@@ -17,8 +17,17 @@ namespace QQn {
 		private:
 			~SvnClientContext();
 		
+		internal:
+			property svn_client_ctx_t *Handle
+			{
+				svn_client_ctx_t *get()
+				{
+					if(!_handle)
+						throw gcnew ObjectDisposedException("SvnClientContext");
 
-
+					return _handle;
+				}
+			}
 		};
 	}
 }
