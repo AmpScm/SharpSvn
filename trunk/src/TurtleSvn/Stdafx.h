@@ -4,5 +4,11 @@
 
 #pragma once
 
+#pragma warning(push)
+#pragma warning(disable: 4635)
 #include <apr.h>
 #include <svn_client.h>
+
+#pragma warning(pop)
+
+using System::Runtime::InteropServices::OutAttribute;

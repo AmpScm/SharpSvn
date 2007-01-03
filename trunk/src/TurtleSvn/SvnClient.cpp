@@ -20,16 +20,8 @@ SvnClient::~SvnClient()
 	if(pool)
 	{
 		_pool = nullptr;
-		delete pool;
-	}
-}
 
-SvnClient::!SvnClient()
-{
-	AprPool^ pool = _pool;
-	if(pool)
-	{
-		_pool = nullptr;
-		delete pool;
+		if(!pool->IsDisposed)
+			delete pool;
 	}
 }

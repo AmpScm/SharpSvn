@@ -1,17 +1,23 @@
 #include "stdafx.h"
 #include "SvnBase.h"
 
+#include "AprPool.h"
+
 #include <apr_general.h>
 
+using namespace QQn::Apr;
 using namespace QQn::Svn;
 
 static bool _aprInitialized = false;
+static int _myLen = 0;
 
 static SvnBase::SvnBase()
 {
 	if(!_aprInitialized)
 	{
 		_aprInitialized = true;
+
+		_myLen = strlen("Please initialize CRT");
 
 		apr_initialize();
 	}
@@ -26,20 +32,41 @@ SvnBase::SvnBase()
 {
 }
 
-String^ SvnBase::PtrToStringUtf8(const char *ptr)
+String^ SvnBase::Utf8_PtrToString(const char *ptr)
 {
 	if(!ptr)
 		return nullptr;
 
-	return System::Runtime::InteropServices::Marshal::PtrToStringAnsi((IntPtr)const_cast<char*>(ptr));
+	return Utf8_PtrToString(ptr, ::strlen(ptr));
 }
 
-String^ SvnBase::PtrToStringUtf8(const char *ptr, int length)
+String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 {
 	if(!ptr)
 		return nullptr;
 
-	return System::Runtime::InteropServices::Marshal::PtrToStringAnsi((IntPtr)const_cast<char*>(ptr), length);
+	return gcnew String(ptr, 0, ::strlen(ptr), System::Text::Encoding::UTF8);
+}
+
+const char* SvnBase::Utf8_StringToPtr(String ^value, AprPool^ pool)
+{
+	if(!value)
+		throw gcnew ArgumentNullException("value");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	cli::array<unsigned char, 1>^ bytes = System::Text::Encoding::UTF8::get()->GetBytes(value);
+
+	char* pData = (char*)apr_palloc(pool->Handle, bytes->Length+1);
+
+	pin_ptr<unsigned char> pBytes = &bytes[0]; 
+
+	if(pData && pBytes)
+		memcpy(pData, pBytes, bytes->Length);
+
+	pData[bytes->Length] = 0;
+
+	return pData;
 }
 
 static SvnHandleBase::SvnHandleBase()
@@ -51,13 +78,17 @@ SvnHandleBase::SvnHandleBase()
 {
 }
 
-String^ SvnHandleBase::PtrToStringUtf8(const char *ptr)
+String^ SvnHandleBase::Utf8_PtrToString(const char *ptr)
 {
-	return SvnBase::PtrToStringUtf8(ptr);
+	return SvnBase::Utf8_PtrToString(ptr);
 }
 
-String^ SvnHandleBase::PtrToStringUtf8(const char *ptr, int length)
+String^ SvnHandleBase::Utf8_PtrToString(const char *ptr, int length)
 {
-	return SvnBase::PtrToStringUtf8(ptr, length);
+	return SvnBase::Utf8_PtrToString(ptr, length);
 }
 
+const char* SvnHandleBase::Utf8_StringToPtr(String ^value, AprPool^ pool)
+{
+	return SvnBase::Utf8_StringToPtr(value, pool);
+}
