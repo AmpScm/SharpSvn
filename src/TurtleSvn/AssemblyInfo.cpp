@@ -11,7 +11,7 @@ using namespace System::Security::Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("TurtleSvnCommon")];
+[assembly:AssemblyTitleAttribute("TurtleSvn - Subversion support for .Net 2.0")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("VSoft")];
@@ -39,5 +39,23 @@ using namespace System::Security::Permissions;
 
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
-#pragma comment(lib, "libsvn_client-1.lib")
 #pragma comment(lib, "libapr.lib")
+#pragma comment(lib, "libsvn_client-1.lib")
+//#pragma comment(lib, "libsvn_delta-1.lib")
+//#pragma comment(lib, "libsvn_diff-1.lib")
+//#pragma comment(lib, "libsvn_fs-1.lib")
+//#pragma comment(lib, "libsvn_fs_base-1.lib")
+//#pragma comment(lib, "libsvn_fs_fs-1.lib")
+//#pragma comment(lib, "libsvn_ra-1.lib")
+//#pragma comment(lib, "libsvn_ra_dav-1.lib")
+//#pragma comment(lib, "libsvn_ra_local-1.lib")
+//#pragma comment(lib, "libsvn_ra_svn-1.lib")
+//#pragma comment(lib, "libsvn_repos-1.lib")
+#pragma comment(lib, "libsvn_subr-1.lib")
+//#pragma comment(lib, "libsvn_wc-1.lib")
+//#pragma comment(lib, "libapriconv.lib")
+#pragma comment(lib, "libaprutil.lib")
+//#pragma comment(lib, "xml.lib")
+#pragma comment(lib, "intl3_svn.lib")
+
+#include <shfolder.h>

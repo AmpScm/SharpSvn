@@ -19,7 +19,7 @@ namespace QQn {
 		{
 			char buffer[256];
 
-			String^ result = QQn::Svn::SvnBase::PtrToStringUtf8(apr_strerror(status, buffer, sizeof(buffer)));
+			String^ result = QQn::Svn::SvnBase::Utf8_PtrToString(apr_strerror(status, buffer, sizeof(buffer)));
 
 			return result;
 		}

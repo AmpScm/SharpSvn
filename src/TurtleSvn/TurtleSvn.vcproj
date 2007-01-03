@@ -41,9 +41,13 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon"
 				PreprocessorDefinitions="WIN32;_DEBUG"
-				RuntimeLibrary="3"
+				StringPooling="true"
+				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
+				GenerateXMLDocumentationFiles="true"
+				BrowseInformation="1"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -58,7 +62,6 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit)"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -115,7 +118,9 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon"
 				PreprocessorDefinitions="WIN32;NDEBUG"
+				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				WarningLevel="3"
@@ -132,7 +137,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit)"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -300,6 +305,18 @@
 					RelativePath=".\SvnException.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnPathTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
@@ -310,6 +327,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientContext.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTargets.cpp"
 					>
 				</File>
 			</Filter>

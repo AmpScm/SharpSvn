@@ -19,7 +19,7 @@ namespace QQn {
 			if(!error)
 				return "";
 
-			return QQn::Svn::SvnBase::PtrToStringUtf8(error->message);
+			return QQn::Svn::SvnBase::Utf8_PtrToString(error->message);
 		}
 
 		public:
