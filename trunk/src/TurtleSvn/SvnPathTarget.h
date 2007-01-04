@@ -13,7 +13,7 @@ namespace QQn {
 			String^ _fullPath;
 
 		public:
-			SvnPathTarget(String^ path, PegRevision^ revision)
+			SvnPathTarget(String^ path, SvnRevision^ revision)
 				: SvnTarget(revision)
 			{
 				if(String::IsNullOrEmpty(path))
@@ -24,7 +24,7 @@ namespace QQn {
 			}
 
 			SvnPathTarget(String^ path)
-				: SvnTarget(PegRevision::None)
+				: SvnTarget(SvnRevision::None)
 			{
 				if(String::IsNullOrEmpty(path))
 					throw gcnew ArgumentNullException("path");
@@ -34,7 +34,7 @@ namespace QQn {
 			}
 
 			SvnPathTarget(String^ path, long revision)
-				: SvnTarget(gcnew PegRevision(revision))
+				: SvnTarget(gcnew SvnRevision(revision))
 			{
 				if(String::IsNullOrEmpty(path))
 					throw gcnew ArgumentNullException("path");
@@ -44,7 +44,7 @@ namespace QQn {
 			}
 
 			SvnPathTarget(String^ path, DateTime date)
-				: SvnTarget(gcnew PegRevision(date))
+				: SvnTarget(gcnew SvnRevision(date))
 			{
 				if(String::IsNullOrEmpty(path))
 					throw gcnew ArgumentNullException("path");
@@ -53,8 +53,8 @@ namespace QQn {
 				_fullPath = System::IO::Path::GetFullPath(path);
 			}
 
-			SvnPathTarget(String^ path, PegType type)
-				: SvnTarget(gcnew PegRevision(type))
+			SvnPathTarget(String^ path, SvnRevisionType type)
+				: SvnTarget(gcnew SvnRevision(type))
 			{
 				if(String::IsNullOrEmpty(path))
 					throw gcnew ArgumentNullException("path");
@@ -123,7 +123,7 @@ namespace QQn {
 
 					if(!realPath->Contains("://"))
 					{
-						PegRevision^ pegRev = PegRevision::Load(&rev);
+						SvnRevision^ pegRev = SvnRevision::Load(&rev);
 
 						target = gcnew SvnPathTarget(realPath, pegRev);
 						return true;

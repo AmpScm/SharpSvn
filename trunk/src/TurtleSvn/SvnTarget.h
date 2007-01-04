@@ -7,7 +7,7 @@ namespace QQn {
 	namespace Svn {
 		using namespace System;
 
-		public enum class PegType
+		public enum class SvnRevisionType
 		{
 			None		= svn_opt_revision_unspecified, 
 			Number		= svn_opt_revision_number,
@@ -19,39 +19,47 @@ namespace QQn {
 			Head		= svn_opt_revision_head
 		};
 
-		public ref class PegRevision sealed
+		public ref class SvnRevision sealed
 		{
-			initonly PegType _type;
-			initonly long _rev;
-			initonly __int64 _date;
+			initonly SvnRevisionType _type;
+			initonly __int64 _value;
 
 		internal:
-			static PegRevision^ Load(svn_opt_revision_t* revData);
+			static SvnRevision^ Load(svn_opt_revision_t* revData);
 		public:
-			PegRevision()
+			SvnRevision()
 			{
-				_type = PegType::None;
+				_type = SvnRevisionType::None;
 			}
 
-			PegRevision(long revision)
+			SvnRevision(long revision)
 			{
 				if(revision < 0)
 					throw gcnew ArgumentOutOfRangeException("revision");
 
-				_type = PegType::Number;
-				_rev = revision;
+				_type = SvnRevisionType::Number;
+				_value = revision;
 			}
 
-			PegRevision(PegType type)
+			SvnRevision(__int64 revision)
+			{
+				if(revision < 0)
+					throw gcnew ArgumentOutOfRangeException("revision");
+
+				_type = SvnRevisionType::Number;
+				_value = revision;
+			}
+
+			SvnRevision(SvnRevisionType type)
 			{
 				switch(type)
 				{
-				case PegType::None:
-				case PegType::Committed:
-				case PegType::Previous:
-				case PegType::Base:
-				case PegType::Working:
-				case PegType::Head:
+				case SvnRevisionType::None:
+				case SvnRevisionType::Committed:
+				case SvnRevisionType::Previous:
+				case SvnRevisionType::Base:
+				case SvnRevisionType::Working:
+				case SvnRevisionType::Head:
 					_type = type;
 					break;
 				default:
@@ -59,51 +67,51 @@ namespace QQn {
 				}
 			}
 
-			PegRevision(DateTime date)
+			SvnRevision(DateTime date)
 			{
-				_type = PegType::Date;
-				_date = date.ToBinary();
+				_type = SvnRevisionType::Date;
+				_value = date.ToBinary();
 			}
 
 			virtual String^ ToString() override
 			{
 				switch(_type)
 				{
-				case PegType::None:
+				case SvnRevisionType::None:
 					return "";
-				case PegType::Number:
-					return _rev.ToString(System::Globalization::CultureInfo::InvariantCulture);
-				case PegType::Date:
-					return "{" + DateTime(_date).ToString("s") + "}";
-				case PegType::Committed:
+				case SvnRevisionType::Number:
+					return _value.ToString(System::Globalization::CultureInfo::InvariantCulture);
+				case SvnRevisionType::Date:
+					return "{" + DateTime(_value).ToString("s") + "}";
+				case SvnRevisionType::Committed:
 					return "COMMITTED";
-				case PegType::Previous:
+				case SvnRevisionType::Previous:
 					return "PREVIOUS";
-				case PegType::Base:
+				case SvnRevisionType::Base:
 					return "BASE";
-				case PegType::Working:
+				case SvnRevisionType::Working:
 					return "WORKING";
-				case PegType::Head:
+				case SvnRevisionType::Head:
 					return "HEAD";
 				default:
-					throw gcnew InvalidOperationException("Invalid PegType set");
+					throw gcnew InvalidOperationException("Invalid SvnRevisionType set");
 				}
 			}
 
-			property PegType Type
+			property SvnRevisionType Type
 			{
-				PegType get()
+				SvnRevisionType get()
 				{
 					return _type;
 				}
 			}
 
-			property long Revision
+			property __int64 Revision
 			{
-				long get()
+				__int64 get()
 				{
-					if(_type == PegType::Number)
-						return _rev;
+					if(_type == SvnRevisionType::Number)
+						return _value;
 					else
 						return 0;
 				}
@@ -113,19 +121,23 @@ namespace QQn {
 			{
 				DateTime get()
 				{
-					if(_type == PegType::Date)
-						return DateTime(_date);
+					if(_type == SvnRevisionType::Date)
+						return DateTime(_value);
 					
 					return DateTime::MinValue;
 				}
 			}
 
-			static initonly PegRevision^ None		= gcnew PegRevision(PegType::None);
-			static initonly PegRevision^ Head		= gcnew PegRevision(PegType::Head);
-			static initonly PegRevision^ Working	= gcnew PegRevision(PegType::Working);
-			static initonly PegRevision^ Base		= gcnew PegRevision(PegType::Base);
-			static initonly PegRevision^ Previous	= gcnew PegRevision(PegType::Previous);
-			static initonly PegRevision^ Committed	= gcnew PegRevision(PegType::Committed);
+		internal:
+			svn_opt_revision_t ToSvnRevision();
+
+		public:
+			static initonly SvnRevision^ None		= gcnew SvnRevision(SvnRevisionType::None);
+			static initonly SvnRevision^ Head		= gcnew SvnRevision(SvnRevisionType::Head);
+			static initonly SvnRevision^ Working	= gcnew SvnRevision(SvnRevisionType::Working);
+			static initonly SvnRevision^ Base		= gcnew SvnRevision(SvnRevisionType::Base);
+			static initonly SvnRevision^ Previous	= gcnew SvnRevision(SvnRevisionType::Previous);
+			static initonly SvnRevision^ Committed	= gcnew SvnRevision(SvnRevisionType::Committed);
 		};
 
 		ref class SvnUriTarget;
@@ -133,20 +145,20 @@ namespace QQn {
 
 		public ref class SvnTarget abstract : public SvnBase
 		{
-			initonly PegRevision^ _revision;
+			initonly SvnRevision^ _revision;
 		protected:
-			SvnTarget(PegRevision^ revision)
+			SvnTarget(SvnRevision^ revision)
 			{
 				if(revision == nullptr)
-					_revision = PegRevision::None;
+					_revision = SvnRevision::None;
 				else
 					_revision = revision;
 			}
 
 		public:
-			property PegRevision^ Revision
+			property SvnRevision^ Revision
 			{
-				PegRevision^ get()
+				SvnRevision^ get()
 				{
 					return _revision;
 				}
@@ -159,7 +171,7 @@ namespace QQn {
 
 			virtual String^ ToString() override
 			{
-				if(Revision->Type == PegType::None)
+				if(Revision->Type == SvnRevisionType::None)
 					return TargetName;
 				else
 					return TargetName + "@" + Revision->ToString();

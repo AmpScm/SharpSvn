@@ -19,7 +19,14 @@ namespace QQn {
 			if(!error)
 				return "";
 
-			return QQn::Svn::SvnBase::Utf8_PtrToString(error->message);
+			try
+			{
+				return QQn::Svn::SvnBase::Utf8_PtrToString(error->message);
+			}
+			catch(Exception^ e)
+			{
+				return "Subversion error: Unable to retrieve error text";
+			}
 		}
 
 		public:

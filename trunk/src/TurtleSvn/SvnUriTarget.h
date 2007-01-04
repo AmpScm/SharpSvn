@@ -13,7 +13,7 @@ namespace QQn {
 
 
 		public:
-			SvnUriTarget (Uri^ uri, PegRevision^ revision)
+			SvnUriTarget (Uri^ uri, SvnRevision^ revision)
 				: SvnTarget(revision)
 			{
 				if(!uri)
@@ -25,7 +25,7 @@ namespace QQn {
 			}
 
 			SvnUriTarget (Uri^ uri)
-				: SvnTarget(PegRevision::None)
+				: SvnTarget(SvnRevision::None)
 			{
 				if(!uri)
 					throw gcnew ArgumentNullException("uri");
@@ -36,7 +36,7 @@ namespace QQn {
 			}
 
 			SvnUriTarget (Uri^ uri, long revision)
-				: SvnTarget(gcnew PegRevision(revision))
+				: SvnTarget(gcnew SvnRevision(revision))
 			{
 				if(!uri)
 					throw gcnew ArgumentNullException("uri");
@@ -47,7 +47,7 @@ namespace QQn {
 			}
 
 			SvnUriTarget (Uri^ uri, DateTime date)
-				: SvnTarget(gcnew PegRevision(date))
+				: SvnTarget(gcnew SvnRevision(date))
 			{
 				if(!uri)
 					throw gcnew ArgumentNullException("uri");
@@ -57,8 +57,8 @@ namespace QQn {
 				_uri = uri;
 			}
 
-			SvnUriTarget (Uri^ uri, PegType type)
-				: SvnTarget(gcnew PegRevision(type))
+			SvnUriTarget (Uri^ uri, SvnRevisionType type)
+				: SvnTarget(gcnew SvnRevision(type))
 			{
 				if(!uri)
 					throw gcnew ArgumentNullException("uri");
@@ -131,7 +131,7 @@ namespace QQn {
 
 					if(System::Uri::TryCreate(Utf8_PtrToString(truePath), UriKind::Absolute, uri))
 					{
-						PegRevision^ pegRev = PegRevision::Load(&rev);
+						SvnRevision^ pegRev = SvnRevision::Load(&rev);
 
 						target = gcnew SvnUriTarget (uri, pegRev);
 						return true;

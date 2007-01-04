@@ -7,3 +7,5 @@
 #include "SvnUriTarget.h"
 
 #include "SvnException.h"
+
+#include "SvnCallbackArgs.h"

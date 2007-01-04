@@ -55,18 +55,7 @@ const char* SvnBase::Utf8_StringToPtr(String ^value, AprPool^ pool)
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	cli::array<unsigned char, 1>^ bytes = System::Text::Encoding::UTF8::get()->GetBytes(value);
-
-	char* pData = (char*)apr_palloc(pool->Handle, bytes->Length+1);
-
-	pin_ptr<unsigned char> pBytes = &bytes[0]; 
-
-	if(pData && pBytes)
-		memcpy(pData, pBytes, bytes->Length);
-
-	pData[bytes->Length] = 0;
-
-	return pData;
+	return pool->AllocString(value);
 }
 
 static SvnHandleBase::SvnHandleBase()

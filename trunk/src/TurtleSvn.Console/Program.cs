@@ -21,6 +21,13 @@ namespace TurtleSvn
 
 			_client = new SvnClient();
 
+			_client.LoadConfigurationDefault();
+
+			_client.ClientCancel += new EventHandler<SvnClientCancelEventArgs>(OnClientCancel);
+			_client.ClientGetCommitLog += new EventHandler<SvnClientCommitLogEventArgs>(OnClientGetCommitLog);
+			_client.ClientNotify += new EventHandler<SvnClientNotifyEventArgs>(OnClientNotify);
+			_client.ClientProgress += new EventHandler<SvnClientProgressEventArgs>(OnClientProgress);
+
 			SvnTarget target;
 
 			if (SvnTarget.TryParse("f:\\projects@{2000-03-20T13:02:03}", out target))
@@ -30,6 +37,25 @@ namespace TurtleSvn
 				Console.WriteLine(target.ToString());
 
 			Console.WriteLine(((SvnUriTarget)new Uri("http://qqn.nl/")).ToString());
+
+			long ver;
+			_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
+		}
+
+		void OnClientProgress(object sender, SvnClientProgressEventArgs e)
+		{
+		}
+
+		void OnClientNotify(object sender, SvnClientNotifyEventArgs e)
+		{
+		}
+
+		void OnClientGetCommitLog(object sender, SvnClientCommitLogEventArgs e)
+		{
+		}
+
+		void OnClientCancel(object sender, SvnClientCancelEventArgs e)
+		{
 		}
 	}
 }
