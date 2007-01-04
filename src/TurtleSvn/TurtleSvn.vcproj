@@ -66,6 +66,7 @@
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
+				KeyFile="TurtleSvn.snk"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -141,6 +142,7 @@
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
+				KeyFile="TurtleSvn.snk"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -204,6 +206,10 @@
 				Name="Sources"
 				>
 				<File
+					RelativePath=".\AprArray.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\AprException.cpp"
 					>
 				</File>
@@ -215,6 +221,10 @@
 			<Filter
 				Name="Headers"
 				>
+				<File
+					RelativePath=".\AprArray.h"
+					>
+				</File>
 				<File
 					RelativePath=".\AprException.h"
 					>
@@ -294,11 +304,27 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnBatton.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnCallbackArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClient.h"
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClientContext.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientEventArgs.h"
 					>
 				</File>
 				<File
@@ -326,11 +352,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientArgs.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClientContext.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\SvnTargets.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Commands"
+				>
+				<File
+					RelativePath=".\Client_CheckOut.cpp"
 					>
 				</File>
 			</Filter>

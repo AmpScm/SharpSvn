@@ -45,13 +45,15 @@ namespace QQn {
 			};
 
 		private:
+			AprPool^ _parent;
 			AprPoolTag^ _tag;
 			apr_pool_t *_handle;
 
 			AprPool(apr_pool_t *handle);
-			~AprPool();
-		public:
 			!AprPool();
+		public:
+			~AprPool();
+			
 
 		protected:
 			void Destroy();
@@ -68,6 +70,29 @@ namespace QQn {
 				}
 			}
 
+			void Ensure()
+			{
+				if(!_tag)
+					throw gcnew ObjectDisposedException("AprPool");
+
+				_tag->Ensure();
+			}
+
+		internal:
+			apr_pool_t* Detach()
+			{
+				if(_handle)
+				{
+					_tag->Ensure();
+					apr_pool_t *me = _handle;
+					_handle = nullptr;
+					_tag = nullptr;
+
+					return me;
+				}
+				return nullptr;
+			}
+
 		internal:
 			property apr_pool_t* Handle
 			{
@@ -78,6 +103,12 @@ namespace QQn {
 					return _handle;
 				}
 			}
+
+			void Clear();
+
+			void* Alloc(size_t size);
+			void* AllocCleared(size_t size);
+			const char* AllocString(String^ value);
 		};
 	}
 }

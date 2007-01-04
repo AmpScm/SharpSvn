@@ -4,42 +4,64 @@
 
 using namespace QQn::Svn;
 
-PegRevision^ PegRevision::Load(svn_opt_revision_t *revData)
+SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 {
 	if(!revData)
 		throw gcnew ArgumentNullException("revData");
 
-	PegType type = (PegType)revData->kind;
+	SvnRevisionType type = (SvnRevisionType)revData->kind;
 
 
 	switch(type)
 	{
-		case PegType::None:
+		case SvnRevisionType::None:
 			return None;
-		case PegType::Committed:
+		case SvnRevisionType::Committed:
 			return Committed;
-		case PegType::Previous:
+		case SvnRevisionType::Previous:
 			return Previous;
-		case PegType::Base:
+		case SvnRevisionType::Base:
 			return Base;
-		case PegType::Working:
+		case SvnRevisionType::Working:
 			return Working;
-		case PegType::Head:
+		case SvnRevisionType::Head:
 			return Head;
-		case PegType::Number:
-			return gcnew PegRevision(revData->value.number);
-		case PegType::Date:
+		case SvnRevisionType::Number:
+			return gcnew SvnRevision(revData->value.number);
+		case SvnRevisionType::Date:
 			// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
 			{
 				__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
-				return gcnew PegRevision(System::DateTime(revData->value.date*10 + aprTimeBase));
+				return gcnew SvnRevision(System::DateTime(revData->value.date*10 + aprTimeBase));
 			}
 		default:
-			throw gcnew ArgumentException("PegType unknown", "revData");
+			throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
 	}	
 }
 
-bool SvnTarget::TryParse(String^ targetString, SvnTarget^% target)
+svn_opt_revision_t SvnRevision::ToSvnRevision()
+{
+	svn_opt_revision_t r;
+	memset(&r, 0, sizeof(r));
+	r.kind = (svn_opt_revision_kind)_type; // Values are identical by design
+	
+
+	switch(_type)
+	{
+		case SvnRevisionType::Number:
+			r.value.number = (svn_revnum_t)_value;
+			break;
+		case SvnRevisionType::Date:
+			{
+				__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+				r.value.date = (_value - aprTimeBase) / 10;
+			}
+			break;
+	}
+	return r;
+}
+
+bool SvnTarget::TryParse(String^ targetString, [Out] SvnTarget^% target)
 {
 	if(String::IsNullOrEmpty(targetString))
 		throw gcnew ArgumentNullException("targetString");
@@ -62,7 +84,7 @@ bool SvnTarget::TryParse(String^ targetString, SvnTarget^% target)
 	return false;
 }
 
-bool SvnTarget::TryParse(String^ targetString, SvnTarget ^% target, AprPool^ pool)
+bool SvnTarget::TryParse(String^ targetString, [Out] SvnTarget ^% target, AprPool^ pool)
 {
 	if(String::IsNullOrEmpty(targetString))
 		throw gcnew ArgumentNullException("targetString");

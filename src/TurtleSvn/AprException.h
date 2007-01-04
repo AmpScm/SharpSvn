@@ -10,7 +10,7 @@ namespace QQn {
 	namespace Apr {
 
 		[Serializable]
-		public ref class AprException : public System::Runtime::InteropServices::ExternalException
+		ref class AprException : public System::Runtime::InteropServices::ExternalException
 		{
 		private:
 			apr_status_t _status;
