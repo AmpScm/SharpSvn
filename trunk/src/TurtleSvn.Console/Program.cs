@@ -39,7 +39,8 @@ namespace TurtleSvn
 			Console.WriteLine(((SvnUriTarget)new Uri("http://qqn.nl/")).ToString());
 
 			long ver;
-			_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
+			//_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
+			_client.Update(@"g:\Projects\SvnDotNet", new SvnUpdateArgs(), out ver);
 		}
 
 		void OnClientProgress(object sender, SvnClientProgressEventArgs e)
