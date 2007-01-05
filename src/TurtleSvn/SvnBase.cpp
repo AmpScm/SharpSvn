@@ -2,6 +2,8 @@
 #include "SvnBase.h"
 
 #include "AprPool.h"
+#include "svn_dso.h"
+#include "svn_utf.h"
 
 #include <apr_general.h>
 
@@ -17,9 +19,12 @@ static SvnBase::SvnBase()
 	{
 		_aprInitialized = true;
 
-		_myLen = strlen("Please initialize CRT");
-
 		apr_initialize();
+		svn_dso_initialize();
+
+		apr_pool_t* pool;
+		apr_pool_create(&pool, NULL);
+		svn_utf_initialize(pool);
 	}
 }
 
