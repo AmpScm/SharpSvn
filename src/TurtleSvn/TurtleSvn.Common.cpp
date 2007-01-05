@@ -4,6 +4,6 @@
 
 #include "TurtleSvn.Common.h"
 
-using namespace QQn::Svn;
+using namespace TurtleSvn;
 
 

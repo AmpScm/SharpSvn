@@ -3,8 +3,8 @@
 #include "SvnAll.h"
 #include <svn_config.h>
 
-using namespace QQn::Apr;
-using namespace QQn::Svn;
+using namespace TurtleSvn::Apr;
+using namespace TurtleSvn;
 
 bool SvnClientArgs::HandleResult(svn_error_t *error)
 {

@@ -1,17 +1,18 @@
 
 #pragma once
 
-namespace QQn {
-	namespace Svn {
+namespace TurtleSvn {
+	namespace Apr
+	{
 		using System::Runtime::InteropServices::GCHandle;
 
 		generic<typename T>
-		ref class SvnBatton : public IDisposable
+		ref class AprBaton : public TurtleSvn::Apr::SvnBase, public IDisposable
 		{
 			GCHandle _handle;
 
 		public:
-			SvnBatton(T value)
+			AprBaton(T value)
 			{
 				if(value == nullptr)
 					throw gcnew ArgumentNullException("value");
@@ -20,13 +21,13 @@ namespace QQn {
 			}
 
 		private:
-			!SvnBatton()
+			!AprBaton()
 			{
 				if(_handle.IsAllocated)
 					_handle.Free();
 			}
 
-			~SvnBatton()
+			~AprBaton()
 			{
 				if(_handle.IsAllocated)
 					_handle.Free();

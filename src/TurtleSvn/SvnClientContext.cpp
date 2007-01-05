@@ -2,7 +2,7 @@
 
 #include "SvnAll.h"
 
-using namespace QQn::Svn;
+using namespace TurtleSvn;
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {

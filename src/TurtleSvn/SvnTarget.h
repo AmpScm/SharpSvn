@@ -3,190 +3,188 @@
 
 #include "SvnClientContext.h"
 
-namespace QQn {
-	namespace Svn {
-		using namespace System;
+namespace TurtleSvn {
+	using namespace System;
 
-		public enum class SvnRevisionType
+	public enum class SvnRevisionType
+	{
+		None		= svn_opt_revision_unspecified, 
+		Number		= svn_opt_revision_number,
+		Date		= svn_opt_revision_date,
+		Committed	= svn_opt_revision_committed,
+		Previous	= svn_opt_revision_previous,
+		Base		= svn_opt_revision_base,
+		Working		= svn_opt_revision_working,
+		Head		= svn_opt_revision_head
+	};
+
+	public ref class SvnRevision sealed
+	{
+		initonly SvnRevisionType _type;
+		initonly __int64 _value;
+
+	internal:
+		static SvnRevision^ Load(svn_opt_revision_t* revData);
+	public:
+		SvnRevision()
 		{
-			None		= svn_opt_revision_unspecified, 
-			Number		= svn_opt_revision_number,
-			Date		= svn_opt_revision_date,
-			Committed	= svn_opt_revision_committed,
-			Previous	= svn_opt_revision_previous,
-			Base		= svn_opt_revision_base,
-			Working		= svn_opt_revision_working,
-			Head		= svn_opt_revision_head
-		};
+			_type = SvnRevisionType::None;
+		}
 
-		public ref class SvnRevision sealed
+		SvnRevision(long revision)
 		{
-			initonly SvnRevisionType _type;
-			initonly __int64 _value;
+			if(revision < 0)
+				throw gcnew ArgumentOutOfRangeException("revision");
 
-		internal:
-			static SvnRevision^ Load(svn_opt_revision_t* revData);
-		public:
-			SvnRevision()
-			{
-				_type = SvnRevisionType::None;
-			}
+			_type = SvnRevisionType::Number;
+			_value = revision;
+		}
 
-			SvnRevision(long revision)
-			{
-				if(revision < 0)
-					throw gcnew ArgumentOutOfRangeException("revision");
-
-				_type = SvnRevisionType::Number;
-				_value = revision;
-			}
-
-			SvnRevision(__int64 revision)
-			{
-				if(revision < 0)
-					throw gcnew ArgumentOutOfRangeException("revision");
-
-				_type = SvnRevisionType::Number;
-				_value = revision;
-			}
-
-			SvnRevision(SvnRevisionType type)
-			{
-				switch(type)
-				{
-				case SvnRevisionType::None:
-				case SvnRevisionType::Committed:
-				case SvnRevisionType::Previous:
-				case SvnRevisionType::Base:
-				case SvnRevisionType::Working:
-				case SvnRevisionType::Head:
-					_type = type;
-					break;
-				default:
-					throw gcnew ArgumentOutOfRangeException("type");
-				}
-			}
-
-			SvnRevision(DateTime date)
-			{
-				_type = SvnRevisionType::Date;
-				_value = date.ToBinary();
-			}
-
-			virtual String^ ToString() override
-			{
-				switch(_type)
-				{
-				case SvnRevisionType::None:
-					return "";
-				case SvnRevisionType::Number:
-					return _value.ToString(System::Globalization::CultureInfo::InvariantCulture);
-				case SvnRevisionType::Date:
-					return "{" + DateTime(_value).ToString("s") + "}";
-				case SvnRevisionType::Committed:
-					return "COMMITTED";
-				case SvnRevisionType::Previous:
-					return "PREVIOUS";
-				case SvnRevisionType::Base:
-					return "BASE";
-				case SvnRevisionType::Working:
-					return "WORKING";
-				case SvnRevisionType::Head:
-					return "HEAD";
-				default:
-					throw gcnew InvalidOperationException("Invalid SvnRevisionType set");
-				}
-			}
-
-			property SvnRevisionType Type
-			{
-				SvnRevisionType get()
-				{
-					return _type;
-				}
-			}
-
-			property __int64 Revision
-			{
-				__int64 get()
-				{
-					if(_type == SvnRevisionType::Number)
-						return _value;
-					else
-						return 0;
-				}
-			}
-
-			property DateTime Date
-			{
-				DateTime get()
-				{
-					if(_type == SvnRevisionType::Date)
-						return DateTime(_value);
-					
-					return DateTime::MinValue;
-				}
-			}
-
-		internal:
-			svn_opt_revision_t ToSvnRevision();
-
-		public:
-			static initonly SvnRevision^ None		= gcnew SvnRevision(SvnRevisionType::None);
-			static initonly SvnRevision^ Head		= gcnew SvnRevision(SvnRevisionType::Head);
-			static initonly SvnRevision^ Working	= gcnew SvnRevision(SvnRevisionType::Working);
-			static initonly SvnRevision^ Base		= gcnew SvnRevision(SvnRevisionType::Base);
-			static initonly SvnRevision^ Previous	= gcnew SvnRevision(SvnRevisionType::Previous);
-			static initonly SvnRevision^ Committed	= gcnew SvnRevision(SvnRevisionType::Committed);
-		};
-
-		ref class SvnUriTarget;
-		ref class SvnPathTarget;
-
-		public ref class SvnTarget abstract : public SvnBase
+		SvnRevision(__int64 revision)
 		{
-			initonly SvnRevision^ _revision;
-		protected:
-			SvnTarget(SvnRevision^ revision)
+			if(revision < 0)
+				throw gcnew ArgumentOutOfRangeException("revision");
+
+			_type = SvnRevisionType::Number;
+			_value = revision;
+		}
+
+		SvnRevision(SvnRevisionType type)
+		{
+			switch(type)
 			{
-				if(revision == nullptr)
-					_revision = SvnRevision::None;
+			case SvnRevisionType::None:
+			case SvnRevisionType::Committed:
+			case SvnRevisionType::Previous:
+			case SvnRevisionType::Base:
+			case SvnRevisionType::Working:
+			case SvnRevisionType::Head:
+				_type = type;
+				break;
+			default:
+				throw gcnew ArgumentOutOfRangeException("type");
+			}
+		}
+
+		SvnRevision(DateTime date)
+		{
+			_type = SvnRevisionType::Date;
+			_value = date.ToBinary();
+		}
+
+		virtual String^ ToString() override
+		{
+			switch(_type)
+			{
+			case SvnRevisionType::None:
+				return "";
+			case SvnRevisionType::Number:
+				return _value.ToString(System::Globalization::CultureInfo::InvariantCulture);
+			case SvnRevisionType::Date:
+				return "{" + DateTime(_value).ToString("s") + "}";
+			case SvnRevisionType::Committed:
+				return "COMMITTED";
+			case SvnRevisionType::Previous:
+				return "PREVIOUS";
+			case SvnRevisionType::Base:
+				return "BASE";
+			case SvnRevisionType::Working:
+				return "WORKING";
+			case SvnRevisionType::Head:
+				return "HEAD";
+			default:
+				throw gcnew InvalidOperationException("Invalid SvnRevisionType set");
+			}
+		}
+
+		property SvnRevisionType Type
+		{
+			SvnRevisionType get()
+			{
+				return _type;
+			}
+		}
+
+		property __int64 Revision
+		{
+			__int64 get()
+			{
+				if(_type == SvnRevisionType::Number)
+					return _value;
 				else
-					_revision = revision;
+					return 0;
 			}
+		}
 
-		public:
-			property SvnRevision^ Revision
+		property DateTime Date
+		{
+			DateTime get()
 			{
-				SvnRevision^ get()
-				{
-					return _revision;
-				}
-			}
+				if(_type == SvnRevisionType::Date)
+					return DateTime(_value);
 
-			property String^ TargetName
+				return DateTime::MinValue;
+			}
+		}
+
+	internal:
+		svn_opt_revision_t ToSvnRevision();
+
+	public:
+		static initonly SvnRevision^ None		= gcnew SvnRevision(SvnRevisionType::None);
+		static initonly SvnRevision^ Head		= gcnew SvnRevision(SvnRevisionType::Head);
+		static initonly SvnRevision^ Working	= gcnew SvnRevision(SvnRevisionType::Working);
+		static initonly SvnRevision^ Base		= gcnew SvnRevision(SvnRevisionType::Base);
+		static initonly SvnRevision^ Previous	= gcnew SvnRevision(SvnRevisionType::Previous);
+		static initonly SvnRevision^ Committed	= gcnew SvnRevision(SvnRevisionType::Committed);
+	};
+
+	ref class SvnUriTarget;
+	ref class SvnPathTarget;
+
+	public ref class SvnTarget abstract : public SvnBase
+	{
+		initonly SvnRevision^ _revision;
+	protected:
+		SvnTarget(SvnRevision^ revision)
+		{
+			if(revision == nullptr)
+				_revision = SvnRevision::None;
+			else
+				_revision = revision;
+		}
+
+	public:
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
 			{
-				virtual String^ get() = 0;
+				return _revision;
 			}
+		}
 
-			virtual String^ ToString() override
-			{
-				if(Revision->Type == SvnRevisionType::None)
-					return TargetName;
-				else
-					return TargetName + "@" + Revision->ToString();
-			}
+		property String^ TargetName
+		{
+			virtual String^ get() = 0;
+		}
 
-			static SvnTarget^ FromUri(Uri^ value);
-			static SvnTarget^ FromString(String^ value);
+		virtual String^ ToString() override
+		{
+			if(Revision->Type == SvnRevisionType::None)
+				return TargetName;
+			else
+				return TargetName + "@" + Revision->ToString();
+		}
 
-			static operator SvnTarget^(Uri^ value)					{ return value ? FromUri(value) : nullptr; }
-			static explicit operator SvnTarget^(String^ value)		{ return value ? FromString(value) : nullptr; }
+		static SvnTarget^ FromUri(Uri^ value);
+		static SvnTarget^ FromString(String^ value);
+
+		static operator SvnTarget^(Uri^ value)					{ return value ? FromUri(value) : nullptr; }
+		static explicit operator SvnTarget^(String^ value)		{ return value ? FromString(value) : nullptr; }
 
 
-		public:
-			static bool TryParse(String^ targetString, [Out] SvnTarget^% target);
-			static bool TryParse(String^ targetString, [Out] SvnTarget^% target, AprPool^ pool);
-		};
-	}
+	public:
+		static bool TryParse(String^ targetString, [Out] SvnTarget^% target);
+		static bool TryParse(String^ targetString, [Out] SvnTarget^% target, AprPool^ pool);
+	};
 }

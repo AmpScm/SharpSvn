@@ -2,7 +2,7 @@
 
 #include "AprArray.h"
 
-using namespace QQn::Apr;
+using namespace TurtleSvn::Apr;
 
 generic<typename T, typename R>
 AprArray<T,R>::AprArray(IList<T>^ items, AprPool ^pool)

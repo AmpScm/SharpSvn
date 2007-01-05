@@ -1,8 +1,13 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace QQn::Apr;
-using namespace QQn::Svn;
+using namespace TurtleSvn::Apr;
+using namespace TurtleSvn;
+
+void SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
+{
+	CheckOut(url, path, revision, gcnew SvnCheckOutArgs());
+}
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision, SvnCheckOutArgs^ args)
 {

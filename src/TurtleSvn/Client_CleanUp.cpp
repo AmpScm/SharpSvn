@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace QQn::Apr;
-using namespace QQn::Svn;
+using namespace TurtleSvn::Apr;
+using namespace TurtleSvn;
 using namespace System::Collections::Generic;
 
 void SvnClient::CleanUp(String ^path)

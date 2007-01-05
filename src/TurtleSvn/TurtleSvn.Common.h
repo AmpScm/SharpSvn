@@ -4,8 +4,8 @@
 
 using namespace System;
 
-namespace QQn {
-	namespace Svn {
+namespace TurtleSvn {
+	namespace Apr {
 
 		
 

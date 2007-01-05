@@ -4,8 +4,9 @@
 #include <svn_config.h>
 #include "SvnObjBaton.h"
 
-using namespace QQn::Apr;
-using namespace QQn::Svn;
+using namespace TurtleSvn;
+using namespace TurtleSvn::Apr;
+
 
 struct apr_hash_t
 {};
@@ -14,14 +15,14 @@ struct apr_hash_t
 SvnClient::SvnClient()
 	: _pool(gcnew AprPool()), SvnClientContext(_pool)
 {
-	_clientBatton = gcnew SvnBatton<SvnClient^>(this);
+	_clientBatton = gcnew AprBaton<SvnClient^>(this);
 	Initialize();
 }
 
 SvnClient::SvnClient(AprPool^ pool)
 	: _pool(gcnew AprPool(pool)), SvnClientContext(_pool)
 {
-	_clientBatton = gcnew SvnBatton<SvnClient^>(this);
+	_clientBatton = gcnew AprBaton<SvnClient^>(this);
 	Initialize();
 }
 
@@ -198,7 +199,7 @@ void SvnClient::OnClientNotify(SvnClientNotifyEventArgs^ e)
 
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 {
-	SvnClient^ client = SvnBatton<SvnClient^>::Get((IntPtr)cancel_baton);
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
 
 	SvnClientCancelEventArgs^ ea = gcnew SvnClientCancelEventArgs();
 
@@ -209,7 +210,7 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 
 svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
 {
-	SvnClient^ client = SvnBatton<SvnClient^>::Get((IntPtr)baton);
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnClientCommitLogEventArgs^ ea = gcnew SvnClientCommitLogEventArgs();
 
@@ -221,7 +222,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg
 
 void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool)
 {
-	SvnClient^ client = SvnBatton<SvnClient^>::Get((IntPtr)baton);
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs();
 
@@ -231,7 +232,7 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
 
 void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
 {
-	SvnClient^ client = SvnBatton<SvnClient^>::Get((IntPtr)baton);
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total);
 

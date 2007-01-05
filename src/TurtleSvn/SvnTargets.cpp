@@ -2,7 +2,7 @@
 
 #include "SvnAll.h"
 
-using namespace QQn::Svn;
+using namespace TurtleSvn;
 
 SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 {
