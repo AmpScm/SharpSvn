@@ -61,6 +61,7 @@ namespace TurtleSvn {
 		bool _notRecursive;
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
+		bool _allowUnversionedObstructions;
 	public:
 		SvnCheckOutArgs()
 		{
@@ -105,12 +106,26 @@ namespace TurtleSvn {
 					_revision = SvnRevision::Head;
 			}
 		}
+
+		[Obsolete("Available from Svn 1.5; currently ignored")]
+		property bool AllowUnversionedObstructions
+		{
+			bool get()
+			{
+				return _allowUnversionedObstructions;
+			}
+			void set(bool value)
+			{
+				_allowUnversionedObstructions = value;
+			}
+		}
 	};
 
 	public ref class SvnUpdateArgs : public SvnClientArgs
 	{
 		bool _notRecursive;
 		bool _ignoreExternals;
+		bool _allowUnversionedObstructions;
 		SvnRevision^ _revision;
 	public:
 		SvnUpdateArgs()
@@ -154,6 +169,19 @@ namespace TurtleSvn {
 					_revision = value;
 				else
 					_revision = SvnRevision::Head;
+			}
+		}
+
+		[Obsolete("Available from Svn 1.5; currently ignored")]
+		property bool AllowUnversionedObstructions
+		{
+			bool get()
+			{
+				return _allowUnversionedObstructions;
+			}
+			void set(bool value)
+			{
+				_allowUnversionedObstructions = value;
 			}
 		}
 	};
