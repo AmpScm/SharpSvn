@@ -1,5 +1,6 @@
 #pragma once
 #include "AprPool.h"
+#include "AprArray.h"
 #include "SvnClientContext.h"
 #include "SvnClient.h"
 

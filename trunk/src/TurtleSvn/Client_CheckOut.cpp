@@ -12,6 +12,22 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revisio
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!args->Revision)
+		throw gcnew ArgumentNullException("args.Revision");
+	else
+		switch(args->Revision->Type)
+	{
+		case SvnRevisionType::Date:
+		case SvnRevisionType::Number:
+		case SvnRevisionType::Head:
+			break;
+		default:
+			// Throw the error before we allocate the unmanaged resources
+			throw gcnew ArgumentException("Revision type must be head, date or number", "args");
+	}
+
+	if(_currentArgs)
+		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
 	AprPool^ pool = gcnew AprPool(_pool);
 	_currentArgs = args;

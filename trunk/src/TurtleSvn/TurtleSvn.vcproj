@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon"
+				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon;..\..\imports\include"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -63,6 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="..\..\imports\lib"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -119,7 +120,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon"
+				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon;..\..\imports\include"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -140,6 +141,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\imports\lib"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 				KeyFile="TurtleSvn.snk"
@@ -369,6 +371,14 @@
 				>
 				<File
 					RelativePath=".\Client_CheckOut.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_CleanUp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Update.cpp"
 					>
 				</File>
 			</Filter>

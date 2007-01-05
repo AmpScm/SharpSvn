@@ -108,7 +108,58 @@ namespace QQn {
 			}
 		};
 
-		public ref class SvnCommitArgs
+		public ref class SvnUpdateArgs : public SvnClientArgs
+		{
+			bool _notRecursive;
+			bool _ignoreExternals;
+			SvnRevision^ _revision;
+		public:
+			SvnUpdateArgs()
+			{
+				_revision = SvnRevision::Head;
+			}
+
+			property bool NotRecursive
+			{
+				bool get()
+				{
+					return _notRecursive;
+				}
+				void set(bool value)
+				{
+					_notRecursive = value;
+				}
+			}
+
+			property bool IgnoreExternals
+			{
+				bool get()
+				{
+					return _ignoreExternals;
+				}
+				void set(bool value)
+				{
+					_ignoreExternals = value;
+				}
+			}
+
+			property SvnRevision^ Revision
+			{
+				SvnRevision^ get()
+				{
+					return _revision;
+				}
+				void set(SvnRevision^ value)
+				{
+					if(value)
+						_revision = value;
+					else
+						_revision = SvnRevision::Head;
+				}
+			}
+		};
+
+		public ref class SvnCommitArgs : public SvnClientArgs
 		{
 			event EventHandler<SvnClientCommitLogEventArgs^>^ GetCommitLog;
 
@@ -122,5 +173,14 @@ namespace QQn {
 				GetCommitLog(this, e);
 			}
 		};
+
+		public ref class SvnCleanUpArgs : public SvnClientArgs
+		{
+		public:
+			SvnCleanUpArgs()
+			{
+			}
+		};
+
 	}
 }

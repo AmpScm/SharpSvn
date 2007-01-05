@@ -23,7 +23,7 @@ namespace QQn {
 			{
 				return QQn::Svn::SvnBase::Utf8_PtrToString(error->message);
 			}
-			catch(Exception^ e)
+			catch(Exception^)
 			{
 				return "Subversion error: Unable to retrieve error text";
 			}
