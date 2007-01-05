@@ -4,25 +4,41 @@
 
 using namespace QQn::Apr;
 
-generic<typename T>
-AprArray<T>::AprArray(IList<T>^ items, AprPool ^pool)
+generic<typename T, typename R>
+AprArray<T,R>::AprArray(IList<T>^ items, AprPool ^pool)
 {
-	//apr_array_header_t
+	if(!items)
+		throw gcnew ArgumentNullException("items");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	_marshaller = Activator::CreateInstance<R>();
+	_pool = pool;
+	_handle = apr_array_make(pool->Handle, items->Count, _marshaller->ItemSize);
+
+	for each(T t in items)
+	{
+		void* ptr = apr_array_push(_handle);
+
+		_marshaller->Write(t, ptr, pool);
+	}
 }
 
-generic<typename T>
-apr_array_header_t *AprArray<T>::Handle::get()
+generic<typename T, typename R>
+AprArray<T,R>::AprArray(apr_array_header_t* handle, AprPool ^pool)
 {
-	_pool->Ensure();
-	return _handle;
+	if(!handle)
+		throw gcnew ArgumentNullException("handle");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	_marshaller = Activator::CreateInstance<R>();
+	_handle = handle;
+	_pool = pool;
 }
 
-generic<typename T>
-AprArray<T>::!AprArray()
+generic<typename T, typename R>
+AprArray<T,R>::~AprArray()
 {
-}
-
-generic<typename T>
-AprArray<T>::~AprArray()
-{
+	_handle = nullptr;
 }

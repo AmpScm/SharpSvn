@@ -23,6 +23,8 @@ namespace QQn {
 		ref class SvnNotifyEventArgs;
 
 		using System::Runtime::InteropServices::GCHandle;
+		using System::Collections::Generic::IDictionary;
+		using System::Collections::Generic::IList;
 
 		struct SvnClientCallBacks
 		{
@@ -110,14 +112,62 @@ namespace QQn {
 
 		public:
 			/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
+			/// <exception type="SvnException">Operation failed</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
 			void CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
 			{
 				CheckOut(url, path, revision, gcnew SvnCheckOutArgs());
 			}
 
+			/// <summary>Performs a checkout of <paramref name="url" /> to <paramref name="path" /> to the specified param</summary>
+			/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			/// <returns>true if the operation succeeded; false if it did not</returns>
 			bool CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision, SvnCheckOutArgs^ args);
 
+		public:
+			/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
+			/// <exception type="SvnException">Operation failed</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			void Update(String^ path);
+			/// <summary>Recursively updates the specified path</summary>
+			/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			bool Update(String^ path, SvnUpdateArgs^ args);
 
+			/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
+			/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			bool Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revision);
+
+			/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
+			/// <exception type="SvnException">Operation failed</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			void Update(IList<String^>^ paths);
+			/// <summary>Updates the specified paths to the specified revision</summary>
+			/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			/// <returns>true if the operation succeeded; false if it did not</returns>
+			bool Update(IList<String^>^ paths, SvnUpdateArgs^ args);
+			/// <summary>Updates the specified paths to the specified revision</summary>
+			/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			/// <returns>true if the operation succeeded; false if it did not</returns>
+			bool Update(IList<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions);
+
+		private:
+			bool UpdateInternal(IList<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions);
+
+		public:
+			/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
+			/// <exception type="SvnException">Operation failed</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			void CleanUp(String^ path);
+			/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
+			/// <returns>true if the operation succeeded; false if it did not</returns>
+			/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+			/// <exception type="ArgumentException">Parameters invalid</exception>
+			bool CleanUp(String^ path, SvnCleanUpArgs^ args);
 
 		private:
 			~SvnClient();
