@@ -28,11 +28,25 @@ namespace TurtleSvn {
 			}
 		}
 
-	public:
+	internal:
+		static SvnException^ Create(svn_error_t *error);
+		
+
+	internal:
 		SvnException(svn_error_t *error)
 			: ExternalException(GetErrorText(error))
 		{
 			_error = error;
+		}
+
+	};
+
+	public ref class SvnAuthorizationException : public SvnException
+	{
+	internal:
+		SvnAuthorizationException(svn_error_t *error)
+			: SvnException(error)
+		{
 		}
 
 	};

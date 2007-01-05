@@ -1,15 +1,10 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include <svn_config.h>
 #include "SvnObjBaton.h"
 
 using namespace TurtleSvn;
 using namespace TurtleSvn::Apr;
-
-
-struct apr_hash_t
-{};
 
 
 SvnClient::SvnClient()
@@ -50,94 +45,6 @@ void SvnClient::Initialize()
 	CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
 	CtxHandle->progress_baton = baton;
 	CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
-}
-
-
-
-void SvnClient::EnsureState(SvnClientState state)
-{
-	if(state < _clientState)
-		return;
-
-	if(ClientState < SvnClientState::ConfigLoaded && state >= SvnClientState::ConfigLoaded)
-	{
-		LoadConfigurationDefault();
-
-		System::Diagnostics::Debug::Assert(ClientState == SvnClientState::ConfigLoaded);
-	}
-}
-
-void SvnClient::LoadConfiguration(String ^path, bool ensurePath)
-{
-	if(ClientState >= SvnClientState::ConfigLoaded)
-		throw gcnew InvalidOperationException("Configuration already loaded");
-
-	if(String::IsNullOrEmpty(path))
-		path = nullptr;
-
-	AprPool^ tmpPool = gcnew AprPool(_pool);
-	try
-	{
-		const char* szPath = path ? tmpPool->AllocString(path) : nullptr;
-
-		svn_error_t* err = nullptr;
-
-		if(ensurePath)
-		{
-			err = svn_config_ensure(szPath, tmpPool->Handle);
-
-			if(err)
-				throw gcnew SvnException(err);
-		}
-
-		apr_hash_t* cfg = nullptr;
-		err = svn_config_get_config(&cfg, szPath, _pool->Handle);
-
-		if(err)
-			throw gcnew SvnException(err);
-
-		CtxHandle->config = cfg;
-
-		_clientState = SvnClientState::ConfigLoaded;
-	}
-	finally
-	{
-		delete tmpPool;
-	}
-}
-
-void SvnClient::LoadConfiguration(String ^path)
-{
-	LoadConfiguration(path, false);
-}
-
-void SvnClient::LoadConfigurationDefault()
-{
-	LoadConfiguration(nullptr, true);
-}
-
-void SvnClient::MergeConfiguration(String^ path)
-{
-	if(!path)
-		throw gcnew ArgumentNullException("path");
-
-	if(ClientState < SvnClientState::ConfigLoaded)
-		LoadConfigurationDefault();
-
-	AprPool^ tmpPool = gcnew AprPool(_pool);
-	try
-	{
-		const char* szPath = tmpPool->AllocString(path);
-
-		svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);
-
-		if(err)
-			throw gcnew SvnException(err);
-	}
-	finally
-	{
-		delete tmpPool;
-	}
 }
 
 void SvnClient::HandleClientCancel(SvnClientCancelEventArgs^ e)
@@ -202,10 +109,19 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
 
 	SvnClientCancelEventArgs^ ea = gcnew SvnClientCancelEventArgs();
+	try
+	{
+		client->HandleClientCancel(ea);
 
-	client->HandleClientCancel(ea);
+		if(ea->Cancel)
+			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
 
-	return nullptr;
+		return nullptr;
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
 }
 
 svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
@@ -214,9 +130,19 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg
 
 	SvnClientCommitLogEventArgs^ ea = gcnew SvnClientCommitLogEventArgs();
 
-	client->HandleClientGetCommitLog(ea);
+	try
+	{
+		client->HandleClientGetCommitLog(ea);
 
-	return nullptr;
+		if(ea->Cancel)
+			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
+
+		return nullptr;
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
 }
 
 
@@ -224,17 +150,30 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs();
+	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs(notify, pool);
 
-	client->HandleClientNotify(ea);
-
+	try
+	{
+		client->HandleClientNotify(ea);
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
 }
 
 void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total);
+	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total, pool);
 
-	client->HandleClientProgress(ea);
+	try
+	{
+		client->HandleClientProgress(ea);
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
 }

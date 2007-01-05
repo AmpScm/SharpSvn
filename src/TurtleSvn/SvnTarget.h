@@ -185,6 +185,7 @@ namespace TurtleSvn {
 
 	public:
 		static bool TryParse(String^ targetString, [Out] SvnTarget^% target);
+	internal:
 		static bool TryParse(String^ targetString, [Out] SvnTarget^% target, AprPool^ pool);
 	};
 }
