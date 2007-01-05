@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<project>
+	<mkdir dir="zip" />
+	<!-- http://subversion.tigris.org/files/documents/15/32472/db-4.4.20-win32.zip gives some error -->
+	<!--get src="http://www.studioturtle.net/downloads/dev/db-4.4.20-win32.zip" dest="zip/db-4.4.20-win32.zip" usetimestamp="true" />
+	<get src="http://www.studioturtle.net/downloads/dev/svn-win32-libintl.zip" dest="zip/svn-win32-libintl.zip" usetimestamp="true" />
+	<get src="http://subversion.tigris.org/downloads/svn-win32-1.4.2.zip" dest="zip/svn-win32-1.4.2.zip" usetimestamp="true" />
+	<get src="http://subversion.tigris.org/downloads/svn-win32-1.4.2_dev.zip" dest="zip/svn-win32-1.4.2_dev.zip" usetimestamp="true" />
+	<get src="http://subversion.tigris.org/downloads/svn-win32-1.4.2_pdb.zip" dest="zip/svn-win32-1.4.2_pdb.zip" usetimestamp="true" /-->
+
+	<foreach item="File" in="zip" property="filename">
+		<unzip todir="tmp" zipfile="${filename}" />
+	</foreach>
+
+	<copy todir="include" flatten="true">
+		<fileset basedir="tmp">
+			<include name="**/*.h" />
+		</fileset>
+	</copy>
+	<copy todir="lib" flatten="true">
+		<fileset basedir="tmp">
+			<include name="**/*.lib" />
+			<include name="**/*.pdb" />
+			<include name="**/*.exp" />
+		</fileset>
+	</copy>
+	<copy todir="bin" flatten="true">
+		<fileset basedir="tmp">
+			<include name="**/*.dll" />
+			<include name="**/*.pdb" />
+		</fileset>
+	</copy>
+	<delete>
+		<fileset basedir="tmp">
+			<include name="**" />
+		</fileset>
+	</delete>
+</project>
