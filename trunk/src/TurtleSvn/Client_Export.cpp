@@ -84,7 +84,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
 		throw gcnew ArgumentNullException("args");
 
 	__int64 revision;
-	Export(from, toPath, args, revision);
+	return Export(from, toPath, args, revision);
 }
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] __int64% revision)
@@ -126,6 +126,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		if(args->HandleResult(r))
 		{
 			revision = resultRev;
+			return true;
 		}
 		else
 			return false;
