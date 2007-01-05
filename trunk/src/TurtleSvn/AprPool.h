@@ -6,10 +6,10 @@ using namespace System;
 #include "SvnBase.h"
 
 
-namespace QQn {
+namespace TurtleSvn {
 	namespace Apr {
 
-		public ref class AprPool : public QQn::Svn::SvnHandleBase, public System::IDisposable
+		public ref class AprPool : public SvnHandleBase, public System::IDisposable
 		{
 			ref class AprPoolTag : public IDisposable
 			{

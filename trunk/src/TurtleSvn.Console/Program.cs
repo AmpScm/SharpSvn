@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using QQn.Svn;
+using TurtleSvn;
 using System.Reflection;
 
 namespace TurtleSvn

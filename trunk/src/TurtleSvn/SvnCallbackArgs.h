@@ -1,13 +1,9 @@
 
 #pragma once
 
-namespace QQn
-{
-	namespace Svn
+namespace TurtleSvn {
+	ref class SvnCallbackArgs : EventArgs
 	{
-		ref class SvnCallbackArgs : EventArgs
-		{
 
-		};
-	}
+	};
 }

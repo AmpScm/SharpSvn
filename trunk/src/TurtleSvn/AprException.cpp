@@ -2,5 +2,5 @@
 
 #include "AprException.h"
 
-using namespace QQn::Apr;
+using namespace TurtleSvn::Apr;
 

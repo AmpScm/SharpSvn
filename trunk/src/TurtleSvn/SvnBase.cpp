@@ -7,8 +7,8 @@
 
 #include <apr_general.h>
 
-using namespace QQn::Apr;
-using namespace QQn::Svn;
+using namespace TurtleSvn::Apr;
+using namespace TurtleSvn;
 
 static bool _aprInitialized = false;
 static int _myLen = 0;

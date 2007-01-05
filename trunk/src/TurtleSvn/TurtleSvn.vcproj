@@ -235,6 +235,10 @@
 					RelativePath=".\AprPool.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnBatton.h"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -303,10 +307,6 @@
 				>
 				<File
 					RelativePath=".\SvnAll.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnBatton.h"
 					>
 				</File>
 				<File

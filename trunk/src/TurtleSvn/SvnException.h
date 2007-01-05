@@ -5,14 +5,13 @@
 
 using namespace System;
 
-namespace QQn {
-	namespace Svn {
+namespace TurtleSvn {
 
-		[Serializable]
-		public ref class SvnException : public System::Runtime::InteropServices::ExternalException
-		{
-		private:
-			svn_error_t *_error;
+	[Serializable]
+	public ref class SvnException : public System::Runtime::InteropServices::ExternalException
+	{
+	private:
+		svn_error_t *_error;
 
 		static String^ GetErrorText(svn_error_t *error)
 		{
@@ -21,7 +20,7 @@ namespace QQn {
 
 			try
 			{
-				return QQn::Svn::SvnBase::Utf8_PtrToString(error->message);
+				return TurtleSvn::Apr::SvnBase::Utf8_PtrToString(error->message);
 			}
 			catch(Exception^)
 			{
@@ -29,13 +28,12 @@ namespace QQn {
 			}
 		}
 
-		public:
-			SvnException(svn_error_t *error)
-				: ExternalException(GetErrorText(error))
-			{
-				_error = error;
-			}
-			
-		};
-	}
+	public:
+		SvnException(svn_error_t *error)
+			: ExternalException(GetErrorText(error))
+		{
+			_error = error;
+		}
+
+	};
 }

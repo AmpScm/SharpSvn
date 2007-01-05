@@ -4,12 +4,9 @@
 using namespace System;
 
 
-namespace QQn {
+namespace TurtleSvn {
 	namespace Apr {
 		ref class AprPool;
-	}
-
-	namespace Svn {
 
 		public ref class SvnBase abstract
 		{
@@ -27,7 +24,7 @@ namespace QQn {
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 
-			static const char* Utf8_StringToPtr(String ^value, QQn::Apr::AprPool^ pool);
+			static const char* Utf8_StringToPtr(String ^value, TurtleSvn::Apr::AprPool^ pool);
 		};
 
 		public ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
@@ -43,7 +40,7 @@ namespace QQn {
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 
-			static const char* Utf8_StringToPtr(String ^value, QQn::Apr::AprPool^ pool);
+			static const char* Utf8_StringToPtr(String ^value, TurtleSvn::Apr::AprPool^ pool);
 		};
 	}
 }

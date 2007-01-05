@@ -6,7 +6,7 @@ using namespace System;
 #include "SvnBase.h"
 #include "AprPool.h"
 
-namespace QQn {
+namespace TurtleSvn {
 	namespace Apr {
 
 		using System::Collections::Generic::IList;
@@ -27,7 +27,7 @@ namespace QQn {
 
 		generic<typename T, typename R>
 		where R : IItemMarshaller<T>
-		ref class AprArray : public QQn::Svn::SvnHandleBase, public System::Collections::Generic::ICollection<T>
+		ref class AprArray : public SvnHandleBase, public System::Collections::Generic::ICollection<T>
 		{
 			AprPool^ _pool;
 			apr_array_header_t *_handle;
@@ -118,7 +118,7 @@ namespace QQn {
 		};
 
 
-		ref class AprCStrMarshaller sealed : public QQn::Svn::SvnBase, public IItemMarshaller<String^>
+		ref class AprCStrMarshaller sealed : public SvnBase, public IItemMarshaller<String^>
 		{
 		public:
 			AprCStrMarshaller()
@@ -146,26 +146,7 @@ namespace QQn {
 			}
 		};
 
-		ref class SvnRevNum
-		{
-			initonly __int32 _value;
-
-		public:
-			SvnRevNum(__int32 value)
-			{
-				_value = value;
-			}
-
-			property __int32 Value
-			{
-				__int32 get()
-				{
-					return _value;
-				}
-			}
-		};
-
-		ref class AprSvnRevNumMarshaller sealed : public QQn::Svn::SvnBase, public IItemMarshaller<__int64>
+		ref class AprSvnRevNumMarshaller sealed : public SvnBase, public IItemMarshaller<__int64>
 		{
 		public:
 			AprSvnRevNumMarshaller()
