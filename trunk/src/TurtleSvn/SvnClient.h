@@ -9,12 +9,6 @@
 #include "SvnBatton.h"
 
 namespace TurtleSvn {
-	public enum class SvnClientState
-	{
-		Initial,
-		ConfigLoaded,
-		AuthorizationInitialized
-	};
 
 	ref class SvnCancelEventArgs;
 	ref class SvnProgressEventArgs;
@@ -38,11 +32,11 @@ namespace TurtleSvn {
 	{
 		initonly TurtleSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
 		AprPool^ _pool;
-		SvnClientState _clientState;
 		SvnClientArgs^ _currentArgs;
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
+	internal:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient(AprPool^ pool);
 
@@ -68,27 +62,6 @@ namespace TurtleSvn {
 			}
 		}
 
-		property SvnClientState ClientState
-		{
-			SvnClientState get()
-			{
-				return _clientState;
-			}
-		}
-
-	protected:
-		void EnsureState(SvnClientState state);
-
-	public:
-		/// <summary>Loads the subversion configuration from the specified path</summary>
-		void LoadConfiguration(String^ path);
-		/// <summary>Loads the subversion configuration from the specified path and optionally ensures the path is a subversion config dir by creating default files</summary>
-		void LoadConfiguration(String^ path, bool ensurePath);
-		/// <summary>Loads the standard subversion configuration and ensures the subversion config dir by creating default files</summary>
-		void LoadConfigurationDefault();
-		/// <summary>Merges configuration from the specified path into the existing configuration</summary>
-		void MergeConfiguration(String^ path);
-
 	public:
 		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel;
 		event EventHandler<SvnClientProgressEventArgs^>^	ClientProgress;
@@ -108,8 +81,13 @@ namespace TurtleSvn {
 		void HandleClientGetCommitLog(SvnClientCommitLogEventArgs^ e);
 		void HandleClientNotify(SvnClientNotifyEventArgs^ e);
 
+		const char* GetEolPtr(SvnEolStyle style);
 
 	public:
+		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void CheckOut(SvnUriTarget^ url, String^ path);
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -119,18 +97,26 @@ namespace TurtleSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision, SvnCheckOutArgs^ args);
+		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args);
+		/// <summary>Performs a checkout of <paramref name="url" /> to <paramref name="path" /> to the specified param</summary>
+		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		/// <returns>true if the operation succeeded; false if it did not</returns>
+		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] __int64% revision);
 
 	public:
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		void Update(String^ path);
+		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
+		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void Update(String^ path, [Out] __int64% revision);
 		/// <summary>Recursively updates the specified path</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(String^ path, SvnUpdateArgs^ args);
-
+		bool Update(String^ path, SvnUpdateArgs^ args);		
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -140,6 +126,10 @@ namespace TurtleSvn {
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		void Update(IList<String^>^ paths);
+		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void Update(IList<String^>^ paths, [Out] IList<__int64>^% revisions);
 		/// <summary>Updates the specified paths to the specified revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -153,6 +143,26 @@ namespace TurtleSvn {
 
 	private:
 		bool UpdateInternal(IList<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions);
+
+	public:
+		/// <summary>Recursively exports the specified target to the specified path</summary>
+		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
+		void Export(SvnTarget^ from, String^ toPath);
+		/// <summary>Recursively exports the specified target to the specified path</summary>
+		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
+		void Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision);
+		/// <summary>Recursively exports the specified target to the specified path, optionally overwriting existing files</summary>
+		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
+		void Export(SvnTarget^ from, String^ toPath, bool overwrite);
+		/// <summary>Recursively exports the specified target to the specified path, optionally overwriting existing files</summary>
+		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
+		void Export(SvnTarget^ from, String^ toPath, bool overwrite, [Out] __int64% revision);
+		/// <summary>Exports the specified target to the specified path</summary>
+		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
+		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args);
+		/// <summary>Exports the specified target to the specified path</summary>
+		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
+		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] __int64% revision);
 
 	public:
 		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>

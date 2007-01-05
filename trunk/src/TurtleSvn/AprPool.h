@@ -9,7 +9,7 @@ using namespace System;
 namespace TurtleSvn {
 	namespace Apr {
 
-		public ref class AprPool : public SvnHandleBase, public System::IDisposable
+		ref class AprPool : public SvnHandleBase, public System::IDisposable
 		{
 			ref class AprPoolTag : public IDisposable
 			{

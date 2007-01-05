@@ -4,12 +4,42 @@
 using namespace TurtleSvn::Apr;
 using namespace TurtleSvn;
 
-void SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
+void SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
-	CheckOut(url, path, revision, gcnew SvnCheckOutArgs());
+	if(!url)
+		throw gcnew ArgumentNullException("url");
+	else if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	__int64 revision;
+	CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
 }
 
-bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision, SvnCheckOutArgs^ args)
+void SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
+{
+	if(!url)
+		throw gcnew ArgumentNullException("url");
+	else if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
+}
+
+bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
+{
+	if(!url)
+		throw gcnew ArgumentNullException("url");
+	else if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	__int64 revision;
+
+	return CheckOut(url, path, args, revision);
+}
+
+bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] __int64% revision)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
@@ -18,7 +48,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revisio
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!args->Revision)
-		throw gcnew ArgumentNullException("args.Revision");
+		throw gcnew ArgumentException("args.Revision is not set", "args");
 	else
 		switch(args->Revision->Type)
 	{

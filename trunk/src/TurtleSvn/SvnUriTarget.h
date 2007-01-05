@@ -112,6 +112,7 @@ namespace TurtleSvn {
 			}
 		}
 
+	internal:
 		static bool TryParse(String^ targetString, [Out] SvnUriTarget ^% target, AprPool^ pool)
 		{
 			if(String::IsNullOrEmpty(targetString))

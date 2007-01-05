@@ -17,6 +17,24 @@ void SvnClient::Update(String^ path)
 	UpdateInternal(safe_cast<IList<String^>^>(paths), gcnew SvnUpdateArgs(), nullptr);
 }
 
+void SvnClient::Update(String^ path, [Out] __int64% revision)
+{
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	array<__int64>^ revisions = gcnew array<__int64>(1);
+	array<String^>^ paths = gcnew array<String^>(1);
+	
+	revision = -1;
+
+	paths[0] = path;
+
+	UpdateInternal(safe_cast<IList<String^>^>(paths), gcnew SvnUpdateArgs(), revisions);
+
+	revision = revisions[0];
+}
+
+
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 {
 	if(!path)
@@ -62,6 +80,24 @@ void SvnClient::Update(IList<String^>^ paths)
 
 	UpdateInternal(paths, gcnew SvnUpdateArgs(), nullptr);
 }
+
+void SvnClient::Update(IList<String^>^ paths, [Out] IList<__int64>^% revisions)
+{
+	if(!paths)
+		throw gcnew ArgumentNullException("paths");
+
+	array<__int64>^ revs = gcnew array<__int64>(paths->Count);
+
+	try
+	{
+		UpdateInternal(paths, gcnew SvnUpdateArgs(), revs);
+	}
+	finally
+	{
+		revisions = safe_cast<IList<__int64>^>(revs);
+	}
+}
+
 
 bool SvnClient::Update(IList<String^>^ paths, SvnUpdateArgs^ args)
 {
@@ -137,18 +173,17 @@ bool SvnClient::UpdateInternal(IList<String^>^ paths, SvnUpdateArgs^ args, array
 			CtxHandle,
 			pool->Handle);
 
-		if(r)
-			return args->HandleResult(r);
-
-		if(revisions)
+		if(args->HandleResult(r) && revisions)
 		{			
 			AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, pool);
 
 			for(int i = 0; i < aprRevs->Count; i++)
 				revisions[i] = aprRevs[i];
+
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 	finally
 	{

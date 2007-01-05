@@ -362,6 +362,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientEventArgs.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnException.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnTargets.cpp"
 					>
 				</File>
@@ -375,6 +383,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_CleanUp.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Export.cpp"
 					>
 				</File>
 				<File

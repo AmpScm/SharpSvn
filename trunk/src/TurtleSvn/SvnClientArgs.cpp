@@ -10,10 +10,11 @@ bool SvnClientArgs::HandleResult(svn_error_t *error)
 {
 	if(!error)
 		return true;
-	else if(ThrowOnError)
-		throw gcnew SvnException(error);
-	else
-		_exception = gcnew SvnException(error);
 
-	return false;
+	_exception = SvnException::Create(error);
+
+	if(ThrowOnError)
+		throw _exception;
+	else
+		return false;
 }

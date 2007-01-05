@@ -158,6 +158,91 @@ namespace TurtleSvn {
 		}
 	};
 
+	public enum class SvnEolStyle
+	{
+		Native,
+		CrLf,
+		Lf,
+		Cr
+	};	
+
+	public ref class SvnExportArgs : public SvnClientArgs
+	{
+		bool _notRecursive;
+		bool _ignoreExternals;
+		bool _overwrite;
+		SvnRevision^ _revision;
+		SvnEolStyle _eolStyle;
+	public:
+		SvnExportArgs()
+		{
+			_revision = SvnRevision::Head;
+		}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return _notRecursive;
+			}
+			void set(bool value)
+			{
+				_notRecursive = value;
+			}
+		}
+
+		property bool IgnoreExternals
+		{
+			bool get()
+			{
+				return _ignoreExternals;
+			}
+			void set(bool value)
+			{
+				_ignoreExternals = value;
+			}
+		}
+
+		property bool Overwrite
+		{
+			bool get()
+			{
+				return _overwrite;
+			}
+			void set(bool value)
+			{
+				_overwrite = value;
+			}
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::Head;
+			}
+		}
+
+		property SvnEolStyle EolStyle
+		{
+			SvnEolStyle get()
+			{
+				return _eolStyle;
+			}
+			void set(SvnEolStyle value)
+			{
+				_eolStyle = value;
+			}
+		}
+	};
+
 	public ref class SvnCommitArgs : public SvnClientArgs
 	{
 		event EventHandler<SvnClientCommitLogEventArgs^>^ GetCommitLog;

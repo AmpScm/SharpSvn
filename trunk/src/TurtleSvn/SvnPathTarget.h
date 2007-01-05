@@ -103,6 +103,7 @@ namespace TurtleSvn {
 			}
 		}
 
+	internal:
 		static bool TryParse(String^ targetString, [Out] SvnPathTarget ^% target, AprPool^ pool)
 		{
 			if(String::IsNullOrEmpty(targetString))
@@ -134,6 +135,7 @@ namespace TurtleSvn {
 			return false;
 		}
 
+	public:
 		static SvnPathTarget^ FromString(String^ value);
 		static explicit operator SvnPathTarget^(String^ value) { return value ? FromString(value) : nullptr; }
 	};
