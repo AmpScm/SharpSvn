@@ -112,7 +112,7 @@ void SvnClient::LoadConfiguration(String ^path)
 
 void SvnClient::LoadConfigurationDefault()
 {
-	LoadConfiguration(nullptr, false);
+	LoadConfiguration(nullptr, true);
 }
 
 void SvnClient::MergeConfiguration(String^ path)
