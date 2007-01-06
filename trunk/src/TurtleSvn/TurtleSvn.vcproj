@@ -228,15 +228,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\AprBaton.h"
+					>
+				</File>
+				<File
 					RelativePath=".\AprException.h"
 					>
 				</File>
 				<File
 					RelativePath=".\AprPool.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnBatton.h"
 					>
 				</File>
 			</Filter>
@@ -310,6 +310,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnAuthentication.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnCallbackArgs.h"
 					>
 				</File>
@@ -327,6 +331,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnEnums.h"
 					>
 				</File>
 				<File
@@ -349,6 +357,10 @@
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\SvnAuthentication.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\SvnClient.cpp"
 					>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using TurtleSvn;
 using System.Reflection;
+using TurtleSvn.Security;
 
 namespace TurtleSvn
 {
@@ -22,9 +23,13 @@ namespace TurtleSvn
 			_client = new SvnClient();
 
 			_client.LoadConfigurationDefault();
+			_client.Authenticator.AddSubversionFileHandlers();
+			_client.Authenticator.UsernamePasswordHandlers += new EventHandler<TurtleSvn.Security.SvnUsernamePasswordArgs>(Authentication_UsernamePasswordHandlers);
+
+			//_client.Authenticator.
+			//_client.Authentication.
 
 			_client.ClientCancel += new EventHandler<SvnClientCancelEventArgs>(OnClientCancel);
-			_client.ClientGetCommitLog += new EventHandler<SvnClientCommitLogEventArgs>(OnClientGetCommitLog);
 			_client.ClientNotify += new EventHandler<SvnClientNotifyEventArgs>(OnClientNotify);
 			_client.ClientProgress += new EventHandler<SvnClientProgressEventArgs>(OnClientProgress);
 
@@ -43,15 +48,16 @@ namespace TurtleSvn
 			_client.Update(@"g:\Projects\SvnDotNet", new SvnUpdateArgs(), out ver);
 		}
 
+		void Authentication_UsernamePasswordHandlers(object sender, TurtleSvn.Security.SvnUsernamePasswordArgs e)
+		{
+			
+		}
+
 		void OnClientProgress(object sender, SvnClientProgressEventArgs e)
 		{
 		}
 
 		void OnClientNotify(object sender, SvnClientNotifyEventArgs e)
-		{
-		}
-
-		void OnClientGetCommitLog(object sender, SvnClientCommitLogEventArgs e)
 		{
 		}
 

@@ -23,6 +23,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 		throw gcnew SvnException(r);
 
 	_ctx = ctx;
+	_authentication = gcnew TurtleSvn::Security::SvnAuthentication();
 }
 
 SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
@@ -41,6 +42,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 		throw gcnew SvnException(r);
 
 	_ctx = ctx;
+	_authentication = gcnew TurtleSvn::Security::SvnAuthentication();
 }
 
 SvnClientContext::~SvnClientContext()
