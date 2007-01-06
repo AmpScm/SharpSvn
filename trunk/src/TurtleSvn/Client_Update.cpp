@@ -73,7 +73,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revisio
 	}
 }
 
-void SvnClient::Update(IList<String^>^ paths)
+void SvnClient::Update(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -81,7 +81,7 @@ void SvnClient::Update(IList<String^>^ paths)
 	UpdateInternal(paths, gcnew SvnUpdateArgs(), nullptr);
 }
 
-void SvnClient::Update(IList<String^>^ paths, [Out] IList<__int64>^% revisions)
+void SvnClient::Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -99,7 +99,7 @@ void SvnClient::Update(IList<String^>^ paths, [Out] IList<__int64>^% revisions)
 }
 
 
-bool SvnClient::Update(IList<String^>^ paths, SvnUpdateArgs^ args)
+bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -109,7 +109,7 @@ bool SvnClient::Update(IList<String^>^ paths, SvnUpdateArgs^ args)
 	return UpdateInternal(paths, args, nullptr);
 }
 
-bool SvnClient::Update(IList<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions)
+bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -129,7 +129,7 @@ bool SvnClient::Update(IList<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<_
 	}
 }
 
-bool SvnClient::UpdateInternal(IList<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions)
+bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -152,6 +152,8 @@ bool SvnClient::UpdateInternal(IList<String^>^ paths, SvnUpdateArgs^ args, array
 		if(String::IsNullOrEmpty(s))
 			throw gcnew ArgumentException("member of paths is null", "paths");
 	}
+
+	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; an SvnClient instance can handle only one command at a time");

@@ -5,7 +5,7 @@
 using namespace TurtleSvn::Apr;
 
 generic<typename T, typename R>
-AprArray<T,R>::AprArray(IList<T>^ items, AprPool ^pool)
+AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)
 {
 	if(!items)
 		throw gcnew ArgumentNullException("items");

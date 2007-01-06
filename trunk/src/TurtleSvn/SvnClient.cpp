@@ -47,6 +47,18 @@ void SvnClient::Initialize()
 	CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
 }
 
+System::Version^ SvnClient::Version::get()
+{
+	const svn_version_t* version = svn_client_version();
+
+	return gcnew System::Version(version->major, version->minor, version->patch);
+}
+
+System::Version^ SvnClient::WrapperVersion::get()
+{
+	return (gcnew System::Reflection::AssemblyName(SvnClient::typeid->Assembly->FullName))->Version;
+}
+
 void SvnClient::HandleClientCancel(SvnClientCancelEventArgs^ e)
 {
 	if(_currentArgs)

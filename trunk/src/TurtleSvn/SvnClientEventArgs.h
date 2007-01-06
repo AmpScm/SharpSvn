@@ -130,6 +130,7 @@ namespace TurtleSvn {
 			if(!notify)
 				throw gcnew ArgumentNullException("notify");
 
+			_notify = notify;
 			_action = (SvnNotifyAction)notify->action;
 			_nodeKind = (SvnNodeKind)notify->kind;
 			_contentState = (SvnNotifyState)notify->content_state;

@@ -96,6 +96,8 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
+	EnsureState(SvnContextState::AuthorizationInitialized);
+
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
