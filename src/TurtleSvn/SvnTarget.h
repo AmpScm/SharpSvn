@@ -2,21 +2,10 @@
 #pragma once
 
 #include "SvnClientContext.h"
+#include "SvnEnums.h"
 
 namespace TurtleSvn {
 	using namespace System;
-
-	public enum class SvnRevisionType
-	{
-		None		= svn_opt_revision_unspecified, 
-		Number		= svn_opt_revision_number,
-		Date		= svn_opt_revision_date,
-		Committed	= svn_opt_revision_committed,
-		Previous	= svn_opt_revision_previous,
-		Base		= svn_opt_revision_base,
-		Working		= svn_opt_revision_working,
-		Head		= svn_opt_revision_head
-	};
 
 	public ref class SvnRevision sealed
 	{

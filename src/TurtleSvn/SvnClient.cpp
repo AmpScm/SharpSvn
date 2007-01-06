@@ -60,7 +60,8 @@ void SvnClient::HandleClientCancel(SvnClientCancelEventArgs^ e)
 
 void SvnClient::OnClientCancel(SvnClientCancelEventArgs^ e)
 {
-	ClientCancel(this, e);
+	if(_clientCancel)
+		_clientCancel(this, e);
 }
 
 void SvnClient::HandleClientProgress(SvnClientProgressEventArgs^ e)
@@ -73,7 +74,8 @@ void SvnClient::HandleClientProgress(SvnClientProgressEventArgs^ e)
 
 void SvnClient::OnClientProgress(SvnClientProgressEventArgs^ e)
 {
-	ClientProgress(this, e);
+	if(_clientProgress)
+		_clientProgress(this, e);
 }
 
 void SvnClient::HandleClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
@@ -88,7 +90,7 @@ void SvnClient::HandleClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
 
 void SvnClient::OnClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
 {
-	ClientGetCommitLog(this, e);
+	
 }
 
 void SvnClient::HandleClientNotify(SvnClientNotifyEventArgs^ e)
@@ -101,7 +103,8 @@ void SvnClient::HandleClientNotify(SvnClientNotifyEventArgs^ e)
 
 void SvnClient::OnClientNotify(SvnClientNotifyEventArgs^ e)
 {
-	ClientNotify(this, e);
+	if(_clientNotify)
+		_clientNotify(this, e);
 }
 
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)

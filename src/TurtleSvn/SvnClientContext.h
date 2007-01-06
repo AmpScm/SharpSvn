@@ -7,6 +7,11 @@ using namespace System;
 using namespace TurtleSvn::Apr;
 
 namespace TurtleSvn {
+	namespace Security {
+		ref class SvnAuthentication;
+	};
+
+	using TurtleSvn::Security::SvnAuthentication;
 
 	public enum class SvnContextState
 	{
@@ -15,12 +20,12 @@ namespace TurtleSvn {
 		AuthorizationInitialized
 	};
 
-
 	public ref class SvnClientContext : public SvnHandleBase
 	{
 		svn_client_ctx_t *_ctx;
 		AprPool^ _pool;
 		SvnContextState _contextState;
+		initonly SvnAuthentication^ _authentication;
 	internal:
 		SvnClientContext(AprPool^ pool);
 
@@ -56,5 +61,14 @@ namespace TurtleSvn {
 				return _contextState;
 			}
 		}
+
+	public:
+		property SvnAuthentication^ Authenticator
+		{
+			SvnAuthentication^ get()
+			{
+				return _authentication;
+			}
+		}	
 	};
 }

@@ -6,7 +6,7 @@
 #include "SvnPathTarget.h"
 #include "SvnClientEventArgs.h"
 #include "SvnClientArgs.h"
-#include "SvnBatton.h"
+#include "AprBaton.h"
 
 namespace TurtleSvn {
 
@@ -62,11 +62,28 @@ namespace TurtleSvn {
 			}
 		}
 
+	private:
+		EventHandler<SvnClientCancelEventArgs^>^	_clientCancel;
+		EventHandler<SvnClientProgressEventArgs^>^	_clientProgress;
+		EventHandler<SvnClientNotifyEventArgs^>^	_clientNotify;
 	public:
-		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel;
-		event EventHandler<SvnClientProgressEventArgs^>^	ClientProgress;
-		event EventHandler<SvnClientCommitLogEventArgs^>^	ClientGetCommitLog;
-		event EventHandler<SvnClientNotifyEventArgs^>^		ClientNotify;
+		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel
+		{
+			void add(EventHandler<SvnClientCancelEventArgs^>^ e)		{ _clientCancel += e; }
+			void remove(EventHandler<SvnClientCancelEventArgs^>^ e)		{ _clientCancel -= e; }
+		}
+
+		event EventHandler<SvnClientProgressEventArgs^>^	ClientProgress
+		{
+			void add(EventHandler<SvnClientProgressEventArgs^>^ e)		{ _clientProgress += e; }
+			void remove(EventHandler<SvnClientProgressEventArgs^>^ e)	{ _clientProgress -= e; }
+		}
+
+		event EventHandler<SvnClientNotifyEventArgs^>^		ClientNotify
+		{
+			void add(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify += e; }
+			void remove(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify -= e; }
+		}
 
 	protected:
 		virtual void OnClientCancel(SvnClientCancelEventArgs^ e);
