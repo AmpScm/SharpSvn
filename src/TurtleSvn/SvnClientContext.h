@@ -24,6 +24,8 @@ namespace TurtleSvn {
 	{
 		svn_client_ctx_t *_ctx;
 		AprPool^ _pool;
+		AprPool^ _authPool;
+		int _authCookie;
 		SvnContextState _contextState;
 		initonly SvnAuthentication^ _authentication;
 	internal:

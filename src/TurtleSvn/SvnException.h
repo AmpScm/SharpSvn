@@ -50,4 +50,14 @@ namespace TurtleSvn {
 		}
 
 	};
+
+	public ref class SvnOperationCanceledException : public SvnException
+	{
+	internal:
+		SvnOperationCanceledException(svn_error_t *error)
+			: SvnException(error)
+		{
+		}
+
+	};
 }

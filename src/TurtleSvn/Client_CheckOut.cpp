@@ -61,6 +61,8 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 			throw gcnew ArgumentException("Revision type must be head, date or number", "args");
 	}
 
+	EnsureState(SvnContextState::AuthorizationInitialized);
+
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 

@@ -72,5 +72,17 @@ namespace TurtleSvn {
 		Unlocked	= svn_wc_notify_lock_state_unlocked
 	};
 
+	[Flags]
+	public enum class SvnCertificateTrustFailure
+	{
+		CertificateNotValidYet		=	SVN_AUTH_SSL_NOTYETVALID,
+		CertificateExpired			=	SVN_AUTH_SSL_EXPIRED,
+		CommonNameMismatch			=	SVN_AUTH_SSL_CNMISMATCH,
+		UnknownCertificateAuthority =	SVN_AUTH_SSL_UNKNOWNCA,
+
+		UnknownSslProviderFailure	=	SVN_AUTH_SSL_OTHER,
+
+		MaskAllFailures				=	CertificateNotValidYet | CertificateExpired | CommonNameMismatch | UnknownCertificateAuthority | UnknownSslProviderFailure
+	};
 
 }

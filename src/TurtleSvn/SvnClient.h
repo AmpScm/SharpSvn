@@ -17,6 +17,7 @@ namespace TurtleSvn {
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
+	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 
 	struct SvnClientCallBacks
@@ -46,22 +47,16 @@ namespace TurtleSvn {
 	public:
 		property static Version^ Version
 		{
-			System::Version^ get()
-			{
-				const svn_version_t* version = svn_client_version();
-
-				return gcnew System::Version(version->major, version->minor, version->patch);
-			}
+			System::Version^ get();
 		}
 
 		property static System::Version^ WrapperVersion
 		{
-			System::Version^ get()
-			{
-				return (gcnew System::Reflection::AssemblyName(SvnClient::typeid->Assembly->FullName))->Version;
-			}
+			System::Version^ get();
 		}
 
+/////////////////////////////////////////
+#pragma region // Client events
 	private:
 		EventHandler<SvnClientCancelEventArgs^>^	_clientCancel;
 		EventHandler<SvnClientProgressEventArgs^>^	_clientProgress;
@@ -99,8 +94,12 @@ namespace TurtleSvn {
 		void HandleClientNotify(SvnClientNotifyEventArgs^ e);
 
 		const char* GetEolPtr(SvnEolStyle style);
+#pragma endregion
 
 	public:
+/////////////////////////////////////////
+#pragma region // Checkout Client Command
+
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -120,8 +119,12 @@ namespace TurtleSvn {
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
 		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] __int64% revision);
+#pragma endregion
 
 	public:
+/////////////////////////////////////////
+#pragma region // Update Client Command
+
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -142,26 +145,29 @@ namespace TurtleSvn {
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Update(IList<String^>^ paths);
+		void Update(ICollection<String^>^ paths);
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Update(IList<String^>^ paths, [Out] IList<__int64>^% revisions);
+		void Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions);
 		/// <summary>Updates the specified paths to the specified revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool Update(IList<String^>^ paths, SvnUpdateArgs^ args);
+		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args);
 		/// <summary>Updates the specified paths to the specified revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool Update(IList<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions);
+		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions);
 
 	private:
-		bool UpdateInternal(IList<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions);
+		bool UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions);
+#pragma endregion
 
 	public:
+/////////////////////////////////////////
+#pragma region // Export Client Command
 		/// <summary>Recursively exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
 		void Export(SvnTarget^ from, String^ toPath);
@@ -180,8 +186,12 @@ namespace TurtleSvn {
 		/// <summary>Exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
 		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] __int64% revision);
+#pragma endregion
 
 	public:
+		/////////////////////////////////////////
+#pragma region // Cleanup Client Command
+
 		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -191,6 +201,7 @@ namespace TurtleSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		bool CleanUp(String^ path, SvnCleanUpArgs^ args);
+#pragma endregion
 
 	private:
 		~SvnClient();

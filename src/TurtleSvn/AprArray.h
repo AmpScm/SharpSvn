@@ -9,7 +9,7 @@ using namespace System;
 namespace TurtleSvn {
 	namespace Apr {
 
-		using System::Collections::Generic::IList;
+		using System::Collections::Generic::ICollection;
 
 		generic<typename T>
 		where T : Object
@@ -34,7 +34,7 @@ namespace TurtleSvn {
 			initonly IItemMarshaller<T>^ _marshaller; // BH: replacing type IItemMarshaller<T>^ with R gives an internal compiler error in MSC 14.0
 
 		internal:
-			AprArray(IList<T>^ items, AprPool ^pool);
+			AprArray(ICollection<T>^ items, AprPool ^pool);
 			AprArray(apr_array_header_t* handle, AprPool ^pool);
 
 		internal:

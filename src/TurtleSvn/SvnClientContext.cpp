@@ -73,6 +73,38 @@ void SvnClientContext::EnsureState(SvnContextState state)
 
 		System::Diagnostics::Debug::Assert(State == SvnContextState::ConfigLoaded);
 	}
+
+	if(state >= SvnContextState::AuthorizationInitialized)
+	{
+		if(State < SvnContextState::AuthorizationInitialized)
+		{
+			_authPool = gcnew AprPool(_pool);
+			int authCookie;
+
+			CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(_authPool, authCookie);
+			_authCookie = authCookie;
+
+			_contextState = SvnContextState::AuthorizationInitialized;
+		}
+		else
+		{
+			if(_authCookie != Authenticator->Cookie)
+			{
+				// Authenticator configuration has changed; reload the baton and its backend
+
+				_contextState = SvnContextState::ConfigLoaded;
+				CtxHandle->auth_baton = nullptr;
+				_authPool->Clear();
+
+				int authCookie;
+
+				CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(_authPool, authCookie);
+				_authCookie = authCookie;
+
+				_contextState = SvnContextState::AuthorizationInitialized;
+			}
+		}
+	}
 }
 
 void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)

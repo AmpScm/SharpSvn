@@ -88,6 +88,8 @@ namespace TurtleSvn {
 					_handle = nullptr;
 					_tag = nullptr;
 
+					GC::SuppressFinalize(this);
+
 					return me;
 				}
 				return nullptr;
@@ -109,6 +111,10 @@ namespace TurtleSvn {
 			void* Alloc(size_t size);
 			void* AllocCleared(size_t size);
 			const char* AllocString(String^ value);
+
+			static const char* AllocString(String^ value, apr_pool_t *pool);
+			static void* Alloc(size_t size, apr_pool_t *pool);
+			static void* AllocCleared(size_t size, apr_pool_t *pool);
 		};
 	}
 }
