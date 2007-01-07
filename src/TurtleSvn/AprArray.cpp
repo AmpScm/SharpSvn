@@ -25,7 +25,7 @@ AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)
 }
 
 generic<typename T, typename R>
-AprArray<T,R>::AprArray(apr_array_header_t* handle, AprPool ^pool)
+AprArray<T,R>::AprArray(const apr_array_header_t* handle, AprPool ^pool)
 {
 	if(!handle)
 		throw gcnew ArgumentNullException("handle");
@@ -33,8 +33,9 @@ AprArray<T,R>::AprArray(apr_array_header_t* handle, AprPool ^pool)
 		throw gcnew ArgumentNullException("pool");
 
 	_marshaller = Activator::CreateInstance<R>();
-	_handle = handle;
+	_handle = const_cast<apr_array_header_t*>(handle);
 	_pool = pool;
+	_readOnly = true;
 }
 
 generic<typename T, typename R>

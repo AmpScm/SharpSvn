@@ -14,7 +14,7 @@ void SvnClient::Update(String^ path)
 
 	paths[0] = path;
 
-	UpdateInternal(safe_cast<IList<String^>^>(paths), gcnew SvnUpdateArgs(), nullptr);
+	UpdateInternal(safe_cast<ICollection<String^>^>(paths), gcnew SvnUpdateArgs(), nullptr);
 }
 
 void SvnClient::Update(String^ path, [Out] __int64% revision)
@@ -29,7 +29,7 @@ void SvnClient::Update(String^ path, [Out] __int64% revision)
 
 	paths[0] = path;
 
-	UpdateInternal(safe_cast<IList<String^>^>(paths), gcnew SvnUpdateArgs(), revisions);
+	UpdateInternal(safe_cast<ICollection<String^>^>(paths), gcnew SvnUpdateArgs(), revisions);
 
 	revision = revisions[0];
 }
@@ -46,7 +46,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 
 	paths[0] = path;
 
-	return UpdateInternal(safe_cast<IList<String^>^>(paths), args, nullptr);
+	return UpdateInternal(safe_cast<ICollection<String^>^>(paths), args, nullptr);
 }
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revision)
@@ -65,7 +65,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revisio
 
 	try
 	{
-		return UpdateInternal(safe_cast<IList<String^>^>(paths), args, revisions);
+		return UpdateInternal(safe_cast<ICollection<String^>^>(paths), args, revisions);
 	}
 	finally
 	{

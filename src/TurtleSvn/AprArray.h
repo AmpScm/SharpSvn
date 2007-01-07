@@ -32,10 +32,11 @@ namespace TurtleSvn {
 			AprPool^ _pool;
 			apr_array_header_t *_handle;
 			initonly IItemMarshaller<T>^ _marshaller; // BH: replacing type IItemMarshaller<T>^ with R gives an internal compiler error in MSC 14.0
+			initonly bool _readOnly;
 
 		internal:
 			AprArray(ICollection<T>^ items, AprPool ^pool);
-			AprArray(apr_array_header_t* handle, AprPool ^pool);
+			AprArray(const apr_array_header_t* handle, AprPool ^pool);
 
 		internal:
 			property apr_array_header_t *Handle
@@ -112,7 +113,7 @@ namespace TurtleSvn {
 			{
 				virtual bool get()
 				{
-					return false;
+					return _readOnly;
 				}
 			}
 		};

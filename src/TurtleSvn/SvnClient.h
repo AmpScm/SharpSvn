@@ -6,6 +6,7 @@
 #include "SvnPathTarget.h"
 #include "SvnClientEventArgs.h"
 #include "SvnClientArgs.h"
+#include "SvnCommitArgs.h"
 #include "AprBaton.h"
 
 namespace TurtleSvn {
@@ -19,14 +20,6 @@ namespace TurtleSvn {
 	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
-
-	struct SvnClientCallBacks
-	{
-		static svn_error_t *svn_cancel_func(void *cancel_baton);
-		static svn_error_t *svn_client_get_commit_log2(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
-		static void svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
-		static void svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
-	};
 
 	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
 	public ref class SvnClient : public SvnClientContext
@@ -61,6 +54,7 @@ namespace TurtleSvn {
 		EventHandler<SvnClientCancelEventArgs^>^	_clientCancel;
 		EventHandler<SvnClientProgressEventArgs^>^	_clientProgress;
 		EventHandler<SvnClientNotifyEventArgs^>^	_clientNotify;
+		EventHandler<SvnClientCommitLogEventArgs^>^	_clientCommit;
 	public:
 		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel
 		{
@@ -78,6 +72,12 @@ namespace TurtleSvn {
 		{
 			void add(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify += e; }
 			void remove(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify -= e; }
+		}
+
+		event EventHandler<SvnClientCommitLogEventArgs^>^	ClientCommit
+		{
+			void add(EventHandler<SvnClientCommitLogEventArgs^>^ e)		{ _clientCommit += e; }
+			void remove(EventHandler<SvnClientCommitLogEventArgs^>^ e)	{ _clientCommit -= e; }
 		}
 
 	protected:
@@ -190,6 +190,68 @@ namespace TurtleSvn {
 
 	public:
 		/////////////////////////////////////////
+#pragma region // Switch Client Command
+
+		/// <summary>Switches a path recursively to the specified target</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void Switch(String^ path, SvnUriTarget^ target);
+
+		/// <summary>Switches a path recursively to the specified target</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision);
+
+		/// <summary>Switches a path recursively to the specified target</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args);
+
+		/// <summary>Switches a path recursively to the specified target</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] __int64% revision);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Add Client Command
+		/// <summary>Recursively adds the specified path</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void Add(String^ path);
+
+		/// <summary>Adds the specified path</summary>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		void Add(String^ path, bool notRecursive);
+
+		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
+		/// <returns>true if the operation succeeded; false if it did not</returns>
+		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		bool Add(String^ path, SvnAddArgs^ args);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Commit Client Command
+		void Commit(String^ path);
+		void Commit(String^ path, [Out] SvnCommitInfo^% commitInfo);
+		void Commit(ICollection<String^>^ paths);
+		void Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(String^ path, SvnCommitArgs^ args);
+		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args);
+		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+
+	private:
+		bool CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
+
+	public:
+		/////////////////////////////////////////
 #pragma region // Cleanup Client Command
 
 		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
@@ -202,6 +264,15 @@ namespace TurtleSvn {
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		bool CleanUp(String^ path, SvnCleanUpArgs^ args);
 #pragma endregion
+
+
+	public:
+		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
+		Uri^ GetUriFromPath(String^ path);
+
+		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
+		/// <returns>true if successfull, otherwise false</returns>
+		bool GetUuidFromUri(Uri^ uri, [Out] Guid% uuid);
 
 	private:
 		~SvnClient();

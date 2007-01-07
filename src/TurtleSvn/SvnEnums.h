@@ -84,5 +84,4 @@ namespace TurtleSvn {
 
 		MaskAllFailures				=	CertificateNotValidYet | CertificateExpired | CommonNameMismatch | UnknownCertificateAuthority | UnknownSslProviderFailure
 	};
-
 }
