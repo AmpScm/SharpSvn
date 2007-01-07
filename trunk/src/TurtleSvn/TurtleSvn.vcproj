@@ -334,6 +334,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnCommitArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnEnums.h"
 					>
 				</File>
@@ -378,6 +382,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnCommitArgs.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnException.cpp"
 					>
 				</File>
@@ -390,6 +398,10 @@
 				Name="Commands"
 				>
 				<File
+					RelativePath=".\Client_Add.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_CheckOut.cpp"
 					>
 				</File>
@@ -398,7 +410,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Commit.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Export.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Switch.cpp"
 					>
 				</File>
 				<File

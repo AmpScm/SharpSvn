@@ -2,8 +2,11 @@
 #pragma once
 
 #include "SvnEnums.h"
+#include "SvnCommitArgs.h"
 
 namespace TurtleSvn {
+	using System::Collections::Generic::ICollection;
+	using System::Collections::Generic::IList;
 
 	ref class SvnException;
 
@@ -94,12 +97,15 @@ namespace TurtleSvn {
 
 	public ref class SvnClientCommitLogEventArgs : public SvnClientEventArgs
 	{
+		AprPool^ _pool;
+		const apr_array_header_t *_commitItems;
 		bool _cancel;
+		String^ _logMessage;
+		IList<SvnCommitItem^>^ _items;
 	internal:
-		SvnClientCommitLogEventArgs()
-		{
-		}
+		SvnClientCommitLogEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
 
+	public:
 		property bool Cancel
 		{
 			bool get()
@@ -111,6 +117,25 @@ namespace TurtleSvn {
 				_cancel = value;
 			}
 		}
+
+		property String^ LogMessage
+		{
+			String^ get()
+			{
+				return _logMessage;
+			}
+			void set(String^ value)
+			{
+				_logMessage = value;
+			}
+		}
+
+		property IList<SvnCommitItem^>^ Items
+		{
+			IList<SvnCommitItem^>^ get();
+		}
+
+		virtual void Detach(bool keepProperties) override;
 	};
 
 	public ref class SvnClientNotifyEventArgs : public SvnClientEventArgs

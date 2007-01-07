@@ -12,13 +12,14 @@ struct apr_allocator_t
 struct apr_pool_t
 {};
 
-AprPool::AprPool(apr_pool_t *handle)
+AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
 {
 	if(!handle)
 		throw gcnew ArgumentNullException("handle");
 
 	_handle = handle;
 	_tag = gcnew AprPoolTag();
+	_destroyPool = destroyPool;
 }
 
 AprPool::~AprPool()
@@ -43,7 +44,8 @@ void AprPool::Destroy()
 		{
 			_handle = nullptr;
 
-			apr_pool_destroy(handle);
+			if(_destroyPool)
+				apr_pool_destroy(handle);
 		}
 	}
 }
@@ -63,6 +65,7 @@ AprPool::AprPool(TurtleSvn::Apr::AprPool ^parentPool)
 
 	_tag = gcnew AprPoolTag(parentPool->_tag);
 	_parent = parentPool;
+	_destroyPool = true;
 }
 
 AprPool::AprPool()
@@ -76,6 +79,15 @@ AprPool::AprPool()
 		_handle = handle;
 
 	_tag = gcnew AprPoolTag();
+	_destroyPool = true;
+}
+
+AprPool^ AprPool::Attach(apr_pool_t *handle, bool destroyPool)
+{
+	if(!handle)
+		throw gcnew ArgumentNullException("handle");
+
+	return gcnew AprPool(handle, destroyPool);
 }
 
 void AprPool::Clear()

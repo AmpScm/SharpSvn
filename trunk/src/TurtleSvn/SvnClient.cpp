@@ -1,21 +1,21 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "SvnObjBaton.h"
+#include "SvnCommitArgs.h"
 
 using namespace TurtleSvn;
 using namespace TurtleSvn::Apr;
 
 
 SvnClient::SvnClient()
-	: _pool(gcnew AprPool()), SvnClientContext(_pool)
+: _pool(gcnew AprPool()), SvnClientContext(_pool)
 {
 	_clientBatton = gcnew AprBaton<SvnClient^>(this);
 	Initialize();
 }
 
 SvnClient::SvnClient(AprPool^ pool)
-	: _pool(gcnew AprPool(pool)), SvnClientContext(_pool)
+: _pool(gcnew AprPool(pool)), SvnClientContext(_pool)
 {
 	_clientBatton = gcnew AprBaton<SvnClient^>(this);
 	Initialize();
@@ -32,6 +32,14 @@ SvnClient::~SvnClient()
 			delete pool;
 	}
 }
+
+struct SvnClientCallBacks
+{
+	static svn_error_t *svn_cancel_func(void *cancel_baton);
+	static svn_error_t *svn_client_get_commit_log2(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
+	static void svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
+	static void svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
+};
 
 void SvnClient::Initialize()
 {
@@ -92,17 +100,18 @@ void SvnClient::OnClientProgress(SvnClientProgressEventArgs^ e)
 
 void SvnClient::HandleClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
 {
-	SvnCommitArgs^ commitArgs = dynamic_cast<SvnCommitArgs^>(_currentArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(_currentArgs); // C#: _currentArgs as SvnCommitArgs
 
 	if(commitArgs)
 		commitArgs->OnGetCommitLog(e);
-	
+
 	OnClientGetCommitLog(e);
 }
 
 void SvnClient::OnClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
 {
-	
+	if(_clientCommit)
+		_clientCommit(this, e);
 }
 
 void SvnClient::HandleClientNotify(SvnClientNotifyEventArgs^ e)
@@ -143,7 +152,9 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientCommitLogEventArgs^ ea = gcnew SvnClientCommitLogEventArgs();
+	AprPool^ tmpPool = AprPool::Attach(pool, false);
+	
+	SvnClientCommitLogEventArgs^ ea = gcnew SvnClientCommitLogEventArgs(commit_items, tmpPool);
 
 	try
 	{
@@ -152,11 +163,15 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg
 		if(ea->Cancel)
 			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
 
+		if(ea->LogMessage)
+			*log_msg = tmpPool->AllocString(ea->LogMessage);
+
 		return nullptr;
 	}
 	finally
 	{
 		ea->Detach(false);
+		delete tmpPool;
 	}
 }
 
@@ -190,5 +205,52 @@ void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off
 	finally
 	{
 		ea->Detach(false);
+	}
+}
+
+Uri^ SvnClient::GetUriFromPath(String^ path)
+{
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	EnsureState(SvnContextState::ConfigLoaded);
+
+	AprPool pool(_pool);
+
+	const char* url = NULL;
+
+	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocString(path), pool.Handle);
+
+	if(!err && url)
+	{
+		String ^uriStr = Utf8_PtrToString(url);
+
+		return gcnew Uri(uriStr);
+	}
+	else
+		return nullptr;
+}
+
+bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
+{
+	if(!uri)
+		throw gcnew ArgumentNullException("uri");
+
+	uuid = Guid::Empty;
+
+	EnsureState(SvnContextState::AuthorizationInitialized);
+
+	AprPool pool(_pool);
+
+	const char* uuidStr = NULL;
+
+	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocString(uri->ToString()), CtxHandle, pool.Handle);
+
+	if(err || !uuidStr)
+		return false;
+	else
+	{
+		uuid = Guid(Utf8_PtrToString(uuidStr));
+		return true;
 	}
 }

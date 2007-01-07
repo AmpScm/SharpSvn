@@ -48,8 +48,9 @@ namespace TurtleSvn {
 			AprPool^ _parent;
 			AprPoolTag^ _tag;
 			apr_pool_t *_handle;
+			bool _destroyPool;
 
-			AprPool(apr_pool_t *handle);
+			AprPool(apr_pool_t *handle, bool destroyPool);
 			!AprPool();
 		public:
 			~AprPool();
@@ -61,6 +62,8 @@ namespace TurtleSvn {
 		public:
 			AprPool(AprPool^ parentPool);
 			AprPool();
+
+			static AprPool^ Attach(apr_pool_t *handle, bool destroyPool);
 
 			property bool IsDisposed
 			{

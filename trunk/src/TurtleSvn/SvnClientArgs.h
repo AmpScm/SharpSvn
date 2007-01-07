@@ -56,6 +56,45 @@ namespace TurtleSvn {
 		bool HandleResult(svn_error_t *error);
 	};
 
+	public ref class SvnClientArgsWithCommit : public SvnClientArgs
+	{
+		event EventHandler<SvnClientCommitLogEventArgs^>^ GetCommitLog;
+		String^ _commitMessage;
+
+	protected:
+		SvnClientArgsWithCommit()
+		{
+		}
+
+	protected public:
+		virtual void OnGetCommitLog(SvnClientCommitLogEventArgs^ e)
+		{
+			GetCommitLog(this, e);
+		}
+
+	public:
+		property String^ CommitMessage
+		{
+			String^ get()
+			{
+				return _commitMessage;
+			}
+
+			void set(String^ value)
+			{
+				_commitMessage = value;
+			}
+		}
+	};
+
+	public ref class SvnCleanUpArgs : public SvnClientArgs
+	{
+	public:
+		SvnCleanUpArgs()
+		{
+		}
+	};
+
 	public ref class SvnCheckOutArgs : public SvnClientArgs
 	{
 		bool _notRecursive;
@@ -271,27 +310,113 @@ namespace TurtleSvn {
 		}
 	};
 
-	public ref class SvnCommitArgs : public SvnClientArgs
+	public ref class SvnSwitchArgs : public SvnClientArgs
 	{
-		event EventHandler<SvnClientCommitLogEventArgs^>^ GetCommitLog;
+		bool _notRecursive;
 
-	protected public:
+	public:
+		SvnSwitchArgs()
+		{
+		}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return _notRecursive;
+			}
+			void set(bool value)
+			{
+				_notRecursive = value;
+			}
+		}
+	};
+
+	public ref class SvnAddArgs : public SvnClientArgs
+	{
+		bool _notRecursive;
+		bool _noIgnore;
+		bool _force;
+
+	public:
+		SvnAddArgs()
+		{
+		}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return _notRecursive;
+			}
+			void set(bool value)
+			{
+				_notRecursive = value;
+			}
+		}
+
+		property bool NoIgnore
+		{
+			bool get()
+			{
+				return _noIgnore;
+			}
+			void set(bool value)
+			{
+				_noIgnore = value;
+			}
+		}
+
+		/// <summary>If force is not set and path is already under version control, return the error 
+		/// SVN_ERR_ENTRY_EXISTS. If force is set, do not error on already-versioned items. When used 
+		/// on a directory in conjunction with the recursive flag, this has the effect of scheduling 
+		/// for addition unversioned files and directories scattered deep within a versioned tree.</summary>
+		property bool Force
+		{
+			bool get()
+			{
+				return _force;
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+	};
+
+	public ref class SvnCommitArgs : public SvnClientArgsWithCommit
+	{
+		bool _notRecursive;
+		bool _keepLocks;
+		String^ _message;
+	public:
 		SvnCommitArgs()
 		{
 		}
 
-		virtual void OnGetCommitLog(SvnClientCommitLogEventArgs^ e)
-		{
-			GetCommitLog(this, e);
-		}
-	};
-
-	public ref class SvnCleanUpArgs : public SvnClientArgs
-	{
 	public:
-		SvnCleanUpArgs()
+		property bool NotRecursive
 		{
+			bool get()
+			{
+				return _notRecursive;
+			}
+			void set(bool value)
+			{
+				_notRecursive = value;
+			}
+		}
+
+		property bool KeepLocks
+		{
+			bool get()
+			{
+				return _keepLocks;
+			}
+			void set(bool value)
+			{
+				_keepLocks = value;
+			}
 		}
 	};
-
 }

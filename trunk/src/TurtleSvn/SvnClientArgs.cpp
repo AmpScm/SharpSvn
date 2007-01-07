@@ -18,3 +18,4 @@ bool SvnClientArgs::HandleResult(svn_error_t *error)
 	else
 		return false;
 }
+
