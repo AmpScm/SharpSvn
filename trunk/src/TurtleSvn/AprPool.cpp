@@ -123,18 +123,23 @@ const char* AprPool::AllocString(String^ value)
 	if(!value)
 		value = "";
 
-	cli::array<unsigned char, 1>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
+	if(value->Length >= 1)
+	{
+		cli::array<unsigned char, 1>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
-	char* pData = (char*)Alloc(bytes->Length+1);
+		char* pData = (char*)Alloc(bytes->Length+1);
 
-	pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		pin_ptr<unsigned char> pBytes = &bytes[0]; 
 
-	if(pData && pBytes)
-		memcpy(pData, pBytes, bytes->Length);
+		if(pData && pBytes)
+			memcpy(pData, pBytes, bytes->Length);
 
-	pData[bytes->Length] = 0;
+		pData[bytes->Length] = 0;
 
-	return pData;
+		return pData;
+	}
+	else
+		return (const char*)AllocCleared(1);
 }
 
 const char* AprPool::AllocString(String^ value, apr_pool_t *pool)
@@ -145,16 +150,21 @@ const char* AprPool::AllocString(String^ value, apr_pool_t *pool)
 	if(!value)
 		value = "";
 
-	cli::array<unsigned char, 1>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
+	if(value->Length > 0)
+	{
+		cli::array<unsigned char, 1>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
-	char* pData = (char*)apr_palloc(pool, bytes->Length+1);
+		char* pData = (char*)Alloc(bytes->Length+1, pool);
 
-	pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		pin_ptr<unsigned char> pBytes = &bytes[0]; 
 
-	if(pData && pBytes)
-		memcpy(pData, pBytes, bytes->Length);
+		if(pData && pBytes)
+			memcpy(pData, pBytes, bytes->Length);
 
-	pData[bytes->Length] = 0;
+		pData[bytes->Length] = 0;
 
-	return pData;
+		return pData;
+	}
+	else
+		return (const char*)AllocCleared(1, pool);
 }
