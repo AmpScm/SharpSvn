@@ -22,6 +22,7 @@ void SvnAuthentication::AddSubversionFileHandlers()
 {
 	UsernameHandlers						+= SubversionFileUsernameHandler;
 	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;
+	UsernamePasswordHandlers				+= SubversionWindowsUsernamePasswordHandler; // svn.exe adds this after the other handler
 	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
@@ -51,7 +52,7 @@ svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(AprPool ^pool, [Out] 
 	if(!pool)
 		throw gcnew NullReferenceException("pool");
 
-	AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>^ authArray = gcnew AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>(_wrappers->Values, pool);
+	AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>^ authArray = gcnew AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>(_handlers, pool);
 
 	svn_auth_baton_t *rslt = nullptr;
 
@@ -81,15 +82,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 	SvnUsernameArgs^ args = gcnew SvnUsernameArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	wrapper->Raise(args);
-
-	if(args->Cancel)
+	if(!wrapper->Raise(args) || args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_username_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_username_t), pool);
 
 	(*cred)->username = AprPool::AllocString(args->Username, pool);
-	(*cred)->may_save = args->MaySave;
+	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
@@ -121,16 +120,14 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 
 	SvnUsernamePasswordArgs^ args = gcnew SvnUsernamePasswordArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	wrapper->Raise(args);
-
-	if(args->Cancel)
+	if(!wrapper->Raise(args) || args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_simple_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_simple_t), pool);
 
 	(*cred)->username = AprPool::AllocString(args->Username, pool);
 	(*cred)->password = AprPool::AllocString(args->Password, pool);
-	(*cred)->may_save = args->MaySave;
+	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
@@ -143,6 +140,10 @@ svn_auth_provider_object_t *SvnUsernamePasswordArgs::Wrapper::GetProviderPtr(Apr
 	svn_auth_provider_object_t *provider = NULL;
 
 	if(_handler->Equals(SvnAuthentication::SubversionFileUsernamePasswordHandler))
+	{
+		svn_auth_get_simple_provider(&provider, pool->Handle);
+	}
+	else if(_handler->Equals(SvnAuthentication::SubversionWindowsUsernamePasswordHandler))
 	{
 		svn_auth_get_windows_simple_provider(&provider, pool->Handle);
 	}
@@ -170,15 +171,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		SvnBase::Utf8_PtrToString(cert_info->ascii_cert),
 		SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	wrapper->Raise(args);
-
-	if(args->Cancel)
+	if(!wrapper->Raise(args) || args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_ssl_server_trust_t*)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t), pool);
 
 	(*cred)->accepted_failures = (apr_uint32_t)args->AcceptedFailures;
-	(*cred)->may_save = args->MaySave;
+	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
@@ -210,15 +209,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 
 	SvnSslClientCertificateArgs^ args = gcnew SvnSslClientCertificateArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	wrapper->Raise(args);
-
-	if(args->Cancel)
+	if(!wrapper->Raise(args) || args->Cancel)
 		return svn_error_create(SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_ssl_client_cert_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_t), pool);
 
 	(*cred)->cert_file = AprPool::AllocString(args->CertificateFile, pool);
-	(*cred)->may_save = args->MaySave;
+	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
@@ -250,15 +247,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 
 	SvnSslClientCertificatePasswordArgs^ args = gcnew SvnSslClientCertificatePasswordArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	wrapper->Raise(args);
-
-	if(args->Cancel)
+	if(!wrapper->Raise(args) || args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_ssl_client_cert_pw_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_pw_t), pool);
 
 	(*cred)->password = AprPool::AllocString(args->Password, pool);
-	(*cred)->may_save = args->MaySave;
+	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
@@ -281,50 +276,50 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetPro
 }
 #pragma endregion
 
-void SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
+bool SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
-void SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
+bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
-void SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
-{
-	throw gcnew NotImplementedException();
-}
-
-void SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
 
-void SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
+bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
 
-void SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
+bool SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
 
-void SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
+bool SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
 
-void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+bool SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
 
-void SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
 
-void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
+bool SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+{
+	throw gcnew NotImplementedException();
+}
+
+bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 {
 	throw gcnew NotImplementedException();
 }
