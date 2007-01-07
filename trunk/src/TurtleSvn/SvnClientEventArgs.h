@@ -142,10 +142,13 @@ namespace TurtleSvn {
 		}
 
 	private:
+		String^ _fullPath;
 		String^ _path;
 		String^ _mimeType;
 		SvnException^ _exception;
 	public:
+		/// <summary>The path the notification is about</summary>
+		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
 		property String^ Path
 		{
 			String^ get()
@@ -154,6 +157,19 @@ namespace TurtleSvn {
 					_path = SvnBase::Utf8_PtrToString(_notify->path);
 
 				return _path;
+			}
+		}
+
+		/// <summary>The path the notification is about, translated via <see cref="System::IO::Path::GetFullPath" /></summary>
+		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
+		property String^ FullPath
+		{
+			String^ get()
+			{
+				if(!_fullPath && Path)
+					_fullPath = System::IO::Path::GetFullPath(Path);
+
+				return _fullPath;
 			}
 		}
 
