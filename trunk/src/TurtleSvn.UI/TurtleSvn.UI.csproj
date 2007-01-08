@@ -32,13 +32,71 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\SslClientCertificatePassPhraseDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication\SslClientCertificatePassPhraseDialog.Designer.cs">
+      <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Authentication\SslServerCertificateTrustDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication\SslServerCertificateTrustDialog.Designer.cs">
+      <DependentUpon>SslServerCertificateTrustDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Authentication\TurtleSvnGui.cs" />
+    <Compile Include="Authentication\UsernameDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication\UsernameDialog.Designer.cs">
+      <DependentUpon>UsernameDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Authentication\UsernamePasswordDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication\UsernamePasswordDialog.Designer.cs">
+      <DependentUpon>UsernamePasswordDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="TurtleSvn.UI.snk" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Authentication\SslClientCertificatePassPhraseDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Authentication\SslServerCertificateTrustDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>SslServerCertificateTrustDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Authentication\UsernameDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UsernameDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Authentication\UsernamePasswordDialog.resx">
+      <SubType>Designer</SubType>
+      <DependentUpon>UsernamePasswordDialog.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Authentication\AuthenticationBanner.bmp" />
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <SubType>Designer</SubType>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
