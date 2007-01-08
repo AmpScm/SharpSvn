@@ -185,6 +185,10 @@
 			RelativePath="System.XML.dll"
 			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 		/>
+		<ProjectReference
+			ReferencedProjectIdentifier="{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
+			RelativePathToProject=".\TurtleSvn.UI\TurtleSvn.UI.csproj"
+		/>
 	</References>
 	<Files>
 		<Filter

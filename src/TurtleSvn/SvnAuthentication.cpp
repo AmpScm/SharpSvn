@@ -7,6 +7,7 @@
 using namespace TurtleSvn;
 using namespace TurtleSvn::Apr;
 using namespace TurtleSvn::Security;
+using System::Text::StringBuilder;
 
 struct svn_auth_baton_t
 {};
@@ -82,7 +83,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 	SvnUsernameArgs^ args = gcnew SvnUsernameArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) || args->Cancel)
+	if(!wrapper->Raise(args) && !args->Cancel)
+	{
+		*cred = nullptr;
+		return nullptr;
+	}
+
+	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_username_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_username_t), pool);
@@ -120,7 +127,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 
 	SvnUsernamePasswordArgs^ args = gcnew SvnUsernamePasswordArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) || args->Cancel)
+	if(!wrapper->Raise(args) && !args->Cancel)
+	{
+		*cred = nullptr;
+		return nullptr;
+	}
+
+	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_simple_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_simple_t), pool);
@@ -171,7 +184,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		SvnBase::Utf8_PtrToString(cert_info->ascii_cert),
 		SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) || args->Cancel)
+	if(!wrapper->Raise(args) && !args->Cancel)
+	{
+		*cred = nullptr;
+		return nullptr;
+	}
+
+	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_ssl_server_trust_t*)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t), pool);
@@ -209,7 +228,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 
 	SvnSslClientCertificateArgs^ args = gcnew SvnSslClientCertificateArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) || args->Cancel)
+	if(!wrapper->Raise(args) && !args->Cancel)
+	{
+		*cred = nullptr;
+		return nullptr;
+	}
+
+	if(args->Cancel)
 		return svn_error_create(SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_ssl_client_cert_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_t), pool);
@@ -247,7 +272,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 
 	SvnSslClientCertificatePasswordArgs^ args = gcnew SvnSslClientCertificatePasswordArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) || args->Cancel)
+	if(!wrapper->Raise(args) && !args->Cancel)
+	{
+		*cred = nullptr;
+		return nullptr;
+	}
+
+	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
 
 	*cred = (svn_auth_cred_ssl_client_cert_pw_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_pw_t), pool);
@@ -299,27 +330,162 @@ bool SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sen
 	throw gcnew NotImplementedException();
 }
 
+///////////////////////////////
+void SvnAuthentication::MaybePrintRealm(SvnAuthorizationArgs^ e)
+{
+	if(!e)
+		throw gcnew ArgumentNullException("e");
+
+	if(e->Realm)
+		Console::WriteLine("Authentication realm: {0}", e->Realm);
+}
+
+String^ SvnAuthentication::ReadPassword()
+{
+	StringBuilder^ sb = gcnew StringBuilder();
+
+	ConsoleKeyInfo^ key;
+	do
+	{
+		key = Console::ReadKey(true);
+
+		switch(key->Key)
+		{
+		case ConsoleKey::Backspace:
+			if(sb->Length > 0)
+			{
+				Console::Write("\b \b");
+
+				sb->Length--;
+			}
+			break;
+		case ConsoleKey::Enter:
+			break; // Don't add to buffer!
+		default:
+			Console::Write('*');
+			sb->Append(key->KeyChar);
+		}
+	}
+	while(key->Key != ConsoleKey::Enter);
+
+	return sb->ToString();
+}
+
+
 bool SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	MaybePrintRealm(e);
+
+	Console::Write("Username: ");
+	e->Username = Console::ReadLine();
+
+	return true;
 }
 
 bool SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	MaybePrintRealm(e);
+
+	if(!e->InitialUsername)
+	{
+		Console::Write("Username: ");
+		e->Username = Console::ReadLine();
+	}
+	else
+		e->Username = e->InitialUsername;
+
+	Console::WriteLine();
+
+	Console::Write("Password: ");
+	e->Password = ReadPassword();
+	Console::WriteLine();
+
+	return true;
 }
 
 bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	Console::WriteLine("Error validating server certificate for '{0}':", e->Realm);
+
+	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority))
+	{
+		Console::WriteLine(" - The certificate is not issued by a trusted authority. Use the\n"
+			"   fingerprint to validate the certificate manually!");
+	}
+	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::CommonNameMismatch))
+	{
+		Console::WriteLine(" - The certificate hostname does not match.");
+	}
+	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::CertificateNotValidYet))
+	{
+		Console::WriteLine(" - The certificate is not yet valid.");
+	}
+	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::CertificateExpired))
+	{
+		Console::WriteLine(" - The certificate is has expired.");
+	}
+	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::UnknownSslProviderFailure))
+	{
+		Console::WriteLine(" - The certificate has an unknown error.");
+	}
+
+	Console::WriteLine("Certificcate information:\n"
+		" - Hostname: {0}\n"
+		" - Valid: from {1} until {2}\n"
+		" - Issuer: {3}\n"
+		" - Fingerprint: {4}",
+		e->CommonName,
+		e->ValidFrom,
+		e->ValidUntil,
+		e->Issuer,
+		e->FingerPrint);
+
+	try
+	{
+		while(true)
+		{
+			Console::Write("(R)eject, accept (t)emporarily or accept (p)ermanently? ");
+
+			ConsoleKeyInfo^ki = Console::ReadKey();
+			Console::WriteLine();
+
+			switch(ki->Key)
+			{
+			case ConsoleKey::Escape:
+			case ConsoleKey::R:
+				return false;
+			case ConsoleKey::P:
+				e->AcceptedFailures = e->Failures;
+				e->Save = e->MaySave;
+				return true;
+			case ConsoleKey::T:
+				e->AcceptedFailures = e->Failures;
+				return true;
+			}
+		}
+	}
+	finally
+	{
+		Console::WriteLine();
+	}
 }
 
 bool SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	MaybePrintRealm(e);
+
+	Console::Write("Client certificate filename: ");
+
+	e->CertificateFile = Console::ReadLine();
+	Console::WriteLine();
+	return true;
 }
 
 bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	Console::Write("Passphrase for '{0}': ", e->Realm);
+
+	e->Password = ReadPassword();
+	Console::WriteLine();
+	return true;
 }

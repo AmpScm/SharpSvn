@@ -339,8 +339,8 @@ namespace TurtleSvn {
 				}
 			}
 
-			/// <summary>Fingerprint name of the certificate</summary>
-			property String^ Fingerprint
+			/// <summary>FingerPrint name of the certificate</summary>
+			property String^ FingerPrint
 			{
 				String^ get()
 				{
@@ -363,6 +363,15 @@ namespace TurtleSvn {
 				String^ get()
 				{
 					return _certValidUntil;
+				}
+			}
+
+			/// <summary>Issuer value of the certificate</summary>
+			property String^ Issuer
+			{
+				String^ get()
+				{
+					return _certIssuer;
 				}
 			}
 
@@ -795,6 +804,8 @@ namespace TurtleSvn {
 				= gcnew SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>(ImpDialogSslClientCertificatePasswordHandler);
 
 		private:
+			static void MaybePrintRealm(SvnAuthorizationArgs^ e);
+			static String^ ReadPassword();
 			static bool ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArgs^ e);
 			static bool ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e);
 			static bool ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);

@@ -75,6 +75,7 @@ namespace TurtleSvn {
 	[Flags]
 	public enum class SvnCertificateTrustFailure
 	{
+		None						=	0,
 		CertificateNotValidYet		=	SVN_AUTH_SSL_NOTYETVALID,
 		CertificateExpired			=	SVN_AUTH_SSL_EXPIRED,
 		CommonNameMismatch			=	SVN_AUTH_SSL_CNMISMATCH,
