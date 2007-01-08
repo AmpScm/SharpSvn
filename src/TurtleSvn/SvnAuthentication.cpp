@@ -3,11 +3,12 @@
 #include "SvnAll.h"
 #include "SvnObjBaton.h"
 #include "SvnAuthentication.h"
-
 using namespace TurtleSvn;
 using namespace TurtleSvn::Apr;
 using namespace TurtleSvn::Security;
+using namespace TurtleSvn::UI::Authentication;
 using System::Text::StringBuilder;
+
 
 struct svn_auth_baton_t
 {};
@@ -309,11 +310,38 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetPro
 
 bool SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+
+	String^ username;
+	bool save;
+
+	if(TurtleSvnGui::AskUsername(handle, "Subversion", e->Realm, e->Realm, e->MaySave, username, save))
+	{
+		e->Username = username;
+		e->Save = save;
+		return true;
+	}
+	else
+		return false;
 }
+
 bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+
+	String^ username;
+	String^ password;
+	bool save;
+
+	if(TurtleSvnGui::AskUsernamePassword(handle, "Subversion", e->Realm, e->Realm, e->InitialUsername, e->MaySave, username, password, save))
+	{
+		e->Username = username;
+		e->Password = password;
+		e->Save = save;
+		return true;
+	}
+	else
+		return false;
 }
 bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
@@ -322,12 +350,36 @@ bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslSer
 
 bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+
+	String^ file;
+	bool save;
+
+	if(TurtleSvnGui::AskClientCertificateFile(handle, "Subversion", e->Realm, e->Realm, file, save))
+	{
+		e->CertificateFile = file;
+		e->Save = save;
+		return true;
+	}
+	else
+		return false;
 }
 
 bool SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 {
-	throw gcnew NotImplementedException();
+	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+
+	String^ password;
+	bool save;
+
+	if(TurtleSvnGui::AskClientCertificatePassPhrase(handle, "Subversion", e->Realm, e->Realm, password, save))
+	{
+		e->Password = password;
+		e->Save = save;
+		return true;
+	}
+	else
+		return false;
 }
 
 ///////////////////////////////
