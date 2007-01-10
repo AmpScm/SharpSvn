@@ -66,7 +66,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool^ pool = gcnew AprPool(_pool);
+	AprPool pool(_pool);
 	_currentArgs = args;
 	try
 	{
@@ -77,20 +77,19 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		svn_opt_revision_t coRev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_checkout2(&version, 
-			pool->AllocString(url->TargetName), 
-			pool->AllocString(path), 
+			pool.AllocString(url->TargetName), 
+			pool.AllocString(path), 
 			&pegRev, 
 			&coRev, 
 			!args->NotRecursive, 
 			args->IgnoreExternals,
 			CtxHandle,
-			pool->Handle);
+			pool.Handle);
 
 		return args->HandleResult(err);
 	}
 	finally
 	{
 		_currentArgs = nullptr;
-		delete pool;
 	}
 }

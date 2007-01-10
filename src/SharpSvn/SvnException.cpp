@@ -2,7 +2,6 @@
 
 #include "SvnAll.h"
 #include <svn_config.h>
-#include "SvnObjBaton.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;

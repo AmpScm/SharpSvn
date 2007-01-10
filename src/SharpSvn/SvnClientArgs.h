@@ -419,4 +419,130 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnStatusArgs : public SvnClientArgs
+	{
+		bool _notRecursive;
+		bool _getAll;
+		bool _update;
+		bool _noIgnore;
+		bool _ignoreExternals;
+
+	protected public:
+		event EventHandler<SvnStatusEventArgs^>^ Status;
+
+		void OnStatus(SvnStatusEventArgs^ e)
+		{
+			Status(this, e);
+		}
+	public:
+		SvnStatusArgs()
+		{
+		}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return _notRecursive;
+			}
+			void set(bool value)
+			{
+				_notRecursive = value;
+			}
+		}
+
+		property bool GetAll
+		{
+			bool get()
+			{
+				return _getAll;
+			}
+			void set(bool value)
+			{
+				_getAll = value;
+			}
+		}
+
+		property bool Update
+		{
+			bool get()
+			{
+				return _update;
+			}
+			void set(bool value)
+			{
+				_update = value;
+			}
+		}
+
+		property bool NoIgnore
+		{
+			bool get()
+			{
+				return _noIgnore;
+			}
+			void set(bool value)
+			{
+				_noIgnore = value;
+			}
+		}
+
+		property bool IgnoreExternals
+		{
+			bool get()
+			{
+				return _ignoreExternals;
+			}
+			void set(bool value)
+			{
+				_ignoreExternals = value;
+			}
+		}
+	};
+
+	public ref class SvnInfoArgs : public SvnClientArgs
+	{
+		SvnRevision^ _revision;
+		bool _recursive;
+
+	protected public:
+		event EventHandler<SvnInfoEventArgs^>^ Info;
+
+		void OnInfo(SvnInfoEventArgs^ e)
+		{
+			Info(this, e);
+		}
+	public:
+		SvnInfoArgs()
+		{
+		}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return !_recursive;
+			}
+			void set(bool value)
+			{
+				_recursive = !value;
+			}
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::Head;
+			}
+		}
+	};
 }

@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "SvnObjBaton.h"
 #include "SvnAuthentication.h"
 #include "Wincrypt.h"
 using namespace SharpSvn;
@@ -549,9 +548,10 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	return true;
 }
 
-/*bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
+bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
 {
-	array<char>^ bytes = System::Text::Encoding::ASCII->GetBytes(this->CertificateValue);
+	throw gcnew NotImplementedException();
+	/*array<char>^ bytes = System::Text::Encoding::ASCII->GetBytes(this->CertificateValue);
 	pin_ptr<char> pByte = &bytes[0];
 
 	pCRLContext = CertCreateCRLContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pByte, bytes->Length);
@@ -570,6 +570,5 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 		0, NULL))
 	{
 		return false;
-	}
-
-}*/
+	}*/
+}

@@ -27,6 +27,15 @@ namespace SharpSvn {
 		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
 		AprPool^ _pool;
 		SvnClientArgs^ _currentArgs;
+	internal:
+		property SvnClientArgs^ CurrentArgs
+		{
+			SvnClientArgs^ get()
+			{
+				return _currentArgs;
+			}
+		}
+	
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
@@ -247,6 +256,55 @@ namespace SharpSvn {
 
 	private:
 		bool CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
+	internal:
+		generic<typename T>
+		where T : SvnClientEventArgs
+		ref class InfoItemList : public System::Collections::Generic::List<T>
+		{
+		public:
+			InfoItemList()
+			{}
+
+		internal:
+			void HandleItem(Object^ sender, T e)
+			{
+				e->Detach(true);
+				Add(e);
+			}
+		};
+	public:
+		/////////////////////////////////////////
+#pragma region // Status Client Command
+		/// <summary>Recursively gets 'interesting' status data for the specified path</summary>
+		void Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler);
+		/// <summary>Gets status data for the specified path</summary>
+		bool Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args);
+
+		/// <summary>Recursively gets a list of 'interesting' status data for the specified path</summary>
+		void GetStatus(SvnPathTarget^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		/// <summary>Gets the status data for the specified path</summary>
+		void GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status);
+		/// <summary>Gets a list of status data for the specified path</summary>
+		bool GetStatus(SvnPathTarget^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		
+#pragma endregion
+
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Info Client Command
+		/// <summary>Gets information about the specified target</summary>
+		void Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler);
+		/// <summary>Gets information about the specified target</summary>
+		bool Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler, SvnInfoArgs^ args);
+
+		/// <summary>Gets information about the specified target</summary>
+		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% status);
+		/// <summary>Gets information about the specified target</summary>
+		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^ statuses);
+		
 #pragma endregion
 
 
