@@ -22,7 +22,15 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 	SvnStatusArgs^ args = dynamic_cast<SvnStatusArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
-		args->OnStatus(gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status));
+		SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status);
+		try
+		{
+			args->OnStatus(e);
+		}
+		finally
+		{
+			e->Detach(false);
+		}
 	}
 }
 
@@ -103,7 +111,7 @@ void SvnClient::GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status
 	
 	try
 	{
-		Status(path, results->Handler);
+		Status(path, results->Handler, args);
 	}
 	finally
 	{

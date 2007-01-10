@@ -117,6 +117,22 @@ namespace SharpSvn {
 		Incomplete			= svn_wc_status_incomplete
 	};
 
+	public enum class SvnWcSchedule
+	{
+		/// <summary>Zero value; probably same as normal</summary>
+		None = 0,
+		/// <summary> Nothing special here </summary>
+		Normal			= svn_wc_schedule_normal,
+		/// <summary> Slated for addition </summary>
+		Add				= svn_wc_schedule_add,
+
+		/// <summary> Slated for deletion </summary>
+		Delete			= svn_wc_schedule_delete,
+
+		/// <summary> Slated for replacement (delete + add) </summary>
+		Replace			= svn_wc_schedule_replace
+	};
+
 	[Flags]
 	public enum class SvnCertificateTrustFailure
 	{

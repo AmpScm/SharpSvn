@@ -141,6 +141,14 @@ namespace SharpSvn {
 	public ref class SvnLockInfo : public SvnClientEventArgs
 	{
 		const svn_lock_t *_lock;
+		String^ _path;
+		String^ _fullPath;
+		String^ _token;
+		String^ _owner;
+		String^ _comment;
+		initonly bool _isDavComment;
+		initonly DateTime _creationDate;
+		initonly DateTime _expirationDate;
 	internal:
 		SvnLockInfo(const svn_lock_t *lock)
 		{
@@ -148,7 +156,94 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("lock");
 
 			_lock = lock;
+			_isDavComment = lock->is_dav_comment != 0;
+			_creationDate = SvnBase::DateTimeFromAprTime(lock->creation_date);
+			_expirationDate = SvnBase::DateTimeFromAprTime(lock->expiration_date);
 		}
+
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				if(!_path && _lock)
+					_path = SvnBase::Utf8_PtrToString(_lock->path);
+
+				return _path;
+			}
+		}
+
+		/// <summary>The path the notification is about, translated via <see cref="System::IO::Path::GetFullPath" /></summary>
+		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
+		property String^ FullPath
+		{
+			String^ get()
+			{
+				if(!_fullPath && Path)
+					_fullPath = System::IO::Path::GetFullPath(Path);
+
+				return _fullPath;
+			}
+		}
+
+		property String^ Token
+		{
+			String^ get()
+			{
+				if(!_token && _lock)
+					_token = SvnBase::Utf8_PtrToString(_lock->token);
+
+				return _token;
+			}
+		}
+
+		property String^ Owner
+		{
+			String^ get()
+			{
+				if(!_owner && _lock)
+					_owner = SvnBase::Utf8_PtrToString(_lock->owner);
+
+				return _owner;
+			}
+		}
+
+		property String^ Comment
+		{
+			String^ get()
+			{
+				if(!_comment && _lock)
+					_comment = SvnBase::Utf8_PtrToString(_lock->comment);
+
+				return _comment;
+			}
+		}
+
+		property bool IsWebDavComment
+		{
+			bool get()
+			{
+				return _isDavComment;
+			}
+		}
+
+		property DateTime CreationDate
+		{
+			DateTime get()
+			{
+				return _creationDate;
+			}
+		}
+
+		property DateTime ExpirationDate
+		{
+			DateTime get()
+			{
+				return _expirationDate;
+			}
+		}
+
+
 
 	public:
 		virtual void Detach(bool keepProperties) override
@@ -157,11 +252,16 @@ namespace SharpSvn {
 			{
 				if(keepProperties)
 				{
+					GC::KeepAlive(Path);
+					GC::KeepAlive(Token);
+					GC::KeepAlive(Owner);
+					GC::KeepAlive(Comment);
 				}
 			}
 			finally
 			{
 				_lock = nullptr;
+				__super::Detach(keepProperties);
 			}
 		}
 	};
@@ -528,7 +628,6 @@ namespace SharpSvn {
 				if(keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory
-					GC::KeepAlive(Path);
 					GC::KeepAlive(Uri);
 					GC::KeepAlive(ReposLock);
 					GC::KeepAlive(OodCommitAuthor);
@@ -547,8 +646,306 @@ namespace SharpSvn {
 
 	public ref class SvnInfoEventArgs : public SvnClientEventArgs
 	{
+		const svn_info_t* _info;
+		initonly String^ _path;
+		String^ _fullPath;
+		Uri^ _uri;
+		initonly __int64 _rev;
+		initonly SvnNodeKind _nodeKind;
+		Uri^ _reposRootUri;
+		String^ _reposUuid;
+		initonly __int64 _lastChangeRev;
+		initonly DateTime _lastChangeDate;
+		String^ _lastChangeAuthor;
+		SvnLockInfo^ _lock;
+		initonly bool _hasWcInfo;
+		SvnWcSchedule _wcSchedule;
+		Uri ^_copyFromUri;
+		initonly __int64 _copyFromRev;
+		initonly DateTime _contentTime;
+		initonly DateTime _propertyTime;
+		String^ _checksum;
+		String^ _conflict_old;
+		String^ _conflict_new;
+		String^ _conflict_wrk;
+		String^ _prejfile;
+
 	internal:
-		SvnInfoEventArgs()
-		{}
+		SvnInfoEventArgs(String^ path, const svn_info_t* info)
+		{
+			if(!path)
+				throw gcnew ArgumentNullException("path");
+			else if(!info)
+				throw gcnew ArgumentNullException("info");
+
+			_info = info;
+			_path = path;
+			_rev = info->rev;
+			_nodeKind = (SvnNodeKind)info->kind;
+			if(info->last_changed_author)
+			{
+				_lastChangeRev = info->last_changed_rev;
+				_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
+			}
+			_hasWcInfo = info->has_wc_info != 0;
+			_wcSchedule = (SvnWcSchedule)info->schedule;
+			_copyFromRev = info->copyfrom_rev;
+			if(_hasWcInfo)
+			{
+				_contentTime = SvnBase::DateTimeFromAprTime(info->text_time);
+				_propertyTime = SvnBase::DateTimeFromAprTime(info->prop_time);
+			}			
+		}
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}
+
+		/// <summary>The path the notification is about, translated via <see cref="System::IO::Path::GetFullPath" /></summary>
+		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
+		property String^ FullPath
+		{
+			String^ get()
+			{
+				if(!_fullPath && Path)
+					_fullPath = System::IO::Path::GetFullPath(Path);
+
+				return _fullPath;
+			}
+		}
+
+		property Uri^ Uri
+		{
+			System::Uri^ get()
+			{
+				if(!_uri && _info && _info->URL)
+					_uri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->URL));
+
+				return _uri;
+			}
+		}
+
+		property __int64 Revision
+		{
+			__int64 get()
+			{
+				return _rev;
+			}
+		}
+
+		property SvnNodeKind NodeKind
+		{
+			SvnNodeKind get()
+			{
+				return _nodeKind;
+			}
+		}
+
+		/// <summary>Gets the repository root Uri; ending in a '/' at the end</summary>
+		/// <remarks>The unmanaged api does not add the '/' at the end, but this makes using <see cref="System::Uri" /> hard</remarks>
+		property System::Uri^ ReposRoot
+		{
+			System::Uri^ get()
+			{
+				if(!_reposRootUri && _info && _info->repos_root_URL)
+				{
+					// Subversion does not add a / at the end; but to use the Uri infrastructure we require a /
+					_reposRootUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->repos_root_URL) + "/");
+				}
+
+				return _reposRootUri;
+			}
+		}
+		
+		property Guid ReposUuid
+		{
+			Guid get()
+			{
+				if(!_reposUuid && _info && _info->repos_UUID)
+					_reposUuid = SvnBase::Utf8_PtrToString(_info->repos_UUID);
+
+				return _reposUuid ? Guid(_reposUuid) : Guid::Empty;
+			}
+		}
+
+		property __int64 LastChangeRevision
+		{
+			__int64 get()
+			{
+				return _lastChangeRev;
+			}
+		}
+
+		property DateTime LastChangeDate
+		{
+			DateTime get()
+			{
+				return _lastChangeDate;
+			}
+		}
+
+		property String^ LastChangeAuthor
+		{
+			String^ get()
+			{
+				if(!_lastChangeAuthor && _info && _info->last_changed_author)
+					_lastChangeAuthor = SvnBase::Utf8_PtrToString(_info->last_changed_author);
+
+				return _lastChangeAuthor;
+			}
+		}
+
+		property SvnLockInfo^ Lock
+		{
+			SvnLockInfo^ get()
+			{
+				if(!_lock && _info && _info->lock)
+					_lock = gcnew SvnLockInfo(_info->lock);
+
+				return _lock;
+			}
+		}
+
+		property bool HasWcInfo
+		{
+			bool get()
+			{
+				return _hasWcInfo;
+			}
+		}
+
+		property SvnWcSchedule Schedule
+		{
+			SvnWcSchedule get()
+			{
+				return HasWcInfo ? _wcSchedule : SvnWcSchedule::None;
+			}
+		}
+
+		property System::Uri^ CopyFromUri
+		{
+			System::Uri^ get()
+			{
+				if(!_copyFromUri && _info && _info->copyfrom_url && HasWcInfo)
+					_copyFromUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->copyfrom_url));
+
+				return _copyFromUri;
+			}
+		}
+
+		property __int64 CopyFromRev
+		{
+			__int64 get()
+			{
+				return _copyFromRev;
+			}
+		}
+
+		property DateTime ContentTime
+		{
+			DateTime get()
+			{
+				return _contentTime; 
+			}
+		}
+
+		property DateTime PropertyTime
+		{
+			DateTime get()
+			{
+				return _propertyTime;
+			}
+		}
+
+		property String^ Checksum
+		{
+			String^ get()
+			{
+				if(!_checksum && _info && _info->checksum && HasWcInfo)
+					_checksum = SvnBase::Utf8_PtrToString(_info->checksum);
+
+				return _checksum;
+			}
+		}
+
+		property String^ ConflictOld
+		{
+			String^ get()
+			{
+				if(!_conflict_old && _info && _info->conflict_old && HasWcInfo)
+					_conflict_old = SvnBase::Utf8_PtrToString(_info->conflict_old);
+
+				return _conflict_old;
+			}
+		}
+
+		property String^ ConflictNew
+		{
+			String^ get()
+			{
+				if(!_conflict_new && _info && _info->conflict_new && HasWcInfo)
+					_conflict_new = SvnBase::Utf8_PtrToString(_info->conflict_new);
+
+				return _conflict_new;
+			}
+		}
+
+		property String^ ConflictWork
+		{
+			String^ get()
+			{
+				if(!_conflict_wrk && _info && _info->conflict_wrk && HasWcInfo)
+					_conflict_wrk = SvnBase::Utf8_PtrToString(_info->conflict_wrk);
+
+				return _conflict_wrk;
+			}
+		}
+
+		property String^ PropertyEditFile
+		{
+			String^ get()
+			{
+				if(!_prejfile && _info && _info->prejfile && HasWcInfo)
+					_prejfile = SvnBase::Utf8_PtrToString(_info->prejfile);
+
+				return _prejfile;
+			}
+		}
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					// Use all properties to get them cached in .Net memory
+					GC::KeepAlive(Path);
+					GC::KeepAlive(Uri);
+					GC::KeepAlive(ReposRoot);
+					GC::KeepAlive(ReposUuid);
+					GC::KeepAlive(LastChangeAuthor);
+					GC::KeepAlive(Lock);
+					GC::KeepAlive(CopyFromUri);
+					GC::KeepAlive(Checksum);
+					GC::KeepAlive(ConflictOld);
+					GC::KeepAlive(ConflictNew);
+					GC::KeepAlive(ConflictWork);
+					GC::KeepAlive(PropertyEditFile);
+				}
+
+				if(_lock)
+					_lock->Detach(keepProperties);
+			}
+			finally
+			{
+				_info = nullptr;
+				__super::Detach(keepProperties);
+			}
+		}
 	};
 }
