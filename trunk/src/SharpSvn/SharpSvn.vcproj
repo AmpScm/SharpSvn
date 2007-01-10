@@ -2,10 +2,11 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
-	Name="TurtleSvn"
+	Name="SharpSvn"
 	ProjectGUID="{A3166809-1484-4442-BF75-5FB0E8356381}"
 	RootNamespace="TurtleSvnCommon"
 	Keyword="ManagedCProj"
+	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib&quot;"
 	>
 	<Platforms>
 		<Platform
@@ -41,7 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon;..\..\imports\include"
+				AdditionalIncludeDirectories="..\..\imports\release\include"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -63,17 +64,19 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="f:\turtlesvn-subversion\release\Release\lib"
+				AdditionalLibraryDirectories="..\..\imports\release\lib"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
-				KeyFile="TurtleSvn.snk"
+				KeyFile="SharpSvn.snk"
 			/>
 			<Tool
 				Name="VCALinkTool"
 			/>
 			<Tool
 				Name="VCManifestTool"
+				VerboseOutput="true"
+				AssemblyIdentity="QQn.SharpSvn, processorArchitecture=x86, version=1.4.2.0, type=win32"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -120,7 +123,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories=".;.\apr;.\Svn;.\SvnCommon;..\..\imports\include"
+				AdditionalIncludeDirectories="..\..\imports\release\include"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -141,10 +144,10 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\lib"
+				AdditionalLibraryDirectories="..\..\imports\release\lib"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
-				KeyFile="TurtleSvn.snk"
+				KeyFile="SharpSvn.snk"
 			/>
 			<Tool
 				Name="VCALinkTool"
@@ -187,8 +190,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
-			UseDependenciesInBuild="false"
-			RelativePathToProject=".\TurtleSvn.UI\TurtleSvn.UI.csproj"
+			RelativePathToProject=".\SharpSvn.UI\SharpSvn.UI.csproj"
 		/>
 	</References>
 	<Files>
@@ -266,10 +268,6 @@
 					RelativePath=".\SvnBase.h"
 					>
 				</File>
-				<File
-					RelativePath=".\TurtleSvn.Common.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
@@ -296,10 +294,6 @@
 				</File>
 				<File
 					RelativePath=".\SvnBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\TurtleSvn.Common.cpp"
 					>
 				</File>
 			</Filter>
@@ -420,6 +414,14 @@
 				</File>
 				<File
 					RelativePath=".\Client_Export.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Info.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Status.cpp"
 					>
 				</File>
 				<File

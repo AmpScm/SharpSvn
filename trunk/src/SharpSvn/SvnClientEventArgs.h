@@ -284,4 +284,65 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnStatusEventArgs : public SvnClientEventArgs
+	{
+		initonly String^ _path;
+		svn_wc_status2_t *_status;
+		String^ _fullPath;
+
+	internal:
+		SvnStatusEventArgs(String^ path, svn_wc_status2_t *status)
+		{
+			if(!path)
+				throw gcnew ArgumentNullException("path");
+			else if(!status)
+				throw gcnew ArgumentNullException("status");
+
+			_path = path;
+			_status = status;
+		}
+
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}
+
+		/// <summary>The path the notification is about, translated via <see cref="System::IO::Path::GetFullPath" /></summary>
+		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
+		property String^ FullPath
+		{
+			String^ get()
+			{
+				if(!_fullPath && Path)
+					_fullPath = System::IO::Path::GetFullPath(Path);
+
+				return _fullPath;
+			}
+		}
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+			}
+			finally
+			{
+				_status = nullptr;
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+	public ref class SvnInfoEventArgs : public SvnClientEventArgs
+	{
+	internal:
+		SvnInfoEventArgs()
+		{}
+	};
 }

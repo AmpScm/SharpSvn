@@ -7,10 +7,10 @@
     <ProjectGuid>{E929A4D4-6C65-4D00-9432-E082169BDDC3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TurtleSvn.UI</RootNamespace>
-    <AssemblyName>TurtleSvn.UI</AssemblyName>
+    <RootNamespace>SharpSvn.UI</RootNamespace>
+    <AssemblyName>SharpSvn.UI</AssemblyName>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>TurtleSvn.UI.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>SharpSvn.UI.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -70,9 +70,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="TurtleSvn.UI.snk" />
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Authentication\SslClientCertificatePassPhraseDialog.resx">
       <SubType>Designer</SubType>
       <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
@@ -92,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Authentication\AuthenticationBanner.bmp" />
+    <None Include="SharpSvn.UI.snk" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>

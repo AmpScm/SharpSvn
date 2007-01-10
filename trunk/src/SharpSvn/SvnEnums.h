@@ -26,7 +26,7 @@ namespace SharpSvn {
 		Skip			= svn_wc_notify_skip, 
 		UpdateDelete	= svn_wc_notify_update_delete, 
 		UpdateAdd		= svn_wc_notify_update_add, 
-		UpdateData		= svn_wc_notify_update_update, 
+		UpdateUpdate	= svn_wc_notify_update_update, 
 		UpdateCompleted = svn_wc_notify_update_completed, 
 		UpdateExternal  = svn_wc_notify_update_external, 
 		StatusCompleted = svn_wc_notify_status_completed, 
