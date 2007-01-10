@@ -5,6 +5,7 @@ using SharpSvn;
 using System.Reflection;
 using SharpSvn.Security;
 using System.IO;
+using System.Windows.Forms;
 
 namespace SharpSvn
 {
@@ -14,6 +15,7 @@ namespace SharpSvn
 
 		static void Main(string[] args)
 		{
+			Application.EnableVisualStyles();
 			new Program().Run(args);
 		}
 
@@ -24,8 +26,10 @@ namespace SharpSvn
 			_client = new SvnClient();
 
 			_client.LoadConfigurationDefault();
-			//_client.Authenticator.Clear();
+			_client.Authenticator.Clear();
+			_client.Authenticator.SslServerTrustHandlers += SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler;
 			//_client.Authenticator.AddSubversionFileHandlers();
+			_client.Authenticator.AddDialogHandlers();
 			_client.Authenticator.UsernamePasswordHandlers += new SvnAuthenticationHandler<SvnUsernamePasswordArgs>(Authenticator_UsernamePasswordHandlers);
 
 			//_client.Authenticator.
