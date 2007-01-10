@@ -1,18 +1,4 @@
-Below this directory you should see three the subdirectories:
+This directory contains a script which builds subversion and its dependencies.
 
-bin
-lib
-include
-
-and if you use the download script also: zip
-
-In these the following downloads are extracted by download.build:
-
-http://subversion.tigris.org/downloads/svn-win32-1.4.2_dev.zip
-http://subversion.tigris.org/downloads/svn-win32-1.4.2_pdb.zip
-http://subversion.tigris.org/files/documents/15/32472/db-4.4.20-win32.zip
-http://subversion.tigris.org/files/documents/15/20739/svn-win32-libintl.zip
-
-include: *.h
-lib: *.lib *.pdb
-bin: *.dll
+You can use this script to retrieve the dependencies; but you can also
+use the precompiled files from the StudioTurtle website.
