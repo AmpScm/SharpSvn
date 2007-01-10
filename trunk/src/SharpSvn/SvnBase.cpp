@@ -65,6 +65,19 @@ const char* SvnBase::Utf8_StringToPtr(String ^value, AprPool^ pool)
 	return pool->AllocString(value);
 }
 
+DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
+{
+	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+
+	return System::DateTime(aprTime*10 + aprTimeBase);
+}
+
+apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)
+{
+	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+	return (time.ToBinary() - aprTimeBase) / 10;
+}
+
 static SvnHandleBase::SvnHandleBase()
 {
 	SvnBase::EnsureLoaded();

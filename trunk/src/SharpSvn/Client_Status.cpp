@@ -74,15 +74,61 @@ bool SvnClient::Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ s
 
 void SvnClient::GetStatus(SvnPathTarget^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
+
+	try
+	{
+		Status(path, results->Handler, gcnew SvnStatusArgs());	
+	}
+	finally
+	{
+		statuses = safe_cast<IList<SvnStatusEventArgs^>^>(results);
+	}
 }
 
 void SvnClient::GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
+	
+	SvnStatusArgs^ args = gcnew SvnStatusArgs();
+	args->NotRecursive = true;
+	args->GetAll = true;
+	args->NoIgnore = true;
+	
+	try
+	{
+		Status(path, results->Handler);
+	}
+	finally
+	{
+		if(results->Count > 0)
+			status = results[0];
+		else
+			status = nullptr;
+	}
 }
 
 bool SvnClient::GetStatus(SvnPathTarget^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
+
+	try
+	{
+		return Status(path, results->Handler, args);	
+	}
+	finally
+	{
+		statuses = safe_cast<IList<SvnStatusEventArgs^>^>(results);
+	}
 }

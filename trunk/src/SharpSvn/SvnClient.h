@@ -63,7 +63,7 @@ namespace SharpSvn {
 		EventHandler<SvnClientCancelEventArgs^>^	_clientCancel;
 		EventHandler<SvnClientProgressEventArgs^>^	_clientProgress;
 		EventHandler<SvnClientNotifyEventArgs^>^	_clientNotify;
-		EventHandler<SvnClientCommitLogEventArgs^>^	_clientCommit;
+		EventHandler<SvnClientBeforeCommitEventArgs^>^	_clientBeforeCommit;
 	public:
 		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel
 		{
@@ -83,23 +83,23 @@ namespace SharpSvn {
 			void remove(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify -= e; }
 		}
 
-		event EventHandler<SvnClientCommitLogEventArgs^>^	ClientCommit
+		event EventHandler<SvnClientBeforeCommitEventArgs^>^	ClientBeforeCommit
 		{
-			void add(EventHandler<SvnClientCommitLogEventArgs^>^ e)		{ _clientCommit += e; }
-			void remove(EventHandler<SvnClientCommitLogEventArgs^>^ e)	{ _clientCommit -= e; }
+			void add(EventHandler<SvnClientBeforeCommitEventArgs^>^ e)		{ _clientBeforeCommit += e; }
+			void remove(EventHandler<SvnClientBeforeCommitEventArgs^>^ e)	{ _clientBeforeCommit -= e; }
 		}
 
 	protected:
 		virtual void OnClientCancel(SvnClientCancelEventArgs^ e);
 		virtual void OnClientProgress(SvnClientProgressEventArgs^ e);
-		virtual void OnClientGetCommitLog(SvnClientCommitLogEventArgs^ e);
+		virtual void OnClientBeforeCommit(SvnClientBeforeCommitEventArgs^ e);
 		virtual void OnClientNotify(SvnClientNotifyEventArgs^ e);
 
 	internal:
 
 		void HandleClientCancel(SvnClientCancelEventArgs^ e);
 		void HandleClientProgress(SvnClientProgressEventArgs^ e);
-		void HandleClientGetCommitLog(SvnClientCommitLogEventArgs^ e);
+		void HandleClientGetCommitLog(SvnClientBeforeCommitEventArgs^ e);
 		void HandleClientNotify(SvnClientNotifyEventArgs^ e);
 
 		const char* GetEolPtr(SvnEolStyle style);
@@ -272,6 +272,14 @@ namespace SharpSvn {
 			{
 				e->Detach(true);
 				Add(e);
+			}
+
+			property EventHandler<T>^ Handler
+			{
+				EventHandler<T>^ get()
+				{
+					return gcnew EventHandler<T>(this, &InfoItemList<T>::HandleItem);
+				}
 			}
 		};
 	public:

@@ -11,6 +11,11 @@ namespace SharpSvn {
 		String^ _path;
 		String^ _fullPath;
 
+		String^ GetFullPath(String ^path)
+		{
+			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+		}
+
 	public:
 		SvnPathTarget(String^ path, SvnRevision^ revision)
 			: SvnTarget(revision)
@@ -19,7 +24,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
-			_fullPath = System::IO::Path::GetFullPath(path);
+			_fullPath = GetFullPath(path);
 		}
 
 		SvnPathTarget(String^ path)
@@ -29,7 +34,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
-			_fullPath = System::IO::Path::GetFullPath(path);
+			_fullPath = GetFullPath(path);
 		}
 
 		SvnPathTarget(String^ path, long revision)
@@ -39,7 +44,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
-			_fullPath = System::IO::Path::GetFullPath(path);
+			_fullPath = GetFullPath(path);
 		}
 
 		SvnPathTarget(String^ path, DateTime date)
@@ -49,7 +54,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
-			_fullPath = System::IO::Path::GetFullPath(path);
+			_fullPath = GetFullPath(path);
 		}
 
 		SvnPathTarget(String^ path, SvnRevisionType type)
@@ -59,7 +64,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
-			_fullPath = System::IO::Path::GetFullPath(path);
+			_fullPath = GetFullPath(path);
 		}
 
 		property String^ TargetName
@@ -137,6 +142,6 @@ namespace SharpSvn {
 
 	public:
 		static SvnPathTarget^ FromString(String^ value);
-		static explicit operator SvnPathTarget^(String^ value) { return value ? FromString(value) : nullptr; }
+		static operator SvnPathTarget^(String^ value) { return value ? FromString(value) : nullptr; }
 	};
 }
