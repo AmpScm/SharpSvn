@@ -2,7 +2,7 @@
 
 #include "SvnAll.h"
 
-using namespace TurtleSvn;
+using namespace SharpSvn;
 
 SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 {

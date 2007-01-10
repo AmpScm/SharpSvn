@@ -6,7 +6,7 @@ using namespace System;
 #include "SvnBase.h"
 
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Apr {
 
 		ref class AprPool : public SvnHandleBase, public System::IDisposable

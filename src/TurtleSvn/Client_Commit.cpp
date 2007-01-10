@@ -2,8 +2,8 @@
 #include "SvnAll.h"
 #include "SvnCommitArgs.h"
 
-using namespace TurtleSvn::Apr;
-using namespace TurtleSvn;
+using namespace SharpSvn::Apr;
+using namespace SharpSvn;
 
 void SvnClient::Commit(String^ path)
 {

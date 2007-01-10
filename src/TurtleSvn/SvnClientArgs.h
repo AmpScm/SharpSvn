@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	ref class SvnException;
 
 	public ref class SvnClientArgs abstract

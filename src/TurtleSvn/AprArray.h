@@ -6,7 +6,7 @@ using namespace System;
 #include "SvnBase.h"
 #include "AprPool.h"
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Apr {
 
 		using System::Collections::Generic::ICollection;

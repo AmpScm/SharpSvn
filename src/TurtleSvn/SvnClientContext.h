@@ -4,14 +4,14 @@
 #include "AprPool.h"
 
 using namespace System;
-using namespace TurtleSvn::Apr;
+using namespace SharpSvn::Apr;
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Security {
 		ref class SvnAuthentication;
 	};
 
-	using TurtleSvn::Security::SvnAuthentication;
+	using SharpSvn::Security::SvnAuthentication;
 
 	public enum class SvnContextState
 	{

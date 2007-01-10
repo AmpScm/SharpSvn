@@ -3,10 +3,11 @@
 #include "SvnAll.h"
 #include "SvnObjBaton.h"
 #include "SvnAuthentication.h"
-using namespace TurtleSvn;
-using namespace TurtleSvn::Apr;
-using namespace TurtleSvn::Security;
-using namespace TurtleSvn::UI::Authentication;
+#include "Wincrypt.h"
+using namespace SharpSvn;
+using namespace SharpSvn::Apr;
+using namespace SharpSvn::Security;
+using namespace SharpSvn::UI::Authentication;
 using System::Text::StringBuilder;
 
 
@@ -308,9 +309,15 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetPro
 }
 #pragma endregion
 
+IntPtr SvnAuthentication::GetParentHandle(Object ^sender)
+{
+
+	return IntPtr::Zero;
+}
+
 bool SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
 {
-	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+	IntPtr handle = GetParentHandle(sender);
 
 	String^ username;
 	bool save;
@@ -327,7 +334,7 @@ bool SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs
 
 bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
 {
-	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+	IntPtr handle = GetParentHandle(sender);
 
 	String^ username;
 	String^ password;
@@ -350,7 +357,7 @@ bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslSer
 
 bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
 {
-	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+	IntPtr handle = GetParentHandle(sender);
 
 	String^ file;
 	bool save;
@@ -367,7 +374,7 @@ bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, Svn
 
 bool SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 {
-	IntPtr handle = /*WindowHandleProvider ? WindowHandleProvider->ParentWindowHandle :*/ IntPtr::Zero;
+	IntPtr handle = GetParentHandle(sender);
 
 	String^ password;
 	bool save;
@@ -541,3 +548,28 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	Console::WriteLine();
 	return true;
 }
+
+/*bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
+{
+	array<char>^ bytes = System::Text::Encoding::ASCII->GetBytes(this->CertificateValue);
+	pin_ptr<char> pByte = &bytes[0];
+
+	pCRLContext = CertCreateCRLContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pByte, bytes->Length);
+	if (NULL == pCRLContext)
+		return false;
+
+	pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pByte, bytes->Length);
+
+	if (!pCertContext)
+		return false;
+	
+
+	if (!CryptVerifyCertificateSignatureEx(NULL, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
+		CRYPT_VERIFY_CERT_SIGN_SUBJECT_CRL, pCRLContext,
+		CRYPT_VERIFY_CERT_SIGN_ISSUER_CERT, pCertContext,
+		0, NULL))
+	{
+		return false;
+	}
+
+}*/

@@ -1,10 +1,10 @@
-// TurtleSvn.Common.h
+// SharpSvn.Common.h
 
 #pragma once
 
 using namespace System;
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Apr {
 
 		

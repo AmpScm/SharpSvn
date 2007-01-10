@@ -4,7 +4,7 @@
 
 #include <apr_pools.h>
 
-using namespace TurtleSvn::Apr;
+using namespace SharpSvn::Apr;
 
 struct apr_allocator_t
 {};
@@ -50,7 +50,7 @@ void AprPool::Destroy()
 	}
 }
 
-AprPool::AprPool(TurtleSvn::Apr::AprPool ^parentPool)
+AprPool::AprPool(SharpSvn::Apr::AprPool ^parentPool)
 {
 	if(!parentPool)
 		throw gcnew ArgumentNullException("parentPool");

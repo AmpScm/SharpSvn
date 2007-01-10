@@ -3,14 +3,14 @@
 #include "SvnAll.h"
 #include "SvnCommitArgs.h"
 
-using namespace TurtleSvn;
+using namespace SharpSvn;
 #include "stdafx.h"
 
 #include "SvnAll.h"
 #include <svn_config.h>
 
-using namespace TurtleSvn::Apr;
-using namespace TurtleSvn;
+using namespace SharpSvn::Apr;
+using namespace SharpSvn;
 
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item2_t *commitItemInfo)
 {

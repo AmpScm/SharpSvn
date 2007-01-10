@@ -2,8 +2,8 @@
 
 #include "stdafx.h"
 
-#include "TurtleSvn.Common.h"
+#include "SharpSvn.Common.h"
 
-using namespace TurtleSvn;
+using namespace SharpSvn;
 
 

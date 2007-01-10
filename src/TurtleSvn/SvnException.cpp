@@ -4,8 +4,8 @@
 #include <svn_config.h>
 #include "SvnObjBaton.h"
 
-using namespace TurtleSvn;
-using namespace TurtleSvn::Apr;
+using namespace SharpSvn;
+using namespace SharpSvn::Apr;
 
 
 SvnException^ SvnException::Create(svn_error_t *error)

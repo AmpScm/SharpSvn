@@ -1,13 +1,13 @@
 
 #pragma once
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Apr
 	{
 		using System::Runtime::InteropServices::GCHandle;
 
 		generic<typename T>
-		ref class AprBaton : public TurtleSvn::Apr::SvnBase, public IDisposable
+		ref class AprBaton : public SharpSvn::Apr::SvnBase, public IDisposable
 		{
 			GCHandle _handle;
 

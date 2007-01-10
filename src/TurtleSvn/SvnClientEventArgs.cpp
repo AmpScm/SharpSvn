@@ -3,8 +3,8 @@
 #include "SvnAll.h"
 #include <svn_config.h>
 
-using namespace TurtleSvn::Apr;
-using namespace TurtleSvn;
+using namespace SharpSvn::Apr;
+using namespace SharpSvn;
 
 
 SvnException^ SvnClientNotifyEventArgs::Error::get()

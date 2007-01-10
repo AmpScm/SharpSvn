@@ -4,7 +4,7 @@
 #include "SvnClientContext.h"
 #include "SvnEnums.h"
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	using namespace System;
 
 	public ref class SvnRevision sealed

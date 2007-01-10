@@ -5,7 +5,7 @@
 
 using namespace System;
 
-namespace TurtleSvn {
+namespace SharpSvn {
 
 	[Serializable]
 	public ref class SvnException : public System::Runtime::InteropServices::ExternalException
@@ -20,7 +20,7 @@ namespace TurtleSvn {
 
 			try
 			{
-				return TurtleSvn::Apr::SvnBase::Utf8_PtrToString(error->message);
+				return SharpSvn::Apr::SvnBase::Utf8_PtrToString(error->message);
 			}
 			catch(Exception^)
 			{

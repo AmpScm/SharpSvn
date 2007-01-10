@@ -4,7 +4,7 @@
 using namespace System;
 
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Apr {
 		ref class AprPool;
 
@@ -24,7 +24,7 @@ namespace TurtleSvn {
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 
-			static const char* Utf8_StringToPtr(String ^value, TurtleSvn::Apr::AprPool^ pool);
+			static const char* Utf8_StringToPtr(String ^value, SharpSvn::Apr::AprPool^ pool);
 		};
 
 		public ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
@@ -40,7 +40,7 @@ namespace TurtleSvn {
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 
-			static const char* Utf8_StringToPtr(String ^value, TurtleSvn::Apr::AprPool^ pool);
+			static const char* Utf8_StringToPtr(String ^value, SharpSvn::Apr::AprPool^ pool);
 		};
 	}
 }

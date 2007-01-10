@@ -4,9 +4,9 @@
 #include "AprArray.h"
 #include "AprBaton.h"
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Security {
-		using TurtleSvn::Apr::AprBaton;
+		using SharpSvn::Apr::AprBaton;
 		using System::Collections::Generic::Dictionary;
 		using System::Collections::Generic::List;
 
@@ -84,6 +84,8 @@ namespace TurtleSvn {
 			}
 		};
 
+		ref class SvnAuthentication;
+
 		generic<typename TSvnAuthorizationArgs>
 		where TSvnAuthorizationArgs : SvnAuthorizationArgs
 		public delegate bool SvnAuthenticationHandler(Object^ sender, TSvnAuthorizationArgs e);
@@ -96,6 +98,11 @@ namespace TurtleSvn {
 			{
 				int get();
 				void set(int value);
+			}
+
+			property SvnAuthentication^ Authentication
+			{
+				SvnAuthentication^ get();
 			}
 		};
 
@@ -166,9 +173,19 @@ namespace TurtleSvn {
 				}
 			}
 
+		internal:
 			bool Raise(T item)
 			{
 				return _handler(this, item);
+			}
+
+		public:
+			property SvnAuthentication^ Authentication
+			{
+				virtual SvnAuthentication^ get()
+				{
+					return _authentication;
+				}
 			}
 		};
 
@@ -382,6 +399,11 @@ namespace TurtleSvn {
 				{
 					return _certValue;
 				}
+			}
+
+			property bool AcceptedByCryptoApi
+			{
+				bool get();
 			}
 
 		internal:
@@ -776,6 +798,7 @@ namespace TurtleSvn {
 				= gcnew SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>(ImpSubversionFileSslClientCertificatePasswordHandler);
 
 		private:
+			static IntPtr GetParentHandle(Object ^sender);
 			static bool ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs^ e); 
 			static bool ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e);
 			static bool ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);

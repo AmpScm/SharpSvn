@@ -6,7 +6,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 
-namespace TurtleSvn.UI.Authentication
+namespace SharpSvn.UI.Authentication
 {
 	public partial class SslClientCertificatePassPhraseDialog : Form
 	{
