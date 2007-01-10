@@ -148,20 +148,15 @@
 				<arg value="db_dll.vcproj" />
 				<arg value="${Configuration}|WIN32" />					
 			</exec>
-			<copy todir="release/${Configuration}/bin">
+			<copy todir="release/lib">
 				<fileset basedir="build/db-${bdbVersion}/build_win32/${Configuration}">
 					<include name="*.dll" />
-				</fileset>
-			</copy>
-			<copy todir="release/${Configuration}/lib">
-				<fileset basedir="build/db-${bdbVersion}/build_win32/${Configuration}">
 					<include name="*.lib" />
 					<include name="*.exp" />
 					<include name="*.pdb" />
-					<include name="*.dll" />
 				</fileset>
 			</copy>
-			<copy todir="release/${Configuration}/include">
+			<copy todir="release/include">
 				<fileset basedir="build/db-${bdbVersion}/build_win32">
 					<include name="*.h" />
 				</fileset>
@@ -195,20 +190,15 @@
 				<arg value="zlib.vcproj" />
 				<arg value="DLL Release|Win32" />					
 			</exec>
-			<copy todir="release/${Configuration}/bin">
+			<copy todir="release/lib">
 				<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/Win32_Dll_Release">
 					<include name="*.dll" />
-				</fileset>
-			</copy>
-			<copy todir="release/${Configuration}/lib">
-				<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/Win32_Dll_Release">
 					<include name="*.lib" />
 					<include name="*.exp" />
 					<include name="*.pdb" />
-					<include name="*.dll" />
 				</fileset>
 			</copy>
-			<copy todir="release/${Configuration}/include">
+			<copy todir="release/include">
 				<fileset basedir="build/db-${bdbVersion}/build_win32">
 					<include name="*.h" />
 				</fileset>
@@ -218,7 +208,7 @@
 					<include name="**/*.lib" />
 				</fileset>
 			</copy>
-			<copy file="build/zlib-${zlibVersion}/projects/visualc6/Win32_LIB_Release/zlib.lib" tofile="release/${Configuration}/lib/zlibstat.lib" />
+			<copy file="build/zlib-${zlibVersion}/projects/visualc6/Win32_LIB_Release/zlib.lib" tofile="release/lib/zlibstat.lib" />
 			<touch file="${'build/zlib-' + zlibVersion +'.finished'}" />
 		</if>
 	</target>
@@ -278,20 +268,20 @@
 					</do>
 				</foreach>
 			</if>
-			<copy todir="release/${Configuration}/lib">
+			<copy todir="release/lib">
 				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
 					<include name="*.lib" />
 					<include name="*.exp" />
 					<include name="*.pdb" />
 				</fileset>
 			</copy>
-			<copy todir="release/${Configuration}/bin">
+			<copy todir="release/lib">
 				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
 					<include name="${dllPrefix}*.dll" />
 					<include name="${dllPrefix}*.pdb" />
 				</fileset>
 			</copy>
-			<copy todir="release/${Configuration}/include">
+			<copy todir="release/include">
 				<fileset basedir="build/openssl-${opensslVersion}/inc32">
 					<include name="**" />
 				</fileset>
@@ -350,7 +340,7 @@
 				<arg line="-t vcproj" />
 				<arg line="--vsnet-version=2005" />
 				<arg value="--release" />
-				<arg value="--with-berkeley-db=../../release/${Configuration}" />
+				<arg value="--with-berkeley-db=../../release" />
 				<arg value="--with-openssl=../openssl-${opensslVersion}" />
 				<arg value="--with-zlib=../zlib-${zlibVersion}" />
 				<!--arg value="- -with-serf=serf" /-->
@@ -362,6 +352,13 @@
 				</filterchain>
 			</loadfile>
 			<echo message="${projtext}" file="build/subversion/apr-util/libaprutil.vcproj" />
+			<loadfile file="build/subversion/apr/libapr.vcproj" property="projtext">
+				<filterchain>
+					<replacestring from='/libapr.dll' to='/${dllPrefix}libapr.dll' /> 
+					<replacestring from='\libapr.dll' to='\${dllPrefix}libapr.dll' /> 
+				</filterchain>
+			</loadfile>
+			<echo message="${projtext}" file="build/subversion/apr/libapr.vcproj" />
 			<touch file="${'build/subversion-' + subversionVersion +'.generated'}" />
 		</if>
 	</target>
@@ -371,18 +368,20 @@
 			<arg value="/p:Configuration=Release" />
 			<arg value="/t:Svn" />
 		</exec>
-		<copy todir="release/${Configuration}/lib" flatten="true">
+		<copy todir="release/lib" flatten="true">
 			<fileset basedir="build\subversion">
 				<include name="**/*.lib" />
 				<include name="**/lib*.pdb" />
 				<include name="**/${dllPrefix}lib*.pdb" />
+				<include name="**/*.dll" />
 			</fileset>
 		</copy>
-		<copy todir="release/${Configuration}/bin" flatten="true">
+		<copy todir="release/include" flatten="true">
 			<fileset basedir="build\subversion">
-				<include name="**/*.dll" />
-				<include name="**/lib*.pdb" />
-				<include name="**/${dllPrefix}lib*.pdb" />
+				<include name="subversion/include/**.h" />
+				<include name="apr/include/**.h" />
+				<include name="apr-util/include/**.h" />
+				<include name="apr-iconv/include/**.h" />
 			</fileset>
 		</copy>
 	</target>
