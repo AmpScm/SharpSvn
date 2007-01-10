@@ -125,7 +125,7 @@ bool SvnClient::CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args,
 	_currentArgs = args;
 	try
 	{
-		AprArray<String^, AprCStrMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrMarshaller^>(paths, %pool);
+		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
 		svn_commit_info_t *commitInfoPtr = nullptr;
 

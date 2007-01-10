@@ -115,7 +115,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		svn_error_t* r = svn_client_export3(
 			&resultRev, 
 			pool->AllocString(from->TargetName), 
-			pool->AllocString(toPath), 
+			pool->AllocPath(toPath), 
 			&pegRev, 
 			&rev, 
 			args->Overwrite, 

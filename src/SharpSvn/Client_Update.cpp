@@ -162,7 +162,7 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 	_currentArgs = args;
 	try
 	{
-		AprArray<String^, AprCStrMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrMarshaller^>(paths, pool);
+		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, pool);
 
 		apr_array_header_t* revs = nullptr;
 		svn_opt_revision_t uRev = args->Revision->ToSvnRevision();

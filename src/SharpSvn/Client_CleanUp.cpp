@@ -30,7 +30,7 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 	try
 	{
 		svn_error_t *r = svn_client_cleanup(
-			pool->AllocString(path),
+			pool->AllocPath(path),
 			CtxHandle,
 			pool->Handle);
 

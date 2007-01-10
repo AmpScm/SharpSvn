@@ -123,7 +123,7 @@ namespace SharpSvn {
 			svn_opt_revision_t rev;
 			const char* truePath;
 
-			const char* path = Utf8_StringToPtr(targetString, pool);
+			const char* path = pool->AllocPath(targetString);
 
 			if(!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
 			{

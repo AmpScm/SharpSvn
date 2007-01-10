@@ -74,7 +74,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 
 		svn_error_t *r = svn_client_switch(
 			&rev,
-			pool->AllocString(path),
+			pool->AllocPath(path),
 			pool->AllocString(target->TargetName),
 			&toRev,
 			!args->NotRecursive,

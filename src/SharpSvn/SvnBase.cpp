@@ -55,16 +55,6 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 	return gcnew String(ptr, 0, ::strlen(ptr), System::Text::Encoding::UTF8);
 }
 
-const char* SvnBase::Utf8_StringToPtr(String ^value, AprPool^ pool)
-{
-	if(!value)
-		throw gcnew ArgumentNullException("value");
-	else if(!pool)
-		throw gcnew ArgumentNullException("pool");
-
-	return pool->AllocString(value);
-}
-
 DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 {
 	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
@@ -95,9 +85,4 @@ String^ SvnHandleBase::Utf8_PtrToString(const char *ptr)
 String^ SvnHandleBase::Utf8_PtrToString(const char *ptr, int length)
 {
 	return SvnBase::Utf8_PtrToString(ptr, length);
-}
-
-const char* SvnHandleBase::Utf8_StringToPtr(String ^value, AprPool^ pool)
-{
-	return SvnBase::Utf8_StringToPtr(value, pool);
 }

@@ -35,6 +35,11 @@ namespace SharpSvn {
 				return _currentArgs;
 			}
 		}
+
+		String^ GetSvnPath(String ^path)
+		{
+			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+		}
 	
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
@@ -309,9 +314,9 @@ namespace SharpSvn {
 		bool Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler, SvnInfoArgs^ args);
 
 		/// <summary>Gets information about the specified target</summary>
-		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% status);
+		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
 		/// <summary>Gets information about the specified target</summary>
-		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^ statuses);
+		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^ info);
 		
 #pragma endregion
 

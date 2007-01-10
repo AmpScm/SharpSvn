@@ -41,7 +41,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	try
 	{
 		svn_error_t *r = svn_client_add3(
-			pool->AllocString(path),
+			pool->AllocPath(path),
 			!args->NotRecursive,
 			args->Force,
 			args->NoIgnore,

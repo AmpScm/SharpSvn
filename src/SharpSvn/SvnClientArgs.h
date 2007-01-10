@@ -545,7 +545,7 @@ namespace SharpSvn {
 				if(value)
 					_revision = value;
 				else
-					_revision = SvnRevision::Head;
+					_revision = SvnRevision::None;
 			}
 		}
 	};
