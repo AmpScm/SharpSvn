@@ -35,6 +35,16 @@ namespace SharpSvn
 			_client.ClientNotify += new EventHandler<SvnClientNotifyEventArgs>(OnClientNotify);
 			_client.ClientProgress += new EventHandler<SvnClientProgressEventArgs>(OnClientProgress);
 
+			_client.Status("G:\\Projects\\SvnDotNet\\AprSharp\\dev\\src\\AprSharp.csproj", delegate(object sender, SvnStatusEventArgs e)
+			{
+				Console.WriteLine(e.FullPath);
+			});
+
+			_client.Status("g:\\projects\\StudioTurtle", delegate(object sender, SvnStatusEventArgs e)
+			{
+				Console.WriteLine(e.FullPath);
+			});
+
 			//SvnTarget target;
 
 			string _tmpDir = "f:\\svn-test-location";

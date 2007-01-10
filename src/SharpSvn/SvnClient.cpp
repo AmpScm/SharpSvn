@@ -98,20 +98,20 @@ void SvnClient::OnClientProgress(SvnClientProgressEventArgs^ e)
 		_clientProgress(this, e);
 }
 
-void SvnClient::HandleClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
+void SvnClient::HandleClientGetCommitLog(SvnClientBeforeCommitEventArgs^ e)
 {
-	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(_currentArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 
 	if(commitArgs)
-		commitArgs->OnGetCommitLog(e);
+		commitArgs->OnBeforeCommit(e);
 
-	OnClientGetCommitLog(e);
+	OnClientBeforeCommit(e);
 }
 
-void SvnClient::OnClientGetCommitLog(SvnClientCommitLogEventArgs^ e)
+void SvnClient::OnClientBeforeCommit(SvnClientBeforeCommitEventArgs^ e)
 {
-	if(_clientCommit)
-		_clientCommit(this, e);
+	if(_clientBeforeCommit)
+		_clientBeforeCommit(this, e);
 }
 
 void SvnClient::HandleClientNotify(SvnClientNotifyEventArgs^ e)
@@ -154,7 +154,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg
 
 	AprPool^ tmpPool = AprPool::Attach(pool, false);
 	
-	SvnClientCommitLogEventArgs^ ea = gcnew SvnClientCommitLogEventArgs(commit_items, tmpPool);
+	SvnClientBeforeCommitEventArgs^ ea = gcnew SvnClientBeforeCommitEventArgs(commit_items, tmpPool);
 
 	try
 	{

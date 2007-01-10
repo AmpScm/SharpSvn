@@ -32,6 +32,7 @@ namespace SharpSvn {
 			Notify(this, e);
 		}
 
+	public:
 		property bool ThrowOnError
 		{
 			bool get()
@@ -58,7 +59,7 @@ namespace SharpSvn {
 
 	public ref class SvnClientArgsWithCommit : public SvnClientArgs
 	{
-		event EventHandler<SvnClientCommitLogEventArgs^>^ GetCommitLog;
+		event EventHandler<SvnClientBeforeCommitEventArgs^>^ BeforeCommit;
 		String^ _commitMessage;
 
 	protected:
@@ -67,9 +68,12 @@ namespace SharpSvn {
 		}
 
 	protected public:
-		virtual void OnGetCommitLog(SvnClientCommitLogEventArgs^ e)
+		virtual void OnBeforeCommit(SvnClientBeforeCommitEventArgs^ e)
 		{
-			GetCommitLog(this, e);
+			if(CommitMessage && !e->LogMessage)
+				e->LogMessage = CommitMessage;
+
+			BeforeCommit(this, e);
 		}
 
 	public:

@@ -32,7 +32,7 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 			// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
 			{
 				__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
-				return gcnew SvnRevision(System::DateTime(revData->value.date*10 + aprTimeBase));
+				return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
 			}
 		default:
 			throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
@@ -53,8 +53,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 			break;
 		case SvnRevisionType::Date:
 			{
-				__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
-				r.value.date = (_value - aprTimeBase) / 10;
+				r.value.date = SvnBase::AprTimeFromDateTime(DateTime::FromBinary(_value));
 			}
 			break;
 	}

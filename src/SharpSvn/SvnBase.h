@@ -24,6 +24,9 @@ namespace SharpSvn {
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 
+			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
+			static apr_time_t AprTimeFromDateTime(DateTime time);
+
 			static const char* Utf8_StringToPtr(String ^value, SharpSvn::Apr::AprPool^ pool);
 		};
 

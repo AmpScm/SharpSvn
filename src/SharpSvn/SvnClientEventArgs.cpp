@@ -15,7 +15,7 @@ SvnException^ SvnClientNotifyEventArgs::Error::get()
 	return _exception;
 }
 
-SvnClientCommitLogEventArgs::SvnClientCommitLogEventArgs(const apr_array_header_t *commitItems, AprPool^ pool)
+SvnClientBeforeCommitEventArgs::SvnClientBeforeCommitEventArgs(const apr_array_header_t *commitItems, AprPool^ pool)
 {
 	if(!commitItems)
 		throw gcnew ArgumentNullException("commitItems");
@@ -26,7 +26,7 @@ SvnClientCommitLogEventArgs::SvnClientCommitLogEventArgs(const apr_array_header_
 	this->_pool = pool;
 }
 
-void SvnClientCommitLogEventArgs::Detach(bool keepProperties)
+void SvnClientBeforeCommitEventArgs::Detach(bool keepProperties)
 {
 	if(!_commitItems)
 		return;
@@ -55,7 +55,7 @@ SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo)
 	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;
 }
 
-IList<SvnCommitItem^>^ SvnClientCommitLogEventArgs::Items::get()
+IList<SvnCommitItem^>^ SvnClientBeforeCommitEventArgs::Items::get()
 {
 	if(!_items && _commitItems)
 	{
