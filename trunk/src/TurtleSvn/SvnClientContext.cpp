@@ -3,7 +3,7 @@
 #include "SvnAll.h"
 #include <svn_config.h>
 
-using namespace TurtleSvn;
+using namespace SharpSvn;
 
 struct apr_hash_t
 {};
@@ -23,7 +23,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 		throw gcnew SvnException(r);
 
 	_ctx = ctx;
-	_authentication = gcnew TurtleSvn::Security::SvnAuthentication();
+	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
 }
 
 SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
@@ -42,7 +42,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 		throw gcnew SvnException(r);
 
 	_ctx = ctx;
-	_authentication = gcnew TurtleSvn::Security::SvnAuthentication();
+	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
 }
 
 SvnClientContext::~SvnClientContext()

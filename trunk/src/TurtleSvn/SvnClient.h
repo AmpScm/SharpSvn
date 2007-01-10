@@ -9,7 +9,7 @@
 #include "SvnCommitArgs.h"
 #include "AprBaton.h"
 
-namespace TurtleSvn {
+namespace SharpSvn {
 
 	ref class SvnCancelEventArgs;
 	ref class SvnProgressEventArgs;
@@ -24,7 +24,7 @@ namespace TurtleSvn {
 	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
 	public ref class SvnClient : public SvnClientContext
 	{
-		initonly TurtleSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
+		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
 		AprPool^ _pool;
 		SvnClientArgs^ _currentArgs;
 	public:

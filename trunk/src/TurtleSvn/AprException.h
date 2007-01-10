@@ -6,7 +6,7 @@ using namespace System;
 #include "SvnBase.h"
 
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	namespace Apr {
 
 		[Serializable]
@@ -19,7 +19,7 @@ namespace TurtleSvn {
 		{
 			char buffer[256];
 
-			String^ result = TurtleSvn::Apr::SvnBase::Utf8_PtrToString(apr_strerror(status, buffer, sizeof(buffer)));
+			String^ result = SharpSvn::Apr::SvnBase::Utf8_PtrToString(apr_strerror(status, buffer, sizeof(buffer)));
 
 			return result;
 		}

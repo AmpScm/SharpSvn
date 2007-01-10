@@ -11,7 +11,7 @@ using namespace System::Security::Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("TurtleSvn - Subversion support for .Net 2.0")];
+[assembly:AssemblyTitleAttribute("SharpSvn - Subversion support for .Net 2.0")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("VSoft")];
@@ -53,10 +53,10 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libsvn_repos-1.lib")
 #pragma comment(lib, "libsvn_subr-1.lib")
 #pragma comment(lib, "libsvn_wc-1.lib")
-//#pragma comment(lib, "libapriconv.lib")
+#pragma comment(lib, "libapriconv.lib")
 #pragma comment(lib, "libaprutil.lib")
 #pragma comment(lib, "xml.lib")
-#pragma comment(lib, "intl3_svn.lib")
+//#pragma comment(lib, "intl3_svn.lib")
 #pragma comment(lib, "libneon.lib")
 #pragma comment(lib, "zlibstat.lib")
 #pragma comment(lib, "ws2_32.lib")

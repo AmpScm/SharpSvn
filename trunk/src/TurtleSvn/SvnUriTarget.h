@@ -3,7 +3,7 @@
 
 #include "SvnTarget.h"
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	using namespace System;
 
 	public ref class SvnUriTarget sealed : public SvnTarget

@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	ref class SvnCallbackArgs : EventArgs
 	{
 

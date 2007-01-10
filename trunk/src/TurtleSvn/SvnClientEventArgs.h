@@ -4,7 +4,7 @@
 #include "SvnEnums.h"
 #include "SvnCommitArgs.h"
 
-namespace TurtleSvn {
+namespace SharpSvn {
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 

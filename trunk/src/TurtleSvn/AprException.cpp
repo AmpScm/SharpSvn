@@ -2,5 +2,5 @@
 
 #include "AprException.h"
 
-using namespace TurtleSvn::Apr;
+using namespace SharpSvn::Apr;
 

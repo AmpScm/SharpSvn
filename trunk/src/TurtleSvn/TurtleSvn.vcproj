@@ -63,7 +63,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\lib"
+				AdditionalLibraryDirectories="f:\turtlesvn-subversion\release\Release\lib"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -187,6 +187,7 @@
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
+			UseDependenciesInBuild="false"
 			RelativePathToProject=".\TurtleSvn.UI\TurtleSvn.UI.csproj"
 		/>
 	</References>

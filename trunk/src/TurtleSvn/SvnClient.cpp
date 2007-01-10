@@ -3,8 +3,8 @@
 #include "SvnAll.h"
 #include "SvnCommitArgs.h"
 
-using namespace TurtleSvn;
-using namespace TurtleSvn::Apr;
+using namespace SharpSvn;
+using namespace SharpSvn::Apr;
 
 
 SvnClient::SvnClient()

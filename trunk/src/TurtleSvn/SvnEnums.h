@@ -1,6 +1,6 @@
 #pragma once
 
-namespace TurtleSvn {
+namespace SharpSvn {
 
 	public enum class SvnRevisionType
 	{

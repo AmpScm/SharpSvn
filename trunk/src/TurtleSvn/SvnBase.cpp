@@ -7,30 +7,32 @@
 
 #include <apr_general.h>
 
-using namespace TurtleSvn::Apr;
-using namespace TurtleSvn;
+using namespace SharpSvn::Apr;
+using namespace SharpSvn;
 
 static bool _aprInitialized = false;
 static int _myLen = 0;
 
 static SvnBase::SvnBase()
 {
-	if(!_aprInitialized)
-	{
-		_aprInitialized = true;
-
-		apr_initialize();
-		svn_dso_initialize();
-
-		apr_pool_t* pool;
-		apr_pool_create(&pool, NULL);
-		svn_utf_initialize(pool);
-	}
+	EnsureLoaded();
 }
 
 void SvnBase::EnsureLoaded()
 {
-	GC::KeepAlive(SvnBase::typeid);
+	if(!_aprInitialized)
+	{
+		_aprInitialized = true;
+
+		apr_initialize(); // First
+		svn_dso_initialize(); // Before first pool
+
+		apr_pool_t* pool;
+		apr_pool_create(&pool, NULL);
+		svn_utf_initialize(pool);
+
+		svn_ra_initialize(pool);
+	}
 }
 
 SvnBase::SvnBase()

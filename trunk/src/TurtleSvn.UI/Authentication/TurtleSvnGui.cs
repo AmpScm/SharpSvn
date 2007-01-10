@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 
-namespace TurtleSvn.UI.Authentication
+namespace SharpSvn.UI.Authentication
 {
 	/// <summary>
 	/// Public api used by TurtelSvn

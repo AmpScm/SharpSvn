@@ -1,7 +1,7 @@
 #pragma once
 #include "AprArray.h"
-namespace TurtleSvn {
-	using namespace TurtleSvn::Apr;
+namespace SharpSvn {
+	using namespace SharpSvn::Apr;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 

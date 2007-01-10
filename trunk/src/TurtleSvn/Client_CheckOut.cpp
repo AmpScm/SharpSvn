@@ -1,8 +1,8 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace TurtleSvn::Apr;
-using namespace TurtleSvn;
+using namespace SharpSvn::Apr;
+using namespace SharpSvn;
 
 void SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {

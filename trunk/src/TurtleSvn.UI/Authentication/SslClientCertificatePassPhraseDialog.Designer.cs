@@ -1,4 +1,4 @@
-namespace TurtleSvn.UI.Authentication
+namespace SharpSvn.UI.Authentication
 {
 	partial class SslClientCertificatePassPhraseDialog
 	{
@@ -97,7 +97,7 @@ namespace TurtleSvn.UI.Authentication
 			// panel1
 			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
-			this.panel1.BackgroundImage = global::TurtleSvn.UI.Properties.Resources.AuthenticationBanner;
+			this.panel1.BackgroundImage = global::SharpSvn.UI.Properties.Resources.AuthenticationBanner;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";

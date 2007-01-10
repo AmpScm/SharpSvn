@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TurtleSvn;
+using SharpSvn;
 using System.Reflection;
-using TurtleSvn.Security;
+using SharpSvn.Security;
 using System.IO;
 
-namespace TurtleSvn
+namespace SharpSvn
 {
 	class Program
 	{
@@ -19,12 +19,13 @@ namespace TurtleSvn
 
 		void Run(string[] args)
 		{
-			Console.WriteLine("TurtleSvn version {0}, using Subversion {1} libraries", SvnClient.WrapperVersion, SvnClient.Version);
+			Console.WriteLine("SharpSvn version {0}, using Subversion {1} libraries", SvnClient.WrapperVersion, SvnClient.Version);
 
 			_client = new SvnClient();
 
 			_client.LoadConfigurationDefault();
-			_client.Authenticator.AddSubversionFileHandlers();
+			//_client.Authenticator.Clear();
+			//_client.Authenticator.AddSubversionFileHandlers();
 			_client.Authenticator.UsernamePasswordHandlers += new SvnAuthenticationHandler<SvnUsernamePasswordArgs>(Authenticator_UsernamePasswordHandlers);
 
 			//_client.Authenticator.
@@ -53,7 +54,7 @@ namespace TurtleSvn
 			Directory.CreateDirectory("f:\\svn-test-location");
 
 			long ver;
-			_client.CheckOut(new Uri("https://studioturtle.googlecode.com/svn/trunk/src/TurtleSvn/"), "f:\\svn-test-location\\gc", out ver);
+			_client.CheckOut(new Uri("https://studioturtle.googlecode.com/svn/trunk/src/SharpSvn/"), "f:\\svn-test-location\\gc", out ver);
 			_client.Update("f:\\svn-test-location\\gc");
 			//_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
 			//_client.Update(@"g:\Projects\SvnDotNet", new SvnUpdateArgs(), out ver);
@@ -61,7 +62,7 @@ namespace TurtleSvn
 			
 		}
 
-		bool Authenticator_UsernamePasswordHandlers(object sender, TurtleSvn.Security.SvnUsernamePasswordArgs e)
+		bool Authenticator_UsernamePasswordHandlers(object sender, SharpSvn.Security.SvnUsernamePasswordArgs e)
 		{
 			return false;
 		}
