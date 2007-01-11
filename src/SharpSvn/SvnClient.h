@@ -36,11 +36,14 @@ namespace SharpSvn {
 			}
 		}
 
-		String^ GetSvnPath(String ^path)
+		static String^ GetSvnPath(String ^path)
 		{
 			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 		}
-	
+
+		/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
+		static bool IsNotUri(String ^path);
+
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
@@ -62,7 +65,7 @@ namespace SharpSvn {
 			System::Version^ get();
 		}
 
-/////////////////////////////////////////
+		/////////////////////////////////////////
 #pragma region // Client events
 	private:
 		EventHandler<SvnClientCancelEventArgs^>^	_clientCancel;
@@ -111,7 +114,7 @@ namespace SharpSvn {
 #pragma endregion
 
 	public:
-/////////////////////////////////////////
+		/////////////////////////////////////////
 #pragma region // Checkout Client Command
 
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
@@ -136,7 +139,7 @@ namespace SharpSvn {
 #pragma endregion
 
 	public:
-/////////////////////////////////////////
+		/////////////////////////////////////////
 #pragma region // Update Client Command
 
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
@@ -180,7 +183,7 @@ namespace SharpSvn {
 #pragma endregion
 
 	public:
-/////////////////////////////////////////
+		/////////////////////////////////////////
 #pragma region // Export Client Command
 		/// <summary>Recursively exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
@@ -247,22 +250,6 @@ namespace SharpSvn {
 		bool Add(String^ path, SvnAddArgs^ args);
 #pragma endregion
 
-	public:
-		/////////////////////////////////////////
-#pragma region // Commit Client Command
-		void Commit(String^ path);
-		void Commit(String^ path, [Out] SvnCommitInfo^% commitInfo);
-		void Commit(ICollection<String^>^ paths);
-		void Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo);
-		bool Commit(String^ path, SvnCommitArgs^ args);
-		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args);
-		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-
-	private:
-		bool CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo);
-#pragma endregion
-
 	internal:
 		generic<typename T>
 		where T : SvnClientEventArgs
@@ -301,7 +288,7 @@ namespace SharpSvn {
 		void GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status);
 		/// <summary>Gets a list of status data for the specified path</summary>
 		bool GetStatus(SvnPathTarget^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses);
-		
+
 #pragma endregion
 
 
@@ -317,8 +304,94 @@ namespace SharpSvn {
 		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
 		/// <summary>Gets information about the specified target</summary>
 		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^ info);
-		
+
 #pragma endregion
+
+
+	public:
+		/////////////////////////////////////////
+#pragma region // MkDir Client Command
+
+		void MkDir(String^ path);
+		bool MkDir(String^ path, SvnMkDirArgs^ args);
+
+		void MkDir(ICollection<String^>^ paths);
+		bool MkDir(ICollection<String^>^ paths, SvnMkDirArgs^ args);
+
+		bool RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args);
+		bool RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args);
+		bool RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // MkDir Client Command
+
+		void Delete(String^ path);
+		bool Delete(String^ path, SvnDeleteArgs^ args);
+
+		void Delete(ICollection<String^>^ paths);
+		bool Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args);
+
+		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args);
+		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args);
+		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Import Client Command
+
+		/// <summary>Performs a working copy import to the specified Uri, 
+		/// by importing the root remotely, checking that out and then adding the files locally</summary>
+		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
+		/// but requires two commits until it is further optimized by the subversion API</remarks>
+		void Import(String^ path, Uri^ target);
+		/// <summary>Performs a working copy import to the specified Uri, 
+		/// by importing the root remotely, checking that out and then adding the files locally</summary>
+		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
+		/// but requires two commits until it is further optimized by the subversion API</remarks>
+		void Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
+		/// <summary>Performs a working copy import to the specified Uri, 
+		/// by importing the root remotely, checking that out and then adding the files locally</summary>
+		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
+		/// but requires two commits until it is further optimized by the subversion API</remarks>
+		bool Import(String^ path, Uri^ target, SvnImportArgs^ args);
+		/// <summary>Performs a working copy import to the specified Uri, 
+		/// by importing the root remotely, checking that out and then adding the files locally</summary>
+		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
+		/// but requires two commits until it is further optimized by the subversion API</remarks>
+		bool Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+
+		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
+		void RemoteImport(String^ path, Uri^ target);
+		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
+		void RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
+		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
+		bool RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args);
+		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
+		bool RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Commit Client Command
+		void Commit(String^ path);
+		void Commit(String^ path, [Out] SvnCommitInfo^% commitInfo);
+		void Commit(ICollection<String^>^ paths);
+		void Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(String^ path, SvnCommitArgs^ args);
+		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args);
+		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+
+	private:
+		bool CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
 
 
 	public:

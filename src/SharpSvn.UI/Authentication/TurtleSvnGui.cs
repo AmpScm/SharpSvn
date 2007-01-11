@@ -31,6 +31,7 @@ namespace SharpSvn.UI.Authentication
 			{
 				dlg.Text = title;
 				dlg.descriptionBox.Text = description;
+				dlg.descriptionBox.Visible = true;
 				dlg.rememberCheck.Enabled = maySave;
 
 				DialogResult r = (parentHandle != IntPtr.Zero) ? dlg.ShowDialog(new ParentProvider(parentHandle)) : dlg.ShowDialog();
@@ -55,6 +56,7 @@ namespace SharpSvn.UI.Authentication
 			{
 				dlg.Text = title;
 				dlg.descriptionBox.Text = description;
+				dlg.descriptionBox.Visible = true;
 				dlg.rememberCheck.Enabled = maySave;
 				if (!string.IsNullOrEmpty(initialUsername))
 					dlg.usernameBox.Text = initialUsername;
@@ -76,25 +78,43 @@ namespace SharpSvn.UI.Authentication
 			}
 		}
 
-		public static bool AskServerCertificateTrust(IntPtr parentHandle, string title, string description, string realm, out bool accept, out bool save)
+		public static bool AskServerCertificateTrust(IntPtr parentHandle, string title, string description, string realm, bool maySave, out bool accept, out bool save)
 		{
 			accept = false;
 			save = false;
 			return false;
 		}
 
-		public static bool AskClientCertificateFile(IntPtr parentHandle, string title, string description, string realm, out string filename, out bool save)
+		public static bool AskClientCertificateFile(IntPtr parentHandle, string title, string description, string realm, bool maySave, out string filename, out bool save)
 		{
 			filename = null;
 			save = false;
 			return false;
 		}
 
-		public static bool AskClientCertificatePassPhrase(IntPtr parentHandle, string title, string description, string realm, out string passPhrase, out bool save)
+		public static bool AskClientCertificatePassPhrase(IntPtr parentHandle, string title, string description, string realm, bool maySave, out string passPhrase, out bool save)
 		{
-			passPhrase = null;
-			save = false;
-			return false;
+			using (SslClientCertificatePassPhraseDialog dlg = new SslClientCertificatePassPhraseDialog())
+			{
+				dlg.Text = title;
+				dlg.descriptionBox.Text = description;
+				dlg.descriptionBox.Visible = true;
+				dlg.rememberCheck.Enabled = maySave;
+
+				DialogResult r = (parentHandle != IntPtr.Zero) ? dlg.ShowDialog(new ParentProvider(parentHandle)) : dlg.ShowDialog();
+
+				if (r != DialogResult.OK)
+				{
+					save = false;
+					passPhrase = null;
+					return false;
+				}
+
+				passPhrase = dlg.passPhraseBox.Text;
+				save = maySave && dlg.rememberCheck.Checked;
+
+				return true;
+			}
 		}
 	}
 }

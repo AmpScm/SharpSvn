@@ -36,23 +36,22 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool^ pool = gcnew AprPool(_pool);
+	AprPool pool(_pool);
 	_currentArgs = args;
 	try
 	{
 		svn_error_t *r = svn_client_add3(
-			pool->AllocPath(path),
+			pool.AllocPath(path),
 			!args->NotRecursive,
 			args->Force,
 			args->NoIgnore,
 			CtxHandle,
-			pool->Handle);
+			pool.Handle);
 
 		return args->HandleResult(r);
 	}
 	finally
 	{
 		_currentArgs = nullptr;
-		delete pool;
 	}
 }

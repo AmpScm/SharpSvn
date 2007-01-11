@@ -71,7 +71,7 @@ namespace SharpSvn {
 		{
 			virtual String^ get() override
 			{
-				return _fullPath;
+				return _fullPath->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 			}
 		}
 

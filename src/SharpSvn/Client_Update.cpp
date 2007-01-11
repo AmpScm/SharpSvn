@@ -158,11 +158,11 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; an SvnClient instance can handle only one command at a time");
 
-	AprPool^ pool = gcnew AprPool(_pool);
+	AprPool pool(_pool);
 	_currentArgs = args;
 	try
 	{
-		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, pool);
+		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
 		apr_array_header_t* revs = nullptr;
 		svn_opt_revision_t uRev = args->Revision->ToSvnRevision();
@@ -173,11 +173,11 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 			!args->NotRecursive,
 			args->IgnoreExternals,
 			CtxHandle,
-			pool->Handle);
+			pool.Handle);
 
 		if(args->HandleResult(r) && revisions)
 		{			
-			AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, pool);
+			AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 
 			for(int i = 0; i < aprRevs->Count; i++)
 				revisions[i] = aprRevs[i];
@@ -190,6 +190,5 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 	finally
 	{
 		_currentArgs = nullptr;
-		delete pool;
 	}
 }

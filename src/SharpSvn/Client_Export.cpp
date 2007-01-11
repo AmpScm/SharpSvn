@@ -103,7 +103,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 
 	revision = -1;
 
-	AprPool^ pool = gcnew AprPool(_pool);
+	AprPool pool(_pool);
 	_currentArgs = args;
 
 	try
@@ -114,8 +114,8 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 
 		svn_error_t* r = svn_client_export3(
 			&resultRev, 
-			pool->AllocString(from->TargetName), 
-			pool->AllocPath(toPath), 
+			pool.AllocString(from->TargetName), 
+			pool.AllocPath(toPath), 
 			&pegRev, 
 			&rev, 
 			args->Overwrite, 
@@ -123,7 +123,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 			!args->NotRecursive,
 			GetEolPtr(args->EolStyle),
 			CtxHandle,
-			pool->Handle);
+			pool.Handle);
 
 		if(args->HandleResult(r))
 		{
@@ -136,7 +136,6 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 	finally
 	{
 		_currentArgs = nullptr;
-		delete pool;
 	}
 
 }
