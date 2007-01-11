@@ -321,7 +321,7 @@ bool SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs
 	String^ username;
 	bool save;
 
-	if(TurtleSvnGui::AskUsername(handle, "Subversion", e->Realm, e->Realm, e->MaySave, username, save))
+	if(TurtleSvnGui::AskUsername(handle, "Connect to Subversion", e->Realm, e->MaySave, username, save))
 	{
 		e->Username = username;
 		e->Save = save && e->MaySave;
@@ -339,7 +339,7 @@ bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUser
 	String^ password;
 	bool save;
 
-	if(TurtleSvnGui::AskUsernamePassword(handle, "Subversion", e->Realm, e->Realm, e->InitialUsername, e->MaySave, username, password, save))
+	if(TurtleSvnGui::AskUsernamePassword(handle, "Connect to Subversion", e->Realm, e->InitialUsername, e->MaySave, username, password, save))
 	{
 		e->Username = username;
 		e->Password = password;
@@ -361,7 +361,7 @@ bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, Svn
 	String^ file;
 	bool save;
 
-	if(TurtleSvnGui::AskClientCertificateFile(handle, "Subversion", e->Realm, e->Realm, e->MaySave, file, save))
+	if(TurtleSvnGui::AskClientCertificateFile(handle, "Connect to Subversion", e->Realm, e->MaySave, file, save))
 	{
 		e->CertificateFile = file;
 		e->Save = save && e->MaySave;
@@ -378,7 +378,7 @@ bool SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sen
 	String^ password;
 	bool save;
 
-	if(TurtleSvnGui::AskClientCertificatePassPhrase(handle, "Subversion", e->Realm, e->Realm, e->MaySave, password, save))
+	if(TurtleSvnGui::AskClientCertificatePassPhrase(handle, "Connect to Subversion", e->Realm, e->MaySave, password, save))
 	{
 		e->Password = password;
 		e->Save = save && e->MaySave;
