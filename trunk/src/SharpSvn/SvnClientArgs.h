@@ -520,6 +520,7 @@ namespace SharpSvn {
 	public:
 		SvnInfoArgs()
 		{
+			_revision = SvnRevision::None;
 		}
 
 		property bool NotRecursive
@@ -548,5 +549,41 @@ namespace SharpSvn {
 					_revision = SvnRevision::None;
 			}
 		}
+	};
+
+	public ref class SvnMkDirArgs : public SvnClientArgsWithCommit
+	{
+	public:
+		SvnMkDirArgs()
+		{}
+	};
+
+	public ref class SvnDeleteArgs : public SvnClientArgsWithCommit
+	{
+		bool _force;
+	public:
+		SvnDeleteArgs()
+		{}
+
+		/// <summary>If Force is not set then this operation will fail if any path contains locally modified 
+		/// and/or unversioned items. If Force is set such items will be deleted.</summary>
+		property bool Force
+		{
+			bool get()
+			{
+				return _force;
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+	};
+
+	public ref class SvnImportArgs : public SvnClientArgsWithCommit
+	{
+	public:
+		SvnImportArgs()
+		{}
 	};
 }

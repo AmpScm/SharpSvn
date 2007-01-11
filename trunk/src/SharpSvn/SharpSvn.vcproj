@@ -413,11 +413,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Delete.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Export.cpp"
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Import.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Info.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_MkDir.cpp"
 					>
 				</File>
 				<File

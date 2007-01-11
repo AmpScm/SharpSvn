@@ -65,7 +65,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool^ pool = gcnew AprPool(_pool);
+	AprPool pool(_pool);
 	_currentArgs = args;
 	try
 	{
@@ -74,12 +74,12 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 
 		svn_error_t *r = svn_client_switch(
 			&rev,
-			pool->AllocPath(path),
-			pool->AllocString(target->TargetName),
+			pool.AllocPath(path),
+			pool.AllocString(target->TargetName),
 			&toRev,
 			!args->NotRecursive,
 			CtxHandle,
-			pool->Handle);
+			pool.Handle);
 
 		revision = rev;
 
@@ -88,6 +88,5 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	finally
 	{
 		_currentArgs = nullptr;
-		delete pool;
 	}
 }

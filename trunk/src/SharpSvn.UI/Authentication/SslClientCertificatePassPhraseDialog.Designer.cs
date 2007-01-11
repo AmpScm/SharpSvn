@@ -30,7 +30,7 @@ namespace SharpSvn.UI.Authentication
 		{
 			this.descriptionBox = new System.Windows.Forms.Label();
 			this.usernameLabel = new System.Windows.Forms.Label();
-			this.usernameBox = new System.Windows.Forms.TextBox();
+			this.passPhraseBox = new System.Windows.Forms.TextBox();
 			this.rememberCheck = new System.Windows.Forms.CheckBox();
 			this.okButton = new System.Windows.Forms.Button();
 			this.cancelButton = new System.Windows.Forms.Button();
@@ -56,13 +56,13 @@ namespace SharpSvn.UI.Authentication
 			this.usernameLabel.TabIndex = 2;
 			this.usernameLabel.Text = "&Pass phrase:";
 			// 
-			// usernameBox
+			// passPhraseBox
 			// 
-			this.usernameBox.Location = new System.Drawing.Point(92, 113);
-			this.usernameBox.Name = "usernameBox";
-			this.usernameBox.PasswordChar = '*';
-			this.usernameBox.Size = new System.Drawing.Size(231, 20);
-			this.usernameBox.TabIndex = 3;
+			this.passPhraseBox.Location = new System.Drawing.Point(92, 113);
+			this.passPhraseBox.Name = "passPhraseBox";
+			this.passPhraseBox.PasswordChar = '*';
+			this.passPhraseBox.Size = new System.Drawing.Size(231, 20);
+			this.passPhraseBox.TabIndex = 3;
 			// 
 			// rememberCheck
 			// 
@@ -112,7 +112,7 @@ namespace SharpSvn.UI.Authentication
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.rememberCheck);
-			this.Controls.Add(this.usernameBox);
+			this.Controls.Add(this.passPhraseBox);
 			this.Controls.Add(this.usernameLabel);
 			this.Controls.Add(this.descriptionBox);
 			this.Controls.Add(this.panel1);
@@ -133,7 +133,7 @@ namespace SharpSvn.UI.Authentication
 		private System.Windows.Forms.Button okButton;
 		private System.Windows.Forms.Button cancelButton;
 		internal System.Windows.Forms.Label descriptionBox;
-		internal System.Windows.Forms.TextBox usernameBox;
+		internal System.Windows.Forms.TextBox passPhraseBox;
 		internal System.Windows.Forms.CheckBox rememberCheck;
 	}
 }

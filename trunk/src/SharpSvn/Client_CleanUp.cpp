@@ -25,20 +25,19 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool^ pool = gcnew AprPool(_pool);
+	AprPool pool(_pool);
 	_currentArgs = args;
 	try
 	{
 		svn_error_t *r = svn_client_cleanup(
-			pool->AllocPath(path),
+			pool.AllocPath(path),
 			CtxHandle,
-			pool->Handle);
+			pool.Handle);
 
 		return args->HandleResult(r);
 	}
 	finally
 	{
 		_currentArgs = nullptr;
-		delete pool;
 	}
 }

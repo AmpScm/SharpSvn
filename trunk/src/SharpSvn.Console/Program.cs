@@ -39,12 +39,12 @@ namespace SharpSvn
 			_client.ClientNotify += new EventHandler<SvnClientNotifyEventArgs>(OnClientNotify);
 			_client.ClientProgress += new EventHandler<SvnClientProgressEventArgs>(OnClientProgress);
 
-			_client.Status("G:\\Projects\\SvnDotNet\\AprSharp\\dev\\src\\AprSharp.csproj", delegate(object sender, SvnStatusEventArgs e)
+			_client.Status("..\\..\\SharpSvn.Console.csproj", delegate(object sender, SvnStatusEventArgs e)
 			{
 				Console.WriteLine(e.FullPath);
 			});
 
-			_client.Status("g:\\projects\\StudioTurtle", delegate(object sender, SvnStatusEventArgs e)
+			_client.Info((SvnPathTarget)"..\\..\\SharpSvn.Console.csproj", delegate(object sender, SvnInfoEventArgs e)
 			{
 				Console.WriteLine(e.FullPath);
 			});
