@@ -582,8 +582,34 @@ namespace SharpSvn {
 
 	public ref class SvnImportArgs : public SvnClientArgsWithCommit
 	{
+		bool _notRecursive;
+		bool _noIgnore;
 	public:
 		SvnImportArgs()
 		{}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return _notRecursive;
+			}
+			void set(bool value)
+			{
+				_notRecursive = value;
+			}
+		}
+
+		property bool NoIgnore
+		{
+			bool get()
+			{
+				return _noIgnore;
+			}
+			void set(bool value)
+			{
+				_noIgnore = value;
+			}
+		}
 	};
 }
