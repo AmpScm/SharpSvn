@@ -8,40 +8,122 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Import(String^ path, Uri^ target)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+
+	Import(path, target, gcnew SvnImportArgs());
 }
 
 void SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+
+	Import(path, target, gcnew SvnImportArgs(), commitInfo);
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	SvnCommitInfo^ commitInfo;
+
+	return Import(path, target, args, commitInfo);	
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	throw gcnew NotImplementedException("Must be implemented on top of RemoteImport and Add");
 }
 
 void SvnClient::RemoteImport(String^ path, Uri^ target)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+
+	RemoteImport(path, target, gcnew SvnImportArgs());
 }
 
 void SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+
+	RemoteImport(path, target, gcnew SvnImportArgs(), commitInfo);
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	SvnCommitInfo^ commitInfo;
+
+	return RemoteImport(path, target, args, commitInfo);	
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	throw gcnew NotImplementedException();
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+	else if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	commitInfo = nullptr;
+
+	EnsureState(SvnContextState::AuthorizationInitialized);
+
+	if(_currentArgs)
+		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+
+	AprPool pool(_pool);
+	_currentArgs = args;
+	try
+	{
+		svn_commit_info_t *commit_info = nullptr;
+		
+		svn_error_t *r = svn_client_import2(
+			&commit_info,
+			pool.AllocPath(path),
+			pool.AllocString(target->ToString()),
+			args->NotRecursive,
+			args->NoIgnore,
+			CtxHandle,
+			pool.Handle);
+
+		if(commit_info)
+			commitInfo = gcnew SvnCommitInfo(commit_info);
+		
+		return args->HandleResult(r);
+	}
+	finally
+	{
+		_currentArgs = nullptr;
+	}
 }
