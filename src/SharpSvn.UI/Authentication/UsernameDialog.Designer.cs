@@ -50,7 +50,7 @@ namespace SharpSvn.UI.Authentication
 			// usernameLabel
 			// 
 			this.usernameLabel.AutoSize = true;
-			this.usernameLabel.Location = new System.Drawing.Point(12, 113);
+			this.usernameLabel.Location = new System.Drawing.Point(12, 116);
 			this.usernameLabel.Name = "usernameLabel";
 			this.usernameLabel.Size = new System.Drawing.Size(61, 13);
 			this.usernameLabel.TabIndex = 2;
@@ -105,8 +105,10 @@ namespace SharpSvn.UI.Authentication
 			// 
 			// UsernameDialog
 			// 
+			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+			this.CancelButton = this.cancelButton;
 			this.ClientSize = new System.Drawing.Size(335, 241);
 			this.Controls.Add(this.cancelButton);
 			this.Controls.Add(this.okButton);
