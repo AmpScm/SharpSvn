@@ -27,7 +27,7 @@ namespace SharpSvn
 
 			_client.LoadConfigurationDefault();
 			_client.Authenticator.Clear();
-			_client.Authenticator.SslServerTrustHandlers += SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler;
+			//_client.Authenticator.SslServerTrustHandlers += SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler;
 			//_client.Authenticator.AddSubversionFileHandlers();
 			_client.Authenticator.AddDialogHandlers();
 			_client.Authenticator.UsernamePasswordHandlers += new SvnAuthenticationHandler<SvnUsernamePasswordArgs>(Authenticator_UsernamePasswordHandlers);

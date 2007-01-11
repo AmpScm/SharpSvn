@@ -349,9 +349,37 @@ bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUser
 	else
 		return false;
 }
+
+
 bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
-	throw gcnew NotImplementedException();
+
+	IntPtr handle = GetParentHandle(sender);
+
+	bool save;
+
+	TurtleSvnGui::ServerCertificateInfo^ sci = gcnew TurtleSvnGui::ServerCertificateInfo();
+
+	sci->InvalidCommonName = (0 != (int)(e->Failures & SvnCertificateTrustFailure::CommonNameMismatch));
+	sci->NoTrustedIssuer = 0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority);
+	sci->TimeError = 0 != (int)(e->Failures & (SvnCertificateTrustFailure::CertificateExpired | SvnCertificateTrustFailure::CertificateNotValidYet));
+
+	sci->Hostname = e->CommonName;
+	sci->Fingerprint = e->FingerPrint;
+	sci->Certificate = e->CertificateValue;
+	sci->Issuer = e->Issuer;
+	sci->ValidFrom = e->ValidFrom;
+	sci->ValidTo = e->ValidUntil;
+
+	bool accept = false;
+	if(TurtleSvnGui::AskServerCertificateTrust(handle, "Connect to Subversion", e->Realm, sci, e->MaySave, accept, save))
+	{
+		e->AcceptedFailures = accept ? e->Failures : SvnCertificateTrustFailure::None;
+		e->Save = save && e->MaySave;
+		return true;
+	}
+	else
+		return false;
 }
 
 bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)

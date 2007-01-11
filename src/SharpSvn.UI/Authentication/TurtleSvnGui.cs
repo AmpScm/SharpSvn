@@ -4,6 +4,8 @@ using System.Text;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using SharpSvn.UI.Properties;
 
 namespace SharpSvn.UI.Authentication
 {
@@ -56,7 +58,7 @@ namespace SharpSvn.UI.Authentication
 
 				if (r != DialogResult.OK)
 				{
-					save = false;
+					save = dlg.rememberCheck.Checked;
 					username = null;
 					return false;
 				}
@@ -122,7 +124,7 @@ namespace SharpSvn.UI.Authentication
 
 				if (r != DialogResult.OK)
 				{
-					save = false;
+					save = dlg.rememberCheck.Checked;
 					username = password = null;
 					return false;
 				}
@@ -135,11 +137,106 @@ namespace SharpSvn.UI.Authentication
 			}
 		}
 
-		public static bool AskServerCertificateTrust(IntPtr parentHandle, string title, string realm, bool maySave, out bool accept, out bool save)
+		public class ServerCertificateInfo
 		{
-			accept = false;
-			save = false;
-			return false;
+			string _hostname;
+
+			public string Hostname
+			{
+				get { return _hostname; }
+				set { _hostname = value; }
+			}
+			string _fingerprint;
+
+			public string Fingerprint
+			{
+				get { return _fingerprint; }
+				set { _fingerprint = value; }
+			}
+			string _validFrom;
+
+			public string ValidFrom
+			{
+				get { return _validFrom; }
+				set { _validFrom = value; }
+			}
+			string _validTo;
+
+			public string ValidTo
+			{
+				get { return _validTo; }
+				set { _validTo = value; }
+			}
+			string _issuer;
+
+			public string Issuer
+			{
+				get { return _issuer; }
+				set { _issuer = value; }
+			}
+			string _certificate;
+
+			public string Certificate
+			{
+				get { return _certificate; }
+				set { _certificate = value; }
+			}
+
+			bool _noTrustedIssuer;
+
+			public bool NoTrustedIssuer
+			{
+				get { return _noTrustedIssuer; }
+				set { _noTrustedIssuer = value; }
+			}
+			bool _timeError;
+
+			public bool TimeError
+			{
+				get { return _timeError; }
+				set { _timeError = value; }
+			}
+			bool _invalidCommonName;
+
+			public bool InvalidCommonName
+			{
+				get { return _invalidCommonName; }
+				set { _invalidCommonName = value; }
+			}
+		}
+
+		public static bool AskServerCertificateTrust(IntPtr parentHandle, string title, string realm, ServerCertificateInfo info, bool maySave, out bool accept, out bool save)
+		{
+			using (SslServerCertificateTrustDialog dlg = new SslServerCertificateTrustDialog())
+			{
+				dlg.Text = title ;
+
+				dlg.hostname.Text = info.Hostname;
+				dlg.fingerprint.Text = info.Fingerprint;
+				dlg.validFrom.Text = info.ValidFrom;
+				dlg.validTo.Text = info.ValidTo;
+				dlg.issuer.Text = info.Issuer;
+				dlg.certificateBox.Text = info.Certificate;
+
+				Bitmap Ok = Resources.Ok.ToBitmap();
+				Bitmap Error = Resources.Error.ToBitmap();
+
+				dlg.caUnknownImage.Image = info.NoTrustedIssuer ? Error : Ok;
+				dlg.invalidDateImage.Image = info.TimeError ? Error : Ok;
+				dlg.serverMismatchImage.Image = info.InvalidCommonName ? Error : Ok;
+
+				DialogResult r = (parentHandle != IntPtr.Zero) ? dlg.ShowDialog(new ParentProvider(parentHandle)) : dlg.ShowDialog();
+
+				if (r == DialogResult.OK)
+				{
+					save = dlg.rememberCheck.Checked;
+					accept = true;
+					return true;
+				}
+				accept = false;
+				save = false;
+				return false;
+			}
 		}
 
 		public static bool AskClientCertificateFile(IntPtr parentHandle, string title, string realm, bool maySave, out string filename, out bool save)
