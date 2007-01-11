@@ -41,9 +41,8 @@ namespace SharpSvn.UI.Authentication
 			// 
 			this.descriptionBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.descriptionBox.Location = new System.Drawing.Point(12, 73);
-			this.descriptionBox.MaximumSize = new System.Drawing.Size(0, 270);
 			this.descriptionBox.Name = "descriptionBox";
-			this.descriptionBox.Size = new System.Drawing.Size(0, 36);
+			this.descriptionBox.Size = new System.Drawing.Size(311, 36);
 			this.descriptionBox.TabIndex = 1;
 			this.descriptionBox.Text = "Description";
 			// 
