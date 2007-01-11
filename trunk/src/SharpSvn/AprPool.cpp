@@ -36,17 +36,21 @@ void AprPool::Destroy()
 {
 	if(_handle)
 	{
-		_tag->Ensure();
-		delete _tag; // Dispose
-
-		apr_pool_t* handle = _handle;
-		if(handle)
+		if(_tag->IsValid()) // Don't crash the finalizer; dont Destroy if parent is deleted
 		{
-			_handle = nullptr;
+			delete _tag; // Dispose
 
-			if(_destroyPool)
-				apr_pool_destroy(handle);
+			apr_pool_t* handle = _handle;
+			if(handle)
+			{
+				_handle = nullptr;
+
+				if(_destroyPool)
+					apr_pool_destroy(handle);
+			}
 		}
+		else
+			_handle = nullptr;
 	}
 }
 

@@ -42,6 +42,19 @@ namespace SharpSvn {
 					if(_parent)
 						_parent->Ensure();
 				}
+
+			internal:
+				bool IsValid()
+				{
+					if(_disposed)
+						return false;
+					if(_parent)
+						return _parent->IsValid();
+
+					return true;					
+				}
+
+				
 			};
 
 		private:

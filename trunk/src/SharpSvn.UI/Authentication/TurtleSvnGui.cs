@@ -87,9 +87,9 @@ namespace SharpSvn.UI.Authentication
 
 				bool dlgSave = false;
 
-				int flags = (int)NativeMethods.CREDUI_FLAGS.GENERIC_CREDENTIALS;
-				if(!maySave)
-					flags |= (int)NativeMethods.CREDUI_FLAGS.DO_NOT_PERSIST;
+				int flags = (int)NativeMethods.CREDUI_FLAGS.GENERIC_CREDENTIALS | (int)NativeMethods.CREDUI_FLAGS.ALWAYS_SHOW_UI | (int)NativeMethods.CREDUI_FLAGS.DO_NOT_PERSIST;
+				if(maySave)
+					flags |= (int)NativeMethods.CREDUI_FLAGS.SHOW_SAVE_CHECK_BOX;
 
 				switch (NativeMethods.CredUIPromptForCredentials(ref info, realm, IntPtr.Zero, 0, sbUsername, 1024, sbPassword, 1024, ref dlgSave,
 					(NativeMethods.CREDUI_FLAGS)flags))
@@ -229,7 +229,7 @@ namespace SharpSvn.UI.Authentication
 
 				if (r == DialogResult.OK)
 				{
-					save = dlg.rememberCheck.Checked;
+					save = dlg.rememberCheck.Checked && maySave;
 					accept = true;
 					return true;
 				}
