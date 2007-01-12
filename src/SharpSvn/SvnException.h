@@ -28,13 +28,21 @@ namespace SharpSvn {
 			}
 		}
 
+		static Exception^ GetInnerException(svn_error_t *error)
+		{
+			if(error && error->child)
+				return Create(error->child);
+			else
+				return nullptr;
+		}
+
 	internal:
 		static SvnException^ Create(svn_error_t *error);
 		
 
 	internal:
 		SvnException(svn_error_t *error)
-			: ExternalException(GetErrorText(error))
+			: ExternalException(GetErrorText(error), GetInnerException(error))
 		{
 			_error = error;
 		}
