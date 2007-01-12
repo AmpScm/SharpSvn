@@ -92,34 +92,7 @@ void SvnClient::HandleClientProgress(SvnClientProgressEventArgs^ e)
 	OnClientProgress(e);
 }
 
-bool SvnClient::IsNotUri(String ^path)
-{
-	if(!path)
-		return false;
 
-	// Use the same stupid algorithm subversion uses to choose between Uri's and paths
-	for(int i = 0; i < path->Length; i++)
-	{
-		wchar_t c = path[i];
-		switch(c)
-		{
-		case '\\':
-		case '/':
-			return true;
-		case ':':
-			if(i < path->Length-2)
-			{
-				if((path[i+1] == '/') && (path[i+2] == '/'))
-					return false;
-			}
-			return true;
-		default:
-			if(!wchar_t::IsLetter(c))
-				return true;
-		}
-	}	
-	return true;
-}
 
 void SvnClient::OnClientProgress(SvnClientProgressEventArgs^ e)
 {

@@ -431,17 +431,34 @@ namespace SharpSvn {
 		bool _update;
 		bool _noIgnore;
 		bool _ignoreExternals;
+		SvnRevision^ _revision;
 
 	protected public:
 		event EventHandler<SvnStatusEventArgs^>^ Status;
 
-		void OnStatus(SvnStatusEventArgs^ e)
+		virtual void OnStatus(SvnStatusEventArgs^ e)
 		{
 			Status(this, e);
 		}
 	public:
 		SvnStatusArgs()
 		{
+			_revision = SvnRevision::None;
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
+			}
 		}
 
 		property bool NotRecursive
@@ -513,7 +530,7 @@ namespace SharpSvn {
 	protected public:
 		event EventHandler<SvnInfoEventArgs^>^ Info;
 
-		void OnInfo(SvnInfoEventArgs^ e)
+		virtual void OnInfo(SvnInfoEventArgs^ e)
 		{
 			Info(this, e);
 		}
@@ -609,6 +626,80 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noIgnore = value;
+			}
+		}
+	};
+
+	public ref class SvnListArgs : public SvnClientArgs
+	{
+		SvnRevision^ _revision;
+		bool _recursive;
+		SvnDirEntryItems _entryItems;
+		bool _fetchLocks;
+
+	protected public:
+		event EventHandler<SvnListEventArgs^>^ List;
+
+		virtual void OnList(SvnListEventArgs^ e)
+		{
+			List(this, e);
+		}
+	public:
+		SvnListArgs()
+		{
+			_revision = SvnRevision::None;
+			_entryItems = SvnDirEntryItems::AllFields;
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
+			}
+		}
+
+		property SvnDirEntryItems EntryItems
+		{
+			SvnDirEntryItems get()
+			{
+				return _entryItems;
+			}
+
+			void set(SvnDirEntryItems value)
+			{
+				_entryItems = value;
+			}
+		}
+
+		property bool FetchLocks
+		{
+			bool get()
+			{
+				return _fetchLocks;
+			}
+			void set(bool value)
+			{
+				_fetchLocks = value;
+			}
+		}
+
+		property bool NotRecursive
+		{
+			bool get()
+			{
+				return !_recursive;
+			}
+			void set(bool value)
+			{
+				_recursive = value;
 			}
 		}
 	};

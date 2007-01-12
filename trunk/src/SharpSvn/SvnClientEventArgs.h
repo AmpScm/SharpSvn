@@ -948,4 +948,13 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnListEventArgs : public SvnClientEventArgs
+	{
+	internal:
+		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
+		{
+		}
+
+	};
 }

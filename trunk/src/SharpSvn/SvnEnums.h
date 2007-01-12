@@ -146,4 +146,31 @@ namespace SharpSvn {
 
 		MaskAllFailures				=	CertificateNotValidYet | CertificateExpired | CommonNameMismatch | UnknownCertificateAuthority | UnknownSslProviderFailure
 	};
+
+	[Flags]
+	public enum class SvnDirEntryItems
+	{
+		None			= 0,
+
+		/** An indication that you are interested in the @c kind field */
+		Kind			= SVN_DIRENT_KIND,
+
+		/** An indication that you are interested in the @c size field */
+		Size			= SVN_DIRENT_SIZE,
+
+		/** An indication that you are interested in the @c has_props field */
+		HasProperties	= SVN_DIRENT_HAS_PROPS,
+
+		/** An indication that you are interested in the @c created_rev field */
+		CreatedRevision	= SVN_DIRENT_CREATED_REV,
+
+		/** An indication that you are interested in the @c time field */
+		Time			= SVN_DIRENT_TIME,
+
+		/** An indication that you are interested in the @c last_author field */
+		LastAuthor		= SVN_DIRENT_LAST_AUTHOR,
+
+		/** A combination of all the dirent fields */
+		AllFields		= SVN_DIRENT_ALL
+	};
 }
