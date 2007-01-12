@@ -353,6 +353,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnUriOrPath.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnUriTarget.h"
 					>
 				</File>
@@ -426,6 +430,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_Info.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_List.cpp"
 					>
 				</File>
 				<File

@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
+void SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
 	if(!path)
 		throw gcnew ArgumentNullException("path");
@@ -34,12 +34,14 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 	}
 }
 
-bool SvnClient::Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args)
+bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args)
 {
 	if(!path)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+
+	// We allow a null statusHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
@@ -54,10 +56,10 @@ bool SvnClient::Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ s
 	{
 		svn_revnum_t version = 0;
 
-		svn_opt_revision_t pegRev = path->Revision->ToSvnRevision();
+		svn_opt_revision_t pegRev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_status2(&version,
-			pool.AllocString(path->TargetName), 
+			pool.AllocPath(path), 
 			&pegRev, 
 			svnclient_status_handler,
 			(void*)_clientBatton->Handle,
@@ -80,7 +82,7 @@ bool SvnClient::Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ s
 	}
 }
 
-void SvnClient::GetStatus(SvnPathTarget^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
+void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
 	if(!path)
 		throw gcnew ArgumentNullException("path");
@@ -97,7 +99,7 @@ void SvnClient::GetStatus(SvnPathTarget^ path, [Out] IList<SvnStatusEventArgs^>^
 	}
 }
 
-void SvnClient::GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status)
+void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 {
 	if(!path)
 		throw gcnew ArgumentNullException("path");
@@ -122,7 +124,7 @@ void SvnClient::GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status
 	}
 }
 
-bool SvnClient::GetStatus(SvnPathTarget^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses)
+bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
 	if(!path)
 		throw gcnew ArgumentNullException("path");

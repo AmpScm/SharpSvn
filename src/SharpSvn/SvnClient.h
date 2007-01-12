@@ -8,6 +8,7 @@
 #include "SvnClientArgs.h"
 #include "SvnCommitArgs.h"
 #include "AprBaton.h"
+#include "SvnUriOrPath.h"
 
 namespace SharpSvn {
 
@@ -15,6 +16,7 @@ namespace SharpSvn {
 	ref class SvnProgressEventArgs;
 	ref class SvnLogEventArgs;
 	ref class SvnNotifyEventArgs;
+
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -40,9 +42,6 @@ namespace SharpSvn {
 		{
 			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 		}
-
-		/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
-		static bool IsNotUri(String ^path);
 
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
@@ -278,19 +277,29 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Status Client Command
 		/// <summary>Recursively gets 'interesting' status data for the specified path</summary>
-		void Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler);
+		void Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler);
 		/// <summary>Gets status data for the specified path</summary>
-		bool Status(SvnPathTarget^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args);
+		bool Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args);
 
 		/// <summary>Recursively gets a list of 'interesting' status data for the specified path</summary>
-		void GetStatus(SvnPathTarget^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		void GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
 		/// <summary>Gets the status data for the specified path</summary>
-		void GetStatus(SvnPathTarget^ path, [Out] SvnStatusEventArgs^% status);
+		void GetStatus(String^ path, [Out] SvnStatusEventArgs^% status);
 		/// <summary>Gets a list of status data for the specified path</summary>
-		bool GetStatus(SvnPathTarget^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		bool GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses);
 
 #pragma endregion
 
+		public:
+		/////////////////////////////////////////
+#pragma region // List Client Command
+
+		void List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler);
+		bool List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler, SvnListArgs^ args);
+
+		void GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list);
+		bool GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnListEventArgs^>^% list);
+#pragma endregion
 
 	public:
 		/////////////////////////////////////////
@@ -397,6 +406,8 @@ namespace SharpSvn {
 		bool CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
+
+	
 
 
 	public:

@@ -26,6 +26,9 @@ namespace SharpSvn {
 
 			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
 			static apr_time_t AprTimeFromDateTime(DateTime time);
+
+			/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
+			static bool IsNotUri(String ^path);
 		};
 
 		public ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
@@ -40,6 +43,7 @@ namespace SharpSvn {
 		private protected:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
+			static bool IsNotUri(String ^path);
 		};
 	}
 }
