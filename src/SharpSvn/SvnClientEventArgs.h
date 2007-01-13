@@ -949,12 +949,194 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnDirEntry : public SvnClientEventArgs
+	{
+		const svn_dirent_t *_entry;
+		initonly SvnNodeKind _nodeKind;
+		initonly __int64 _fileSize;
+		initonly bool _hasProperties;
+		initonly __int64 _rev;
+		initonly DateTime _time;
+		String^ _author;
+	internal:
+		SvnDirEntry(const svn_dirent_t *entry)
+		{
+			if(!entry)
+				throw gcnew ArgumentNullException("entry");
+
+			_entry = entry;
+			_nodeKind = (SvnNodeKind)entry->kind;
+			_fileSize = entry->size;
+			_hasProperties = (entry->has_props != 0);
+			_rev = entry->created_rev;
+			_time = (entry->time != 0) ? SvnBase::DateTimeFromAprTime(entry->time) : DateTime::MinValue;
+		}
+	public:
+		property SvnNodeKind Kind
+		{
+			SvnNodeKind get()
+			{
+				return _nodeKind;
+			}
+		}
+
+		property __int64 FileSize
+		{
+			__int64 get()
+			{
+				return _fileSize;
+			}
+		}
+
+		property bool HasProperties
+		{
+			bool get()
+			{
+				return _hasProperties;
+			}
+		}
+
+		property __int64 Revision
+		{
+			__int64 get()
+			{
+				return _rev;
+			}
+		}
+
+		property DateTime Time
+		{
+			DateTime get()
+			{
+				return _time;
+			}
+		}
+		property String^ Author
+		{
+			String^ get()
+			{
+				if(!_author && _entry->last_author)
+					_author = SvnBase::Utf8_PtrToString(_entry->last_author);
+
+				return _author;
+			}
+		}
+	
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					GC::KeepAlive(Author);
+				}
+
+			}
+			finally
+			{
+				_entry = nullptr;
+
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+
 	public ref class SvnListEventArgs : public SvnClientEventArgs
 	{
+		initonly String^ _path;
+		const char* _pAbsPath;
+		const svn_lock_t *_pLock;
+		const svn_dirent_t *_pDirEnt;
+
+		String^ _absPath;
+		SvnLockInfo^ _lock;
+		SvnDirEntry^ _entry;
+		
 	internal:
 		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
 		{
+			if(!path)
+				throw gcnew ArgumentNullException("path");
+			else if(!abs_path)
+				throw gcnew ArgumentNullException("abs_path");
+
+			_path = SvnBase::Utf8_PtrToString(path);
+			
+			_pDirEnt = dirent;
+			_pLock = lock;
+			_pAbsPath = abs_path;
 		}
 
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}
+
+		property String^ AbsPath
+		{
+			String^ get()
+			{
+				if(!_absPath && _pAbsPath)
+					_absPath = SvnBase::Utf8_PtrToString(_pAbsPath);
+
+				return _absPath;
+			}
+		}
+
+		property SvnLockInfo^ Lock
+		{
+			SvnLockInfo^ get()
+			{
+				if(!_lock && _pLock)
+					_lock = gcnew SvnLockInfo(_pLock);
+
+				return _lock;
+			}
+		}
+
+		property SvnDirEntry^ Entry
+		{
+			SvnDirEntry^ get()
+			{
+				if(!_entry && _pDirEnt)
+					_entry = gcnew SvnDirEntry(_pDirEnt);
+
+				return _entry;
+			}
+		}
+
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					GC::KeepAlive(AbsPath);
+					GC::KeepAlive(Lock);
+					GC::KeepAlive(Entry);
+				}
+
+				if(_lock)
+					_lock->Detach(keepProperties);
+				if(_entry)
+					_entry->Detach(keepProperties);
+			}
+			finally
+			{
+				_pAbsPath = nullptr;
+				_pLock = nullptr;
+				_pDirEnt = nullptr;
+
+				__super::Detach(keepProperties);
+			}
+		}
 	};
 }

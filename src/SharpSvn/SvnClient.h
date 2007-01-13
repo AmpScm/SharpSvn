@@ -8,7 +8,6 @@
 #include "SvnClientArgs.h"
 #include "SvnCommitArgs.h"
 #include "AprBaton.h"
-#include "SvnUriOrPath.h"
 
 namespace SharpSvn {
 
@@ -24,6 +23,8 @@ namespace SharpSvn {
 	using System::Collections::Generic::IList;
 
 	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
+	/// <remarks><para>Please note: the subversion is not thread safe. You can use an SvnClient from a single thread at a time</para>
+	/// You can use multiple SvnClients in multiple threads at the same time</remarks>
 	public ref class SvnClient : public SvnClientContext
 	{
 		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
