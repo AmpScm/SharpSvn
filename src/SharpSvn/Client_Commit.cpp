@@ -110,16 +110,16 @@ bool SvnClient::CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args,
 	else if(!args)
 		throw gcnew ArgumentNullException("args");	
 
-	for each(String^ s in paths)
+	for each(String^ path in paths)
 	{
-		if(String::IsNullOrEmpty(s))
+		if(String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException("member of paths is null", "paths");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; an SvnClient instance can handle only one command at a time");
+		throw gcnew InvalidOperationException("Operation in progress; a SvnClient instance can handle only one command at a time");
 
 	AprPool pool(_pool);
 	_currentArgs = args;

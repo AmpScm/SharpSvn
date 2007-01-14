@@ -47,7 +47,9 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 
 	for each(String^ path in paths)
 	{
-		if(!IsNotUri(path))
+		if(String::IsNullOrEmpty(path))
+			throw gcnew ArgumentException("member of paths is null", "paths");
+		else if(!IsNotUri(path))
 			throw gcnew ArgumentException("Path is a url; please use RemoteDelete", "paths");
 	}
 

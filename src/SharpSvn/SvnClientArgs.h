@@ -540,15 +540,15 @@ namespace SharpSvn {
 			_revision = SvnRevision::None;
 		}
 
-		property bool NotRecursive
+		property bool Recursive
 		{
 			bool get()
 			{
-				return !_recursive;
+				return _recursive;
 			}
 			void set(bool value)
 			{
-				_recursive = !value;
+				_recursive = value;
 			}
 		}
 
@@ -691,11 +691,11 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool NotRecursive
+		property bool Recursive
 		{
 			bool get()
 			{
-				return !_recursive;
+				return _recursive;
 			}
 			void set(bool value)
 			{
@@ -703,4 +703,57 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnRevertArgs : public SvnClientArgs
+	{
+		bool _recursive;
+
+	public:
+		SvnRevertArgs()
+		{
+		}
+
+		property bool Recursive
+		{
+			bool get()
+			{
+				return _recursive;
+			}
+			void set(bool value)
+			{
+				_recursive = value;
+			}
+		}
+	};
+
+	public ref class SvnResolvedArgs : public SvnClientArgs
+	{
+		bool _recursive;
+
+	public:
+		SvnResolvedArgs()
+		{
+		}
+
+		property bool Recursive
+		{
+			bool get()
+			{
+				return _recursive;
+			}
+			void set(bool value)
+			{
+				_recursive = value;
+			}
+		}
+	};
+
+	public ref class SvnCopyArgs : public SvnClientArgsWithCommit
+	{
+	public:
+		SvnCopyArgs()
+		{
+		}
+	};
+
 }

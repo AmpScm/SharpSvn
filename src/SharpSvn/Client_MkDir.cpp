@@ -45,7 +45,9 @@ bool SvnClient::MkDir(ICollection<String^>^ paths, SvnMkDirArgs^ args)
 
 	for each(String^ path in paths)
 	{
-		if(!IsNotUri(path))
+		if(String::IsNullOrEmpty(path))
+			throw gcnew ArgumentException("member of paths is null", "paths");
+		else if(!IsNotUri(path))
 			throw gcnew ArgumentException("Path is a url; please use RemoteDelete", "paths");
 	}
 

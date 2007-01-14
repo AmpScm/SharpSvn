@@ -8,7 +8,7 @@ void SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
-	else if(!path)
+	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	__int64 revision;
@@ -19,7 +19,7 @@ void SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revisio
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
-	else if(!path)
+	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
@@ -29,7 +29,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
-	else if(!path)
+	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -43,7 +43,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
-	else if(!path)
+	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
