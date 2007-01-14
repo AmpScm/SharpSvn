@@ -353,10 +353,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnUriOrPath.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnUriTarget.h"
 					>
 				</File>
@@ -417,6 +413,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Copy.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Delete.cpp"
 					>
 				</File>
@@ -438,6 +438,14 @@
 				</File>
 				<File
 					RelativePath=".\Client_MkDir.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Resolved.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Revert.cpp"
 					>
 				</File>
 				<File

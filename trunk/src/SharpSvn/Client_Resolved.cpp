@@ -3,30 +3,20 @@
 
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
+using namespace System::Collections::Generic;
 
-void SvnClient::Add(String^ path)
+
+void SvnClient::Resolved(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if(!path)
 		throw gcnew ArgumentNullException("path");
 
-	Add(path, gcnew SvnAddArgs());
+	Resolved(path, gcnew SvnResolvedArgs());
 }
 
-void SvnClient::Add(String^ path, bool notRecursive)
+bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-
-	SvnAddArgs ^args = gcnew SvnAddArgs();
-
-	args->NotRecursive = notRecursive;
-
-	Add(path, args);
-}
-
-bool SvnClient::Add(String^ path, SvnAddArgs^ args)
-{
-	if(String::IsNullOrEmpty(path))
+	if(!path)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -40,11 +30,9 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	_currentArgs = args;
 	try
 	{
-		svn_error_t *r = svn_client_add3(
+		svn_error_t *r = svn_client_resolved(
 			pool.AllocPath(path),
-			!args->NotRecursive,
-			args->Force,
-			args->NoIgnore,
+			args->Recursive,
 			CtxHandle,
 			pool.Handle);
 

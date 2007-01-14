@@ -291,7 +291,7 @@ namespace SharpSvn {
 
 #pragma endregion
 
-		public:
+	public:
 		/////////////////////////////////////////
 #pragma region // List Client Command
 
@@ -408,7 +408,21 @@ namespace SharpSvn {
 #pragma endregion
 
 
-	
+	public:
+		/////////////////////////////////////////
+#pragma region // Revert Client Command
+		void Revert(String^ path);
+		bool Revert(String^ path, SvnRevertArgs^ args);
+		void Revert(ICollection<String^>^ paths);
+		bool Revert(ICollection<String^>^ paths, SvnRevertArgs^ args);
+#pragma endregion
+
+public:
+		/////////////////////////////////////////
+#pragma region // Resolved Client Command
+		void Resolved(String^ path);
+		bool Resolved(String^ path, SvnResolvedArgs^ args);
+#pragma endregion
 
 
 	public:
@@ -424,6 +438,17 @@ namespace SharpSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		bool CleanUp(String^ path, SvnCleanUpArgs^ args);
+#pragma endregion
+
+			public:
+		/////////////////////////////////////////
+#pragma region // Cleanup Client Command
+		void Copy(SvnTarget^ sourceTarget, String^ toPath);
+		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
+		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri);
+		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
+		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 

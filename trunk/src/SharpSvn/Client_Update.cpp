@@ -156,7 +156,7 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; an SvnClient instance can handle only one command at a time");
+		throw gcnew InvalidOperationException("Operation in progress; a SvnClient instance can handle only one command at a time");
 
 	AprPool pool(_pool);
 	_currentArgs = args;
