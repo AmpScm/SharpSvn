@@ -78,10 +78,24 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr)
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 {
-	if(!ptr)
+	if(!ptr || length < 0)
 		return nullptr;
 
 	return gcnew String(ptr, 0, ::strlen(ptr), System::Text::Encoding::UTF8);
+}
+
+array<char>^ SvnBase::PtrToByteArray(const char* ptr, int length)
+{
+	if(!ptr || length < 0)
+		return nullptr;
+
+	array<char>^ bytes = gcnew array<char>(length);
+
+	pin_ptr<char> pBytes = &bytes[0];
+
+	memcpy(pBytes, ptr, length);
+
+	return bytes;
 }
 
 DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
@@ -119,4 +133,9 @@ String^ SvnHandleBase::Utf8_PtrToString(const char *ptr, int length)
 bool SvnHandleBase::IsNotUri(String ^path)
 {
 	return SvnBase::IsNotUri(path);
+}
+
+array<char>^ SvnHandleBase::PtrToByteArray(const char* ptr, int length)
+{
+	return SvnBase::PtrToByteArray(ptr, length);
 }

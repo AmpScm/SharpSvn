@@ -417,7 +417,7 @@ namespace SharpSvn {
 		bool Revert(ICollection<String^>^ paths, SvnRevertArgs^ args);
 #pragma endregion
 
-public:
+	public:
 		/////////////////////////////////////////
 #pragma region // Resolved Client Command
 		void Resolved(String^ path);
@@ -440,15 +440,75 @@ public:
 		bool CleanUp(String^ path, SvnCleanUpArgs^ args);
 #pragma endregion
 
-			public:
+	public:
 		/////////////////////////////////////////
-#pragma region // Cleanup Client Command
+#pragma region // Copy Client Command
 		void Copy(SvnTarget^ sourceTarget, String^ toPath);
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
 		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri);
 		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
 		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
 		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Move Client Command
+		void Move(String^ sourcePath, String^ toPath);
+		bool Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args);
+		void RemoteMove(Uri^ sourceUri, Uri^ toUri);
+		void RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args);
+		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // SetProperty Client Command
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		void SetProperty(String^ path, String^ propertyName, String^ value);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		void SetProperty(String^ path, String^ propertyName, array<char>^ bytes);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool SetProperty(String^ path, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool SetProperty(String^ path, String^ propertyName, array<char>^ bytes, SvnSetPropertyArgs^ args);
+		/// <summary>Removes the specified property from the specfied path</summary>
+		void DeleteProperty(String^ path, String^ propertyName);
+		/// <summary>Removes the specified property from the specfied path</summary>
+		bool DeleteProperty(String^ path, String^ propertyName, SvnSetPropertyArgs^ args);
+
+	internal:
+		bool InternalSetProperty(String^ path, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // GetProperty Client Command
+		/// <summary>Gets the specified property from the specfied path</summary>
+		/// <returns>true if property is set, otherwise false</returns>
+		/// <exception type="SvnException">path is not a valid workingcopy path</exception>
+		void GetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
+		/// <summary>Gets the specified property from the specfied path</summary>
+		/// <returns>true if property is set, otherwise false</returns>
+		/// <exception type="SvnException">path is not a valid workingcopy path</exception>
+		void GetProperty(SvnTarget^ target, String^ propertyName, IList<char>^% bytes);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] IDictionary<SvnTarget^, String^>^% properties);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] IDictionary<SvnTarget^, IList<char>^>^% properties);
+
+		/// <summary>Tries to get a property from the specified path</summary>
+		/// <remarks>Eats all (non-argument) exceptions</remarks>
+		/// <returns>True if the property is fetched, otherwise false</returns>
+		bool TryGetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
 #pragma endregion
 
 
