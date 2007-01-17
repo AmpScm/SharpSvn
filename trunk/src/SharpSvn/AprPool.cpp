@@ -3,6 +3,7 @@
 #include "AprException.h"
 
 #include <apr_pools.h>
+#include <svn_path.h>
 
 using namespace SharpSvn::Apr;
 
@@ -110,12 +111,22 @@ void AprPool::Clear()
 
 void* AprPool::Alloc(size_t size)
 {
-	return apr_palloc(Handle, size);
+	void *p = apr_palloc(Handle, size);
+
+	if(!p)
+		throw gcnew OutOfMemoryException("apr_palloc returned null");
+
+	return p;
 }
 
 void* AprPool::AllocCleared(size_t size)
 {
-	return apr_pcalloc(Handle, size);
+	void *p = apr_pcalloc(Handle, size);
+
+	if(!p)
+		throw gcnew OutOfMemoryException("apr_pcalloc returned null");
+
+	return p;
 }
 
 void* AprPool::Alloc(size_t size, apr_pool_t *pool)
@@ -123,7 +134,12 @@ void* AprPool::Alloc(size_t size, apr_pool_t *pool)
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	return apr_palloc(pool, size);
+	void* p = apr_palloc(pool, size);
+
+	if(!p)
+		throw gcnew OutOfMemoryException("apr_palloc returned null");
+
+	return p;
 }
 
 void* AprPool::AllocCleared(size_t size, apr_pool_t *pool)
@@ -131,7 +147,12 @@ void* AprPool::AllocCleared(size_t size, apr_pool_t *pool)
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	return apr_pcalloc(pool, size);
+	void* p = apr_pcalloc(pool, size);
+
+	if(!p)
+		throw gcnew OutOfMemoryException("apr_pcalloc returned null");
+
+	return p;
 }
 
 const char* AprPool::AllocString(String^ value)
@@ -175,6 +196,7 @@ const char* AprPool::AllocPath(String^ value)
 		{
 			memcpy(pData, pBytes, bytes->Length);
 
+			// Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
 			for(int i = 0; i < bytes->Length; i++)
 				if(pData[i] == '\\')
 					pData[i] = '/';
@@ -186,6 +208,36 @@ const char* AprPool::AllocPath(String^ value)
 	}
 	else
 		return (const char*)AllocCleared(1);
+}
+
+const svn_string_t* AprPool::AllocSvnString(String^ value)
+{
+	if(!value)
+		value = "";
+
+	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));
+
+	pStr->data = AllocString(value);
+	pStr->len = strlen(pStr->data);
+
+	return pStr;
+}
+
+const svn_string_t* AprPool::AllocSvnString(array<char>^ bytes)
+{
+	if(!bytes)
+		bytes = gcnew array<char>(0);
+
+	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));
+
+	char* pChars = (char*)AllocCleared(bytes->Length+1);
+	pStr->data = pChars;
+	pStr->len = bytes->Length;
+
+	pin_ptr<char> pBytes = &bytes[0]; 
+	memcpy(pChars, pBytes, bytes->Length);
+
+	return pStr;
 }
 
 
@@ -236,6 +288,7 @@ const char* AprPool::AllocPath(String^ value, apr_pool_t *pool)
 		{
 			memcpy(pData, pBytes, bytes->Length);
 
+			// Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
 			for(int i = 0; i < bytes->Length; i++)
 				if(pData[i] == '\\')
 					pData[i] = '/';
@@ -247,4 +300,40 @@ const char* AprPool::AllocPath(String^ value, apr_pool_t *pool)
 	}
 	else
 		return (const char*)AllocCleared(1, pool);
+}
+
+const svn_string_t* AprPool::AllocSvnString(String^ value, apr_pool_t *pool)
+{
+	if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	if(!value)
+		value = "";
+
+	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t), pool);
+
+	pStr->data = AllocString(value, pool);
+	pStr->len = strlen(pStr->data);
+
+	return pStr;
+}
+
+const svn_string_t* AprPool::AllocSvnString(array<char>^ bytes, apr_pool_t *pool)
+{
+	if(!pool)
+		throw gcnew ArgumentNullException("pool");
+	
+	if(!bytes)
+		bytes = gcnew array<char>(0);
+
+	svn_string_t* pStr = (svn_string_t*)Alloc(sizeof(svn_string_t), pool);
+
+	char *pChars = (char*)AllocCleared(bytes->Length+1, pool);
+	pStr->data = pChars;
+	pStr->len = bytes->Length;
+
+	pin_ptr<char> pBytes = &bytes[0]; 
+	memcpy(pChars, pBytes, bytes->Length);
+
+	return pStr;
 }

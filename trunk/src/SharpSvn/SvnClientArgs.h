@@ -756,4 +756,97 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnMoveArgs : public SvnClientArgs
+	{
+		bool _force;
+	public:
+		SvnMoveArgs()
+		{
+		}
+
+		property bool Force
+		{
+			bool get()
+			{
+				return _force;
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+	};
+
+	public ref class SvnSetPropertyArgs : public SvnClientArgs
+	{
+		bool _recursive;
+		bool _skipChecks;
+	public:
+		SvnSetPropertyArgs()
+		{
+		}
+
+		property bool Recursive
+		{
+			bool get()
+			{
+				return _recursive;
+			}
+			void set(bool value)
+			{
+				_recursive = value;
+			}
+		}
+
+		property bool SkipChecks
+		{
+			bool get()
+			{
+				return _skipChecks;
+			}
+			void set(bool value)
+			{
+				_skipChecks = value;
+			}
+		}
+	};
+
+	public ref class SvnGetPropertyArgs : public SvnClientArgs
+	{
+		SvnRevision^ _revision;
+		bool _recursive;
+	public:
+		SvnGetPropertyArgs()
+		{
+			_revision = SvnRevision::None;
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
+			}
+		}
+
+		property bool Recursive
+		{
+			bool get()
+			{
+				return _recursive;
+			}
+			void set(bool value)
+			{
+				_recursive = value;
+			}
+		}
+	};
+
 }

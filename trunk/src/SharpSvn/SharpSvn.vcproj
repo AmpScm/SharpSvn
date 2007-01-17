@@ -425,6 +425,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_GetProperty.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Import.cpp"
 					>
 				</File>
@@ -441,11 +445,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Move.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Resolved.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Client_Revert.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_SetProperty.cpp"
 					>
 				</File>
 				<File

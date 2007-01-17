@@ -7,7 +7,7 @@
 namespace SharpSvn {
 	using namespace System;
 
-	public ref class SvnRevision sealed
+	public ref class SvnRevision sealed : public IEquatable<SvnRevision^>
 	{
 		initonly SvnRevisionType _type;
 		initonly __int64 _value;
@@ -116,6 +116,26 @@ namespace SharpSvn {
 			}
 		}
 
+		virtual bool Equals(Object^ obj) override
+		{
+			SvnRevision ^rev = dynamic_cast<SvnRevision^>(obj);
+
+			return Equals(rev);
+		}
+
+		virtual bool Equals(SvnRevision^ rev)
+		{
+			if(!rev)
+				return false;
+
+			return (_type == rev->_type) && (_value == rev->_value);
+		}
+
+		virtual int GetHashCode() override
+		{
+			return _type.GetHashCode() ^ _value.GetHashCode();
+		}
+
 	internal:
 		svn_opt_revision_t ToSvnRevision();
 
@@ -131,7 +151,7 @@ namespace SharpSvn {
 	ref class SvnUriTarget;
 	ref class SvnPathTarget;
 
-	public ref class SvnTarget abstract : public SvnBase
+	public ref class SvnTarget abstract : public SvnBase, public IEquatable<SvnTarget^>
 	{
 		initonly SvnRevision^ _revision;
 	protected:
@@ -170,6 +190,29 @@ namespace SharpSvn {
 
 		static operator SvnTarget^(Uri^ value)					{ return value ? FromUri(value) : nullptr; }
 		static explicit operator SvnTarget^(String^ value)		{ return value ? FromString(value) : nullptr; }
+
+		virtual bool Equals(Object^ obj) override
+		{
+			SvnTarget^ target = dynamic_cast<SvnTarget^>(obj);
+
+			return Equals(target);
+		}
+
+		virtual bool Equals(SvnTarget^ target)
+		{
+			if(!target)
+				return false;
+
+			if(!String::Equals(target->TargetName, TargetName))
+				return false;
+			
+			return Revision->Equals(target->Revision);
+		}
+
+		virtual int GetHashCode() override
+		{
+			return TargetName->GetHashCode();
+		}
 
 
 	public:

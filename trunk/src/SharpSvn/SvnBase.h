@@ -23,6 +23,7 @@ namespace SharpSvn {
 		internal:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
+			static array<char>^ PtrToByteArray(const char* ptr, int length);
 
 			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
 			static apr_time_t AprTimeFromDateTime(DateTime time);
@@ -43,6 +44,7 @@ namespace SharpSvn {
 		private protected:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
+			static array<char>^ PtrToByteArray(const char* ptr, int length);
 			static bool IsNotUri(String ^path);
 		};
 	}

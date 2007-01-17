@@ -5,28 +5,30 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath)
+void SvnClient::Move(String^ sourcePath, String^ toPath)
 {
-	if(!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if(String::IsNullOrEmpty(sourcePath))
+		throw gcnew ArgumentNullException("sourcePath");
 	else if(String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 
-	Copy(sourceTarget, toPath, gcnew SvnCopyArgs());
+	Move(sourcePath, toPath, gcnew SvnMoveArgs());
 }
 
-bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
+bool SvnClient::Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args)
 {
-	if(!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if(String::IsNullOrEmpty(sourcePath))
+		throw gcnew ArgumentNullException("sourcePath");
 	else if(String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!IsNotUri(sourcePath))
+		throw gcnew ArgumentException("Path looks like a Uri", "sourcePath");
 	else if(!IsNotUri(toPath))
 		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
+	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
@@ -36,13 +38,12 @@ bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
 	try
 	{
 		svn_commit_info_t* pInfo = nullptr;
-		svn_opt_revision_t rev = sourceTarget->Revision->ToSvnRevision();
 
-		svn_error_t *r = svn_client_copy3(
+		svn_error_t *r = svn_client_move4(
 			&pInfo,
-			pool.AllocString(sourceTarget->TargetName),
-			&rev,
+			pool.AllocPath(sourcePath),
 			pool.AllocPath(toPath),
+			args->Force,
 			CtxHandle,
 			pool.Handle);
 
@@ -54,45 +55,45 @@ bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
 	}
 }
 
-void SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
+void SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri)
 {
-	if(!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if(!sourceUri)
+		throw gcnew ArgumentNullException("sourceUri");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	RemoteCopy(sourceTarget, toUri, gcnew SvnCopyArgs(), commitInfo);
+	RemoteMove(sourceUri, toUri, gcnew SvnMoveArgs(), commitInfo);
 }
 
-void SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
+void SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if(!sourceUri)
+		throw gcnew ArgumentNullException("sourceUri");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
-	RemoteCopy(sourceTarget, toUri, gcnew SvnCopyArgs(), commitInfo);
+	RemoteMove(sourceUri, toUri, gcnew SvnMoveArgs(), commitInfo);
 }
 
-bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args)
+bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args)
 {
-	if(!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if(!sourceUri)
+		throw gcnew ArgumentNullException("sourceUri");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitInfo^ commitInfo = nullptr;
-	return RemoteCopy(sourceTarget, toUri, args, commitInfo);
+	return RemoteMove(sourceUri, toUri, args, commitInfo);
 }
 
-bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if(!sourceUri)
+		throw gcnew ArgumentNullException("sourceUri");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
@@ -108,13 +109,12 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ 
 	try
 	{
 		svn_commit_info_t* pInfo = nullptr;
-		svn_opt_revision_t rev = sourceTarget->Revision->ToSvnRevision();
 
-		svn_error_t *r = svn_client_copy3(
+		svn_error_t *r = svn_client_move4(
 			&pInfo,
-			pool.AllocString(sourceTarget->TargetName),
-			&rev,
+			pool.AllocString(sourceUri->ToString()),
 			pool.AllocString(toUri->ToString()),
+			args->Force,
 			CtxHandle,
 			pool.Handle);
 
