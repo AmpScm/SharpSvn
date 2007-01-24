@@ -3,7 +3,7 @@
 	<!-- -->
 	<property name="opensslVersion" value="0.9.8d" />
 	<property name="neonVersion" value="0.26.2" />
-	<property name="subversionVersion" value="1.4.2" />
+	<property name="subversionVersion" value="1.4.3" />
 	<property name="aprVersion" value="0.9.13" />
 	<property name="aprIconvVersion" value="0.9.7" />
 	<property name="bdbVersion" value="4.4.20.NC" />
