@@ -52,9 +52,6 @@
 		<if test="${not file::exists('downloads/' + zlibFilename)}">
 			<get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
 		</if>
-		<!--if test="${not file::exists('downloads/' + expatFilename)}">
-			<get src="http://mesh.dl.sourceforge.net/sourceforge/expat/${expatFilename}" dest="downloads/${expatFilename}" />
-		</if-->
 	</target>
 	
 	<target name="extract" depends="download">
@@ -68,9 +65,6 @@
 		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
 			<untar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
 		</if>
-		<!--if test="${not directory::exists('build/expat-' + expatVersion)}">
-			<untar tarfile="downloads/${expatFilename}" todir="build" compresstype="gzip" />
-		</if-->
 	</target>
 	
 	<target name="checkout">
@@ -111,13 +105,13 @@
 				<arg value="build/subversion/apr-iconv" />
 			</exec>
 		</if>
-		<!--if test="${not directory::exists('build/subversion/serf')}">
+		<if test="${not directory::exists('build/subversion/serf')}">
 			<exec program="svn.exe" verbose="true">
 				<arg line="- -non-interactive co" />
 				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" />
 				<arg value="build/subversion/serf" />
 			</exec>
-		</if-->
+		</if>
 	</target>
 	
 	<target name="build-bdb" depends="extract">
@@ -347,23 +341,30 @@
 			</exec>
 			<loadfile file="build/subversion/apr-util/libaprutil.vcproj" property="projtext">
 				<filterchain>
-					<replacestring from='/libaprutil.dll' to='/${dllPrefix}libaprutil.dll' /> 
-					<replacestring from='\libaprutil.dll' to='\${dllPrefix}libaprutil.dll' /> 
+					<replacestring from='/libaprutil.dll' to='/${dllPrefix}aprutil.dll' /> 
+					<replacestring from='\libaprutil.dll' to='\${dllPrefix}aprutil.dll' /> 
 				</filterchain>
 			</loadfile>
 			<echo message="${projtext}" file="build/subversion/apr-util/libaprutil.vcproj" />
 			<loadfile file="build/subversion/apr/libapr.vcproj" property="projtext">
 				<filterchain>
-					<replacestring from='/libapr.dll' to='/${dllPrefix}libapr.dll' /> 
-					<replacestring from='\libapr.dll' to='\${dllPrefix}libapr.dll' /> 
+					<replacestring from='/libapr.dll' to='/${dllPrefix}apr.dll' /> 
+					<replacestring from='\libapr.dll' to='\${dllPrefix}apr.dll' /> 
 				</filterchain>
 			</loadfile>
 			<echo message="${projtext}" file="build/subversion/apr/libapr.vcproj" />
+			<loadfile file="build/subversion/apr-iconv/libapriconv.vcproj" property="projtext">
+				<filterchain>
+					<replacestring from='/libapriconv.dll' to='/${dllPrefix}apriconv.dll' /> 
+					<replacestring from='\libapriconv.dll' to='\${dllPrefix}apriconv.dll' /> 
+				</filterchain>
+			</loadfile>
+			<echo message="${projtext}" file="build/subversion/apr-iconv/libapriconv.vcproj" />
 			<touch file="${'build/subversion-' + subversionVersion +'.generated'}" />
 		</if>
 	</target>
 	<target name="build-svn" depends="download,extract,checkout, build-bdb, build-zlib, build-openssl, prepare-neon,generate-svnfiles">
-		<exec program="msbuild.exe" workingdir="build\subversion" failonerror="false">
+		<exec program="msbuild.exe" workingdir="build\subversion">
 			<arg value="subversion_vcnet.sln" />
 			<arg value="/p:Configuration=Release" />
 			<arg value="/t:Svn" />
