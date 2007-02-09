@@ -56,7 +56,6 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libapriconv.lib")
 #pragma comment(lib, "libaprutil.lib")
 #pragma comment(lib, "xml.lib")
-//#pragma comment(lib, "intl3_svn.lib")
 #pragma comment(lib, "libneon.lib")
 #pragma comment(lib, "zlibstat.lib")
 #pragma comment(lib, "ws2_32.lib")

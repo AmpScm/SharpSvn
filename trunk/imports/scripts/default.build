@@ -12,7 +12,7 @@
 	
 	<property name="httpOrHttps" value="https" />
 	<property name="Configuration" value="Release" />
-	<property name="dllPrefix" value="ttsvn-" />
+	<property name="dllPrefix" value="shsvn-" />
 
 	<include buildfile="tasks.build" />
 
