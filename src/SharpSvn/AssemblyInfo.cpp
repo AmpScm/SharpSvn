@@ -39,7 +39,7 @@ using namespace System::Security::Permissions;
 
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
-#pragma comment(lib, "libapr.lib")
+//#pragma comment(lib, "libapr.lib")
 #pragma comment(lib, "libsvn_client-1.lib")
 #pragma comment(lib, "libsvn_delta-1.lib")
 #pragma comment(lib, "libsvn_diff-1.lib")
@@ -53,10 +53,18 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libsvn_repos-1.lib")
 #pragma comment(lib, "libsvn_subr-1.lib")
 #pragma comment(lib, "libsvn_wc-1.lib")
-#pragma comment(lib, "libapriconv.lib")
-#pragma comment(lib, "libaprutil.lib")
 #pragma comment(lib, "xml.lib")
 #pragma comment(lib, "libneon.lib")
 #pragma comment(lib, "zlibstat.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "libdb44.lib")
+// When statically linking neon/OpenSSL
+#pragma comment(lib, "Gdi32.lib")
+#pragma comment(lib, "User32.lib")
+// When dynamic linking iconv and apr-util
+//#pragma comment(lib, "libapriconv.lib")
+//#pragma comment(lib, "libaprutil.lib")
+//#pragma comment(lib, "apriconv.lib")
+#pragma comment(lib, "apr.lib")
+#pragma comment(lib, "apriconv.lib")
+#pragma comment(lib, "aprutil.lib")
