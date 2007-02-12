@@ -13,6 +13,10 @@
 	<property name="httpOrHttps" value="https" />
 	<property name="Configuration" value="Release" />
 	<property name="dllPrefix" value="shsvn-" />
+	
+	<setenv>
+		<variable name="OPENSSL_STATIC" value="1" />
+	</setenv>
 
 	<include buildfile="tasks.build" />
 
@@ -40,7 +44,6 @@
 	<property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
 	<property name="bdbFilename" value="db-${bdbVersion}.tar.gz" />
 	<property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
-	<!--property name="expatFilename" value="expat-${expatVersion}.tar.gz" /-->
 	<target name="download">	
 		<mkdir dir="downloads" />
 		<if test="${not file::exists('downloads/' + opensslFilename)}">
@@ -107,7 +110,7 @@
 		</if>
 		<if test="${not directory::exists('build/subversion/serf')}">
 			<exec program="svn.exe" verbose="true">
-				<arg line="- -non-interactive co" />
+				<arg line="--non-interactive co" />
 				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" />
 				<arg value="build/subversion/serf" />
 			</exec>
@@ -232,8 +235,11 @@
 					<echo message="${defText}" file="${def}" />
 				</do>
 			</foreach>			
-			<exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
+			<!--exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg line="-f ms\ntdll.mak" />
+			</exec-->
+			<exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
+				<arg line="-f ms\nt.mak" />
 			</exec>
 			<foreach item="File" property="manifest">
 				<in>
@@ -321,7 +327,7 @@
 			<touch file="${'build/apr-' + aprVersion +'.upgraded'}" />
 		</if>
 	</target>
-	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, checkout, prepare-neon, upgrade-apr">		
+	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, checkout, prepare-neon, upgrade-apr">
 		<if test="${not file::exists('build/subversion-' + subversionVersion +'.generated')}">
 			<loadfile file="build/subversion/build/generator/gen_win.py" property="gen_win">
 				<filterchain>
@@ -339,31 +345,60 @@
 				<arg value="--with-zlib=../zlib-${zlibVersion}" />
 				<!--arg value="- -with-serf=serf" /-->
 			</exec>
-			<loadfile file="build/subversion/apr-util/libaprutil.vcproj" property="projtext">
-				<filterchain>
-					<replacestring from='/libaprutil.dll' to='/${dllPrefix}aprutil.dll' /> 
-					<replacestring from='\libaprutil.dll' to='\${dllPrefix}aprutil.dll' /> 
-				</filterchain>
-			</loadfile>
-			<echo message="${projtext}" file="build/subversion/apr-util/libaprutil.vcproj" />
-			<loadfile file="build/subversion/apr/libapr.vcproj" property="projtext">
-				<filterchain>
-					<replacestring from='/libapr.dll' to='/${dllPrefix}apr.dll' /> 
-					<replacestring from='\libapr.dll' to='\${dllPrefix}apr.dll' /> 
-				</filterchain>
-			</loadfile>
-			<echo message="${projtext}" file="build/subversion/apr/libapr.vcproj" />
-			<loadfile file="build/subversion/apr-iconv/libapriconv.vcproj" property="projtext">
-				<filterchain>
-					<replacestring from='/libapriconv.dll' to='/${dllPrefix}apriconv.dll' /> 
-					<replacestring from='\libapriconv.dll' to='\${dllPrefix}apriconv.dll' /> 
-				</filterchain>
-			</loadfile>
 			<echo message="${projtext}" file="build/subversion/apr-iconv/libapriconv.vcproj" />
+			
+			<!-- Replace shared library builds with static builds; to auto change dependencies -->
+			<foreach item="File" property="project">
+				<in>
+					<items basedir="build\subversion\build\win32">
+						<include name="**/*.vcproj" />
+					</items>
+				</in>
+				<do>
+					<loadfile file="${project}" property="projtext">
+						<filterchain>
+							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;WIN32' /> 
+							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib zlibstat.lib' />
+						</filterchain>
+					</loadfile>
+					<echo message="${projtext}" file="${project}" />
+				</do>
+			</foreach>
+			<foreach item="File" property="project">
+				<in>
+					<items basedir="build/subversion">
+						<include name="**/lib*.dsp" />						
+						<include name="**/lib*.vcproj" />
+					</items>
+				</in>
+				<do>
+					<property name="itemName" value="${path::get-file-name(project)}" />
+					<if test="${file::exists(path::combine(path::get-directory-name(project), string::substring(itemName, 3, string::get-length(itemName)-3)))}">
+						<copy 
+							file="${project}" 
+							tofile="${project}.orig" unless="${file::exists(project + '.orig')}" />
+						<delete file="${project}" />
+						<copy 
+							file="${path::combine(path::get-directory-name(project), string::substring(itemName, 3, string::get-length(itemName)-3))}" 
+							tofile="${project}" />
+					</if>
+				</do>
+			</foreach>
+			
 			<touch file="${'build/subversion-' + subversionVersion +'.generated'}" />
 		</if>
 	</target>
 	<target name="build-svn" depends="download,extract,checkout, build-bdb, build-zlib, build-openssl, prepare-neon,generate-svnfiles">
+		<!-- Prepare static builds (require changed build order) -->
+		<exec program="msbuild.exe" workingdir="build\subversion">
+			<arg value="apr\apr.vcproj" />
+			<arg value="/p:Configuration=Release" />
+		</exec>
+		<!--exec program="msbuild.exe" workingdir="build\subversion">
+			<arg value="apr-iconv\apriconv.vcproj" />
+			<arg value="/p:Configuration=Release" />
+		</exec-->
+		<!-- Now build subversion -->
 		<exec program="msbuild.exe" workingdir="build\subversion">
 			<arg value="subversion_vcnet.sln" />
 			<arg value="/p:Configuration=Release" />
@@ -373,6 +408,7 @@
 			<fileset basedir="build\subversion">
 				<include name="**/*.lib" />
 				<include name="**/lib*.pdb" />
+				<include name="**/src*.pdb" />
 				<include name="**/${dllPrefix}lib*.pdb" />
 				<include name="**/*.dll" />
 			</fileset>
