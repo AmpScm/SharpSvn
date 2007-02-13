@@ -522,6 +522,99 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnLogArgs : public SvnClientArgs
+	{
+		SvnRevision^ _start;
+		SvnRevision^ _end;
+		int _limit;
+		bool _logChangedPaths;
+		bool _strictHistory;
+
+	protected public:
+		event EventHandler<SvnLogEventArgs^>^ Log;
+
+		virtual void OnLog(SvnLogEventArgs^ e)
+		{
+			Log(this, e);
+		}
+	public:
+		SvnLogArgs()
+		{
+			_start = SvnRevision::Head;
+			_end = SvnRevision::Zero;
+			_limit = 0;
+			_logChangedPaths = true;
+			_strictHistory = false;
+		}
+
+		property SvnRevision^ Start
+		{
+			SvnRevision^ get()
+			{
+				return _start;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_start = value;
+				else
+					_start = SvnRevision::Head;
+			}
+		}
+
+		property SvnRevision^ End
+		{
+			SvnRevision^ get()
+			{
+				return _end;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_end = value;
+				else
+					_end = SvnRevision::Zero;
+			}
+		}
+
+		property int Limit
+		{
+			int get()
+			{
+				return _limit;
+			}
+
+			void set(int value)
+			{
+				_limit = (value >= 0) ? value : 0;
+			}
+		}
+
+		property bool LogChangedPaths
+		{
+			bool get()
+			{
+				return _logChangedPaths;
+			}
+			void set(bool value)
+			{
+				_logChangedPaths = value;
+			}
+		}
+
+		property bool StrictHistory
+		{
+			bool get()
+			{
+				return _strictHistory;
+			}
+			void set(bool value)
+			{
+				_strictHistory = value;
+			}
+		}
+	};
+
 	public ref class SvnInfoArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;

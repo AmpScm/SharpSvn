@@ -20,7 +20,7 @@ namespace SharpSvn {
 			_type = SvnRevisionType::None;
 		}
 
-		SvnRevision(long revision)
+		SvnRevision(int revision)
 		{
 			if(revision < 0)
 				throw gcnew ArgumentOutOfRangeException("revision");
@@ -146,6 +146,7 @@ namespace SharpSvn {
 		static initonly SvnRevision^ Base		= gcnew SvnRevision(SvnRevisionType::Base);
 		static initonly SvnRevision^ Previous	= gcnew SvnRevision(SvnRevisionType::Previous);
 		static initonly SvnRevision^ Committed	= gcnew SvnRevision(SvnRevisionType::Committed);
+		static initonly SvnRevision^ Zero		= gcnew SvnRevision((__int64)0);
 	};
 
 	ref class SvnUriTarget;
