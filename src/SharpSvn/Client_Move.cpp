@@ -27,6 +27,8 @@ bool SvnClient::Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args)
 		throw gcnew ArgumentException("Path looks like a Uri", "sourcePath");
 	else if(!IsNotUri(toPath))
 		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 
@@ -98,6 +100,8 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] 
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 

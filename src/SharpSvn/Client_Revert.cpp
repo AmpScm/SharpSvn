@@ -41,6 +41,8 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	for each(String^ path in paths)
 	{

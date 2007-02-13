@@ -64,6 +64,9 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 
 void SvnClientContext::EnsureState(SvnContextState state)
 {
+	if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
+
 	if(state < State)
 		return;
 

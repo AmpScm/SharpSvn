@@ -93,6 +93,8 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 		throw gcnew ArgumentNullException("propertyName");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 

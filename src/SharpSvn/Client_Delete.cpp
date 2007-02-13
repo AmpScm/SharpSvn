@@ -22,6 +22,8 @@ bool SvnClient::Delete(String^ path, SvnDeleteArgs^ args)
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException("Path is a url; please use RemoteDelete", "path");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	array<String^>^ paths = gcnew array<String^>(1);
 	paths[0] = path;
