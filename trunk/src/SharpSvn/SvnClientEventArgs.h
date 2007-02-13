@@ -644,6 +644,10 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnLogEventArgs : public SvnClientEventArgs
+	{
+	};
+
 	public ref class SvnInfoEventArgs : public SvnClientEventArgs
 	{
 		const svn_info_t* _info;
