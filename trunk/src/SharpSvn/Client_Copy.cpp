@@ -25,6 +25,8 @@ bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(toPath))
 		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
@@ -97,6 +99,8 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ 
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 

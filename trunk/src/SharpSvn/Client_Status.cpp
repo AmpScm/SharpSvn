@@ -40,6 +40,8 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	// We allow a null statusHandler; the args object might just handle it itself
 

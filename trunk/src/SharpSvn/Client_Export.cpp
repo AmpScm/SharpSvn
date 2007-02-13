@@ -95,6 +95,8 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		throw gcnew ArgumentNullException("toPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 

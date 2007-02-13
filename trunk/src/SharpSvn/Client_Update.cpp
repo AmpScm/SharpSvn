@@ -55,6 +55,8 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revisio
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 
 	array<__int64>^ revisions = gcnew array<__int64>(1);
 	array<String^>^ paths = gcnew array<String^>(1);
@@ -135,6 +137,8 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!_pool)
+		throw gcnew ObjectDisposedException("SvnClient");
 	else
 		switch(args->Revision->Type)
 	{
