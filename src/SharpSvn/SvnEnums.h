@@ -65,6 +65,15 @@ namespace SharpSvn {
 		Conflicted	= svn_wc_notify_state_conflicted 
 	};
 
+	public enum class SvnChangeAction
+	{
+		None = 0,
+		Add = 'A',
+		Delete = 'D', 
+		Replace = 'R',
+		Modify = 'M'
+	};
+
 	public enum class SvnLockState
 	{
 		Unchanged	= svn_wc_notify_lock_state_unchanged,

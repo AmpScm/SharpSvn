@@ -26,6 +26,14 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 		try
 		{
 			args->OnInfo(e);
+
+			if(e->Cancel)
+				return svn_error_create (SVN_ERR_CANCELLED, NULL, "Info receiver canceled operation");
+		}
+		catch(Exception^ e)
+		{
+			AprPool^ thePool = AprPool::Attach(pool, false);
+			return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("Info receiver throwed exception: ", e->ToString())));
 		}
 		finally
 		{

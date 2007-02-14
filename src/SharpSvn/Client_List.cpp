@@ -26,6 +26,14 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 		try
 		{
 			args->OnList(e);
+
+			if(e->Cancel)
+				return svn_error_create (SVN_ERR_CANCELLED, NULL, "List receiver canceled operation");
+		}
+		catch(Exception^ e)
+		{
+			AprPool^ thePool = AprPool::Attach(pool, false);
+			return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("List receiver throwed exception: ", e->ToString())));
 		}
 		finally
 		{

@@ -299,26 +299,18 @@ namespace SharpSvn {
 		/// <summary>Gets log messages of the specified target</summary>
 		bool Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args);
 		/// <summary>Gets log messages of the specified target</summary>
-		void Log(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler);
+		void Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
-		void Log(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args);
-		/// <summary>Gets log messages of the specified target</summary>
-		void Log(ICollection<String^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler);
-		/// <summary>Gets log messages of the specified target</summary>
-		void Log(ICollection<String^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args);
+		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args);
 
 		/// <summary>Gets log messages of the specified target</summary>
-		void GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logHandler);
+		void GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logHandler);
+		bool GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		void GetLog(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, [Out] IList<SvnLogEventArgs^>^% logHandler);
+		void GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, [Out] IList<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logHandler);
-		/// <summary>Gets log messages of the specified target</summary>
-		void GetLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, [Out] IList<SvnLogEventArgs^>^% logHandler);
-		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logHandler);
+		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
 
 	private:
 		bool InternalLog(ICollection<String^>^ paths, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);

@@ -144,6 +144,10 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 
 		return nullptr;
 	}
+	catch(Exception^)
+	{
+		return svn_error_create(SVN_ERR_CANCELLED, NULL, "Operation canceled via exception");
+	}
 	finally
 	{
 		ea->Detach(false);
@@ -169,6 +173,11 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg
 			*log_msg = tmpPool->AllocString(ea->LogMessage);
 
 		return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		AprPool^ thePool = AprPool::Attach(pool, false);
+		return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("Commit log callback throwed exception: ", e->ToString())));
 	}
 	finally
 	{
