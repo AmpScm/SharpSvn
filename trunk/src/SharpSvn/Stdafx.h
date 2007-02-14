@@ -8,6 +8,7 @@
 #pragma warning(disable: 4635)
 #include <apr.h>
 #include <svn_client.h>
+#include <svn_time.h>
 
 #pragma warning(pop)
 

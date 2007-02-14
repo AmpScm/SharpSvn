@@ -6,7 +6,9 @@
 
 namespace SharpSvn {
 	using System::Collections::Generic::ICollection;
+	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::IList;
+	using System::Collections::Generic::SortedList;
 
 	ref class SvnException;
 
@@ -585,6 +587,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the out of date status of the item; if true the Ood* properties are set</summary>
 		property bool IsOutOfDate
 		{
 			bool get()
@@ -593,6 +596,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Out of Date: Last commit version of the item</summary>
 		property __int64 OodLastCommitRevision
 		{
 			__int64 get()
@@ -601,6 +605,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Out of Date: Last commit date of the item</summary>
 		property DateTime OodLastCommitDate
 		{
 			DateTime get()
@@ -609,6 +614,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Out of Date: Gets the author of the OutOfDate commit</summary>
 		property String^ OodCommitAuthor
 		{
 			String^ get()
@@ -644,11 +650,176 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLogEventArgs : public SvnClientEventArgs
+	public ref class SvnLogChangeItem sealed
 	{
+		initonly String^ _path;
+		initonly SvnChangeAction _action;
+		initonly String^ _copyFromPath;
+		initonly __int64 _copyFromRevision;
+	protected public:
+		SvnLogChangeItem(String^ path, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision)
+		{
+			if(!path)
+				throw gcnew ArgumentNullException("path");
+
+			_path = path;
+			_action = action;
+			_copyFromPath = copyFromPath;
+			_copyFromRevision = copyFromPath ? copyFromRevision : -1;
+		}
+
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}
+
+		property SvnChangeAction Action
+		{
+			SvnChangeAction get()
+			{
+				return _action;
+			}
+		}
+
+		property String^ CopyFromPath
+		{
+			String^ get()
+			{
+				return _copyFromPath;
+			}
+		}
+
+		property __int64 CopyFromRevision
+		{
+			__int64 get()
+			{
+				return _copyFromRevision;
+			}
+		}
 	};
 
-	public ref class SvnInfoEventArgs : public SvnClientEventArgs
+	public ref class SvnLogEventArgs : public SvnClientCancelEventArgs
+	{
+		apr_hash_t *_aprChangedPaths;
+		AprPool^ _pool;
+		initonly __int64 _revision;
+		initonly String^ _author;
+		initonly DateTime _date;
+		initonly String^ _message;
+		SortedList<String^, SvnLogChangeItem^>^ _changedPaths;
+
+	internal:
+		SvnLogEventArgs(apr_hash_t *changed_paths, svn_revnum_t revision, const char *author, apr_time_t date, const char *message, AprPool ^pool)
+		{
+			if(!changed_paths)
+				throw gcnew ArgumentNullException("changed_paths");
+			else if(!author)
+				throw gcnew ArgumentNullException("author");
+			else if(!date)
+				throw gcnew ArgumentNullException("date");
+			else if(!pool)
+				throw gcnew ArgumentNullException("pool");
+
+			_aprChangedPaths = changed_paths;
+			_pool = pool;
+			_revision = revision;
+			_author = SvnBase::Utf8_PtrToString(author);
+			_date = SvnBase::DateTimeFromAprTime(date);
+
+			_message = message ? SvnBase::Utf8_PtrToString(message) : "";
+
+			if(!Environment::NewLine->Equals("\n"))
+				_message = _message->Replace("\n", Environment::NewLine);
+		}
+
+	public:
+		property IDictionary<String^, SvnLogChangeItem^>^ ChangedPaths
+		{
+			IDictionary<String^, SvnLogChangeItem^>^  get()
+			{
+				if(!_changedPaths && _aprChangedPaths && _pool)
+				{
+					_changedPaths = gcnew SortedList<String^, SvnLogChangeItem^>();
+
+					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _aprChangedPaths); hi; hi = apr_hash_next(hi))
+					{
+						const char* pKey;
+						apr_ssize_t keyLen;
+						svn_log_changed_path_t *pChangeInfo;
+
+						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
+
+						SvnLogChangeItem^ ci = gcnew SvnLogChangeItem(SvnBase::Utf8_PtrToString(pKey, (int)keyLen), 
+							(SvnChangeAction)pChangeInfo->action, 
+							SvnBase::Utf8_PtrToString(pChangeInfo->copyfrom_path),
+							pChangeInfo->copyfrom_rev);
+
+						_changedPaths->Add(ci->Path, ci);
+					}
+				}
+
+				return safe_cast<IDictionary<String^, SvnLogChangeItem^>^>(_changedPaths);
+			}
+		}
+
+		property __int64 Revision
+		{
+			__int64 get()
+			{
+				return _revision;
+			}
+		}
+
+		property String^ Author
+		{
+			String^ get()
+			{
+				return _author;
+			}
+		}
+
+		property DateTime Date
+		{
+			DateTime get()
+			{
+				return _date;
+			}
+		}
+		
+		property String^ Message
+		{
+			String^ get()
+			{
+				return _message;
+			}
+		}
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					// Use all properties to get them cached in .Net memory
+					GC::KeepAlive(ChangedPaths);
+				}
+
+				_aprChangedPaths = nullptr;
+			}
+			finally
+			{
+				__super::Detach(keepProperties);
+			}
+		}
+
+	};
+
+	public ref class SvnInfoEventArgs : public SvnClientCancelEventArgs
 	{
 		const svn_info_t* _info;
 		initonly String^ _path;
@@ -1047,7 +1218,7 @@ namespace SharpSvn {
 	};
 
 
-	public ref class SvnListEventArgs : public SvnClientEventArgs
+	public ref class SvnListEventArgs : public SvnClientCancelEventArgs
 	{
 		initonly String^ _path;
 		const char* _pAbsPath;

@@ -7,84 +7,181 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!logHandler)
+		throw gcnew ArgumentNullException("logHandler");
 
+	array<String^>^ targets = gcnew array<String^>(1);
+
+	targets[0] = target->TargetName;
+
+	InternalLog(safe_cast<ICollection<String^>^>(targets), target->Revision, gcnew SvnLogArgs(), logHandler);
 }
 
 bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
 {
-	return false;
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	array<String^>^ targets = gcnew array<String^>(1);
+
+	targets[0] = target->TargetName;
+
+	return InternalLog(safe_cast<ICollection<String^>^>(targets), target->Revision, args, logHandler);
 }
 
-void SvnClient::Log(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler)
+void SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-
+	Log(baseTarget, relativeTargets, logHandler, gcnew SvnLogArgs());
 }
 
-void SvnClient::Log(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
+bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
 {
+	if(!baseTarget)
+		throw gcnew ArgumentNullException("baseTarget");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
 
+	array<String^>^ targets;
+
+	if(!relativeTargets || !relativeTargets->Count)
+		targets = gcnew array<String^>(1);
+	else
+	{
+		targets = gcnew array<String^>(1 + relativeTargets->Count);
+		Uri^ baseUri = baseTarget->Uri;
+
+		int i = 1;
+		for each(Uri^ uri in relativeTargets)
+		{
+			if(!uri)
+				throw gcnew ArgumentException("One of the relative uri's is null", "relativeTargets");
+
+			Uri^ relUri = baseUri->MakeRelativeUri(gcnew Uri(baseUri, uri));
+			
+			if(relUri->IsAbsoluteUri)
+				throw gcnew ArgumentException("One of the relative uri's is not relative", "relativeTargets");
+
+			targets[i] = relUri->ToString();
+			i++;
+		}
+	}
+
+	targets[0] = baseTarget->TargetName;
+
+	return InternalLog(safe_cast<ICollection<String^>^>(targets), baseTarget->Revision, args, logHandler);
 }
 
-void SvnClient::Log(ICollection<String^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler)
+void SvnClient::GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems)
 {
+	if(!target)
+		throw gcnew ArgumentNullException("target");
 
+	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+
+	try
+	{
+		Log(target, results->Handler);	
+	}
+	finally
+	{
+		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+	}
 }
 
-void SvnClient::Log(ICollection<String^>^ targets, SvnRevision^ pegRevision, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
+bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems)
 {
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
 
+	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(target, results->Handler, args);
+	}
+	finally
+	{
+		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+	}
 }
 
-
-void SvnClient::GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logHandler)
+void SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, [Out] IList<SvnLogEventArgs^>^% logItems)
 {
+	if(!baseTarget)
+		throw gcnew ArgumentNullException("baseTarget");
 
+	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(baseTarget, subTargets, results->Handler);
+	}
+	finally
+	{
+		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+	}
 }
 
-bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logHandler)
+bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems)
 {
-	return false;
+	if(!baseTarget)
+		throw gcnew ArgumentNullException("baseTarget");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(baseTarget, subTargets, results->Handler, args);
+	}
+	finally
+	{
+		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+	}
 }
-
-void SvnClient::GetLog(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, [Out] IList<SvnLogEventArgs^>^% logHandler)
-{
-
-}
-
-bool SvnClient::GetLog(ICollection<Uri^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logHandler)
-{
-	return false;
-}
-
-void SvnClient::GetLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, [Out] IList<SvnLogEventArgs^>^% logHandler)
-{
-
-}
-
-bool SvnClient::GetLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logHandler)
-{
-	return false;
-
-}
-
 
 static svn_error_t *svnclient_log_handler(void *baton, apr_hash_t *changed_paths, svn_revnum_t revision, const char *author, const char *date, const char *message, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
+	
+	apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
+
+	svn_error_t *err = svn_time_from_cstring(&when, date, pool); // pool is not used at this time (might be for errors in future versions)
+
+	if(err)
+		return err;
+
+
 	SvnLogArgs^ args = dynamic_cast<SvnLogArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnLogArgs
+	AprPool^ aprPool = AprPool::Attach(pool, false);
 	if(args)
 	{
-		SvnLogEventArgs^ e = gcnew SvnLogEventArgs();
+		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(changed_paths, revision, author, when, message, aprPool);
 
 		/* date: use svn_time_from_cstring() if need apr_time_t */
 		try
 		{
 			args->OnLog(e);
+
+			if(e->Cancel)
+				return svn_error_create (SVN_ERR_CANCELLED, NULL, "Log receiver canceled operation");
+		}
+		catch(Exception^ e)
+		{
+			return svn_error_create(SVN_ERR_CANCELLED, NULL, aprPool->AllocString(String::Concat("Log receiver throwed exception: ", e->ToString())));
 		}
 		finally
 		{
 			e->Detach(false);
+			delete aprPool; // Just detach
 		}
 	}
 	return NULL;
