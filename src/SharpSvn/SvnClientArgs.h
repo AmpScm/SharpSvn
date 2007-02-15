@@ -999,4 +999,29 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnCatArgs : public SvnClientArgs
+	{
+		SvnRevision^ _revision;
+	public:
+		SvnCatArgs()
+		{
+			_revision = SvnRevision::None;
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
+			}
+		}
+	};
 }
