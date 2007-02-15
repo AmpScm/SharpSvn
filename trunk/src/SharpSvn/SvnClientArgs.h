@@ -942,4 +942,61 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnLockArgs : public SvnClientArgs
+	{
+		String^ _comment;
+		bool _stealLock;
+
+	public:
+		SvnLockArgs()
+		{
+		}
+
+		property String^ Comment
+		{
+			String^ get()
+			{
+				return _comment ? _comment : "";
+			}
+
+			void set(String^ value)
+			{
+				_comment = value;
+			}
+		}
+
+		property bool StealLock
+		{
+			bool get()
+			{
+				return _stealLock;
+			}
+			void set(bool value)
+			{
+				_stealLock = value;
+			}
+		}
+	};
+
+	public ref class SvnUnlockArgs : public SvnClientArgs
+	{
+		bool _breakLock;
+
+	public:
+		SvnUnlockArgs()
+		{
+		}
+
+		property bool BreakLock
+		{
+			bool get()
+			{
+				return _breakLock;
+			}
+			void set(bool value)
+			{
+				_breakLock = value;
+			}
+		}
+	};
 }

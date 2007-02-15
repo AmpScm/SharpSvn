@@ -488,6 +488,28 @@ namespace SharpSvn {
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
+public:
+		/////////////////////////////////////////
+#pragma region // Lock Client Command
+		void Lock(String^ target, String^ comment);
+		void Lock(Uri^ target, String^ comment);
+		void Lock(ICollection<String^>^ targets, String^ comment);
+		bool Lock(String^ target, SvnLockArgs^ args);
+		bool Lock(Uri^ target, SvnLockArgs^ args);
+		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
+#pragma endregion
+
+public:
+		/////////////////////////////////////////
+#pragma region // Lock Client Command
+		void Unlock(String^ target);
+		void Unlock(Uri^ target);
+		void Unlock(ICollection<String^>^ targets);
+		bool Unlock(String^ target, SvnUnlockArgs^ args);
+		bool Unlock(Uri^ target, SvnUnlockArgs^ args);
+		bool Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args);
+#pragma endregion
+
 	public:
 		/////////////////////////////////////////
 #pragma region // SetProperty Client Command
