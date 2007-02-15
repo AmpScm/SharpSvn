@@ -444,6 +444,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Lock.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Log.cpp"
 					>
 				</File>
@@ -473,6 +477,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_Switch.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Unlock.cpp"
 					>
 				</File>
 				<File
