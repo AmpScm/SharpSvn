@@ -229,6 +229,10 @@
 					RelativePath=".\AprPool.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnStreamWrapper.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Headers"
@@ -247,6 +251,10 @@
 				</File>
 				<File
 					RelativePath=".\AprPool.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnStreamWrapper.h"
 					>
 				</File>
 			</Filter>
@@ -401,6 +409,10 @@
 				>
 				<File
 					RelativePath=".\Client_Add.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Cat.cpp"
 					>
 				</File>
 				<File

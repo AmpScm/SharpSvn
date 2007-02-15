@@ -21,6 +21,7 @@ namespace SharpSvn {
 	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
+	using System::IO::Stream;
 
 	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
 	/// <remarks><para>Please note: the subversion is not thread safe. You can use an SvnClient from a single thread at a time</para>
@@ -316,6 +317,12 @@ namespace SharpSvn {
 		bool InternalLog(ICollection<String^>^ paths, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 #pragma endregion
 
+	public:
+		/////////////////////////////////////////
+#pragma region // List Cat Command
+		void Cat(SvnTarget^ target, Stream^ toStream);
+		bool Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args);
+#pragma endregion
 
 	public:
 		/////////////////////////////////////////
