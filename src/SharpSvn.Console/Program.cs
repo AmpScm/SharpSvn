@@ -21,7 +21,7 @@ namespace SharpSvn
 
 		void Run(string[] args)
 		{
-			Console.WriteLine("SharpSvn version {0}, using Subversion {1} libraries", SvnClient.WrapperVersion, SvnClient.Version);
+			Console.WriteLine("SharpSvn version {0}, using Subversion {1}", SvnClient.WrapperVersion, SvnClient.Version);
 
 			_client = new SvnClient();
 
