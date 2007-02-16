@@ -102,7 +102,7 @@ DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 {
 	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
 
-	return System::DateTime(aprTime*10 + aprTimeBase);
+	return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Utc);
 }
 
 apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)

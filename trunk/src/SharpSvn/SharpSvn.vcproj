@@ -130,6 +130,8 @@
 				StringPooling="true"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
+				GenerateXMLDocumentationFiles="true"
+				BrowseInformation="1"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
