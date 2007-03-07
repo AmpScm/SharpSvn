@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 	<!-- -->
-	<property name="opensslVersion" value="0.9.8d" />
+	<property name="opensslVersion" value="0.9.8e" />
 	<property name="neonVersion" value="0.26.2" />
 	<property name="subversionVersion" value="1.4.3" />
 	<property name="aprVersion" value="0.9.13" />
