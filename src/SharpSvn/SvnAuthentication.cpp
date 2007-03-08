@@ -14,6 +14,16 @@ struct svn_auth_baton_t
 {};
 
 
+SvnAuthentication::SvnAuthentication()
+{
+	_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();
+	_handlers = gcnew List<ISvnAuthWrapper^>();
+	CryptoStoreSslServerTrustHandler = gcnew SvnAuthenticationHandler<SvnSslServerTrustArgs^>(this, &SvnAuthentication::ImpCryptoStoreSslServerTrustHandler);
+
+	AddSubversionFileHandlers(); // Add handlers which use no interaction by default
+	//SslServerTrustHandlers += CryptoStoreSslServerTrustHandler;				
+}
+
 void SvnAuthentication::Clear()
 {
 	_wrappers->Clear();
@@ -353,7 +363,6 @@ bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUser
 
 bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
-
 	IntPtr handle = GetParentHandle(sender);
 
 	bool save;
@@ -576,27 +585,84 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	return true;
 }
 
+bool SvnAuthentication::ImpCryptoStoreSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+{
+	if(AcceptViaCryptoApi && (0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority)))
+	{
+		if(e->AcceptedByCryptoApi)
+			e->AcceptedFailures = e->SvnCertificateTrustFailure::UnknownCertificateAuthority;
+
+		if(e->MaySave && AcceptPermanentlyViaCryptoApi)
+			e->Save = true;
+		else
+			e->Save = false;
+	}
+
+	return true;
+}
+
 bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
 {
-	throw gcnew NotImplementedException();
-	/*array<char>^ bytes = System::Text::Encoding::ASCII->GetBytes(this->CertificateValue);
-	pin_ptr<char> pByte = &bytes[0];
+	if(0 != (int)(Failures & ~(SvnCertificateTrustFailure::UnknownCertificateAuthority | SvnCertificateTrustFailure::CertificateNotValidYet | SvnCertificateTrustFailure::CertificateExpired)))
+	{
+		return false; // Not a certificate error -> Just return false
+	}
 
-	pCRLContext = CertCreateCRLContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pByte, bytes->Length);
-	if (NULL == pCRLContext)
+	CERT_CHAIN_PARA         ChainPara;
+	PCCERT_CHAIN_CONTEXT    pChainContext   = NULL;
+	PCCERT_CONTEXT			pCertContext;
+	DWORD                  dwTrustErrorMask = ~(CERT_TRUST_IS_NOT_TIME_NESTED|CERT_TRUST_REVOCATION_STATUS_UNKNOWN);
+	array<unsigned char>^	bytes = System::Text::Encoding::Unicode->GetBytes(this->CertificateValue);
+	array<unsigned char>^	rawBytes = gcnew array<unsigned char>(bytes->Length);
+	pin_ptr<unsigned char>	pByte = &bytes[0];
+	pin_ptr<unsigned char>	pRawByte = &rawBytes[0];
+	DWORD len = bytes->Length;
+	PCERT_SIMPLE_CHAIN      pSimpleChain;
+
+	ZeroMemory(&ChainPara, sizeof(ChainPara));
+	ChainPara.cbSize = sizeof(ChainPara);
+
+
+	if(!CryptStringToBinary((LPCWSTR)pByte, bytes->Length, CRYPT_STRING_BASE64_ANY, pRawByte, &len, NULL, NULL))
 		return false;
 
-	pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pByte, bytes->Length);
+	pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pRawByte, len);
 
 	if (!pCertContext)
 		return false;
 	
-
-	if (!CryptVerifyCertificateSignatureEx(NULL, X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, 
-		CRYPT_VERIFY_CERT_SIGN_SUBJECT_CRL, pCRLContext,
-		CRYPT_VERIFY_CERT_SIGN_ISSUER_CERT, pCertContext,
-		0, NULL))
+	try
 	{
-		return false;
-	}*/
+		if(!CertGetCertificateChain(
+								NULL,
+								pCertContext,
+								NULL,
+								pCertContext->hCertStore,
+								&ChainPara,
+								0,
+								NULL,
+								&pChainContext))
+		{
+			return false;
+
+		}
+	 
+		pSimpleChain = pChainContext->rgpChain[0];
+	 
+		dwTrustErrorMask &= pSimpleChain->TrustStatus.dwErrorStatus;
+		if (dwTrustErrorMask)
+		{
+			return false;
+		}
+
+		return true;
+	}
+	finally
+	{
+		if(pChainContext)
+		{
+	        CertFreeCertificateChain(pChainContext);
+		}
+	}
 }
+
