@@ -500,13 +500,7 @@ namespace SharpSvn {
 			int _cookie;
 
 		internal:
-			SvnAuthentication()
-			{
-				_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();
-				_handlers = gcnew List<ISvnAuthWrapper^>();
-
-				AddSubversionFileHandlers(); // Add handlers which use no interaction by default
-			}
+			SvnAuthentication();
 
 			property int Cookie
 			{
@@ -751,7 +745,6 @@ namespace SharpSvn {
 			/// <summary>Adds all default console handlers</summary>
 			void AddConsoleHandlers();
 
-
 		private:
 			static bool ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameArgs^ e) 
 			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
@@ -855,6 +848,40 @@ namespace SharpSvn {
 			/// <summary>Console based SslClientCertificatePassword implementation</summary>
 			static initonly SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>^ ConsoleSslClientCertificatePasswordHandler
 				= gcnew SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>(ImpConsoleSslClientCertificatePasswordHandler);
+
+		private:
+			bool ImpCryptoStoreSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);
+
+			bool _dontAcceptViaCryptoApi;
+			bool _acceptPermanantlyViaCryptoApi;
+
+		public:
+			property bool AcceptViaCryptoApi
+			{
+				bool get()
+				{
+					return !_dontAcceptViaCryptoApi;
+				}
+				void set(bool value)
+				{
+					_dontAcceptViaCryptoApi = !value;
+				}
+			}
+
+			property bool AcceptPermanentlyViaCryptoApi
+			{
+				bool get()
+				{
+					return _acceptPermanantlyViaCryptoApi;
+				}
+				void set(bool value)
+				{
+					_acceptPermanantlyViaCryptoApi = value;
+				}
+			}
+
+			/// <summary>Automatically trust certificate roots the Windows Crypto Api trusts if <see cref="AcceptViaCryptoApi" /> is true</summary>
+			initonly SvnAuthenticationHandler<SvnSslServerTrustArgs^>^				CryptoStoreSslServerTrustHandler;
 		};
 	}
 }
