@@ -3,6 +3,9 @@
 #include "SvnAll.h"
 #include "SvnAuthentication.h"
 #include "Wincrypt.h"
+
+#include "apr_base64.h"
+
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 using namespace SharpSvn::Security;
@@ -18,10 +21,8 @@ SvnAuthentication::SvnAuthentication()
 {
 	_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();
 	_handlers = gcnew List<ISvnAuthWrapper^>();
-	CryptoStoreSslServerTrustHandler = gcnew SvnAuthenticationHandler<SvnSslServerTrustArgs^>(this, &SvnAuthentication::ImpCryptoStoreSslServerTrustHandler);
 
 	AddSubversionFileHandlers(); // Add handlers which use no interaction by default
-	//SslServerTrustHandlers += CryptoStoreSslServerTrustHandler;				
 }
 
 void SvnAuthentication::Clear()
@@ -36,6 +37,7 @@ void SvnAuthentication::AddSubversionFileHandlers()
 	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;
 	UsernamePasswordHandlers				+= SubversionWindowsUsernamePasswordHandler; // svn.exe adds this after the other handler
 	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
+	SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler; // svn.exe should add this after the other handler
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
 }
@@ -222,6 +224,14 @@ svn_auth_provider_object_t *SvnSslServerTrustArgs::Wrapper::GetProviderPtr(AprPo
 	if(_handler->Equals(SvnAuthentication::SubversionFileSslServerTrustHandler))
 	{
 		svn_auth_get_ssl_server_trust_file_provider(&provider, pool->Handle);
+	}
+	else if(_handler->Equals(SvnAuthentication::SubversionWindowsSslServerTrustHandler))
+	{
+#ifdef INTERNAL_SSL_TRUST
+		svn_auth_get_windows_ssl_server_trust_provider(&provider, pool->Handle);
+#else
+		svn_auth_get_ssl_server_trust_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func, (void*)_baton->Handle, pool->Handle);
+#endif
 	}
 	else
 		svn_auth_get_ssl_server_trust_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func, (void*)_baton->Handle, pool->Handle);
@@ -585,17 +595,14 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	return true;
 }
 
-bool SvnAuthentication::ImpCryptoStoreSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+bool SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
-	if(AcceptViaCryptoApi && (0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority)))
+	if(0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority))
 	{
 		if(e->AcceptedByCryptoApi)
 			e->AcceptedFailures = e->SvnCertificateTrustFailure::UnknownCertificateAuthority;
 
-		if(e->MaySave && AcceptPermanentlyViaCryptoApi)
-			e->Save = true;
-		else
-			e->Save = false;
+		e->Save = false;
 	}
 
 	return true;
@@ -612,21 +619,27 @@ bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
 	PCCERT_CHAIN_CONTEXT    pChainContext   = NULL;
 	PCCERT_CONTEXT			pCertContext;
 	DWORD                  dwTrustErrorMask = ~(CERT_TRUST_IS_NOT_TIME_NESTED|CERT_TRUST_REVOCATION_STATUS_UNKNOWN);
-	array<unsigned char>^	bytes = System::Text::Encoding::Unicode->GetBytes(this->CertificateValue);
-	array<unsigned char>^	rawBytes = gcnew array<unsigned char>(bytes->Length);
+	array<unsigned char>^	bytes = System::Text::Encoding::ASCII->GetBytes(this->CertificateValue);
 	pin_ptr<unsigned char>	pByte = &bytes[0];
-	pin_ptr<unsigned char>	pRawByte = &rawBytes[0];
-	DWORD len = bytes->Length;
+	
+	int len;
 	PCERT_SIMPLE_CHAIN      pSimpleChain;
 
 	ZeroMemory(&ChainPara, sizeof(ChainPara));
 	ChainPara.cbSize = sizeof(ChainPara);
 
+	/* Use apr-util as CryptStringToBinaryA is available only on XP+ */
+	len = apr_base64_decode_len((const char*)pByte);
 
-	if(!CryptStringToBinary((LPCWSTR)pByte, bytes->Length, CRYPT_STRING_BASE64_ANY, pRawByte, &len, NULL, NULL))
+	if(len <= 0)
 		return false;
 
-	pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, pRawByte, len);
+	array<char>^	rawBytes = gcnew array<char>(len);
+	pin_ptr<char>	pRawByte = &rawBytes[0];
+
+	len = apr_base64_decode(pRawByte, (const char*)pByte);
+
+	pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const unsigned char*)pRawByte, len);
 
 	if (!pCertContext)
 		return false;
@@ -662,6 +675,11 @@ bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
 		if(pChainContext)
 		{
 	        CertFreeCertificateChain(pChainContext);
+		}
+
+		if(!pCertContext)
+		{
+			CertFreeCertificateContext(pCertContext);
 		}
 	}
 }
