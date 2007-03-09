@@ -755,7 +755,7 @@ namespace SharpSvn {
 			static bool ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
 			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
-			static bool ImpSubversionSvnSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e) 
+			static bool ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e) 
 			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
@@ -763,6 +763,9 @@ namespace SharpSvn {
 
 			static bool ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+
+			static bool ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);
+			//{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 		public:
 			/// <summary>Subversion UsernameHandler file backend (managed representation)</summary>
@@ -780,7 +783,7 @@ namespace SharpSvn {
 
 			/// <summary>Subversion SslServerTrust file backend (managed representation)</summary>
 			static initonly SvnAuthenticationHandler<SvnSslServerTrustArgs^>^				SubversionFileSslServerTrustHandler
-				= gcnew SvnAuthenticationHandler<SvnSslServerTrustArgs^>(ImpSubversionSvnSslServerTrustHandler);
+				= gcnew SvnAuthenticationHandler<SvnSslServerTrustArgs^>(ImpSubversionFileSslServerTrustHandler);
 
 			/// <summary>Subversion SslClientCertificate file backend (managed representation)</summary>
 			static initonly SvnAuthenticationHandler<SvnSslClientCertificateArgs^>^			SubversionFileSslClientCertificateHandler
@@ -789,6 +792,10 @@ namespace SharpSvn {
 			/// <summary>Subversion SslClientCertificatePassword file backend (managed representation)</summary>
 			static initonly SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>^ SubversionFileSslClientCertificatePasswordHandler
 				= gcnew SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>(ImpSubversionFileSslClientCertificatePasswordHandler);
+
+			/// <summary>Subversion CryptoApi Ssl Trust handler</summary>
+			static initonly SvnAuthenticationHandler<SvnSslServerTrustArgs^>^				SubversionWindowsSslServerTrustHandler
+				= gcnew SvnAuthenticationHandler<SvnSslServerTrustArgs^>(ImpSubversionWindowsSslServerTrustHandler);
 
 		private:
 			static IntPtr GetParentHandle(Object ^sender);
@@ -848,40 +855,6 @@ namespace SharpSvn {
 			/// <summary>Console based SslClientCertificatePassword implementation</summary>
 			static initonly SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>^ ConsoleSslClientCertificatePasswordHandler
 				= gcnew SvnAuthenticationHandler<SvnSslClientCertificatePasswordArgs^>(ImpConsoleSslClientCertificatePasswordHandler);
-
-		private:
-			bool ImpCryptoStoreSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);
-
-			bool _dontAcceptViaCryptoApi;
-			bool _acceptPermanantlyViaCryptoApi;
-
-		public:
-			property bool AcceptViaCryptoApi
-			{
-				bool get()
-				{
-					return !_dontAcceptViaCryptoApi;
-				}
-				void set(bool value)
-				{
-					_dontAcceptViaCryptoApi = !value;
-				}
-			}
-
-			property bool AcceptPermanentlyViaCryptoApi
-			{
-				bool get()
-				{
-					return _acceptPermanantlyViaCryptoApi;
-				}
-				void set(bool value)
-				{
-					_acceptPermanantlyViaCryptoApi = value;
-				}
-			}
-
-			/// <summary>Automatically trust certificate roots the Windows Crypto Api trusts if <see cref="AcceptViaCryptoApi" /> is true</summary>
-			initonly SvnAuthenticationHandler<SvnSslServerTrustArgs^>^				CryptoStoreSslServerTrustHandler;
 		};
 	}
 }
