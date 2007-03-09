@@ -20,7 +20,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 	svn_error_t *r = svn_client_create_context(&ctx, pool->Handle);
 
 	if(r)
-		throw gcnew SvnException(r);
+		throw SvnException::Create(r);
 
 	_ctx = ctx;
 	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
@@ -39,7 +39,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 	svn_error_t *r = svn_client_create_context(&ctx, _pool->Handle);
 
 	if(r)
-		throw gcnew SvnException(r);
+		throw SvnException::Create(r);
 
 	_ctx = ctx;
 	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
@@ -130,14 +130,14 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 			err = svn_config_ensure(szPath, tmpPool->Handle);
 
 			if(err)
-				throw gcnew SvnException(err);
+				throw SvnException::Create(err);
 		}
 
 		apr_hash_t* cfg = nullptr;
 		err = svn_config_get_config(&cfg, szPath, _pool->Handle);
 
 		if(err)
-			throw gcnew SvnException(err);
+			throw SvnException::Create(err);
 
 		CtxHandle->config = cfg;
 
@@ -175,7 +175,7 @@ void SvnClientContext::MergeConfiguration(String^ path)
 		svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);
 
 		if(err)
-			throw gcnew SvnException(err);
+			throw SvnException::Create(err);
 	}
 	finally
 	{
