@@ -764,8 +764,12 @@ namespace SharpSvn {
 			static bool ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
-			static bool ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);
-			//{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			static bool ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+#if (SVN_VER_MAJOR > 1) || (SVN_VER_MINOR >= 5)
+			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+#else
+			;
+#endif
 
 		public:
 			/// <summary>Subversion UsernameHandler file backend (managed representation)</summary>

@@ -34,10 +34,10 @@ void SvnAuthentication::Clear()
 void SvnAuthentication::AddSubversionFileHandlers()
 {
 	UsernameHandlers						+= SubversionFileUsernameHandler;
-	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;
-	UsernamePasswordHandlers				+= SubversionWindowsUsernamePasswordHandler; // svn.exe adds this after the other handler
-	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
-	SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler; // svn.exe should add this after the other handler
+	UsernamePasswordHandlers				+= SubversionWindowsUsernamePasswordHandler;
+	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;	
+	SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler; 
+	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;	
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
 }
@@ -225,14 +225,12 @@ svn_auth_provider_object_t *SvnSslServerTrustArgs::Wrapper::GetProviderPtr(AprPo
 	{
 		svn_auth_get_ssl_server_trust_file_provider(&provider, pool->Handle);
 	}
+#if (SVN_VER_MAJOR > 1) || (SVN_VER_MINOR >= 5)
 	else if(_handler->Equals(SvnAuthentication::SubversionWindowsSslServerTrustHandler))
 	{
-#ifdef INTERNAL_SSL_TRUST
 		svn_auth_get_windows_ssl_server_trust_provider(&provider, pool->Handle);
-#else
-		svn_auth_get_ssl_server_trust_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func, (void*)_baton->Handle, pool->Handle);
-#endif
 	}
+#endif
 	else
 		svn_auth_get_ssl_server_trust_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func, (void*)_baton->Handle, pool->Handle);
 
