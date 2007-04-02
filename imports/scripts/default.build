@@ -1,17 +1,25 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
+	<property name="svnTrunkBuild" value="false" />
+
 	<!-- -->
+	<property name="subversionVersion" value="1.4.3" if="${svnTrunkBuild == 'false'}" />	
+	<property name="subversionVersion" value="1.5.0" if="${svnTrunkBuild == 'true'}" />		
+	<!-- -->
+	<property name="withSerf" value="false" />
+
 	<property name="opensslVersion" value="0.9.8e" />
 	<property name="neonVersion" value="0.26.3" />
-	<property name="subversionVersion" value="1.4.3" />
+	
 	<property name="aprVersion" value="0.9.13" />
 	<property name="aprUtilVersion" value="${aprVersion}" />
 	<property name="aprIconvVersion" value="0.9.7" />
 	<property name="bdbVersion" value="4.4.20.NC" />
 	<property name="zlibVersion" value="1.2.3" />
 	<property name="serfVersion" value="0.1.0" />
+	<property name="sqliteVersion" value="3.3.13" />
 	
-	<property name="httpOrHttps" value="https" />
+	<property name="httpOrHttps" value="http" />
 	<property name="Configuration" value="Release" />
 	<property name="dllPrefix" value="shsvn-" />
 	
@@ -19,6 +27,9 @@
 		<variable name="OPENSSL_STATIC" value="1" />
 	</setenv>
 
+
+	<property name="Configuration" value="release" />
+	<property name="Platform" value="win32" />
 	<include buildfile="tasks.build" />
 
 	<target name="clean">
@@ -45,6 +56,7 @@
 	<property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
 	<property name="bdbFilename" value="db-${bdbVersion}.tar.gz" />
 	<property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
+	<property name="sqliteFilename" value="sqlite-source-${string::replace(sqliteVersion,'.','_')}.zip" />
 	<target name="download">	
 		<mkdir dir="downloads" />
 		<if test="${not file::exists('downloads/' + opensslFilename)}">
@@ -56,8 +68,12 @@
 		<if test="${not file::exists('downloads/' + zlibFilename)}">
 			<get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
 		</if>
+		<if test="${not file::exists('downloads/' + sqliteFilename)}">
+			<get src="http://www.sqlite.org/${sqliteFilename}" dest="downloads/${sqliteFilename}" />
+		</if>
 	</target>
 	
+	<property name="sqliteDir" value="${'build/sqlite-' + sqliteVersion}" />
 	<target name="extract" depends="download">
 		<mkdir dir="build" />
 		<if test="${not directory::exists('build/openssl-' + opensslVersion)}">
@@ -69,13 +85,17 @@
 		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
 			<untar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
 		</if>
+		<if test="${not directory::exists(sqliteDir)}">
+			<unzip zipfile="downloads/${sqliteFilename}" todir="build/sqlite-${sqliteVersion}"  />
+		</if>
 	</target>
 	
 	<target name="checkout">
 		<if test="${not directory::exists('build/subversion')}">
 			<exec program="svn.exe" verbose="true">
 				<arg line="--non-interactive co" />
-				<arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" />
+				<arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" unless="${svnTrunkBuild == 'true'}" />
+				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnTrunkBuild == 'true'}" />
 				<arg value="build/subversion" />
 			</exec>
 		</if>
@@ -290,6 +310,93 @@
 			<touch file="build/openssl-${opensslVersion}.finished" />
 		</if>
 	</target>
+	<target name="build-sqlite" depends="extract">
+		<if test="${not file::exists('build/sqlite-' + sqliteVersion +'.finished')}">
+			<!--regex pattern="^(?'SQLITE_MAJOR_VERSION'\d+)\.(?'SQLITE_MINOR_VERSION'\d+)\.(?'SQLITE_MICRO_VERSION'\d+)" input="${sqliteVersion}" />
+			<loadfile file="${sqliteDir}/src/sqlite.h.in" property="sqliteH"> 
+				<filterchain> 
+					<replacestring from="- -VERS- -" to="${sqliteVersion}" /> 
+					<replacestring from="- -VERSION-NUMBER- -" to="${1000000 * int::parse(SQLITE_MAJOR_VERSION) + 1000 * int::parse(SQLITE_MINOR_VERSION) + int::parse(SQLITE_MICRO_VERSION)}" />
+				</filterchain> 
+			</loadfile> 
+			<echo file="${sqliteDir}/src/sqlite3.h" message="${sqliteH}" />
+			
+			<mkdir dir="${sqliteDir}/tool/bin" />
+			<cl outputdir="${sqliteDir}/tool/bin">
+				<arg value="/W3" />
+				<sources basedir="${sqliteDir}/tool">
+					<include name="lemon.c" />
+				</sources>
+				<defines>
+					<define name="_CRT_NONSTDC_NO_DEPRECATE" />
+					<define name="_CRT_SECURE_NO_DEPRECATE" />
+				</defines>
+			</cl>
+			<link output="${sqliteDir}/tool/bin/lemon.exe">
+				<sources basedir="${sqliteDir}/tool/bin">
+					<include name="lemon.obj" />
+				</sources>			
+			</link>
+			<echo>Parsing parse.y with lemon</echo>
+			<exec program="${sqliteDir}/tool/bin/lemon.exe" workingdir="${sqliteDir}/tool">
+				<arg file="${sqliteDir}/src/parse.y" />
+			</exec-->
+			<mkdir dir="${sqliteDir}/${Configuration}_${Platform}" />
+			<cl outputdir="${sqliteDir}/${Configuration}_${Platform}">
+				<arg value="/O2" if="${Configuration == 'release'}" />
+				<arg value="/Ob1" if="${Configuration == 'release'}" />
+				<arg value="/Od" if="${Configuration != 'release'}" />
+				<arg value="/GF" if="${Configuration == 'release'}" />
+				<arg value="/FD" />
+				<arg value="/EHsc" />
+				<arg value="/MD" if="${Configuration == 'release'}" />
+				<arg value="/MDd" if="${Configuration != 'release'}" />
+				<arg value="/Gy" />
+				<arg value="/W3" />
+				<arg value="/nologo" />
+				<arg value="/c" />
+				<arg value="/Zi" />
+				<arg value="/errorReport:prompt" />
+				<sources basedir="${sqliteDir}">
+					<include name="*.c" />
+				</sources>
+				<includedirs basedir="${sqliteDir}">
+					<include name="." />
+				</includedirs>
+				<defines>
+					<define name="_CRT_NONSTDC_NO_DEPRECATE" />
+					<define name="_CRT_SECURE_NO_DEPRECATE" />
+					<define name="NO_TCL" />
+					<define name="WIN32" />
+					<define name="_WINDOWS" />
+					<define name="_WIN32" />
+					<define name="WIN64" if="${Platform == 'x64'}" />
+					<define name="NDEBUG" if="${Configuration == 'release'}"/>
+					<define name="_DEBUG" if="${Configuration != 'release'}"/>
+				</defines>
+			</cl>
+			<property name="machineoption" value="/MACHINE:X86" if="${Platform == 'win32'}"  />
+			<property name="machineoption" value="/MACHINE:x64" if="${Platform == 'x64'}" />
+			<lib 
+				output="build/sqlite-${sqliteVersion}/${Configuration}_${Platform}\sqlite3.lib" 
+				options='/NOLOGO /SUBSYSTEM:WINDOWS ${machineoption}'>
+				<sources basedir="build/sqlite-${sqliteVersion}">
+					<include name="${Configuration}_${Platform}\*.obj" />
+				</sources>
+			</lib>
+			<copy todir="release/lib">
+				<fileset basedir="${sqliteDir}/${Configuration}_${Platform}">
+					<include name="*.lib" />
+				</fileset>
+			</copy>
+			<copy todir="release/include">
+				<fileset basedir="${sqliteDir}">
+					<include name="sqlite3.h" />
+				</fileset>
+			</copy>
+			<touch file="${'build/sqlite-' + sqliteVersion +'.finished'}" />
+		</if>
+	</target>
 	<target name="prepare-neon" depends="checkout">
 		<if test="${not file::exists('build/neon-' + neonVersion +'.prepared')}">
 			<regex pattern="^(?'NEON_MAJOR_VERSION'\d+)\.(?'NEON_MINOR_VERSION'\d+)\.(?'NEON_MICRO_VERSION'\d+)$" input="${neonVersion}" />
@@ -328,7 +435,7 @@
 			<touch file="${'build/apr-' + aprVersion +'.upgraded'}" />
 		</if>
 	</target>
-	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, checkout, prepare-neon, upgrade-apr">
+	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, build-sqlite, checkout, prepare-neon, upgrade-apr">
 		<if test="${not file::exists('build/subversion-' + subversionVersion +'.generated')}">
 			<loadfile file="build/subversion/build/generator/gen_win.py" property="gen_win">
 				<filterchain>
@@ -344,9 +451,12 @@
 				<arg value="--with-berkeley-db=../../release" />
 				<arg value="--with-openssl=../openssl-${opensslVersion}" />
 				<arg value="--with-zlib=../zlib-${zlibVersion}" />
-				<!--arg value="- -with-serf=serf" /-->
+				<arg value="--with-serf=serf" if="${withSerf=='true'}" />
+				<!-- Before 1.5 all builds were static -->
+				<arg value="--with-sqlite=../sqlite-${sqliteVersion}" unless="${subversionVersion &lt; '1.5'}" />
+				<arg value="--disable-shared" unless="${subversionVersion &lt; '1.5'}" />
 			</exec>
-			<echo message="${projtext}" file="build/subversion/apr-iconv/libapriconv.vcproj" />
+			<!--echo message="${projtext}" file="build/subversion/apr-iconv/libapriconv.vcproj" /-->
 			
 			<!-- Replace shared library builds with static builds; to auto change dependencies -->
 			<foreach item="File" property="project">
