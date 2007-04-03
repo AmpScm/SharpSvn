@@ -130,7 +130,7 @@
 			</exec>
 		</if>
 		<if test="${not directory::exists('build/subversion/serf')}">
-			<exec program="svn.exe" verbose="true">
+			<exec program="svn.exe" verbose="true" if="${withSerf=='true'}" >
 				<arg line="--non-interactive co" />
 				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" />
 				<arg value="build/subversion/serf" />
@@ -522,6 +522,8 @@
 				<include name="**/src*.pdb" />
 				<include name="**/${dllPrefix}lib*.pdb" />
 				<include name="**/*.dll" />
+				<!-- Don't copy the GPL as a *.lib file -->
+				<exclude name="neon/src/COPYING.LIB" />
 			</fileset>
 		</copy>
 		<copy todir="release/include" flatten="true">
