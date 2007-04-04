@@ -1,4 +1,26 @@
 <?xml version="1.0" ?>
 <project basedir="." default="build">
+	<property name="svnTrunkBuild" value="false" />
+
+	<!-- -->
+	<property name="subversionVersion" value="1.4.3" if="${svnTrunkBuild == 'false'}" />	
+	<property name="subversionVersion" value="1.5.0" if="${svnTrunkBuild == 'true'}" />		
+	<!-- -->
+	<property name="withSerf" value="false" />
+
+	<property name="opensslVersion" value="0.9.8e" />
+	<property name="neonVersion" value="0.26.3" />
+	
+	<property name="aprVersion" value="1.2.8" />
+	<property name="aprUtilVersion" value="${aprVersion}" />
+	<property name="aprIconvVersion" value="0.9.7" />
+	<property name="bdbVersion" value="4.4.20.NC" />
+	<property name="zlibVersion" value="1.2.3" />
+	<property name="serfVersion" value="0.1.0" />
+	<property name="sqliteVersion" value="3.3.13" />
+	
+	<property name="httpOrHttps" value="http" />
+
+
 	<include buildfile="scripts/default.build" />
 </project>
