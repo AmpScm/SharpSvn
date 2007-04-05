@@ -79,7 +79,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 			pool.AllocPath(path),
 			pool.AllocString(target->TargetName),
 			&toRev,
-			!args->NotRecursive,
+			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
 

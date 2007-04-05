@@ -77,7 +77,7 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 			&rev,
 			svn_info_receiver,
 			(void*)_clientBatton->Handle,
-			args->Recursive,
+			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
 

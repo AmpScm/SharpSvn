@@ -70,7 +70,7 @@ namespace SharpSvn
 			Directory.CreateDirectory("f:\\svn-test-location");
 
 			long ver;
-			_client.CheckOut(new Uri("https://studioturtle.googlecode.com/svn/trunk/src/SharpSvn/"), "f:\\svn-test-location\\gc", out ver);
+            _client.CheckOut(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"), "f:\\svn-test-location\\gc", out ver);
 			_client.Update("f:\\svn-test-location\\gc");
 			//_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
 			//_client.Update(@"g:\Projects\SvnDotNet", new SvnUpdateArgs(), out ver);

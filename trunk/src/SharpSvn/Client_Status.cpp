@@ -42,6 +42,8 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 		throw gcnew ArgumentNullException("args");
 	else if(!_pool)
 		throw gcnew ObjectDisposedException("SvnClient");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException("Path must be a local path", "path");
 
 	// We allow a null statusHandler; the args object might just handle it itself
 
@@ -65,7 +67,7 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 			&pegRev, 
 			svnclient_status_handler,
 			(void*)_clientBatton->Handle,
-			!args->NotRecursive,
+			IsRecursive(args->Depth),
 			args->GetAll,
 			args->Update,
 			args->NoIgnore,
@@ -109,7 +111,7 @@ void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
 	
 	SvnStatusArgs^ args = gcnew SvnStatusArgs();
-	args->NotRecursive = true;
+	args->Depth = SvnDepth::Empty;
 	args->GetAll = true;
 	args->NoIgnore = true;
 	

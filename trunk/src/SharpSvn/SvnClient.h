@@ -45,6 +45,34 @@ namespace SharpSvn {
 			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 		}
 
+		bool IsRecursive(SvnDepth depth)		
+		{ 
+			switch(depth)
+			{
+			case SvnDepth::Empty:
+			case SvnDepth::Files:
+				return false;
+			case SvnDepth::Infinity:
+				return true;
+			default:
+				throw gcnew ArgumentException("Depth must be Empty, Files or Infinity in 1.4 compatible compilation", "depth");
+			}
+		}
+
+		bool IsNotRecursive(SvnDepth depth)
+		{
+			switch(depth)
+			{
+			case SvnDepth::Empty:
+			case SvnDepth::Files:
+				return true;
+			case SvnDepth::Infinity:
+				return false;
+			default:
+				throw gcnew ArgumentException("Depth must be Empty, Files or Infinity in 1.4 compatible compilation", "depth");
+			}
+		}
+
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
@@ -242,7 +270,7 @@ namespace SharpSvn {
 		/// <summary>Adds the specified path</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Add(String^ path, bool notRecursive);
+		void Add(String^ path, SvnDepth depth);
 
 		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
 		/// <returns>true if the operation succeeded; false if it did not</returns>

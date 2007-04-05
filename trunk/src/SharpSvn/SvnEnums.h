@@ -2,6 +2,48 @@
 
 namespace SharpSvn {
 
+#if (SVN_VER_MINOR >= 5)
+#define SVN_DEPTH_DEF(x, y) (x)
+#else
+#define SVN_DEPTH_DEF(x, y) (y)
+#endif
+
+	public enum class SvnDepth
+	{
+		/// <summary>Depth undetermined or ignored</summary>
+		Unknown			= SVN_DEPTH_DEF(svn_depth_unknown, -2),
+
+		/// <summary>Exclude (remove, whatever) directory D</summary>
+		Exclude			= SVN_DEPTH_DEF(svn_depth_exclude, -1),
+
+		/// <summary> 
+		/// Just the named directory D, no entries. Updates will not pull in any 
+		/// files or subdirectories not already present
+		/// </summary>
+		Empty			= SVN_DEPTH_DEF(svn_depth_empty, 0),
+
+		/// <summary>
+		/// D + its file children, but not subdirs.  Updates will pull in any files
+		/// not already present, but not subdirectories.
+		/// </summary>
+		Files			= SVN_DEPTH_DEF(svn_depth_files, 1),
+
+		/// <summary>
+		/// D + immediate children (D and its entries). Updates will pull in any 
+		/// files or subdirectories not already present; those subdirectories' 
+		/// this_dir entries will have depth-empty. */
+		/// </summary>
+		Immediates		= SVN_DEPTH_DEF(svn_depth_immediates, 2),
+  
+		/// <summary>
+		/// D + all descendants (full recursion from D). Updates will pull in any 
+		/// files or subdirectories not already present; those subdirectories' 
+		/// this_dir entries will have depth-infinity. Equivalent to the pre-1.5 
+		/// default update behavior. */
+		/// </summary>
+		Infinity		= SVN_DEPTH_DEF(svn_depth_infinity, 3),
+	};
+
 	public enum class SvnRevisionType
 	{
 		None		= svn_opt_revision_unspecified, 

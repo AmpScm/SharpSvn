@@ -122,7 +122,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 			&rev, 
 			args->Overwrite, 
 			args->IgnoreExternals, 
-			!args->NotRecursive,
+			IsRecursive(args->Depth),
 			GetEolPtr(args->EolStyle),
 			CtxHandle,
 			pool.Handle);

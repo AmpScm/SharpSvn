@@ -108,7 +108,7 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 			pool->AllocString(propertyName),
 			value,
 			pool->AllocPath(path),
-			args->Recursive,
+			IsRecursive(args->Depth),
 			args->SkipChecks,
 			CtxHandle,
 			pool->Handle);

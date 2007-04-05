@@ -75,7 +75,7 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 			pool.AllocString(target->ToString()), 
 			&pegrev,
 			&rev, 
-			args->Recursive,
+			IsRecursive(args->Depth),
 			(apr_uint32_t)args->EntryItems,
 			args->FetchLocks,
 			svnclient_list_handler,

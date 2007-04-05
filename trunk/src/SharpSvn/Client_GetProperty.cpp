@@ -84,7 +84,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
-			args->Recursive,
+			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
 
@@ -148,7 +148,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
-			args->Recursive,
+			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
 

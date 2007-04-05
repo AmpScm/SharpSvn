@@ -593,6 +593,7 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	return true;
 }
 
+#if (SVN_VER_MAJOR == 1) && (SVN_VER_MINOR < 5)
 bool SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
 	if(0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority))
@@ -681,4 +682,4 @@ bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
 		}
 	}
 }
-
+#endif

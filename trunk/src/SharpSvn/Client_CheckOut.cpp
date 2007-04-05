@@ -83,7 +83,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 			pool.AllocPath(path), 
 			&pegRev, 
 			&coRev, 
-			!args->NotRecursive, 
+			IsRecursive(args->Depth), 
 			args->IgnoreExternals,
 			CtxHandle,
 			pool.Handle);
