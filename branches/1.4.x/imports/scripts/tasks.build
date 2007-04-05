@@ -1,0 +1,66 @@
+<project>
+	<script language="C#">
+		<references>
+			<lib>
+				<include name="${nant::get-base-directory() + '/lib'}" asis="true" />
+			</lib>
+			<include name="ICSharpCode.SharpZipLib.dll"/>
+		</references>
+		<imports>
+			<import namespace="ICSharpCode.SharpZipLib"/>
+			<import namespace="ICSharpCode.SharpZipLib.Tar"/>
+			<import namespace="ICSharpCode.SharpZipLib.GZip"/>
+			<import namespace="ICSharpCode.SharpZipLib.BZip2"/>
+		</imports>
+		<code>
+		<![CDATA[			
+			[TaskName("untar")]
+			public class UnTar : Task {
+			
+				private string _tarfile;
+				private string _todir;
+				private string _compresstype;
+
+				[TaskAttribute("tarfile", Required=true)]
+				public string tarfile {
+					get { return _tarfile; }
+					set { _tarfile = value; }
+				}
+
+				[TaskAttribute("todir", Required=true)]
+				public string todir {
+					get { return _todir; }
+					set { _todir = value; }
+				}
+				
+				[TaskAttribute("compresstype", Required=false)]
+				public string compresstype {
+					get { return _compresstype; }
+					set { _compresstype = value; }
+				}
+				
+				protected override void ExecuteTask() {
+					Log(Level.Info, String.Format("Extracting '{0}' to '{1}'",
+						_tarfile, _todir));
+					
+					Stream inStream = File.OpenRead(_tarfile);
+					
+					switch(_compresstype) {
+						case "gzip":
+							inStream = new GZipInputStream(inStream);
+							break;
+							
+						case "bzip2":
+							inStream = new BZip2InputStream(inStream);
+							break;
+					}
+
+					TarArchive archive = TarArchive.CreateInputTarArchive(inStream);
+					archive.ExtractContents(_todir);
+				}
+			}
+		]]>
+		</code>
+	</script>
+</project>
+
