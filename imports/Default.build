@@ -11,7 +11,7 @@
 	<property name="opensslVersion" value="0.9.8e" />
 	<property name="neonVersion" value="0.26.3" />
 	
-	<property name="aprVersion" value="1.2.8" />
+	<property name="aprVersion" value="0.9.13" />
 	<property name="aprUtilVersion" value="${aprVersion}" />
 	<property name="aprIconvVersion" value="0.9.7" />
 	<property name="bdbVersion" value="4.4.20.NC" />
