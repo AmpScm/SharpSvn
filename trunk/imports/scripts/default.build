@@ -499,7 +499,7 @@
 			<arg value="/t:Svn" />
 		</exec>
 		<copy todir="release/lib" flatten="true">
-			<fileset basedir="build\subversion">
+			<fileset basedir="build\subversion">				
 				<include name="**/*.lib" />
 				<include name="**/lib*.pdb" />
 				<include name="**/src*.pdb" />
@@ -507,6 +507,12 @@
 				<include name="**/*.dll" />
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
+				
+				<!-- APR 1.* uses new names -->
+				<include name="apr/LibR/*.lib" />
+				<include name="apr/LibR/*.pdb" />
+				<include name="apr-util/LibR/*.lib" />
+				<include name="apr-util/LibR/*.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="release/include" flatten="true">

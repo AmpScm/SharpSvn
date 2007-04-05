@@ -13,12 +13,12 @@ using namespace System::Security::Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("SharpSvn - Subversion support for .Net 2.0")];
+[assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 2.0")];
 [assembly:AssemblyDescriptionAttribute("")];
 [assembly:AssemblyConfigurationAttribute("")];
-[assembly:AssemblyCompanyAttribute("VSoft")];
-[assembly:AssemblyProductAttribute("TurtleSvnCommon")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) VSoft 2007")];
+[assembly:AssemblyCompanyAttribute("QQn")];
+[assembly:AssemblyProductAttribute("SharpSvn")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) QQn 2007")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
