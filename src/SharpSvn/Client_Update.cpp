@@ -174,7 +174,7 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 		svn_error_t *r = svn_client_update2(revisions ? &revs : nullptr,
 			aprPaths->Handle,
 			&uRev,
-			!args->NotRecursive,
+			IsRecursive(args->Depth),
 			args->IgnoreExternals,
 			CtxHandle,
 			pool.Handle);

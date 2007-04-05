@@ -114,7 +114,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 			&commit_info,
 			pool.AllocPath(path),
 			pool.AllocString(target->ToString()),
-			args->NotRecursive,
+			IsNotRecursive(args->Depth),
 			args->NoIgnore,
 			CtxHandle,
 			pool.Handle);

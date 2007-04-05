@@ -101,25 +101,26 @@ namespace SharpSvn {
 
 	public ref class SvnCheckOutArgs : public SvnClientArgs
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
 		bool _allowUnversionedObstructions;
 	public:
 		SvnCheckOutArgs()
 		{
+			_depth = SvnDepth::Infinity;
 			_revision = SvnRevision::Head;
 		}
 
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 
@@ -166,27 +167,29 @@ namespace SharpSvn {
 
 	public ref class SvnUpdateArgs : public SvnClientArgs
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _ignoreExternals;
 		bool _allowUnversionedObstructions;
 		SvnRevision^ _revision;
 	public:
 		SvnUpdateArgs()
 		{
+			_depth = SvnDepth::Infinity;
 			_revision = SvnRevision::Head;
 		}
 
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
+
 
 		property bool IgnoreExternals
 		{
@@ -239,7 +242,7 @@ namespace SharpSvn {
 
 	public ref class SvnExportArgs : public SvnClientArgs
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _ignoreExternals;
 		bool _overwrite;
 		SvnRevision^ _revision;
@@ -247,18 +250,19 @@ namespace SharpSvn {
 	public:
 		SvnExportArgs()
 		{
+			_depth = SvnDepth::Infinity;
 			_revision = SvnRevision::Head;
 		}
 
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 
@@ -316,46 +320,48 @@ namespace SharpSvn {
 
 	public ref class SvnSwitchArgs : public SvnClientArgs
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 
 	public:
 		SvnSwitchArgs()
 		{
+			_depth = SvnDepth::Infinity;
 		}
 
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 	};
 
 	public ref class SvnAddArgs : public SvnClientArgs
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _noIgnore;
 		bool _force;
 
 	public:
 		SvnAddArgs()
 		{
+			_depth = SvnDepth::Infinity;
 		}
 
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 
@@ -390,24 +396,25 @@ namespace SharpSvn {
 
 	public ref class SvnCommitArgs : public SvnClientArgsWithCommit
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _keepLocks;
 		String^ _message;
 	public:
 		SvnCommitArgs()
 		{
+			_depth = SvnDepth::Infinity;
 		}
 
 	public:
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 
@@ -426,7 +433,7 @@ namespace SharpSvn {
 
 	public ref class SvnStatusArgs : public SvnClientArgs
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _getAll;
 		bool _update;
 		bool _noIgnore;
@@ -443,6 +450,7 @@ namespace SharpSvn {
 	public:
 		SvnStatusArgs()
 		{
+			_depth = SvnDepth::Infinity;
 			_revision = SvnRevision::None;
 		}
 
@@ -461,15 +469,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool NotRecursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 
@@ -618,7 +626,7 @@ namespace SharpSvn {
 	public ref class SvnInfoArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
-		bool _recursive;
+		SvnDepth _depth;
 
 	protected public:
 		event EventHandler<SvnInfoEventArgs^>^ Info;
@@ -631,17 +639,18 @@ namespace SharpSvn {
 		SvnInfoArgs()
 		{
 			_revision = SvnRevision::None;
+			_depth = SvnDepth::Empty;
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _recursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_recursive = value;
+				_depth = value;
 			}
 		}
 
@@ -692,21 +701,23 @@ namespace SharpSvn {
 
 	public ref class SvnImportArgs : public SvnClientArgsWithCommit
 	{
-		bool _notRecursive;
+		SvnDepth _depth;
 		bool _noIgnore;
 	public:
 		SvnImportArgs()
-		{}
-
-		property bool NotRecursive
 		{
-			bool get()
+			_depth = SvnDepth::Infinity;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
 			{
-				return _notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = value;
+				_depth = value;
 			}
 		}
 
@@ -726,7 +737,7 @@ namespace SharpSvn {
 	public ref class SvnListArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
-		bool _recursive;
+		SvnDepth _depth;
 		SvnDirEntryItems _entryItems;
 		bool _fetchLocks;
 
@@ -740,8 +751,21 @@ namespace SharpSvn {
 	public:
 		SvnListArgs()
 		{
+			_depth = SvnDepth::Files;
 			_revision = SvnRevision::None;
 			_entryItems = SvnDirEntryItems::AllFields;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = value;
+			}
 		}
 
 		property SvnRevision^ Revision
@@ -783,60 +807,50 @@ namespace SharpSvn {
 				_fetchLocks = value;
 			}
 		}
-
-		property bool Recursive
-		{
-			bool get()
-			{
-				return _recursive;
-			}
-			void set(bool value)
-			{
-				_recursive = value;
-			}
-		}
 	};
 
 	public ref class SvnRevertArgs : public SvnClientArgs
 	{
-		bool _recursive;
+		SvnDepth _depth;
 
 	public:
 		SvnRevertArgs()
 		{
+			_depth = SvnDepth::Empty;
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _recursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_recursive = value;
+				_depth = value;
 			}
 		}
 	};
 
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
-		bool _recursive;
+		SvnDepth _depth;
 
 	public:
 		SvnResolvedArgs()
 		{
+			_depth = SvnDepth::Empty;
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _recursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_recursive = value;
+				_depth = value;
 			}
 		}
 	};
@@ -872,22 +886,23 @@ namespace SharpSvn {
 
 	public ref class SvnSetPropertyArgs : public SvnClientArgs
 	{
-		bool _recursive;
+		SvnDepth _depth;
 		bool _skipChecks;
 	public:
 		SvnSetPropertyArgs()
 		{
+			_depth = SvnDepth::Empty;
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _recursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_recursive = value;
+				_depth = value;
 			}
 		}
 
@@ -907,10 +922,11 @@ namespace SharpSvn {
 	public ref class SvnGetPropertyArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
-		bool _recursive;
+		SvnDepth _depth;
 	public:
 		SvnGetPropertyArgs()
 		{
+			_depth = SvnDepth::Empty;
 			_revision = SvnRevision::None;
 		}
 
@@ -929,15 +945,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _recursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_recursive = value;
+				_depth = value;
 			}
 		}
 	};

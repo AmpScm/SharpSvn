@@ -12,14 +12,14 @@ void SvnClient::Add(String^ path)
 	Add(path, gcnew SvnAddArgs());
 }
 
-void SvnClient::Add(String^ path, bool notRecursive)
+void SvnClient::Add(String^ path, SvnDepth depth)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	SvnAddArgs ^args = gcnew SvnAddArgs();
 
-	args->NotRecursive = notRecursive;
+	args->Depth = depth;
 
 	Add(path, args);
 }
@@ -44,7 +44,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	{
 		svn_error_t *r = svn_client_add3(
 			pool.AllocPath(path),
-			!args->NotRecursive,
+			IsRecursive(args->Depth),
 			args->Force,
 			args->NoIgnore,
 			CtxHandle,

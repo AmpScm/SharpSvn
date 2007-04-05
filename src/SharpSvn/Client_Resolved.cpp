@@ -34,7 +34,7 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 	{
 		svn_error_t *r = svn_client_resolved(
 			pool.AllocPath(path),
-			args->Recursive,
+			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
 

@@ -64,7 +64,7 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 
 		svn_error_t *r = svn_client_revert(
 			aprPaths->Handle,
-			args->Recursive,
+			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
 

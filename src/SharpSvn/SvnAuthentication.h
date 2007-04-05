@@ -401,10 +401,13 @@ namespace SharpSvn {
 				}
 			}
 
+		internal:
+		#if (SVN_VER_MAJOR == 1) && (SVN_VER_MINOR < 5)
 			property bool AcceptedByCryptoApi
 			{
 				bool get();
 			}
+		#endif
 
 		internal:
 			ref class Wrapper sealed : public SvnAuthWrapper<SvnSslServerTrustArgs^>

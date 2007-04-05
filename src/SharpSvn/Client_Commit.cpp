@@ -134,7 +134,7 @@ bool SvnClient::CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args,
 		svn_error_t *r = svn_client_commit3(
 			&commitInfoPtr,
 			aprPaths->Handle,
-			!args->NotRecursive,
+			IsRecursive(args->Depth),
 			args->KeepLocks,
 			CtxHandle,
 			pool.Handle);
