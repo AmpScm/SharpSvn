@@ -104,12 +104,17 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 	_currentArgs = args;
 	try
 	{
-		svn_error_t *r = svn_client_propset2(
+		svn_commit_info_t* pInfo = nullptr;
+
+
+		svn_error_t *r = svn_client_propset3(
+			&pInfo,
 			pool->AllocString(propertyName),
 			value,
 			pool->AllocPath(path),
 			IsRecursive(args->Depth),
 			args->SkipChecks,
+			(svn_revnum_t)args->BaseRevision,
 			CtxHandle,
 			pool->Handle);
 

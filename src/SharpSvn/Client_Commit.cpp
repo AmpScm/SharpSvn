@@ -131,11 +131,13 @@ bool SvnClient::CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args,
 
 		svn_commit_info_t *commitInfoPtr = nullptr;
 
-		svn_error_t *r = svn_client_commit3(
+		svn_error_t *r = svn_client_commit4(
 			&commitInfoPtr,
 			aprPaths->Handle,
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
 			args->KeepLocks,
+			args->KeepChangelist,
+			args->Changelist ? pool.AllocString(args->Changelist) : nullptr,
 			CtxHandle,
 			pool.Handle);
 

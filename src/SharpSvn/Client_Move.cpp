@@ -46,6 +46,7 @@ bool SvnClient::Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args)
 			pool.AllocPath(sourcePath),
 			pool.AllocPath(toPath),
 			args->Force,
+			//args->MoveAsChild,
 			CtxHandle,
 			pool.Handle);
 

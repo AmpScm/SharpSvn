@@ -171,11 +171,12 @@ bool SvnClient::UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args,
 		apr_array_header_t* revs = nullptr;
 		svn_opt_revision_t uRev = args->Revision->ToSvnRevision();
 
-		svn_error_t *r = svn_client_update2(revisions ? &revs : nullptr,
+		svn_error_t *r = svn_client_update3(revisions ? &revs : nullptr,
 			aprPaths->Handle,
 			&uRev,
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
 			args->IgnoreExternals,
+			args->AllowUnversionedObstructions,
 			CtxHandle,
 			pool.Handle);
 

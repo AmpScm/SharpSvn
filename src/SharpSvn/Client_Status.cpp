@@ -62,12 +62,12 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 
 		svn_opt_revision_t pegRev = args->Revision->ToSvnRevision();
 
-		svn_error_t* err = svn_client_status2(&version,
+		svn_error_t* err = svn_client_status3(&version,
 			pool.AllocPath(path), 
 			&pegRev, 
 			svnclient_status_handler,
 			(void*)_clientBatton->Handle,
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
 			args->GetAll,
 			args->Update,
 			args->NoIgnore,
