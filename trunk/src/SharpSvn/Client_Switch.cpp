@@ -74,12 +74,13 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		svn_revnum_t rev = 0;
 		svn_opt_revision_t toRev = target->Revision->ToSvnRevision();
 
-		svn_error_t *r = svn_client_switch(
+		svn_error_t *r = svn_client_switch2(
 			&rev,
 			pool.AllocPath(path),
 			pool.AllocString(target->TargetName),
 			&toRev,
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
+			args->AllowUnversionedObstructions,
 			CtxHandle,
 			pool.Handle);
 

@@ -105,6 +105,7 @@ namespace SharpSvn {
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
 		bool _allowUnversionedObstructions;
+		
 	public:
 		SvnCheckOutArgs()
 		{
@@ -151,7 +152,6 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Available from Svn 1.5; currently ignored")]
 		property bool AllowUnversionedObstructions
 		{
 			bool get()
@@ -218,7 +218,6 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Available from Svn 1.5; currently ignored")]
 		property bool AllowUnversionedObstructions
 		{
 			bool get()
@@ -321,6 +320,7 @@ namespace SharpSvn {
 	public ref class SvnSwitchArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
+		bool _allowUnversionedObstructions;
 
 	public:
 		SvnSwitchArgs()
@@ -337,6 +337,18 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = value;
+			}
+		}
+
+		property bool AllowUnversionedObstructions
+		{
+			bool get()
+			{
+				return _allowUnversionedObstructions;
+			}
+			void set(bool value)
+			{
+				_allowUnversionedObstructions = value;
 			}
 		}
 	};
@@ -398,7 +410,9 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _keepLocks;
+		bool _keepChangelist;
 		String^ _message;
+		String^ _changelist;
 	public:
 		SvnCommitArgs()
 		{
@@ -427,6 +441,30 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_keepLocks = value;
+			}
+		}
+
+		property String^ Changelist
+		{
+			String^ get()
+			{
+				return _changelist;
+			}
+			void set(String^ value)
+			{
+				_changelist = value;
+			}
+		}
+
+		property bool KeepChangelist
+		{
+			bool get()
+			{
+				return _keepChangelist;
+			}
+			void set(bool value)
+			{
+				_keepChangelist = value;
 			}
 		}
 	};
@@ -680,6 +718,7 @@ namespace SharpSvn {
 	public ref class SvnDeleteArgs : public SvnClientArgsWithCommit
 	{
 		bool _force;
+		bool _keepLocal;
 	public:
 		SvnDeleteArgs()
 		{}
@@ -695,6 +734,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_force = value;
+			}
+		}
+
+		property bool KeepLocal
+		{
+			bool get()
+			{
+				return _keepLocal;
+			}
+			void set(bool value)
+			{
+				_keepLocal = value;
 			}
 		}
 	};
@@ -866,6 +917,7 @@ namespace SharpSvn {
 	public ref class SvnMoveArgs : public SvnClientArgs
 	{
 		bool _force;
+		bool _moveAsChild;
 	public:
 		SvnMoveArgs()
 		{
@@ -882,16 +934,30 @@ namespace SharpSvn {
 				_force = value;
 			}
 		}
+
+		property bool MoveAsChild
+		{
+			bool get()
+			{
+				return _moveAsChild;
+			}
+			void set(bool value)
+			{
+				_moveAsChild = value;
+			}
+		}
 	};
 
-	public ref class SvnSetPropertyArgs : public SvnClientArgs
+	public ref class SvnSetPropertyArgs : public SvnClientArgsWithCommit
 	{
 		SvnDepth _depth;
 		bool _skipChecks;
+		__int64 _baseRevision;
 	public:
 		SvnSetPropertyArgs()
 		{
 			_depth = SvnDepth::Empty;
+			_baseRevision = SVN_INVALID_REVNUM;
 		}
 
 		property SvnDepth Depth
@@ -915,6 +981,21 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_skipChecks = value;
+			}
+		}
+
+		property __int64 BaseRevision
+		{
+			__int64 get()
+			{ 
+				return _baseRevision; 
+			}
+			void set(__int64 value)
+			{
+				if(value >= 0)
+					_baseRevision = value;
+				else 
+					_baseRevision = SVN_INVALID_REVNUM;
 			}
 		}
 	};

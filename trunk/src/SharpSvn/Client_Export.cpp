@@ -114,7 +114,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		svn_error_t* r = svn_client_export3(
+		svn_error_t* r = svn_client_export4(
 			&resultRev, 
 			pool.AllocString(from->TargetName), 
 			pool.AllocPath(toPath), 
@@ -122,7 +122,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 			&rev, 
 			args->Overwrite, 
 			args->IgnoreExternals, 
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
 			GetEolPtr(args->EolStyle),
 			CtxHandle,
 			pool.Handle);

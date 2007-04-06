@@ -75,15 +75,17 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 	{
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+		svn_revnum_t actualRev = 0;
 
 		apr_hash_t* pHash = nullptr;
 
-		svn_error_t *r = svn_client_propget2(
+		svn_error_t *r = svn_client_propget3(
 			&pHash,			
 			pool.AllocString(propertyName),
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
+			&actualRev,
 			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
@@ -141,13 +143,15 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 
 		apr_hash_t* pHash = nullptr;
+		svn_revnum_t actualRev;
 
-		svn_error_t *r = svn_client_propget2(
+		svn_error_t *r = svn_client_propget3(
 			&pHash,			
 			pool.AllocString(propertyName),
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
+			&actualRev,
 			IsRecursive(args->Depth),
 			CtxHandle,
 			pool.Handle);
