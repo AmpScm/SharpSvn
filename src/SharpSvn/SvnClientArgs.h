@@ -5,12 +5,14 @@ namespace SharpSvn {
 	ref class SvnException;
 
 	public ref class SvnClientArgs abstract
-	{
+	{		
+		bool _noThrowOnError;
+		SvnException^ _exception;
+
+	public:
 		event EventHandler<SvnClientCancelEventArgs^>^		Cancel;
 		event EventHandler<SvnClientProgressEventArgs^>^	Progress;
 		event EventHandler<SvnClientNotifyEventArgs^>^		Notify;
-		bool _noThrowOnError;
-		SvnException^ _exception;
 
 	protected public:
 		SvnClientArgs()
@@ -59,8 +61,10 @@ namespace SharpSvn {
 
 	public ref class SvnClientArgsWithCommit : public SvnClientArgs
 	{
-		event EventHandler<SvnClientBeforeCommitEventArgs^>^ BeforeCommit;
 		String^ _commitMessage;
+
+	public:
+		event EventHandler<SvnClientBeforeCommitEventArgs^>^ BeforeCommit;
 
 	protected:
 		SvnClientArgsWithCommit()
@@ -478,13 +482,15 @@ namespace SharpSvn {
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
 
-	protected public:
+	public:
 		event EventHandler<SvnStatusEventArgs^>^ Status;
 
+	protected public:		
 		virtual void OnStatus(SvnStatusEventArgs^ e)
 		{
 			Status(this, e);
 		}
+
 	public:
 		SvnStatusArgs()
 		{
@@ -576,13 +582,15 @@ namespace SharpSvn {
 		bool _logChangedPaths;
 		bool _strictHistory;
 
-	protected public:
+	public:
 		event EventHandler<SvnLogEventArgs^>^ Log;
 
+	protected public:
 		virtual void OnLog(SvnLogEventArgs^ e)
 		{
 			Log(this, e);
 		}
+
 	public:
 		SvnLogArgs()
 		{
@@ -666,13 +674,15 @@ namespace SharpSvn {
 		SvnRevision^ _revision;
 		SvnDepth _depth;
 
-	protected public:
+	public:
 		event EventHandler<SvnInfoEventArgs^>^ Info;
 
+	protected public:
 		virtual void OnInfo(SvnInfoEventArgs^ e)
 		{
 			Info(this, e);
 		}
+
 	public:
 		SvnInfoArgs()
 		{
@@ -792,13 +802,15 @@ namespace SharpSvn {
 		SvnDirEntryItems _entryItems;
 		bool _fetchLocks;
 
-	protected public:
+	public:
 		event EventHandler<SvnListEventArgs^>^ List;
 
+	protected public:
 		virtual void OnList(SvnListEventArgs^ e)
 		{
 			List(this, e);
 		}
+
 	public:
 		SvnListArgs()
 		{
