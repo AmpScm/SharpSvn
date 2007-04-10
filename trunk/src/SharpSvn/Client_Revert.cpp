@@ -60,7 +60,6 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 	try
 	{
 		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
-		svn_commit_info_t* commitInfo = nullptr;
 
 		svn_error_t *r = svn_client_revert(
 			aprPaths->Handle,

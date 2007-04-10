@@ -66,8 +66,6 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 		args->Info += infoHandler;
 	try
 	{
-		svn_revnum_t version = 0;
-
 		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 

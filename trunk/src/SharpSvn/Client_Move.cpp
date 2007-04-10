@@ -113,15 +113,17 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] 
 	_currentArgs = args;
 	try
 	{
-		svn_commit_info_t* pInfo = nullptr;
+		svn_commit_info_t* commitInfoPtr = nullptr;
 
 		svn_error_t *r = svn_client_move4(
-			&pInfo,
+			&commitInfoPtr,
 			pool.AllocString(sourceUri->ToString()),
 			pool.AllocString(toUri->ToString()),
 			args->Force,
 			CtxHandle,
 			pool.Handle);
+
+		commitInfo = commitInfoPtr ? gcnew SvnCommitInfo(commitInfoPtr) : nullptr;
 
 		return args->HandleResult(r);
 	}

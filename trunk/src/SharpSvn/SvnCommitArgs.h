@@ -153,6 +153,9 @@ namespace SharpSvn {
 
 		virtual void Write(SvnCommitItem^ value, void* ptr, AprPool^ pool)
 		{
+			UNUSED_ALWAYS(value);
+			UNUSED_ALWAYS(ptr);
+			UNUSED_ALWAYS(pool);
 			throw gcnew NotImplementedException();
 		}
 

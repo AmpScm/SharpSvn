@@ -72,10 +72,9 @@ namespace SharpSvn {
 				}
 			}
 
-			
-
 			virtual void Add(T item)
 			{
+				UNUSED_ALWAYS(item);
 				throw gcnew NotImplementedException();
 			}
 
@@ -86,16 +85,20 @@ namespace SharpSvn {
 
 			virtual bool Remove(T item)
 			{
+				UNUSED_ALWAYS(item);
 				throw gcnew NotImplementedException();
 			}
 
 			virtual void CopyTo(array<T>^ item, int offset)
 			{
+				UNUSED_ALWAYS(item);
+				UNUSED_ALWAYS(offset);
 				throw gcnew NotImplementedException();
 			}
 
 			virtual bool Contains(T item)
 			{
+				UNUSED_ALWAYS(item);
 				throw gcnew NotImplementedException();
 			}
 
@@ -191,6 +194,7 @@ namespace SharpSvn {
 
 			virtual void Write(__int64 value, void* ptr, AprPool^ pool)
 			{
+				UNUSED_ALWAYS(pool);
 				svn_revnum_t * pRev = (svn_revnum_t*)ptr;
 
 				*pRev = (svn_revnum_t)value;

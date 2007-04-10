@@ -291,6 +291,7 @@ namespace SharpSvn {
 		internal:
 			void HandleItem(Object^ sender, T e)
 			{
+				UNUSED_ALWAYS(sender);
 				e->Detach(true);
 				Add(e);
 			}
@@ -419,27 +420,19 @@ namespace SharpSvn {
 
 		/// <summary>Performs a working copy import to the specified Uri, 
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
-		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
-		/// but requires two commits until it is further optimized by the subversion API</remarks>
-		[Obsolete("Not implemented yet; Use RemoteImport for now")]
+		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		void Import(String^ path, Uri^ target);
 		/// <summary>Performs a working copy import to the specified Uri, 
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
-		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
-		/// but requires two commits until it is further optimized by the subversion API</remarks>
-		[Obsolete("Not implemented yet; Use RemoteImport for now")]
+		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		void Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
 		/// <summary>Performs a working copy import to the specified Uri, 
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
-		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
-		/// but requires two commits until it is further optimized by the subversion API</remarks>
-		[Obsolete("Not implemented yet; Use RemoteImport for now")]
+		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		bool Import(String^ path, Uri^ target, SvnImportArgs^ args);
 		/// <summary>Performs a working copy import to the specified Uri, 
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
-		/// <remarks>This method works more 'logical' than the RemoteImport's import and than checkout,
-		/// but requires two commits until it is further optimized by the subversion API</remarks>
-		[Obsolete("Not implemented yet; Use RemoteImport for now")]
+		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		bool Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>

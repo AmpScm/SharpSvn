@@ -129,6 +129,7 @@ namespace SharpSvn {
 
 			virtual ISvnAuthWrapper^ Read(const void* ptr)
 			{
+				UNUSED_ALWAYS(ptr);
 				// Not needed; we only provide arrays; item is black box to us
 				throw gcnew NotImplementedException();
 			}
@@ -750,26 +751,26 @@ namespace SharpSvn {
 
 		private:
 			static bool ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameArgs^ e) 
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e) 
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 
 			static bool ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 #if (SVN_VER_MAJOR > 1) || (SVN_VER_MINOR >= 5)
-			{ throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
+			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
 #else
 			;
 #endif

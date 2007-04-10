@@ -53,6 +53,12 @@ namespace SharpSvn {
 			{
 				return _exception;
 			}
+
+		internal:
+			void set(SvnException^ value)
+			{
+				_exception = value;
+			}
 		}
 
 	internal:
