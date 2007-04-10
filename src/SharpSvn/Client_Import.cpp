@@ -49,7 +49,25 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	throw gcnew NotImplementedException("Must be implemented on top of RemoteImport and Add");
+	if(RemoteImport(path, target, args, commitInfo))
+	{
+		SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
+		aa->ThrowOnError = args->ThrowOnError;
+		aa->Depth = args->Depth;
+
+		aa->AllowUnversionedObstructions = true; // This is the trick
+
+		try
+		{
+			return CheckOut(target, path, aa);
+		}
+		finally
+		{
+			args->Exception = aa->Exception;
+		}
+	}
+	else
+		return false;
 }
 
 void SvnClient::RemoteImport(String^ path, Uri^ target)

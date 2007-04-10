@@ -66,8 +66,6 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 		args->List += listHandler;
 	try
 	{
-		svn_revnum_t version = 0;
-
 		svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 

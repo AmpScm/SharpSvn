@@ -49,7 +49,7 @@
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
-				WarningLevel="3"
+				WarningLevel="4"
 				DebugInformationFormat="3"
 			/>
 			<Tool

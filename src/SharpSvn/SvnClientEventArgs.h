@@ -32,6 +32,7 @@ namespace SharpSvn {
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
 		virtual void Detach(bool keepProperties)
 		{
+			UNUSED_ALWAYS(keepProperties);
 			_pool = nullptr;
 		}
 	};
