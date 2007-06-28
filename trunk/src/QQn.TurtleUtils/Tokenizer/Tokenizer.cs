@@ -36,9 +36,8 @@ namespace QQn.TurtleUtils.Tokenizer
 			if (commandLine == null)
 				throw new ArgumentNullException("commandLine");
 
-			return TryParseCommandLine<T>(GetCommandlineTokens(commandLine), args, out to);
+			return TryParseCommandLine<T>(GetCommandlineWords(commandLine), args, out to);
 		}
-
 
 		public static bool TryParseCommandLine<T>(IList<string> commandLineArgs, TokenizerArgs args, out T to)
 			where T : class, new()
@@ -402,7 +401,10 @@ namespace QQn.TurtleUtils.Tokenizer
 			return words;
 		}
 
-
+		public static IList<string> GetCommandlineWords(string commandLine)
+		{
+			return GetWords(commandLine, new string[] { "\"\"" }, '\\', EscapeMode.EscapeGroupOnly, null);
+		}
 
 		static string UnEscape(string p, Dictionary<char, char> _groups, string[] groups, char escapeCharacter, EscapeMode mode, char[] wordSeparators)
 		{
