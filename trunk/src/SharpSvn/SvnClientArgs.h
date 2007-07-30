@@ -331,6 +331,7 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _allowUnversionedObstructions;
+		bool _ignoreExternals;
 
 	public:
 		SvnSwitchArgs()
@@ -359,6 +360,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_allowUnversionedObstructions = value;
+			}
+		}
+
+		property bool IgnoreExternals
+		{
+			bool get()
+			{
+				return _ignoreExternals;
+			}
+			void set(bool value)
+			{
+				_ignoreExternals = value;
 			}
 		}
 	};

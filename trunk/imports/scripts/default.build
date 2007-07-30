@@ -5,6 +5,9 @@
 	
 	<setenv>
 		<variable name="OPENSSL_STATIC" value="1" />
+		<variable name="APR_DECLARE_STATIC" value="1" />
+		<variable name="APU_DECLARE_STATIC" value="1" />
+		<variable name="API_DECLARE_STATIC" value="1" />
 	</setenv>
 
 
@@ -136,9 +139,9 @@
 			<loadfile file="build/db-${bdbVersion}/build_win32/db_dll.vcproj" property="projtext">
 				<filterchain>
 					<replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' /> 
-					<replacestring from='/libdb44.dll' to='/${dllPrefix}db44.dll' /> 
-					<replacestring from='/libdb45.dll' to='/${dllPrefix}db45.dll' /> 
-					<replacestring from='/libdb46.dll' to='/${dllPrefix}db46.dll' /> 
+					<replacestring from='/libdb44.dll' to='/${dllPrefix}-DB-${bdbVersion}.dll' /> 
+					<replacestring from='/libdb45.dll' to='/${dllPrefix}-DB-${bdbVersion}.dll' /> 
+					<replacestring from='/libdb46.dll' to='/${dllPrefix}-DB-${bdbVersion}.dll' /> 
 				</filterchain>
 			</loadfile>
 			<echo message="${projtext}" file="build/db-${bdbVersion}/build_win32/db_dll.vcproj" />
@@ -221,24 +224,6 @@
 			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg line="/c ms\do_masm.bat" />
 			</exec>
-			<foreach item="File" property="def">
-				<in>
-					<items basedir="build/openssl-${opensslVersion}">
-						<include name="**/*.def" />
-					</items>
-				</in>
-				<do>
-					<loadfile file="${def}" property="defText">
-						<filterchain>
-							<replacestring from='LIBRARY' to='LIBRARY ${string::to-upper(dllPrefix + path::get-file-name-without-extension(def))}  ;' /> 
-						</filterchain>
-					</loadfile>
-					<echo message="${defText}" file="${def}" />
-				</do>
-			</foreach>			
-			<!--exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
-				<arg line="-f ms\ntdll.mak" />
-			</exec-->
 			<exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg line="-f ms\nt.mak" />
 			</exec>
@@ -256,19 +241,6 @@
 					</exec>					
 				</do>
 			</foreach>
-			<if test="${dllPrefix != ''}">
-				<foreach item="File" property="dll">
-					<in>
-						<items basedir="build/openssl-${opensslVersion}">
-							<include name="**/*.dll" />
-						</items>
-					</in>
-					<do>
-						<copy file="${dll}" 
-							tofile="${path::combine(path::get-directory-name(dll), dllPrefix + path::get-file-name(dll))}" />
-					</do>
-				</foreach>
-			</if>
 			<copy todir="release/lib">
 				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
 					<include name="*.lib" />
@@ -292,35 +264,6 @@
 	</target>
 	<target name="build-sqlite" depends="extract">
 		<if test="${not file::exists('build/sqlite-' + sqliteVersion +'.finished')}">
-			<!--regex pattern="^(?'SQLITE_MAJOR_VERSION'\d+)\.(?'SQLITE_MINOR_VERSION'\d+)\.(?'SQLITE_MICRO_VERSION'\d+)" input="${sqliteVersion}" />
-			<loadfile file="${sqliteDir}/src/sqlite.h.in" property="sqliteH"> 
-				<filterchain> 
-					<replacestring from="- -VERS- -" to="${sqliteVersion}" /> 
-					<replacestring from="- -VERSION-NUMBER- -" to="${1000000 * int::parse(SQLITE_MAJOR_VERSION) + 1000 * int::parse(SQLITE_MINOR_VERSION) + int::parse(SQLITE_MICRO_VERSION)}" />
-				</filterchain> 
-			</loadfile> 
-			<echo file="${sqliteDir}/src/sqlite3.h" message="${sqliteH}" />
-			
-			<mkdir dir="${sqliteDir}/tool/bin" />
-			<cl outputdir="${sqliteDir}/tool/bin">
-				<arg value="/W3" />
-				<sources basedir="${sqliteDir}/tool">
-					<include name="lemon.c" />
-				</sources>
-				<defines>
-					<define name="_CRT_NONSTDC_NO_DEPRECATE" />
-					<define name="_CRT_SECURE_NO_DEPRECATE" />
-				</defines>
-			</cl>
-			<link output="${sqliteDir}/tool/bin/lemon.exe">
-				<sources basedir="${sqliteDir}/tool/bin">
-					<include name="lemon.obj" />
-				</sources>			
-			</link>
-			<echo>Parsing parse.y with lemon</echo>
-			<exec program="${sqliteDir}/tool/bin/lemon.exe" workingdir="${sqliteDir}/tool">
-				<arg file="${sqliteDir}/src/parse.y" />
-			</exec-->
 			<mkdir dir="${sqliteDir}/${Configuration}_${Platform}" />
 			<cl outputdir="${sqliteDir}/${Configuration}_${Platform}">
 				<arg value="/O2" if="${Configuration == 'release'}" />
@@ -339,6 +282,8 @@
 				<arg value="/errorReport:prompt" />
 				<sources basedir="${sqliteDir}">
 					<include name="*.c" />
+					<exclude name="tclsqlite.c" />
+					<exclude name="icu.c" />
 				</sources>
 				<includedirs basedir="${sqliteDir}">
 					<include name="." />
@@ -394,6 +339,18 @@
 			<touch file="${'build/neon-' + neonVersion +'.prepared'}" />
 		</if>
 	</target>
+	<target name="prepare-serf" depends="checkout">
+    <if test="${not file::exists('build/serf-' + serfVersion +'.prepared')}">
+			<loadfile file="build/subversion/serf/serf.mak" property="serfmak"> 
+				<filterchain> 
+          <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" /> 
+          <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 " />
+				</filterchain> 
+			</loadfile> 
+			<echo file="build/subversion/serf/serf.mak" message="${serfmak}" /> 
+			<touch file="${'build/serf-' + serfVersion +'.prepared'}" />
+		</if>
+	</target>	
 	<target name="upgrade-apr" depends="checkout">
 		<if test="${not file::exists('build/apr-' + aprVersion +'.upgraded')}">
 			<foreach item="File" property="project">
@@ -411,11 +368,36 @@
 						<arg line="/nologo" />
 					</exec>	
 				</do>
-			</foreach>
+			</foreach>			
 			<touch file="${'build/apr-' + aprVersion +'.upgraded'}" />
 		</if>
 	</target>
-	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, build-sqlite, checkout, prepare-neon, upgrade-apr">
+	<target name="build-apr" depends="upgrade-apr">
+    	<if test="${not file::exists('build/apr-' + aprVersion +'.build')}">
+      		<foreach item="File" property="winHeader">
+				<in>
+					<items basedir="build/subversion">
+						<include name="**/*.hw" />
+					</items>
+				</in>
+				<do>
+					<copy file="${winHeader}" tofile="${string::replace(winHeader, '.hw', '.h')}" />
+				</do>
+			</foreach>
+			<foreach item="File" property="winHeader">
+				<in>
+					<items basedir="build/subversion">
+						<include name="**/expat.h.in" />
+					</items>
+				</in>
+				<do>
+					<copy file="${winHeader}" tofile="${string::replace(winHeader, '.h.in', '.h')}" />
+				</do>
+			</foreach>
+			<touch file="${'build/apr-' + aprVersion +'.build'}" />
+		</if>
+	</target>
+	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, build-sqlite, checkout, prepare-neon, prepare-serf, build-apr">
 		<if test="${not file::exists('build/subversion-' + subversionVersion +'.generated')}">
 			<loadfile file="build/subversion/build/generator/gen_win.py" property="gen_win">
 				<filterchain>
@@ -436,7 +418,6 @@
 				<arg value="--with-sqlite=../sqlite-${sqliteVersion}" unless="${subversionVersion &lt; '1.5'}" />
 				<arg value="--disable-shared" unless="${subversionVersion &lt; '1.5'}" />
 			</exec>
-			<!--echo message="${projtext}" file="build/subversion/apr-iconv/libapriconv.vcproj" /-->
 			
 			<!-- Replace shared library builds with static builds; to auto change dependencies -->
 			<foreach item="File" property="project">
@@ -485,18 +466,56 @@
 			<arg value="apr\apr.vcproj" />
 			<arg value="/p:Configuration=Release" />
 		</exec>
-		<if test="${aprVersion &gt;= '1.0'}">
-			<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\LibR\apr.lib" />
-		</if>
-		<!--exec program="msbuild.exe" workingdir="build\subversion">
+		<exec program="msbuild.exe" workingdir="build\subversion">
+			<arg value="apr-util\aprutil.vcproj" />
+			<arg value="/p:Configuration=Release" />
+		</exec>
+		<exec program="msbuild.exe" workingdir="build\subversion">
+			<arg value="apr-util\xml\expat\lib\xml.vcproj" />
+			<arg value="/p:Configuration=Release" />
+		</exec>
+		<exec program="msbuild.exe" workingdir="build\subversion">
 			<arg value="apr-iconv\apriconv.vcproj" />
 			<arg value="/p:Configuration=Release" />
-		</exec-->
+		</exec>
+		<exec program="msbuild.exe" workingdir="build\subversion">
+			<arg value="serf\serf.vcproj" />
+			<arg value="/p:Configuration=Release" />
+		</exec>
+		
+		<if test="${aprVersion &gt;= '1.0'}">
+			<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\LibR\apr.lib" />
+			<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\LibR\aprutil.lib" />
+			<copy file="build\subversion\apr-iconv\LibR\apriconv-1.lib" tofile="build\subversion\apr-iconv\LibR\apriconv.lib" />
+			
+			<mkdir dir="build\subversion\apr\release" />
+			<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\release\libapr-1.lib" />
+			<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\release\libapr.lib" />
+			
+			<mkdir dir="build\subversion\apr-util\release" />
+			<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\release\libaprutil.lib" />
+			<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\release\libaprutil-1.lib" />
+			
+			<mkdir dir="build\subversion\apr-iconv\release" />
+			<copy file="build\subversion\apr-iconv\LibR\apriconv-1.lib" tofile="build\subversion\apr-iconv\release\libapriconv.lib" />
+			<copy file="build\subversion\apr-iconv\LibR\apriconv-1.lib" tofile="build\subversion\apr-iconv\release\libapriconv-1.lib" />
+		</if>
+		<if test="${aprVersion &lt;= '1.0'}">      
+			<copy file="build\subversion\apr\LibR\apr.lib" tofile="build\subversion\apr\LibR\libapr.lib" />
+			
+			<mkdir dir="build\subversion\apr\release" />
+			<copy file="build\subversion\apr\LibR\apr.lib" tofile="build\subversion\apr\release\libapr.lib" />
+			
+      <mkdir dir="build\subversion\apr-util\release" />
+			<copy file="build\subversion\apr-util\LibR\aprutil.lib" tofile="build\subversion\apr-util\release\libaprutil.lib" />
+		</if>
+		
 		<!-- Now build subversion -->
+		
 		<exec program="msbuild.exe" workingdir="build\subversion">
 			<arg value="subversion_vcnet.sln" />
 			<arg value="/p:Configuration=Release" />
-			<arg value="/t:Svn" />
+			<arg value="/t:__LIBS__" />
 		</exec>
 		<copy todir="release/lib" flatten="true">
 			<fileset basedir="build\subversion">				
@@ -505,13 +524,18 @@
 				<include name="**/src*.pdb" />
 				<include name="**/${dllPrefix}lib*.pdb" />
 				<include name="**/*.dll" />
+				
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
 				
 				<!-- APR 1.* uses new names -->
-				<include name="apr/LibR/*.lib" />
+				<include name="apr/LibR/*.lib" if="${aprVersion &lt; '1.0'}" />
+				<include name="apr-util/LibR/*.lib" if="${aprVersion &lt; '1.0'}"/>				
+				
+				<include name="apr/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}" />
+				<include name="apr-util/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}"/>
+				
 				<include name="apr/LibR/*.pdb" />
-				<include name="apr-util/LibR/*.lib" />
 				<include name="apr-util/LibR/*.pdb" />
 			</fileset>
 		</copy>
