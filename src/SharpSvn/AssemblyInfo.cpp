@@ -41,6 +41,8 @@ using namespace System::Security::Permissions;
 
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
+#pragma comment(lib, "ole32.lib")
+
 //#pragma comment(lib, "libapr.lib")
 #pragma comment(lib, "libsvn_client-1.lib")
 #pragma comment(lib, "libsvn_delta-1.lib")
@@ -48,13 +50,18 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libsvn_fs-1.lib")
 #pragma comment(lib, "libsvn_fs_base-1.lib")
 #pragma comment(lib, "libsvn_fs_fs-1.lib")
-#if (SVN_VER_MINOR >= 5)
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
 #pragma comment(lib, "libsvn_fs_util-1.lib")
 #pragma comment(lib, "sqlite3.lib")
 #endif
 
 #pragma comment(lib, "libsvn_ra-1.lib")
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
+#pragma comment(lib, "libsvn_ra_neon-1.lib")
+#pragma comment(lib, "libsvn_ra_serf-1.lib")
+#else
 #pragma comment(lib, "libsvn_ra_dav-1.lib")
+#endif
 #pragma comment(lib, "libsvn_ra_local-1.lib")
 #pragma comment(lib, "libsvn_ra_svn-1.lib")
 #pragma comment(lib, "libsvn_repos-1.lib")
@@ -62,6 +69,9 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libsvn_wc-1.lib")
 #pragma comment(lib, "xml.lib")
 #pragma comment(lib, "libneon.lib")
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
+#pragma comment(lib, "serf.lib")
+#endif
 #pragma comment(lib, "zlibstat.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "libdb44.lib")
@@ -75,7 +85,7 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "apr.lib")
 #pragma comment(lib, "apriconv.lib")
 #pragma comment(lib, "aprutil.lib")
-#elif (APR_MAJOR_VERSION == 1)
+#elif (APR_MAJOR_VERSION >= 1)
 #pragma comment(lib, "apr-1.lib")
 #pragma comment(lib, "apriconv.lib")
 #pragma comment(lib, "aprutil-1.lib")

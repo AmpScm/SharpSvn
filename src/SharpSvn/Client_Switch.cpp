@@ -80,6 +80,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 			pool.AllocString(target->TargetName),
 			&toRev,
 			(svn_depth_t)args->Depth,
+			args->IgnoreExternals,
 			args->AllowUnversionedObstructions,
 			CtxHandle,
 			pool.Handle);
