@@ -600,6 +600,8 @@ namespace SharpSvn {
 		int _limit;
 		bool _logChangedPaths;
 		bool _strictHistory;
+		bool _includeMerged;
+		bool _ommitMessages;
 
 	public:
 		event EventHandler<SvnLogEventArgs^>^ Log;
@@ -617,7 +619,7 @@ namespace SharpSvn {
 			_end = SvnRevision::Zero;
 			_limit = 0;
 			_logChangedPaths = true;
-			_strictHistory = false;
+			//_strictHistory = false;
 		}
 
 		property SvnRevision^ Start
@@ -684,6 +686,30 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_strictHistory = value;
+			}
+		}
+
+		property bool IncludeMergedRevisions
+		{
+			bool get()
+			{
+				return _includeMerged;
+			}
+			void set(bool value)
+			{
+				_includeMerged = value;
+			}
+		}
+
+		property bool OmitMessages
+		{
+			bool get()
+			{
+				return _ommitMessages;
+			}
+			void set(bool value)
+			{
+				_ommitMessages = value;
 			}
 		}
 	};
@@ -1037,6 +1063,55 @@ namespace SharpSvn {
 		SvnDepth _depth;
 	public:
 		SvnGetPropertyArgs()
+		{
+			_depth = SvnDepth::Empty;
+			_revision = SvnRevision::None;
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
+			}
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = value;
+			}
+		}
+	};
+
+	public ref class SvnPropertyListArgs : public SvnClientArgs
+	{
+		SvnRevision^ _revision;
+		SvnDepth _depth;
+
+	public:
+		event EventHandler<SvnPropertyListEventArgs^>^ PropertyList;
+
+	protected public:
+		virtual void OnPropertyList(SvnPropertyListEventArgs^ e)
+		{
+			PropertyList(this, e);
+		}
+
+	public:
+		SvnPropertyListArgs()
 		{
 			_depth = SvnDepth::Empty;
 			_revision = SvnRevision::None;

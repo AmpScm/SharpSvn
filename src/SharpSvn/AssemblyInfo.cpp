@@ -18,7 +18,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("QQn")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) QQn 2007")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) QQn Project 2007")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -33,7 +33,7 @@ using namespace System::Security::Permissions;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.4.*")];
+[assembly:AssemblyVersionAttribute("1.5.*")];
 
 [assembly:ComVisible(false)];
 

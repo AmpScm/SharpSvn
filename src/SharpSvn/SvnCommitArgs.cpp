@@ -12,7 +12,7 @@ using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
-SvnCommitItem::SvnCommitItem(const svn_client_commit_item2_t *commitItemInfo)
+SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo)
 {
 	if(!commitItemInfo)
 		throw gcnew NullReferenceException("commitItemInfo");
@@ -22,15 +22,18 @@ SvnCommitItem::SvnCommitItem(const svn_client_commit_item2_t *commitItemInfo)
 
 void SvnCommitItem::Detach(bool keepProperties)
 {
-	if(!_info)
-		return;
-
-	if(keepProperties)
+	try
 	{
-		GC::KeepAlive(Path);
-		GC::KeepAlive(Uri);
-		GC::KeepAlive(CopyFromUri);
+		if(keepProperties)
+		{
+			GC::KeepAlive(Path);
+			GC::KeepAlive(Uri);
+			GC::KeepAlive(CopyFromUri);
+		}
 	}
-	_info = nullptr;
+	finally
+	{
+		_info = nullptr;
+	}
 }
 

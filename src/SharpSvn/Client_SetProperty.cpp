@@ -17,7 +17,7 @@ void SvnClient::SetProperty(String^ path, String^ propertyName, String^ value)
 	SetProperty(path, propertyName, value, gcnew SvnSetPropertyArgs());
 }
 
-void SvnClient::SetProperty(String^ path, String^ propertyName, array<char>^ bytes)
+void SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ bytes)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -45,7 +45,7 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, String^ value, S
 	return InternalSetProperty(path, propertyName, pool.AllocSvnString(value), args, %pool);
 }
 
-bool SvnClient::SetProperty(String^ path, String^ propertyName, array<char>^ bytes, SvnSetPropertyArgs^ args)
+bool SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ bytes, SvnSetPropertyArgs^ args)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -58,7 +58,16 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, array<char>^ byt
 
 	AprPool pool(_pool);
 
-	return InternalSetProperty(path, propertyName, pool.AllocSvnString(bytes), args, %pool);
+	array<char> ^byteArray = safe_cast<array<char>>(bytes);
+
+	if(!byteArray)
+	{
+		byteArray = gcnew array<char>(bytes->Count);
+
+		bytes->CopyTo(byteArray, 0);
+	}
+
+	return InternalSetProperty(path, propertyName, pool.AllocSvnString(byteArray), args, %pool);
 }
 
 void SvnClient::DeleteProperty(String^ path, String^ propertyName)
