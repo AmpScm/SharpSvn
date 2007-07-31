@@ -124,6 +124,56 @@ namespace SharpSvn {
 		virtual void Detach(bool keepProperties) override;
 	};
 
+	public ref class SvnClientConflictResolveEventArgs : public SvnClientCancelEventArgs
+	{
+		AprPool^ _pool;
+		const svn_wc_conflict_description_t* _description;
+		SvnConflictResult _result;
+
+	internal:
+		SvnClientConflictResolveEventArgs(const svn_wc_conflict_description_t *description, AprPool^ pool)
+		{
+			if(!description)
+				throw gcnew ArgumentNullException("description");
+			else if(!pool)
+				throw gcnew ArgumentNullException("pool");
+
+			_description = description;
+			_pool = pool;
+			_result = SvnConflictResult::Conflicted;
+		}
+
+	public:
+		property SvnConflictResult Result
+		{
+			SvnConflictResult get()
+			{
+				return _result;
+			}
+			void set(SvnConflictResult value)
+			{
+				_result = value;
+			}
+		}
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+				}
+			}
+			finally
+			{
+				_description = nullptr;
+				_pool = nullptr;
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
 	public ref class SvnLockInfo : public SvnClientEventArgs
 	{
 		const svn_lock_t *_lock;

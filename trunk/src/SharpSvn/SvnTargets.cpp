@@ -30,10 +30,7 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 			return gcnew SvnRevision(revData->value.number);
 		case SvnRevisionType::Date:
 			// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
-			{
-				__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
-				return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
-			}
+			return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
 		default:
 			throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
 	}	

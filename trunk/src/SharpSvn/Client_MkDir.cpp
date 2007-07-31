@@ -65,9 +65,10 @@ bool SvnClient::MkDir(ICollection<String^>^ paths, SvnMkDirArgs^ args)
 		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 		svn_commit_info_t* commitInfo = nullptr;
 
-		svn_error_t *r = svn_client_mkdir2(
+		svn_error_t *r = svn_client_mkdir3(
 			&commitInfo,			
 			aprPaths->Handle,
+			args->MakeParents,
 			CtxHandle,
 			pool.Handle);
 
@@ -156,9 +157,10 @@ bool SvnClient::RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args, [Out] S
 		AprArray<String^, AprCStrMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
 		svn_commit_info_t* commit_info = nullptr;
 
-		svn_error_t *r = svn_client_mkdir2(
+		svn_error_t *r = svn_client_mkdir3(
 			&commit_info,
 			aprPaths->Handle,
+			args->MakeParents,
 			CtxHandle,
 			pool.Handle);
 

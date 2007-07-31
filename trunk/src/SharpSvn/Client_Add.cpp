@@ -42,11 +42,12 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	_currentArgs = args;
 	try
 	{
-		svn_error_t *r = svn_client_add3(
+		svn_error_t *r = svn_client_add4(
 			pool.AllocPath(path),
 			IsRecursive(args->Depth),
 			args->Force,
 			args->NoIgnore,
+			args->AddParents,
 			CtxHandle,
 			pool.Handle);
 

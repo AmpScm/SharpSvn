@@ -69,11 +69,11 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 		svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		svn_error_t* err = svn_client_list(
+		svn_error_t* err = svn_client_list2(
 			pool.AllocString(target->ToString()), 
 			&pegrev,
 			&rev, 
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
 			(apr_uint32_t)args->EntryItems,
 			args->FetchLocks,
 			svnclient_list_handler,

@@ -39,6 +39,8 @@ struct SvnClientCallBacks
 	static svn_error_t *svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
 	static void svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
 	static void svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
+
+	static svn_error_t * svn_wc_conflict_resolver_func(svn_wc_conflict_result_t *result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
 };
 
 void SvnClient::Initialize()
@@ -53,6 +55,8 @@ void SvnClient::Initialize()
 	CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
 	CtxHandle->progress_baton = baton;
 	CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
+	CtxHandle->conflict_baton = baton;
+	CtxHandle->conflict_func = &SvnClientCallBacks::svn_wc_conflict_resolver_func;
 }
 
 System::Version^ SvnClient::Version::get()
@@ -130,6 +134,17 @@ void SvnClient::OnClientNotify(SvnClientNotifyEventArgs^ e)
 		_clientNotify(this, e);
 }
 
+void SvnClient::HandleClientConflictResolver(SvnClientConflictResolveEventArgs^ e)
+{
+	OnClientConflictResolver(e);
+}
+
+void SvnClient::OnClientConflictResolver(SvnClientConflictResolveEventArgs^ e)
+{
+	if(_clientConflictResolver)
+		_clientConflictResolver(this, e);
+}
+
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
@@ -156,6 +171,8 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 
 svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
 {
+	UNUSED_ALWAYS(tmp_file); // We don't use temp files for the log message
+
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	AprPool^ tmpPool = AprPool::Attach(pool, false);
@@ -189,6 +206,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool)
 {
+	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs(notify);
@@ -205,6 +223,7 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
 
 void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
 {
+	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total);
@@ -218,6 +237,39 @@ void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off
 		ea->Detach(false);
 	}
 }
+
+svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_result_t *result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool)
+{
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+
+	AprPool^ tmpPool = AprPool::Attach(pool, false);
+	
+	SvnClientConflictResolveEventArgs^ ea = gcnew SvnClientConflictResolveEventArgs(description, tmpPool);
+
+	try
+	{
+		client->HandleClientConflictResolver(ea);
+
+		if(ea->Cancel)
+			return svn_error_create(SVN_ERR_CANCELLED, NULL, "Operation canceled");
+
+		if(ea->Result != SvnConflictResult::Conflicted)
+			*result = (svn_wc_conflict_result_t)ea->Result;
+
+		return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		AprPool^ thePool = AprPool::Attach(pool, false);
+		return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("Conflict resolver callback throwed exception: ", e->ToString())));
+	}
+	finally
+	{
+		ea->Detach(false);
+		delete tmpPool;
+	}
+}
+
 
 Uri^ SvnClient::GetUriFromPath(String^ path)
 {

@@ -38,6 +38,40 @@ namespace SharpSvn {
 		Infinity		= svn_depth_infinity,
 	};
 
+	public enum class SvnConflictResult
+	{
+		/// <summary>user did nothing; conflict remains</summary>
+		Conflicted		= svn_wc_conflict_result_conflicted,
+		/// <summary>user has resolved the conflict</summary>
+		Resolved		= svn_wc_conflict_result_resolved,
+
+		/// <summary>user chooses the base file; The caller of the conflict-callback is responsible for "installing" the chosen file as the final version of the file</summary>
+		Base			= svn_wc_conflict_result_choose_base,
+		/// <summary>user chooses the repository file; The caller of the conflict-callback is responsible for "installing" the chosen file as the final version of the file</summary>
+		Repository		= svn_wc_conflict_result_choose_repos,
+		/// <summary>user chooses own version of file; The caller of the conflict-callback is responsible for "installing" the chosen file as the final version of the file</summary>
+		User			= svn_wc_conflict_result_choose_user,
+		/// <summary>user chooses the merged-file; The caller of the conflict-callback is responsible for "installing" the chosen file as the final version of the file</summary>
+		Merged			= svn_wc_conflict_result_choose_merged,
+	};
+
+	public enum class SvnAccept
+	{
+		Invalid			= svn_accept_invalid,
+
+		/// <summary>Resolve the conflict as usual</summary>
+		Default			= svn_accept_default,
+
+		/// <summary>Resolve the conflict with the pre-conflict base file</summary>
+		Left			= svn_accept_left,
+
+		/// <summary>Resolve the conflict with the pre-conflict working copy file</summary>
+		Working			= svn_accept_working,
+
+		/// <summary>Resolve the conflict with the post-conflict base file</summary>
+		Right			= svn_accept_right,
+	};
+
 	public enum class SvnRevisionType
 	{
 		None		= svn_opt_revision_unspecified, 
