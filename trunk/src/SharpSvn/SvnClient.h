@@ -607,6 +607,22 @@ public:
 		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
 
+	public:
+		/////////////////////////////////////////
+#pragma region // GetProperty Client Command
+		/// <summary>
+		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
+		/// </summary>
+		void Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPath);
+		/// <summary>
+		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
+		/// </summary>
+		bool Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPath, SvnMergeArgs^ args);
+
+		void Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath);
+		bool Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath, SvnMergeArgs^ args);
+#pragma endregion
+
 		// TODO:
 		// Merge + MergePeg
 		// Diff + DiffPeg + DiffSummarize + DiffSummarizePeg
