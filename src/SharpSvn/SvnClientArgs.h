@@ -1290,4 +1290,79 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnMergeArgs : public SvnClientArgs
+	{
+		SvnDepth _depth;
+		bool _ignoreAncestry;
+		bool _force;
+		bool _recordOnly;
+		bool _dryRun;
+	public:
+		SvnMergeArgs()
+		{
+			_depth = SvnDepth::Infinity;
+
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = value;
+			}
+		}
+
+		property bool IgnoreAncestry
+		{
+			bool get()
+			{
+				return _ignoreAncestry;
+			}
+			void set(bool value)
+			{
+				_ignoreAncestry = value;
+			}
+		}
+
+		property bool Force
+		{
+			bool get()
+			{
+				return _force;
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+
+		property bool RecordOnly
+		{
+			bool get()
+			{
+				return _recordOnly;
+			}
+			void set(bool value)
+			{
+				_recordOnly = value;
+			}
+		}
+
+		property bool DryRun
+		{
+			bool get()
+			{
+				return _dryRun;
+			}
+			void set(bool value)
+			{
+				_dryRun = value;
+			}
+		}
+	};
 }
