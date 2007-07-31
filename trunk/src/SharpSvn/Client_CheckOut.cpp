@@ -89,6 +89,8 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 			CtxHandle,
 			pool.Handle);
 
+		revision = version;
+
 		return args->HandleResult(err);
 	}
 	finally

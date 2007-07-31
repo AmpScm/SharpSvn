@@ -72,10 +72,18 @@ namespace SharpSvn
 			long ver;
             _client.CheckOut(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"), "f:\\svn-test-location\\gc", out ver);
 			_client.Update("f:\\svn-test-location\\gc");
+
+			_client.PropertyList((SvnPathTarget)"F:\\svn-test-location\\gc\\src\\SharpSvn.UI\\SharpSvn.UI.snk", new EventHandler<SvnPropertyListEventArgs>(OnPropertyItem));
 			//_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
 			//_client.Update(@"g:\Projects\SvnDotNet", new SvnUpdateArgs(), out ver);
 			//long rev;
 			
+		}
+
+		void OnPropertyItem(object sender, SvnPropertyListEventArgs e)
+		{
+			GC.KeepAlive(e.Properties);
+
 		}
 
 		bool Authenticator_UsernamePasswordHandlers(object sender, SharpSvn.Security.SvnUsernamePasswordArgs e)

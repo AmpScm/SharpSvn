@@ -56,14 +56,6 @@ namespace SharpSvn {
 		initonly __int64 _progress;
 		initonly __int64 _totalProgress;
 
-
-	internal:
-		SvnClientProgressEventArgs(__int64 progress, __int64 totalProgress, apr_pool_t *pool)
-		{
-			_progress = progress;
-			_totalProgress = totalProgress;
-		}
-
 	public:
 		SvnClientProgressEventArgs(__int64 progress, __int64 totalProgress)
 		{
@@ -1414,13 +1406,14 @@ namespace SharpSvn {
 					{
 						const char* pKey;
 						apr_ssize_t keyLen;
-						svn_log_changed_path_t *pChangeInfo;
+						const svn_string_t *propVal;
 
-						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
+						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
 						String^ key = SvnBase::Utf8_PtrToString(pKey);
-
-						_properties->Add(key, key);
+						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, propVal->len);
+						
+						_properties->Add(key, value);
 					}
 				}
 
