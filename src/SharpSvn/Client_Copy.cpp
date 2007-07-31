@@ -122,6 +122,11 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ 
 			CtxHandle,
 			pool.Handle);
 
+		if(pInfo)
+			commitInfo = gcnew SvnCommitInfo(pInfo);
+		else
+			commitInfo = nullptr;
+
 		return args->HandleResult(r);
 	}
 	finally

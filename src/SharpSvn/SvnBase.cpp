@@ -98,6 +98,23 @@ array<char>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 	return bytes;
 }
 
+Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
+{
+	if(!ptr || length < 0)
+		return nullptr;
+	else if(length == 0)
+		return "";
+
+	try
+	{
+		return Utf8_PtrToString(ptr, length);
+	}
+	catch(System::Text::DecoderFallbackException^)
+	{
+		return SvnBase::PtrToByteArray(ptr, length);
+	}
+}
+
 DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 {
 	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
@@ -139,3 +156,4 @@ array<char>^ SvnHandleBase::PtrToByteArray(const char* ptr, int length)
 {
 	return SvnBase::PtrToByteArray(ptr, length);
 }
+

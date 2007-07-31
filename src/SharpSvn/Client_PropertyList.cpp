@@ -110,5 +110,19 @@ void SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEv
 
 bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list)
 {
-	return false;
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemList<SvnPropertyListEventArgs^>^ results = gcnew InfoItemList<SvnPropertyListEventArgs^>();
+
+	try
+	{
+		return PropertyList(target, results->Handler, args);	
+	}
+	finally
+	{
+		list = safe_cast<IList<SvnPropertyListEventArgs^>^>(results);
+	}
 }

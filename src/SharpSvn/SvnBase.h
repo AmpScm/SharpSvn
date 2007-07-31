@@ -25,6 +25,8 @@ namespace SharpSvn {
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 			static array<char>^ PtrToByteArray(const char* ptr, int length);
 
+			static Object^ PtrToStringOrByteArray(const char* ptr, int length);
+
 			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
 			static apr_time_t AprTimeFromDateTime(DateTime time);
 
