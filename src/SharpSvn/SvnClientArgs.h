@@ -381,6 +381,7 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		bool _noIgnore;
 		bool _force;
+		bool _addParents;
 
 	public:
 		SvnAddArgs()
@@ -425,6 +426,21 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_force = value;
+			}
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		property bool AddParents
+		{
+			bool get()
+			{
+				return _addParents;
+			}
+			void set(bool value)
+			{
+				_addParents = value;
 			}
 		}
 	};
@@ -765,9 +781,23 @@ namespace SharpSvn {
 
 	public ref class SvnMkDirArgs : public SvnClientArgsWithCommit
 	{
+		bool _makeParents;
 	public:
 		SvnMkDirArgs()
 		{}
+
+		property bool MakeParents
+		{
+			bool get()
+			{
+				return _makeParents;
+			}
+
+			void set(bool value)
+			{
+				_makeParents = value;
+			}
+		}
 	};
 
 	public ref class SvnDeleteArgs : public SvnClientArgsWithCommit
@@ -809,6 +839,7 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _noIgnore;
+		bool _ignoreUnknownNodeTypes;
 	public:
 		SvnImportArgs()
 		{
@@ -836,6 +867,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noIgnore = value;
+			}
+		}
+
+		property bool IgnoreUnknownNodeTypes
+		{
+			bool get()
+			{
+				return _ignoreUnknownNodeTypes;
+			}
+			void set(bool value)
+			{
+				_ignoreUnknownNodeTypes = value;
 			}
 		}
 	};
@@ -943,11 +986,19 @@ namespace SharpSvn {
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
+		SvnAccept _accept;
 
 	public:
 		SvnResolvedArgs()
 		{
 			_depth = SvnDepth::Empty;
+			_accept = SvnAccept::Default;
+		}
+
+		SvnResolvedArgs(SvnAccept accept)
+		{
+			_depth = SvnDepth::Empty;
+			_accept = accept;
 		}
 
 		property SvnDepth Depth
@@ -959,6 +1010,18 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = value;
+			}
+		}
+
+		property SvnAccept Accept
+		{
+			SvnAccept get()
+			{
+				return _accept;
+			}
+			void set(SvnAccept value)
+			{
+				_accept = value;
 			}
 		}
 	};

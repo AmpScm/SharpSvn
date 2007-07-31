@@ -101,6 +101,7 @@ namespace SharpSvn {
 		EventHandler<SvnClientProgressEventArgs^>^	_clientProgress;
 		EventHandler<SvnClientNotifyEventArgs^>^	_clientNotify;
 		EventHandler<SvnClientBeforeCommitEventArgs^>^	_clientBeforeCommit;
+		EventHandler<SvnClientConflictResolveEventArgs^>^	_clientConflictResolver;
 	public:
 		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel
 		{
@@ -126,11 +127,18 @@ namespace SharpSvn {
 			void remove(EventHandler<SvnClientBeforeCommitEventArgs^>^ e)	{ _clientBeforeCommit -= e; }
 		}
 
+		event EventHandler<SvnClientConflictResolveEventArgs^>^	ClientConflictResolver
+		{
+			void add(EventHandler<SvnClientConflictResolveEventArgs^>^ e)		{ _clientConflictResolver += e; }
+			void remove(EventHandler<SvnClientConflictResolveEventArgs^>^ e)	{ _clientConflictResolver -= e; }
+		}
+
 	protected:
 		virtual void OnClientCancel(SvnClientCancelEventArgs^ e);
 		virtual void OnClientProgress(SvnClientProgressEventArgs^ e);
 		virtual void OnClientBeforeCommit(SvnClientBeforeCommitEventArgs^ e);
 		virtual void OnClientNotify(SvnClientNotifyEventArgs^ e);
+		virtual void OnClientConflictResolver(SvnClientConflictResolveEventArgs^ e);
 
 	internal:
 
@@ -138,6 +146,7 @@ namespace SharpSvn {
 		void HandleClientProgress(SvnClientProgressEventArgs^ e);
 		void HandleClientGetCommitLog(SvnClientBeforeCommitEventArgs^ e);
 		void HandleClientNotify(SvnClientNotifyEventArgs^ e);
+		void HandleClientConflictResolver(SvnClientConflictResolveEventArgs^ e);
 
 		const char* GetEolPtr(SvnEolStyle style);
 #pragma endregion
@@ -475,6 +484,7 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Resolved Client Command
 		void Resolved(String^ path);
+		void Resolved(String^ path, SvnAccept accept);
 		bool Resolved(String^ path, SvnResolvedArgs^ args);
 #pragma endregion
 
@@ -596,6 +606,12 @@ public:
 		void GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list);
 		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
+
+		// TODO:
+		// Merge + MergePeg
+		// Diff + DiffPeg + DiffSummarize + DiffSummarizePeg
+		// Retrieving MergeInfo
+		// AddToChangeList + RemoveFromChangeList + GetChangeList
 
 
 	public:

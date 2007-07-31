@@ -14,6 +14,14 @@ void SvnClient::Resolved(String^ path)
 	Resolved(path, gcnew SvnResolvedArgs());
 }
 
+void SvnClient::Resolved(String^ path, SvnAccept accept)
+{
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	Resolved(path, gcnew SvnResolvedArgs(accept));
+}
+
 bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 {
 	if(!path)
@@ -32,9 +40,10 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 	_currentArgs = args;
 	try
 	{
-		svn_error_t *r = svn_client_resolved(
+		svn_error_t *r = svn_client_resolved2(
 			pool.AllocPath(path),
 			IsRecursive(args->Depth),
+			(svn_accept_t)args->Accept,
 			CtxHandle,
 			pool.Handle);
 

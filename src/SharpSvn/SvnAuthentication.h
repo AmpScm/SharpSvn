@@ -403,14 +403,6 @@ namespace SharpSvn {
 			}
 
 		internal:
-		#if (SVN_VER_MAJOR == 1) && (SVN_VER_MINOR < 5)
-			property bool AcceptedByCryptoApi
-			{
-				bool get();
-			}
-		#endif
-
-		internal:
 			ref class Wrapper sealed : public SvnAuthWrapper<SvnSslServerTrustArgs^>
 			{
 			public:
@@ -750,30 +742,13 @@ namespace SharpSvn {
 			void AddConsoleHandlers();
 
 		private:
-			static bool ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameArgs^ e) 
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-
-			static bool ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-
-			static bool ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-
-			static bool ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e) 
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-
-			static bool ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-
-			static bool ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-
-			static bool ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
-#if (SVN_VER_MAJOR > 1) || (SVN_VER_MINOR >= 5)
-			{ sender;e; throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); }
-#else
-			;
-#endif
+			static bool ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameArgs^ e);
+			static bool ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e);
+			static bool ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e);
+			static bool ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);
+			static bool ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e);
+			static bool ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e);
+			static bool ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e);
 
 		public:
 			/// <summary>Subversion UsernameHandler file backend (managed representation)</summary>

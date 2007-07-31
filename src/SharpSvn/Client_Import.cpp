@@ -128,12 +128,13 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	{
 		svn_commit_info_t *commit_info = nullptr;
 		
-		svn_error_t *r = svn_client_import2(
+		svn_error_t *r = svn_client_import3(
 			&commit_info,
 			pool.AllocPath(path),
 			pool.AllocString(target->ToString()),
 			IsNotRecursive(args->Depth),
 			args->NoIgnore,
+			args->IgnoreUnknownNodeTypes,
 			CtxHandle,
 			pool.Handle);
 

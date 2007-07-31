@@ -4,8 +4,6 @@
 #include "SvnAuthentication.h"
 #include "Wincrypt.h"
 
-#include "apr_base64.h"
-
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 using namespace SharpSvn::Security;
@@ -328,6 +326,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetPro
 
 IntPtr SvnAuthentication::GetParentHandle(Object ^sender)
 {
+	UNUSED_ALWAYS(sender);
 
 	return IntPtr::Zero;
 }
@@ -477,6 +476,7 @@ String^ SvnAuthentication::ReadPassword()
 
 bool SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
 {
+	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
 	Console::Write("Username: ");
@@ -487,6 +487,7 @@ bool SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArg
 
 bool SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
 {
+	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
 	if(!e->InitialUsername)
@@ -508,6 +509,7 @@ bool SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUse
 
 bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
 {
+	UNUSED_ALWAYS(sender);
 	Console::WriteLine("Error validating server certificate for '{0}':", e->Realm);
 
 	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority))
@@ -575,6 +577,7 @@ bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 
 bool SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
 {
+	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
 	Console::Write("Client certificate filename: ");
@@ -586,6 +589,7 @@ bool SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, Sv
 
 bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
 {
+	UNUSED_ALWAYS(sender);
 	Console::Write("Passphrase for '{0}': ", e->Realm);
 
 	e->Password = ReadPassword();
@@ -593,93 +597,51 @@ bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	return true;
 }
 
-#if (SVN_VER_MAJOR == 1) && (SVN_VER_MINOR < 5)
+bool SvnAuthentication::ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+}
+
+bool SvnAuthentication::ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+}
+
+bool SvnAuthentication::ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+}
+
+bool SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e) 
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+}
+
+bool SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+}
+
+bool SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+}
+
 bool SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
-{
-	if(0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority))
-	{
-		if(e->AcceptedByCryptoApi)
-			e->AcceptedFailures = e->SvnCertificateTrustFailure::UnknownCertificateAuthority;
-
-		e->Save = false;
-	}
-
-	return true;
+{ 
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
-
-bool SvnSslServerTrustArgs::AcceptedByCryptoApi::get()
-{
-	if(0 != (int)(Failures & ~(SvnCertificateTrustFailure::UnknownCertificateAuthority | SvnCertificateTrustFailure::CertificateNotValidYet | SvnCertificateTrustFailure::CertificateExpired)))
-	{
-		return false; // Not a certificate error -> Just return false
-	}
-
-	CERT_CHAIN_PARA         ChainPara;
-	PCCERT_CHAIN_CONTEXT    pChainContext   = NULL;
-	PCCERT_CONTEXT			pCertContext;
-	DWORD                  dwTrustErrorMask = ~(CERT_TRUST_IS_NOT_TIME_NESTED|CERT_TRUST_REVOCATION_STATUS_UNKNOWN);
-	array<unsigned char>^	bytes = System::Text::Encoding::ASCII->GetBytes(this->CertificateValue);
-	pin_ptr<unsigned char>	pByte = &bytes[0];
-	
-	int len;
-	PCERT_SIMPLE_CHAIN      pSimpleChain;
-
-	ZeroMemory(&ChainPara, sizeof(ChainPara));
-	ChainPara.cbSize = sizeof(ChainPara);
-
-	/* Use apr-util as CryptStringToBinaryA is available only on XP+ */
-	len = apr_base64_decode_len((const char*)pByte);
-
-	if(len <= 0)
-		return false;
-
-	array<char>^	rawBytes = gcnew array<char>(len);
-	pin_ptr<char>	pRawByte = &rawBytes[0];
-
-	len = apr_base64_decode(pRawByte, (const char*)pByte);
-
-	pCertContext = CertCreateCertificateContext(X509_ASN_ENCODING | PKCS_7_ASN_ENCODING, (const unsigned char*)pRawByte, len);
-
-	if (!pCertContext)
-		return false;
-	
-	try
-	{
-		if(!CertGetCertificateChain(
-								NULL,
-								pCertContext,
-								NULL,
-								pCertContext->hCertStore,
-								&ChainPara,
-								0,
-								NULL,
-								&pChainContext))
-		{
-			return false;
-
-		}
-	 
-		pSimpleChain = pChainContext->rgpChain[0];
-	 
-		dwTrustErrorMask &= pSimpleChain->TrustStatus.dwErrorStatus;
-		if (dwTrustErrorMask)
-		{
-			return false;
-		}
-
-		return true;
-	}
-	finally
-	{
-		if(pChainContext)
-		{
-	        CertFreeCertificateChain(pChainContext);
-		}
-
-		if(!pCertContext)
-		{
-			CertFreeCertificateContext(pCertContext);
-		}
-	}
-}
-#endif
