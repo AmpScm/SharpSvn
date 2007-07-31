@@ -147,24 +147,17 @@ bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, 
 	}
 }
 
-static svn_error_t *svnclient_log_handler(void *baton, apr_hash_t *changed_paths, svn_revnum_t revision, const char *author, const char *date, const char *message, apr_pool_t *pool)
+
+
+static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entry, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
-
-	
-	apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
-
-	svn_error_t *err = svn_time_from_cstring(&when, date, pool); // pool is not used at this time (might be for errors in future versions)
-
-	if(err)
-		return err;
-
 
 	SvnLogArgs^ args = dynamic_cast<SvnLogArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnLogArgs
 	AprPool^ aprPool = AprPool::Attach(pool, false);
 	if(args)
 	{
-		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(changed_paths, revision, author, when, message, aprPool);
+		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, aprPool);
 
 		/* date: use svn_time_from_cstring() if need apr_time_t */
 		try
@@ -216,7 +209,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 		svn_opt_revision_t start = args->Start->ToSvnRevision();
 		svn_opt_revision_t end = args->End->ToSvnRevision();
 
-		svn_error_t *r = svn_client_log3(
+		svn_error_t *r = svn_client_log4(
 			targets->Handle,
 			&pegRev,
 			&start,
@@ -224,6 +217,8 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 			args->Limit,
 			args->LogChangedPaths,
 			args->StrictHistory,
+			args->IncludeMergedRevisions,
+			args->OmitMessages,
 			svnclient_log_handler,
 			(void*)_clientBatton->Handle,
 			CtxHandle,

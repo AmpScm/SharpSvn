@@ -470,6 +470,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_PropertyList.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Resolved.cpp"
 					>
 				</File>

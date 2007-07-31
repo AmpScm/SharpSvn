@@ -54,7 +54,7 @@ namespace SharpSvn {
 
 	public ref class SvnCommitItem : public SvnBase
 	{
-		const svn_client_commit_item2_t *_info;
+		const svn_client_commit_item3_t *_info;
 		String^ _path;
 		String^ _fullPath;
 		initonly SvnNodeKind _nodeKind;
@@ -64,7 +64,7 @@ namespace SharpSvn {
 		initonly __int64 _copyFromRevision;
 
 	internal:
-		SvnCommitItem(const svn_client_commit_item2_t *commitItemInfo);
+		SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo);
 
 	public:
 		property String^ Path
@@ -161,7 +161,7 @@ namespace SharpSvn {
 
 		virtual SvnCommitItem^ Read(const void* ptr)
 		{
-			const svn_client_commit_item2_t** ppcCommitItem = (const svn_client_commit_item2_t**)ptr;
+			const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
 
 			return gcnew SvnCommitItem(*ppcCommitItem);
 		}

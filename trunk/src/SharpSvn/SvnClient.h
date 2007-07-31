@@ -348,7 +348,7 @@ namespace SharpSvn {
 
 	public:
 		/////////////////////////////////////////
-#pragma region // List Cat Command
+#pragma region // Cat Client Command
 		void Cat(SvnTarget^ target, Stream^ toStream);
 		bool Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args);
 #pragma endregion
@@ -546,13 +546,13 @@ public:
 		void SetProperty(String^ path, String^ propertyName, String^ value);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		void SetProperty(String^ path, String^ propertyName, array<char>^ bytes);
+		void SetProperty(String^ path, String^ propertyName, IList<char>^ bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
 		bool SetProperty(String^ path, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, array<char>^ bytes, SvnSetPropertyArgs^ args);
+		bool SetProperty(String^ path, String^ propertyName, IList<char>^ bytes, SvnSetPropertyArgs^ args);
 		/// <summary>Removes the specified property from the specfied path</summary>
 		void DeleteProperty(String^ path, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
@@ -585,6 +585,16 @@ public:
 		/// <remarks>Eats all (non-argument) exceptions</remarks>
 		/// <returns>True if the property is fetched, otherwise false</returns>
 		bool TryGetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
+#pragma endregion
+
+public:
+		/////////////////////////////////////////
+#pragma region // Properties List Client Command
+		void PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
+		bool PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler, SvnPropertyListArgs^ args);
+
+		void GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list);
+		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
 
 

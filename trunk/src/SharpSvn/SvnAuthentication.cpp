@@ -118,7 +118,7 @@ svn_auth_provider_object_t *SvnUsernameArgs::Wrapper::GetProviderPtr(AprPool^ po
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	svn_auth_provider_object_t *provider = NULL;
+	svn_auth_provider_object_t *provider = nullptr;
 
 	if(_handler->Equals(SvnAuthentication::SubversionFileUsernameHandler))
 	{
@@ -163,7 +163,7 @@ svn_auth_provider_object_t *SvnUsernamePasswordArgs::Wrapper::GetProviderPtr(Apr
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	svn_auth_provider_object_t *provider = NULL;
+	svn_auth_provider_object_t *provider = nullptr;
 
 	if(_handler->Equals(SvnAuthentication::SubversionFileUsernamePasswordHandler))
 	{
@@ -219,7 +219,7 @@ svn_auth_provider_object_t *SvnSslServerTrustArgs::Wrapper::GetProviderPtr(AprPo
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	svn_auth_provider_object_t *provider = NULL;
+	svn_auth_provider_object_t *provider = nullptr;
 
 	if(_handler->Equals(SvnAuthentication::SubversionFileSslServerTrustHandler))
 	{
@@ -269,7 +269,7 @@ svn_auth_provider_object_t *SvnSslClientCertificateArgs::Wrapper::GetProviderPtr
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	svn_auth_provider_object_t *provider = NULL;
+	svn_auth_provider_object_t *provider = nullptr;
 
 	if(_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificateHandler))
 	{
@@ -313,7 +313,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetPro
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	svn_auth_provider_object_t *provider = NULL;
+	svn_auth_provider_object_t *provider = nullptr;
 
 	if(_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificatePasswordHandler))
 	{

@@ -14,14 +14,6 @@ namespace SharpSvn {
 
 	public ref class SvnClientEventArgs abstract : public System::EventArgs
 	{
-		apr_pool_t *_pool;
-
-	internal:
-		SvnClientEventArgs(apr_pool_t *pool)
-		{
-			_pool = pool;
-		}
-
 	protected:
 		SvnClientEventArgs()
 		{
@@ -33,7 +25,6 @@ namespace SharpSvn {
 		virtual void Detach(bool keepProperties)
 		{
 			UNUSED_ALWAYS(keepProperties);
-			_pool = nullptr;
 		}
 	};
 
@@ -46,6 +37,7 @@ namespace SharpSvn {
 		{
 		}
 
+	public:
 		property bool Cancel
 		{
 			bool get()
@@ -67,7 +59,6 @@ namespace SharpSvn {
 
 	internal:
 		SvnClientProgressEventArgs(__int64 progress, __int64 totalProgress, apr_pool_t *pool)
-			: SvnClientEventArgs(pool)
 		{
 			_progress = progress;
 			_totalProgress = totalProgress;
@@ -281,8 +272,7 @@ namespace SharpSvn {
 		SvnLockInfo^ _lock;
 		
 	internal:
-		SvnClientNotifyEventArgs(const svn_wc_notify_t *notify, apr_pool_t *pool)
-			: SvnClientEventArgs(pool)
+		SvnClientNotifyEventArgs(const svn_wc_notify_t *notify)
 		{
 			if(!notify)
 				throw gcnew ArgumentNullException("notify");
@@ -705,36 +695,35 @@ namespace SharpSvn {
 
 	public ref class SvnLogEventArgs : public SvnClientCancelEventArgs
 	{
-		apr_hash_t *_aprChangedPaths;
+		svn_log_entry_t* _entry;
 		AprPool^ _pool;
-		initonly __int64 _revision;
-		initonly String^ _author;
-		initonly DateTime _date;
-		initonly String^ _message;
-		SortedList<String^, SvnLogChangeItem^>^ _changedPaths;
+
+		SortedList<String^, SvnLogChangeItem^>^ _changedPaths;		
+		String^ _author;
+		DateTime _date;
+		String^ _message;
+		__int64 _revision;
+		__int64 _nLogChildren;		
 
 	internal:
-		SvnLogEventArgs(apr_hash_t *changed_paths, svn_revnum_t revision, const char *author, apr_time_t date, const char *message, AprPool ^pool)
+		SvnLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
 		{
-			if(!changed_paths)
-				throw gcnew ArgumentNullException("changed_paths");
-			else if(!author)
-				throw gcnew ArgumentNullException("author");
-			else if(!date)
-				throw gcnew ArgumentNullException("date");
+			if(!entry)
+				throw gcnew ArgumentNullException("entry");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
 
-			_aprChangedPaths = changed_paths;
+			_entry = entry;
 			_pool = pool;
-			_revision = revision;
-			_author = SvnBase::Utf8_PtrToString(author);
-			_date = SvnBase::DateTimeFromAprTime(date);
 
-			_message = message ? SvnBase::Utf8_PtrToString(message) : "";
+			apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
+			svn_error_t *err = svn_time_from_cstring(&when, entry->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 
-			if(!Environment::NewLine->Equals("\n"))
-				_message = _message->Replace("\n", Environment::NewLine);
+			if(!err)
+				_date = SvnBase::DateTimeFromAprTime(when);
+
+			_revision = entry->revision;			
+			_nLogChildren = entry->nbr_children;
 		}
 
 	public:
@@ -742,11 +731,11 @@ namespace SharpSvn {
 		{
 			IDictionary<String^, SvnLogChangeItem^>^  get()
 			{
-				if(!_changedPaths && _aprChangedPaths && _pool)
+				if(!_changedPaths && _entry && _pool)
 				{
 					_changedPaths = gcnew SortedList<String^, SvnLogChangeItem^>();
 
-					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _aprChangedPaths); hi; hi = apr_hash_next(hi))
+					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths); hi; hi = apr_hash_next(hi))
 					{
 						const char* pKey;
 						apr_ssize_t keyLen;
@@ -779,6 +768,9 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+				if(!_author && _entry && _entry->author)
+					_author = SvnBase::Utf8_PtrToString(_entry->author);
+
 				return _author;
 			}
 		}
@@ -787,6 +779,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
+
 				return _date;
 			}
 		}
@@ -795,7 +788,23 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+				if(!_message && _entry && _entry->message)
+				{
+					_message = SvnBase::Utf8_PtrToString(_entry->message);
+
+					if(_message)
+						_message = _message->Replace("\n", Environment::NewLine);
+				}
+
 				return _message;
+			}
+		}
+
+		property __int64 LogChildren
+		{
+			__int64 get()
+			{
+				return _nLogChildren;
 			}
 		}
 
@@ -808,12 +817,14 @@ namespace SharpSvn {
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(ChangedPaths);
-				}
-
-				_aprChangedPaths = nullptr;
+					GC::KeepAlive(Author);
+					GC::KeepAlive(Message);
+				}				
 			}
 			finally
 			{
+				_entry = nullptr;
+				_pool = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}
@@ -845,6 +856,10 @@ namespace SharpSvn {
 		String^ _conflict_new;
 		String^ _conflict_wrk;
 		String^ _prejfile;
+		String^ _changeList;
+		initonly SvnDepth _depth;
+		initonly __int64 _wcSize;
+		initonly __int64 _size;
 
 	internal:
 		SvnInfoEventArgs(String^ path, const svn_info_t* info)
@@ -870,7 +885,11 @@ namespace SharpSvn {
 			{
 				_contentTime = SvnBase::DateTimeFromAprTime(info->text_time);
 				_propertyTime = SvnBase::DateTimeFromAprTime(info->prop_time);
-			}			
+			}
+
+			_depth = (SvnDepth)info->depth;
+			_wcSize = info->working_size;
+			_size = info->size;
 		}
 	public:
 		property String^ Path
@@ -1092,6 +1111,41 @@ namespace SharpSvn {
 			}
 		}
 
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+		}
+
+		property String^ ChangeList
+		{
+			String^ get()
+			{
+				if(!_changeList && _info && _info->changelist)
+					_changeList = SvnBase::Utf8_PtrToString(_info->changelist);
+
+				return _changeList;
+			}
+		}
+
+		property __int64 WorkingCopySize
+		{
+			__int64 get()
+			{
+				return _wcSize;
+			}
+		}
+
+		property __int64 RepositorySize
+		{
+			__int64 get()
+			{
+				return _size;
+			}
+		}
+
 	public:
 		virtual void Detach(bool keepProperties) override
 		{
@@ -1112,6 +1166,7 @@ namespace SharpSvn {
 					GC::KeepAlive(ConflictNew);
 					GC::KeepAlive(ConflictWork);
 					GC::KeepAlive(PropertyEditFile);
+					GC::KeepAlive(ChangeList);
 				}
 
 				if(_lock)
@@ -1310,6 +1365,85 @@ namespace SharpSvn {
 				_pAbsPath = nullptr;
 				_pLock = nullptr;
 				_pDirEnt = nullptr;
+
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+	public ref class SvnPropertyListEventArgs : public SvnClientCancelEventArgs
+	{
+		initonly String^ _path;
+		apr_hash_t* _propHash;
+		SortedList<String^, Object^>^ _properties;
+		AprPool^ _pool;
+		
+	internal:
+		SvnPropertyListEventArgs(const char *path, apr_hash_t* prop_hash, AprPool ^pool)
+		{
+			if(!path)
+				throw gcnew ArgumentNullException("path");
+			else if(!prop_hash)
+				throw gcnew ArgumentNullException("prop_hash");
+			else if(!pool)
+				throw gcnew ArgumentNullException("pool");
+
+			_path = SvnBase::Utf8_PtrToString(path);
+			_propHash = prop_hash;
+			_pool = pool;
+		}
+
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}
+
+		property IDictionary<String^, Object^>^ Properties
+		{
+			IDictionary<String^, Object^>^ get()
+			{
+				if(!_properties && _propHash)
+				{
+					_properties = gcnew SortedList<String^, Object^>();
+
+					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _propHash); hi; hi = apr_hash_next(hi))
+					{
+						const char* pKey;
+						apr_ssize_t keyLen;
+						svn_log_changed_path_t *pChangeInfo;
+
+						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
+
+						String^ key = SvnBase::Utf8_PtrToString(pKey);
+
+						_properties->Add(key, key);
+					}
+				}
+
+				return safe_cast<IDictionary<String^, Object^>^>(_properties);
+			}
+		}		
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					GC::KeepAlive(Path);
+					GC::KeepAlive(Properties);
+//					GC::KeepAlive(Entry);
+				}
+			}
+			finally
+			{
+				_propHash = nullptr;
+				_pool = nullptr;
 
 				__super::Detach(keepProperties);
 			}

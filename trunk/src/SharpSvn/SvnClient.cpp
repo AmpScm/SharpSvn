@@ -36,7 +36,7 @@ SvnClient::~SvnClient()
 struct SvnClientCallBacks
 {
 	static svn_error_t *svn_cancel_func(void *cancel_baton);
-	static svn_error_t *svn_client_get_commit_log2(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
+	static svn_error_t *svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
 	static void svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
 	static void svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 };
@@ -47,8 +47,8 @@ void SvnClient::Initialize()
 
 	CtxHandle->cancel_baton = baton;
 	CtxHandle->cancel_func = &SvnClientCallBacks::svn_cancel_func;
-	CtxHandle->log_msg_baton2 = baton;
-	CtxHandle->log_msg_func2 = &SvnClientCallBacks::svn_client_get_commit_log2;
+	CtxHandle->log_msg_baton3 = baton;
+	CtxHandle->log_msg_func3 = &SvnClientCallBacks::svn_client_get_commit_log3;
 	CtxHandle->notify_baton2 = baton;
 	CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
 	CtxHandle->progress_baton = baton;
@@ -154,7 +154,7 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 	}
 }
 
-svn_error_t* SvnClientCallBacks::svn_client_get_commit_log2(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
+svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
@@ -191,7 +191,7 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs(notify, pool);
+	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs(notify);
 
 	try
 	{
@@ -207,7 +207,7 @@ void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total, pool);
+	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total);
 
 	try
 	{
@@ -228,7 +228,7 @@ Uri^ SvnClient::GetUriFromPath(String^ path)
 
 	AprPool pool(_pool);
 
-	const char* url = NULL;
+	const char* url = nullptr;
 
 	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocString(path), pool.Handle);
 
@@ -253,7 +253,7 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 
 	AprPool pool(_pool);
 
-	const char* uuidStr = NULL;
+	const char* uuidStr = nullptr;
 
 	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocString(uri->ToString()), CtxHandle, pool.Handle);
 
