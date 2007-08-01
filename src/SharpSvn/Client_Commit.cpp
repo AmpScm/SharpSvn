@@ -7,28 +7,20 @@ using namespace SharpSvn;
 
 void SvnClient::Commit(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-
-	array<String^>^ paths = gcnew array<String^>(1);
-	SvnCommitArgs^ args = gcnew SvnCommitArgs();
-	paths[0] = path;
 
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	CommitInternal(safe_cast<ICollection<String^>^>(paths), args, false, commitInfo);
+	Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
 }
 
 void SvnClient::Commit(String^ path, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	array<String^>^ paths = gcnew array<String^>(1);
-	SvnCommitArgs^ args = gcnew SvnCommitArgs();
-	paths[0] = path;
-
-	CommitInternal(safe_cast<ICollection<String^>^>(paths), args, true, commitInfo);
+	Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
 }
 
 void SvnClient::Commit(ICollection<String^>^ paths)
@@ -36,11 +28,9 @@ void SvnClient::Commit(ICollection<String^>^ paths)
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	SvnCommitArgs^ args = gcnew SvnCommitArgs();
-
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	CommitInternal(paths, args, false, commitInfo);
+	Commit(paths, gcnew SvnCommitArgs(), commitInfo);
 }
 
 void SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo)
@@ -48,24 +38,19 @@ void SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commit
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	SvnCommitArgs^ args = gcnew SvnCommitArgs();
-
-	CommitInternal(paths, args, true, commitInfo);
+	Commit(paths, gcnew SvnCommitArgs(), commitInfo);
 }
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ paths = gcnew array<String^>(1);
-	paths[0] = path;
-
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	return CommitInternal(safe_cast<ICollection<String^>^>(paths), args, false, commitInfo);
+	return Commit(NewSingleItemCollection(path), args, commitInfo);
 }
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
@@ -75,10 +60,7 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% 
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ paths = gcnew array<String^>(1);
-	paths[0] = path;
-
-	return CommitInternal(safe_cast<ICollection<String^>^>(paths), args, true, commitInfo);
+	return Commit(NewSingleItemCollection(path), args, commitInfo);
 }
 
 bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
@@ -90,20 +72,10 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
 
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	return CommitInternal(paths, args, false, commitInfo);
+	return Commit(paths, args, commitInfo);
 }
 
 bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
-{
-	if(!paths)
-		throw gcnew ArgumentNullException("paths");
-	else if(!args)
-		throw gcnew ArgumentNullException("args");
-
-	return CommitInternal(paths, args, true, commitInfo);
-}
-
-bool SvnClient::CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -141,7 +113,7 @@ bool SvnClient::CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args,
 			CtxHandle,
 			pool.Handle);
 
-		if(requireInfo && commitInfoPtr)
+		if(commitInfoPtr)
 			commitInfo = gcnew SvnCommitInfo(commitInfoPtr);
 		else
 			commitInfo = nullptr;

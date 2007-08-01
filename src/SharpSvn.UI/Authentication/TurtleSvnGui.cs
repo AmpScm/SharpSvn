@@ -30,6 +30,12 @@ namespace SharpSvn.UI.Authentication
 		}
 
 		static Regex _realmRegex;
+		/// <summary>
+		/// Makes the description.
+		/// </summary>
+		/// <param name="realm">The realm.</param>
+		/// <param name="format">The format.</param>
+		/// <returns></returns>
 		static string MakeDescription(string realm, string format)
 		{
 			if(null == _realmRegex)
@@ -45,6 +51,16 @@ namespace SharpSvn.UI.Authentication
 				return string.Format(format, "", realm);
 		}
 
+		/// <summary>
+		/// Asks the username.
+		/// </summary>
+		/// <param name="parentHandle">The parent handle.</param>
+		/// <param name="title">The title.</param>
+		/// <param name="realm">The realm.</param>
+		/// <param name="maySave">if set to <c>true</c> [may save].</param>
+		/// <param name="username">The username.</param>
+		/// <param name="save">if set to <c>true</c> [save].</param>
+		/// <returns></returns>
 		public static bool AskUsername(IntPtr parentHandle, string title, string realm, bool maySave, out string username, out bool save)
 		{
 			using (UsernameDialog dlg = new UsernameDialog())
@@ -70,6 +86,18 @@ namespace SharpSvn.UI.Authentication
 			}
 		}
 
+		/// <summary>
+		/// Asks the username password.
+		/// </summary>
+		/// <param name="parentHandle">The parent handle.</param>
+		/// <param name="title">The title.</param>
+		/// <param name="realm">The realm.</param>
+		/// <param name="initialUsername">The initial username.</param>
+		/// <param name="maySave">if set to <c>true</c> [may save].</param>
+		/// <param name="username">The username.</param>
+		/// <param name="password">The password.</param>
+		/// <param name="save">if set to <c>true</c> [save].</param>
+		/// <returns></returns>
 		public static bool AskUsernamePassword(IntPtr parentHandle, string title, string realm, string initialUsername, bool maySave, out string username, out string password, out bool save)
 		{
 			string description = MakeDescription(realm, Strings.TheServerXatYRequiresAUsernameAndPassword);
@@ -137,10 +165,17 @@ namespace SharpSvn.UI.Authentication
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public class ServerCertificateInfo
 		{
 			string _hostname;
 
+			/// <summary>
+			/// Gets or sets the hostname.
+			/// </summary>
+			/// <value>The hostname.</value>
 			public string Hostname
 			{
 				get { return _hostname; }
@@ -148,6 +183,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			string _fingerprint;
 
+			/// <summary>
+			/// Gets or sets the fingerprint.
+			/// </summary>
+			/// <value>The fingerprint.</value>
 			public string Fingerprint
 			{
 				get { return _fingerprint; }
@@ -155,6 +194,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			string _validFrom;
 
+			/// <summary>
+			/// Gets or sets the valid from.
+			/// </summary>
+			/// <value>The valid from.</value>
 			public string ValidFrom
 			{
 				get { return _validFrom; }
@@ -162,6 +205,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			string _validTo;
 
+			/// <summary>
+			/// Gets or sets the valid to.
+			/// </summary>
+			/// <value>The valid to.</value>
 			public string ValidTo
 			{
 				get { return _validTo; }
@@ -169,6 +216,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			string _issuer;
 
+			/// <summary>
+			/// Gets or sets the issuer.
+			/// </summary>
+			/// <value>The issuer.</value>
 			public string Issuer
 			{
 				get { return _issuer; }
@@ -176,6 +227,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			string _certificate;
 
+			/// <summary>
+			/// Gets or sets the certificate.
+			/// </summary>
+			/// <value>The certificate.</value>
 			public string Certificate
 			{
 				get { return _certificate; }
@@ -184,6 +239,10 @@ namespace SharpSvn.UI.Authentication
 
 			bool _noTrustedIssuer;
 
+			/// <summary>
+			/// Gets or sets a value indicating whether [no trusted issuer].
+			/// </summary>
+			/// <value><c>true</c> if [no trusted issuer]; otherwise, <c>false</c>.</value>
 			public bool NoTrustedIssuer
 			{
 				get { return _noTrustedIssuer; }
@@ -191,6 +250,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			bool _timeError;
 
+			/// <summary>
+			/// Gets or sets a value indicating whether [time error].
+			/// </summary>
+			/// <value><c>true</c> if [time error]; otherwise, <c>false</c>.</value>
 			public bool TimeError
 			{
 				get { return _timeError; }
@@ -198,6 +261,10 @@ namespace SharpSvn.UI.Authentication
 			}
 			bool _invalidCommonName;
 
+			/// <summary>
+			/// Gets or sets a value indicating whether [invalid common name].
+			/// </summary>
+			/// <value><c>true</c> if [invalid common name]; otherwise, <c>false</c>.</value>
 			public bool InvalidCommonName
 			{
 				get { return _invalidCommonName; }
@@ -205,6 +272,17 @@ namespace SharpSvn.UI.Authentication
 			}
 		}
 
+		/// <summary>
+		/// Asks the server certificate trust.
+		/// </summary>
+		/// <param name="parentHandle">The parent handle.</param>
+		/// <param name="title">The title.</param>
+		/// <param name="realm">The realm.</param>
+		/// <param name="info">The info.</param>
+		/// <param name="maySave">if set to <c>true</c> [may save].</param>
+		/// <param name="accept">if set to <c>true</c> [accept].</param>
+		/// <param name="save">if set to <c>true</c> [save].</param>
+		/// <returns></returns>
 		public static bool AskServerCertificateTrust(IntPtr parentHandle, string title, string realm, ServerCertificateInfo info, bool maySave, out bool accept, out bool save)
 		{
 			using (SslServerCertificateTrustDialog dlg = new SslServerCertificateTrustDialog())
@@ -239,6 +317,16 @@ namespace SharpSvn.UI.Authentication
 			}
 		}
 
+		/// <summary>
+		/// Asks the client certificate file.
+		/// </summary>
+		/// <param name="parentHandle">The parent handle.</param>
+		/// <param name="title">The title.</param>
+		/// <param name="realm">The realm.</param>
+		/// <param name="maySave">if set to <c>true</c> [may save].</param>
+		/// <param name="filename">The filename.</param>
+		/// <param name="save">if set to <c>true</c> [save].</param>
+		/// <returns></returns>
 		public static bool AskClientCertificateFile(IntPtr parentHandle, string title, string realm, bool maySave, out string filename, out bool save)
 		{
 			filename = null;
@@ -246,6 +334,16 @@ namespace SharpSvn.UI.Authentication
 			return false;
 		}
 
+		/// <summary>
+		/// Asks the client certificate pass phrase.
+		/// </summary>
+		/// <param name="parentHandle">The parent handle.</param>
+		/// <param name="title">The title.</param>
+		/// <param name="realm">The realm.</param>
+		/// <param name="maySave">if set to <c>true</c> [may save].</param>
+		/// <param name="passPhrase">The pass phrase.</param>
+		/// <param name="save">if set to <c>true</c> [save].</param>
+		/// <returns></returns>
 		public static bool AskClientCertificatePassPhrase(IntPtr parentHandle, string title, string realm, bool maySave, out string passPhrase, out bool save)
 		{
 			using (SslClientCertificatePassPhraseDialog dlg = new SslClientCertificatePassPhraseDialog())
@@ -269,6 +367,20 @@ namespace SharpSvn.UI.Authentication
 
 				return true;
 			}
+		}
+
+		/// <summary>
+		/// Determines whether [has win32 handle] [the specified owner].
+		/// </summary>
+		/// <param name="owner">The owner.</param>
+		/// <returns>
+		/// 	<c>true</c> if [has win32 handle] [the specified owner]; otherwise, <c>false</c>.
+		/// </returns>
+		public static bool HasWin32Handle(Object owner)
+		{
+			IWin32Window window = owner as IWin32Window;
+
+			return (window != null) && window.Handle != IntPtr.Zero;
 		}
 	}
 }

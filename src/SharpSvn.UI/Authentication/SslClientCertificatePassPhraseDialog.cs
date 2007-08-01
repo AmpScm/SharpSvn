@@ -8,8 +8,14 @@ using System.Windows.Forms;
 
 namespace SharpSvn.UI.Authentication
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class SslClientCertificatePassPhraseDialog : Form
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SslClientCertificatePassPhraseDialog"/> class.
+		/// </summary>
 		public SslClientCertificatePassPhraseDialog()
 		{
 			InitializeComponent();

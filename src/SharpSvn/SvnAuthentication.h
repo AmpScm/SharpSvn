@@ -10,15 +10,6 @@ namespace SharpSvn {
 		using System::Collections::Generic::Dictionary;
 		using System::Collections::Generic::List;
 
-		public interface class IParentWindowHandleProvider
-		{
-			property IntPtr ParentWindowHandle
-			{
-				IntPtr get();
-			}
-		};
-
-
 		ref class SvnAuthentication;
 
 		public ref class SvnAuthorizationArgs abstract: public EventArgs
@@ -491,7 +482,7 @@ namespace SharpSvn {
 		{
 			Dictionary<Delegate^, ISvnAuthWrapper^>^ _wrappers;
 			List<ISvnAuthWrapper^>^ _handlers;
-			IParentWindowHandleProvider^ _parentWindowHandleProvider;
+			Object^ _parentWindow;
 			bool _readOnly;
 			int _cookie;
 
@@ -511,16 +502,19 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Allows users to provide a parent window handle to use as owner of popup windows</summary>
-			property IParentWindowHandleProvider^ WindowHandleProvider
+			property Object^ ParentWindow
 			{
-				IParentWindowHandleProvider^ get()
+				Object^ get()
 				{
-					return _parentWindowHandleProvider;
+					return _parentWindow;
 				}
 
-				void set(IParentWindowHandleProvider^ value)
+				void set(Object^ value)
 				{
-					_parentWindowHandleProvider = value;
+					if(!value || SharpSvn::UI::Authentication::TurtleSvnGui::HasWin32Handle(value))
+						_parentWindow = value;
+					else
+						throw gcnew ArgumentException("Parent window has no Win32 handle", "value");
 				}
 			}
 

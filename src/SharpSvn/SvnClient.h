@@ -466,9 +466,6 @@ namespace SharpSvn {
 		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args);
 		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-
-	private:
-		bool CommitInternal(ICollection<String^>^ paths, SvnCommitArgs^ args, bool requireInfo, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 

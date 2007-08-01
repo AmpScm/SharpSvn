@@ -78,7 +78,6 @@
 			<Tool
 				Name="VCManifestTool"
 				VerboseOutput="true"
-				AssemblyIdentity="QQn.SharpSvn, processorArchitecture=x86, version=1.4.2.0, type=win32"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -125,6 +124,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				Optimization="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"

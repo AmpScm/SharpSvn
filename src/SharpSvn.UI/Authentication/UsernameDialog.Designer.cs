@@ -1,5 +1,8 @@
 namespace SharpSvn.UI.Authentication
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	partial class UsernameDialog
 	{
 		/// <summary>

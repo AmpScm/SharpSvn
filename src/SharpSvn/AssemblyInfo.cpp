@@ -18,7 +18,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("QQn")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) QQn Project 2007")];
+[assembly:AssemblyCopyrightAttribute("Copyright © QQn Project 2007")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -43,7 +43,6 @@ using namespace System::Security::Permissions;
 
 #pragma comment(lib, "ole32.lib")
 
-//#pragma comment(lib, "libapr.lib")
 #pragma comment(lib, "libsvn_client-1.lib")
 #pragma comment(lib, "libsvn_delta-1.lib")
 #pragma comment(lib, "libsvn_diff-1.lib")
@@ -90,5 +89,5 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "apriconv.lib")
 #pragma comment(lib, "aprutil-1.lib")
 #else
-#error Only apr 0.9.* and 1.* are supported
+#error Only apr 0.9.* and 1.* are supported at this time
 #endif
