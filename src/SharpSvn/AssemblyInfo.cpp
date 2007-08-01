@@ -86,7 +86,7 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "aprutil.lib")
 #elif (APR_MAJOR_VERSION >= 1)
 #pragma comment(lib, "apr-1.lib")
-#pragma comment(lib, "apriconv.lib")
+#pragma comment(lib, "apriconv-1.lib")
 #pragma comment(lib, "aprutil-1.lib")
 #else
 #error Only apr 0.9.* and 1.* are supported at this time

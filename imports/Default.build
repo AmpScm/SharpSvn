@@ -3,24 +3,20 @@
 	<property name="svnTrunkBuild" value="true" />
 
 	<!-- -->
-	<property name="subversionVersion" value="1.4.4" if="${svnTrunkBuild == 'false'}" />	
-	<property name="subversionVersion" value="1.5.0" if="${svnTrunkBuild == 'true'}" />		
+	<property name="subversionVersion" value="1.5.0" />
 	<!-- -->
-	<property name="withSerf" value="true" />
-
 	<property name="opensslVersion" value="0.9.8e" />
 	<property name="neonVersion" value="0.26.3" />
 
 	<property name="aprVersion" value="1.2.9" />
 	<property name="aprUtilVersion" value="1.2.8" />
 	<property name="aprIconvVersion" value="1.2.0" />
-	<property name="bdbVersion" value="4.4.20.NC" />
+	<property name="dbVersion" value="4.4.20.NC" />
 	<property name="zlibVersion" value="1.2.3" />
 	<property name="serfVersion" value="0.1.2" />
 	<property name="sqliteVersion" value="3.4.1" />
 	
 	<property name="httpOrHttps" value="http" />
-
 
 	<include buildfile="scripts/default.build" />
 </project>
