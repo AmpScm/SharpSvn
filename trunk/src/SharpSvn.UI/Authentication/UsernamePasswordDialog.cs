@@ -10,6 +10,9 @@ namespace SharpSvn.UI.Authentication
 {
 	public partial class UsernamePasswordDialog : Form
 	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="UsernamePasswordDialog"/> class.
+		/// </summary>
 		public UsernamePasswordDialog()
 		{
 			InitializeComponent();
