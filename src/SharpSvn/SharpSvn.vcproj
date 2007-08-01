@@ -125,7 +125,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
 				PreprocessorDefinitions="WIN32;NDEBUG"
 				StringPooling="true"
 				RuntimeLibrary="2"
