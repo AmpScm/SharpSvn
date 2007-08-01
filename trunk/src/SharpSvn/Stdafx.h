@@ -8,6 +8,7 @@
 #pragma warning(disable: 4635)
 #pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target. 
 #include <apr.h>
+#include <apr_file_io.h>
 #include <svn_client.h>
 #include <svn_time.h>
 

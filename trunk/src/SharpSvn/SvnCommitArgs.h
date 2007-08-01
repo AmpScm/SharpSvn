@@ -147,7 +147,7 @@ namespace SharpSvn {
 		{
 			virtual int get()
 			{
-				return sizeof(svn_client_commit_item2_t*);
+				return sizeof(svn_client_commit_item3_t*);
 			}
 		}
 

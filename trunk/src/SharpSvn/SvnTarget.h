@@ -139,6 +139,8 @@ namespace SharpSvn {
 	internal:
 		svn_opt_revision_t ToSvnRevision();
 
+		svn_opt_revision_t* AllocSvnRevision(AprPool ^pool);
+
 	public:
 		static initonly SvnRevision^ None		= gcnew SvnRevision(SvnRevisionType::None);
 		static initonly SvnRevision^ Head		= gcnew SvnRevision(SvnRevisionType::Head);

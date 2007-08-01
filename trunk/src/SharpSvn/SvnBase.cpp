@@ -7,6 +7,10 @@
 
 #include <apr_general.h>
 
+#include "AprArray.h"
+#include "SvnTarget.h"
+
+
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
@@ -157,3 +161,63 @@ array<char>^ SvnHandleBase::PtrToByteArray(const char* ptr, int length)
 	return SvnBase::PtrToByteArray(ptr, length);
 }
 
+ref class SvnCopyTargetMarshaller : public SvnBase, public IItemMarshaller<SvnTarget^>
+{
+public:
+	SvnCopyTargetMarshaller()
+	{}
+
+	property int ItemSize
+	{
+		virtual int get()
+		{
+			return sizeof(svn_client_copy_source_t*);
+		}
+	}
+
+	virtual void Write(SvnTarget^ value, void* ptr, AprPool^ pool)
+	{
+		svn_client_copy_source_t **src = (svn_client_copy_source_t**)&ptr;
+		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
+		
+		(*src)->path = pool->AllocString(value->TargetName);
+		(*src)->revision = value->Revision->AllocSvnRevision(pool);
+	}
+
+	virtual SvnTarget^ Read(const void* ptr)
+	{
+		//const char** ppcStr = (const char**)ptr;
+
+		return nullptr;
+	}
+};
+
+apr_array_header_t *SvnHandleBase::AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool)
+{
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
+
+	for each(SvnTarget^ s in targets)
+	{
+		if(!s)
+			throw gcnew ArgumentException("SvnTarget in targets is null", "targets");
+	}
+	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
+
+	return aprTargets->Handle;
+}
+
+apr_array_header_t *SvnHandleBase::AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool)
+{
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
+
+	for each(SvnTarget^ s in targets)
+	{
+		if(!s)
+			throw gcnew ArgumentException("SvnTarget in targets is null", "targets");
+	}
+	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
+
+	return aprTargets->Handle;
+}

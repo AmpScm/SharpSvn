@@ -37,6 +37,7 @@ namespace SharpSvn {
 		internal:
 			AprArray(ICollection<T>^ items, AprPool ^pool);
 			AprArray(const apr_array_header_t* handle, AprPool ^pool);
+			AprArray(System::Collections::IEnumerable^ items, AprPool ^pool);
 
 		internal:
 			property apr_array_header_t *Handle

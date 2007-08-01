@@ -31,17 +31,22 @@ void SvnClientBeforeCommitEventArgs::Detach(bool keepProperties)
 	if(!_commitItems)
 		return;
 
-	if(keepProperties)
+	try
 	{
-		if(Items)
-			for each(SvnCommitItem^ item in Items)
-			{
-				item->Detach(true);
-			}
+		if(keepProperties)
+		{
+			if(Items)
+				for each(SvnCommitItem^ item in Items)
+				{
+					item->Detach(true);
+				}
+		}
 	}
-
-	_commitItems = nullptr;
-	_pool = nullptr;
+	finally
+	{
+		_commitItems = nullptr;
+		_pool = nullptr;
+	}
 }
 
 SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo)

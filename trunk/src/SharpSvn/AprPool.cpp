@@ -337,3 +337,4 @@ const svn_string_t* AprPool::AllocSvnString(array<char>^ bytes, apr_pool_t *pool
 
 	return pStr;
 }
+

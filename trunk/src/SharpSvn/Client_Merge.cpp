@@ -97,8 +97,6 @@ bool SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Str
 	_currentArgs = args;
 	try
 	{
-		apr_array_header_t *merge_options = nullptr;
-
 		svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
 		svn_opt_revision_t fromRev = from->ToSvnRevision();
 		svn_opt_revision_t toRev = to->ToSvnRevision();
@@ -114,7 +112,7 @@ bool SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Str
 			args->Force,
 			args->RecordOnly,
 			args->DryRun,
-			merge_options,
+			args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
 			CtxHandle,
 			pool.Handle);
 

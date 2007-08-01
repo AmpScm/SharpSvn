@@ -1028,9 +1028,37 @@ namespace SharpSvn {
 
 	public ref class SvnCopyArgs : public SvnClientArgsWithCommit
 	{
+		bool _makeParents;
+		bool _alwaysCopyBelow;
+
 	public:
 		SvnCopyArgs()
 		{
+		}
+
+		property bool MakeParents
+		{
+			bool get()
+			{
+				return _makeParents;
+			}
+			void set(bool value)
+			{
+				_makeParents = value;
+			}
+		}
+
+		/// <summary>Always copies the result to below the target (this behaviour is always used if multiple targets are provided)</summary>
+		property bool AlwaysCopyAsChild
+		{
+			bool get()
+			{
+				return _alwaysCopyBelow;
+			}
+			void set(bool value)
+			{
+				_alwaysCopyBelow = value;
+			}
 		}
 	};
 
@@ -1038,6 +1066,7 @@ namespace SharpSvn {
 	{
 		bool _force;
 		bool _moveAsChild;
+		bool _makeParents;
 	public:
 		SvnMoveArgs()
 		{
@@ -1055,7 +1084,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool MoveAsChild
+		property bool AlwaysMoveAsChild
 		{
 			bool get()
 			{
@@ -1064,6 +1093,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_moveAsChild = value;
+			}
+		}
+
+		property bool MakeParents
+		{
+			bool get()
+			{
+				return _makeParents;
+			}
+			void set(bool value)
+			{
+				_makeParents = value;
 			}
 		}
 	};
@@ -1298,6 +1339,7 @@ namespace SharpSvn {
 		bool _force;
 		bool _recordOnly;
 		bool _dryRun;
+		IList<String^>^ _mergeArguments;
 	public:
 		SvnMergeArgs()
 		{
@@ -1362,6 +1404,111 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_dryRun = value;
+			}
+		}
+
+		property IList<String^>^ MergeArguments
+		{
+			IList<String^>^ get()
+			{
+				return _mergeArguments;
+			}
+			void set(IList<String^>^ value)
+			{
+				if(value)
+					_mergeArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
+				else
+					_mergeArguments = nullptr;
+			}
+		}
+	};
+
+	public ref class SvnDiffArgs : public SvnClientArgs
+	{
+		SvnDepth _depth;
+		bool _ignoreAncestry;
+		bool _noDeleted;
+		bool _ignoreContentType;
+		String^ _headerEncoding;
+		IList<String^>^ _diffArguments;
+	public:
+		SvnDiffArgs()
+		{
+			_depth = SvnDepth::Infinity;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = value;
+			}
+		}
+
+		property bool IgnoreAncestry
+		{
+			bool get()
+			{
+				return _ignoreAncestry;
+			}
+			void set(bool value)
+			{
+				_ignoreAncestry = value;
+			}
+		}
+
+		property bool NoDeleted
+		{
+			bool get()
+			{
+				return _noDeleted;
+			}
+			void set(bool value)
+			{
+				_noDeleted = value;
+			}
+		}
+
+		property bool IgnoreContentType
+		{
+			bool get()
+			{
+				return _ignoreContentType;
+			}
+			void set(bool value)
+			{
+				_ignoreContentType = value;
+			}
+		}
+
+		property String^ HeaderEncoding
+		{
+			String^ get()
+			{
+				return _headerEncoding ? _headerEncoding : "utf-8";
+			}
+			void set(String^ value)
+			{
+				_headerEncoding = value;
+			}
+		}
+
+		property IList<String^>^ DiffArguments
+		{
+			IList<String^>^ get()
+			{
+				return _diffArguments;
+			}
+			void set(IList<String^>^ value)
+			{
+				if(value)
+					_diffArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
+				else
+					_diffArguments = nullptr;
 			}
 		}
 	};
