@@ -336,7 +336,8 @@
 			</loadfile>
 			<echo file="build/subversion/neon/config.hw" message="${configfile}" unless="${file::exists('build/subversion/neon/config.hw')}" />
 			<echo file="build/subversion/neon/config.h" message="${configfile}" unless="${file::exists('build/subversion/neon/config.h')}" />
-			<touch file="${'build/neon-' + neonVersion +'.prepared'}" />
+			<echo file="build/subversion/neon/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
+			<touch file="${'build/neon-' + neonVersion +'.prepared'}" />			
 		</if>
 	</target>
 	<target name="prepare-serf" depends="checkout">
@@ -542,8 +543,10 @@
 				<include name="**/libsvn_*.lib" />
 				<include name="**/lib*.pdb" />
 				<include name="**/src*.pdb" />
+				<include name="serf/**/*.lib" />
 				<include name="serf/**/*.pdb" />
 				<include name="neon/**/*.pdb" />
+				<include name="apr-util/xml/**/*.lib" />
 				<include name="**/*.dll" />
 
 				<!-- Don't copy the GPL as a *.lib file -->
@@ -558,16 +561,40 @@
 				<include name="apr-util/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}"/>
 				<include name="apr-iconv/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}"/>
 
+        
+        
 				<include name="apr/LibR/*.pdb" />
-				<include name="apr-util/LibR/*.pdb" />				
+				<include name="apr-util/LibR/*.pdb" />
 			</fileset>
 		</copy>
-		<copy todir="release/include" flatten="true">
-			<fileset basedir="build\subversion">
-				<include name="subversion/include/**.h" />
-				<include name="apr/include/**.h" />
-				<include name="apr-util/include/**.h" />
-				<include name="apr-iconv/include/**.h" />
+		<copy todir="release/include">
+			<fileset basedir="build\subversion\subversion\include">
+				<include name="**/*.h" />
+      </fileset>
+    </copy>
+    <copy todir="release/include/serf">
+			<fileset basedir="build\subversion\serf">
+				<include name="**/*.h" />
+      </fileset>
+    </copy>
+    <copy todir="release/include/neon">
+			<fileset basedir="build\subversion\neon\src">
+				<include name="**/*.h" />
+      </fileset>
+    </copy>
+		<copy todir="release/include/apr-1">
+			<fileset basedir="build\subversion\apr\include">
+				<include name="**.h" />
+			</fileset>
+		</copy>
+		<copy todir="release/include/apr-1">
+			<fileset basedir="build\subversion\apr-util\include">
+				<include name="**.h" />
+      </fileset>
+		</copy>
+		<copy todir="release/include/apr-1">
+      <fileset basedir="build\subversion\apr-iconv\include">
+				<include name="**.h" />
 			</fileset>
 		</copy>
 	</target>
