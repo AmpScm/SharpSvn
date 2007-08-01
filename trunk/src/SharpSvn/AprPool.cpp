@@ -2,7 +2,7 @@
 #include "AprPool.h"
 #include "AprException.h"
 
-#include <apr_pools.h>
+#include <apr-1/apr_pools.h>
 #include <svn_path.h>
 
 using namespace SharpSvn::Apr;

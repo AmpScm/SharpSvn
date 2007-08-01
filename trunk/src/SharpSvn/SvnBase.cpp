@@ -5,7 +5,7 @@
 #include "svn_dso.h"
 #include "svn_utf.h"
 
-#include <apr_general.h>
+#include <apr-1/apr_general.h>
 
 #include "AprArray.h"
 #include "SvnTarget.h"
