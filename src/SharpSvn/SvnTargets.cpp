@@ -57,6 +57,18 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 	return r;
 }
 
+svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
+{
+	if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	svn_opt_revision_t *rev = (svn_opt_revision_t *)pool->Alloc(sizeof(svn_opt_revision_t));
+
+	*rev = ToSvnRevision();
+
+	return rev;
+}
+
 bool SvnTarget::TryParse(String^ targetString, [Out] SvnTarget^% target)
 {
 	if(String::IsNullOrEmpty(targetString))

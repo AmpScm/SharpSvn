@@ -22,6 +22,7 @@ namespace SharpSvn {
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 	using System::IO::Stream;
+	using System::IO::FileStream;
 
 	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
 	/// <remarks><para>Please note: the subversion is not thread safe. You can use an SvnClient from a single thread at a time</para>
@@ -508,22 +509,34 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Copy Client Command
 		void Copy(SvnTarget^ sourceTarget, String^ toPath);
+		void Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath);
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
+		bool Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, SvnCopyArgs^ args);
 		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri);
+		void RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri);
 		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		void RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
 		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
+		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
 		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 	public:
 		/////////////////////////////////////////
 #pragma region // Move Client Command
 		void Move(String^ sourcePath, String^ toPath);
+		void Move(ICollection<String^>^ sourcePaths, String^ toPath);
 		bool Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args);
+		bool Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveArgs^ args);
 		void RemoteMove(Uri^ sourceUri, Uri^ toUri);
+		void RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri);
 		void RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		void RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args);
+		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args);
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 public:
@@ -623,8 +636,15 @@ public:
 		bool Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath, SvnMergeArgs^ args);
 #pragma endregion
 
+	public:
+		/////////////////////////////////////////
+#pragma region // GetProperty Client Command
+		void Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result);
+		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
+		void Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result);
+		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
+#pragma endregion
 		// TODO:
-		// Merge + MergePeg
 		// Diff + DiffPeg + DiffSummarize + DiffSummarizePeg
 		// Retrieving MergeInfo
 		// AddToChangeList + RemoveFromChangeList + GetChangeList

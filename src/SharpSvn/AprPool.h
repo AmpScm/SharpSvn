@@ -2,7 +2,7 @@
 #pragma once
 
 using namespace System;
-
+using System::Collections::Generic::ICollection;
 #include "SvnBase.h"
 
 

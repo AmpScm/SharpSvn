@@ -404,6 +404,7 @@
 			</Filter>
 			<Filter
 				Name="Commands"
+				Filter="Client_*.cpp"
 				>
 				<File
 					RelativePath=".\Client_Add.cpp"
@@ -431,6 +432,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_Delete.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_Diff.cpp"
 					>
 				</File>
 				<File
