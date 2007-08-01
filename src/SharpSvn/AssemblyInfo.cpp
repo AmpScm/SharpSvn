@@ -36,7 +36,7 @@ using namespace System::Security::Permissions;
 									   ", apr-iconv " API_VERSION_STRING
 									   ", neon " NEON_VERSION 
 									   ", serf " SERF_VERSION 
-									   "and " OPENSSL_VERSION_TEXT 
+									   " and " OPENSSL_VERSION_TEXT 
 									   " and linked to Berkeley DB" BDB_VERSION ")")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("QQn Project")];
