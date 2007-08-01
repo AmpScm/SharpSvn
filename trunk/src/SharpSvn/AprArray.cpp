@@ -34,7 +34,10 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 
 	int nItems = 0;
 	for each(T t in items)
+	{
+		UNUSED_ALWAYS(t);
 		nItems++;
+	}
 
 	_marshaller = Activator::CreateInstance<R>();
 	_pool = pool;

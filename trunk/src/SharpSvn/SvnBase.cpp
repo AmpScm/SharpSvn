@@ -186,6 +186,7 @@ public:
 
 	virtual SvnTarget^ Read(const void* ptr)
 	{
+		UNUSED_ALWAYS(ptr);
 		//const char** ppcStr = (const char**)ptr;
 
 		return nullptr;
