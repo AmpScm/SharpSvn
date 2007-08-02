@@ -55,7 +55,7 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

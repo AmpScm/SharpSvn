@@ -59,7 +59,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 
 	AprPool pool(_pool);
 	_currentArgs = args;
-	
+
 	try
 	{
 		if(	apr_file_open(&tmpOut, pool.AllocPath(tempOut), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
@@ -148,7 +148,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 
 	AprPool pool(_pool);
 	_currentArgs = args;
-	
+
 	try
 	{
 		apr_array_header_t *diff_options = nullptr;

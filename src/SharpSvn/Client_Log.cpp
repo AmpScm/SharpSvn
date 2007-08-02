@@ -61,7 +61,7 @@ bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets
 				throw gcnew ArgumentException("One of the relative uri's is null", "relativeTargets");
 
 			Uri^ relUri = baseUri->MakeRelativeUri(gcnew Uri(baseUri, uri));
-			
+
 			if(relUri->IsAbsoluteUri)
 				throw gcnew ArgumentException("One of the relative uri's is not relative", "relativeTargets");
 
@@ -165,7 +165,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 			args->OnLog(e);
 
 			if(e->Cancel)
-				return svn_error_create (SVN_ERR_CANCELLED, NULL, "Log receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Log receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{

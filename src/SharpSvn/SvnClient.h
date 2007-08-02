@@ -292,7 +292,7 @@ namespace SharpSvn {
 	internal:
 		generic<typename T>
 		where T : SvnClientEventArgs
-		ref class InfoItemList : public System::Collections::Generic::List<T>
+		ref class InfoItemList : public System::Collections::ObjectModel::Collection<T>
 		{
 		public:
 			InfoItemList()
@@ -536,7 +536,7 @@ namespace SharpSvn {
 		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
-public:
+	public:
 		/////////////////////////////////////////
 #pragma region // Lock Client Command
 		void Lock(String^ target, String^ comment);
@@ -547,7 +547,7 @@ public:
 		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
 #pragma endregion
 
-public:
+	public:
 		/////////////////////////////////////////
 #pragma region // Lock Client Command
 		void Unlock(String^ target);
@@ -593,7 +593,7 @@ public:
 		/// <summary>Gets the specified property from the specfied path</summary>
 		/// <returns>true if property is set, otherwise false</returns>
 		/// <exception type="SvnException">path is not a valid workingcopy path</exception>
-		void GetProperty(SvnTarget^ target, String^ propertyName, IList<char>^% bytes);
+		void GetProperty(SvnTarget^ target, String^ propertyName, [Out] IList<char>^% bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
 		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] IDictionary<SvnTarget^, String^>^% properties);
@@ -607,7 +607,7 @@ public:
 		bool TryGetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
 #pragma endregion
 
-public:
+	public:
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
 		void PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
@@ -641,15 +641,31 @@ public:
 		void Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result);
 		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
 #pragma endregion
+
+	public:
+		void AddToChangeList(String^ path, String^ changeList);
+		bool AddToChangeList(String^ path, String^ changeList, SvnAddToChangeListArgs^ args);
+		void AddToChangeList(ICollection<String^>^ paths, String^ changeList);
+		bool AddToChangeList(ICollection<String^>^ paths, String^ changeList, SvnAddToChangeListArgs^ args);
+		void RemoveFromChangeList(String^ path, String^ changeList);
+		bool RemoveFromChangeList(String^ path, String^ changeList, SvnRemoveFromChangeListArgs^ args);
+		void RemoveFromChangeList(ICollection<String^>^ paths, String^ changeList);
+		bool RemoveFromChangeList(ICollection<String^>^ paths, String^ changeList, SvnRemoveFromChangeListArgs^ args);
+		void ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
+		bool ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler, SvnListChangeListArgs^ args);
+
+		void GetChangeList(String^ changeList, String^ rootPath, [Out]IList<String^>^% list);
+		bool GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<String^>^% list);
+		void GetChangeList(String^ changeList, String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
+
 		// TODO:
-		// Diff + DiffPeg + DiffSummarize + DiffSummarizePeg
-		// Retrieving MergeInfo
-		// AddToChangeList + RemoveFromChangeList + GetChangeList
+		// Retrieving MergeInfo (svn_client_get_mergeinfo)
 
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
-		Uri^ GetUriFromPath(String^ path);
+		Uri^ GetUriFromWorkingCopy(String^ path);
 
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>

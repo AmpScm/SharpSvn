@@ -14,12 +14,20 @@ SvnException^ SvnException::Create(svn_error_t *error)
 
 	try
 	{
-		if(error->apr_err == SVN_ERR_CANCELLED)
-			return SvnOperationCanceledException::Create(error);
-		else if(APR_STATUS_IS_EACCES(error->apr_err))
-			return SvnAuthorizationException::Create(error);
-		else
-			return gcnew SvnException(error);
+		switch(error->apr_err)
+		{
+		case SVN_ERR_CANCELLED:
+			return gcnew SvnOperationCanceledException(error);
+
+		case SVN_ERR_CEASE_INVOCATION:
+			return gcnew SvnOperationCompletedException(error);
+
+		default:
+			if(APR_STATUS_IS_EACCES(error->apr_err))
+				return gcnew SvnAuthorizationException(error);
+			else
+				return gcnew SvnException(error);
+		}
 	}
 	finally
 	{

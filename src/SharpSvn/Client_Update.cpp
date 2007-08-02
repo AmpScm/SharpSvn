@@ -7,7 +7,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Update(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	array<String^>^ paths = gcnew array<String^>(1);
@@ -19,12 +19,12 @@ void SvnClient::Update(String^ path)
 
 void SvnClient::Update(String^ path, [Out] __int64% revision)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	array<__int64>^ revisions = gcnew array<__int64>(1);
 	array<String^>^ paths = gcnew array<String^>(1);
-	
+
 	revision = -1;
 
 	paths[0] = path;
@@ -37,7 +37,7 @@ void SvnClient::Update(String^ path, [Out] __int64% revision)
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -51,7 +51,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revision)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

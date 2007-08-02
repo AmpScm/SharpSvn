@@ -27,7 +27,7 @@ namespace SharpSvn {
 
 		generic<typename T, typename R>
 		where R : IItemMarshaller<T>
-		ref class AprArray : public SvnHandleBase, public System::Collections::Generic::ICollection<T>
+		ref class AprArray : public SvnHandleBase
 		{
 			AprPool^ _pool;
 			apr_array_header_t *_handle;
@@ -73,44 +73,19 @@ namespace SharpSvn {
 				}
 			}
 
-			virtual void Add(T item)
+			array<T>^ ToArray()
 			{
-				UNUSED_ALWAYS(item);
-				throw gcnew NotImplementedException();
+				array<T>^ items = gcnew array<T>(Count);
+
+				CopyTo(items, 0);
+
+				return items;
 			}
 
-			virtual void Clear()
+			void CopyTo(array<T>^ item, int offset)
 			{
-				throw gcnew NotImplementedException();
-			}
-
-			virtual bool Remove(T item)
-			{
-				UNUSED_ALWAYS(item);
-				throw gcnew NotImplementedException();
-			}
-
-			virtual void CopyTo(array<T>^ item, int offset)
-			{
-				UNUSED_ALWAYS(item);
-				UNUSED_ALWAYS(offset);
-				throw gcnew NotImplementedException();
-			}
-
-			virtual bool Contains(T item)
-			{
-				UNUSED_ALWAYS(item);
-				throw gcnew NotImplementedException();
-			}
-
-			virtual System::Collections::Generic::IEnumerator<T>^ GetGenericEnumerator() = System::Collections::Generic::IEnumerable<T>::GetEnumerator
-			{
-				throw gcnew NotImplementedException();
-			}
-
-			virtual System::Collections::IEnumerator^ GetEnumerator()
-			{
-				throw gcnew NotImplementedException();
+				for(int i = 0; i < Count; i++)
+					item[i+offset] = default[i];				
 			}
 
 			property bool IsReadOnly

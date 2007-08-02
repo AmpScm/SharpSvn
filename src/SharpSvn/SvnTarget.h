@@ -208,7 +208,7 @@ namespace SharpSvn {
 
 			if(!String::Equals(target->TargetName, TargetName))
 				return false;
-			
+
 			return Revision->Equals(target->Revision);
 		}
 

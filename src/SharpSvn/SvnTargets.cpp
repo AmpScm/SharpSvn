@@ -14,25 +14,25 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 
 	switch(type)
 	{
-		case SvnRevisionType::None:
-			return None;
-		case SvnRevisionType::Committed:
-			return Committed;
-		case SvnRevisionType::Previous:
-			return Previous;
-		case SvnRevisionType::Base:
-			return Base;
-		case SvnRevisionType::Working:
-			return Working;
-		case SvnRevisionType::Head:
-			return Head;
-		case SvnRevisionType::Number:
-			return gcnew SvnRevision(revData->value.number);
-		case SvnRevisionType::Date:
-			// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
-			return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
-		default:
-			throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
+	case SvnRevisionType::None:
+		return None;
+	case SvnRevisionType::Committed:
+		return Committed;
+	case SvnRevisionType::Previous:
+		return Previous;
+	case SvnRevisionType::Base:
+		return Base;
+	case SvnRevisionType::Working:
+		return Working;
+	case SvnRevisionType::Head:
+		return Head;
+	case SvnRevisionType::Number:
+		return gcnew SvnRevision(revData->value.number);
+	case SvnRevisionType::Date:
+		// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
+		return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
+	default:
+		throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
 	}	
 }
 
@@ -41,18 +41,18 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 	svn_opt_revision_t r;
 	memset(&r, 0, sizeof(r));
 	r.kind = (svn_opt_revision_kind)_type; // Values are identical by design
-	
+
 
 	switch(_type)
 	{
-		case SvnRevisionType::Number:
-			r.value.number = (svn_revnum_t)_value;
-			break;
-		case SvnRevisionType::Date:
-			{
-				r.value.date = SvnBase::AprTimeFromDateTime(DateTime::FromBinary(_value));
-			}
-			break;
+	case SvnRevisionType::Number:
+		r.value.number = (svn_revnum_t)_value;
+		break;
+	case SvnRevisionType::Date:
+		{
+			r.value.date = SvnBase::AprTimeFromDateTime(DateTime::FromBinary(_value));
+		}
+		break;
 	}
 	return r;
 }

@@ -38,7 +38,7 @@ namespace SharpSvn {
 
 	internal:
 		static SvnException^ Create(svn_error_t *error);
-		
+
 
 	private protected:
 		SvnException(svn_error_t *error)
@@ -51,32 +51,28 @@ namespace SharpSvn {
 
 	public ref class SvnAuthorizationException : public SvnException
 	{
-	private protected:
+	internal:
 		SvnAuthorizationException(svn_error_t *error)
 			: SvnException(error)
 		{
-		}
-
-	internal:
-		static SvnAuthorizationException^ Create(svn_error_t *error)
-		{
-			return gcnew SvnAuthorizationException(error);
 		}
 	};
 
 	public ref class SvnOperationCanceledException : public SvnException
 	{
-	private protected:
+	internal:
 		SvnOperationCanceledException(svn_error_t *error)
 			: SvnException(error)
 		{
 		}
+	};
 
+	public ref class SvnOperationCompletedException : public SvnException
+	{
 	internal:
-		static SvnOperationCanceledException^ Create(svn_error_t *error)
+		SvnOperationCompletedException(svn_error_t *error)
+			: SvnException(error)
 		{
-			return gcnew SvnOperationCanceledException(error);
 		}
-
 	};
 }

@@ -8,7 +8,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Delete(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	Delete(path, gcnew SvnDeleteArgs());
@@ -16,7 +16,7 @@ void SvnClient::Delete(String^ path)
 
 bool SvnClient::Delete(String^ path, SvnDeleteArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -36,7 +36,7 @@ void SvnClient::Delete(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
-	
+
 	Delete(paths, gcnew SvnDeleteArgs());
 }
 
@@ -131,11 +131,11 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	int i = 0;
 
 	for each(Uri^ uri in uris)
-		{
-			if(uri == nullptr)
-				throw gcnew ArgumentException("Uris contains null Uri", "uris");
-			uriData[i++] = uri->ToString();
-		}
+	{
+		if(uri == nullptr)
+			throw gcnew ArgumentException("Uris contains null Uri", "uris");
+		uriData[i++] = uri->ToString();
+	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 

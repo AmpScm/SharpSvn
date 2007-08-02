@@ -45,7 +45,7 @@ SvnBase::SvnBase()
 
 bool SvnBase::IsNotUri(String ^path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		return false;
 
 	// Use the same stupid algorithm subversion uses to choose between Uri's and paths

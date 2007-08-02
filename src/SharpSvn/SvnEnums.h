@@ -28,7 +28,7 @@ namespace SharpSvn {
 		/// this_dir entries will have depth-empty. */
 		/// </summary>
 		Immediates		= svn_depth_immediates,
-  
+
 		/// <summary>
 		/// D + all descendants (full recursion from D). Updates will pull in any 
 		/// files or subdirectories not already present; those subdirectories' 

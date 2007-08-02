@@ -28,7 +28,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 			args->OnInfo(e);
 
 			if(e->Cancel)
-				return svn_error_create (SVN_ERR_CANCELLED, NULL, "Info receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Info receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{
@@ -52,7 +52,7 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 		throw gcnew ArgumentNullException("args");
 	else if(!_pool)
 		throw gcnew ObjectDisposedException("SvnClient");
-	
+
 	// We allow a null infoHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -96,7 +96,7 @@ void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 		throw gcnew ArgumentNullException("target");
 
 	InfoItemList<SvnInfoEventArgs^>^ results = gcnew InfoItemList<SvnInfoEventArgs^>();
-	
+
 	try
 	{
 		Info(target, results->Handler);

@@ -88,7 +88,7 @@ bool SvnClient::DeleteProperty(String^ path, String^ propertyName, SvnSetPropert
 		throw gcnew ArgumentNullException("propertyName");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-		
+
 	AprPool pool(_pool);
 
 	return InternalSetProperty(path, propertyName, nullptr, args, %pool);

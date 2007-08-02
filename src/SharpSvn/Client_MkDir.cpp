@@ -8,7 +8,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::MkDir(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	MkDir(path, gcnew SvnMkDirArgs());
@@ -16,7 +16,7 @@ void SvnClient::MkDir(String^ path)
 
 bool SvnClient::MkDir(String^ path, SvnMkDirArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

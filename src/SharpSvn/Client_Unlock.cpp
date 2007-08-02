@@ -101,7 +101,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 
 	AprPool pool(_pool);
 	_currentArgs = args;
-	
+
 	try
 	{
 		AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);

@@ -115,7 +115,7 @@ namespace SharpSvn {
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
 		bool _allowUnversionedObstructions;
-		
+
 	public:
 		SvnCheckOutArgs()
 		{
@@ -1510,6 +1510,40 @@ namespace SharpSvn {
 				else
 					_diffArguments = nullptr;
 			}
+		}
+	};
+
+	public ref class SvnAddToChangeListArgs : public SvnClientArgs
+	{
+	public:
+		SvnAddToChangeListArgs()
+		{
+		}
+	};
+
+	public ref class SvnRemoveFromChangeListArgs : public SvnClientArgs
+	{
+	public:
+		SvnRemoveFromChangeListArgs()
+		{
+		}
+	};
+
+
+	public ref class SvnListChangeListArgs : public SvnClientArgs
+	{
+	public:
+		SvnListChangeListArgs()
+		{
+		}
+
+	public:
+		event EventHandler<SvnListChangeListEventArgs^>^ ListChangeList;
+
+	protected public:
+		virtual void OnListChangeList(SvnListChangeListEventArgs^ e)
+		{
+			ListChangeList(this, e);
 		}
 	};
 }

@@ -25,7 +25,7 @@ bool SvnClient::Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args)
 		throw gcnew ArgumentNullException("toStream");
 	else if(!args)
 		throw gcnew ObjectDisposedException("args");
-	
+
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)

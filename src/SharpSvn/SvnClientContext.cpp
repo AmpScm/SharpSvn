@@ -30,7 +30,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 {
 	if(!fromContext)
 		throw gcnew ArgumentNullException("fromContext");
-	
+
 	fromContext->_pool->Ensure();
 	_pool = fromContext->_pool;
 
@@ -57,7 +57,7 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 		throw gcnew ObjectDisposedException("SvnClientContext");
 
 	_pool->Ensure();
-	
+
 
 	return _ctx;
 }
@@ -161,7 +161,7 @@ void SvnClientContext::LoadConfigurationDefault()
 
 void SvnClientContext::MergeConfiguration(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	if(State < SvnContextState::ConfigLoaded)

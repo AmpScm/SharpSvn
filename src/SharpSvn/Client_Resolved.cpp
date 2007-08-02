@@ -8,7 +8,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Resolved(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	Resolved(path, gcnew SvnResolvedArgs());
@@ -16,7 +16,7 @@ void SvnClient::Resolved(String^ path)
 
 void SvnClient::Resolved(String^ path, SvnAccept accept)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	Resolved(path, gcnew SvnResolvedArgs(accept));
@@ -24,7 +24,7 @@ void SvnClient::Resolved(String^ path, SvnAccept accept)
 
 bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
