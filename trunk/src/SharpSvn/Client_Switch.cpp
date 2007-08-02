@@ -7,7 +7,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Switch(String^ path, SvnUriTarget^ target)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -19,7 +19,7 @@ void SvnClient::Switch(String^ path, SvnUriTarget^ target)
 
 void SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -30,7 +30,7 @@ void SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revisi
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -44,7 +44,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] __int64% revision)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("args");
@@ -61,7 +61,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		// Throw the error before we allocate the unmanaged resources
 		throw gcnew ArgumentException("Revision type must be head, date or number", "target");
 	}
-	
+
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)

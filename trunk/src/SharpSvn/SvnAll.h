@@ -10,6 +10,4 @@
 
 #include "SvnException.h"
 
-#include "SvnCallbackArgs.h"
-
 #include "SvnAuthentication.h"

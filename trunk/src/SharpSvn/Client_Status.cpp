@@ -7,11 +7,11 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!statusHandler)
 		throw gcnew ArgumentNullException("statusHandler");
-	
+
 	Status(path, statusHandler, gcnew SvnStatusArgs());
 }
 
@@ -36,7 +36,7 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 
 bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -88,7 +88,7 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 
 void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
@@ -105,16 +105,16 @@ void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statu
 
 void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
-	
+
 	SvnStatusArgs^ args = gcnew SvnStatusArgs();
 	args->Depth = SvnDepth::Empty;
 	args->GetAll = true;
 	args->NoIgnore = true;
-	
+
 	try
 	{
 		Status(path, results->Handler, args);
@@ -130,7 +130,7 @@ void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 
 bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

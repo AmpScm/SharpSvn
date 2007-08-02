@@ -8,7 +8,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::Revert(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	Revert(path, gcnew SvnRevertArgs());
@@ -16,7 +16,7 @@ void SvnClient::Revert(String^ path)
 
 bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

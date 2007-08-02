@@ -322,10 +322,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCallbackArgs.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnClient.h"
 					>
 				</File>
@@ -412,6 +408,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_Cat.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_ChangeList.cpp"
 					>
 				</File>
 				<File

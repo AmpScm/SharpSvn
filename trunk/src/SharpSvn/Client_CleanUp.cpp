@@ -7,7 +7,7 @@ using namespace System::Collections::Generic;
 
 void SvnClient::CleanUp(String ^path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	CleanUp(path, gcnew SvnCleanUpArgs());
@@ -15,13 +15,13 @@ void SvnClient::CleanUp(String ^path)
 
 bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!_pool)
 		throw gcnew ObjectDisposedException("SvnClient");
-	
+
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)

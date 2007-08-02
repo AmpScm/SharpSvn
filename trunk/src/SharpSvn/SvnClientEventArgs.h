@@ -312,7 +312,7 @@ namespace SharpSvn {
 		initonly SvnLockState _lockState;
 		initonly __int64 _revision;
 		SvnLockInfo^ _lock;
-		
+
 	internal:
 		SvnClientNotifyEventArgs(const svn_wc_notify_t *notify)
 		{
@@ -488,7 +488,7 @@ namespace SharpSvn {
 	internal:
 		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status)
 		{
-			if(!path)
+			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!status)
 				throw gcnew ArgumentNullException("status");
@@ -552,7 +552,7 @@ namespace SharpSvn {
 				return _wcPropertyStatus;
 			}
 		}
-		
+
 		/// <summary>Gets a boolean indicating whether the workingcopy is locked</summary>
 		property bool WcLocked
 		{
@@ -692,7 +692,7 @@ namespace SharpSvn {
 	protected public:
 		SvnLogChangeItem(String^ path, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision)
 		{
-			if(!path)
+			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
@@ -825,7 +825,7 @@ namespace SharpSvn {
 				return _date;
 			}
 		}
-		
+
 		property String^ Message
 		{
 			String^ get()
@@ -906,7 +906,7 @@ namespace SharpSvn {
 	internal:
 		SvnInfoEventArgs(String^ path, const svn_info_t* info)
 		{
-			if(!path)
+			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!info)
 				throw gcnew ArgumentNullException("info");
@@ -997,7 +997,7 @@ namespace SharpSvn {
 				return _reposRootUri;
 			}
 		}
-		
+
 		property Guid ReposUuid
 		{
 			Guid get()
@@ -1294,7 +1294,7 @@ namespace SharpSvn {
 				return _author;
 			}
 		}
-	
+
 	public:
 		virtual void Detach(bool keepProperties) override
 		{
@@ -1326,7 +1326,7 @@ namespace SharpSvn {
 		String^ _absPath;
 		SvnLockInfo^ _lock;
 		SvnDirEntry^ _entry;
-		
+
 	internal:
 		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
 		{
@@ -1336,7 +1336,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("abs_path");
 
 			_path = SvnBase::Utf8_PtrToString(path);
-			
+
 			_pDirEnt = dirent;
 			_pLock = lock;
 			_pAbsPath = abs_path;
@@ -1419,7 +1419,7 @@ namespace SharpSvn {
 		apr_hash_t* _propHash;
 		SortedList<String^, Object^>^ _properties;
 		AprPool^ _pool;
-		
+
 	internal:
 		SvnPropertyListEventArgs(const char *path, apr_hash_t* prop_hash, AprPool ^pool)
 		{
@@ -1462,7 +1462,7 @@ namespace SharpSvn {
 
 						String^ key = SvnBase::Utf8_PtrToString(pKey);
 						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, propVal->len);
-						
+
 						_properties->Add(key, value);
 					}
 				}
@@ -1480,7 +1480,7 @@ namespace SharpSvn {
 				{
 					GC::KeepAlive(Path);
 					GC::KeepAlive(Properties);
-//					GC::KeepAlive(Entry);
+					//					GC::KeepAlive(Entry);
 				}
 			}
 			finally
@@ -1488,6 +1488,45 @@ namespace SharpSvn {
 				_propHash = nullptr;
 				_pool = nullptr;
 
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+	public ref class SvnListChangeListEventArgs : public SvnClientCancelEventArgs
+	{
+		initonly String^ _path;
+
+	internal:
+		SvnListChangeListEventArgs(const char *path)
+		{
+			if(!path)
+				throw gcnew ArgumentNullException("path");
+
+			_path = SvnBase::Utf8_PtrToString(path);
+		}
+
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}	
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					GC::KeepAlive(Path);
+				}
+			}
+			finally
+			{
 				__super::Detach(keepProperties);
 			}
 		}

@@ -176,7 +176,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	AprPool^ tmpPool = AprPool::Attach(pool, false);
-	
+
 	SvnClientBeforeCommitEventArgs^ ea = gcnew SvnClientBeforeCommitEventArgs(commit_items, tmpPool);
 
 	try
@@ -243,7 +243,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	AprPool^ tmpPool = AprPool::Attach(pool, false);
-	
+
 	SvnClientConflictResolveEventArgs^ ea = gcnew SvnClientConflictResolveEventArgs(description, tmpPool);
 
 	try
@@ -270,10 +270,9 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 	}
 }
 
-
-Uri^ SvnClient::GetUriFromPath(String^ path)
+Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	EnsureState(SvnContextState::ConfigLoaded);

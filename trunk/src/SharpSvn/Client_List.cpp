@@ -11,7 +11,7 @@ void SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 		throw gcnew ArgumentNullException("target");
 	else if(!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
-	
+
 	List(target, listHandler, gcnew SvnListArgs());
 }
 
@@ -28,7 +28,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 			args->OnList(e);
 
 			if(e->Cancel)
-				return svn_error_create (SVN_ERR_CANCELLED, NULL, "List receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "List receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{
@@ -125,6 +125,6 @@ bool SvnClient::GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnLis
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnListEventArgs^>^>(results);
+		list = results;
 	}
 }
