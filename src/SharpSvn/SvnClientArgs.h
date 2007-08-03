@@ -35,6 +35,11 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>
+		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
+		/// If an exception would occur, the method returns false and the <see cref="Exception" /> property
+		/// is set to the exception which would have been throw.
+		/// </summary>
 		property bool ThrowOnError
 		{
 			bool get()
@@ -59,6 +64,11 @@ namespace SharpSvn {
 			{
 				_exception = value;
 			}
+		}
+
+		property bool InvokationCeased
+		{
+			bool get();
 		}
 
 	internal:
@@ -1544,6 +1554,14 @@ namespace SharpSvn {
 		virtual void OnListChangeList(SvnListChangeListEventArgs^ e)
 		{
 			ListChangeList(this, e);
+		}
+	};
+
+	public ref class SvnGetMergeInfoArgs : public SvnClientArgs
+	{
+	public:
+		SvnGetMergeInfoArgs()
+		{
 		}
 	};
 }

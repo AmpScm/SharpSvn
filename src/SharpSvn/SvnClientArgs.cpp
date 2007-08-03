@@ -20,3 +20,7 @@ bool SvnClientArgs::HandleResult(svn_error_t *error)
 		return false;
 }
 
+bool SvnClientArgs::InvokationCeased::get()
+{
+	return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
+}

@@ -6,7 +6,8 @@
 #include "SvnPathTarget.h"
 #include "SvnClientEventArgs.h"
 #include "SvnClientArgs.h"
-#include "SvnCommitArgs.h"
+#include "SvnCommitItem.h"
+#include "SvnMergeInfo.h"
 #include "AprBaton.h"
 
 namespace SharpSvn {
@@ -659,9 +660,10 @@ namespace SharpSvn {
 		void GetChangeList(String^ changeList, String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list);
 		bool GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
 
-		// TODO:
-		// Retrieving MergeInfo (svn_client_get_mergeinfo)
-
+	public:
+		void GetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo);
+		bool GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]SvnMergeInfo^% mergeInfo);
+		bool TryGetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo);
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>

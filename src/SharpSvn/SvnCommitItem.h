@@ -7,7 +7,7 @@ namespace SharpSvn {
 
 	ref class SvnCommitItem;
 
-	public ref class SvnCommitInfo
+	public ref class SvnCommitInfo : SvnBase
 	{
 		initonly __int64 _revision;
 		initonly DateTime _date;
