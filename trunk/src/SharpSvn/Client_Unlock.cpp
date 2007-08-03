@@ -17,10 +17,7 @@ void SvnClient::Unlock(String^ target)
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	array<String^>^ targets = gcnew array<String^>(1);
-	targets[0] = target;
-
-	Unlock(safe_cast<ICollection<String^>^>(targets), gcnew SvnUnlockArgs());
+	Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
 void SvnClient::Unlock(Uri^ target)
@@ -28,10 +25,7 @@ void SvnClient::Unlock(Uri^ target)
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	array<String^>^ targets = gcnew array<String^>(1);
-	targets[0] = target->ToString();
-
-	Unlock(safe_cast<ICollection<String^>^>(targets), gcnew SvnUnlockArgs());
+	Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
 void SvnClient::Unlock(ICollection<String^>^ targets)
@@ -42,6 +36,15 @@ void SvnClient::Unlock(ICollection<String^>^ targets)
 	Unlock(targets, gcnew SvnUnlockArgs());
 }
 
+void SvnClient::Unlock(ICollection<Uri^>^ targets)
+{
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
+
+	Unlock(targets, gcnew SvnUnlockArgs());
+}
+
+
 bool SvnClient::Unlock(String^ target, SvnUnlockArgs^ args)
 {
 	if(!target)
@@ -49,10 +52,7 @@ bool SvnClient::Unlock(String^ target, SvnUnlockArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ targets = gcnew array<String^>(1);
-	targets[0] = target;
-
-	return Unlock(safe_cast<ICollection<String^>^>(targets), args);
+	return Unlock(NewSingleItemCollection(target), args);
 }
 
 bool SvnClient::Unlock(Uri^ target, SvnUnlockArgs^ args)
@@ -62,10 +62,7 @@ bool SvnClient::Unlock(Uri^ target, SvnUnlockArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ targets = gcnew array<String^>(1);
-	targets[0] = target->ToString();
-
-	return Unlock(safe_cast<ICollection<String^>^>(targets), args);
+	return Unlock(NewSingleItemCollection(target), args);
 }
 
 bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
@@ -75,12 +72,14 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
 	int i = 0;
 	for each(String^ target in targets)
 	{
+		if(String::IsNullOrEmpty(target))
+			throw gcnew ArgumentException("Target is null within targets", "targets");
+
 		if(IsNotUri(target))
 			targetStrings[i++] = GetSvnPath(target);
 		else 
@@ -92,6 +91,51 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 
 			targetStrings[i++] = uri->ToString();
 		}
+	}
+
+	EnsureState(SvnContextState::AuthorizationInitialized);
+
+	if(_currentArgs)
+		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+
+	AprPool pool(_pool);
+	_currentArgs = args;
+
+	try
+	{
+		AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+
+
+		svn_error_t* err = svn_client_unlock(
+			aprTargets->Handle,
+			args->BreakLock,			
+			CtxHandle,
+			pool.Handle);
+
+		return args->HandleResult(err);
+	}
+	finally
+	{
+		_currentArgs = nullptr;
+	}
+}
+
+bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
+{
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
+
+	int i = 0;
+	for each(Uri^ target in targets)
+	{
+		if(!target)
+			throw gcnew ArgumentException("Uri is null within targets", "targets");
+
+		targetStrings[i++] = target->ToString();
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

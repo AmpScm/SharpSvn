@@ -4,6 +4,7 @@
 #include "SvnClientContext.h"
 
 #include "SvnClient.h"
+#include "SvnRepositoryClient.h"
 
 #include "SvnPathTarget.h"
 #include "SvnUriTarget.h"

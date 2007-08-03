@@ -11,6 +11,7 @@
 #include <apr-1/apr_file_io.h>
 #include <svn_client.h>
 #include <svn_time.h>
+#include <svn_repos.h>
 
 #ifndef UNUSED_ALWAYS
 #define UNUSED_ALWAYS(x) (x)

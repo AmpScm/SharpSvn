@@ -10,11 +10,6 @@ using namespace SharpSvn::Security;
 using namespace SharpSvn::UI::Authentication;
 using System::Text::StringBuilder;
 
-
-struct svn_auth_baton_t
-{};
-
-
 SvnAuthentication::SvnAuthentication()
 {
 	_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();

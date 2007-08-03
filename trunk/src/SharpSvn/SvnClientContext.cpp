@@ -5,10 +5,6 @@
 
 using namespace SharpSvn;
 
-struct apr_hash_t
-{};
-
-
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
 	if(!pool)

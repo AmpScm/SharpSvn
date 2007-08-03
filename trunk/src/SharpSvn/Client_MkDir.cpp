@@ -11,7 +11,7 @@ void SvnClient::MkDir(String^ path)
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	MkDir(path, gcnew SvnMkDirArgs());
+	MkDir(NewSingleItemCollection(path), gcnew SvnMkDirArgs());
 }
 
 bool SvnClient::MkDir(String^ path, SvnMkDirArgs^ args)
@@ -21,10 +21,7 @@ bool SvnClient::MkDir(String^ path, SvnMkDirArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ paths = gcnew array<String^>(1);
-	paths[1] = path;
-
-	return MkDir(safe_cast<ICollection<String^>^>(paths), args);
+	return MkDir(NewSingleItemCollection(path), args);
 }
 
 
@@ -107,10 +104,7 @@ bool SvnClient::RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% 
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<Uri^>^ uris = gcnew array<Uri^>(1);
-	uris[1] = uri;
-
-	return RemoteMkDir(safe_cast<ICollection<Uri^>^>(uris), args, commitInfo);
+	return RemoteMkDir(NewSingleItemCollection(uri), args, commitInfo);
 }
 
 bool SvnClient::RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args)
@@ -154,7 +148,7 @@ bool SvnClient::RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args, [Out] S
 	_currentArgs = args;
 	try
 	{
-		AprArray<String^, AprCStrMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
+		AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
 		svn_commit_info_t* commit_info = nullptr;
 
 		svn_error_t *r = svn_client_mkdir3(

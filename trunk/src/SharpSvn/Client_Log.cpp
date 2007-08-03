@@ -12,11 +12,7 @@ void SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 	else if(!logHandler)
 		throw gcnew ArgumentNullException("logHandler");
 
-	array<String^>^ targets = gcnew array<String^>(1);
-
-	targets[0] = target->TargetName;
-
-	InternalLog(safe_cast<ICollection<String^>^>(targets), target->Revision, gcnew SvnLogArgs(), logHandler);
+	InternalLog(NewSingleItemCollection(target->TargetName), target->Revision, gcnew SvnLogArgs(), logHandler);
 }
 
 bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
@@ -30,7 +26,7 @@ bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 
 	targets[0] = target->TargetName;
 
-	return InternalLog(safe_cast<ICollection<String^>^>(targets), target->Revision, args, logHandler);
+	return InternalLog(NewSingleItemCollection(target->TargetName), target->Revision, args, logHandler);
 }
 
 void SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler)

@@ -358,11 +358,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnRepositoryClient.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnTarget.h"
 					>
 				</File>
 				<File
 					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\UnmanagedStructs.h"
 					>
 				</File>
 			</Filter>
@@ -399,6 +407,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnMergeInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnRepositoryClient.cpp"
 					>
 				</File>
 				<File
