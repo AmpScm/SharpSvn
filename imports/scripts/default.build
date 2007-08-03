@@ -41,6 +41,7 @@
 	<property name="dbFilename" value="db-${dbVersion}.tar.gz" />
 	<property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
 	<property name="sqliteFilename" value="sqlite-source-${string::replace(sqliteVersion,'.','_')}.zip" />
+	<property name="nunitFilename" value="NUnit-${nunitVersion}-net-2.0.zip" />
 	<target name="download">
 		<mkdir dir="downloads" />
 		<if test="${not file::exists('downloads/' + opensslFilename)}">
@@ -55,9 +56,13 @@
 		<if test="${not file::exists('downloads/' + sqliteFilename)}">
 			<get src="http://www.sqlite.org/${sqliteFilename}" dest="downloads/${sqliteFilename}" />
 		</if>
+		<if test="${not file::exists('downloads/' + nunitFilename)}">
+      <get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
+    </if>
 	</target>
 
 	<property name="sqliteDir" value="${'build/sqlite-' + sqliteVersion}" />
+	<property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 	<target name="extract" depends="download">
 		<mkdir dir="build" />
 		<if test="${not directory::exists('build/openssl-' + opensslVersion)}">
@@ -70,7 +75,10 @@
 			<untar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
 		</if>
 		<if test="${not directory::exists(sqliteDir)}">
-			<unzip zipfile="downloads/${sqliteFilename}" todir="build/sqlite-${sqliteVersion}"  />
+			<unzip zipfile="downloads/${sqliteFilename}" todir="${sqliteDir}"  />
+		</if>
+		<if test="${not directory::exists(nunitDir)}">
+			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />
 		</if>
 	</target>
 
@@ -519,23 +527,31 @@
 		</if>
 	</target>
 	<target name="build-serf" depends="build-zlib,build-apr">
-		<exec program="msbuild.exe" workingdir="build\subversion">
-			<arg value="/nologo" />
-			<arg value="/verbosity:quiet" />
-			<arg value="serf\serf.vcproj" />
-			<arg value="/p:Configuration=Release" />
-		</exec>
+    <if test="${not file::exists('build/serf-' + serfVersion +'.build')}">
+      <exec program="msbuild.exe" workingdir="build\subversion">
+        <arg value="/nologo" />
+        <arg value="/verbosity:quiet" />
+        <arg value="serf\serf.vcproj" />
+        <arg value="/p:Configuration=Release" />
+      </exec>
+      <touch file="${'build/serf-' + serfVersion +'.build'}" />
+		</if>
 	</target>
 	<target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-apr,build-serf,prepare-neon,generate-svnfiles">
-		<!-- Now build subversion -->
+    <if test="${not file::exists('build/subversion-' + subversionVersion +'.build')}">
+      <!-- Now build subversion -->
 
-		<exec program="msbuild.exe" workingdir="build\subversion">
-			<arg value="/nologo" />
-			<arg value="/verbosity:quiet" />
-			<arg value="subversion_vcnet.sln" />
-			<arg value="/p:Configuration=Release" />
-			<arg value="/t:__LIBS__" />
-		</exec>
+      <exec program="msbuild.exe" workingdir="build\subversion">
+        <arg value="/nologo" />
+        <arg value="/verbosity:quiet" />
+        <arg value="subversion_vcnet.sln" />
+        <arg value="/p:Configuration=Release" />
+        <arg value="/t:__LIBS__" />
+      </exec>
+      <touch file="${'build/subversion-' + subversionVersion +'.build'}" />
+		</if>
+	</target>
+	<target name="copy-result" depends="build-svn">
 		<copy todir="release/lib" flatten="true">
 			<fileset basedir="build\subversion">
 				<include name="release/**/*.lib" />
@@ -597,8 +613,14 @@
 				<include name="**.h" />
 			</fileset>
 		</copy>
+		<copy todir="release/lib">
+      <fileset basedir="${nunitDir}/bin">
+        <include name="nunit.framework.dll" />
+        <include name="nunit.framework.xml" />
+      </fileset>      
+		</copy>
 	</target>
-	<target name="build" depends="download,extract,checkout, build-bdb, build-zlib, build-svn">
+	<target name="build" depends="download,extract,checkout, build-bdb, build-zlib, build-svn, copy-result">
 
 	</target>
 </project>
