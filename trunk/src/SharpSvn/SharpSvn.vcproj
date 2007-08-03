@@ -338,7 +338,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommitArgs.h"
+					RelativePath=".\SvnCommitItem.h"
 					>
 				</File>
 				<File
@@ -347,6 +347,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfo.h"
 					>
 				</File>
 				<File
@@ -386,11 +390,15 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommitArgs.cpp"
+					RelativePath=".\SvnCommitItem.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\SvnException.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfo.cpp"
 					>
 				</File>
 				<File
@@ -468,6 +476,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_Merge.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_MergeInfo.cpp"
 					>
 				</File>
 				<File

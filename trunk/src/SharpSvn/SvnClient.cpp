@@ -1,7 +1,6 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "SvnCommitArgs.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;

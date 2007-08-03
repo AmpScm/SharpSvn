@@ -1,13 +1,6 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "SvnCommitArgs.h"
-
-using namespace SharpSvn;
-#include "stdafx.h"
-
-#include "SvnAll.h"
-#include <svn_config.h>
 
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;

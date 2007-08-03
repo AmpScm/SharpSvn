@@ -2,7 +2,7 @@
 #pragma once
 
 #include "SvnEnums.h"
-#include "SvnCommitArgs.h"
+#include "SvnCommitItem.h"
 
 namespace SharpSvn {
 	using System::Collections::Generic::ICollection;
@@ -1450,7 +1450,7 @@ namespace SharpSvn {
 			{
 				if(!_properties && _propHash)
 				{
-					_properties = gcnew SortedList<String^, Object^>();
+Commi					_properties = gcnew SortedList<String^, Object^>();
 
 					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _propHash); hi; hi = apr_hash_next(hi))
 					{
