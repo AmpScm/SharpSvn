@@ -1,9 +1,6 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-struct apr_hash_index_t
-{};
-
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;

@@ -10,7 +10,6 @@
 #include "AprArray.h"
 #include "SvnTarget.h"
 
-
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 

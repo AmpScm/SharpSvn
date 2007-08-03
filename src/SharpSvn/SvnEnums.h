@@ -252,4 +252,18 @@ namespace SharpSvn {
 		/** A combination of all the dirent fields */
 		AllFields		= SVN_DIRENT_ALL
 	};
+
+	public enum class SvnRepositoryFilesystem
+	{
+		Default			= 0,
+		FsFs			= 1,
+		BerkeleyDb		= 2
+	};
+
+	public enum class SvnRepositoryCompatibility
+	{
+		Default				= 0,
+		SubversionPre1_4	= 1,
+		SubversionPre1_5	= 2,
+	};
 }

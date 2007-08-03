@@ -218,8 +218,6 @@ namespace SharpSvn {
 		/// <returns>true if the operation succeeded; false if it did not</returns>
 		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions);
 
-	private:
-		bool UpdateInternal(ICollection<String^>^ paths, SvnUpdateArgs^ args, array<__int64>^ revisions);
 #pragma endregion
 
 	public:
@@ -543,9 +541,11 @@ namespace SharpSvn {
 		void Lock(String^ target, String^ comment);
 		void Lock(Uri^ target, String^ comment);
 		void Lock(ICollection<String^>^ targets, String^ comment);
+		void Lock(ICollection<Uri^>^ targets, String^ comment);
 		bool Lock(String^ target, SvnLockArgs^ args);
 		bool Lock(Uri^ target, SvnLockArgs^ args);
 		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
+		bool Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args);
 #pragma endregion
 
 	public:
@@ -554,8 +554,10 @@ namespace SharpSvn {
 		void Unlock(String^ target);
 		void Unlock(Uri^ target);
 		void Unlock(ICollection<String^>^ targets);
+		void Unlock(ICollection<Uri^>^ targets);
 		bool Unlock(String^ target, SvnUnlockArgs^ args);
 		bool Unlock(Uri^ target, SvnUnlockArgs^ args);
+		bool Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args);
 		bool Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args);
 #pragma endregion
 

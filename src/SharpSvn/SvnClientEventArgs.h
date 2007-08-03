@@ -1450,7 +1450,7 @@ namespace SharpSvn {
 			{
 				if(!_properties && _propHash)
 				{
-Commi					_properties = gcnew SortedList<String^, Object^>();
+					_properties = gcnew SortedList<String^, Object^>();
 
 					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _propHash); hi; hi = apr_hash_next(hi))
 					{

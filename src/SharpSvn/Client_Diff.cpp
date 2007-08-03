@@ -1,15 +1,13 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
+#include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
+
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 using System::IO::File;
 using System::IO::FileMode;
-
-struct apr_file_t
-{
-};
 
 ref class DeleteOnCloseStream : public System::IO::FileStream
 {

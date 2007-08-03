@@ -91,10 +91,7 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<Uri^>^ uris = gcnew array<Uri^>(1);
-	uris[0] = uri;
-
-	return RemoteDelete(safe_cast<ICollection<Uri^>^>(uris), args);
+	return RemoteDelete(NewSingleItemCollection(uri), args);
 }
 
 bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo)
@@ -104,10 +101,7 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<Uri^>^ uris = gcnew array<Uri^>(1);
-	uris[0] = uri;
-
-	return RemoteDelete(safe_cast<ICollection<Uri^>^>(uris), args, commitInfo);
+	return RemoteDelete(NewSingleItemCollection(uri), args, commitInfo);
 }
 
 

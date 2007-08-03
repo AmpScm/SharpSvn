@@ -55,8 +55,6 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 	_currentArgs = args;
 	try
 	{
-		svn_commit_info_t* pInfo = nullptr;
-
 		svn_error_t *r = svn_client_add_to_changelist(
 			AllocPathArray(paths, %pool),
 			pool.AllocString(changeList),
@@ -121,8 +119,6 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ change
 	_currentArgs = args;
 	try
 	{
-		svn_commit_info_t* pInfo = nullptr;
-
 		svn_error_t *r = svn_client_remove_from_changelist(
 			AllocPathArray(paths, %pool),
 			pool.AllocString(changeList),

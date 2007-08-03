@@ -154,6 +154,34 @@ namespace SharpSvn {
 			}
 		};
 
+		ref class AprCanonicalMarshaller sealed : public SvnBase, public IItemMarshaller<String^>
+		{
+		public:
+			AprCanonicalMarshaller()
+			{}
+
+			property int ItemSize
+			{
+				virtual int get()
+				{
+					return sizeof(char*);
+				}
+			}
+
+			virtual void Write(String^ value, void* ptr, AprPool^ pool)
+			{
+				const char** ppStr = (const char**)ptr;
+				*ppStr = pool->AllocCanonical(value);
+			}
+
+			virtual String^ Read(const void* ptr)
+			{
+				const char** ppcStr = (const char**)ptr;
+
+				return Utf8_PtrToString(*ppcStr);
+			}
+		};
+
 		ref class AprSvnRevNumMarshaller sealed : public SvnBase, public IItemMarshaller<__int64>
 		{
 		public:

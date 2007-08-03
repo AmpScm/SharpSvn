@@ -8,9 +8,6 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using System::Runtime::InteropServices::Marshal;
 
-struct svn_stream_t
-{};
-
 SvnStreamWrapper::~SvnStreamWrapper()
 {
 }

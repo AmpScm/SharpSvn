@@ -1564,4 +1564,94 @@ namespace SharpSvn {
 		{
 		}
 	};
+
+	public ref class SvnCreateRepositoryArgs : public SvnClientArgs
+	{
+		bool _bdbNoFSyncCommit;
+		bool _bdbKeepLogs;
+		SvnRepositoryFilesystem _reposType;
+		SvnRepositoryCompatibility _reposCompat;
+
+	public:
+		SvnCreateRepositoryArgs()
+		{
+		}
+
+
+		property bool BerkeleyDbNoFSyncAtCommit
+		{
+			bool get()
+			{
+				return _bdbNoFSyncCommit;
+			}
+			void set(bool value)
+			{
+				_bdbNoFSyncCommit = value;
+			}
+		}
+
+		property bool BerkeleyDbKeepTransactionLogs
+		{
+			bool get()
+			{
+				return _bdbKeepLogs;
+			}
+			void set(bool value)
+			{
+				_bdbKeepLogs = value;
+			}
+		}
+
+		property SvnRepositoryFilesystem RepositoryType
+		{
+			SvnRepositoryFilesystem get()
+			{
+				return _reposType;
+			}
+			void set(SvnRepositoryFilesystem value)
+			{
+				_reposType = value;
+			}
+		}
+
+		property SvnRepositoryCompatibility RepositoryCompatibility
+		{
+			SvnRepositoryCompatibility get()
+			{
+				return _reposCompat;
+			}
+			void set(SvnRepositoryCompatibility value)
+			{
+				_reposCompat = value;
+			}
+		}
+	};
+
+	public ref class SvnDeleteRepositoryArgs : public SvnClientArgs
+	{
+	public:
+		SvnDeleteRepositoryArgs()
+		{
+		}
+	};
+	public ref class SvnRecoverRepositoryArgs : public SvnClientArgs
+	{
+		bool _nonBlocking;
+	public:
+		SvnRecoverRepositoryArgs()
+		{
+		}
+
+		property bool NonBlocking
+		{
+			bool get()
+			{
+				return _nonBlocking;
+			}
+			void set(bool value)
+			{
+				_nonBlocking = value;
+			}
+		}
+	};
 }

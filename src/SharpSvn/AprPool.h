@@ -128,11 +128,13 @@ namespace SharpSvn {
 			void* AllocCleared(size_t size);
 			const char* AllocString(String^ value);
 			const char* AllocPath(String^ value);
+			const char* AllocCanonical(String^ value);
 			const svn_string_t* AllocSvnString(String^ value);
 			const svn_string_t* AllocSvnString(array<char>^ value);
 
 			static const char* AllocString(String^ value, apr_pool_t *pool);
 			static const char* AllocPath(String^ path, apr_pool_t *pool);
+			static const char* AllocCanonical(String^ value, apr_pool_t *pool);
 			static void* Alloc(size_t size, apr_pool_t *pool);
 			static void* AllocCleared(size_t size, apr_pool_t *pool);
 			static const svn_string_t* AllocSvnString(String^ value, apr_pool_t *pool);
