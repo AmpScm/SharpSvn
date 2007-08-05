@@ -125,6 +125,16 @@ SvnTarget^ SvnTarget::FromUri(Uri^ value)
 	return gcnew SvnUriTarget(value);
 }
 
+bool SvnPathTarget::TryParse(String^ targetString, [Out] SvnPathTarget^% target)
+{
+	if(String::IsNullOrEmpty(targetString))
+		throw gcnew ArgumentNullException("targetString");
+
+	AprPool pool;
+	
+	return TryParse(targetString, target, %pool);
+}
+
 SvnTarget^ SvnTarget::FromString(String^ value)
 {
 	if(!value)

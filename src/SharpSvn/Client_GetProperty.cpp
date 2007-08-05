@@ -55,8 +55,6 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	properties = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);	
@@ -121,8 +119,6 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	properties = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);	
@@ -188,8 +184,6 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	IDictionary<SvnTarget^, String^>^ result = nullptr;
 	value = nullptr;

@@ -20,7 +20,7 @@ namespace SharpSvn {
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException("Uri is not absolute", "uri");
 
-			_uri = uri;
+			_uri = CanonicalizeUri(uri);
 		}
 
 		SvnUriTarget (Uri^ uri)
@@ -31,7 +31,7 @@ namespace SharpSvn {
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException("Uri is not absolute", "uri");
 
-			_uri = uri;
+			_uri = CanonicalizeUri(uri);
 		}
 
 		SvnUriTarget (Uri^ uri, long revision)
@@ -42,7 +42,7 @@ namespace SharpSvn {
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException("Uri is not absolute", "uri");
 
-			_uri = uri;
+			_uri = CanonicalizeUri(uri);
 		}
 
 		SvnUriTarget (Uri^ uri, DateTime date)
@@ -53,7 +53,7 @@ namespace SharpSvn {
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException("Uri is not absolute", "uri");
 
-			_uri = uri;
+			_uri = CanonicalizeUri(uri);
 		}
 
 		SvnUriTarget (Uri^ uri, SvnRevisionType type)
@@ -64,7 +64,7 @@ namespace SharpSvn {
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException("Uri is not absolute", "uri");
 
-			_uri = uri;
+			_uri = CanonicalizeUri(uri);
 		}
 
 		static SvnUriTarget^ FromUri(Uri^ value)

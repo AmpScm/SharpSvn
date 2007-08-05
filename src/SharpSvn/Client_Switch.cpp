@@ -48,8 +48,6 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	switch(target->Revision->Type)
 	{

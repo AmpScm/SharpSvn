@@ -384,7 +384,7 @@ namespace SharpSvn {
 		/// <summary>Gets information about the specified target</summary>
 		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
 		/// <summary>Gets information about the specified target</summary>
-		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^ info);
+		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^% info);
 
 #pragma endregion
 
@@ -416,8 +416,10 @@ namespace SharpSvn {
 		void Delete(ICollection<String^>^ paths);
 		bool Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args);
 
+		void RemoteDelete(Uri^ uri);
 		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args);
 		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		void RemoteDelete(ICollection<Uri^>^ uris);
 		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args);
 		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 

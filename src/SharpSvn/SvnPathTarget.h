@@ -23,8 +23,8 @@ namespace SharpSvn {
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
-			_path = path;
-			_fullPath = GetFullPath(path);
+			_path = CanonicalizePath(path);
+			_fullPath = GetFullPath(_path);
 		}
 
 		SvnPathTarget(String^ path)
@@ -33,8 +33,8 @@ namespace SharpSvn {
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
-			_path = path;
-			_fullPath = GetFullPath(path);
+			_path = CanonicalizePath(path);
+			_fullPath = GetFullPath(_path);
 		}
 
 		SvnPathTarget(String^ path, long revision)
@@ -43,8 +43,8 @@ namespace SharpSvn {
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
-			_path = path;
-			_fullPath = GetFullPath(path);
+			_path = CanonicalizePath(path);
+			_fullPath = GetFullPath(_path);
 		}
 
 		SvnPathTarget(String^ path, DateTime date)
@@ -53,8 +53,8 @@ namespace SharpSvn {
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
-			_path = path;
-			_fullPath = GetFullPath(path);
+			_path = CanonicalizePath(path);
+			_fullPath = GetFullPath(_path);
 		}
 
 		SvnPathTarget(String^ path, SvnRevisionType type)
@@ -63,8 +63,8 @@ namespace SharpSvn {
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
-			_path = path;
-			_fullPath = GetFullPath(path);
+			_path = CanonicalizePath(path);
+			_fullPath = GetFullPath(_path);
 		}
 
 		property String^ TargetName
@@ -92,21 +92,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		static bool TryParse(String^ targetString, [Out] SvnPathTarget^% target)
-		{
-			if(String::IsNullOrEmpty(targetString))
-				throw gcnew ArgumentNullException("targetString");
-
-			AprPool ^pool = gcnew AprPool();
-			try
-			{
-				return TryParse(targetString, target, pool);
-			}
-			finally
-			{
-				delete pool;
-			}
-		}
+		static bool TryParse(String^ targetString, [Out] SvnPathTarget^% target);
 
 	internal:
 		static bool TryParse(String^ targetString, [Out] SvnPathTarget ^% target, AprPool^ pool)

@@ -28,8 +28,6 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 

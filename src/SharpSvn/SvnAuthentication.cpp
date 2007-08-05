@@ -542,7 +542,8 @@ bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 
 	try
 	{
-		while(true)
+		bool breakOut = false;
+		while(!breakOut)
 		{
 			Console::Write("(R)eject, accept (t)emporarily or accept (p)ermanently? ");
 
@@ -553,7 +554,8 @@ bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 			{
 			case ConsoleKey::Escape:
 			case ConsoleKey::R:
-				return false;
+				breakOut = true;
+				break;
 			case ConsoleKey::P:
 				e->AcceptedFailures = e->Failures;
 				e->Save = e->MaySave;
@@ -563,6 +565,7 @@ bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 				return true;
 			}
 		}
+		return false;
 	}
 	finally
 	{

@@ -159,8 +159,9 @@ namespace SharpSvn {
 			throw gcnew NotImplementedException();
 		}
 
-		virtual SvnCommitItem^ Read(const void* ptr)
+		virtual SvnCommitItem^ Read(const void* ptr, AprPool^ pool)
 		{
+			UNUSED_ALWAYS(pool);
 			const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
 
 			return gcnew SvnCommitItem(*ppcCommitItem);

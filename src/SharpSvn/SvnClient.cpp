@@ -178,6 +178,9 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 	SvnClientBeforeCommitEventArgs^ ea = gcnew SvnClientBeforeCommitEventArgs(commit_items, tmpPool);
 
+	*log_msg = ""; // Must be initialized
+	*tmp_file = nullptr;
+
 	try
 	{
 		client->HandleClientGetCommitLog(ea);

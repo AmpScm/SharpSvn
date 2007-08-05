@@ -71,6 +71,32 @@ bool SvnBase::IsNotUri(String ^path)
 	return true;
 }
 
+Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
+{
+	if(!uri)
+		throw gcnew ArgumentNullException("uri");
+
+	String^ path = uri->AbsolutePath;
+	if(path->Length > 0 && path[path->Length -1] == '/')
+	{
+		// Create a new uri with all / and \ characters at the end removed
+		return gcnew Uri(uri, path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
+	}
+
+	return uri;
+}
+
+String^ SvnBase::CanonicalizePath(String^ path)
+{
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	if(path->Length > 0 && ((path[path->Length-1] == System::IO::Path::DirectorySeparatorChar) || (path[path->Length-1] == System::IO::Path::AltDirectorySeparatorChar)))
+		return path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
+
+	return path;
+}
+
 String^ SvnBase::Utf8_PtrToString(const char *ptr)
 {
 	if(!ptr)
@@ -176,16 +202,18 @@ public:
 
 	virtual void Write(SvnTarget^ value, void* ptr, AprPool^ pool)
 	{
-		svn_client_copy_source_t **src = (svn_client_copy_source_t**)&ptr;
+		svn_client_copy_source_t **src = (svn_client_copy_source_t**)ptr;
 		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
 		
 		(*src)->path = pool->AllocString(value->TargetName);
 		(*src)->revision = value->Revision->AllocSvnRevision(pool);
+		(*src)->peg_revision = value->Revision->AllocSvnRevision(pool);
 	}
 
-	virtual SvnTarget^ Read(const void* ptr)
+	virtual SvnTarget^ Read(const void* ptr, AprPool^ pool)
 	{
 		UNUSED_ALWAYS(ptr);
+		UNUSED_ALWAYS(pool);
 		//const char** ppcStr = (const char**)ptr;
 
 		return nullptr;

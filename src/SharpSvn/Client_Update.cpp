@@ -46,8 +46,6 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revisio
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	revision = -1;
 

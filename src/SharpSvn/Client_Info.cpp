@@ -50,8 +50,6 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	// We allow a null infoHandler; the args object might just handle it itself
 
@@ -67,6 +65,12 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 	try
 	{
 		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+
+		if(dynamic_cast<SvnUriTarget^>(target) && (target->Revision == SvnRevision::None))
+		{
+			pegRev.kind = svn_opt_revision_head;
+		}
+		
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_info(
@@ -99,7 +103,7 @@ void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 
 	try
 	{
-		Info(target, results->Handler);
+		Info(target, results->Handler, gcnew SvnInfoArgs());
 	}
 	finally
 	{
@@ -110,7 +114,7 @@ void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 	}
 }
 
-bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^ info)
+bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^% info)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");

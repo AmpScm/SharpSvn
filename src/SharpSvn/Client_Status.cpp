@@ -40,8 +40,6 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException("Path must be a local path", "path");
 

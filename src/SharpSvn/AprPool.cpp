@@ -184,21 +184,26 @@ const char* AprPool::AllocPath(String^ value)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
-		char* pData = (char*)Alloc(bytes->Length+1);
+		int len = bytes->Length;
+
+		while(len && ((bytes[len-1] == System::IO::Path::DirectorySeparatorChar) || bytes[len-1] == System::IO::Path::AltDirectorySeparatorChar))
+			len--;
+
+		char* pData = (char*)Alloc(len+1);
 
 		pin_ptr<unsigned char> pBytes = &bytes[0]; 
 
 		if(pData && pBytes)
 		{
-			memcpy(pData, pBytes, bytes->Length);
+			memcpy(pData, pBytes, len);
 
 			// Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
-			for(int i = 0; i < bytes->Length; i++)
-				if(pData[i] == '\\')
+			for(int i = 0; i < len; i++)
+				if((pData[i] == System::IO::Path::DirectorySeparatorChar) || (pData[i] == System::IO::Path::AltDirectorySeparatorChar))
 					pData[i] = '/';
 		}
 
-		pData[bytes->Length] = 0;
+		pData[len] = 0;
 
 		return pData;
 	}
@@ -215,28 +220,21 @@ const char* AprPool::AllocCanonical(String^ value)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
-		int len = bytes->Length;
-
-		if((bytes[len-1] == '/') || bytes[len-1] == '\\')
-			len--;
-
-		char* pData = (char*)Alloc(len+1);
-
 		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		const char* pcBytes = (const char*)static_cast<const unsigned char*>(pBytes);
 
-		if(pData && pBytes)
+		const char* resPath = svn_path_canonicalize(pcBytes, Handle);
+
+		if(resPath == pcBytes)
 		{
-			memcpy(pData, pBytes, len);
+			char* pData = (char*)Alloc(bytes->Length+1);
+			memcpy(pData, pBytes, bytes->Length);
+			pData[bytes->Length] = 0;
 
-			// Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
-			for(int i = 0; i < len; i++)
-				if(pData[i] == '\\')
-					pData[i] = '/';
+			return pData;
 		}
 
-		pData[len] = 0;
-
-		return pData;
+		return resPath;
 	}
 	else
 		return (const char*)AllocCleared(1);
@@ -312,21 +310,26 @@ const char* AprPool::AllocPath(String^ value, apr_pool_t *pool)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
-		char* pData = (char*)Alloc(bytes->Length+1, pool);
+		int len = bytes->Length;
+
+		while(len && ((bytes[len-1] == System::IO::Path::DirectorySeparatorChar) || bytes[len-1] == System::IO::Path::AltDirectorySeparatorChar))
+			len--;
+
+		char* pData = (char*)Alloc(len+1, pool);
 
 		pin_ptr<unsigned char> pBytes = &bytes[0]; 
 
 		if(pData && pBytes)
 		{
-			memcpy(pData, pBytes, bytes->Length);
+			memcpy(pData, pBytes, len);
 
 			// Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
-			for(int i = 0; i < bytes->Length; i++)
-				if(pData[i] == '\\')
+			for(int i = 0; i < len; i++)
+				if((pData[i] == System::IO::Path::DirectorySeparatorChar) || (pData[i] == System::IO::Path::AltDirectorySeparatorChar))
 					pData[i] = '/';
 		}
 
-		pData[bytes->Length] = 0;
+		pData[len] = 0;
 
 		return pData;
 	}
@@ -347,10 +350,11 @@ const char* AprPool::AllocCanonical(String^ value, apr_pool_t *pool)
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
 		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		const char* pcBytes = (const char*)static_cast<const unsigned char*>(pBytes);
 
-		const char* resPath = svn_path_canonicalize((const char*)static_cast<const unsigned char*>(pBytes), pool);
+		const char* resPath = svn_path_canonicalize(pcBytes, pool);
 
-		if(resPath == (const char*)static_cast<const unsigned char*>(pBytes))
+		if(resPath == pcBytes)
 		{
 			char* pData = (char*)Alloc(bytes->Length+1, pool);
 			memcpy(pData, pBytes, bytes->Length);

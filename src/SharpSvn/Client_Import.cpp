@@ -112,8 +112,6 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	commitInfo = nullptr;
 
@@ -131,7 +129,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		svn_error_t *r = svn_client_import3(
 			&commit_info,
 			pool.AllocPath(path),
-			pool.AllocString(target->ToString()),
+			pool.AllocCanonical(target->ToString()),
 			IsNotRecursive(args->Depth),
 			args->NoIgnore,
 			args->IgnoreUnknownNodeTypes,
