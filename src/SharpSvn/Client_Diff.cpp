@@ -60,18 +60,29 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 
 	try
 	{
-		if(	apr_file_open(&tmpOut, pool.AllocPath(tempOut), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
-			apr_file_open(&tmpErr, pool.AllocPath(tempErr), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
+		apr_int32_t openFlags = APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE | APR_BUFFERED | APR_FOPEN_WRITE;
+
+		svn_error_t *openErr = nullptr;
+		if(	(openErr = svn_io_file_open(&tmpOut, pool.AllocString(tempOut), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle)) ||
+			(openErr = svn_io_file_open(&tmpErr, pool.AllocString(tempErr), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle)) ||
 			!tmpOut || !tmpErr)
 		{
+			if(openErr)
+				throw SvnException::Create(openErr);
+
 			throw gcnew System::IO::IOException("Can't create temporary files for diffing");
 		}
 
-		svn_opt_revision_t fromRev = from->Revision->ToSvnRevision();
-		svn_opt_revision_t toRev = to->Revision->ToSvnRevision();
+		svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
+		svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
+
+		IList<String^>^ diffArgs = args->DiffArguments;
+
+		if(!diffArgs)
+			diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
 		svn_error_t *r = svn_client_diff4(
-			args->DiffArguments ? pool.AllocArray(args->DiffArguments, %pool) : nullptr,
+			AllocArray(diffArgs, %pool),
 			pool.AllocString(from->TargetName),
 			&fromRev,
 			pool.AllocString(to->TargetName),
@@ -85,6 +96,9 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 			tmpErr,
 			CtxHandle,
 			pool.Handle);
+
+		apr_file_close(tmpOut);
+		tmpOut = nullptr;
 
 		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);		
 		tempOut = nullptr;

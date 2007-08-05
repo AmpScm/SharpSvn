@@ -57,6 +57,14 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 	return r;
 }
 
+svn_opt_revision_t SvnRevision::ToSvnRevision(SvnRevision^ noneValue)
+{
+	if(Type != SvnRevisionType::None || !noneValue)
+		return ToSvnRevision();
+	else
+		return noneValue->ToSvnRevision();
+}
+
 svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
 {
 	if(!pool)
@@ -125,6 +133,18 @@ SvnTarget^ SvnTarget::FromUri(Uri^ value)
 	return gcnew SvnUriTarget(value);
 }
 
+svn_opt_revision_t SvnPathTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
+{
+	UNUSED_ALWAYS(uriNoneValue);
+	return Revision->ToSvnRevision(fileNoneValue);
+}
+
+svn_opt_revision_t SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
+{
+	UNUSED_ALWAYS(fileNoneValue);
+	return Revision->ToSvnRevision(uriNoneValue);
+}
+
 bool SvnPathTarget::TryParse(String^ targetString, [Out] SvnPathTarget^% target)
 {
 	if(String::IsNullOrEmpty(targetString))
@@ -147,7 +167,7 @@ SvnTarget^ SvnTarget::FromString(String^ value)
 		return result;
 	}
 	else
-		throw gcnew System::ArgumentException("Value is not a valid SvnUriTarget and/or SvnPathTarget", "value");
+		throw gcnew System::ArgumentException("Converting string to SvnTarget: Value is not a valid SvnUriTarget and/or SvnPathTarget", "value");
 }
 
 SvnPathTarget^ SvnPathTarget::FromString(String^ value)

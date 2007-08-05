@@ -33,6 +33,7 @@ namespace SharpSvn {
 		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
 		AprPool^ _pool;
 		SvnClientArgs^ _currentArgs;
+		bool _logMessageRequired;
 	internal:
 		property SvnClientArgs^ CurrentArgs
 		{
@@ -94,6 +95,19 @@ namespace SharpSvn {
 		property static System::Version^ WrapperVersion
 		{
 			System::Version^ get();
+		}
+
+		/// <summary>Gets or sets a boolean indicating whether commits will fail if no log message is provided</summary>
+		property bool LogMessageRequired
+		{
+			bool get()
+			{
+				return _logMessageRequired;
+			}
+			void set(bool value)
+			{
+				_logMessageRequired = value;
+			}
 		}
 
 		/////////////////////////////////////////
