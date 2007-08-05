@@ -178,7 +178,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 	SvnClientBeforeCommitEventArgs^ ea = gcnew SvnClientBeforeCommitEventArgs(commit_items, tmpPool);
 
-	*log_msg = ""; // Must be initialized
+	*log_msg = "";// Must be initialized
 	*tmp_file = nullptr;
 
 	try
@@ -187,6 +187,8 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 		if(ea->Cancel)
 			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
+		else if(!ea->LogMessage && client->LogMessageRequired)
+			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Commit canceled: A logmessage is required");
 
 		if(ea->LogMessage)
 			*log_msg = tmpPool->AllocString(ea->LogMessage);
@@ -195,8 +197,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 	}
 	catch(Exception^ e)
 	{
-		AprPool^ thePool = AprPool::Attach(pool, false);
-		return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("Commit log callback throwed exception: ", e->ToString())));
+		return svn_error_create(SVN_ERR_CANCELLED, NULL, tmpPool->AllocString(String::Concat("Commit log callback throwed exception: ", e->ToString())));
 	}
 	finally
 	{

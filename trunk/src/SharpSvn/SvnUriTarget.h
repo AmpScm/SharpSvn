@@ -141,5 +141,7 @@ namespace SharpSvn {
 			target = nullptr;
 			return false;
 		}
+
+		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
 	};
 }

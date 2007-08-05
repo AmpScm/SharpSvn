@@ -174,17 +174,26 @@ namespace SharpSvn {
 
 	internal:
 		svn_opt_revision_t ToSvnRevision();
+		svn_opt_revision_t ToSvnRevision(SvnRevision^ noneValue);
 
 		svn_opt_revision_t* AllocSvnRevision(AprPool ^pool);
 
+	private:
+		static initonly SvnRevision^ _none		= gcnew SvnRevision(SvnRevisionType::None);
+		static initonly SvnRevision^ _head		= gcnew SvnRevision(SvnRevisionType::Head);
+		static initonly SvnRevision^ _working	= gcnew SvnRevision(SvnRevisionType::Working);
+		static initonly SvnRevision^ _base		= gcnew SvnRevision(SvnRevisionType::Base);
+		static initonly SvnRevision^ _previous	= gcnew SvnRevision(SvnRevisionType::Previous);
+		static initonly SvnRevision^ _committed	= gcnew SvnRevision(SvnRevisionType::Committed);
+		static initonly SvnRevision^ _zero		= gcnew SvnRevision((__int64)0);
 	public:
-		static initonly SvnRevision^ None		= gcnew SvnRevision(SvnRevisionType::None);
-		static initonly SvnRevision^ Head		= gcnew SvnRevision(SvnRevisionType::Head);
-		static initonly SvnRevision^ Working	= gcnew SvnRevision(SvnRevisionType::Working);
-		static initonly SvnRevision^ Base		= gcnew SvnRevision(SvnRevisionType::Base);
-		static initonly SvnRevision^ Previous	= gcnew SvnRevision(SvnRevisionType::Previous);
-		static initonly SvnRevision^ Committed	= gcnew SvnRevision(SvnRevisionType::Committed);
-		static initonly SvnRevision^ Zero		= gcnew SvnRevision((__int64)0);
+		static property SvnRevision^ None		{ SvnRevision^ get() { return _none; } }
+		static property SvnRevision^ Head		{ SvnRevision^ get() { return _head; } }
+		static property SvnRevision^ Working	{ SvnRevision^ get() { return _working; } }
+		static property SvnRevision^ Base		{ SvnRevision^ get() { return _base; } }
+		static property SvnRevision^ Previous	{ SvnRevision^ get() { return _previous; } }
+		static property SvnRevision^ Committed	{ SvnRevision^ get() { return _committed; } }
+		static property SvnRevision^ Zero		{ SvnRevision^ get() { return _zero; } }
 	};
 
 	ref class SvnUriTarget;
@@ -227,8 +236,8 @@ namespace SharpSvn {
 		static SvnTarget^ FromUri(Uri^ value);
 		static SvnTarget^ FromString(String^ value);
 
-		static operator SvnTarget^(Uri^ value)					{ return value ? FromUri(value) : nullptr; }
-		static explicit operator SvnTarget^(String^ value)		{ return value ? FromString(value) : nullptr; }
+		static operator SvnTarget^(Uri^ value)			{ return value ? FromUri(value) : nullptr; }
+		static operator SvnTarget^(String^ value)		{ return value ? FromString(value) : nullptr; }
 
 		virtual bool Equals(Object^ obj) override
 		{
@@ -258,5 +267,12 @@ namespace SharpSvn {
 		static bool TryParse(String^ targetString, [Out] SvnTarget^% target);
 	internal:
 		static bool TryParse(String^ targetString, [Out] SvnTarget^% target, AprPool^ pool);
+
+		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
+
+		svn_opt_revision_t GetSvnRevision(SvnRevision^ noneValue)
+		{
+			return GetSvnRevision(noneValue, noneValue);
+		}
 	};
 }

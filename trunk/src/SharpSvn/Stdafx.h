@@ -13,6 +13,7 @@
 #include <svn_path.h>
 #include <svn_time.h>
 #include <svn_repos.h>
+#include <svn_io.h>
 
 #ifndef UNUSED_ALWAYS
 #define UNUSED_ALWAYS(x) (x)

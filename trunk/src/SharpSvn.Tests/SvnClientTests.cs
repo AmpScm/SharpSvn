@@ -35,6 +35,14 @@ namespace SharpSvn.Tests
 			}
 		}
 
+		Uri WcUri
+		{
+			get
+			{
+				return new Uri(ReposUri, "folder/");
+			}
+		}
+
 		string WcPath
 		{
 			get
@@ -231,7 +239,7 @@ namespace SharpSvn.Tests
 
 				using (MemoryStream ms = new MemoryStream())
 				{
-					client.Cat(new Uri(ReposUri, "folder/CatTest"), ms);
+					client.Cat(new Uri(WcUri, "CatTest"), ms);
 
 					ms.Position = 0;
 
@@ -257,10 +265,10 @@ namespace SharpSvn.Tests
 				ia.ThrowOnError = false;
 				SvnInfoEventArgs iea;
 				IList<SvnInfoEventArgs> ee;
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile1"), ia, out ee), Is.False);
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile2"), ia, out ee), Is.False);
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile3"), ia, out ee), Is.False);
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile4"), ia, out ee), Is.False);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile1"), ia, out ee), Is.False);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile2"), ia, out ee), Is.False);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile3"), ia, out ee), Is.False);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.False);
 
 				TouchFile(file1);
 				TouchFile(file2);
@@ -270,7 +278,7 @@ namespace SharpSvn.Tests
 				client.Add(file1);
 				client.Commit(WcPath);
 
-				client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile1"), out iea);
+				client.GetInfo(new Uri(WcUri, "ChangeListFile1"), out iea);
 				Assert.That(iea, Is.Not.Null);
 
 				client.Add(file2);
@@ -297,9 +305,9 @@ namespace SharpSvn.Tests
 
 				client.Commit(WcPath, ca);
 
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile2"), ia, out ee), Is.True);
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile3"), ia, out ee), Is.False);
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile4"), ia, out ee), Is.False);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile2"), ia, out ee), Is.True);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile3"), ia, out ee), Is.False);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.False);
 
 				bool visited = false;
 				client.ListChangeList("ChangeListTest-3", WcPath, delegate(object sender, SvnListChangeListEventArgs e)
@@ -322,8 +330,8 @@ namespace SharpSvn.Tests
 
 				client.Commit(WcPath);
 
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile3"), ia, out ee), Is.True);
-				Assert.That(client.GetInfo(new Uri(ReposUri, "folder/ChangeListFile4"), ia, out ee), Is.True);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile3"), ia, out ee), Is.True);
+				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.True);
 			}
 		}
 
@@ -348,10 +356,10 @@ namespace SharpSvn.Tests
 
 				client.Commit(WcPath);
 
-				client.RemoteCopy(new Uri(ReposUri, "folder/CopyBase"), new Uri(ReposUri, "folder/RemoteCopyBase"));
+				client.RemoteCopy(new Uri(WcUri, "CopyBase"), new Uri(WcUri, "RemoteCopyBase"));
 				bool visited = false;
 				bool first = true;
-				client.Log(new Uri(ReposUri, "folder/RemoteCopyBase"), delegate(object sender, SvnLogEventArgs e)
+				client.Log(new Uri(WcUri, "RemoteCopyBase"), delegate(object sender, SvnLogEventArgs e)
 				{
 					if (first)
 					{
@@ -380,7 +388,7 @@ namespace SharpSvn.Tests
 				client.Commit(WcPath);
 				visited = false;
 				first = true;
-				client.Log(new Uri(ReposUri, "folder/LocalCopy"), delegate(object sender, SvnLogEventArgs e)
+				client.Log(new Uri(WcUri, "LocalCopy"), delegate(object sender, SvnLogEventArgs e)
 				{
 					if (first)
 					{
@@ -433,24 +441,169 @@ namespace SharpSvn.Tests
 
 				TouchFile(Path.Combine(TestPath, "MoveTestImport/RemoteMoveBase"), true);
 
-				client.RemoteImport(Path.Combine(TestPath, "MoveTestImport"), new Uri(ReposUri, "folder/RemoteMoveBase"));
+				client.RemoteImport(Path.Combine(TestPath, "MoveTestImport"), new Uri(WcUri, "RemoteMoveBase"));
 
 				client.Commit(WcPath);
 
-				Assert.That(ItemExists(new Uri(ReposUri, "folder/RemoteMoveBase")), Is.True, "Remote base does exist");
-				Assert.That(ItemExists(new Uri(ReposUri, "folder/LocalMoveBase")), Is.True, "Local base does exist");
+				Assert.That(ItemExists(new Uri(WcUri, "RemoteMoveBase")), Is.True, "Remote base does exist");
+				Assert.That(ItemExists(new Uri(WcUri, "LocalMoveBase")), Is.True, "Local base does exist");
 
-				client.RemoteMove(new Uri(ReposUri, "folder/RemoteMoveBase"), new Uri(ReposUri, "folder/RemoteMoveTarget"));
+				client.RemoteMove(new Uri(WcUri, "RemoteMoveBase"), new Uri(WcUri, "RemoteMoveTarget"));
 				client.Move(file, Path.Combine(WcPath, "LocalMoveTarget"));
 
 				client.Commit(WcPath);
 
-				Assert.That(ItemExists(new Uri(ReposUri, "folder/RemoteMoveTarget")), Is.True, "Remote target exists");
-				Assert.That(ItemExists(new Uri(ReposUri, "folder/LocalMoveTarget")), Is.True, "Local target exists");
-				Assert.That(ItemExists(new Uri(ReposUri, "folder/RemoteMoveBase")), Is.False, "Remote base does not exist");
-				Assert.That(ItemExists(new Uri(ReposUri, "folder/LocalMoveBase")), Is.False, "Local base does not exist");
+				Assert.That(ItemExists(new Uri(WcUri, "RemoteMoveTarget")), Is.True, "Remote target exists");
+				Assert.That(ItemExists(new Uri(WcUri, "LocalMoveTarget")), Is.True, "Local target exists");
+				Assert.That(ItemExists(new Uri(WcUri, "RemoteMoveBase")), Is.False, "Remote base does not exist");
+				Assert.That(ItemExists(new Uri(WcUri, "LocalMoveBase")), Is.False, "Local base does not exist");
 			}
 		}
 
+		[Test]
+		public void DeleteTest()
+		{
+			using (SvnClient client = new SvnClient())
+			{
+				string local = Path.Combine(WcPath, "LocalDeleteBase");
+				string remote = Path.Combine(WcPath, "RemoteDeleteBase");
+
+				TouchFile(local);
+				client.Add(local);
+				TouchFile(remote);
+				client.Add(remote);
+
+				client.Commit(WcPath);
+
+				Assert.That(ItemExists(new Uri(WcUri, "LocalDeleteBase")), Is.True, "Remote base does exist");
+				Assert.That(ItemExists(new Uri(WcUri, "RemoteDeleteBase")), Is.True, "Local base does exist");
+
+				client.Delete(local);
+				client.RemoteDelete(new Uri(WcUri, "RemoteDeleteBase"));
+
+				bool visited = false;
+				client.Status(local, delegate(object sender, SvnStatusEventArgs e)
+				{
+					Assert.That(e.FullPath, Is.EqualTo(local));
+					Assert.That(e.WcContentStatus, Is.EqualTo(SvnWcStatus.Deleted));
+					Assert.That(e.WcSwitched, Is.False);
+					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
+					visited = true;
+				});
+				Assert.That(visited, "Visited handler");
+
+				client.Commit(WcPath);
+
+				Assert.That(ItemExists(new Uri(WcUri, "LocalDeleteBase")), Is.False, "Remote base does not exist");
+				Assert.That(ItemExists(new Uri(WcUri, "RemoteDeleteBase")), Is.False, "Local base does not exist");
+			}
+		}
+
+		[Test]
+		public void DiffTests()
+		{
+			string start = Guid.NewGuid().ToString()+Environment.NewLine + Guid.NewGuid().ToString();
+			string end = Guid.NewGuid().ToString()+Environment.NewLine + Guid.NewGuid().ToString();
+			string origLine = Guid.NewGuid().ToString();
+			string newLine = Guid.NewGuid().ToString();
+			using (SvnClient client = new SvnClient())
+			{
+				string diffFile = Path.Combine(WcPath, "DiffTest");
+
+				using (StreamWriter sw = File.CreateText(diffFile))
+				{
+					sw.WriteLine(start);
+					sw.WriteLine(origLine);
+					sw.WriteLine(end);
+				}
+
+				client.Add(diffFile);
+				client.Commit(diffFile);
+
+				using (StreamWriter sw = File.CreateText(diffFile))
+				{
+					sw.WriteLine(start);
+					sw.WriteLine(newLine);
+					sw.WriteLine(end);
+				}
+
+				FileStream diffOutput;
+
+				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Head), out diffOutput);
+				VerifyDiffOutput(origLine, newLine, diffOutput);
+
+				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Committed), out diffOutput);
+				VerifyDiffOutput(origLine, newLine, diffOutput);
+
+				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new Uri(WcUri, "DiffTest"), out diffOutput);
+				VerifyDiffOutput(origLine, newLine, diffOutput);
+			}
+
+
+		}
+
+		private static void VerifyDiffOutput(string origLine, string newLine, FileStream diffOutput)
+		{
+			string path = diffOutput.Name;
+			Assert.That(File.Exists(path));
+			using (StreamReader sr = new StreamReader(diffOutput))
+			{
+				bool foundMin = false;
+				bool foundPlus = false;
+
+				string line;
+
+				while (null != (line = sr.ReadLine()))
+				{
+					if (line.Contains(newLine))
+					{
+						Assert.That(line.StartsWith("+"));
+						foundPlus = true;
+					}
+					else if (line.Contains(origLine))
+					{
+						Assert.That(line.StartsWith("-"));
+						foundMin = true;
+					}
+				}
+				Assert.That(foundMin, "Found -");
+				Assert.That(foundPlus, "Found +");
+			}
+			Assert.That(!File.Exists(path));
+		}
+
+		[Test]
+		public void TestExport()
+		{
+			string exportDir = Path.Combine(TestPath, "ExportTests");
+			if (Directory.Exists(exportDir))
+				ForcedDeleteDirectory(exportDir);
+
+			using (SvnClient client = new SvnClient())
+			{
+				string file = Path.Combine(WcPath, "ExportFile");
+				TouchFile(file);
+				client.Add(file);
+
+				client.Commit(WcPath);
+
+				Assert.That(Directory.Exists(exportDir), Is.False);
+
+				client.Export(WcUri, exportDir);
+				Assert.That(Directory.Exists(exportDir), Is.True);
+				Assert.That(File.Exists(Path.Combine(exportDir, "ExportFile")));
+				Assert.That(!Directory.Exists(Path.Combine(exportDir, ".svn")));
+
+				ForcedDeleteDirectory(exportDir);
+
+				Assert.That(Directory.Exists(exportDir), Is.False);
+
+				client.Export(new SvnPathTarget(WcPath), exportDir);
+				Assert.That(Directory.Exists(exportDir), Is.True);
+				Assert.That(File.Exists(Path.Combine(exportDir, "ExportFile")));
+
+				ForcedDeleteDirectory(exportDir);
+			}
+		}
 	}
 }
