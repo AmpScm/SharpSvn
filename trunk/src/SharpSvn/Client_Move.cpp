@@ -45,8 +45,6 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		throw gcnew ArgumentNullException("toPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");	
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	for each(String^ s in sourcePaths)
 	{
@@ -175,8 +173,6 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	System::Collections::Generic::List<String^>^ uris = gcnew System::Collections::Generic::List<String^>(sourceUris->Count);
 

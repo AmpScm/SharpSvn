@@ -48,6 +48,9 @@ namespace SharpSvn {
 
 			/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
 			static bool IsNotUri(String ^path);
+
+			static Uri^ CanonicalizeUri(Uri^ uri);
+			static String^ CanonicalizePath(String^ path);
 		};
 
 		public ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject

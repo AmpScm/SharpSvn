@@ -136,6 +136,42 @@ namespace SharpSvn {
 			return _type.GetHashCode() ^ _value.GetHashCode();
 		}
 
+		static bool operator == (SvnRevision^ rev1, SvnRevision^ rev2)
+		{
+			bool r1Null = (nullptr == static_cast<Object^>(rev1));
+			bool r2Null = (nullptr == static_cast<Object^>(rev2));
+
+			if(r1Null != r2Null)
+				return false;
+			else if(r1Null && r2Null)
+				return true;
+
+			if(rev1->Type != rev2->Type)
+				return false;
+
+			switch(rev1->Type)
+			{
+			case SvnRevisionType::None:
+			case SvnRevisionType::Committed:
+			case SvnRevisionType::Previous:
+			case SvnRevisionType::Base:
+			case SvnRevisionType::Working:
+			case SvnRevisionType::Head:
+				return true;
+			case SvnRevisionType::Number:
+			case SvnRevisionType::Date:
+				return rev1->_value == rev2->_value;
+			default:
+				throw gcnew ArgumentException("SvnRevisionType undefined");
+			}
+		}
+
+
+		static bool operator != (SvnRevision^ rev1, SvnRevision^ rev2)
+		{
+			return !(rev1 == rev2);
+		}
+
 	internal:
 		svn_opt_revision_t ToSvnRevision();
 

@@ -118,9 +118,10 @@ namespace SharpSvn {
 				*ppProvider = value->GetProviderPtr(pool);
 			}
 
-			virtual ISvnAuthWrapper^ Read(const void* ptr)
+			virtual ISvnAuthWrapper^ Read(const void* ptr, AprPool^ pool)
 			{
 				UNUSED_ALWAYS(ptr);
+				UNUSED_ALWAYS(pool);
 				// Not needed; we only provide arrays; item is black box to us
 				throw gcnew NotImplementedException();
 			}

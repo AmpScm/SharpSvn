@@ -1503,7 +1503,7 @@ namespace SharpSvn {
 			if(!path)
 				throw gcnew ArgumentNullException("path");
 
-			_path = SvnBase::Utf8_PtrToString(path);
+			_path = SvnBase::Utf8_PtrToString(path)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 		}
 
 	public:

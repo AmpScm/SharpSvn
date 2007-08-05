@@ -49,8 +49,6 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		throw gcnew ArgumentNullException("args");
 	else if(!args->Revision)
 		throw gcnew ArgumentException("args.Revision is not set", "args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 	else
 		switch(args->Revision->Type)
 	{

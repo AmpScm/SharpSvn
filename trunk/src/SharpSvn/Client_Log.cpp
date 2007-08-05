@@ -184,8 +184,6 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 		throw gcnew ArgumentNullException("pegRevision");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 

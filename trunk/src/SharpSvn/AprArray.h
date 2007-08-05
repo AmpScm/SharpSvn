@@ -22,7 +22,7 @@ namespace SharpSvn {
 
 			void Write(T value, void* ptr, AprPool^ pool);
 
-			T Read(const void* ptr);
+			T Read(const void* ptr, AprPool^ pool);
 		};
 
 		generic<typename T, typename R>
@@ -69,7 +69,7 @@ namespace SharpSvn {
 
 					const char* pData = Handle->elts;
 
-					return _marshaller->Read(pData + _marshaller->ItemSize * index);
+					return _marshaller->Read(pData + _marshaller->ItemSize * index, _pool);
 				}
 			}
 
@@ -118,8 +118,10 @@ namespace SharpSvn {
 				*ppStr = pool->AllocString(value);
 			}
 
-			virtual String^ Read(const void* ptr)
+			virtual String^ Read(const void* ptr, AprPool^ pool)
 			{
+				UNUSED_ALWAYS(pool);
+
 				const char** ppcStr = (const char**)ptr;
 
 				return Utf8_PtrToString(*ppcStr);
@@ -143,14 +145,16 @@ namespace SharpSvn {
 			virtual void Write(String^ value, void* ptr, AprPool^ pool)
 			{
 				const char** ppStr = (const char**)ptr;
+
 				*ppStr = pool->AllocPath(value);
 			}
 
-			virtual String^ Read(const void* ptr)
+			virtual String^ Read(const void* ptr, AprPool^ pool)
 			{
+				UNUSED_ALWAYS(pool);
 				const char** ppcStr = (const char**)ptr;
 
-				return Utf8_PtrToString(*ppcStr);
+				return Utf8_PtrToString(svn_path_local_style(*ppcStr, pool->Handle));
 			}
 		};
 
@@ -174,8 +178,10 @@ namespace SharpSvn {
 				*ppStr = pool->AllocCanonical(value);
 			}
 
-			virtual String^ Read(const void* ptr)
+			virtual String^ Read(const void* ptr, AprPool^ pool)
 			{
+				UNUSED_ALWAYS(pool);
+
 				const char** ppcStr = (const char**)ptr;
 
 				return Utf8_PtrToString(*ppcStr);
@@ -204,8 +210,10 @@ namespace SharpSvn {
 				*pRev = (svn_revnum_t)value;
 			}
 
-			virtual __int64 Read(const void* ptr)
+			virtual __int64 Read(const void* ptr, AprPool^ pool)
 			{
+				UNUSED_ALWAYS(pool);
+
 				return *(svn_revnum_t*)ptr;
 			}
 		};

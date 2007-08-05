@@ -114,35 +114,28 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 	if(String::IsNullOrEmpty(path))
 		path = nullptr;
 
-	AprPool^ tmpPool = gcnew AprPool(_pool);
-	try
+	AprPool tmpPool(_pool);
+	const char* szPath = path ? tmpPool.AllocString(path) : nullptr;
+
+	svn_error_t* err = nullptr;
+
+	if(ensurePath)
 	{
-		const char* szPath = path ? tmpPool->AllocString(path) : nullptr;
-
-		svn_error_t* err = nullptr;
-
-		if(ensurePath)
-		{
-			err = svn_config_ensure(szPath, tmpPool->Handle);
-
-			if(err)
-				throw SvnException::Create(err);
-		}
-
-		apr_hash_t* cfg = nullptr;
-		err = svn_config_get_config(&cfg, szPath, _pool->Handle);
+		err = svn_config_ensure(szPath, tmpPool.Handle);
 
 		if(err)
 			throw SvnException::Create(err);
-
-		CtxHandle->config = cfg;
-
-		_contextState = SvnContextState::ConfigLoaded;
 	}
-	finally
-	{
-		delete tmpPool;
-	}
+
+	apr_hash_t* cfg = nullptr;
+	err = svn_config_get_config(&cfg, szPath, _pool->Handle);
+
+	if(err)
+		throw SvnException::Create(err);
+
+	CtxHandle->config = cfg;
+
+	_contextState = SvnContextState::ConfigLoaded;
 }
 
 void SvnClientContext::LoadConfiguration(String ^path)
@@ -163,18 +156,12 @@ void SvnClientContext::MergeConfiguration(String^ path)
 	if(State < SvnContextState::ConfigLoaded)
 		LoadConfigurationDefault();
 
-	AprPool^ tmpPool = gcnew AprPool(_pool);
-	try
-	{
-		const char* szPath = tmpPool->AllocString(path);
+	AprPool tmpPool(_pool);
+	
+	const char* szPath = tmpPool.AllocString(path);
 
-		svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);
+	svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);
 
-		if(err)
-			throw SvnException::Create(err);
-	}
-	finally
-	{
-		delete tmpPool;
-	}
+	if(err)
+		throw SvnException::Create(err);
 }

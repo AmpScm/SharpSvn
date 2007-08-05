@@ -174,8 +174,6 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
@@ -191,7 +189,7 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		svn_error_t *r = svn_client_copy4(
 			&pInfo,
 			AllocCopyArray(sourceTargets, %pool),
-			pool.AllocString(toUri->ToString()),
+			pool.AllocCanonical(toUri->ToString()),
 			args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 			args->MakeParents,
 			CtxHandle,

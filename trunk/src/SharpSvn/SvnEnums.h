@@ -107,12 +107,18 @@ namespace SharpSvn {
 		CommitReplaced	= svn_wc_notify_commit_replaced, 
 		CommitBeforeDelta=svn_wc_notify_commit_postfix_txdelta, 
 		BlameRevision	= svn_wc_notify_blame_revision, 
+		// 1.2+
 		Locked			= svn_wc_notify_locked, 
 		LockUnlocked	= svn_wc_notify_unlocked, 
-		LockFailed		= svn_wc_notify_failed_lock, 
-		LockFailedUnlock=svn_wc_notify_failed_unlock 
+		LockFailed		= svn_wc_notify_failed_lock, 		
+		LockFailedUnlock=svn_wc_notify_failed_unlock,
 
-		// TODO: Add new items for Subversion 1.5+
+		// 1.5+
+		Exists			= svn_wc_notify_exists,
+		ChangeListSet	= svn_wc_notify_changelist_set,
+		ChangeListClear = svn_wc_notify_changelist_clear,
+		ChangeListFailed=svn_wc_notify_changelist_failed,
+		MergeBegin		= svn_wc_notify_merge_begin,
 	};
 
 	public enum class SvnNodeKind

@@ -30,8 +30,6 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 

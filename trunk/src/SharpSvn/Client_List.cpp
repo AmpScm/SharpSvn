@@ -50,8 +50,6 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
 	// We allow a null listHandler; the args object might just handle it itself
 
@@ -70,7 +68,7 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_list2(
-			pool.AllocString(target->ToString()), 
+			pool.AllocCanonical(target->ToString()), 
 			&pegrev,
 			&rev, 
 			(svn_depth_t)args->Depth,

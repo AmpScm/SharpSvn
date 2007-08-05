@@ -47,14 +47,12 @@ namespace SharpSvn {
 			_error = error;
 		}
 
-	};
-
-	public ref class SvnAuthorizationException : public SvnException
-	{
-	internal:
-		SvnAuthorizationException(svn_error_t *error)
-			: SvnException(error)
+	protected:
+		SvnException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+			//: ExternalException(info, context)
 		{
+			UNUSED_ALWAYS(info);
+			UNUSED_ALWAYS(context);
 		}
 	};
 
@@ -75,4 +73,38 @@ namespace SharpSvn {
 		{
 		}
 	};
+
+	//////////// Generic Subversion exception wrappers
+
+#define DECLARE_SVN_EXCEPTION_TYPE(type, parentType)			\
+	[Serializable]												\
+	public ref class type : public parentType					\
+	{															\
+	internal:													\
+		type(svn_error_t *error)								\
+			: parentType(error)									\
+		{}														\
+	protected:													\
+	type(System::Runtime::Serialization::SerializationInfo^ info,\
+	System::Runtime::Serialization::StreamingContext context)	\
+		: parentType(info, context)								\
+	{}															\
+	};
+
+	DECLARE_SVN_EXCEPTION_TYPE(SvnFormatException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnXmlException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnIoException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnStreamException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnNodeException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyLockException, SvnWorkingCopyException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemLockException, SvnFileSystemException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryIoException, SvnException); // Does not extent Repository Exception (= RA library exception)
+	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthenticationException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthorizationException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnDiffException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientApiException, SvnException);
 }

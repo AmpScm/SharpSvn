@@ -11,7 +11,7 @@ void SvnClient::Delete(String^ path)
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Delete(path, gcnew SvnDeleteArgs());
+	Delete(NewSingleItemCollection(path), gcnew SvnDeleteArgs());
 }
 
 bool SvnClient::Delete(String^ path, SvnDeleteArgs^ args)
@@ -22,13 +22,8 @@ bool SvnClient::Delete(String^ path, SvnDeleteArgs^ args)
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException("Path is a url; please use RemoteDelete", "path");
-	else if(!_pool)
-		throw gcnew ObjectDisposedException("SvnClient");
 
-	array<String^>^ paths = gcnew array<String^>(1);
-	paths[0] = path;
-
-	return Delete(safe_cast<ICollection<String^>^>(paths), args);
+	return Delete(NewSingleItemCollection(path), args);
 }
 
 
@@ -83,6 +78,14 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 	}
 }
 
+void SvnClient::RemoteDelete(Uri^ uri)
+{
+	if(!uri)
+		throw gcnew ArgumentNullException("uri");
+
+	RemoteDelete(NewSingleItemCollection(uri), gcnew SvnDeleteArgs());
+}
+
 
 bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args)
 {
@@ -104,9 +107,22 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^
 	return RemoteDelete(NewSingleItemCollection(uri), args, commitInfo);
 }
 
+void SvnClient::RemoteDelete(ICollection<Uri^>^ uris)
+{
+	if(!uris)
+		throw gcnew ArgumentNullException("uris");
+	SvnCommitInfo^ commitInfo;
+
+	RemoteDelete(uris, gcnew SvnDeleteArgs(), commitInfo);
+}
+
 
 bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args)
 {
+	if(!uris)
+		throw gcnew ArgumentNullException("uris");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
 	SvnCommitInfo^ commitInfo;
 
 	return RemoteDelete(uris, args, commitInfo);
@@ -140,7 +156,7 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	_currentArgs = args;
 	try
 	{
-		AprArray<String^, AprCStrMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
+		AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
 		svn_commit_info_t* commit_info = nullptr;
 
 		svn_error_t *r = svn_client_delete3(
