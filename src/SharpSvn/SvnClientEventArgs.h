@@ -930,8 +930,16 @@ namespace SharpSvn {
 			}
 
 			_depth = (SvnDepth)info->depth;
-			_wcSize = info->working_size;
-			_size = info->size;
+			
+			if(info->size == (apr_size_t)-1)
+				_size = -1;
+			else
+				_size = info->size;
+
+			if(info->working_size == (apr_size_t)-1)
+				_wcSize = -1;
+			else
+				_wcSize = info->working_size;
 		}
 	public:
 		property String^ Path
@@ -948,7 +956,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path)
+				if(!_fullPath && Path && HasWcInfo)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
