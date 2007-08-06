@@ -150,10 +150,10 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnLogArgs^ args = dynamic_cast<SvnLogArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnLogArgs
-	AprPool^ aprPool = AprPool::Attach(pool, false);
+	AprPool aprPool(pool, false);
 	if(args)
 	{
-		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, aprPool);
+		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, %aprPool);
 
 		/* date: use svn_time_from_cstring() if need apr_time_t */
 		try
@@ -165,12 +165,11 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 		}
 		catch(Exception^ e)
 		{
-			return svn_error_create(SVN_ERR_CANCELLED, NULL, aprPool->AllocString(String::Concat("Log receiver throwed exception: ", e->ToString())));
+			return CreateExceptionSvnError("Log receiver", e);
 		}
 		finally
 		{
 			e->Detach(false);
-			delete aprPool; // Just detach
 		}
 	}
 	return NULL;

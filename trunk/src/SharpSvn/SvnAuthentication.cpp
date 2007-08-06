@@ -89,10 +89,17 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 	SvnUsernameArgs^ args = gcnew SvnUsernameArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) && !args->Cancel)
+	try
 	{
-		*cred = nullptr;
-		return nullptr;
+		if(!wrapper->Raise(args) && !args->Cancel)
+		{
+			*cred = nullptr;
+			return nullptr;
+		}
+	}
+	catch(Exception^ e)
+	{
+		return CreateExceptionSvnError("Authorization handler", e);
 	}
 
 	if(args->Cancel)
@@ -133,10 +140,17 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 
 	SvnUsernamePasswordArgs^ args = gcnew SvnUsernamePasswordArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) && !args->Cancel)
+	try
 	{
-		*cred = nullptr;
-		return nullptr;
+		if(!wrapper->Raise(args) && !args->Cancel)
+		{
+			*cred = nullptr;
+			return nullptr;
+		}
+	}
+	catch(Exception^ e)
+	{
+		return CreateExceptionSvnError("Authorization handler", e);
 	}
 
 	if(args->Cancel)
@@ -190,10 +204,17 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		SvnBase::Utf8_PtrToString(cert_info->ascii_cert),
 		SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) && !args->Cancel)
+	try
 	{
-		*cred = nullptr;
-		return nullptr;
+		if(!wrapper->Raise(args) && !args->Cancel)
+		{
+			*cred = nullptr;
+			return nullptr;
+		}
+	}
+	catch(Exception^ e)
+	{
+		return CreateExceptionSvnError("Authorization handler", e);
 	}
 
 	if(args->Cancel)
@@ -240,10 +261,17 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 
 	SvnSslClientCertificateArgs^ args = gcnew SvnSslClientCertificateArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) && !args->Cancel)
+	try
 	{
-		*cred = nullptr;
-		return nullptr;
+		if(!wrapper->Raise(args) && !args->Cancel)
+		{
+			*cred = nullptr;
+			return nullptr;
+		}
+	}
+	catch(Exception^ e)
+	{
+		return CreateExceptionSvnError("Authorization handler", e);
 	}
 
 	if(args->Cancel)
@@ -284,10 +312,17 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 
 	SvnSslClientCertificatePasswordArgs^ args = gcnew SvnSslClientCertificatePasswordArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-	if(!wrapper->Raise(args) && !args->Cancel)
+	try
 	{
-		*cred = nullptr;
-		return nullptr;
+		if(!wrapper->Raise(args) && !args->Cancel)
+		{
+			*cred = nullptr;
+			return nullptr;
+		}
+	}
+	catch(Exception^ e)
+	{
+		return CreateExceptionSvnError("Authorization handler", e);
 	}
 
 	if(args->Cancel)

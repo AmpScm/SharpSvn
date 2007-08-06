@@ -12,3 +12,7 @@
 #include "SvnException.h"
 
 #include "SvnAuthentication.h"
+
+#define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
+
+svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);

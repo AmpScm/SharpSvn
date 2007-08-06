@@ -19,6 +19,8 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
+	AprPool thePool(pool, false);
+
 	SvnListArgs^ args = dynamic_cast<SvnListArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
@@ -31,9 +33,8 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "List receiver canceled operation");
 		}
 		catch(Exception^ e)
-		{
-			AprPool^ thePool = AprPool::Attach(pool, false);
-			return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("List receiver throwed exception: ", e->ToString())));
+		{			
+			return CreateExceptionSvnError("List receiver", e);
 		}
 		finally
 		{

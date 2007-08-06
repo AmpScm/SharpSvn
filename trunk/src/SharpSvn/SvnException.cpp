@@ -6,8 +6,12 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 
-
 SvnException^ SvnException::Create(svn_error_t *error)
+{
+	return static_cast<SvnException^>(Create(error, true));
+}
+
+Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 {
 	if(!error)
 		return nullptr;
@@ -206,6 +210,20 @@ SvnException^ SvnException::Create(svn_error_t *error)
 			return gcnew SvnClientApiException(error);
 
 		case SVN_ERR_CANCELLED:
+			if(error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, strlen(MANAGED_EXCEPTION_PREFIX)))
+			{
+				try
+				{
+					String^ message = SvnBase::Utf8_PtrToString(error->message);				
+					__int64 handle = __int64::Parse(message->Substring((int)strlen(MANAGED_EXCEPTION_PREFIX)));
+
+					return AprBaton<Exception^>::Get((IntPtr)handle);
+				}
+				catch(Exception^)
+				{}
+
+				// Exception is a 
+			}
 			return gcnew SvnOperationCanceledException(error);
 
 		case SVN_ERR_CEASE_INVOCATION:
@@ -220,6 +238,7 @@ SvnException^ SvnException::Create(svn_error_t *error)
 	}
 	finally
 	{
-		svn_error_clear(error);
+		if(clearError)
+			svn_error_clear(error);
 	}
 }

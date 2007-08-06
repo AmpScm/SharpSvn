@@ -33,7 +33,7 @@ namespace SharpSvn {
 		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
 		AprPool^ _pool;
 		SvnClientArgs^ _currentArgs;
-		bool _logMessageRequired;
+		bool _noLogMessageRequired;
 	internal:
 		property SvnClientArgs^ CurrentArgs
 		{
@@ -97,16 +97,43 @@ namespace SharpSvn {
 			System::Version^ get();
 		}
 
-		/// <summary>Gets or sets a boolean indicating whether commits will fail if no log message is provided</summary>
-		property bool LogMessageRequired
+		ref class SvnClientConfiguration sealed
 		{
-			bool get()
+			SvnClient^ _client;
+		internal:
+			SvnClientConfiguration(SvnClient^ client)
 			{
-				return _logMessageRequired;
+				if(!client)
+					throw gcnew ArgumentNullException("client");
+
+				_client = client;
 			}
-			void set(bool value)
+
+		public:
+			/// <summary>Gets or sets a boolean indicating whether commits will fail if no log message is provided</summary>
+			property bool LogMessageRequired
 			{
-				_logMessageRequired = value;
+				bool get()
+				{
+					return !_client->_noLogMessageRequired;
+				}
+				void set(bool value)
+				{
+					_client->_noLogMessageRequired = !value;
+				}
+			}
+		};
+
+		SvnClientConfiguration^ _config;
+
+		property SvnClientConfiguration^ Configuration
+		{
+			SvnClientConfiguration^ get()
+			{
+				if(!_config)
+					_config = gcnew SvnClientConfiguration(this);
+
+				return _config;
 			}
 		}
 

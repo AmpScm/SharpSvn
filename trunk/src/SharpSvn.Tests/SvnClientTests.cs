@@ -103,6 +103,8 @@ namespace SharpSvn.Tests
 
 			using (SvnClient client = new SvnClient())
 			{
+				client.Configuration.LogMessageRequired = false;
+
 				client.RemoteMkDir(new Uri(ReposUri, "folder"));
 
 				client.CheckOut(new Uri(ReposUri, "folder"), WcPath);
@@ -120,10 +122,28 @@ namespace SharpSvn.Tests
 #endif
 		}
 
+		SvnClient NewSvnClient(bool expectCommit, bool expectConflict)
+		{
+			SvnClient client = new SvnClient();
+
+			client.ClientConflictResolver += delegate(object sender, SvnClientConflictResolveEventArgs e)
+			{
+				Assert.That(true, Is.EqualTo(expectConflict), "Conflict expected");
+			};
+
+			client.ClientBeforeCommit += delegate(object sender, SvnClientBeforeCommitEventArgs e)
+			{
+				Assert.That(true, Is.EqualTo(expectCommit), "Commit expected");
+				e.LogMessage = "";
+			};
+
+			return client;
+		}
+
 		[Test]
 		public void CreateTrunk()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				Uri trunkUri = new Uri(ReposUri, "trunk/");
 				client.RemoteMkDir(trunkUri);
@@ -154,7 +174,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void RemoteListTest()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(false, false))
 			{
 				IList<SvnListEventArgs> items;
 				client.GetList(ReposUri, out items);
@@ -166,7 +186,7 @@ namespace SharpSvn.Tests
 
 		public void InfoTest()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(false, false))
 			{
 				IList<SvnInfoEventArgs> items;
 				client.GetInfo(ReposUri, new SvnInfoArgs(), out items);
@@ -190,7 +210,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void WcStatusTest()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(false, false))
 			{
 				string file = Path.Combine(WcPath, "WcStatusTest");
 				TouchFile(file);
@@ -209,7 +229,7 @@ namespace SharpSvn.Tests
 		public void CatTest()
 		{
 			string data = Guid.NewGuid().ToString();
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string file = Path.Combine(WcPath, "CatTest");
 				using (StreamWriter sw = File.CreateText(file))
@@ -259,7 +279,7 @@ namespace SharpSvn.Tests
 			string file2 = Path.Combine(WcPath, "ChangeListFile2");
 			string file3 = Path.Combine(WcPath, "ChangeListFile3");
 			string file4 = Path.Combine(WcPath, "ChangeListFile4");
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				SvnInfoArgs ia = new SvnInfoArgs();
 				ia.ThrowOnError = false;
@@ -338,7 +358,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void TestCleanup()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(false, false))
 			{
 				client.CleanUp(WcPath);
 			}
@@ -347,7 +367,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void CopyTest()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string file = Path.Combine(WcPath, "CopyBase");
 
@@ -417,7 +437,7 @@ namespace SharpSvn.Tests
 		bool ItemExists(Uri target)
 		{
 			bool found = false;
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(false, false))
 			{
 				SvnInfoArgs args = new SvnInfoArgs();
 				args.ThrowOnError = false;
@@ -432,7 +452,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void MoveTest()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string file = Path.Combine(WcPath, "LocalMoveBase");
 
@@ -463,7 +483,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void DeleteTest()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string local = Path.Combine(WcPath, "LocalDeleteBase");
 				string remote = Path.Combine(WcPath, "RemoteDeleteBase");
@@ -506,7 +526,7 @@ namespace SharpSvn.Tests
 			string end = Guid.NewGuid().ToString()+Environment.NewLine + Guid.NewGuid().ToString();
 			string origLine = Guid.NewGuid().ToString();
 			string newLine = Guid.NewGuid().ToString();
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string diffFile = Path.Combine(WcPath, "DiffTest");
 
@@ -579,7 +599,7 @@ namespace SharpSvn.Tests
 			if (Directory.Exists(exportDir))
 				ForcedDeleteDirectory(exportDir);
 
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string file = Path.Combine(WcPath, "ExportFile");
 				TouchFile(file);
@@ -609,7 +629,7 @@ namespace SharpSvn.Tests
 		[Test]
 		public void TestInfo()
 		{
-			using (SvnClient client = new SvnClient())
+			using (SvnClient client = NewSvnClient(true, false))
 			{
 				string file = Path.Combine(WcPath, "InfoFile");
 				TouchFile(file);

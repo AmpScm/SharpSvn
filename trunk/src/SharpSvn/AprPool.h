@@ -4,6 +4,7 @@
 using namespace System;
 using System::Collections::Generic::ICollection;
 #include "SvnBase.h"
+#include <svn_pools.h>
 
 
 namespace SharpSvn {
@@ -61,9 +62,8 @@ namespace SharpSvn {
 			AprPool^ _parent;
 			AprPoolTag^ _tag;
 			apr_pool_t *_handle;
-			bool _destroyPool;
+			initonly bool _destroyPool;
 
-			AprPool(apr_pool_t *handle, bool destroyPool);
 			!AprPool();
 		public:
 			~AprPool();
@@ -75,8 +75,9 @@ namespace SharpSvn {
 		public:
 			AprPool(AprPool^ parentPool);
 			AprPool();
+			AprPool(apr_pool_t *attachHandle, bool destroyPool);
 
-			static AprPool^ Attach(apr_pool_t *handle, bool destroyPool);
+			//static AprPool^ Attach(apr_pool_t *handle, bool destroyPool);
 
 			property bool IsDisposed
 			{

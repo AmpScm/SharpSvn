@@ -2,8 +2,8 @@
 #include "AprPool.h"
 #include "AprException.h"
 
-#include <apr-1/apr_pools.h>
 #include <svn_path.h>
+#include <svn_pools.h>
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
@@ -56,39 +56,17 @@ AprPool::AprPool(SharpSvn::Apr::AprPool ^parentPool)
 	if(!parentPool)
 		throw gcnew ArgumentNullException("parentPool");
 
-	apr_pool_t* handle = nullptr;
-	apr_status_t hr = apr_pool_create(&handle, parentPool->Handle);
-
-	if(hr)
-		throw gcnew AprException(hr);
-	else
-		_handle = handle;
-
 	_tag = gcnew AprPoolTag(parentPool->_tag);
 	_parent = parentPool;
+	_handle = svn_pool_create(parentPool->Handle);	
 	_destroyPool = true;
 }
 
 AprPool::AprPool()
 {
-	apr_pool_t* handle = nullptr;
-	apr_status_t hr = apr_pool_create(&handle, nullptr);
-
-	if(hr)
-		throw gcnew AprException(hr);
-	else
-		_handle = handle;
-
 	_tag = gcnew AprPoolTag();
+	_handle = svn_pool_create(nullptr);	
 	_destroyPool = true;
-}
-
-AprPool^ AprPool::Attach(apr_pool_t *handle, bool destroyPool)
-{
-	if(!handle)
-		throw gcnew ArgumentNullException("handle");
-
-	return gcnew AprPool(handle, destroyPool);
 }
 
 void AprPool::Clear()
@@ -102,7 +80,7 @@ void AprPool::Clear()
 	else
 		_tag = gcnew AprPoolTag();
 
-	apr_pool_clear(_handle);
+	svn_pool_clear(_handle);
 }
 
 void* AprPool::Alloc(size_t size)
@@ -226,14 +204,8 @@ const char* AprPool::AllocCanonical(String^ value)
 		const char* resPath = svn_path_canonicalize(pcBytes, Handle);
 
 		if(resPath == pcBytes)
-		{
-			char* pData = (char*)Alloc(bytes->Length+1);
-			memcpy(pData, pBytes, bytes->Length);
-			pData[bytes->Length] = 0;
-
-			return pData;
-		}
-
+			resPath = apr_pstrdup(Handle, resPath);
+		
 		return resPath;
 	}
 	else
@@ -355,14 +327,8 @@ const char* AprPool::AllocCanonical(String^ value, apr_pool_t *pool)
 		const char* resPath = svn_path_canonicalize(pcBytes, pool);
 
 		if(resPath == pcBytes)
-		{
-			char* pData = (char*)Alloc(bytes->Length+1, pool);
-			memcpy(pData, pBytes, bytes->Length);
-			pData[bytes->Length] = 0;
-
-			return pData;
-		}
-
+			resPath = apr_pstrdup(pool, resPath);
+		
 		return resPath;
 	}
 	else

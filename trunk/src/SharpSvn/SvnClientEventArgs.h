@@ -1469,7 +1469,7 @@ namespace SharpSvn {
 						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
 						String^ key = SvnBase::Utf8_PtrToString(pKey);
-						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, propVal->len);
+						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
 
 						_properties->Add(key, value);
 					}
