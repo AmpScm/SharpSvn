@@ -108,7 +108,7 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr)
 	if(!ptr)
 		return nullptr;
 
-	return Utf8_PtrToString(ptr, ::strlen(ptr));
+	return Utf8_PtrToString(ptr, (int)::strlen(ptr));
 }
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
@@ -116,7 +116,7 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 	if(!ptr || length < 0)
 		return nullptr;
 
-	return gcnew String(ptr, 0, ::strlen(ptr), System::Text::Encoding::UTF8);
+	return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
 }
 
 array<char>^ SvnBase::PtrToByteArray(const char* ptr, int length)

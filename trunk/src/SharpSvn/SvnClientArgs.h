@@ -1524,6 +1524,51 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnDiffSummaryArgs : public SvnClientArgs
+	{
+		bool _noticeAncestry;
+		SvnDepth _depth;
+	public:
+		SvnDiffSummaryArgs()
+		{
+			_depth = SvnDepth::Infinity;
+		}
+
+	public:
+		event EventHandler<SvnDiffSummaryEventArgs^>^ SummaryHandler;
+
+	protected public:
+		virtual void OnSummaryHandler(SvnDiffSummaryEventArgs^ e)
+		{
+			SummaryHandler(this, e);
+		}
+
+	public:
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = value;
+			}
+		}
+
+		property bool IgnoreAncestry
+		{
+			bool get()
+			{
+				return !_noticeAncestry;
+			}
+			void set(bool value)
+			{
+				_noticeAncestry = !value;
+			}
+		}
+	};
+
 	public ref class SvnAddToChangeListArgs : public SvnClientArgs
 	{
 	public:

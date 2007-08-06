@@ -15,7 +15,7 @@ void SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 	InternalLog(NewSingleItemCollection(target->TargetName), target->Revision, gcnew SvnLogArgs(), logHandler);
 }
 
-bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
+bool SvnClient::Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -31,10 +31,10 @@ bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 
 void SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	Log(baseTarget, relativeTargets, logHandler, gcnew SvnLogArgs());
+	Log(baseTarget, relativeTargets, gcnew SvnLogArgs(), logHandler);
 }
 
-bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args)
+bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if(!baseTarget)
 		throw gcnew ArgumentNullException("baseTarget");
@@ -99,7 +99,7 @@ bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEv
 
 	try
 	{
-		return Log(target, results->Handler, args);
+		return Log(target, args, results->Handler);
 	}
 	finally
 	{
@@ -135,7 +135,7 @@ bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, 
 
 	try
 	{
-		return Log(baseTarget, subTargets, results->Handler, args);
+		return Log(baseTarget, subTargets, args, results->Handler);
 	}
 	finally
 	{

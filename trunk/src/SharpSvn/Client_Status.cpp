@@ -12,7 +12,7 @@ void SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 	else if(!statusHandler)
 		throw gcnew ArgumentNullException("statusHandler");
 
-	Status(path, statusHandler, gcnew SvnStatusArgs());
+	Status(path, gcnew SvnStatusArgs(), statusHandler);
 }
 
 static void svnclient_status_handler(void *baton, const char *path, svn_wc_status2_t *status)
@@ -34,7 +34,7 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 	}
 }
 
-bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args)
+bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -93,7 +93,7 @@ void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statu
 
 	try
 	{
-		Status(path, results->Handler, gcnew SvnStatusArgs());	
+		Status(path, gcnew SvnStatusArgs(), results->Handler);
 	}
 	finally
 	{
@@ -115,7 +115,7 @@ void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 
 	try
 	{
-		Status(path, results->Handler, args);
+		Status(path, args, results->Handler);
 	}
 	finally
 	{
@@ -137,7 +137,7 @@ bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStat
 
 	try
 	{
-		return Status(path, results->Handler, args);	
+		return Status(path, args, results->Handler);
 	}
 	finally
 	{

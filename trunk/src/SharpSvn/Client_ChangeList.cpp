@@ -142,7 +142,7 @@ void SvnClient::ListChangeList(String^ changeList, String^ rootPath, EventHandle
 	else if(!changeListHandler)
 		throw gcnew ArgumentNullException("changeListHandler");
 
-	ListChangeList(changeList, rootPath, changeListHandler, gcnew SvnListChangeListArgs());
+	ListChangeList(changeList, rootPath, gcnew SvnListChangeListArgs(), changeListHandler);
 }
 
 static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
@@ -176,7 +176,7 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
 }
 
 
-bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler, SvnListChangeListArgs^ args)
+bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -286,7 +286,7 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 
 	try
 	{
-		return ListChangeList(changeList, rootPath, results->Handler, args);
+		return ListChangeList(changeList, rootPath, args, results->Handler);
 	}
 	finally
 	{

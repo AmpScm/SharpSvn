@@ -360,7 +360,7 @@ namespace SharpSvn {
 		/// <summary>Recursively gets 'interesting' status data for the specified path</summary>
 		void Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler);
 		/// <summary>Gets status data for the specified path</summary>
-		bool Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler, SvnStatusArgs^ args);
+		bool Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatusEventArgs^>^ statusHandler);
 
 		/// <summary>Recursively gets a list of 'interesting' status data for the specified path</summary>
 		void GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
@@ -377,11 +377,11 @@ namespace SharpSvn {
 		/// <summary>Gets log messages of the specified target</summary>
 		void Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args);
+		bool Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
 		void Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler, SvnLogArgs^ args);
+		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <summary>Gets log messages of the specified target</summary>
 		void GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems);
@@ -408,7 +408,7 @@ namespace SharpSvn {
 #pragma region // List Client Command
 
 		void List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler);
-		bool List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler, SvnListArgs^ args);
+		bool List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListEventArgs^>^ listHandler);
 
 		void GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list);
 		bool GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnListEventArgs^>^% list);
@@ -420,7 +420,7 @@ namespace SharpSvn {
 		/// <summary>Gets information about the specified target</summary>
 		void Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler);
 		/// <summary>Gets information about the specified target</summary>
-		bool Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler, SvnInfoArgs^ args);
+		bool Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoEventArgs^>^ infoHandler);
 
 		/// <summary>Gets information about the specified target</summary>
 		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
@@ -657,7 +657,7 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
 		void PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
-		bool PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler, SvnPropertyListArgs^ args);
+		bool PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
 
 		void GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list);
 		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
@@ -681,12 +681,22 @@ namespace SharpSvn {
 
 	public:
 		/////////////////////////////////////////
-#pragma region // GetProperty Client Command
+#pragma region // Diff Client Command
 		void Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result);
 		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
 		void Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result);
 		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
 #pragma endregion
+
+public:
+		/////////////////////////////////////////
+#pragma region // Diff Summary Command
+		void DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
+		bool DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
+		void GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
+		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
+#pragma endregion
+
 
 	public:
 		void AddToChangeList(String^ path, String^ changeList);
@@ -698,7 +708,7 @@ namespace SharpSvn {
 		void RemoveFromChangeList(ICollection<String^>^ paths, String^ changeList);
 		bool RemoveFromChangeList(ICollection<String^>^ paths, String^ changeList, SvnRemoveFromChangeListArgs^ args);
 		void ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
-		bool ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler, SvnListChangeListArgs^ args);
+		bool ListChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
 
 		void GetChangeList(String^ changeList, String^ rootPath, [Out]IList<String^>^% list);
 		bool GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<String^>^% list);

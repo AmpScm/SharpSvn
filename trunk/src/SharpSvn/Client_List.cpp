@@ -12,7 +12,7 @@ void SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 	else if(!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
 
-	List(target, listHandler, gcnew SvnListArgs());
+	List(target, gcnew SvnListArgs(), listHandler);
 }
 
 static svn_error_t *svnclient_list_handler(void *baton, const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, apr_pool_t *pool)
@@ -24,7 +24,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	SvnListArgs^ args = dynamic_cast<SvnListArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
-		SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path);
+		SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path, %thePool);
 		try
 		{
 			args->OnList(e);
@@ -45,7 +45,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	return nullptr;
 }
 
-bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler, SvnListArgs^ args)
+bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListEventArgs^>^ listHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -69,7 +69,7 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_list2(
-			pool.AllocCanonical(target->ToString()), 
+			pool.AllocString(target->TargetName), 
 			&pegrev,
 			&rev, 
 			(svn_depth_t)args->Depth,
@@ -100,7 +100,7 @@ void SvnClient::GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list
 
 	try
 	{
-		List(target, results->Handler, gcnew SvnListArgs());	
+		List(target, gcnew SvnListArgs(), results->Handler);
 	}
 	finally
 	{
@@ -120,7 +120,7 @@ bool SvnClient::GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnLis
 
 	try
 	{
-		return List(target, results->Handler, args);	
+		return List(target, args, results->Handler);
 	}
 	finally
 	{

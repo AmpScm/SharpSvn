@@ -38,8 +38,10 @@ namespace SharpSvn {
 				return (T)GCHandle::FromIntPtr(value).Target;
 			}
 
+			
 			property IntPtr Handle
 			{
+				[System::Diagnostics::DebuggerStepThrough]
 				IntPtr get()
 				{
 					return GCHandle::ToIntPtr(_handle);

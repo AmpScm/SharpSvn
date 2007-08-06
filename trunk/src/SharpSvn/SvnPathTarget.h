@@ -37,7 +37,7 @@ namespace SharpSvn {
 			_fullPath = GetFullPath(_path);
 		}
 
-		SvnPathTarget(String^ path, long revision)
+		SvnPathTarget(String^ path, __int64 revision)
 			: SvnTarget(gcnew SvnRevision(revision))
 		{
 			if(String::IsNullOrEmpty(path))

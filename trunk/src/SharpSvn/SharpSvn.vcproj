@@ -461,6 +461,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_DiffSummary.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Export.cpp"
 					>
 				</File>
