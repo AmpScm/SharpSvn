@@ -1330,28 +1330,32 @@ namespace SharpSvn {
 		const char* _pAbsPath;
 		const svn_lock_t *_pLock;
 		const svn_dirent_t *_pDirEnt;
+		AprPool^ _pool;
 
 		String^ _absPath;
 		SvnLockInfo^ _lock;
 		SvnDirEntry^ _entry;
 
 	internal:
-		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
+		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, AprPool^ pool)
 		{
 			if(!path)
 				throw gcnew ArgumentNullException("path");
 			else if(!abs_path)
 				throw gcnew ArgumentNullException("abs_path");
+			else if(!pool)
+				throw gcnew ArgumentNullException("pool");
 
 			_path = SvnBase::Utf8_PtrToString(path);
 
 			_pDirEnt = dirent;
 			_pLock = lock;
 			_pAbsPath = abs_path;
+			_pool = pool;
 		}
 
 	public:
-		property String^ Path
+		property String^ ItemPath
 		{
 			String^ get()
 			{
@@ -1359,7 +1363,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ AbsPath
+		property String^ BasePath
 		{
 			String^ get()
 			{
@@ -1400,7 +1404,8 @@ namespace SharpSvn {
 			{
 				if(keepProperties)
 				{
-					GC::KeepAlive(AbsPath);
+					GC::KeepAlive(ItemPath);
+					GC::KeepAlive(BasePath);
 					GC::KeepAlive(Lock);
 					GC::KeepAlive(Entry);
 				}
@@ -1415,6 +1420,7 @@ namespace SharpSvn {
 				_pAbsPath = nullptr;
 				_pLock = nullptr;
 				_pDirEnt = nullptr;
+				_pool = nullptr;
 
 				__super::Detach(keepProperties);
 			}
@@ -1539,4 +1545,79 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnDiffSummaryEventArgs : public SvnClientCancelEventArgs
+	{
+		const svn_client_diff_summarize_t *_diffSummary;
+		String^ _path;
+		initonly bool _propertiesChanged;
+		initonly SvnNodeKind _nodeKind;
+		initonly SvnDiffKind _diffKind;
+	internal:
+		SvnDiffSummaryEventArgs(const svn_client_diff_summarize_t *diffSummary)
+		{
+			if(!diffSummary)
+				throw gcnew ArgumentNullException("diffSummary");
+
+			_diffSummary = diffSummary;
+			_propertiesChanged = (0 != diffSummary->prop_changed);
+			_nodeKind = (SvnNodeKind)diffSummary->node_kind;
+			_diffKind = (SvnDiffKind)diffSummary->summarize_kind;
+		}
+
+
+	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				if(!_path && _diffSummary)
+					_path = SvnBase::Utf8_PtrToString(_diffSummary->path);
+
+				return _path;
+			}
+		}
+
+		property bool PropertiesChanged
+		{
+			bool get()
+			{
+				return _propertiesChanged;
+			}
+		}
+
+		property SvnNodeKind NodeKind
+		{
+			SvnNodeKind get()
+			{
+				return _nodeKind;
+			}
+		}
+
+		property SvnDiffKind DiffKind
+		{
+			SvnDiffKind get()
+			{
+				return _diffKind;
+			}
+		}
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
+					GC::KeepAlive(Path);
+				}
+			}
+			finally
+			{
+				_diffSummary = nullptr;
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
 }

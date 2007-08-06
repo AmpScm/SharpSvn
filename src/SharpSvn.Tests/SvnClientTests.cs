@@ -428,7 +428,7 @@ namespace SharpSvn.Tests
 							Assert.That(i.Key.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
 							visited = true;
 						}
-						
+
 				});
 				Assert.That(visited, "Visited local log item");
 			}
@@ -442,11 +442,11 @@ namespace SharpSvn.Tests
 				SvnInfoArgs args = new SvnInfoArgs();
 				args.ThrowOnError = false;
 				args.Depth = SvnDepth.Empty;
-				return client.Info(target, delegate(object sender, SvnInfoEventArgs e)
+				return client.Info(target, args, delegate(object sender, SvnInfoEventArgs e)
 				{
 					found = true;
-				}, args) && found;
-			}					
+				}) && found;
+			}
 		}
 
 		[Test]
@@ -522,8 +522,8 @@ namespace SharpSvn.Tests
 		[Test]
 		public void DiffTests()
 		{
-			string start = Guid.NewGuid().ToString()+Environment.NewLine + Guid.NewGuid().ToString();
-			string end = Guid.NewGuid().ToString()+Environment.NewLine + Guid.NewGuid().ToString();
+			string start = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
+			string end = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
 			string origLine = Guid.NewGuid().ToString();
 			string newLine = Guid.NewGuid().ToString();
 			using (SvnClient client = NewSvnClient(true, false))
@@ -557,9 +557,24 @@ namespace SharpSvn.Tests
 
 				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new Uri(WcUri, "DiffTest"), out diffOutput);
 				VerifyDiffOutput(origLine, newLine, diffOutput);
+
+				SvnCommitInfo info;
+				client.Commit(diffFile, out info);
+
+				bool visited = false;
+				client.DiffSummary(new SvnUriTarget(WcUri, info.Revision-1), WcUri,
+					delegate(object sender, SvnDiffSummaryEventArgs e)
+					{
+						if (e.Path == "DiffTest")
+						{
+							Assert.That(e.DiffKind, Is.EqualTo(SvnDiffKind.Modified));
+							Assert.That(e.PropertiesChanged, Is.False);
+							visited = true;
+						}
+					});
+
+				Assert.That(visited);
 			}
-
-
 		}
 
 		private static void VerifyDiffOutput(string origLine, string newLine, FileStream diffOutput)
@@ -671,34 +686,34 @@ namespace SharpSvn.Tests
 				client.Commit(WcPath, out commitData);
 				visited = false;
 				client.Info(file, delegate(object sender, SvnInfoEventArgs e)
-				{
-					Assert.That(e.ChangeList, Is.Null);
-					Assert.That(e.Checksum, Is.EqualTo("d41d8cd98f00b204e9800998ecf8427e"));
-					Assert.That(e.ConflictNew, Is.Null);
-					Assert.That(e.ConflictOld, Is.Null);
-					Assert.That(e.ConflictWork, Is.Null);
-					Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
-					Assert.That(e.CopyFromRev, Is.EqualTo(-1L));
-					Assert.That(e.CopyFromUri, Is.Null);
-					Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
-					Assert.That(e.FullPath, Is.EqualTo(file));
-					Assert.That(e.HasWcInfo, Is.True);
-					Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-					Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
-					Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
-					Assert.That(e.Lock, Is.Null);
-					Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
-					Assert.That(e.Path, Is.Not.Null);
-					Assert.That(e.PropertyEditFile, Is.Null);
-					//Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime)); // Not static, might change
-					Assert.That(e.RepositorySize, Is.EqualTo(-1L));
-					Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
-					Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-					Assert.That(e.Schedule, Is.EqualTo(SvnWcSchedule.None));
-					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
-					Assert.That(e.WorkingCopySize, Is.EqualTo(0L));
-					visited = true;
-				});
+					{
+						Assert.That(e.ChangeList, Is.Null);
+						Assert.That(e.Checksum, Is.EqualTo("d41d8cd98f00b204e9800998ecf8427e"));
+						Assert.That(e.ConflictNew, Is.Null);
+						Assert.That(e.ConflictOld, Is.Null);
+						Assert.That(e.ConflictWork, Is.Null);
+						Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+						Assert.That(e.CopyFromRev, Is.EqualTo(-1L));
+						Assert.That(e.CopyFromUri, Is.Null);
+						Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
+						Assert.That(e.FullPath, Is.EqualTo(file));
+						Assert.That(e.HasWcInfo, Is.True);
+						Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
+						Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+						Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
+						Assert.That(e.Lock, Is.Null);
+						Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
+						Assert.That(e.Path, Is.Not.Null);
+						Assert.That(e.PropertyEditFile, Is.Null);
+						//Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime)); // Not static, might change
+						Assert.That(e.RepositorySize, Is.EqualTo(-1L));
+						Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
+						Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
+						Assert.That(e.Schedule, Is.EqualTo(SvnWcSchedule.None));
+						Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
+						Assert.That(e.WorkingCopySize, Is.EqualTo(0L));
+						visited = true;
+					});
 				Assert.That(visited);
 
 				visited = false;
@@ -732,6 +747,63 @@ namespace SharpSvn.Tests
 					visited = true;
 				});
 				Assert.That(visited);
+			}
+		}
+		[Test]
+		public void TestList()
+		{
+			using (SvnClient client = NewSvnClient(true, false))
+			{
+				
+				string oneFile = Path.Combine(WcPath, "LocalFileForTestList");
+				TouchFile(oneFile);
+				client.Add(oneFile);
+
+				SvnCommitInfo ci;
+				client.Commit(WcPath, out ci);
+				client.Update(WcPath);
+
+				bool visited = false;
+				SvnListArgs a = new SvnListArgs();
+				a.EntryItems = SvnDirEntryItems.AllFields;
+
+				client.List(new SvnPathTarget(WcPath), a, delegate(object sender, SvnListEventArgs e)
+					{
+						Assert.That(e.Entry, Is.Not.Null, "Entry set");
+
+						if (e.ItemPath == "LocalFileForTestList")
+						{
+							Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
+							Assert.That(e.Lock, Is.Null);							
+							Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
+							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
+							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
+							Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
+							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+							visited = true;
+						}
+					});
+				Assert.That(visited, Is.True, "Visited is true");
+
+
+				visited = false;
+				client.List(WcUri, a, delegate(object sender, SvnListEventArgs e)
+					{
+						Assert.That(e.Entry, Is.Not.Null, "Entry set");
+
+						if (e.ItemPath == "LocalFileForTestList")
+						{
+							Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
+							Assert.That(e.Lock, Is.Null);
+							Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
+							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
+							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
+							Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
+							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+							visited = true;
+						}
+					});
+				Assert.That(visited, Is.True, "Visited is true");
 			}
 		}
 	}

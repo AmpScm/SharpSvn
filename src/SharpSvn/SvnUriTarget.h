@@ -34,7 +34,7 @@ namespace SharpSvn {
 			_uri = CanonicalizeUri(uri);
 		}
 
-		SvnUriTarget (Uri^ uri, long revision)
+		SvnUriTarget (Uri^ uri, __int64 revision)
 			: SvnTarget(gcnew SvnRevision(revision))
 		{
 			if(!uri)

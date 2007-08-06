@@ -11,8 +11,8 @@ void SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEven
 		throw gcnew ArgumentNullException("target");
 	else if(!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
-	
-	PropertyList(target, listHandler, gcnew SvnPropertyListArgs());
+
+	PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
 }
 
 static svn_error_t *svnclient_property_list_handler(void *baton, const char *path, apr_hash_t *prop_hash, apr_pool_t *pool)
@@ -44,7 +44,7 @@ static svn_error_t *svnclient_property_list_handler(void *baton, const char *pat
 	return nullptr;
 }
 
-bool SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler, SvnPropertyListArgs^ args)
+bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, EventHandler<SvnPropertyListEventArgs^>^ listHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -97,7 +97,7 @@ void SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEv
 
 	try
 	{
-		PropertyList(target, results->Handler, gcnew SvnPropertyListArgs());	
+		PropertyList(target, gcnew SvnPropertyListArgs(), results->Handler);
 	}
 	finally
 	{
@@ -116,7 +116,7 @@ bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [O
 
 	try
 	{
-		return PropertyList(target, results->Handler, args);	
+		return PropertyList(target, args, results->Handler);
 	}
 	finally
 	{

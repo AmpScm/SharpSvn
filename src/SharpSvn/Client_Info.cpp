@@ -12,7 +12,7 @@ void SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 	else if(!infoHandler)
 		throw gcnew ArgumentNullException("infoHandler");
 
-	Info(target, infoHandler, gcnew SvnInfoArgs());
+	Info(target, gcnew SvnInfoArgs(), infoHandler);
 }
 
 static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_info_t *info, apr_pool_t *pool)
@@ -44,7 +44,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 	return nullptr;
 }
 
-bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler, SvnInfoArgs^ args)
+bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -103,7 +103,7 @@ void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 
 	try
 	{
-		Info(target, results->Handler, gcnew SvnInfoArgs());
+		Info(target, gcnew SvnInfoArgs(), results->Handler);
 	}
 	finally
 	{
@@ -125,7 +125,7 @@ bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInf
 
 	try
 	{
-		return Info(target, results->Handler, args);	
+		return Info(target, args, results->Handler);
 	}
 	finally
 	{

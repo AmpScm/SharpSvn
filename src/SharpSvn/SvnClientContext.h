@@ -40,6 +40,7 @@ namespace SharpSvn {
 	internal:
 		property svn_client_ctx_t *CtxHandle
 		{
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			svn_client_ctx_t *get();
 		}
 

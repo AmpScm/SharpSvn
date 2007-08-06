@@ -35,6 +35,7 @@ namespace SharpSvn {
 				}
 
 			public:
+				[System::Diagnostics::DebuggerStepThroughAttribute()]
 				void Ensure()
 				{
 					if(_disposed)
@@ -112,9 +113,10 @@ namespace SharpSvn {
 				return nullptr;
 			}
 
-		internal:
+		internal:			
 			property apr_pool_t* Handle
 			{
+				[System::Diagnostics::DebuggerStepThroughAttribute()]
 				apr_pool_t* get()
 				{
 					_tag->Ensure();
@@ -125,12 +127,19 @@ namespace SharpSvn {
 
 			void Clear();
 
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			void* Alloc(size_t size);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			void* AllocCleared(size_t size);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocString(String^ value);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocPath(String^ value);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocCanonical(String^ value);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(String^ value);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(array<char>^ value);
 
 			static const char* AllocString(String^ value, apr_pool_t *pool);

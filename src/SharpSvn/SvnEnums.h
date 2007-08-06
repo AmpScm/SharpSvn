@@ -272,4 +272,21 @@ namespace SharpSvn {
 		SubversionPre1_4	= 1,
 		SubversionPre1_5	= 2,
 	};
+
+	public enum class SvnDiffKind
+	{
+		None = 0,
+
+		/** An item with no text modifications */
+		Normal = svn_client_diff_summarize_kind_normal,
+
+		/** An added item */
+		Added = svn_client_diff_summarize_kind_added,
+
+		/** An item with text modifications */
+		Modified = svn_client_diff_summarize_kind_modified,
+
+		/** A deleted item */
+		Deleted = svn_client_diff_summarize_kind_deleted
+	};
 }
