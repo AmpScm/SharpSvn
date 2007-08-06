@@ -8,7 +8,7 @@ using namespace System;
 namespace SharpSvn {
 
 	[Serializable]
-	public ref class SvnException : public System::Runtime::InteropServices::ExternalException
+	public ref class SvnException : public System::Exception
 	{
 	private:
 		svn_error_t *_error;
@@ -31,7 +31,7 @@ namespace SharpSvn {
 		static Exception^ GetInnerException(svn_error_t *error)
 		{
 			if(error && error->child)
-				return Create(error->child);
+				return Create(error->child, false);
 			else
 				return nullptr;
 		}
@@ -39,38 +39,22 @@ namespace SharpSvn {
 	internal:
 		static SvnException^ Create(svn_error_t *error);
 
+	private:
+		static Exception^ Create(svn_error_t *error, bool clearError);
 
 	private protected:
 		SvnException(svn_error_t *error)
-			: ExternalException(GetErrorText(error), GetInnerException(error))
+			: Exception(GetErrorText(error), GetInnerException(error))
 		{
 			_error = error;
 		}
 
 	protected:
 		SvnException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
-			//: ExternalException(info, context)
+			: Exception(info, context)
 		{
 			UNUSED_ALWAYS(info);
 			UNUSED_ALWAYS(context);
-		}
-	};
-
-	public ref class SvnOperationCanceledException : public SvnException
-	{
-	internal:
-		SvnOperationCanceledException(svn_error_t *error)
-			: SvnException(error)
-		{
-		}
-	};
-
-	public ref class SvnOperationCompletedException : public SvnException
-	{
-	internal:
-		SvnOperationCompletedException(svn_error_t *error)
-			: SvnException(error)
-		{
 		}
 	};
 
@@ -90,6 +74,10 @@ namespace SharpSvn {
 		: parentType(info, context)								\
 	{}															\
 	};
+
+	DECLARE_SVN_EXCEPTION_TYPE(SvnOperationCanceledException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnOperationCompletedException, SvnException);
+
 
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFormatException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnXmlException, SvnException);

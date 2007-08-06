@@ -33,6 +33,12 @@ void SvnBase::EnsureLoaded()
 		apr_pool_t* pool;
 		apr_pool_create(&pool, NULL);
 		svn_utf_initialize(pool);
+		svn_fs_initialize(pool);
+
+		if (getenv("SVN_ASP_DOT_NET_HACK"))
+		{
+			svn_wc_set_adm_dir("_svn", pool);
+		}
 
 		svn_ra_initialize(pool);
 	}
@@ -204,7 +210,7 @@ public:
 	{
 		svn_client_copy_source_t **src = (svn_client_copy_source_t**)ptr;
 		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
-		
+
 		(*src)->path = pool->AllocString(value->TargetName);
 		(*src)->revision = value->Revision->AllocSvnRevision(pool);
 		(*src)->peg_revision = value->Revision->AllocSvnRevision(pool);

@@ -20,10 +20,10 @@ static svn_error_t *svnclient_property_list_handler(void *baton, const char *pat
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnPropertyListArgs^ args = dynamic_cast<SvnPropertyListArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
-	AprPool^ aprPool = AprPool::Attach(pool, false);
+	AprPool aprPool(pool, false);
 	if(args)
 	{
-		SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(path, prop_hash, aprPool);
+		SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(path, prop_hash, %aprPool);
 		try
 		{
 			args->OnPropertyList(e);
@@ -33,8 +33,7 @@ static svn_error_t *svnclient_property_list_handler(void *baton, const char *pat
 		}
 		catch(Exception^ e)
 		{
-			AprPool^ thePool = AprPool::Attach(pool, false);
-			return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("List receiver throwed exception: ", e->ToString())));
+			return CreateExceptionSvnError("Property list receiver", e);
 		}
 		finally
 		{

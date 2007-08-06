@@ -19,6 +19,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
+	AprPool thePool(pool, false);
 	SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
@@ -31,9 +32,8 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Info receiver canceled operation");
 		}
 		catch(Exception^ e)
-		{
-			AprPool^ thePool = AprPool::Attach(pool, false);
-			return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("Info receiver throwed exception: ", e->ToString())));
+		{			
+			return CreateExceptionSvnError("Info receiver", e);
 		}
 		finally
 		{

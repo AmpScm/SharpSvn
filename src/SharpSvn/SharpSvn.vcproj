@@ -42,6 +42,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
 				PreprocessorDefinitions="WIN32;_DEBUG"
 				StringPooling="true"
@@ -50,6 +51,7 @@
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
+				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool

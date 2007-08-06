@@ -99,7 +99,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 				apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-				rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, keyLen)), Utf8_PtrToString(propVal->data, propVal->len));
+				rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen)), Utf8_PtrToString(propVal->data, (int)propVal->len));
 			}
 
 			properties = safe_cast<IDictionary<SvnTarget^, String^>^>(rd);
@@ -163,8 +163,8 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 				apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-				IList<char>^ list = safe_cast<IList<char>^>(PtrToByteArray(propVal->data, propVal->len));
-				rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, keyLen)), list);
+				IList<char>^ list = safe_cast<IList<char>^>(PtrToByteArray(propVal->data, (int)propVal->len));
+				rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen)), list);
 			}
 
 			properties = safe_cast<IDictionary<SvnTarget^, IList<char>^>^>(rd);
