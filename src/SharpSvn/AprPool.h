@@ -134,6 +134,8 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			const char* AllocUnixString(String^ value);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocPath(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocCanonical(String^ value);

@@ -453,6 +453,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_CreateDirectory.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Delete.cpp"
 					>
 				</File>
@@ -498,10 +502,6 @@
 				</File>
 				<File
 					RelativePath=".\Client_MergeInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Client_MkDir.cpp"
 					>
 				</File>
 				<File

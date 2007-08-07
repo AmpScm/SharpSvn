@@ -10,26 +10,26 @@ namespace SharpSvn {
 		SvnException^ _exception;
 
 	public:
-		event EventHandler<SvnClientCancelEventArgs^>^		Cancel;
-		event EventHandler<SvnClientProgressEventArgs^>^	Progress;
-		event EventHandler<SvnClientNotifyEventArgs^>^		Notify;
+		event EventHandler<SvnCancelEventArgs^>^		Cancel;
+		event EventHandler<SvnProgressEventArgs^>^	Progress;
+		event EventHandler<SvnNotifyEventArgs^>^		Notify;
 
 	protected public:
 		SvnClientArgs()
 		{
 		}
 
-		virtual void OnCancel(SvnClientCancelEventArgs^ e)
+		virtual void OnCancel(SvnCancelEventArgs^ e)
 		{
 			Cancel(this, e);
 		}
 
-		virtual void OnProgress(SvnClientProgressEventArgs^ e)
+		virtual void OnProgress(SvnProgressEventArgs^ e)
 		{
 			Progress(this, e);
 		}
 
-		virtual void OnNotify(SvnClientNotifyEventArgs^ e)
+		virtual void OnNotify(SvnNotifyEventArgs^ e)
 		{
 			Notify(this, e);
 		}
@@ -78,10 +78,10 @@ namespace SharpSvn {
 
 	public ref class SvnClientArgsWithCommit : public SvnClientArgs
 	{
-		String^ _commitMessage;
+		String^ _logMessage;
 
 	public:
-		event EventHandler<SvnClientBeforeCommitEventArgs^>^ BeforeCommit;
+		event EventHandler<SvnCommittingEventArgs^>^ Committing;
 
 	protected:
 		SvnClientArgsWithCommit()
@@ -89,25 +89,58 @@ namespace SharpSvn {
 		}
 
 	protected public:
-		virtual void OnBeforeCommit(SvnClientBeforeCommitEventArgs^ e)
+		virtual void OnCommitting(SvnCommittingEventArgs^ e)
 		{
-			if(CommitMessage && !e->LogMessage)
-				e->LogMessage = CommitMessage;
+			if(LogMessage && !e->LogMessage)
+				e->LogMessage = LogMessage;
 
-			BeforeCommit(this, e);
+			Committing(this, e);
 		}
 
 	public:
-		property String^ CommitMessage
+		property String^ LogMessage
 		{
 			String^ get()
 			{
-				return _commitMessage;
+				return _logMessage;
 			}
 
 			void set(String^ value)
 			{
-				_commitMessage = value;
+				_logMessage = value;
+			}
+		}
+	};
+
+	public ref class SvnClientArgsWithConflict : public SvnClientArgs
+	{
+		String^ _logMessage;
+
+	public:
+		event EventHandler<SvnConflictEventArgs^>^ Conflict;
+
+	protected:
+		SvnClientArgsWithConflict()
+		{
+		}
+
+	protected public:
+		virtual void OnConflict(SvnConflictEventArgs^ e)
+		{
+			Conflict(this, e);
+		}
+
+	public:
+		property String^ LogMessage
+		{
+			String^ get()
+			{
+				return _logMessage;
+			}
+
+			void set(String^ value)
+			{
+				_logMessage = value;
 			}
 		}
 	};
@@ -186,7 +219,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnUpdateArgs : public SvnClientArgs
+	public ref class SvnUpdateArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
 		bool _ignoreExternals;
@@ -461,7 +494,6 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		bool _keepLocks;
 		bool _keepChangelist;
-		String^ _message;
 		String^ _changelist;
 	public:
 		SvnCommitArgs()
@@ -626,7 +658,7 @@ namespace SharpSvn {
 		SvnRevision^ _end;
 		int _limit;
 		bool _logChangedPaths;
-		bool _strictHistory;
+		bool _strictNodeHistory;
 		bool _includeMerged;
 		bool _ommitMessages;
 
@@ -704,15 +736,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool StrictHistory
+		property bool StrictNodeHistory
 		{
 			bool get()
 			{
-				return _strictHistory;
+				return _strictNodeHistory;
 			}
 			void set(bool value)
 			{
-				_strictHistory = value;
+				_strictNodeHistory = value;
 			}
 		}
 
@@ -790,11 +822,11 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnMkDirArgs : public SvnClientArgsWithCommit
+	public ref class SvnCreateDirectoryArgs : public SvnClientArgsWithCommit
 	{
 		bool _makeParents;
 	public:
-		SvnMkDirArgs()
+		SvnCreateDirectoryArgs()
 		{}
 
 		property bool MakeParents
@@ -915,7 +947,7 @@ namespace SharpSvn {
 		{
 			_depth = SvnDepth::Files;
 			_revision = SvnRevision::None;
-			_entryItems = SvnDirEntryItems::AllFields;
+			_entryItems = SvnDirEntryItems::SnvListDefault;
 		}
 
 		property SvnDepth Depth
@@ -1343,7 +1375,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnMergeArgs : public SvnClientArgs
+	public ref class SvnMergeArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
 		bool _ignoreAncestry;

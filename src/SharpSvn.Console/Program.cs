@@ -21,7 +21,7 @@ namespace SharpSvn
 
 		void Run(string[] args)
 		{
-			Console.WriteLine("SharpSvn version {0}, using Subversion {1}", SvnClient.WrapperVersion, SvnClient.Version);
+			Console.WriteLine("SharpSvn version {0}, using Subversion {1}", SvnClient.SharpSvnVersion, SvnClient.Version);
 
 			_client = new SvnClient();
 
@@ -32,14 +32,14 @@ namespace SharpSvn
 			//_client.Authenticator.SslServerTrustHandlers += SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler;
 			//_client.Authenticator.AddSubversionFileHandlers();
 			_client.Authenticator.AddDialogHandlers();
-			//_client.Authenticator.UsernamePasswordHandlers += new SvnAuthenticationHandler<SvnUsernamePasswordArgs>(Authenticator_UsernamePasswordHandlers);
+			//_client.Authenticator.UsernamePasswordHandlers += new EventHandler<SvnUsernamePasswordEventArgs>(Authenticator_UsernamePasswordHandlers);
 
 			//_client.Authenticator.
 			//_client.Authentication.
 
-			_client.ClientCancel += new EventHandler<SvnClientCancelEventArgs>(OnClientCancel);
-			_client.ClientNotify += new EventHandler<SvnClientNotifyEventArgs>(OnClientNotify);
-			_client.ClientProgress += new EventHandler<SvnClientProgressEventArgs>(OnClientProgress);
+			_client.Cancel += new EventHandler<SvnCancelEventArgs>(OnClientCancel);
+			_client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
+			_client.Progress += new EventHandler<SvnProgressEventArgs>(OnClientProgress);
 
 			_client.Status("..\\..\\SharpSvn.Console.csproj", delegate(object sender, SvnStatusEventArgs e)
 			{
@@ -86,22 +86,22 @@ namespace SharpSvn
 
 		}
 
-		bool Authenticator_UsernamePasswordHandlers(object sender, SharpSvn.Security.SvnUsernamePasswordArgs e)
+		bool Authenticator_UsernamePasswordHandlers(object sender, SharpSvn.Security.SvnUsernamePasswordEventArgs e)
 		{
 			return false;
 		}
 
-		void OnClientProgress(object sender, SvnClientProgressEventArgs e)
+		void OnClientProgress(object sender, SvnProgressEventArgs e)
 		{
 
 		}
 
-		void OnClientNotify(object sender, SvnClientNotifyEventArgs e)
+		void OnClientNotify(object sender, SvnNotifyEventArgs e)
 		{
 			Console.WriteLine(e.FullPath);
 		}
 
-		void OnClientCancel(object sender, SvnClientCancelEventArgs e)
+		void OnClientCancel(object sender, SvnCancelEventArgs e)
 		{
 		}
 	}

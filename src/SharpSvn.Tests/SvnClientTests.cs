@@ -97,7 +97,7 @@ namespace SharpSvn.Tests
 			using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
 			{
 				SvnCreateRepositoryArgs cra = new SvnCreateRepositoryArgs();
-				cra.RepositoryCompatibility = SvnRepositoryCompatibility.SubversionPre1_5;
+				cra.RepositoryCompatibility = SvnRepositoryCompatibility.SubversionPre15;
 				reposClient.CreateRepository(RepositoryPath, cra);
 			}
 
@@ -105,7 +105,7 @@ namespace SharpSvn.Tests
 			{
 				client.Configuration.LogMessageRequired = false;
 
-				client.RemoteMkDir(new Uri(ReposUri, "folder"));
+				client.RemoteCreateDirectory(new Uri(ReposUri, "folder"));
 
 				client.CheckOut(new Uri(ReposUri, "folder"), WcPath);
 			}
@@ -126,15 +126,16 @@ namespace SharpSvn.Tests
 		{
 			SvnClient client = new SvnClient();
 
-			client.ClientConflictResolver += delegate(object sender, SvnClientConflictResolveEventArgs e)
+			client.Conflict += delegate(object sender, SvnConflictEventArgs e)
 			{
 				Assert.That(true, Is.EqualTo(expectConflict), "Conflict expected");
 			};
 
-			client.ClientBeforeCommit += delegate(object sender, SvnClientBeforeCommitEventArgs e)
+			client.Committing += delegate(object sender, SvnCommittingEventArgs e)
 			{
 				Assert.That(true, Is.EqualTo(expectCommit), "Commit expected");
-				e.LogMessage = "";
+				if(e.LogMessage == null)
+					e.LogMessage = "";
 			};
 
 			return client;
@@ -146,7 +147,7 @@ namespace SharpSvn.Tests
 			using (SvnClient client = NewSvnClient(true, false))
 			{
 				Uri trunkUri = new Uri(ReposUri, "trunk/");
-				client.RemoteMkDir(trunkUri);
+				client.RemoteCreateDirectory(trunkUri);
 
 				string trunkPath = Path.Combine(TestPath, "trunk");
 
@@ -384,20 +385,20 @@ namespace SharpSvn.Tests
 					if (first)
 					{
 						first = false;
-						foreach (KeyValuePair<string, SvnLogChangeItem> i in e.ChangedPaths)
+						foreach (SvnChangeItem i in e.ChangedPaths)
 						{
-							Assert.That(i.Key.EndsWith("folder/RemoteCopyBase"), "Path ends with folder/RemoteCopyBase");
-							Assert.That(i.Value.Action, Is.EqualTo(SvnChangeAction.Add));
-							Assert.That(i.Value.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
-							Assert.That(i.Value.CopyFromRevision, Is.GreaterThan(0L));
+							Assert.That(i.Path.EndsWith("folder/RemoteCopyBase"), "Path ends with folder/RemoteCopyBase");
+							Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
+							Assert.That(i.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
+							Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
 						}
 					}
 					else
 					{
-						foreach (KeyValuePair<string, SvnLogChangeItem> i in e.ChangedPaths)
+						foreach (SvnChangeItem i in e.ChangedPaths)
 						{
-							Assert.That(i.Value.Action, Is.EqualTo(SvnChangeAction.Add));
-							Assert.That(i.Key.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
+							Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
+							Assert.That(i.Path.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
 							visited = true;
 						}
 					}
@@ -412,20 +413,20 @@ namespace SharpSvn.Tests
 				{
 					if (first)
 					{
-						foreach (KeyValuePair<string, SvnLogChangeItem> i in e.ChangedPaths)
+						foreach (SvnChangeItem i in e.ChangedPaths)
 						{
-							Assert.That(i.Key.EndsWith("folder/LocalCopy"), "Path ends with folder/LocalCopy");
-							Assert.That(i.Value.Action, Is.EqualTo(SvnChangeAction.Add));
-							Assert.That(i.Value.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
-							Assert.That(i.Value.CopyFromRevision, Is.GreaterThan(0L));
+							Assert.That(i.Path.EndsWith("folder/LocalCopy"), "Path ends with folder/LocalCopy");
+							Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
+							Assert.That(i.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
+							Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
 						}
 						first = false;
 					}
 					else
-						foreach (KeyValuePair<string, SvnLogChangeItem> i in e.ChangedPaths)
+						foreach (SvnChangeItem i in e.ChangedPaths)
 						{
-							Assert.That(i.Value.Action, Is.EqualTo(SvnChangeAction.Add));
-							Assert.That(i.Key.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
+							Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
+							Assert.That(i.Path.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
 							visited = true;
 						}
 
@@ -804,6 +805,98 @@ namespace SharpSvn.Tests
 						}
 					});
 				Assert.That(visited, Is.True, "Visited is true");
+			}
+		}
+
+		[Test]
+		public void TestLog()
+		{
+			using (SvnClient client = NewSvnClient(true, false))
+			{
+				string logFile = Path.Combine(WcPath, "LogTestFileBase");
+				TouchFile(logFile);
+				client.Add(logFile);
+				SvnCommitArgs a = new SvnCommitArgs();
+				a.LogMessage = "Commit 1\rWith\nSome\r\nRandom\n\rNewlines\nAdded\n\r\n";
+				client.Commit(WcPath, a);
+
+				File.AppendAllText(logFile, Guid.NewGuid().ToString());
+				a.LogMessage = "Commit 2";
+				client.SetProperty(logFile, "TestProperty", "TestValue");
+				client.Commit(WcPath, a);
+
+				string renamedLogFile = Path.Combine(WcPath, "LogTestFileDest");
+				client.Move(logFile, renamedLogFile);
+				a.LogMessage = "Commit 3" + Environment.NewLine + "With newline";
+				client.Commit(WcPath,a);
+
+				int n = 0;
+				SvnLogArgs la = new SvnLogArgs();
+				la.StrictNodeHistory = false;
+				client.Log(new SvnUriTarget(new Uri(WcUri, "LogTestFileDest")),
+					delegate(object sender, SvnLogEventArgs e)
+					{
+						SvnChangeItem ci;
+						SvnChangeItem ci2;
+
+						Assert.That(e.Author, Is.EqualTo(Environment.UserName));
+						Assert.That(e.Cancel, Is.False);
+						Assert.That(e.Date, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+						Assert.That(e.LogChildren, Is.EqualTo(0));						
+						switch (n)
+						{
+							case 0:
+								Assert.That(e.LogMessage, Is.EqualTo("Commit 3" + Environment.NewLine + "With newline"));
+								Assert.That(e.ChangedPaths, Is.Not.Null);
+								Assert.That(e.ChangedPaths.Count, Is.EqualTo(2));
+								Assert.That(e.ChangedPaths.Contains("/folder/LogTestFileBase"));
+								Assert.That(e.ChangedPaths.Contains("/folder/LogTestFileDest"));
+								ci = e.ChangedPaths["/folder/LogTestFileBase"];
+								ci2 = e.ChangedPaths["/folder/LogTestFileDest"];
+								
+								Assert.That(ci, Is.Not.Null);
+								Assert.That(ci2, Is.Not.Null);
+								Assert.That(ci.Path, Is.EqualTo("/folder/LogTestFileBase"));
+								Assert.That(ci.Action, Is.EqualTo(SvnChangeAction.Delete));
+								Assert.That(ci.CopyFromPath, Is.Null);
+								Assert.That(ci.CopyFromRevision, Is.EqualTo(-1));
+								Assert.That(ci2.Path, Is.EqualTo("/folder/LogTestFileDest"));
+								Assert.That(ci2.Action, Is.EqualTo(SvnChangeAction.Add));
+								Assert.That(ci2.CopyFromPath, Is.EqualTo("/folder/LogTestFileBase"));
+								Assert.That(ci2.CopyFromRevision, Is.Not.EqualTo(-1));
+								break;
+							case 1:
+								Assert.That(e.LogMessage, Is.EqualTo("Commit 2"));
+								Assert.That(e.ChangedPaths, Is.Not.Null);
+								Assert.That(e.ChangedPaths.Count, Is.EqualTo(1));
+								ci = e.ChangedPaths[0];
+								Assert.That(ci, Is.Not.Null);
+								Assert.That(ci.Path, Is.EqualTo("/folder/LogTestFileBase"));
+								Assert.That(ci.Action, Is.EqualTo(SvnChangeAction.Modify));
+								Assert.That(ci.CopyFromPath, Is.Null);
+								Assert.That(ci.CopyFromRevision, Is.EqualTo(-1));
+								break;
+							case 2:
+								Assert.That(e.LogMessage, Is.EqualTo("Commit 1" + Environment.NewLine + "With" + 
+									Environment.NewLine + "Some" + Environment.NewLine + "Random" + Environment.NewLine +
+									"Newlines" + Environment.NewLine + "Added" + Environment.NewLine + Environment.NewLine));
+								Assert.That(e.ChangedPaths, Is.Not.Null);
+								Assert.That(e.ChangedPaths.Count, Is.EqualTo(1));
+								ci = e.ChangedPaths[0];
+								Assert.That(ci, Is.Not.Null);
+								Assert.That(ci.Path, Is.EqualTo("/folder/LogTestFileBase"));
+								Assert.That(ci.Action, Is.EqualTo(SvnChangeAction.Add));
+								Assert.That(ci.CopyFromPath, Is.Null);
+								Assert.That(ci.CopyFromRevision, Is.EqualTo(-1));
+								break;
+							default:
+								Assert.That(false);
+								break;
+						}
+						n++;
+					});
+
+				Assert.That(n, Is.EqualTo(3));
 			}
 		}
 	}

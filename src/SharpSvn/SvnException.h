@@ -38,6 +38,7 @@ namespace SharpSvn {
 
 	internal:
 		static SvnException^ Create(svn_error_t *error);
+		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);
 
 	private:
 		static Exception^ Create(svn_error_t *error, bool clearError);
@@ -56,23 +57,47 @@ namespace SharpSvn {
 			UNUSED_ALWAYS(info);
 			UNUSED_ALWAYS(context);
 		}
+
+	public:
+		SvnException()
+		{
+		}
+
+		SvnException(String^ message)
+			: Exception(message)
+		{
+		}
+
+		SvnException(String^ message, Exception^ inner)
+			: Exception(message, inner)
+		{
+		}
 	};
 
 	//////////// Generic Subversion exception wrappers
 
-#define DECLARE_SVN_EXCEPTION_TYPE(type, parentType)			\
-	[Serializable]												\
-	public ref class type : public parentType					\
-	{															\
-	internal:													\
-		type(svn_error_t *error)								\
-			: parentType(error)									\
-		{}														\
-	protected:													\
-	type(System::Runtime::Serialization::SerializationInfo^ info,\
-	System::Runtime::Serialization::StreamingContext context)	\
-		: parentType(info, context)								\
-	{}															\
+#define DECLARE_SVN_EXCEPTION_TYPE(type, parentType)					\
+	[Serializable]														\
+	public ref class type : public parentType							\
+	{																	\
+	internal:															\
+		type(svn_error_t *error)										\
+			: parentType(error)											\
+		{}																\
+	protected:															\
+		type(System::Runtime::Serialization::SerializationInfo^ info,	\
+		System::Runtime::Serialization::StreamingContext context)		\
+			: parentType(info, context)									\
+		{}																\
+	public:																\
+		type()															\
+		{}																\
+		type(String^ message)											\
+			: parentType(message)										\
+		{}																\
+		type(String^ message, Exception^ inner)							\
+			: parentType(message, inner)								\
+		{}																\
 	};
 
 	DECLARE_SVN_EXCEPTION_TYPE(SvnOperationCanceledException, SvnException);
@@ -81,7 +106,7 @@ namespace SharpSvn {
 
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFormatException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnXmlException, SvnException);
-	DECLARE_SVN_EXCEPTION_TYPE(SvnIoException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnIOException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnStreamException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnNodeException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryException, SvnException);

@@ -7,7 +7,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
 
-SvnException^ SvnClientNotifyEventArgs::Error::get()
+SvnException^ SvnNotifyEventArgs::Error::get()
 {
 	if(!_exception && _notify && _notify->err)
 		_exception = SvnException::Create(_notify->err);
@@ -15,7 +15,7 @@ SvnException^ SvnClientNotifyEventArgs::Error::get()
 	return _exception;
 }
 
-SvnClientBeforeCommitEventArgs::SvnClientBeforeCommitEventArgs(const apr_array_header_t *commitItems, AprPool^ pool)
+SvnCommittingEventArgs::SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool)
 {
 	if(!commitItems)
 		throw gcnew ArgumentNullException("commitItems");
@@ -26,7 +26,7 @@ SvnClientBeforeCommitEventArgs::SvnClientBeforeCommitEventArgs(const apr_array_h
 	this->_pool = pool;
 }
 
-void SvnClientBeforeCommitEventArgs::Detach(bool keepProperties)
+void SvnCommittingEventArgs::Detach(bool keepProperties)
 {
 	if(!_commitItems)
 		return;
@@ -60,7 +60,7 @@ SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo)
 	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;
 }
 
-IList<SvnCommitItem^>^ SvnClientBeforeCommitEventArgs::Items::get()
+IList<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
 {
 	if(!_items && _commitItems)
 	{

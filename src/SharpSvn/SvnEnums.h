@@ -152,6 +152,7 @@ namespace SharpSvn {
 
 	public enum class SvnLockState
 	{
+		None		= 0,
 		Unchanged	= svn_wc_notify_lock_state_unchanged,
 		Locked		= svn_wc_notify_lock_state_locked,
 		Unlocked	= svn_wc_notify_lock_state_unlocked
@@ -256,7 +257,9 @@ namespace SharpSvn {
 		LastAuthor		= SVN_DIRENT_LAST_AUTHOR,
 
 		/** A combination of all the dirent fields */
-		AllFields		= SVN_DIRENT_ALL
+		AllFields		= SVN_DIRENT_ALL,
+
+		SnvListDefault	= Kind | Time
 	};
 
 	public enum class SvnRepositoryFilesystem
@@ -269,8 +272,8 @@ namespace SharpSvn {
 	public enum class SvnRepositoryCompatibility
 	{
 		Default				= 0,
-		SubversionPre1_4	= 1,
-		SubversionPre1_5	= 2,
+		SubversionPre14		= 1,
+		SubversionPre15		= 2,
 	};
 
 	public enum class SvnDiffKind

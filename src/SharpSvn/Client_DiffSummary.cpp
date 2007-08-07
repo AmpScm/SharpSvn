@@ -36,7 +36,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 		}
 		catch(Exception^ e)
 		{			
-			return CreateExceptionSvnError("Diff summary receiver", e);
+			return SvnException::CreateExceptionSvnError("Diff summary receiver", e);
 		}
 		finally
 		{

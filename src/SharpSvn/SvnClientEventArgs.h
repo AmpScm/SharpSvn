@@ -12,15 +12,15 @@ namespace SharpSvn {
 
 	ref class SvnException;
 
-	public ref class SvnClientEventArgs abstract : public System::EventArgs
+	public ref class SvnEventArgs abstract : public System::EventArgs
 	{
 	protected:
-		SvnClientEventArgs()
+		SvnEventArgs()
 		{
 		}
 
 	public:
-		/// <summary>Detaches the SvnClientEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
+		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
 		virtual void Detach(bool keepProperties)
 		{
@@ -28,12 +28,12 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnClientCancelEventArgs : public SvnClientEventArgs
+	public ref class SvnCancelEventArgs : public SvnEventArgs
 	{
 		bool _cancel;
 
 	public:
-		SvnClientCancelEventArgs()
+		SvnCancelEventArgs()
 		{
 		}
 
@@ -51,13 +51,13 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnClientProgressEventArgs : public SvnClientEventArgs
+	public ref class SvnProgressEventArgs : public SvnEventArgs
 	{
 		initonly __int64 _progress;
 		initonly __int64 _totalProgress;
 
 	public:
-		SvnClientProgressEventArgs(__int64 progress, __int64 totalProgress)
+		SvnProgressEventArgs(__int64 progress, __int64 totalProgress)
 		{
 			_progress = progress;
 			_totalProgress = totalProgress;
@@ -81,7 +81,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnClientBeforeCommitEventArgs : public SvnClientEventArgs
+	public ref class SvnCommittingEventArgs : public SvnEventArgs
 	{
 		AprPool^ _pool;
 		const apr_array_header_t *_commitItems;
@@ -89,7 +89,7 @@ namespace SharpSvn {
 		String^ _logMessage;
 		IList<SvnCommitItem^>^ _items;
 	internal:
-		SvnClientBeforeCommitEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
+		SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
 
 	public:
 		property bool Cancel
@@ -124,14 +124,14 @@ namespace SharpSvn {
 		virtual void Detach(bool keepProperties) override;
 	};
 
-	public ref class SvnClientConflictResolveEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnConflictEventArgs : public SvnCancelEventArgs
 	{
 		AprPool^ _pool;
 		const svn_wc_conflict_description_t* _description;
 		SvnConflictResult _result;
 
 	internal:
-		SvnClientConflictResolveEventArgs(const svn_wc_conflict_description_t *description, AprPool^ pool)
+		SvnConflictEventArgs(const svn_wc_conflict_description_t *description, AprPool^ pool)
 		{
 			if(!description)
 				throw gcnew ArgumentNullException("description");
@@ -174,7 +174,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLockInfo : public SvnClientEventArgs
+	public ref class SvnLockInfo : public SvnEventArgs
 	{
 		const svn_lock_t *_lock;
 		String^ _path;
@@ -302,7 +302,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnClientNotifyEventArgs : public SvnClientEventArgs
+	public ref class SvnNotifyEventArgs : public SvnEventArgs
 	{
 		const svn_wc_notify_t *_notify;
 		initonly SvnNotifyAction _action;
@@ -314,7 +314,7 @@ namespace SharpSvn {
 		SvnLockInfo^ _lock;
 
 	internal:
-		SvnClientNotifyEventArgs(const svn_wc_notify_t *notify)
+		SvnNotifyEventArgs(const svn_wc_notify_t *notify)
 		{
 			if(!notify)
 				throw gcnew ArgumentNullException("notify");
@@ -439,7 +439,7 @@ namespace SharpSvn {
 
 
 	public:
-		/// <summary>Detaches the SvnClientEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
+		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
 		virtual void Detach(bool keepProperties) override
 		{
@@ -465,7 +465,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnStatusEventArgs : public SvnClientEventArgs
+	public ref class SvnStatusEventArgs : public SvnEventArgs
 	{
 		initonly String^ _path;
 		const svn_wc_status2_t *_status;
@@ -683,14 +683,14 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLogChangeItem sealed
+	public ref class SvnChangeItem sealed
 	{
 		initonly String^ _path;
 		initonly SvnChangeAction _action;
 		initonly String^ _copyFromPath;
 		initonly __int64 _copyFromRevision;
 	protected public:
-		SvnLogChangeItem(String^ path, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision)
+		SvnChangeItem(String^ path, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision)
 		{
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
@@ -735,12 +735,11 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLogEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnLogEventArgs : public SvnCancelEventArgs
 	{
 		svn_log_entry_t* _entry;
 		AprPool^ _pool;
 
-		SortedList<String^, SvnLogChangeItem^>^ _changedPaths;		
 		String^ _author;
 		DateTime _date;
 		String^ _message;
@@ -768,14 +767,29 @@ namespace SharpSvn {
 			_nLogChildren = entry->nbr_children;
 		}
 
-	public:
-		property IDictionary<String^, SvnLogChangeItem^>^ ChangedPaths
+	private:
+		ref class ChangedPathsCollection sealed : System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>
 		{
-			IDictionary<String^, SvnLogChangeItem^>^  get()
+		protected:
+			virtual String^ GetKeyForItem(SvnChangeItem^ item) override
+			{
+				if(!item)
+					throw gcnew ArgumentNullException("item");
+
+				return item->Path;
+			}
+		};
+
+		ChangedPathsCollection^ _changedPaths;
+	public:
+		
+		property System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>^ ChangedPaths
+		{
+			System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>^  get()
 			{
 				if(!_changedPaths && _entry && _pool)
 				{
-					_changedPaths = gcnew SortedList<String^, SvnLogChangeItem^>();
+					_changedPaths = gcnew ChangedPathsCollection();
 
 					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths); hi; hi = apr_hash_next(hi))
 					{
@@ -785,16 +799,16 @@ namespace SharpSvn {
 
 						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
 
-						SvnLogChangeItem^ ci = gcnew SvnLogChangeItem(SvnBase::Utf8_PtrToString(pKey, (int)keyLen), 
+						SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(pKey, (int)keyLen), 
 							(SvnChangeAction)pChangeInfo->action, 
 							SvnBase::Utf8_PtrToString(pChangeInfo->copyfrom_path),
 							pChangeInfo->copyfrom_rev);
 
-						_changedPaths->Add(ci->Path, ci);
+						_changedPaths->Add(ci);
 					}
 				}
 
-				return safe_cast<IDictionary<String^, SvnLogChangeItem^>^>(_changedPaths);
+				return _changedPaths;
 			}
 		}
 
@@ -826,7 +840,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ Message
+		property String^ LogMessage
 		{
 			String^ get()
 			{
@@ -835,7 +849,10 @@ namespace SharpSvn {
 					_message = SvnBase::Utf8_PtrToString(_entry->message);
 
 					if(_message)
+					{
+						// Subversion log messages always use \n newlines
 						_message = _message->Replace("\n", Environment::NewLine);
+					}
 				}
 
 				return _message;
@@ -860,7 +877,7 @@ namespace SharpSvn {
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(ChangedPaths);
 					GC::KeepAlive(Author);
-					GC::KeepAlive(Message);
+					GC::KeepAlive(LogMessage);
 				}				
 			}
 			finally
@@ -873,7 +890,7 @@ namespace SharpSvn {
 
 	};
 
-	public ref class SvnInfoEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnInfoEventArgs : public SvnCancelEventArgs
 	{
 		const svn_info_t* _info;
 		initonly String^ _path;
@@ -1230,7 +1247,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnDirEntry : public SvnClientEventArgs
+	public ref class SvnDirEntry : public SvnEventArgs
 	{
 		const svn_dirent_t *_entry;
 		initonly SvnNodeKind _nodeKind;
@@ -1324,7 +1341,7 @@ namespace SharpSvn {
 	};
 
 
-	public ref class SvnListEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnListEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
 		const char* _pAbsPath;
@@ -1427,7 +1444,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnPropertyListEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnPropertyListEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
 		apr_hash_t* _propHash;
@@ -1507,7 +1524,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnListChangeListEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnListChangeListEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
 
@@ -1546,7 +1563,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnDiffSummaryEventArgs : public SvnClientCancelEventArgs
+	public ref class SvnDiffSummaryEventArgs : public SvnCancelEventArgs
 	{
 		const svn_client_diff_summarize_t *_diffSummary;
 		String^ _path;

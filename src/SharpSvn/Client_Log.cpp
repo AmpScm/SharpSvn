@@ -165,7 +165,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 		}
 		catch(Exception^ e)
 		{
-			return CreateExceptionSvnError("Log receiver", e);
+			return SvnException::CreateExceptionSvnError("Log receiver", e);
 		}
 		finally
 		{
@@ -209,7 +209,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 			&end,
 			args->Limit,
 			args->LogChangedPaths,
-			args->StrictHistory,
+			args->StrictNodeHistory,
 			args->IncludeMergedRevisions,
 			args->OmitMessages,
 			svnclient_log_handler,
