@@ -77,20 +77,20 @@ svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
 	return rev;
 }
 
-bool SvnTarget::TryParse(String^ targetString, [Out] SvnTarget^% target)
+bool SvnTarget::TryParse(String^ targetName, [Out] SvnTarget^% target)
 {
-	if(String::IsNullOrEmpty(targetString))
-		throw gcnew ArgumentNullException("targetString");
+	if(String::IsNullOrEmpty(targetName))
+		throw gcnew ArgumentNullException("targetName");
 
 	SvnUriTarget^ uriTarget = nullptr;
 	SvnPathTarget^ pathTarget = nullptr;
 
-	if(targetString->Contains("://") && SvnUriTarget::TryParse(targetString, uriTarget))
+	if(targetName->Contains("://") && SvnUriTarget::TryParse(targetName, uriTarget))
 	{
 		target = uriTarget;
 		return true;
 	}
-	else if(SvnPathTarget::TryParse(targetString, pathTarget))
+	else if(SvnPathTarget::TryParse(targetName, pathTarget))
 	{
 		target = pathTarget;
 		return true;
@@ -145,14 +145,14 @@ svn_opt_revision_t SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnR
 	return Revision->ToSvnRevision(uriNoneValue);
 }
 
-bool SvnPathTarget::TryParse(String^ targetString, [Out] SvnPathTarget^% target)
+bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)
 {
-	if(String::IsNullOrEmpty(targetString))
-		throw gcnew ArgumentNullException("targetString");
+	if(String::IsNullOrEmpty(targetName))
+		throw gcnew ArgumentNullException("targetName");
 
 	AprPool pool;
 	
-	return TryParse(targetString, target, %pool);
+	return TryParse(targetName, target, %pool);
 }
 
 SvnTarget^ SvnTarget::FromString(String^ value)

@@ -40,7 +40,7 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, String^ value, S
 	else if(!value)
 		throw gcnew ArgumentNullException("value");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	return InternalSetProperty(path, propertyName, pool.AllocSvnString(value), args, %pool);
 }
@@ -56,7 +56,7 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ byt
 	else if(!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	array<char> ^byteArray = safe_cast<array<char>>(bytes);
 
@@ -89,7 +89,7 @@ bool SvnClient::DeleteProperty(String^ path, String^ propertyName, SvnSetPropert
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	return InternalSetProperty(path, propertyName, nullptr, args, %pool);
 }

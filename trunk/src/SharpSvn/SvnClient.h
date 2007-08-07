@@ -10,6 +10,8 @@
 #include "SvnMergeInfo.h"
 #include "AprBaton.h"
 
+#include "SvnClientConfiguration.h"
+
 namespace SharpSvn {
 
 	ref class SvnCommittingEventArgs;
@@ -32,8 +34,9 @@ namespace SharpSvn {
 	public ref class SvnClient : public SvnClientContext
 	{
 		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
-		AprPool^ _pool;
+		AprPool _pool;
 		SvnClientArgs^ _currentArgs;
+	internal:
 		bool _noLogMessageRequired;
 	internal:
 		property SvnClientArgs^ CurrentArgs
@@ -80,9 +83,6 @@ namespace SharpSvn {
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
-	internal:
-		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
-		SvnClient(AprPool^ pool);
 
 	private:
 		void Initialize();
@@ -97,33 +97,6 @@ namespace SharpSvn {
 		{
 			System::Version^ get();
 		}
-
-		ref class SvnClientConfiguration sealed
-		{
-			SvnClient^ _client;
-		internal:
-			SvnClientConfiguration(SvnClient^ client)
-			{
-				if(!client)
-					throw gcnew ArgumentNullException("client");
-
-				_client = client;
-			}
-
-		public:
-			/// <summary>Gets or sets a boolean indicating whether commits will fail if no log message is provided</summary>
-			property bool LogMessageRequired
-			{
-				bool get()
-				{
-					return !_client->_noLogMessageRequired;
-				}
-				void set(bool value)
-				{
-					_client->_noLogMessageRequired = !value;
-				}
-			}
-		};
 
 	private:
 		SvnClientConfiguration^ _config;

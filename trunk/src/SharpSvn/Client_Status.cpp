@@ -50,7 +50,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	if(statusHandler)
 		args->Status += statusHandler;

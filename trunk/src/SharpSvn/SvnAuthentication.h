@@ -105,7 +105,7 @@ namespace SharpSvn {
 				SvnAuthentication^ get();
 			}
 		};
-
+		
 		ref class SvnAuthProviderMarshaller sealed : public SvnBase, public IItemMarshaller<ISvnAuthWrapper^>
 		{
 		public:
@@ -291,32 +291,32 @@ namespace SharpSvn {
 
 		public ref class SvnSslServerTrustEventArgs : public SvnAuthorizationEventArgs
 		{
-			initonly SvnCertificateTrustFailure _failures;
+			initonly SvnCertificateTrustFailures _failures;
 			initonly String^ _certCommonName;
 			initonly String^ _certFingerprint;
 			initonly String^ _certValidFrom;
 			initonly String^ _certValidUntil;
 			initonly String^ _certIssuer;
 			initonly String^ _certValue;
-			SvnCertificateTrustFailure _acceptedFailures;
+			SvnCertificateTrustFailures _acceptedFailures;
 
 		public:
-			SvnSslServerTrustEventArgs (SvnCertificateTrustFailure failures, String^ certificateCommonName, String^ certificateFingerprint, String^ certificateValidFrom, 
+			SvnSslServerTrustEventArgs (SvnCertificateTrustFailures failures, String^ certificateCommonName, String^ certificateFingerprint, String^ certificateValidFrom, 
 				String^ certificateValidUntil, String^ certificateIssuer, String^ certificateValue, String^ realm, bool maySave)
 				: SvnAuthorizationEventArgs(realm, maySave)
 			{
 				if(!certificateCommonName)
-					throw gcnew NullReferenceException("certificateCommonName");
+					throw gcnew ArgumentNullException("certificateCommonName");
 				else if(!certificateFingerprint)
-					throw gcnew NullReferenceException("certificateFingerprint");
+					throw gcnew ArgumentNullException("certificateFingerprint");
 				else if(!certificateValidFrom)
-					throw gcnew NullReferenceException("certificateValidFrom");
+					throw gcnew ArgumentNullException("certificateValidFrom");
 				else if(!certificateValidUntil)
-					throw gcnew NullReferenceException("certificateValidUntil");
+					throw gcnew ArgumentNullException("certificateValidUntil");
 				else if(!certificateIssuer)
-					throw gcnew NullReferenceException("certificateIssuer");
+					throw gcnew ArgumentNullException("certificateIssuer");
 				else if(!certificateValue)
-					throw gcnew NullReferenceException("certificateValue");
+					throw gcnew ArgumentNullException("certificateValue");
 
 				_failures			= failures;
 				_certCommonName		= certificateCommonName;
@@ -328,24 +328,24 @@ namespace SharpSvn {
 			}
 
 		public:
-			property SvnCertificateTrustFailure Failures
+			property SvnCertificateTrustFailures Failures
 			{
-				SvnCertificateTrustFailure get()
+				SvnCertificateTrustFailures get()
 				{
 					return _failures;
 				}
 			}
 
-			property SvnCertificateTrustFailure AcceptedFailures
+			property SvnCertificateTrustFailures AcceptedFailures
 			{
-				SvnCertificateTrustFailure get()
+				SvnCertificateTrustFailures get()
 				{
 					return _acceptedFailures;
 				}
 
-				void set(SvnCertificateTrustFailure value)
+				void set(SvnCertificateTrustFailures value)
 				{
-					_acceptedFailures = (SvnCertificateTrustFailure)(value & SvnCertificateTrustFailure::MaskAllFailures);
+					_acceptedFailures = (SvnCertificateTrustFailures)(value & SvnCertificateTrustFailures::MaskAllFailures);
 				}
 			}
 

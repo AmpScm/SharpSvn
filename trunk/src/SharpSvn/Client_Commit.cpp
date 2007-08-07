@@ -92,7 +92,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a SvnClient instance can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{
@@ -111,7 +111,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 			pool.Handle);
 
 		if(commitInfoPtr)
-			commitInfo = gcnew SvnCommitInfo(commitInfoPtr);
+			commitInfo = gcnew SvnCommitInfo(commitInfoPtr, %pool);
 		else
 			commitInfo = nullptr;
 

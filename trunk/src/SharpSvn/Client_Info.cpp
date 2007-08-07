@@ -58,7 +58,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	if(infoHandler)
 		args->Info += infoHandler;

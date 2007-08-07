@@ -10,6 +10,7 @@ using System::Runtime::InteropServices::Marshal;
 
 SvnStreamWrapper::~SvnStreamWrapper()
 {
+	delete _streamBatton;
 }
 
 SvnStreamWrapper::!SvnStreamWrapper()

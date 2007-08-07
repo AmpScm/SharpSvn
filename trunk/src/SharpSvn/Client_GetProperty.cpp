@@ -59,7 +59,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 	properties = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);	
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
@@ -123,7 +123,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 	properties = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);	
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");

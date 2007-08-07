@@ -120,7 +120,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{
@@ -137,7 +137,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 			pool.Handle);
 
 		if(commit_info)
-			commitInfo = gcnew SvnCommitInfo(commit_info);
+			commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
 		return args->HandleResult(r);
 	}

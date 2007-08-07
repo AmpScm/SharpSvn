@@ -5,6 +5,8 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Lock(System.String,SharpSvn.SvnLockArgs):System.Boolean")];
+
 void SvnClient::Lock(String^ target, String^ comment)
 {
 	if(String::IsNullOrEmpty(target))
@@ -117,7 +119,7 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 
 	try
@@ -164,7 +166,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 
 	try

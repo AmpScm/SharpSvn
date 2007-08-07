@@ -25,7 +25,7 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{

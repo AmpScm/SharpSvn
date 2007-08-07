@@ -8,26 +8,15 @@ using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 
 
-SvnRepositoryClient::SvnRepositoryClient()
-: _pool(gcnew AprPool()), SvnClientContext(_pool)
-{
-}
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnRepositoryClient.DeleteRepository(System.String,SharpSvn.SvnDeleteRepositoryArgs):System.Boolean")];
 
-SvnRepositoryClient::SvnRepositoryClient(AprPool^ pool)
-: _pool(gcnew AprPool(pool)), SvnClientContext(_pool)
+SvnRepositoryClient::SvnRepositoryClient()
+: _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
 }
 
 SvnRepositoryClient::~SvnRepositoryClient()
 {
-	AprPool^ pool = _pool;
-	if(pool)
-	{
-		_pool = nullptr;
-
-		if(!pool->IsDisposed)
-			delete pool;
-	}
 }
 
 String^ SvnRepositoryClient::FindRepositoryRoot(String^ path)
@@ -37,8 +26,7 @@ String^ SvnRepositoryClient::FindRepositoryRoot(String^ path)
 
 	EnsureState(SvnContextState::ConfigLoaded);
 
-
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	const char* root = svn_repos_find_root_path(
 		pool.AllocPath(path),
@@ -66,7 +54,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
 	svn_repos_t* result;
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	apr_hash_t *fs_config = apr_hash_make(pool.Handle);
 
@@ -156,7 +144,7 @@ bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepo
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	svn_error_t* r = svn_repos_delete(
 		pool.AllocPath(repositoryPath),
@@ -181,7 +169,7 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	svn_error_t* r = svn_repos_recover3(
 		pool.AllocPath(repositoryPath),

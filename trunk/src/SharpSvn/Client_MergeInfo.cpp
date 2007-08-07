@@ -27,7 +27,7 @@ bool SvnClient::GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]
 
 	mergeInfo = nullptr;
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{

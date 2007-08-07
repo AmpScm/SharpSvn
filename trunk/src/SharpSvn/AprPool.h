@@ -74,19 +74,20 @@ namespace SharpSvn {
 			void Destroy();
 
 		public:
+			//AprPool(AprPool% thisPool);
 			AprPool(AprPool^ parentPool);
 			AprPool();
 			AprPool(apr_pool_t *attachHandle, bool destroyPool);
 
 			//static AprPool^ Attach(apr_pool_t *handle, bool destroyPool);
 
-			property bool IsDisposed
+			/*property bool IsDisposed
 			{
 				bool get()
 				{
 					return !_handle;
 				}
-			}
+			}*/
 
 			void Ensure()
 			{
@@ -143,14 +144,6 @@ namespace SharpSvn {
 			const svn_string_t* AllocSvnString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(array<char>^ value);
-
-			static const char* AllocString(String^ value, apr_pool_t *pool);
-			static const char* AllocPath(String^ path, apr_pool_t *pool);
-			static const char* AllocCanonical(String^ value, apr_pool_t *pool);
-			static void* Alloc(size_t size, apr_pool_t *pool);
-			static void* AllocCleared(size_t size, apr_pool_t *pool);
-			static const svn_string_t* AllocSvnString(String^ value, apr_pool_t *pool);
-			static const svn_string_t* AllocSvnString(array<char>^ value, apr_pool_t *pool);
 		};
 	}
 }

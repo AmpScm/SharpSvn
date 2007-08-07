@@ -5,15 +5,72 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 
-SvnClient::SvnClient()
-: _pool(gcnew AprPool()), SvnClientContext(_pool)
-{
-	_clientBatton = gcnew AprBaton<SvnClient^>(this);
-	Initialize();
-}
+using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 
-SvnClient::SvnClient(AprPool^ pool)
-: _pool(gcnew AprPool(pool)), SvnClientContext(_pool)
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetLog(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.Collections.Generic.IList`1<SharpSvn.SvnLogEventArgs>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetMergeInfo(SharpSvn.SvnTarget,SharpSvn.SvnGetMergeInfoArgs,SharpSvn.SvnMergeInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetLog(SharpSvn.SvnTarget,SharpSvn.SvnLogArgs,System.Collections.Generic.IList`1<SharpSvn.SvnLogEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Switch(System.String,SharpSvn.SvnUriTarget,SharpSvn.SvnSwitchArgs,System.Int64&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetUuidFromUri(System.Uri,System.Guid&):System.Boolean", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,SharpSvn.SvnListChangeListArgs,System.Collections.Generic.IList`1<System.String>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Update(System.String,System.Int64&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnRevision,SharpSvn.SvnRevision,System.IO.FileStream&):System.Void", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Update(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnUpdateArgs,System.Collections.Generic.IList`1<System.Int64>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetList(SharpSvn.SvnTarget,SharpSvn.SvnListArgs,System.Collections.Generic.IList`1<SharpSvn.SvnListEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetPropertyList(SharpSvn.SvnTarget,SharpSvn.SvnPropertyListArgs,System.Collections.Generic.IList`1<SharpSvn.SvnPropertyListEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteDelete(System.Uri,SharpSvn.SvnDeleteArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetStatus(System.String,SharpSvn.SvnStatusEventArgs&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnUriTarget,System.Uri,SharpSvn.SvnCommitInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnCommitInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoArgs,System.Collections.Generic.IList`1<SharpSvn.SvnInfoEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnMoveArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,System.Int64&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnCommitInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,System.IO.FileStream&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Update(System.String,SharpSvn.SvnUpdateArgs,System.Int64&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCreateDirectory(System.Uri,SharpSvn.SvnCreateDirectoryArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetList(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<SharpSvn.SvnListEventArgs>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffArgs,System.IO.FileStream&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnUriTarget,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetProperty(SharpSvn.SvnTarget,System.String,SharpSvn.SvnGetPropertyArgs,System.Collections.Generic.IDictionary`2<SharpSvn.SvnTarget,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,System.Collections.Generic.IList`1<SharpSvn.SvnListChangeListEventArgs>&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Collections.Generic.ICollection`1<System.Uri>,System.Uri,SharpSvn.SvnMoveArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnCommitInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(System.Collections.Generic.ICollection`1<SharpSvn.SvnUriTarget>,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetPropertyList(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<SharpSvn.SvnPropertyListEventArgs>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteDelete(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnDeleteArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnRevision,SharpSvn.SvnRevision,SharpSvn.SvnDiffArgs,System.IO.FileStream&):System.Boolean", MessageId="4#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetLog(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<SharpSvn.SvnLogEventArgs>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,System.Collections.Generic.IList`1<System.String>&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetLog(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1<System.Uri>,System.Collections.Generic.IList`1<SharpSvn.SvnLogEventArgs>&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Update(System.Collections.Generic.ICollection`1<System.String>,System.Collections.Generic.IList`1<System.Int64>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Collections.Generic.ICollection`1<System.Uri>,System.Uri,SharpSvn.SvnCommitInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetDiffSummary(SharpSvn.SvnTarget,SharpSvn.SvnTarget,System.Collections.Generic.IList`1<SharpSvn.SvnDiffSummaryEventArgs>&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,System.Int64&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitInfo&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(System.Collections.Generic.ICollection`1<SharpSvn.SvnUriTarget>,System.Uri,SharpSvn.SvnCommitInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnCheckOutArgs,System.Int64&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,SharpSvn.SvnListChangeListArgs,System.Collections.Generic.IList`1<SharpSvn.SvnListChangeListEventArgs>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoEventArgs&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitInfo&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetDiffSummary(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffSummaryArgs,System.Collections.Generic.IList`1<SharpSvn.SvnDiffSummaryEventArgs>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetStatus(System.String,SharpSvn.SvnStatusArgs,System.Collections.Generic.IList`1<SharpSvn.SvnStatusEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCreateDirectory(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnCreateDirectoryArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Switch(System.String,SharpSvn.SvnUriTarget,System.Int64&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetStatus(System.String,System.Collections.Generic.IList`1<SharpSvn.SvnStatusEventArgs>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetProperty(SharpSvn.SvnTarget,System.String,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,SharpSvn.SvnExportArgs,System.Int64&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetMergeInfo(SharpSvn.SvnTarget,SharpSvn.SvnMergeInfo&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetProperty(SharpSvn.SvnTarget,System.String,SharpSvn.SvnGetPropertyArgs,System.Collections.Generic.IDictionary`2<SharpSvn.SvnTarget,System.String>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetProperty(SharpSvn.SvnTarget,System.String,System.String&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,System.Boolean,System.Int64&):System.Void", MessageId="3#")];
+
+SvnClient::SvnClient()
+: _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
 	_clientBatton = gcnew AprBaton<SvnClient^>(this);
 	Initialize();
@@ -21,14 +78,7 @@ SvnClient::SvnClient(AprPool^ pool)
 
 SvnClient::~SvnClient()
 {
-	AprPool^ pool = _pool;
-	if(pool)
-	{
-		_pool = nullptr;
-
-		if(!pool->IsDisposed)
-			delete pool;
-	}
+	delete _clientBatton;
 }
 
 struct SvnClientCallBacks
@@ -270,7 +320,7 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 
 	EnsureState(SvnContextState::ConfigLoaded);
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	const char* url = nullptr;
 
@@ -295,7 +345,7 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 
 	const char* uuidStr = nullptr;
 
@@ -308,4 +358,13 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 		uuid = Guid(Utf8_PtrToString(uuidStr));
 		return true;
 	}
+}
+
+bool SvnClientConfiguration::LogMessageRequired::get()
+{
+	return !_client->_noLogMessageRequired;
+}
+void SvnClientConfiguration::LogMessageRequired::set(bool value)
+{
+	_client->_noLogMessageRequired = !value;
 }

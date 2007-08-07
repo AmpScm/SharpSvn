@@ -43,6 +43,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 
 SvnClientContext::~SvnClientContext()
 {
+	delete _authPool;
 	_ctx = nullptr;
 	_pool = nullptr;
 }

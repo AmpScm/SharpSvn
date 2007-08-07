@@ -33,7 +33,7 @@ bool SvnClient::Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args)
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);
 	_currentArgs = args;
 	try

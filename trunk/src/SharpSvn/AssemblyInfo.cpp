@@ -64,6 +64,8 @@ using namespace System::Security::Permissions;
 
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
+[assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
+
 #pragma comment(lib, "ole32.lib")
 
 #pragma comment(lib, "libsvn_client-1.lib")

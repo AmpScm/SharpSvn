@@ -11,22 +11,9 @@ namespace SharpSvn {
 	public ref class SvnException : public System::Exception
 	{
 	private:
-		svn_error_t *_error;
+		initonly int _errorCode;
 
-		static String^ GetErrorText(svn_error_t *error)
-		{
-			if(!error)
-				return "";
-
-			try
-			{
-				return SharpSvn::Apr::SvnBase::Utf8_PtrToString(error->message);
-			}
-			catch(Exception^)
-			{
-				return "Subversion error: Unable to retrieve error text";
-			}
-		}
+		static String^ GetErrorText(svn_error_t *error);
 
 		static Exception^ GetInnerException(svn_error_t *error)
 		{
@@ -47,15 +34,19 @@ namespace SharpSvn {
 		SvnException(svn_error_t *error)
 			: Exception(GetErrorText(error), GetInnerException(error))
 		{
-			_error = error;
+			if(error)
+				_errorCode = error->apr_err;
 		}
 
 	protected:
 		SvnException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
 			: Exception(info, context)
 		{
-			UNUSED_ALWAYS(info);
+			if(!info)
+				throw gcnew ArgumentNullException("info");
 			UNUSED_ALWAYS(context);
+
+			_errorCode = info->GetInt32("SvnErrorValue");
 		}
 
 	public:
@@ -71,6 +62,25 @@ namespace SharpSvn {
 		SvnException(String^ message, Exception^ inner)
 			: Exception(message, inner)
 		{
+		}
+
+		property int ErrorCode
+		{
+			int get()
+			{
+				return _errorCode;
+			}
+		}
+
+	public:
+		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
+		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
+		{
+			if(!info)
+				throw gcnew ArgumentNullException("info");
+			Exception::GetObjectData(info, context);
+
+			info->AddValue("SvnErrorValue", _errorCode);
 		}
 	};
 

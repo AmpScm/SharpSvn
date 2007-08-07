@@ -55,7 +55,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 	apr_file_t* tmpOut = nullptr;
 	apr_file_t* tmpErr = nullptr;
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 
 	try
@@ -158,7 +158,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 	apr_file_t* tmpOut = nullptr;
 	apr_file_t* tmpErr = nullptr;
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 
 	try

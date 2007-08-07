@@ -25,3 +25,4 @@
 #pragma warning(disable: 4706) // assignment within conditional expression
 
 using System::Runtime::InteropServices::OutAttribute;
+using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
