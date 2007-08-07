@@ -24,7 +24,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	SvnListArgs^ args = dynamic_cast<SvnListArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
-		SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path, %thePool);
+		SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path);
 		try
 		{
 			args->OnList(e);
@@ -59,7 +59,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	if(listHandler)
 		args->List += listHandler;

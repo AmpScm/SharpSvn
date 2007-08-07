@@ -33,7 +33,7 @@ bool SvnClient::Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPa
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{
@@ -93,7 +93,7 @@ bool SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Str
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{

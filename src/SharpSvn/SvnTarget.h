@@ -70,7 +70,7 @@ namespace SharpSvn {
 			case SvnRevisionType::Number:
 				return _value.ToString(System::Globalization::CultureInfo::InvariantCulture);
 			case SvnRevisionType::Date:
-				return "{" + DateTime(_value).ToString("s") + "}";
+				return "{" + DateTime(_value).ToString("s", System::Globalization::CultureInfo::InvariantCulture) + "}";
 			case SvnRevisionType::Committed:
 				return "COMMITTED";
 			case SvnRevisionType::Previous:
@@ -123,12 +123,12 @@ namespace SharpSvn {
 			return Equals(rev);
 		}
 
-		virtual bool Equals(SvnRevision^ rev)
+		virtual bool Equals(SvnRevision^ other)
 		{
-			if(!rev)
+			if(!other)
 				return false;
 
-			return (_type == rev->_type) && (_value == rev->_value);
+			return (_type == other->_type) && (_value == other->_value);
 		}
 
 		virtual int GetHashCode() override
@@ -264,9 +264,9 @@ namespace SharpSvn {
 
 
 	public:
-		static bool TryParse(String^ targetString, [Out] SvnTarget^% target);
+		static bool TryParse(String^ targetName, [Out] SvnTarget^% target);
 	internal:
-		static bool TryParse(String^ targetString, [Out] SvnTarget^% target, AprPool^ pool);
+		static bool TryParse(String^ targetName, [Out] SvnTarget^% target, AprPool^ pool);
 
 		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
 

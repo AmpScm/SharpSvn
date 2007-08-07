@@ -36,7 +36,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 		}
 		catch(Exception^ e)
 		{			
-			return SvnException::CreateExceptionSvnError("Diff summary receiver", e);
+			return SvnException:: CreateExceptionSvnError("Diff summary receiver", e);
 		}
 		finally
 		{
@@ -62,7 +62,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 
 	if(summaryHandler)

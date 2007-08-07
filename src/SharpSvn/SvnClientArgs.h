@@ -657,7 +657,7 @@ namespace SharpSvn {
 		SvnRevision^ _start;
 		SvnRevision^ _end;
 		int _limit;
-		bool _logChangedPaths;
+		bool _noLogChangedPaths;
 		bool _strictNodeHistory;
 		bool _includeMerged;
 		bool _ommitMessages;
@@ -676,8 +676,8 @@ namespace SharpSvn {
 		{
 			_start = SvnRevision::Head;
 			_end = SvnRevision::Zero;
-			_limit = 0;
-			_logChangedPaths = true;
+			//_limit = 0;
+			//_noLogChangedPaths = false;
 			//_strictHistory = false;
 		}
 
@@ -728,11 +728,11 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-				return _logChangedPaths;
+				return !_noLogChangedPaths;
 			}
 			void set(bool value)
 			{
-				_logChangedPaths = value;
+				_noLogChangedPaths = !value;
 			}
 		}
 

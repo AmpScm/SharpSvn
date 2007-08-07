@@ -14,7 +14,7 @@ SvnMergeInfo::SvnMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo)
 	_target = target;
 	if(!mergeInfo)
 	{
-		_available = false;
+		//_available = false;
 		return;
 	}
 

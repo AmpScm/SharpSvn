@@ -11,7 +11,7 @@ namespace SharpSvn {
 		String^ _path;
 		String^ _fullPath;
 
-		String^ GetFullPath(String ^path)
+		static String^ GetFullPath(String ^path)
 		{
 			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 		}
@@ -92,20 +92,20 @@ namespace SharpSvn {
 		}
 
 	public:
-		static bool TryParse(String^ targetString, [Out] SvnPathTarget^% target);
+		static bool TryParse(String^ targetName, [Out] SvnPathTarget^% target);
 
 	internal:
-		static bool TryParse(String^ targetString, [Out] SvnPathTarget ^% target, AprPool^ pool)
+		static bool TryParse(String^ targetName, [Out] SvnPathTarget ^% target, AprPool^ pool)
 		{
-			if(String::IsNullOrEmpty(targetString))
-				throw gcnew ArgumentNullException("targetString");
+			if(String::IsNullOrEmpty(targetName))
+				throw gcnew ArgumentNullException("targetName");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
 
 			svn_opt_revision_t rev;
 			const char* truePath;
 
-			const char* path = pool->AllocPath(targetString);
+			const char* path = pool->AllocPath(targetName);
 
 			if(!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
 			{

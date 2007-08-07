@@ -160,6 +160,9 @@ namespace SharpSvn {
 
 	public enum class SvnWcStatus
 	{
+		/// <summary>Zero value. Never used by Subversion</summary>
+		Zero				= 0,
+
 		/// <summary>does not exist</summary>
 		None				= svn_wc_status_none,
 
@@ -220,7 +223,7 @@ namespace SharpSvn {
 	};
 
 	[Flags]
-	public enum class SvnCertificateTrustFailure
+	public enum class SvnCertificateTrustFailures
 	{
 		None						=	0,
 		CertificateNotValidYet		=	SVN_AUTH_SSL_NOTYETVALID,
@@ -256,8 +259,9 @@ namespace SharpSvn {
 		/** An indication that you are interested in the @c last_author field */
 		LastAuthor		= SVN_DIRENT_LAST_AUTHOR,
 
-		/** A combination of all the dirent fields */
-		AllFields		= SVN_DIRENT_ALL,
+		/** A combination of all the dirent fields */			
+		AllFields		= Kind | Size | HasProperties | CreatedRevision | Time | LastAuthor,	
+		//AllFields	was SVN_DIRENT_ALL, but that value does not allow future extension without side-effects
 
 		SnvListDefault	= Kind | Time
 	};

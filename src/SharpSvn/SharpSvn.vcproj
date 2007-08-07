@@ -222,10 +222,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\AprException.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\AprPool.cpp"
 					>
 				</File>
@@ -243,10 +239,6 @@
 				</File>
 				<File
 					RelativePath=".\AprBaton.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AprException.h"
 					>
 				</File>
 				<File
@@ -329,6 +321,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientConfiguration.h"
 					>
 				</File>
 				<File

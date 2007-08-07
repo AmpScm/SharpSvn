@@ -18,15 +18,11 @@ namespace SharpSvn {
 	/// </remarks>
 	public ref class SvnRepositoryClient : public SvnClientContext
 	{
-		AprPool^ _pool;
+		AprPool _pool;
 
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnRepositoryClient();
-	internal:
-		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
-		SvnRepositoryClient(AprPool^ pool);
-
 
 	public:
 		/// <summary>Helper which allows splitting file:/// uri's in the repository root and the file within</summary>

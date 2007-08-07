@@ -15,7 +15,7 @@ namespace SharpSvn {
 		initonly String^ _postCommitError;
 
 	internal:
-		SvnCommitInfo(const svn_commit_info_t *commitInfo);
+		SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool);
 
 	public:
 		property __int64 Revision

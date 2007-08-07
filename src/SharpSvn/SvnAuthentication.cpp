@@ -10,6 +10,25 @@ using namespace SharpSvn::Security;
 using namespace SharpSvn::UI::Authentication;
 using System::Text::StringBuilder;
 
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionWindowsUsernamePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogUsernameHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleUsernameHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleSslClientCertificateHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogUsernamePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileSslClientCertificateHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleUsernamePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionWindowsSslServerTrustHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileSslClientCertificatePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogSslClientCertificatePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleSslServerTrustHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileUsernamePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleSslClientCertificatePasswordHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogSslServerTrustHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogSslClientCertificateHandler")];
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileUsernameHandler")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
+
 SvnAuthentication::SvnAuthentication()
 {
 	_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();
@@ -57,7 +76,7 @@ void SvnAuthentication::AddConsoleHandlers()
 svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(AprPool ^pool, [Out] int% cookie)
 {
 	if(!pool)
-		throw gcnew NullReferenceException("pool");
+		throw gcnew ArgumentNullException("pool");
 
 	AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>^ authArray = gcnew AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>(_handlers, pool);
 
@@ -89,11 +108,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 	SvnUsernameEventArgs^ args = gcnew SvnUsernameEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-		*cred = nullptr;
+	AprPool tmpPool(pool, false);
+	*cred = nullptr;
 	try
 	{
 		wrapper->Raise(args);
-		
+
 	}
 	catch(Exception^ e)
 	{
@@ -105,9 +125,9 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 		return nullptr;
 
 
-	*cred = (svn_auth_cred_username_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_username_t), pool);
+	*cred = (svn_auth_cred_username_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_username_t));
 
-	(*cred)->username = AprPool::AllocString(args->Username, pool);
+	(*cred)->username = tmpPool.AllocString(args->Username);
 	(*cred)->may_save = args->Save;
 
 	return nullptr;
@@ -140,11 +160,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 
 	SvnUsernamePasswordEventArgs^ args = gcnew SvnUsernamePasswordEventArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+	AprPool tmpPool(pool, false);
 	*cred = nullptr;
 	try
 	{
 		wrapper->Raise(args);
-		
+
 	}
 	catch(Exception^ e)
 	{
@@ -155,10 +176,10 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 	else if(args->Break)
 		return nullptr;
 
-	*cred = (svn_auth_cred_simple_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_simple_t), pool);
+	*cred = (svn_auth_cred_simple_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_simple_t));
 
-	(*cred)->username = AprPool::AllocString(args->Username, pool);
-	(*cred)->password = AprPool::AllocString(args->Password, pool);
+	(*cred)->username = tmpPool.AllocString(args->Username);
+	(*cred)->password = tmpPool.AllocString(args->Password);
 	(*cred)->may_save = args->Save;
 
 	return nullptr;
@@ -194,7 +215,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 	SvnAuthWrapper<SvnSslServerTrustEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslServerTrustEventArgs^>^>::Get((IntPtr)baton);
 
 	SvnSslServerTrustEventArgs^ args = gcnew SvnSslServerTrustEventArgs(
-		(SvnCertificateTrustFailure)failures, 
+		(SvnCertificateTrustFailures)failures, 
 		SvnBase::Utf8_PtrToString(cert_info->hostname),
 		SvnBase::Utf8_PtrToString(cert_info->fingerprint),
 		SvnBase::Utf8_PtrToString(cert_info->valid_from),
@@ -203,11 +224,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		SvnBase::Utf8_PtrToString(cert_info->ascii_cert),
 		SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-		*cred = nullptr;
+	AprPool tmpPool(pool, false);
+	*cred = nullptr;
 	try
 	{
 		wrapper->Raise(args);
-		
+
 	}
 	catch(Exception^ e)
 	{
@@ -219,7 +241,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		return nullptr;
 
 
-	*cred = (svn_auth_cred_ssl_server_trust_t*)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t), pool);
+	*cred = (svn_auth_cred_ssl_server_trust_t*)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t));
 
 	(*cred)->accepted_failures = (apr_uint32_t)args->AcceptedFailures;
 	(*cred)->may_save = args->Save;
@@ -260,11 +282,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 
 	SvnSslClientCertificateEventArgs^ args = gcnew SvnSslClientCertificateEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
-		*cred = nullptr;
+	AprPool tmpPool(pool, false);
+	*cred = nullptr;
 	try
 	{
 		wrapper->Raise(args);
-		
+
 	}
 	catch(Exception^ e)
 	{
@@ -276,9 +299,9 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 		return nullptr;
 
 
-	*cred = (svn_auth_cred_ssl_client_cert_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_t), pool);
+	*cred = (svn_auth_cred_ssl_client_cert_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_t));
 
-	(*cred)->cert_file = AprPool::AllocString(args->CertificateFile, pool);
+	(*cred)->cert_file = tmpPool.AllocString(args->CertificateFile);
 	(*cred)->may_save = args->Save;
 
 	return nullptr;
@@ -311,11 +334,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 
 	SvnSslClientCertificatePasswordEventArgs^ args = gcnew SvnSslClientCertificatePasswordEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+	AprPool tmpPool(pool, false);
 	*cred = nullptr;
 	try
 	{
 		wrapper->Raise(args);
-		
+
 	}
 	catch(Exception^ e)
 	{
@@ -326,9 +350,9 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 	else if(args->Break)
 		return nullptr;
 
-	*cred = (svn_auth_cred_ssl_client_cert_pw_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_pw_t), pool);
+	*cred = (svn_auth_cred_ssl_client_cert_pw_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_pw_t));
 
-	(*cred)->password = AprPool::AllocString(args->Password, pool);
+	(*cred)->password = tmpPool.AllocString(args->Password);
 	(*cred)->may_save = args->Save;
 
 	return nullptr;
@@ -407,9 +431,9 @@ void SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslSer
 
 	SharpSvnGui::ServerCertificateInfo^ sci = gcnew SharpSvnGui::ServerCertificateInfo();
 
-	sci->InvalidCommonName = (0 != (int)(e->Failures & SvnCertificateTrustFailure::CommonNameMismatch));
-	sci->NoTrustedIssuer = 0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority);
-	sci->TimeError = 0 != (int)(e->Failures & (SvnCertificateTrustFailure::CertificateExpired | SvnCertificateTrustFailure::CertificateNotValidYet));
+	sci->InvalidCommonName = (0 != (int)(e->Failures & SvnCertificateTrustFailures::CommonNameMismatch));
+	sci->NoTrustedIssuer = 0 != (int)(e->Failures & SvnCertificateTrustFailures::UnknownCertificateAuthority);
+	sci->TimeError = 0 != (int)(e->Failures & (SvnCertificateTrustFailures::CertificateExpired | SvnCertificateTrustFailures::CertificateNotValidYet));
 
 	sci->Hostname = e->CommonName;
 	sci->Fingerprint = e->FingerPrint;
@@ -421,7 +445,7 @@ void SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslSer
 	bool accept = false;
 	if(SharpSvnGui::AskServerCertificateTrust(handle, "Connect to Subversion", e->Realm, sci, e->MaySave, accept, save))
 	{
-		e->AcceptedFailures = accept ? e->Failures : SvnCertificateTrustFailure::None;
+		e->AcceptedFailures = accept ? e->Failures : SvnCertificateTrustFailures::None;
 		e->Save = save && e->MaySave;
 	}
 	else
@@ -439,7 +463,7 @@ void SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, Svn
 	{
 		e->CertificateFile = file;
 		e->Save = save && e->MaySave;
-		}
+	}
 	else
 		e->Break = true;
 }
@@ -536,24 +560,24 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 	UNUSED_ALWAYS(sender);
 	Console::WriteLine("Error validating server certificate for '{0}':", e->Realm);
 
-	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority))
+	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::UnknownCertificateAuthority))
 	{
 		Console::WriteLine(" - The certificate is not issued by a trusted authority. Use the\n"
 			"   fingerprint to validate the certificate manually!");
 	}
-	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::CommonNameMismatch))
+	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CommonNameMismatch))
 	{
 		Console::WriteLine(" - The certificate hostname does not match.");
 	}
-	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::CertificateNotValidYet))
+	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CertificateNotValidYet))
 	{
 		Console::WriteLine(" - The certificate is not yet valid.");
 	}
-	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::CertificateExpired))
+	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CertificateExpired))
 	{
 		Console::WriteLine(" - The certificate is has expired.");
 	}
-	if(SvnCertificateTrustFailure::None != (e->Failures & SvnCertificateTrustFailure::UnknownSslProviderFailure))
+	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::UnknownSslProviderFailure))
 	{
 		Console::WriteLine(" - The certificate has an unknown error.");
 	}

@@ -33,7 +33,7 @@ namespace SharpSvn {
 			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
 			static apr_time_t AprTimeFromDateTime(DateTime time);
 
-			generic<typename T> __forceinline array<T>^ NewSingleItemArray(T value)
+			generic<typename T> static __forceinline array<T>^ NewSingleItemArray(T value)
 			{
 				array<T>^ items = gcnew array<T>(1);
 				items[0] = value;
@@ -41,7 +41,7 @@ namespace SharpSvn {
 				return items;
 			}
 
-			generic<typename T> __forceinline ICollection<T>^ NewSingleItemCollection(T value)
+			generic<typename T> static __forceinline ICollection<T>^ NewSingleItemCollection(T value)
 			{
 				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
 			}
@@ -69,7 +69,7 @@ namespace SharpSvn {
 			static bool IsNotUri(String ^path);
 
 		internal:
-			generic<typename T> __forceinline array<T>^ NewSingleItemArray(T value)
+			generic<typename T> static __forceinline array<T>^ NewSingleItemArray(T value)
 			{
 				array<T>^ items = gcnew array<T>(1);
 				items[0] = value;
@@ -77,15 +77,15 @@ namespace SharpSvn {
 				return items;
 			}
 
-			generic<typename T> __forceinline ICollection<T>^ NewSingleItemCollection(T value)
+			generic<typename T> static __forceinline ICollection<T>^ NewSingleItemCollection(T value)
 			{
 				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
 			}
 
-			apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
-			apr_array_header_t *AllocPathArray(ICollection<String^>^ strings, AprPool^ pool);
-			apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
-			apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
+			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
+			static apr_array_header_t *AllocPathArray(ICollection<String^>^ strings, AprPool^ pool);
+			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
+			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
 		};
 	}
 }

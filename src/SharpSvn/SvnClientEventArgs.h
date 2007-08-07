@@ -1347,28 +1347,24 @@ namespace SharpSvn {
 		const char* _pAbsPath;
 		const svn_lock_t *_pLock;
 		const svn_dirent_t *_pDirEnt;
-		AprPool^ _pool;
 
 		String^ _absPath;
 		SvnLockInfo^ _lock;
 		SvnDirEntry^ _entry;
 
 	internal:
-		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, AprPool^ pool)
+		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
 		{
 			if(!path)
 				throw gcnew ArgumentNullException("path");
 			else if(!abs_path)
 				throw gcnew ArgumentNullException("abs_path");
-			else if(!pool)
-				throw gcnew ArgumentNullException("pool");
 
 			_path = SvnBase::Utf8_PtrToString(path);
 
 			_pDirEnt = dirent;
 			_pLock = lock;
 			_pAbsPath = abs_path;
-			_pool = pool;
 		}
 
 	public:
@@ -1437,7 +1433,6 @@ namespace SharpSvn {
 				_pAbsPath = nullptr;
 				_pLock = nullptr;
 				_pDirEnt = nullptr;
-				_pool = nullptr;
 
 				__super::Detach(keepProperties);
 			}

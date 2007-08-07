@@ -49,13 +49,24 @@ void SvnCommittingEventArgs::Detach(bool keepProperties)
 	}
 }
 
-SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo)
+SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool)
 {
 	if(!commitInfo)
 		throw gcnew ArgumentNullException("commitInfo");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
 
 	_revision = commitInfo->revision;
-	_date = DateTime::Parse(SvnBase::Utf8_PtrToString(commitInfo->date));
+	
+	apr_time_t when = 0;
+	svn_error_t *err = svn_time_from_cstring(&when, commitInfo->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
+
+	if(!err)
+		_date = SvnBase::DateTimeFromAprTime(when);
+	else
+		_date = DateTime::MinValue;
+
 	_author = SvnBase::Utf8_PtrToString(commitInfo->author);
 	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;
 }

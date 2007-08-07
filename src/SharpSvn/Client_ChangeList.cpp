@@ -51,7 +51,7 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{
@@ -115,7 +115,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ change
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{
@@ -190,7 +190,7 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	if(changeListHandler)
 		args->ListChangeList += changeListHandler;
@@ -242,7 +242,7 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 	if(_currentArgs)
 		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
 
-	AprPool pool(_pool);
+	AprPool pool(%_pool);
 	_currentArgs = args;
 	try
 	{

@@ -25,7 +25,25 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 		innerError = svn_error_create(SVN_ERR_CANCELLED, nullptr, tmpPool.AllocString(forwardData));
 	}
 
-	return svn_error_create(SVN_ERR_CANCELLED, innerError, tmpPool.AllocString(String::Format("Operation canceled. Exception occured in {0}", origin)));
+	return svn_error_create(SVN_ERR_CANCELLED, innerError, tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
+}
+
+
+
+[module: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="SharpSvn.SvnException.GetErrorText(svn_error_t*):System.String")];
+String^ SvnException::GetErrorText(svn_error_t *error)
+{
+	if(!error)
+		return "";
+
+	try
+	{
+		return SharpSvn::Apr::SvnBase::Utf8_PtrToString(error->message);
+	}
+	catch(Exception^)
+	{
+		return "Subversion error: Unable to retrieve error text";
+	}
 }
 
 
@@ -34,10 +52,13 @@ SvnException^ SvnException::Create(svn_error_t *error)
 	return static_cast<SvnException^>(Create(error, true));
 }
 
+[module: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="SharpSvn.SvnException.Create(svn_error_t*,System.Boolean):System.Exception")];
 Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 {
 	if(!error)
 		return nullptr;
+
+	static const int prefixLength = (int)strlen(MANAGED_EXCEPTION_PREFIX);
 
 	try
 	{
@@ -233,12 +254,12 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			return gcnew SvnClientApiException(error);
 
 		case SVN_ERR_CANCELLED:
-			if(error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, strlen(MANAGED_EXCEPTION_PREFIX)))
+			if(error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, prefixLength))
 			{
 				try
 				{
 					String^ message = SvnBase::Utf8_PtrToString(error->message);				
-					__int64 handle = __int64::Parse(message->Substring((int)strlen(MANAGED_EXCEPTION_PREFIX)));
+					__int64 handle = __int64::Parse(message->Substring(prefixLength), System::Globalization::CultureInfo::InvariantCulture);
 
 					return AprBaton<Exception^>::Get((IntPtr)handle);
 				}

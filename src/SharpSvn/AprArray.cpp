@@ -35,7 +35,9 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 	int nItems = 0;
 	for each(T t in items)
 	{
-		UNUSED_ALWAYS(t);
+		if(!t)
+			throw gcnew ArgumentException("item is null", "items");
+
 		nItems++;
 	}
 
