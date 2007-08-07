@@ -33,7 +33,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 		}
 		catch(Exception^ e)
 		{			
-			return CreateExceptionSvnError("Info receiver", e);
+			return SvnException::CreateExceptionSvnError("Info receiver", e);
 		}
 		finally
 		{

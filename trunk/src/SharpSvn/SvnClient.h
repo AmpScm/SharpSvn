@@ -12,6 +12,7 @@
 
 namespace SharpSvn {
 
+	ref class SvnCommittingEventArgs;
 	ref class SvnCancelEventArgs;
 	ref class SvnProgressEventArgs;
 	ref class SvnLogEventArgs;
@@ -48,7 +49,7 @@ namespace SharpSvn {
 			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 		}
 
-		bool IsRecursive(SvnDepth depth)		
+		static bool IsRecursive(SvnDepth depth)		
 		{ 
 			switch(depth)
 			{
@@ -62,7 +63,7 @@ namespace SharpSvn {
 			}
 		}
 
-		bool IsNotRecursive(SvnDepth depth)
+		static bool IsNotRecursive(SvnDepth depth)
 		{
 			switch(depth)
 			{
@@ -92,7 +93,7 @@ namespace SharpSvn {
 			System::Version^ get();
 		}
 
-		property static System::Version^ WrapperVersion
+		property static System::Version^ SharpSvnVersion
 		{
 			System::Version^ get();
 		}
@@ -124,8 +125,10 @@ namespace SharpSvn {
 			}
 		};
 
+	private:
 		SvnClientConfiguration^ _config;
 
+	public:
 		property SvnClientConfiguration^ Configuration
 		{
 			SvnClientConfiguration^ get()
@@ -139,59 +142,29 @@ namespace SharpSvn {
 
 		/////////////////////////////////////////
 #pragma region // Client events
-	private:
-		EventHandler<SvnClientCancelEventArgs^>^	_clientCancel;
-		EventHandler<SvnClientProgressEventArgs^>^	_clientProgress;
-		EventHandler<SvnClientNotifyEventArgs^>^	_clientNotify;
-		EventHandler<SvnClientBeforeCommitEventArgs^>^	_clientBeforeCommit;
-		EventHandler<SvnClientConflictResolveEventArgs^>^	_clientConflictResolver;
 	public:
-		event EventHandler<SvnClientCancelEventArgs^>^		ClientCancel
-		{
-			void add(EventHandler<SvnClientCancelEventArgs^>^ e)		{ _clientCancel += e; }
-			void remove(EventHandler<SvnClientCancelEventArgs^>^ e)		{ _clientCancel -= e; }
-		}
-
-		event EventHandler<SvnClientProgressEventArgs^>^	ClientProgress
-		{
-			void add(EventHandler<SvnClientProgressEventArgs^>^ e)		{ _clientProgress += e; }
-			void remove(EventHandler<SvnClientProgressEventArgs^>^ e)	{ _clientProgress -= e; }
-		}
-
-		event EventHandler<SvnClientNotifyEventArgs^>^		ClientNotify
-		{
-			void add(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify += e; }
-			void remove(EventHandler<SvnClientNotifyEventArgs^>^ e)		{ _clientNotify -= e; }
-		}
-
-		event EventHandler<SvnClientBeforeCommitEventArgs^>^	ClientBeforeCommit
-		{
-			void add(EventHandler<SvnClientBeforeCommitEventArgs^>^ e)		{ _clientBeforeCommit += e; }
-			void remove(EventHandler<SvnClientBeforeCommitEventArgs^>^ e)	{ _clientBeforeCommit -= e; }
-		}
-
-		event EventHandler<SvnClientConflictResolveEventArgs^>^	ClientConflictResolver
-		{
-			void add(EventHandler<SvnClientConflictResolveEventArgs^>^ e)		{ _clientConflictResolver += e; }
-			void remove(EventHandler<SvnClientConflictResolveEventArgs^>^ e)	{ _clientConflictResolver -= e; }
-		}
+		event EventHandler<SvnCancelEventArgs^>^		Cancel;
+		event EventHandler<SvnProgressEventArgs^>^		Progress;
+		event EventHandler<SvnNotifyEventArgs^>^		Notify;
+		event EventHandler<SvnCommittingEventArgs^>^	Committing;
+		event EventHandler<SvnConflictEventArgs^>^		Conflict;
 
 	protected:
-		virtual void OnClientCancel(SvnClientCancelEventArgs^ e);
-		virtual void OnClientProgress(SvnClientProgressEventArgs^ e);
-		virtual void OnClientBeforeCommit(SvnClientBeforeCommitEventArgs^ e);
-		virtual void OnClientNotify(SvnClientNotifyEventArgs^ e);
-		virtual void OnClientConflictResolver(SvnClientConflictResolveEventArgs^ e);
+		virtual void OnCancel(SvnCancelEventArgs^ e);
+		virtual void OnProgress(SvnProgressEventArgs^ e);
+		virtual void OnCommitting(SvnCommittingEventArgs^ e);
+		virtual void OnNotify(SvnNotifyEventArgs^ e);
+		virtual void OnConflict(SvnConflictEventArgs^ e);
 
 	internal:
 
-		void HandleClientCancel(SvnClientCancelEventArgs^ e);
-		void HandleClientProgress(SvnClientProgressEventArgs^ e);
-		void HandleClientGetCommitLog(SvnClientBeforeCommitEventArgs^ e);
-		void HandleClientNotify(SvnClientNotifyEventArgs^ e);
-		void HandleClientConflictResolver(SvnClientConflictResolveEventArgs^ e);
+		void HandleClientCancel(SvnCancelEventArgs^ e);
+		void HandleClientProgress(SvnProgressEventArgs^ e);
+		void HandleClientGetCommitLog(SvnCommittingEventArgs^ e);
+		void HandleClientNotify(SvnNotifyEventArgs^ e);
+		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
 
-		const char* GetEolPtr(SvnEolStyle style);
+		static const char* GetEolPtr(SvnEolStyle style);
 #pragma endregion
 
 	public:
@@ -322,7 +295,7 @@ namespace SharpSvn {
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		void Add(String^ path, SvnDepth depth);
 
-		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
+		/// <summary>Adds the specified path</summary>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -331,7 +304,7 @@ namespace SharpSvn {
 
 	internal:
 		generic<typename T>
-		where T : SvnClientEventArgs
+		where T : SvnEventArgs
 		ref class InfoItemList : public System::Collections::ObjectModel::Collection<T>
 		{
 		public:
@@ -378,6 +351,7 @@ namespace SharpSvn {
 		void Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+		
 		/// <summary>Gets log messages of the specified target</summary>
 		void Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
@@ -432,24 +406,24 @@ namespace SharpSvn {
 
 	public:
 		/////////////////////////////////////////
-#pragma region // MkDir Client Command
+#pragma region // CreateDirectory Client Command
 
-		void MkDir(String^ path);
-		bool MkDir(String^ path, SvnMkDirArgs^ args);
+		void CreateDirectory(String^ path);
+		bool CreateDirectory(String^ path, SvnCreateDirectoryArgs^ args);
 
-		void MkDir(ICollection<String^>^ paths);
-		bool MkDir(ICollection<String^>^ paths, SvnMkDirArgs^ args);
+		void CreateDirectory(ICollection<String^>^ paths);
+		bool CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryArgs^ args);
 
-		void RemoteMkDir(Uri^ uri);
-		bool RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args);
-		bool RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args);
-		bool RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		void RemoteCreateDirectory(Uri^ uri);
+		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args);
+		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args);
+		bool RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 	public:
 		/////////////////////////////////////////
-#pragma region // MkDir Client Command
+#pragma region // CreateDirectory Client Command
 
 		void Delete(String^ path);
 		bool Delete(String^ path, SvnDeleteArgs^ args);

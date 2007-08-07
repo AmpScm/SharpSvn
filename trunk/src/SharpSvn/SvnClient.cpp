@@ -5,25 +5,6 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 
-svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception)
-{
-	AprPool tmpPool;
-
-	svn_error_t *innerError = nullptr;
-
-	if(exception)
-	{
-		AprBaton<Exception^> ^item = gcnew AprBaton<Exception^>(exception);
-
-		String^ forwardData = String::Format(System::Globalization::CultureInfo::InvariantCulture, MANAGED_EXCEPTION_PREFIX "{0}", (__int64)item->Handle);
-
-		innerError = svn_error_create(SVN_ERR_CANCELLED, nullptr, tmpPool.AllocString(forwardData));
-	}
-
-	return svn_error_create(SVN_ERR_CANCELLED, innerError, tmpPool.AllocString(String::Format("Operation canceled. Exception occured in {0}", origin)));
-}
-
-
 SvnClient::SvnClient()
 : _pool(gcnew AprPool()), SvnClientContext(_pool)
 {
@@ -83,12 +64,12 @@ System::Version^ SvnClient::Version::get()
 	return gcnew System::Version(version->major, version->minor, version->patch);
 }
 
-System::Version^ SvnClient::WrapperVersion::get()
+System::Version^ SvnClient::SharpSvnVersion::get()
 {
 	return (gcnew System::Reflection::AssemblyName(SvnClient::typeid->Assembly->FullName))->Version;
 }
 
-void SvnClient::HandleClientCancel(SvnClientCancelEventArgs^ e)
+void SvnClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
 	if(_currentArgs)
 		_currentArgs->OnCancel(e);
@@ -96,77 +77,70 @@ void SvnClient::HandleClientCancel(SvnClientCancelEventArgs^ e)
 	if(e->Cancel)
 		return;
 
-	OnClientCancel(e);
+	OnCancel(e);
 }
 
-void SvnClient::OnClientCancel(SvnClientCancelEventArgs^ e)
+void SvnClient::OnCancel(SvnCancelEventArgs^ e)
 {
-	if(_clientCancel)
-		_clientCancel(this, e);
+	Cancel(this, e);
 }
 
-void SvnClient::HandleClientProgress(SvnClientProgressEventArgs^ e)
+void SvnClient::HandleClientProgress(SvnProgressEventArgs^ e)
 {
 	if(_currentArgs)
 		_currentArgs->OnProgress(e);
 
-	OnClientProgress(e);
+	OnProgress(e);
 }
 
-
-
-void SvnClient::OnClientProgress(SvnClientProgressEventArgs^ e)
+void SvnClient::OnProgress(SvnProgressEventArgs^ e)
 {
-	if(_clientProgress)
-		_clientProgress(this, e);
+	Progress(this, e);
 }
 
-void SvnClient::HandleClientGetCommitLog(SvnClientBeforeCommitEventArgs^ e)
+void SvnClient::HandleClientGetCommitLog(SvnCommittingEventArgs^ e)
 {
 	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 
 	if(commitArgs)
-		commitArgs->OnBeforeCommit(e);
+		commitArgs->OnCommitting(e);
 
-	OnClientBeforeCommit(e);
+	OnCommitting(e);
 }
 
-void SvnClient::OnClientBeforeCommit(SvnClientBeforeCommitEventArgs^ e)
+void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
 {
-	if(_clientBeforeCommit)
-		_clientBeforeCommit(this, e);
+	Committing(this, e);
 }
 
-void SvnClient::HandleClientNotify(SvnClientNotifyEventArgs^ e)
+void SvnClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
 	if(_currentArgs)
 		_currentArgs->OnNotify(e);
 
-	OnClientNotify(e);
+	OnNotify(e);
 }
 
-void SvnClient::OnClientNotify(SvnClientNotifyEventArgs^ e)
+void SvnClient::OnNotify(SvnNotifyEventArgs^ e)
 {
-	if(_clientNotify)
-		_clientNotify(this, e);
+	Notify(this, e);
 }
 
-void SvnClient::HandleClientConflictResolver(SvnClientConflictResolveEventArgs^ e)
+void SvnClient::HandleClientConflictResolver(SvnConflictEventArgs^ e)
 {
-	OnClientConflictResolver(e);
+	OnConflict(e);
 }
 
-void SvnClient::OnClientConflictResolver(SvnClientConflictResolveEventArgs^ e)
+void SvnClient::OnConflict(SvnConflictEventArgs^ e)
 {
-	if(_clientConflictResolver)
-		_clientConflictResolver(this, e);
+	Conflict(this, e);
 }
 
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
 
-	SvnClientCancelEventArgs^ ea = gcnew SvnClientCancelEventArgs();
+	SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
 	try
 	{
 		client->HandleClientCancel(ea);
@@ -178,7 +152,7 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Cancel function", e);
+		return SvnException::CreateExceptionSvnError("Cancel function", e);
 	}
 	finally
 	{
@@ -192,7 +166,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 	AprPool^ tmpPool = gcnew AprPool(pool, false);
 
-	SvnClientBeforeCommitEventArgs^ ea = gcnew SvnClientBeforeCommitEventArgs(commit_items, tmpPool);
+	SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, tmpPool);
 
 	*log_msg = nullptr;
 	*tmp_file = nullptr;
@@ -204,7 +178,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 		if(ea->Cancel)
 			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
 		else if(ea->LogMessage)
-			*log_msg = tmpPool->AllocString(ea->LogMessage); 
+			*log_msg = tmpPool->AllocUnixString(ea->LogMessage); 
 		else if(client->Configuration->LogMessageRequired)
 			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Commit canceled: A logmessage is required");
 		else
@@ -214,7 +188,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Commit log", e);
+		return SvnException::CreateExceptionSvnError("Commit log", e);
 	}
 	finally
 	{
@@ -230,7 +204,7 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
 	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientNotifyEventArgs^ ea = gcnew SvnClientNotifyEventArgs(notify);
+	SvnNotifyEventArgs^ ea = gcnew SvnNotifyEventArgs(notify);
 
 	try
 	{
@@ -247,7 +221,7 @@ void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off
 	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnClientProgressEventArgs^ ea = gcnew SvnClientProgressEventArgs(progress, total);
+	SvnProgressEventArgs^ ea = gcnew SvnProgressEventArgs(progress, total);
 
 	try
 	{
@@ -265,7 +239,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 
 	AprPool tmpPool(pool, false);
 
-	SvnClientConflictResolveEventArgs^ ea = gcnew SvnClientConflictResolveEventArgs(description, %tmpPool);
+	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %tmpPool);
 
 	try
 	{
@@ -281,7 +255,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Conflict resolver", e);
+		return SvnException::CreateExceptionSvnError("Conflict resolver", e);
 	}
 	finally
 	{

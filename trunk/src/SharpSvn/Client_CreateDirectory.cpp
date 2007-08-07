@@ -6,34 +6,34 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::MkDir(String^ path)
+void SvnClient::CreateDirectory(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	MkDir(NewSingleItemCollection(path), gcnew SvnMkDirArgs());
+	CreateDirectory(NewSingleItemCollection(path), gcnew SvnCreateDirectoryArgs());
 }
 
-bool SvnClient::MkDir(String^ path, SvnMkDirArgs^ args)
+bool SvnClient::CreateDirectory(String^ path, SvnCreateDirectoryArgs^ args)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return MkDir(NewSingleItemCollection(path), args);
+	return CreateDirectory(NewSingleItemCollection(path), args);
 }
 
 
-void SvnClient::MkDir(ICollection<String^>^ paths)
+void SvnClient::CreateDirectory(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	MkDir(paths, gcnew SvnMkDirArgs());
+	CreateDirectory(paths, gcnew SvnCreateDirectoryArgs());
 }
 
-bool SvnClient::MkDir(ICollection<String^>^ paths, SvnMkDirArgs^ args)
+bool SvnClient::CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryArgs^ args)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -75,15 +75,15 @@ bool SvnClient::MkDir(ICollection<String^>^ paths, SvnMkDirArgs^ args)
 	}
 }
 
-void SvnClient::RemoteMkDir(Uri^ uri)
+void SvnClient::RemoteCreateDirectory(Uri^ uri)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
 
-	RemoteMkDir(uri, gcnew SvnMkDirArgs());
+	RemoteCreateDirectory(uri, gcnew SvnCreateDirectoryArgs());
 }
 
-bool SvnClient::RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args)
+bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
@@ -92,20 +92,20 @@ bool SvnClient::RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args)
 
 	SvnCommitInfo^ commitInfo;
 
-	return RemoteMkDir(uri, args, commitInfo);
+	return RemoteCreateDirectory(uri, args, commitInfo);
 }
 
-bool SvnClient::RemoteMkDir(Uri^ uri, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return RemoteMkDir(NewSingleItemCollection(uri), args, commitInfo);
+	return RemoteCreateDirectory(NewSingleItemCollection(uri), args, commitInfo);
 }
 
-bool SvnClient::RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args)
+bool SvnClient::RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args)
 {
 	if(!uris)
 		throw gcnew ArgumentNullException("uris");
@@ -114,11 +114,11 @@ bool SvnClient::RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args)
 
 	SvnCommitInfo^ commitInfo;
 
-	return RemoteMkDir(uris, args, commitInfo);
+	return RemoteCreateDirectory(uris, args, commitInfo);
 
 }
 
-bool SvnClient::RemoteMkDir(ICollection<Uri^>^ uris, SvnMkDirArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(!uris)
 		throw gcnew ArgumentNullException("uris");

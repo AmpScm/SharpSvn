@@ -153,6 +153,58 @@ const char* AprPool::AllocString(String^ value)
 		return (const char*)AllocCleared(1);
 }
 
+const char* AprPool::AllocUnixString(String^ value)
+{
+	if(!value)
+		value = "";
+
+	if(value->Length >= 1)
+	{
+		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
+
+		char* pData = (char*)Alloc(bytes->Length+1);
+
+		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+
+		if(pData && pBytes)
+			memcpy(pData, pBytes, bytes->Length);
+
+		pData[bytes->Length] = 0;
+
+		char *pFrom;
+		char *pTo;
+
+		pFrom = pTo = pData;
+
+		while(*pFrom)
+		{
+			switch(*pFrom)
+			{
+			case '\r':
+				*pTo++ = '\n';
+				if(*(++pFrom) == '\n')
+					pFrom++;
+				break;
+			case '\n':
+				*pTo++ = '\n';
+				if(*(++pFrom) == '\r')
+					pFrom++;
+				break;
+
+			default:
+				*pTo++ = *pFrom++;
+			}
+		}
+
+		*pTo = 0;
+
+		return pData;
+	}
+	else
+		return (const char*)AllocCleared(1);
+}
+
+
 const char* AprPool::AllocPath(String^ value)
 {
 	if(!value)

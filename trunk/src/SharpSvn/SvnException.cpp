@@ -6,6 +6,29 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 
+#define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
+
+
+
+svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ exception)
+{
+	AprPool tmpPool;
+
+	svn_error_t *innerError = nullptr;
+
+	if(exception)
+	{
+		AprBaton<Exception^> ^item = gcnew AprBaton<Exception^>(exception);
+
+		String^ forwardData = String::Format(System::Globalization::CultureInfo::InvariantCulture, MANAGED_EXCEPTION_PREFIX "{0}", (__int64)item->Handle);
+
+		innerError = svn_error_create(SVN_ERR_CANCELLED, nullptr, tmpPool.AllocString(forwardData));
+	}
+
+	return svn_error_create(SVN_ERR_CANCELLED, innerError, tmpPool.AllocString(String::Format("Operation canceled. Exception occured in {0}", origin)));
+}
+
+
 SvnException^ SvnException::Create(svn_error_t *error)
 {
 	return static_cast<SvnException^>(Create(error, true));
@@ -37,7 +60,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_IO_UNKNOWN_EOL:
 		case SVN_ERR_IO_UNIQUE_NAMES_EXHAUSTED:
 		case SVN_ERR_IO_WRITE_ERROR:
-			return gcnew SvnIoException(error);
+			return gcnew SvnIOException(error);
 		case SVN_ERR_STREAM_UNEXPECTED_EOF:
 		case SVN_ERR_STREAM_MALFORMED_DATA:
 		case SVN_ERR_STREAM_UNRECOGNIZED_DATA:

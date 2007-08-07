@@ -85,25 +85,25 @@ struct AuthPromptWrappers
 
 svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_username_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnUsernameArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUsernameArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnUsernameEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUsernameEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnUsernameArgs^ args = gcnew SvnUsernameArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
+	SvnUsernameEventArgs^ args = gcnew SvnUsernameEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+		*cred = nullptr;
 	try
 	{
-		if(!wrapper->Raise(args) && !args->Cancel)
-		{
-			*cred = nullptr;
-			return nullptr;
-		}
+		wrapper->Raise(args);
+		
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Authorization handler", e);
+		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-
 	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+	else if(args->Break)
+		return nullptr;
+
 
 	*cred = (svn_auth_cred_username_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_username_t), pool);
 
@@ -113,7 +113,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnUsernameArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnUsernameEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -136,25 +136,24 @@ svn_auth_provider_object_t *SvnUsernameArgs::Wrapper::GetProviderPtr(AprPool^ po
 
 svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simple_t **cred, void *baton, const char *realm, const char *username, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnUsernamePasswordArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUsernamePasswordArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnUsernamePasswordEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUsernamePasswordEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnUsernamePasswordArgs^ args = gcnew SvnUsernamePasswordArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
+	SvnUsernamePasswordEventArgs^ args = gcnew SvnUsernamePasswordEventArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+	*cred = nullptr;
 	try
 	{
-		if(!wrapper->Raise(args) && !args->Cancel)
-		{
-			*cred = nullptr;
-			return nullptr;
-		}
+		wrapper->Raise(args);
+		
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Authorization handler", e);
+		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-
 	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+	else if(args->Break)
+		return nullptr;
 
 	*cred = (svn_auth_cred_simple_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_simple_t), pool);
 
@@ -165,7 +164,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnUsernamePasswordArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnUsernamePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -188,13 +187,13 @@ svn_auth_provider_object_t *SvnUsernamePasswordArgs::Wrapper::GetProviderPtr(Apr
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////
-#pragma region	// SvnSslServerTrustArgs handler wrapper
+#pragma region	// SvnSslServerTrustEventArgs handler wrapper
 
 svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_cred_ssl_server_trust_t **cred, void *baton, const char *realm, apr_uint32_t failures, const svn_auth_ssl_server_cert_info_t *cert_info, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnSslServerTrustArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslServerTrustArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnSslServerTrustEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslServerTrustEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnSslServerTrustArgs^ args = gcnew SvnSslServerTrustArgs(
+	SvnSslServerTrustEventArgs^ args = gcnew SvnSslServerTrustEventArgs(
 		(SvnCertificateTrustFailure)failures, 
 		SvnBase::Utf8_PtrToString(cert_info->hostname),
 		SvnBase::Utf8_PtrToString(cert_info->fingerprint),
@@ -204,21 +203,21 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		SvnBase::Utf8_PtrToString(cert_info->ascii_cert),
 		SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+		*cred = nullptr;
 	try
 	{
-		if(!wrapper->Raise(args) && !args->Cancel)
-		{
-			*cred = nullptr;
-			return nullptr;
-		}
+		wrapper->Raise(args);
+		
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Authorization handler", e);
+		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-
 	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+	else if(args->Break)
+		return nullptr;
+
 
 	*cred = (svn_auth_cred_ssl_server_trust_t*)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t), pool);
 
@@ -228,7 +227,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnSslServerTrustArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnSslServerTrustEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -257,25 +256,25 @@ svn_auth_provider_object_t *SvnSslServerTrustArgs::Wrapper::GetProviderPtr(AprPo
 
 svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_cred_ssl_client_cert_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnSslClientCertificateArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslClientCertificateArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnSslClientCertificateEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslClientCertificateEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnSslClientCertificateArgs^ args = gcnew SvnSslClientCertificateArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
+	SvnSslClientCertificateEventArgs^ args = gcnew SvnSslClientCertificateEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+		*cred = nullptr;
 	try
 	{
-		if(!wrapper->Raise(args) && !args->Cancel)
-		{
-			*cred = nullptr;
-			return nullptr;
-		}
+		wrapper->Raise(args);
+		
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Authorization handler", e);
+		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-
 	if(args->Cancel)
-		return svn_error_create(SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+	else if(args->Break)
+		return nullptr;
+
 
 	*cred = (svn_auth_cred_ssl_client_cert_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_t), pool);
 
@@ -285,7 +284,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnSslClientCertificateArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnSslClientCertificateEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -308,25 +307,24 @@ svn_auth_provider_object_t *SvnSslClientCertificateArgs::Wrapper::GetProviderPtr
 
 svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_auth_cred_ssl_client_cert_pw_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnSslClientCertificatePasswordArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslClientCertificatePasswordArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnSslClientCertificatePasswordEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslClientCertificatePasswordEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnSslClientCertificatePasswordArgs^ args = gcnew SvnSslClientCertificatePasswordArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
+	SvnSslClientCertificatePasswordEventArgs^ args = gcnew SvnSslClientCertificatePasswordEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
+	*cred = nullptr;
 	try
 	{
-		if(!wrapper->Raise(args) && !args->Cancel)
-		{
-			*cred = nullptr;
-			return nullptr;
-		}
+		wrapper->Raise(args);
+		
 	}
 	catch(Exception^ e)
 	{
-		return CreateExceptionSvnError("Authorization handler", e);
+		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-
 	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+	else if(args->Break)
+		return nullptr;
 
 	*cred = (svn_auth_cred_ssl_client_cert_pw_t *)AprPool::AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_pw_t), pool);
 
@@ -336,7 +334,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -356,29 +354,34 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordArgs::Wrapper::GetPro
 
 IntPtr SvnAuthentication::GetParentHandle(Object ^sender)
 {
-	UNUSED_ALWAYS(sender);
+	SvnAuthentication^ ref = dynamic_cast<SvnAuthentication^>(sender);
+
+	if(ref)
+	{
+		if(ref->ParentWindow)
+			return SharpSvnGui::GetWin32Handle(ref->ParentWindow);
+	}
 
 	return IntPtr::Zero;
 }
 
-bool SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
+void SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
 {
 	IntPtr handle = GetParentHandle(sender);
 
 	String^ username;
 	bool save;
 
-	if(TurtleSvnGui::AskUsername(handle, "Connect to Subversion", e->Realm, e->MaySave, username, save))
+	if(SharpSvnGui::AskUsername(handle, "Connect to Subversion", e->Realm, e->MaySave, username, save))
 	{
 		e->Username = username;
 		e->Save = save && e->MaySave;
-		return true;
 	}
 	else
-		return false;
+		e->Break = true;
 }
 
-bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
+void SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
 {
 	IntPtr handle = GetParentHandle(sender);
 
@@ -386,25 +389,23 @@ bool SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUser
 	String^ password;
 	bool save;
 
-	if(TurtleSvnGui::AskUsernamePassword(handle, "Connect to Subversion", e->Realm, e->InitialUsername, e->MaySave, username, password, save))
+	if(SharpSvnGui::AskUsernamePassword(handle, "Connect to Subversion", e->Realm, e->InitialUsername, e->MaySave, username, password, save))
 	{
 		e->Username = username;
 		e->Password = password;
 		e->Save = save && e->MaySave;
-		return true;
 	}
 	else
-		return false;
+		e->Break = true;
 }
 
-
-bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+void SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 {
 	IntPtr handle = GetParentHandle(sender);
 
 	bool save;
 
-	TurtleSvnGui::ServerCertificateInfo^ sci = gcnew TurtleSvnGui::ServerCertificateInfo();
+	SharpSvnGui::ServerCertificateInfo^ sci = gcnew SharpSvnGui::ServerCertificateInfo();
 
 	sci->InvalidCommonName = (0 != (int)(e->Failures & SvnCertificateTrustFailure::CommonNameMismatch));
 	sci->NoTrustedIssuer = 0 != (int)(e->Failures & SvnCertificateTrustFailure::UnknownCertificateAuthority);
@@ -418,52 +419,49 @@ bool SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslSer
 	sci->ValidTo = e->ValidUntil;
 
 	bool accept = false;
-	if(TurtleSvnGui::AskServerCertificateTrust(handle, "Connect to Subversion", e->Realm, sci, e->MaySave, accept, save))
+	if(SharpSvnGui::AskServerCertificateTrust(handle, "Connect to Subversion", e->Realm, sci, e->MaySave, accept, save))
 	{
 		e->AcceptedFailures = accept ? e->Failures : SvnCertificateTrustFailure::None;
 		e->Save = save && e->MaySave;
-		return true;
 	}
 	else
-		return false;
+		e->Break = true;
 }
 
-bool SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+void SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
 {
 	IntPtr handle = GetParentHandle(sender);
 
 	String^ file;
 	bool save;
 
-	if(TurtleSvnGui::AskClientCertificateFile(handle, "Connect to Subversion", e->Realm, e->MaySave, file, save))
+	if(SharpSvnGui::AskClientCertificateFile(handle, "Connect to Subversion", e->Realm, e->MaySave, file, save))
 	{
 		e->CertificateFile = file;
 		e->Save = save && e->MaySave;
-		return true;
-	}
+		}
 	else
-		return false;
+		e->Break = true;
 }
 
-bool SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
+void SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
 	IntPtr handle = GetParentHandle(sender);
 
 	String^ password;
 	bool save;
 
-	if(TurtleSvnGui::AskClientCertificatePassPhrase(handle, "Connect to Subversion", e->Realm, e->MaySave, password, save))
+	if(SharpSvnGui::AskClientCertificatePassPhrase(handle, "Connect to Subversion", e->Realm, e->MaySave, password, save))
 	{
 		e->Password = password;
 		e->Save = save && e->MaySave;
-		return true;
 	}
 	else
-		return false;
+		e->Break = true;
 }
 
 ///////////////////////////////
-void SvnAuthentication::MaybePrintRealm(SvnAuthorizationArgs^ e)
+void SvnAuthentication::MaybePrintRealm(SvnAuthorizationEventArgs^ e)
 {
 	if(!e)
 		throw gcnew ArgumentNullException("e");
@@ -504,18 +502,16 @@ String^ SvnAuthentication::ReadPassword()
 }
 
 
-bool SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
+void SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
 	Console::Write("Username: ");
 	e->Username = Console::ReadLine();
-
-	return true;
 }
 
-bool SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e)
+void SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
@@ -533,11 +529,9 @@ bool SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUse
 	Console::Write("Password: ");
 	e->Password = ReadPassword();
 	Console::WriteLine();
-
-	return true;
 }
 
-bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	Console::WriteLine("Error validating server certificate for '{0}':", e->Realm);
@@ -594,13 +588,13 @@ bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 			case ConsoleKey::P:
 				e->AcceptedFailures = e->Failures;
 				e->Save = e->MaySave;
-				return true;
+				return;
 			case ConsoleKey::T:
 				e->AcceptedFailures = e->Failures;
-				return true;
+				return;
 			}
 		}
-		return false;
+		e->Break = true;
 	}
 	finally
 	{
@@ -608,7 +602,7 @@ bool SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 	}
 }
 
-bool SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+void SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
@@ -617,62 +611,60 @@ bool SvnAuthentication::ImpConsoleSslClientCertificateHandler(Object ^sender, Sv
 
 	e->CertificateFile = Console::ReadLine();
 	Console::WriteLine();
-	return true;
 }
 
-bool SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
+void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	Console::Write("Passphrase for '{0}': ", e->Realm);
 
 	e->Password = ReadPassword();
 	Console::WriteLine();
-	return true;
 }
 
-bool SvnAuthentication::ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameArgs^ e)
+void SvnAuthentication::ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
 
-bool SvnAuthentication::ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
+void SvnAuthentication::ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e) 
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
 
-bool SvnAuthentication::ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordArgs^ e) 
+void SvnAuthentication::ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e) 
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
 
-bool SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e) 
+void SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e) 
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
 
-bool SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateArgs^ e)
+void SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
 
-bool SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordArgs^ e)
+void SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
 }
 
-bool SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustArgs^ e)
+void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 { 
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);

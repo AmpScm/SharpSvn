@@ -34,7 +34,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 		}
 		catch(Exception^ e)
 		{			
-			return CreateExceptionSvnError("List receiver", e);
+			return SvnException::CreateExceptionSvnError("List receiver", e);
 		}
 		finally
 		{

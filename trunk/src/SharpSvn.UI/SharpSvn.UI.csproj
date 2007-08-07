@@ -52,7 +52,7 @@
     <Compile Include="Authentication\SslServerCertificateTrustDialog.Designer.cs">
       <DependentUpon>SslServerCertificateTrustDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="Authentication\TurtleSvnGui.cs" />
+    <Compile Include="Authentication\SharpSvnGui.cs" />
     <Compile Include="Authentication\UsernameDialog.cs">
       <SubType>Form</SubType>
     </Compile>
