@@ -41,14 +41,14 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(path))
-		throw gcnew ArgumentException("Path must be a local path", "path");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	// We allow a null statusHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -89,7 +89,7 @@ void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statu
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
+	InfoItemCollection<SvnStatusEventArgs^>^ results = gcnew InfoItemCollection<SvnStatusEventArgs^>();
 
 	try
 	{
@@ -106,7 +106,7 @@ void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
+	InfoItemCollection<SvnStatusEventArgs^>^ results = gcnew InfoItemCollection<SvnStatusEventArgs^>();
 
 	SvnStatusArgs^ args = gcnew SvnStatusArgs();
 	args->Depth = SvnDepth::Empty;
@@ -133,7 +133,7 @@ bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStat
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	InfoItemList<SvnStatusEventArgs^>^ results = gcnew InfoItemList<SvnStatusEventArgs^>();
+	InfoItemCollection<SvnStatusEventArgs^>^ results = gcnew InfoItemCollection<SvnStatusEventArgs^>();
 
 	try
 	{

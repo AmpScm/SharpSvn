@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-#include "AprArray.h"
+#include "SvnAll.h"
 
 
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCStrPathMarshaller")];
@@ -42,7 +42,7 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 	for each(T t in items)
 	{
 		if(!t)
-			throw gcnew ArgumentException("item is null", "items");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "items");
 
 		nItems++;
 	}
@@ -90,7 +90,7 @@ apr_array_header_t *SvnHandleBase::AllocArray(ICollection<String^>^ strings, Apr
 	for each(String^ s in strings)
 	{
 		if(!s)
-			throw gcnew ArgumentException("String in strings is null", "strings");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "strings");
 	}
 	AprArray<String^, AprCStrMarshaller^>^ aprStrings = gcnew AprArray<String^, AprCStrMarshaller^>(strings, pool);
 
@@ -107,7 +107,7 @@ apr_array_header_t *SvnHandleBase::AllocPathArray(ICollection<String^>^ paths, A
 	for each(String^ s in paths)
 	{
 		if(!s)
-			throw gcnew ArgumentException("String in paths is null", "paths");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, pool);
 

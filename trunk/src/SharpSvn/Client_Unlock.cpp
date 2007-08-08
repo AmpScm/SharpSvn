@@ -79,35 +79,46 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
 	int i = 0;
+	bool checked = false;
+	bool allUri = false;
 	for each(String^ target in targets)
 	{
 		if(String::IsNullOrEmpty(target))
-			throw gcnew ArgumentException("Target is null within targets", "targets");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 
-		if(IsNotUri(target))
-			targetStrings[i++] = GetSvnPath(target);
+		bool isUri = IsNotUri(target);
+		if(checked && (isUri != allUri))
+			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "targets");
 		else
+		{
+			checked = true;
+			allUri = isUri;
+		}
+
+		if(isUri)
 		{
 			Uri^ uri;
 
 			if(!Uri::TryCreate(target, UriKind::Absolute, uri))
-				throw gcnew ArgumentException("Invalid target Uri", "targets");
+				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "targets");
 
 			targetStrings[i++] = uri->ToString();
 		}
+		else
+			targetStrings[i++] = target;
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
 
 	try
 	{
-		AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+		AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
 		svn_error_t* err = svn_client_unlock(
@@ -137,7 +148,7 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	for each(Uri^ target in targets)
 	{
 		if(!target)
-			throw gcnew ArgumentException("Uri is null within targets", "targets");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 
 		targetStrings[i++] = target->ToString();
 	}
@@ -145,7 +156,7 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

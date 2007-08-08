@@ -57,13 +57,13 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		break;
 	default:
 		// Throw the error before we allocate the unmanaged resources
-		throw gcnew ArgumentException("Revision type must be head, date or number", "target");
+		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific, "target");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

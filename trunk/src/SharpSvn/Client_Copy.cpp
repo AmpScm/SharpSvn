@@ -58,7 +58,7 @@ bool SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, Svn
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -178,7 +178,7 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

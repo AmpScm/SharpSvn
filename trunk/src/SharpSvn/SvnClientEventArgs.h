@@ -288,6 +288,7 @@ namespace SharpSvn {
 	public ref class SvnLockInfo : public ISvnDetachable
 	{
 		const svn_lock_t *_lock;
+		initonly bool _localData;
 		String^ _path;
 		String^ _fullPath;
 		String^ _token;
@@ -297,11 +298,12 @@ namespace SharpSvn {
 		initonly DateTime _creationDate;
 		initonly DateTime _expirationDate;
 	internal:
-		SvnLockInfo(const svn_lock_t *lock)
+		SvnLockInfo(const svn_lock_t *lock, bool localData)
 		{
 			if(!lock)
 				throw gcnew ArgumentNullException("lock");
 
+			_localData = localData;
 			_lock = lock;
 			_isDavComment = lock->is_dav_comment != 0;
 			_creationDate = SvnBase::DateTimeFromAprTime(lock->creation_date);
@@ -326,7 +328,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path)
+				if(!_fullPath && _localData && Path)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -359,8 +361,13 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_comment && _lock)
+				if(!_comment && _lock && _lock->comment)
+				{
 					_comment = SvnBase::Utf8_PtrToString(_lock->comment);
+
+					if(_comment)
+						_comment->Replace("\n", Environment::NewLine);
+				}
 
 				return _comment;
 			}
@@ -542,7 +549,7 @@ namespace SharpSvn {
 			SvnLockInfo^ get()
 			{
 				if(!_lock && _notify && _notify->lock)
-					_lock = gcnew SvnLockInfo(_notify->lock);
+					_lock = gcnew SvnLockInfo(_notify->lock, false);
 
 				return _lock;
 			}
@@ -713,7 +720,7 @@ namespace SharpSvn {
 			SvnLockInfo^ get()
 			{
 				if(!_reposLock && _status && _status->repos_lock)
-					_reposLock = gcnew SvnLockInfo(_status->repos_lock);
+					_reposLock = gcnew SvnLockInfo(_status->repos_lock, false);
 
 				return _reposLock;
 			}
@@ -1185,7 +1192,7 @@ namespace SharpSvn {
 			SvnLockInfo^ get()
 			{
 				if(!_lock && _info && _info->lock)
-					_lock = gcnew SvnLockInfo(_info->lock);
+					_lock = gcnew SvnLockInfo(_info->lock, HasLocalInfo);
 
 				return _lock;
 			}
@@ -1511,7 +1518,7 @@ namespace SharpSvn {
 			SvnLockInfo^ get()
 			{
 				if(!_lock && _pLock)
-					_lock = gcnew SvnLockInfo(_pLock);
+					_lock = gcnew SvnLockInfo(_pLock, false);
 
 				return _lock;
 			}

@@ -34,7 +34,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

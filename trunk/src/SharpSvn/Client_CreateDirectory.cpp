@@ -43,15 +43,15 @@ bool SvnClient::CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryA
 	for each(String^ path in paths)
 	{
 		if(String::IsNullOrEmpty(path))
-			throw gcnew ArgumentException("member of paths is null", "paths");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 		else if(!IsNotUri(path))
-			throw gcnew ArgumentException("Path is a url; please use RemoteDelete", "paths");
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
 	}
 
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -133,14 +133,14 @@ bool SvnClient::RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirector
 	for each(Uri^ uri in uris)
 		{
 			if(uri == nullptr)
-				throw gcnew ArgumentException("Uris contains null Uri", "uris");
+				throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
 			uriData[i++] = uri->ToString();
 		}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

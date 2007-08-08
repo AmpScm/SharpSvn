@@ -47,8 +47,6 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!args->Revision)
-		throw gcnew ArgumentException("args.Revision is not set", "args");
 	else
 		switch(args->Revision->Type)
 	{
@@ -58,13 +56,13 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 			break;
 		default:
 			// Throw the error before we allocate the unmanaged resources
-			throw gcnew ArgumentException("Revision type must be head, date or number", "args");
+			throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

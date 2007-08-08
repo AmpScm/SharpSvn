@@ -34,7 +34,7 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 		// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
 		return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
 	default:
-		throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
+		throw gcnew ArgumentException(SharpSvnStrings::InvalidSvnRevisionTypeValue, "revData");
 	}
 }
 

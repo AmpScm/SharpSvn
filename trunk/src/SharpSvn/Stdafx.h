@@ -26,3 +26,4 @@
 
 using System::Runtime::InteropServices::OutAttribute;
 using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
+#include "SharpSvnStrings.h"

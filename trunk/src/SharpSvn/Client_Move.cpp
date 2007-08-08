@@ -49,7 +49,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	for each(String^ s in sourcePaths)
 	{
 		if(String::IsNullOrEmpty(s))
-			throw gcnew ArgumentException("Path is empty", "sourcePaths");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourcePaths");
 		else if(!IsNotUri(s))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "sourcePaths");
 	}
@@ -57,7 +57,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -184,7 +184,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
