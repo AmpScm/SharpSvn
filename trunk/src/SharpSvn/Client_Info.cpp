@@ -32,7 +32,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Info receiver canceled operation");
 		}
 		catch(Exception^ e)
-		{			
+		{
 			return SvnException::CreateExceptionSvnError("Info receiver", e);
 		}
 		finally
@@ -70,11 +70,11 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 		{
 			pegRev.kind = svn_opt_revision_head;
 		}
-		
+
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_info(
-			pool.AllocString(target->TargetName), 
+			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
 			svn_info_receiver,

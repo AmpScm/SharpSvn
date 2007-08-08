@@ -199,8 +199,8 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 		svn_error_t* err = svn_client_get_changelist_streamy(
 			svnclient_changelist_handler,
 			(void*)_clientBatton->Handle,
-			pool.AllocString(changeList), 
-			pool.AllocPath(rootPath), 
+			pool.AllocString(changeList),
+			pool.AllocPath(rootPath),
 			CtxHandle,
 			pool.Handle);
 
@@ -250,8 +250,8 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 
 		svn_error_t* err = svn_client_get_changelist(
 			&aprResult,
-			pool.AllocString(changeList), 
-			pool.AllocPath(rootPath), 
+			pool.AllocString(changeList),
+			pool.AllocPath(rootPath),
 			CtxHandle,
 			pool.Handle);
 

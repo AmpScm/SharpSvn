@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #pragma warning(disable: 4635)
-#pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target. 
+#pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target.
 
 #include <apr-1/apr_version.h>
 #include <apr-1/apu_version.h>
@@ -15,6 +15,7 @@
 
 using namespace System;
 using namespace System::Reflection;
+using namespace System::Resources;
 using namespace System::Runtime::CompilerServices;
 using namespace System::Runtime::InteropServices;
 using namespace System::Security::Permissions;
@@ -31,12 +32,12 @@ using namespace System::Security::Permissions;
 //
 [assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 2.0")];
 [assembly:AssemblyDescriptionAttribute("SharpSvn (Compiled statically with subversion " SVN_VER_NUMBER
-									   ", apr " APR_VERSION_STRING 
-									   ", apr-util " APU_VERSION_STRING 
+									   ", apr " APR_VERSION_STRING
+									   ", apr-util " APU_VERSION_STRING
 									   ", apr-iconv " API_VERSION_STRING
-									   ", neon " NEON_VERSION 
-									   ", serf " SERF_VERSION 
-									   " and " OPENSSL_VERSION_TEXT 
+									   ", neon " NEON_VERSION
+									   ", serf " SERF_VERSION
+									   " and " OPENSSL_VERSION_TEXT
 									   " and linked to Berkeley DB" BDB_VERSION ")")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("QQn Project")];
@@ -57,6 +58,7 @@ using namespace System::Security::Permissions;
 // by using the '*' as shown below:
 
 [assembly:AssemblyVersionAttribute("1.5.*")];
+[assembly:NeutralResourcesLanguageAttribute("en")];
 
 [assembly:ComVisible(false)];
 

@@ -72,6 +72,6 @@ namespace SharpSvn {
 			{
 				return _authentication;
 			}
-		}	
+		}
 	};
 }

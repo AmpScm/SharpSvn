@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace SharpSvn.UI.Authentication
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public partial class SslServerCertificateTrustDialog : Form
 	{

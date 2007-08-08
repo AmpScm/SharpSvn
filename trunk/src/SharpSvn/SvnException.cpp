@@ -258,7 +258,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			{
 				try
 				{
-					String^ message = SvnBase::Utf8_PtrToString(error->message);				
+					String^ message = SvnBase::Utf8_PtrToString(error->message);
 					__int64 handle = __int64::Parse(message->Substring(prefixLength), System::Globalization::CultureInfo::InvariantCulture);
 
 					return AprBaton<Exception^>::Get((IntPtr)handle);
@@ -266,7 +266,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 				catch(Exception^)
 				{}
 
-				// Exception is a 
+				// Exception is a
 			}
 			return gcnew SvnOperationCanceledException(error);
 

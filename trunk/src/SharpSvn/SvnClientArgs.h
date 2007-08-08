@@ -5,7 +5,7 @@ namespace SharpSvn {
 	ref class SvnException;
 
 	public ref class SvnClientArgs abstract
-	{		
+	{
 		bool _noThrowOnError;
 		SvnException^ _exception;
 
@@ -285,21 +285,13 @@ namespace SharpSvn {
 		}
 	};
 
-	public enum class SvnEolStyle
-	{
-		Native,
-		CrLf,
-		Lf,
-		Cr
-	};	
-
 	public ref class SvnExportArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
 		bool _ignoreExternals;
 		bool _overwrite;
 		SvnRevision^ _revision;
-		SvnEolStyle _eolStyle;
+		SvnLineStyle _lineStyle;
 	public:
 		SvnExportArgs()
 		{
@@ -358,15 +350,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnEolStyle EolStyle
+		property SvnLineStyle LineStyle
 		{
-			SvnEolStyle get()
+			SvnLineStyle get()
 			{
-				return _eolStyle;
+				return _lineStyle;
 			}
-			void set(SvnEolStyle value)
+			void set(SvnLineStyle value)
 			{
-				_eolStyle = value;
+				_lineStyle = value;
 			}
 		}
 	};
@@ -457,9 +449,9 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>If force is not set and path is already under version control, return the error 
-		/// SVN_ERR_ENTRY_EXISTS. If force is set, do not error on already-versioned items. When used 
-		/// on a directory in conjunction with the recursive flag, this has the effect of scheduling 
+		/// <summary>If force is not set and path is already under version control, return the error
+		/// SVN_ERR_ENTRY_EXISTS. If force is set, do not error on already-versioned items. When used
+		/// on a directory in conjunction with the recursive flag, this has the effect of scheduling
 		/// for addition unversioned files and directories scattered deep within a versioned tree.</summary>
 		property bool Force
 		{
@@ -563,7 +555,7 @@ namespace SharpSvn {
 	public:
 		event EventHandler<SvnStatusEventArgs^>^ Status;
 
-	protected public:		
+	protected public:
 		virtual void OnStatus(SvnStatusEventArgs^ e)
 		{
 			Status(this, e);
@@ -851,7 +843,7 @@ namespace SharpSvn {
 		SvnDeleteArgs()
 		{}
 
-		/// <summary>If Force is not set then this operation will fail if any path contains locally modified 
+		/// <summary>If Force is not set then this operation will fail if any path contains locally modified
 		/// and/or unversioned items. If Force is set such items will be deleted.</summary>
 		property bool Force
 		{
@@ -1191,14 +1183,14 @@ namespace SharpSvn {
 		property __int64 BaseRevision
 		{
 			__int64 get()
-			{ 
-				return _baseRevision; 
+			{
+				return _baseRevision;
 			}
 			void set(__int64 value)
 			{
 				if(value >= 0)
 					_baseRevision = value;
-				else 
+				else
 					_baseRevision = SVN_INVALID_REVNUM;
 			}
 		}

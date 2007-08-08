@@ -58,7 +58,7 @@ SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool)
 
 
 	_revision = commitInfo->revision;
-	
+
 	apr_time_t when = 0;
 	svn_error_t *err = svn_time_from_cstring(&when, commitInfo->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 
@@ -70,6 +70,43 @@ SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool)
 	_author = SvnBase::Utf8_PtrToString(commitInfo->author);
 	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;
 }
+
+
+//Fxcop bug:
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.SvnCommitItemMarshaller")];
+
+ref class SvnCommitItemMarshaller sealed : public SvnBase, public IItemMarshaller<SvnCommitItem^>
+{
+public:
+	SvnCommitItemMarshaller()
+	{}
+
+	property int ItemSize
+	{
+		virtual int get()
+		{
+			return sizeof(svn_client_commit_item3_t*);
+		}
+	}
+
+	virtual void Write(SvnCommitItem^ value, void* ptr, AprPool^ pool)
+	{
+		UNUSED_ALWAYS(value);
+		UNUSED_ALWAYS(ptr);
+		UNUSED_ALWAYS(pool);
+		throw gcnew NotImplementedException();
+	}
+
+	virtual SvnCommitItem^ Read(const void* ptr, AprPool^ pool)
+	{
+		UNUSED_ALWAYS(pool);
+		const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
+
+		return gcnew SvnCommitItem(*ppcCommitItem);
+	}
+};
+
+
 
 IList<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
 {

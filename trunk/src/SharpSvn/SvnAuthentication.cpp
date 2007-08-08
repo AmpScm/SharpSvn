@@ -10,23 +10,6 @@ using namespace SharpSvn::Security;
 using namespace SharpSvn::UI::Authentication;
 using System::Text::StringBuilder;
 
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionWindowsUsernamePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogUsernameHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleUsernameHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleSslClientCertificateHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogUsernamePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileSslClientCertificateHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleUsernamePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionWindowsSslServerTrustHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileSslClientCertificatePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogSslClientCertificatePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleSslServerTrustHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileUsernamePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.ConsoleSslClientCertificatePasswordHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogSslServerTrustHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.DialogSslClientCertificateHandler")];
-[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.Security.SvnAuthentication.SubversionFileUsernameHandler")];
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
 
 SvnAuthentication::SvnAuthentication()
@@ -47,9 +30,9 @@ void SvnAuthentication::AddSubversionFileHandlers()
 {
 	UsernameHandlers						+= SubversionFileUsernameHandler;
 	UsernamePasswordHandlers				+= SubversionWindowsUsernamePasswordHandler;
-	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;	
-	SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler; 
-	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;	
+	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;
+	SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler;
+	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
 }
@@ -215,7 +198,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 	SvnAuthWrapper<SvnSslServerTrustEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnSslServerTrustEventArgs^>^>::Get((IntPtr)baton);
 
 	SvnSslServerTrustEventArgs^ args = gcnew SvnSslServerTrustEventArgs(
-		(SvnCertificateTrustFailures)failures, 
+		(SvnCertificateTrustFailures)failures,
 		SvnBase::Utf8_PtrToString(cert_info->hostname),
 		SvnBase::Utf8_PtrToString(cert_info->fingerprint),
 		SvnBase::Utf8_PtrToString(cert_info->valid_from),
@@ -647,50 +630,50 @@ void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 }
 
 void SvnAuthentication::ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
-{ 
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
-void SvnAuthentication::ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e) 
-{ 
+void SvnAuthentication::ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
-void SvnAuthentication::ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e) 
-{ 
+void SvnAuthentication::ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
-void SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e) 
-{ 
+void SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
-{ 
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
-{ 
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
-{ 
+{
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
-	throw gcnew NotImplementedException("Managed placeholder for unmanaged function"); 
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }

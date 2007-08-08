@@ -13,10 +13,6 @@ SvnStreamWrapper::~SvnStreamWrapper()
 	delete _streamBatton;
 }
 
-SvnStreamWrapper::!SvnStreamWrapper()
-{
-}
-
 static svn_error_t *svnStreamRead(void *baton, char *buffer, apr_size_t *len)
 {
 	// Subversion:

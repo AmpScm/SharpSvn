@@ -158,7 +158,7 @@ void SvnClientContext::MergeConfiguration(String^ path)
 		LoadConfigurationDefault();
 
 	AprPool tmpPool(_pool);
-	
+
 	const char* szPath = tmpPool.AllocString(path);
 
 	svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);

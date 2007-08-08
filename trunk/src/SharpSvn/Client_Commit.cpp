@@ -79,7 +79,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
-		throw gcnew ArgumentNullException("args");	
+		throw gcnew ArgumentNullException("args");
 
 	for each(String^ path in paths)
 	{

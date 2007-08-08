@@ -86,7 +86,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 
 		if(IsNotUri(target))
 			targetStrings[i++] = GetSvnPath(target);
-		else 
+		else
 		{
 			Uri^ uri;
 
@@ -112,7 +112,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 
 		svn_error_t* err = svn_client_unlock(
 			aprTargets->Handle,
-			args->BreakLock,			
+			args->BreakLock,
 			CtxHandle,
 			pool.Handle);
 
@@ -157,7 +157,7 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 
 		svn_error_t* err = svn_client_unlock(
 			aprTargets->Handle,
-			args->BreakLock,			
+			args->BreakLock,
 			CtxHandle,
 			pool.Handle);
 

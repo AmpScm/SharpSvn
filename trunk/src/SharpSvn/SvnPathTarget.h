@@ -11,10 +11,8 @@ namespace SharpSvn {
 		String^ _path;
 		String^ _fullPath;
 
-		static String^ GetFullPath(String ^path)
-		{
-			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
-		}
+		[SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")] // Optimized away by MC++ compiler
+		static String^ GetFullPath(String ^path);
 
 	public:
 		SvnPathTarget(String^ path, SvnRevision^ revision)

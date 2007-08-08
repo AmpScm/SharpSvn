@@ -35,7 +35,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Diff summary receiver canceled operation");
 		}
 		catch(Exception^ e)
-		{			
+		{
 			return SvnException:: CreateExceptionSvnError("Diff summary receiver", e);
 		}
 		finally

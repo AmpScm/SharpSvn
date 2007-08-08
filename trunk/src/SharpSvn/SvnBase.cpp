@@ -73,7 +73,7 @@ bool SvnBase::IsNotUri(String ^path)
 			if(!wchar_t::IsLetter(c))
 				return true;
 		}
-	}	
+	}
 	return true;
 }
 

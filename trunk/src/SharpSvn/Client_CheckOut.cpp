@@ -76,11 +76,11 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
 		svn_opt_revision_t coRev = args->Revision->ToSvnRevision();
 
-		svn_error_t* err = svn_client_checkout3(&version, 
-			pool.AllocString(url->TargetName), 
-			pool.AllocPath(path), 
-			&pegRev, 
-			&coRev, 
+		svn_error_t* err = svn_client_checkout3(&version,
+			pool.AllocString(url->TargetName),
+			pool.AllocPath(path),
+			&pegRev,
+			&coRev,
 			(svn_depth_t)args->Depth,
 			args->IgnoreExternals,
 			args->AllowUnversionedObstructions,

@@ -10,8 +10,8 @@
 
 namespace SharpSvn.UI.Properties {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace SharpSvn.UI.Properties {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Resources() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace SharpSvn.UI.Properties {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,21 +59,21 @@ namespace SharpSvn.UI.Properties {
                 resourceCulture = value;
             }
         }
-        
+
         internal static System.Drawing.Bitmap AuthenticationBanner {
             get {
                 object obj = ResourceManager.GetObject("AuthenticationBanner", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-        
+
         internal static System.Drawing.Icon Error {
             get {
                 object obj = ResourceManager.GetObject("Error", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
             }
         }
-        
+
         internal static System.Drawing.Icon Ok {
             get {
                 object obj = ResourceManager.GetObject("Ok", resourceCulture);

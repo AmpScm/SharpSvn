@@ -52,8 +52,8 @@ namespace SharpSvn {
 			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 		}
 
-		static bool IsRecursive(SvnDepth depth)		
-		{ 
+		static bool IsRecursive(SvnDepth depth)
+		{
 			switch(depth)
 			{
 			case SvnDepth::Empty:
@@ -137,7 +137,7 @@ namespace SharpSvn {
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
 
-		static const char* GetEolPtr(SvnEolStyle style);
+		static const char* GetEolPtr(SvnLineStyle style);
 #pragma endregion
 
 	public:
@@ -180,7 +180,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified path</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(String^ path, SvnUpdateArgs^ args);		
+		bool Update(String^ path, SvnUpdateArgs^ args);
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -324,7 +324,7 @@ namespace SharpSvn {
 		void Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
-		
+
 		/// <summary>Gets log messages of the specified target</summary>
 		void Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
@@ -417,19 +417,19 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Import Client Command
 
-		/// <summary>Performs a working copy import to the specified Uri, 
+		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		void Import(String^ path, Uri^ target);
-		/// <summary>Performs a working copy import to the specified Uri, 
+		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		void Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
-		/// <summary>Performs a working copy import to the specified Uri, 
+		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		bool Import(String^ path, Uri^ target, SvnImportArgs^ args);
-		/// <summary>Performs a working copy import to the specified Uri, 
+		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
 		bool Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo);

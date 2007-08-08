@@ -342,8 +342,8 @@ namespace SharpSvn.Tests
 				client.Status(file4, delegate(object sender, SvnStatusEventArgs e)
 				{
 					Assert.That(e.FullPath, Is.EqualTo(file4));
-					Assert.That(e.WcContentStatus, Is.EqualTo(SvnWcStatus.Added));
-					Assert.That(e.IsOutOfDate, Is.False);
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnWcStatus.Added));
+					Assert.That(e.IsRemoteUpdated, Is.False);
 					Assert.That(e.Path.Replace('/', Path.DirectorySeparatorChar), Is.EqualTo(file4));
 					visited = true;
 				});
@@ -506,8 +506,8 @@ namespace SharpSvn.Tests
 				client.Status(local, delegate(object sender, SvnStatusEventArgs e)
 				{
 					Assert.That(e.FullPath, Is.EqualTo(local));
-					Assert.That(e.WcContentStatus, Is.EqualTo(SvnWcStatus.Deleted));
-					Assert.That(e.WcSwitched, Is.False);
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnWcStatus.Deleted));
+					Assert.That(e.Switched, Is.False);
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
 					visited = true;
 				});
@@ -755,7 +755,7 @@ namespace SharpSvn.Tests
 		{
 			using (SvnClient client = NewSvnClient(true, false))
 			{
-				
+
 				string oneFile = Path.Combine(WcPath, "LocalFileForTestList");
 				TouchFile(oneFile);
 				client.Add(oneFile);
@@ -775,7 +775,7 @@ namespace SharpSvn.Tests
 						if (e.ItemPath == "LocalFileForTestList")
 						{
 							Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
-							Assert.That(e.Lock, Is.Null);							
+							Assert.That(e.Lock, Is.Null);
 							Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
 							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
 							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
@@ -842,7 +842,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.Author, Is.EqualTo(Environment.UserName));
 						Assert.That(e.Cancel, Is.False);
 						Assert.That(e.Date, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
-						Assert.That(e.LogChildren, Is.EqualTo(0));						
+						Assert.That(e.LogChildren, Is.EqualTo(0));
 						switch (n)
 						{
 							case 0:
@@ -853,7 +853,7 @@ namespace SharpSvn.Tests
 								Assert.That(e.ChangedPaths.Contains("/folder/LogTestFileDest"));
 								ci = e.ChangedPaths["/folder/LogTestFileBase"];
 								ci2 = e.ChangedPaths["/folder/LogTestFileDest"];
-								
+
 								Assert.That(ci, Is.Not.Null);
 								Assert.That(ci2, Is.Not.Null);
 								Assert.That(ci.Path, Is.EqualTo("/folder/LogTestFileBase"));
@@ -877,7 +877,7 @@ namespace SharpSvn.Tests
 								Assert.That(ci.CopyFromRevision, Is.EqualTo(-1));
 								break;
 							case 2:
-								Assert.That(e.LogMessage, Is.EqualTo("Commit 1" + Environment.NewLine + "With" + 
+								Assert.That(e.LogMessage, Is.EqualTo("Commit 1" + Environment.NewLine + "With" +
 									Environment.NewLine + "Some" + Environment.NewLine + "Random" + Environment.NewLine +
 									"Newlines" + Environment.NewLine + "Added" + Environment.NewLine + Environment.NewLine));
 								Assert.That(e.ChangedPaths, Is.Not.Null);

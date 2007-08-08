@@ -210,6 +210,41 @@
 				RelativePath=".\app.rc"
 				>
 			</File>
+			<File
+				RelativePath=".\SharpSvnStrings.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SharpSvnStrings.resx"
+				SubType="Designer"
+				>
+			</File>
+			<File
+				RelativePath=".\SharpSvnStrings.txt"
+				>
+				<FileConfiguration
+					Name="Debug|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating SharpSvnStrings.h"
+						CommandLine="ResGen.exe /str:c++ SharpSvnStrings.resx&#x0D;&#x0A;"
+						AdditionalDependencies="SharpSvnStrings.resx"
+						Outputs="SharpSvnStrings.h"
+					/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Release|Win32"
+					>
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Generating SharpSvnStrings.h"
+						CommandLine="ResGen.exe /str:c++ SharpSvnStrings.resx&#x0D;&#x0A;"
+						AdditionalDependencies="SharpSvnStrings.resx"
+						Outputs="SharpSvnStrings.h"
+					/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 		<Filter
 			Name="Apr"

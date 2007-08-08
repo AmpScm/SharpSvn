@@ -59,13 +59,13 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 	apr_hash_t *fs_config = apr_hash_make(pool.Handle);
 
 	apr_hash_set(
-		fs_config, 
+		fs_config,
 		SVN_FS_CONFIG_BDB_TXN_NOSYNC,
 		APR_HASH_KEY_STRING,
 		(args->BerkeleyDbNoFSyncAtCommit ? "1" : "0"));
 
 	apr_hash_set(
-		fs_config, 
+		fs_config,
 		SVN_FS_CONFIG_BDB_LOG_AUTOREMOVE,
 		APR_HASH_KEY_STRING,
 		(args->BerkeleyDbKeepTransactionLogs ? "0" : "1"));
@@ -75,14 +75,14 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 	{
 	case SvnRepositoryFilesystem::FsFs:
 		apr_hash_set(
-			fs_config, 
+			fs_config,
 			SVN_FS_CONFIG_FS_TYPE,
 			APR_HASH_KEY_STRING,
 			SVN_FS_TYPE_FSFS);
 		break;
 	case SvnRepositoryFilesystem::BerkeleyDb:
 		apr_hash_set(
-			fs_config, 
+			fs_config,
 			SVN_FS_CONFIG_FS_TYPE,
 			APR_HASH_KEY_STRING,
 			SVN_FS_TYPE_BDB);
@@ -95,14 +95,14 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 	{
 	case SvnRepositoryCompatibility::SubversionPre14:
 		apr_hash_set(
-			fs_config, 
+			fs_config,
 			SVN_FS_CONFIG_PRE_1_4_COMPATIBLE,
 			APR_HASH_KEY_STRING,
 			"1");
 		// fall through
 	case SvnRepositoryCompatibility::SubversionPre15:
 		apr_hash_set(
-			fs_config, 
+			fs_config,
 			SVN_FS_CONFIG_PRE_1_5_COMPATIBLE,
 			APR_HASH_KEY_STRING,
 			"1");
