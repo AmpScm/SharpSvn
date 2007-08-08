@@ -693,14 +693,14 @@ namespace SharpSvn.Tests
 						Assert.That(e.ConflictNew, Is.Null);
 						Assert.That(e.ConflictOld, Is.Null);
 						Assert.That(e.ConflictWork, Is.Null);
-						Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+						Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 						Assert.That(e.CopyFromRev, Is.EqualTo(-1L));
 						Assert.That(e.CopyFromUri, Is.Null);
 						Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
 						Assert.That(e.FullPath, Is.EqualTo(file));
 						Assert.That(e.HasLocalInfo, Is.True);
 						Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-						Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+						Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 						Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
 						Assert.That(e.Lock, Is.Null);
 						Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
@@ -732,7 +732,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.FullPath, Is.Null);
 					Assert.That(e.HasLocalInfo, Is.False);
 					Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-					Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+					Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 					Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
 					Assert.That(e.Lock, Is.Null);
 					Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
@@ -780,7 +780,7 @@ namespace SharpSvn.Tests
 							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
 							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
 							Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
-							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 							visited = true;
 						}
 					});
@@ -800,7 +800,7 @@ namespace SharpSvn.Tests
 							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
 							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
 							Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
-							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 							visited = true;
 						}
 					});
@@ -841,7 +841,7 @@ namespace SharpSvn.Tests
 
 						Assert.That(e.Author, Is.EqualTo(Environment.UserName));
 						Assert.That(e.Cancel, Is.False);
-						Assert.That(e.Date, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
+						Assert.That(e.Date, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 						Assert.That(e.LogChildren, Is.EqualTo(0));
 						switch (n)
 						{
