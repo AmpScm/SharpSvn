@@ -257,6 +257,13 @@ namespace SharpSvn {
 		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] __int64% revision);
 #pragma endregion
 
+		/////////////////////////////////////////
+#pragma region // Relocate Client Command
+		void Relocate(String^ path, Uri^ from, Uri^ to);
+
+		bool Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args);
+#pragma endregion
+
 	public:
 		/////////////////////////////////////////
 #pragma region // Add Client Command

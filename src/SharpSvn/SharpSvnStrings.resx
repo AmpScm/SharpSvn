@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ArgumentMustBeAPathNotAUri" xml:space="preserve">
+    <value>This argument is not a valid path. A Uri was specified</value>
+  </data>
   <data name="DepthMustBeRecursiveValue" xml:space="preserve">
     <value>"Depth must be Empty, Files or Infinity in 1.4 compatible compilation"</value>
   </data>

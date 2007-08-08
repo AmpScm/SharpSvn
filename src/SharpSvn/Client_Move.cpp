@@ -51,7 +51,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		if(String::IsNullOrEmpty(s))
 			throw gcnew ArgumentException("Path is empty", "sourcePaths");
 		else if(!IsNotUri(s))
-			throw gcnew ArgumentException("Path looks like a Uri", "sourcePaths");
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "sourcePaths");
 	}
 
 	EnsureState(SvnContextState::ConfigLoaded);
