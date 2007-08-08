@@ -48,6 +48,27 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to This argument is not a valid path. A Uri was specified.
+    /// </summary>
+    internal: static property System::String^  ArgumentMustBeAPathNotAUri {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to &quot;Depth must be Empty, Files or Infinity in 1.4 compatible compilation&quot;.
+    /// </summary>
+    internal: static property System::String^  DepthMustBeRecursiveValue {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Invalid SvnRevisionType value specified.
+    /// </summary>
+    internal: static property System::String^  InvalidSvnRevisionTypeValue {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to One or more items in the list are null.
     /// </summary>
     internal: static property System::String^  ItemInListIsNull {
@@ -114,6 +135,18 @@ inline ::System::Globalization::CultureInfo^  SharpSvnStrings::Culture::get() {
 }
 inline System::Void SharpSvnStrings::Culture::set(::System::Globalization::CultureInfo^  value) {
     resourceCulture = value;
+}
+
+inline System::String^  SharpSvnStrings::ArgumentMustBeAPathNotAUri::get() {
+    return ResourceManager->GetString(L"ArgumentMustBeAPathNotAUri", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {
+    return ResourceManager->GetString(L"DepthMustBeRecursiveValue", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::InvalidSvnRevisionTypeValue::get() {
+    return ResourceManager->GetString(L"InvalidSvnRevisionTypeValue", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {

@@ -544,6 +544,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Relocate.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Resolved.cpp"
 					>
 				</File>

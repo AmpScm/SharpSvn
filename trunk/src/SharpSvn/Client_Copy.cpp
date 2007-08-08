@@ -12,7 +12,7 @@ void SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath)
 	else if(String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if(!IsNotUri(toPath))
-		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	Copy(NewSingleItemCollection(sourceTarget), toPath, gcnew SvnCopyArgs());
 }
@@ -24,7 +24,7 @@ void SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath)
 	else if(String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if(!IsNotUri(toPath))
-		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	Copy(sourceTargets, toPath, gcnew SvnCopyArgs());
 }
@@ -38,7 +38,7 @@ bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(toPath))
-		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	return Copy(NewSingleItemCollection(sourceTarget), toPath, args);
 }
@@ -53,7 +53,7 @@ bool SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, Svn
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(toPath))
-		throw gcnew ArgumentException("Path looks like a Uri", "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 

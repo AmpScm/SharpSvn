@@ -412,6 +412,27 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnRelocateArgs : public SvnClientArgs
+	{
+		bool _nonRecursive;
+	public:
+		SvnRelocateArgs()
+		{
+		}
+
+		property bool NonRecursive
+		{
+			bool get()
+			{
+				return _nonRecursive;
+			}
+			void set(bool value)
+			{
+				_nonRecursive = value;
+			}
+		}
+	};
+
 	public ref class SvnAddArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
