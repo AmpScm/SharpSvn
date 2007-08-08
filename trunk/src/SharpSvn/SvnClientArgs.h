@@ -1048,7 +1048,7 @@ namespace SharpSvn {
 		SvnResolvedArgs()
 		{
 			_depth = SvnDepth::Empty;
-			_accept = SvnAccept::Default;
+			_accept = SvnAccept::None;
 		}
 
 		SvnResolvedArgs(SvnAccept accept)

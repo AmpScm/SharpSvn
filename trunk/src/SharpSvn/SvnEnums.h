@@ -60,7 +60,7 @@ namespace SharpSvn {
 		Invalid			= svn_accept_invalid,
 
 		/// <summary>Resolve the conflict as usual</summary>
-		Default			= svn_accept_default,
+		None			= svn_accept_none,
 
 		/// <summary>Resolve the conflict with the pre-conflict base file</summary>
 		Left			= svn_accept_left,
