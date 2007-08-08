@@ -106,7 +106,7 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	_currentArgs = args;
 	try

@@ -106,7 +106,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 			break;
 		default:
 			// Throw the error before we allocate the unmanaged resources
-			throw gcnew ArgumentException("Revision type must be head, date or number", "args");
+			throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific, "args");
 	}
 
 	revisions = nullptr;
@@ -114,7 +114,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 	for each(String^ s in paths)
 	{
 		if(String::IsNullOrEmpty(s))
-			throw gcnew ArgumentException("member of paths is null", "paths");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

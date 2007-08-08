@@ -50,7 +50,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 	String^ tempErr = System::IO::Path::GetTempFileName();
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	apr_file_t* tmpOut = nullptr;
 	apr_file_t* tmpErr = nullptr;
@@ -153,7 +153,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 	String^ tempErr = System::IO::Path::GetTempFileName();
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	apr_file_t* tmpOut = nullptr;
 	apr_file_t* tmpErr = nullptr;

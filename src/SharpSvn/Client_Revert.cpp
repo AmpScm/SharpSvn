@@ -45,13 +45,13 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 	for each(String^ path in paths)
 	{
 		if(String::IsNullOrEmpty(path))
-			throw gcnew ArgumentException("member of paths is null", "paths");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

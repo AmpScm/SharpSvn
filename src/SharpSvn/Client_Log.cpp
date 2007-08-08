@@ -54,12 +54,12 @@ bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets
 		for each(Uri^ uri in relativeTargets)
 		{
 			if(!uri)
-				throw gcnew ArgumentException("One of the relative uri's is null", "relativeTargets");
+				throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "relativeTargets");
 
 			Uri^ relUri = baseUri->MakeRelativeUri(gcnew Uri(baseUri, uri));
 
 			if(relUri->IsAbsoluteUri)
-				throw gcnew ArgumentException("One of the relative uri's is not relative", "relativeTargets");
+				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "relativeTargets");
 
 			targets[i] = relUri->ToString();
 			i++;
@@ -76,7 +76,7 @@ void SvnClient::GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logIte
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
 
 	try
 	{
@@ -95,7 +95,7 @@ bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEv
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
 
 	try
 	{
@@ -112,7 +112,7 @@ void SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, 
 	if(!baseTarget)
 		throw gcnew ArgumentNullException("baseTarget");
 
-	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
 
 	try
 	{
@@ -131,7 +131,7 @@ bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, 
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	InfoItemList<SvnLogEventArgs^>^ results = gcnew InfoItemList<SvnLogEventArgs^>();
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
 
 	try
 	{
@@ -187,7 +187,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;

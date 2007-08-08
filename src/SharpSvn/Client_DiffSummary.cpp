@@ -60,7 +60,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -101,7 +101,7 @@ void SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDi
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
 
-	InfoItemList<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemList<SvnDiffSummaryEventArgs^>();
+	InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
 
 	try
 	{
@@ -122,7 +122,7 @@ bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArg
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	InfoItemList<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemList<SvnDiffSummaryEventArgs^>();
+	InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
 
 	try
 	{

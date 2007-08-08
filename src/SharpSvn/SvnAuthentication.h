@@ -543,7 +543,7 @@ namespace SharpSvn {
 					_cookie++;
 				}
 				else
-					throw gcnew ArgumentException("Handler not registered", "handler");
+					throw gcnew ArgumentException("HandlerIsNotRegisteredAtThisTime", "handler");
 			}
 
 		public:

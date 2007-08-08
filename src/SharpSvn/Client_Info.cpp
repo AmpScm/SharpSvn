@@ -56,7 +56,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -99,7 +99,7 @@ void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	InfoItemList<SvnInfoEventArgs^>^ results = gcnew InfoItemList<SvnInfoEventArgs^>();
+	InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
 
 	try
 	{
@@ -121,7 +121,7 @@ bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInf
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	InfoItemList<SvnInfoEventArgs^>^ results = gcnew InfoItemList<SvnInfoEventArgs^>();
+	InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
 
 	try
 	{

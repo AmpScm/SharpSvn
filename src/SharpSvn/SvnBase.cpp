@@ -228,7 +228,7 @@ apr_array_header_t *SvnHandleBase::AllocCopyArray(ICollection<SvnTarget^>^ targe
 	for each(SvnTarget^ s in targets)
 	{
 		if(!s)
-			throw gcnew ArgumentException("SvnTarget in targets is null", "targets");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 	}
 	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
 
@@ -243,7 +243,7 @@ apr_array_header_t *SvnHandleBase::AllocCopyArray(System::Collections::IEnumerab
 	for each(SvnTarget^ s in targets)
 	{
 		if(!s)
-			throw gcnew ArgumentException("SvnTarget in targets is null", "targets");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 	}
 	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
 

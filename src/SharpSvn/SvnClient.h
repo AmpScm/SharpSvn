@@ -287,10 +287,10 @@ namespace SharpSvn {
 	internal:
 		generic<typename T>
 		where T : SvnEventArgs
-		ref class InfoItemList : public System::Collections::ObjectModel::Collection<T>
+		ref class InfoItemCollection : public System::Collections::ObjectModel::Collection<T>
 		{
 		public:
-			InfoItemList()
+			InfoItemCollection()
 			{}
 
 		internal:
@@ -305,7 +305,7 @@ namespace SharpSvn {
 			{
 				EventHandler<T>^ get()
 				{
-					return gcnew EventHandler<T>(this, &InfoItemList<T>::HandleItem);
+					return gcnew EventHandler<T>(this, &InfoItemCollection<T>::HandleItem);
 				}
 			}
 		};

@@ -49,7 +49,7 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -113,7 +113,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ change
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -188,7 +188,7 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -240,7 +240,7 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a client can handle only one command at a time");
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	AprPool pool(%_pool);
 	_currentArgs = args;
@@ -282,7 +282,7 @@ void SvnClient::GetChangeList(String^ changeList, String^ rootPath, [Out]IList<S
 
 bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {
-	InfoItemList<SvnListChangeListEventArgs^>^ results = gcnew InfoItemList<SvnListChangeListEventArgs^>();
+	InfoItemCollection<SvnListChangeListEventArgs^>^ results = gcnew InfoItemCollection<SvnListChangeListEventArgs^>();
 
 	try
 	{

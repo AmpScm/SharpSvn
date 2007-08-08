@@ -84,7 +84,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	for each(String^ path in paths)
 	{
 		if(String::IsNullOrEmpty(path))
-			throw gcnew ArgumentException("member of paths is null", "paths");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

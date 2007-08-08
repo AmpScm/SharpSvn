@@ -117,14 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AllTargetsMustBeUriOrPath" xml:space="preserve">
+    <value>All targets must either be Uri or Path</value>
+  </data>
   <data name="ArgumentMustBeAPathNotAUri" xml:space="preserve">
     <value>This argument is not a valid path. A Uri was specified</value>
   </data>
   <data name="DepthMustBeRecursiveValue" xml:space="preserve">
     <value>"Depth must be Empty, Files or Infinity in 1.4 compatible compilation"</value>
   </data>
+  <data name="HandlerIsNotRegisteredAtThisTime" xml:space="preserve">
+    <value>The handler is not registered at this time</value>
+  </data>
   <data name="InvalidSvnRevisionTypeValue" xml:space="preserve">
     <value>Invalid SvnRevisionType value specified</value>
+  </data>
+  <data name="InvalidUri" xml:space="preserve">
+    <value>Invalid Uri string</value>
   </data>
   <data name="ItemInListIsNull" xml:space="preserve">
     <value>One or more items in the list are null</value>
@@ -132,8 +141,14 @@
   <data name="ParentWindowHasNoWindowHandle" xml:space="preserve">
     <value>The parent window object has no Win32 handle</value>
   </data>
+  <data name="RevisionTypeMustBeHeadDateOrSpecific" xml:space="preserve">
+    <value>Revision type must be head, date or a specific revision number</value>
+  </data>
   <data name="SvnAuthManagedPlaceholder" xml:space="preserve">
     <value>This function is not available from managed code. </value>
+  </data>
+  <data name="SvnClientOperationInProgress" xml:space="preserve">
+    <value>Svn operation in progress; an SvnClient instance can handle only one command at a time</value>
   </data>
   <data name="TheTargetIsNotAValidPathTarget" xml:space="preserve">
     <value>The specified target is not a valid Path target</value>
