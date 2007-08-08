@@ -158,7 +158,7 @@ namespace SharpSvn {
 		Unlocked	= svn_wc_notify_lock_state_unlocked
 	};
 
-	public enum class SvnLocalStatus
+	public enum class SvnStatus
 	{
 		/// <summary>Zero value. Never used by Subversion</summary>
 		Zero				= 0,

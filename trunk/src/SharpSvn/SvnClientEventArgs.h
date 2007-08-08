@@ -205,7 +205,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ ReposFile
+		property String^ RemoteFile
 		{
 			String^ get()
 			{
@@ -272,7 +272,7 @@ namespace SharpSvn {
 					GC::KeepAlive(Path);
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(BaseFile);
-					GC::KeepAlive(ReposFile);
+					GC::KeepAlive(RemoteFile);
 					GC::KeepAlive(UserFile);
 					GC::KeepAlive(MergedFile);
 				}
@@ -581,13 +581,13 @@ namespace SharpSvn {
 		initonly String^ _path;
 		const svn_wc_status2_t *_status;
 		String^ _fullPath;
-		initonly SvnLocalStatus _wcContentStatus;
-		initonly SvnLocalStatus _wcPropertyStatus;
+		initonly SvnStatus _wcContentStatus;
+		initonly SvnStatus _wcPropertyStatus;
 		initonly bool _wcLocked;
 		initonly bool _copied;
 		initonly bool _switched;
-		initonly SvnLocalStatus _reposContentStatus;
-		initonly SvnLocalStatus _reposPropertyStatus;
+		initonly SvnStatus _reposContentStatus;
+		initonly SvnStatus _reposPropertyStatus;
 		SvnLockInfo^ _reposLock;
 		Uri^ _uri;
 		initonly __int64 _oodLastCommitRev;
@@ -606,13 +606,13 @@ namespace SharpSvn {
 			_path = path;
 			_status = status;
 
-			_wcContentStatus = (SvnLocalStatus)status->text_status;
-			_wcPropertyStatus = (SvnLocalStatus)status->prop_status;
+			_wcContentStatus = (SvnStatus)status->text_status;
+			_wcPropertyStatus = (SvnStatus)status->prop_status;
 			_wcLocked = status->locked != 0;
 			_copied = status->copied != 0;
 			_switched = status->switched != 0;
-			_reposContentStatus = (SvnLocalStatus)status->repos_text_status;
-			_reposPropertyStatus = (SvnLocalStatus)status->repos_prop_status;
+			_reposContentStatus = (SvnStatus)status->repos_text_status;
+			_reposPropertyStatus = (SvnStatus)status->repos_prop_status;
 
 			_oodLastCommitRev = status->ood_last_cmt_rev;
 
@@ -646,18 +646,18 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Content status in working copy</summary>
-		property SvnLocalStatus LocalContentStatus
+		property SvnStatus LocalContentStatus
 		{
-			SvnLocalStatus get()
+			SvnStatus get()
 			{
 				return _wcContentStatus;
 			}
 		}
 
 		/// <summary>Property status in working copy</summary>
-		property SvnLocalStatus LocalPropertyStatus
+		property SvnStatus LocalPropertyStatus
 		{
-			SvnLocalStatus get()
+			SvnStatus get()
 			{
 				return _wcPropertyStatus;
 			}
@@ -692,23 +692,23 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnLocalStatus ReposContentStatus
+		property SvnStatus ReposContentStatus
 		{
-			SvnLocalStatus get()
+			SvnStatus get()
 			{
 				return _reposContentStatus;
 			}
 		}
 
-		property SvnLocalStatus ReposPropertyStatus
+		property SvnStatus ReposPropertyStatus
 		{
-			SvnLocalStatus get()
+			SvnStatus get()
 			{
 				return _reposPropertyStatus;
 			}
 		}
 
-		property SvnLockInfo^ ReposLock
+		property SvnLockInfo^ RemoteLock
 		{
 			SvnLockInfo^ get()
 			{
@@ -787,7 +787,7 @@ namespace SharpSvn {
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Uri);
-					GC::KeepAlive(ReposLock);
+					GC::KeepAlive(RemoteLock);
 					GC::KeepAlive(RemoteUpdateCommitAuthor);
 				}
 
@@ -1128,7 +1128,7 @@ namespace SharpSvn {
 
 		/// <summary>Gets the repository root Uri; ending in a '/' at the end</summary>
 		/// <remarks>The unmanaged api does not add the '/' at the end, but this makes using <see cref="System::Uri" /> hard</remarks>
-		property System::Uri^ ReposRoot
+		property System::Uri^ RepositoryRoot
 		{
 			System::Uri^ get()
 			{
@@ -1142,7 +1142,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property Guid ReposUuid
+		property Guid RepositoryUuid
 		{
 			Guid get()
 			{
@@ -1342,8 +1342,8 @@ namespace SharpSvn {
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Path);
 					GC::KeepAlive(Uri);
-					GC::KeepAlive(ReposRoot);
-					GC::KeepAlive(ReposUuid);
+					GC::KeepAlive(RepositoryRoot);
+					GC::KeepAlive(RepositoryUuid);
 					GC::KeepAlive(LastChangeAuthor);
 					GC::KeepAlive(Lock);
 					GC::KeepAlive(CopyFromUri);

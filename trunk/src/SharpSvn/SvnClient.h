@@ -59,10 +59,11 @@ namespace SharpSvn {
 			case SvnDepth::Empty:
 			case SvnDepth::Files:
 				return false;
+			case SvnDepth::Unknown:
 			case SvnDepth::Infinity:
 				return true;
 			default:
-				throw gcnew ArgumentException("Depth must be Empty, Files or Infinity in 1.4 compatible compilation", "depth");
+				throw gcnew ArgumentException(SharpSvnStrings::DepthMustBeRecursiveValue, "depth");
 			}
 		}
 
@@ -74,9 +75,10 @@ namespace SharpSvn {
 			case SvnDepth::Files:
 				return true;
 			case SvnDepth::Infinity:
+			case SvnDepth::Unknown:
 				return false;
 			default:
-				throw gcnew ArgumentException("Depth must be Empty, Files or Infinity in 1.4 compatible compilation", "depth");
+				throw gcnew ArgumentException(SharpSvnStrings::DepthMustBeRecursiveValue, "depth");
 			}
 		}
 

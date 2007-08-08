@@ -342,7 +342,7 @@ namespace SharpSvn.Tests
 				client.Status(file4, delegate(object sender, SvnStatusEventArgs e)
 				{
 					Assert.That(e.FullPath, Is.EqualTo(file4));
-					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnLocalStatus.Added));
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Added));
 					Assert.That(e.IsRemoteUpdated, Is.False);
 					Assert.That(e.Path.Replace('/', Path.DirectorySeparatorChar), Is.EqualTo(file4));
 					visited = true;
@@ -506,7 +506,7 @@ namespace SharpSvn.Tests
 				client.Status(local, delegate(object sender, SvnStatusEventArgs e)
 				{
 					Assert.That(e.FullPath, Is.EqualTo(local));
-					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnLocalStatus.Deleted));
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
 					Assert.That(e.Switched, Is.False);
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
 					visited = true;
@@ -674,7 +674,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.PropertyEditFile, Is.Null);
 					Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime));
 					Assert.That(e.RepositorySize, Is.EqualTo(-1L));
-					Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
+					Assert.That(e.RepositoryRoot, Is.EqualTo(ReposUri));
 					Assert.That(e.Revision, Is.EqualTo(0L)); // Not committed yet
 					Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Add));
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
@@ -708,7 +708,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.PropertyEditFile, Is.Null);
 						//Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime)); // Not static, might change
 						Assert.That(e.RepositorySize, Is.EqualTo(-1L));
-						Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
+						Assert.That(e.RepositoryRoot, Is.EqualTo(ReposUri));
 						Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
 						Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.None));
 						Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
@@ -740,7 +740,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.PropertyEditFile, Is.Null);
 					Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime));
 					Assert.That(e.RepositorySize, Is.EqualTo(0L));
-					Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
+					Assert.That(e.RepositoryRoot, Is.EqualTo(ReposUri));
 					Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
 					Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.None));
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
