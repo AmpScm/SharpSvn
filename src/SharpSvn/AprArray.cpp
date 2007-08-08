@@ -2,6 +2,12 @@
 
 #include "AprArray.h"
 
+
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCStrPathMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCanonicalMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprSvnRevNumMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCStrMarshaller")];
+
 using namespace SharpSvn::Apr;
 
 generic<typename T, typename R>

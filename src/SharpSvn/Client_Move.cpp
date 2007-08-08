@@ -44,7 +44,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	else if(String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if(!args)
-		throw gcnew ArgumentNullException("args");	
+		throw gcnew ArgumentNullException("args");
 
 	for each(String^ s in sourcePaths)
 	{

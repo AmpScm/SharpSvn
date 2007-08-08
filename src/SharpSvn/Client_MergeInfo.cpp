@@ -35,7 +35,7 @@ bool SvnClient::GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]
 
 		svn_error_t* err = svn_client_get_mergeinfo(
 			&svnMergeInfo,
-			pool.AllocString(target->ToString()), 
+			pool.AllocString(target->ToString()),
 			target->Revision->AllocSvnRevision(%pool),
 			CtxHandle,
 			pool.Handle);
@@ -66,6 +66,6 @@ bool SvnClient::TryGetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo
 		mergeInfo = nullptr;
 		return false;
 	}
-	
+
 	return true;
 }

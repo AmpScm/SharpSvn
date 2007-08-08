@@ -128,28 +128,7 @@ namespace SharpSvn {
 			if(!other)
 				return false;
 
-			return (_type == other->_type) && (_value == other->_value);
-		}
-
-		virtual int GetHashCode() override
-		{
-			return _type.GetHashCode() ^ _value.GetHashCode();
-		}
-
-		static bool operator == (SvnRevision^ rev1, SvnRevision^ rev2)
-		{
-			bool r1Null = (nullptr == static_cast<Object^>(rev1));
-			bool r2Null = (nullptr == static_cast<Object^>(rev2));
-
-			if(r1Null != r2Null)
-				return false;
-			else if(r1Null && r2Null)
-				return true;
-
-			if(rev1->Type != rev2->Type)
-				return false;
-
-			switch(rev1->Type)
+			switch(Type)
 			{
 			case SvnRevisionType::None:
 			case SvnRevisionType::Committed:
@@ -160,10 +139,25 @@ namespace SharpSvn {
 				return true;
 			case SvnRevisionType::Number:
 			case SvnRevisionType::Date:
-				return rev1->_value == rev2->_value;
+				return _value == other->_value;
 			default:
-				throw gcnew ArgumentException("SvnRevisionType undefined");
+				throw gcnew InvalidOperationException("SvnRevisionType undefined");
 			}
+		}
+
+		virtual int GetHashCode() override
+		{
+			return _type.GetHashCode() ^ _value.GetHashCode();
+		}
+
+		static bool operator == (SvnRevision^ rev1, SvnRevision^ rev2)
+		{
+			if(!rev1)
+				return !rev2;
+			else if(!rev2)
+				return false;
+
+			return rev1->Equals(rev2);
 		}
 
 
@@ -246,15 +240,15 @@ namespace SharpSvn {
 			return Equals(target);
 		}
 
-		virtual bool Equals(SvnTarget^ target)
+		virtual bool Equals(SvnTarget^ other)
 		{
-			if(!target)
+			if(!other)
 				return false;
 
-			if(!String::Equals(target->TargetName, TargetName))
+			if(!String::Equals(other->TargetName, TargetName))
 				return false;
 
-			return Revision->Equals(target->Revision);
+			return Revision->Equals(other->Revision);
 		}
 
 		virtual int GetHashCode() override
@@ -266,13 +260,6 @@ namespace SharpSvn {
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnTarget^% target);
 	internal:
-		static bool TryParse(String^ targetName, [Out] SvnTarget^% target, AprPool^ pool);
-
 		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
-
-		svn_opt_revision_t GetSvnRevision(SvnRevision^ noneValue)
-		{
-			return GetSvnRevision(noneValue, noneValue);
-		}
 	};
 }

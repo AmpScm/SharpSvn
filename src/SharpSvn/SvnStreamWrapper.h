@@ -40,7 +40,6 @@ namespace SharpSvn {
 			}
 
 			~SvnStreamWrapper();
-			!SvnStreamWrapper();
 
 			property svn_stream_t* Handle
 			{

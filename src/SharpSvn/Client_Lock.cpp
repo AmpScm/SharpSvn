@@ -6,6 +6,7 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Lock(System.String,SharpSvn.SvnLockArgs):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Lock(System.String,System.String):System.Void")];
 
 void SvnClient::Lock(String^ target, String^ comment)
 {
@@ -103,7 +104,7 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 
 		if(IsNotUri(target))
 			targetStrings[i++] = GetSvnPath(target);
-		else 
+		else
 		{
 			Uri^ uri;
 
@@ -130,7 +131,7 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 		svn_error_t* err = svn_client_lock(
 			aprTargets->Handle,
 			pool.AllocString(args->Comment),
-			args->StealLock,			
+			args->StealLock,
 			CtxHandle,
 			pool.Handle);
 
@@ -177,7 +178,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 		svn_error_t* err = svn_client_lock(
 			aprTargets->Handle,
 			pool.AllocString(args->Comment),
-			args->StealLock,			
+			args->StealLock,
 			CtxHandle,
 			pool.Handle);
 

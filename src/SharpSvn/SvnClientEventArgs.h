@@ -12,7 +12,12 @@ namespace SharpSvn {
 
 	ref class SvnException;
 
-	public ref class SvnEventArgs abstract : public System::EventArgs
+	public interface class ISvnDetachable
+	{
+		void Detach(bool keepProperties);
+	};
+
+	public ref class SvnEventArgs abstract : public System::EventArgs, public ISvnDetachable
 	{
 	protected:
 		SvnEventArgs()
@@ -174,7 +179,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLockInfo : public SvnEventArgs
+	public ref class SvnLockInfo : public ISvnDetachable
 	{
 		const svn_lock_t *_lock;
 		String^ _path;
@@ -282,7 +287,7 @@ namespace SharpSvn {
 
 
 	public:
-		virtual void Detach(bool keepProperties) override
+		virtual void Detach(bool keepProperties)
 		{
 			try
 			{
@@ -297,7 +302,7 @@ namespace SharpSvn {
 			finally
 			{
 				_lock = nullptr;
-				__super::Detach(keepProperties);
+				//__super::Detach(keepProperties);
 			}
 		}
 	};
@@ -484,7 +489,6 @@ namespace SharpSvn {
 		initonly SvnNodeKind _oodLastCommitNodeKind;
 		String^ _oodLastCommitAuthor;
 
-
 	internal:
 		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status)
 		{
@@ -536,7 +540,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Content status in working copy</summary>
-		property SvnWcStatus WcContentStatus
+		property SvnWcStatus LocalContentStatus
 		{
 			SvnWcStatus get()
 			{
@@ -545,7 +549,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Property status in working copy</summary>
-		property SvnWcStatus WcPropertyStatus
+		property SvnWcStatus LocalPropertyStatus
 		{
 			SvnWcStatus get()
 			{
@@ -554,7 +558,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether the workingcopy is locked</summary>
-		property bool WcLocked
+		property bool LocalLocked
 		{
 			bool get()
 			{
@@ -563,9 +567,9 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether the file is copied in the working copy</summary>
-		/// <remarks>A file or directory can be 'copied' if it's scheduled for addition-with-history 
+		/// <remarks>A file or directory can be 'copied' if it's scheduled for addition-with-history
 		/// (or part of a subtree that is scheduled as such.).</remarks>
-		property bool WcCopied
+		property bool LocalCopied
 		{
 			bool get()
 			{
@@ -574,7 +578,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether the file is switched in the working copy</summary>
-		property bool WcSwitched
+		property bool Switched
 		{
 			bool get()
 			{
@@ -620,8 +624,8 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the out of date status of the item; if true the Ood* properties are set</summary>
-		property bool IsOutOfDate
+		/// <summary>Gets the out of date status of the item; if true the RemoteUpdate* properties are set</summary>
+		property bool IsRemoteUpdated
 		{
 			bool get()
 			{
@@ -630,7 +634,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Out of Date: Last commit version of the item</summary>
-		property __int64 OodLastCommitRevision
+		property __int64 RemoteUpdateRevision
 		{
 			__int64 get()
 			{
@@ -639,7 +643,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Out of Date: Last commit date of the item</summary>
-		property DateTime OodLastCommitDate
+		property DateTime RemoteUpdateCommitDate
 		{
 			DateTime get()
 			{
@@ -648,14 +652,23 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Out of Date: Gets the author of the OutOfDate commit</summary>
-		property String^ OodCommitAuthor
+		property String^ RemoteUpdateCommitAuthor
 		{
 			String^ get()
 			{
-				if(!_oodLastCommitAuthor && _status && _status->ood_last_cmt_author && IsOutOfDate)
+				if(!_oodLastCommitAuthor && _status && _status->ood_last_cmt_author && IsRemoteUpdated)
 					_oodLastCommitAuthor = SvnBase::Utf8_PtrToString(_status->ood_last_cmt_author);
 
 				return _oodLastCommitAuthor;
+			}
+		}
+
+		/// <summary>Out of Date: Gets the node kind of the OutOfDate commit</summary>
+		property SvnNodeKind RemoteUpdateNodeKind
+		{
+			SvnNodeKind get()
+			{
+				return _oodLastCommitNodeKind;
 			}
 		}
 
@@ -669,7 +682,7 @@ namespace SharpSvn {
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Uri);
 					GC::KeepAlive(ReposLock);
-					GC::KeepAlive(OodCommitAuthor);
+					GC::KeepAlive(RemoteUpdateCommitAuthor);
 				}
 
 				if(_reposLock)
@@ -744,7 +757,7 @@ namespace SharpSvn {
 		DateTime _date;
 		String^ _message;
 		__int64 _revision;
-		__int64 _nLogChildren;		
+		__int64 _nLogChildren;
 
 	internal:
 		SvnLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
@@ -763,7 +776,7 @@ namespace SharpSvn {
 			if(!err)
 				_date = SvnBase::DateTimeFromAprTime(when);
 
-			_revision = entry->revision;			
+			_revision = entry->revision;
 			_nLogChildren = entry->nbr_children;
 		}
 
@@ -782,7 +795,7 @@ namespace SharpSvn {
 
 		ChangedPathsCollection^ _changedPaths;
 	public:
-		
+
 		property System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>^ ChangedPaths
 		{
 			System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>^  get()
@@ -799,8 +812,8 @@ namespace SharpSvn {
 
 						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
 
-						SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(pKey, (int)keyLen), 
-							(SvnChangeAction)pChangeInfo->action, 
+						SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(pKey, (int)keyLen),
+							(SvnChangeAction)pChangeInfo->action,
 							SvnBase::Utf8_PtrToString(pChangeInfo->copyfrom_path),
 							pChangeInfo->copyfrom_rev);
 
@@ -878,7 +891,7 @@ namespace SharpSvn {
 					GC::KeepAlive(ChangedPaths);
 					GC::KeepAlive(Author);
 					GC::KeepAlive(LogMessage);
-				}				
+				}
 			}
 			finally
 			{
@@ -947,7 +960,7 @@ namespace SharpSvn {
 			}
 
 			_depth = (SvnDepth)info->depth;
-			
+
 			if(info->size == (apr_size_t)-1)
 				_size = -1;
 			else
@@ -1111,7 +1124,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-				return _contentTime; 
+				return _contentTime;
 			}
 		}
 
@@ -1247,7 +1260,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnDirEntry : public SvnEventArgs
+	public ref class SvnDirEntry : public ISvnDetachable
 	{
 		const svn_dirent_t *_entry;
 		initonly SvnNodeKind _nodeKind;
@@ -1321,7 +1334,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		virtual void Detach(bool keepProperties) override
+		virtual void Detach(bool keepProperties)
 		{
 			try
 			{
@@ -1335,7 +1348,7 @@ namespace SharpSvn {
 			{
 				_entry = nullptr;
 
-				__super::Detach(keepProperties);
+				//__super::Detach(keepProperties);
 			}
 		}
 	};
@@ -1495,7 +1508,7 @@ namespace SharpSvn {
 
 				return safe_cast<IDictionary<String^, Object^>^>(_properties);
 			}
-		}		
+		}
 
 	public:
 		virtual void Detach(bool keepProperties) override
@@ -1539,7 +1552,7 @@ namespace SharpSvn {
 			{
 				return _path;
 			}
-		}	
+		}
 
 	public:
 		virtual void Detach(bool keepProperties) override

@@ -17,7 +17,7 @@ namespace SharpSvn {
 		initonly IList<String^>^ _mergeSources;
 	internal:
 		SvnMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo);
-		
+
 
 	public:
 		/// <summary>Gets a boolean indicating whether MergeInfo is available for the specified target</summary>

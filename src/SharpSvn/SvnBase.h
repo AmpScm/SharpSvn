@@ -33,19 +33,6 @@ namespace SharpSvn {
 			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
 			static apr_time_t AprTimeFromDateTime(DateTime time);
 
-			generic<typename T> static __forceinline array<T>^ NewSingleItemArray(T value)
-			{
-				array<T>^ items = gcnew array<T>(1);
-				items[0] = value;
-
-				return items;
-			}
-
-			generic<typename T> static __forceinline ICollection<T>^ NewSingleItemCollection(T value)
-			{
-				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
-			}
-
 			/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
 			static bool IsNotUri(String ^path);
 

@@ -33,7 +33,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "List receiver canceled operation");
 		}
 		catch(Exception^ e)
-		{			
+		{
 			return SvnException::CreateExceptionSvnError("List receiver", e);
 		}
 		finally
@@ -69,9 +69,9 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_list2(
-			pool.AllocString(target->TargetName), 
+			pool.AllocString(target->TargetName),
 			&pegrev,
-			&rev, 
+			&rev,
 			(svn_depth_t)args->Depth,
 			(apr_uint32_t)args->EntryItems,
 			args->FetchLocks,

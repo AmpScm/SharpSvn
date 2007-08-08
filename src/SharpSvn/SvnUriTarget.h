@@ -18,7 +18,7 @@ namespace SharpSvn {
 			if(!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException("Uri is not absolute", "uri");
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -29,7 +29,7 @@ namespace SharpSvn {
 			if(!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException("Uri is not absolute", "uri");
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -40,7 +40,7 @@ namespace SharpSvn {
 			if(!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException("Uri is not absolute", "uri");
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -51,7 +51,7 @@ namespace SharpSvn {
 			if(!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException("Uri is not absolute", "uri");
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -62,7 +62,7 @@ namespace SharpSvn {
 			if(!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException("Uri is not absolute", "uri");
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}

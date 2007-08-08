@@ -58,14 +58,14 @@ AprPool::AprPool(SharpSvn::Apr::AprPool ^parentPool)
 
 	_tag = gcnew AprPoolTag(parentPool->_tag);
 	_parent = parentPool;
-	_handle = svn_pool_create(parentPool->Handle);	
+	_handle = svn_pool_create(parentPool->Handle);
 	_destroyPool = true;
 }
 
 AprPool::AprPool()
 {
 	_tag = gcnew AprPoolTag();
-	_handle = svn_pool_create(nullptr);	
+	_handle = svn_pool_create(nullptr);
 	_destroyPool = true;
 }
 
@@ -88,7 +88,7 @@ void* AprPool::Alloc(size_t size)
 	void *p = apr_palloc(Handle, size);
 
 	if(!p)
-		throw gcnew OutOfMemoryException("apr_palloc returned null");
+		throw gcnew ArgumentException("apr_palloc returned null; We have crashed before you see this (See svn sourcecode)", "size");
 
 	return p;
 }
@@ -98,7 +98,7 @@ void* AprPool::AllocCleared(size_t size)
 	void *p = apr_pcalloc(Handle, size);
 
 	if(!p)
-		throw gcnew OutOfMemoryException("apr_pcalloc returned null");
+		throw gcnew ArgumentException("apr_pcalloc returned null; We have crashed before you see this (See svn sourcecode)", "size");
 
 	return p;
 }
@@ -114,7 +114,7 @@ const char* AprPool::AllocString(String^ value)
 
 		char* pData = (char*)Alloc(bytes->Length+1);
 
-		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		pin_ptr<unsigned char> pBytes = &bytes[0];
 
 		if(pData && pBytes)
 			memcpy(pData, pBytes, bytes->Length);
@@ -138,7 +138,7 @@ const char* AprPool::AllocUnixString(String^ value)
 
 		char* pData = (char*)Alloc(bytes->Length+1);
 
-		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		pin_ptr<unsigned char> pBytes = &bytes[0];
 
 		if(pData && pBytes)
 			memcpy(pData, pBytes, bytes->Length);
@@ -195,7 +195,7 @@ const char* AprPool::AllocPath(String^ value)
 
 		char* pData = (char*)Alloc(len+1);
 
-		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		pin_ptr<unsigned char> pBytes = &bytes[0];
 
 		if(pData && pBytes)
 		{
@@ -224,14 +224,14 @@ const char* AprPool::AllocCanonical(String^ value)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
-		pin_ptr<unsigned char> pBytes = &bytes[0]; 
+		pin_ptr<unsigned char> pBytes = &bytes[0];
 		const char* pcBytes = (const char*)static_cast<const unsigned char*>(pBytes);
 
 		const char* resPath = svn_path_canonicalize(pcBytes, Handle);
 
 		if(resPath == pcBytes)
 			resPath = apr_pstrdup(Handle, resPath);
-		
+
 		return resPath;
 	}
 	else
@@ -262,7 +262,7 @@ const svn_string_t* AprPool::AllocSvnString(array<char>^ bytes)
 	pStr->data = pChars;
 	pStr->len = bytes->Length;
 
-	pin_ptr<char> pBytes = &bytes[0]; 
+	pin_ptr<char> pBytes = &bytes[0];
 	memcpy(pChars, pBytes, bytes->Length);
 
 	return pStr;

@@ -136,35 +136,4 @@ namespace SharpSvn {
 
 		void Detach(bool keepProperties);
 	};
-
-	ref class SvnCommitItemMarshaller sealed : public SvnBase, public IItemMarshaller<SvnCommitItem^>
-	{
-	public:
-		SvnCommitItemMarshaller()
-		{}
-
-		property int ItemSize
-		{
-			virtual int get()
-			{
-				return sizeof(svn_client_commit_item3_t*);
-			}
-		}
-
-		virtual void Write(SvnCommitItem^ value, void* ptr, AprPool^ pool)
-		{
-			UNUSED_ALWAYS(value);
-			UNUSED_ALWAYS(ptr);
-			UNUSED_ALWAYS(pool);
-			throw gcnew NotImplementedException();
-		}
-
-		virtual SvnCommitItem^ Read(const void* ptr, AprPool^ pool)
-		{
-			UNUSED_ALWAYS(pool);
-			const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
-
-			return gcnew SvnCommitItem(*ppcCommitItem);
-		}
-	};
 }

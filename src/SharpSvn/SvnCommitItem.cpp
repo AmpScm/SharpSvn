@@ -8,7 +8,7 @@ using namespace SharpSvn;
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo)
 {
 	if(!commitItemInfo)
-		throw gcnew NullReferenceException("commitItemInfo");
+		throw gcnew ArgumentNullException("commitItemInfo");
 
 	_info = commitItemInfo;
 }

@@ -28,17 +28,17 @@ namespace SharpSvn {
 			}
 
 		public:
-			/// <summary>If MaySave is false, the auth system does not allow the credentials 
-			/// to be saved (to disk). A prompt function shall not ask the user if the 
-			/// credentials shall be saved if may_save is FALSE. For example, a GUI client 
-			/// with a remember password checkbox would grey out the checkbox if may_save 
+			/// <summary>If MaySave is false, the auth system does not allow the credentials
+			/// to be saved (to disk). A prompt function shall not ask the user if the
+			/// credentials shall be saved if may_save is FALSE. For example, a GUI client
+			/// with a remember password checkbox would grey out the checkbox if may_save
 			/// is false</summary>
 			property bool MaySave
 			{
 				bool get()
-				{ 
-					return _maySave; 
-				}	
+				{
+					return _maySave;
+				}
 			}
 
 			/// <summary>If realm is non-null, maybe use it in the prompt string</summary>
@@ -53,9 +53,9 @@ namespace SharpSvn {
 			property bool Save
 			{
 				bool get()
-				{ 
-					return _save; 
-				}	
+				{
+					return _save;
+				}
 
 				void set(bool value)
 				{
@@ -105,7 +105,7 @@ namespace SharpSvn {
 				SvnAuthentication^ get();
 			}
 		};
-		
+
 		ref class SvnAuthProviderMarshaller sealed : public SvnBase, public IItemMarshaller<ISvnAuthWrapper^>
 		{
 		public:
@@ -301,7 +301,7 @@ namespace SharpSvn {
 			SvnCertificateTrustFailures _acceptedFailures;
 
 		public:
-			SvnSslServerTrustEventArgs (SvnCertificateTrustFailures failures, String^ certificateCommonName, String^ certificateFingerprint, String^ certificateValidFrom, 
+			SvnSslServerTrustEventArgs (SvnCertificateTrustFailures failures, String^ certificateCommonName, String^ certificateFingerprint, String^ certificateValidFrom,
 				String^ certificateValidUntil, String^ certificateIssuer, String^ certificateValue, String^ realm, bool maySave)
 				: SvnAuthorizationEventArgs(realm, maySave)
 			{
@@ -524,7 +524,7 @@ namespace SharpSvn {
 					if(!value || SharpSvn::UI::Authentication::SharpSvnGui::HasWin32Handle(value))
 						_parentWindow = value;
 					else
-						throw gcnew ArgumentException("Parent window has no Win32 handle", "value");
+						throw gcnew ArgumentException(SharpSvnStrings::ParentWindowHasNoWindowHandle, "value");
 				}
 			}
 
@@ -754,39 +754,70 @@ namespace SharpSvn {
 			static void ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
 			static void ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
 
+		private:
+			static initonly EventHandler<SvnUsernameEventArgs^>^						_subversionFileUsernameHandler
+				= gcnew EventHandler<SvnUsernameEventArgs^>(ImpSubversionFileUsernameHandler);
+			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				_subversionFileUsernamePasswordHandler
+				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpSubversionFileUsernamePasswordHandler);
+			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				_subversionWindowsUsernamePasswordHandler
+				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpSubversionWindowsFileUsernamePasswordHandler);
+			static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionFileSslServerTrustHandler
+				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionFileSslServerTrustHandler);
+			static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			_subversionFileSslClientCertificateHandler
+				= gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpSubversionFileSslClientCertificateHandler);
+			static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^	_subversionFileSslClientCertificatePasswordHandler
+				= gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpSubversionFileSslClientCertificatePasswordHandler);
+			static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionWindowsSslServerTrustHandler
+				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionWindowsSslServerTrustHandler);
+
+
 		public:
 			/// <summary>Subversion UsernameHandler file backend (managed representation)</summary>
-			static initonly EventHandler<SvnUsernameEventArgs^>^						SubversionFileUsernameHandler
-				= gcnew EventHandler<SvnUsernameEventArgs^>(ImpSubversionFileUsernameHandler);
+			static property EventHandler<SvnUsernameEventArgs^>^						SubversionFileUsernameHandler
+			{
+				EventHandler<SvnUsernameEventArgs^>^ get() { return _subversionFileUsernameHandler; } 
+			}
 
 			/// <summary>Subversion UsernamePasswordHandler file backend (managed representation)</summary>
-			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				SubversionFileUsernamePasswordHandler
-				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpSubversionFileUsernamePasswordHandler);
+			static property EventHandler<SvnUsernamePasswordEventArgs^>^				SubversionFileUsernamePasswordHandler
+			{
+				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return _subversionFileUsernamePasswordHandler; } 
+			}
 
 			/// <summary>Subversion UsernameHandler file backend using Windows CryptoStore (managed representation)</summary>
 			/// <remarks>Should be added after <see cref="SubversionFileUsernamePasswordHandler" /></remarks>
-			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				SubversionWindowsUsernamePasswordHandler
-				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpSubversionWindowsFileUsernamePasswordHandler);
+			static property EventHandler<SvnUsernamePasswordEventArgs^>^				SubversionWindowsUsernamePasswordHandler
+			{
+				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return _subversionWindowsUsernamePasswordHandler; } 
+			}
 
 			/// <summary>Subversion SslServerTrust file backend (managed representation)</summary>
-			static initonly EventHandler<SvnSslServerTrustEventArgs^>^				SubversionFileSslServerTrustHandler
-				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionFileSslServerTrustHandler);
+			static property EventHandler<SvnSslServerTrustEventArgs^>^				SubversionFileSslServerTrustHandler
+			{
+				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionFileSslServerTrustHandler; } 
+			}
 
 			/// <summary>Subversion SslClientCertificate file backend (managed representation)</summary>
-			static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			SubversionFileSslClientCertificateHandler
-				= gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpSubversionFileSslClientCertificateHandler);
+			static property EventHandler<SvnSslClientCertificateEventArgs^>^			SubversionFileSslClientCertificateHandler
+			{
+				EventHandler<SvnSslClientCertificateEventArgs^>^ get() { return _subversionFileSslClientCertificateHandler; } 
+			}
 
 			/// <summary>Subversion SslClientCertificatePassword file backend (managed representation)</summary>
-			static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ SubversionFileSslClientCertificatePasswordHandler
-				= gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpSubversionFileSslClientCertificatePasswordHandler);
+			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ SubversionFileSslClientCertificatePasswordHandler
+			{
+				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return _subversionFileSslClientCertificatePasswordHandler; } 
+			}
 
 			/// <summary>Subversion CryptoApi Ssl Trust handler</summary>
-			static initonly EventHandler<SvnSslServerTrustEventArgs^>^				SubversionWindowsSslServerTrustHandler
-				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionWindowsSslServerTrustHandler);
+			static property EventHandler<SvnSslServerTrustEventArgs^>^				SubversionWindowsSslServerTrustHandler
+			{
+				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionWindowsSslServerTrustHandler; } 
+			}
 
 		private:
 			static IntPtr GetParentHandle(Object ^sender);
-			static void ImpDialogUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e); 
+			static void ImpDialogUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e);
 			static void ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e);
 			static void ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
 			static void ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
@@ -794,24 +825,34 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Dialog based UsernameHandler implementation</summary>
-			static initonly EventHandler<SvnUsernameEventArgs^>^						DialogUsernameHandler
-				= gcnew EventHandler<SvnUsernameEventArgs^>(ImpDialogUsernameHandler);
+			static property EventHandler<SvnUsernameEventArgs^>^						DialogUsernameHandler
+			{
+				EventHandler<SvnUsernameEventArgs^>^ get() { return gcnew EventHandler<SvnUsernameEventArgs^>(ImpDialogUsernameHandler); }
+			}
 
 			/// <summary>Dialog based UsernamePasswordHandler implementation</summary>
-			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				DialogUsernamePasswordHandler
-				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpDialogUsernamePasswordHandler);
+			static property EventHandler<SvnUsernamePasswordEventArgs^>^				DialogUsernamePasswordHandler
+			{
+				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpDialogUsernamePasswordHandler); }
+			}
 
 			/// <summary>Dialog based SslServerTrust implementation</summary>
-			static initonly EventHandler<SvnSslServerTrustEventArgs^>^				DialogSslServerTrustHandler
-				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpDialogSslServerTrustHandler);
+			static property EventHandler<SvnSslServerTrustEventArgs^>^				DialogSslServerTrustHandler
+			{
+				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpDialogSslServerTrustHandler); }
+			}
 
 			/// <summary>Dialog based SslClientCertificate implementation</summary>
-			static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			DialogSslClientCertificateHandler
-				= gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpDialogSslClientCertificateHandler);
+			static property EventHandler<SvnSslClientCertificateEventArgs^>^			DialogSslClientCertificateHandler
+			{
+				EventHandler<SvnSslClientCertificateEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpDialogSslClientCertificateHandler); }
+			}
 
 			/// <summary>Dialog based SslClientCertificatePassword implementation</summary>
-			static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ DialogSslClientCertificatePasswordHandler
-				= gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpDialogSslClientCertificatePasswordHandler);
+			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ DialogSslClientCertificatePasswordHandler
+			{
+				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpDialogSslClientCertificatePasswordHandler); }
+			}
 
 		private:
 			static void MaybePrintRealm(SvnAuthorizationEventArgs^ e);
@@ -824,24 +865,34 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Console based UsernameHandler implementation</summary>
-			static initonly EventHandler<SvnUsernameEventArgs^>^						ConsoleUsernameHandler
-				= gcnew EventHandler<SvnUsernameEventArgs^>(ImpConsoleUsernameHandler);
+			static property EventHandler<SvnUsernameEventArgs^>^ ConsoleUsernameHandler
+			{
+				EventHandler<SvnUsernameEventArgs^>^ get() { return gcnew EventHandler<SvnUsernameEventArgs^>(ImpConsoleUsernameHandler); }
+			}
 
 			/// <summary>Console based UsernamePasswordHandler implementation</summary>
-			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				ConsoleUsernamePasswordHandler
-				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpConsoleUsernamePasswordHandler);
+			static property EventHandler<SvnUsernamePasswordEventArgs^>^ ConsoleUsernamePasswordHandler
+			{
+				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpConsoleUsernamePasswordHandler); }
+			}
 
 			/// <summary>Console based SslServerTrust implementation</summary>
-			static initonly EventHandler<SvnSslServerTrustEventArgs^>^				ConsoleSslServerTrustHandler
-				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpConsoleSslServerTrustHandler);
+			static property EventHandler<SvnSslServerTrustEventArgs^>^ ConsoleSslServerTrustHandler
+			{
+				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpConsoleSslServerTrustHandler); }
+			}
 
 			/// <summary>Console based SslClientCertificate implementation</summary>
-			static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			ConsoleSslClientCertificateHandler
-				= gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpConsoleSslClientCertificateHandler);
+			static property EventHandler<SvnSslClientCertificateEventArgs^>^ ConsoleSslClientCertificateHandler
+			{
+				EventHandler<SvnSslClientCertificateEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpConsoleSslClientCertificateHandler); }
+			}
 
 			/// <summary>Console based SslClientCertificatePassword implementation</summary>
-			static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ ConsoleSslClientCertificatePasswordHandler
-				= gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpConsoleSslClientCertificatePasswordHandler);
+			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ ConsoleSslClientCertificatePasswordHandler
+			{
+				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpConsoleSslClientCertificatePasswordHandler); }
+			}
 		};
 	}
 }

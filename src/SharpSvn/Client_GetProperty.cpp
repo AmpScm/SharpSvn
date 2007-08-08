@@ -57,7 +57,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		throw gcnew ArgumentNullException("propertyName");
 
 	properties = nullptr;
-	EnsureState(SvnContextState::AuthorizationInitialized);	
+	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	AprPool pool(%_pool);
 
@@ -75,7 +75,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		apr_hash_t* pHash = nullptr;
 
 		svn_error_t *r = svn_client_propget3(
-			&pHash,			
+			&pHash,
 			pool.AllocString(propertyName),
 			pool.AllocString(target->TargetName),
 			&pegRev,
@@ -121,7 +121,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		throw gcnew ArgumentNullException("propertyName");
 
 	properties = nullptr;
-	EnsureState(SvnContextState::AuthorizationInitialized);	
+	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	AprPool pool(%_pool);
 
@@ -139,7 +139,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		svn_revnum_t actualRev;
 
 		svn_error_t *r = svn_client_propget3(
-			&pHash,			
+			&pHash,
 			pool.AllocString(propertyName),
 			pool.AllocString(target->TargetName),
 			&pegRev,

@@ -77,7 +77,7 @@ namespace SharpSvn
 			//_client.CheckOut(new Uri("file:///F:/_local/repos/"), "f:\\test-co", out ver);
 			//_client.Update(@"g:\Projects\SvnDotNet", new SvnUpdateArgs(), out ver);
 			//long rev;
-			
+
 		}
 
 		void OnPropertyItem(object sender, SvnPropertyListEventArgs e)

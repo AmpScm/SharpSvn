@@ -61,7 +61,7 @@ bool SvnClient::CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryA
 		svn_commit_info_t* commitInfo = nullptr;
 
 		svn_error_t *r = svn_client_mkdir3(
-			&commitInfo,			
+			&commitInfo,
 			aprPaths->Handle,
 			args->MakeParents,
 			CtxHandle,

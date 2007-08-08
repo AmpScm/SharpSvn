@@ -100,7 +100,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 		apr_file_close(tmpOut);
 		tmpOut = nullptr;
 
-		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);		
+		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
 		tempOut = nullptr;
 
 		return args->HandleResult(r);
@@ -116,7 +116,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 			apr_file_close(tmpOut);
 
 		if(tempErr && File::Exists(tempErr))
-		{			
+		{
 			File::Delete(tempErr);
 		}
 		if(tempOut && File::Exists(tempOut))
@@ -192,7 +192,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 			CtxHandle,
 			pool.Handle);
 
-		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);		
+		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
 		tempOut = nullptr;
 
 		return args->HandleResult(r);
@@ -208,7 +208,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 			apr_file_close(tmpOut);
 
 		if(tempErr && File::Exists(tempErr))
-		{			
+		{
 			File::Delete(tempErr);
 		}
 		if(tempOut && File::Exists(tempOut))

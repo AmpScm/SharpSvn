@@ -13,7 +13,7 @@ namespace SharpSvn {
 
 		generic<typename T>
 		where T : Object
-		interface class IItemMarshaller 
+		interface class IItemMarshaller
 		{
 			property int ItemSize
 			{
@@ -60,12 +60,12 @@ namespace SharpSvn {
 				}
 			}
 
-			property T default[int] 
+			property T default[int]
 			{
-				T get(int index) 
+				T get(int index)
 				{
 					if(index < 0 || index >= Count)
-						throw gcnew IndexOutOfRangeException("Index out of range");
+						throw gcnew ArgumentOutOfRangeException("index", "Index out of range");
 
 					const char* pData = Handle->elts;
 
@@ -85,7 +85,7 @@ namespace SharpSvn {
 			void CopyTo(array<T>^ item, int offset)
 			{
 				for(int i = 0; i < Count; i++)
-					item[i+offset] = default[i];				
+					item[i+offset] = default[i];
 			}
 
 			property bool IsReadOnly

@@ -37,7 +37,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 
 	SvnCommitInfo^ commitInfo;
 
-	return Import(path, target, args, commitInfo);	
+	return Import(path, target, args, commitInfo);
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
@@ -101,7 +101,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 
 	SvnCommitInfo^ commitInfo;
 
-	return RemoteImport(path, target, args, commitInfo);	
+	return RemoteImport(path, target, args, commitInfo);
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)

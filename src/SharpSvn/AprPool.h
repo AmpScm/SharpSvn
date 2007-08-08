@@ -53,10 +53,10 @@ namespace SharpSvn {
 					if(_parent)
 						return _parent->IsValid();
 
-					return true;					
+					return true;
 				}
 
-				
+
 			};
 
 		private:
@@ -68,7 +68,7 @@ namespace SharpSvn {
 			!AprPool();
 		public:
 			~AprPool();
-			
+
 
 		protected:
 			void Destroy();
@@ -98,23 +98,6 @@ namespace SharpSvn {
 			}
 
 		internal:
-			apr_pool_t* Detach()
-			{
-				if(_handle)
-				{
-					_tag->Ensure();
-					apr_pool_t *me = _handle;
-					_handle = nullptr;
-					_tag = nullptr;
-
-					GC::SuppressFinalize(this);
-
-					return me;
-				}
-				return nullptr;
-			}
-
-		internal:			
 			property apr_pool_t* Handle
 			{
 				[System::Diagnostics::DebuggerStepThroughAttribute()]

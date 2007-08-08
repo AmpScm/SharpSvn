@@ -5,17 +5,17 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-const char* SvnClient::GetEolPtr(SvnEolStyle style)
+const char* SvnClient::GetEolPtr(SvnLineStyle style)
 {
 	switch(style)
 	{
-	case SvnEolStyle::Native:
+	case SvnLineStyle::Native:
 		return nullptr;
-	case SvnEolStyle::CrLf:
+	case SvnLineStyle::CariageReturnLineFeed:
 		return "CRLF";
-	case SvnEolStyle::Lf:
+	case SvnLineStyle::LineFeed:
 		return "LF";
-	case SvnEolStyle::Cr:
+	case SvnLineStyle::CariageReturn:
 		return "CR";
 	default:
 		throw gcnew ArgumentOutOfRangeException("style");
@@ -113,15 +113,15 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* r = svn_client_export4(
-			&resultRev, 
-			pool.AllocString(from->TargetName), 
-			pool.AllocPath(toPath), 
-			&pegRev, 
-			&rev, 
-			args->Overwrite, 
-			args->IgnoreExternals, 
+			&resultRev,
+			pool.AllocString(from->TargetName),
+			pool.AllocPath(toPath),
+			&pegRev,
+			&rev,
+			args->Overwrite,
+			args->IgnoreExternals,
 			(svn_depth_t)args->Depth,
-			GetEolPtr(args->EolStyle),
+			GetEolPtr(args->LineStyle),
 			CtxHandle,
 			pool.Handle);
 

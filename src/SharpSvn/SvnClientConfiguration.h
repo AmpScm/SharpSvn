@@ -21,7 +21,7 @@ namespace SharpSvn {
 		property bool LogMessageRequired
 		{
 			bool get();
-			void set(bool value);				
+			void set(bool value);
 		}
 	};
 

@@ -2,6 +2,8 @@
 
 #include "SvnAll.h"
 
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnTarget.op_Implicit(System.String):SharpSvn.SvnTarget")];
+
 using namespace SharpSvn;
 
 SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
@@ -33,7 +35,7 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 		return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
 	default:
 		throw gcnew ArgumentException("SvnRevisionType unknown", "revData");
-	}	
+	}
 }
 
 svn_opt_revision_t SvnRevision::ToSvnRevision()
@@ -100,31 +102,6 @@ bool SvnTarget::TryParse(String^ targetName, [Out] SvnTarget^% target)
 	return false;
 }
 
-bool SvnTarget::TryParse(String^ targetString, [Out] SvnTarget ^% target, AprPool^ pool)
-{
-	if(String::IsNullOrEmpty(targetString))
-		throw gcnew ArgumentNullException("targetString");
-	else if(!pool)
-		throw gcnew ArgumentNullException("pool");
-
-	SvnUriTarget^ uriTarget = nullptr;
-	SvnPathTarget^ pathTarget = nullptr;
-
-	if(targetString->Contains("://") && SvnUriTarget::TryParse(targetString, uriTarget, pool))
-	{
-		target = uriTarget;
-		return true;
-	}
-	else if(SvnPathTarget::TryParse(targetString, pathTarget, pool))
-	{
-		target = pathTarget;
-		return true;
-	}
-
-	target = nullptr;
-	return false;
-}
-
 SvnTarget^ SvnTarget::FromUri(Uri^ value)
 {
 	if(!value)
@@ -145,13 +122,18 @@ svn_opt_revision_t SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnR
 	return Revision->ToSvnRevision(uriNoneValue);
 }
 
+String^ SvnPathTarget::GetFullPath(String ^path)
+{
+	return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+}
+
 bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)
 {
 	if(String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 
 	AprPool pool;
-	
+
 	return TryParse(targetName, target, %pool);
 }
 
@@ -167,7 +149,7 @@ SvnTarget^ SvnTarget::FromString(String^ value)
 		return result;
 	}
 	else
-		throw gcnew System::ArgumentException("Converting string to SvnTarget: Value is not a valid SvnUriTarget and/or SvnPathTarget", "value");
+		throw gcnew System::ArgumentException(SharpSvnStrings::TheTargetIsNotAValidUriOrPathTarget, "value");
 }
 
 SvnPathTarget^ SvnPathTarget::FromString(String^ value)
@@ -182,7 +164,7 @@ SvnPathTarget^ SvnPathTarget::FromString(String^ value)
 		return result;
 	}
 	else
-		throw gcnew System::ArgumentException("Value is not a valid SvnPathTarget", "value");
+		throw gcnew System::ArgumentException(SharpSvnStrings::TheTargetIsNotAValidPathTarget, "value");
 }
 
 SvnUriTarget^ SvnUriTarget::FromString(String^ value)
@@ -197,5 +179,5 @@ SvnUriTarget^ SvnUriTarget::FromString(String^ value)
 		return result;
 	}
 	else
-		throw gcnew System::ArgumentException("Value is not a valid SvnUriTarget", "value");
+		throw gcnew System::ArgumentException(SharpSvnStrings::TheTargetIsNotAValidUriTarget, "value");
 }

@@ -80,7 +80,7 @@ void SvnClient::GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logIte
 
 	try
 	{
-		Log(target, results->Handler);	
+		Log(target, results->Handler);
 	}
 	finally
 	{
