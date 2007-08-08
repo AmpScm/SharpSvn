@@ -289,7 +289,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 
 	AprPool tmpPool(pool, false);
 
-	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %tmpPool);
+	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description);
 
 	try
 	{

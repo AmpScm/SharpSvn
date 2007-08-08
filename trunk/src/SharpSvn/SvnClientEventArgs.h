@@ -131,21 +131,31 @@ namespace SharpSvn {
 
 	public ref class SvnConflictEventArgs : public SvnCancelEventArgs
 	{
-		AprPool^ _pool;
 		const svn_wc_conflict_description_t* _description;
 		SvnConflictResult _result;
 
+		initonly SvnNodeKind _nodeKind;
+		initonly bool _isBinary;
+		initonly SvnConflictReason _reason;
+		
+		String^ _path;
+		String^ _mimeType;
+		String^ _baseFile;
+		String^ _reposFile;
+		String^ _userFile;
+		String^ _mergedFile;
+
 	internal:
-		SvnConflictEventArgs(const svn_wc_conflict_description_t *description, AprPool^ pool)
+		SvnConflictEventArgs(const svn_wc_conflict_description_t *description)
 		{
 			if(!description)
 				throw gcnew ArgumentNullException("description");
-			else if(!pool)
-				throw gcnew ArgumentNullException("pool");
 
 			_description = description;
-			_pool = pool;
 			_result = SvnConflictResult::Conflicted;
+
+			_nodeKind = (SvnNodeKind)description->node_kind;
+			_reason = (SvnConflictReason)description->reason;
 		}
 
 	public:
@@ -162,18 +172,114 @@ namespace SharpSvn {
 		}
 
 	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				if(!_path && _description && _description->path)
+					_path = SvnBase::Utf8_PtrToString(_description->path);
+
+				return _path;
+			}
+		}
+
+		property String^ MimeType
+		{
+			String^ get()
+			{
+				if(!_mimeType && _description && _description->mime_type)
+					_mimeType = SvnBase::Utf8_PtrToString(_description->mime_type);
+
+				return _mimeType;
+			}
+		}
+
+		property String^ BaseFile
+		{
+			String^ get()
+			{
+				if(!_baseFile && _description && _description->base_file)
+					_baseFile = SvnBase::Utf8_PtrToString(_description->base_file);
+
+				return _baseFile;
+			}
+		}
+
+		property String^ ReposFile
+		{
+			String^ get()
+			{
+				if(!_reposFile && _description && _description->repos_file)
+					_reposFile = SvnBase::Utf8_PtrToString(_description->repos_file);
+
+				return _reposFile;
+			}
+		}
+
+		property String^ UserFile
+		{
+			String^ get()
+			{
+				if(!_userFile && _description && _description->user_file)
+					_userFile = SvnBase::Utf8_PtrToString(_description->user_file);
+
+				return _userFile;
+			}
+		}
+
+		property String^ MergedFile
+		{
+			String^ get()
+			{
+				if(!_mergedFile && _description && _description->merged_file)
+					_mergedFile  = SvnBase::Utf8_PtrToString(_description->merged_file);
+
+				return _mergedFile;
+			}
+		}
+
+		property bool IsBinary
+		{
+			bool get()
+			{
+				return _isBinary;
+			}
+		}
+
+		property SvnConflictReason ConflictReason
+		{
+			SvnConflictReason get()
+			{
+				return _reason;
+			}
+		}
+
+		property SvnNodeKind NodeKind
+		{
+			SvnNodeKind get()
+			{
+				return _nodeKind;
+			}
+		}
+
+	public:
 		virtual void Detach(bool keepProperties) override
 		{
 			try
 			{
 				if(keepProperties)
 				{
+					GC::KeepAlive(Path);
+					GC::KeepAlive(MimeType);
+					GC::KeepAlive(BaseFile);
+					GC::KeepAlive(ReposFile);
+					GC::KeepAlive(UserFile);
+					GC::KeepAlive(MergedFile);
 				}
 			}
 			finally
 			{
 				_description = nullptr;
-				_pool = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}
@@ -475,13 +581,13 @@ namespace SharpSvn {
 		initonly String^ _path;
 		const svn_wc_status2_t *_status;
 		String^ _fullPath;
-		initonly SvnWcStatus _wcContentStatus;
-		initonly SvnWcStatus _wcPropertyStatus;
+		initonly SvnLocalStatus _wcContentStatus;
+		initonly SvnLocalStatus _wcPropertyStatus;
 		initonly bool _wcLocked;
 		initonly bool _copied;
 		initonly bool _switched;
-		initonly SvnWcStatus _reposContentStatus;
-		initonly SvnWcStatus _reposPropertyStatus;
+		initonly SvnLocalStatus _reposContentStatus;
+		initonly SvnLocalStatus _reposPropertyStatus;
 		SvnLockInfo^ _reposLock;
 		Uri^ _uri;
 		initonly __int64 _oodLastCommitRev;
@@ -500,13 +606,13 @@ namespace SharpSvn {
 			_path = path;
 			_status = status;
 
-			_wcContentStatus = (SvnWcStatus)status->text_status;
-			_wcPropertyStatus = (SvnWcStatus)status->prop_status;
+			_wcContentStatus = (SvnLocalStatus)status->text_status;
+			_wcPropertyStatus = (SvnLocalStatus)status->prop_status;
 			_wcLocked = status->locked != 0;
 			_copied = status->copied != 0;
 			_switched = status->switched != 0;
-			_reposContentStatus = (SvnWcStatus)status->repos_text_status;
-			_reposPropertyStatus = (SvnWcStatus)status->repos_prop_status;
+			_reposContentStatus = (SvnLocalStatus)status->repos_text_status;
+			_reposPropertyStatus = (SvnLocalStatus)status->repos_prop_status;
 
 			_oodLastCommitRev = status->ood_last_cmt_rev;
 
@@ -540,18 +646,18 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Content status in working copy</summary>
-		property SvnWcStatus LocalContentStatus
+		property SvnLocalStatus LocalContentStatus
 		{
-			SvnWcStatus get()
+			SvnLocalStatus get()
 			{
 				return _wcContentStatus;
 			}
 		}
 
 		/// <summary>Property status in working copy</summary>
-		property SvnWcStatus LocalPropertyStatus
+		property SvnLocalStatus LocalPropertyStatus
 		{
-			SvnWcStatus get()
+			SvnLocalStatus get()
 			{
 				return _wcPropertyStatus;
 			}
@@ -586,17 +692,17 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnWcStatus ReposContentStatus
+		property SvnLocalStatus ReposContentStatus
 		{
-			SvnWcStatus get()
+			SvnLocalStatus get()
 			{
 				return _reposContentStatus;
 			}
 		}
 
-		property SvnWcStatus ReposPropertyStatus
+		property SvnLocalStatus ReposPropertyStatus
 		{
-			SvnWcStatus get()
+			SvnLocalStatus get()
 			{
 				return _reposPropertyStatus;
 			}
@@ -918,7 +1024,7 @@ namespace SharpSvn {
 		String^ _lastChangeAuthor;
 		SvnLockInfo^ _lock;
 		initonly bool _hasWcInfo;
-		SvnWcSchedule _wcSchedule;
+		SvnSchedule _wcSchedule;
 		Uri ^_copyFromUri;
 		initonly __int64 _copyFromRev;
 		initonly DateTime _contentTime;
@@ -951,7 +1057,7 @@ namespace SharpSvn {
 				_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
 			}
 			_hasWcInfo = info->has_wc_info != 0;
-			_wcSchedule = (SvnWcSchedule)info->schedule;
+			_wcSchedule = (SvnSchedule)info->schedule;
 			_copyFromRev = info->copyfrom_rev;
 			if(_hasWcInfo)
 			{
@@ -986,7 +1092,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path && HasWcInfo)
+				if(!_fullPath && Path && HasLocalInfo)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -1085,7 +1191,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool HasWcInfo
+		property bool HasLocalInfo
 		{
 			bool get()
 			{
@@ -1093,11 +1199,11 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnWcSchedule Schedule
+		property SvnSchedule Schedule
 		{
-			SvnWcSchedule get()
+			SvnSchedule get()
 			{
-				return HasWcInfo ? _wcSchedule : SvnWcSchedule::None;
+				return HasLocalInfo ? _wcSchedule : SvnSchedule::None;
 			}
 		}
 
@@ -1105,7 +1211,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_copyFromUri && _info && _info->copyfrom_url && HasWcInfo)
+				if(!_copyFromUri && _info && _info->copyfrom_url && HasLocalInfo)
 					_copyFromUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->copyfrom_url));
 
 				return _copyFromUri;
@@ -1140,7 +1246,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_checksum && _info && _info->checksum && HasWcInfo)
+				if(!_checksum && _info && _info->checksum && HasLocalInfo)
 					_checksum = SvnBase::Utf8_PtrToString(_info->checksum);
 
 				return _checksum;
@@ -1151,7 +1257,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflict_old && _info && _info->conflict_old && HasWcInfo)
+				if(!_conflict_old && _info && _info->conflict_old && HasLocalInfo)
 					_conflict_old = SvnBase::Utf8_PtrToString(_info->conflict_old);
 
 				return _conflict_old;
@@ -1162,7 +1268,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflict_new && _info && _info->conflict_new && HasWcInfo)
+				if(!_conflict_new && _info && _info->conflict_new && HasLocalInfo)
 					_conflict_new = SvnBase::Utf8_PtrToString(_info->conflict_new);
 
 				return _conflict_new;
@@ -1173,7 +1279,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflict_wrk && _info && _info->conflict_wrk && HasWcInfo)
+				if(!_conflict_wrk && _info && _info->conflict_wrk && HasLocalInfo)
 					_conflict_wrk = SvnBase::Utf8_PtrToString(_info->conflict_wrk);
 
 				return _conflict_wrk;
@@ -1184,7 +1290,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_prejfile && _info && _info->prejfile && HasWcInfo)
+				if(!_prejfile && _info && _info->prejfile && HasLocalInfo)
 					_prejfile = SvnBase::Utf8_PtrToString(_info->prejfile);
 
 				return _prejfile;

@@ -197,13 +197,13 @@ namespace SharpSvn.Tests
 
 				SvnInfoEventArgs info = items[0];
 				Assert.That(info.Uri.ToString() + "/", Is.EqualTo(ReposUri.ToString()), "Repository uri matches");
-				Assert.That(info.HasWcInfo, Is.False, "No WC info");
+				Assert.That(info.HasLocalInfo, Is.False, "No WC info");
 				Assert.That(info.Path, Is.EqualTo(""), "Path is empty");
 
 				client.GetInfo(new Uri(ReposUri, "folder"), out info);
 
 				Assert.That(info.Uri.ToString() + "/", Is.EqualTo(ReposUri.ToString()), "Repository uri matches");
-				Assert.That(info.HasWcInfo, Is.False, "No WC info");
+				Assert.That(info.HasLocalInfo, Is.False, "No WC info");
 				Assert.That(info.Path, Is.EqualTo("folder"), "Path is empty");
 			}
 		}
@@ -342,7 +342,7 @@ namespace SharpSvn.Tests
 				client.Status(file4, delegate(object sender, SvnStatusEventArgs e)
 				{
 					Assert.That(e.FullPath, Is.EqualTo(file4));
-					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnWcStatus.Added));
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnLocalStatus.Added));
 					Assert.That(e.IsRemoteUpdated, Is.False);
 					Assert.That(e.Path.Replace('/', Path.DirectorySeparatorChar), Is.EqualTo(file4));
 					visited = true;
@@ -506,7 +506,7 @@ namespace SharpSvn.Tests
 				client.Status(local, delegate(object sender, SvnStatusEventArgs e)
 				{
 					Assert.That(e.FullPath, Is.EqualTo(local));
-					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnWcStatus.Deleted));
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnLocalStatus.Deleted));
 					Assert.That(e.Switched, Is.False);
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
 					visited = true;
@@ -664,7 +664,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.CopyFromUri, Is.Null);
 					Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
 					Assert.That(e.FullPath, Is.EqualTo(file));
-					Assert.That(e.HasWcInfo, Is.True);
+					Assert.That(e.HasLocalInfo, Is.True);
 					Assert.That(e.LastChangeAuthor, Is.Null);
 					Assert.That(e.LastChangeDate, Is.EqualTo(DateTime.MinValue));
 					Assert.That(e.LastChangeRevision, Is.EqualTo(0)); // Not committed yet
@@ -676,7 +676,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.RepositorySize, Is.EqualTo(-1L));
 					Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
 					Assert.That(e.Revision, Is.EqualTo(0L)); // Not committed yet
-					Assert.That(e.Schedule, Is.EqualTo(SvnWcSchedule.Add));
+					Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Add));
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
 					Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
 					visited = true;
@@ -698,7 +698,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.CopyFromUri, Is.Null);
 						Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
 						Assert.That(e.FullPath, Is.EqualTo(file));
-						Assert.That(e.HasWcInfo, Is.True);
+						Assert.That(e.HasLocalInfo, Is.True);
 						Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
 						Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
 						Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
@@ -710,7 +710,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.RepositorySize, Is.EqualTo(-1L));
 						Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
 						Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-						Assert.That(e.Schedule, Is.EqualTo(SvnWcSchedule.None));
+						Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.None));
 						Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
 						Assert.That(e.WorkingCopySize, Is.EqualTo(0L));
 						visited = true;
@@ -730,7 +730,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.CopyFromUri, Is.Null);
 					Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
 					Assert.That(e.FullPath, Is.Null);
-					Assert.That(e.HasWcInfo, Is.False);
+					Assert.That(e.HasLocalInfo, Is.False);
 					Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
 					Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(1, 0, 0)));
 					Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
@@ -742,7 +742,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.RepositorySize, Is.EqualTo(0L));
 					Assert.That(e.ReposRoot, Is.EqualTo(ReposUri));
 					Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-					Assert.That(e.Schedule, Is.EqualTo(SvnWcSchedule.None));
+					Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.None));
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
 					Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
 					visited = true;
