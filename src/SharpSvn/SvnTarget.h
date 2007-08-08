@@ -82,7 +82,7 @@ namespace SharpSvn {
 			case SvnRevisionType::Head:
 				return "HEAD";
 			default:
-				throw gcnew InvalidOperationException("Invalid SvnRevisionType set");
+				throw gcnew InvalidOperationException(SharpSvnStrings::InvalidSvnRevisionTypeValue);
 			}
 		}
 

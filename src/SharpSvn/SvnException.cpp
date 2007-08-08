@@ -211,7 +211,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_SVN_REPOS_NOT_FOUND:
 		case SVN_ERR_RA_SVN_BAD_VERSION:
 		case SVN_ERR_RA_SVN_NO_MECHANISMS:
-			return gcnew SvnRepositoryIoException(error);
+			return gcnew SvnRepositoryIOException(error);
 
 		case SVN_ERR_AUTHN_CREDS_UNAVAILABLE:
 		case SVN_ERR_AUTHN_NO_PROVIDER:

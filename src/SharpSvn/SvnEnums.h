@@ -158,7 +158,7 @@ namespace SharpSvn {
 		Unlocked	= svn_wc_notify_lock_state_unlocked
 	};
 
-	public enum class SvnWcStatus
+	public enum class SvnLocalStatus
 	{
 		/// <summary>Zero value. Never used by Subversion</summary>
 		Zero				= 0,
@@ -206,7 +206,7 @@ namespace SharpSvn {
 		Incomplete			= svn_wc_status_incomplete
 	};
 
-	public enum class SvnWcSchedule
+	public enum class SvnSchedule
 	{
 		/// <summary>Zero value; probably same as normal</summary>
 		None = 0,
@@ -270,7 +270,7 @@ namespace SharpSvn {
 	{
 		Default			= 0,
 		FsFs			= 1,
-		BerkeleyDb		= 2
+		BerkeleyDB		= 2
 	};
 
 	public enum class SvnRepositoryCompatibility
@@ -305,5 +305,20 @@ namespace SharpSvn {
 		CariageReturn,
 		Windows = CariageReturnLineFeed,
 		Unix = LineFeed
+	};
+
+	public enum class SvnConflictReason
+	{
+		None=0,
+		/// <summary>local edits are already present</summary>
+		Edited	= svn_wc_conflict_reason_edited,
+		/// <summary>another object is in the way</summary>
+		Obstructed = svn_wc_conflict_reason_obstructed,
+		/// <summary>object is already schedule-delete</summary>
+		Deleted = svn_wc_conflict_reason_deleted,
+		/// <summary>object is unknown or missing</summary>
+		Missing = svn_wc_conflict_reason_missing,
+		/// <summary>object is unversioned</summary>
+		Unversioned = svn_wc_conflict_reason_unversioned
 	};
 }

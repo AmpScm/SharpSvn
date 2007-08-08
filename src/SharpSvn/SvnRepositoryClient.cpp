@@ -9,6 +9,7 @@ using namespace SharpSvn::Apr;
 
 
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnRepositoryClient.DeleteRepository(System.String,SharpSvn.SvnDeleteRepositoryArgs):System.Boolean")];
+[module: SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Scope="member", Target="SharpSvn.SvnRepositoryFilesystem.FsFs", MessageId="Member")];
 
 SvnRepositoryClient::SvnRepositoryClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
@@ -62,13 +63,13 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 		fs_config,
 		SVN_FS_CONFIG_BDB_TXN_NOSYNC,
 		APR_HASH_KEY_STRING,
-		(args->BerkeleyDbNoFSyncAtCommit ? "1" : "0"));
+		(args->BerkeleyDBNoFSyncAtCommit ? "1" : "0"));
 
 	apr_hash_set(
 		fs_config,
 		SVN_FS_CONFIG_BDB_LOG_AUTOREMOVE,
 		APR_HASH_KEY_STRING,
-		(args->BerkeleyDbKeepTransactionLogs ? "0" : "1"));
+		(args->BerkeleyDBKeepTransactionLogs ? "0" : "1"));
 
 
 	switch(args->RepositoryType)
@@ -80,7 +81,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 			APR_HASH_KEY_STRING,
 			SVN_FS_TYPE_FSFS);
 		break;
-	case SvnRepositoryFilesystem::BerkeleyDb:
+	case SvnRepositoryFilesystem::BerkeleyDB:
 		apr_hash_set(
 			fs_config,
 			SVN_FS_CONFIG_FS_TYPE,

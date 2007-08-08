@@ -1,14 +1,9 @@
 #include "stdafx.h"
-#include "SvnBase.h"
 
-#include "AprPool.h"
+#include "SvnAll.h"
+
 #include "svn_dso.h"
 #include "svn_utf.h"
-
-#include <apr-1/apr_general.h>
-
-#include "AprArray.h"
-#include "SvnTarget.h"
 
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
@@ -30,8 +25,7 @@ void SvnBase::EnsureLoaded()
 		apr_initialize(); // First
 		svn_dso_initialize(); // Before first pool
 
-		apr_pool_t* pool;
-		apr_pool_create(&pool, NULL);
+		apr_pool_t* pool = svn_pool_create(nullptr);
 		svn_utf_initialize(pool);
 		svn_fs_initialize(pool);
 

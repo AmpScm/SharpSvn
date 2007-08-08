@@ -1648,7 +1648,7 @@ namespace SharpSvn {
 		}
 
 
-		property bool BerkeleyDbNoFSyncAtCommit
+		property bool BerkeleyDBNoFSyncAtCommit
 		{
 			bool get()
 			{
@@ -1660,7 +1660,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool BerkeleyDbKeepTransactionLogs
+		property bool BerkeleyDBKeepTransactionLogs
 		{
 			bool get()
 			{
