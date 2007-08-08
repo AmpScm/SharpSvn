@@ -141,7 +141,7 @@ namespace SharpSvn {
 			case SvnRevisionType::Date:
 				return _value == other->_value;
 			default:
-				throw gcnew InvalidOperationException("SvnRevisionType undefined");
+				throw gcnew InvalidOperationException(SharpSvnStrings::InvalidSvnRevisionTypeValue);
 			}
 		}
 
