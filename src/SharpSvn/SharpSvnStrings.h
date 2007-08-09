@@ -48,6 +48,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to All targets must either be Uri or Path.
+    /// </summary>
+    internal: static property System::String^  AllTargetsMustBeUriOrPath {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to This argument is not a valid path. A Uri was specified.
     /// </summary>
     internal: static property System::String^  ArgumentMustBeAPathNotAUri {
@@ -55,9 +62,16 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to &quot;Depth must be Empty, Files or Infinity in 1.4 compatible compilation&quot;.
+    ///   Looks up a localized string similar to Depth must be Empty, Files or Infinity in 1.4 compatible compilation.
     /// </summary>
     internal: static property System::String^  DepthMustBeRecursiveValue {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to The handler is not registered at this time.
+    /// </summary>
+    internal: static property System::String^  HandlerIsNotRegisteredAtThisTime {
         System::String^  get();
     }
     
@@ -65,6 +79,13 @@ ref class SharpSvnStrings {
     ///   Looks up a localized string similar to Invalid SvnRevisionType value specified.
     /// </summary>
     internal: static property System::String^  InvalidSvnRevisionTypeValue {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Invalid Uri string.
+    /// </summary>
+    internal: static property System::String^  InvalidUri {
         System::String^  get();
     }
     
@@ -83,9 +104,23 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to Revision type must be head, date or a specific revision number.
+    /// </summary>
+    internal: static property System::String^  RevisionTypeMustBeHeadDateOrSpecific {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to This function is not available from managed code. .
     /// </summary>
     internal: static property System::String^  SvnAuthManagedPlaceholder {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Svn operation in progress; an SvnClient instance can handle only one command at a time.
+    /// </summary>
+    internal: static property System::String^  SvnClientOperationInProgress {
         System::String^  get();
     }
     
@@ -137,6 +172,10 @@ inline System::Void SharpSvnStrings::Culture::set(::System::Globalization::Cultu
     resourceCulture = value;
 }
 
+inline System::String^  SharpSvnStrings::AllTargetsMustBeUriOrPath::get() {
+    return ResourceManager->GetString(L"AllTargetsMustBeUriOrPath", resourceCulture);
+}
+
 inline System::String^  SharpSvnStrings::ArgumentMustBeAPathNotAUri::get() {
     return ResourceManager->GetString(L"ArgumentMustBeAPathNotAUri", resourceCulture);
 }
@@ -145,8 +184,16 @@ inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {
     return ResourceManager->GetString(L"DepthMustBeRecursiveValue", resourceCulture);
 }
 
+inline System::String^  SharpSvnStrings::HandlerIsNotRegisteredAtThisTime::get() {
+    return ResourceManager->GetString(L"HandlerIsNotRegisteredAtThisTime", resourceCulture);
+}
+
 inline System::String^  SharpSvnStrings::InvalidSvnRevisionTypeValue::get() {
     return ResourceManager->GetString(L"InvalidSvnRevisionTypeValue", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::InvalidUri::get() {
+    return ResourceManager->GetString(L"InvalidUri", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {
@@ -157,8 +204,16 @@ inline System::String^  SharpSvnStrings::ParentWindowHasNoWindowHandle::get() {
     return ResourceManager->GetString(L"ParentWindowHasNoWindowHandle", resourceCulture);
 }
 
+inline System::String^  SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific::get() {
+    return ResourceManager->GetString(L"RevisionTypeMustBeHeadDateOrSpecific", resourceCulture);
+}
+
 inline System::String^  SharpSvnStrings::SvnAuthManagedPlaceholder::get() {
     return ResourceManager->GetString(L"SvnAuthManagedPlaceholder", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::SvnClientOperationInProgress::get() {
+    return ResourceManager->GetString(L"SvnClientOperationInProgress", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::TheTargetIsNotAValidPathTarget::get() {
