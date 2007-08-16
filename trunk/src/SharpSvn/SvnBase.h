@@ -11,7 +11,7 @@ namespace SharpSvn {
 	namespace Apr {
 		ref class AprPool;
 
-		public ref class SvnBase abstract
+		public ref class SvnBase : public System::MarshalByRefObject
 		{
 		private:
 			// Initializes runtime
@@ -22,6 +22,20 @@ namespace SharpSvn {
 
 		protected:
 			SvnBase();
+
+		internal:
+			generic<typename T> static __forceinline array<T>^ NewSingleItemArray(T value)
+			{
+				array<T>^ items = gcnew array<T>(1);
+				items[0] = value;
+
+				return items;
+			}
+
+			generic<typename T> static __forceinline ICollection<T>^ NewSingleItemCollection(T value)
+			{
+				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
+			}
 
 		internal:
 			static String^ Utf8_PtrToString(const char *ptr);
@@ -38,8 +52,14 @@ namespace SharpSvn {
 
 			static Uri^ CanonicalizeUri(Uri^ uri);
 			static String^ CanonicalizePath(String^ path);
+
+			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
+			static apr_array_header_t *AllocPathArray(ICollection<String^>^ strings, AprPool^ pool);
+			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
+			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
 		};
 
+		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
 		public ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
 		{
 		private:
@@ -49,30 +69,11 @@ namespace SharpSvn {
 		protected:
 			SvnHandleBase();
 
-		private protected:
+		/*private protected:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 			static array<char>^ PtrToByteArray(const char* ptr, int length);
-			static bool IsNotUri(String ^path);
-
-		internal:
-			generic<typename T> static __forceinline array<T>^ NewSingleItemArray(T value)
-			{
-				array<T>^ items = gcnew array<T>(1);
-				items[0] = value;
-
-				return items;
-			}
-
-			generic<typename T> static __forceinline ICollection<T>^ NewSingleItemCollection(T value)
-			{
-				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
-			}
-
-			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
-			static apr_array_header_t *AllocPathArray(ICollection<String^>^ strings, AprPool^ pool);
-			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
-			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
+			static bool IsNotUri(String ^path);*/
 		};
 	}
 }

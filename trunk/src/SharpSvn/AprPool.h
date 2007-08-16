@@ -10,6 +10,8 @@ using System::Collections::Generic::ICollection;
 namespace SharpSvn {
 	namespace Apr {
 
+		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true)]
+		[SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
 		ref class AprPool : public SvnHandleBase, public System::IDisposable
 		{
 			ref class AprPoolTag : public IDisposable

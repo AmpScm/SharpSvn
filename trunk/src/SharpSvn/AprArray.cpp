@@ -80,7 +80,7 @@ AprArray<T,R>::~AprArray()
 	_handle = nullptr;
 }
 
-apr_array_header_t *SvnHandleBase::AllocArray(ICollection<String^>^ strings, AprPool^ pool)
+apr_array_header_t *SvnBase::AllocArray(ICollection<String^>^ strings, AprPool^ pool)
 {
 	if(!strings)
 		throw gcnew ArgumentNullException("strings");
@@ -97,7 +97,7 @@ apr_array_header_t *SvnHandleBase::AllocArray(ICollection<String^>^ strings, Apr
 	return aprStrings->Handle;
 }
 
-apr_array_header_t *SvnHandleBase::AllocPathArray(ICollection<String^>^ paths, AprPool^ pool)
+apr_array_header_t *SvnBase::AllocPathArray(ICollection<String^>^ paths, AprPool^ pool)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");

@@ -207,10 +207,6 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\app.rc"
-				>
-			</File>
-			<File
 				RelativePath=".\SharpSvnStrings.h"
 				>
 			</File>
@@ -221,6 +217,7 @@
 			</File>
 			<File
 				RelativePath=".\SharpSvnStrings.txt"
+				DeploymentContent="true"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -579,6 +576,10 @@
 		</Filter>
 		<File
 			RelativePath=".\AssemblyInfo.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\SharpSvn.snk"
 			>
 		</File>
 	</Files>

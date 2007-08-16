@@ -20,7 +20,7 @@ namespace SharpSvn {
 		AuthorizationInitialized
 	};
 
-	public ref class SvnClientContext : public SvnHandleBase
+	public ref class SvnClientContext : public SvnBase
 	{
 		svn_client_ctx_t *_ctx;
 		AprPool^ _pool;
