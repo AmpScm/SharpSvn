@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include "AprException.h"
-
 using namespace System;
 
 namespace SharpSvn {

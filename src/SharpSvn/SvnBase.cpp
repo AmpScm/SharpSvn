@@ -166,26 +166,6 @@ SvnHandleBase::SvnHandleBase()
 {
 }
 
-String^ SvnHandleBase::Utf8_PtrToString(const char *ptr)
-{
-	return SvnBase::Utf8_PtrToString(ptr);
-}
-
-String^ SvnHandleBase::Utf8_PtrToString(const char *ptr, int length)
-{
-	return SvnBase::Utf8_PtrToString(ptr, length);
-}
-
-bool SvnHandleBase::IsNotUri(String ^path)
-{
-	return SvnBase::IsNotUri(path);
-}
-
-array<char>^ SvnHandleBase::PtrToByteArray(const char* ptr, int length)
-{
-	return SvnBase::PtrToByteArray(ptr, length);
-}
-
 ref class SvnCopyTargetMarshaller : public SvnBase, public IItemMarshaller<SvnTarget^>
 {
 public:
@@ -220,7 +200,7 @@ public:
 	}
 };
 
-apr_array_header_t *SvnHandleBase::AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool)
+apr_array_header_t *SvnBase::AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");
@@ -235,7 +215,7 @@ apr_array_header_t *SvnHandleBase::AllocCopyArray(ICollection<SvnTarget^>^ targe
 	return aprTargets->Handle;
 }
 
-apr_array_header_t *SvnHandleBase::AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool)
+apr_array_header_t *SvnBase::AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");

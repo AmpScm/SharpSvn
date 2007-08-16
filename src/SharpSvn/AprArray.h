@@ -27,7 +27,7 @@ namespace SharpSvn {
 
 		generic<typename T, typename R>
 		where R : IItemMarshaller<T>
-		ref class AprArray : public SvnHandleBase
+		ref class AprArray : public SvnBase
 		{
 			AprPool^ _pool;
 			apr_array_header_t *_handle;

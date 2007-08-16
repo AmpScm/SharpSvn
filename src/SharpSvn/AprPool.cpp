@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "AprPool.h"
-#include "AprException.h"
 
 #include <svn_path.h>
 #include <svn_pools.h>

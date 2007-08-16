@@ -163,7 +163,7 @@ namespace SharpSvn {
 	public:
 		SvnCheckOutArgs()
 		{
-			_depth = SvnDepth::Infinity;
+			_depth = SvnDepth::Unknown;
 			_revision = SvnRevision::Head;
 		}
 
@@ -228,7 +228,7 @@ namespace SharpSvn {
 	public:
 		SvnUpdateArgs()
 		{
-			_depth = SvnDepth::Infinity;
+			_depth = SvnDepth::Unknown;
 			_revision = SvnRevision::Head;
 		}
 
@@ -1399,8 +1399,7 @@ namespace SharpSvn {
 	public:
 		SvnMergeArgs()
 		{
-			_depth = SvnDepth::Infinity;
-
+			_depth = SvnDepth::Unknown;
 		}
 
 		property SvnDepth Depth
