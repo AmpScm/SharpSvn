@@ -42,7 +42,11 @@ void AprPool::Destroy()
 				_handle = nullptr;
 
 				if(_destroyPool)
-					apr_pool_destroy(handle);
+				{
+					svn_pool_destroy(handle);
+
+					GC::RemoveMemoryPressure(AprPool::StandardMemoryPressure);
+				}
 			}
 		}
 		else
@@ -59,6 +63,7 @@ AprPool::AprPool(SharpSvn::Apr::AprPool ^parentPool)
 	_parent = parentPool;
 	_handle = svn_pool_create(parentPool->Handle);
 	_destroyPool = true;
+	GC::AddMemoryPressure(AprPool::StandardMemoryPressure);
 }
 
 AprPool::AprPool()
@@ -66,6 +71,7 @@ AprPool::AprPool()
 	_tag = gcnew AprPoolTag();
 	_handle = svn_pool_create(nullptr);
 	_destroyPool = true;
+	GC::AddMemoryPressure(AprPool::StandardMemoryPressure);
 }
 
 void AprPool::Clear()
