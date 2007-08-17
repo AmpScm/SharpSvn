@@ -98,7 +98,7 @@ namespace SharpSvn {
 		};
 
 
-		ref class AprCStrMarshaller sealed : public SvnBase, public IItemMarshaller<String^>
+		ref class AprCStrMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:
 			AprCStrMarshaller()
@@ -124,11 +124,11 @@ namespace SharpSvn {
 
 				const char** ppcStr = (const char**)ptr;
 
-				return Utf8_PtrToString(*ppcStr);
+				return SvnBase::Utf8_PtrToString(*ppcStr);
 			}
 		};
 
-		ref class AprCStrPathMarshaller sealed : public SvnBase, public IItemMarshaller<String^>
+		ref class AprCStrPathMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:
 			AprCStrPathMarshaller()
@@ -154,11 +154,11 @@ namespace SharpSvn {
 				UNUSED_ALWAYS(pool);
 				const char** ppcStr = (const char**)ptr;
 
-				return Utf8_PtrToString(svn_path_local_style(*ppcStr, pool->Handle));
+				return SvnBase::Utf8_PtrToString(svn_path_local_style(*ppcStr, pool->Handle));
 			}
 		};
 
-		ref class AprCanonicalMarshaller sealed : public SvnBase, public IItemMarshaller<String^>
+		ref class AprCanonicalMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:
 			AprCanonicalMarshaller()
@@ -184,11 +184,11 @@ namespace SharpSvn {
 
 				const char** ppcStr = (const char**)ptr;
 
-				return Utf8_PtrToString(*ppcStr);
+				return SvnBase::Utf8_PtrToString(*ppcStr);
 			}
 		};
 
-		ref class AprSvnRevNumMarshaller sealed : public SvnBase, public IItemMarshaller<__int64>
+		ref class AprSvnRevNumMarshaller sealed : public IItemMarshaller<__int64>
 		{
 		public:
 			AprSvnRevNumMarshaller()

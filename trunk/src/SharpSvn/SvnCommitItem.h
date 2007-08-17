@@ -7,7 +7,21 @@ namespace SharpSvn {
 
 	ref class SvnCommitItem;
 
-	public ref class SvnCommitInfo : SvnBase
+	public ref class SvnInfoBase abstract
+	{
+	protected:
+		SvnInfoBase()
+		{
+		}
+
+	internal:
+		static String^ Utf8_PtrToString(const char *ptr)
+		{
+			return SvnBase::Utf8_PtrToString(ptr);
+		}
+	};
+
+	public ref class SvnCommitInfo : SvnInfoBase
 	{
 		initonly __int64 _revision;
 		initonly DateTime _date;
@@ -52,7 +66,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnCommitItem : public SvnBase
+	public ref class SvnCommitItem : public SvnInfoBase
 	{
 		const svn_client_commit_item3_t *_info;
 		String^ _path;
