@@ -106,7 +106,7 @@ namespace SharpSvn {
 			}
 		};
 
-		ref class SvnAuthProviderMarshaller sealed : public SvnBase, public IItemMarshaller<ISvnAuthWrapper^>
+		ref class SvnAuthProviderMarshaller sealed : public IItemMarshaller<ISvnAuthWrapper^>
 		{
 		public:
 			SvnAuthProviderMarshaller()

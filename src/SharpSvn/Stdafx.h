@@ -22,6 +22,9 @@
 
 #pragma warning(pop)
 
+#include <vcclr.h>
+#include <crtdbg.h>
+
 #pragma warning(disable: 4706) // assignment within conditional expression
 
 using System::Runtime::InteropServices::OutAttribute;

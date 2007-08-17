@@ -8,6 +8,57 @@ using namespace SharpSvn::Apr;
 
 #define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
 
+class SvnExceptionContainer sealed
+{
+private:
+	static const INT_PTR _idValue = 0xFF00FFEE;
+	INT_PTR _id;
+	gcroot<Exception^> _exception;
+
+private:
+	static apr_status_t cleanup_handler(void* data)
+	{
+		SvnExceptionContainer* ptr = reinterpret_cast<SvnExceptionContainer*>(data);
+
+		System::Diagnostics::Debug::Assert(ptr->_id == _idValue);
+
+		if(ptr->_id == _idValue)
+		{
+			delete ptr;
+		}
+
+		return 0;
+	}
+
+public:
+	SvnExceptionContainer(Exception^ ex, apr_pool_t* pool)
+	{
+		_id = _idValue;
+		_exception = ex;
+		
+		apr_pool_cleanup_register(pool, this, cleanup_handler, cleanup_handler);
+		
+		_exception = ex;
+	}
+
+	static Exception^ Fetch(const SvnExceptionContainer* container)
+	{
+		System::Diagnostics::Debug::Assert(container && container->_id == _idValue);
+
+		if(container->_id == _idValue)
+			return container->_exception;
+		else
+			return nullptr;
+	}
+
+private:
+	~SvnExceptionContainer()
+	{		
+		System::Diagnostics::Debug::Assert(_id == _idValue);
+		_id = 0;
+		_exception = nullptr;
+	}
+};
 
 
 svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ exception)
@@ -18,11 +69,20 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 
 	if(exception)
 	{
-		AprBaton<Exception^> ^item = gcnew AprBaton<Exception^>(exception);
+		svn_error_t *creator = svn_error_create(SVN_ERR_CANCELLED, nullptr, "{Managed Exception Blob}");
 
-		String^ forwardData = String::Format(System::Globalization::CultureInfo::InvariantCulture, MANAGED_EXCEPTION_PREFIX "{0}", (__int64)item->Handle);
+		if(creator->pool)
+		{
+			char ptrBuffer[32];
 
-		innerError = svn_error_create(SVN_ERR_CANCELLED, nullptr, tmpPool.AllocString(forwardData));
+			SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
+			
+			sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex);			
+
+			char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
+
+			innerError = svn_error_create(SVN_ERR_CANCELLED, creator, forwardData);
+		}
 	}
 
 	return svn_error_create(SVN_ERR_CANCELLED, innerError, tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
@@ -258,10 +318,10 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			{
 				try
 				{
-					String^ message = SvnBase::Utf8_PtrToString(error->message);
-					__int64 handle = __int64::Parse(message->Substring(prefixLength), System::Globalization::CultureInfo::InvariantCulture);
-
-					return AprBaton<Exception^>::Get((IntPtr)handle);
+					void *container = nullptr;
+					sscanf(error->message + prefixLength, "%p", &container);
+					
+					return SvnExceptionContainer::Fetch((SvnExceptionContainer*)container);
 				}
 				catch(Exception^)
 				{}

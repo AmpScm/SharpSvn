@@ -166,7 +166,7 @@ SvnHandleBase::SvnHandleBase()
 {
 }
 
-ref class SvnCopyTargetMarshaller : public SvnBase, public IItemMarshaller<SvnTarget^>
+ref class SvnCopyTargetMarshaller : public IItemMarshaller<SvnTarget^>
 {
 public:
 	SvnCopyTargetMarshaller()

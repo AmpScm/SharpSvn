@@ -75,7 +75,7 @@ SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool)
 //Fxcop bug:
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.SvnCommitItemMarshaller")];
 
-ref class SvnCommitItemMarshaller sealed : public SvnBase, public IItemMarshaller<SvnCommitItem^>
+ref class SvnCommitItemMarshaller sealed : public IItemMarshaller<SvnCommitItem^>
 {
 public:
 	SvnCommitItemMarshaller()
