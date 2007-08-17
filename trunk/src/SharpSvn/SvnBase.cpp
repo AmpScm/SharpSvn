@@ -8,8 +8,9 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
+#pragma unmanaged
 static bool _aprInitialized = false;
-static int _myLen = 0;
+#pragma managed
 
 static SvnBase::SvnBase()
 {

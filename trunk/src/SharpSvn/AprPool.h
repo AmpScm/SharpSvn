@@ -14,6 +14,8 @@ namespace SharpSvn {
 		[SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
 		ref class AprPool : public SvnHandleBase, public System::IDisposable
 		{
+			static const __int64 StandardMemoryPressure = 512*1024;
+
 			ref class AprPoolTag : public IDisposable
 			{
 			private:
