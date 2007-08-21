@@ -97,6 +97,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to {This line was not parsable as Utf8}.
+    /// </summary>
+    internal: static property System::String^  NonUtf8ConvertableLine {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to The parent window object has no Win32 handle.
     /// </summary>
     internal: static property System::String^  ParentWindowHasNoWindowHandle {
@@ -198,6 +205,10 @@ inline System::String^  SharpSvnStrings::InvalidUri::get() {
 
 inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {
     return ResourceManager->GetString(L"ItemInListIsNull", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NonUtf8ConvertableLine::get() {
+    return ResourceManager->GetString(L"NonUtf8ConvertableLine", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::ParentWindowHasNoWindowHandle::get() {

@@ -677,6 +677,12 @@ public:
 		bool TryGetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo);
 
 	public:
+		void Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);
+		bool Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBlameEventArgs^>^ blameHandler);
+		void GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list);
+		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] IList<SvnBlameEventArgs^>^% list);
+
+	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
 		Uri^ GetUriFromWorkingCopy(String^ path);
 

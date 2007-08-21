@@ -538,7 +538,8 @@ namespace SharpSvn.Tests
 				}
 
 				client.Add(diffFile);
-				client.Commit(diffFile);
+				SvnCommitInfo ci;
+				client.Commit(diffFile, out ci);
 
 				using (StreamWriter sw = File.CreateText(diffFile))
 				{
@@ -574,6 +575,33 @@ namespace SharpSvn.Tests
 					});
 
 				Assert.That(visited);
+
+				int n = 0;
+
+				client.Blame(new SvnPathTarget(diffFile), delegate(object sender, SvnBlameEventArgs e)
+				{					
+					Assert.That(e.Author, Is.EqualTo(Environment.UserName));
+					Assert.That(e.LineNumber, Is.EqualTo((long)n));
+					switch (n)
+					{
+						case 0:
+						case 1:
+						case 3:
+						case 4:
+							Assert.That(e.Revision, Is.EqualTo(ci.Revision));
+							break;
+						case 2:
+							Assert.That(e.Revision, Is.EqualTo(info.Revision));
+							break;
+						default:
+							Assert.That(false, "EOF");
+							break;
+					}
+					Assert.That(e.Line, Is.Not.Null);
+					n++;
+				});
+
+				Assert.That(n, Is.EqualTo(5), "Blame receiver received 5 lines");
 			}
 		}
 
@@ -709,7 +737,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.RepositorySize, Is.EqualTo(-1L));
 						Assert.That(e.RepositoryRoot, Is.EqualTo(ReposUri));
 						Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-						Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.None));
+						Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Normal));
 						Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
 						Assert.That(e.WorkingCopySize, Is.EqualTo(0L));
 						visited = true;
@@ -742,7 +770,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.RepositorySize, Is.EqualTo(0L));
 					Assert.That(e.RepositoryRoot, Is.EqualTo(ReposUri));
 					Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-					Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.None));
+					Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Normal));
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
 					Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
 					visited = true;
