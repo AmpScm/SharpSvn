@@ -217,7 +217,6 @@
 			</File>
 			<File
 				RelativePath=".\SharpSvnStrings.txt"
-				DeploymentContent="true"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
