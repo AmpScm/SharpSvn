@@ -1613,6 +1613,98 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnBlameArgs : public SvnClientArgs
+	{
+		SvnRevision ^_from;
+		SvnRevision ^_to;
+		SvnIgnoreSpacing _ignoreSpace;
+		bool _ignoreEol;
+		bool _ignoreMime;
+
+	public:
+		SvnBlameArgs()
+		{
+			_from = SvnRevision::Zero;
+			_to = SvnRevision::Head;
+		}
+
+	public:
+		event EventHandler<SvnBlameEventArgs^>^ BlameHandler;
+
+	protected public:
+		virtual void OnBlameHandler(SvnBlameEventArgs^ e)
+		{
+			BlameHandler(this, e);
+		}
+
+	public:
+		property SvnRevision^ Start
+		{
+			SvnRevision^ get()
+			{
+				return _from;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(!value)
+					throw gcnew ArgumentNullException("value");
+
+				_from = value;
+			}
+		}
+
+		property SvnRevision^ End
+		{
+			SvnRevision^ get()
+			{
+				return _to;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(!value)
+					throw gcnew ArgumentNullException("value");
+
+				_to = value;
+			}
+		}
+
+		property SvnIgnoreSpacing IgnoreSpacing
+		{
+			SvnIgnoreSpacing get()
+			{
+				return _ignoreSpace;
+			}
+			void set(SvnIgnoreSpacing value)
+			{
+				_ignoreSpace = value;
+			}
+		}
+
+		property bool IgnoreLineEndings
+		{
+			bool get()
+			{
+				return _ignoreEol;
+			}
+			void set(bool value)
+			{
+				_ignoreEol = value;
+			}
+		}
+
+		property bool IgnoreMimeType
+		{
+			bool get()
+			{
+				return _ignoreMime;
+			}
+			void set(bool value)
+			{
+				_ignoreMime = value;
+			}
+		}
+	};
+
 	public ref class SvnAddToChangeListArgs : public SvnClientArgs
 	{
 	public:

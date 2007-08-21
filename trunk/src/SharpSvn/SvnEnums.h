@@ -86,7 +86,7 @@ namespace SharpSvn {
 
 	public enum class SvnNotifyAction
 	{
-		Add				= svn_wc_notify_add,
+		Add				= svn_wc_notify_add, // =0
 		Copy			= svn_wc_notify_copy,
 		Delete			= svn_wc_notify_delete,
 		Restore			= svn_wc_notify_restore,
@@ -152,7 +152,8 @@ namespace SharpSvn {
 
 	public enum class SvnLockState
 	{
-		None		= 0,
+		None		= svn_wc_notify_lock_state_inapplicable,
+		Unknown		= svn_wc_notify_lock_state_unknown,
 		Unchanged	= svn_wc_notify_lock_state_unchanged,
 		Locked		= svn_wc_notify_lock_state_locked,
 		Unlocked	= svn_wc_notify_lock_state_unlocked
@@ -208,18 +209,16 @@ namespace SharpSvn {
 
 	public enum class SvnSchedule
 	{
-		/// <summary>Zero value; probably same as normal</summary>
-		None = 0,
 		/// <summary> Nothing special here </summary>
-		Normal			= svn_wc_schedule_normal,
+		Normal			= svn_wc_schedule_normal - svn_wc_schedule_normal,
 		/// <summary> Slated for addition </summary>
-		Add				= svn_wc_schedule_add,
+		Add				= svn_wc_schedule_add - svn_wc_schedule_normal,
 
 		/// <summary> Slated for deletion </summary>
-		Delete			= svn_wc_schedule_delete,
+		Delete			= svn_wc_schedule_delete - svn_wc_schedule_normal,
 
 		/// <summary> Slated for replacement (delete + add) </summary>
-		Replace			= svn_wc_schedule_replace
+		Replace			= svn_wc_schedule_replace - svn_wc_schedule_normal
 	};
 
 	[Flags]
@@ -320,5 +319,14 @@ namespace SharpSvn {
 		Missing = svn_wc_conflict_reason_missing,
 		/// <summary>object is unversioned</summary>
 		Unversioned = svn_wc_conflict_reason_unversioned
+	};
+
+	public enum class SvnIgnoreSpacing
+	{
+		// Default the none value to zero
+
+		None		= svn_diff_file_ignore_space_none   - svn_diff_file_ignore_space_none,
+		IgnoreSpace = svn_diff_file_ignore_space_change - svn_diff_file_ignore_space_none,
+		IgnoreAll	= svn_diff_file_ignore_space_all	- svn_diff_file_ignore_space_all
 	};
 }

@@ -456,6 +456,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_Blame.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Cat.cpp"
 					>
 				</File>
