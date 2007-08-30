@@ -4,6 +4,7 @@
 using namespace System;
 using System::Collections::Generic::IList;
 using System::Collections::Generic::ICollection;
+using System::Collections::Generic::IDictionary;
 
 namespace SharpSvn {
 	ref class SvnTarget;
@@ -57,6 +58,8 @@ namespace SharpSvn {
 			static apr_array_header_t *AllocPathArray(ICollection<String^>^ strings, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
+
+			static IDictionary<String^, Object^>^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
@@ -68,12 +71,6 @@ namespace SharpSvn {
 
 		protected:
 			SvnHandleBase();
-
-		/*private protected:
-			static String^ Utf8_PtrToString(const char *ptr);
-			static String^ Utf8_PtrToString(const char *ptr, int length);
-			static array<char>^ PtrToByteArray(const char* ptr, int length);
-			static bool IsNotUri(String ^path);*/
 		};
 	}
 }

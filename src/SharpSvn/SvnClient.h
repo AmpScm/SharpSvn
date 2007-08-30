@@ -647,11 +647,6 @@ namespace SharpSvn {
 	public:
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
-	internal:
-		// Internal for now; should probably be refactored to be more usefull
-		void RevisionPropertyList(SvnUriTarget^ target, EventHandler<SvnRevisionPropertyListEventArgs^>^ listHandler);
-		bool RevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, EventHandler<SvnRevisionPropertyListEventArgs^>^ listHandler);
-	public:
 		void GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list);
 		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] IDictionary<String^, Object^>^% list);
 #pragma endregion

@@ -1569,7 +1569,7 @@ namespace SharpSvn {
 	{
 		initonly String^ _path;
 		apr_hash_t* _propHash;
-		SortedList<String^, Object^>^ _properties;
+		IDictionary<String^, Object^>^ _properties;
 		AprPool^ _pool;
 
 	internal:
@@ -1600,26 +1600,10 @@ namespace SharpSvn {
 		{
 			IDictionary<String^, Object^>^ get()
 			{
-				if(!_properties && _propHash)
-				{
-					_properties = gcnew SortedList<String^, Object^>();
+				if(!_properties && _propHash && _pool)
+					_properties = SvnBase::CreatePropertyDictionary(_propHash, _pool);
 
-					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _propHash); hi; hi = apr_hash_next(hi))
-					{
-						const char* pKey;
-						apr_ssize_t keyLen;
-						const svn_string_t *propVal;
-
-						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
-
-						String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
-						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
-
-						_properties->Add(key, value);
-					}
-				}
-
-				return safe_cast<IDictionary<String^, Object^>^>(_properties);
+				return _properties;
 			}
 		}
 
@@ -1649,7 +1633,7 @@ namespace SharpSvn {
 	{
 		initonly String^ _path;
 		apr_hash_t* _propHash;
-		SortedList<String^, Object^>^ _properties;
+		IDictionary<String^, Object^>^ _properties;
 		AprPool^ _pool;
 
 	internal:
@@ -1669,26 +1653,10 @@ namespace SharpSvn {
 		{
 			IDictionary<String^, Object^>^ get()
 			{
-				if(!_properties && _propHash)
-				{
-					_properties = gcnew SortedList<String^, Object^>();
-
-					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _propHash); hi; hi = apr_hash_next(hi))
-					{
-						const char* pKey;
-						apr_ssize_t keyLen;
-						const svn_string_t *propVal;
-
-						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
-
-						String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
-						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
-
-						_properties->Add(key, value);
-					}
-				}
-
-				return safe_cast<IDictionary<String^, Object^>^>(_properties);
+				if(!_properties && _propHash && _pool)
+					_properties = SvnBase::CreatePropertyDictionary(_propHash, _pool);
+				
+				return _properties;
 			}
 		}
 
