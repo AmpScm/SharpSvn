@@ -230,3 +230,29 @@ apr_array_header_t *SvnBase::AllocCopyArray(System::Collections::IEnumerable^ ta
 
 	return aprTargets->Handle;
 }
+
+IDictionary<String^, Object^>^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool)
+{
+	if(!propHash)
+		throw gcnew ArgumentNullException("propHash");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	SortedList<String^, Object^>^ _properties = gcnew SortedList<String^, Object^>();
+
+	for (apr_hash_index_t* hi = apr_hash_first(pool->Handle, propHash); hi; hi = apr_hash_next(hi))
+	{
+		const char* pKey;
+		apr_ssize_t keyLen;
+		const svn_string_t *propVal;
+
+		apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
+
+		String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
+		Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
+
+		_properties->Add(key, value);
+	}
+
+	return safe_cast<IDictionary<String^, Object^>^>(_properties);
+}
