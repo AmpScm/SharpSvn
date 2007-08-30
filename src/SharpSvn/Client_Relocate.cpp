@@ -33,26 +33,16 @@ bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_error_t *r = svn_client_relocate(
-			pool.AllocPath(path),
-			pool.AllocCanonical(from->ToString()),
-			pool.AllocCanonical(to->ToString()),
-			!args->NonRecursive,
-			CtxHandle,
-			pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_relocate(
+		pool.AllocPath(path),
+		pool.AllocCanonical(from->ToString()),
+		pool.AllocCanonical(to->ToString()),
+		!args->NonRecursive,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }

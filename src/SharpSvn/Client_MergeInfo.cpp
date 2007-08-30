@@ -21,36 +21,25 @@ bool SvnClient::GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
+	AprPool pool(%_pool);
 	mergeInfo = nullptr;
 
-	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
+	apr_hash_t* svnMergeInfo = nullptr;
+
+	svn_error_t* err = svn_client_get_mergeinfo(
+		&svnMergeInfo,
+		pool.AllocString(target->TargetName),
+		target->Revision->AllocSvnRevision(%pool),
+		CtxHandle,
+		pool.Handle);
+
+	if(!err)
 	{
-		apr_hash_t* svnMergeInfo = nullptr;
-
-		svn_error_t* err = svn_client_get_mergeinfo(
-			&svnMergeInfo,
-			pool.AllocString(target->ToString()),
-			target->Revision->AllocSvnRevision(%pool),
-			CtxHandle,
-			pool.Handle);
-
-		if(!err)
-		{
-			mergeInfo = gcnew SvnMergeInfo(target, svnMergeInfo);
-		}
-
-		return args->HandleResult(err);
+		mergeInfo = gcnew SvnMergeInfo(target, svnMergeInfo);
 	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+
+	return args->HandleResult(err);
 }
 
 bool SvnClient::TryGetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo)

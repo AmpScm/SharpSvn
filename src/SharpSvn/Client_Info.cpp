@@ -54,12 +54,9 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	// We allow a null infoHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
+
 	if(infoHandler)
 		args->Info += infoHandler;
 	try
@@ -87,8 +84,6 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(infoHandler)
 			args->Info -= infoHandler;
 	}

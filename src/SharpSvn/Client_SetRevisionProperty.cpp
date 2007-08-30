@@ -1,0 +1,136 @@
+#include "stdafx.h"
+#include "SvnAll.h"
+
+using namespace SharpSvn::Apr;
+using namespace SharpSvn;
+using namespace System::Collections::Generic;
+
+void SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if(!value)
+		throw gcnew ArgumentNullException("value");
+
+	SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), value);
+}
+
+void SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if(!bytes)
+		throw gcnew ArgumentNullException("bytes");
+
+	SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), bytes);
+}
+
+bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if(!value)
+		throw gcnew ArgumentNullException("value");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	AprPool pool(%_pool);
+
+	return InternalSetRevisionProperty(target, 
+		propertyName, 
+		// Subversion does no normalization on the property value; so we have to do this before sending it
+		// to the server
+		propertyName->StartsWith("svn:") ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
+		args,
+		%pool);
+}
+
+bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, IList<char>^ bytes)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if(!bytes)
+		throw gcnew ArgumentNullException("bytes");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	AprPool pool(%_pool);
+
+	array<char> ^byteArray = safe_cast<array<char>>(bytes);
+
+	if(!byteArray)
+	{
+		byteArray = gcnew array<char>(bytes->Count);
+
+		bytes->CopyTo(byteArray, 0);
+	}
+
+	return InternalSetRevisionProperty(target, 
+		propertyName, 
+		pool.AllocSvnString(byteArray),
+		args,
+		%pool);
+}
+
+void SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+
+	DeleteRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs());
+}
+
+bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	AprPool pool(%_pool);
+
+	return InternalSetRevisionProperty(target, 
+		propertyName, 
+		nullptr,
+		args,
+		%pool);
+}
+
+bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
+	ArgsStore store(this, args);
+
+	svn_revnum_t set_rev = 0;
+
+	svn_error_t *r = svn_client_revprop_set(
+		pool->AllocString(propertyName), 
+		value, 
+		pool->AllocString(target->TargetName),
+		target->Revision->AllocSvnRevision(pool),
+		&set_rev,
+		args->Force,
+		CtxHandle,
+		pool->Handle);
+
+	return args->HandleResult(r);
+}

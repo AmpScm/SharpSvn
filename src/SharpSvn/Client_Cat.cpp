@@ -29,31 +29,21 @@ bool SvnClient::Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args)
 		throw gcnew ObjectDisposedException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);
-	_currentArgs = args;
-	try
-	{
-		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		svn_error_t *r = svn_client_cat2(
-			wrapper.Handle,
-			pool.AllocString(target->TargetName),
-			&pegRev,
-			&rev,
-			CtxHandle,
-			pool.Handle);
+	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+	svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_cat2(
+		wrapper.Handle,
+		pool.AllocString(target->TargetName),
+		&pegRev,
+		&rev,
+		CtxHandle,
+		pool.Handle);
 
+	return args->HandleResult(r);
 }

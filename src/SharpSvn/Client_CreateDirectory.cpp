@@ -49,30 +49,20 @@ bool SvnClient::CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryA
 	}
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
-		svn_commit_info_t* commitInfo = nullptr;
 
-		svn_error_t *r = svn_client_mkdir3(
-			&commitInfo,
-			aprPaths->Handle,
-			args->MakeParents,
-			CtxHandle,
-			pool.Handle);
+	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
+	svn_commit_info_t* commitInfo = nullptr;
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_mkdir3(
+		&commitInfo,
+		aprPaths->Handle,
+		args->MakeParents,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
 
 void SvnClient::RemoteCreateDirectory(Uri^ uri)
@@ -131,39 +121,28 @@ bool SvnClient::RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirector
 	int i = 0;
 
 	for each(Uri^ uri in uris)
-		{
-			if(uri == nullptr)
-				throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
-			uriData[i++] = uri->ToString();
-		}
+	{
+		if(uri == nullptr)
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
+		uriData[i++] = uri->ToString();
+	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
-		svn_commit_info_t* commit_info = nullptr;
 
-		svn_error_t *r = svn_client_mkdir3(
-			&commit_info,
-			aprPaths->Handle,
-			args->MakeParents,
-			CtxHandle,
-			pool.Handle);
+	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
+	svn_commit_info_t* commit_info = nullptr;
 
-		if(commit_info)
-			commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+	svn_error_t *r = svn_client_mkdir3(
+		&commit_info,
+		aprPaths->Handle,
+		args->MakeParents,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	if(commit_info)
+		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
+	return args->HandleResult(r);
 }

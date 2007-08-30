@@ -103,32 +103,22 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	EnsureState(SvnContextState::ConfigLoaded);
+	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
+	ArgsStore store(this, args);
 
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+	svn_commit_info_t* pInfo = nullptr;
 
-	_currentArgs = args;
-	try
-	{
-		svn_commit_info_t* pInfo = nullptr;
+	svn_error_t *r = svn_client_propset3(
+		&pInfo,
+		pool->AllocString(propertyName),
+		value,
+		pool->AllocPath(path),
+		IsRecursive(args->Depth),
+		args->SkipChecks,
+		(svn_revnum_t)args->BaseRevision,
+		CtxHandle,
+		pool->Handle);
 
+	return args->HandleResult(r);
 
-		svn_error_t *r = svn_client_propset3(
-			&pInfo,
-			pool->AllocString(propertyName),
-			value,
-			pool->AllocPath(path),
-			IsRecursive(args->Depth),
-			args->SkipChecks,
-			(svn_revnum_t)args->BaseRevision,
-			CtxHandle,
-			pool->Handle);
-
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
 }

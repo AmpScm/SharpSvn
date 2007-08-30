@@ -53,7 +53,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 	{
 		SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
 		aa->ThrowOnError = args->ThrowOnError;
-		aa->Depth = args->Depth;
+		aa->Depth = SvnDepth::Infinity;
 
 		aa->AllowUnversionedObstructions = true; // This is the trick
 
@@ -116,33 +116,23 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	commitInfo = nullptr;
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_commit_info_t *commit_info = nullptr;
 
-		svn_error_t *r = svn_client_import3(
-			&commit_info,
-			pool.AllocPath(path),
-			pool.AllocCanonical(target->ToString()),
-			IsNotRecursive(args->Depth),
-			args->NoIgnore,
-			args->IgnoreUnknownNodeTypes,
-			CtxHandle,
-			pool.Handle);
+	svn_commit_info_t *commit_info = nullptr;
 
-		if(commit_info)
-			commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+	svn_error_t *r = svn_client_import3(
+		&commit_info,
+		pool.AllocPath(path),
+		pool.AllocCanonical(target->ToString()),
+		!args->Recursive,
+		args->NoIgnore,
+		args->IgnoreUnknownNodeTypes,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	if(commit_info)
+		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+
+	return args->HandleResult(r);
 }

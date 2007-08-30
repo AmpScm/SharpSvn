@@ -45,19 +45,14 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 		throw gcnew ArgumentNullException("to");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
+	ArgsStore store(this, args);
+	AprPool pool(%_pool);
 
 	String^ tempOut = System::IO::Path::GetTempFileName();
 	String^ tempErr = System::IO::Path::GetTempFileName();
 
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
 	apr_file_t* tmpOut = nullptr;
 	apr_file_t* tmpErr = nullptr;
-
-	AprPool pool(%_pool);
-	_currentArgs = args;
-
 	try
 	{
 		apr_int32_t openFlags = APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE | APR_BUFFERED | APR_FOPEN_WRITE;
@@ -107,8 +102,6 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(tmpErr)
 			apr_file_close(tmpErr);
 
@@ -148,18 +141,14 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 		throw gcnew ArgumentNullException("to");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
+	ArgsStore store(this, args);
+	AprPool pool(%_pool);
 
 	String^ tempOut = System::IO::Path::GetTempFileName();
 	String^ tempErr = System::IO::Path::GetTempFileName();
 
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
 	apr_file_t* tmpOut = nullptr;
 	apr_file_t* tmpErr = nullptr;
-
-	AprPool pool(%_pool);
-	_currentArgs = args;
 
 	try
 	{
@@ -199,8 +188,6 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(tmpErr)
 			apr_file_close(tmpErr);
 

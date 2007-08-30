@@ -30,25 +30,15 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_error_t *r = svn_client_resolved2(
-			pool.AllocPath(path),
-			IsRecursive(args->Depth),
-			(svn_accept_t)args->Accept,
-			CtxHandle,
-			pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_resolved2(
+		pool.AllocPath(path),
+		args->Recursive,
+		(svn_accept_t)args->Accept,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }

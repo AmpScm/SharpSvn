@@ -97,45 +97,33 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+	ArgsStore store(this, args);
+	AprPool pool(%_pool);
 
 	revision = -1;
 
-	AprPool pool(%_pool);
-	_currentArgs = args;
+	svn_revnum_t resultRev = 0;
+	svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
+	svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-	try
+	svn_error_t* r = svn_client_export4(
+		&resultRev,
+		pool.AllocString(from->TargetName),
+		pool.AllocPath(toPath),
+		&pegRev,
+		&rev,
+		args->Overwrite,
+		args->IgnoreExternals,
+		(svn_depth_t)args->Depth,
+		GetEolPtr(args->LineStyle),
+		CtxHandle,
+		pool.Handle);
+
+	if(args->HandleResult(r))
 	{
-		svn_revnum_t resultRev = 0;
-		svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
-		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
-
-		svn_error_t* r = svn_client_export4(
-			&resultRev,
-			pool.AllocString(from->TargetName),
-			pool.AllocPath(toPath),
-			&pegRev,
-			&rev,
-			args->Overwrite,
-			args->IgnoreExternals,
-			(svn_depth_t)args->Depth,
-			GetEolPtr(args->LineStyle),
-			CtxHandle,
-			pool.Handle);
-
-		if(args->HandleResult(r))
-		{
-			revision = resultRev;
-			return true;
-		}
-		else
-			return false;
+		revision = resultRev;
+		return true;
 	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
-
+	else
+		return false;
 }

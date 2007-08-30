@@ -55,33 +55,24 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	}
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_commit_info_t* pInfo = nullptr;
 
-		svn_error_t *r = svn_client_move5(
-			&pInfo,
-			AllocPathArray(sourcePaths, %pool),
-			pool.AllocPath(toPath),
-			args->Force,
-			args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
-			args->MakeParents,
-			CtxHandle,
-			pool.Handle);
+	svn_commit_info_t* pInfo = nullptr;
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_move5(
+		&pInfo,
+		AllocPathArray(sourcePaths, %pool),
+		pool.AllocPath(toPath),
+		args->Force,
+		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
+		args->MakeParents,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
+
 
 void SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri)
 {
@@ -182,32 +173,22 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_commit_info_t* commitInfoPtr = nullptr;
 
-		svn_error_t *r = svn_client_move5(
-			&commitInfoPtr,
-			AllocArray(uris, %pool),
-			pool.AllocString(toUri->ToString()),
-			args->Force,
-			args->AlwaysMoveAsChild || (sourceUris->Count > 1),
-			args->MakeParents,
-			CtxHandle,
-			pool.Handle);
+	svn_commit_info_t* commitInfoPtr = nullptr;
 
-		commitInfo = commitInfoPtr ? gcnew SvnCommitInfo(commitInfoPtr, %pool) : nullptr;
+	svn_error_t *r = svn_client_move5(
+		&commitInfoPtr,
+		AllocArray(uris, %pool),
+		pool.AllocString(toUri->ToString()),
+		args->Force,
+		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
+		args->MakeParents,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	commitInfo = commitInfoPtr ? gcnew SvnCommitInfo(commitInfoPtr, %pool) : nullptr;
+
+	return args->HandleResult(r);
 }

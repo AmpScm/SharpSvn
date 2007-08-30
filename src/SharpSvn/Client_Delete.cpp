@@ -51,31 +51,21 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 	}
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
-		svn_commit_info_t* commitInfo = nullptr;
 
-		svn_error_t *r = svn_client_delete3(
-			&commitInfo,
-			aprPaths->Handle,
-			args->Force,
-			args->KeepLocal,
-			CtxHandle,
-			pool.Handle);
+	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
+	svn_commit_info_t* commitInfo = nullptr;
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_delete3(
+		&commitInfo,
+		aprPaths->Handle,
+		args->Force,
+		args->KeepLocal,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
 
 void SvnClient::RemoteDelete(Uri^ uri)
@@ -148,32 +138,22 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
-		svn_commit_info_t* commit_info = nullptr;
 
-		svn_error_t *r = svn_client_delete3(
-			&commit_info,
-			aprPaths->Handle,
-			args->Force,
-			args->KeepLocal,
-			CtxHandle,
-			pool.Handle);
+	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
+	svn_commit_info_t* commit_info = nullptr;
 
-		if(commit_info)
-			commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+	svn_error_t *r = svn_client_delete3(
+		&commit_info,
+		aprPaths->Handle,
+		args->Force,
+		args->KeepLocal,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	if(commit_info)
+		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+
+	return args->HandleResult(r);
 }

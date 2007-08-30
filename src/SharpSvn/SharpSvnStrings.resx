@@ -144,6 +144,9 @@
   <data name="ParentWindowHasNoWindowHandle" xml:space="preserve">
     <value>The parent window object has no Win32 handle</value>
   </data>
+  <data name="RevisionNumberMustBeAtLeast0" xml:space="preserve">
+    <value>Revision number must be at least 0</value>
+  </data>
   <data name="RevisionTypeMustBeHeadDateOrSpecific" xml:space="preserve">
     <value>Revision type must be head, date or a specific revision number</value>
   </data>

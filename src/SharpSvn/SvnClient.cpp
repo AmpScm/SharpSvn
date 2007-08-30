@@ -178,7 +178,7 @@ void SvnClient::OnNotify(SvnNotifyEventArgs^ e)
 
 void SvnClient::HandleClientConflictResolver(SvnConflictEventArgs^ e)
 {
-	SvnClientArgsWithConflict^ conflictArgs = dynamic_cast<SvnClientArgsWithConflict^>(CurrentArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnClientArgsWithConflict^ conflictArgs = dynamic_cast<SvnClientArgsWithConflict^>(CurrentArgs); // C#: _currentArgs as SvnClientArgsWithConflict
 
 	if(conflictArgs)
 		conflictArgs->OnConflict(e);

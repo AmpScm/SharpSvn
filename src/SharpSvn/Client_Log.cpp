@@ -185,12 +185,8 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
 
 	if(logHandler)
 		args->Log += logHandler;
@@ -221,8 +217,6 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(logHandler)
 			args->Log -= logHandler;
 	}

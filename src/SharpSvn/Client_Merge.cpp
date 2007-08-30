@@ -29,40 +29,30 @@ bool SvnClient::Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPa
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		apr_array_header_t *merge_options = nullptr;
 
-		svn_opt_revision_t mergeFromRev = mergeFrom->Revision->ToSvnRevision();
-		svn_opt_revision_t mergeToRev = mergeTo->Revision->ToSvnRevision();
+	apr_array_header_t *merge_options = nullptr;
 
-		svn_error_t *r = svn_client_merge3(
-			pool.AllocString(mergeFrom->TargetName),
-			&mergeFromRev,
-			pool.AllocString(mergeTo->TargetName),
-			&mergeToRev,
-			pool.AllocPath(targetPath),
-			(svn_depth_t)args->Depth,
-			args->IgnoreAncestry,
-			args->Force,
-			args->RecordOnly,
-			args->DryRun,
-			merge_options,
-			CtxHandle,
-			pool.Handle);
+	svn_opt_revision_t mergeFromRev = mergeFrom->Revision->ToSvnRevision();
+	svn_opt_revision_t mergeToRev = mergeTo->Revision->ToSvnRevision();
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_merge3(
+		pool.AllocString(mergeFrom->TargetName),
+		&mergeFromRev,
+		pool.AllocString(mergeTo->TargetName),
+		&mergeToRev,
+		pool.AllocPath(targetPath),
+		(svn_depth_t)args->Depth,
+		args->IgnoreAncestry,
+		args->Force,
+		args->RecordOnly,
+		args->DryRun,
+		merge_options,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
 
 void SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath)
@@ -89,37 +79,27 @@ bool SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Str
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
-		svn_opt_revision_t fromRev = from->ToSvnRevision();
-		svn_opt_revision_t toRev = to->ToSvnRevision();
 
-		svn_error_t *r = svn_client_merge_peg3(
-			pool.AllocString(source->TargetName),
-			&fromRev,
-			&toRev,
-			&pegRev,
-			pool.AllocPath(targetPath),
-			(svn_depth_t)args->Depth,
-			args->IgnoreAncestry,
-			args->Force,
-			args->RecordOnly,
-			args->DryRun,
-			args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
-			CtxHandle,
-			pool.Handle);
+	svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
+	svn_opt_revision_t fromRev = from->ToSvnRevision();
+	svn_opt_revision_t toRev = to->ToSvnRevision();
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_merge_peg3(
+		pool.AllocString(source->TargetName),
+		&fromRev,
+		&toRev,
+		&pegRev,
+		pool.AllocPath(targetPath),
+		(svn_depth_t)args->Depth,
+		args->IgnoreAncestry,
+		args->Force,
+		args->RecordOnly,
+		args->DryRun,
+		args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }

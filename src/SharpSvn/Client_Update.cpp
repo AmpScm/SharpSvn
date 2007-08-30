@@ -118,41 +118,31 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a SvnClient instance can handle only one command at a time");
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
+
+	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
+
+	apr_array_header_t* revs = nullptr;
+	svn_opt_revision_t uRev = args->Revision->ToSvnRevision();
+
+	svn_error_t *r = svn_client_update3(revisions ? &revs : nullptr,
+		aprPaths->Handle,
+		&uRev,
+		(svn_depth_t)args->Depth,
+		args->IgnoreExternals,
+		args->AllowUnversionedObstructions,
+		CtxHandle,
+		pool.Handle);
+
+	if(args->HandleResult(r) && revisions)
 	{
-		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
+		AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 
-		apr_array_header_t* revs = nullptr;
-		svn_opt_revision_t uRev = args->Revision->ToSvnRevision();
+		revisions = safe_cast<IList<__int64>^>(aprRevs->ToArray());
 
-		svn_error_t *r = svn_client_update3(revisions ? &revs : nullptr,
-			aprPaths->Handle,
-			&uRev,
-			(svn_depth_t)args->Depth,
-			args->IgnoreExternals,
-			args->AllowUnversionedObstructions,
-			CtxHandle,
-			pool.Handle);
-
-		if(args->HandleResult(r) && revisions)
-		{
-			AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
-
-			revisions = safe_cast<IList<__int64>^>(aprRevs->ToArray());
-
-			return true;
-		}
-
-		return false;
+		return true;
 	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+
+	return false;
 }
