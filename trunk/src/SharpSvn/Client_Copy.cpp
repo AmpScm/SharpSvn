@@ -56,31 +56,21 @@ bool SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, Svn
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_commit_info_t* pInfo = nullptr;
 
-		svn_error_t *r = svn_client_copy4(
-			&pInfo,
-			AllocCopyArray(sourceTargets, %pool),
-			pool.AllocPath(toPath),
-			args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
-			args->MakeParents,
-			CtxHandle,
-			pool.Handle);
+	svn_commit_info_t* pInfo = nullptr;
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_copy4(
+		&pInfo,
+		AllocCopyArray(sourceTargets, %pool),
+		pool.AllocPath(toPath),
+		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
+		args->MakeParents,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
 
 void SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
@@ -176,35 +166,25 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_commit_info_t* pInfo = nullptr;
 
-		svn_error_t *r = svn_client_copy4(
-			&pInfo,
-			AllocCopyArray(sourceTargets, %pool),
-			pool.AllocCanonical(toUri->ToString()),
-			args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
-			args->MakeParents,
-			CtxHandle,
-			pool.Handle);
+	svn_commit_info_t* pInfo = nullptr;
 
-		if(pInfo)
-			commitInfo = gcnew SvnCommitInfo(pInfo, %pool);
-		else
-			commitInfo = nullptr;
+	svn_error_t *r = svn_client_copy4(
+		&pInfo,
+		AllocCopyArray(sourceTargets, %pool),
+		pool.AllocCanonical(toUri->ToString()),
+		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
+		args->MakeParents,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	if(pInfo)
+		commitInfo = gcnew SvnCommitInfo(pInfo, %pool);
+	else
+		commitInfo = nullptr;
+
+	return args->HandleResult(r);
 }
 

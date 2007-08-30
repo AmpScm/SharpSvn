@@ -363,7 +363,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnSwitchArgs : public SvnClientArgs
+	public ref class SvnSwitchArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
 		bool _allowUnversionedObstructions;
@@ -893,24 +893,23 @@ namespace SharpSvn {
 
 	public ref class SvnImportArgs : public SvnClientArgsWithCommit
 	{
-		SvnDepth _depth;
+		bool _notRecursive;
 		bool _noIgnore;
 		bool _ignoreUnknownNodeTypes;
 	public:
 		SvnImportArgs()
 		{
-			_depth = SvnDepth::Infinity;
 		}
 
-		property SvnDepth Depth
+		property bool Recursive
 		{
-			SvnDepth get()
+			bool get()
 			{
-				return _depth;
+				return !_notRecursive;
 			}
-			void set(SvnDepth value)
+			void set(bool value)
 			{
-				_depth = value;
+				_notRecursive = !value;
 			}
 		}
 
@@ -1041,31 +1040,29 @@ namespace SharpSvn {
 
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
-		SvnDepth _depth;
+		bool _recursive;
 		SvnAccept _accept;
 
 	public:
 		SvnResolvedArgs()
 		{
-			_depth = SvnDepth::Empty;
 			_accept = SvnAccept::None;
 		}
 
 		SvnResolvedArgs(SvnAccept accept)
 		{
-			_depth = SvnDepth::Empty;
 			_accept = accept;
 		}
 
-		property SvnDepth Depth
+		property bool Recursive
 		{
-			SvnDepth get()
+			bool get()
 			{
-				return _depth;
+				return _recursive;
 			}
-			void set(SvnDepth value)
+			void set(bool value)
 			{
-				_depth = value;
+				_recursive = value;
 			}
 		}
 
@@ -1304,6 +1301,55 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnSetRevisionPropertyArgs : public SvnClientArgs
+	{
+		bool _force;
+	public:
+		SvnSetRevisionPropertyArgs()
+		{
+		}		
+
+		property bool Force
+		{
+			bool get()
+			{ 
+				return _force; 
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+	};
+
+	public ref class SvnGetRevisionPropertyArgs : public SvnClientArgs
+	{
+	public:
+		SvnGetRevisionPropertyArgs()
+		{
+		}		
+	};
+
+	public ref class SvnRevisionPropertyListArgs : public SvnClientArgs
+	{
+		SvnDepth _depth;
+
+	public:
+		event EventHandler<SvnRevisionPropertyListEventArgs^>^ PropertyList;
+
+	protected public:
+		virtual void OnPropertyList(SvnRevisionPropertyListEventArgs^ e)
+		{
+			PropertyList(this, e);
+		}
+
+	public:
+		SvnRevisionPropertyListArgs()
+		{
+		}
+	};
+
 
 	public ref class SvnLockArgs : public SvnClientArgs
 	{

@@ -31,28 +31,19 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
+
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_error_t *r = svn_client_add4(
-			pool.AllocPath(path),
-			IsRecursive(args->Depth),
-			args->Force,
-			args->NoIgnore,
-			args->AddParents,
-			CtxHandle,
-			pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_add4(
+		pool.AllocPath(path),
+		IsRecursive(args->Depth),
+		args->Force,
+		args->NoIgnore,
+		args->AddParents,
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }

@@ -53,12 +53,8 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
 
 	if(blameHandler)
 		args->BlameHandler += blameHandler;
@@ -87,7 +83,6 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	}
 	finally
 	{
-		_currentArgs = nullptr;
 		if(blameHandler)
 			args->BlameHandler -= blameHandler;
 	}

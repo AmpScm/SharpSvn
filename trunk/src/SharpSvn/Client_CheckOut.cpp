@@ -60,37 +60,27 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_revnum_t version = 0;
 
-		//svn_opt_peg_Re
-		svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
-		svn_opt_revision_t coRev = args->Revision->ToSvnRevision();
+	svn_revnum_t version = 0;
 
-		svn_error_t* err = svn_client_checkout3(&version,
-			pool.AllocString(url->TargetName),
-			pool.AllocPath(path),
-			&pegRev,
-			&coRev,
-			(svn_depth_t)args->Depth,
-			args->IgnoreExternals,
-			args->AllowUnversionedObstructions,
-			CtxHandle,
-			pool.Handle);
+	//svn_opt_peg_Re
+	svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
+	svn_opt_revision_t coRev = args->Revision->ToSvnRevision();
 
-		revision = version;
+	svn_error_t* err = svn_client_checkout3(&version,
+		pool.AllocString(url->TargetName),
+		pool.AllocPath(path),
+		&pegRev,
+		&coRev,
+		(svn_depth_t)args->Depth,
+		args->IgnoreExternals,
+		args->AllowUnversionedObstructions,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(err);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	revision = version;
+
+	return args->HandleResult(err);
 }

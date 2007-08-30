@@ -619,9 +619,47 @@ namespace SharpSvn {
 		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
 
+
 	public:
 		/////////////////////////////////////////
-#pragma region // GetProperty Client Command
+#pragma region // SetRevisionProperty Client Command
+		void SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value);
+		void SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes);
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value);
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, IList<char>^ bytes);
+		void DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName);
+		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args);
+
+	internal:
+		bool InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool);
+
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // GetRevisionProperty Client Command
+		void GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value);
+		void GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% value);
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value);
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] IList<char>^% value);
+#pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Properties List Client Command
+	internal:
+		// Internal for now; should probably be refactored to be more usefull
+		void RevisionPropertyList(SvnUriTarget^ target, EventHandler<SvnRevisionPropertyListEventArgs^>^ listHandler);
+		bool RevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, EventHandler<SvnRevisionPropertyListEventArgs^>^ listHandler);
+	public:
+		void GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list);
+		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] IDictionary<String^, Object^>^% list);
+#pragma endregion
+
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Merge Client Command
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
@@ -692,5 +730,27 @@ public:
 
 	private:
 		~SvnClient();
+
+		// Used as auto-dispose class for setting the _currentArgs property
+		ref class ArgsStore sealed
+		{
+			initonly SvnClient^ _client;
+		public:
+			ArgsStore(SvnClient^ client, SvnClientArgs^ args)
+			{
+				if(!args)
+					throw gcnew ArgumentNullException("args");
+				else if(client->_currentArgs)
+					throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+
+				client->_currentArgs = args;
+				_client = client;
+			}
+
+			~ArgsStore()
+			{
+				_client->_currentArgs = nullptr;
+			}
+		};
 	};
 }

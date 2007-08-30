@@ -58,59 +58,47 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 	properties = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+	svn_opt_revision_t rev = args->Revision->ToSvnRevision();
+	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+	svn_revnum_t actualRev = 0;
 
-	_currentArgs = args;
+	apr_hash_t* pHash = nullptr;
 
-	try
+	svn_error_t *r = svn_client_propget3(
+		&pHash,
+		pool.AllocString(propertyName),
+		pool.AllocString(target->TargetName),
+		&pegRev,
+		&rev,
+		&actualRev,
+		IsRecursive(args->Depth),
+		CtxHandle,
+		pool.Handle);
+
+	if(pHash)
 	{
-		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
-		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-		svn_revnum_t actualRev = 0;
+		int count = apr_hash_count(pHash);
 
-		apr_hash_t* pHash = nullptr;
+		Dictionary<SvnTarget^, String^>^ rd = gcnew Dictionary<SvnTarget^, String^>(count);
 
-		svn_error_t *r = svn_client_propget3(
-			&pHash,
-			pool.AllocString(propertyName),
-			pool.AllocString(target->TargetName),
-			&pegRev,
-			&rev,
-			&actualRev,
-			IsRecursive(args->Depth),
-			CtxHandle,
-			pool.Handle);
-
-		if(pHash)
+		for(apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
 		{
-			int count = apr_hash_count(pHash);
+			const char* pKey;
+			apr_ssize_t keyLen;
+			const svn_string_t *propVal;
 
-			Dictionary<SvnTarget^, String^>^ rd = gcnew Dictionary<SvnTarget^, String^>(count);
+			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-			for(apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
-			{
-				const char* pKey;
-				apr_ssize_t keyLen;
-				const svn_string_t *propVal;
-
-				apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
-
-				rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen)), Utf8_PtrToString(propVal->data, (int)propVal->len));
-			}
-
-			properties = safe_cast<IDictionary<SvnTarget^, String^>^>(rd);
+			rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen)), Utf8_PtrToString(propVal->data, (int)propVal->len));
 		}
 
-		return args->HandleResult(r);
+		properties = safe_cast<IDictionary<SvnTarget^, String^>^>(rd);
 	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+
+	return args->HandleResult(r);
 }
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, IDictionary<SvnTarget^, IList<char>^>^% properties)
@@ -122,60 +110,48 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 	properties = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+	svn_opt_revision_t rev = args->Revision->ToSvnRevision();
+	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 
-	_currentArgs = args;
+	apr_hash_t* pHash = nullptr;
+	svn_revnum_t actualRev;
 
-	try
+	svn_error_t *r = svn_client_propget3(
+		&pHash,
+		pool.AllocString(propertyName),
+		pool.AllocString(target->TargetName),
+		&pegRev,
+		&rev,
+		&actualRev,
+		IsRecursive(args->Depth),
+		CtxHandle,
+		pool.Handle);
+
+	if(pHash)
 	{
-		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
-		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+		int count = apr_hash_count(pHash);
 
-		apr_hash_t* pHash = nullptr;
-		svn_revnum_t actualRev;
+		Dictionary<SvnTarget^, IList<char>^>^ rd = gcnew Dictionary<SvnTarget^, IList<char>^>(count);
 
-		svn_error_t *r = svn_client_propget3(
-			&pHash,
-			pool.AllocString(propertyName),
-			pool.AllocString(target->TargetName),
-			&pegRev,
-			&rev,
-			&actualRev,
-			IsRecursive(args->Depth),
-			CtxHandle,
-			pool.Handle);
-
-		if(pHash)
+		for(apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
 		{
-			int count = apr_hash_count(pHash);
+			const char* pKey;
+			apr_ssize_t keyLen;
+			const svn_string_t *propVal;
 
-			Dictionary<SvnTarget^, IList<char>^>^ rd = gcnew Dictionary<SvnTarget^, IList<char>^>(count);
+			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-			for(apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
-			{
-				const char* pKey;
-				apr_ssize_t keyLen;
-				const svn_string_t *propVal;
-
-				apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
-
-				IList<char>^ list = safe_cast<IList<char>^>(PtrToByteArray(propVal->data, (int)propVal->len));
-				rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen)), list);
-			}
-
-			properties = safe_cast<IDictionary<SvnTarget^, IList<char>^>^>(rd);
+			IList<char>^ list = safe_cast<IList<char>^>(PtrToByteArray(propVal->data, (int)propVal->len));
+			rd->Add(SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen)), list);
 		}
 
-		return args->HandleResult(r);
+		properties = safe_cast<IDictionary<SvnTarget^, IList<char>^>^>(rd);
 	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+
+	return args->HandleResult(r);
 }
 
 bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^% value)

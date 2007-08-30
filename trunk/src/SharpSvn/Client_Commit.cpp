@@ -88,37 +88,27 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException("Operation in progress; a SvnClient instance can handle only one command at a time");
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
-		svn_commit_info_t *commitInfoPtr = nullptr;
+	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
-		svn_error_t *r = svn_client_commit4(
-			&commitInfoPtr,
-			aprPaths->Handle,
-			(svn_depth_t)args->Depth,
-			args->KeepLocks,
-			args->KeepChangelist,
-			args->Changelist ? pool.AllocString(args->Changelist) : nullptr,
-			CtxHandle,
-			pool.Handle);
+	svn_commit_info_t *commitInfoPtr = nullptr;
 
-		if(commitInfoPtr && !r)
-			commitInfo = gcnew SvnCommitInfo(commitInfoPtr, %pool);
-		else
-			commitInfo = nullptr;
+	svn_error_t *r = svn_client_commit4(
+		&commitInfoPtr,
+		aprPaths->Handle,
+		(svn_depth_t)args->Depth,
+		args->KeepLocks,
+		args->KeepChangelist,
+		args->Changelist ? pool.AllocString(args->Changelist) : nullptr,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	if(commitInfoPtr && !r)
+		commitInfo = gcnew SvnCommitInfo(commitInfoPtr, %pool);
+	else
+		commitInfo = nullptr;
+
+	return args->HandleResult(r);
 }

@@ -47,26 +47,17 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_error_t *r = svn_client_add_to_changelist(
-			AllocPathArray(paths, %pool),
-			pool.AllocString(changeList),
-			CtxHandle,
-			pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+
+	svn_error_t *r = svn_client_add_to_changelist(
+		AllocPathArray(paths, %pool),
+		pool.AllocString(changeList),
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
 
 void SvnClient::RemoveFromChangeList(String^ path, String^ changeList)
@@ -111,26 +102,16 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ change
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_error_t *r = svn_client_remove_from_changelist(
-			AllocPathArray(paths, %pool),
-			pool.AllocString(changeList),
-			CtxHandle,
-			pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	svn_error_t *r = svn_client_remove_from_changelist(
+		AllocPathArray(paths, %pool),
+		pool.AllocString(changeList),
+		CtxHandle,
+		pool.Handle);
+
+	return args->HandleResult(r);
 }
 
 void SvnClient::ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
@@ -186,12 +167,9 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
+
 	if(changeListHandler)
 		args->ListChangeList += changeListHandler;
 	try
@@ -208,8 +186,6 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(changeListHandler)
 			args->ListChangeList -= changeListHandler;
 	}
@@ -238,36 +214,26 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 	list = nullptr;
 
 	EnsureState(SvnContextState::ConfigLoaded);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
+
+	apr_array_header_t* aprResult = nullptr;
+
+	svn_error_t* err = svn_client_get_changelist(
+		&aprResult,
+		pool.AllocString(changeList),
+		pool.AllocPath(rootPath),
+		CtxHandle,
+		pool.Handle);
+
+	if(!err && aprResult)
 	{
-		apr_array_header_t* aprResult = nullptr;
+		AprArray<String^,AprCStrPathMarshaller^> paths(aprResult, %pool);
 
-		svn_error_t* err = svn_client_get_changelist(
-			&aprResult,
-			pool.AllocString(changeList),
-			pool.AllocPath(rootPath),
-			CtxHandle,
-			pool.Handle);
-
-		if(!err && aprResult)
-		{
-			AprArray<String^,AprCStrPathMarshaller^> paths(aprResult, %pool);
-
-			list = safe_cast<IList<String^>^>(paths.ToArray());
-		}
-
-		return args->HandleResult(err);
+		list = safe_cast<IList<String^>^>(paths.ToArray());
 	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+
+	return args->HandleResult(err);
 }
 
 void SvnClient::GetChangeList(String^ changeList, String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list)

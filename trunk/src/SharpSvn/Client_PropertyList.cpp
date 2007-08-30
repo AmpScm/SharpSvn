@@ -54,12 +54,9 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 	// We allow a null listHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
+
 	if(listHandler)
 		args->PropertyList += listHandler;
 	try
@@ -68,7 +65,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* err = svn_client_proplist3(
-			pool.AllocString(target->ToString()),
+			pool.AllocString(target->TargetName),
 			&pegrev,
 			&rev,
 			(svn_depth_t)args->Depth,
@@ -81,8 +78,6 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(listHandler)
 			args->PropertyList -= listHandler;
 	}

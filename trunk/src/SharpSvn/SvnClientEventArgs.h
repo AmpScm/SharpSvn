@@ -1612,7 +1612,7 @@ namespace SharpSvn {
 
 						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-						String^ key = SvnBase::Utf8_PtrToString(pKey);
+						String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
 						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
 
 						_properties->Add(key, value);
@@ -1631,6 +1631,74 @@ namespace SharpSvn {
 				if(keepProperties)
 				{
 					GC::KeepAlive(Path);
+					GC::KeepAlive(Properties);
+					//					GC::KeepAlive(Entry);
+				}
+			}
+			finally
+			{
+				_propHash = nullptr;
+				_pool = nullptr;
+
+				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+	public ref class SvnRevisionPropertyListEventArgs : public SvnCancelEventArgs
+	{
+		initonly String^ _path;
+		apr_hash_t* _propHash;
+		SortedList<String^, Object^>^ _properties;
+		AprPool^ _pool;
+
+	internal:
+		SvnRevisionPropertyListEventArgs(apr_hash_t* prop_hash, AprPool ^pool)
+		{
+			if(!prop_hash)
+				throw gcnew ArgumentNullException("prop_hash");
+			else if(!pool)
+				throw gcnew ArgumentNullException("pool");
+
+			_propHash = prop_hash;
+			_pool = pool;
+		}
+
+	public:
+		property IDictionary<String^, Object^>^ Properties
+		{
+			IDictionary<String^, Object^>^ get()
+			{
+				if(!_properties && _propHash)
+				{
+					_properties = gcnew SortedList<String^, Object^>();
+
+					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _propHash); hi; hi = apr_hash_next(hi))
+					{
+						const char* pKey;
+						apr_ssize_t keyLen;
+						const svn_string_t *propVal;
+
+						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
+
+						String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
+						Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
+
+						_properties->Add(key, value);
+					}
+				}
+
+				return safe_cast<IDictionary<String^, Object^>^>(_properties);
+			}
+		}
+
+	public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if(keepProperties)
+				{
 					GC::KeepAlive(Properties);
 					//					GC::KeepAlive(Entry);
 				}

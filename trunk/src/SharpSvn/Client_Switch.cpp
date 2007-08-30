@@ -61,34 +61,24 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
-	try
-	{
-		svn_revnum_t rev = 0;
-		svn_opt_revision_t toRev = target->Revision->ToSvnRevision();
 
-		svn_error_t *r = svn_client_switch2(
-			&rev,
-			pool.AllocPath(path),
-			pool.AllocString(target->TargetName),
-			&toRev,
-			(svn_depth_t)args->Depth,
-			args->IgnoreExternals,
-			args->AllowUnversionedObstructions,
-			CtxHandle,
-			pool.Handle);
+	svn_revnum_t rev = 0;
+	svn_opt_revision_t toRev = target->Revision->ToSvnRevision();
 
-		revision = rev;
+	svn_error_t *r = svn_client_switch2(
+		&rev,
+		pool.AllocPath(path),
+		pool.AllocString(target->TargetName),
+		&toRev,
+		(svn_depth_t)args->Depth,
+		args->IgnoreExternals,
+		args->AllowUnversionedObstructions,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(r);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	revision = rev;
+
+	return args->HandleResult(r);
 }

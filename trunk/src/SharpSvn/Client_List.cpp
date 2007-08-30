@@ -55,12 +55,9 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	// We allow a null listHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
+
 	if(listHandler)
 		args->List += listHandler;
 	try
@@ -84,8 +81,6 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(listHandler)
 			args->List -= listHandler;
 	}

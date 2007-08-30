@@ -109,30 +109,19 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
 
-	try
-	{
-		AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+	AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
-		svn_error_t* err = svn_client_unlock(
-			aprTargets->Handle,
-			args->BreakLock,
-			CtxHandle,
-			pool.Handle);
+	svn_error_t* err = svn_client_unlock(
+		aprTargets->Handle,
+		args->BreakLock,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(err);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	return args->HandleResult(err);
 }
 
 bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
@@ -154,28 +143,17 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
 
-	try
-	{
-		AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+	AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
-		svn_error_t* err = svn_client_unlock(
-			aprTargets->Handle,
-			args->BreakLock,
-			CtxHandle,
-			pool.Handle);
+	svn_error_t* err = svn_client_unlock(
+		aprTargets->Handle,
+		args->BreakLock,
+		CtxHandle,
+		pool.Handle);
 
-		return args->HandleResult(err);
-	}
-	finally
-	{
-		_currentArgs = nullptr;
-	}
+	return args->HandleResult(err);
 }

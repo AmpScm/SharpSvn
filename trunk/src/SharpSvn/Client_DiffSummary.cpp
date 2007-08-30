@@ -58,12 +58,8 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
 
 	if(summaryHandler)
 		args->SummaryHandler += summaryHandler;
@@ -88,7 +84,6 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	}
 	finally
 	{
-		_currentArgs = nullptr;
 		if(summaryHandler)
 			args->SummaryHandler -= summaryHandler;
 	}

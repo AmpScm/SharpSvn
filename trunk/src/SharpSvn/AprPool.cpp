@@ -256,6 +256,20 @@ const svn_string_t* AprPool::AllocSvnString(String^ value)
 	return pStr;
 }
 
+const svn_string_t* AprPool::AllocUnixSvnString(String^ value)
+{
+	if(!value)
+		value = "";
+
+	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));
+
+	pStr->data = AllocUnixString(value);
+	pStr->len = strlen(pStr->data);
+
+	return pStr;
+}
+
+
 const svn_string_t* AprPool::AllocSvnString(array<char>^ bytes)
 {
 	if(!bytes)

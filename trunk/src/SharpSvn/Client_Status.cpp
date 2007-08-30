@@ -46,12 +46,9 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	// We allow a null statusHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	if(_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	_currentArgs = args;
+
 	if(statusHandler)
 		args->Status += statusHandler;
 	try
@@ -77,8 +74,6 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	}
 	finally
 	{
-		_currentArgs = nullptr;
-
 		if(statusHandler)
 			args->Status -= statusHandler;
 	}
