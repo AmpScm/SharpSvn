@@ -111,6 +111,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to Revision number must be at least 0.
+    /// </summary>
+    internal: static property System::String^  RevisionNumberMustBeAtLeast0 {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to Revision type must be head, date or a specific revision number.
     /// </summary>
     internal: static property System::String^  RevisionTypeMustBeHeadDateOrSpecific {
@@ -213,6 +220,10 @@ inline System::String^  SharpSvnStrings::NonUtf8ConvertableLine::get() {
 
 inline System::String^  SharpSvnStrings::ParentWindowHasNoWindowHandle::get() {
     return ResourceManager->GetString(L"ParentWindowHasNoWindowHandle", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {
+    return ResourceManager->GetString(L"RevisionNumberMustBeAtLeast0", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific::get() {

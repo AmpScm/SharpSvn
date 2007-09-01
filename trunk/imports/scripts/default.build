@@ -8,7 +8,6 @@
 		<variable name="OPENSSL_STATIC" value="1" />
 		<variable name="APR_DECLARE_STATIC" value="1" />
 		<variable name="APU_DECLARE_STATIC" value="1" />
-		<variable name="API_DECLARE_STATIC" value="1" />
 	</setenv>
 
 
@@ -112,13 +111,6 @@
 				<arg line="--non-interactive co" />
 				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
 				<arg value="build/subversion/apr-util" />
-			</exec>
-		</if>
-		<if test="${not directory::exists('build/subversion/apr-iconv')}">
-			<exec program="svn.exe" verbose="true">
-				<arg line="--non-interactive co" />
-				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
-				<arg value="build/subversion/apr-iconv" />
 			</exec>
 		</if>
 		<if test="${not directory::exists('build/subversion/serf')}">
@@ -367,7 +359,6 @@
 					<items basedir="build/subversion">
 						<include name="apr/**/*.dsp" />
 						<include name="apr-util/**/*.dsp" />
-						<include name="apr-iconv/**/*.dsp" />
 					</items>
 				</in>
 				<do>
@@ -387,20 +378,19 @@
 				<in>
 					<items basedir="build/subversion">
 						<include name="**/*.hw" />
+						<include name="apr-util/**/expat.h.in" />
 					</items>
 				</in>
 				<do>
-					<copy file="${winHeader}" tofile="${string::replace(winHeader, '.hw', '.h')}" />
-				</do>
-			</foreach>
-			<foreach item="File" property="winHeader">
-				<in>
-					<items basedir="build/subversion">
-						<include name="**/expat.h.in" />
-					</items>
-				</in>
-				<do>
-					<copy file="${winHeader}" tofile="${string::replace(winHeader, '.h.in', '.h')}" />
+          <property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
+          <if test="${not file::exists(winHeader2)}">
+            <loadfile file="${winHeader}" property="headertext">
+              <filterchain>
+                <replacestring from='#define APU_HAVE_APR_ICONV     1' to='#define APU_HAVE_APR_ICONV     0' />					
+              </filterchain>
+            </loadfile>
+            <echo message="${headertext}" file="${winHeader2}" />
+          </if>
 				</do>
 			</foreach>
 			<touch file="${'build/apr-' + aprVersion +'.prepared'}" />
@@ -490,16 +480,9 @@
 				<arg value="apr-util\xml\expat\lib\xml.vcproj" />
 				<arg value="/p:Configuration=Release" />
 			</exec>
-			<exec program="msbuild.exe" workingdir="build\subversion">
-				<arg value="/nologo" />
-				<arg value="/verbosity:quiet" />
-				<arg value="apr-iconv\apriconv.vcproj" />
-				<arg value="/p:Configuration=Release" />
-			</exec>
 			<if test="${aprVersion &gt;= '1.0'}">
 				<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\LibR\apr.lib" />
 				<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\LibR\aprutil.lib" />
-				<copy file="build\subversion\apr-iconv\LibR\apriconv-1.lib" tofile="build\subversion\apr-iconv\LibR\apriconv.lib" />
 
 				<mkdir dir="build\subversion\apr\release" />
 				<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\release\libapr-1.lib" />
@@ -508,10 +491,6 @@
 				<mkdir dir="build\subversion\apr-util\release" />
 				<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\release\libaprutil.lib" />
 				<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\release\libaprutil-1.lib" />
-
-				<mkdir dir="build\subversion\apr-iconv\release" />
-				<copy file="build\subversion\apr-iconv\LibR\apriconv-1.lib" tofile="build\subversion\apr-iconv\release\libapriconv.lib" />
-				<copy file="build\subversion\apr-iconv\LibR\apriconv-1.lib" tofile="build\subversion\apr-iconv\release\libapriconv-1.lib" />
 			</if>
 			<if test="${aprVersion &lt; '1.0'}">
 				<copy file="build\subversion\apr\LibR\apr.lib" tofile="build\subversion\apr\LibR\libapr.lib" />
@@ -571,13 +550,9 @@
 				<!-- APR 1.* uses new names -->
 				<include name="apr/LibR/*.lib" if="${aprVersion &lt; '1.0'}" />
 				<include name="apr-util/LibR/*.lib" if="${aprVersion &lt; '1.0'}"/>
-				<include name="apr-iconv/LibR/*.lib" if="${aprVersion &lt; '1.0'}"/>
 
 				<include name="apr/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}" />
 				<include name="apr-util/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}"/>
-				<include name="apr-iconv/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}"/>
-
-        
         
 				<include name="apr/LibR/*.pdb" />
 				<include name="apr-util/LibR/*.pdb" />
@@ -607,11 +582,6 @@
 			<fileset basedir="build\subversion\apr-util\include">
 				<include name="**.h" />
       </fileset>
-		</copy>
-		<copy todir="release/include/apr-1">
-      <fileset basedir="build\subversion\apr-iconv\include">
-				<include name="**.h" />
-			</fileset>
 		</copy>
 		<copy todir="release/lib">
       <fileset basedir="${nunitDir}/bin">
