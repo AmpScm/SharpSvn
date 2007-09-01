@@ -6,7 +6,9 @@
 #include <apr-1/apr_version.h>
 #include <apr-1/apu_version.h>
 #include <apr-1/apu_version.h>
+#if (APU_HAVE_APR_ICONV != 0)
 #include <apr-1/api_version.h>
+#endif
 #include <svn_version.h>
 #include <serf/serf.h>
 #include <openssl/opensslv.h>
@@ -34,7 +36,9 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyDescriptionAttribute("SharpSvn (Compiled statically with subversion " SVN_VER_NUMBER
 									   ", apr " APR_VERSION_STRING
 									   ", apr-util " APU_VERSION_STRING
+#if (APU_HAVE_APR_ICONV != 0)
 									   ", apr-iconv " API_VERSION_STRING
+#endif
 									   ", neon " NEON_VERSION
 									   ", serf " SERF_VERSION
 									   " and " OPENSSL_VERSION_TEXT
@@ -108,13 +112,17 @@ using namespace System::Security::Permissions;
 
 
 #if (APR_MAJOR_VERSION == 0) && (APR_MINOR_VERSION == 9)
-#pragma comment(lib, "apr.lib")
-#pragma comment(lib, "apriconv.lib")
-#pragma comment(lib, "aprutil.lib")
+#  pragma comment(lib, "apr.lib")
+#  pragma comment(lib, "aprutil.lib")
+#  if (APU_HAVE_APR_ICONV != 0)
+#    pragma comment(lib, "apriconv.lib")
+#  endif
 #elif (APR_MAJOR_VERSION >= 1)
 #pragma comment(lib, "apr-1.lib")
-#pragma comment(lib, "apriconv-1.lib")
 #pragma comment(lib, "aprutil-1.lib")
+#  if (APU_HAVE_APR_ICONV != 0)
+#    pragma comment(lib, "apriconv-1.lib")
+#  endif
 #else
 #error Only apr 0.9.* and 1.* are supported at this time
 #endif
