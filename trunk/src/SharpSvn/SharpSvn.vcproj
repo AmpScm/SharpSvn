@@ -29,6 +29,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Copying BDB dll"
+				CommandLine="copy /y ..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll &quot;$(TargetDir)\SharpSvn-DB4-4-20-NC.dll&quot;&#x0D;&#x0A;"
+				AdditionalDependencies="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
+				Outputs="$(TargetDir)\SharpSvn-DB4-4-20-NC.dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -69,6 +73,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib"
 				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
+				AssemblyLinkResource="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -114,6 +119,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
+				Description="Copying BDB dll"
+				CommandLine="copy /y ..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll &quot;$(TargetDir)\SharpSvn-DB4-4-20-NC.dll&quot;&#x0D;&#x0A;"
+				AdditionalDependencies="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
+				Outputs="$(TargetDir)\SharpSvn-DB4-4-20-NC.dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -152,6 +161,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib"
 				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
+				AssemblyLinkResource="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 				KeyFile="SharpSvn.snk"
@@ -186,14 +196,6 @@
 		<AssemblyReference
 			RelativePath="System.dll"
 			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-		/>
-		<AssemblyReference
-			RelativePath="System.Data.dll"
-			AssemblyName="System.Data, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=x86"
-		/>
-		<AssemblyReference
-			RelativePath="System.XML.dll"
-			AssemblyName="System.Xml, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 		/>
 		<ProjectReference
 			ReferencedProjectIdentifier="{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
