@@ -870,7 +870,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.Author, Is.EqualTo(Environment.UserName));
 						Assert.That(e.Cancel, Is.False);
 						Assert.That(e.Date, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-						Assert.That(e.LogChildren, Is.EqualTo(0));
+						Assert.That(e.HasChildren, Is.False);
 						switch (n)
 						{
 							case 0:

@@ -870,7 +870,7 @@ namespace SharpSvn {
 		DateTime _date;
 		String^ _message;
 		__int64 _revision;
-		__int64 _nLogChildren;
+		bool _hasChildren;
 
 	internal:
 		SvnLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
@@ -890,7 +890,7 @@ namespace SharpSvn {
 				_date = SvnBase::DateTimeFromAprTime(when);
 
 			_revision = entry->revision;
-			_nLogChildren = entry->nbr_children;
+			_hasChildren = entry->has_children ? true : false;
 		}
 
 	private:
@@ -985,11 +985,11 @@ namespace SharpSvn {
 			}
 		}
 
-		property __int64 LogChildren
+		property bool HasChildren
 		{
-			__int64 get()
+			bool get()
 			{
-				return _nLogChildren;
+				return _hasChildren;
 			}
 		}
 
