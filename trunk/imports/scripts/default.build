@@ -4,12 +4,16 @@
 	<property name="dllPrefix" value="SharpSvn-" />
 	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" />
 
+  <property name="build-WIN32" value="true" />
+  <property name="build-WIN64-X64" value="false" />
+
 	<setenv>
 		<variable name="OPENSSL_STATIC" value="1" />
 		<variable name="APR_DECLARE_STATIC" value="1" />
 		<variable name="APU_DECLARE_STATIC" value="1" />
+		<variable name="MACHINE" value="x86" if="${build-WIN32}" />
+		<variable name="MACHINE" value="x64" if="${build-WIN64-X64}" />
 	</setenv>
-
 
 	<property name="Configuration" value="release" />
 	<property name="Platform" value="win32" />
@@ -217,7 +221,10 @@
 		<if test="${not file::exists('build/openssl-' + opensslVersion +'.finished')}">
 			<exec program="perl.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg value="Configure" />
-				<arg value="VC-WIN32" />
+				<arg value="VC-WIN32" if="${build-WIN32}" />
+				<arg value="VC-WIN64a" if="${build-WIN64-X64}" />
+				<!-- SSLv2 is as deprecated as it gets; the common browsers deny it -->
+				<!-- C options -->
 				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
 				<arg value="-D_USE_32BIT_TIME_T" />
 			</exec>
@@ -346,6 +353,8 @@
 				<filterchain>
 					<replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
 					<replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
+					<!-- Optimize for size over speed; we are IO bound, don't duplicate code for zero -->
+					<replacestring from=" /O2 " to=" /O1 /W3 /GS " /> 
 				</filterchain>
 			</loadfile>
 			<echo file="build/subversion/serf/serf.mak" message="${serfmak}" />
@@ -429,7 +438,13 @@
 					<loadfile file="${project}" property="projtext">
 						<filterchain>
 							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib zlibstat.lib' />
+							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib zlibstat.lib' />							
+							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
+							<replacestring from='Optimization="2"' to='Optimization="1"' />
+							<replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
+							<replacestring from='InlineFunctionExpansion="2"' to='' />
+							<!-- Increase security a little little bit in some cases -->
+							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
 						</filterchain>
 					</loadfile>
 					<echo message="${projtext}" file="${project}" />
