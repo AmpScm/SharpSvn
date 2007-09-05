@@ -17,8 +17,8 @@
 		<variable name="OPENSSL_STATIC" value="1" />
 		<variable name="APR_DECLARE_STATIC" value="1" />
 		<variable name="APU_DECLARE_STATIC" value="1" />
-		<variable name="MACHINE" value="x86" if="${build-WIN32}" />
-		<variable name="MACHINE" value="x64" if="${build-WIN64-X64}" />
+		<variable name="MACHINE" value="x86" if="${platform=='win32'}" />
+		<variable name="MACHINE" value="x64" if="${platform=='x64'}" />
 	</setenv>
 
 	<property name="Configuration" value="release" />
@@ -157,10 +157,9 @@
 			<exec program="vcbuild.exe" workingdir="build/db-${dbVersion}/build_win32">
 				<arg value="/nologo" />
 				<arg value="db_dll.vcproj" />
-				<arg value="${Configuration}|${platform}" if="${platform=='win32'}"/>
-				<arg value="${Configuration} AMD64|x64" if="${platform=='x64'}"/>
+				<arg value="${Configuration}|WIN32" />
 			</exec>
-			<copy todir="release/lib">
+			<copy todir="${release}/lib">
 				<fileset basedir="build/db-${dbVersion}/build_win32/${Configuration}">
 					<include name="*.dll" />
 					<include name="*.lib" />
@@ -168,7 +167,7 @@
 					<include name="*.pdb" />
 				</fileset>
 			</copy>
-			<copy todir="release/include">
+			<copy todir="${release}/include">
 				<fileset basedir="build/db-${dbVersion}/build_win32">
 					<include name="*.h" />
 				</fileset>
@@ -198,17 +197,17 @@
 			<exec program="vcbuild.exe" workingdir="build/zlib-${zlibVersion}/projects/visualc6">
 				<arg value="/nologo" />
 				<arg value="zlib.vcproj" />
-				<arg value="LIB Release|Win32" />
+				<arg value="LIB Release|${platform}" />
 			</exec>
-			<copy todir="release/lib">
-				<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/Win32_Dll_Release">
+			<copy todir="${release}/lib">
+				<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/${platform}_Dll_Release">
 					<include name="*.dll" />
 					<include name="*.lib" />
 					<include name="*.exp" />
 					<include name="*.pdb" />
 				</fileset>
 			</copy>
-			<copy todir="release/include">
+			<copy todir="${release}/include">
 				<fileset basedir="build/db-${dbVersion}/build_win32">
 					<include name="*.h" />
 				</fileset>
@@ -219,7 +218,7 @@
 				</fileset>
 			</copy>
 			<copy file="build/zlib-${zlibVersion}/projects/visualc6/Win32_LIB_Release/zlib.lib" tofile="build/zlib-${zlibVersion}/zlibstat.lib" />
-			<copy file="build/zlib-${zlibVersion}/projects/visualc6/Win32_LIB_Release/zlib.lib" tofile="release/lib/zlibstat.lib" />
+			<copy file="build/zlib-${zlibVersion}/projects/visualc6/Win32_LIB_Release/zlib.lib" tofile="${release}/lib/zlibstat.lib" />
 			<touch file="${'build/zlib-' + zlibVersion +'.finished'}" />
 		</if>
 	</target>
@@ -228,17 +227,14 @@
 			<exec program="perl.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg value="Configure" />
 				<arg value="VC-WIN32" if="${platform=='win32'}" />
-				<arg value="VC-WIN64A" if="${platform=='x64'}" />
-				<arg value="VC-WIN64i" if="${platform=='ia64'}" />
+				<arg value="VC-WIN64" if="${platform=='x64'}" />
+				<!-- SSLv2 is as deprecated as it gets; the common browsers deny it -->
 				<!-- C options -->
 				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
-				<arg value="-D_USE_32BIT_TIME_T" if="${platform=='win32'}" />
+				<arg value="-D_USE_32BIT_TIME_T" />
 			</exec>
-			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}" if="${platform=='win32'}">
+			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg line="/c ms\do_masm.bat" />
-			</exec>
-			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}" if="${platform=='x64'}">
-				<arg line="/c ms\do_win64a.bat" />
 			</exec>
 			<exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg line="-f ms\nt.mak" />
@@ -257,20 +253,20 @@
 					</exec>
 				</do>
 			</foreach>
-			<copy todir="release/lib">
+			<copy todir="${release}/lib">
 				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
 					<include name="*.lib" />
 					<include name="*.exp" />
 					<include name="*.pdb" />
 				</fileset>
 			</copy>
-			<copy todir="release/lib">
+			<copy todir="${release}/lib">
 				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
 					<include name="${dllPrefix}*.dll" />
 					<include name="${dllPrefix}*.pdb" />
 				</fileset>
 			</copy>
-			<copy todir="release/include">
+			<copy todir="${release}/include">
 				<fileset basedir="build/openssl-${opensslVersion}/inc32">
 					<include name="**" />
 				</fileset>
@@ -325,12 +321,12 @@
 					<include name="${Configuration}_${platform}\*.obj" />
 				</sources>
 			</lib>
-			<copy todir="release/lib">
+			<copy todir="${release}/lib">
 				<fileset basedir="${sqliteDir}/${Configuration}_${platform}">
 					<include name="*.lib" />
 				</fileset>
 			</copy>
-			<copy todir="release/include">
+			<copy todir="${release}/include">
 				<fileset basedir="${sqliteDir}">
 					<include name="sqlite3.h" />
 				</fileset>
@@ -356,22 +352,32 @@
 			<touch file="${'build/neon-' + neonVersion +'.prepared'}" />			
 		</if>
 	</target>
-	<target name="prepare-serf" depends="checkout">
+	<target name="prepare-serf" depends="checkout, prepare-neon">
 		<if test="${not file::exists('build/serf-' + serfVersion +'.prepared')}">
-			<loadfile file="build/subversion/serf/serf.mak" property="serfmak">
-				<filterchain>
-					<replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
-					<replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
-					<!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
-					<replacestring from=" /O2 " to=" /O1 /W3 /GS " /> 
-					<!-- Don't include everything in the intermediate library -->
-					<replacestring from="LIB32_OBJS = $(LIB32_OBJS) " to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) " />
-					<!-- Only compile library, the testfiles don't like the small library -->
-					<replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
-				</filterchain>
-			</loadfile>
-			<echo file="build/subversion/serf/serf.mak" message="${serfmak}" />
-			<touch file="${'build/serf-' + serfVersion +'.prepared'}" />
+      <foreach item="File" property="mak">
+        <in>
+          <items basedir="build/subversion">
+            <include name="serf/serf.mak" />
+            <include name="neon/neon.mak" />
+          </items>
+        </in>
+        <do>
+          <loadfile file="${mak}" property="serfmak">
+            <filterchain>
+              <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
+              <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
+              <!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
+              <replacestring from=" /O2 " to=" /O1 /W3 /GS " /> 
+              <!-- Don't include everything in the intermediate library -->
+              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) " to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) " />
+              <!-- Only compile library, the testfiles don't like the small library -->
+              <replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
+            </filterchain>
+          </loadfile>
+          <echo file="${mak}" message="${serfmak}" />
+        </do>
+      </foreach>
+      <touch file="${'build/serf-' + serfVersion +'.prepared'}" />			
 		</if>
 	</target>
 	<target name="upgrade-apr" depends="checkout">
@@ -431,7 +437,7 @@
 				<arg line="-t vcproj" />
 				<arg line="--vsnet-version=2005" />
 				<arg value="--release" />
-				<arg value="--with-berkeley-db=../../release" />
+				<arg value="--with-berkeley-db=../../${release}" />
 				<arg value="--with-openssl=../openssl-${opensslVersion}" />
 				<arg value="--with-zlib=../zlib-${zlibVersion}" />
 				<arg value="--with-serf=serf" />
@@ -494,22 +500,19 @@
 				<arg value="/nologo" />
 				<arg value="/verbosity:quiet" />
 				<arg value="apr\apr.vcproj" />
-				<arg value="/p:Configuration=Release" />
-				<arg value="/p:Platform=${platform}" />
+				<arg value="/p:Configuration=Release|${platform}" />
 			</exec>
 			<exec program="msbuild.exe" workingdir="build\subversion">
 				<arg value="/nologo" />
 				<arg value="/verbosity:quiet" />
 				<arg value="apr-util\aprutil.vcproj" />
-				<arg value="/p:Configuration=Release" />
-				<arg value="/p:Platform=${platform}" />
+				<arg value="/p:Configuration=Release|${platform}" />
 			</exec>
 			<exec program="msbuild.exe" workingdir="build\subversion">
 				<arg value="/nologo" />
 				<arg value="/verbosity:quiet" />
 				<arg value="apr-util\xml\expat\lib\xml.vcproj" />
-				<arg value="/p:Configuration=Release" />
-				<arg value="/p:Platform=${platform}" />
+				<arg value="/p:Configuration=Release|${platform}" />
 			</exec>
 			<if test="${aprVersion &gt;= '1.0'}">
 				<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\LibR\apr.lib" />
@@ -542,7 +545,7 @@
         <arg value="/nologo" />
         <arg value="/verbosity:quiet" />
         <arg value="serf\serf.vcproj" />
-        <arg value="/p:Configuration=Release" />
+        <arg value="/p:Configuration=Release|${platform}" />
       </exec>
       <touch file="${'build/serf-' + serfVersion +'.build'}" />
 		</if>
@@ -556,15 +559,16 @@
         <arg value="/verbosity:quiet" />
         <arg value="subversion_vcnet.sln" />
         <arg value="/p:Configuration=Release" />
+        <arg value="/p:Platform=${platform}" />
         <arg value="/t:__LIBS__" />
       </exec>
       <touch file="${'build/subversion-' + subversionVersion +'.build'}" />
 		</if>
 	</target>
 	<target name="copy-result" depends="build-svn">
-		<copy todir="release/lib" flatten="true">
+		<copy todir="${release}/lib" flatten="true">
 			<fileset basedir="build\subversion">
-				<include name="release/**/*.lib" />
+				<include name="${release}/**/*.lib" />
 				<include name="neon/**/*.lib" />
 				<include name="**/libsvn_*.lib" />
 				<include name="**/lib*.pdb" />
@@ -589,32 +593,32 @@
 				<include name="apr-util/LibR/*.pdb" />
 			</fileset>
 		</copy>
-		<copy todir="release/include">
+		<copy todir="${release}/include">
 			<fileset basedir="build\subversion\subversion\include">
 				<include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="release/include/serf">
+    <copy todir="${release}/include/serf">
 			<fileset basedir="build\subversion\serf">
 				<include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="release/include/neon">
+    <copy todir="${release}/include/neon">
 			<fileset basedir="build\subversion\neon\src">
 				<include name="**/*.h" />
       </fileset>
     </copy>
-		<copy todir="release/include/apr-1">
+		<copy todir="${release}/include/apr-1">
 			<fileset basedir="build\subversion\apr\include">
 				<include name="**.h" />
 			</fileset>
 		</copy>
-		<copy todir="release/include/apr-1">
+		<copy todir="${release}/include/apr-1">
 			<fileset basedir="build\subversion\apr-util\include">
 				<include name="**.h" />
       </fileset>
 		</copy>
-		<copy todir="release/lib">
+		<copy todir="${release}/lib">
       <fileset basedir="${nunitDir}/bin">
         <include name="nunit.framework.dll" />
         <include name="nunit.framework.xml" />
