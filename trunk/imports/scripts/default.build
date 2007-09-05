@@ -15,10 +15,6 @@
 
 	<setenv>
 		<variable name="OPENSSL_STATIC" value="1" />
-		<variable name="APR_DECLARE_STATIC" value="1" />
-		<variable name="APU_DECLARE_STATIC" value="1" />
-		<variable name="MACHINE" value="x86" if="${platform=='win32'}" />
-		<variable name="MACHINE" value="x64" if="${platform=='x64'}" />
 	</setenv>
 
 	<property name="Configuration" value="release" />
@@ -187,6 +183,8 @@
       <loadfile file="build/zlib-${zlibVersion}/projects/visualc6/zlib.vcproj" property="projtext">
 				<filterchain>
 					<replacestring from='PrecompiledHeaderFile=".\Win32_LIB_Release/zlib.pch"' to='PrecompiledHeaderFile=".\Win32_LIB_Release\zlib.pch" DebugInformationFormat="3"' />
+					<replacestring from='"Win32"' to='"${platform}"' if="${platform != 'win32'}" />
+					<replacestring from='|Win32"' to='|${platform}"' if="${platform != 'win32'}" />
 				</filterchain>
 			</loadfile>
 			<echo message="${projtext}" file="build/zlib-${zlibVersion}/projects/visualc6/zlib.vcproj" />
@@ -229,14 +227,15 @@
 			<exec program="perl.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg value="Configure" />
 				<arg value="VC-WIN32" if="${platform=='win32'}" />
-				<arg value="VC-WIN64" if="${platform=='x64'}" />
-				<!-- SSLv2 is as deprecated as it gets; the common browsers deny it -->
-				<!-- C options -->
+				<arg value="VC-WIN64A" if="${platform=='x64'}" />
 				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
-				<arg value="-D_USE_32BIT_TIME_T" />
+				<arg value="-D_USE_32BIT_TIME_T" if="${platform=='win32'}" />
 			</exec>
-			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}">
+			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}" if="${platform=='win32'}">
 				<arg line="/c ms\do_masm.bat" />
+			</exec>
+			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}" if="${platform=='x64'}">
+				<arg line="/c ms\do_win64a.bat" />
 			</exec>
 			<exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
 				<arg line="-f ms\nt.mak" />
@@ -453,6 +452,10 @@
 				<in>
 					<items basedir="build\subversion\build\win32">
 						<include name="**/*.vcproj" />
+						<include name="../../apr/apr.vcproj" />
+						<include name="../../apr-util/aprutil.vcproj" />
+						<include name="../../serf/serf.vcproj" />
+						<include name="../../apr-util/xml/expat/lib/xml.vcproj" />						
 					</items>
 				</in>
 				<do>
@@ -466,6 +469,8 @@
 							<replacestring from='InlineFunctionExpansion="2"' to='' />
 							<!-- Increase security a little little bit in some cases -->
 							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+							<replacestring from='"Win32"' to='"${platform}"' if="${platform != 'win32'}" />
+              <replacestring from='|Win32"' to='|${platform}"' if="${platform != 'win32'}" />
 						</filterchain>
 					</loadfile>
 					<echo message="${projtext}" file="${project}" />
@@ -491,13 +496,18 @@
 					</if>
 				</do>
 			</foreach>
-
+			<loadfile file="build/subversion/subversion_vcnet.sln" property="projtext" if="${platform!='win32'}">
+        <filterchain>
+          <replacestring from='|Win32' to='|${platform}' />
+        </filterchain>
+      </loadfile>
+      <echo message="${projtext}" file="build/subversion/subversion_vcnet.sln" if="${platform!='win32'}" />
 			<touch file="${'build/subversion-' + subversionVersion +'.generated'}" />
 		</if>
 	</target>
 	<target name="build-apr" depends="download,extract,checkout, generate-svnfiles, prepare-apr">
 		<if test="${not file::exists('build/apr-' + aprVersion +'.build')}">
-			<!-- Prepare static builds (require changed build order) -->
+			<!-- Prepare static builds (requires changed build order) -->
 			<exec program="msbuild.exe" workingdir="build\subversion">
 				<arg value="/nologo" />
 				<arg value="/verbosity:quiet" />
