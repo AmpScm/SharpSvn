@@ -22,6 +22,8 @@
 	</setenv>
 
 	<property name="Configuration" value="release" />
+	<property name="release" value="release" if="${platform=='win32'}" />
+	<property name="release" value="release_${platform}" if="${platform!='win32'}" />
 	<include buildfile="tasks.build" />
 
 	<target name="clean">
