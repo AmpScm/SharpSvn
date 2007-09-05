@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir="." default="build">
 	<property name="svnTrunkBuild" value="true" />
+	<property name="platform" value="win32" if="${not property::exists('platform')}" />
 
 	<!-- -->
 	<property name="subversionVersion" value="1.5.0" />
