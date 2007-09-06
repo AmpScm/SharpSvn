@@ -430,6 +430,8 @@
 			<loadfile file="build/subversion/build/generator/gen_win.py" property="gen_win">
 				<filterchain>
 					<replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
+					<!-- Allow compilation for x64 -->
+					<replacestring from="self.platforms = ['Win32']" to="self.platforms = ['Win32', 'x64']" />
 				</filterchain>
 			</loadfile>
 			<echo message="${gen_win}" file="build/subversion/build/generator/gen_win.py" />
