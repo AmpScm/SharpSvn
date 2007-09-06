@@ -471,8 +471,6 @@
 							<replacestring from='InlineFunctionExpansion="2"' to='' />
 							<!-- Increase security a little little bit in some cases -->
 							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
-							<replacestring from='"Win32"' to='"${platform}"' if="${platform != 'win32'}" />
-              <replacestring from='|Win32"' to='|${platform}"' if="${platform != 'win32'}" />
 						</filterchain>
 					</loadfile>
 					<echo message="${projtext}" file="${project}" />
