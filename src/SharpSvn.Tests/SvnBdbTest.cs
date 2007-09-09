@@ -19,8 +19,13 @@ namespace SharpSvn.Tests
                 ForcedDeleteDirectory(path);
 
             SvnRepositoryClient reposClient = new SvnRepositoryClient();
-            
-            reposClient.CreateRepository(path, new SvnCreateRepositoryArgs(){ RepositoryType = SvnRepositoryFilesystem.BerkeleyDB });
+
+            SvnCreateRepositoryArgs ra = new SvnCreateRepositoryArgs();
+            ra.RepositoryType = SvnRepositoryFilesystem.BerkeleyDB;
+            reposClient.CreateRepository(path, ra);
+
+            Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
+            Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
         }
 
     }
