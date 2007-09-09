@@ -54,7 +54,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "sourcePaths");
 	}
 
-	EnsureState(SvnContextState::ConfigLoaded);
+	EnsureState(args->WithMergeHistory ? SvnContextState::AuthorizationInitialized : SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
@@ -67,6 +67,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		args->Force,
 		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
 		args->MakeParents,
+		args->WithMergeHistory,
 		CtxHandle,
 		pool.Handle);
 
@@ -185,6 +186,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 		args->Force,
 		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
 		args->MakeParents,
+		args->WithMergeHistory,
 		CtxHandle,
 		pool.Handle);
 
