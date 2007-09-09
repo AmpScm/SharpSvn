@@ -1083,6 +1083,7 @@ namespace SharpSvn {
 	{
 		bool _makeParents;
 		bool _alwaysCopyBelow;
+		bool _withMergeHistory;
 
 	public:
 		SvnCopyArgs()
@@ -1113,6 +1114,18 @@ namespace SharpSvn {
 				_alwaysCopyBelow = value;
 			}
 		}
+
+		property bool WithMergeHistory
+		{
+			bool get()
+			{
+				return _withMergeHistory;
+			}
+			void set(bool value)
+			{
+				_withMergeHistory = value;
+			}
+		}
 	};
 
 	public ref class SvnMoveArgs : public SvnClientArgs
@@ -1120,6 +1133,7 @@ namespace SharpSvn {
 		bool _force;
 		bool _moveAsChild;
 		bool _makeParents;
+		bool _withMergeHistory;
 	public:
 		SvnMoveArgs()
 		{
@@ -1158,6 +1172,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_makeParents = value;
+			}
+		}
+
+		property bool WithMergeHistory
+		{
+			bool get()
+			{
+				return _withMergeHistory;
+			}
+			void set(bool value)
+			{
+				_withMergeHistory = value;
 			}
 		}
 	};

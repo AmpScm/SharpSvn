@@ -67,6 +67,7 @@ bool SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, Svn
 		pool.AllocPath(toPath),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,
+		args->WithMergeHistory,
 		CtxHandle,
 		pool.Handle);
 
@@ -177,6 +178,7 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		pool.AllocCanonical(toUri->ToString()),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,
+		args->WithMergeHistory,
 		CtxHandle,
 		pool.Handle);
 
