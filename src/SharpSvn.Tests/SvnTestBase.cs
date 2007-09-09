@@ -22,5 +22,15 @@ namespace SharpSvn.Tests
 				return _testPath;
 			}
 		}
+
+        public static void ForcedDeleteDirectory(string dir)
+        {
+            foreach (FileInfo fif in new DirectoryInfo(dir).GetFiles("*", SearchOption.AllDirectories))
+            {
+                if ((int)(fif.Attributes & FileAttributes.ReadOnly) != 0)
+                    fif.Attributes = FileAttributes.Normal;
+            }
+            Directory.Delete(dir, true);
+        }
 	}
 }
