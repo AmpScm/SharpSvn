@@ -1,0 +1,76 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &lt; '4.5'}" />
+	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &gt;= '4.5'}" />	
+	<target name="prepare-bdb" depends="extract">
+		<OnceBlock file="build/db-${dbVersion}.prepared">
+			<foreach item="File" property="dsp">
+				<in>
+					<items basedir="${dbWindowsDir}">
+						<include name="*.dsp" />
+					</items>
+				</in>
+				<do>
+					<VCBuild>
+						<arg line="/upgrade" />
+						<arg value="${dsp}" />
+					</VCBuild>
+				</do>
+			</foreach>
+		</OnceBlock>
+		<OnceBlock file="build/db-${dbVersion}.patched">
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="${dbWindowsDir}">
+						<include name="*.vcproj" />
+					</items>
+				</in>
+				<do>
+					<loadfile file="${vcproj}" property="projtext">
+						<filterchain>
+							<replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+							<replacestring from='AMD64/libdb44.dll' to='AMD64/${dbDllName}-x64.dll' />
+							<replacestring from='AMD64/libdb45.dll' to='AMD64/${dbDllName}-x64.dll' />
+							<replacestring from='AMD64/libdb46.dll' to='AMD64/${dbDllName}-x64.dll' />
+							<replacestring from='AMD64/libdb47.dll' to='AMD64/${dbDllName}-x64.dll' />
+							<replacestring from='/libdb44.dll' to='/${dbDllName}.dll' />
+							<replacestring from='/libdb45.dll' to='/${dbDllName}.dll' />
+							<replacestring from='/libdb46.dll' to='/${dbDllName}.dll' />
+							<replacestring from='/libdb47.dll' to='/${dbDllName}.dll' />
+						</filterchain>
+					</loadfile>
+					<echo message="${projtext}" file="${vcproj}" />
+				</do>
+			</foreach>
+		</OnceBlock>
+	</target>
+	<target name="build-bdb" depends="prepare-bdb">
+		<VCBuild platform="${platform}">
+			<arg value="${dbWindowsDir}/db_dll.vcproj" />
+			<arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
+			<arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />			
+			<arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
+		</VCBuild>
+		<copy todir="${release}/lib">
+			<fileset basedir="${dbWindowsDir}/${Configuration}">
+				<include name="*.dll" />
+				<include name="*.lib" />
+				<include name="*.pdb" />
+				<include name="*.exp" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64">
+			<fileset basedir="${dbWindowsDir}/${Configuration}_AMD64">
+				<include name="*.dll" />
+				<include name="*.lib" />
+				<include name="*.pdb" />
+				<include name="*.exp" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="*.h" />
+			</fileset>
+		</copy>
+	</target>
+</project>
