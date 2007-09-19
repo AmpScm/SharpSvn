@@ -7,11 +7,11 @@
 	<property name="subversionVersion" value="1.5.0" />
 	<!-- -->
 	<property name="opensslVersion" value="0.9.8e" />
-	<property name="neonVersion" value="0.26.4" />
+	<property name="neonVersion" value="0.27.1" />
 
 	<property name="aprVersion" value="1.2.9" />
 	<property name="aprUtilVersion" value="1.2.8" />
-	<property name="dbVersion" value="4.4.20.NC" />
+	<property name="dbVersion" value="4.5.20.NC" />
 	<property name="zlibVersion" value="1.2.3" />
 	<property name="serfVersion" value="0.1.2" />
 	<property name="sqliteVersion" value="3.4.2" />

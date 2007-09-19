@@ -13,53 +13,150 @@
 			<import namespace="ICSharpCode.SharpZipLib.BZip2"/>
 		</imports>
 		<code>
-		<![CDATA[			
-			[TaskName("untar")]
-			public class UnTar : Task {
-			
-				private string _tarfile;
-				private string _todir;
-				private string _compresstype;
+			<![CDATA[			
+[TaskName("UnTar")]
+public class UnTar : Task 
+{
+	string _tarfile;
+	string _todir;
+	string _compresstype;
 
-				[TaskAttribute("tarfile", Required=true)]
-				public string tarfile {
-					get { return _tarfile; }
-					set { _tarfile = value; }
-				}
+	[TaskAttribute("tarfile", Required=true)]
+	public string tarfile 
+	{
+		get { return _tarfile; }
+		set { _tarfile = value; }
+	}
 
-				[TaskAttribute("todir", Required=true)]
-				public string todir {
-					get { return _todir; }
-					set { _todir = value; }
-				}
-				
-				[TaskAttribute("compresstype", Required=false)]
-				public string compresstype {
-					get { return _compresstype; }
-					set { _compresstype = value; }
-				}
-				
-				protected override void ExecuteTask() {
-					Log(Level.Info, String.Format("Extracting '{0}' to '{1}'",
-						_tarfile, _todir));
-					
-					Stream inStream = File.OpenRead(_tarfile);
-					
-					switch(_compresstype) {
-						case "gzip":
-							inStream = new GZipInputStream(inStream);
-							break;
+	[TaskAttribute("todir", Required=true)]
+	public string todir 
+	{
+		get { return _todir; }
+		set { _todir = value; }
+	}
+
+	[TaskAttribute("compresstype", Required=false)]
+	public string compresstype
+	{
+		get { return _compresstype; }
+		set { _compresstype = value; }
+	}
+
+	protected override void ExecuteTask() 
+	{
+		Log(Level.Info, String.Format("Extracting '{0}' to '{1}'", _tarfile, _todir));
+
+		Stream inStream = File.OpenRead(_tarfile);
+
+		switch(_compresstype) 
+		{
+		case "gzip":
+			inStream = new GZipInputStream(inStream);
+			break;
+
+		case "bzip2":
+			inStream = new BZip2InputStream(inStream);
+			break;
+		}
+
+		TarArchive archive = TarArchive.CreateInputTarArchive(inStream);
+		archive.ExtractContents(_todir);
+	}
+}
+
+[TaskName("VCBuild")]
+public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
+{
+	bool _showLogo;
+	string _platform;
+	string _configuration;
+	   
+	[TaskAttribute("nologo", Required=false), BooleanValidator]
+	public bool NoLogo
+	{
+		get { return !_showLogo; }
+		set { _showLogo = !value; }
+	}
+
+	public override string ProgramFileName
+	{
+		get { return "vcbuild.exe"; }
+	}
+	 
+	[TaskAttribute("platform")]
+	public string Platform
+	{
+	    get { return _platform; }
+		set { _platform = value; }
+	}
+	 
+	[TaskAttribute("configuration")]
+	public string Configuration
+	{
+	    get { return _configuration; }
+		set { _configuration = value; }
+	}
+
+	public override string ProgramArguments
+	{
+		get 
+	    {
+			StringBuilder sb = new StringBuilder();
+					 
+			if(NoLogo)
+				sb.Append(" /nologo");
 							
-						case "bzip2":
-							inStream = new BZip2InputStream(inStream);
-							break;
-					}
+			if(Platform != null)
+				sb.AppendFormat(" /platform:{0}", Platform);
+							
+			return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
+		}
+	}	
+		
+    protected override void ExecuteTask()
+	{
+	   if(Configuration != null)
+		  Arguments.Add(new NAnt.Core.Types.Argument(Configuration));
+				
+	   base.ExecuteTask();
+	}
+}
 
-					TarArchive archive = TarArchive.CreateInputTarArchive(inStream);
-					archive.ExtractContents(_todir);
-				}
-			}
-		]]>
+[TaskName("Svn")]
+public class Svn : NAnt.Core.Tasks.ExternalProgramBase
+{
+	public override string ProgramArguments
+	{
+	   get { return "--non-interactive"; }
+	}
+}
+
+[TaskName("OnceBlock")]
+public class OnceBlock : NAnt.Core.TaskContainer
+{
+	FileInfo _touchFile;
+
+    [TaskAttribute("file", Required=true)]
+	public FileInfo TouchFile
+	{
+		get { return _touchFile; }
+		set { _touchFile = value; }	  	 
+	}
+	 
+	protected override void ExecuteTask()
+	{
+	   if(!_touchFile.Exists)
+	   {
+		   base.ExecuteTask();
+				 
+		   using(_touchFile.Create())
+		   {
+			  // Create NOP file if execute succeeded
+		   }
+	   }
+    }
+}
+]]>
 		</code>
 	</script>
 </project>
