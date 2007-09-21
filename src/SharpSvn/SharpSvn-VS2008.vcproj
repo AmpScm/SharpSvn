@@ -4,7 +4,7 @@
 	Version="9,00"
 	Name="SharpSvn"
 	ProjectGUID="{A3166809-1484-4442-BF75-5FB0E8356381}"
-	RootNamespace="TurtleSvnCommon"
+	RootNamespace="SharpSvn"
 	Keyword="ManagedCProj"
 	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib&quot;"
 	TargetFrameworkVersion="131072"
@@ -73,6 +73,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				ShowProgress="1"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib"
 				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
@@ -108,8 +109,8 @@
 		</Configuration>
 		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			ManagedExtensions="1"
@@ -282,8 +283,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			ManagedExtensions="1"

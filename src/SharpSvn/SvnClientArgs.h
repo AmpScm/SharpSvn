@@ -896,20 +896,22 @@ namespace SharpSvn {
 		bool _notRecursive;
 		bool _noIgnore;
 		bool _ignoreUnknownNodeTypes;
+		SvnDepth _depth;
 	public:
 		SvnImportArgs()
 		{
+			_depth = SvnDepth::Infinity;
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return !_notRecursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_notRecursive = !value;
+				_depth = value;
 			}
 		}
 
@@ -1692,6 +1694,7 @@ namespace SharpSvn {
 		SvnIgnoreSpacing _ignoreSpace;
 		bool _ignoreEol;
 		bool _ignoreMime;
+		bool _includeMergedRevisions;
 
 	public:
 		SvnBlameArgs()
@@ -1775,6 +1778,18 @@ namespace SharpSvn {
 				_ignoreMime = value;
 			}
 		}
+
+		property bool IncludeMergedRevisions
+		{
+			bool get()
+			{
+				return _includeMergedRevisions;
+			}
+			void set(bool value)
+			{
+				_includeMergedRevisions = value;
+			}
+		}
 	};
 
 	public ref class SvnAddToChangeListArgs : public SvnClientArgs
@@ -1811,10 +1826,10 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnGetMergeInfoArgs : public SvnClientArgs
+	public ref class SvnGetSuggestedMergeSourcesArgs : public SvnClientArgs
 	{
 	public:
-		SvnGetMergeInfoArgs()
+		SvnGetSuggestedMergeSourcesArgs()
 		{
 		}
 	};

@@ -71,7 +71,6 @@ using namespace System::Security::Permissions;
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
-
 #pragma comment(lib, "ole32.lib")
 
 #pragma comment(lib, "libsvn_client-1.lib")
@@ -102,9 +101,9 @@ using namespace System::Security::Permissions;
 #if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
 #pragma comment(lib, "serf.lib")
 #endif
-#pragma comment(lib, "zlibstat.lib")
+#pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "libdb44.lib")
+#pragma comment(lib, "libdb45.lib")
 
 // When statically linking neon/OpenSSL
 #pragma comment(lib, "Gdi32.lib")

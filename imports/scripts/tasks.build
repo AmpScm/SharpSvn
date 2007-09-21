@@ -11,6 +11,8 @@
 			<import namespace="ICSharpCode.SharpZipLib.Tar"/>
 			<import namespace="ICSharpCode.SharpZipLib.GZip"/>
 			<import namespace="ICSharpCode.SharpZipLib.BZip2"/>
+			<import namespace="System.Xml"/>
+			<import namespace="System.Xml.XPath"/>
 		</imports>
 		<code>
 			<![CDATA[			
@@ -154,6 +156,110 @@ public class OnceBlock : NAnt.Core.TaskContainer
 			  // Create NOP file if execute succeeded
 		   }
 	   }
+    }
+}
+
+[TaskName("VCProjAddPlatform")]
+public class VCProjAddPlatform : NAnt.Core.Task
+{
+	FileInfo _project;
+	string _platform;
+	string _fromPlatform;
+
+    [TaskAttribute("project", Required=true)]
+	public FileInfo ProjectFile
+	{
+		get { return _project; }
+		set { _project = value; }	  	 
+	}
+	 
+	[TaskAttribute("platform", Required=true)]
+	public string Platform
+	{
+	    get { return _platform; }
+		set { _platform = value; }
+	}
+	 
+	[TaskAttribute("fromPlatform", Required=true)]
+	public string FromPlatform
+	{
+	    get { return _fromPlatform; }
+		set { _fromPlatform = value; }
+	}	  
+	 
+	protected override void ExecuteTask()
+	{
+		XmlDocument doc = new XmlDocument();
+		doc.Load(ProjectFile.FullName);
+	
+		bool oldFound = false;
+		
+		foreach(XmlNode n in doc.SelectNodes("/VisualStudioProject/Platforms/Platform/@Name"))
+		{
+			if(0 == string.Compare(n.Value, Platform, true))
+				return; // Already completed
+			else if(0 == string.Compare(n.Value, FromPlatform, true))
+			{
+				FromPlatform = n.Value;
+				oldFound = true;
+			}
+		}
+		 
+		if(!oldFound)
+			throw new Exception("FromPlatform not found");
+					 
+		XmlElement el = doc.CreateElement("Platform");
+		el.SetAttribute("Name", Platform);
+		doc.SelectSingleNode("/VisualStudioProject/Platforms").AppendChild(el);
+			  			  
+		foreach(XmlElement n in doc.SelectNodes("/VisualStudioProject/Configurations/Configuration"))
+		{
+			string name = n.GetAttribute("Name");
+			if(!name.EndsWith("|" + FromPlatform))
+				continue;
+						 
+						 
+			XmlElement nn = (XmlElement)n.CloneNode(true);
+			nn.SetAttribute("Name", name.Substring(0, name.Length-FromPlatform.Length) + Platform);
+					 
+			foreach(XmlNode i in nn.SelectNodes("Tool/@TargetMachine"))
+			{
+				switch(Platform.ToUpper())
+				{
+					case "X64":
+						i.Value = "17";
+						break;
+					case "IA64":
+						i.Value = "error";
+						break;
+				}
+			}
+			 
+			foreach(XmlNode i in nn.SelectNodes("@OutputDirectory | @IntermediateDirectory | .//@OutputFile | .//@TypeLibraryName | .//@PrecompiledHeaderFile | .//@ObjectFile | .//@ProgramDataBaseFileName | .//@ImportLibrary"))
+			{
+				if (i.Value.StartsWith(".\\"))
+					i.Value = Platform + '\\' + i.Value.Substring(2);
+				else if (char.IsLetterOrDigit(i.Value, 0))
+					i.Value = Platform + '\\' + i.Value;
+			}
+					 
+			n.ParentNode.AppendChild(nn);
+		} 
+		  
+		foreach(XmlElement n in doc.SelectNodes("/VisualStudioProject/Files//FileConfiguration"))
+		{
+			string name = n.GetAttribute("Name");
+			if(!name.EndsWith("|" + FromPlatform))
+				continue;						 
+						 
+			XmlElement nn = (XmlElement)n.CloneNode(true);
+			nn.SetAttribute("Name", name.Substring(0, name.Length-FromPlatform.Length) + Platform);
+					 
+			n.ParentNode.AppendChild(nn);
+		} 
+			  
+			  
+		doc.Save(ProjectFile.FullName);
     }
 }
 ]]>

@@ -70,13 +70,13 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		svn_error_t* err = svn_client_info(
+		svn_error_t* err = svn_client_info2(
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
 			svn_info_receiver,
 			(void*)_clientBatton->Handle,
-			IsRecursive(args->Depth),
+			(svn_depth_t)args->Depth,
 			CtxHandle,
 			pool.Handle);
 

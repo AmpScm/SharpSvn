@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
 	<property name="Configuration" value="Release" />
 	<property name="dllPrefix" value="SharpSvn-" />
-	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','')}" />
+	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" />
 
 	<if test="${platform != 'win32' and platform != 'x64'}">
 		<fail message="Platform must be win32 or x64 at this time" />
@@ -16,13 +16,15 @@
 	</setenv>
 
 	<property name="Configuration" value="release" />
-	<property name="release" value="release" if="${platform=='win32'}" />
-	<property name="release" value="release_${platform}" if="${platform!='win32'}" />
+	<property name="release" value="release" />
 
 	<include buildfile="tasks.build" />
 
 	<include buildfile="build-bdb.build" />
 	<include buildfile="build-zlib.build" />
+	<include buildfile="build-openssl.build" />
+	<include buildfile="build-sqlite.build" />
+	<include buildfile="build-serf.build" />
 
 	<target name="clean">
 		<delete>
@@ -73,8 +75,8 @@
 	<property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 	<target name="extract" depends="download">
 		<mkdir dir="build" />
-		<if test="${not directory::exists('build/openssl-' + opensslVersion)}">
-			<UnTar tarfile="downloads/${opensslFilename}" todir="build" compresstype="gzip" />
+		<if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
+			<UnTar tarfile="downloads/${opensslFilename}" todir="build/${platform}" compresstype="gzip" />
 		</if>
 		<if test="${not directory::exists('build/db-' + dbVersion)}">
 			<UnTar tarfile="downloads/${dbFilename}" todir="build" compresstype="gzip" />
@@ -89,173 +91,51 @@
 			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />
 		</if>
 	</target>
-
 	<target name="checkout">
-		<if test="${not directory::exists('build/subversion')}">
+		<property name="svnBase" value="build/${platform}/subversion" />
+		<if test="${not directory::exists(svnBase)}">
 			<Svn verbose="true">
 				<arg line="--non-interactive co" />
 				<arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" unless="${svnTrunkBuild == 'true'}" />
 				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnTrunkBuild == 'true'}" />
-				<arg value="build/subversion" />
+				<arg value="${svnBase}" />
 			</Svn>
 		</if>
-		<if test="${not directory::exists('build/subversion/neon')}">
+		<if test="${not directory::exists(svnBase + '/neon')}">
 			<Svn verbose="true">
 				<arg line="co" />
 				<arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
-				<arg value="build/subversion/neon" />
+				<arg value="${svnBase}/neon" />
 			</Svn>
 			<!-- Write version for subversion configure script -->
-			<echo message="${neonVersion}" file="build/subversion/neon/.version" />
+			<echo message="${neonVersion}" file="${svnBase}/neon/.version" />
 		</if>
-		<if test="${not directory::exists('build/subversion/apr')}">
+		<if test="${not directory::exists(svnBase + '/apr')}">
 			<Svn verbose="true">
 				<arg line="co" />
 				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
-				<arg value="build/subversion/apr" />
+				<arg value="${svnBase}/apr" />
 			</Svn>
 		</if>
-		<if test="${not directory::exists('build/subversion/apr-util')}">
+		<if test="${not directory::exists(svnBase + '/apr-util')}">
 			<Svn verbose="true">
 				<arg line="co" />
 				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
-				<arg value="build/subversion/apr-util" />
+				<arg value="${svnBase}/apr-util" />
 			</Svn>
 		</if>
-		<if test="${not directory::exists('build/subversion/serf')}">
+		<if test="${not directory::exists(svnBase + '/serf')}">
 			<Svn verbose="true">
 				<arg line="co" />
 				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" />
-				<arg value="build/subversion/serf" />
+				<arg value="${svnBase}/serf" />
 			</Svn>
 		</if>
 	</target>
-
-	
-	<target name="build-openssl" depends="extract">
-		<if test="${not file::exists('build/openssl-' + opensslVersion +'.finished')}">
-			<exec program="perl.exe" workingdir="build/openssl-${opensslVersion}">
-				<arg value="Configure" />
-				<arg value="VC-WIN32" if="${platform=='win32'}" />
-				<arg value="VC-WIN64A" if="${platform=='x64'}" />
-				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
-				<!--arg value="-D_USE_32BIT_TIME_T" if="${platform=='win32'}" /-->
-			</exec>
-			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}" if="${platform=='win32'}">
-				<arg line="/c ms\do_masm.bat" />
-			</exec>
-			<exec program="cmd.exe" workingdir="build/openssl-${opensslVersion}" if="${platform=='x64'}">
-				<arg line="/c ms\do_win64a.bat" />
-			</exec>
-			<exec program="nmake.exe" workingdir="build/openssl-${opensslVersion}">
-				<arg line="-f ms\nt.mak" />
-			</exec>
-			<foreach item="File" property="manifest">
-				<in>
-					<items basedir="build/openssl-${opensslVersion}/out32dll">
-						<include name="*.dll.manifest" />
-					</items>
-				</in>
-				<do>
-					<exec program="mt.exe" workingdir="build/openssl-${opensslVersion}/out32dll">
-						<arg value="-manifest" />
-						<arg value="${manifest}" />
-						<arg value="-outputresource:${path::get-file-name-without-extension(manifest)};#2" />
-					</exec>
-				</do>
-			</foreach>
-			<copy todir="${release}/lib">
-				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
-					<include name="*.lib" />
-					<include name="*.exp" />
-					<include name="*.pdb" />
-				</fileset>
-			</copy>
-			<copy todir="${release}/lib">
-				<fileset basedir="build/openssl-${opensslVersion}/out32dll">
-					<include name="${dllPrefix}*.dll" />
-					<include name="${dllPrefix}*.pdb" />
-				</fileset>
-			</copy>
-			<copy todir="${release}/lib">
-				<fileset basedir="build/openssl-${opensslVersion}/out32">
-					<include name="*.lib" />
-					<include name="*.exp" />
-					<include name="*.pdb" />
-				</fileset>
-			</copy>
-			<copy todir="${release}/include">
-				<fileset basedir="build/openssl-${opensslVersion}/inc32">
-					<include name="**" />
-				</fileset>
-			</copy>
-			<touch file="build/openssl-${opensslVersion}.finished" />
-		</if>
-	</target>
-	<target name="build-sqlite" depends="extract">
-		<if test="${not file::exists('build/sqlite-' + sqliteVersion +'.finished')}">
-			<mkdir dir="${sqliteDir}/${Configuration}_${platform}" />
-			<cl outputdir="${sqliteDir}/${Configuration}_${platform}">
-				<arg value="/O2" if="${Configuration == 'release'}" />
-				<arg value="/Ob1" if="${Configuration == 'release'}" />
-				<arg value="/Od" if="${Configuration != 'release'}" />
-				<arg value="/GF" if="${Configuration == 'release'}" />
-				<arg value="/FD" />
-				<arg value="/EHsc" />
-				<arg value="/MD" if="${Configuration == 'release'}" />
-				<arg value="/MDd" if="${Configuration != 'release'}" />
-				<arg value="/Gy" />
-				<arg value="/W3" />
-				<arg value="/nologo" />
-				<arg value="/c" />
-				<arg value="/Zi" />
-				<arg value="/errorReport:prompt" />
-				<sources basedir="${sqliteDir}">
-					<include name="*.c" />
-					<exclude name="tclsqlite.c" />
-					<exclude name="icu.c" />
-				</sources>
-				<includedirs basedir="${sqliteDir}">
-					<include name="." />
-				</includedirs>
-				<defines>
-					<define name="_CRT_NONSTDC_NO_DEPRECATE" />
-					<define name="_CRT_SECURE_NO_DEPRECATE" />
-					<define name="NO_TCL" />
-					<define name="WIN32" />
-					<define name="_WINDOWS" />
-					<define name="_WIN32" />
-					<define name="WIN64" if="${platform == 'x64'}" />
-					<define name="NDEBUG" if="${Configuration == 'release'}"/>
-					<define name="_DEBUG" if="${Configuration != 'release'}"/>
-				</defines>
-			</cl>
-			<property name="machineoption" value="/MACHINE:X86" if="${platform == 'win32'}"  />
-			<property name="machineoption" value="/MACHINE:x64" if="${platform == 'x64'}" />
-			<lib
-					  output="build/sqlite-${sqliteVersion}/${Configuration}_${platform}\sqlite3.lib"
-					  options='/NOLOGO /SUBSYSTEM:WINDOWS ${machineoption}'>
-				<sources basedir="build/sqlite-${sqliteVersion}">
-					<include name="${Configuration}_${platform}\*.obj" />
-				</sources>
-			</lib>
-			<copy todir="${release}/lib">
-				<fileset basedir="${sqliteDir}/${Configuration}_${platform}">
-					<include name="*.lib" />
-				</fileset>
-			</copy>
-			<copy todir="${release}/include">
-				<fileset basedir="${sqliteDir}">
-					<include name="sqlite3.h" />
-				</fileset>
-			</copy>
-			<touch file="${'build/sqlite-' + sqliteVersion +'.finished'}" />
-		</if>
-	</target>
 	<target name="prepare-neon" depends="checkout">
-		<if test="${not file::exists('build/neon-' + neonVersion +'.prepared')}">
+		<OnceBlock file="build/neon-${neonVersion}_${platform}.prepared">
 			<regex pattern="^(?'NEON_MAJOR_VERSION'\d+)\.(?'NEON_MINOR_VERSION'\d+)\.(?'NEON_MICRO_VERSION'\d+)$" input="${neonVersion}" />
-			<loadfile file="build/subversion/neon/config.hw.in" property="configfile">
+			<loadfile file="${svnBase}/neon/config.hw.in" property="configfile">
 				<filterchain>
 					<replacetokens begintoken="@" endtoken="@">
 						<token key="VERSION" value="${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}" />
@@ -264,66 +144,35 @@
 					</replacetokens>
 				</filterchain>
 			</loadfile>
-			<echo file="build/subversion/neon/config.hw" message="${configfile}" unless="${file::exists('build/subversion/neon/config.hw')}" />
-			<echo file="build/subversion/neon/config.h" message="${configfile}" unless="${file::exists('build/subversion/neon/config.h')}" />
-			<echo file="build/subversion/neon/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
-			<touch file="${'build/neon-' + neonVersion +'.prepared'}" />
-		</if>
+			<echo file="${svnBase}/neon/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
+			<echo file="${svnBase}/neon/config.h" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.h')}" />
+			<echo file="${svnBase}/neon/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
+		</OnceBlock>
 	</target>
-	<target name="prepare-serf" depends="checkout, prepare-neon">
-		<if test="${not file::exists('build/serf-' + serfVersion +'.prepared')}">
-			<foreach item="File" property="mak">
-				<in>
-					<items basedir="build/subversion">
-						<include name="serf/serf.mak" />
-						<include name="neon/neon.mak" />
-					</items>
-				</in>
-				<do>
-					<loadfile file="${mak}" property="serfmak">
-						<filterchain>
-							<replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
-							<replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
-							<!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
-							<replacestring from=" /O2 " to=" /O1 /W3 /GS " />
-							<!-- Don't include apr and openssl in the intermediate libraries -->
-							<replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" />
-							<replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" />
-							<!-- Only compile library, the testfiles don't like the small library -->
-							<replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
-						</filterchain>
-					</loadfile>
-					<echo file="${mak}" message="${serfmak}" />
-				</do>
-			</foreach>
-			<touch file="${'build/serf-' + serfVersion +'.prepared'}" />
-		</if>
-	</target>
+
 	<target name="upgrade-apr" depends="checkout">
-		<if test="${not file::exists('build/apr-' + aprVersion +'.upgraded')}">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
 			<foreach item="File" property="project">
 				<in>
-					<items basedir="build/subversion">
+					<items basedir="${svnBase}">
 						<include name="apr/**/*.dsp" />
 						<include name="apr-util/**/*.dsp" />
 					</items>
 				</in>
 				<do>
-					<VCBuild workingdir="build/subversion">
-						<arg line="/nologo" />
+					<VCBuild platform="${platform}">
 						<arg line="/upgrade" />
 						<arg line="${project}" />
 					</VCBuild>
 				</do>
 			</foreach>
-			<touch file="${'build/apr-' + aprVersion +'.upgraded'}" />
-		</if>
+		</OnceBlock>
 	</target>
 	<target name="prepare-apr" depends="upgrade-apr">
-		<if test="${not file::exists('build/apr-' + aprVersion +'.prepared')}">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
 			<foreach item="File" property="winHeader">
 				<in>
-					<items basedir="build/subversion">
+					<items basedir="${svnBase}">
 						<include name="**/*.hw" />
 						<include name="apr-util/**/expat.h.in" />
 					</items>
@@ -340,37 +189,62 @@
 					</if>
 				</do>
 			</foreach>
-			<touch file="${'build/apr-' + aprVersion +'.prepared'}" />
-		</if>
+		</OnceBlock>
 	</target>
-	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, build-sqlite, checkout, prepare-neon, prepare-serf, prepare-apr">
-		<if test="${not file::exists('build/subversion-' + subversionVersion +'.generated')}">
-			<loadfile file="build/subversion/build/generator/gen_win.py" property="gen_win">
+	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, build-sqlite, checkout, prepare-apr">
+		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
+			<!-- Patches for x64 builds; hopefully included in svn 1.5 -->
+			<copy todir="${svnBase}/build/generator/" overwrite="true">
+				<fileset basedir="scripts">
+					<include name="*.ezt" />
+				</fileset>
+			</copy>
+			<copy todir="${svnBase}/subversion/libsvn_subr" overwrite="true">
+				<fileset basedir="scripts">
+					<include name="win32_crashrpt.c" />
+					<include name="win32_crashrpt.h" />
+					<include name="win32_crashrpt_dll.h" />
+				</fileset>
+			</copy>
+			<loadfile file="${svnBase}/build/generator/gen_win.py" property="gen_win">
 				<filterchain>
 					<replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
 					<!-- Allow compilation for x64 -->
 					<replacestring from="self.platforms = ['Win32']" to="self.platforms = ['Win32', 'x64']" />
 				</filterchain>
 			</loadfile>
-			<echo message="${gen_win}" file="build/subversion/build/generator/gen_win.py" />
-			<exec program="cmd.exe" workingdir="build\subversion" verbose="true">
+			<echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
+			<exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
 				<arg line="/c gen-make.py" />
 				<arg line="-t vcproj" />
 				<arg line="--vsnet-version=2005" />
 				<arg value="--release" />
-				<arg value="--with-berkeley-db=../../${release}" />
+				<arg value="--with-berkeley-db=../../db-${dbVersion}/${platform}" />
 				<arg value="--with-openssl=../openssl-${opensslVersion}" />
-				<arg value="--with-zlib=../zlib-${zlibVersion}" />
+				<arg value="--with-zlib=../../zlib-${zlibVersion}" />
 				<arg value="--with-serf=serf" />
-				<!-- Before 1.5 all builds were static -->
-				<arg value="--with-sqlite=../sqlite-${sqliteVersion}" unless="${subversionVersion &lt; '1.5'}" />
+				<arg value="--with-sqlite=../../sqlite-${sqliteVersion}" unless="${subversionVersion &lt; '1.5'}" />
 				<arg value="--disable-shared" unless="${subversionVersion &lt; '1.5'}" />
 			</exec>
 
 			<!-- Replace shared library builds with static builds; to auto change dependencies -->
-			<foreach item="File" property="project">
+			<foreach item="File" property="vcproj">
 				<in>
-					<items basedir="build\subversion\build\win32">
+					<items basedir="${svnBase}/build/win32">
+						<include name="svn_config.vcproj" />
+						<include name="svn_locale.vcproj" />
+						<include name="zlib.vcproj" />
+						<include name="../../apr/**.vcproj" />
+						<include name="../../apr-util/**.vcproj" />
+					</items>
+				</in>
+				<do>
+					<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+				</do>
+			</foreach>
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="${svnBase}\build\win32">
 						<include name="**/*.vcproj" />
 						<include name="../../apr/apr.vcproj" />
 						<include name="../../apr-util/aprutil.vcproj" />
@@ -379,7 +253,7 @@
 					</items>
 				</in>
 				<do>
-					<loadfile file="${project}" property="projtext">
+					<loadfile file="${vcproj}" property="projtext">
 						<filterchain>
 							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
 							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib zlibstat.lib' />
@@ -391,164 +265,130 @@
 							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
 						</filterchain>
 					</loadfile>
-					<echo message="${projtext}" file="${project}" />
+					<echo message="${projtext}" file="${vcproj}" />
 				</do>
 			</foreach>
+		</OnceBlock>>
+	</target>
+	<target name="build-apr" depends="download,extract,checkout, generate-svnfiles, prepare-apr">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.build">
+			<!-- Prepare static builds (requires changed build order) -->
 			<foreach item="File" property="project">
 				<in>
-					<items basedir="build/subversion">
-						<include name="**/lib*.dsp" />
-						<include name="**/lib*.vcproj" />
+					<items basedir="${svnBase}">
+						<include name="apr/apr.vcproj" />
+						<include name="apr-util/aprutil.vcproj" />
+						<include name="apr-util/xml/expat/lib/xml.vcproj" />
 					</items>
 				</in>
 				<do>
-					<property name="itemName" value="${path::get-file-name(project)}" />
-					<if test="${file::exists(path::combine(path::get-directory-name(project), string::substring(itemName, 3, string::get-length(itemName)-3)))}">
-						<copy
-										file="${project}"
-										tofile="${project}.orig" unless="${file::exists(project + '.orig')}" />
-						<delete file="${project}" />
-						<copy
-										file="${path::combine(path::get-directory-name(project), string::substring(itemName, 3, string::get-length(itemName)-3))}"
-										tofile="${project}" />
-					</if>
+					<VCBuild platform="${platform}">
+						<arg value="${project}" />
+						<arg value="${Configuration}|${platform}" />
+					</VCBuild>
 				</do>
 			</foreach>
-			<loadfile file="build/subversion/subversion_vcnet.sln" property="projtext" if="${platform!='win32'}">
-				<filterchain>
-					<replacestring from='|Win32' to='|${platform}' />
-				</filterchain>
-			</loadfile>
-			<echo message="${projtext}" file="build/subversion/subversion_vcnet.sln" if="${platform!='win32'}" />
-			<touch file="${'build/subversion-' + subversionVersion +'.generated'}" />
-		</if>
-	</target>
-	<target name="build-apr" depends="download,extract,checkout, generate-svnfiles, prepare-apr">
-		<if test="${not file::exists('build/apr-' + aprVersion +'.build')}">
-			<!-- Prepare static builds (requires changed build order) -->
-			<exec program="msbuild.exe" workingdir="build\subversion">
-				<arg value="/nologo" />
-				<arg value="/verbosity:quiet" />
-				<arg value="apr\apr.vcproj" />
-				<arg value="/p:Configuration=Release|${platform}" />
-			</exec>
-			<exec program="msbuild.exe" workingdir="build\subversion">
-				<arg value="/nologo" />
-				<arg value="/verbosity:quiet" />
-				<arg value="apr-util\aprutil.vcproj" />
-				<arg value="/p:Configuration=Release|${platform}" />
-			</exec>
-			<exec program="msbuild.exe" workingdir="build\subversion">
-				<arg value="/nologo" />
-				<arg value="/verbosity:quiet" />
-				<arg value="apr-util\xml\expat\lib\xml.vcproj" />
-				<arg value="/p:Configuration=Release|${platform}" />
-			</exec>
-			<if test="${aprVersion &gt;= '1.0'}">
-				<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\LibR\apr.lib" />
-				<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\LibR\aprutil.lib" />
-
-				<mkdir dir="build\subversion\apr\release" />
-				<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\release\libapr-1.lib" />
-				<copy file="build\subversion\apr\LibR\apr-1.lib" tofile="build\subversion\apr\release\libapr.lib" />
-
-				<mkdir dir="build\subversion\apr-util\release" />
-				<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\release\libaprutil.lib" />
-				<copy file="build\subversion\apr-util\LibR\aprutil-1.lib" tofile="build\subversion\apr-util\release\libaprutil-1.lib" />
-			</if>
-			<if test="${aprVersion &lt; '1.0'}">
-				<copy file="build\subversion\apr\LibR\apr.lib" tofile="build\subversion\apr\LibR\libapr.lib" />
-
-				<mkdir dir="build\subversion\apr\release" />
-				<copy file="build\subversion\apr\LibR\apr.lib" tofile="build\subversion\apr\release\libapr.lib" />
-
-				<mkdir dir="build\subversion\apr-util\release" />
-				<copy file="build\subversion\apr-util\LibR\aprutil.lib" tofile="build\subversion\apr-util\release\libaprutil.lib" />
-			</if>
-
-			<touch file="${'build/apr-' + aprVersion +'.build'}" />
-		</if>
-	</target>
-	<target name="build-serf" depends="build-zlib,build-apr">
-		<if test="${not file::exists('build/serf-' + serfVersion +'.build')}">
-			<exec program="msbuild.exe" workingdir="build\subversion">
-				<arg value="/nologo" />
-				<arg value="/verbosity:quiet" />
-				<arg value="serf\serf.vcproj" />
-				<arg value="/p:Configuration=Release|${platform}" />
-			</exec>
-			<touch file="${'build/serf-' + serfVersion +'.build'}" />
-		</if>
+		</OnceBlock>
+		<copy todir="${release}/lib" flatten="true">
+			<fileset basedir="build/win32/subversion">
+				<include name="apr\LibR\apr-1.lib" />
+				<include name="apr-util\LibR\aprutil-1.lib" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64" flatten="true">
+			<fileset basedir="build/x64/subversion">
+				<include name="apr\LibR\apr-1.lib" />
+				<include name="apr-util\LibR\aprutil-1.lib" />
+			</fileset>
+		</copy>
+		<property name="aprIncludeDir" value="${release}/include/apr-1" />
+		<copy todir="${aprIncludeDir}">
+			<fileset basedir="${svnBase}/apr/include">
+				<include name="*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${aprIncludeDir}">
+			<fileset basedir="${svnBase}/apr/include">
+				<include name="*.h" />
+			</fileset>
+		</copy>
 	</target>
 	<target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-apr,build-serf,prepare-neon,generate-svnfiles">
-		<if test="${not file::exists('build/subversion-' + subversionVersion +'.build')}">
+		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
 			<!-- Now build subversion -->
-
-			<exec program="msbuild.exe" workingdir="build\subversion">
+			<exec program="msbuild.exe" workingdir="${svnBase}">
 				<arg value="/nologo" />
-				<arg value="/verbosity:quiet" />
+				<!--arg value="/verbosity:quiet" /-->
 				<arg value="subversion_vcnet.sln" />
 				<arg value="/p:Configuration=Release" />
 				<arg value="/p:Platform=${platform}" />
 				<arg value="/t:__LIBS__" />
 			</exec>
-			<touch file="${'build/subversion-' + subversionVersion +'.build'}" />
-		</if>
+		</OnceBlock>
 	</target>
 	<target name="copy-result" depends="build-svn">
 		<copy todir="${release}/lib" flatten="true">
-			<fileset basedir="build\subversion">
-				<include name="${release}/**/*.lib" />
+			<fileset basedir="build/win32/subversion">
+				<include name="${Configuration}/**/*.lib" />
+				<include name="${Configuration}/**/*.pdb" />
 				<include name="neon/**/*.lib" />
-				<include name="**/libsvn_*.lib" />
-				<include name="**/lib*.pdb" />
-				<include name="**/src*.pdb" />
-				<include name="serf/**/*.lib" />
-				<include name="serf/**/*.pdb" />
+				<include name="serf/${Configuration}/*.lib" />
+				<include name="serf/${Configuration}/*.pdb" />
 				<include name="neon/**/*.pdb" />
 				<include name="apr-util/xml/**/*.lib" />
-				<include name="**/*.dll" />
+				<include name="apr-util/xml/**/*.pdb" />
 
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
 
-				<!-- APR 1.* uses new names -->
-				<include name="apr/LibR/*.lib" if="${aprVersion &lt; '1.0'}" />
-				<include name="apr-util/LibR/*.lib" if="${aprVersion &lt; '1.0'}"/>
+				<include name="apr*/LibR/*.lib" />
+				<include name="apr*/LibR/*.pdb" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64" flatten="true">
+			<fileset basedir="build/x64/subversion">
+				<include name="x64/${Configuration}/**/*.lib" />
+				<include name="x64/${Configuration}/**/*.pdb" />
+				<include name="neon/**/*.lib" />
+				<include name="serf/${Configuration}/*.lib" />
+				<include name="serf/${Configuration}/*.pdb" />
+				<include name="neon/**/*.pdb" />
+				<include name="apr-util/xml/**/*.lib" />
+				<include name="apr-util/xml/**/*.pdb" />
 
-				<include name="apr/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}" />
-				<include name="apr-util/LibR/*-1.lib" if="${aprVersion &gt;= '1.0'}"/>
+				<!-- Don't copy the GPL as a *.lib file -->
+				<exclude name="neon/src/COPYING.LIB" />
 
-				<include name="apr/LibR/*.pdb" />
-				<include name="apr-util/LibR/*.pdb" />
+				<include name="apr*/x64/LibR/*.lib" />
+				<include name="apr*/x64/LibR/*.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include">
-			<fileset basedir="build\subversion\subversion\include">
+			<fileset basedir="${svnBase}\subversion\include">
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/serf">
-			<fileset basedir="build\subversion\serf">
+			<fileset basedir="${svnBase}\serf">
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/neon">
-			<fileset basedir="build\subversion\neon\src">
+			<fileset basedir="${svnBase}\neon\src">
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/apr-1">
-			<fileset basedir="build\subversion\apr\include">
+			<fileset basedir="${svnBase}\apr\include">
 				<include name="**.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/apr-1">
-			<fileset basedir="build\subversion\apr-util\include">
+			<fileset basedir="${svnBase}\apr-util\include">
 				<include name="**.h" />
 			</fileset>
 		</copy>
-		<copy todir="${release}/lib">
+		<copy todir="${release}/lib-AnyCPU">
 			<fileset basedir="${nunitDir}/bin">
 				<include name="nunit.framework.dll" />
 				<include name="nunit.framework.xml" />

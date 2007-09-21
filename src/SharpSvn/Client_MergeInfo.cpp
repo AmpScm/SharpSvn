@@ -5,15 +5,15 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::GetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo)
+void SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources^% mergeInfo)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	GetMergeInfo(target, gcnew SvnGetMergeInfoArgs(), mergeInfo);
+	GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeInfo);
 }
 
-bool SvnClient::GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]SvnMergeInfo^% mergeInfo)
+bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSources^% mergeInfo)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -25,10 +25,10 @@ bool SvnClient::GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]
 	AprPool pool(%_pool);
 	mergeInfo = nullptr;
 
-	apr_hash_t* svnMergeInfo = nullptr;
+	apr_array_header_t* svnMergeSources = nullptr;
 
-	svn_error_t* err = svn_client_get_mergeinfo(
-		&svnMergeInfo,
+	svn_error_t* err = svn_client_suggest_merge_sources(
+		&svnMergeSources,
 		pool.AllocString(target->TargetName),
 		target->Revision->AllocSvnRevision(%pool),
 		CtxHandle,
@@ -36,21 +36,21 @@ bool SvnClient::GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]
 
 	if(!err)
 	{
-		mergeInfo = gcnew SvnMergeInfo(target, svnMergeInfo);
+		mergeInfo = gcnew SvnMergeSources(target, svnMergeSources);
 	}
 
 	return args->HandleResult(err);
 }
 
-bool SvnClient::TryGetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo)
+bool SvnClient::TryGetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources^% mergeInfo)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	SvnGetMergeInfoArgs^ args = gcnew SvnGetMergeInfoArgs();
+	SvnGetSuggestedMergeSourcesArgs^ args = gcnew SvnGetSuggestedMergeSourcesArgs();
 	args->ThrowOnError = false;
 
-	if(!GetMergeInfo(target, args, mergeInfo) || !mergeInfo || !mergeInfo->Available)
+	if(!GetSuggestedMergeSources(target, args, mergeInfo) || !mergeInfo || !mergeInfo->Available)
 	{
 		mergeInfo = nullptr;
 		return false;

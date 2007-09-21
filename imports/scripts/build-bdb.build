@@ -1,7 +1,11 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &lt; '4.5'}" />
-	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &gt;= '4.5'}" />	
+	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &gt;= '4.5'}" />
+
+	<property name="dllPrefix" value="SharpSvn-" />
+	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" />
+	
 	<target name="prepare-bdb" depends="extract">
 		<OnceBlock file="build/db-${dbVersion}.prepared">
 			<foreach item="File" property="dsp">
@@ -33,10 +37,10 @@
 							<replacestring from='AMD64/libdb45.dll' to='AMD64/${dbDllName}-x64.dll' />
 							<replacestring from='AMD64/libdb46.dll' to='AMD64/${dbDllName}-x64.dll' />
 							<replacestring from='AMD64/libdb47.dll' to='AMD64/${dbDllName}-x64.dll' />
-							<replacestring from='/libdb44.dll' to='/${dbDllName}.dll' />
-							<replacestring from='/libdb45.dll' to='/${dbDllName}.dll' />
-							<replacestring from='/libdb46.dll' to='/${dbDllName}.dll' />
-							<replacestring from='/libdb47.dll' to='/${dbDllName}.dll' />
+							<replacestring from='/libdb44.dll' to='/${dbDllName}-win32.dll' />
+							<replacestring from='/libdb45.dll' to='/${dbDllName}-win32.dll' />
+							<replacestring from='/libdb46.dll' to='/${dbDllName}-win32.dll' />
+							<replacestring from='/libdb47.dll' to='/${dbDllName}-win32.dll' />
 						</filterchain>
 					</loadfile>
 					<echo message="${projtext}" file="${vcproj}" />
@@ -51,9 +55,20 @@
 			<arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />			
 			<arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
 		</VCBuild>
+		<!-- Create temp directory for subversion build -->
+		<copy todir="build/db-${dbVersion}/${platform}/lib" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="${Configuration}/*.lib" if="${platform == 'win32'}"/>
+				<include name="${Configuration}_AMD64/*.lib" if="${platform == 'x64'}"/>
+			</fileset>
+		</copy>
+		<copy todir="build/db-${dbVersion}/${platform}/include" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="*.h" />
+			</fileset>
+		</copy>
 		<copy todir="${release}/lib">
-			<fileset basedir="${dbWindowsDir}/${Configuration}">
-				<include name="*.dll" />
+			<fileset basedir="${dbWindowsDir}/${Configuration}">				
 				<include name="*.lib" />
 				<include name="*.pdb" />
 				<include name="*.exp" />
@@ -61,10 +76,17 @@
 		</copy>
 		<copy todir="${release}/lib-x64">
 			<fileset basedir="${dbWindowsDir}/${Configuration}_AMD64">
-				<include name="*.dll" />
 				<include name="*.lib" />
 				<include name="*.pdb" />
 				<include name="*.exp" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/bin" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="${Configuration}/*.dll" />
+				<include name="${Configuration}/*.pdb" />
+				<include name="${Configuration}_AMD64/*.dll" />
+				<include name="${Configuration}_AMD64/*.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include">

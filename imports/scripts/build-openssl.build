@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+	<target name="prepare-openssl" depends="extract">
+		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
+			<exec program="perl.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
+				<arg value="Configure" />
+				<arg value="VC-WIN32" if="${platform=='win32'}" />
+				<arg value="VC-WIN64A" if="${platform=='x64'}" />
+				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
+				<arg value="-D_CRT_SECURE_NO_DEPRECATE" />
+			</exec>
+		</OnceBlock>
+		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
+			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='win32'}">
+				<arg line="/c ms\do_masm.bat" />
+			</exec>
+			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='x64'}">
+				<arg line="/c ms\do_win64a.bat" />
+			</exec>
+		</OnceBlock>
+	</target>
+	<target name="build-openssl" depends="prepare-openssl">
+		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
+			<exec program="nmake.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
+				<arg line="-f ms\nt.mak" />
+			</exec>
+		</OnceBlock>
+		<copy todir="${release}/lib">
+			<fileset basedir="build/win32/openssl-${opensslVersion}">
+				<include name="*.lib" />
+				<include name="*.exp" />
+				<include name="*.pdb" />
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64">
+			<fileset basedir="build/x64/openssl-${opensslVersion}">
+				<include name="*.lib" />
+				<include name="*.exp" />
+				<include name="*.pdb" />
+				<include name="*.dll" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="build/${platform}/openssl-${opensslVersion}/inc32">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+	</target>
+</project>
