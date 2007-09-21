@@ -38,7 +38,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 
 	svn_error_t *r = svn_client_add4(
 		pool.AllocPath(path),
-		IsRecursive(args->Depth),
+		(svn_depth_t)args->Depth,
 		args->Force,
 		args->NoIgnore,
 		args->AddParents,

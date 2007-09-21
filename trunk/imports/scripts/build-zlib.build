@@ -16,29 +16,29 @@
 				</do>
 			</foreach>
 		</OnceBlock>
-		<OnceBlock file="build/zlib-${zlibVersion}-${platform}.patched">
-			<if test="${platform != 'win32'}">
-				<loadfile file="build/zlib-${zlibVersion}/projects/visualc6/zlib.vcproj" property="projtext">
-					<filterchain>
-						<replacestring from='"Win32"' to='"${platform}"' if="${platform != 'win32'}" />
-						<replacestring from='|Win32"' to='|${platform}"' if="${platform != 'win32'}" />
-						<replacestring from='=".\Win32_' to='=".\${platform}_' />
-						<replacestring from='="Win32_' to='="${platform}_' />
-						<replacestring from='TargetMachine="1"' to='TargetMachine="17"' if="${platform == 'x64'}" />
-					</filterchain>
-				</loadfile>
-				<echo message="${projtext}" file="build/zlib-${zlibVersion}/projects/visualc6/zlib-${platform}.vcproj" />
-			</if>
+		<OnceBlock file="build/zlib-${zlibVersion}_${platform}.prepared">
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="build/zlib-${zlibVersion}">
+						<include name="projects/visualc6/zlib.vcproj" />
+					</items>
+				</in>
+				<do>
+					<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+				</do>
+			</foreach>
 		</OnceBlock>
 	</target>
 	<target name="build-zlib" depends="prepare-zlib, extract">
 		<VCBuild>
-			<arg value="build/zlib-${zlibVersion}/projects/visualc6/zlib.vcproj" if="${platform == 'win32'}" />
-			<arg value="build/zlib-${zlibVersion}/projects/visualc6/zlib-${platform}.vcproj" if="${platform != 'win32'}" />
-			<arg value="LIB Release|${platform}" />
+			<arg value="build/zlib-${zlibVersion}/projects/visualc6/zlib.vcproj" />
+			<arg value="LIB ${Configuration}|${platform}" />
 		</VCBuild>
+		<copy file="build/zlib-${zlibVersion}/projects/visualc6/win32_Lib_Release/zlib.lib" tofile="build/zlib-${zlibVersion}/zlib.lib" if="${platform == 'win32'}" overwrite="true"/>
+		<copy file="build/zlib-${zlibVersion}/projects/visualc6/${platform}/win32_Lib_Release/zlib.lib" tofile="build/zlib-${zlibVersion}/zlib.lib" if="${platform != 'win32'}" overwrite="true"/>
+		<copy file="build/zlib-${zlibVersion}/zlib.lib" tofile="build/zlib-${zlibVersion}/zlibstat.lib" overwrite="true" />
 		<copy todir="${release}/lib">
-			<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/win32_Dll_Release">
+			<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/win32_Lib_Release">
 				<include name="*.dll" />
 				<include name="*.lib" />
 				<include name="*.exp" />
@@ -46,7 +46,7 @@
 			</fileset>
 		</copy>
 		<copy todir="${release}/lib-x64">
-			<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/${platform}_Dll_Release">
+			<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/x64/Win32_Lib_Release">
 				<include name="*.dll" />
 				<include name="*.lib" />
 				<include name="*.exp" />

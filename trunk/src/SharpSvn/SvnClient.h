@@ -705,9 +705,9 @@ public:
 		bool GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
 
 	public:
-		void GetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo);
-		bool GetMergeInfo(SvnTarget ^target, SvnGetMergeInfoArgs^ args, [Out]SvnMergeInfo^% mergeInfo);
-		bool TryGetMergeInfo(SvnTarget ^target, [Out]SvnMergeInfo^% mergeInfo);
+		void GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources^% mergeInfo);
+		bool GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSources^% mergeInfo);
+		bool TryGetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources^% mergeInfo);
 
 	public:
 		void Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);

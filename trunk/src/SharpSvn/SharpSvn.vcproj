@@ -4,7 +4,7 @@
 	Version="8,00"
 	Name="SharpSvn"
 	ProjectGUID="{A3166809-1484-4442-BF75-5FB0E8356381}"
-	RootNamespace="TurtleSvnCommon"
+	RootNamespace="SharpSvn"
 	Keyword="ManagedCProj"
 	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib&quot;"
 	>
@@ -21,8 +21,8 @@
 	<Configurations>
 		<Configuration
 			Name="Debug|Win32"
-			OutputDirectory="bin\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(ConfigurationName)"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			ManagedExtensions="1"
@@ -33,9 +33,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll &quot;$(TargetDir)\SharpSvn-DB4-4-20-NC.dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
-				Outputs="$(TargetDir)\SharpSvn-DB4-4-20-NC.dll"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -74,9 +74,9 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib"
-				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
-				AssemblyLinkResource="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
+				AdditionalLibraryDirectories="..\..\imports\release\lib;;..\..\imports\release\lib-AnyCPU"
+				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -109,95 +109,9 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="bin\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			ManagedExtensions="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll &quot;$(TargetDir)\SharpSvn-DB4-4-20-NC.dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
-				Outputs="$(TargetDir)SharpSvn-DB4-4-20-NC.dll"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
-				PreprocessorDefinitions="WIN32;NDEBUG"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
-				GenerateXMLDocumentationFiles="true"
-				BrowseInformation="1"
-				WarningLevel="3"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\release\lib"
-				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
-				AssemblyLinkResource="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
-				KeyFile="SharpSvn.snk"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Debug|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			ManagedExtensions="1"
@@ -208,9 +122,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll &quot;$(TargetDir)\SharpSvn-DB4-4-20-NC.dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
-				Outputs="$(TargetDir)\SharpSvn-DB4-4-20-NC.dll"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -250,9 +164,9 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib"
-				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
-				AssemblyLinkResource="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
+				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU"
+				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="17"
@@ -285,9 +199,9 @@
 			/>
 		</Configuration>
 		<Configuration
-			Name="Release|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
+			Name="Release|Win32"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="1"
 			ManagedExtensions="1"
@@ -299,9 +213,95 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll &quot;$(TargetDir)\SharpSvn-DB4-4-20-NC.dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
-				Outputs="$(TargetDir)SharpSvn-DB4-4-20-NC.dll"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="1"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
+				PreprocessorDefinitions="WIN32;NDEBUG"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="2"
+				GenerateXMLDocumentationFiles="true"
+				BrowseInformation="1"
+				WarningLevel="3"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\imports\release\lib;;..\..\imports\release\lib-AnyCPU"
+				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				GenerateDebugInformation="true"
+				TargetMachine="1"
+				KeyFile="SharpSvn.snk"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
+			Name="Release|x64"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
+			ManagedExtensions="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description="Copying BDB dll"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -339,9 +339,9 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\release\lib"
-				DelayLoadDLLs="SharpSvn-DB4-4-20-NC.dll"
-				AssemblyLinkResource="..\..\imports\release\lib\SharpSvn-DB4-4-20-NC.dll"
+				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU"
+				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				TargetMachine="17"
 				KeyFile="SharpSvn.snk"
@@ -412,7 +412,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -423,7 +423,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|x64"
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -522,7 +522,7 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="Release|Win32"
+						Name="Debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -530,7 +530,7 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="Debug|x64"
+						Name="Release|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"

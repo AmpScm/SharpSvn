@@ -53,7 +53,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 	{
 		SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
 		aa->ThrowOnError = args->ThrowOnError;
-		aa->Depth = SvnDepth::Infinity;
+		aa->Depth = args->Depth;
 
 		aa->AllowUnversionedObstructions = true; // This is the trick
 
@@ -125,7 +125,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		&commit_info,
 		pool.AllocPath(path),
 		pool.AllocCanonical(target->ToString()),
-		!args->Recursive,
+		(svn_depth_t)args->Depth,
 		args->NoIgnore,
 		args->IgnoreUnknownNodeTypes,
 		CtxHandle,

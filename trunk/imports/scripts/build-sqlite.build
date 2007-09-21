@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+	<target name="build-sqlite" depends="extract">
+		<OnceBlock file="build/sqlite-${sqliteVersion}-${platform}.build">
+			<mkdir dir="${sqliteDir}/${Configuration}_${platform}" />
+			<cl outputdir="${sqliteDir}/${Configuration}_${platform}">
+				<arg value="/O2" if="${Configuration == 'release'}" />
+				<arg value="/Ob1" if="${Configuration == 'release'}" />
+				<arg value="/Od" if="${Configuration != 'release'}" />
+				<arg value="/GF" if="${Configuration == 'release'}" />
+				<arg value="/FD" />
+				<arg value="/EHsc" />
+				<arg value="/MD" if="${Configuration == 'release'}" />
+				<arg value="/MDd" if="${Configuration != 'release'}" />
+				<arg value="/Gy" />
+				<arg value="/W3" />
+				<arg value="/nologo" />
+				<arg value="/c" />
+				<arg value="/Zi" />
+				<arg value="/Fd${sqliteDir}/${Configuration}_${platform}/sqlite3.pdb" />
+				<arg value="/errorReport:prompt" />
+				<!-- conversion from 'i64' to 'int', possible loss of data -->
+				<arg value="/wd4244" />
+				<!-- conversion from 'size_t' to 'int', possible loss of data -->
+				<arg value="/wd4267" />
+				<sources basedir="${sqliteDir}">
+					<include name="*.c" />
+					<exclude name="tclsqlite.c" />
+					<exclude name="icu.c" />
+				</sources>
+				<includedirs basedir="${sqliteDir}">
+					<include name="." />
+				</includedirs>
+				<defines>
+					<define name="_CRT_NONSTDC_NO_DEPRECATE" />
+					<define name="_CRT_SECURE_NO_DEPRECATE" />
+					<define name="NO_TCL" />
+					<define name="WIN32" />
+					<define name="_WINDOWS" />
+					<define name="_WIN32" />
+					<define name="WIN64" if="${platform == 'x64'}" />
+					<define name="NDEBUG" if="${Configuration == 'release'}"/>
+					<define name="_DEBUG" if="${Configuration != 'release'}"/>
+				</defines>
+			</cl>
+			<property name="machineoption" value="/MACHINE:X86" if="${platform == 'win32'}"  />
+			<property name="machineoption" value="/MACHINE:x64" if="${platform == 'x64'}" />
+			<lib
+					  output="build/sqlite-${sqliteVersion}/${Configuration}_${platform}\sqlite3.lib"
+					  options='/NOLOGO /SUBSYSTEM:WINDOWS ${machineoption}'>
+				<sources basedir="build/sqlite-${sqliteVersion}">
+					<include name="${Configuration}_${platform}\*.obj" />
+				</sources>
+			</lib>
+		</OnceBlock>
+		<copy todir="${sqliteDir}/inc">
+			<fileset basedir="${sqliteDir}">
+				<include name="sqlite3.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib">
+			<fileset basedir="${sqliteDir}/${Configuration}_win32">
+				<include name="*.lib" />
+				<include name="*.pdb" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64">
+			<fileset basedir="${sqliteDir}/${Configuration}_x64">
+				<include name="*.lib" />
+				<include name="*.pdb" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="${sqliteDir}">
+				<include name="sqlite3.h" />
+			</fileset>
+		</copy>
+	</target>
+</project>

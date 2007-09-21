@@ -10,13 +10,13 @@ namespace SharpSvn {
 	using System::Collections::Generic::SortedList;
 
 
-	public ref class SvnMergeInfo : SvnBase
+	public ref class SvnMergeSources : SvnBase
 	{
 		initonly SvnTarget^ _target;
 		initonly bool _available;
-		initonly IList<String^>^ _mergeSources;
+		initonly IList<Uri^>^ _mergeSources;
 	internal:
-		SvnMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo);
+		SvnMergeSources(SvnTarget^ target, apr_array_header_t* mergeSources);
 
 
 	public:
@@ -38,9 +38,9 @@ namespace SharpSvn {
 		}
 
 	public:
-		property IList<String^>^ MergeSources
+		property IList<Uri^>^ MergeSources
 		{
-			IList<String^>^ get()
+			IList<Uri^>^ get()
 			{
 				return _mergeSources;
 			}

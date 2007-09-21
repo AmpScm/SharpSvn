@@ -14,7 +14,9 @@ void SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
 
 	Blame(target, gcnew SvnBlameArgs(), blameHandler);
 }
-static svn_error_t *svn_client_blame_receiver_handler(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author, const char *date, const char *line, apr_pool_t *pool)
+static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author, 
+													   const char *date, svn_revnum_t merged_revision,  const char *merged_author, 
+													   const char *merged_date, const char *merged_path, const char *line, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
@@ -23,7 +25,8 @@ static svn_error_t *svn_client_blame_receiver_handler(void *baton, apr_int64_t l
 	SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
-		SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, line, %thePool);
+		SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date, 
+													   merged_path, line, %thePool);
 		try
 		{
 			args->OnBlameHandler(e);
@@ -67,14 +70,15 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 
 		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
-		svn_error_t *r = svn_client_blame3(
+		svn_error_t *r = svn_client_blame4(
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			args->Start->AllocSvnRevision(%pool),
 			args->End->AllocSvnRevision(%pool),
 			options,
 			args->IgnoreMimeType,
-			svn_client_blame_receiver_handler,
+			args->IncludeMergedRevisions,
+			svn_client_blame_receiver_handler2,
 			(void*)_clientBatton->Handle,
 			CtxHandle,
 			pool.Handle);

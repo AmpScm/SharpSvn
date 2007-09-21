@@ -1803,9 +1803,17 @@ namespace SharpSvn {
 		DateTime _date;
 		String^ _author;
 		String^ _line;
+		__int64 _mergedRevision;
+		const char* _pcMergedAuthor;
+		const char* _pcMergedPath;
+		DateTime _mergedDate;
+		String^ _mergedAuthor;
+		String^ _mergedPath;
 
 	internal:
-		SvnBlameEventArgs(__int64 revision, __int64 lineNr, const char* author, const char* date, const char* line, AprPool^ pool)
+		SvnBlameEventArgs(__int64 revision, __int64 lineNr, const char* author, const char* date, 
+			svn_revnum_t merged_revision, const char *merged_author, const char *merged_date, 
+			const char *merged_path, const char* line, AprPool^ pool)
 		{
 			if(!pool)
 				throw gcnew ArgumentNullException("pool");
@@ -1826,6 +1834,18 @@ namespace SharpSvn {
 
 			if(!err)
 				_date = SvnBase::DateTimeFromAprTime(when);
+
+			_mergedRevision = merged_revision;
+			_pcMergedAuthor = merged_author;
+			_pcMergedPath = merged_path;
+
+			if(merged_date)
+			{
+				err = svn_time_from_cstring(&when, merged_date, pool->Handle);
+
+				if(!err)
+					_mergedDate = SvnBase::DateTimeFromAprTime(when);
+			}
 		}
 
 	public:
@@ -1875,6 +1895,44 @@ namespace SharpSvn {
 			}
 		}
 
+		property String^ MergedAuthor
+		{
+			String^ get()
+			{
+				if(!_mergedAuthor && _pcMergedAuthor)
+					_mergedAuthor = SvnBase::Utf8_PtrToString(_pcMergedAuthor);
+
+				return _mergedAuthor;
+			}
+		}
+
+		property String^ MergedPath
+		{
+			String^ get()
+			{
+				if(!_mergedPath && _pcMergedPath)
+					_mergedPath = SvnBase::Utf8_PtrToString(_pcMergedPath);
+
+				return _mergedPath;
+			}
+		}
+
+		property DateTime MergedDate
+		{
+			DateTime get()
+			{
+				return _mergedDate; 
+			}
+		}
+
+		property __int64 MergedRevision
+		{
+			__int64 get()
+			{
+				return _mergedRevision;
+			}
+		}
+
 		virtual void Detach(bool keepProperties) override
 		{
 			try
@@ -1883,13 +1941,16 @@ namespace SharpSvn {
 				{
 					GC::KeepAlive(Author);
 					GC::KeepAlive(Line);
-					//GC::KeepAlive(Path);
+					GC::KeepAlive(MergedAuthor);
+					GC::KeepAlive(MergedPath);
 				}
 			}
 			finally
 			{
 				_pcAuthor = nullptr;
 				_pcLine = nullptr;
+				_pcMergedAuthor = nullptr;
+				_pcMergedPath = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}

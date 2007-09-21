@@ -6,26 +6,21 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
-SvnMergeInfo::SvnMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo)
+SvnMergeSources::SvnMergeSources(SvnTarget^ target, apr_array_header_t* mergeSources)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
+	else if(!mergeSources)
+		throw gcnew ArgumentNullException("mergeSources");
 
 	_target = target;
-	if(!mergeInfo)
-	{
-		//_available = false;
-		return;
-	}
 
-	List<String^>^ sources = gcnew List<String^>(0);
+	List<Uri^>^ sources = gcnew List<Uri^>(mergeSources->nelts);
 
-	for (apr_hash_index_t *hi = apr_hash_first(NULL, mergeInfo); hi; hi = apr_hash_next(hi))
-	{
-		const char *path;
-		apr_hash_this(hi, (const void **) &path, NULL, NULL);
+	const char** uris = (const char**)mergeSources->elts;
 
-		sources->Add(Utf8_PtrToString(path));
-	}
+	for(int i = 0; i < sources->Count; i++)
+		sources->Add(gcnew Uri(Utf8_PtrToString(*(uris++))));
+
 	_mergeSources = sources->AsReadOnly();
 }
