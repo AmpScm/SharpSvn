@@ -13,8 +13,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		SharpSvn.FxCop = SharpSvn.FxCop
 	EndProjectSection
+	ProjectSection(FolderStartupServices) = postProject
+		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
+	EndProjectSection
 EndProject
 Global
+	GlobalSection(TextTemplating) = postSolution
+		TextTemplating = 1
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
 		Debug|x86 = Debug|x86
@@ -23,9 +29,11 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Debug|x64.ActiveCfg = Debug|x64
+		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Debug|x64.Build.0 = Debug|x64
 		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Debug|x86.ActiveCfg = Debug|x86
 		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Debug|x86.Build.0 = Debug|x86
 		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Release|x64.ActiveCfg = Release|x64
+		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Release|x64.Build.0 = Release|x64
 		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Release|x86.ActiveCfg = Release|x86
 		{E929A4D4-6C65-4D00-9432-E082169BDDC3}.Release|x86.Build.0 = Release|x86
 		{A3166809-1484-4442-BF75-5FB0E8356381}.Debug|x64.ActiveCfg = Debug|x64
@@ -41,9 +49,11 @@ Global
 		{7C522F9F-6C65-405C-9A67-5F27FAAF970B}.Release|x64.ActiveCfg = Release|x64
 		{7C522F9F-6C65-405C-9A67-5F27FAAF970B}.Release|x86.ActiveCfg = Release|x86
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x64.ActiveCfg = Debug|x64
+		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x64.Build.0 = Debug|x64
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x86.ActiveCfg = Debug|x86
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x86.Build.0 = Debug|x86
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x64.ActiveCfg = Release|x64
+		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x64.Build.0 = Release|x64
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x86.ActiveCfg = Release|x86
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
