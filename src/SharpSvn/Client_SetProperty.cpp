@@ -108,12 +108,17 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 
 	svn_commit_info_t* pInfo = nullptr;
 
+	const char* pcPropertyName = pool->AllocString(propertyName);
+
+	if(!svn_prop_name_is_valid(pcPropertyName))
+		throw gcnew ArgumentException("Property name is not valid", "propertyName");
+
 	svn_error_t *r = svn_client_propset3(
 		&pInfo,
-		pool->AllocString(propertyName),
+		pcPropertyName,
 		value,
 		pool->AllocPath(path),
-		IsRecursive(args->Depth),
+		(svn_depth_t)args->Depth,
 		args->SkipChecks,
 		(svn_revnum_t)args->BaseRevision,
 		CtxHandle,

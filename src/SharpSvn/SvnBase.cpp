@@ -36,6 +36,8 @@ void SvnBase::EnsureLoaded()
 		}
 
 		svn_ra_initialize(pool);
+
+		_admDir = svn_wc_get_adm_dir(pool);
 	}
 }
 

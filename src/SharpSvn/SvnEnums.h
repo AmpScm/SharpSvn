@@ -210,15 +210,15 @@ namespace SharpSvn {
 	public enum class SvnSchedule
 	{
 		/// <summary> Nothing special here </summary>
-		Normal			= svn_wc_schedule_normal - svn_wc_schedule_normal,
+		Normal			= svn_wc_schedule_normal,
 		/// <summary> Slated for addition </summary>
-		Add				= svn_wc_schedule_add - svn_wc_schedule_normal,
+		Add				= svn_wc_schedule_add,
 
 		/// <summary> Slated for deletion </summary>
-		Delete			= svn_wc_schedule_delete - svn_wc_schedule_normal,
+		Delete			= svn_wc_schedule_delete,
 
 		/// <summary> Slated for replacement (delete + add) </summary>
-		Replace			= svn_wc_schedule_replace - svn_wc_schedule_normal
+		Replace			= svn_wc_schedule_replace
 	};
 
 	[Flags]

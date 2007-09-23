@@ -20,6 +20,7 @@ namespace SharpSvn {
 
 		internal:
 			static void EnsureLoaded();
+			static const char* _admDir;
 
 		protected:
 			SvnBase();

@@ -10,9 +10,9 @@ namespace SharpSvn {
 		SvnException^ _exception;
 
 	public:
-		event EventHandler<SvnCancelEventArgs^>^		Cancel;
+		event EventHandler<SvnCancelEventArgs^>^	Cancel;
 		event EventHandler<SvnProgressEventArgs^>^	Progress;
-		event EventHandler<SvnNotifyEventArgs^>^		Notify;
+		event EventHandler<SvnNotifyEventArgs^>^	Notify;
 
 	protected public:
 		SvnClientArgs()
@@ -1042,29 +1042,31 @@ namespace SharpSvn {
 
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
-		bool _recursive;
+		SvnDepth _depth;
 		SvnAccept _accept;
 
 	public:
 		SvnResolvedArgs()
 		{
+			_depth = SvnDepth::Empty;
 			_accept = SvnAccept::None;
 		}
 
 		SvnResolvedArgs(SvnAccept accept)
 		{
+			_depth = SvnDepth::Empty;
 			_accept = accept;
 		}
 
-		property bool Recursive
+		property SvnDepth Depth
 		{
-			bool get()
+			SvnDepth get()
 			{
-				return _recursive;
+				return _depth;
 			}
-			void set(bool value)
+			void set(SvnDepth value)
 			{
-				_recursive = value;
+				_depth = value;
 			}
 		}
 
@@ -1830,6 +1832,22 @@ namespace SharpSvn {
 	{
 	public:
 		SvnGetSuggestedMergeSourcesArgs()
+		{
+		}
+	};
+
+	public ref class SvnGetAppliedMergeInfoArgs : public SvnClientArgs
+	{
+	public:
+		SvnGetAppliedMergeInfoArgs()
+		{
+		}
+	};
+
+	public ref class SvnGetAvailableMergeInfoArgs : public SvnClientArgs
+	{
+	public:
+		SvnGetAvailableMergeInfoArgs()
 		{
 		}
 	};

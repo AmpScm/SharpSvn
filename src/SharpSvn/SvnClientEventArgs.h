@@ -56,7 +56,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnProgressEventArgs : public SvnEventArgs
+	public ref class SvnProgressEventArgs sealed : public SvnEventArgs
 	{
 		initonly __int64 _progress;
 		initonly __int64 _totalProgress;
@@ -86,7 +86,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnCommittingEventArgs : public SvnEventArgs
+	public ref class SvnCommittingEventArgs sealed : public SvnEventArgs
 	{
 		AprPool^ _pool;
 		const apr_array_header_t *_commitItems;
@@ -129,7 +129,7 @@ namespace SharpSvn {
 		virtual void Detach(bool keepProperties) override;
 	};
 
-	public ref class SvnConflictEventArgs : public SvnCancelEventArgs
+	public ref class SvnConflictEventArgs sealed : public SvnCancelEventArgs
 	{
 		const svn_wc_conflict_description_t* _description;
 		SvnConflictResult _result;
@@ -285,7 +285,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLockInfo : public ISvnDetachable
+	public ref class SvnLockInfo sealed : public ISvnDetachable
 	{
 		const svn_lock_t *_lock;
 		initonly bool _localData;
@@ -420,7 +420,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnNotifyEventArgs : public SvnEventArgs
+	public ref class SvnNotifyEventArgs sealed : public SvnEventArgs
 	{
 		const svn_wc_notify_t *_notify;
 		initonly SvnNotifyAction _action;
@@ -1064,7 +1064,7 @@ namespace SharpSvn {
 				_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
 			}
 			_hasWcInfo = info->has_wc_info != 0;
-			_wcSchedule = (SvnSchedule)(info->schedule - svn_wc_schedule_normal);
+			_wcSchedule = (SvnSchedule)info->schedule;
 			_copyFromRev = info->copyfrom_rev;
 			if(_hasWcInfo)
 			{
