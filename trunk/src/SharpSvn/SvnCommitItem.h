@@ -7,21 +7,7 @@ namespace SharpSvn {
 
 	ref class SvnCommitItem;
 
-	public ref class SvnInfoBase abstract
-	{
-	protected:
-		SvnInfoBase()
-		{
-		}
-
-	internal:
-		static String^ Utf8_PtrToString(const char *ptr)
-		{
-			return SvnBase::Utf8_PtrToString(ptr);
-		}
-	};
-
-	public ref class SvnCommitInfo : SvnInfoBase
+	public ref class SvnCommitInfo sealed
 	{
 		initonly __int64 _revision;
 		initonly DateTime _date;
@@ -66,7 +52,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnCommitItem : public SvnInfoBase
+	public ref class SvnCommitItem sealed
 	{
 		const svn_client_commit_item3_t *_info;
 		String^ _path;
@@ -86,7 +72,7 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if(!_path && _info)
-					_path = Utf8_PtrToString(_info->path);
+					_path = SvnBase::Utf8_PtrToString(_info->path);
 				return _path;
 			}
 		}
@@ -115,7 +101,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_uri && _info && _info->url)
-					_uri = gcnew System::Uri(Utf8_PtrToString(_info->url));
+					_uri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->url));
 
 				return _uri;
 			}
@@ -134,7 +120,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_copyFromUri && _info && _info->copyfrom_url)
-					_copyFromUri = gcnew System::Uri(Utf8_PtrToString(_info->copyfrom_url));
+					_copyFromUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->copyfrom_url));
 
 				return _copyFromUri;
 			}

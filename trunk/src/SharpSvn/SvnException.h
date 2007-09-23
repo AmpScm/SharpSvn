@@ -62,7 +62,7 @@ namespace SharpSvn {
 		{
 		}
 
-		property int ErrorCode
+		property int SubversionErrorCode
 		{
 			int get()
 			{
@@ -128,4 +128,5 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthorizationException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnDiffException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientApiException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnDiskFullException, SvnException);
 }

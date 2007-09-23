@@ -33,7 +33,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
@@ -122,7 +122,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
@@ -213,7 +213,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
@@ -299,7 +299,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;"
+				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
 			/>
@@ -724,11 +724,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_GetAppliedMergeInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_GetAvailableMergeInfo.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_GetProperty.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\Client_GetRevisionProperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_GetSuggestedMergeSources.cpp"
 					>
 				</File>
 				<File
@@ -753,10 +765,6 @@
 				</File>
 				<File
 					RelativePath=".\Client_Merge.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Client_MergeInfo.cpp"
 					>
 				</File>
 				<File

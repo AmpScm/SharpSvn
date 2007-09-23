@@ -6,21 +6,67 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
-SvnMergeSources::SvnMergeSources(SvnTarget^ target, apr_array_header_t* mergeSources)
+SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo, AprPool^ pool)
 {
+	// Pool is only available during the constructor
 	if(!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!mergeSources)
-		throw gcnew ArgumentNullException("mergeSources");
+	else if(!mergeInfo)
+		throw gcnew ArgumentNullException("mergeInfo");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
 
 	_target = target;
 
-	List<Uri^>^ sources = gcnew List<Uri^>(mergeSources->nelts);
+	// mergeInfo: hash mapping <const char *> source URLs to an <apr_array_header_t *> list of <svn_merge_range_t>
 
-	const char** uris = (const char**)mergeSources->elts;
+	AppliedMergesList^ list = gcnew AppliedMergesList();
 
-	for(int i = 0; i < sources->Count; i++)
-		sources->Add(gcnew Uri(Utf8_PtrToString(*(uris++))));
+	for (apr_hash_index_t *hi = apr_hash_first(pool->Handle, mergeInfo); hi; hi = apr_hash_next(hi))
+	{
+		const char *pUri;
+		apr_ssize_t klen;
+		apr_array_header_t *ranges;
+		apr_hash_this(hi, (const void **) &pUri, &klen, (void**)&ranges);
 
-	_mergeSources = sources->AsReadOnly();
+		if(pUri && ranges)
+		{
+			Uri^ uri;
+
+			if(Uri::TryCreate(SvnBase::Utf8_PtrToString(pUri, klen), UriKind::Absolute, uri))
+			{
+				list->Add(gcnew SvnAppliedMergeItem(uri, SvnAppliedMergeItem::CreateRangeList(ranges)));
+			}
+		}		
+	}
+	_appliedMerges = list;
+}
+
+SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool)
+{
+	// Pool is only available during the constructor
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!mergeInfo)
+		throw gcnew ArgumentNullException("mergeInfo");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	_target = target;
+	_mergeRanges = SvnAppliedMergeItem::CreateRangeList(mergeInfo);
+}
+
+IList<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
+{
+	if(!rangeList)
+		throw gcnew ArgumentNullException("rangeList");
+
+	array<SvnMergeRange^>^ ranges = gcnew array<SvnMergeRange^>(rangeList->nelts);
+
+	const svn_merge_range_t** mrgRange = (const svn_merge_range_t**)rangeList->elts;
+
+	for(int i = 0; i < rangeList->nelts; i++)
+		ranges[i] = gcnew SvnMergeRange(mrgRange[i]->start, mrgRange[i]->end, 0 != mrgRange[i]->inheritable);
+
+	return array<SvnMergeRange>::AsReadOnly(ranges);
 }

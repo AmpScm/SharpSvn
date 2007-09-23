@@ -87,23 +87,38 @@ namespace SharpSvn {
 		SvnClient();
 
 	private:
+		static initonly String^ _administrativeDirName = Utf8_PtrToString(_admDir);
 		void Initialize();
 
 	public:
+		/// <summary>Gets the version number of SharpSvn's encapsulated subversion library</summary>
 		property static Version^ Version
 		{
 			System::Version^ get();
 		}
 
+		/// <summary>Gets the version of the SharpSvn library</summary>
 		property static System::Version^ SharpSvnVersion
 		{
 			System::Version^ get();
+		}
+
+		/// <summary>
+		/// Gets the name of the subversion administrative directories. Most commonly ".svn"
+		/// </summary>
+		property static String^ AdministrativeDirectoryName
+		{
+			String^ get()
+			{
+				return _administrativeDirName;
+			}
 		}
 
 	private:
 		SvnClientConfiguration^ _config;
 
 	public:
+		/// <summary>Gets the <see cref="SvnClientConfiguration" /> instance of this <see cref="SvnClient"/></summary>
 		property SvnClientConfiguration^ Configuration
 		{
 			SvnClientConfiguration^ get()
@@ -118,17 +133,47 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Client events
 	public:
+		/// <summary>
+		/// Raised to allow canceling operations. The event is first 
+		/// raised on the <see cref="SvnClientArgs" /> object and 
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
 		event EventHandler<SvnCancelEventArgs^>^		Cancel;
+		/// <summary>
+		/// Raised on progress. The event is first 
+		/// raised on the <see cref="SvnClientArgs" /> object and 
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
 		event EventHandler<SvnProgressEventArgs^>^		Progress;
+		/// <summary>
+		/// Raised on notifications. The event is first 
+		/// raised on the <see cref="SvnClientArgs" /> object and 
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
 		event EventHandler<SvnNotifyEventArgs^>^		Notify;
+		/// <summary>
+		/// Raised on progress. The event is first 
+		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and 
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
 		event EventHandler<SvnCommittingEventArgs^>^	Committing;
+		/// <summary>
+		/// Raised on progress. The event is first 
+		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and 
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
 		event EventHandler<SvnConflictEventArgs^>^		Conflict;
 
 	protected:
+		/// <summary>Invokes the <see cref="Cancel" /> event</summary>
 		virtual void OnCancel(SvnCancelEventArgs^ e);
+		/// <summary>Invokes the <see cref="Progress" /> event</summary>
 		virtual void OnProgress(SvnProgressEventArgs^ e);
+		/// <summary>Invokes the <see cref="Committing" /> event</summary>
 		virtual void OnCommitting(SvnCommittingEventArgs^ e);
+		/// <summary>Invokes the <see cref="Notify" /> event</summary>
 		virtual void OnNotify(SvnNotifyEventArgs^ e);
+		/// <summary>Invokes the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e);
 
 	internal:
@@ -677,7 +722,7 @@ namespace SharpSvn {
 		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
 #pragma endregion
 
-public:
+	public:
 		/////////////////////////////////////////
 #pragma region // Diff Summary Command
 		void DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
@@ -705,9 +750,24 @@ public:
 		bool GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
 
 	public:
-		void GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources^% mergeInfo);
-		bool GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSources^% mergeInfo);
-		bool TryGetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources^% mergeInfo);
+		/// <summary>Gets a list of Uri's which might be valid merge sources</summary>
+		/// <remarks>The list contains copy-from locations and previous merge locations</remarks>
+		void GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources);
+		/// <summary>Gets a list of Uri's which might be valid merge sources</summary>
+		/// <remarks>The list contains copy-from locations and previous merge locations</remarks>
+		bool GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]IList<Uri^>^% mergeSources);
+
+	public:
+		/// <summary>Gets the merges which are applied on the specified target</summary>
+		void GetAppliedMergeInfo(SvnTarget ^target, [Out]SvnAppliedMergeInfo^% mergeInfo);
+		/// <summary>Gets the merges which are applied on the specified target</summary>
+		bool GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArgs^ args, [Out]SvnAppliedMergeInfo^% mergeInfo);
+
+	public:
+		/// <summary>Gets a list of merges which can be applied on target</summary>
+		void GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo);
+		/// <summary>Gets a list of merges which can be applied on target</summary>
+		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo);
 
 	public:
 		void Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);
@@ -719,9 +779,30 @@ public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
 		Uri^ GetUriFromWorkingCopy(String^ path);
 
+		/// <summary>Gets the repository root from the specified uri</summary>
+		/// <value>The repository root <see cref="Uri" /> or <c>null</c> if the uri is not a repository uri</value>
+		/// <remarks>SharpSvn makes sure the uri ends in a '/'</remarks>
+		Uri^ GetRepositoryRoot(Uri^ uri);
+		/// <summary>Gets the repository root from the specified path</summary>
+		/// <value>The repository root <see cref="Uri" /> or <c>null</c> if the uri is not a working copy path</value>
+		/// <remarks>SharpSvn makes sure the uri ends in a '/'</remarks>
+		Uri^ GetRepositoryRoot(String^ path);
+
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>
 		bool GetUuidFromUri(Uri^ uri, [Out] Guid% uuid);
+
+		/// <summary>Gets the given value with <see cref="SvnClientArgs::ThrowOnError" /> set to false</summary>
+		generic<typename T> 
+		where T : SvnClientArgs, gcnew()
+			T NoThrowOnError(T value)
+		{
+			if(!value)
+				throw gcnew ArgumentNullException("value");
+
+			value->ThrowOnError = false;
+			return value;
+		}
 
 	private:
 		~SvnClient();

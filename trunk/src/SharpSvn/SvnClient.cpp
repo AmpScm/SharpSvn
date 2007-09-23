@@ -354,7 +354,7 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 
 	const char* uuidStr = nullptr;
 
-	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocString(uri->ToString()), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocCanonical(uri->ToString()), CtxHandle, pool.Handle);
 
 	if(err || !uuidStr)
 		return false;
@@ -364,6 +364,60 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 		return true;
 	}
 }
+
+Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
+{
+	if(!uri)
+		throw gcnew ArgumentNullException("uri");
+
+	const char* resultUrl = nullptr;
+	EnsureState(SvnContextState::AuthorizationInitialized);
+	AprPool pool(%_pool);
+
+	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocCanonical(uri->ToString()), CtxHandle, pool.Handle);
+
+	if(!err && resultUrl)
+	{
+		String^ urlString = Utf8_PtrToString(resultUrl);
+
+		if(!urlString->EndsWith("/", StringComparison::InvariantCulture))
+			urlString += "/";
+
+		if(Uri::TryCreate(urlString, UriKind::Absolute, uri))
+		{
+			return uri;
+		}
+	}
+	return nullptr;
+}
+
+Uri^ SvnClient::GetRepositoryRoot(String^ path)
+{
+	if(!path)
+		throw gcnew ArgumentNullException("path");
+
+	const char* resultUrl = nullptr;
+	EnsureState(SvnContextState::AuthorizationInitialized);
+	AprPool pool(%_pool);
+
+	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocPath(path), CtxHandle, pool.Handle);
+
+	if(!err && resultUrl)
+	{
+		Uri^ uri = nullptr;
+		String^ urlString = Utf8_PtrToString(resultUrl);
+
+		if(!urlString->EndsWith("/", StringComparison::InvariantCulture))
+			urlString += "/";
+
+		if(Uri::TryCreate(urlString, UriKind::Absolute, uri))
+		{
+			return uri;
+		}
+	}
+	return nullptr;
+}
+
 
 bool SvnClientConfiguration::LogMessageRequired::get()
 {
