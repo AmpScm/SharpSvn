@@ -688,14 +688,18 @@ namespace SharpSvn {
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
-		void Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPath);
+		void Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo);
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
-		bool Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPath, SvnMergeArgs^ args);
+		bool Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnMergeArgs^ args);
 
-		void Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath);
-		bool Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath, SvnMergeArgs^ args);
+		void Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to);
+
+		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnMergeArgs^ args);
+
+		void Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange);
+		bool Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange, SvnMergeArgs^ args);		
 #pragma endregion
 
 	public:

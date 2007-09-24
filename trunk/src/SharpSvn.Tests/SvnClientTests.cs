@@ -940,14 +940,17 @@ namespace SharpSvn.Tests
 				string merge2 = Path.Combine(WcPath, "mmerge-2");
 				client.CreateDirectory(merge1);
 
-				using (StreamWriter fs = File.CreateText("myfile.txt"))
+				string f1 = Path.Combine(merge1, "myfile.txt");
+
+				using (StreamWriter fs = File.CreateText(f1))
 				{
 					fs.WriteLine("First line");
 					fs.WriteLine("Second line");
 					fs.WriteLine("Third line");
 					fs.WriteLine("Fourth line");
-					fs.WriteLine("Fifth line");
 				}
+
+				client.Add(f1);
 
 				SvnCommitInfo ci;
 				client.Commit(WcPath, out ci);
@@ -988,6 +991,14 @@ namespace SharpSvn.Tests
 				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision+1));
 				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
 				Assert.That(available.Target, Is.Not.Null);
+
+				using (StreamWriter fs = File.AppendText(f1))
+				{
+					fs.WriteLine("Fifth line");
+				}
+				client.Commit(merge1);
+
+				//client.Merge(
 			}
 		}
 	}
