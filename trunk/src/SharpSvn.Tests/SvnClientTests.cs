@@ -986,7 +986,7 @@ namespace SharpSvn.Tests
 				SvnAvailableMergeInfo available;
 				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
 				Assert.That(available, Is.Not.Null);
-				Assert.That(available.MergeRanges.Count, Is.EqualTo(1)); // Shouldn't this be 0?
+				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
 				Assert.That(available.MergeRanges[0].Start, Is.EqualTo(ci.Revision));
 				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision+1));
 				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
@@ -998,7 +998,27 @@ namespace SharpSvn.Tests
 				}
 				client.Commit(merge1);
 
-				//client.Merge(
+				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+				Assert.That(available, Is.Not.Null);
+				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
+				Assert.That(available.MergeRanges[0].Start, Is.EqualTo(ci.Revision));
+				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision + 2));
+				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
+				Assert.That(available.Target, Is.Not.Null);
+
+				client.Merge(merge2, fromUri, available.MergeRanges[0]);
+
+				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+				Assert.That(available, Is.Not.Null);
+				Assert.That(available.MergeRanges.Count, Is.EqualTo(0));
+				Assert.That(available.Target, Is.Not.Null);
+
+				client.Commit(WcPath);
+
+				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+				Assert.That(available, Is.Not.Null);
+				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
+				Assert.That(available.Target, Is.Not.Null);
 			}
 		}
 	}

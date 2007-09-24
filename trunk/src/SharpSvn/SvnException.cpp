@@ -98,7 +98,15 @@ String^ SvnException::GetErrorText(svn_error_t *error)
 
 	try
 	{
-		return SharpSvn::Apr::SvnBase::Utf8_PtrToString(error->message);
+		if(error->message)
+			return SvnBase::Utf8_PtrToString(error->message);
+
+		char buffer[1024];
+		memset(buffer, 0, sizeof(buffer));
+
+		svn_err_best_message(error, buffer, sizeof(buffer)-1);
+
+		return SvnBase::Utf8_PtrToString(buffer);
 	}
 	catch(Exception^)
 	{
