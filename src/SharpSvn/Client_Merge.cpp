@@ -5,26 +5,26 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPath)
+void SvnClient::Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo)
 {
-	if(!mergeFrom)
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!mergeFrom)
 		throw gcnew ArgumentNullException("mergeFrom");
 	else if(!mergeFrom)
 		throw gcnew ArgumentNullException("mergeTo");
-	else if(String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
 
-	Merge(mergeFrom, mergeTo, targetPath, gcnew SvnMergeArgs());
+	Merge(targetPath, mergeFrom, mergeTo, gcnew SvnMergeArgs());
 }
 
-bool SvnClient::Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPath, SvnMergeArgs^ args)
+bool SvnClient::Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnMergeArgs^ args)
 {
-	if(!mergeFrom)
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!mergeFrom)
 		throw gcnew ArgumentNullException("mergeFrom");
 	else if(!mergeFrom)
 		throw gcnew ArgumentNullException("mergeTo");
-	else if(String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -55,25 +55,29 @@ bool SvnClient::Merge(SvnTarget^ mergeFrom, SvnTarget^ mergeTo, String^ targetPa
 	return args->HandleResult(r);
 }
 
-void SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath)
+void SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to)
 {
-	if(!source)
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!source)
 		throw gcnew ArgumentNullException("source");
 	else if(!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!from)
+	else if(!to)
 		throw gcnew ArgumentNullException("to");
 
-	Merge(source, from, to, targetPath, gcnew SvnMergeArgs());
+	Merge(targetPath, source, from, to, gcnew SvnMergeArgs());
 }
 
-bool SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, String^ targetPath, SvnMergeArgs^ args)
+bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnMergeArgs^ args)
 {
-	if(!source)
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!source)
 		throw gcnew ArgumentNullException("source");
 	else if(!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!from)
+	else if(!to)
 		throw gcnew ArgumentNullException("to");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -102,4 +106,35 @@ bool SvnClient::Merge(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Str
 		pool.Handle);
 
 	return args->HandleResult(r);
+}
+
+void SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange)
+{
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!source)
+		throw gcnew ArgumentNullException("source");
+	else if(!mergeRange)
+		throw gcnew ArgumentNullException("mergeRange");
+
+	SvnMergeArgs^ args = gcnew SvnMergeArgs();
+
+	// if(!mergeRange->Inheritable)
+	//		args->Depth = ??
+
+	Merge(targetPath, source, mergeRange, args);
+}
+
+bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange, SvnMergeArgs^ args)
+{
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!source)
+		throw gcnew ArgumentNullException("source");
+	else if(!mergeRange)
+		throw gcnew ArgumentNullException("mergeRange");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+	
+	return SvnClient::Merge(targetPath, source, gcnew SvnRevision(mergeRange->Start), gcnew SvnRevision(mergeRange->End), args);	
 }
