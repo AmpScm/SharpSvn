@@ -86,7 +86,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, 
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
+	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 	svn_opt_revision_t fromRev = from->ToSvnRevision();
 	svn_opt_revision_t toRev = to->ToSvnRevision();
 
