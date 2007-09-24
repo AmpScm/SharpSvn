@@ -9,7 +9,9 @@ namespace SharpSvn {
 	using System::Collections::Generic::IList;
 	using System::Collections::Generic::SortedList;
 	using System::Collections::ObjectModel::KeyedCollection;
+	using System::Diagnostics::DebuggerDisplayAttribute;
 
+	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
 	public ref class SvnMergeRange sealed
 	{
 		initonly __int64 _start;
@@ -48,8 +50,20 @@ namespace SharpSvn {
 				return _inheritable;
 			}
 		}
+
+		virtual int GetHashCode() override
+		{
+			return (_start + _end).GetHashCode();
+		}
+
+	public:
+		virtual String^ ToString() override
+		{
+			return String::Format(System::Globalization::CultureInfo::InvariantCulture, "r{0}-{1}", Start, End);
+		}
 	};
 
+	[DebuggerDisplayAttribute("Uri={Uri}")]
 	public ref class SvnAppliedMergeItem sealed
 	{
 		initonly Uri^ _uri;

@@ -162,6 +162,19 @@ namespace SharpSvn.Tests
 		}
 
 		[Test]
+		public void SomeGlobalTests()
+		{
+			using (SvnClient client = NewSvnClient(false, false))
+			{
+				Assert.That(SvnClient.AdministrativeDirectoryName, Is.EqualTo(".svn"));
+				Assert.That(SvnClient.Version, Is.GreaterThanOrEqualTo(new Version(1, 5, 0)));
+				Assert.That(SvnClient.SharpSvnVersion, Is.GreaterThan(new Version(1, 5, 0)));
+				Assert.That(client.GetRepositoryRoot(ReposUri), Is.EqualTo(ReposUri));
+				Assert.That(client.GetRepositoryRoot(WcPath), Is.EqualTo(ReposUri));
+			}
+		}
+
+		[Test]
 		public void RemoteListTest()
 		{
 			using (SvnClient client = NewSvnClient(false, false))
@@ -915,6 +928,66 @@ namespace SharpSvn.Tests
 					});
 
 				Assert.That(n, Is.EqualTo(3));
+			}
+		}
+
+		[Test]
+		public void MinimalMergeTest()
+		{
+			using (SvnClient client = NewSvnClient(true, false))
+			{
+				string merge1 = Path.Combine(WcPath, "mmerge-1");
+				string merge2 = Path.Combine(WcPath, "mmerge-2");
+				client.CreateDirectory(merge1);
+
+				using (StreamWriter fs = File.CreateText("myfile.txt"))
+				{
+					fs.WriteLine("First line");
+					fs.WriteLine("Second line");
+					fs.WriteLine("Third line");
+					fs.WriteLine("Fourth line");
+					fs.WriteLine("Fifth line");
+				}
+
+				SvnCommitInfo ci;
+				client.Commit(WcPath, out ci);
+				client.Copy(new SvnPathTarget(merge1), merge2);
+				client.Commit(WcPath);
+				client.Update(WcPath);
+
+				IList<Uri> sources;
+				client.GetSuggestedMergeSources(new SvnPathTarget(merge1), out sources);
+
+				Assert.That(sources.Count, Is.EqualTo(0));
+
+				client.GetSuggestedMergeSources(new SvnPathTarget(merge2), out sources);
+
+				Assert.That(sources.Count, Is.EqualTo(1));
+
+				Uri fromUri = new Uri(ReposUri, new Uri("folder/mmerge-1", UriKind.Relative));
+				Assert.That(sources[0], Is.EqualTo(fromUri));
+
+				SvnAppliedMergeInfo applied;
+				client.GetAppliedMergeInfo(new SvnPathTarget(merge2), out applied);
+
+				Assert.That(applied, Is.Not.Null);
+				Assert.That(applied.AppliedMerges.Count, Is.EqualTo(1));
+				Assert.That(applied.AppliedMerges[0].Uri, Is.EqualTo(fromUri));
+				Assert.That(applied.AppliedMerges[0].MergeRanges, Is.Not.Null);
+				Assert.That(applied.AppliedMerges[0].MergeRanges.Count, Is.EqualTo(1));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Start, Is.EqualTo(ci.Revision-1));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].End, Is.EqualTo(ci.Revision));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Inheritable, Is.True);
+				Assert.That(applied.Target, Is.Not.Null);
+
+				SvnAvailableMergeInfo available;
+				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+				Assert.That(available, Is.Not.Null);
+				Assert.That(available.MergeRanges.Count, Is.EqualTo(1)); // Shouldn't this be 0?
+				Assert.That(available.MergeRanges[0].Start, Is.EqualTo(ci.Revision));
+				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision+1));
+				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
+				Assert.That(available.Target, Is.Not.Null);
 			}
 		}
 	}

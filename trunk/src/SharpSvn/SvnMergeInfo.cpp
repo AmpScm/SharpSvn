@@ -33,7 +33,7 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInf
 		{
 			Uri^ uri;
 
-			if(Uri::TryCreate(SvnBase::Utf8_PtrToString(pUri, klen), UriKind::Absolute, uri))
+			if(Uri::TryCreate(SvnBase::Utf8_PtrToString(pUri, (int)klen), UriKind::Absolute, uri))
 			{
 				list->Add(gcnew SvnAppliedMergeItem(uri, SvnAppliedMergeItem::CreateRangeList(ranges)));
 			}

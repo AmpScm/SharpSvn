@@ -67,21 +67,6 @@ namespace SharpSvn {
 			}
 		}
 
-		static bool IsNotRecursive(SvnDepth depth)
-		{
-			switch(depth)
-			{
-			case SvnDepth::Empty:
-			case SvnDepth::Files:
-				return true;
-			case SvnDepth::Infinity:
-			case SvnDepth::Unknown:
-				return false;
-			default:
-				throw gcnew ArgumentException(SharpSvnStrings::DepthMustBeRecursiveValue, "depth");
-			}
-		}
-
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
