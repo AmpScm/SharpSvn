@@ -34,7 +34,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description=" "
-				CommandLine=" "
+				CommandLine="&#x0D;&#x0A;"
 				AdditionalDependencies=" "
 				Outputs=" "
 			/>
@@ -122,7 +122,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description=" "
-				CommandLine=" "
+				CommandLine="&#x0D;&#x0A;"
 				AdditionalDependencies=" "
 				Outputs=" "
 			/>
@@ -213,7 +213,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description=" "
-				CommandLine=" "
+				CommandLine="&#x0D;&#x0A;"
 				AdditionalDependencies=" "
 				Outputs=" "
 			/>
@@ -299,7 +299,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description=" "
-				CommandLine=" "
+				CommandLine="&#x0D;&#x0A;"
 				AdditionalDependencies=" "
 				Outputs=" "
 			/>
@@ -377,10 +377,6 @@
 			RelativePath="System.dll"
 			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
 			MinFrameworkVersion="131072"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
-			RelativePathToProject=".\SharpSvn.UI\SharpSvn.UI.csproj"
 		/>
 	</References>
 	<Files>

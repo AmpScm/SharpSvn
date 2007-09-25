@@ -6,7 +6,7 @@
 	ProjectGUID="{A3166809-1484-4442-BF75-5FB0E8356381}"
 	RootNamespace="SharpSvn"
 	Keyword="ManagedCProj"
-	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib&quot;"
+	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib-AnyCPU&quot;"
 	>
 	<Platforms>
 		<Platform
@@ -376,10 +376,6 @@
 		<AssemblyReference
 			RelativePath="System.dll"
 			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
-		/>
-		<ProjectReference
-			ReferencedProjectIdentifier="{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
-			RelativePathToProject=".\SharpSvn.UI\SharpSvn.UI.csproj"
 		/>
 	</References>
 	<Files>

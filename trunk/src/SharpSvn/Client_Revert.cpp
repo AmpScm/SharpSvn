@@ -54,9 +54,9 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
-	svn_error_t *r = svn_client_revert(
+	svn_error_t *r = svn_client_revert2(
 		aprPaths->Handle,
-		IsRecursive(args->Depth),
+		(svn_depth_t)args->Depth,
 		CtxHandle,
 		pool.Handle);
 

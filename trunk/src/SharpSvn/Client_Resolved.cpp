@@ -14,12 +14,12 @@ void SvnClient::Resolved(String^ path)
 	Resolved(path, gcnew SvnResolvedArgs());
 }
 
-void SvnClient::Resolved(String^ path, SvnAccept accept)
+void SvnClient::Resolved(String^ path, SvnAccept which)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Resolved(path, gcnew SvnResolvedArgs(accept));
+	Resolved(path, gcnew SvnResolvedArgs(which));
 }
 
 bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
@@ -36,7 +36,7 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 	svn_error_t *r = svn_client_resolved2(
 		pool.AllocPath(path),
 		(svn_depth_t)args->Depth,
-		(svn_accept_t)args->Accept,
+		(svn_accept_t)args->Which,
 		CtxHandle,
 		pool.Handle);
 

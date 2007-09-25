@@ -7,7 +7,6 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Apr;
 using namespace SharpSvn::Security;
-using namespace SharpSvn::UI::Authentication;
 using System::Text::StringBuilder;
 
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
@@ -35,15 +34,6 @@ void SvnAuthentication::AddSubversionFileHandlers()
 	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
-}
-
-void SvnAuthentication::AddDialogHandlers()
-{
-	UsernameHandlers						+= DialogUsernameHandler;
-	UsernamePasswordHandlers				+= DialogUsernamePasswordHandler;
-	SslServerTrustHandlers					+= DialogSslServerTrustHandler;
-	SslClientCertificateHandlers			+= DialogSslClientCertificateHandler;
-	SslClientCertificatePasswordHandlers	+= DialogSslClientCertificatePasswordHandler;
 }
 
 void SvnAuthentication::AddConsoleHandlers()
@@ -359,113 +349,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
 }
 #pragma endregion
 
-IntPtr SvnAuthentication::GetParentHandle(Object ^sender)
-{
-	SvnAuthentication^ ref = dynamic_cast<SvnAuthentication^>(sender);
 
-	if(ref)
-	{
-		if(ref->ParentWindow)
-			return SharpSvnGui::GetWin32Handle(ref->ParentWindow);
-	}
-
-	return IntPtr::Zero;
-}
-
-void SvnAuthentication::ImpDialogUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
-{
-	IntPtr handle = GetParentHandle(sender);
-
-	String^ username;
-	bool save;
-
-	if(SharpSvnGui::AskUsername(handle, "Connect to Subversion", e->Realm, e->MaySave, username, save))
-	{
-		e->Username = username;
-		e->Save = save && e->MaySave;
-	}
-	else
-		e->Break = true;
-}
-
-void SvnAuthentication::ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
-{
-	IntPtr handle = GetParentHandle(sender);
-
-	String^ username;
-	String^ password;
-	bool save;
-
-	if(SharpSvnGui::AskUsernamePassword(handle, "Connect to Subversion", e->Realm, e->InitialUsername, e->MaySave, username, password, save))
-	{
-		e->Username = username;
-		e->Password = password;
-		e->Save = save && e->MaySave;
-	}
-	else
-		e->Break = true;
-}
-
-void SvnAuthentication::ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
-{
-	IntPtr handle = GetParentHandle(sender);
-
-	bool save;
-
-	SharpSvnGui::ServerCertificateInfo^ sci = gcnew SharpSvnGui::ServerCertificateInfo();
-
-	sci->InvalidCommonName = (0 != (int)(e->Failures & SvnCertificateTrustFailures::CommonNameMismatch));
-	sci->NoTrustedIssuer = 0 != (int)(e->Failures & SvnCertificateTrustFailures::UnknownCertificateAuthority);
-	sci->TimeError = 0 != (int)(e->Failures & (SvnCertificateTrustFailures::CertificateExpired | SvnCertificateTrustFailures::CertificateNotValidYet));
-
-	sci->Hostname = e->CommonName;
-	sci->Fingerprint = e->FingerPrint;
-	sci->Certificate = e->CertificateValue;
-	sci->Issuer = e->Issuer;
-	sci->ValidFrom = e->ValidFrom;
-	sci->ValidTo = e->ValidUntil;
-
-	bool accept = false;
-	if(SharpSvnGui::AskServerCertificateTrust(handle, "Connect to Subversion", e->Realm, sci, e->MaySave, accept, save))
-	{
-		e->AcceptedFailures = accept ? e->Failures : SvnCertificateTrustFailures::None;
-		e->Save = save && e->MaySave;
-	}
-	else
-		e->Break = true;
-}
-
-void SvnAuthentication::ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
-{
-	IntPtr handle = GetParentHandle(sender);
-
-	String^ file;
-	bool save;
-
-	if(SharpSvnGui::AskClientCertificateFile(handle, "Connect to Subversion", e->Realm, e->MaySave, file, save))
-	{
-		e->CertificateFile = file;
-		e->Save = save && e->MaySave;
-	}
-	else
-		e->Break = true;
-}
-
-void SvnAuthentication::ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
-{
-	IntPtr handle = GetParentHandle(sender);
-
-	String^ password;
-	bool save;
-
-	if(SharpSvnGui::AskClientCertificatePassPhrase(handle, "Connect to Subversion", e->Realm, e->MaySave, password, save))
-	{
-		e->Password = password;
-		e->Save = save && e->MaySave;
-	}
-	else
-		e->Break = true;
-}
 
 ///////////////////////////////
 void SvnAuthentication::MaybePrintRealm(SvnAuthorizationEventArgs^ e)

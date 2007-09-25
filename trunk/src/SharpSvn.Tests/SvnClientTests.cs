@@ -1021,5 +1021,37 @@ namespace SharpSvn.Tests
 				Assert.That(available.Target, Is.Not.Null);
 			}
 		}
+
+		[Test]
+		public void TestMultiMove()
+		{
+			using (SvnClient client = NewSvnClient(true, false))
+			{
+				string ren1 = Path.Combine(WcPath, "ren-1");
+
+				using (StreamWriter sw = File.CreateText(ren1))
+				{
+					sw.WriteLine("ToRename");
+				}
+				client.Add(ren1);
+				client.Commit(WcPath);
+				client.Update(WcPath);
+
+				using (StreamWriter sw = File.AppendText(ren1))
+				{
+					sw.WriteLine("AddedLine");
+				}
+				client.Move(ren1, ren1 + ".ren1");
+
+				client.Commit(WcPath);
+
+				client.Move(ren1 + ".ren1", ren1 + ".ren2");
+				SvnMoveArgs ma = new SvnMoveArgs();
+				ma.Force = true;
+				ma.WithoutMergeHistory = true;
+				client.Move(ren1 + ".ren2", ren1 + ".ren3", ma);
+				client.Commit(WcPath);
+			}
+		}
 	}
 }

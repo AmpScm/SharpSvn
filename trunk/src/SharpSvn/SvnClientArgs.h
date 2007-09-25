@@ -1043,19 +1043,19 @@ namespace SharpSvn {
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
-		SvnAccept _accept;
+		SvnAccept _which;
 
 	public:
 		SvnResolvedArgs()
 		{
 			_depth = SvnDepth::Empty;
-			_accept = SvnAccept::None;
+			_which = SvnAccept::None;
 		}
 
-		SvnResolvedArgs(SvnAccept accept)
+		SvnResolvedArgs(SvnAccept which)
 		{
 			_depth = SvnDepth::Empty;
-			_accept = accept;
+			_which = which;
 		}
 
 		property SvnDepth Depth
@@ -1070,15 +1070,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnAccept Accept
+		property SvnAccept Which
 		{
 			SvnAccept get()
 			{
-				return _accept;
+				return _which;
 			}
 			void set(SvnAccept value)
 			{
-				_accept = value;
+				_which = value;
 			}
 		}
 	};
