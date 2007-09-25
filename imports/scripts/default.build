@@ -143,12 +143,12 @@
 		<if test="${platform == 'win32'}">
 			<copy todir="build/win32/lib/include">
 				<fileset basedir="build/apr/include">
-					<include name="*.h" />
+					<include name="**/*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/win32/lib/include">
 				<fileset basedir="build/apr-util/include">
-					<include name="*.h" />
+					<include name="**/*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/win32/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
@@ -164,17 +164,18 @@
 					<include name="*.h" />
 				</fileset>
 			</copy>
+			<copy todir="build/win32/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 		</if>
 		<if test="${platform == 'x64'}">
 			<copy todir="build/x64/lib/include">
 				<fileset basedir="build/apr/include">
-					<include name="*.h" />
+					<include name="**/*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/x64/lib/include">
 				<fileset basedir="build/apr-util/include">
-					<include name="*.h" />
+					<include name="**/*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/x64/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
@@ -190,6 +191,7 @@
 					<include name="*.h" />					
 				</fileset>
 			</copy>
+			<copy todir="build/x64/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 			<copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 		</if>
 
