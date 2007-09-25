@@ -58,6 +58,12 @@
 				<include name="sqlite3.h" />
 			</fileset>
 		</copy>
+		<copy todir="${sqliteDir}/lib">
+      <fileset basedir="${sqliteDir}/${Configuration}_win32">
+				<include name="*.lib" />
+				<include name="*.pdb" />
+			</fileset>
+		</copy>
 		<copy todir="${release}/lib">
 			<fileset basedir="${sqliteDir}/${Configuration}_win32">
 				<include name="*.lib" />
