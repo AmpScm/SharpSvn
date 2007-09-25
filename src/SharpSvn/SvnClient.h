@@ -510,7 +510,7 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Resolved Client Command
 		void Resolved(String^ path);
-		void Resolved(String^ path, SvnAccept accept);
+		void Resolved(String^ path, SvnAccept which);
 		bool Resolved(String^ path, SvnResolvedArgs^ args);
 #pragma endregion
 

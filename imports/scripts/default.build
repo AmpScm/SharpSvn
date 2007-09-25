@@ -211,7 +211,7 @@
 					<loadfile file="${vcproj}" property="projtext">
 						<filterchain>
 							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib zlibstat.lib' />
+							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib' />
 							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
 							<replacestring from='Optimization="2"' to='Optimization="1"' />
 							<replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
@@ -237,6 +237,7 @@
 				<arg value="/p:Platform=${platform}" />
 				<arg value="/t:__LIBS__" />
 				<arg value="/t:svn" />
+				<arg value="/t:svnadmin" />
 			</exec>
 		</OnceBlock>
 	</target>
@@ -278,6 +279,7 @@
 			</fileset>
 		</copy>
 		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
+		<copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
 		<copy todir="${release}/include">
 			<fileset basedir="${svnBase}\subversion\include">
 				<include name="**/*.h" />

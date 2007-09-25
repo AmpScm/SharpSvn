@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authentication\NativeMethods.cs" />
+    <Compile Include="Authentication\ServerCertificateInfo.cs" />
     <Compile Include="Authentication\SslClientCertificatePassPhraseDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,11 +78,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="SharpSvnUI.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
+    <Compile Include="SvnClientUIHandler.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Authentication\SslClientCertificatePassPhraseDialog.resx">
@@ -123,6 +126,12 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
+      <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+      <Name>SharpSvn</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

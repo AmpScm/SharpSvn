@@ -511,23 +511,6 @@ namespace SharpSvn {
 			svn_auth_baton_t *GetAuthorizationBaton(AprPool ^pool, [Out] int% cookie);
 
 		public:
-			/// <summary>Allows users to provide a parent window handle to use as owner of popup windows</summary>
-			property Object^ ParentWindow
-			{
-				Object^ get()
-				{
-					return _parentWindow;
-				}
-
-				void set(Object^ value)
-				{
-					if(!value || SharpSvn::UI::Authentication::SharpSvnGui::HasWin32Handle(value))
-						_parentWindow = value;
-					else
-						throw gcnew ArgumentException(SharpSvnStrings::ParentWindowHasNoWindowHandle, "value");
-				}
-			}
-
 			void SetRetryLimit(Delegate^ handler, int limit)
 			{
 				if(!handler)
@@ -739,9 +722,6 @@ namespace SharpSvn {
 			/// <summary>Adds all default subversion-configuration-based handlers</summary>
 			void AddSubversionFileHandlers();
 
-			/// <summary>Adds all default dialog handlers</summary>
-			void AddDialogHandlers();
-
 			/// <summary>Adds all default console handlers</summary>
 			void AddConsoleHandlers();
 
@@ -813,45 +793,6 @@ namespace SharpSvn {
 			static property EventHandler<SvnSslServerTrustEventArgs^>^				SubversionWindowsSslServerTrustHandler
 			{
 				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionWindowsSslServerTrustHandler; } 
-			}
-
-		private:
-			static IntPtr GetParentHandle(Object ^sender);
-			static void ImpDialogUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e);
-			static void ImpDialogUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e);
-			static void ImpDialogSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
-			static void ImpDialogSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
-			static void ImpDialogSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
-
-		public:
-			/// <summary>Dialog based UsernameHandler implementation</summary>
-			static property EventHandler<SvnUsernameEventArgs^>^						DialogUsernameHandler
-			{
-				EventHandler<SvnUsernameEventArgs^>^ get() { return gcnew EventHandler<SvnUsernameEventArgs^>(ImpDialogUsernameHandler); }
-			}
-
-			/// <summary>Dialog based UsernamePasswordHandler implementation</summary>
-			static property EventHandler<SvnUsernamePasswordEventArgs^>^				DialogUsernamePasswordHandler
-			{
-				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpDialogUsernamePasswordHandler); }
-			}
-
-			/// <summary>Dialog based SslServerTrust implementation</summary>
-			static property EventHandler<SvnSslServerTrustEventArgs^>^				DialogSslServerTrustHandler
-			{
-				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpDialogSslServerTrustHandler); }
-			}
-
-			/// <summary>Dialog based SslClientCertificate implementation</summary>
-			static property EventHandler<SvnSslClientCertificateEventArgs^>^			DialogSslClientCertificateHandler
-			{
-				EventHandler<SvnSslClientCertificateEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpDialogSslClientCertificateHandler); }
-			}
-
-			/// <summary>Dialog based SslClientCertificatePassword implementation</summary>
-			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ DialogSslClientCertificatePasswordHandler
-			{
-				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpDialogSslClientCertificatePasswordHandler); }
 			}
 
 		private:
