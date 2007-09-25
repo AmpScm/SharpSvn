@@ -286,22 +286,22 @@
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/serf">
-			<fileset basedir="${svnBase}\serf">
+			<fileset basedir="${platformBase}\serf">
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/neon">
-			<fileset basedir="${svnBase}\neon\src">
+			<fileset basedir="${platformBase}\neon\src">
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/apr-1">
-			<fileset basedir="${svnBase}\apr\include">
+			<fileset basedir="${platformBase}\apr\include">
 				<include name="**.h" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/include/apr-1">
-			<fileset basedir="${svnBase}\apr-util\include">
+			<fileset basedir="${platformBase}\apr-util\include">
 				<include name="**.h" />
 			</fileset>
 		</copy>
