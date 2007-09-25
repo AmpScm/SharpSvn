@@ -1,0 +1,89 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+	<target name="upgrade-apr" depends="checkout">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
+			<foreach item="File" property="project">
+				<in>
+					<items basedir="${platformBase}">
+						<include name="apr/**/*.dsp" />
+						<include name="apr-util/**/*.dsp" />
+					</items>
+				</in>
+				<do>
+					<VCBuild platform="${platform}">
+						<arg line="/upgrade" />
+						<arg line="${project}" />
+					</VCBuild>
+				</do>
+			</foreach>
+		</OnceBlock>
+	</target>
+	<target name="prepare-apr" depends="upgrade-apr">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
+			<foreach item="File" property="winHeader">
+				<in>
+					<items basedir="${platformBase}">
+						<include name="apr*/**/*.hw" />
+						<include name="apr-util/**/expat.h.in" />
+					</items>
+				</in>
+				<do>
+					<property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
+					<if test="${not file::exists(winHeader2)}">
+						<loadfile file="${winHeader}" property="headertext">
+							<filterchain>
+								<replacestring from='#define APU_HAVE_APR_ICONV     1' to='#define APU_HAVE_APR_ICONV     0' />
+							</filterchain>
+						</loadfile>
+						<echo message="${headertext}" file="${winHeader2}" />
+					</if>
+				</do>
+			</foreach>
+		</OnceBlock>
+	</target>
+	<target name="build-apr" depends="download,extract,checkout, generate-svnfiles, prepare-apr">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.build">
+			<!-- Prepare static builds (requires changed build order) -->
+			<foreach item="File" property="project">
+				<in>
+					<items basedir="${platformBase}">
+						<include name="apr/apr.vcproj" />
+						<include name="apr-util/aprutil.vcproj" />
+						<include name="apr-util/xml/expat/lib/xml.vcproj" />
+					</items>
+				</in>
+				<do>
+					<VCBuild platform="${platform}">
+						<arg value="${project}" />
+						<arg value="${Configuration}|${platform}" />
+					</VCBuild>
+				</do>
+			</foreach>
+		</OnceBlock>
+		<copy file="${platformBase}/apr/libr/apr-1.lib" tofile="${platformBase}/apr/Release/libapr-1.lib" />
+		<copy file="${platformBase}/apr-util/libr/aprutil-1.lib" tofile="${platformBase}/apr-util/Release/libaprutil-1.lib" />
+		<copy todir="${release}/lib" flatten="true">
+			<fileset basedir="build/win32">
+				<include name="apr\LibR\apr-1.lib" />
+				<include name="apr-util\LibR\aprutil-1.lib" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64" flatten="true">
+			<fileset basedir="build/x64">
+				<include name="apr\LibR\apr-1.lib" />
+				<include name="apr-util\LibR\aprutil-1.lib" />
+			</fileset>
+		</copy>
+		<property name="aprIncludeDir" value="${release}/include/apr-1" />
+		<copy todir="${aprIncludeDir}">
+			<fileset basedir="${platformBase}/apr/include">
+				<include name="*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${aprIncludeDir}">
+			<fileset basedir="${platformBase}/apr/include">
+				<include name="*.h" />
+			</fileset>
+		</copy>
+	</target>
+</project>
