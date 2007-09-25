@@ -4,9 +4,8 @@
 		<OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
 			<foreach item="File" property="project">
 				<in>
-					<items basedir="${platformBase}">
-						<include name="apr/**/*.dsp" />
-						<include name="apr-util/**/*.dsp" />
+					<items basedir="build">
+						<include name="apr*/**/*.dsp" />
 					</items>
 				</in>
 				<do>
@@ -19,10 +18,41 @@
 		</OnceBlock>
 	</target>
 	<target name="prepare-apr" depends="upgrade-apr">
-		<OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
+		<OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">			
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="build">
+						<include name="apr*/**/*.vcproj" />
+					</items>
+				</in>
+				<do>
+					<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+				</do>
+			</foreach>
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="build">
+						<include name="apr*/**/*.vcproj" />
+					</items>
+				</in>
+				<do>
+					<loadfile file="${vcproj}" property="projtext">
+						<filterchain>
+							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;WIN32;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib' />
+							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
+							<replacestring from='Optimization="2"' to='Optimization="1"' />
+							<replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
+							<!-- Increase security a little little bit in some cases -->
+							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+						</filterchain>
+					</loadfile>
+					<echo message="${projtext}" file="${vcproj}" />
+				</do>
+			</foreach>
 			<foreach item="File" property="winHeader">
 				<in>
-					<items basedir="${platformBase}">
+					<items basedir="build">
 						<include name="apr*/**/*.hw" />
 						<include name="apr-util/**/expat.h.in" />
 					</items>
@@ -41,12 +71,12 @@
 			</foreach>
 		</OnceBlock>
 	</target>
-	<target name="build-apr" depends="download,extract,checkout, generate-svnfiles, prepare-apr">
+	<target name="build-apr" depends="download,extract,checkout, prepare-apr">
 		<OnceBlock file="build/apr-${aprVersion}_${platform}.build">
 			<!-- Prepare static builds (requires changed build order) -->
 			<foreach item="File" property="project">
 				<in>
-					<items basedir="${platformBase}">
+					<items basedir="build">
 						<include name="apr/apr.vcproj" />
 						<include name="apr-util/aprutil.vcproj" />
 						<include name="apr-util/xml/expat/lib/xml.vcproj" />
@@ -59,29 +89,30 @@
 					</VCBuild>
 				</do>
 			</foreach>
-		</OnceBlock>
-		<copy file="${platformBase}/apr/libr/apr-1.lib" tofile="${platformBase}/apr/Release/libapr-1.lib" />
-		<copy file="${platformBase}/apr-util/libr/aprutil-1.lib" tofile="${platformBase}/apr-util/Release/libaprutil-1.lib" />
+		</OnceBlock>		
+    
 		<copy todir="${release}/lib" flatten="true">
-			<fileset basedir="build/win32">
+			<fileset basedir="build">
 				<include name="apr\LibR\apr-1.lib" />
 				<include name="apr-util\LibR\aprutil-1.lib" />
+				<include name="apr-util\xml\expat\lib\LibR\xml.lib" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/lib-x64" flatten="true">
-			<fileset basedir="build/x64">
-				<include name="apr\LibR\apr-1.lib" />
-				<include name="apr-util\LibR\aprutil-1.lib" />
+			<fileset basedir="build">
+				<include name="apr\x64\LibR\apr-1.lib" />
+				<include name="apr-util\x64\LibR\aprutil-1.lib" />
+				<include name="apr-util\xml\expat\lib\x64\LibR\xml.lib" />
 			</fileset>
 		</copy>
 		<property name="aprIncludeDir" value="${release}/include/apr-1" />
 		<copy todir="${aprIncludeDir}">
-			<fileset basedir="${platformBase}/apr/include">
+			<fileset basedir="build/apr/include">
 				<include name="*.h" />
 			</fileset>
 		</copy>
 		<copy todir="${aprIncludeDir}">
-			<fileset basedir="${platformBase}/apr/include">
+			<fileset basedir="build/apr-util/include">
 				<include name="*.h" />
 			</fileset>
 		</copy>

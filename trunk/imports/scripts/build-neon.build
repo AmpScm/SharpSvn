@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-	<target name="prepare-neon" depends="checkout">
+	<target name="prepare-neon" depends="checkout, prepare-serf">
 		<OnceBlock file="build/neon-${neonVersion}_${platform}.prepared">
 			<regex pattern="^(?'NEON_MAJOR_VERSION'\d+)\.(?'NEON_MINOR_VERSION'\d+)\.(?'NEON_MICRO_VERSION'\d+)$" input="${neonVersion}" />
 			<loadfile file="${svnBase}/../neon/config.hw.in" property="configfile">

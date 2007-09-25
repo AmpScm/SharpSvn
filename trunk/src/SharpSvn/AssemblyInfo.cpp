@@ -5,7 +5,6 @@
 
 #include <apr-1/apr_version.h>
 #include <apr-1/apu_version.h>
-#include <apr-1/apu_version.h>
 #if (APU_HAVE_APR_ICONV != 0)
 #include <apr-1/api_version.h>
 #endif
@@ -72,6 +71,11 @@ using namespace System::Security::Permissions;
 
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 #pragma comment(lib, "ole32.lib")
+#pragma comment(lib, "Gdi32.lib")
+#pragma comment(lib, "User32.lib")
+
+#pragma comment(lib, "libeay32.lib")
+#pragma comment(lib, "ssleay32.lib")
 
 #pragma comment(lib, "libsvn_client-1.lib")
 #pragma comment(lib, "libsvn_delta-1.lib")
@@ -104,11 +108,6 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "libdb45.lib")
-
-// When statically linking neon/OpenSSL
-#pragma comment(lib, "Gdi32.lib")
-#pragma comment(lib, "User32.lib")
-
 
 #if (APR_MAJOR_VERSION == 0) && (APR_MINOR_VERSION == 9)
 #  pragma comment(lib, "apr.lib")

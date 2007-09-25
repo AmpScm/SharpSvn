@@ -104,13 +104,6 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to The parent window object has no Win32 handle.
-    /// </summary>
-    internal: static property System::String^  ParentWindowHasNoWindowHandle {
-        System::String^  get();
-    }
-    
-    /// <summary>
     ///   Looks up a localized string similar to Revision number must be at least 0.
     /// </summary>
     internal: static property System::String^  RevisionNumberMustBeAtLeast0 {
@@ -216,10 +209,6 @@ inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {
 
 inline System::String^  SharpSvnStrings::NonUtf8ConvertableLine::get() {
     return ResourceManager->GetString(L"NonUtf8ConvertableLine", resourceCulture);
-}
-
-inline System::String^  SharpSvnStrings::ParentWindowHasNoWindowHandle::get() {
-    return ResourceManager->GetString(L"ParentWindowHasNoWindowHandle", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {

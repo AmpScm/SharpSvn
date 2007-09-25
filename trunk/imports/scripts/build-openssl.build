@@ -26,7 +26,7 @@
 			</exec>
 		</OnceBlock>
 		<copy todir="${release}/lib">
-			<fileset basedir="build/win32/openssl-${opensslVersion}">
+			<fileset basedir="build/win32/openssl-${opensslVersion}/out32">
 				<include name="*.lib" />
 				<include name="*.exp" />
 				<include name="*.pdb" />
@@ -34,7 +34,7 @@
 			</fileset>
 		</copy>
 		<copy todir="${release}/lib-x64">
-			<fileset basedir="build/x64/openssl-${opensslVersion}">
+			<fileset basedir="build/x64/openssl-${opensslVersion}/out32">
 				<include name="*.lib" />
 				<include name="*.exp" />
 				<include name="*.pdb" />
