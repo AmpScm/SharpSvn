@@ -141,9 +141,6 @@
   <data name="NonUtf8ConvertableLine" xml:space="preserve">
     <value>{This line was not parsable as Utf8}</value>
   </data>
-  <data name="ParentWindowHasNoWindowHandle" xml:space="preserve">
-    <value>The parent window object has no Win32 handle</value>
-  </data>
   <data name="RevisionNumberMustBeAtLeast0" xml:space="preserve">
     <value>Revision number must be at least 0</value>
   </data>

@@ -61,9 +61,9 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpSvn.UI\SharpSvn.UI.csproj">
+    <ProjectReference Include="..\SharpSvn.UI\SharpSvn.UI-2008.csproj">
       <Project>{E929A4D4-6C65-4D00-9432-E082169BDDC3}</Project>
-      <Name>SharpSvn.UI</Name>
+      <Name>SharpSvn.UI-2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
       <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>

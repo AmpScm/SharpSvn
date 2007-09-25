@@ -128,9 +128,10 @@
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
+    <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
       <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
       <Name>SharpSvn</Name>
+      <Private>False</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

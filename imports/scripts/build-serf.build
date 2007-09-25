@@ -15,7 +15,7 @@
 		<OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
 			<foreach item="File" property="mak">
 				<in>
-					<items basedir="${svnBase}/..">
+					<items basedir="${platformBase}">
 						<include name="serf/serf.mak" />
 						<include name="neon/neon.mak" />
 					</items>
@@ -26,12 +26,15 @@
 							<replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
 							<replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
 							<!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
-							<replacestring from=" /O2 " to=" /O1 /W3 /GS " />
+							<replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi " />
 							<!-- Don't include apr and openssl in the intermediate libraries -->
 							<replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" />
 							<replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" />
+							<replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(OPEN' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(OPEN' />
+							<replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' />
 							<!-- Only compile library, the testfiles don't like the small library -->
 							<replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
+							<replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
 						</filterchain>
 					</loadfile>
 					<echo file="${mak}" message="${serfmak}" />
