@@ -15,7 +15,7 @@
 		<OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
 			<foreach item="File" property="mak">
 				<in>
-					<items basedir="${svnBase}">
+					<items basedir="${svnBase}/..">
 						<include name="serf/serf.mak" />
 						<include name="neon/neon.mak" />
 					</items>
@@ -42,7 +42,7 @@
 	<target name="build-serf" depends="prepare-serf, build-zlib,build-apr">
 		<foreach item="File" property="vcproj">
 			<in>
-				<items basedir="${svnBase}/serf">
+				<items basedir="${svnBase}/../serf">
 					<include name="serf.vcproj" />
 				</items>
 			</in>
