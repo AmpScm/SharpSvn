@@ -308,34 +308,24 @@
 				<include name="serf/${Configuration}/*.lib" />
 				<include name="serf/${Configuration}/*.pdb" />
 				<include name="neon/**/*.pdb" />
-				<include name="apr-util/xml/**/*.lib" />
-				<include name="apr-util/xml/**/*.pdb" />
 
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
-
-				<include name="apr*/LibR/*.lib" />
-				<include name="apr*/LibR/*.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/lib-x64" flatten="true">
 			<fileset basedir="build/x64">
 				<include name="subversion/x64/${Configuration}/**/*.lib" />
-				<include name="subversion/x64/${Configuration}/**/*.pdb" />
+				<include name="subversion/${Configuration}/**/*.pdb" />
 				<!-- Don't copy pdb's for executables -->
-				<exclude name="subversion/x64/${Configuration}/**/svn*.pdb" />
+				<exclude name="subversion/${Configuration}/**/svn*.pdb" />
 				<include name="neon/**/*.lib" />
 				<include name="serf/${Configuration}/*.lib" />
 				<include name="serf/${Configuration}/*.pdb" />
 				<include name="neon/**/*.pdb" />
-				<include name="apr-util/xml/**/*.lib" />
-				<include name="apr-util/xml/**/*.pdb" />
 
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
-
-				<include name="apr*/x64/LibR/*.lib" />
-				<include name="apr*/x64/LibR/*.pdb" />
 			</fileset>
 		</copy>
 		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform == 'win32'}"/>

@@ -93,16 +93,22 @@
     
 		<copy todir="${release}/lib" flatten="true">
 			<fileset basedir="build">
-				<include name="apr\LibR\apr-1.lib" />
+				<include name="apr/LibR/apr-1.lib" />
+				<include name="apr/LibR/*.pdb" />
 				<include name="apr-util\LibR\aprutil-1.lib" />
+				<include name="apr-util\LibR\*.pdb" />
 				<include name="apr-util\xml\expat\lib\LibR\xml.lib" />
+				<include name="apr-util\xml\expat\lib\LibR\*.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/lib-x64" flatten="true">
 			<fileset basedir="build">
-				<include name="apr\x64\LibR\apr-1.lib" />
-				<include name="apr-util\x64\LibR\aprutil-1.lib" />
+				<include name="apr/x64/LibR/apr-1.lib" />
+				<include name="apr/x64/LibR/*.pdb" />
+				<include name="apr-util/x64/LibR/aprutil-1.lib" />
+				<include name="apr-util/x64/LibR/*.pdb" />
 				<include name="apr-util\xml\expat\lib\x64\LibR\xml.lib" />
+				<include name="apr-util\xml\expat\lib\x64\LibR\*.pdb" />
 			</fileset>
 		</copy>
 		<property name="aprIncludeDir" value="${release}/include/apr-1" />
