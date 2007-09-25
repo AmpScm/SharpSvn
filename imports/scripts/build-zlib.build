@@ -34,9 +34,6 @@
 			<arg value="build/zlib-${zlibVersion}/projects/visualc6/zlib.vcproj" />
 			<arg value="LIB ${Configuration}|${platform}" />
 		</VCBuild>
-		<copy file="build/zlib-${zlibVersion}/projects/visualc6/win32_Lib_Release/zlib.lib" tofile="build/zlib-${zlibVersion}/zlib.lib" if="${platform == 'win32'}" overwrite="true"/>
-		<copy file="build/zlib-${zlibVersion}/projects/visualc6/${platform}/win32_Lib_Release/zlib.lib" tofile="build/zlib-${zlibVersion}/zlib.lib" if="${platform != 'win32'}" overwrite="true"/>
-		<copy file="build/zlib-${zlibVersion}/zlib.lib" tofile="build/zlib-${zlibVersion}/zlibstat.lib" overwrite="true" />
 		<copy todir="${release}/lib">
 			<fileset basedir="build/zlib-${zlibVersion}/projects/visualc6/win32_Lib_Release">
 				<include name="*.dll" />

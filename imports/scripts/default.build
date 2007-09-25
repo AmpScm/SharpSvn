@@ -138,7 +138,7 @@
 		</if>
 	</target>
 
-	<target name="generate-svnfiles" depends="build-bdb, build-zlib, build-openssl, build-sqlite, checkout, prepare-apr, build-sqlite, build-apr">
+	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr">
 		<!-- Fake direct result for subversion -->
 		<if test="${platform == 'win32'}">
 			<copy todir="build/win32/lib/include">
@@ -164,8 +164,8 @@
 					<include name="*.h" />
 				</fileset>
 			</copy>
-			<copy todir="build/win32/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
-			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
+			<copy todir="build/win32/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
+			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
 		</if>
 		<if test="${platform == 'x64'}">
 			<copy todir="build/x64/lib/include">
@@ -305,9 +305,10 @@
 				<!-- Don't copy pdb's for executables -->
 				<exclude name="subversion/${Configuration}/**/svn*.pdb" />
 				<include name="neon/**/*.lib" />
+				<include name="neon/**/*.pdb" />
 				<include name="serf/${Configuration}/*.lib" />
 				<include name="serf/${Configuration}/*.pdb" />
-				<include name="neon/**/*.pdb" />
+				
 
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
@@ -321,10 +322,10 @@
 				<!-- Don't copy pdb's for executables -->
 				<exclude name="subversion/${Configuration}/**/svn*.pdb" />
 				<include name="neon/**/*.lib" />
+				<include name="neon/**/*.pdb" />
 				<include name="serf/${Configuration}/*.lib" />
 				<include name="serf/${Configuration}/*.pdb" />
-				<include name="neon/**/*.pdb" />
-
+				
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
 				<exclude name="**/vc??.pdb" />
@@ -332,8 +333,8 @@
 		</copy>
 		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform == 'win32'}"/>
 		<copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" if="${platform == 'win32'}"/>
-		<copy file="${svnBase}/${platform}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform == 'win32'}"/>
-		<copy file="${svnBase}/${platform}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" if="${platform == 'win32'}"/>
+		<copy file="${svnBase}/${platform}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform != 'win32'}"/>
+		<copy file="${svnBase}/${platform}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" if="${platform != 'win32'}"/>
 		<copy todir="${release}/include">
 			<fileset basedir="${svnBase}\subversion\include">
 				<include name="**/*.h" />
@@ -366,7 +367,7 @@
 			</fileset>
 		</copy>
 	</target>
-	<target name="build" depends="download,extract,checkout, build-bdb, build-zlib, build-svn, copy-result">
+	<target name="build" depends="download,extract,checkout, build-svn, copy-result">
 
 	</target>
 </project>
