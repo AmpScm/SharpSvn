@@ -33,9 +33,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -75,8 +75,8 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;;..\..\imports\release\lib-AnyCPU"
-				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -122,9 +122,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -165,8 +165,8 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU"
-				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="17"
@@ -213,9 +213,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -253,8 +253,8 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;;..\..\imports\release\lib-AnyCPU"
-				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
 				KeyFile="SharpSvn.snk"
@@ -299,9 +299,9 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y ..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll &quot;$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -340,8 +340,8 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU"
-				DelayLoadDLLs="SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB4-5-20-NC-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				TargetMachine="17"
 				KeyFile="SharpSvn.snk"
