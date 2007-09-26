@@ -73,7 +73,7 @@
 	</target>
 
 	<property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
-	<property name="dbFilename" value="db-${dbVersion}.tar.gz" />
+	<property name="dbFilename" value="db-${dbVersion}.NC.tar.gz" />
 	<property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
 	<property name="sqliteFilename" value="sqlite-source-${string::replace(sqliteVersion,'.','_')}.zip" />
 	<property name="nunitFilename" value="NUnit-${nunitVersion}-net-2.0.zip" />
@@ -107,7 +107,7 @@
 				</fileset>
 			</copy>
 			<copy todir="build/win32/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
-			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
+			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />			
 		</if>
 		<if test="${platform == 'x64'}">
 			<copy todir="build/x64/lib/include">
@@ -136,6 +136,21 @@
 			<copy todir="build/x64/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 			<copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 		</if>
+
+		<!-- Create temp directory for subversion build -->
+		<copy todir="build/${platform}/lib/lib" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="${Configuration}_AMD64/*.lib" if="${platform == 'x64'}"/>
+				<include name="${Configuration}_AMD64/*.exp" if="${platform == 'x64'}"/>
+				<include name="${Configuration}/*.lib" if="${platform == 'win32'}"/>
+				<include name="${Configuration}/*.exp" if="${platform == 'win32'}"/>
+			</fileset>
+		</copy>
+		<copy todir="build/${platform}/lib/include" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="*.h" />
+			</fileset>
+		</copy>
 	</target>
 
 	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, svn-prepare">
@@ -175,7 +190,7 @@
 				<arg value="--release" />
 				<arg value="--with-apr=../lib" />
 				<arg value="--with-apr-util=../lib" />
-				<arg value="--with-berkeley-db=../../db-${dbVersion}/${platform}" />
+				<arg value="--with-berkeley-db=../lib" />
 				<arg value="--with-openssl=../openssl-${opensslVersion}" />
 				<arg value="--with-zlib=../lib/zlib" />
 				<arg value="--with-neon=../neon" />

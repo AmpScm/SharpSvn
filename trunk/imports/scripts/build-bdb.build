@@ -1,10 +1,13 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &lt; '4.5'}" />
-	<property name="dbWindowsDir" value="build/db-${dbVersion}/build_windows" if="${dbVersion &gt;= '4.5'}" />
+
+	<regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
+	
+	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &lt; '4.5'}" />
+	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &gt;= '4.5'}" />
 
 	<property name="dllPrefix" value="SharpSvn-" />
-	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" />
+	<property name="dbDllName" value="SharpSvn-DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
 	
 	<target name="prepare-bdb" depends="extract">
 		<OnceBlock file="build/db-${dbVersion}.prepared">
@@ -55,18 +58,6 @@
 			<arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />			
 			<arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
 		</VCBuild>
-		<!-- Create temp directory for subversion build -->
-		<copy todir="build/db-${dbVersion}/${platform}/lib" flatten="true">
-			<fileset basedir="${dbWindowsDir}">
-				<include name="${Configuration}/*.lib" if="${platform == 'win32'}"/>
-				<include name="${Configuration}_AMD64/*.lib" if="${platform == 'x64'}"/>
-			</fileset>
-		</copy>
-		<copy todir="build/db-${dbVersion}/${platform}/include" flatten="true">
-			<fileset basedir="${dbWindowsDir}">
-				<include name="*.h" />
-			</fileset>
-		</copy>
 		<copy todir="${release}/lib">
 			<fileset basedir="${dbWindowsDir}/${Configuration}">				
 				<include name="*.lib" />

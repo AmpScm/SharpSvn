@@ -24,7 +24,7 @@
 		<if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
 			<UnTar tarfile="downloads/${opensslFilename}" todir="build/${platform}" compresstype="gzip" />
 		</if>
-		<if test="${not directory::exists('build/db-' + dbVersion)}">
+		<if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
 			<UnTar tarfile="downloads/${dbFilename}" todir="build" compresstype="gzip" />
 		</if>
 		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
