@@ -11,7 +11,7 @@
 [for platforms][for configs]		<Configuration
 			Name="[configs.name]|[platforms]"
 			OutputDirectory="..\..\..\[is platforms "Win32"][else][platforms]\[end][configs.name]\[target.output_dir]"
-			IntermediateDirectory="..\..\..\[configs.name]\[target.intermediate_dir]"
+			IntermediateDirectory="..\..\..\[is platforms "Win32"][else][platforms]\[end][configs.name]\[target.intermediate_dir]"
 			ConfigurationType="[target_type]"[is configs.name "Release"]
 			WholeProgramOptimization="FALSE"[end]>
 			<Tool
@@ -110,7 +110,7 @@
 				<Tool
 					Name="VCCLCompilerTool"
 					ObjectFile="$(IntDir)/[sources.reldir]/"
-					ProgramDataBaseFileName="$(IntDir)/[sources.reldir]/"/>
+					ProgramDataBaseFileName="$(IntDir)/[sources.reldir]/[target.proj_name]-[sources.reldir].pdb"/>
 			</FileConfiguration>
 [end][end][end]
 		</File>

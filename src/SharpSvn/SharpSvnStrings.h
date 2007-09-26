@@ -158,6 +158,13 @@ ref class SharpSvnStrings {
     internal: static property System::String^  UriIsNotAbsolute {
         System::String^  get();
     }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to The value {0} is not a valid {1}.
+    /// </summary>
+    internal: static property System::String^  VerifyEnumFailed {
+        System::String^  get();
+    }
 };
 
 
@@ -241,4 +248,8 @@ inline System::String^  SharpSvnStrings::TheTargetIsNotAValidUriTarget::get() {
 
 inline System::String^  SharpSvnStrings::UriIsNotAbsolute::get() {
     return ResourceManager->GetString(L"UriIsNotAbsolute", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::VerifyEnumFailed::get() {
+    return ResourceManager->GetString(L"VerifyEnumFailed", resourceCulture);
 }

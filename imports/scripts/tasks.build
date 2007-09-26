@@ -127,9 +127,18 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
 [TaskName("Svn")]
 public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 {
+  bool _interactive;
 	public override string ProgramArguments
 	{
-	   get { return "--non-interactive"; }
+	   get { return _interactive ? "" : "--non-interactive"; }
+	}
+	
+	
+	[TaskAttribute("nonInteractive")]
+	public bool NonInteractive
+	{
+	    get { return !_interactive; }
+      set { _interactive = !value; }
 	}
 }
 

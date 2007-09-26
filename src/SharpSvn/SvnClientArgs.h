@@ -175,7 +175,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -240,7 +240,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -307,7 +307,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -358,7 +358,7 @@ namespace SharpSvn {
 			}
 			void set(SvnLineStyle value)
 			{
-				_lineStyle = value;
+				_lineStyle = EnumVerifier::Verify(value);
 			}
 		}
 	};
@@ -383,7 +383,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -454,7 +454,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -523,7 +523,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -612,7 +612,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -815,7 +815,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -911,7 +911,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -972,7 +972,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1035,7 +1035,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 	};
@@ -1066,7 +1066,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1078,7 +1078,7 @@ namespace SharpSvn {
 			}
 			void set(SvnAccept value)
 			{
-				_which = value;
+				_which = EnumVerifier::Verify(value);
 			}
 		}
 	};
@@ -1212,7 +1212,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1278,7 +1278,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 	};
@@ -1327,7 +1327,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 	};
@@ -1486,7 +1486,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1576,7 +1576,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1672,7 +1672,7 @@ namespace SharpSvn {
 			}
 			void set(SvnDepth value)
 			{
-				_depth = value;
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1897,7 +1897,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRepositoryFilesystem value)
 			{
-				_reposType = value;
+				_reposType = EnumVerifier::Verify(value);
 			}
 		}
 
@@ -1909,7 +1909,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRepositoryCompatibility value)
 			{
-				_reposCompat = value;
+				_reposCompat = EnumVerifier::Verify(value);
 			}
 		}
 	};
