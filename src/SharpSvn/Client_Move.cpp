@@ -71,7 +71,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 
@@ -192,5 +192,5 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 
 	commitInfo = commitInfoPtr ? gcnew SvnCommitInfo(commitInfoPtr, %pool) : nullptr;
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

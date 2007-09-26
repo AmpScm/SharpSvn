@@ -4,6 +4,8 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.CleanUp(System.String,SharpSvn.SvnCleanUpArgs):System.Boolean")];
+
 
 void SvnClient::CleanUp(String ^path)
 {
@@ -29,5 +31,5 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

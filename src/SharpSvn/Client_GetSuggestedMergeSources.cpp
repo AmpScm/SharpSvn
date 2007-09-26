@@ -5,6 +5,8 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,System.Collections.Generic.IList`1<System.Uri>&):System.Boolean")];
+
 void SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources)
 {
 	if(!target)
@@ -28,14 +30,14 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 	apr_array_header_t* svnMergeSources = nullptr;
 
 	svn_opt_revision_t rev = target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-	svn_error_t* err = svn_client_suggest_merge_sources(
+	svn_error_t* r = svn_client_suggest_merge_sources(
 		&svnMergeSources,
 		pool.AllocString(target->TargetName),
 		&rev,
 		CtxHandle,
 		pool.Handle);
 
-	if(!err && svnMergeSources)
+	if(!r && svnMergeSources)
 	{
 		array<Uri^>^ uris = gcnew array<Uri^>(svnMergeSources->nelts);
 
@@ -48,5 +50,5 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 		mergeSources = safe_cast<IList<Uri^>^>(uris);
 	}
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }

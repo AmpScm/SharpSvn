@@ -115,13 +115,13 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
-	svn_error_t* err = svn_client_unlock(
+	svn_error_t* r = svn_client_unlock(
 		aprTargets->Handle,
 		args->BreakLock,
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }
 
 bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
@@ -149,11 +149,11 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
-	svn_error_t* err = svn_client_unlock(
+	svn_error_t* r = svn_client_unlock(
 		aprTargets->Handle,
 		args->BreakLock,
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }

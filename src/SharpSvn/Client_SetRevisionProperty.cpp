@@ -132,5 +132,5 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 		CtxHandle,
 		pool->Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

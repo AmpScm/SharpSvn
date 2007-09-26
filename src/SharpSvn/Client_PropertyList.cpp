@@ -64,7 +64,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 		svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		svn_error_t* err = svn_client_proplist3(
+		svn_error_t* r = svn_client_proplist3(
 			pool.AllocString(target->TargetName),
 			&pegrev,
 			&rev,
@@ -74,7 +74,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(err);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{

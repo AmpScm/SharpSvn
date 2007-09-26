@@ -34,6 +34,11 @@ namespace SharpSvn {
 			Notify(this, e);
 		}
 
+		virtual void OnSvnError(SvnErrorEventArgs^ e)
+		{
+			UNUSED_ALWAYS(e);
+		}
+
 	public:
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
@@ -73,7 +78,7 @@ namespace SharpSvn {
 
 	internal:
 		[System::Diagnostics::DebuggerStepThroughAttribute()]
-		bool HandleResult(svn_error_t *error);
+		bool HandleResult(SvnClientContext^ client, svn_error_t *error);
 	};
 
 	public ref class SvnClientArgsWithCommit : public SvnClientArgs
@@ -893,7 +898,6 @@ namespace SharpSvn {
 
 	public ref class SvnImportArgs : public SvnClientArgsWithCommit
 	{
-		bool _notRecursive;
 		bool _noIgnore;
 		bool _ignoreUnknownNodeTypes;
 		SvnDepth _depth;
@@ -1363,16 +1367,14 @@ namespace SharpSvn {
 
 	public ref class SvnRevisionPropertyListArgs : public SvnClientArgs
 	{
-		SvnDepth _depth;
-
-	public:
+	/*public:
 		event EventHandler<SvnRevisionPropertyListEventArgs^>^ PropertyList;
 
 	protected public:
 		virtual void OnPropertyList(SvnRevisionPropertyListEventArgs^ e)
 		{
 			PropertyList(this, e);
-		}
+		}*/
 
 	public:
 		SvnRevisionPropertyListArgs()

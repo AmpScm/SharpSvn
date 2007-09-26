@@ -5,6 +5,8 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetSuggestedMergeSourcesArgs,SharpSvn.SvnAvailableMergeInfo&):System.Boolean")];
+
 void SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo)
 {
 	if(!target)
@@ -30,7 +32,7 @@ bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetS
 
 	apr_array_header_t* svnMergeInfo = nullptr;
 
-	svn_error_t* err = svn_client_mergeinfo_get_available(
+	svn_error_t* r = svn_client_mergeinfo_get_available(
 		&svnMergeInfo,
 		pool.AllocString(target->TargetName),
 		target->Revision->AllocSvnRevision(%pool),
@@ -38,12 +40,12 @@ bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetS
 		CtxHandle,
 		pool.Handle);
 
-	if(!err && svnMergeInfo)
+	if(!r && svnMergeInfo)
 	{
 		mergeInfo = gcnew SvnAvailableMergeInfo(target, svnMergeInfo, %pool);
 	}
 	else
 		mergeInfo = nullptr;
 
-	return args->HandleResult(err) && mergeInfo;
+	return args->HandleResult(this, r) && mergeInfo;
 }

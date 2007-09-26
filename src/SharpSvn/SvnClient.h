@@ -47,26 +47,6 @@ namespace SharpSvn {
 			}
 		}
 
-		static String^ GetSvnPath(String ^path)
-		{
-			return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
-		}
-
-		static bool IsRecursive(SvnDepth depth)
-		{
-			switch(depth)
-			{
-			case SvnDepth::Empty:
-			case SvnDepth::Files:
-				return false;
-			case SvnDepth::Unknown:
-			case SvnDepth::Infinity:
-				return true;
-			default:
-				throw gcnew ArgumentException(SharpSvnStrings::DepthMustBeRecursiveValue, "depth");
-			}
-		}
-
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
 		SvnClient();
@@ -149,6 +129,13 @@ namespace SharpSvn {
 		/// </summary>
 		event EventHandler<SvnConflictEventArgs^>^		Conflict;
 
+		/// <summary>
+		/// Raised when a subversion exception occurs.
+		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel 
+		/// throwing the exception
+		/// </summary>
+		event EventHandler<SvnErrorEventArgs^>^		SvnError;
+
 	protected:
 		/// <summary>Invokes the <see cref="Cancel" /> event</summary>
 		virtual void OnCancel(SvnCancelEventArgs^ e);
@@ -160,14 +147,16 @@ namespace SharpSvn {
 		virtual void OnNotify(SvnNotifyEventArgs^ e);
 		/// <summary>Invokes the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e);
+		/// <summary>Invokes the <see cref="Exception" /> event</summary>
+		virtual void OnSvnError(SvnErrorEventArgs^ e);
 
 	internal:
-
 		void HandleClientCancel(SvnCancelEventArgs^ e);
 		void HandleClientProgress(SvnProgressEventArgs^ e);
 		void HandleClientGetCommitLog(SvnCommittingEventArgs^ e);
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
+		void HandleClientError(SvnErrorEventArgs^ e);
 
 		static const char* GetEolPtr(SvnLineStyle style);
 #pragma endregion
@@ -780,18 +769,6 @@ namespace SharpSvn {
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>
 		bool GetUuidFromUri(Uri^ uri, [Out] Guid% uuid);
-
-		/// <summary>Gets the given value with <see cref="SvnClientArgs::ThrowOnError" /> set to false</summary>
-		generic<typename T> 
-		where T : SvnClientArgs, gcnew()
-			T NoThrowOnError(T value)
-		{
-			if(!value)
-				throw gcnew ArgumentNullException("value");
-
-			value->ThrowOnError = false;
-			return value;
-		}
 
 	private:
 		~SvnClient();

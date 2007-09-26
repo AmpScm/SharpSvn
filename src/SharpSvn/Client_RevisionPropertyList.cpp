@@ -30,7 +30,7 @@ bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropert
 	apr_hash_t *props = nullptr;
 	svn_revnum_t set_rev = 0;
 
-	svn_error_t* err = svn_client_revprop_list(
+	svn_error_t* r = svn_client_revprop_list(
 		&props,
 		pool.AllocString(target->ToString()),
 		target->Revision->AllocSvnRevision(%pool),
@@ -38,10 +38,10 @@ bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropert
 		CtxHandle,
 		pool.Handle);
 
-	if(!err && props)
+	if(!r && props)
 	{
 		list = CreatePropertyDictionary(props, %pool);
 	}
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }

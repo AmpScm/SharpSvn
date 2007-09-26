@@ -68,6 +68,21 @@ using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetProperty(SharpSvn.SvnTarget,System.String,SharpSvn.SvnGetPropertyArgs,System.Collections.Generic.IDictionary`2<SharpSvn.SvnTarget,System.String>&):System.Boolean", MessageId="3#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetProperty(SharpSvn.SvnTarget,System.String,System.String&):System.Void", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,System.Boolean,System.Int64&):System.Void", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetAppliedMergeInfo(SharpSvn.SvnTarget,SharpSvn.SvnAppliedMergeInfo&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetBlame(SharpSvn.SvnTarget,SharpSvn.SvnBlameArgs,System.Collections.Generic.IList`1<SharpSvn.SvnBlameEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<System.Uri>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnAvailableMergeInfo&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetSuggestedMergeSourcesArgs,SharpSvn.SvnAvailableMergeInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,System.String&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Void", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,System.Collections.Generic.IList`1<System.Uri>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetAppliedMergeInfo(SharpSvn.SvnTarget,SharpSvn.SvnGetAppliedMergeInfoArgs,SharpSvn.SvnAppliedMergeInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetBlame(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<SharpSvn.SvnBlameEventArgs>&):System.Void", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.String&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1047:DoNotDeclareProtectedMembersInSealedTypes", Scope="member", Target="SharpSvn.SvnClient+ArgsStore.Dispose(System.Boolean):System.Void")];
 
 SvnClient::SvnClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
@@ -150,10 +165,16 @@ void SvnClient::OnProgress(SvnProgressEventArgs^ e)
 
 void SvnClient::HandleClientGetCommitLog(SvnCommittingEventArgs^ e)
 {
+	if(e->Cancel)
+		return;
+
 	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentArgs); // C#: _currentArgs as SvnCommitArgs
 
 	if(commitArgs)
 		commitArgs->OnCommitting(e);
+
+	if(e->Cancel)
+		return;
 
 	OnCommitting(e);
 }
@@ -178,10 +199,18 @@ void SvnClient::OnNotify(SvnNotifyEventArgs^ e)
 
 void SvnClient::HandleClientConflictResolver(SvnConflictEventArgs^ e)
 {
+	if(e->Cancel)
+		return;
+
 	SvnClientArgsWithConflict^ conflictArgs = dynamic_cast<SvnClientArgsWithConflict^>(CurrentArgs); // C#: _currentArgs as SvnClientArgsWithConflict
 
 	if(conflictArgs)
+	{
 		conflictArgs->OnConflict(e);
+
+		if(e->Cancel)
+			return;
+	}
 	
 	OnConflict(e);
 }
@@ -189,6 +218,27 @@ void SvnClient::HandleClientConflictResolver(SvnConflictEventArgs^ e)
 void SvnClient::OnConflict(SvnConflictEventArgs^ e)
 {
 	Conflict(this, e);
+}
+
+void SvnClient::HandleClientError(SvnErrorEventArgs^ e)
+{
+	if(e->Cancel)
+		return;
+
+	if(_currentArgs)
+	{
+		_currentArgs->OnSvnError(e);
+
+		if(e->Cancel)
+			return;
+	}
+
+	OnSvnError(e);
+}
+
+void SvnClient::OnSvnError(SvnErrorEventArgs^ e)
+{
+	SvnError(this, e);
 }
 
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
@@ -391,10 +441,14 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 	return nullptr;
 }
 
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.GetRepositoryRoot(System.String):System.Uri")];
+
 Uri^ SvnClient::GetRepositoryRoot(String^ path)
 {
-	if(!path)
+	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	const char* resultUrl = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);

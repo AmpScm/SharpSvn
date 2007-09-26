@@ -62,7 +62,7 @@ bool SvnClient::CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryA
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::RemoteCreateDirectory(Uri^ uri)
@@ -144,5 +144,5 @@ bool SvnClient::RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirector
 	if(commit_info)
 		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

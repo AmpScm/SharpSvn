@@ -1,0 +1,50 @@
+﻿<project schemaVersion="1.4.0.2">
+    <assemblies>
+        <assembly assemblyPath=".\SharpSvn\bin_2008\Win32\Release\SharpSvn.dll" xmlCommentsPath=".\SharpSvn\bin_2008\Win32\Release\SharpSvn.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\SharpSvn.UI\bin\Release\SharpSvn.UI.dll" xmlCommentsPath=".\SharpSvn.UI\bin\Release\SharpSvn.UI.xml" commentsOnly="False" />
+    </assemblies>
+    <namespaceSummaries>
+        <namespaceSummaryItem name="" isDocumented="False" />
+        <namespaceSummaryItem name="&lt;CppImplementationDetails&gt;" isDocumented="False" />
+        <namespaceSummaryItem name="&lt;CrtImplementationDetails&gt;" isDocumented="False" />
+        <namespaceSummaryItem name="SharpSvn" isDocumented="True" />
+        <namespaceSummaryItem name="SharpSvn.Apr" isDocumented="True" />
+        <namespaceSummaryItem name="SharpSvn.Security" isDocumented="True" />
+        <namespaceSummaryItem name="SharpSvn.UI" isDocumented="True" />
+        <namespaceSummaryItem name="SharpSvn.UI.Authentication" isDocumented="True" />
+        <namespaceSummaryItem name="SharpSvn.UI.Properties" isDocumented="True" />
+        <namespaceSummaryItem name="vc_attributes" isDocumented="False" />
+    </namespaceSummaries>
+    <ProjectSummary />
+    <MissingTags>Summary, Parameter, Returns, AutoDocumentCtors, Namespace</MissingTags>
+    <VisibleItems>InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected</VisibleItems>
+    <HtmlHelp1xCompilerPath path="" />
+    <HtmlHelp2xCompilerPath path="" />
+    <OutputPath>.\Help\</OutputPath>
+    <SandcastlePath path="" />
+    <WorkingPath path="" />
+    <CleanIntermediates>True</CleanIntermediates>
+    <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
+    <PurgeDuplicateTopics>True</PurgeDuplicateTopics>
+    <CppCommentsFixup>True</CppCommentsFixup>
+    <FrameworkVersion>2.0.50727</FrameworkVersion>
+    <BinaryTOC>True</BinaryTOC>
+    <IncludeFavorites>False</IncludeFavorites>
+    <Preliminary>True</Preliminary>
+    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceTitle />
+    <HelpTitle>SharpSvn - Subversion for .Net</HelpTitle>
+    <HtmlHelpName>Documentation</HtmlHelpName>
+    <Language>en-US</Language>
+    <CopyrightHref>http://code.google.com/p/sharpsvn/</CopyrightHref>
+    <CopyrightText>Copyright (c) QQn Project</CopyrightText>
+    <FeedbackEMailAddress />
+    <HeaderText />
+    <FooterText />
+    <ProjectLinkType>Local</ProjectLinkType>
+    <SdkLinkType>Msdn</SdkLinkType>
+    <PresentationStyle>vs2005</PresentationStyle>
+    <NamingMethod>MemberName</NamingMethod>
+    <SyntaxFilters>Standard</SyntaxFilters>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+</project>

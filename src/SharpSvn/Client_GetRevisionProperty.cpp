@@ -5,6 +5,10 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.String&):System.Boolean")];
+
 void SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value)
 {
 	if(!target)
@@ -60,7 +64,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	else
 		value = nullptr;
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] IList<char>^% value)
@@ -95,5 +99,5 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	else
 		value = nullptr;
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

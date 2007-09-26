@@ -126,7 +126,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 		fs_config,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnRepositoryClient::DeleteRepository(String^ repositoryPath)
@@ -151,7 +151,7 @@ bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepo
 		pool.AllocPath(repositoryPath),
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
@@ -181,5 +181,5 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 		nullptr,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

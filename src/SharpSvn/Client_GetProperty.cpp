@@ -98,7 +98,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		properties = safe_cast<IDictionary<SvnTarget^, String^>^>(rd);
 	}
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, IDictionary<SvnTarget^, IList<char>^>^% properties)
@@ -151,7 +151,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		properties = safe_cast<IDictionary<SvnTarget^, IList<char>^>^>(rd);
 	}
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^% value)

@@ -65,7 +65,7 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::RemoteDelete(Uri^ uri)
@@ -155,5 +155,5 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	if(commit_info)
 		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

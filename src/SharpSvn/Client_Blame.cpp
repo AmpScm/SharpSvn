@@ -83,7 +83,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(r);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{

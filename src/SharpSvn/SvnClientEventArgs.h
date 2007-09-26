@@ -9,15 +9,11 @@ namespace SharpSvn {
 	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::IList;
 	using System::Collections::Generic::SortedList;
+	using System::Collections::ObjectModel::KeyedCollection;
 
 	ref class SvnException;
 
-	public interface class ISvnDetachable
-	{
-		void Detach(bool keepProperties);
-	};
-
-	public ref class SvnEventArgs abstract : public System::EventArgs, public ISvnDetachable
+	public ref class SvnEventArgs abstract : public System::EventArgs
 	{
 	protected:
 		SvnEventArgs()
@@ -285,7 +281,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnLockInfo sealed : public ISvnDetachable
+	public ref class SvnLockInfo sealed
 	{
 		const svn_lock_t *_lock;
 		initonly bool _localData;
@@ -366,7 +362,7 @@ namespace SharpSvn {
 					_comment = SvnBase::Utf8_PtrToString(_lock->comment);
 
 					if(_comment)
-						_comment->Replace("\n", Environment::NewLine);
+						_comment = _comment->Replace("\n", Environment::NewLine);
 				}
 
 				return _comment;
@@ -396,8 +392,6 @@ namespace SharpSvn {
 				return _expirationDate;
 			}
 		}
-
-
 
 	public:
 		virtual void Detach(bool keepProperties)
@@ -909,9 +903,9 @@ namespace SharpSvn {
 		ChangedPathsCollection^ _changedPaths;
 	public:
 
-		property System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>^ ChangedPaths
+		property KeyedCollection<String^, SvnChangeItem^>^ ChangedPaths
 		{
-			System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>^  get()
+			KeyedCollection<String^, SvnChangeItem^>^  get()
 			{
 				if(!_changedPaths && _entry && _pool)
 				{
@@ -1373,7 +1367,28 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnDirEntry : public ISvnDetachable
+	public ref class SvnErrorEventArgs : public SvnCancelEventArgs
+	{
+		initonly SvnException ^_exception;
+	public:
+		SvnErrorEventArgs(SvnException ^exception)
+		{
+			if(!exception)
+				throw gcnew ArgumentNullException("exception");
+
+			_exception = exception;
+		}
+
+		property SvnException^ Exception
+		{
+			SvnException^ get()
+			{
+				return _exception;
+			}
+		}
+	};
+
+	public ref class SvnDirEntry
 	{
 		const svn_dirent_t *_entry;
 		initonly SvnNodeKind _nodeKind;
@@ -1629,9 +1644,8 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnRevisionPropertyListEventArgs : public SvnCancelEventArgs
+	/*public ref class SvnRevisionPropertyListEventArgs : public SvnCancelEventArgs
 	{
-		initonly String^ _path;
 		apr_hash_t* _propHash;
 		IDictionary<String^, Object^>^ _properties;
 		AprPool^ _pool;
@@ -1679,7 +1693,7 @@ namespace SharpSvn {
 				__super::Detach(keepProperties);
 			}
 		}
-	};
+	};*/
 
 	public ref class SvnListChangeListEventArgs : public SvnCancelEventArgs
 	{
@@ -1796,17 +1810,17 @@ namespace SharpSvn {
 
 	public ref class SvnBlameEventArgs : public SvnCancelEventArgs
 	{
-		__int64 _revision;
-		__int64 _lineNr;
+		initonly __int64 _revision;
+		initonly __int64 _lineNr;
 		const char* _pcAuthor;
 		const char* _pcLine;
-		DateTime _date;
+		initonly DateTime _date;
 		String^ _author;
 		String^ _line;
-		__int64 _mergedRevision;
+		initonly __int64 _mergedRevision;
 		const char* _pcMergedAuthor;
 		const char* _pcMergedPath;
-		DateTime _mergedDate;
+		initonly DateTime _mergedDate;
 		String^ _mergedAuthor;
 		String^ _mergedPath;
 
@@ -1864,6 +1878,15 @@ namespace SharpSvn {
 				return _lineNr;
 			}
 		}
+
+		property DateTime Date
+		{
+			DateTime get()
+			{
+				return _date; 
+			}
+		}
+
 		property String^ Author
 		{
 			String^ get()
@@ -1885,7 +1908,7 @@ namespace SharpSvn {
 					{
 						_line = SvnBase::Utf8_PtrToString(_pcLine);
 					}
-					catch(Exception^)
+					catch(ArgumentException^)
 					{
 						_line = SharpSvnStrings::NonUtf8ConvertableLine;
 					}
