@@ -1,6 +1,7 @@
 #pragma once
 
 namespace SharpSvn {
+	using System::Globalization::CultureInfo;
 
 	public enum class SvnDepth
 	{
@@ -25,7 +26,7 @@ namespace SharpSvn {
 		/// <summary>
 		/// D + immediate children (D and its entries). Updates will pull in any
 		/// files or subdirectories not already present; those subdirectories'
-		/// this_dir entries will have depth-empty. */
+		/// this_dir entries will have depth-empty.
 		/// </summary>
 		Immediates		= svn_depth_immediates,
 
@@ -33,7 +34,7 @@ namespace SharpSvn {
 		/// D + all descendants (full recursion from D). Updates will pull in any
 		/// files or subdirectories not already present; those subdirectories'
 		/// this_dir entries will have depth-infinity. Equivalent to the pre-1.5
-		/// default update behavior. */
+		/// default update behavior.
 		/// </summary>
 		Infinity		= svn_depth_infinity,
 	};
@@ -328,5 +329,19 @@ namespace SharpSvn {
 		None		= svn_diff_file_ignore_space_none   - svn_diff_file_ignore_space_none,
 		IgnoreSpace = svn_diff_file_ignore_space_change - svn_diff_file_ignore_space_none,
 		IgnoreAll	= svn_diff_file_ignore_space_all	- svn_diff_file_ignore_space_all
+	};
+
+	ref class EnumVerifier
+	{
+	public:
+		generic<typename T>
+		where T : System::Enum
+		static T Verify(T value)
+		{
+			if(!Enum::IsDefined(T::typeid, value))
+				throw gcnew ArgumentOutOfRangeException("value", value, String::Format(CultureInfo::InvariantCulture, SharpSvnStrings::VerifyEnumFailed, value, T::typeid->FullName));
+
+			return value;
+		}
 	};
 }

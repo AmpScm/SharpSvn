@@ -21,6 +21,8 @@
 
 	<include buildfile="tasks.build" />
 
+	<include buildfile="build-prepare.build" />
+
 	<include buildfile="build-bdb.build" />
 	<include buildfile="build-zlib.build" />
 	<include buildfile="build-openssl.build" />
@@ -32,6 +34,11 @@
 	<target name="clean">
 		<delete>
 			<fileset basedir="build" defaultexcludes="false">
+				<include name="**" />
+			</fileset>
+		</delete>
+		<delete>
+			<fileset basedir="release">
 				<include name="**" />
 			</fileset>
 		</delete>
@@ -50,96 +57,31 @@
 		</delete>
 	</target>
 
+	<target name="win32" depends="x86">
+	</target>
+	
+	<target name="x86">
+		<exec program="${environment::get-variable('comspec')}">
+			<arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=win32 build"' />
+		</exec>
+	</target>
+		
+	<target name="x64">
+		<exec program="${environment::get-variable('comspec')}">
+			<arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86_amd64 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=x64 build"' />
+		</exec>
+	</target>
+
 	<property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
 	<property name="dbFilename" value="db-${dbVersion}.tar.gz" />
 	<property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
 	<property name="sqliteFilename" value="sqlite-source-${string::replace(sqliteVersion,'.','_')}.zip" />
 	<property name="nunitFilename" value="NUnit-${nunitVersion}-net-2.0.zip" />
-	<target name="download">
-		<mkdir dir="downloads" />
-		<if test="${not file::exists('downloads/' + opensslFilename)}">
-			<get src="http://www.openssl.org/source/${opensslFilename}" dest="downloads/${opensslFilename}" />
-		</if>
-		<if test="${not file::exists('downloads/' + dbFilename)}">
-			<get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="downloads/${dbFilename}" />
-		</if>
-		<if test="${not file::exists('downloads/' + zlibFilename)}">
-			<get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
-		</if>
-		<if test="${not file::exists('downloads/' + sqliteFilename)}">
-			<get src="http://www.sqlite.org/${sqliteFilename}" dest="downloads/${sqliteFilename}" />
-		</if>
-		<if test="${not file::exists('downloads/' + nunitFilename)}">
-			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
-		</if>
-	</target>
-
 	<property name="sqliteDir" value="${'build/sqlite-' + sqliteVersion}" />
 	<property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
-	<target name="extract" depends="download">
-		<mkdir dir="build" />
-		<if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
-			<UnTar tarfile="downloads/${opensslFilename}" todir="build/${platform}" compresstype="gzip" />
-		</if>
-		<if test="${not directory::exists('build/db-' + dbVersion)}">
-			<UnTar tarfile="downloads/${dbFilename}" todir="build" compresstype="gzip" />
-		</if>
-		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
-			<UnTar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
-		</if>
-		<if test="${not directory::exists(sqliteDir)}">
-			<unzip zipfile="downloads/${sqliteFilename}" todir="${sqliteDir}"  />
-		</if>
-		<if test="${not directory::exists(nunitDir)}">
-			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />
-		</if>
-	</target>
-	<target name="checkout">
-		<property name="platformBase" value="build/${platform}" />
-		<property name="svnBase" value="${platformBase}/subversion" />
 
-		<if test="${not directory::exists(svnBase)}">
-			<Svn verbose="true">
-				<arg line="--non-interactive co" />
-				<arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" unless="${svnTrunkBuild == 'true'}" />
-				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnTrunkBuild == 'true'}" />
-				<arg value="${svnBase}" />
-			</Svn>
-		</if>
-		<if test="${not directory::exists(platformBase + '/neon')}">
-			<Svn verbose="true">
-				<arg line="co" />
-				<arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
-				<arg value="build/${platform}/neon" />
-			</Svn>
-			<!-- Write version for subversion configure script -->
-			<echo message="${neonVersion}" file="${platformBase}/neon/.version" />
-		</if>
-		<if test="${not directory::exists('build/apr')}">
-			<Svn verbose="true">
-				<arg line="co" />
-				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
-				<arg value="build/apr" />
-			</Svn>
-		</if>
-		<if test="${not directory::exists('build/apr-util')}">
-			<Svn verbose="true">
-				<arg line="co" />
-				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
-				<arg value="build/apr-util" />
-			</Svn>
-		</if>
-		<if test="${not directory::exists(platformBase + '/serf')}">
-			<Svn verbose="true">
-				<arg line="co" />
-				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" />
-				<arg value="${platformBase}/serf" />
-			</Svn>
-		</if>
-	</target>
-
-	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr">
-		<!-- Fake direct result for subversion -->
+	<target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-sqlite, build-apr">
+		<!-- Fake direct result for subversion to hide platforms -->
 		<if test="${platform == 'win32'}">
 			<copy todir="build/win32/lib/include">
 				<fileset basedir="build/apr/include">
@@ -188,20 +130,22 @@
 			<copy todir="build/x64/lib/inc" file="build/sqlite-${sqliteVersion}/sqlite3.h" />
 			<copy todir="build/x64/lib/zlib" flatten="true">
 				<fileset basedir="build/zlib-${zlibVersion}">
-					<include name="*.h" />					
+					<include name="*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/x64/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 			<copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 		</if>
+	</target>
 
+	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, svn-prepare">
 		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
 			<!-- Patches for x64 builds; hopefully included in svn 1.5 -->
 			<copy todir="${svnBase}/build/generator/" overwrite="true">
 				<fileset basedir="scripts">
 					<include name="*.ezt" />
 				</fileset>
-			</copy>			
+			</copy>
 			<copy todir="${svnBase}/subversion/libsvn_subr" overwrite="true">
 				<fileset basedir="scripts">
 					<include name="win32_crashrpt.c" />
@@ -308,11 +252,9 @@
 				<include name="neon/**/*.pdb" />
 				<include name="serf/${Configuration}/*.lib" />
 				<include name="serf/${Configuration}/*.pdb" />
-				
 
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
-				<exclude name="**/vc??.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/lib-x64" flatten="true">
@@ -325,10 +267,9 @@
 				<include name="neon/**/*.pdb" />
 				<include name="serf/${Configuration}/*.lib" />
 				<include name="serf/${Configuration}/*.pdb" />
-				
+
 				<!-- Don't copy the GPL as a *.lib file -->
 				<exclude name="neon/src/COPYING.LIB" />
-				<exclude name="**/vc??.pdb" />
 			</fileset>
 		</copy>
 		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform == 'win32'}"/>
@@ -369,6 +310,42 @@
 	</target>
 	<target name="build" depends="download,extract,checkout, build-svn, copy-result">
 
+	</target>
+	<target name="clean-svn">
+		<delete>
+			<fileset basedir="build">
+				<include name="subversion*_${platform}.*" />
+				<include name="serf*_${platform}.*" />
+				<include name="neon*_${platform}.*" />
+				<include name="${platform}/subversion/${Configuration}/**" />
+			</fileset>
+		</delete>
+		<delete>
+			<fileset basedir="${release}">
+				<include name="lib/**" if="${platform == 'win32'}" />
+				<include name="lib-${platform}/**" if="${platform != 'win32'}" />
+				<include name="bin/*-${platform}.exe" />
+				<include name="bin/*-${platform}.dll" />
+			</fileset>
+		</delete>
+		<Svn nonInteractive="false">
+			<arg line="revert -R build/${platform}/subversion" />
+		</Svn>
+		<Svn nonInteractive="false">
+			<arg line="revert -R build/${platform}/neon" />
+		</Svn>
+		<Svn nonInteractive="false">
+			<arg line="revert -R build/${platform}/serf" />
+		</Svn>
+		<Svn>
+			<arg line="up build/${platform}/subversion" />
+		</Svn>
+		<Svn>
+			<arg line="up build/${platform}/neon" />
+		</Svn>
+		<Svn>
+			<arg line="up build/${platform}/serf" />
+		</Svn>
 	</target>
 </project>
 

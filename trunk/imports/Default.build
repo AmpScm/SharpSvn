@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project basedir="." default="build">
+<project basedir="." default="help">
 	<property name="svnTrunkBuild" value="true" />
 	<property name="platform" value="win32" if="${not property::exists('platform')}" />
 
@@ -20,5 +20,23 @@
 	
 	<property name="httpOrHttps" value="http" />
 
+	<property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 8\VC" />
+	
 	<include buildfile="scripts/default.build" />
+
+	<target name="help">
+		<echo>
+			The following targets are defined
+			- build      - Build all
+			- clean      - Clean all
+			- distclean  - Clean all + clean downloads
+			- svn-clean  - Clean+Update subversion
+			
+			Use nant /D:platform=x64 to build/clean the x64 binaries (platform=win32 by default)
+			
+			The following targets try to start nant within the specified context
+			- x86
+			- x64
+		</echo>
+	</target>
 </project>

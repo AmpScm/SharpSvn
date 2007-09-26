@@ -165,4 +165,7 @@
   <data name="UriIsNotAbsolute" xml:space="preserve">
     <value>The passed Uri is not absolute</value>
   </data>
+  <data name="VerifyEnumFailed" xml:space="preserve">
+    <value>The value {0} is not a valid {1}</value>
+  </data>
 </root>
