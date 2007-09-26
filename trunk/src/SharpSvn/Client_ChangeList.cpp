@@ -5,6 +5,11 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,SharpSvn.SvnListChangeListArgs,System.Collections.Generic.IList`1<System.String>&):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.AddToChangeList(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnAddToChangeListArgs):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangeList(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnRemoveFromChangeListArgs):System.Boolean")];
+
 void SvnClient::AddToChangeList(String^ path, String^ changeList)
 {
 	if(String::IsNullOrEmpty(path))
@@ -57,7 +62,7 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::RemoveFromChangeList(String^ path, String^ changeList)
@@ -111,7 +116,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ change
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
@@ -174,7 +179,7 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 		args->ListChangeList += changeListHandler;
 	try
 	{
-		svn_error_t* err = svn_client_get_changelist_streamy(
+		svn_error_t* r = svn_client_get_changelist_streamy(
 			svnclient_changelist_handler,
 			(void*)_clientBatton->Handle,
 			pool.AllocString(changeList),
@@ -182,7 +187,7 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(err);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{
@@ -219,21 +224,21 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 
 	apr_array_header_t* aprResult = nullptr;
 
-	svn_error_t* err = svn_client_get_changelist(
+	svn_error_t* r = svn_client_get_changelist(
 		&aprResult,
 		pool.AllocString(changeList),
 		pool.AllocPath(rootPath),
 		CtxHandle,
 		pool.Handle);
 
-	if(!err && aprResult)
+	if(!r && aprResult)
 	{
 		AprArray<String^,AprCStrPathMarshaller^> paths(aprResult, %pool);
 
 		list = safe_cast<IList<String^>^>(paths.ToArray());
 	}
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::GetChangeList(String^ changeList, String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list)

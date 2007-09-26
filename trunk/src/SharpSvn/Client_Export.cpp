@@ -119,7 +119,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		CtxHandle,
 		pool.Handle);
 
-	if(args->HandleResult(r))
+	if(args->HandleResult(this, r))
 	{
 		revision = resultRev;
 		return true;

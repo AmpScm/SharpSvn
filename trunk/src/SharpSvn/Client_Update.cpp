@@ -56,7 +56,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revisio
 	}
 	finally
 	{
-		revision = revisions[0];
+		revision = revisions ? revisions[0] : -1;
 	}
 }
 
@@ -135,7 +135,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 		CtxHandle,
 		pool.Handle);
 
-	if(args->HandleResult(r) && revisions)
+	if(args->HandleResult(this, r) && revisions)
 	{
 		AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 

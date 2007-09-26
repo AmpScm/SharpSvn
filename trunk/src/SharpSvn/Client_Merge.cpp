@@ -52,7 +52,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ merge
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to)
@@ -105,7 +105,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, 
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange)

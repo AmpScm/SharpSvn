@@ -70,7 +70,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
-		svn_error_t* err = svn_client_info2(
+		svn_error_t* r = svn_client_info2(
 			pool.AllocString(target->TargetName),
 			&pegRev,
 			&rev,
@@ -80,7 +80,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(err);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{

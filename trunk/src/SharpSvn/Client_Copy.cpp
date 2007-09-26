@@ -71,7 +71,7 @@ bool SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, Svn
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 
 void SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
@@ -187,6 +187,6 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 	else
 		commitInfo = nullptr;
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }
 

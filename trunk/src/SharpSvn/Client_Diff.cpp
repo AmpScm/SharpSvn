@@ -37,6 +37,9 @@ void SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result)
 	Diff(from, to, gcnew SvnDiffArgs(), result);
 }
 
+// Fxcop or vc++ code generating bug
+[module: SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffArgs,System.IO.FileStream&):System.Boolean", MessageId="openFlags")];
+
 bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result)
 {
 	if(!from)
@@ -55,15 +58,18 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 	apr_file_t* tmpErr = nullptr;
 	try
 	{
-		apr_int32_t openFlags = APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE | APR_BUFFERED | APR_FOPEN_WRITE;
+		const apr_int32_t openFlags = APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE | APR_BUFFERED | APR_FOPEN_WRITE;
 
-		svn_error_t *openErr = nullptr;
-		if(	(openErr = svn_io_file_open(&tmpOut, pool.AllocString(tempOut), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle)) ||
-			(openErr = svn_io_file_open(&tmpErr, pool.AllocString(tempErr), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle)) ||
-			!tmpOut || !tmpErr)
+		svn_error_t *err;
+
+		err = svn_io_file_open(&tmpOut, pool.AllocString(tempOut), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle);
+		if(!err)
+			err = svn_io_file_open(&tmpErr, pool.AllocString(tempErr), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle);
+
+		if(	err || !tmpOut || !tmpErr)
 		{
-			if(openErr)
-				throw SvnException::Create(openErr);
+			if(err)
+				throw SvnException::Create(err);
 
 			throw gcnew System::IO::IOException("Can't create temporary files for diffing");
 		}
@@ -98,7 +104,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
 		tempOut = nullptr;
 
-		return args->HandleResult(r);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{
@@ -151,9 +157,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 	apr_file_t* tmpErr = nullptr;
 
 	try
-	{
-		apr_array_header_t *diff_options = nullptr;
-
+	{		
 		if(	apr_file_open(&tmpOut, pool.AllocPath(tempOut), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
 			apr_file_open(&tmpErr, pool.AllocPath(tempErr), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
 			!tmpOut || !tmpErr)
@@ -165,8 +169,13 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 		svn_opt_revision_t fromRev = from->ToSvnRevision();
 		svn_opt_revision_t toRev = to->ToSvnRevision();
 
+		IList<String^>^ diffArgs = args->DiffArguments;
+
+		if(!diffArgs)
+			diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
+
 		svn_error_t *r = svn_client_diff_peg4(
-			diff_options,
+			AllocArray(diffArgs, %pool),
 			pool.AllocString(source->TargetName),
 			&pegRev,
 			&fromRev,
@@ -184,7 +193,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
 		tempOut = nullptr;
 
-		return args->HandleResult(r);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{

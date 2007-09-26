@@ -80,5 +80,5 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 
 	revision = rev;
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

@@ -8,6 +8,10 @@
 
 using namespace SharpSvn::Apr;
 
+
+[module: SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", Scope="member", Target="SharpSvn.Apr.AprPool.Dispose(System.Boolean):System.Void", MessageId="_tag")];
+[module: SuppressMessage("Microsoft.Design", "CA1047:DoNotDeclareProtectedMembersInSealedTypes", Scope="member", Target="SharpSvn.Apr.AprPool.Dispose(System.Boolean):System.Void")];
+
 AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
 {
 	if(!handle)

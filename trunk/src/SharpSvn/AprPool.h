@@ -12,7 +12,7 @@ namespace SharpSvn {
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true)]
 		[SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
-		ref class AprPool : public SvnHandleBase, public System::IDisposable
+		ref class AprPool sealed : public SvnHandleBase, public System::IDisposable
 		{
 			static const __int64 StandardMemoryPressure = 512*1024;
 
@@ -74,25 +74,15 @@ namespace SharpSvn {
 			~AprPool();
 
 
-		protected:
+		private:
 			void Destroy();
 
 		public:
-			//AprPool(AprPool% thisPool);
 			AprPool(AprPool^ parentPool);
 			AprPool();
 			AprPool(apr_pool_t *attachHandle, bool destroyPool);
 
-			//static AprPool^ Attach(apr_pool_t *handle, bool destroyPool);
-
-			/*property bool IsDisposed
-			{
-				bool get()
-				{
-					return !_handle;
-				}
-			}*/
-
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			void Ensure()
 			{
 				if(!_tag)
@@ -113,6 +103,7 @@ namespace SharpSvn {
 				}
 			}
 
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			void Clear();
 
 			[System::Diagnostics::DebuggerStepThroughAttribute()]

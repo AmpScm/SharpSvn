@@ -213,7 +213,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(r);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{

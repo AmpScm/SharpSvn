@@ -5,6 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetAppliedMergeInfo(SharpSvn.SvnTarget,SharpSvn.SvnGetAppliedMergeInfoArgs,SharpSvn.SvnAppliedMergeInfo&):System.Boolean")];
 
 void SvnClient::GetAppliedMergeInfo(SvnTarget ^target, [Out]SvnAppliedMergeInfo^% mergeState)
 {
@@ -27,19 +28,19 @@ bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArg
 
 	apr_hash_t* svnMergeInfo = nullptr;
 
-	svn_error_t* err = svn_client_mergeinfo_get_merged(
+	svn_error_t* r = svn_client_mergeinfo_get_merged(
 		&svnMergeInfo,
 		pool.AllocString(target->TargetName),
 		target->Revision->AllocSvnRevision(%pool),
 		CtxHandle,
 		pool.Handle);
 
-	if(!err && svnMergeInfo)
+	if(!r && svnMergeInfo)
 	{
 		mergeState = gcnew SvnAppliedMergeInfo(target, svnMergeInfo, %pool);
 	}
 	else
 		mergeState = nullptr;
 
-	return args->HandleResult(err) && mergeState;
+	return args->HandleResult(this, r) && mergeState;
 }

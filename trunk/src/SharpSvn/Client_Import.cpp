@@ -134,5 +134,5 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	if(commit_info)
 		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

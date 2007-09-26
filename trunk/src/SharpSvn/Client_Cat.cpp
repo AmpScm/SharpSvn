@@ -45,5 +45,5 @@ bool SvnClient::Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 }

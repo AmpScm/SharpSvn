@@ -8,6 +8,8 @@ using namespace SharpSvn::Apr;
 
 #define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
 
+static const int _abusedErrorCode = SVN_ERR_CL_LOG_MESSAGE_IS_PATHNAME;
+
 class SvnExceptionContainer sealed
 {
 private:
@@ -35,9 +37,9 @@ public:
 	{
 		_id = _idValue;
 		_exception = ex;
-		
+
 		apr_pool_cleanup_register(pool, this, cleanup_handler, cleanup_handler);
-		
+
 		_exception = ex;
 	}
 
@@ -69,19 +71,19 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 
 	if(exception)
 	{
-		svn_error_t *creator = svn_error_create(SVN_ERR_CANCELLED, nullptr, "{Managed Exception Blob}");
+		svn_error_t *creator = svn_error_create(_abusedErrorCode, nullptr, "{Managed Exception Blob}");
 
 		if(creator->pool)
 		{
 			char ptrBuffer[32];
 
 			SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
-			
+
 			sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex);			
 
 			char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
 
-			innerError = svn_error_create(SVN_ERR_CANCELLED, creator, forwardData);
+			innerError = svn_error_create(_abusedErrorCode, creator, forwardData);
 		}
 	}
 
@@ -127,6 +129,22 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		return nullptr;
 
 	static const int prefixLength = (int)strlen(MANAGED_EXCEPTION_PREFIX);
+
+	if(error->apr_err == _abusedErrorCode)
+	{
+		if(error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, prefixLength))
+		{
+			try
+			{
+				void *container = nullptr;
+				sscanf(error->message + prefixLength, "%p", &container);
+
+				return SvnExceptionContainer::Fetch((SvnExceptionContainer*)container);
+			}
+			catch(Exception^)
+			{}
+		}
+	}
 
 	try
 	{
@@ -321,23 +339,11 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_CLIENT_NO_VERSIONED_PARENT:
 			return gcnew SvnClientApiException(error);
 
-		
+
 		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
 			return gcnew SvnException(error);
 
-		case SVN_ERR_CANCELLED:
-			if(error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, prefixLength))
-			{
-				try
-				{
-					void *container = nullptr;
-					sscanf(error->message + prefixLength, "%p", &container);
-					
-					return SvnExceptionContainer::Fetch((SvnExceptionContainer*)container);
-				}
-				catch(Exception^)
-				{}
-			}
+		case SVN_ERR_CANCELLED:			
 			return gcnew SvnOperationCanceledException(error);
 
 		case SVN_ERR_CEASE_INVOCATION:

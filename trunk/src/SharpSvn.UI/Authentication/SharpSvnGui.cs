@@ -10,9 +10,9 @@ using SharpSvn.UI.Properties;
 namespace SharpSvn.UI.Authentication
 {
 	/// <summary>
-	/// Public api used by TurtelSvn
+	/// Former public api used for binding to SharpSvn
 	/// </summary>
-	public static class SharpSvnGui
+	static class SharpSvnGui
 	{
 		class ParentProvider : System.Windows.Forms.IWin32Window
 		{

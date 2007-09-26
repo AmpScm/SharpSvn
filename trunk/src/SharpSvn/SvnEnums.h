@@ -333,6 +333,10 @@ namespace SharpSvn {
 
 	ref class EnumVerifier
 	{
+	private:
+		EnumVerifier()
+		{}
+
 	public:
 		generic<typename T>
 		where T : System::Enum

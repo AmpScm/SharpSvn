@@ -22,7 +22,7 @@ namespace SharpSvn {
 			static void EnsureLoaded();
 			static const char* _admDir;
 
-		protected:
+		internal:
 			SvnBase();
 
 		internal:
@@ -64,7 +64,7 @@ namespace SharpSvn {
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
-		public ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
+		private ref class SvnHandleBase abstract : public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
 		{
 		private:
 			// Initializes runtime

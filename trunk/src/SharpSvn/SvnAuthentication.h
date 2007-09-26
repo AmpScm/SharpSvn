@@ -492,7 +492,6 @@ namespace SharpSvn {
 		{
 			Dictionary<Delegate^, ISvnAuthWrapper^>^ _wrappers;
 			List<ISvnAuthWrapper^>^ _handlers;
-			Object^ _parentWindow;
 			bool _readOnly;
 			int _cookie;
 

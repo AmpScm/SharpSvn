@@ -80,7 +80,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(r);
+		return args->HandleResult(this, r);
 	}
 	finally
 	{

@@ -132,14 +132,14 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 	AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
-	svn_error_t* err = svn_client_lock(
+	svn_error_t* r = svn_client_lock(
 		aprTargets->Handle,
 		pool.AllocUnixString(args->Comment),
 		args->StealLock,
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }
 
 bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
@@ -168,12 +168,12 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 	AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 
-	svn_error_t* err = svn_client_lock(
+	svn_error_t* r = svn_client_lock(
 		aprTargets->Handle,
 		pool.AllocString(args->Comment),
 		args->StealLock,
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(err);
+	return args->HandleResult(this, r);
 }

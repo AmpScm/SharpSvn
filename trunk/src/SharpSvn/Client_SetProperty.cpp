@@ -124,6 +124,6 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 		CtxHandle,
 		pool->Handle);
 
-	return args->HandleResult(r);
+	return args->HandleResult(this, r);
 
 }
