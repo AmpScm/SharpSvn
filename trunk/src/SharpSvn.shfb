@@ -8,7 +8,7 @@
         <namespaceSummaryItem name="&lt;CppImplementationDetails&gt;" isDocumented="False" />
         <namespaceSummaryItem name="&lt;CrtImplementationDetails&gt;" isDocumented="False" />
         <namespaceSummaryItem name="SharpSvn" isDocumented="True" />
-        <namespaceSummaryItem name="SharpSvn.Apr" isDocumented="True" />
+        <namespaceSummaryItem name="SharpSvn.Apr" isDocumented="False" />
         <namespaceSummaryItem name="SharpSvn.Security" isDocumented="True" />
         <namespaceSummaryItem name="SharpSvn.UI" isDocumented="True" />
         <namespaceSummaryItem name="SharpSvn.UI.Authentication" isDocumented="True" />

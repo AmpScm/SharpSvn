@@ -65,44 +65,36 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 	return args->HandleResult(this, r);
 }
 
-void SvnClient::RemoveFromChangeList(String^ path, String^ changeList)
+void SvnClient::RemoveFromChangeList(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
 
-	RemoveFromChangeList(NewSingleItemCollection(path), changeList, gcnew SvnRemoveFromChangeListArgs());
+	RemoveFromChangeList(NewSingleItemCollection(path), gcnew SvnRemoveFromChangeListArgs());
 }
 
-bool SvnClient::RemoveFromChangeList(String^ path, String^ changeList, SvnRemoveFromChangeListArgs^ args)
+bool SvnClient::RemoveFromChangeList(String^ path, SvnRemoveFromChangeListArgs^ args)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return RemoveFromChangeList(NewSingleItemCollection(path), changeList, args);
+	return RemoveFromChangeList(NewSingleItemCollection(path), args);
 }
 
-void SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ changeList)
+void SvnClient::RemoveFromChangeList(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
 
-	RemoveFromChangeList(paths, changeList, gcnew SvnRemoveFromChangeListArgs());
+	RemoveFromChangeList(paths, gcnew SvnRemoveFromChangeListArgs());
 }
 
-bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ changeList, SvnRemoveFromChangeListArgs^ args)
+bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromChangeListArgs^ args)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -112,14 +104,14 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, String^ change
 
 	svn_error_t *r = svn_client_remove_from_changelist(
 		AllocPathArray(paths, %pool),
-		pool.AllocString(changeList),
+		nullptr,
 		CtxHandle,
 		pool.Handle);
 
 	return args->HandleResult(this, r);
 }
 
-void SvnClient::ListChangeList(String^ changeList, String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
+void SvnClient::ListChangeList(String^ rootPath, String^ changeList, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -128,7 +120,7 @@ void SvnClient::ListChangeList(String^ changeList, String^ rootPath, EventHandle
 	else if(!changeListHandler)
 		throw gcnew ArgumentNullException("changeListHandler");
 
-	ListChangeList(changeList, rootPath, gcnew SvnListChangeListArgs(), changeListHandler);
+	ListChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), changeListHandler);
 }
 
 static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
@@ -162,7 +154,7 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
 }
 
 
-bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
+bool SvnClient::ListChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -197,17 +189,17 @@ bool SvnClient::ListChangeList(String^ changeList, String^ rootPath, SvnListChan
 }
 
 
-void SvnClient::GetChangeList(String^ changeList, String^ rootPath, [Out]IList<String^>^% list)
+void SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 	else if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 
-	GetChangeList(changeList, rootPath, gcnew SvnListChangeListArgs(), list);
+	GetChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), list);
 }
 
-bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<String^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, [Out]IList<String^>^% list)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -241,23 +233,28 @@ bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChang
 	return args->HandleResult(this, r);
 }
 
-void SvnClient::GetChangeList(String^ changeList, String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list)
+void SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 	else if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 
-	GetChangeList(changeList, rootPath, gcnew SvnListChangeListArgs(), list);
+	GetChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), list);
 }
 
 bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {
+	if(String::IsNullOrEmpty(changeList))
+		throw gcnew ArgumentNullException("changeList");
+	else if(String::IsNullOrEmpty(rootPath))
+		throw gcnew ArgumentNullException("rootPath");
+
 	InfoItemCollection<SvnListChangeListEventArgs^>^ results = gcnew InfoItemCollection<SvnListChangeListEventArgs^>();
 
 	try
 	{
-		return ListChangeList(changeList, rootPath, args, results->Handler);
+		return ListChangeList(rootPath, changeList, args, results->Handler);
 	}
 	finally
 	{
