@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
 		SharpSvn.FxCop = SharpSvn.FxCop
+		SharpSvn.shfb = SharpSvn.shfb
 	EndProjectSection
 	ProjectSection(FolderStartupServices) = postProject
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}

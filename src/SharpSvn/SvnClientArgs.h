@@ -1441,11 +1441,11 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnCatArgs : public SvnClientArgs
+	public ref class SvnWriteArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
 	public:
-		SvnCatArgs()
+		SvnWriteArgs()
 		{
 			_revision = SvnRevision::None;
 		}

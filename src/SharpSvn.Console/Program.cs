@@ -14,11 +14,11 @@ namespace SharpSvn
 	{
 		SvnClient _client;
 
-		static void Main(string[] args)
+		/*static void Main(string[] args)
 		{
 			Application.EnableVisualStyles();
 			new Program().Run(args);
-		}
+		}*/
 
 		void Run(string[] args)
 		{

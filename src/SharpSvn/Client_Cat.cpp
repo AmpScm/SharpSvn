@@ -9,17 +9,17 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::Cat(SvnTarget^ target, Stream^ toStream)
+void SvnClient::Write(SvnTarget^ target, Stream^ toStream)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!toStream)
 		throw gcnew ArgumentNullException("toStream");
 
-	Cat(target, toStream, gcnew SvnCatArgs());
+	Write(target, toStream, gcnew SvnWriteArgs());
 }
 
-bool SvnClient::Cat(SvnTarget^ target, Stream^ toStream, SvnCatArgs^ args)
+bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
