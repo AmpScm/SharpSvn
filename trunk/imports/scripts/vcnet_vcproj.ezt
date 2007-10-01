@@ -10,8 +10,8 @@
 	<Configurations>
 [for platforms][for configs]		<Configuration
 			Name="[configs.name]|[platforms]"
-			OutputDirectory="..\..\..\[is platforms "Win32"][else][platforms]\[end][configs.name]\[target.output_dir]"
-			IntermediateDirectory="..\..\..\[is platforms "Win32"][else][platforms]\[end][configs.name]\[target.intermediate_dir]"
+			OutputDirectory="..\..\..\[configs.name]\[target.output_dir]"
+			IntermediateDirectory="..\..\..\[configs.name]\[target.intermediate_dir]"
 			ConfigurationType="[target_type]"[is configs.name "Release"]
 			WholeProgramOptimization="FALSE"[end]>
 			<Tool

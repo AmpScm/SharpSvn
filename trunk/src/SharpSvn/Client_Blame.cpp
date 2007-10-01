@@ -32,7 +32,7 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 			args->OnBlameHandler(e);
 
 			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Diff summary receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{

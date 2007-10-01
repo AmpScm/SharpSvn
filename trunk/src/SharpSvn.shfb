@@ -1,7 +1,6 @@
 ﻿<project schemaVersion="1.4.0.2">
     <assemblies>
-        <assembly assemblyPath=".\SharpSvn\bin_2008\Win32\Release\SharpSvn.dll" xmlCommentsPath=".\SharpSvn\bin_2008\Win32\Release\SharpSvn.xml" commentsOnly="False" />
-        <assembly assemblyPath=".\SharpSvn.UI\bin\Release\SharpSvn.UI.dll" xmlCommentsPath=".\SharpSvn.UI\bin\Release\SharpSvn.UI.xml" commentsOnly="False" />
+        <assembly assemblyPath=".\SharpSvn\bin\Win32\Release\SharpSvn.dll" xmlCommentsPath=".\SharpSvn\bin\Win32\Release\SharpSvn.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />

@@ -136,13 +136,13 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
 			args->OnListChangeList(e);
 
 			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "List receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{
 			AprPool^ thePool = gcnew AprPool(); // We have no error pool handler; just create a GC-able one; it is just for copying into the error
 
-			return svn_error_create(SVN_ERR_CANCELLED, NULL, thePool->AllocString(String::Concat("List receiver throwed exception: ", e->ToString())));
+			return svn_error_create(SVN_ERR_CANCELLED, nullptr, thePool->AllocString(String::Concat("List receiver throwed exception: ", e->ToString())));
 		}
 		finally
 		{

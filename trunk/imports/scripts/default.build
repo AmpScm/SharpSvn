@@ -274,7 +274,7 @@
 		</copy>
 		<copy todir="${release}/lib-x64" flatten="true">
 			<fileset basedir="build/x64">
-				<include name="subversion/x64/${Configuration}/**/*.lib" />
+				<include name="subversion/${Configuration}/**/*.lib" />
 				<include name="subversion/${Configuration}/**/*.pdb" />
 				<!-- Don't copy pdb's for executables -->
 				<exclude name="subversion/${Configuration}/**/svn*.pdb" />
@@ -287,10 +287,8 @@
 				<exclude name="neon/src/COPYING.LIB" />
 			</fileset>
 		</copy>
-		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform == 'win32'}"/>
-		<copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" if="${platform == 'win32'}"/>
-		<copy file="${svnBase}/${platform}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" if="${platform != 'win32'}"/>
-		<copy file="${svnBase}/${platform}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" if="${platform != 'win32'}"/>
+		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
+		<copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
 		<copy todir="${release}/include">
 			<fileset basedir="${svnBase}\subversion\include">
 				<include name="**/*.h" />
@@ -326,21 +324,23 @@
 	<target name="build" depends="download,extract,checkout, build-svn, copy-result">
 
 	</target>
-	<target name="clean-svn">
-		<delete>
-			<fileset basedir="build">
-				<include name="subversion*_${platform}.*" />
-				<include name="serf*_${platform}.*" />
-				<include name="neon*_${platform}.*" />
-				<include name="${platform}/subversion/${Configuration}/**" />
-			</fileset>
-		</delete>
+	<target name="clean-svn" depends="update-svn">
 		<delete>
 			<fileset basedir="${release}">
 				<include name="lib/**" if="${platform == 'win32'}" />
 				<include name="lib-${platform}/**" if="${platform != 'win32'}" />
 				<include name="bin/*-${platform}.exe" />
 				<include name="bin/*-${platform}.dll" />
+			</fileset>
+		</delete>
+	</target>
+	<target name="update-svn">
+		<delete>
+			<fileset basedir="build">
+				<include name="subversion*_${platform}.*" />
+				<include name="serf*_${platform}.*" />
+				<include name="neon*_${platform}.*" />
+				<include name="${platform}/subversion/${Configuration}/**" />
 			</fileset>
 		</delete>
 		<Svn nonInteractive="false">

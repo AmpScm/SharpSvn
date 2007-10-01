@@ -251,7 +251,7 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 		client->HandleClientCancel(ea);
 
 		if(ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 
 		return nullptr;
 	}
@@ -281,11 +281,11 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 		client->HandleClientGetCommitLog(ea);
 
 		if(ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Operation canceled");
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 		else if(ea->LogMessage)
 			*log_msg = tmpPool->AllocUnixString(ea->LogMessage);
 		else if(client->Configuration->LogMessageRequired)
-			return svn_error_create (SVN_ERR_CANCELLED, NULL, "Commit canceled: A logmessage is required");
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
 		else
 			*log_msg = tmpPool->AllocString("");
 
@@ -351,7 +351,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 		client->HandleClientConflictResolver(ea);
 
 		if(ea->Cancel)
-			return svn_error_create(SVN_ERR_CANCELLED, NULL, "Operation canceled");
+			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 
 		if(ea->Result != SvnConflictResult::Conflicted)
 			*result = (svn_wc_conflict_result_t)ea->Result;

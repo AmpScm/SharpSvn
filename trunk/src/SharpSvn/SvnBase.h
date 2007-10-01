@@ -12,6 +12,8 @@ namespace SharpSvn {
 	namespace Apr {
 		ref class AprPool;
 
+		/// <summary>Main class of Subversion api. This class is responsible for loading the unmanaged api</summary>
+		/// <threadsafety static="true" instance="false"/>
 		public ref class SvnBase : public System::MarshalByRefObject
 		{
 		private:
