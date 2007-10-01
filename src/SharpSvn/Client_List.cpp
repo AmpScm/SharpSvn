@@ -30,7 +30,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 			args->OnList(e);
 
 			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "List receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{

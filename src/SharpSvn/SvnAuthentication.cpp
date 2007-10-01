@@ -93,7 +93,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
 	if(args->Cancel)
-		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
 
@@ -145,7 +145,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
 	if(args->Cancel)
-		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
 
@@ -209,7 +209,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
 	if(args->Cancel)
-		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
 
@@ -267,7 +267,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
 	if(args->Cancel)
-		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
 
@@ -319,7 +319,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
 	if(args->Cancel)
-		return svn_error_create (SVN_ERR_CANCELLED, NULL, "Authorization canceled operation");
+		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
 

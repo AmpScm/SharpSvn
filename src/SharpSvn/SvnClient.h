@@ -5,7 +5,6 @@
 #include "SvnUriTarget.h"
 #include "SvnPathTarget.h"
 #include "SvnClientEventArgs.h"
-#include "SvnClientArgs.h"
 #include "SvnCommitItem.h"
 #include "SvnMergeInfo.h"
 #include "AprBaton.h"
@@ -20,6 +19,50 @@ namespace SharpSvn {
 	ref class SvnLogEventArgs;
 	ref class SvnNotifyEventArgs;
 
+	ref class SvnClientArgs;
+	ref class SvnClientArgsWithCommit;
+	ref class SvnClientArgsWithConflict;
+	ref class SvnCleanUpArgs;
+	ref class SvnCheckOutArgs;
+	ref class SvnUpdateArgs;
+	ref class SvnExportArgs;
+	ref class SvnSwitchArgs;
+	ref class SvnRelocateArgs;
+	ref class SvnAddArgs;
+	ref class SvnCommitArgs;
+	ref class SvnStatusArgs;
+	ref class SvnLogArgs;
+	ref class SvnInfoArgs;
+	ref class SvnCreateDirectoryArgs;
+	ref class SvnDeleteArgs;
+	ref class SvnImportArgs;
+	ref class SvnListArgs;
+	ref class SvnRevertArgs;
+	ref class SvnResolvedArgs;
+	ref class SvnCopyArgs;
+	ref class SvnMoveArgs;
+	ref class SvnSetPropertyArgs;
+	ref class SvnGetPropertyArgs;
+	ref class SvnPropertyListArgs;
+	ref class SvnSetRevisionPropertyArgs;
+	ref class SvnGetRevisionPropertyArgs;
+	ref class SvnRevisionPropertyListArgs;
+	ref class SvnLockArgs;
+	ref class SvnUnlockArgs;
+	ref class SvnWriteArgs;
+	ref class SvnMergeArgs;
+	ref class SvnDiffArgs;
+	ref class SvnDiffSummaryArgs;
+	ref class SvnBlameArgs;
+	ref class SvnAddToChangeListArgs;
+	ref class SvnRemoveFromChangeListArgs;
+	ref class SvnListChangeListArgs;
+	ref class SvnGetSuggestedMergeSourcesArgs;
+	ref class SvnGetAppliedMergeInfoArgs;
+	ref class SvnGetAvailableMergeInfoArgs;
+	ref class SvnCreateRepositoryArgs;
+	ref class SvnDeleteRepositoryArgs;
+	ref class SvnRecoverRepositoryArgs;
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -29,8 +72,7 @@ namespace SharpSvn {
 	using System::IO::FileStream;
 
 	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
-	/// <remarks><para>Please note: the subversion c api is not thread safe. You can use a SvnClient from a single thread at a time</para>
-	/// You can use multiple SvnClients in multiple threads at the same time</remarks>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClient : public SvnClientContext
 	{
 		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
@@ -655,7 +697,7 @@ namespace SharpSvn {
 		/// <summary>Tries to get a property from the specified path (<c>svn propget</c>)</summary>
 		/// <remarks>Eats all (non-argument) exceptions</remarks>
 		/// <returns>True if the property is fetched, otherwise false</returns>
-		/// <remarks>Equivalent to GetProperty with <see cref="SvnGetPropertyArgs::ThrowOnError" />set to false</remarks>
+		/// <remarks>Equivalent to GetProperty with <see cref="SvnGetPropertyArgs" />'s ThrowOnError set to false</remarks>
 		bool TryGetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
 #pragma endregion
 
@@ -727,7 +769,7 @@ namespace SharpSvn {
 		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnMergeArgs^ args);
 
 		void Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange);
-		bool Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange, SvnMergeArgs^ args);		
+		bool Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange, SvnMergeArgs^ args);
 #pragma endregion
 
 	public:
@@ -848,3 +890,4 @@ namespace SharpSvn {
 		};
 	};
 }
+#include "SvnClientArgs.h"

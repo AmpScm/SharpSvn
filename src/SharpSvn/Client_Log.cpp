@@ -153,15 +153,24 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 	AprPool aprPool(pool, false);
 	if(args)
 	{
-		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, %aprPool);
+		if(log_entry->revision == SVN_INVALID_REVNUM)
+		{
+			// This marks the end of logs at this level,
+			args->_mergeLogLevel--;
+			return nullptr;
+		}
 
-		/* date: use svn_time_from_cstring() if need apr_time_t */
+		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool);
+
+		if(log_entry->has_children)
+			args->_mergeLogLevel++;
+
 		try
 		{
 			args->OnLog(e);
 
 			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Log receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Log receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{
@@ -172,7 +181,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 			e->Detach(false);
 		}
 	}
-	return NULL;
+	return nullptr;
 }
 
 bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -188,18 +197,24 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
+	args->_mergeLogLevel = 0; // Clear log level
 	if(logHandler)
 		args->Log += logHandler;
 	try
 	{
-		AprArray<String^, AprCStrMarshaller^>^ targets = gcnew AprArray<String^, AprCStrMarshaller^>(targetStrings, %pool);
+		apr_array_header_t* retrieveProperties;
+
+		if(args->RetrievePropertiesUsed)
+			retrieveProperties = AllocArray(args->RetrieveProperties, %pool);
+		else
+			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
 		svn_opt_revision_t pegRev = pegRevision->ToSvnRevision();
 		svn_opt_revision_t start = args->Start->ToSvnRevision();
 		svn_opt_revision_t end = args->End->ToSvnRevision();
 
 		svn_error_t *r = svn_client_log4(
-			targets->Handle,
+			AllocArray(targetStrings, %pool),
 			&pegRev,
 			&start,
 			&end,
@@ -207,7 +222,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 			args->LogChangedPaths,
 			args->StrictNodeHistory,
 			args->IncludeMergedRevisions,
-			args->OmitMessages,
+			retrieveProperties,
 			svnclient_log_handler,
 			(void*)_clientBatton->Handle,
 			CtxHandle,

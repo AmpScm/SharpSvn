@@ -865,9 +865,13 @@ namespace SharpSvn {
 		String^ _message;
 		__int64 _revision;
 		bool _hasChildren;
+		int _mergeLevel;
+
+		const char* _pcAuthor;
+		const char* _pcMessage;
 
 	internal:
-		SvnLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
+		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool)
 		{
 			if(!entry)
 				throw gcnew ArgumentNullException("entry");
@@ -877,14 +881,31 @@ namespace SharpSvn {
 			_entry = entry;
 			_pool = pool;
 
-			apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
-			svn_error_t *err = svn_time_from_cstring(&when, entry->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
+			const char* pcAuthor = nullptr;
+			const char* pcDate = nullptr;
+			const char* pcMessage = nullptr;
+			
+			if(entry->revprops)
+				svn_compat_log_revprops_out(&pcAuthor, &pcDate, &pcMessage, entry->revprops);
 
-			if(!err)
-				_date = SvnBase::DateTimeFromAprTime(when);
+
+			if(pcDate)
+			{
+				apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
+				svn_error_t *err = pcDate ? svn_time_from_cstring(&when, pcDate, pool->Handle) : nullptr;
+
+				if(!err)
+					_date = SvnBase::DateTimeFromAprTime(when);
+			}
+			else
+				_date = DateTime::MinValue;
 
 			_revision = entry->revision;
+			_pcAuthor = pcAuthor;
+			_pcMessage = pcMessage;
 			_hasChildren = entry->has_children ? true : false;
+
+			_mergeLevel = mergeLevel;
 		}
 
 	private:
@@ -944,8 +965,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_author && _entry && _entry->author)
-					_author = SvnBase::Utf8_PtrToString(_entry->author);
+				if(!_author && _pcAuthor)
+					_author = SvnBase::Utf8_PtrToString(_pcAuthor);
 
 				return _author;
 			}
@@ -964,9 +985,9 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_message && _entry && _entry->message)
+				if(!_message && _pcMessage)
 				{
-					_message = SvnBase::Utf8_PtrToString(_entry->message);
+					_message = SvnBase::Utf8_PtrToString(_pcMessage);
 
 					if(_message)
 					{
@@ -979,11 +1000,21 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Set to true when the following items are merged-child items of this item.</summary>
 		property bool HasChildren
 		{
 			bool get()
 			{
 				return _hasChildren;
+			}
+		}
+
+		/// <summary>Gets the nesting level of the logs via merges</summary>
+		property int MergLogNestingLevel
+		{
+			int get()
+			{
+				return _mergeLevel;
 			}
 		}
 
@@ -1004,6 +1035,8 @@ namespace SharpSvn {
 			{
 				_entry = nullptr;
 				_pool = nullptr;
+				_pcMessage = nullptr;
+				_pcAuthor = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}

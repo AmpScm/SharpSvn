@@ -29,7 +29,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 			args->OnInfo(e);
 
 			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, NULL, "Info receiver canceled operation");
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Info receiver canceled operation");
 		}
 		catch(Exception^ e)
 		{

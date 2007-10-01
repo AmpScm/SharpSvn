@@ -3,15 +3,21 @@
 
 namespace SharpSvn {
 	ref class SvnException;
+	using System::Collections::ObjectModel::Collection;
 
+	/// <summary>Base class of all <see cref="SvnClient" /> arguments</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientArgs abstract
 	{
 		bool _noThrowOnError;
 		SvnException^ _exception;
 
 	public:
+		/// <summary>Raised to allow canceling an in-progress command</summary>
 		event EventHandler<SvnCancelEventArgs^>^	Cancel;
+		/// <summary>Raised to notify of progress by an in-progress command</summary>
 		event EventHandler<SvnProgressEventArgs^>^	Progress;
+		/// <summary>Raised to notify changes by an in-progrss command</summary>
 		event EventHandler<SvnNotifyEventArgs^>^	Notify;
 
 	protected public:
@@ -19,21 +25,25 @@ namespace SharpSvn {
 		{
 		}
 
+		/// <summary>Raises the <see cref="Cancel" /> event</summary>
 		virtual void OnCancel(SvnCancelEventArgs^ e)
 		{
 			Cancel(this, e);
 		}
 
+		/// <summary>Raises the <see cref="Progress" /> event</summary>
 		virtual void OnProgress(SvnProgressEventArgs^ e)
 		{
 			Progress(this, e);
 		}
 
+		/// <summary>Raises the <see cref="Notify" /> event</summary>
 		virtual void OnNotify(SvnNotifyEventArgs^ e)
 		{
 			Notify(this, e);
 		}
 
+		/// <summary>Called when handling a <see cref="SvnException" /></summary>
 		virtual void OnSvnError(SvnErrorEventArgs^ e)
 		{
 			UNUSED_ALWAYS(e);
@@ -57,6 +67,9 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>
+		/// Gets the last exception thrown by a Subversion api command to which this argument was provided
+		/// </summary>
 		property SvnException^ Exception
 		{
 			SvnException^ get()
@@ -64,7 +77,7 @@ namespace SharpSvn {
 				return _exception;
 			}
 
-		internal:
+		protected public:
 			void set(SvnException^ value)
 			{
 				_exception = value;
@@ -81,11 +94,14 @@ namespace SharpSvn {
 		bool HandleResult(SvnClientContext^ client, svn_error_t *error);
 	};
 
+	/// <summary>Base class of all <see cref="SvnClient" /> arguments which allow committing</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientArgsWithCommit : public SvnClientArgs
 	{
 		String^ _logMessage;
 
 	public:
+		/// <summary>Raised just before committing to allow modifying the log message</summary>
 		event EventHandler<SvnCommittingEventArgs^>^ Committing;
 
 	protected:
@@ -94,6 +110,7 @@ namespace SharpSvn {
 		}
 
 	protected public:
+		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>
 		virtual void OnCommitting(SvnCommittingEventArgs^ e)
 		{
 			if(LogMessage && !e->LogMessage)
@@ -103,6 +120,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets or sets the logmessage applied to the commit</summary>
 		property String^ LogMessage
 		{
 			String^ get()
@@ -117,6 +135,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Base class of all <see cref="SvnClient" /> arguments which allow handling conflicts</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientArgsWithConflict : public SvnClientArgs
 	{
 		String^ _logMessage;
@@ -150,6 +170,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended parameter container for <see cref="SvnClient" />Cleanup</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCleanUpArgs : public SvnClientArgs
 	{
 	public:
@@ -158,6 +180,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::CheckOut(SvnUriTarget^, String^, SvnCheckOutArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCheckOutArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -224,6 +248,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Update(String^, SvnUpdateArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnUpdateArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
@@ -290,6 +316,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Export(SvnTarget^, String^, SvnExportArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnExportArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -368,6 +396,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Switch(String^, SvnUriTarget^, SvnSwitchArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnSwitchArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
@@ -417,6 +447,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Relocate(String^, Uri^, Uri^, SvnRelocateArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRelocateArgs : public SvnClientArgs
 	{
 		bool _nonRecursive;
@@ -438,6 +470,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Add(String^, SvnAddArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnAddArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -507,6 +541,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Commit(String^, SvnCommitArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCommitArgs : public SvnClientArgsWithCommit
 	{
 		SvnDepth _depth;
@@ -569,6 +605,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Status(String^, SvnStatusArgs^, EventHandler{SvnStatusEventArgs^})" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnStatusArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -670,6 +708,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Log(SvnTarget^, SvnLogArgs^, EventHandler{SvnLogEventArgs^}^ logHandler)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnLogArgs : public SvnClientArgs
 	{
 		SvnRevision^ _start;
@@ -679,6 +719,10 @@ namespace SharpSvn {
 		bool _strictNodeHistory;
 		bool _includeMerged;
 		bool _ommitMessages;
+		Collection<String^>^ _retrieveProperties;
+
+	internal:
+		int _mergeLogLevel; // Used by log handler to provide mergeLogLevel
 
 	public:
 		event EventHandler<SvnLogEventArgs^>^ Log;
@@ -789,8 +833,24 @@ namespace SharpSvn {
 				_ommitMessages = value;
 			}
 		}
+
+		property Collection<String^>^ RetrieveProperties
+		{
+			Collection<String^>^ get();
+		}
+
+	internal:
+		property bool RetrievePropertiesUsed
+		{
+			bool get()
+			{
+				return _retrieveProperties != nullptr;
+			}
+		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler{SvnInfoEventArgs^}^ infoHandler)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnInfoArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
@@ -840,6 +900,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::CreateDirectory(String^, SvnCreateDirectoryArgs^)" /> and <see cref="SvnClient::RemoteCreateDirectory(Uri^, SvnCreateDirectoryArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCreateDirectoryArgs : public SvnClientArgsWithCommit
 	{
 		bool _makeParents;
@@ -861,6 +923,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Delete(String^,SvnDeleteArgs^)" /> and <see cref="SvnClient::RemoteDelete(Uri^,SvnDeleteArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnDeleteArgs : public SvnClientArgsWithCommit
 	{
 		bool _force;
@@ -896,6 +960,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Import(String^,Uri^,SvnImportArgs^)" /> and <see cref="SvnClient::RemoteImport(String^,Uri^,SvnImportArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnImportArgs : public SvnClientArgsWithCommit
 	{
 		bool _noIgnore;
@@ -944,6 +1010,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::List(SvnTarget^, SvnListArgs^, EventHandler{SvnListEventArgs^}^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnListArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
@@ -1021,6 +1089,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Revert(String^, SvnRevertArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRevertArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -1044,6 +1114,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Resolved(String^, SvnResolvedArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -1087,6 +1159,9 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and 
+	/// <see cref="SvnClient::RemoteCopy(SvnUriTarget^,Uri^,SvnCopyArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCopyArgs : public SvnClientArgsWithCommit
 	{
 		bool _makeParents;
@@ -1136,6 +1211,9 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Move(String^,String^,SvnMoveArgs^)" /> and 
+	/// <see cref="SvnClient::RemoteMove(Uri^,Uri^,SvnMoveArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnMoveArgs : public SvnClientArgs
 	{
 		bool _force;
@@ -1196,6 +1274,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::SetProperty(String^,String^,String^,SvnSetPropertyArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnSetPropertyArgs : public SvnClientArgsWithCommit
 	{
 		SvnDepth _depth;
@@ -1248,6 +1328,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetProperty</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetPropertyArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
@@ -1287,6 +1369,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::PropertyList(SvnTarget^, SvnPropertyListArgs^, EventHandler{SvnPropertyListEventArgs^}^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnPropertyListArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
@@ -1336,6 +1420,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::SetRevisionProperty(SvnUriTarget^,String^,SvnSetRevisionPropertyArgs^,String^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnSetRevisionPropertyArgs : public SvnClientArgs
 	{
 		bool _force;
@@ -1356,7 +1442,9 @@ namespace SharpSvn {
 			}
 		}
 	};
-
+			
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetRevisionProperty</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetRevisionPropertyArgs : public SvnClientArgs
 	{
 	public:
@@ -1365,24 +1453,18 @@ namespace SharpSvn {
 		}		
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetRevisionPropertyList</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRevisionPropertyListArgs : public SvnClientArgs
 	{
-	/*public:
-		event EventHandler<SvnRevisionPropertyListEventArgs^>^ PropertyList;
-
-	protected public:
-		virtual void OnPropertyList(SvnRevisionPropertyListEventArgs^ e)
-		{
-			PropertyList(this, e);
-		}*/
-
 	public:
 		SvnRevisionPropertyListArgs()
 		{
 		}
 	};
 
-
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Lock(String^, SvnLockArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnLockArgs : public SvnClientArgs
 	{
 		String^ _comment;
@@ -1419,6 +1501,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Unlock(String^, SvnUnlockArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnUnlockArgs : public SvnClientArgs
 	{
 		bool _breakLock;
@@ -1441,6 +1525,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnWriteArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
@@ -1466,6 +1552,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Merge(String^,SvnTarget^, SvnMergeRange^, SvnMergeArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnMergeArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
@@ -1556,6 +1644,9 @@ namespace SharpSvn {
 		}
 	};
 
+	
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s Diff command</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnDiffArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
@@ -1646,6 +1737,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::DiffSummary(SvnTarget^,SvnTarget^,SvnDiffSummaryArgs^,EventHandler{SvnDiffSummaryEventArgs^}^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnDiffSummaryArgs : public SvnClientArgs
 	{
 		bool _noticeAncestry;
@@ -1691,6 +1784,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Blame(SvnTarget^,SvnBlameArgs^,EventHandler{SvnBlameEventArgs^}^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnBlameArgs : public SvnClientArgs
 	{
 		SvnRevision ^_from;
@@ -1796,6 +1891,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::AddToChangeList(String^,String^, SvnAddToChangeListArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnAddToChangeListArgs : public SvnClientArgs
 	{
 	public:
@@ -1804,6 +1901,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::RemoveFromChangeList(String^,SvnRemoveFromChangeListArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRemoveFromChangeListArgs : public SvnClientArgs
 	{
 	public:
@@ -1813,6 +1912,8 @@ namespace SharpSvn {
 	};
 
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::ListChangeList(String^,String^,SvnListChangeListArgs^,EventHandler{SvnListChangeListEventArgs^}^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnListChangeListArgs : public SvnClientArgs
 	{
 	public:
@@ -1830,6 +1931,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetSuggestedMergeSources method</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetSuggestedMergeSourcesArgs : public SvnClientArgs
 	{
 	public:
@@ -1838,6 +1941,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetAppliedMergeInfo method</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetAppliedMergeInfoArgs : public SvnClientArgs
 	{
 	public:
@@ -1846,6 +1951,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetAvailableMergeInfo method</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetAvailableMergeInfoArgs : public SvnClientArgs
 	{
 	public:
@@ -1854,6 +1961,10 @@ namespace SharpSvn {
 		}
 	};
 
+	ref class SvnRepositoryClient;
+
+	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCreateRepositoryArgs : public SvnClientArgs
 	{
 		bool _bdbNoFSyncCommit;
@@ -1916,6 +2027,8 @@ namespace SharpSvn {
 		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s DeleteRepository method</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnDeleteRepositoryArgs : public SvnClientArgs
 	{
 	public:
@@ -1923,6 +2036,9 @@ namespace SharpSvn {
 		{
 		}
 	};
+
+	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s RecoverRepository method</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRecoverRepositoryArgs : public SvnClientArgs
 	{
 		bool _nonBlocking;
