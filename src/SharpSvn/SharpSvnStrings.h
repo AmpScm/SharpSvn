@@ -62,6 +62,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to The argyment must be a valid absolute repository Uri.
+    /// </summary>
+    internal: static property System::String^  ArgumentMustBeAValidRepositoryUri {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to Depth must be Empty, Files or Infinity in 1.4 compatible compilation.
     /// </summary>
     internal: static property System::String^  DepthMustBeRecursiveValue {
@@ -192,6 +199,10 @@ inline System::String^  SharpSvnStrings::AllTargetsMustBeUriOrPath::get() {
 
 inline System::String^  SharpSvnStrings::ArgumentMustBeAPathNotAUri::get() {
     return ResourceManager->GetString(L"ArgumentMustBeAPathNotAUri", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::ArgumentMustBeAValidRepositoryUri::get() {
+    return ResourceManager->GetString(L"ArgumentMustBeAValidRepositoryUri", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {

@@ -191,7 +191,9 @@ const char* AprPool::AllocUnixString(String^ value)
 const char* AprPool::AllocPath(String^ value)
 {
 	if(!value)
-		value = "";
+		throw gcnew ArgumentNullException("value");
+
+	value = System::IO::Path::GetFullPath(value);
 
 	if(value->Length >= 1)
 	{

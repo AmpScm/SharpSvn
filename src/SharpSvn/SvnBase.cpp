@@ -45,6 +45,20 @@ SvnBase::SvnBase()
 {
 }
 
+bool SvnBase::IsValidReposUri(Uri^ uri)
+{
+	if(!uri)
+		throw gcnew ArgumentNullException("uri");
+	
+	if(!uri->IsAbsoluteUri)
+		return false;
+	else if(String::IsNullOrEmpty(uri->Scheme))
+		return false;
+
+	return true;
+}
+
+
 bool SvnBase::IsNotUri(String ^path)
 {
 	if(String::IsNullOrEmpty(path))

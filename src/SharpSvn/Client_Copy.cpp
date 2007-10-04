@@ -80,6 +80,8 @@ void SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
 		throw gcnew ArgumentNullException("sourceTarget");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
+	else if(!SvnBase::IsValidReposUri(toUri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
 	SvnCommitInfo^ commitInfo = nullptr;
 
@@ -165,6 +167,8 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!SvnBase::IsValidReposUri(toUri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);

@@ -395,6 +395,8 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
+	else if(!SvnBase::IsValidReposUri(uri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	uuid = Guid::Empty;
 
@@ -419,6 +421,8 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
+	else if(!SvnBase::IsValidReposUri(uri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	const char* resultUrl = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -481,3 +485,4 @@ void SvnClientConfiguration::LogMessageRequired::set(bool value)
 {
 	_client->_noLogMessageRequired = !value;
 }
+

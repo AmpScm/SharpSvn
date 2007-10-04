@@ -22,10 +22,6 @@ bool SvnClient::Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEven
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ targets = gcnew array<String^>(1);
-
-	targets[0] = target->TargetName;
-
 	return InternalLog(NewSingleItemCollection(target->TargetName), target->Revision, args, logHandler);
 }
 

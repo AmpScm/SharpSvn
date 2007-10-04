@@ -52,7 +52,8 @@ namespace SharpSvn {
 			static apr_time_t AprTimeFromDateTime(DateTime time);
 
 			/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
-			static bool IsNotUri(String ^path);
+			static bool IsNotUri(String^ path);
+			static bool IsValidReposUri(Uri^ uri);
 
 			static Uri^ CanonicalizeUri(Uri^ uri);
 			static String^ CanonicalizePath(String^ path);
