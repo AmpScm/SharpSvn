@@ -193,8 +193,6 @@ const char* AprPool::AllocPath(String^ value)
 	if(!value)
 		throw gcnew ArgumentNullException("value");
 
-	value = System::IO::Path::GetFullPath(value);
-
 	if(value->Length >= 1)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
