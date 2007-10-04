@@ -72,6 +72,8 @@ void SvnClient::RemoteDelete(Uri^ uri)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
+	else if(!SvnBase::IsValidReposUri(uri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	RemoteDelete(NewSingleItemCollection(uri), gcnew SvnDeleteArgs());
 }
@@ -83,6 +85,8 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args)
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!SvnBase::IsValidReposUri(uri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	return RemoteDelete(NewSingleItemCollection(uri), args);
 }
@@ -93,6 +97,8 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!SvnBase::IsValidReposUri(uri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	return RemoteDelete(NewSingleItemCollection(uri), args, commitInfo);
 }
@@ -134,6 +140,9 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	{
 		if(uri == nullptr)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
+		else if(!SvnBase::IsValidReposUri(uri))
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uris");
+
 		uriData[i++] = uri->ToString();
 	}
 

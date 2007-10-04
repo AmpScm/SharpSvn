@@ -21,10 +21,7 @@ bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ paths = gcnew array<String^>(1);
-	paths[0] = path;
-
-	return Revert(safe_cast<ICollection<String^>^>(paths), args);
+	return Revert(NewSingleItemCollection(path), args);
 }
 
 void SvnClient::Revert(ICollection<String^>^ paths)

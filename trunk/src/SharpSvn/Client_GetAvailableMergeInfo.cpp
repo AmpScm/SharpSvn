@@ -13,6 +13,8 @@ void SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]Sv
 		throw gcnew ArgumentNullException("target");
 	else if(!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
+	else if(!SvnBase::IsValidReposUri(sourceUri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
 	
 	GetAvailableMergeInfo(target, sourceUri, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeInfo);
 }
@@ -25,6 +27,8 @@ bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetS
 		throw gcnew ArgumentNullException("sourceUri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!SvnBase::IsValidReposUri(sourceUri))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);

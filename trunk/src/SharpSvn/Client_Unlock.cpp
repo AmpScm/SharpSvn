@@ -101,6 +101,8 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 
 			if(!Uri::TryCreate(target, UriKind::Absolute, uri))
 				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "targets");
+			else if(!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
 
 			targetStrings[i++] = uri->ToString();
 		}
@@ -134,12 +136,14 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
 	int i = 0;
-	for each(Uri^ target in targets)
+	for each(Uri^ uri in targets)
 	{
-		if(!target)
+		if(!uri)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
+		else if(!SvnBase::IsValidReposUri(uri))
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
 
-		targetStrings[i++] = target->ToString();
+		targetStrings[i++] = uri->ToString();
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

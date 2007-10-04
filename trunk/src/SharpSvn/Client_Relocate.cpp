@@ -15,6 +15,10 @@ void SvnClient::Relocate(String^ path, Uri^ from, Uri^ to)
 		throw gcnew ArgumentNullException("to");
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+	else if(!SvnBase::IsValidReposUri(from))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "from");
+	else if(!SvnBase::IsValidReposUri(to))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
 
 	Relocate(path, from, to, gcnew SvnRelocateArgs());
 }
@@ -31,6 +35,10 @@ bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args
 		throw gcnew ArgumentNullException("args");
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+	else if(!SvnBase::IsValidReposUri(from))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "from");
+	else if(!SvnBase::IsValidReposUri(to))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);

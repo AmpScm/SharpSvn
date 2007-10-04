@@ -19,6 +19,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+			else if(!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -30,6 +32,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+			else if(!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -41,6 +45,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+			else if(!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -52,6 +58,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+			else if(!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -63,6 +71,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+			else if(!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
 		}
@@ -133,7 +143,7 @@ namespace SharpSvn {
 				{
 					SvnRevision^ pegRev = SvnRevision::Load(&rev);
 
-					target = gcnew SvnUriTarget (uri, pegRev);
+					target = gcnew SvnUriTarget(uri, pegRev);
 					return true;
 				}
 			}
