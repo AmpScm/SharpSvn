@@ -561,7 +561,7 @@ namespace SharpSvn {
 #pragma region // Resolved Client Command
 		/// <overloads>Remove 'conflicted' state on working copy files or directories (<c>svn resolved</c>)</overloads>
 		void Resolved(String^ path);
-		void Resolved(String^ path, SvnAccept which);
+		void Resolved(String^ path, SvnConflictResult which);
 		bool Resolved(String^ path, SvnResolvedArgs^ args);
 #pragma endregion
 

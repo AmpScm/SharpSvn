@@ -137,8 +137,8 @@ namespace SharpSvn {
 		String^ _path;
 		String^ _mimeType;
 		String^ _baseFile;
-		String^ _reposFile;
-		String^ _userFile;
+		String^ _theirFile;
+		String^ _myFile;
 		String^ _mergedFile;
 
 	internal:
@@ -201,25 +201,25 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ RemoteFile
+		property String^ TheirFile
 		{
 			String^ get()
 			{
-				if(!_reposFile && _description && _description->repos_file)
-					_reposFile = SvnBase::Utf8_PtrToString(_description->repos_file);
+				if(!_theirFile && _description && _description->their_file)
+					_theirFile = SvnBase::Utf8_PtrToString(_description->their_file);
 
-				return _reposFile;
+				return _theirFile;
 			}
 		}
 
-		property String^ UserFile
+		property String^ MyFile
 		{
 			String^ get()
 			{
-				if(!_userFile && _description && _description->user_file)
-					_userFile = SvnBase::Utf8_PtrToString(_description->user_file);
+				if(!_myFile && _description && _description->my_file)
+					_myFile = SvnBase::Utf8_PtrToString(_description->my_file);
 
-				return _userFile;
+				return _myFile;
 			}
 		}
 
@@ -268,8 +268,8 @@ namespace SharpSvn {
 					GC::KeepAlive(Path);
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(BaseFile);
-					GC::KeepAlive(RemoteFile);
-					GC::KeepAlive(UserFile);
+					GC::KeepAlive(TheirFile);
+					GC::KeepAlive(MyFile);
 					GC::KeepAlive(MergedFile);
 				}
 			}
