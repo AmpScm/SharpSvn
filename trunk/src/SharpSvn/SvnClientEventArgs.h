@@ -3,6 +3,7 @@
 
 #include "SvnEnums.h"
 #include "SvnCommitItem.h"
+#include "svn_compat.h"
 
 namespace SharpSvn {
 	using System::Collections::Generic::ICollection;

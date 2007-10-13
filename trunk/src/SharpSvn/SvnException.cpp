@@ -203,6 +203,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_WC_INVALID_SWITCH:
 		case SVN_ERR_WC_MISMATCHED_CHANGELIST:
 		case SVN_ERR_WC_CONFLICT_RESOLVER_FAILURE:
+		case SVN_ERR_WC_COPYFROM_PATH_NOT_FOUND:
+		case SVN_ERR_WC_CHANGELIST_MOVE:
 			return gcnew SvnWorkingCopyException(error);
 		case SVN_ERR_WC_LOCKED:
 		case SVN_ERR_WC_NOT_LOCKED:
@@ -275,6 +277,10 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_NO_REPOS_UUID:
 		case SVN_ERR_RA_UNSUPPORTED_ABI_VERSION:
 		case SVN_ERR_RA_NOT_LOCKED:
+		case SVN_ERR_RA_UNKNOWN_CAPABILITY:
+			return gcnew SvnRepositoryIOException(error);
+
+
 		case SVN_ERR_RA_DAV_SOCK_INIT:
 		case SVN_ERR_RA_DAV_CREATING_REQUEST:
 		case SVN_ERR_RA_DAV_REQUEST_FAILED:
@@ -287,8 +293,10 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_DAV_MALFORMED_DATA:
 		case SVN_ERR_RA_DAV_RESPONSE_HEADER_BADNESS:
 		case SVN_ERR_RA_DAV_RELOCATED:
+			return gcnew SvnRepositoryIOException(error);
 		case SVN_ERR_RA_LOCAL_REPOS_NOT_FOUND:
 		case SVN_ERR_RA_LOCAL_REPOS_OPEN_FAILED:
+			return gcnew SvnRepositoryIOException(error);
 		case SVN_ERR_RA_SVN_CMD_ERR:
 		case SVN_ERR_RA_SVN_UNKNOWN_CMD:
 		case SVN_ERR_RA_SVN_CONNECTION_CLOSED:
@@ -348,6 +356,12 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 
 		case SVN_ERR_CEASE_INVOCATION:
 			return gcnew SvnOperationCompletedException(error);
+
+		case SVN_ERR_ITER_BREAK:
+			return gcnew SvnBreakIterationException(error);
+
+		case SVN_ERR_UNKNOWN_CHANGELIST:
+			return gcnew SvnUnknownChangelistException(error);
 
 		default:
 			if(APR_STATUS_IS_EACCES(error->apr_err))

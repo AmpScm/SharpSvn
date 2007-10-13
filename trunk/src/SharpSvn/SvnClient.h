@@ -764,12 +764,11 @@ namespace SharpSvn {
 		/// </summary>
 		bool Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnMergeArgs^ args);
 
-		void Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to);
-
-		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnMergeArgs^ args);
-
 		void Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange);
+		void Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange);
 		bool Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange, SvnMergeArgs^ args);
+		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange, SvnMergeArgs^ args);
+
 #pragma endregion
 
 	public:
