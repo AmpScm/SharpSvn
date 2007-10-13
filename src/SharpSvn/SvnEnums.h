@@ -102,6 +102,7 @@ namespace SharpSvn {
 		ChangeListSet	= svn_wc_notify_changelist_set,
 		ChangeListClear = svn_wc_notify_changelist_clear,
 		ChangeListFailed=svn_wc_notify_changelist_failed,
+		ChangeListMoved=svn_wc_notify_changelist_moved,
 		MergeBegin		= svn_wc_notify_merge_begin,
 	};
 

@@ -25,17 +25,17 @@ namespace SharpSvn {
 			T Read(const void* ptr, AprPool^ pool);
 		};
 
-		generic<typename T, typename R>
-		where R : IItemMarshaller<T>
+		generic<typename TManaged, typename TMarshaller>
+		where TMarshaller : IItemMarshaller<TManaged>
 		ref class AprArray : public SvnBase
 		{
 			AprPool^ _pool;
 			apr_array_header_t *_handle;
-			initonly IItemMarshaller<T>^ _marshaller; // BH: replacing type IItemMarshaller<T>^ with R gives an internal compiler error in MSC 14.0
+			initonly IItemMarshaller<TManaged>^ _marshaller; // BH: replacing type IItemMarshaller<T>^ with R gives an internal compiler error in MSC 14.0
 			initonly bool _readOnly;
 
 		internal:
-			AprArray(ICollection<T>^ items, AprPool ^pool);
+			AprArray(ICollection<TManaged>^ items, AprPool ^pool);
 			AprArray(const apr_array_header_t* handle, AprPool ^pool);
 			AprArray(System::Collections::IEnumerable^ items, AprPool ^pool);
 
@@ -60,9 +60,9 @@ namespace SharpSvn {
 				}
 			}
 
-			property T default[int]
+			property TManaged default[int]
 			{
-				T get(int index)
+				TManaged get(int index)
 				{
 					if(index < 0 || index >= Count)
 						throw gcnew ArgumentOutOfRangeException("index", "Index out of range");
@@ -73,16 +73,16 @@ namespace SharpSvn {
 				}
 			}
 
-			array<T>^ ToArray()
+			array<TManaged>^ ToArray()
 			{
-				array<T>^ items = gcnew array<T>(Count);
+				array<TManaged>^ items = gcnew array<TManaged>(Count);
 
 				CopyTo(items, 0);
 
 				return items;
 			}
 
-			void CopyTo(array<T>^ item, int offset)
+			void CopyTo(array<TManaged>^ item, int offset)
 			{
 				for(int i = 0; i < Count; i++)
 					item[i+offset] = default[i];
@@ -131,9 +131,6 @@ namespace SharpSvn {
 		ref class AprCStrPathMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:
-			AprCStrPathMarshaller()
-			{}
-
 			property int ItemSize
 			{
 				virtual int get()
@@ -161,9 +158,6 @@ namespace SharpSvn {
 		ref class AprCanonicalMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:
-			AprCanonicalMarshaller()
-			{}
-
 			property int ItemSize
 			{
 				virtual int get()
@@ -191,9 +185,6 @@ namespace SharpSvn {
 		ref class AprSvnRevNumMarshaller sealed : public IItemMarshaller<__int64>
 		{
 		public:
-			AprSvnRevNumMarshaller()
-			{}
-
 			property int ItemSize
 			{
 				virtual int get()
