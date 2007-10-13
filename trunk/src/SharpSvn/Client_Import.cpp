@@ -6,24 +6,24 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::Import(String^ path, Uri^ target)
+bool SvnClient::Import(String^ path, Uri^ target)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	Import(path, target, gcnew SvnImportArgs());
+	return Import(path, target, gcnew SvnImportArgs());
 }
 
-void SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	Import(path, target, gcnew SvnImportArgs(), commitInfo);
+	return Import(path, target, gcnew SvnImportArgs(), commitInfo);
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
@@ -58,6 +58,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 		aa->Depth = args->Depth;
 
 		aa->AllowUnversionedObstructions = true; // This is the trick
+		aa->SvnError += gcnew EventHandler<SvnErrorEventArgs^>(args, &SvnImportArgs::HandleOnSvnError);
 
 		try
 		{
@@ -72,24 +73,24 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 		return false;
 }
 
-void SvnClient::RemoteImport(String^ path, Uri^ target)
+bool SvnClient::RemoteImport(String^ path, Uri^ target)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	RemoteImport(path, target, gcnew SvnImportArgs());
+	return RemoteImport(path, target, gcnew SvnImportArgs());
 }
 
-void SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	RemoteImport(path, target, gcnew SvnImportArgs(), commitInfo);
+	return RemoteImport(path, target, gcnew SvnImportArgs(), commitInfo);
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)

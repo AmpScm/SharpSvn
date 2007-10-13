@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Relocate(String^ path, Uri^ from, Uri^ to)
+bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -20,7 +20,7 @@ void SvnClient::Relocate(String^ path, Uri^ from, Uri^ to)
 	else if(!SvnBase::IsValidReposUri(to))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
 
-	Relocate(path, from, to, gcnew SvnRelocateArgs());
+	return Relocate(path, from, to, gcnew SvnRelocateArgs());
 }
 
 bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args)

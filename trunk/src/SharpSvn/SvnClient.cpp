@@ -486,3 +486,15 @@ void SvnClientConfiguration::LogMessageRequired::set(bool value)
 	_client->_noLogMessageRequired = !value;
 }
 
+SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)
+{
+	if(!args)
+		throw gcnew ArgumentNullException("args");
+	else if(client->_currentArgs)
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+
+	args->Exception = nullptr;
+
+	client->_currentArgs = args;
+	_client = client;
+}

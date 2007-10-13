@@ -16,36 +16,36 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Unlock(System.String):System.Void")];
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Unlock(System.String,SharpSvn.SvnUnlockArgs):System.Boolean")];
 
-void SvnClient::Unlock(String^ target)
+bool SvnClient::Unlock(String^ target)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
+	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
-void SvnClient::Unlock(Uri^ target)
+bool SvnClient::Unlock(Uri^ target)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
+	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
-void SvnClient::Unlock(ICollection<String^>^ targets)
+bool SvnClient::Unlock(ICollection<String^>^ targets)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");
 
-	Unlock(targets, gcnew SvnUnlockArgs());
+	return Unlock(targets, gcnew SvnUnlockArgs());
 }
 
-void SvnClient::Unlock(ICollection<Uri^>^ targets)
+bool SvnClient::Unlock(ICollection<Uri^>^ targets)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");
 
-	Unlock(targets, gcnew SvnUnlockArgs());
+	return Unlock(targets, gcnew SvnUnlockArgs());
 }
 
 

@@ -27,14 +27,14 @@ public:
 };
 
 
-void SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result)
+bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
 
-	Diff(from, to, gcnew SvnDiffArgs(), result);
+	return Diff(from, to, gcnew SvnDiffArgs(), result);
 }
 
 // Fxcop or vc++ code generating bug
@@ -125,7 +125,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 	}
 }
 
-void SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result)
+bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result)
 {
 	if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -134,7 +134,7 @@ void SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
 
-	Diff(source, from, to, gcnew SvnDiffArgs(), result);
+	return Diff(source, from, to, gcnew SvnDiffArgs(), result);
 }
 
 bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result)

@@ -4,7 +4,7 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
-void SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
+bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
@@ -12,17 +12,17 @@ void SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 		throw gcnew ArgumentNullException("path");
 
 	__int64 revision;
-	CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
+	return CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
 }
 
-void SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
+bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
+	return CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
 }
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)

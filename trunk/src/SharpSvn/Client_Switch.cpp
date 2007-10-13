@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Switch(String^ path, SvnUriTarget^ target)
+bool SvnClient::Switch(String^ path, SvnUriTarget^ target)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -14,19 +14,18 @@ void SvnClient::Switch(String^ path, SvnUriTarget^ target)
 
 	__int64 revision;
 
-	Switch(path, target, gcnew SvnSwitchArgs(), revision);
+	return Switch(path, target, gcnew SvnSwitchArgs(), revision);
 }
 
-void SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision)
+bool SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	Switch(path, target, gcnew SvnSwitchArgs(), revision);
+	return Switch(path, target, gcnew SvnSwitchArgs(), revision);
 }
-
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 {

@@ -5,16 +5,16 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Update(String^ path)
+bool SvnClient::Update(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	IList<__int64>^ revisions;
-	Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), revisions);
+	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), revisions);
 }
 
-void SvnClient::Update(String^ path, [Out] __int64% revision)
+bool SvnClient::Update(String^ path, [Out] __int64% revision)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -22,9 +22,11 @@ void SvnClient::Update(String^ path, [Out] __int64% revision)
 	IList<__int64>^ revisions;
 	revision = -1;
 
-	Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), revisions);
+	bool ok = Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), revisions);
 
-	revision = revisions[0];
+	revision = (ok && revisions && revisions->Count > 0) ? revisions[0] : -1;
+
+	return ok;
 }
 
 
@@ -60,22 +62,22 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revisio
 	}
 }
 
-void SvnClient::Update(ICollection<String^>^ paths)
+bool SvnClient::Update(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	IList<__int64>^ revisions;
 
-	Update(paths, gcnew SvnUpdateArgs(), revisions);
+	return Update(paths, gcnew SvnUpdateArgs(), revisions);
 }
 
-void SvnClient::Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions)
+bool SvnClient::Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	Update(paths, gcnew SvnUpdateArgs(), revisions);
+	return Update(paths, gcnew SvnUpdateArgs(), revisions);
 }
 
 

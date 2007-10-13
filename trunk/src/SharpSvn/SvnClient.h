@@ -211,11 +211,11 @@ namespace SharpSvn {
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void CheckOut(SvnUriTarget^ url, String^ path);
+		bool CheckOut(SvnUriTarget^ url, String^ path);
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision);
+		bool CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision);
 
 		/// <summary>Performs a checkout of <paramref name="url" /> to <paramref name="path" /> to the specified param</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
@@ -236,11 +236,11 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Update(String^ path);
+		bool Update(String^ path);
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Update(String^ path, [Out] __int64% revision);
+		bool Update(String^ path, [Out] __int64% revision);
 		/// <summary>Recursively updates the specified path</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -253,11 +253,11 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Update(ICollection<String^>^ paths);
+		bool Update(ICollection<String^>^ paths);
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions);
+		bool Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions);
 		/// <summary>Updates the specified paths to the specified revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -277,16 +277,10 @@ namespace SharpSvn {
 		/// <overloads>Create an unversioned copy of a tree (<c>svn export</c>)</overloads>
 		/// <summary>Recursively exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		void Export(SvnTarget^ from, String^ toPath);
+		bool Export(SvnTarget^ from, String^ toPath);
 		/// <summary>Recursively exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		void Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision);
-		/// <summary>Recursively exports the specified target to the specified path, optionally overwriting existing files</summary>
-		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		void Export(SvnTarget^ from, String^ toPath, bool overwrite);
-		/// <summary>Recursively exports the specified target to the specified path, optionally overwriting existing files</summary>
-		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		void Export(SvnTarget^ from, String^ toPath, bool overwrite, [Out] __int64% revision);
+		bool Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision);
 		/// <summary>Exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
 		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args);
@@ -302,12 +296,12 @@ namespace SharpSvn {
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Switch(String^ path, SvnUriTarget^ target);
+		bool Switch(String^ path, SvnUriTarget^ target);
 
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision);
+		bool Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision);
 
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
@@ -323,7 +317,7 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Relocate Client Command
 		/// <overloads>Update the working copy to a different repository (<c>svn switch --relocate</c>)</overloads>
-		void Relocate(String^ path, Uri^ from, Uri^ to);
+		bool Relocate(String^ path, Uri^ from, Uri^ to);
 
 		bool Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args);
 #pragma endregion
@@ -336,12 +330,12 @@ namespace SharpSvn {
 		/// <summary>Recursively adds the specified path</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Add(String^ path);
+		bool Add(String^ path);
 
 		/// <summary>Adds the specified path</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void Add(String^ path, SvnDepth depth);
+		bool Add(String^ path, SvnDepth depth);
 
 		/// <summary>Adds the specified path</summary>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
@@ -380,14 +374,14 @@ namespace SharpSvn {
 #pragma region // Status Client Command
 		/// <overloads>Retrieve the status of working copy files and directories (<c>svn status</c>)</overloads>
 		/// <summary>Recursively gets 'interesting' status data for the specified path</summary>
-		void Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler);
+		bool Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler);
 		/// <summary>Gets status data for the specified path</summary>
 		bool Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatusEventArgs^>^ statusHandler);
 
 		/// <summary>Recursively gets a list of 'interesting' status data for the specified path</summary>
-		void GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		bool GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
 		/// <summary>Gets the status data for the specified path</summary>
-		void GetStatus(String^ path, [Out] SvnStatusEventArgs^% status);
+		bool GetStatus(String^ path, [Out] SvnStatusEventArgs^% status);
 		/// <summary>Gets a list of status data for the specified path</summary>
 		bool GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses);
 
@@ -398,22 +392,22 @@ namespace SharpSvn {
 #pragma region // Log Client Command
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
-		void Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
+		bool Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <summary>Gets log messages of the specified target</summary>
-		void Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
+		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <overloads>Retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
-		void GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems);
+		bool GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		void GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, [Out] IList<SvnLogEventArgs^>^% logItems);
+		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, [Out] IList<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
 
@@ -425,7 +419,7 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Write Command
 		/// <overloads>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</overloads>
-		void Write(SvnTarget^ target, Stream^ toStream);
+		bool Write(SvnTarget^ target, Stream^ toStream);
 		bool Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args);
 #pragma endregion
 
@@ -433,11 +427,11 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // List Client Command
 		/// <overloads>Streamingly lists directory entries in the repository. (<c>svn list</c>)</overloads>
-		void List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler);
+		bool List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler);
 		bool List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListEventArgs^>^ listHandler);
 
 		/// <overloads>Gets a list of directory entries in the repository. (<c>svn list</c>)</overloads>
-		void GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list);
+		bool GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list);
 		bool GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnListEventArgs^>^% list);
 #pragma endregion
 
@@ -446,12 +440,12 @@ namespace SharpSvn {
 #pragma region // Info Client Command
 		/// <overloads>Streamingly retrieves information about a local or remote item (<c>svn info</c>)</overloads>
 		/// <summary>Gets information about the specified target</summary>
-		void Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler);
+		bool Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler);
 		/// <summary>Gets information about the specified target</summary>
 		bool Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoEventArgs^>^ infoHandler);
 
 		/// <summary>Gets information about the specified target</summary>
-		void GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
+		bool GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
 		/// <summary>Gets information about the specified target</summary>
 		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^% info);
 
@@ -463,18 +457,18 @@ namespace SharpSvn {
 #pragma region // CreateDirectory Client Command
 
 		/// <overloads>Create a new directory under version control, scheduling (<c>svn mkdir</c>)</overloads>
-		void CreateDirectory(String^ path);
+		bool CreateDirectory(String^ path);
 		bool CreateDirectory(String^ path, SvnCreateDirectoryArgs^ args);
 
-		void CreateDirectory(ICollection<String^>^ paths);
-		bool CreateDirectory(ICollection<String^>^ paths, SvnCreateDirectoryArgs^ args);
+		bool CreateDirectories(ICollection<String^>^ paths);
+		bool CreateDirectories(ICollection<String^>^ paths, SvnCreateDirectoryArgs^ args);
 
 		/// <overloads>Create a new directory under version control at the repository (<c>svn mkdir</c>)</overloads>
-		void RemoteCreateDirectory(Uri^ uri);
+		bool RemoteCreateDirectory(Uri^ uri);
 		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args);
 		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args);
-		bool RemoteCreateDirectory(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args);
+		bool RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 	public:
@@ -482,17 +476,17 @@ namespace SharpSvn {
 #pragma region // CreateDirectory Client Command
 
 		/// <overloads>Remove files and directories from version control, scheduling (<c>svn delete|remove</c>)</overloads>
-		void Delete(String^ path);
+		bool Delete(String^ path);
 		bool Delete(String^ path, SvnDeleteArgs^ args);
 
-		void Delete(ICollection<String^>^ paths);
+		bool Delete(ICollection<String^>^ paths);
 		bool Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args);
 
 		/// <overloads>Remove files and directories from version control at the repository (<c>svn delete|remove</c>)</overloads>
-		void RemoteDelete(Uri^ uri);
+		bool RemoteDelete(Uri^ uri);
 		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args);
 		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		void RemoteDelete(ICollection<Uri^>^ uris);
+		bool RemoteDelete(ICollection<Uri^>^ uris);
 		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args);
 		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 
@@ -506,11 +500,11 @@ namespace SharpSvn {
 		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
-		void Import(String^ path, Uri^ target);
+		bool Import(String^ path, Uri^ target);
 		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
-		void Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
+		bool Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
 		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
@@ -522,9 +516,9 @@ namespace SharpSvn {
 
 		/// <overloads>Commit an unversioned file or tree into the repository (<c>svn import</c>)</overloads>
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
-		void RemoteImport(String^ path, Uri^ target);
+		bool RemoteImport(String^ path, Uri^ target);
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
-		void RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
 		bool RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args);
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
@@ -535,10 +529,10 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Commit Client Command
 		/// <overloads>Send changes from your working copy to the repository (<c>svn commit</c>)</overloads>
-		void Commit(String^ path);
-		void Commit(String^ path, [Out] SvnCommitInfo^% commitInfo);
-		void Commit(ICollection<String^>^ paths);
-		void Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(String^ path);
+		bool Commit(String^ path, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(ICollection<String^>^ paths);
+		bool Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo);
 		bool Commit(String^ path, SvnCommitArgs^ args);
 		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args);
@@ -550,9 +544,9 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Revert Client Command
 		/// <overloads>Restore pristine working copy file (undo most local edits) (<c>svn revert</c>)</overloads>
-		void Revert(String^ path);
+		bool Revert(String^ path);
 		bool Revert(String^ path, SvnRevertArgs^ args);
-		void Revert(ICollection<String^>^ paths);
+		bool Revert(ICollection<String^>^ paths);
 		bool Revert(ICollection<String^>^ paths, SvnRevertArgs^ args);
 #pragma endregion
 
@@ -560,8 +554,8 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Resolved Client Command
 		/// <overloads>Remove 'conflicted' state on working copy files or directories (<c>svn resolved</c>)</overloads>
-		void Resolved(String^ path);
-		void Resolved(String^ path, SvnConflictResult which);
+		bool Resolved(String^ path);
+		bool Resolved(String^ path, SvnConflictResult which);
 		bool Resolved(String^ path, SvnResolvedArgs^ args);
 #pragma endregion
 
@@ -573,7 +567,7 @@ namespace SharpSvn {
 		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		void CleanUp(String^ path);
+		bool CleanUp(String^ path);
 		/// <summary>Cleans up the specified path, removing all workingcopy locks left behind by crashed clients</summary>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
@@ -585,15 +579,15 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Copy Client Command
 		/// <overloads>Duplicate something in working copy, remembering history (<c>svn copy</c>)</overloads>
-		void Copy(SvnTarget^ sourceTarget, String^ toPath);
-		void Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath);
+		bool Copy(SvnTarget^ sourceTarget, String^ toPath);
+		bool Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath);
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
 		bool Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, SvnCopyArgs^ args);
 		/// <overloads>Duplicate something in repository, remembering history (<c>svn copy</c>)</overloads>
-		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri);
-		void RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri);
-		void RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
-		void RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri);
+		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri);
+		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
 		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
 		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
 		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
@@ -604,15 +598,15 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Move Client Command
 		/// <overloads>Move and/or rename something in working copy, remembering history (<c>svn move</c>)</overloads>
-		void Move(String^ sourcePath, String^ toPath);
-		void Move(ICollection<String^>^ sourcePaths, String^ toPath);
+		bool Move(String^ sourcePath, String^ toPath);
+		bool Move(ICollection<String^>^ sourcePaths, String^ toPath);
 		bool Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args);
 		bool Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveArgs^ args);
 		/// <overloads>Move and/or rename something in repository, remembering history (<c>svn move</c>)</overloads>
-		void RemoteMove(Uri^ sourceUri, Uri^ toUri);
-		void RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri);
-		void RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
-		void RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMove(Uri^ sourceUri, Uri^ toUri);
+		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri);
+		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args);
 		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args);
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
@@ -623,10 +617,10 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Lock Client Command
 		/// <overloads>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</overloads>
-		void Lock(String^ target, String^ comment);
-		void Lock(Uri^ target, String^ comment);
-		void Lock(ICollection<String^>^ targets, String^ comment);
-		void Lock(ICollection<Uri^>^ targets, String^ comment);
+		bool Lock(String^ target, String^ comment);
+		bool Lock(Uri^ target, String^ comment);
+		bool Lock(ICollection<String^>^ targets, String^ comment);
+		bool Lock(ICollection<Uri^>^ targets, String^ comment);
 		bool Lock(String^ target, SvnLockArgs^ args);
 		bool Lock(Uri^ target, SvnLockArgs^ args);
 		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
@@ -637,10 +631,10 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Lock Client Command
 		/// <overloads>Unlock working copy paths or URLs (<c>svn unlock</c>)</overloads>
-		void Unlock(String^ target);
-		void Unlock(Uri^ target);
-		void Unlock(ICollection<String^>^ targets);
-		void Unlock(ICollection<Uri^>^ targets);
+		bool Unlock(String^ target);
+		bool Unlock(Uri^ target);
+		bool Unlock(ICollection<String^>^ targets);
+		bool Unlock(ICollection<Uri^>^ targets);
 		bool Unlock(String^ target, SvnUnlockArgs^ args);
 		bool Unlock(Uri^ target, SvnUnlockArgs^ args);
 		bool Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args);
@@ -653,10 +647,10 @@ namespace SharpSvn {
 		/// <overloads>Set the value of a property on files, dirs (<c>svn propset</c>)</overloads>
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		void SetProperty(String^ path, String^ propertyName, String^ value);
+		bool SetProperty(String^ path, String^ propertyName, String^ value);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		void SetProperty(String^ path, String^ propertyName, IList<char>^ bytes);
+		bool SetProperty(String^ path, String^ propertyName, IList<char>^ bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
 		bool SetProperty(String^ path, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
@@ -666,7 +660,7 @@ namespace SharpSvn {
 
 		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
 		/// <summary>Removes the specified property from the specfied path</summary>
-		void DeleteProperty(String^ path, String^ propertyName);
+		bool DeleteProperty(String^ path, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(String^ path, String^ propertyName, SvnSetPropertyArgs^ args);
 
@@ -682,11 +676,11 @@ namespace SharpSvn {
 		/// <summary>Gets the specified property from the specfied path</summary>
 		/// <returns>true if property is set, otherwise false</returns>
 		/// <exception type="SvnException">path is not a valid workingcopy path</exception>
-		void GetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
+		bool GetProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
 		/// <summary>Gets the specified property from the specfied path</summary>
 		/// <returns>true if property is set, otherwise false</returns>
 		/// <exception type="SvnException">path is not a valid workingcopy path</exception>
-		void GetProperty(SvnTarget^ target, String^ propertyName, [Out] IList<char>^% bytes);
+		bool GetProperty(SvnTarget^ target, String^ propertyName, [Out] IList<char>^% bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
 		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] IDictionary<SvnTarget^, String^>^% properties);
@@ -705,11 +699,11 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
 		/// <overloads>Streamingly lists all properties on files or dirs (<c>svn proplist</c>)</overloads>
-		void PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
+		bool PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
 		bool PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
 
 		/// <overloads>Gets all properties on files or dirs (<c>svn proplist</c>)</overloads>
-		void GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list);
+		bool GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list);
 		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
 
@@ -718,13 +712,13 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // SetRevisionProperty Client Command
 		/// <overloads>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</overloads>
-		void SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value);
-		void SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes);
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value);
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes);
 		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value);
 		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, IList<char>^ bytes);
 
 		/// <overloads>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</overloads>
-		void DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName);
+		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName);
 		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args);
 
 	internal:
@@ -736,8 +730,8 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // GetRevisionProperty Client Command
 		/// <overloads>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</overloads>
-		void GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value);
-		void GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% value);
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value);
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% value);
 		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value);
 		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] IList<char>^% value);
 #pragma endregion
@@ -746,7 +740,7 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
 		/// <overloads>Gets all revision properties on a revision on the specified target (<c>svn proplist --revision</c>)</overloads>
-		void GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list);
+		bool GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list);
 		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] IDictionary<String^, Object^>^% list);
 #pragma endregion
 
@@ -758,15 +752,17 @@ namespace SharpSvn {
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
-		void Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo);
+		bool Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo);
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
 		bool Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnMergeArgs^ args);
 
-		void Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange);
-		void Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange);
-		bool Merge(String^ targetPath, SvnTarget^ source, SvnMergeRange^ mergeRange, SvnMergeArgs^ args);
+		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange);
+		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange);
+		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange);
+		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange, SvnMergeArgs^ args);
+		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange, SvnMergeArgs^ args);
 		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange, SvnMergeArgs^ args);
 
 #pragma endregion
@@ -775,9 +771,9 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Diff Client Command
 		/// <overloads>Retrieves the differences between two revisions or paths (<c>svn diff</c>)</overloads>
-		void Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result);
+		bool Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result);
 		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
-		void Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result);
+		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result);
 		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
 #pragma endregion
 
@@ -785,10 +781,10 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Diff Summary Command
 		/// <overloads>Streamingly retrieves the differences between two revisions or paths (<c>svn diff --summarize</c>)</overloads>
-		void DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
+		bool DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
 		bool DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
 		/// <overloads>Retrieves the differences between two revisions or paths (<c>svn diff --summarize</c>)</overloads>
-		void GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
+		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
 		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
 #pragma endregion
 
@@ -839,10 +835,10 @@ namespace SharpSvn {
 
 	public:
 		/// <overloads>Streamingly retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>
-		void Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);
+		bool Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);
 		bool Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBlameEventArgs^>^ blameHandler);
 		/// <overloads>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>
-		void GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list);
+		bool GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list);
 		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] IList<SvnBlameEventArgs^>^% list);
 
 	public:
@@ -871,16 +867,7 @@ namespace SharpSvn {
 		{
 			initonly SvnClient^ _client;
 		public:
-			ArgsStore(SvnClient^ client, SvnClientArgs^ args)
-			{
-				if(!args)
-					throw gcnew ArgumentNullException("args");
-				else if(client->_currentArgs)
-					throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
-				client->_currentArgs = args;
-				_client = client;
-			}
+			ArgsStore(SvnClient^ client, SvnClientArgs^ args);
 
 			~ArgsStore()
 			{

@@ -17,8 +17,10 @@ namespace SharpSvn {
 		event EventHandler<SvnCancelEventArgs^>^	Cancel;
 		/// <summary>Raised to notify of progress by an in-progress command</summary>
 		event EventHandler<SvnProgressEventArgs^>^	Progress;
-		/// <summary>Raised to notify changes by an in-progrss command</summary>
+		/// <summary>Raised to notify changes by an in-progress command</summary>
 		event EventHandler<SvnNotifyEventArgs^>^	Notify;
+		/// <summary>Raised to notify errors from an command</summary>
+		event EventHandler<SvnErrorEventArgs^>^		SvnError;
 
 	protected public:
 		SvnClientArgs()
@@ -46,7 +48,7 @@ namespace SharpSvn {
 		/// <summary>Called when handling a <see cref="SvnException" /></summary>
 		virtual void OnSvnError(SvnErrorEventArgs^ e)
 		{
-			UNUSED_ALWAYS(e);
+			SvnError(this, e);
 		}
 
 	public:
@@ -1008,6 +1010,14 @@ namespace SharpSvn {
 				_ignoreUnknownNodeTypes = value;
 			}
 		}
+
+	internal:
+		// Used by SvnImport to forward SvnCheckout errors
+		void HandleOnSvnError(Object^ sender, SvnErrorEventArgs^ e)
+		{
+			UNUSED_ALWAYS(sender);
+			OnSvnError(e);
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::List(SvnTarget^, SvnListArgs^, EventHandler{SvnListEventArgs^}^)" /></summary>
@@ -1552,7 +1562,7 @@ namespace SharpSvn {
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Merge(String^,SvnTarget^, SvnMergeRange^, SvnMergeArgs^)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Merge(String^,SvnTarget^, SvnRevisionRange^, SvnMergeArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnMergeArgs : public SvnClientArgsWithConflict
 	{

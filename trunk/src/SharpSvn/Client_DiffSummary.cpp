@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
 
-void SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler)
+bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -14,7 +14,7 @@ void SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiff
 	else if(!summaryHandler)
 		throw gcnew ArgumentNullException("summaryHandler");
 
-	DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), summaryHandler);
+	return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), summaryHandler);
 }
 
 static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff_summarize_t *diff, void *baton, apr_pool_t *pool)
@@ -89,7 +89,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	}
 }
 
-void SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list)
+bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -100,7 +100,7 @@ void SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDi
 
 	try
 	{
-		DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), results->Handler);
+		return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), results->Handler);
 	}
 	finally
 	{

@@ -5,14 +5,14 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler)
+bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
 
-	List(target, gcnew SvnListArgs(), listHandler);
+	return List(target, gcnew SvnListArgs(), listHandler);
 }
 
 static svn_error_t *svnclient_list_handler(void *baton, const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, apr_pool_t *pool)
@@ -86,7 +86,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	}
 }
 
-void SvnClient::GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list)
+bool SvnClient::GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -95,7 +95,7 @@ void SvnClient::GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list
 
 	try
 	{
-		List(target, gcnew SvnListArgs(), results->Handler);
+		return List(target, gcnew SvnListArgs(), results->Handler);
 	}
 	finally
 	{

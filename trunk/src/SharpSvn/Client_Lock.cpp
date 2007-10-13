@@ -8,7 +8,7 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Lock(System.String,SharpSvn.SvnLockArgs):System.Boolean")];
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Lock(System.String,System.String):System.Void")];
 
-void SvnClient::Lock(String^ target, String^ comment)
+bool SvnClient::Lock(String^ target, String^ comment)
 {
 	if(String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
@@ -18,10 +18,10 @@ void SvnClient::Lock(String^ target, String^ comment)
 	SvnLockArgs^ args = gcnew SvnLockArgs();
 	args->Comment = comment;
 
-	Lock(NewSingleItemCollection(target), args);
+	return Lock(NewSingleItemCollection(target), args);
 }
 
-void SvnClient::Lock(Uri^ target, String^ comment)
+bool SvnClient::Lock(Uri^ target, String^ comment)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -33,10 +33,10 @@ void SvnClient::Lock(Uri^ target, String^ comment)
 	SvnLockArgs^ args = gcnew SvnLockArgs();
 	args->Comment = comment;
 
-	Lock(NewSingleItemCollection(target), args);
+	return Lock(NewSingleItemCollection(target), args);
 }
 
-void SvnClient::Lock(ICollection<String^>^ targets, String^ comment)
+bool SvnClient::Lock(ICollection<String^>^ targets, String^ comment)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");
@@ -46,10 +46,10 @@ void SvnClient::Lock(ICollection<String^>^ targets, String^ comment)
 	SvnLockArgs^ args = gcnew SvnLockArgs();
 	args->Comment = comment;
 
-	Lock(targets, args);
+	return Lock(targets, args);
 }
 
-void SvnClient::Lock(ICollection<Uri^>^ targets, String^ comment)
+bool SvnClient::Lock(ICollection<Uri^>^ targets, String^ comment)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");
@@ -59,7 +59,7 @@ void SvnClient::Lock(ICollection<Uri^>^ targets, String^ comment)
 	SvnLockArgs^ args = gcnew SvnLockArgs();
 	args->Comment = comment;
 
-	Lock(targets, args);
+	return Lock(targets, args);
 }
 
 bool SvnClient::Lock(String^ target, SvnLockArgs^ args)

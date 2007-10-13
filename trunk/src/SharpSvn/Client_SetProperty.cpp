@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::SetProperty(String^ path, String^ propertyName, String^ value)
+bool SvnClient::SetProperty(String^ path, String^ propertyName, String^ value)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -14,10 +14,10 @@ void SvnClient::SetProperty(String^ path, String^ propertyName, String^ value)
 	else if(!value)
 		throw gcnew ArgumentNullException("value");
 
-	SetProperty(path, propertyName, value, gcnew SvnSetPropertyArgs());
+	return SetProperty(path, propertyName, value, gcnew SvnSetPropertyArgs());
 }
 
-void SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ bytes)
+bool SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ bytes)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -26,7 +26,7 @@ void SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ byt
 	else if(!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
-	SetProperty(path, propertyName, bytes, gcnew SvnSetPropertyArgs());
+	return SetProperty(path, propertyName, bytes, gcnew SvnSetPropertyArgs());
 }
 
 bool SvnClient::SetProperty(String^ path, String^ propertyName, String^ value, SvnSetPropertyArgs^ args)
@@ -70,14 +70,14 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, IList<char>^ byt
 	return InternalSetProperty(path, propertyName, pool.AllocSvnString(byteArray), args, %pool);
 }
 
-void SvnClient::DeleteProperty(String^ path, String^ propertyName)
+bool SvnClient::DeleteProperty(String^ path, String^ propertyName)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	DeleteProperty(path, propertyName, gcnew SvnSetPropertyArgs());
+	return DeleteProperty(path, propertyName, gcnew SvnSetPropertyArgs());
 }
 
 bool SvnClient::DeleteProperty(String^ path, String^ propertyName, SvnSetPropertyArgs^ args)

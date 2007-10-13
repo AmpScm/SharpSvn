@@ -7,12 +7,12 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.CleanUp(System.String,SharpSvn.SvnCleanUpArgs):System.Boolean")];
 
 
-void SvnClient::CleanUp(String ^path)
+bool SvnClient::CleanUp(String ^path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	CleanUp(path, gcnew SvnCleanUpArgs());
+	return CleanUp(path, gcnew SvnCleanUpArgs());
 }
 
 bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)

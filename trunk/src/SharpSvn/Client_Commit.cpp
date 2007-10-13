@@ -4,40 +4,40 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
-void SvnClient::Commit(String^ path)
+bool SvnClient::Commit(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
+	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
 }
 
-void SvnClient::Commit(String^ path, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Commit(String^ path, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
+	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
 }
 
-void SvnClient::Commit(ICollection<String^>^ paths)
+bool SvnClient::Commit(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	SvnCommitInfo^ commitInfo = nullptr;
 
-	Commit(paths, gcnew SvnCommitArgs(), commitInfo);
+	return Commit(paths, gcnew SvnCommitArgs(), commitInfo);
 }
 
-void SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	Commit(paths, gcnew SvnCommitArgs(), commitInfo);
+	return Commit(paths, gcnew SvnCommitArgs(), commitInfo);
 }
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)

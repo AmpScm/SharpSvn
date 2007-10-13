@@ -6,12 +6,12 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list)
+bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	GetRevisionPropertyList(target, gcnew SvnRevisionPropertyListArgs(), list);
+	return GetRevisionPropertyList(target, gcnew SvnRevisionPropertyListArgs(), list);
 }
 
 bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] IDictionary<String^, Object^>^% list)

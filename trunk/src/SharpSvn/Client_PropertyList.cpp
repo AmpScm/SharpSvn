@@ -5,14 +5,14 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler)
+bool SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
 
-	PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
+	return PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
 }
 
 static svn_error_t *svnclient_property_list_handler(void *baton, const char *path, apr_hash_t *prop_hash, apr_pool_t *pool)
@@ -83,7 +83,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 	}
 }
 
-void SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list)
+bool SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -92,7 +92,7 @@ void SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEv
 
 	try
 	{
-		PropertyList(target, gcnew SvnPropertyListArgs(), results->Handler);
+		return PropertyList(target, gcnew SvnPropertyListArgs(), results->Handler);
 	}
 	finally
 	{

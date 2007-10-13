@@ -5,14 +5,14 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
+bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!statusHandler)
 		throw gcnew ArgumentNullException("statusHandler");
 
-	Status(path, gcnew SvnStatusArgs(), statusHandler);
+	return Status(path, gcnew SvnStatusArgs(), statusHandler);
 }
 
 static void svnclient_status_handler(void *baton, const char *path, svn_wc_status2_t *status)
@@ -79,7 +79,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	}
 }
 
-void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
+bool SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -88,7 +88,7 @@ void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statu
 
 	try
 	{
-		Status(path, gcnew SvnStatusArgs(), results->Handler);
+		return Status(path, gcnew SvnStatusArgs(), results->Handler);
 	}
 	finally
 	{
@@ -96,7 +96,7 @@ void SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statu
 	}
 }
 
-void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
+bool SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -110,7 +110,7 @@ void SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 
 	try
 	{
-		Status(path, args, results->Handler);
+		return Status(path, args, results->Handler);
 	}
 	finally
 	{
