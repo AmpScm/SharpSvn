@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% value)
+bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% value)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -15,19 +15,20 @@ void SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% va
 	IDictionary<SvnTarget^, String^>^ result = nullptr;
 	value = nullptr;
 
-	GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
+	bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
 
 	if(result && (result->Count >= 0))
 	{
 		for each(String^ v in result->Values)
 		{
 			value = v;
-			return;
 		}
 	}
+
+	return ok;
 }
 
-void SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, IList<char>^% bytes)
+bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, IList<char>^% bytes)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -37,16 +38,16 @@ void SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, IList<char>
 	IDictionary<SvnTarget^, String^>^ result = nullptr;
 	bytes = nullptr;
 
-	GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
+	bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
 
 	if(result && (result->Count >= 0))
 	{
 		for each(IList<char>^ v in result->Values)
 		{
 			bytes = v;
-			return;
 		}
 	}
+	return ok;
 }
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, IDictionary<SvnTarget^, String^>^% properties)

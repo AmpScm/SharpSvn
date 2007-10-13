@@ -5,14 +5,14 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler)
+bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!infoHandler)
 		throw gcnew ArgumentNullException("infoHandler");
 
-	Info(target, gcnew SvnInfoArgs(), infoHandler);
+	return Info(target, gcnew SvnInfoArgs(), infoHandler);
 }
 
 static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_info_t *info, apr_pool_t *pool)
@@ -89,7 +89,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	}
 }
 
-void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
+bool SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -98,7 +98,7 @@ void SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 
 	try
 	{
-		Info(target, gcnew SvnInfoArgs(), results->Handler);
+		return Info(target, gcnew SvnInfoArgs(), results->Handler);
 	}
 	finally
 	{

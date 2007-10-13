@@ -9,6 +9,7 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,SharpSvn.SvnListChangeListArgs,System.Collections.Generic.IList`1<System.String>&):System.Boolean")];
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.AddToChangeList(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnAddToChangeListArgs):System.Boolean")];
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangeList(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnRemoveFromChangeListArgs):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangeList(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnRemoveFromChangeListArgs):System.Boolean")];
 
 void SvnClient::AddToChangeList(String^ path, String^ changeList)
 {

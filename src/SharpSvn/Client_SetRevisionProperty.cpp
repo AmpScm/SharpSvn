@@ -5,7 +5,7 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-void SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value)
+bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -14,10 +14,10 @@ void SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	else if(!value)
 		throw gcnew ArgumentNullException("value");
 
-	SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), value);
+	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), value);
 }
 
-void SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes)
+bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -26,7 +26,7 @@ void SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	else if(!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
-	SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), bytes);
+	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), bytes);
 }
 
 bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value)
@@ -80,14 +80,14 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		%pool);
 }
 
-void SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
+bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	DeleteRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs());
+	return DeleteRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs());
 }
 
 bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args)

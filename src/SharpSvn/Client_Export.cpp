@@ -23,7 +23,7 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 }
 
 
-void SvnClient::Export(SvnTarget^ from, String^ toPath)
+bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -32,46 +32,17 @@ void SvnClient::Export(SvnTarget^ from, String^ toPath)
 
 	__int64 revision;
 
-	Export(from, toPath, gcnew SvnExportArgs(), revision);
+	return Export(from, toPath, gcnew SvnExportArgs(), revision);
 }
 
-void SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision)
+bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
 
-	Export(from, toPath, gcnew SvnExportArgs(), revision);
-}
-
-void SvnClient::Export(SvnTarget^ from, String^ toPath, bool overwrite)
-{
-	if(!from)
-		throw gcnew ArgumentNullException("from");
-	else if(!toPath)
-		throw gcnew ArgumentNullException("toPath");
-
-	SvnExportArgs^ args = gcnew SvnExportArgs();
-
-	args->Overwrite = overwrite;
-
-	__int64 revision;
-	Export(from, toPath, args, revision);
-}
-
-void SvnClient::Export(SvnTarget^ from, String^ toPath, bool overwrite, [Out] __int64% revision)
-{
-	if(!from)
-		throw gcnew ArgumentNullException("from");
-	else if(!toPath)
-		throw gcnew ArgumentNullException("toPath");
-
-	SvnExportArgs^ args = gcnew SvnExportArgs();
-
-	args->Overwrite = overwrite;
-
-	Export(from, toPath, args, revision);
+	return Export(from, toPath, gcnew SvnExportArgs(), revision);
 }
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)

@@ -9,24 +9,24 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Boolean")];
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.String&):System.Boolean")];
 
-void SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value)
+bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), value);
+	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), value);
 }
 
-void SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% bytes)
+bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% bytes)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), bytes);
+	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), bytes);
 }
 
 bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value)

@@ -4,15 +4,15 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
-void SvnClient::Add(String^ path)
+bool SvnClient::Add(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Add(path, gcnew SvnAddArgs());
+	return Add(path, gcnew SvnAddArgs());
 }
 
-void SvnClient::Add(String^ path, SvnDepth depth)
+bool SvnClient::Add(String^ path, SvnDepth depth)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -21,7 +21,7 @@ void SvnClient::Add(String^ path, SvnDepth depth)
 
 	args->Depth = depth;
 
-	Add(path, args);
+	return Add(path, args);
 }
 
 bool SvnClient::Add(String^ path, SvnAddArgs^ args)

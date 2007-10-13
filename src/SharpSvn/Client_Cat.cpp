@@ -9,14 +9,14 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::Write(SvnTarget^ target, Stream^ toStream)
+bool SvnClient::Write(SvnTarget^ target, Stream^ toStream)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!toStream)
 		throw gcnew ArgumentNullException("toStream");
 
-	Write(target, toStream, gcnew SvnWriteArgs());
+	return Write(target, toStream, gcnew SvnWriteArgs());
 }
 
 bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)

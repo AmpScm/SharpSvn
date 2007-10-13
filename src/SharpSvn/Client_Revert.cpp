@@ -6,12 +6,12 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::Revert(String^ path)
+bool SvnClient::Revert(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Revert(path, gcnew SvnRevertArgs());
+	return Revert(path, gcnew SvnRevertArgs());
 }
 
 bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
@@ -24,12 +24,12 @@ bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 	return Revert(NewSingleItemCollection(path), args);
 }
 
-void SvnClient::Revert(ICollection<String^>^ paths)
+bool SvnClient::Revert(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	Revert(paths, gcnew SvnRevertArgs());
+	return Revert(paths, gcnew SvnRevertArgs());
 }
 
 bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)

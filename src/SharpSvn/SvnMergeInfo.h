@@ -11,18 +11,56 @@ namespace SharpSvn {
 	using System::Collections::ObjectModel::KeyedCollection;
 	using System::Diagnostics::DebuggerDisplayAttribute;
 
-	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
-	public ref class SvnMergeRange sealed
+	[DebuggerDisplayAttribute("Range={StartRevision}-{EndRevision}")]
+	public ref class SvnRevisionRange
 	{
-		initonly __int64 _start;
-		initonly __int64 _end;
+		initonly SvnRevision^ _start;
+		initonly SvnRevision^ _end;
+
+	public:
+		SvnRevisionRange(__int64 start, __int64 end)
+		{
+			_start = gcnew SvnRevision(start);
+			_end = gcnew SvnRevision(end);
+		}
+
+		SvnRevisionRange(SvnRevision^ start, SvnRevision^ end)
+		{
+			if(!start)
+				throw gcnew ArgumentNullException("start");
+			else if(!end)
+				throw gcnew ArgumentNullException("end");
+
+			_start = start;
+			_end = end;
+		}
+
+		property SvnRevision^ StartRevision
+		{
+			SvnRevision^ get()
+			{
+				return _start; 
+			}
+		}
+
+		property SvnRevision^ EndRevision
+		{
+			SvnRevision^ get()
+			{
+				return _end;
+			}
+		}
+	};
+
+	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
+	public ref class SvnMergeRange sealed : SvnRevisionRange
+	{
 		initonly bool _inheritable;
 
 	internal:
 		SvnMergeRange(__int64 start, __int64 end, bool inheritable)
+			: SvnRevisionRange(start, end)
 		{
-			_start = start;
-			_end = end;
 			_inheritable = inheritable;
 		}
 
@@ -31,7 +69,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-				return _start;
+				return StartRevision->Revision;
 			}
 		}
 
@@ -39,7 +77,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-				return _end;
+				return EndRevision->Revision;
 			}
 		}
 
@@ -53,7 +91,7 @@ namespace SharpSvn {
 
 		virtual int GetHashCode() override
 		{
-			return (_start + _end).GetHashCode();
+			return Start.GetHashCode();
 		}
 
 	public:

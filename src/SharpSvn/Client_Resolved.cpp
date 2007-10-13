@@ -6,20 +6,20 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-void SvnClient::Resolved(String^ path)
+bool SvnClient::Resolved(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Resolved(path, gcnew SvnResolvedArgs());
+	return Resolved(path, gcnew SvnResolvedArgs());
 }
 
-void SvnClient::Resolved(String^ path, SvnConflictResult which)
+bool SvnClient::Resolved(String^ path, SvnConflictResult which)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	Resolved(path, gcnew SvnResolvedArgs(which));
+	return Resolved(path, gcnew SvnResolvedArgs(which));
 }
 
 bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)

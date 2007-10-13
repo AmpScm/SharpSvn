@@ -5,15 +5,16 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
 
-void SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler)
+bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!blameHandler)
 		throw gcnew ArgumentNullException("blameHandler");
 
-	Blame(target, gcnew SvnBlameArgs(), blameHandler);
+	return(target, gcnew SvnBlameArgs(), blameHandler);
 }
+
 static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author, 
 													   const char *date, svn_revnum_t merged_revision,  const char *merged_author, 
 													   const char *merged_date, const char *merged_path, const char *line, apr_pool_t *pool)
