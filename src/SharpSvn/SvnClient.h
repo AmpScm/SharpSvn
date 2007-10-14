@@ -1,3 +1,7 @@
+// $Id$
+// Copyright (c) SharpSvn Project 2007 
+// The Sourcecode of this project is available under the Apache 2.0 license
+// Please read the SharpSvnLicense.txt file for more details
 
 #pragma once
 
@@ -791,23 +795,23 @@ namespace SharpSvn {
 
 	public:
 		/// <overloads>Associate the specified path(s) with the specified changelist (<c>svn changelist</c>)</overloads>
-		void AddToChangeList(String^ path, String^ changeList);
+		bool AddToChangeList(String^ path, String^ changeList);
 		bool AddToChangeList(String^ path, String^ changeList, SvnAddToChangeListArgs^ args);
-		void AddToChangeList(ICollection<String^>^ paths, String^ changeList);
+		bool AddToChangeList(ICollection<String^>^ paths, String^ changeList);
 		bool AddToChangeList(ICollection<String^>^ paths, String^ changeList, SvnAddToChangeListArgs^ args);
 		/// <overloads>Deassociate the specified path(s) from the specified changelist (<c>svn changelist</c>)</overloads>
-		void RemoveFromChangeList(String^ path);
+		bool RemoveFromChangeList(String^ path);
 		bool RemoveFromChangeList(String^ path, SvnRemoveFromChangeListArgs^ args);
-		void RemoveFromChangeList(ICollection<String^>^ paths);
+		bool RemoveFromChangeList(ICollection<String^>^ paths);
 		bool RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromChangeListArgs^ args);
 		/// <overloads>Streamingly gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		void ListChangeList(String^ rootPath, String^ changeList, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
+		bool ListChangeList(String^ rootPath, String^ changeList, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
 		bool ListChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
 
 		/// <overloads>Gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		void GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list);
+		bool GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list);
 		bool GetChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, [Out]IList<String^>^% list);
-		void GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list);
 		bool GetChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
 
 	public:
