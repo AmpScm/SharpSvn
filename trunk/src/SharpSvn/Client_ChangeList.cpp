@@ -1,3 +1,8 @@
+// $Id$
+// Copyright (c) SharpSvn Project 2007 
+// The Sourcecode of this project is available under the Apache 2.0 license
+// Please read the SharpSvnLicense.txt file for more details
+
 #include "stdafx.h"
 #include "SvnAll.h"
 
@@ -11,14 +16,14 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangeList(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnRemoveFromChangeListArgs):System.Boolean")];
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangeList(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnRemoveFromChangeListArgs):System.Boolean")];
 
-void SvnClient::AddToChangeList(String^ path, String^ changeList)
+bool SvnClient::AddToChangeList(String^ path, String^ changeList)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 
-	AddToChangeList(NewSingleItemCollection(path), changeList, gcnew SvnAddToChangeListArgs());
+	return AddToChangeList(NewSingleItemCollection(path), changeList, gcnew SvnAddToChangeListArgs());
 }
 
 bool SvnClient::AddToChangeList(String^ path, String^ changeList, SvnAddToChangeListArgs^ args)
@@ -33,14 +38,14 @@ bool SvnClient::AddToChangeList(String^ path, String^ changeList, SvnAddToChange
 	return AddToChangeList(NewSingleItemCollection(path), changeList, args);
 }
 
-void SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList)
+bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 
-	AddToChangeList(paths, changeList, gcnew SvnAddToChangeListArgs());
+	return AddToChangeList(paths, changeList, gcnew SvnAddToChangeListArgs());
 }
 
 bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList, SvnAddToChangeListArgs^ args)
@@ -66,12 +71,12 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 	return args->HandleResult(this, r);
 }
 
-void SvnClient::RemoveFromChangeList(String^ path)
+bool SvnClient::RemoveFromChangeList(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	RemoveFromChangeList(NewSingleItemCollection(path), gcnew SvnRemoveFromChangeListArgs());
+	return RemoveFromChangeList(NewSingleItemCollection(path), gcnew SvnRemoveFromChangeListArgs());
 }
 
 bool SvnClient::RemoveFromChangeList(String^ path, SvnRemoveFromChangeListArgs^ args)
@@ -84,12 +89,12 @@ bool SvnClient::RemoveFromChangeList(String^ path, SvnRemoveFromChangeListArgs^ 
 	return RemoveFromChangeList(NewSingleItemCollection(path), args);
 }
 
-void SvnClient::RemoveFromChangeList(ICollection<String^>^ paths)
+bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	RemoveFromChangeList(paths, gcnew SvnRemoveFromChangeListArgs());
+	return RemoveFromChangeList(paths, gcnew SvnRemoveFromChangeListArgs());
 }
 
 bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromChangeListArgs^ args)
@@ -112,7 +117,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromC
 	return args->HandleResult(this, r);
 }
 
-void SvnClient::ListChangeList(String^ rootPath, String^ changeList, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
+bool SvnClient::ListChangeList(String^ rootPath, String^ changeList, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -121,7 +126,7 @@ void SvnClient::ListChangeList(String^ rootPath, String^ changeList, EventHandle
 	else if(!changeListHandler)
 		throw gcnew ArgumentNullException("changeListHandler");
 
-	ListChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), changeListHandler);
+	return ListChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), changeListHandler);
 }
 
 static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
@@ -190,14 +195,14 @@ bool SvnClient::ListChangeList(String^ rootPath, String^ changeList, SvnListChan
 }
 
 
-void SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 	else if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 
-	GetChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), list);
+	return GetChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), list);
 }
 
 bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, [Out]IList<String^>^% list)
@@ -234,14 +239,14 @@ bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, SvnListChang
 	return args->HandleResult(this, r);
 }
 
-void SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {
 	if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 	else if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 
-	GetChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), list);
+	return GetChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), list);
 }
 
 bool SvnClient::GetChangeList(String^ changeList, String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list)

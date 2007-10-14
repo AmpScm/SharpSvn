@@ -49,6 +49,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
@@ -138,6 +139,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
@@ -228,6 +230,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
 				PreprocessorDefinitions="WIN32;NDEBUG"
@@ -315,6 +318,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/MP"
 				Optimization="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
 				PreprocessorDefinitions="WIN32;NDEBUG"

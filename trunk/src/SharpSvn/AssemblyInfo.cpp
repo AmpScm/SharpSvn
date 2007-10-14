@@ -1,3 +1,8 @@
+// $Id$
+// Copyright (c) SharpSvn Project 2007 
+// The Sourcecode of this project is available under the Apache 2.0 license
+// Please read the SharpSvnLicense.txt file for more details
+
 #include "stdafx.h"
 
 #pragma warning(disable: 4635)
@@ -45,7 +50,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("QQn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright © QQn Project 2007")];
+[assembly:AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

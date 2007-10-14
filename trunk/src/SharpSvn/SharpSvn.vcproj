@@ -33,7 +33,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
@@ -122,7 +122,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
@@ -213,7 +213,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>
@@ -299,7 +299,7 @@
 			<Tool
 				Name="VCCustomBuildTool"
 				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
 				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
 			/>

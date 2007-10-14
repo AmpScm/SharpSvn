@@ -1,3 +1,8 @@
+// $Id$
+// Copyright (c) SharpSvn Project 2007 
+// The Sourcecode of this project is available under the Apache 2.0 license
+// Please read the SharpSvnLicense.txt file for more details
+
 #include "stdafx.h"
 #include "SvnAll.h"
 
@@ -12,7 +17,7 @@ bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
 	else if(!blameHandler)
 		throw gcnew ArgumentNullException("blameHandler");
 
-	return(target, gcnew SvnBlameArgs(), blameHandler);
+	return Blame(target, gcnew SvnBlameArgs(), blameHandler);
 }
 
 static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author, 
@@ -93,7 +98,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	}
 }
 
-void SvnClient::GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list)
+bool SvnClient::GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -102,7 +107,7 @@ void SvnClient::GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% li
 
 	try
 	{
-		Blame(target, gcnew SvnBlameArgs(), results->Handler);
+		return Blame(target, gcnew SvnBlameArgs(), results->Handler);
 	}
 	finally
 	{
