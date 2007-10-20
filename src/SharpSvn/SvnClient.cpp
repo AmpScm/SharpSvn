@@ -108,7 +108,7 @@ struct SvnClientCallBacks
 	static void __cdecl svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
 	static void __cdecl svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 
-	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t *result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
+	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
 };
 
 void SvnClient::Initialize()
@@ -343,9 +343,11 @@ void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off
 	}
 }
 
-svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_result_t *result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool)
+svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+
+	*result = svn_wc_create_conflict_result(svn_wc_conflict_choose_postpone, NULL, pool);
 
 	AprPool tmpPool(pool, false);
 
@@ -358,8 +360,13 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 		if(ea->Cancel)
 			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 
-		if(ea->Result != SvnConflictResult::Conflicted)
-			*result = (svn_wc_conflict_result_t)ea->Result;
+		if(ea->Choice != SvnConflictChoice::Postpone)
+		{
+			(*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
+
+			if(ea->Choice == SvnConflictChoice::Merged)
+				(*result)->merged_file = tmpPool.AllocPath(ea->MergedFile);
+		}
 
 		return nullptr;
 	}

@@ -42,24 +42,7 @@ namespace SharpSvn {
 		/// default update behavior.
 		/// </summary>
 		Infinity		= svn_depth_infinity,
-	};
-
-	public enum class SvnConflictResult
-	{
-		/// <summary>user did nothing; conflict remains</summary>
-		Conflicted		= svn_wc_conflict_result_conflicted,
-		/// <summary>user has resolved the conflict</summary>
-		Resolved		= svn_wc_conflict_result_resolved,
-
-		/// <summary>user chooses the base file</summary>
-		Base			= svn_wc_conflict_result_choose_base,
-		/// <summary>user chooses their file</summary>
-		Theirs			= svn_wc_conflict_result_choose_theirs,
-		/// <summary>user chooses own version of file</summary>
-		Mine			= svn_wc_conflict_result_choose_mine,
-		/// <summary>user chooses the merged-file</summary>
-		Merged			= svn_wc_conflict_result_choose_merged,
-	};
+	};	
 
 	public enum class SvnRevisionType
 	{
@@ -296,6 +279,30 @@ namespace SharpSvn {
 		Unix = LineFeed
 	};
 
+	public enum class SvnConflictChoice
+	{
+		/// <summary>Don't resolve the conflict now.  Let subversion mark the path
+		/// 'conflicted', so user can run 'svn resolved' later</summary>
+		Postpone		= svn_wc_conflict_choose_postpone,
+
+		/// <summary>user chooses the base file</summary>
+		Base			= svn_wc_conflict_choose_base,
+		/// <summary>user chooses their file</summary>
+		Theirs			= svn_wc_conflict_choose_theirs,
+		/// <summary>user chooses own version of file</summary>
+		Mine			= svn_wc_conflict_choose_mine,
+		/// <summary>user chooses the merged-file</summary>
+		Merged			= svn_wc_conflict_choose_merged,
+	};
+
+	public enum class SvnConflictType
+	{
+		/// <summary>textual conflict (on a file)</summary>
+		Text			= svn_wc_conflict_kind_text,
+		/// <summary>property conflict (on a file or dir)</summary>
+		Property		= svn_wc_conflict_kind_property,
+	};
+
 	public enum class SvnConflictReason
 	{
 		None=0,
@@ -309,6 +316,16 @@ namespace SharpSvn {
 		Missing = svn_wc_conflict_reason_missing,
 		/// <summary>object is unversioned</summary>
 		Unversioned = svn_wc_conflict_reason_unversioned
+	};
+
+	public enum class SvnConflictAction
+	{
+		/// <summary>Attempting to change text or props</summary>
+		Edit = svn_wc_conflict_action_edit,
+		/// <summary>Attempting to add object</summary>
+		Add = svn_wc_conflict_action_add,
+		/// <summary>Attempting to delete object</summary>
+		Delete = svn_wc_conflict_action_delete   
 	};
 
 	public enum class SvnIgnoreSpacing

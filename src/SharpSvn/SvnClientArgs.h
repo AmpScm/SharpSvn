@@ -1133,19 +1133,19 @@ namespace SharpSvn {
 	public ref class SvnResolvedArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
-		SvnConflictResult _which;
+		SvnConflictChoice _choice;
 
 	public:
 		SvnResolvedArgs()
 		{
 			_depth = SvnDepth::Empty;
-			_which = SvnConflictResult::Conflicted;
+			_choice = SvnConflictChoice::Merged;
 		}
 
-		SvnResolvedArgs(SvnConflictResult which)
+		SvnResolvedArgs(SvnConflictChoice choice)
 		{
 			_depth = SvnDepth::Empty;
-			_which = which;
+			_choice = EnumVerifier::Verify(choice);
 		}
 
 		property SvnDepth Depth
@@ -1160,15 +1160,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnConflictResult Which
+		property SvnConflictChoice Choice
 		{
-			SvnConflictResult get()
+			SvnConflictChoice get()
 			{
-				return _which;
+				return _choice;
 			}
-			void set(SvnConflictResult value)
+			void set(SvnConflictChoice value)
 			{
-				_which = EnumVerifier::Verify(value);
+				_choice = EnumVerifier::Verify(value);
 			}
 		}
 	};

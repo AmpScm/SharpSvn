@@ -82,8 +82,11 @@ namespace SharpSvn {
 			void Destroy();
 
 		public:
+			/// <summary>Creates a childpool within the specified parent pool</summary>
 			AprPool(AprPool^ parentPool);
+			/// <summary>Creates a new root pool</summary>
 			AprPool();
+			/// <summary>Attaches to the specified pool</summary>
 			AprPool(apr_pool_t *attachHandle, bool destroyPool);
 
 			[System::Diagnostics::DebuggerStepThroughAttribute()]

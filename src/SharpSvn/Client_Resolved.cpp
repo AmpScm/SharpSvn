@@ -19,12 +19,14 @@ bool SvnClient::Resolved(String^ path)
 	return Resolved(path, gcnew SvnResolvedArgs());
 }
 
-bool SvnClient::Resolved(String^ path, SvnConflictResult which)
+bool SvnClient::Resolved(String^ path, SvnConflictChoice choice)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(SvnConflictChoice::Postpone == choice)
+		throw gcnew ArgumentException("Invalid choice: Postpone", "choice");
 
-	return Resolved(path, gcnew SvnResolvedArgs(which));
+	return Resolved(path, gcnew SvnResolvedArgs(choice));
 }
 
 bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
@@ -33,6 +35,8 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(SvnConflictChoice::Postpone == args->Choice)
+		throw gcnew ArgumentException("Invalid choice: Postpone", "args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
@@ -41,7 +45,7 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 	svn_error_t *r = svn_client_resolved2(
 		pool.AllocPath(path),
 		(svn_depth_t)args->Depth,
-		(svn_wc_conflict_result_t)args->Which,
+		(svn_wc_conflict_choice_t)args->Choice,
 		CtxHandle,
 		pool.Handle);
 
