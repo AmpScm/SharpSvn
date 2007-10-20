@@ -12,12 +12,12 @@ using namespace System::Collections::Generic;
 
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,System.Collections.Generic.IList`1<System.Uri>&):System.Boolean")];
 
-void SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources)
+bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeSources);
+	return GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeSources);
 }
 
 bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]IList<Uri^>^% mergeSources)

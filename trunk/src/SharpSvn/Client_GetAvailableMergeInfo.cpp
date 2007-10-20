@@ -12,7 +12,7 @@ using namespace System::Collections::Generic;
 
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetAvailableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetSuggestedMergeSourcesArgs,SharpSvn.SvnAvailableMergeInfo&):System.Boolean")];
 
-void SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo)
+bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -21,7 +21,7 @@ void SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]Sv
 	else if(!SvnBase::IsValidReposUri(sourceUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
 	
-	GetAvailableMergeInfo(target, sourceUri, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeInfo);
+	return GetAvailableMergeInfo(target, sourceUri, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeInfo);
 }
 
 bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo)

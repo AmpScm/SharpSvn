@@ -18,7 +18,7 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Unlock(System.String):System.Void")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Unlock(System.String):System.Boolean")];
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.Unlock(System.String,SharpSvn.SvnUnlockArgs):System.Boolean")];
 
 bool SvnClient::Unlock(String^ target)
