@@ -10,7 +10,6 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-
 bool SvnClient::Resolved(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
@@ -24,7 +23,7 @@ bool SvnClient::Resolved(String^ path, SvnConflictChoice choice)
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(SvnConflictChoice::Postpone == choice)
-		throw gcnew ArgumentException("Invalid choice: Postpone", "choice");
+		throw gcnew ArgumentOutOfRangeException("choice");
 
 	return Resolved(path, gcnew SvnResolvedArgs(choice));
 }
@@ -35,8 +34,6 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else if(SvnConflictChoice::Postpone == args->Choice)
-		throw gcnew ArgumentException("Invalid choice: Postpone", "args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);

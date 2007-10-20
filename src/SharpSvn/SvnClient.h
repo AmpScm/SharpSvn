@@ -820,7 +820,7 @@ namespace SharpSvn {
 		/// <overloads>Gets a list of Uri's which might be valid merge sources (<c>svn mergeinfo</c>)</overloads>
 		/// <summary>Gets a list of Uri's which might be valid merge sources</summary>
 		/// <remarks>The list contains copy-from locations and previous merge locations</remarks>
-		void GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources);
+		bool GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources);
 		/// <summary>Gets a list of Uri's which might be valid merge sources</summary>
 		/// <remarks>The list contains copy-from locations and previous merge locations</remarks>
 		bool GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]IList<Uri^>^% mergeSources);
@@ -828,14 +828,14 @@ namespace SharpSvn {
 	public:
 		/// <overloads>Gets the merges which are applied on the specified target (<c>svn mergeinfo</c>)</overloads>
 		/// <summary>Gets the merges which are applied on the specified target</summary>
-		void GetAppliedMergeInfo(SvnTarget ^target, [Out]SvnAppliedMergeInfo^% mergeInfo);
+		bool GetAppliedMergeInfo(SvnTarget ^target, [Out]SvnAppliedMergeInfo^% mergeInfo);
 		/// <summary>Gets the merges which are applied on the specified target</summary>
 		bool GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArgs^ args, [Out]SvnAppliedMergeInfo^% mergeInfo);
 
 	public:
 		/// <overloads>Gets a list of available merges which can be applied on the specified target (<c>svn mergeinfo</c>)</overloads>
 		/// <summary>Gets a list of merges which can be applied on target</summary>
-		void GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo);
+		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo);
 		/// <summary>Gets a list of merges which can be applied on target</summary>
 		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo);
 

@@ -296,15 +296,6 @@ namespace SharpSvn {
 			}
 		}
 
-	internal:
-		property bool MergedFileChanged
-		{
-			bool get()
-			{
-				return (nullptr != _mergeResult);
-			}
-		}
-
 	public:
 		virtual void Detach(bool keepProperties) override
 		{
