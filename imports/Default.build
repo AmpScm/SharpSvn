@@ -16,7 +16,7 @@
 	<property name="serfVersion" value="0.1.2" />
 	<property name="sqliteVersion" value="3.4.2" />
 	
-	<property name="nunitVersion" value="2.4.0" />
+	<property name="nunitVersion" value="2.4.3" />
 	
 	<property name="httpOrHttps" value="http" />
 
