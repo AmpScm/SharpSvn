@@ -1180,7 +1180,7 @@ namespace SharpSvn {
 	{
 		bool _makeParents;
 		bool _alwaysCopyBelow;
-		bool _withoutMergeHistory;
+		bool _withMergeHistory;
 
 	public:
 		SvnCopyArgs()
@@ -1212,15 +1212,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool WithoutMergeHistory
+		property bool WithMergeHistory
 		{
 			bool get()
 			{
-				return _withoutMergeHistory;
+				return _withMergeHistory;
 			}
 			void set(bool value)
 			{
-				_withoutMergeHistory = value;
+				_withMergeHistory = value;
 			}
 		}
 	};
@@ -1233,7 +1233,7 @@ namespace SharpSvn {
 		bool _force;
 		bool _moveAsChild;
 		bool _makeParents;
-		bool _withoutMergeHistory;
+		bool _withMergeHistory;
 	public:
 		SvnMoveArgs()
 		{
@@ -1275,15 +1275,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool WithoutMergeHistory
+		property bool WithMergeHistory
 		{
 			bool get()
 			{
-				return _withoutMergeHistory;
+				return _withMergeHistory;
 			}
 			void set(bool value)
 			{
-				_withoutMergeHistory = value;
+				_withMergeHistory = value;
 			}
 		}
 	};
