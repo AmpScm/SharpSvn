@@ -71,7 +71,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	{
 		svn_diff_file_options_t *options = svn_diff_file_options_create(pool.Handle);
 
-		options->ignore_space = (svn_diff_file_ignore_space_t)(svn_diff_file_ignore_space_none + (svn_diff_file_ignore_space_t)args->IgnoreSpacing);
+		options->ignore_space = (svn_diff_file_ignore_space_t)args->IgnoreSpacing;
 		options->ignore_eol_style = args->IgnoreLineEndings;
 
 		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);

@@ -254,18 +254,16 @@ namespace SharpSvn {
 
 	public enum class SvnDiffKind
 	{
-		None = 0,
-
-		/** An item with no text modifications */
+		/// <summary>An item with no text modifications</summary>
 		Normal = svn_client_diff_summarize_kind_normal,
 
-		/** An added item */
+		/// <summary>An added item</summary>
 		Added = svn_client_diff_summarize_kind_added,
 
-		/** An item with text modifications */
+		/// <summary>An item with text modifications</summary>
 		Modified = svn_client_diff_summarize_kind_modified,
 
-		/** A deleted item */
+		/// <summary>A deleted item</summary>
 		Deleted = svn_client_diff_summarize_kind_deleted
 	};
 
@@ -305,7 +303,6 @@ namespace SharpSvn {
 
 	public enum class SvnConflictReason
 	{
-		None=0,
 		/// <summary>local edits are already present</summary>
 		Edited	= svn_wc_conflict_reason_edited,
 		/// <summary>another object is in the way</summary>
@@ -331,10 +328,9 @@ namespace SharpSvn {
 	public enum class SvnIgnoreSpacing
 	{
 		// Default the none value to zero
-
-		None		= svn_diff_file_ignore_space_none   - svn_diff_file_ignore_space_none,
-		IgnoreSpace = svn_diff_file_ignore_space_change - svn_diff_file_ignore_space_none,
-		IgnoreAll	= svn_diff_file_ignore_space_all	- svn_diff_file_ignore_space_all
+		None		= svn_diff_file_ignore_space_none,
+		IgnoreSpace = svn_diff_file_ignore_space_change,
+		IgnoreAll	= svn_diff_file_ignore_space_all
 	};
 
 	ref class EnumVerifier
