@@ -52,9 +52,10 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else
-		switch(args->Revision->Type)
+	
+	switch(args->Revision->Type)
 	{
+		case SvnRevisionType::None: // Translated to head
 		case SvnRevisionType::Date:
 		case SvnRevisionType::Number:
 		case SvnRevisionType::Head:
@@ -72,7 +73,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 
 	//svn_opt_peg_Re
 	svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
-	svn_opt_revision_t coRev = args->Revision->ToSvnRevision();
+	svn_opt_revision_t coRev = args->Revision->ToSvnRevision(SvnRevision::Head);
 
 	svn_error_t* r = svn_client_checkout3(&version,
 		pool.AllocString(url->TargetName),

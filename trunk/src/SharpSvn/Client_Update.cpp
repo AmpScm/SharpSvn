@@ -131,7 +131,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
 	apr_array_header_t* revs = nullptr;
-	svn_opt_revision_t uRev = args->Revision->ToSvnRevision();
+	svn_opt_revision_t uRev = args->Revision->ToSvnRevision(SvnRevision::Head);
 
 	svn_error_t *r = svn_client_update3(revisions ? &revs : nullptr,
 		aprPaths->Handle,
