@@ -65,7 +65,7 @@ using namespace System::Security::Permissions;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.5.0.2")];
+[assembly:AssemblyVersionAttribute("1.5.0.3")];
 [assembly:NeutralResourcesLanguageAttribute("en")];
 
 [assembly:ComVisible(false)];
@@ -120,7 +120,7 @@ using namespace System::Security::Permissions;
 #  if (APU_HAVE_APR_ICONV != 0)
 #    pragma comment(lib, "apriconv.lib")
 #  endif
-#elif (APR_MAJOR_VERSION >= 1)
+#elif (APR_MAJOR_VERSION == 1)
 #pragma comment(lib, "apr-1.lib")
 #pragma comment(lib, "aprutil-1.lib")
 #  if (APU_HAVE_APR_ICONV != 0)
