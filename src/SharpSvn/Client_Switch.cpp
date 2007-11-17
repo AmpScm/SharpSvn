@@ -69,12 +69,14 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	AprPool pool(%_pool);
 
 	svn_revnum_t rev = 0;
-	svn_opt_revision_t toRev = target->Revision->ToSvnRevision();
+	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+	svn_opt_revision_t toRev = args->Revision->ToSvnRevision(SvnRevision::Head);
 
 	svn_error_t *r = svn_client_switch2(
 		&rev,
 		pool.AllocPath(path),
 		pool.AllocString(target->TargetName),
+		&pegRev,
 		&toRev,
 		(svn_depth_t)args->Depth,
 		args->IgnoreExternals,

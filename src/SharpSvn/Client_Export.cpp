@@ -80,7 +80,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 
 	svn_revnum_t resultRev = 0;
 	svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
-	svn_opt_revision_t rev = args->Revision->ToSvnRevision();
+	svn_opt_revision_t rev = args->Revision->ToSvnRevision(SvnRevision::Head);
 
 	svn_error_t* r = svn_client_export4(
 		&resultRev,

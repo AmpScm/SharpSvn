@@ -80,7 +80,7 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 
 		if(creator->pool)
 		{
-			char ptrBuffer[32];
+			char ptrBuffer[2*sizeof(void*) + 4]; // Should be enough for a ptr
 
 			SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
 
@@ -254,6 +254,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_REP_BEING_WRITTEN:
 		case SVN_ERR_FS_TXN_NAME_TOO_LONG:
 		case SVN_ERR_FS_SQLITE_ERROR:
+		case SVN_ERR_FS_NO_SUCH_NODE_ORIGIN:
 			return gcnew SvnFileSystemException(error);
 		case SVN_ERR_FS_PATH_ALREADY_LOCKED:
 		case SVN_ERR_FS_PATH_NOT_LOCKED:

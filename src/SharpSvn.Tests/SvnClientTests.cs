@@ -9,6 +9,7 @@ using System.Text;
 using System.IO;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests
 {

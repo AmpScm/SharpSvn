@@ -237,7 +237,7 @@ namespace SharpSvn {
 				if(value)
 					_revision = value;
 				else
-					_revision = SvnRevision::Head;
+					_revision = SvnRevision::None;
 			}
 		}
 
@@ -305,7 +305,7 @@ namespace SharpSvn {
 				if(value)
 					_revision = value;
 				else
-					_revision = SvnRevision::Head;
+					_revision = SvnRevision::None;
 			}
 		}
 
@@ -385,7 +385,7 @@ namespace SharpSvn {
 				if(value)
 					_revision = value;
 				else
-					_revision = SvnRevision::Head;
+					_revision = SvnRevision::None;
 			}
 		}
 
@@ -407,6 +407,7 @@ namespace SharpSvn {
 	public ref class SvnSwitchArgs : public SvnClientArgsWithConflict
 	{
 		SvnDepth _depth;
+		SvnRevision^ _revision;
 		bool _allowUnversionedObstructions;
 		bool _ignoreExternals;
 
@@ -414,6 +415,7 @@ namespace SharpSvn {
 		SvnSwitchArgs()
 		{
 			_depth = SvnDepth::Infinity;
+			_revision = SvnRevision::None;
 		}
 
 		property SvnDepth Depth
@@ -425,6 +427,21 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
 			}
 		}
 
@@ -760,7 +777,7 @@ namespace SharpSvn {
 				if(value)
 					_start = value;
 				else
-					_start = SvnRevision::Head;
+					_start = SvnRevision::None;
 			}
 		}
 
@@ -775,7 +792,7 @@ namespace SharpSvn {
 				if(value)
 					_end = value;
 				else
-					_end = SvnRevision::Zero;
+					_end = SvnRevision::None;
 			}
 		}
 
@@ -1668,6 +1685,7 @@ namespace SharpSvn {
 		bool _noDeleted;
 		bool _ignoreContentType;
 		String^ _headerEncoding;
+		String^ _relativeFrom;
 		IList<String^>^ _diffArguments;
 	public:
 		SvnDiffArgs()
@@ -1747,6 +1765,21 @@ namespace SharpSvn {
 					_diffArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
 				else
 					_diffArguments = nullptr;
+			}
+		}
+
+		property String^ RelativeToPath
+		{
+			String^ get()
+			{
+				return _relativeFrom;
+			}
+			void set(String^ value)
+			{
+				if(String::IsNullOrEmpty(value))
+					_relativeFrom = nullptr;
+				else
+					_relativeFrom = value;
 			}
 		}
 	};
