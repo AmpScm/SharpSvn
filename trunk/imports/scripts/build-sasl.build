@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+	<property name="saslDir" value="build/${platform}/cyrus-sasl-${saslVersion}" />	
+	<target name="build-sasl" depends="checkout,build-bdb,build-openssl">
+		<OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
+			<!--loadfile file="${saslDir}/include/prop.h" property="propText">
+				<filterchain>
+					<replacestring from='#  define LIBSASL_API  __declspec(dllexport)' to='#  define LIBSASL_API ' />
+					<replacestring from='#  define LIBSASL_API  __declspec(dllimport)' to='#  define LIBSASL_API ' />
+					<replacestring from='#  define LIBSASL_VAR  __declspec(dllexport)' to='#  define LIBSASL_VAR ' />
+					<replacestring from='#  define LIBSASL_VAR  __declspec(dllimport)' to='#  define LIBSASL_VAR ' />
+				</filterchain>
+			</loadfile>
+			<echo message="${propText}" file="${saslDir}/include/prop.h" /-->
+			<loadfile file="${saslDir}/win32/include/config.h" property="propText">
+				<filterchain>
+					<replacestring from='/* which mechs can we link staticly? */' to='#define STATIC_NTLM 1 /* Which mechs can we link staticly?  */ ' />
+					<replacestring from='#define STATIC_OTP 1' to='/* #undef STATIC_OTP */' />
+					<replacestring from='#define STATIC_SRP 1' to='/* #undef STATIC_SRP */' />
+					<replacestring from='#define STATIC_GSSAPIV2 1' to='/* #undef STATIC_GSSAPIV2 */' />
+				</filterchain>
+			</loadfile>
+			<echo message="${propText}" file="${saslDir}/win32/include/config.h" />
+			<loadfile file="${saslDir}/NTMakefile" property="propText">
+				<filterchain>
+					<replacestring 
+						from='SUBDIRS=lib plugins utils sample' 
+						to='SUBDIRS=plugins lib' />
+				</filterchain>
+			</loadfile>
+			<echo message="${propText}" file="${saslDir}/NTMakefile" />
+			<loadfile file="${saslDir}/lib/NTMakefile" property="propText">
+				<filterchain>
+					<replacestring 
+						from='CPPFLAGS = /D NEED_GETOPT' 
+						to='CPPFLAGS = /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
+					<replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
+					<replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
+					<replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) '/>
+				</filterchain>
+			</loadfile>
+			<echo message="${propText}" file="${saslDir}/lib/NTMakefile" />
+		</OnceBlock>
+		<OnceBlock file="build/sasl-${saslVersion}_${platform}.build">
+			<exec program="nmake.exe" workingdir="${saslDir}">
+				<arg line="/f NTMakefile" />
+				<arg value="TARGET_WIN_SYSTEM=50" /> <!-- Win 2000+ -->
+				<!-- BDB -->
+				<arg value="DB_LIB=${libDb}.lib" />
+				<arg value="DB_LIBPATH=${path::get-full-path('release\lib')}" if="${platform == 'win32'}"/>
+				<arg value="DB_LIBPATH=${path::get-full-path('release\lib-x64')}" if="${platform == 'x64'}"/>
+				<arg value="DB_INCLUDE=${path::get-full-path('release\include')}" />
+				<!-- OpenSSL -->
+				<arg value="OPENSSL_INCLUDE=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\inc32')}" />
+				<arg value="OPENSSL_LIBPATH=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\out32')}" />
+				<arg value="NTLM=1" />
+				<arg value="NTLM_STATIC=1" />
+			</exec>
+		</OnceBlock>
+	</target>
+</project>

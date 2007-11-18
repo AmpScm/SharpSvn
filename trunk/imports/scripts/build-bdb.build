@@ -8,6 +8,7 @@
 
 	<property name="dllPrefix" value="SharpSvn-" />
 	<property name="dbDllName" value="SharpSvn-DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
+	<property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
 	
 	<target name="prepare-bdb" depends="extract">
 		<OnceBlock file="build/db-${dbVersion}.prepared">
@@ -36,14 +37,8 @@
 					<loadfile file="${vcproj}" property="projtext">
 						<filterchain>
 							<replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-							<replacestring from='AMD64/libdb44.dll' to='AMD64/${dbDllName}-x64.dll' />
-							<replacestring from='AMD64/libdb45.dll' to='AMD64/${dbDllName}-x64.dll' />
-							<replacestring from='AMD64/libdb46.dll' to='AMD64/${dbDllName}-x64.dll' />
-							<replacestring from='AMD64/libdb47.dll' to='AMD64/${dbDllName}-x64.dll' />
-							<replacestring from='/libdb44.dll' to='/${dbDllName}-win32.dll' />
-							<replacestring from='/libdb45.dll' to='/${dbDllName}-win32.dll' />
-							<replacestring from='/libdb46.dll' to='/${dbDllName}-win32.dll' />
-							<replacestring from='/libdb47.dll' to='/${dbDllName}-win32.dll' />
+							<replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' />
+							<replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' />
 						</filterchain>
 					</loadfile>
 					<echo message="${projtext}" file="${vcproj}" />
