@@ -15,12 +15,14 @@
 	<property name="zlibVersion" value="1.2.3" />
 	<property name="serfVersion" value="0.1.2" />
 	<property name="sqliteVersion" value="3.5.2" />
-	<property name="saslVersion" value="2.1.22" />
-	
+	<property name="saslVersion" value="2.1.22" />	
 	<property name="nunitVersion" value="2.4.3" />
 	
 	<property name="httpOrHttps" value="http" />
 
+  <!-- Prefix to use for dependency DLL's -->
+  <property name="dllPrefix" value="SharpSvn-" />
+  
 	<property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 8\VC" />
 	
 	<include buildfile="scripts/default.build" />
@@ -35,7 +37,7 @@
 			
 			Use nant /D:platform=x64 to build/clean the x64 binaries (platform=win32 by default)
 			
-			The following targets try to start nant within the specified context
+			The following targets try to start nant within the specified context using vcvars.cmd
 			- x86
 			- x64
 		</echo>

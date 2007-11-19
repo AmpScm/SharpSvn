@@ -8,15 +8,6 @@
 	
 	<target name="build-sasl" depends="checkout,build-bdb,build-openssl">
 		<OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
-			<!--loadfile file="${saslDir}/include/prop.h" property="propText">
-				<filterchain>
-					<replacestring from='#  define LIBSASL_API  __declspec(dllexport)' to='#  define LIBSASL_API ' />
-					<replacestring from='#  define LIBSASL_API  __declspec(dllimport)' to='#  define LIBSASL_API ' />
-					<replacestring from='#  define LIBSASL_VAR  __declspec(dllexport)' to='#  define LIBSASL_VAR ' />
-					<replacestring from='#  define LIBSASL_VAR  __declspec(dllimport)' to='#  define LIBSASL_VAR ' />
-				</filterchain>
-			</loadfile>
-			<echo message="${propText}" file="${saslDir}/include/prop.h" /-->
 			<loadfile file="${saslDir}/win32/include/config.h" property="propText">
 				<filterchain>
 					<replacestring from='/* which mechs can we link staticly? */' to='#define STATIC_NTLM 1 /* Which mechs can we link staticly?  */ ' />
