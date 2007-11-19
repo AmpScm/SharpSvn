@@ -35,6 +35,7 @@
 							<!-- Only compile library, the testfiles don't like the small library -->
 							<replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
 							<replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
+							<replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' />
 						</filterchain>
 					</loadfile>
 					<echo file="${mak}" message="${serfmak}" />

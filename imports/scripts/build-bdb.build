@@ -6,8 +6,7 @@
 	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &lt; '4.5'}" />
 	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &gt;= '4.5'}" />
 
-	<property name="dllPrefix" value="SharpSvn-" />
-	<property name="dbDllName" value="SharpSvn-DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
+	<property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
 	<property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
 	<property name="fullDbDllName" value="${dbDllName}-${platform}.dll" />
 	
