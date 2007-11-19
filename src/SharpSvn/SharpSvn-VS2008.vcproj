@@ -71,15 +71,15 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="0"
@@ -161,15 +161,15 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="1"
@@ -251,15 +251,15 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				DataExecutionPrevention="2"
 				TargetMachine="1"
@@ -339,15 +339,15 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				DataExecutionPrevention="2"
 				TargetMachine="17"

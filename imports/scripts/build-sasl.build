@@ -1,6 +1,11 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 	<property name="saslDir" value="build/${platform}/cyrus-sasl-${saslVersion}" />	
+	
+	<regex pattern="^(?'SASL_MAJOR_VERSION'\d+)\.(?'SASL_MINOR_VERSION'\d+)\.(?'SASL_MICRO_VERSION'\d+)" input="${saslVersion}" />
+	
+	<property name="saslDllName" value="${dllPrefix}Sasl${SASL_MAJOR_VERSION}${SASL_MINOR_VERSION}-${SASL_MICRO_VERSION}-${platform}.dll" />
+	
 	<target name="build-sasl" depends="checkout,build-bdb,build-openssl">
 		<OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
 			<!--loadfile file="${saslDir}/include/prop.h" property="propText">
@@ -18,6 +23,7 @@
 					<replacestring from='#define STATIC_OTP 1' to='/* #undef STATIC_OTP */' />
 					<replacestring from='#define STATIC_SRP 1' to='/* #undef STATIC_SRP */' />
 					<replacestring from='#define STATIC_GSSAPIV2 1' to='/* #undef STATIC_GSSAPIV2 */' />
+					<replacestring from='typedef int ssize_t;' to='typedef INT_PTR ssize_t;' />
 				</filterchain>
 			</loadfile>
 			<echo message="${propText}" file="${saslDir}/win32/include/config.h" />
@@ -29,6 +35,19 @@
 				</filterchain>
 			</loadfile>
 			<echo message="${propText}" file="${saslDir}/NTMakefile" />
+			
+			<property name="linkAddendum" value="" />
+			<property name="linkAddendum" value="/MACHINE:x64" if="${platform=='x64'}" />
+			
+			<loadfile file="${saslDir}/plugins/NTMakefile" property="propText">
+        <filterchain>
+          <replacestring from='CPPFLAGS = /D NEED_GETOPT' to='CPPFLAGS = /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT' />
+					<replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
+					<replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64" /D "_WIN64"' if="${platform=='x64'}" />
+        </filterchain>
+			</loadfile>
+			<echo message="${propText}" file="${saslDir}/plugins/NTMakefile" />
+			
 			<loadfile file="${saslDir}/lib/NTMakefile" property="propText">
 				<filterchain>
 					<replacestring 
@@ -36,7 +55,10 @@
 						to='CPPFLAGS = /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
 					<replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
 					<replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
-					<replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) '/>
+					<replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
+					<replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} '/>
+					<replacestring from='libsasl.dll' to='${saslDllName}' />
+					<replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64" /D "_WIN64"' if="${platform=='x64'}" />
 				</filterchain>
 			</loadfile>
 			<echo message="${propText}" file="${saslDir}/lib/NTMakefile" />
@@ -57,5 +79,39 @@
 				<arg value="NTLM_STATIC=1" />
 			</exec>
 		</OnceBlock>
+		<copy todir="build/${platform}/lib/lib">
+      <fileset basedir="${saslDir}/lib">
+        <include name="libsasl.lib" />
+        <include name="libsasl.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="build/${platform}/lib/include">
+      <fileset basedir="${saslDir}/include">
+        <include name="**/*.h" />
+      </fileset>
+    </copy>
+    <copy todir="release/lib">
+      <fileset basedir="build/win32/cyrus-sasl-${saslVersion}/lib">
+        <include name="libsasl.lib" />
+        <include name="libsasl.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/lib-x64">
+      <fileset basedir="build/x64/cyrus-sasl-${saslVersion}/lib">
+        <include name="${dllPrefix}*.dll" />
+        <include name="libsasl.lib" />
+        <include name="libsasl.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/bin">
+      <fileset basedir="${saslDir}/lib">
+        <include name="${saslDllName}" />
+      </fileset>
+    </copy>
+    <copy todir="release/include/sasl">
+      <fileset basedir="${saslDir}/include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
 	</target>
 </project>
