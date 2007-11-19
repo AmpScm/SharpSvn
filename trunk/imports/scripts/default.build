@@ -154,7 +154,7 @@ svn st				<include name="*.h" />
 		</copy>
 	</target>
 
-	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, svn-prepare">
+	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, build-sasl, svn-prepare">
 		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
 			<!-- Patches for x64 builds; hopefully included in svn 1.5 -->
 			<copy todir="${svnBase}/build/generator/" overwrite="true">
@@ -195,6 +195,7 @@ svn st				<include name="*.h" />
 				<arg value="--with-neon=../neon" />
 				<arg value="--with-serf=../serf" />
 				<arg value="--with-sqlite=../lib" />
+				<arg value="--with-sasl=../lib" />
 				<arg value="--disable-shared" />
 			</exec>
 			<!-- The ZLib build has already completed -->
@@ -224,7 +225,7 @@ svn st				<include name="*.h" />
 				<do>
 					<loadfile file="${vcproj}" property="projtext">
 						<filterchain>
-							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6=1;WIN32' />
+							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32' />
 							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib sqlite3.lib' />
 							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
 							<replacestring from='Optimization="2"' to='Optimization="1"' />
