@@ -225,7 +225,7 @@ svn st				<include name="*.h" />
 				<do>
 					<loadfile file="${vcproj}" property="projtext">
 						<filterchain>
-							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32' />
+							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
 							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib sqlite3.lib' />
 							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
 							<replacestring from='Optimization="2"' to='Optimization="1"' />
@@ -238,6 +238,21 @@ svn st				<include name="*.h" />
 					<echo message="${projtext}" file="${vcproj}" />
 				</do>
 			</foreach>
+			<foreach item="File" property="sourceFile">
+        <in>
+          <items basedir="${svnBase}/subversion">
+            <include name="libsvn_subr/win32_crashrpt.c" />
+          </items>
+        </in>
+        <do>
+          <loadfile file="${sourceFile}" property="projtext">
+						<filterchain>
+              <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${sourceFile}" />
+        </do>
+      </foreach>
 		</OnceBlock>
 	</target>
 
