@@ -42,6 +42,7 @@
 					<define name="WIN64" if="${platform == 'x64'}" />
 					<define name="NDEBUG" if="${Configuration == 'release'}"/>
 					<define name="_DEBUG" if="${Configuration != 'release'}"/>
+					<define name="SQLITE_THREADSAFE" />
 				</defines>
 			</cl>
 			<property name="machineoption" value="/MACHINE:X86" if="${platform == 'win32'}"  />
