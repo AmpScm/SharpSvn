@@ -75,7 +75,7 @@ namespace SharpSvn
 			}
 			Directory.CreateDirectory("f:\\svn-test-location");
 
-			long ver;
+			SvnUpdateResult ver;
             _client.CheckOut(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"), "f:\\svn-test-location\\gc", out ver);
 			_client.Update("f:\\svn-test-location\\gc");
 

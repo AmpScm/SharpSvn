@@ -616,6 +616,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnUpdateResult.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnUriTarget.h"
 					>
 				</File>

@@ -19,9 +19,8 @@ class Demo
 			client.Update("c:\\sharpsvn");
 
 			// Update the specified working copy path to the head revision and save the specific revision
-			long revision;
-			client.Update("c:\\sharpsvn", out revision);
-
+			SvnUpdateResult result;
+			client.Update("c:\\sharpsvn", out result);
 
 			client.Move("c:\\sharpsvn\\from.txt", "c:\\sharpsvn\\new.txt");
 

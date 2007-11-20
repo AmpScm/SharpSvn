@@ -68,6 +68,8 @@ namespace SharpSvn {
 	ref class SvnDeleteRepositoryArgs;
 	ref class SvnRecoverRepositoryArgs;
 
+	ref class SvnUpdateResult;
+
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::ICollection;
@@ -219,7 +221,7 @@ namespace SharpSvn {
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision);
+		bool CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult ^% updateInfo);
 
 		/// <summary>Performs a checkout of <paramref name="url" /> to <paramref name="path" /> to the specified param</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
@@ -230,7 +232,7 @@ namespace SharpSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] __int64% revision);
+		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
 #pragma endregion
 
 	public:
@@ -244,7 +246,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(String^ path, [Out] __int64% revision);
+		bool Update(String^ path, [Out] SvnUpdateResult ^% updateInfo);
 		/// <summary>Recursively updates the specified path</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -252,7 +254,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revision);
+		bool Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
 
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
@@ -261,7 +263,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions);
+		bool Update(ICollection<String^>^ paths, [Out] SvnUpdateResult ^% updateInfo);
 		/// <summary>Updates the specified paths to the specified revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -271,7 +273,7 @@ namespace SharpSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions);
+		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
 
 #pragma endregion
 
@@ -284,13 +286,13 @@ namespace SharpSvn {
 		bool Export(SvnTarget^ from, String^ toPath);
 		/// <summary>Recursively exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		bool Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision);
+		bool Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult ^% updateInfo);
 		/// <summary>Exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
 		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args);
 		/// <summary>Exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] __int64% revision);
+		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
 #pragma endregion
 
 	public:
@@ -305,7 +307,7 @@ namespace SharpSvn {
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision);
+		bool Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult ^% updateInfo);
 
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
@@ -315,7 +317,7 @@ namespace SharpSvn {
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] __int64% revision);
+		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
 #pragma endregion
 
 		/////////////////////////////////////////
