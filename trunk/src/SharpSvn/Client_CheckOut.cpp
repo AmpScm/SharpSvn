@@ -16,18 +16,19 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	__int64 revision;
-	return CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
+	SvnUpdateResult^ result;
+
+	return CheckOut(url, path, gcnew SvnCheckOutArgs(), result);
 }
 
-bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] __int64% revision)
+bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult ^% updateInfo)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	return CheckOut(url, path, gcnew SvnCheckOutArgs(), revision);
+	return CheckOut(url, path, gcnew SvnCheckOutArgs(), updateInfo);
 }
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
@@ -39,12 +40,12 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	__int64 revision;
+	SvnUpdateResult^ result;
 
-	return CheckOut(url, path, args, revision);
+	return CheckOut(url, path, args, result);
 }
 
-bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] __int64% revision)
+bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] SvnUpdateResult ^% updateInfo)
 {
 	if(!url)
 		throw gcnew ArgumentNullException("url");
@@ -86,7 +87,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		CtxHandle,
 		pool.Handle);
 
-	revision = version;
+	updateInfo = gcnew SvnUpdateResult(version);
 
 	return args->HandleResult(this, r);
 }

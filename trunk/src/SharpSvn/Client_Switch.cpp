@@ -17,19 +17,19 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target)
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	__int64 revision;
+	SvnUpdateResult^ result;
 
-	return Switch(path, target, gcnew SvnSwitchArgs(), revision);
+	return Switch(path, target, gcnew SvnSwitchArgs(), result);
 }
 
-bool SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] __int64% revision)
+bool SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult^% result)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	return Switch(path, target, gcnew SvnSwitchArgs(), revision);
+	return Switch(path, target, gcnew SvnSwitchArgs(), result);
 }
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
@@ -41,12 +41,12 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	__int64 revision;
+	SvnUpdateResult^ result;
 
-	return Switch(path, target, args, revision);
+	return Switch(path, target, args, result);
 }
 
-bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] __int64% revision)
+bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] SvnUpdateResult^% result)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -84,7 +84,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		CtxHandle,
 		pool.Handle);
 
-	revision = rev;
+	result = gcnew SvnUpdateResult(rev);
 
 	return args->HandleResult(this, r);
 }

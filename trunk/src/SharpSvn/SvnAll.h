@@ -20,3 +20,4 @@
 #include "SvnException.h"
 
 #include "SvnAuthentication.h"
+#include "SvnUpdateResult.h"

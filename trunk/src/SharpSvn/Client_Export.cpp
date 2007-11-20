@@ -35,19 +35,19 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
 
-	__int64 revision;
+	SvnUpdateResult^ result;
 
-	return Export(from, toPath, gcnew SvnExportArgs(), revision);
+	return Export(from, toPath, gcnew SvnExportArgs(), result);
 }
 
-bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] __int64% revision)
+bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% result)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
 
-	return Export(from, toPath, gcnew SvnExportArgs(), revision);
+	return Export(from, toPath, gcnew SvnExportArgs(), result);
 }
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
@@ -59,11 +59,12 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	__int64 revision;
-	return Export(from, toPath, args, revision);
+	SvnUpdateResult^ result;
+
+	return Export(from, toPath, args, result);
 }
 
-bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] __int64% revision)
+bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] SvnUpdateResult^% result)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -76,7 +77,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	revision = -1;
+	result = nullptr;
 
 	svn_revnum_t resultRev = 0;
 	svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
@@ -97,7 +98,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 
 	if(args->HandleResult(this, r))
 	{
-		revision = resultRev;
+		result = gcnew SvnUpdateResult(resultRev);
 		return true;
 	}
 	else

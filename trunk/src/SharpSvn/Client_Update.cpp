@@ -15,23 +15,16 @@ bool SvnClient::Update(String^ path)
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	IList<__int64>^ revisions;
-	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), revisions);
+	SvnUpdateResult^ result;
+	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), result);
 }
 
-bool SvnClient::Update(String^ path, [Out] __int64% revision)
+bool SvnClient::Update(String^ path, [Out] SvnUpdateResult^% updateResult)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	IList<__int64>^ revisions;
-	revision = -1;
-
-	bool ok = Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), revisions);
-
-	revision = (ok && revisions && revisions->Count > 0) ? revisions[0] : -1;
-
-	return ok;
+	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), updateResult);
 }
 
 
@@ -42,29 +35,19 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	IList<__int64>^ revisions;
+	SvnUpdateResult^ result;
 
-	return Update(NewSingleItemCollection(path), args, revisions);
+	return Update(NewSingleItemCollection(path), args, result);
 }
 
-bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] __int64% revision)
+bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% updateResult)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	revision = -1;
-
-	IList<__int64>^ revisions;
-	try
-	{
-		return Update(NewSingleItemCollection(path), args, revisions);
-	}
-	finally
-	{
-		revision = revisions ? revisions[0] : -1;
-	}
+	return Update(NewSingleItemCollection(path), args, updateResult);
 }
 
 bool SvnClient::Update(ICollection<String^>^ paths)
@@ -72,17 +55,17 @@ bool SvnClient::Update(ICollection<String^>^ paths)
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	IList<__int64>^ revisions;
+	SvnUpdateResult^ result;
 
-	return Update(paths, gcnew SvnUpdateArgs(), revisions);
+	return Update(paths, gcnew SvnUpdateArgs(), result);
 }
 
-bool SvnClient::Update(ICollection<String^>^ paths, [Out] IList<__int64>^% revisions)
+bool SvnClient::Update(ICollection<String^>^ paths, [Out] SvnUpdateResult^% updateResult)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	return Update(paths, gcnew SvnUpdateArgs(), revisions);
+	return Update(paths, gcnew SvnUpdateArgs(), updateResult);
 }
 
 
@@ -93,12 +76,12 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	IList<__int64>^ revisions;
+	SvnUpdateResult^ result;
 
-	return Update(paths, args, revisions);
+	return Update(paths, args, result);
 }
 
-bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] IList<__int64>^% revisions)
+bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% updateResult)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -116,7 +99,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 			throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific, "args");
 	}
 
-	revisions = nullptr;
+	updateResult = nullptr;
 
 	for each(String^ s in paths)
 	{
@@ -133,7 +116,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 	apr_array_header_t* revs = nullptr;
 	svn_opt_revision_t uRev = args->Revision->ToSvnRevision(SvnRevision::Head);
 
-	svn_error_t *r = svn_client_update3(revisions ? &revs : nullptr,
+	svn_error_t *r = svn_client_update3(&revs,
 		aprPaths->Handle,
 		&uRev,
 		(svn_depth_t)args->Depth,
@@ -142,11 +125,11 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] I
 		CtxHandle,
 		pool.Handle);
 
-	if(args->HandleResult(this, r) && revisions)
+	if(args->HandleResult(this, r))
 	{
 		AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 
-		revisions = safe_cast<IList<__int64>^>(aprRevs->ToArray());
+		updateResult = gcnew SvnUpdateResult(paths, safe_cast<IList<__int64>^>(aprRevs->ToArray()), (paths->Count >= 1) ? aprRevs[0] : -1);
 
 		return true;
 	}
