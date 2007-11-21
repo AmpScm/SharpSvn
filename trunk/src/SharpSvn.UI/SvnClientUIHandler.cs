@@ -155,6 +155,8 @@ namespace SharpSvn.UI
             using (SslServerCertificateTrustDialog dlg = new SslServerCertificateTrustDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
+                if (Image != null)
+                    dlg.SetImage(Image);
 
                 dlg.hostname.Text = e.CommonName;
                 dlg.fingerprint.Text = e.FingerPrint;
