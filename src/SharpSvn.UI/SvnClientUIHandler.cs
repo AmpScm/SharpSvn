@@ -9,6 +9,9 @@ using System.Text;
 using System.Windows.Forms;
 using SharpSvn.Security;
 using SharpSvn.UI.Authentication;
+using System.Drawing;
+using System.Runtime.InteropServices;
+using SharpSvn.UI.Properties;
 
 namespace SharpSvn.UI
 {
@@ -29,6 +32,13 @@ namespace SharpSvn.UI
 			_window = window ?? new ZeroWindowHandle();
 		}
 
+        Image _bitmap;
+        public Image Image
+        {
+            get { return _bitmap; }
+            set { _bitmap = value; }
+        }
+
 		internal void Bind(SvnClient svnClient)
 		{
 			svnClient.Authenticator.UsernameHandlers += new EventHandler<SharpSvn.Security.SvnUsernameEventArgs>(DialogUsernameHandler);
@@ -40,59 +50,141 @@ namespace SharpSvn.UI
 
 		void DialogUsernameHandler(Object sender, SvnUsernameEventArgs e)
 		{
-			String username;
-			bool save;
+            using (UsernameDialog dlg = new UsernameDialog())
+            {
+                dlg.Text = Strings.ConnectToSubversion;
+                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsername);
+                dlg.descriptionBox.Visible = true;
+                dlg.rememberCheck.Enabled = e.MaySave;
 
-			if (SharpSvnGui.AskUsername(_window.Handle, "Connect to Subversion", e.Realm, e.MaySave, out username, out save))
-			{
-				e.Username = username;
-				e.Save = save && e.MaySave;
-			}
-			else
-				e.Break = true;
+                if (Image != null)
+                    dlg.SetImage(Image);
+
+                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+
+                if (r != DialogResult.OK)
+                {
+                    e.Cancel = e.Break = true;
+                    return;
+                }
+
+                e.Username = dlg.usernameBox.Text;
+                e.Save = e.MaySave && dlg.rememberCheck.Checked;
+
+            }
 		}
 
 		void DialogUsernamePasswordHandler(Object sender, SvnUsernamePasswordEventArgs e)
 		{
-			String username;
-			String password;
-			bool save;
+            string description = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsernameAndPassword);
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(5, 1))
+            {
+                // If Windows XP/Windows 2003 or higher: Use the windows password dialog
+                GetUsernamePasswordWindows(e, description);
 
-			if (SharpSvnGui.AskUsernamePassword(_window.Handle, "Connect to Subversion", e.Realm, e.InitialUsername, e.MaySave, out username, out password, out save))
-			{
-				e.Username = username;
-				e.Password = password;
-				e.Save = save && e.MaySave;
-			}
-			else
-				e.Break = true;
+                return;
+            }
+
+            using (UsernamePasswordDialog dlg = new UsernamePasswordDialog())
+            {
+                dlg.Text = Strings.ConnectToSubversion;
+                dlg.descriptionBox.Text = description;
+                dlg.descriptionBox.Visible = true;
+                dlg.rememberCheck.Enabled = e.MaySave;
+                if(Image != null)
+                    dlg.SetImage(Image);
+
+                if (!string.IsNullOrEmpty(e.InitialUsername))
+                {
+                    dlg.usernameBox.Text = e.InitialUsername;
+                    dlg.passwordBox.Select();
+                }
+
+                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+
+                if (r != DialogResult.OK)
+                {
+                    e.Save = dlg.rememberCheck.Checked;
+                    e.Username = e.Password = null;
+                    e.Cancel = e.Break = true;
+                    return;
+                }
+
+                e.Username = dlg.usernameBox.Text;
+                e.Password = dlg.passwordBox.Text;
+                e.Save = e.MaySave && dlg.rememberCheck.Checked;
+            }
 		}
+
+        private void GetUsernamePasswordWindows(SvnUsernamePasswordEventArgs e, string description)
+        {            
+            NativeMethods.CREDUI_INFO info = new NativeMethods.CREDUI_INFO();
+            info.pszCaptionText = Strings.ConnectToSubversion;
+            info.pszMessageText = description;
+            info.hwndParent = (_window != null) ? _window.Handle : IntPtr.Zero;
+            info.cbSize = Marshal.SizeOf(typeof(NativeMethods.CREDUI_INFO));
+
+            StringBuilder sbUsername = new StringBuilder(e.InitialUsername ?? "", 1024);
+            StringBuilder sbPassword = new StringBuilder("", 1024);
+
+            bool dlgSave = false;
+
+            int flags = (int)NativeMethods.CREDUI_FLAGS.GENERIC_CREDENTIALS | (int)NativeMethods.CREDUI_FLAGS.ALWAYS_SHOW_UI | (int)NativeMethods.CREDUI_FLAGS.DO_NOT_PERSIST;
+            if (e.MaySave)
+                flags |= (int)NativeMethods.CREDUI_FLAGS.SHOW_SAVE_CHECK_BOX;
+
+            switch (NativeMethods.CredUIPromptForCredentials(ref info, e.Realm, IntPtr.Zero, 0, sbUsername, 1024, sbPassword, 1024, ref dlgSave,
+                (NativeMethods.CREDUI_FLAGS)flags))
+            {
+                case NativeMethods.CredUIReturnCodes.NO_ERROR:
+                    e.Username = sbUsername.ToString();
+                    e.Password = sbPassword.ToString();
+                    e.Save = e.MaySave && dlgSave;
+                    break;
+                case NativeMethods.CredUIReturnCodes.ERROR_CANCELLED:
+                    e.Username = null;
+                    e.Password = null;
+                    e.Save = false;
+                    e.Cancel = e.Break = true;
+                    break;
+            }
+        }
 
 		void DialogSslServerTrustHandler(Object sender, SvnSslServerTrustEventArgs e)
 		{
-			bool save;
+            using (SslServerCertificateTrustDialog dlg = new SslServerCertificateTrustDialog())
+            {
+                dlg.Text = Strings.ConnectToSubversion;
 
-			ServerCertificateInfo sci = new ServerCertificateInfo();
+                dlg.hostname.Text = e.CommonName;
+                dlg.fingerprint.Text = e.FingerPrint;
+                dlg.validFrom.Text = e.ValidFrom;
+                dlg.validTo.Text = e.ValidUntil;
+                dlg.issuer.Text = e.Issuer;
+                dlg.certificateBox.Text = e.CertificateValue;
 
-			sci.InvalidCommonName = (0 != (int)(e.Failures & SvnCertificateTrustFailures.CommonNameMismatch));
-			sci.NoTrustedIssuer = 0 != (int)(e.Failures & SvnCertificateTrustFailures.UnknownCertificateAuthority);
-			sci.TimeError = 0 != (int)(e.Failures & (SvnCertificateTrustFailures.CertificateExpired | SvnCertificateTrustFailures.CertificateNotValidYet));
+                Bitmap Ok = Resources.Ok.ToBitmap();
+                Bitmap Error = Resources.Error.ToBitmap();
 
-			sci.Hostname = e.CommonName;
-			sci.Fingerprint = e.FingerPrint;
-			sci.Certificate = e.CertificateValue;
-			sci.Issuer = e.Issuer;
-			sci.ValidFrom = e.ValidFrom;
-			sci.ValidTo = e.ValidUntil;
+                bool invalidCommonName = (0 != (int)(e.Failures & SvnCertificateTrustFailures.CommonNameMismatch));
+                bool noTrustedIssuer = 0 != (int)(e.Failures & SvnCertificateTrustFailures.UnknownCertificateAuthority);
+                bool timeError = 0 != (int)(e.Failures & (SvnCertificateTrustFailures.CertificateExpired | SvnCertificateTrustFailures.CertificateNotValidYet));
+                
+                dlg.caUnknownImage.Image = noTrustedIssuer ? Error : Ok;
+                dlg.invalidDateImage.Image = timeError ? Error : Ok;
+                dlg.serverMismatchImage.Image = invalidCommonName ? Error : Ok;
 
-			bool accept = false;
-			if (SharpSvnGui.AskServerCertificateTrust(_window.Handle, "Connect to Subversion", e.Realm, sci, e.MaySave, out accept, out save))
-			{
-				e.AcceptedFailures = accept ? e.Failures : SvnCertificateTrustFailures.None;
-				e.Save = save && e.MaySave;
-			}
-			else
-				e.Break = true;
+                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+
+                if (r == DialogResult.OK)
+                {
+                    e.Save = dlg.rememberCheck.Checked && e.MaySave;
+                    e.AcceptedFailures = e.Failures;
+                    return;
+                }
+                else
+                    e.Cancel = e.Break = true;
+            }
 		}
 
 		void DialogSslClientCertificateHandler(Object sender, SvnSslClientCertificateEventArgs e)
@@ -106,21 +198,29 @@ namespace SharpSvn.UI
 				e.Save = save && e.MaySave;
 			}
 			else
-				e.Break = true;
+                e.Cancel = e.Break = true;
 		}
 
 		void DialogSslClientCertificatePasswordHandler(Object sender, SvnSslClientCertificatePasswordEventArgs e)
 		{
-			String password;
-			bool save;
+            using (SslClientCertificatePassPhraseDialog dlg = new SslClientCertificatePassPhraseDialog())
+            {
+                dlg.Text = Strings.ConnectToSubversion;
+                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.ThePassPhraseForTheClientCertificateForXIsRequired);
+                dlg.descriptionBox.Visible = true;
+                dlg.rememberCheck.Enabled = e.MaySave;
 
-			if (SharpSvnGui.AskClientCertificatePassPhrase(_window.Handle, "Connect to Subversion", e.Realm, e.MaySave, out password, out save))
-			{
-				e.Password = password;
-				e.Save = save && e.MaySave;
-			}
-			else
-				e.Break = true;
+                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+
+                if (r != DialogResult.OK)
+                {
+                    e.Cancel = e.Break = true;
+                    return;
+                }
+
+                e.Password = dlg.passPhraseBox.Text;
+                e.Save = e.MaySave && dlg.rememberCheck.Checked;
+            }
 		}
 	}
 }

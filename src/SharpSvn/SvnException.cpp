@@ -276,7 +276,6 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_REPOS_POST_UNLOCK_HOOK_FAILED:
 			return gcnew SvnRepositoryException(error);
 		case SVN_ERR_RA_ILLEGAL_URL:
-		case SVN_ERR_RA_NOT_AUTHORIZED:
 		case SVN_ERR_RA_UNKNOWN_AUTH:
 		case SVN_ERR_RA_NOT_IMPLEMENTED:
 		case SVN_ERR_RA_OUT_OF_DATE:
@@ -286,6 +285,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_UNKNOWN_CAPABILITY:
 			return gcnew SvnRepositoryIOException(error);
 
+		case SVN_ERR_RA_NOT_AUTHORIZED:
+			return gcnew SvnAuthorizationException(error);
 
 		case SVN_ERR_RA_DAV_SOCK_INIT:
 		case SVN_ERR_RA_DAV_CREATING_REQUEST:

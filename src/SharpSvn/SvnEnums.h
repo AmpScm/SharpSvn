@@ -13,8 +13,8 @@ namespace SharpSvn {
 		/// <summary>Depth undetermined or ignored</summary>
 		Unknown			= svn_depth_unknown,
 
-		/// <summary>Exclude (remove, whatever) directory D</summary>
-		Exclude			= svn_depth_exclude,
+		/*/// <summary>Exclude (remove, whatever) directory D</summary>
+		Exclude			= svn_depth_exclude,*/
 
 		/// <summary>
 		/// Just the named directory D, no entries. Updates will not pull in any
