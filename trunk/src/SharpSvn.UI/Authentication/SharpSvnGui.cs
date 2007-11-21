@@ -36,7 +36,7 @@ namespace SharpSvn.UI.Authentication
 		/// <param name="realm">The realm.</param>
 		/// <param name="format">The format.</param>
 		/// <returns></returns>
-		static string MakeDescription(string realm, string format)
+		internal static string MakeDescription(string realm, string format)
 		{
 			if(null == _realmRegex)
 				_realmRegex = new Regex("^\\<(?<server>[a-z]+://[^ >]+)\\> (?<realm>.*)$", RegexOptions.ExplicitCapture | RegexOptions.Singleline);

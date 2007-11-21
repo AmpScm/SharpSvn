@@ -25,5 +25,10 @@ namespace SharpSvn.UI.Authentication
 		{
 			InitializeComponent();
 		}
-	}
+
+        internal void SetImage(Image image)
+        {
+            panel1.BackgroundImage = image;            
+        }
+    }
 }
