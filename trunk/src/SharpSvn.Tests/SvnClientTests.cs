@@ -490,6 +490,26 @@ namespace SharpSvn.Tests
 		}
 
 		[Test]
+		public void MoveAndEditTest()
+		{
+			using (SvnClient client = NewSvnClient(true, false))
+			{
+				string file = Path.Combine(WcPath, "LMB");
+
+				TouchFile(file);
+				client.Add(file);
+
+				File.AppendAllText(Path.Combine(WcPath, "LMB"), "Banana" + Environment.NewLine);
+
+				client.Move(file, Path.Combine(WcPath, "LMB2"));
+
+				File.AppendAllText(Path.Combine(WcPath, "LMB2"), "Banana" + Environment.NewLine);
+
+				client.Commit(WcPath);
+			}
+		}
+
+		[Test]
 		public void DeleteTest()
 		{
 			using (SvnClient client = NewSvnClient(true, false))
