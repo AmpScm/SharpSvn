@@ -32,10 +32,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
+				Description=" "
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=" "
+				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -69,14 +69,16 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				Description="Copying BDB library"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"				
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib;;..\..\imports\release\lib-AnyCPU"
-				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -87,7 +89,6 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
-				VerboseOutput="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -121,10 +122,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
+				Description=" "
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=" "
+				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -159,14 +160,16 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				Description="Copying BDB library"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"		
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU"
-				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
+				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
+				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="17"
@@ -177,7 +180,6 @@
 			/>
 			<Tool
 				Name="VCManifestTool"
-				VerboseOutput="true"
 			/>
 			<Tool
 				Name="VCXDCMakeTool"
@@ -212,10 +214,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
+				Description=" "
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=" "
+				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -236,7 +238,7 @@
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
-				WarningLevel="3"
+				WarningLevel="4"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -247,12 +249,14 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				Description="Copying BDB library"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"				
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\release\lib;;..\..\imports\release\lib-AnyCPU"
+				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
 				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				GenerateDebugInformation="true"
@@ -298,10 +302,10 @@
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description="Copying BDB dll"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-DB*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;&#x0D;&#x0A;"
-				AdditionalDependencies="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
-				Outputs="$(TargetDir)\SharpSvn-DB45-20-$(PlatformName).dll"
+				Description=" "
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=" "
+				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -323,7 +327,7 @@
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
-				WarningLevel="3"
+				WarningLevel="4"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -334,12 +338,14 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
+				Description="Copying BDB library"
+				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU"
+				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB45-20-$(PlatformName).dll"
 				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB45-20-$(PlatformName).dll"
 				GenerateDebugInformation="true"
@@ -608,6 +614,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnUpdateResult.h"
 					>
 				</File>
 				<File
