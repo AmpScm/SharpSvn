@@ -71,8 +71,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		pool.AllocPath(toPath),
 		args->Force,
 		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
-		args->MakeParents,
-		args->WithMergeHistory,
+		args->MakeParents,		
 		CtxHandle,
 		pool.Handle);
 
@@ -208,7 +207,6 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 		args->Force,
 		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
 		args->MakeParents,
-		args->WithMergeHistory,
 		CtxHandle,
 		pool.Handle);
 

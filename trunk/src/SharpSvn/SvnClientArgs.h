@@ -1228,18 +1228,6 @@ namespace SharpSvn {
 				_alwaysCopyBelow = value;
 			}
 		}
-
-		property bool WithMergeHistory
-		{
-			bool get()
-			{
-				return _withMergeHistory;
-			}
-			void set(bool value)
-			{
-				_withMergeHistory = value;
-			}
-		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Move(String^,String^,SvnMoveArgs^)" /> and 
@@ -1289,18 +1277,6 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_makeParents = value;
-			}
-		}
-
-		property bool WithMergeHistory
-		{
-			bool get()
-			{
-				return _withMergeHistory;
-			}
-			void set(bool value)
-			{
-				_withMergeHistory = value;
 			}
 		}
 	};
