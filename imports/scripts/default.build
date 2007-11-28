@@ -241,7 +241,7 @@ svn st				<include name="*.h" />
 			<foreach item="File" property="sourceFile">
         <in>
           <items basedir="${svnBase}/subversion">
-            <include name="libsvn_subr/win32_crashrpt.c" />
+            <include name="libsvn_ra_serf/win32_auth_sspi.c" />
           </items>
         </in>
         <do>
