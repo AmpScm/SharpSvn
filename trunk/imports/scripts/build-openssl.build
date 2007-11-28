@@ -1,5 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
+  <property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
+  
 	<target name="prepare-openssl" depends="extract">
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
 			<exec program="perl.exe" workingdir="build/${platform}/openssl-${opensslVersion}">

@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 	<property name="saslDir" value="build/${platform}/cyrus-sasl-${saslVersion}" />	
+	<property name="saslFilename" value="cyrus-sasl-${saslVersion}.tar.gz" />	
 	
 	<regex pattern="^(?'SASL_MAJOR_VERSION'\d+)\.(?'SASL_MINOR_VERSION'\d+)\.(?'SASL_MICRO_VERSION'\d+)" input="${saslVersion}" />
 	

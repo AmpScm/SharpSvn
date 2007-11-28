@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+  <property name="bindFilename" value="bind-${bindVersion}.tar.gz" />
+  <property name="bindDir" value="build/${platform}/bind-${bindVersion}" />
+  <property name="bindOpensslVersion" value="0.9.8d" />
+
+	<target name="prepare-bind" depends="extract,build-openssl">
+		<OnceBlock file="build/bind-${bindVersion}-${platform}.prepared">
+      <exec program="${bindDir}/win32utils/buildsetup.bat" workingdir="${bindDir}/win32utils" />
+		</OnceBlock>
+		<OnceBlock file="build/bind-${bindVersion}-${platform}.upgraded">
+      <foreach item="File" property="project">
+				<in>
+					<items basedir="${bindDir}">
+						<include name="**/*.dsp" />
+					</items>
+				</in>
+				<do>
+					<VCBuild platform="${platform}">
+						<arg line="/upgrade" />
+						<arg line="${project}" />
+					</VCBuild>
+				</do>
+			</foreach>
+			<foreach item="File" property="project">
+				<in>
+					<items basedir="${bindDir}">
+						<include name="**/*.vcproj" />
+					</items>
+				</in>
+				<do>
+					<VCProjAddPlatform project="${project}" platform="${platform}" fromPlatform="win32" />
+					<loadfile file="${project}" property="projtext">
+						<filterchain>
+              <replacestring from="openssl-${bindOpensslVersion}" to="openssl-${opensslVersion}" />
+							<replacestring from='../../../../../openssl-' to='../../../../openssl-' />
+							<replacestring from='out32dll/' to='out32/' />
+							<replacestring from=',../' to=';../' />
+							<replacestring from='ConfigurationType="2"' to='ConfigurationType="4"' />
+						</filterchain>
+					</loadfile>
+					<echo message="${projtext}" file="${project}" />					
+				</do>
+			</foreach>
+		</OnceBlock>
+	</target>
+	<target name="build-bind" depends="prepare-bind">
+		<OnceBlock file="build/bind-${bindVersion}-${platform}.build">
+      <VCBuild platform="${platform}" configuration="release">
+        <arg line="${bindDir}/lib/isc/win32/libisc.vcproj" />
+      </VCBuild>		
+      <VCBuild platform="${platform}" configuration="release">
+        <arg line="${bindDir}/lib/dns/win32/libdns.vcproj" />
+      </VCBuild>		
+		</OnceBlock>
+		<copy todir="${release}/lib" flatten="true">
+			<fileset basedir="build/win32/bind-${bindVersion}">
+				<include name="lib/dns/win32/release/*.lib" />
+				<include name="lib/isc/win32/release/*.lib" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64">
+			<fileset basedir="build/x64/bind-${bindVersion}">
+				<include name="lib/dns/win32/release/*.lib" />
+				<include name="lib/isc/win32/release/*.lib" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="${bindDir}/lib/dns/include">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="${bindDir}/lib/isc/include">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="${bindDir}/lib/isc/win32/include">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+	</target>
+</project>

@@ -1,0 +1,256 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+
+	<target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-sqlite, build-apr">
+		<!-- Fake direct result for subversion to hide platforms -->
+		<if test="${platform == 'win32'}">
+			<copy todir="build/win32/lib/include">
+				<fileset basedir="build/apr/include">
+					<include name="**/*.h" />
+				</fileset>
+			</copy>
+			<copy todir="build/win32/lib/include">
+				<fileset basedir="build/apr-util/include">
+					<include name="**/*.h" />
+				</fileset>
+			</copy>
+			<copy todir="build/win32/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
+			<copy tofile="build/win32/lib/release/libapr-1.lib" file="${release}/lib/apr-1.lib" />
+			<copy tofile="build/win32/lib/release/libaprutil-1.lib" file="${release}/lib/aprutil-1.lib" />
+			<copy todir="build/win32/lib/release" file="${release}/lib/xml.lib" />
+			<copy todir="build/win32/lib/release" file="build/win32/openssl-${opensslVersion}/out32/libeay32.lib" />
+			<copy todir="build/win32/lib/release" file="build/win32/openssl-${opensslVersion}/out32/ssleay32.lib" />
+			<copy todir="build/win32/lib/lib" file="build/sqlite-${sqliteVersion}/${Configuration}_win32/sqlite3.lib" />
+			<copy todir="build/win32/lib/inc" file="build/sqlite-${sqliteVersion}/sqlite3.h" />
+			<copy todir="build/win32/lib/zlib" flatten="true">
+				<fileset basedir="build/zlib-${zlibVersion}">
+					<include name="*.h" />
+				</fileset>
+			</copy>
+			<copy todir="build/win32/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
+			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />			
+		</if>
+		<if test="${platform == 'x64'}">
+			<copy todir="build/x64/lib/include">
+				<fileset basedir="build/apr/include">
+					<include name="**/*.h" />
+				</fileset>
+			</copy>
+			<copy todir="build/x64/lib/include">
+				<fileset basedir="build/apr-util/include">
+					<include name="**/*.h" />
+				</fileset>
+			</copy>
+			<copy todir="build/x64/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
+			<copy tofile="build/x64/lib/release/libapr-1.lib" file="${release}/lib-x64/apr-1.lib" />
+			<copy tofile="build/x64/lib/release/libaprutil-1.lib" file="${release}/lib-x64/aprutil-1.lib" />
+			<copy todir="build/x64/lib/release" file="${release}/lib-x64/xml.lib" />
+			<copy todir="build/x64/lib/release" file="build/x64/openssl-${opensslVersion}/out32/libeay32.lib" />
+			<copy todir="build/x64/lib/release" file="build/x64/openssl-${opensslVersion}/out32/ssleay32.lib" />
+			<copy todir="build/x64/lib/lib" file="build/sqlite-${sqliteVersion}/${Configuration}_x64/sqlite3.lib" />
+			<copy todir="build/x64/lib/inc" file="build/sqlite-${sqliteVersion}/sqlite3.h" />
+			<copy todir="build/x64/lib/zlib" flatten="true">
+				<fileset basedir="build/zlib-${zlibVersion}">
+					<include name="*.h" />
+				</fileset>
+			</copy>
+			<copy todir="build/x64/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
+			<copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
+		</if>
+
+		<!-- Create temp directory for subversion build -->
+		<copy todir="build/${platform}/lib/lib" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+				<include name="${Configuration}_AMD64/*.lib" if="${platform == 'x64'}"/>
+				<include name="${Configuration}_AMD64/*.exp" if="${platform == 'x64'}"/>
+				<include name="${Configuration}/*.lib" if="${platform == 'win32'}"/>
+				<include name="${Configuration}/*.exp" if="${platform == 'win32'}"/>
+			</fileset>
+		</copy>
+		<copy todir="build/${platform}/lib/include" flatten="true">
+			<fileset basedir="${dbWindowsDir}">
+        <include name="*.h" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, build-sasl, svn-prepare">
+		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
+			<!-- Patches for x64 builds; hopefully included in svn 1.5 -->
+			<copy todir="${svnBase}/build/generator/" overwrite="true">
+				<fileset basedir="scripts">
+					<include name="*.ezt" />
+				</fileset>
+			</copy>
+			<loadfile file="${svnBase}/build/generator/gen_win.py" property="gen_win">
+				<filterchain>
+					<replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
+				</filterchain>
+			</loadfile>
+
+			<echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
+
+			<exec program="python.exe" failonerror="false" resultproperty="pythonAvailable" verbose="true">
+				<arg line="-V" />
+			</exec>
+
+			<exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
+				<arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
+				<arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
+				<arg line="-t vcproj" />
+				<arg line="--vsnet-version=2005" />
+				<arg value="--release" />
+				<arg value="--with-apr=../lib" />
+				<arg value="--with-apr-util=../lib" />
+				<arg value="--with-berkeley-db=../lib" />
+				<arg value="--with-openssl=../openssl-${opensslVersion}" />
+				<arg value="--with-zlib=../lib/zlib" />
+				<arg value="--with-neon=../neon" />
+				<arg value="--with-serf=../serf" />
+				<arg value="--with-sqlite=../lib" />
+				<arg value="--with-sasl=../lib" />
+				<arg value="--disable-shared" />
+			</exec>
+			<!-- The ZLib build has already completed -->
+
+			<echo message="@echo off" file="${svnBase}/build/win32/build_zlib.bat" />
+
+			<!-- Replace shared library builds with static builds; to auto change dependencies -->
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="${svnBase}/build/win32">
+						<include name="svn_config.vcproj" />
+						<include name="svn_locale.vcproj" />
+						<include name="zlib.vcproj" />
+					</items>
+				</in>
+				<do>
+					<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+				</do>
+			</foreach>
+			<foreach item="File" property="vcproj">
+				<in>
+					<items basedir="${svnBase}">
+						<include name="build/win32/**/*.vcproj" />
+						<include name="../serf/serf.vcproj" />
+					</items>
+				</in>
+				<do>
+					<loadfile file="${vcproj}" property="projtext">
+						<filterchain>
+							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
+							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib sqlite3.lib' />
+							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
+							<replacestring from='Optimization="2"' to='Optimization="1"' />
+							<replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
+							<replacestring from='InlineFunctionExpansion="2"' to='' />
+							<!-- Increase security a little little bit in some cases -->
+							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+						</filterchain>
+					</loadfile>
+					<echo message="${projtext}" file="${vcproj}" />
+				</do>
+			</foreach>
+			<foreach item="File" property="sourceFile">
+        <in>
+          <items basedir="${svnBase}/subversion">
+            <include name="libsvn_ra_serf/win32_auth_sspi.c" />
+            <include name="libsvn_fs_base/bdb/*.h" if="${aprUtilVersion >= '1.2.11'}"/>
+            <include name="libsvn_fs_base/bdb/*.c" if="${aprUtilVersion >= '1.2.11'}"/>
+          </items>
+        </in>
+        <do>
+          <loadfile file="${sourceFile}" property="projtext">
+						<filterchain>
+              <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
+              <replacestring from='&lt;apu_want.h&gt;' to='&lt;db.h&gt; /* APU ${aprUtilVersion} fix */' if="${aprUtilVersion >= '1.2.11'}" />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${sourceFile}" />
+        </do>
+      </foreach>
+		</OnceBlock>
+	</target>
+
+	<target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,prepare-neon,generate-svnfiles">
+		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
+			<!-- Now build subversion -->
+			<exec program="msbuild.exe" workingdir="${svnBase}">
+				<arg value="/nologo" />
+				<!--arg value="/verbosity:quiet" /-->
+				<arg value="subversion_vcnet.sln" />
+				<arg value="/p:Configuration=Release" />
+				<arg value="/p:Platform=${platform}" />
+				<arg value="/t:__LIBS__" />
+				<arg value="/t:svn" />
+				<arg value="/t:svnadmin" />
+			</exec>
+		</OnceBlock>
+	</target>
+	<target name="copy-result" depends="build-svn">
+		<copy todir="${release}/lib" flatten="true">
+			<fileset basedir="build/win32">
+				<include name="subversion/${Configuration}/**/*.lib" />
+				<include name="subversion/${Configuration}/**/*.pdb" />
+				<!-- Don't copy pdb's for executables -->
+				<exclude name="subversion/${Configuration}/**/svn*.pdb" />
+				<include name="neon/**/*.lib" />
+				<include name="neon/**/*.pdb" />
+				<include name="serf/${Configuration}/*.lib" />
+				<include name="serf/${Configuration}/*.pdb" />
+
+				<!-- Don't copy the GPL as a *.lib file -->
+				<exclude name="neon/src/COPYING.LIB" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-x64" flatten="true">
+			<fileset basedir="build/x64">
+				<include name="subversion/${Configuration}/**/*.lib" />
+				<include name="subversion/${Configuration}/**/*.pdb" />
+				<!-- Don't copy pdb's for executables -->
+				<exclude name="subversion/${Configuration}/**/svn*.pdb" />
+				<include name="neon/**/*.lib" />
+				<include name="neon/**/*.pdb" />
+				<include name="serf/${Configuration}/*.lib" />
+				<include name="serf/${Configuration}/*.pdb" />
+
+				<!-- Don't copy the GPL as a *.lib file -->
+				<exclude name="neon/src/COPYING.LIB" />
+			</fileset>
+		</copy>
+		<copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
+		<copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
+		<copy todir="${release}/include">
+			<fileset basedir="${svnBase}\subversion\include">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include/serf">
+			<fileset basedir="${platformBase}\serf">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include/neon">
+			<fileset basedir="${platformBase}\neon\src">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include/apr-1">
+			<fileset basedir="${platformBase}\apr\include">
+				<include name="**.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/include/apr-1">
+			<fileset basedir="${platformBase}\apr-util\include">
+				<include name="**.h" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/lib-AnyCPU">
+			<fileset basedir="${nunitDir}/bin">
+				<include name="nunit.framework.dll" />
+				<include name="nunit.framework.xml" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>

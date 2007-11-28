@@ -1,5 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
+  <property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
+  
 	<target name="prepare-zlib" depends="extract">
 		<OnceBlock file="build/zlib-${zlibVersion}.prepared">
 			<foreach item="File" property="dsp">
