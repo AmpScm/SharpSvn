@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
 	<property name="sqliteDir" value="${'build/sqlite-' + sqliteVersion}" />
+	<property name="sqliteFilename" value="sqlite-source-${string::replace(sqliteVersion,'.','_')}.zip" />
+	
+	
 	<target name="build-sqlite" depends="extract">
 		<OnceBlock file="build/sqlite-${sqliteVersion}-${platform}.build">
 			<mkdir dir="${sqliteDir}/${Configuration}_${platform}" />
