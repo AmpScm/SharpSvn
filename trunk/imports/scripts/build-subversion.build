@@ -5,73 +5,71 @@
 		<!-- Fake direct result for subversion to hide platforms -->
 		<if test="${platform == 'win32'}">
 			<copy todir="build/win32/lib/include">
-				<fileset basedir="build/apr/include">
-					<include name="**/*.h" />
-				</fileset>
-			</copy>
-			<copy todir="build/win32/lib/include">
-				<fileset basedir="build/apr-util/include">
+				<fileset basedir="${release}/include/apr-1">
 					<include name="**/*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/win32/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
-			<copy tofile="build/win32/lib/release/libapr-1.lib" file="${release}/lib/apr-1.lib" />
-			<copy tofile="build/win32/lib/release/libaprutil-1.lib" file="${release}/lib/aprutil-1.lib" />
-			<copy todir="build/win32/lib/release" file="${release}/lib/xml.lib" />
-			<copy todir="build/win32/lib/release" file="build/win32/openssl-${opensslVersion}/out32/libeay32.lib" />
-			<copy todir="build/win32/lib/release" file="build/win32/openssl-${opensslVersion}/out32/ssleay32.lib" />
-			<copy todir="build/win32/lib/lib" file="build/sqlite-${sqliteVersion}/${Configuration}_win32/sqlite3.lib" />
-			<copy todir="build/win32/lib/inc" file="build/sqlite-${sqliteVersion}/sqlite3.h" />
+			<copy todir="build/win32/lib/inc" file="${release}/include/sqlite3.h" />
+			<copy todir="build/win32/lib/release">
+        <fileset basedir="${release}/lib">
+          <include name="xml.lib" />
+          <include name="libeay32.lib" />
+          <include name="ssleay32.lib" />
+          <include name="sqlite3.lib" />
+          <include name="apr-1.lib" />
+          <include name="aprutil-1.lib" />
+          <include name="libdb*.lib" />
+        </fileset>      
+			</copy>
 			<copy todir="build/win32/lib/zlib" flatten="true">
-				<fileset basedir="build/zlib-${zlibVersion}">
-					<include name="*.h" />
+				<fileset>
+					<include name="build/zlib-${zlibVersion}/z*.h" />
+					<include name="${release}/lib/zlib.lib" />
 				</fileset>
 			</copy>
-			<copy todir="build/win32/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
 			<copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />			
 		</if>
 		<if test="${platform == 'x64'}">
 			<copy todir="build/x64/lib/include">
-				<fileset basedir="build/apr/include">
+				<fileset basedir="${release}/include/apr-1">
 					<include name="**/*.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/x64/lib/include">
-				<fileset basedir="build/apr-util/include">
-					<include name="**/*.h" />
+				<fileset basedir="${release}/include">
+					<include name="sqlite3.h" />
 				</fileset>
 			</copy>
 			<copy todir="build/x64/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
 			<copy tofile="build/x64/lib/release/libapr-1.lib" file="${release}/lib-x64/apr-1.lib" />
 			<copy tofile="build/x64/lib/release/libaprutil-1.lib" file="${release}/lib-x64/aprutil-1.lib" />
-			<copy todir="build/x64/lib/release" file="${release}/lib-x64/xml.lib" />
-			<copy todir="build/x64/lib/release" file="build/x64/openssl-${opensslVersion}/out32/libeay32.lib" />
-			<copy todir="build/x64/lib/release" file="build/x64/openssl-${opensslVersion}/out32/ssleay32.lib" />
-			<copy todir="build/x64/lib/lib" file="build/sqlite-${sqliteVersion}/${Configuration}_x64/sqlite3.lib" />
+			<copy todir="build/x64/lib/release">
+        <fileset basedir="${release}/lib-x64">
+          <include name="xml.lib" />
+          <include name="libeay32.lib" />
+          <include name="ssleay32.lib" />
+          <include name="sqlite3.lib" />
+          <include name="apr-1.lib" />
+          <include name="aprutil-1.lib" />
+          <include name="libdb*.lib" />
+        </fileset>      
+			</copy>
 			<copy todir="build/x64/lib/inc" file="build/sqlite-${sqliteVersion}/sqlite3.h" />
 			<copy todir="build/x64/lib/zlib" flatten="true">
-				<fileset basedir="build/zlib-${zlibVersion}">
-					<include name="*.h" />
+				<fileset>
+					<include name="build/zlib-${zlibVersion}/z*.h" />
+					<include name="${release}/lib/zlib.lib" />
 				</fileset>
 			</copy>
-			<copy todir="build/x64/lib/zlib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 			<copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
 		</if>
-
-		<!-- Create temp directory for subversion build -->
-		<copy todir="build/${platform}/lib/lib" flatten="true">
-			<fileset basedir="${dbWindowsDir}">
-				<include name="${Configuration}_AMD64/*.lib" if="${platform == 'x64'}"/>
-				<include name="${Configuration}_AMD64/*.exp" if="${platform == 'x64'}"/>
-				<include name="${Configuration}/*.lib" if="${platform == 'win32'}"/>
-				<include name="${Configuration}/*.exp" if="${platform == 'win32'}"/>
-			</fileset>
-		</copy>
 		<copy todir="build/${platform}/lib/include" flatten="true">
 			<fileset basedir="${dbWindowsDir}">
         <include name="*.h" />
 			</fileset>
 		</copy>
+		
 	</target>
 
 	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, build-sasl, svn-prepare">
