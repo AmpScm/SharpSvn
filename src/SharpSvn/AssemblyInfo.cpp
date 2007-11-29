@@ -54,7 +54,7 @@ using namespace System::Security::Permissions;
 									   " and dynamically linked to Berkeley DB" BDB_VERSION 
 									   " and Cyrus Sasl " SASL_VERSION ")")];
 [assembly:AssemblyConfigurationAttribute("")];
-[assembly:AssemblyCompanyAttribute("QQn Project")];
+[assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
 [assembly:AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007")];
 [assembly:AssemblyTrademarkAttribute("")];
