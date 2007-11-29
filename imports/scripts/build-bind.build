@@ -36,12 +36,20 @@
 							<replacestring from='../../../../../openssl-' to='../../../../openssl-' />
 							<replacestring from='out32dll/' to='out32/' />
 							<replacestring from=',../' to=';../' />
+							<!-- Compile to .lib instead of .dll -->
 							<replacestring from='ConfigurationType="2"' to='ConfigurationType="4"' />
 						</filterchain>
 					</loadfile>
 					<echo message="${projtext}" file="${project}" />					
 				</do>
 			</foreach>
+			<loadfile file="${bindDir}/lib/isc/win32/include/isc/platform.h" property="projtext">
+        <filterchain>
+          <replacestring from='__declspec(dllexport)' to='/* export */' />
+          <replacestring from='__declspec(dllimport)' to='/* import */' />
+        </filterchain>
+      </loadfile>
+      <echo message="${projtext}" file="${bindDir}/lib/isc/win32/include/isc/platform.h" />
 		</OnceBlock>
 	</target>
 	<target name="build-bind" depends="prepare-bind">
