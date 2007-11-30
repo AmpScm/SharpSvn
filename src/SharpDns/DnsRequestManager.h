@@ -14,16 +14,13 @@ namespace SharpDns
 	/// <summary>
 	/// DnsRequestManager, manager of in-progress dns requests
 	/// </summary>
-	public ref class DnsRequestManager :  public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
+	ref class DnsRequestManager :  public System::Runtime::ConstrainedExecution::CriticalFinalizerObject
 	{
 	private:
-		isc_mem_t* m_pMem;
 		isc_timermgr_t* m_pTimerMgr;
 		isc_socketmgr_t* m_pSocketMgr;
 		isc_taskmgr_t* m_pTaskMgr;
 		dns_dispatchmgr_t* m_pDispatchMgr;
-		dns_dispatch_t* m_pDispIpv4;
-		dns_dispatch_t* m_pDispIpv6;
 		dns_requestmgr_t* m_pRequestMgr;
 		isc_task_t* m_pTask;
 
@@ -33,14 +30,6 @@ namespace SharpDns
 		DnsRequestManager();
 
 	public:
-		property System::Net::IPAddress^ DefaultDnsServer
-		{
-			System::Net::IPAddress^ get()
-			{
-				return System::Net::IPAddress::Parse("194.109.6.66");
-			}
-		}	
-
 		void Shutdown();
 
 	private:
@@ -65,10 +54,6 @@ namespace SharpDns
 		static void SetAddr(System::Net::EndPoint^ from, isc_sockaddr *to);
 
 	public:
-		DnsRequest^ Send(DnsMessage^ message);
-		DnsRequest^ Send(DnsMessage^ message, System::Net::IPEndPoint^ dnsServer);
-		DnsRequest^ Send(DnsMessage^ message, System::Net::IPAddress^ dnsServer);
-
-		
+		DnsRequest^ Send(DnsRequest^ request, System::Net::IPEndPoint^ dnsServer);		
 	};
 }

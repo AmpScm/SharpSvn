@@ -24,14 +24,20 @@
 #include <dns/message.h>
 #include <dns/name.h>
 #include <dns/request.h>
+#include <dns/resolver.h>
 #include <dns/rdataset.h>
+
+#include <dns/view.h>
+} // Missing in view.h
+
+#include <vcclr.h>
 
 #undef in6_addr
 #undef in6addr_any
 #undef in6addr_loopback
 #undef sockaddr_in6
 
-#include <vcclr.h>
+
 
  
 

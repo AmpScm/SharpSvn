@@ -26,6 +26,7 @@ DnsRequestManager::DnsRequestManager()
 	dns_dispatchmgr_t* pDispatchMgr = nullptr;
 	isc_task_t* pTask = nullptr;
 	dns_requestmgr_t* pRequestMgr = nullptr;
+
 	bool ok = false;
 	try
 	{
@@ -74,36 +75,6 @@ DnsRequestManager::DnsRequestManager()
 	}
 
 }
-/*
-
-		unsigned attrs = 0;
-		attrs |= DNS_DISPATCHATTR_UDP;
-		switch (isc_sockaddr_pf(addr)) {
-		case AF_INET:
-			attrs |= DNS_DISPATCHATTR_IPV4;
-			break;
-		case AF_INET6:
-			attrs |= DNS_DISPATCHATTR_IPV6;
-			break;
-		default:
-			result = ISC_R_NOTIMPLEMENTED;
-			goto cleanup;
-		}
-		unsigned attrmask = 0;
-		attrmask |= DNS_DISPATCHATTR_UDP;
-		attrmask |= DNS_DISPATCHATTR_TCP;
-		attrmask |= DNS_DISPATCHATTR_IPV4;
-		attrmask |= DNS_DISPATCHATTR_IPV6;
-
-		dns_dispatch_t *pDisp = nullptr;
-
-		if(dns_dispatch_getudp(pDispatchMgr, pSocketMgr, pTaskMgr, nullptr, 
-			4096, 1000, 32768, 16411, 16433, // From server.c, probably to big
-			attrs, attrmask, &pDisp))
-		{
-			throw gcnew InvalidOperationException();
-		}
-		*/
 
 void DnsRequestManager::Shutdown()
 {
@@ -156,14 +127,6 @@ void DnsRequestManager::Close()
 	}
 }
 
-DnsRequest^ DnsRequestManager::Send(DnsMessage^ message)
-{
-	if(!message)
-		throw gcnew ArgumentNullException("message");
-
-	return Send(message, DefaultDnsServer);	
-}
-
 static void OnRequestCompleted(isc_task_t *task, isc_event_t *ev)
 {
 	pInvokeCompleted(task, ev);
@@ -173,7 +136,7 @@ void DnsRequestManager::OnTaskCallback(isc_task_t *task, isc_event_t *ev)
 {
 	DnsRequest^ rq = DnsRequest::FromArg(ev->ev_arg);
 
-	rq->OnRequestCompleted(task, ev);
+	rq->OnRequestCompleted(ev);
 }
 
 void DnsRequestManager::SetAddr(System::Net::EndPoint^ from, isc_sockaddr *to)
@@ -182,17 +145,19 @@ void DnsRequestManager::SetAddr(System::Net::EndPoint^ from, isc_sockaddr *to)
 		throw gcnew ArgumentNullException();
 
 	System::Net::SocketAddress^ saddr = from->Serialize();
-	isc_sockaddr addr;
 
-	if(saddr->Size > sizeof(addr))
+	memset(to, 0, sizeof(isc_sockaddr));
+
+	if(saddr->Size > sizeof(to->type))
 		throw gcnew InvalidOperationException();
 
-	char* pTo = (char*)to;
+	char* pTo = (char*)&to->type;
 
 	for(int i = 0; i < saddr->Size; i++)
 	{
 		pTo[i] = saddr[i];
 	}
+	to->length = saddr->Size;
 }
 dns_dispatch_t* DnsRequestManager::CreateDispatch(int family)
 {
@@ -214,10 +179,6 @@ dns_dispatch_t* DnsRequestManager::CreateDispatch(int family)
 	else
 		throw gcnew ArgumentException();
 
-	//SetAddr(gcnew System::Net::IPEndPoint(System::Net::IPAddress::Parse("172.20.3.11"), 33003), &localAddr);
-
-	//localAddr.type.sin.sin_port = System::Net::IPAddress::HostToNetworkOrder(33033);
-
 	dns_dispatch_t* pDispatch = nullptr;
 
 	isc_result_t err = dns_dispatch_getudp(m_pDispatchMgr, m_pSocketMgr, m_pTaskMgr, &localAddr,
@@ -233,12 +194,14 @@ dns_dispatch_t* DnsRequestManager::CreateDispatch(int family)
 	}
 }
 
-DnsRequest^ DnsRequestManager::Send(DnsMessage^ message, System::Net::IPEndPoint ^dnsServer)
+DnsRequest^ DnsRequestManager::Send(DnsRequest^ request, System::Net::IPEndPoint ^dnsServer)
 {
-	if(!message)
-		throw gcnew ArgumentNullException("message");
+	if(!request)
+		throw gcnew ArgumentNullException("request");
 	else if(!dnsServer)
 		throw gcnew ArgumentNullException("dnsServer");	
+
+	DnsMessage^ message = request->Request;
 
 	//System::Net::SocketAddress^ saddr = dnsServer->Serialize();
 	isc_sockaddr addr;
@@ -246,36 +209,24 @@ DnsRequest^ DnsRequestManager::Send(DnsMessage^ message, System::Net::IPEndPoint
 
 
 	dns_tsigkey_t *key = nullptr;
-
-	DnsRequest^ rq = gcnew DnsRequest();
 	dns_request_t* pRequest = nullptr;	
 
-	int opts = DNS_REQUESTOPT_TCP; // !DNS_REQUESTOPT_TCP
+	int opts = 0;//DNS_REQUESTOPT_TCP; // !DNS_REQUESTOPT_TCP
 
 	isc_result_t err = dns_request_createvia3(m_pRequestMgr, message->Handle, 
 		nullptr, &addr, 
 		opts, key, 15, 10, 3,
-		m_pTask, OnRequestCompleted, rq->AllocArg(), &pRequest);
+		m_pTask, OnRequestCompleted, request->AllocArg(), &pRequest);
 	if(!err)
 	{
-		rq->SetRequest(pRequest);
+		request->SetRequest(pRequest);
 
-		return rq;
+		return request;
 	}
 	else
 	{
-		rq->Clear();
+		request->Clear();
 		GC::KeepAlive(err);
 		throw gcnew InvalidOperationException();
 	}
-}
-
-DnsRequest^ DnsRequestManager::Send(DnsMessage^ message, System::Net::IPAddress ^dnsServer)
-{
-	if(!message)
-		throw gcnew ArgumentNullException("message");
-	else if(!dnsServer)
-		throw gcnew ArgumentNullException("dnsServer");
-
-	return Send(message, gcnew System::Net::IPEndPoint(dnsServer, 53)); // DNS servers communicate over port 53 udp/tcp
 }

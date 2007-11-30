@@ -3,5 +3,6 @@
 #include "SharpDns.h"
 
 #include "DnsRequestManager.h"
-#include "DnsRequest.h"
 #include "DnsMessage.h"
+#include "DnsRequest.h"
+#include "DnsResponse.h"
