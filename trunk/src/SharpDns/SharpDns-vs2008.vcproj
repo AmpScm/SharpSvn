@@ -356,6 +356,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\DnsResponse.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\SharpDns.cpp"
 				>
 			</File>
@@ -419,6 +423,10 @@
 			</File>
 			<File
 				RelativePath=".\DnsRequestManager.h"
+				>
+			</File>
+			<File
+				RelativePath=".\DnsResponse.h"
 				>
 			</File>
 			<File

@@ -15,6 +15,7 @@ namespace SharpDns
 			static initonly bool m_bHaveIpv6;
 			static isc_mem_t* g_pMem;
 			static isc_entropy_t* g_pEnt;
+			static dns_view_t* g_pView;
 
 			static SharpDnsBase();
 

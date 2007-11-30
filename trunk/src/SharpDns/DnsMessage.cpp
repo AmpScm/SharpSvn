@@ -29,35 +29,12 @@ void DnsMessage::Ensure()
 	if(pMessage)
 	{
 		pMessage->flags = (unsigned)m_Flags;
+
+		if(m_uIntent == DNS_MESSAGE_INTENTRENDER)
+		{
+			pMessage->opcode = dns_opcode_query;
+		}
 	}
-}
-
-DnsRequest^ DnsMessage::Send(DnsRequestManager^ requestManager)
-{
-	if(!requestManager)
-		throw gcnew ArgumentNullException("requestManager");
-
-	return requestManager->Send(this);
-}
-
-DnsRequest^ DnsMessage::Send(DnsRequestManager^ requestManager, System::Net::IPEndPoint ^dnsServer)
-{
-	if(!requestManager)
-		throw gcnew ArgumentNullException("requestManager");
-	else if(!dnsServer)
-		throw gcnew ArgumentNullException("dnsServer");
-
-	return requestManager->Send(this, dnsServer);
-}
-
-DnsRequest^ DnsMessage::Send(DnsRequestManager^ requestManager, System::Net::IPAddress ^dnsServer)
-{
-	if(!requestManager)
-		throw gcnew ArgumentNullException("requestManager");
-	else if(!dnsServer)
-		throw gcnew ArgumentNullException("dnsServer");
-
-	return Send(requestManager, gcnew System::Net::IPEndPoint(dnsServer, 53)); // DNS servers communicate over port 53 udp/tcp
 }
 
 void DnsMessage::AddQuestion(String^ name, DnsDataClass dataClass, DnsDataType dataType)
@@ -112,4 +89,30 @@ void DnsMessage::AddQuestion(String^ name, DnsDataClass dataClass, DnsDataType d
 	ISC_LIST_APPEND(pName->list, rdataset, link);
 
 	dns_message_addname(m_pMessage, pName, DNS_SECTION_QUESTION);
+}
+
+String^ DnsMessage::ToString()
+{
+	return ToText(DnsMessageFormatOptions::None);
+}
+
+String^ DnsMessage::ToText(DnsMessageFormatOptions options)
+{
+	Ensure();
+
+	isc_buffer_t *pBuffer = nullptr;
+
+	if(!isc_buffer_allocate(SharpDnsBase::MemoryManager, &pBuffer, 1024))
+	try
+	{
+		dns_message_totext(m_pMessage, &dns_master_style_debug, (dns_messagetextflag_t)options, pBuffer);
+
+		return gcnew String((char*)isc_buffer_base(pBuffer), 0, isc_buffer_length(pBuffer));
+	}
+	finally
+	{
+		isc_buffer_free(&pBuffer);
+	}
+
+	return nullptr;
 }

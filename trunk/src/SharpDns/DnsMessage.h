@@ -23,6 +23,14 @@ namespace SharpDns
 	};
 
 	[Flags]
+	public enum class DnsMessageFormatOptions
+	{
+		None = 0,
+		NoComments = DNS_MESSAGETEXTFLAG_NOCOMMENTS,
+		NoHeaders = DNS_MESSAGETEXTFLAG_NOHEADERS
+	};
+
+	[Flags]
 	public enum class DnsMessageFlags
 	{
 		Qr = DNS_MESSAGEFLAG_QR,
@@ -51,11 +59,6 @@ namespace SharpDns
 
 
 	public:
-		DnsRequest^ Send(DnsRequestManager^ requestManager);
-		DnsRequest^ Send(DnsRequestManager^ requestManager, System::Net::IPEndPoint ^dnsServer);
-		DnsRequest^ Send(DnsRequestManager^ requestManager, System::Net::IPAddress ^dnsServer);
-
-	public:
 		void AddQuestion(String^ name, DnsDataClass dataClass, DnsDataType dataType);
 		void AddQuestion(String^ name, DnsDataType dataType)
 		{
@@ -67,6 +70,10 @@ namespace SharpDns
 			AddQuestion(name, DnsDataClass::In, DnsDataType::Any);
 		}
 
+	public:
+		virtual String^ ToString() override;
+
+		String^ ToText(DnsMessageFormatOptions options);
 
 	internal:
 		property dns_message_t* Handle

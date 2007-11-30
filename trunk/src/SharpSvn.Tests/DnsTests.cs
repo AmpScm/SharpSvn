@@ -4,6 +4,7 @@ using System.Text;
 using NUnit.Framework;
 using SharpDns;
 using System.Threading;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests
 {
@@ -13,34 +14,41 @@ namespace SharpSvn.Tests
 		[Test, Explicit("Not complete")]
 		public void CreateManager()
 		{
-			DnsRequestManager mgr = new DnsRequestManager();
-
-			mgr.Dispose();
+			using (DnsRequest rq = DnsRequest.Create())
+			{
+				rq.Send();
+			}
 		}
 
 		[Test, Explicit("Not complete")]
 		public void SendMessage()
 		{
-			DnsRequestManager mgr = new DnsRequestManager();
+			using(DnsRequest rq = DnsRequest.Create())
 			{
-				DnsMessage msg = new DnsMessage();
+				DnsMessage msg = rq.Request;
 
 				msg.AddQuestion("ijss.rr.competence.biz.", DnsDataClass.In, DnsDataType.A);
 
-				mgr.Send(msg);
+				rq.Send();
 
 				for (int i = 0; i < 100; i++)
 				{
+					if (rq.Response != null)
+						break;
 					Thread.Sleep(200);
 				}
 
-				msg = new DnsMessage();
+				Assert.That(rq.Response, Is.Not.Null);
+
+				Assert.That(rq.Response.ToString(), Is.Not.Null);
+
+				/*msg = new DnsMessage();
 
 				mgr.Send(msg);
 
 				mgr.Shutdown();
 
-				Thread.Sleep(2000);
+				Thread.Sleep(2000);*/
 			}
 		}
 	}
