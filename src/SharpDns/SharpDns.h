@@ -61,10 +61,4 @@ namespace SharpDns
 			}
 		};
 	}
-
-
-	public ref class SharpSvnDns : public Implementation::SharpDnsBase
-	{
-		// TODO: Add your methods for this class here.
-	};
 }

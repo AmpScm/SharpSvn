@@ -5,10 +5,10 @@ using namespace SharpDns;
 using namespace SharpDns::Implementation;
 using System::Runtime::InteropServices::Marshal;
 
-typedef void (__stdcall pInvokeCompleted_t)(isc_task_t *task, isc_event_t *ev);
+typedef void (__stdcall pInvokeCompleted_t)(isc_event_t *ev);
 static pInvokeCompleted_t *pInvokeCompleted = nullptr;
 
-delegate void mInvokeTask(isc_task_t* task, isc_event_t *ev);
+delegate void mInvokeTask(isc_event_t *ev);
 
 
 static DnsRequestManager::DnsRequestManager()
@@ -110,29 +110,28 @@ void DnsRequestManager::Close()
 		m_pDispatchMgr = pDispatchMgr = nullptr;
 	}
 
-	isc_taskmgr_t* pTaskMgr = m_pTaskMgr;
-	if(pTaskMgr)
-	{
-		isc_taskmgr_destroy(&pTaskMgr);
-		m_pTaskMgr = pTaskMgr = nullptr;
-	}
-
-	
-
 	isc_timermgr_t* pTimerMgr = m_pTimerMgr;
 	if(pTimerMgr)
 	{
 		isc_timermgr_destroy(&pTimerMgr);
 		m_pTimerMgr = pTimerMgr;
 	}
+
+	isc_taskmgr_t* pTaskMgr = m_pTaskMgr;
+	if(pTaskMgr)
+	{
+		//isc_taskmgr_destroy(&pTaskMgr);
+		m_pTaskMgr = pTaskMgr = nullptr;
+	}
 }
 
 static void OnRequestCompleted(isc_task_t *task, isc_event_t *ev)
 {
-	pInvokeCompleted(task, ev);
+	UNUSED_ALWAYS(task);
+	pInvokeCompleted(ev);
 }
 
-void DnsRequestManager::OnTaskCallback(isc_task_t *task, isc_event_t *ev)
+void DnsRequestManager::OnTaskCallback(isc_event_t *ev)
 {
 	DnsRequest^ rq = DnsRequest::FromArg(ev->ev_arg);
 

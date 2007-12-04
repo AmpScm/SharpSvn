@@ -8,28 +8,6 @@ using namespace System::Diagnostics;
 
 namespace SharpDns 
 {
-	public enum class DnsDataClass
-	{
-		In = dns_rdataclass_in,
-		Any = dns_rdataclass_any,
-	};
-
-	public enum class DnsDataType
-	{
-		A = dns_rdatatype_a,
-		CName = dns_rdatatype_cname,
-		AAAA = dns_rdatatype_aaaa,
-		Any = dns_rdatatype_any
-	};
-
-	[Flags]
-	public enum class DnsMessageFormatOptions
-	{
-		None = 0,
-		NoComments = DNS_MESSAGETEXTFLAG_NOCOMMENTS,
-		NoHeaders = DNS_MESSAGETEXTFLAG_NOHEADERS
-	};
-
 	[Flags]
 	public enum class DnsMessageFlags
 	{
@@ -41,10 +19,26 @@ namespace SharpDns
 		Ad = DNS_MESSAGEFLAG_AD,
 		Cd = DNS_MESSAGEFLAG_CD,
 
-
 		Recursive = Rd
 	};
 
+	public enum class DnsResult
+	{
+		NoError = dns_rcode_noerror,
+		FormatError = dns_rcode_formerr,
+		ServFail = dns_rcode_servfail,
+		NxDomain = dns_rcode_nxdomain,
+		NotImplemented = dns_rcode_notimp,
+		Refused = dns_rcode_refused,
+		YxDomain = dns_rcode_yxdomain,
+		YxRrSet = dns_rcode_yxrrset,
+		NxRrSet = dns_rcode_nxrrset,
+		NotAuthorized = dns_rcode_notauth,
+		NotZone = dns_rcode_notzone,
+		BadVersion = dns_rcode_badvers
+	};
+
+	/// <summary>Represents a message to or from a Dns server</summary>
 	public ref class DnsMessage : public Implementation::SharpDnsBase
 	{
 		dns_message_t* m_pMessage;
@@ -57,23 +51,79 @@ namespace SharpDns
 	internal:
 		DnsMessage(unsigned intent);
 
-
-	public:
+	internal:
 		void AddQuestion(String^ name, DnsDataClass dataClass, DnsDataType dataType);
-		void AddQuestion(String^ name, DnsDataType dataType)
+		virtual void EnsureWritable()
 		{
-			AddQuestion(name, DnsDataClass::In, dataType);
 		}
 
-		void AddQuestion(String^ name)
+	private:
+		DnsSection^ _question;
+		DnsSection^ _answer;
+		DnsSection^ _authority;
+		DnsSection^ _additional;
+
+	public:
+		property DnsSection^ Question
 		{
-			AddQuestion(name, DnsDataClass::In, DnsDataType::Any);
+			DnsSection^ get()
+			{
+				if(!_question)
+					_question = gcnew DnsSection(this, DNS_SECTION_QUESTION);
+
+				return _question;
+			}
+		}
+
+		property DnsSection^ Answer
+		{
+			DnsSection^ get()
+			{
+				if(!_answer)
+					_answer = gcnew DnsSection(this, DNS_SECTION_ANSWER);
+
+				return _answer;
+			}
+		}
+
+		property DnsSection^ Autority
+		{
+			DnsSection^ get()
+			{
+				if(!_authority)
+					_authority = gcnew DnsSection(this, DNS_SECTION_AUTHORITY);
+
+				return _authority;
+			}
+		}
+
+		property DnsSection^ Additional
+		{
+			DnsSection^ get()
+			{
+				if(!_additional)
+					_additional = gcnew DnsSection(this, DNS_SECTION_ADDITIONAL);
+
+				return _additional;
+			}
+		}
+
+		property DnsResult Result
+		{
+			DnsResult get()
+			{
+				return (DnsResult)m_pMessage->rcode;
+			}
 		}
 
 	public:
 		virtual String^ ToString() override;
 
 		String^ ToText(DnsMessageFormatOptions options);
+
+	internal:
+		String^ SectionToText(dns_section_t section, DnsMessageFormatOptions options);
+		array<DnsItem^>^ GetNames(dns_section_t section);
 
 	internal:
 		property dns_message_t* Handle
@@ -94,13 +144,13 @@ namespace SharpDns
 			}
 			void set(DnsMessageFlags value)
 			{
+				EnsureWritable();
 				m_Flags = value;
 
 				if(m_pMessage)
 					m_pMessage->flags = (unsigned)m_Flags;
 			}
 		}
-
 
 		void Ensure();
 	};

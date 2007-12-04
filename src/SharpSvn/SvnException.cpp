@@ -255,6 +255,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_TXN_NAME_TOO_LONG:
 		case SVN_ERR_FS_SQLITE_ERROR:
 		case SVN_ERR_FS_NO_SUCH_NODE_ORIGIN:
+		case SVN_ERR_FS_SQLITE_READONLY:
 			return gcnew SvnFileSystemException(error);
 		case SVN_ERR_FS_PATH_ALREADY_LOCKED:
 		case SVN_ERR_FS_PATH_NOT_LOCKED:
@@ -354,9 +355,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_CLIENT_NO_VERSIONED_PARENT:
 			return gcnew SvnClientApiException(error);
 
-
-		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
-			return gcnew SvnException(error);
+//		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
+//			return gcnew SvnException(error);
 
 		case SVN_ERR_CANCELLED:			
 			return gcnew SvnOperationCanceledException(error);

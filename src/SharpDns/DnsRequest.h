@@ -6,17 +6,26 @@ using namespace System::Collections;
 using namespace System::Diagnostics;
 using namespace System::Net;
 using System::Collections::Generic::ICollection;
+using System::Threading::EventWaitHandle;
 
 namespace SharpDns 
 {
 	ref class DnsResponse;
 
+	/// <summary>Represents a request to a dns server</summary>
 	public ref class DnsRequest sealed : public Implementation::SharpDnsBase
 	{
 		dns_request_t* m_pRequest;
 		gcroot<DnsRequest^>* pTag;
 		DnsMessage^ _request;
 		DnsResponse^ _response;
+		int _timeout;
+		bool _completed;
+		initonly Object^ _lock;
+		EventWaitHandle^ _sync;
+
+	public:
+		event EventHandler^ Completed;
 
 	private:
 		DnsRequest(void);
@@ -44,6 +53,21 @@ namespace SharpDns
 		void OnRequestCompleted(isc_event_t *ev);
 
 	public:
+		void AddQuestion(String^ name, DnsDataClass dataClass, DnsDataType dataType);
+		void AddQuestion(String^ name, DnsDataType dataType)
+		{
+			AddQuestion(name, DnsDataClass::In, dataType);
+		}
+
+		void AddQuestion(String^ name)
+		{
+			AddQuestion(name, DnsDataClass::In, DnsDataType::Any);
+		}
+
+		/// <summary>Perform a PTR query for the specified address</summary>
+		void AddQuestion(IPAddress^ address);
+
+	public:
 		property DnsMessage^ Request
 		{
 			DnsMessage^ get()
@@ -60,9 +84,31 @@ namespace SharpDns
 			}
 		}
 
+		property TimeSpan Timeout
+		{
+			TimeSpan get()
+			{
+				return TimeSpan(0, 0, 0, _timeout);
+			}
+			void set(TimeSpan value)
+			{
+				_timeout = (int)value.TotalSeconds;
+				if(_timeout < 3)
+					_timeout = 3;
+			}
+		}
+		DnsResponse^ GetResponse()
+		{
+			WaitForComplete();
+
+			return Response;
+		}
+
 	private:
 		static DnsRequestManager^ _manager;
 		static System::Collections::Generic::ICollection<System::Net::IPAddress^>^ _dnsServers;
+
+		void WaitForComplete();
 
 	internal:
 		property DnsRequestManager^ Manager

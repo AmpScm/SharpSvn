@@ -88,5 +88,10 @@
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
+		<copy todir="${release}/include">
+			<fileset basedir="${bindDir}/lib/isc/noatomic/include">
+				<include name="**/*.h" />
+			</fileset>
+		</copy>
 	</target>
 </project>

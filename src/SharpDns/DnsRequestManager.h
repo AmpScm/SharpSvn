@@ -50,8 +50,9 @@ namespace SharpDns
 
 		dns_dispatch_t* CreateDispatch(int family);
 
-		static void OnTaskCallback(isc_task_t *task, isc_event_t *ev);
+		static void OnTaskCallback(isc_event_t *ev);
 		static void SetAddr(System::Net::EndPoint^ from, isc_sockaddr *to);
+
 
 	public:
 		DnsRequest^ Send(DnsRequest^ request, System::Net::IPEndPoint^ dnsServer);		
