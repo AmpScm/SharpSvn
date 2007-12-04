@@ -43,7 +43,7 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libdns.lib")
 #pragma comment(lib, "libisc.lib")
 
-//#pragma comment(lib, "libeay32.lib")
+#pragma comment(lib, "libeay32.lib")
 
 #pragma comment(lib, "advapi32.lib")
 #pragma comment(lib, "ws2_32.lib")
