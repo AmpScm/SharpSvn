@@ -4,41 +4,14 @@
 #pragma comment(lib, "Iphlpapi.lib")
 
 using namespace SharpDns;
+using namespace System::Threading;
+using System::Text::StringBuilder;
 
 DnsRequest::DnsRequest(void)
 {
 	_request = gcnew DnsMessage();
-}
-
-void DnsRequest::SetRequest(dns_request_t* pRequest)
-{
-	if(m_pRequest)
-		throw gcnew InvalidOperationException();
-
-	m_pRequest = pRequest;
-}
-
-void DnsRequest::OnRequestCompleted(isc_event_t *ev)
-{
-	dns_requestevent_t* e = (dns_requestevent_t *)ev;
-
-	isc_result_t r = e->result;
-
-	if(!r)
-	{
-		DnsResponse^ msg = gcnew DnsResponse();
-
-		isc_result_t r = dns_request_getresponse(e->request, msg->Handle, 0);
-
-		if(r)
-			throw gcnew InvalidOperationException();
-
-		_response = msg;
-	}
-	else
-	{
-		GC::KeepAlive(r);
-	}
+	_timeout = 15;
+	_lock = gcnew Object();
 }
 
 void DnsRequest::Clear()
@@ -50,12 +23,100 @@ void DnsRequest::Clear()
 		pTag = nullptr;
 	}
 
-	dns_request_t *pRequest = m_pRequest;
-	if(pRequest)
-	{		
-		dns_request_destroy(&pRequest);
-		m_pRequest = pRequest = nullptr;
+	Monitor::Enter(_lock);
+	try
+	{
+		dns_request_t *pRequest = m_pRequest;
+		if(pRequest)
+		{		
+			dns_request_destroy(&pRequest);
+			m_pRequest = pRequest = nullptr;
+		}
+
+		if(_sync)
+		{
+			_sync->Set();
+			System::Threading::Thread::Sleep(10);
+
+			delete _sync;
+			_sync = nullptr;
+		}
 	}
+	finally
+	{
+		Monitor::Exit(_lock);
+	}
+}
+
+
+void DnsRequest::SetRequest(dns_request_t* pRequest)
+{
+	if(m_pRequest)
+		throw gcnew InvalidOperationException();
+
+	m_pRequest = pRequest;
+}
+
+void DnsRequest::OnRequestCompleted(isc_event_t *ev)
+{
+	try
+	{
+		dns_requestevent_t* e = (dns_requestevent_t *)ev;
+
+		isc_result_t r = e->result;
+
+		if(!r)
+		{
+			DnsResponse^ msg = gcnew DnsResponse();
+
+			isc_result_t r = dns_request_getresponse(e->request, msg->Handle, 0);
+
+			if(r)
+				throw gcnew InvalidOperationException();
+
+			_response = msg;
+
+			Completed(this, EventArgs::Empty);
+		}
+		else
+		{
+			GC::KeepAlive(r);
+		}
+	}
+	finally
+	{
+		Monitor::Enter(_lock);
+		try
+		{
+			if(_sync)
+				_sync->Set();
+
+			_completed = true;
+		}
+		finally
+		{
+			Monitor::Exit(_lock);
+		}
+	}
+}
+
+void DnsRequest::WaitForComplete()
+{
+	Monitor::Enter(_lock);
+	try
+	{
+		if(_completed)
+			return;
+
+		_sync = gcnew EventWaitHandle(false, System::Threading::EventResetMode::ManualReset);
+	}
+	finally
+	{
+		Monitor::Exit(_lock);
+	}
+
+	if(!_sync->WaitOne(Timeout + TimeSpan(0,0, 3), false))
+		throw gcnew InvalidOperationException("Timeout exceeded within .Net");
 }
 
 DnsRequestManager^ DnsRequest::Manager::get()
@@ -72,7 +133,6 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 		return _dnsServers;
 
 	PIP_ADAPTER_ADDRESSES pAdapterAddresses;
-	DWORD dwRetVal = 0;
 
 	ULONG ulOutBufLen = sizeof(IP_ADAPTER_ADDRESSES);
 
@@ -110,7 +170,7 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 					dns = dns->Next;
 					continue;
 				}
-				
+
 				array<Byte>^ data = gcnew array<Byte>(len);
 				pin_ptr<Byte> pData = &data[0];
 
@@ -143,7 +203,7 @@ IPAddress^ DnsRequest::DefaultDnsServer::get()
 	}
 	return nullptr;
 }
-		
+
 
 void DnsRequest::Send()
 {
@@ -164,4 +224,41 @@ void DnsRequest::Send(System::Net::IPAddress ^dnsServer)
 		throw gcnew ArgumentNullException("dnsServer");
 
 	Send(gcnew System::Net::IPEndPoint(dnsServer, 53)); // DNS servers communicate over port 53 udp/tcp
+}
+
+void DnsRequest::AddQuestion(String^ name, DnsDataClass dataClass, DnsDataType dataType)
+{
+	if(!name)
+		throw gcnew ArgumentNullException("name");
+
+	if(!name->EndsWith("."))
+		name += ".";
+
+	Request->AddQuestion(name, dataClass, dataType);
+}
+
+void DnsRequest::AddQuestion(IPAddress^ address)
+{
+	if(!address)
+		throw gcnew ArgumentNullException("address");
+
+	array<Byte>^ bytes = address->GetAddressBytes();
+
+	if(bytes->Length == 4)
+	{
+		AddQuestion(String::Format("{0}.{1}.{2}.{3}.in-addr.arpa", bytes[3], bytes[2], bytes[1], bytes[0]), DnsDataType::Ptr);
+	}
+	else
+	{
+		StringBuilder^ sb = gcnew StringBuilder();
+
+		for(int i = bytes->Length-1; i >= 0; i--)
+		{
+			sb->AppendFormat("{0:x}.", bytes[i] & 0xF);
+			sb->AppendFormat("{0:x}.", bytes[i] >> 4);
+		}
+		sb->Append("ip6.arpa.");
+
+		AddQuestion(sb->ToString(), DnsDataType::Ptr);
+	}
 }

@@ -4,6 +4,8 @@
 
 #pragma once
 
+#define UNUSED_ALWAYS(x) (x)
+#include <winsock2.h>
 #include <ws2tcpip.h>
 
 
@@ -25,6 +27,7 @@
 #include <dns/name.h>
 #include <dns/request.h>
 #include <dns/resolver.h>
+#include <dns/rdata.h>
 #include <dns/rdataset.h>
 
 #include <dns/view.h>

@@ -87,7 +87,8 @@
 		<if test="${not directory::exists(platformBase + '/serf')}">
 			<Svn verbose="true">
 				<arg line="co" />
-				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" />
+				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" unless="${serfTrunkBuild == 'true'}" />
+				<arg value="http://serf.googlecode.com/svn/trunk/" if="${serfTrunkBuild == 'true'}" />
 				<arg value="${platformBase}/serf" />
 			</Svn>
 		</if>

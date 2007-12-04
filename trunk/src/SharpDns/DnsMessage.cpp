@@ -107,7 +107,7 @@ String^ DnsMessage::ToText(DnsMessageFormatOptions options)
 	{
 		dns_message_totext(m_pMessage, &dns_master_style_debug, (dns_messagetextflag_t)options, pBuffer);
 
-		return gcnew String((char*)isc_buffer_base(pBuffer), 0, isc_buffer_length(pBuffer));
+		return gcnew String((char*)isc_buffer_base(pBuffer), 0, isc_buffer_usedlength(pBuffer));
 	}
 	finally
 	{
@@ -115,4 +115,108 @@ String^ DnsMessage::ToText(DnsMessageFormatOptions options)
 	}
 
 	return nullptr;
+}
+
+String^ DnsMessage::SectionToText(dns_section_t section, DnsMessageFormatOptions options)
+{
+	Ensure();	
+
+	isc_buffer_t *pBuffer = nullptr;
+
+	if(!isc_buffer_allocate(SharpDnsBase::MemoryManager, &pBuffer, 1024))
+	try
+	{
+		dns_message_sectiontotext(m_pMessage, section, &dns_master_style_debug, (dns_messagetextflag_t)options, pBuffer);
+
+		return gcnew String((char*)isc_buffer_base(pBuffer), 0, isc_buffer_usedlength(pBuffer));
+	}
+	finally
+	{
+		isc_buffer_free(&pBuffer);
+	}
+
+	return nullptr;
+}
+
+String^ DnsSection::ToString()
+{
+	return ToText(DnsMessageFormatOptions::NoComments | DnsMessageFormatOptions::NoHeaders);
+}
+
+String^ DnsSection::ToText(DnsMessageFormatOptions options)
+{
+	return _message->SectionToText(_section, options);
+}
+
+void DnsSection::Refresh()
+{
+	_list = _message->GetNames(_section);
+
+	if(!_list)
+		_list = gcnew array<DnsItem^>(0);
+}
+
+array<DnsItem^>^ DnsMessage::GetNames(dns_section_t section)
+{
+	if(dns_message_firstname(m_pMessage, section))
+		return nullptr;
+
+	System::Collections::Generic::List<DnsItem^>^ list = nullptr;
+	isc_buffer_t *pBuffer = nullptr;
+	isc_buffer_t *pBuf2 = nullptr;
+
+	try
+	{
+		if(!isc_buffer_allocate(SharpDnsBase::MemoryManager, &pBuffer, 1024) && !isc_buffer_allocate(SharpDnsBase::MemoryManager, &pBuf2, 1024))
+		do
+		{
+			dns_name_t *pName = nullptr;
+			dns_message_currentname(m_pMessage, section, &pName);
+
+			if(pName)
+			{
+				if(!list)
+					list = gcnew System::Collections::Generic::List<DnsItem^>();
+
+				isc_buffer_clear(pBuffer);
+				dns_name_totext(pName, isc_boolean_false, pBuffer);
+
+				String^ name = gcnew String((char*)isc_buffer_base(pBuffer), 0, isc_buffer_usedlength(pBuffer));		
+
+				dns_rdataset_t * rdataset = ISC_LIST_HEAD(pName->list);
+
+				if(!dns_rdataset_first(rdataset))
+				{
+					do
+					{
+						dns_rdata_t data;
+						memset(&data, 0, sizeof(data));
+
+						dns_rdataset_current(rdataset, &data);
+
+						isc_buffer_clear(pBuf2);
+						if(!dns_rdata_totext(&data, pName, pBuf2))
+						{
+							String^ value = gcnew String((char*)isc_buffer_base(pBuf2), 0, isc_buffer_usedlength(pBuf2));
+							list->Add(gcnew DnsItem(name, (DnsDataClass)data.rdclass, (DnsDataType)data.type, rdataset->ttl, value));
+						}					
+					}
+					while(!dns_rdataset_next(rdataset));
+				}
+			}
+		}
+		while(!dns_message_nextname(m_pMessage, section));
+	}
+	finally
+	{
+		if(pBuffer)
+			isc_buffer_free(&pBuffer);
+		if(pBuf2)
+			isc_buffer_free(&pBuf2);
+	}
+
+	if(list)
+		return list->ToArray();
+	else
+		return nullptr;
 }

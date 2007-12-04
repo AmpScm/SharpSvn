@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpDns", "SharpDns\SharpDns.vcproj", "{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}"
+EndProject
 Global
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1
@@ -56,6 +58,14 @@ Global
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x64.Build.0 = Release|x64
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x86.ActiveCfg = Release|x86
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Release|x86.Build.0 = Release|x86
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Debug|x64.ActiveCfg = Debug|x64
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Debug|x64.Build.0 = Debug|x64
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Debug|x86.ActiveCfg = Debug|Win32
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Debug|x86.Build.0 = Debug|Win32
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Release|x64.ActiveCfg = Release|x64
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Release|x64.Build.0 = Release|x64
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Release|x86.ActiveCfg = Release|Win32
+		{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
