@@ -481,6 +481,10 @@
 				>
 			</File>
 		</Filter>
+		<File
+			RelativePath=".\SharpDns.snk"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

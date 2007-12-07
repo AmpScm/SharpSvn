@@ -214,6 +214,10 @@ void DnsRequest::Send(System::Net::IPEndPoint ^dnsServer)
 {
 	if(!dnsServer)
 		throw gcnew ArgumentNullException("dnsServer");
+	else if(_sent)
+		throw gcnew InvalidOperationException();
+
+	_sent = true;
 
 	Manager->Send(this, dnsServer);
 }

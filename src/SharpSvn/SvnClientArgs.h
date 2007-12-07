@@ -90,7 +90,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool InvokationCeased
+		property bool InvokationCanceled
 		{
 			bool get();
 		}

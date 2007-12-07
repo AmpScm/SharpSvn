@@ -39,6 +39,7 @@ namespace SharpDns
 	};
 
 	/// <summary>Represents a message to or from a Dns server</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class DnsMessage : public Implementation::SharpDnsBase
 	{
 		dns_message_t* m_pMessage;
