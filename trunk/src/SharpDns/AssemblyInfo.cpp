@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#include <openssl/opensslv.h>
 using namespace System;
 using namespace System::Reflection;
 using namespace System::Resources;
@@ -13,7 +13,7 @@ using namespace System::Security::Permissions;
 // associated with an assembly.
 //
 [assembly:AssemblyTitleAttribute("SharpDns")];
-[assembly:AssemblyDescriptionAttribute("")];
+[assembly:AssemblyDescriptionAttribute("SharpDns (Compiled statically with libisc and libdns from bind and " OPENSSL_VERSION_TEXT ")")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpDns")];

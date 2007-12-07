@@ -8,7 +8,6 @@ namespace SharpDns
 {
 	namespace Implementation
 	{
-
 		public ref class SharpDnsBase : public MarshalByRefObject
 		{
 			static initonly bool m_bHaveIpv4;

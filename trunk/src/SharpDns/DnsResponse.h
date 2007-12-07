@@ -7,6 +7,8 @@ using namespace System::Diagnostics;
 
 namespace SharpDns 
 {
+	/// <summary>Encapsulates a dns response message</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class DnsResponse sealed : DnsMessage
 	{
 	public:

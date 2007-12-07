@@ -13,6 +13,7 @@ namespace SharpDns
 	ref class DnsResponse;
 
 	/// <summary>Represents a request to a dns server</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class DnsRequest sealed : public Implementation::SharpDnsBase
 	{
 		dns_request_t* m_pRequest;
@@ -21,6 +22,7 @@ namespace SharpDns
 		DnsResponse^ _response;
 		int _timeout;
 		bool _completed;
+		bool _sent;
 		initonly Object^ _lock;
 		EventWaitHandle^ _sync;
 

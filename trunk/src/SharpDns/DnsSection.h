@@ -7,6 +7,9 @@ using namespace System::Diagnostics;
 
 namespace SharpDns 
 {
+	ref class DnsSection;
+
+	/// <summary>Formatting options of <see cref="DnsMessage"/> and <see cref="DnsSection"/> instances</summary>
 	[Flags]
 	public enum class DnsMessageFormatOptions
 	{
@@ -15,6 +18,7 @@ namespace SharpDns
 		NoHeaders = DNS_MESSAGETEXTFLAG_NOHEADERS
 	};
 
+	/// <summary>Section within a <see cref="DnsMessage" /></summary>
 	public ref class DnsSection sealed : public System::Collections::Generic::ICollection<DnsItem^>, System::Collections::Generic::IEnumerable<DnsItem^>
 	{
 		initonly DnsMessage^ _message;
