@@ -19,11 +19,11 @@ namespace SharpSvn
 	{
 		SvnClient _client;
 
-		/*static void Main(string[] args)
+		static void Main(string[] args)
 		{
 			Application.EnableVisualStyles();
 			new Program().Run(args);
-		}*/
+		}
 
 		void Run(string[] args)
 		{
@@ -34,9 +34,10 @@ namespace SharpSvn
 			_client.LoadConfigurationDefault();
 			_client.Authenticator.Clear();
 			//_client.Authenticator.SslServerTrustHandlers += _client.Authenticator.CryptoStoreSslServerTrustHandler;
-			_client.Authenticator.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
+			//_client.Authenticator.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
 			//_client.Authenticator.SslServerTrustHandlers += SharpSvn.Security.SvnAuthentication.SubversionFileSslServerTrustHandler;
 			//_client.Authenticator.AddSubversionFileHandlers();
+
 			SharpSvnUI.Bind(_client, null);
 			//_client.Authenticator.UsernamePasswordHandlers += new EventHandler<SvnUsernamePasswordEventArgs>(Authenticator_UsernamePasswordHandlers);
 
@@ -47,12 +48,17 @@ namespace SharpSvn
 			_client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
 			_client.Progress += new EventHandler<SvnProgressEventArgs>(OnClientProgress);
 
-			_client.Status("..\\..\\SharpSvn.Console.csproj", delegate(object sender, SvnStatusEventArgs e)
+            string up = "..";
+
+            while (!File.Exists(Path.Combine(up, "SharpSvn.Console.csproj")))
+                up += "\\..";
+
+			_client.Status(Path.Combine(up, "SharpSvn.Console.csproj"), delegate(object sender, SvnStatusEventArgs e)
 			{
 				Console.WriteLine(e.FullPath);
 			});
 
-			_client.Info((SvnPathTarget)"..\\..\\SharpSvn.Console.csproj", delegate(object sender, SvnInfoEventArgs e)
+            _client.Info((SvnPathTarget)Path.Combine(up, "SharpSvn.Console.csproj"), delegate(object sender, SvnInfoEventArgs e)
 			{
 				Console.WriteLine(e.FullPath);
 			});
@@ -76,7 +82,7 @@ namespace SharpSvn
 			Directory.CreateDirectory("f:\\svn-test-location");
 
 			SvnUpdateResult ver;
-            _client.CheckOut(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"), "f:\\svn-test-location\\gc", out ver);
+            _client.CheckOut(new Uri("https://sharpsvn.googlecode.com/svn/trunk/"), "f:\\svn-test-location\\gc", out ver);
 			_client.Update("f:\\svn-test-location\\gc");
 
 			_client.PropertyList((SvnPathTarget)"F:\\svn-test-location\\gc\\src\\SharpSvn.UI\\SharpSvn.UI.snk", new EventHandler<SvnPropertyListEventArgs>(OnPropertyItem));

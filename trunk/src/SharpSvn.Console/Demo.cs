@@ -8,7 +8,7 @@ using SharpSvn;
 
 class Demo
 {
-	public static void Main()
+	public static void qMain()
 	{
 		using (SvnClient client = new SvnClient())
 		{
