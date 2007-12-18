@@ -33,7 +33,7 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
 	else if(!args)
 		throw gcnew ObjectDisposedException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
+	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
