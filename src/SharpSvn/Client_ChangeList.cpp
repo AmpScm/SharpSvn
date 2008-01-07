@@ -129,8 +129,10 @@ bool SvnClient::ListChangeList(String^ rootPath, String^ changeList, EventHandle
 	return ListChangeList(rootPath, changeList, gcnew SvnListChangeListArgs(), changeListHandler);
 }
 
-static svn_error_t *svnclient_changelist_handler(void *baton, const char *path)
+static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, const char *changelist, apr_pool_t *pool)
 {
+	UNUSED_ALWAYS(pool);
+	UNUSED_ALWAYS(changelist);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnListChangeListArgs^ args = dynamic_cast<SvnListChangeListArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
@@ -177,11 +179,12 @@ bool SvnClient::ListChangeList(String^ rootPath, String^ changeList, SvnListChan
 		args->ListChangeList += changeListHandler;
 	try
 	{
-		svn_error_t* r = svn_client_get_changelist_streamy(
+		svn_error_t* r = svn_client_get_changelists(
+			pool.AllocPath(rootPath),
+			AllocArray(NewSingleItemCollection(changeList), %pool),
+			(svn_depth_t)args->Depth,
 			svnclient_changelist_handler,
 			(void*)_clientBatton->Handle,
-			pool.AllocString(changeList),
-			pool.AllocPath(rootPath),
 			CtxHandle,
 			pool.Handle);
 
@@ -193,7 +196,6 @@ bool SvnClient::ListChangeList(String^ rootPath, String^ changeList, SvnListChan
 			args->ListChangeList -= changeListHandler;
 	}
 }
-
 
 bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list)
 {
@@ -214,30 +216,24 @@ bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, SvnListChang
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
+	IList<SvnListChangeListEventArgs^>^ who = nullptr;
 	list = nullptr;
-
-	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
-	AprPool pool(%_pool);
-
-	apr_array_header_t* aprResult = nullptr;
-
-	svn_error_t* r = svn_client_get_changelist(
-		&aprResult,
-		pool.AllocString(changeList),
-		pool.AllocPath(rootPath),
-		CtxHandle,
-		pool.Handle);
-
-	if(!r && aprResult)
+	
+	if(GetChangeList(rootPath, changeList, args, who))
 	{
-		AprArray<String^,AprCStrPathMarshaller^> paths(aprResult, %pool);
+		array<String^>^ lst = gcnew array<String^>(who->Count);
 
-		list = safe_cast<IList<String^>^>(paths.ToArray());
+		for(int i = 0; i < who->Count; i++)
+			lst[i] = who[i]->Path;
+
+		list = array<String^>::AsReadOnly(lst);
+
+		return true;
 	}
-
-	return args->HandleResult(this, r);
+	else
+		return false;
 }
+
 
 bool SvnClient::GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {

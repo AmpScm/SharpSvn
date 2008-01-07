@@ -116,6 +116,11 @@ namespace SharpSvn {
 			System::Version^ get();
 		}
 
+		/// <summary>Adds the specified client name to web requests' UserAgent string</summary>
+		/// <remarks>The name is filtered to be unique and conformant for the webrequest. Clients should use only alphanumerical ascii characters</remarks>
+		static void AddClientName(String^ name, System::Version^ version);
+
+
 		/// <summary>
 		/// Gets the name of the subversion administrative directories. Most commonly ".svn"
 		/// </summary>
