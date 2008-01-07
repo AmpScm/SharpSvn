@@ -24,6 +24,10 @@
 					<include name="sqlite3.lib" />
 					<include name="apr-1.lib" />
 					<include name="aprutil-1.lib" />
+				</fileset>      
+			</copy>
+			<copy todir="build/win32/lib/lib">
+				<fileset basedir="${release}/lib">
 					<include name="libdb*.lib" />
 				</fileset>      
 			</copy>
@@ -44,6 +48,11 @@
 					<include name="sqlite3.lib" />
 					<include name="apr-1.lib" />
 					<include name="aprutil-1.lib" />
+					<include name="libdb*.lib" />
+				</fileset>
+			</copy>
+			<copy todir="build/x64/lib/lib">
+				<fileset basedir="${release}/lib-x64">
 					<include name="libdb*.lib" />
 				</fileset>      
 			</copy>

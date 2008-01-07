@@ -510,3 +510,17 @@ SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)
 	client->_currentArgs = args;
 	_client = client;
 }
+
+void SvnClient::AddClientName(String^ name, System::Version^ version)
+{
+	if(String::IsNullOrEmpty(name))
+		throw gcnew ArgumentNullException("name");
+	else if(!version)
+		throw gcnew ArgumentNullException("version");
+
+	for(int i = 0; i < name->Length; i++)
+	{
+		if(!wchar_t::IsLetterOrDigit(name, i) && 0 > (((String^)"._ ")->IndexOf(name[i])))
+			throw gcnew ArgumentException("name", "Invalid character in name");
+	}
+}

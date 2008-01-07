@@ -1939,13 +1939,27 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnListChangeListArgs : public SvnClientArgs
 	{
+		SvnDepth _depth;
 	public:
 		SvnListChangeListArgs()
 		{
+			_depth = SvnDepth::Infinity;
 		}
 
 	public:
 		event EventHandler<SvnListChangeListEventArgs^>^ ListChangeList;
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
+			}
+		}
 
 	protected public:
 		virtual void OnListChangeList(SvnListChangeListEventArgs^ e)
