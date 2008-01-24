@@ -59,6 +59,7 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 	svn_error_t *r = svn_client_revert2(
 		aprPaths->Handle,
 		(svn_depth_t)args->Depth,
+		(const apr_array_header_t *)nullptr, // Changelists
 		CtxHandle,
 		pool.Handle);
 

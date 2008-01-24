@@ -1770,14 +1770,16 @@ namespace SharpSvn {
 	public ref class SvnListChangeListEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
+		initonly String^ _changelist;
 
 	internal:
-		SvnListChangeListEventArgs(const char *path)
+		SvnListChangeListEventArgs(const char *path, const char *changelist)
 		{
 			if(!path)
 				throw gcnew ArgumentNullException("path");
 
 			_path = SvnBase::Utf8_PtrToString(path)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+			_changelist = SvnBase::Utf8_PtrToString(changelist);
 		}
 
 	public:
@@ -1788,6 +1790,15 @@ namespace SharpSvn {
 				return _path;
 			}
 		}
+
+		property String^ Changelist
+		{
+			String^ get()
+			{
+				return _changelist;
+			}
+		}
+
 
 	public:
 		virtual void Detach(bool keepProperties) override

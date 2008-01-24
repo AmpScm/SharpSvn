@@ -126,6 +126,7 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 		(svn_depth_t)args->Depth,
 		args->SkipChecks,
 		(svn_revnum_t)args->BaseRevision,
+		(const apr_array_header_t *)nullptr, // Changelists
 		CtxHandle,
 		pool->Handle);
 

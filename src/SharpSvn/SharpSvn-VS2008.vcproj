@@ -680,6 +680,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_AddToChangeList.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Blame.cpp"
 					>
 				</File>
@@ -781,6 +785,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_Relocate.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_RemoveFromChangeList.cpp"
 					>
 				</File>
 				<File

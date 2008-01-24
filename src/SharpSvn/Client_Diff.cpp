@@ -101,6 +101,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 			pool.AllocString(args->HeaderEncoding),
 			tmpOut,
 			tmpErr,
+			(const apr_array_header_t *)nullptr, // Changelists
 			CtxHandle,
 			pool.Handle);
 
@@ -194,6 +195,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 			pool.AllocString(args->HeaderEncoding),
 			tmpOut,
 			tmpErr,
+			(const apr_array_header_t *)nullptr, // Changelists
 			CtxHandle,
 			pool.Handle);
 
