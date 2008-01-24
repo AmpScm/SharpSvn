@@ -262,6 +262,8 @@ namespace SharpSvn {
 		bool _ignoreExternals;
 		bool _allowUnversionedObstructions;
 		SvnRevision^ _revision;
+		bool _keepDepth;
+
 	public:
 		SvnUpdateArgs()
 		{
@@ -281,6 +283,17 @@ namespace SharpSvn {
 			}
 		}
 
+		property bool KeepDepth
+		{
+			bool get()
+			{
+				return _keepDepth;
+			}
+			void set(bool value)
+			{
+				_keepDepth = value;
+			}
+		}
 
 		property bool IgnoreExternals
 		{
@@ -410,6 +423,7 @@ namespace SharpSvn {
 		SvnRevision^ _revision;
 		bool _allowUnversionedObstructions;
 		bool _ignoreExternals;
+		bool _keepDepth;
 
 	public:
 		SvnSwitchArgs()
@@ -427,6 +441,18 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		property bool KeepDepth
+		{
+			bool get()
+			{
+				return _keepDepth;
+			}
+			void set(bool value)
+			{
+				_keepDepth = value;
 			}
 		}
 
@@ -603,7 +629,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ Changelist
+		/*property String^ Changelist
 		{
 			String^ get()
 			{
@@ -613,7 +639,7 @@ namespace SharpSvn {
 			{
 				_changelist = value;
 			}
-		}
+		}*/
 
 		property bool KeepChangelist
 		{
@@ -1918,9 +1944,23 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnAddToChangeListArgs : public SvnClientArgs
 	{
+		SvnDepth _depth;
 	public:
 		SvnAddToChangeListArgs()
 		{
+			_depth = SvnDepth::Infinity;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
+			}
 		}
 	};
 
@@ -1928,14 +1968,28 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRemoveFromChangeListArgs : public SvnClientArgs
 	{
+		SvnDepth _depth;
 	public:
 		SvnRemoveFromChangeListArgs()
 		{
+			_depth = SvnDepth::Infinity;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
+			}
 		}
 	};
 
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::ListChangeList(String^,String^,SvnListChangeListArgs^,EventHandler{SvnListChangeListEventArgs^}^)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::ListChangeList(String^,SvnListChangeListArgs^,EventHandler{SvnListChangeListEventArgs^}^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnListChangeListArgs : public SvnClientArgs
 	{

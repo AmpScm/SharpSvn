@@ -106,7 +106,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		(svn_depth_t)args->Depth,
 		args->KeepLocks,
 		args->KeepChangelist,
-		args->Changelist ? pool.AllocString(args->Changelist) : nullptr,
+		(const apr_array_header_t *)nullptr, // Changelists
 		CtxHandle,
 		pool.Handle);
 

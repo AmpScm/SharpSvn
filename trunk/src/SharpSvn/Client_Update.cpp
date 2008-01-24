@@ -120,6 +120,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 		aprPaths->Handle,
 		&uRev,
 		(svn_depth_t)args->Depth,
+		args->KeepDepth,
 		args->IgnoreExternals,
 		args->AllowUnversionedObstructions,
 		CtxHandle,

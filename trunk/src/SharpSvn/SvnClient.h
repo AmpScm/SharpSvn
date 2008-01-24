@@ -814,14 +814,12 @@ namespace SharpSvn {
 		bool RemoveFromChangeList(ICollection<String^>^ paths);
 		bool RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromChangeListArgs^ args);
 		/// <overloads>Streamingly gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool ListChangeList(String^ rootPath, String^ changeList, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
-		bool ListChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
+		bool ListChangeList(String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
+		bool ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
 
 		/// <overloads>Gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool GetChangeList(String^ rootPath, String^ changeList, [Out]IList<String^>^% list);
-		bool GetChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, [Out]IList<String^>^% list);
-		bool GetChangeList(String^ rootPath, String^ changeList, [Out]IList<SvnListChangeListEventArgs^>^% list);
-		bool GetChangeList(String^ rootPath, String^ changeList, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
 
 	public:
 		/// <overloads>Gets a list of Uri's which might be valid merge sources (<c>svn mergeinfo</c>)</overloads>

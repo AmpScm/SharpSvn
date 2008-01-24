@@ -82,6 +82,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 			svn_info_receiver,
 			(void*)_clientBatton->Handle,
 			(svn_depth_t)args->Depth,
+			(const apr_array_header_t *)nullptr, // Changelists
 			CtxHandle,
 			pool.Handle);
 

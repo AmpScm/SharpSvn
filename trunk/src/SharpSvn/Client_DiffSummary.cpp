@@ -80,6 +80,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 			&toRev,
 			(svn_depth_t)args->Depth,
 			args->IgnoreAncestry,
+			(const apr_array_header_t *)nullptr, // Changelists
 			svn_client_diff_summarize_func_handler,
 			(void*)_clientBatton->Handle,
 			CtxHandle,
