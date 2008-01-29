@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 
-	<target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-sqlite, build-apr">
+	<target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-apr">
 		<!-- Fake direct result for subversion to hide platforms -->
 		<copy todir="build/${platform}/lib/include">
 			<fileset basedir="${release}/include/apr-1">
@@ -9,7 +9,6 @@
 			</fileset>
 		</copy>
 		<copy todir="build/${platform}/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
-		<copy todir="build/${platform}/lib/inc" file="${release}/include/sqlite3.h" />
 		<copy todir="build/${platform}/lib/include">
 			<fileset basedir="build/apr/include">
 				<include name="arch/win32/**.h" />
@@ -21,7 +20,6 @@
 					<include name="xml.lib" />
 					<include name="libeay32.lib" />
 					<include name="ssleay32.lib" />
-					<include name="sqlite3.lib" />
 					<include name="apr-1.lib" />
 					<include name="aprutil-1.lib" />
 				</fileset>      
@@ -45,7 +43,6 @@
 					<include name="xml.lib" />
 					<include name="libeay32.lib" />
 					<include name="ssleay32.lib" />
-					<include name="sqlite3.lib" />
 					<include name="apr-1.lib" />
 					<include name="aprutil-1.lib" />
 					<include name="libdb*.lib" />
@@ -56,7 +53,6 @@
 					<include name="libdb*.lib" />
 				</fileset>      
 			</copy>
-			<copy todir="build/x64/lib/inc" file="build/sqlite-${sqliteVersion}/sqlite3.h" />
 			<copy todir="build/x64/lib/zlib" flatten="true">
 				<fileset>
 					<include name="build/zlib-${zlibVersion}/z*.h" />
@@ -77,7 +73,7 @@
 		
 	</target>
 
-	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-sqlite, build-apr, build-sasl, svn-prepare">
+	<target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
 		<OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
 			<!-- Patches for x64 builds; hopefully included in svn 1.5 -->
 			<copy todir="${svnBase}/build/generator/" overwrite="true">
@@ -110,7 +106,6 @@
 				<arg value="--with-zlib=../lib/zlib" />
 				<arg value="--with-neon=../neon" />
 				<arg value="--with-serf=../serf" />
-				<arg value="--with-sqlite=../lib" />
 				<arg value="--with-sasl=../lib" />
 				<arg value="--disable-shared" />
 			</exec>
@@ -142,7 +137,7 @@
 					<loadfile file="${vcproj}" property="projtext">
 						<filterchain>
 							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
-							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib sqlite3.lib' />
+							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib' />
 							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
 							<replacestring from='Optimization="2"' to='Optimization="1"' />
 							<replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />

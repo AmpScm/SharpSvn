@@ -26,7 +26,6 @@
 	<include buildfile="build-bdb.build" />
 	<include buildfile="build-zlib.build" />
 	<include buildfile="build-openssl.build" />
-	<include buildfile="build-sqlite.build" />
 	<include buildfile="build-serf.build" />
 	<include buildfile="build-neon.build" />
 	<include buildfile="build-apr.build" />
