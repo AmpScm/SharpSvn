@@ -11,9 +11,6 @@
 		<if test="${not file::exists('downloads/' + zlibFilename)}">
 			<get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
 		</if>
-		<if test="${not file::exists('downloads/' + sqliteFilename)}">
-			<get src="http://www.sqlite.org/${sqliteFilename}" dest="downloads/${sqliteFilename}" />
-		</if>
 		<if test="${not file::exists('downloads/' + nunitFilename)}">
 			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
 		</if>
@@ -35,9 +32,6 @@
 		</if>
 		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
 			<UnTar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
-		</if>
-		<if test="${not directory::exists(sqliteDir)}">
-			<unzip zipfile="downloads/${sqliteFilename}" todir="${sqliteDir}"  />
 		</if>
 		<if test="${not directory::exists(nunitDir)}">
 			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />

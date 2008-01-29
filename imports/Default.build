@@ -15,7 +15,6 @@
 	<property name="dbVersion" value="4.5.20" />
 	<property name="zlibVersion" value="1.2.3" />
 	<property name="serfVersion" value="0.1.3" />
-	<property name="sqliteVersion" value="3.5.2" />
 	<property name="saslVersion" value="2.1.22" />	
 	<property name="nunitVersion" value="2.4.3" />
 	<property name="bindVersion" value="9.4.1-P1" />
