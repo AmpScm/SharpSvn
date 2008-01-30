@@ -128,3 +128,12 @@ IList<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
 
 	return _items;
 }
+
+SvnMergeRange^ SvnNotifyEventArgs::MergeRange::get()
+{
+	if(!_mergeRange && _notify && _notify->merge_range)
+		_mergeRange = gcnew SvnMergeRange(_notify->merge_range->start, _notify->merge_range->end, _notify->merge_range->inheritable != 0);
+
+	return _mergeRange;
+}
+

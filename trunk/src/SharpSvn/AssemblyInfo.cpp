@@ -51,7 +51,7 @@ using namespace System::Security::Permissions;
 									   ", neon " NEON_VERSION
 									   ", serf " SERF_VERSION
 									   " and " OPENSSL_VERSION_TEXT
-									   " and dynamically linked to Berkeley DB" BDB_VERSION 
+									   ". Dynamically linked to Berkeley DB" BDB_VERSION 
 									   " and Cyrus Sasl " SASL_VERSION ")")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];

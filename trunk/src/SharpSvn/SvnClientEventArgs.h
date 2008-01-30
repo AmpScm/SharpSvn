@@ -17,6 +17,7 @@ namespace SharpSvn {
 	using System::Collections::ObjectModel::KeyedCollection;
 
 	ref class SvnException;
+	ref class SvnMergeRange;
 
 	public ref class SvnEventArgs abstract : public System::EventArgs
 	{
@@ -33,293 +34,11 @@ namespace SharpSvn {
 			UNUSED_ALWAYS(keepProperties);
 		}
 	};
+};
 
-	public ref class SvnCancelEventArgs : public SvnEventArgs
-	{
-		bool _cancel;
-
-	public:
-		SvnCancelEventArgs()
-		{
-		}
-
-	public:
-		property bool Cancel
-		{
-			bool get()
-			{
-				return _cancel;
-			}
-			void set(bool value)
-			{
-				_cancel = value;
-			}
-		}
-	};
-
-	public ref class SvnProgressEventArgs sealed : public SvnEventArgs
-	{
-		initonly __int64 _progress;
-		initonly __int64 _totalProgress;
-
-	public:
-		SvnProgressEventArgs(__int64 progress, __int64 totalProgress)
-		{
-			_progress = progress;
-			_totalProgress = totalProgress;
-		}
-
-	public:
-		property __int64 Progress
-		{
-			__int64 get()
-			{
-				return _progress;
-			}
-		}
-
-		property __int64 TotalProgress
-		{
-			__int64 get()
-			{
-				return _totalProgress;
-			}
-		}
-	};
-
-	public ref class SvnCommittingEventArgs sealed : public SvnEventArgs
-	{
-		AprPool^ _pool;
-		const apr_array_header_t *_commitItems;
-		bool _cancel;
-		String^ _logMessage;
-		IList<SvnCommitItem^>^ _items;
-	internal:
-		SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
-
-	public:
-		property bool Cancel
-		{
-			bool get()
-			{
-				return _cancel;
-			}
-			void set(bool value)
-			{
-				_cancel = value;
-			}
-		}
-
-		property String^ LogMessage
-		{
-			String^ get()
-			{
-				return _logMessage;
-			}
-			void set(String^ value)
-			{
-				_logMessage = value;
-			}
-		}
-
-		property IList<SvnCommitItem^>^ Items
-		{
-			IList<SvnCommitItem^>^ get();
-		}
-
-		virtual void Detach(bool keepProperties) override;
-	};
-
-	public ref class SvnConflictEventArgs sealed : public SvnCancelEventArgs
-	{
-		const svn_wc_conflict_description_t* _description;
-		SvnConflictChoice _result;
-
-		initonly SvnNodeKind _nodeKind;
-		initonly bool _isBinary;
-		initonly SvnConflictAction _action;
-		initonly SvnConflictReason _reason;
-		
-		String^ _propertyName;
-		String^ _path;
-		String^ _mimeType;
-
-		String^ _baseFile;
-		String^ _theirFile;
-		String^ _myFile;
-		String^ _mergedFile;
-
-		String^ _mergeResult;
-
-	internal:
-		SvnConflictEventArgs(const svn_wc_conflict_description_t *description)
-		{
-			if(!description)
-				throw gcnew ArgumentNullException("description");
-
-			_description = description;
-			_result = SvnConflictChoice::Postpone;
-
-			_nodeKind = (SvnNodeKind)description->node_kind;
-			_action = (SvnConflictAction)description->action;
-			_reason = (SvnConflictReason)description->reason;
-			// We ignore the administrative baton for now
-		}
-
-	public:
-		property SvnConflictChoice Choice
-		{
-			SvnConflictChoice get()
-			{
-				return _result;
-			}
-			void set(SvnConflictChoice value)
-			{
-				_result = EnumVerifier::Verify(value);
-			}
-		}
-
-	public:
-		property String^ Path
-		{
-			String^ get()
-			{
-				if(!_path && _description && _description->path)
-					_path = SvnBase::Utf8_PtrToString(_description->path);
-
-				return _path;
-			}
-		}
-
-		property String^ PropertyName
-		{
-			String^ get()
-			{
-				if(!_propertyName && _description && _description->property_name)
-					_propertyName = SvnBase::Utf8_PtrToString(_description->property_name);
-
-				return _propertyName;
-			}
-		}
-
-		property String^ MimeType
-		{
-			String^ get()
-			{
-				if(!_mimeType && _description && _description->mime_type)
-					_mimeType = SvnBase::Utf8_PtrToString(_description->mime_type);
-
-				return _mimeType;
-			}
-		}
-
-		property String^ BaseFile
-		{
-			String^ get()
-			{
-				if(!_baseFile && _description && _description->base_file)
-					_baseFile = SvnBase::Utf8_PtrToString(_description->base_file);
-
-				return _baseFile;
-			}
-		}
-
-		property String^ TheirFile
-		{
-			String^ get()
-			{
-				if(!_theirFile && _description && _description->their_file)
-					_theirFile = SvnBase::Utf8_PtrToString(_description->their_file);
-
-				return _theirFile;
-			}
-		}
-
-		property String^ MyFile
-		{
-			String^ get()
-			{
-				if(!_myFile && _description && _description->my_file)
-					_myFile = SvnBase::Utf8_PtrToString(_description->my_file);
-
-				return _myFile;
-			}
-		}
-
-		property String^ MergedFile
-		{
-			String^ get()
-			{
-				if(_mergeResult)
-					return _mergeResult;
-
-				if(!_mergedFile && _description && _description->merged_file)
-					_mergedFile  = SvnBase::Utf8_PtrToString(_description->merged_file);
-
-				return _mergedFile;
-			}
-			void set(String^ value)
-			{
-				_mergeResult = String::IsNullOrEmpty(value) ? nullptr : value;
-			}
-		}
-
-		property bool IsBinary
-		{
-			bool get()
-			{
-				return _isBinary;
-			}
-		}
-
-		property SvnConflictAction ConflictAction
-		{
-			SvnConflictAction get()
-			{
-				return _action;
-			}
-		}
-
-		property SvnConflictReason ConflictReason
-		{
-			SvnConflictReason get()
-			{
-				return _reason;
-			}
-		}
-
-		property SvnNodeKind NodeKind
-		{
-			SvnNodeKind get()
-			{
-				return _nodeKind;
-			}
-		}
-
-	public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if(keepProperties)
-				{
-					GC::KeepAlive(Path);
-					GC::KeepAlive(PropertyName);
-					GC::KeepAlive(MimeType);
-					GC::KeepAlive(BaseFile);
-					GC::KeepAlive(TheirFile);
-					GC::KeepAlive(MyFile);
-					GC::KeepAlive(MergedFile);
-				}
-			}
-			finally
-			{
-				_description = nullptr;
-				__super::Detach(keepProperties);
-			}
-		}
-	};
-
+#include "SvnClientEventArgs_Global.h"
+	
+namespace SharpSvn {
 	public ref class SvnLockInfo sealed
 	{
 		const svn_lock_t *_lock;
@@ -463,6 +182,8 @@ namespace SharpSvn {
 		initonly SvnLockState _lockState;
 		initonly __int64 _revision;
 		SvnLockInfo^ _lock;
+		String^ _changelistName;
+		SvnMergeRange^ _mergeRange;
 
 	internal:
 		SvnNotifyEventArgs(const svn_wc_notify_t *notify)
@@ -477,8 +198,6 @@ namespace SharpSvn {
 			_propertyState = (SvnNotifyState)notify->prop_state;
 			_lockState = (SvnLockState)notify->lock_state;
 			_revision = notify->revision;
-
-			// TODO: Add support for the Lock member (containing the lock owner etc.)
 		}
 
 	private:
@@ -588,6 +307,21 @@ namespace SharpSvn {
 			}
 		}
 
+		property String^ ChangeListName
+		{
+			String^ get()
+			{
+				if(!_changelistName && _notify && _notify->changelist_name)
+					_changelistName = SvnBase::Utf8_PtrToString(_notify->changelist_name);
+
+				return _changelistName;
+			}
+		}
+
+		property SvnMergeRange^ MergeRange
+		{
+			SvnMergeRange^ get();
+		}
 
 	public:
 		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
@@ -603,6 +337,8 @@ namespace SharpSvn {
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(Error);
 					GC::KeepAlive(Lock);
+					GC::KeepAlive(ChangeListName);
+					GC::KeepAlive(MergeRange);
 				}
 
 				if(_lock)
