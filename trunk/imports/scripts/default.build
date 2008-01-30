@@ -120,5 +120,7 @@
 			<arg line="up build/${platform}/serf" />
 		</Svn>
 	</target>
+	<target name="svn-update" depends="update-svn">
+	</target>
 </project>
 

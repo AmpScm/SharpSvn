@@ -11,46 +11,46 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.AddToChangeList(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnAddToChangeListArgs):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.AddToChangelist(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnAddToChangelistArgs):System.Boolean")];
 
-bool SvnClient::AddToChangeList(String^ path, String^ changeList)
+bool SvnClient::AddToChangelist(String^ path, String^ changelist)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
+	else if(String::IsNullOrEmpty(changelist))
+		throw gcnew ArgumentNullException("changelist");
 
-	return AddToChangeList(NewSingleItemCollection(path), changeList, gcnew SvnAddToChangeListArgs());
+	return AddToChangelist(NewSingleItemCollection(path), changelist, gcnew SvnAddToChangelistArgs());
 }
 
-bool SvnClient::AddToChangeList(String^ path, String^ changeList, SvnAddToChangeListArgs^ args)
+bool SvnClient::AddToChangelist(String^ path, String^ changelist, SvnAddToChangelistArgs^ args)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
+	else if(String::IsNullOrEmpty(changelist))
+		throw gcnew ArgumentNullException("changelist");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return AddToChangeList(NewSingleItemCollection(path), changeList, args);
+	return AddToChangelist(NewSingleItemCollection(path), changelist, args);
 }
 
-bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList)
+bool SvnClient::AddToChangelist(ICollection<String^>^ paths, String^ changelist)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
+	else if(String::IsNullOrEmpty(changelist))
+		throw gcnew ArgumentNullException("changelist");
 
-	return AddToChangeList(paths, changeList, gcnew SvnAddToChangeListArgs());
+	return AddToChangelist(paths, changelist, gcnew SvnAddToChangelistArgs());
 }
 
-bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList, SvnAddToChangeListArgs^ args)
+bool SvnClient::AddToChangelist(ICollection<String^>^ paths, String^ changelist, SvnAddToChangelistArgs^ args)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
+	else if(String::IsNullOrEmpty(changelist))
+		throw gcnew ArgumentNullException("changelist");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -61,9 +61,9 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ paths, String^ changeList,
 
 	svn_error_t *r = svn_client_add_to_changelist(
 		AllocPathArray(paths, %pool),
-		pool.AllocString(changeList),
+		pool.AllocString(changelist),
 		(svn_depth_t)args->Depth,
-		(const apr_array_header_t *)nullptr, // Changelists
+		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 		CtxHandle,
 		pool.Handle);
 

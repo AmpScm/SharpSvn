@@ -16,6 +16,7 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		bool _skipChecks;
 		__int64 _baseRevision;
+		ICollection<String^>^ _changelists;
 	public:
 		SvnSetPropertyArgs()
 		{
@@ -61,6 +62,24 @@ namespace SharpSvn {
 					_baseRevision = SVN_INVALID_REVNUM;
 			}
 		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetProperty</summary>
@@ -69,6 +88,7 @@ namespace SharpSvn {
 	{
 		SvnRevision^ _revision;
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 	public:
 		SvnGetPropertyArgs()
 		{
@@ -102,6 +122,24 @@ namespace SharpSvn {
 				_depth = EnumVerifier::Verify(value);
 			}
 		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::PropertyList(SvnTarget^, SvnPropertyListArgs^, EventHandler{SvnPropertyListEventArgs^}^)" /></summary>
@@ -110,6 +148,7 @@ namespace SharpSvn {
 	{
 		SvnRevision^ _revision;
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 
 	public:
 		event EventHandler<SvnPropertyListEventArgs^>^ PropertyList;
@@ -151,6 +190,24 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 	};

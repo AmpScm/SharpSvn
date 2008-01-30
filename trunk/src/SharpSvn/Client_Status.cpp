@@ -72,7 +72,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			args->Update,
 			args->NoIgnore,
 			args->IgnoreExternals,
-			(const apr_array_header_t *)nullptr, // Changelists
+			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 			CtxHandle,
 			pool.Handle);
 

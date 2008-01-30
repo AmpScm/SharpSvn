@@ -118,6 +118,7 @@ namespace SharpSvn {
 	public ref class SvnRevertArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 
 	public:
 		SvnRevertArgs()
@@ -134,6 +135,24 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 	};
@@ -263,13 +282,14 @@ namespace SharpSvn {
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::AddToChangeList(String^,String^, SvnAddToChangeListArgs^)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::AddToChangelist(String^,String^, SvnAddToChangelistArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnAddToChangeListArgs : public SvnClientArgs
+	public ref class SvnAddToChangelistArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 	public:
-		SvnAddToChangeListArgs()
+		SvnAddToChangelistArgs()
 		{
 			_depth = SvnDepth::Infinity;
 		}
@@ -283,17 +303,36 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::RemoveFromChangeList(String^,SvnRemoveFromChangeListArgs^)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::RemoveFromChangelist(String^,SvnRemoveFromChangelistArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnRemoveFromChangeListArgs : public SvnClientArgs
+	public ref class SvnRemoveFromChangelistArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 	public:
-		SvnRemoveFromChangeListArgs()
+		SvnRemoveFromChangelistArgs()
 		{
 			_depth = SvnDepth::Infinity;
 		}
@@ -307,24 +346,43 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 	};
 
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::ListChangeList(String^,SvnListChangeListArgs^,EventHandler{SvnListChangeListEventArgs^}^)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::ListChangelist(String^,SvnListChangelistArgs^,EventHandler{SvnListChangelistEventArgs^}^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnListChangeListArgs : public SvnClientArgs
+	public ref class SvnListChangelistArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 	public:
-		SvnListChangeListArgs()
+		SvnListChangelistArgs()
 		{
 			_depth = SvnDepth::Infinity;
 		}
 
 	public:
-		event EventHandler<SvnListChangeListEventArgs^>^ ListChangeList;
+		event EventHandler<SvnListChangelistEventArgs^>^ ListChangelist;
 
 		property SvnDepth Depth
 		{
@@ -335,13 +393,31 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 
 	protected public:
-		virtual void OnListChangeList(SvnListChangeListEventArgs^ e)
+		virtual void OnListChangelist(SvnListChangelistEventArgs^ e)
 		{
-			ListChangeList(this, e);
+			ListChangelist(this, e);
 		}
 	};
 };

@@ -87,10 +87,10 @@ namespace SharpSvn {
 
 		// 1.5+
 		Exists			= svn_wc_notify_exists,
-		ChangeListSet	= svn_wc_notify_changelist_set,
-		ChangeListClear = svn_wc_notify_changelist_clear,
-		ChangeListFailed= svn_wc_notify_changelist_failed,
-		ChangeListMoved	= svn_wc_notify_changelist_moved,
+		ChangelistSet	= svn_wc_notify_changelist_set,
+		ChangelistClear = svn_wc_notify_changelist_clear,
+		ChangelistFailed= svn_wc_notify_changelist_failed,
+		ChangelistMoved	= svn_wc_notify_changelist_moved,
 		MergeBegin		= svn_wc_notify_merge_begin,
 		UpdateReplace	= svn_wc_notify_update_replace,
 	};

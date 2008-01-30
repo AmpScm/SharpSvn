@@ -74,7 +74,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 			&pegrev,
 			&rev,
 			(svn_depth_t)args->Depth,
-			(const apr_array_header_t *)nullptr, // Changelists
+			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 			svnclient_property_list_handler,
 			(void*)_clientBatton->Handle,			
 			CtxHandle,

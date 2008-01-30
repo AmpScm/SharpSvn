@@ -55,12 +55,14 @@ namespace SharpSvn {
 	ref class SvnUnlockArgs;
 	ref class SvnWriteArgs;
 	ref class SvnMergeArgs;
+	ref class SvnDiffMergeArgs;
+	ref class SvnReintegrationMergeArgs;
 	ref class SvnDiffArgs;
 	ref class SvnDiffSummaryArgs;
 	ref class SvnBlameArgs;
-	ref class SvnAddToChangeListArgs;
-	ref class SvnRemoveFromChangeListArgs;
-	ref class SvnListChangeListArgs;
+	ref class SvnAddToChangelistArgs;
+	ref class SvnRemoveFromChangelistArgs;
+	ref class SvnListChangelistArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
 	ref class SvnGetAvailableMergeInfoArgs;
@@ -760,24 +762,36 @@ namespace SharpSvn {
 
 	public:
 		/////////////////////////////////////////
-#pragma region // Merge Client Command
+#pragma region // DifferenceMerge Client Command
 		/// <overloads>Merges the differences between two sources to a working copy path (<c>svn merge</c>)</overloads>
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
-		bool Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo);
+		bool DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo);
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
 		/// </summary>
-		bool Merge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnMergeArgs^ args);
+		bool DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnDiffMergeArgs^ args);
+#pragma endregion
 
+	public:
+		/////////////////////////////////////////
+#pragma region // Merge Client Command
+		/// <overloads>Merges the changes in the specified revisions from source to targetPath</overloads>
 		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange);
 		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange);
 		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange);
 		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange, SvnMergeArgs^ args);
 		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange, SvnMergeArgs^ args);
 		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange, SvnMergeArgs^ args);
+#pragma endregion
 
+	public:
+		/////////////////////////////////////////
+#pragma region // ReintegrationMerge Client Command
+		/// <overloads>Perform a reintegration merge of source into targetPath</overloads>
+		bool ReintegrationMerge(String^ targetPath, SvnTarget^ source);
+		bool ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnReintegrationMergeArgs^ args);
 #pragma endregion
 
 	public:
@@ -804,22 +818,22 @@ namespace SharpSvn {
 
 	public:
 		/// <overloads>Associate the specified path(s) with the specified changelist (<c>svn changelist</c>)</overloads>
-		bool AddToChangeList(String^ path, String^ changeList);
-		bool AddToChangeList(String^ path, String^ changeList, SvnAddToChangeListArgs^ args);
-		bool AddToChangeList(ICollection<String^>^ paths, String^ changeList);
-		bool AddToChangeList(ICollection<String^>^ paths, String^ changeList, SvnAddToChangeListArgs^ args);
+		bool AddToChangelist(String^ path, String^ changelist);
+		bool AddToChangelist(String^ path, String^ changelist, SvnAddToChangelistArgs^ args);
+		bool AddToChangelist(ICollection<String^>^ paths, String^ changelist);
+		bool AddToChangelist(ICollection<String^>^ paths, String^ changelist, SvnAddToChangelistArgs^ args);
 		/// <overloads>Deassociate the specified path(s) from the specified changelist (<c>svn changelist</c>)</overloads>
-		bool RemoveFromChangeList(String^ path);
-		bool RemoveFromChangeList(String^ path, SvnRemoveFromChangeListArgs^ args);
-		bool RemoveFromChangeList(ICollection<String^>^ paths);
-		bool RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromChangeListArgs^ args);
+		bool RemoveFromChangelist(String^ path);
+		bool RemoveFromChangelist(String^ path, SvnRemoveFromChangelistArgs^ args);
+		bool RemoveFromChangelist(ICollection<String^>^ paths);
+		bool RemoveFromChangelist(ICollection<String^>^ paths, SvnRemoveFromChangelistArgs^ args);
 		/// <overloads>Streamingly gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool ListChangeList(String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
-		bool ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
+		bool ListChangelist(String^ rootPath, EventHandler<SvnListChangelistEventArgs^>^ changelistHandler);
+		bool ListChangelist(String^ rootPath, SvnListChangelistArgs^ args, EventHandler<SvnListChangelistEventArgs^>^ changelistHandler);
 
 		/// <overloads>Gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list);
-		bool GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangelist(String^ rootPath, [Out]IList<SvnListChangelistEventArgs^>^% list);
+		bool GetChangelist(String^ rootPath, SvnListChangelistArgs^ args, [Out]IList<SvnListChangelistEventArgs^>^% list);
 
 	public:
 		/// <overloads>Gets a list of Uri's which might be valid merge sources (<c>svn mergeinfo</c>)</overloads>

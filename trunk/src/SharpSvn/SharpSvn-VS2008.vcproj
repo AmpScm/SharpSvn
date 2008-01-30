@@ -756,6 +756,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_DiffMerge.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_DiffSummary.cpp"
 					>
 				</File>
@@ -813,6 +817,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_PropertyList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_ReintegrationMerge.cpp"
 					>
 				</File>
 				<File

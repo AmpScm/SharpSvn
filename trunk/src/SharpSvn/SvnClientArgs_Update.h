@@ -239,16 +239,116 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnMergeBaseArgs abstract : public SvnClientArgsWithConflict
+	{
+		IList<String^>^ _mergeArguments;
+	protected:
+		SvnMergeBaseArgs()
+		{
+		}
+
+	public:
+		property IList<String^>^ MergeArguments
+		{
+			IList<String^>^ get()
+			{
+				return _mergeArguments;
+			}
+			void set(IList<String^>^ value)
+			{
+				if(value)
+					_mergeArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
+				else
+					_mergeArguments = nullptr;
+			}
+		}
+	};
+
+	/// <summary>Extended Parameter container of <see cref="SvnClient::DiffMerge(String^, SvnTarget^, SvnTarget^, SvnDiffMergeArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
+	public ref class SvnDiffMergeArgs : public SvnMergeBaseArgs
+	{
+		SvnDepth _depth;
+		bool _ignoreAncestry;
+		bool _force;
+		bool _recordOnly;
+		bool _dryRun;		
+	public:
+		SvnDiffMergeArgs()
+		{
+			_depth = SvnDepth::Unknown;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		property bool IgnoreAncestry
+		{
+			bool get()
+			{
+				return _ignoreAncestry;
+			}
+			void set(bool value)
+			{
+				_ignoreAncestry = value;
+			}
+		}
+
+		property bool Force
+		{
+			bool get()
+			{
+				return _force;
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+
+		property bool RecordOnly
+		{
+			bool get()
+			{
+				return _recordOnly;
+			}
+			void set(bool value)
+			{
+				_recordOnly = value;
+			}
+		}
+
+		property bool DryRun
+		{
+			bool get()
+			{
+				return _dryRun;
+			}
+			void set(bool value)
+			{
+				_dryRun = value;
+			}
+		}
+	};
+
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Merge(String^,SvnTarget^, SvnRevisionRange^, SvnMergeArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnMergeArgs : public SvnClientArgsWithConflict
+	public ref class SvnMergeArgs : public SvnMergeBaseArgs
 	{
 		SvnDepth _depth;
 		bool _ignoreAncestry;
 		bool _force;
 		bool _recordOnly;
 		bool _dryRun;
-		IList<String^>^ _mergeArguments;
 	public:
 		SvnMergeArgs()
 		{
@@ -314,22 +414,42 @@ namespace SharpSvn {
 				_dryRun = value;
 			}
 		}
-
-		property IList<String^>^ MergeArguments
-		{
-			IList<String^>^ get()
-			{
-				return _mergeArguments;
-			}
-			void set(IList<String^>^ value)
-			{
-				if(value)
-					_mergeArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
-				else
-					_mergeArguments = nullptr;
-			}
-		}
 	};
 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::ReintegrationMerge(String^,SvnTarget^, SvnReintegrationMergeArgs^)" /></summary>
+	/// <threadsafety static="true" instance="false"/>
+	public ref class SvnReintegrationMergeArgs : public SvnMergeBaseArgs
+	{
+		bool _force;
+		bool _dryRun;
+	public:
+		SvnReintegrationMergeArgs()
+		{
+		}
+
+		property bool Force
+		{
+			bool get()
+			{
+				return _force;
+			}
+			void set(bool value)
+			{
+				_force = value;
+			}
+		}
+
+		property bool DryRun
+		{
+			bool get()
+			{
+				return _dryRun;
+			}
+			void set(bool value)
+			{
+				_dryRun = value;
+			}
+		}		
+	};
 };
 
