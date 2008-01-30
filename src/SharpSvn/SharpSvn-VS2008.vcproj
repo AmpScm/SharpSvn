@@ -575,6 +575,34 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientArgs_Admin.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientArgs_Commit.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientArgs_Properties.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientArgs_Repos.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientArgs_Stat.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientArgs_Update.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientArgs_Wc.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClientConfiguration.h"
 					>
 				</File>
@@ -584,6 +612,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnClientEventArgs_Global.h"
 					>
 				</File>
 				<File

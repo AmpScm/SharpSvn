@@ -1,4 +1,4 @@
-// $Id: Client_ChangeList.cpp 203 2008-01-07 09:13:07Z bhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007 
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
