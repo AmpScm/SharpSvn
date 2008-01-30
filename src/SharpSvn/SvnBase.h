@@ -67,6 +67,8 @@ namespace SharpSvn {
 			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
 
+			static apr_array_header_t *CreateChangelistsList(ICollection<String^>^ changelists, AprPool^ pool);
+
 			static IDictionary<String^, Object^>^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
 		};
 

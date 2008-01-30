@@ -307,7 +307,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ ChangeListName
+		property String^ ChangelistName
 		{
 			String^ get()
 			{
@@ -337,7 +337,7 @@ namespace SharpSvn {
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(Error);
 					GC::KeepAlive(Lock);
-					GC::KeepAlive(ChangeListName);
+					GC::KeepAlive(ChangelistName);
 					GC::KeepAlive(MergeRange);
 				}
 
@@ -843,7 +843,7 @@ namespace SharpSvn {
 		String^ _conflict_new;
 		String^ _conflict_wrk;
 		String^ _prejfile;
-		String^ _changeList;
+		String^ _changelist;
 		initonly SvnDepth _depth;
 		initonly __int64 _wcSize;
 		initonly __int64 _size;
@@ -1114,14 +1114,14 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ ChangeList
+		property String^ Changelist
 		{
 			String^ get()
 			{
-				if(!_changeList && _info && _info->changelist)
-					_changeList = SvnBase::Utf8_PtrToString(_info->changelist);
+				if(!_changelist && _info && _info->changelist)
+					_changelist = SvnBase::Utf8_PtrToString(_info->changelist);
 
-				return _changeList;
+				return _changelist;
 			}
 		}
 
@@ -1161,7 +1161,7 @@ namespace SharpSvn {
 					GC::KeepAlive(ConflictNew);
 					GC::KeepAlive(ConflictWork);
 					GC::KeepAlive(PropertyEditFile);
-					GC::KeepAlive(ChangeList);
+					GC::KeepAlive(Changelist);
 				}
 
 				if(_lock)
@@ -1503,13 +1503,13 @@ namespace SharpSvn {
 		}
 	};*/
 
-	public ref class SvnListChangeListEventArgs : public SvnCancelEventArgs
+	public ref class SvnListChangelistEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
 		initonly String^ _changelist;
 
 	internal:
-		SvnListChangeListEventArgs(const char *path, const char *changelist)
+		SvnListChangelistEventArgs(const char *path, const char *changelist)
 		{
 			if(!path)
 				throw gcnew ArgumentNullException("path");

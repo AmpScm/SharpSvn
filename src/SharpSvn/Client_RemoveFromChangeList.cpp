@@ -10,35 +10,35 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangeList(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnRemoveFromChangeListArgs):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.RemoveFromChangelist(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnRemoveFromChangelistArgs):System.Boolean")];
 
-bool SvnClient::RemoveFromChangeList(String^ path)
+bool SvnClient::RemoveFromChangelist(String^ path)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	return RemoveFromChangeList(NewSingleItemCollection(path), gcnew SvnRemoveFromChangeListArgs());
+	return RemoveFromChangelist(NewSingleItemCollection(path), gcnew SvnRemoveFromChangelistArgs());
 }
 
-bool SvnClient::RemoveFromChangeList(String^ path, SvnRemoveFromChangeListArgs^ args)
+bool SvnClient::RemoveFromChangelist(String^ path, SvnRemoveFromChangelistArgs^ args)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return RemoveFromChangeList(NewSingleItemCollection(path), args);
+	return RemoveFromChangelist(NewSingleItemCollection(path), args);
 }
 
-bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths)
+bool SvnClient::RemoveFromChangelist(ICollection<String^>^ paths)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	return RemoveFromChangeList(paths, gcnew SvnRemoveFromChangeListArgs());
+	return RemoveFromChangelist(paths, gcnew SvnRemoveFromChangelistArgs());
 }
 
-bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromChangeListArgs^ args)
+bool SvnClient::RemoveFromChangelist(ICollection<String^>^ paths, SvnRemoveFromChangelistArgs^ args)
 {
 	if(!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -52,7 +52,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ paths, SvnRemoveFromC
 	svn_error_t *r = svn_client_remove_from_changelists(
 		AllocPathArray(paths, %pool),
 		(svn_depth_t)args->Depth,
-		(const apr_array_header_t *)nullptr, // Changelists
+		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 		CtxHandle,
 		pool.Handle);
 

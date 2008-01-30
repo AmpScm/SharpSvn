@@ -19,6 +19,7 @@ namespace SharpSvn {
 		bool _noIgnore;
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
+		ICollection<String^>^ _changelists;
 
 	public:
 		event EventHandler<SvnStatusEventArgs^>^ Status;
@@ -108,6 +109,24 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_ignoreExternals = value;
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 	};
@@ -338,6 +357,7 @@ namespace SharpSvn {
 	{
 		SvnRevision^ _revision;
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 
 	public:
 		event EventHandler<SvnInfoEventArgs^>^ Info;
@@ -381,6 +401,24 @@ namespace SharpSvn {
 					_revision = SvnRevision::None;
 			}
 		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s Diff command</summary>
@@ -393,7 +431,8 @@ namespace SharpSvn {
 		bool _ignoreContentType;
 		String^ _headerEncoding;
 		String^ _relativeFrom;
-		IList<String^>^ _diffArguments;
+		ICollection<String^>^ _diffArguments;
+		ICollection<String^>^ _changelists;
 	public:
 		SvnDiffArgs()
 		{
@@ -460,13 +499,13 @@ namespace SharpSvn {
 			}
 		}
 
-		property IList<String^>^ DiffArguments
+		property ICollection<String^>^ DiffArguments
 		{
-			IList<String^>^ get()
+			ICollection<String^>^ get()
 			{
 				return _diffArguments;
 			}
-			void set(IList<String^>^ value)
+			void set(ICollection<String^>^ value)
 			{
 				if(value)
 					_diffArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
@@ -489,6 +528,24 @@ namespace SharpSvn {
 					_relativeFrom = value;
 			}
 		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::DiffSummary(SvnTarget^,SvnTarget^,SvnDiffSummaryArgs^,EventHandler{SvnDiffSummaryEventArgs^}^)" /></summary>
@@ -497,6 +554,7 @@ namespace SharpSvn {
 	{
 		bool _noticeAncestry;
 		SvnDepth _depth;
+		ICollection<String^>^ _changelists;
 	public:
 		SvnDiffSummaryArgs()
 		{
@@ -534,6 +592,24 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noticeAncestry = !value;
+			}
+		}
+
+		/// <summary>Gets or sets the list of changelist-names</summary>
+		property ICollection<String^>^ Changelists
+		{
+			ICollection<String^>^ get()
+			{
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
+			}
+			void set(ICollection<String^>^ value)
+			{
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
 		}
 	};

@@ -82,7 +82,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 		svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 		svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
-		IList<String^>^ diffArgs = args->DiffArguments;
+		ICollection<String^>^ diffArgs = args->DiffArguments;
 
 		if(!diffArgs)
 			diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
@@ -101,7 +101,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 			pool.AllocString(args->HeaderEncoding),
 			tmpOut,
 			tmpErr,
-			(const apr_array_header_t *)nullptr, // Changelists
+			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 			CtxHandle,
 			pool.Handle);
 
@@ -176,7 +176,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 		svn_opt_revision_t fromRev = from->ToSvnRevision();
 		svn_opt_revision_t toRev = to->ToSvnRevision();
 
-		IList<String^>^ diffArgs = args->DiffArguments;
+		ICollection<String^>^ diffArgs = args->DiffArguments;
 
 		if(!diffArgs)
 			diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
@@ -195,7 +195,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 			pool.AllocString(args->HeaderEncoding),
 			tmpOut,
 			tmpErr,
-			(const apr_array_header_t *)nullptr, // Changelists
+			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 			CtxHandle,
 			pool.Handle);
 

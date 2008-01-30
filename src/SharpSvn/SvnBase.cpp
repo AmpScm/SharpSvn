@@ -277,3 +277,11 @@ IDictionary<String^, Object^>^ SvnBase::CreatePropertyDictionary(apr_hash_t* pro
 
 	return safe_cast<IDictionary<String^, Object^>^>(_properties);
 }
+
+apr_array_header_t *SvnBase::CreateChangelistsList(ICollection<String^>^ changelists, AprPool^ pool)
+{
+	if(changelists && changelists->Count > 0)
+		return AllocArray(changelists, pool);
+
+	return nullptr;
+}

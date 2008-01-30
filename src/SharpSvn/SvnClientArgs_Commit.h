@@ -8,6 +8,7 @@
 // Included from SvnClientArgs.h
 
 namespace SharpSvn {
+	using System::Collections::Generic::List;
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Commit(String^, SvnCommitArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -16,7 +17,8 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		bool _keepLocks;
 		bool _keepChangelist;
-		String^ _changelist;
+		IList<String^>^ _changelists;
+
 	public:
 		SvnCommitArgs()
 		{
@@ -48,17 +50,23 @@ namespace SharpSvn {
 			}
 		}
 
-		/*property String^ Changelist
+		/// <summary>Gets or sets the list of changelist-names to commit</summary>
+		property ICollection<String^>^ Changelists
 		{
-			String^ get()
+			ICollection<String^>^ get()
 			{
-				return _changelist;
+				if(!_changelists)
+					_changelists = gcnew List<String^>();
+				return _changelists;
 			}
-			void set(String^ value)
+			void set(ICollection<String^>^ value)
 			{
-				_changelist = value;
+				if(value)
+					_changelists = gcnew List<String^>(value);
+				else
+					_changelists = nullptr;
 			}
-		}*/
+		}
 
 		property bool KeepChangelist
 		{

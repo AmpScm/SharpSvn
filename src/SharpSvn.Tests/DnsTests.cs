@@ -9,7 +9,7 @@ using System.Net;
 
 namespace SharpSvn.Tests
 {
-	[TestFixture]
+	//[TestFixture]
 	public class DnsTests
 	{
 		[Test]

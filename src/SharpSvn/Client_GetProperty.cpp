@@ -81,7 +81,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		&rev,
 		&actualRev,
 		(svn_depth_t)args->Depth,
-		(const apr_array_header_t *)nullptr, // Changelists
+		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 		CtxHandle,
 		pool.Handle);
 
@@ -134,7 +134,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		&rev,
 		&actualRev,
 		(svn_depth_t)args->Depth,
-		(const apr_array_header_t *)nullptr, // Changelists
+		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
 		CtxHandle,
 		pool.Handle);
 
