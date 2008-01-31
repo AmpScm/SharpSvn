@@ -160,7 +160,7 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 			{
 				int len = 0;
 				int offset = 0;
-				
+
 				switch(dns->Address.lpSockaddr->sa_family)
 				{
 				case AF_INET:
@@ -183,13 +183,29 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 				memcpy(pData, paddr->sa_data+offset, len);
 
 				IPAddress^ dnsAddr;
-				
+
 				if(!offset)
 					dnsAddr = gcnew IPAddress(data);
 				else
 					dnsAddr = gcnew IPAddress(data, *(int*)paddr->sa_data);
 
-				if(!servers->Contains(dnsAddr) && !serversExtra->Contains(dnsAddr))
+				bool supported = true;
+				switch(dnsAddr->AddressFamily)
+				{
+				case System::Net::Sockets::AddressFamily::InterNetwork:
+					if(!SharpDnsBase::HaveIpv4)
+						supported = false;
+					break;
+				case System::Net::Sockets::AddressFamily::InterNetworkV6:
+					if(!SharpDnsBase::HaveIpv6)
+						supported = false;
+					break;
+				default:
+					supported = false;
+					break;
+				}
+
+				if(supported && !servers->Contains(dnsAddr) && !serversExtra->Contains(dnsAddr))
 				{
 					if(dnsAddr->IsIPv6LinkLocal) // || dnsAddr->IsIPv6SiteLocal)
 						serversExtra->Add(dnsAddr);
