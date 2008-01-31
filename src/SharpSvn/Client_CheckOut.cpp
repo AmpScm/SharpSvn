@@ -9,6 +9,9 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnCheckOutArgs,SharpSvn.SvnUpdateResult&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnUpdateResult&):System.Boolean", MessageId="2#")];
+
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
 	if(!url)

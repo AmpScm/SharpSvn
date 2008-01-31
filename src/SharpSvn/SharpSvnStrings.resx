@@ -132,6 +132,9 @@
   <data name="HandlerIsNotRegisteredAtThisTime" xml:space="preserve">
     <value>The handler is not registered at this time</value>
   </data>
+  <data name="InvalidCharacterInClientName" xml:space="preserve">
+    <value>Invalid character in clientname</value>
+  </data>
   <data name="InvalidSvnRevisionTypeValue" xml:space="preserve">
     <value>Invalid SvnRevisionType value specified</value>
   </data>

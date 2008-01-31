@@ -521,6 +521,6 @@ void SvnClient::AddClientName(String^ name, System::Version^ version)
 	for(int i = 0; i < name->Length; i++)
 	{
 		if(!wchar_t::IsLetterOrDigit(name, i) && 0 > (((String^)"._ ")->IndexOf(name[i])))
-			throw gcnew ArgumentException("name", "Invalid character in name");
+			throw gcnew ArgumentException(SharpSvnStrings::InvalidCharacterInClientName, "name");
 	}
 }

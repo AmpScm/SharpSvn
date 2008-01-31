@@ -78,7 +78,6 @@ namespace SharpSvn {
 	{
 		bool _makeParents;
 		bool _alwaysCopyBelow;
-		bool _withMergeHistory;
 
 	public:
 		SvnCopyArgs()
@@ -119,7 +118,6 @@ namespace SharpSvn {
 		bool _force;
 		bool _moveAsChild;
 		bool _makeParents;
-		bool _withMergeHistory;
 	public:
 		SvnMoveArgs()
 		{

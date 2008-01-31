@@ -83,6 +83,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to Invalid character in clientname.
+    /// </summary>
+    internal: static property System::String^  InvalidCharacterInClientName {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to Invalid SvnRevisionType value specified.
     /// </summary>
     internal: static property System::String^  InvalidSvnRevisionTypeValue {
@@ -211,6 +218,10 @@ inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {
 
 inline System::String^  SharpSvnStrings::HandlerIsNotRegisteredAtThisTime::get() {
     return ResourceManager->GetString(L"HandlerIsNotRegisteredAtThisTime", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::InvalidCharacterInClientName::get() {
+    return ResourceManager->GetString(L"InvalidCharacterInClientName", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::InvalidSvnRevisionTypeValue::get() {
