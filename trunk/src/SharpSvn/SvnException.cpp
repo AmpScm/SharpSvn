@@ -13,7 +13,7 @@ using namespace SharpSvn::Apr;
 
 #define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
 
-static const int _abusedErrorCode = SVN_ERR_CL_LOG_MESSAGE_IS_PATHNAME;
+static const int _abusedErrorCode = SVN_ERR_TEST_FAILED; // Used for plugging in managed exceptions; this ID is an implementation detail
 
 class SvnExceptionContainer sealed
 {
@@ -161,6 +161,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_BAD_MIME_TYPE:
 		case SVN_ERR_BAD_PROPERTY_VALUE:
 		case SVN_ERR_BAD_VERSION_FILE_FORMAT:
+		case SVN_ERR_BAD_RELATIVE_PATH:
+		case SVN_ERR_BAD_UUID:
 			return gcnew SvnFormatException(error);
 		case SVN_ERR_XML_ATTRIB_NOT_FOUND:
 		case SVN_ERR_XML_MISSING_ANCESTRY:
@@ -282,6 +284,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_UNSUPPORTED_ABI_VERSION:
 		case SVN_ERR_RA_NOT_LOCKED:
 		case SVN_ERR_RA_UNKNOWN_CAPABILITY:
+		case SVN_ERR_RA_PARTIAL_REPLAY_NOT_SUPPORTED:
 			return gcnew SvnRepositoryIOException(error);
 
 		case SVN_ERR_RA_NOT_AUTHORIZED:
@@ -311,6 +314,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_SVN_REPOS_NOT_FOUND:
 		case SVN_ERR_RA_SVN_BAD_VERSION:
 		case SVN_ERR_RA_SVN_NO_MECHANISMS:
+		case SVN_ERR_RA_SERF_SSPI_INITIALISATION_FAILED:
 			return gcnew SvnRepositoryIOException(error);
 
 		case SVN_ERR_AUTHN_CREDS_UNAVAILABLE:
@@ -351,10 +355,11 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_CLIENT_MISSING_LOCK_TOKEN:
 		case SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED:
 		case SVN_ERR_CLIENT_NO_VERSIONED_PARENT:
+		case SVN_ERR_CLIENT_NOT_READY_TO_MERGE:
 			return gcnew SvnClientApiException(error);
 
-//		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
-//			return gcnew SvnException(error);
+			//		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
+			//			return gcnew SvnException(error);
 
 		case SVN_ERR_CANCELLED:			
 			return gcnew SvnOperationCanceledException(error);
@@ -367,6 +372,30 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 
 		case SVN_ERR_UNKNOWN_CHANGELIST:
 			return gcnew SvnUnknownChangelistException(error);
+
+		case SVN_ERR_BASE:
+		case SVN_ERR_PLUGIN_LOAD_FAILURE:
+		case SVN_ERR_MALFORMED_FILE:
+		case SVN_ERR_INCOMPLETE_DATA:
+		case SVN_ERR_INCORRECT_PARAMS:
+		case SVN_ERR_UNVERSIONED_RESOURCE:
+		case SVN_ERR_TEST_FAILED:
+		case SVN_ERR_UNSUPPORTED_FEATURE:
+		case SVN_ERR_BAD_PROP_KIND:
+		case SVN_ERR_ILLEGAL_TARGET:
+		case SVN_ERR_DELTA_MD5_CHECKSUM_ABSENT:
+		case SVN_ERR_DIR_NOT_EMPTY:
+		case SVN_ERR_EXTERNAL_PROGRAM:
+		case SVN_ERR_SWIG_PY_EXCEPTION_SET:
+		case SVN_ERR_CHECKSUM_MISMATCH:
+		case SVN_ERR_INVALID_DIFF_OPTION:
+		case SVN_ERR_PROPERTY_NOT_FOUND:
+		case SVN_ERR_NO_AUTH_FILE_PATH:
+		case SVN_ERR_VERSION_MISMATCH:
+		case SVN_ERR_MERGEINFO_PARSE_ERROR:
+		case SVN_ERR_REVNUM_PARSE_FAILURE:
+			// TODO: Split out
+			return gcnew SvnException(error);
 
 		default:
 			if(APR_STATUS_IS_EACCES(error->apr_err))
