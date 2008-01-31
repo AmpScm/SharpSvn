@@ -96,7 +96,6 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "libsvn_fs_fs-1.lib")
 #if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
 #pragma comment(lib, "libsvn_fs_util-1.lib")
-#pragma comment(lib, "sqlite3.lib")
 #endif
 
 #pragma comment(lib, "libsvn_ra-1.lib")
