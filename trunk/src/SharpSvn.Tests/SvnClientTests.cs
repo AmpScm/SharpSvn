@@ -1081,7 +1081,6 @@ namespace SharpSvn.Tests
 				client.Move(ren1 + ".ren1", ren1 + ".ren2");
 				SvnMoveArgs ma = new SvnMoveArgs();
 				ma.Force = true;
-				//ma.WithMergeHistory = true;
 				client.Move(ren1 + ".ren2", ren1 + ".ren3", ma);
 				client.Commit(WcPath);
 			}
