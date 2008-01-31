@@ -50,8 +50,9 @@
 		<if test="${not directory::exists(svnBase)}">
 			<Svn verbose="true">
 				<arg line="--non-interactive co" />
-				<arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" unless="${svnTrunkBuild == 'true'}" />
-				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnTrunkBuild == 'true'}" />
+				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnBuildType == 'trunk'}" />
+				<arg value="http://svn.collab.net/repos/svn/tags/" if="${svnBuildType == 'tag'}" />
+				<arg value="http://svn.collab.net/repos/svn/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />				
 				<arg value="${svnBase}" />
 			</Svn>
 		</if>
@@ -81,8 +82,9 @@
 		<if test="${not directory::exists(platformBase + '/serf')}">
 			<Svn verbose="true">
 				<arg line="co" />
-				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" unless="${serfTrunkBuild == 'true'}" />
-				<arg value="http://serf.googlecode.com/svn/trunk/" if="${serfTrunkBuild == 'true'}" />
+				<arg value="http://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
+				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />				
+				<arg value="http://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />				
 				<arg value="${platformBase}/serf" />
 			</Svn>
 		</if>

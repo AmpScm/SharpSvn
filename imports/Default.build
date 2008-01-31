@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
-	<property name="svnTrunkBuild" value="true" />
-	<property name="serfTrunkBuild" value="true" />
+	<property name="svnBuildType" value="branch" />
+	<property name="serfBuildType" value="trunk" />
 	<property name="platform" value="win32" if="${not property::exists('platform')}" />
 
 	<!-- -->
-	<property name="subversionVersion" value="1.5.0" />
+	<property name="subversionVersion" value="1.5.x" />
 	<!-- -->
 	<property name="opensslVersion" value="0.9.8g" />
 	<property name="neonVersion" value="0.27.2" />
