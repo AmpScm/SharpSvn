@@ -148,6 +148,7 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 	if(!GetAdaptersAddresses( AF_UNSPEC, 0, nullptr, pAdapterAddresses, &ulOutBufLen))
 	{
 		System::Collections::Generic::List<IPAddress^>^ servers = gcnew System::Collections::Generic::List<IPAddress^>();
+		System::Collections::Generic::List<IPAddress^>^ serversExtra = gcnew System::Collections::Generic::List<IPAddress^>();
 
 		PIP_ADAPTER_ADDRESSES i = pAdapterAddresses;
 
@@ -158,6 +159,8 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 			while(dns)
 			{
 				int len = 0;
+				int offset = 0;
+				
 				switch(dns->Address.lpSockaddr->sa_family)
 				{
 				case AF_INET:
@@ -165,6 +168,7 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 					break;
 				case AF_INET6:
 					len = 16;
+					offset += 4;
 					break;
 				default:
 					dns = dns->Next;
@@ -176,18 +180,31 @@ System::Collections::Generic::ICollection<System::Net::IPAddress^>^ DnsRequest::
 
 				sockaddr* paddr = (sockaddr*)&dns->Address.lpSockaddr->sa_data;
 
-				memcpy(pData, &paddr->sa_data, len);
+				memcpy(pData, paddr->sa_data+offset, len);
 
-				IPAddress^ dnsAddr = gcnew IPAddress(data);
+				IPAddress^ dnsAddr;
+				
+				if(!offset)
+					dnsAddr = gcnew IPAddress(data);
+				else
+					dnsAddr = gcnew IPAddress(data, *(int*)paddr->sa_data);
 
-				if(!servers->Contains(dnsAddr))
-					servers->Add(dnsAddr);
+				if(!servers->Contains(dnsAddr) && !serversExtra->Contains(dnsAddr))
+				{
+					if(dnsAddr->IsIPv6LinkLocal) // || dnsAddr->IsIPv6SiteLocal)
+						serversExtra->Add(dnsAddr);
+					else
+						servers->Add(dnsAddr);
+				}
 
 				dns = dns->Next;
 			}
 
 			i = i->Next;
 		}
+
+		// Add IPv6 link local dns servers at the end as Vista adds those before everything else even if they do not exist
+		servers->AddRange(serversExtra);
 
 		_dnsServers = servers->AsReadOnly();
 	}
