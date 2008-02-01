@@ -13,6 +13,7 @@ namespace SharpSvn {
 		/// <summary>Depth undetermined or ignored</summary>
 		Unknown			= svn_depth_unknown,
 
+		// Not supported in 1.5 client api
 		/*/// <summary>Exclude (remove, whatever) directory D</summary>
 		Exclude			= svn_depth_exclude,*/
 

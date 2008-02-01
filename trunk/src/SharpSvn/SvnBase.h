@@ -27,6 +27,8 @@ namespace SharpSvn {
 		internal:
 			static void EnsureLoaded();
 			static const char* _admDir;
+			static String^ _clientName;
+			initonly static System::Collections::Generic::List<String^>^ _clientNames = gcnew System::Collections::Generic::List<String^>();
 
 		internal:
 			SvnBase();
