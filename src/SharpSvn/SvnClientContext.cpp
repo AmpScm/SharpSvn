@@ -23,6 +23,8 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 	if(r)
 		throw SvnException::Create(r);
 
+	ctx->client_name = pool->AllocString(SvnBase::_clientName);
+
 	_ctx = ctx;
 	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
 }

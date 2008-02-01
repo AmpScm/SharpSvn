@@ -19,6 +19,11 @@ static bool _aprInitialized = false;
 
 static SvnBase::SvnBase()
 {
+	System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
+
+	_clientName = name->Name + "/" + name->Version->ToString();
+	_clientNames->Add(name->Name);
+
 	EnsureLoaded();
 }
 

@@ -523,4 +523,11 @@ void SvnClient::AddClientName(String^ name, System::Version^ version)
 		if(!wchar_t::IsLetterOrDigit(name, i) && 0 > (((String^)"._ ")->IndexOf(name[i])))
 			throw gcnew ArgumentException(SharpSvnStrings::InvalidCharacterInClientName, "name");
 	}
+
+	if(!_clientNames->Contains(name))
+	{
+		_clientNames->Add(name);
+
+		_clientName += " " + name + "/" + version->ToString();
+	}
 }
