@@ -171,6 +171,21 @@
   <data name="NotifyFetchExternalItemIntoX" xml:space="preserve">
     <value>Fetching external item into '{0}'</value>
   </data>
+  <data name="NotifyMergingDifferencesBetweenRepositoryUrlsIntoX" xml:space="preserve">
+    <value>--- Merging differences between repository URLs into '{0}':</value>
+  </data>
+  <data name="NotifyMergingRXIntoY" xml:space="preserve">
+    <value>--- Merging r{0} into '{1}':</value>
+  </data>
+  <data name="NotifyMergingRXToRYIntoZ" xml:space="preserve">
+    <value>--- Merging r{0} through r{1} into '{2}':</value>
+  </data>
+  <data name="NotifyPathXIsNoLongerAMemberOfAChangelist" xml:space="preserve">
+    <value>Path '{0}' is no longer a member of a changelist.</value>
+  </data>
+  <data name="NotifyPathXIsNowAMemberOfChangelistY" xml:space="preserve">
+    <value>Path '{0}' is now a member of changelist '{1}'.</value>
+  </data>
   <data name="NotifyPerformingStatusOnExternalItemAtX" xml:space="preserve">
     <value>Performing status on external item at '{0}'</value>
   </data>
@@ -179,6 +194,12 @@
   </data>
   <data name="NotifyRestoredX" xml:space="preserve">
     <value>Restored '{0}'</value>
+  </data>
+  <data name="NotifyReverseMergingRXIntoY" xml:space="preserve">
+    <value>--- Reverse-merging r{0} into '{1}':</value>
+  </data>
+  <data name="NotifyReverseMergingRXToRYIntoZ" xml:space="preserve">
+    <value>--- Reverse-merging r{0} through r{1} into '{2}':</value>
   </data>
   <data name="NotifyRevertedX" xml:space="preserve">
     <value>Reverted '{0}'</value>
@@ -200,6 +221,12 @@
   </data>
   <data name="NotifyUpdatedToRevisionX" xml:space="preserve">
     <value>Updated to revision {0}.</value>
+  </data>
+  <data name="NotifyXLockedByUserY" xml:space="preserve">
+    <value>'{0}' locked by user '{1}'.</value>
+  </data>
+  <data name="NotifyXUnlocked" xml:space="preserve">
+    <value>'{0}' unlocked.</value>
   </data>
   <data name="RevisionNumberMustBeAtLeast0" xml:space="preserve">
     <value>Revision number must be at least 0</value>

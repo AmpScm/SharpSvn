@@ -10,9 +10,6 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.AddToChangelist(System.Collections.Generic.ICollection`1<System.String>,System.String,SharpSvn.SvnAddToChangelistArgs):System.Boolean")];
-
 bool SvnClient::AddToChangelist(String^ path, String^ changelist)
 {
 	if(String::IsNullOrEmpty(path))

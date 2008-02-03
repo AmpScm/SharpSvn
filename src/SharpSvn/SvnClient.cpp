@@ -172,14 +172,14 @@ void SvnClient::OnSvnError(SvnErrorEventArgs^ e)
 	SvnError(this, e);
 }
 
-void SvnClient::HandleBeforeCommand(SvnBeforeCommandEventArgs^ e)
+void SvnClient::HandleProcessing(SvnProcessingEventArgs^ e)
 {
-	OnBeforeCommand(e);
+	OnProcessing(e);
 }
 
-void SvnClient::OnBeforeCommand(SvnBeforeCommandEventArgs^ e)
+void SvnClient::OnProcessing(SvnProcessingEventArgs^ e)
 {
-	BeforeCommand(this, e);
+	Processing(this, e);
 }
 
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
@@ -446,7 +446,7 @@ SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)
 	_client = client;
 	try
 	{
-		client->HandleBeforeCommand(gcnew SvnBeforeCommandEventArgs(args));
+		client->HandleProcessing(gcnew SvnProcessingEventArgs(args));
 	}
 	catch(Exception^)
 	{

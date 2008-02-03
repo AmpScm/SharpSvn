@@ -385,12 +385,12 @@ namespace SharpSvn {
 
 	ref class SvnClientArgs;
 
-	public ref class SvnBeforeCommandEventArgs sealed : public SvnEventArgs
+	public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
 	{
 		initonly SvnClientArgs^ _clientArgs;
 
 	internal:
-		SvnBeforeCommandEventArgs(SvnClientArgs^ args)
+		SvnProcessingEventArgs(SvnClientArgs^ args)
 		{
 			if(!args)
 				throw gcnew ArgumentNullException("args");

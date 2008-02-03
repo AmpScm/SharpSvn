@@ -174,6 +174,41 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to --- Merging differences between repository URLs into &apos;{0}&apos;:.
+    /// </summary>
+    internal: static property System::String^  NotifyMergingDifferencesBetweenRepositoryUrlsIntoX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to --- Merging r{0} into &apos;{1}&apos;:.
+    /// </summary>
+    internal: static property System::String^  NotifyMergingRXIntoY {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to --- Merging r{0} through r{1} into &apos;{2}&apos;:.
+    /// </summary>
+    internal: static property System::String^  NotifyMergingRXToRYIntoZ {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Path &apos;{0}&apos; is no longer a member of a changelist..
+    /// </summary>
+    internal: static property System::String^  NotifyPathXIsNoLongerAMemberOfAChangelist {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Path &apos;{0}&apos; is now a member of changelist &apos;{1}&apos;..
+    /// </summary>
+    internal: static property System::String^  NotifyPathXIsNowAMemberOfChangelistY {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to Performing status on external item at &apos;{0}&apos;.
     /// </summary>
     internal: static property System::String^  NotifyPerformingStatusOnExternalItemAtX {
@@ -191,6 +226,20 @@ ref class SharpSvnStrings {
     ///   Looks up a localized string similar to Restored &apos;{0}&apos;.
     /// </summary>
     internal: static property System::String^  NotifyRestoredX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to --- Reverse-merging r{0} into &apos;{1}&apos;:.
+    /// </summary>
+    internal: static property System::String^  NotifyReverseMergingRXIntoY {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to --- Reverse-merging r{0} through r{1} into &apos;{2}&apos;:.
+    /// </summary>
+    internal: static property System::String^  NotifyReverseMergingRXToRYIntoZ {
         System::String^  get();
     }
     
@@ -240,6 +289,20 @@ ref class SharpSvnStrings {
     ///   Looks up a localized string similar to Updated to revision {0}..
     /// </summary>
     internal: static property System::String^  NotifyUpdatedToRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to &apos;{0}&apos; locked by user &apos;{1}&apos;..
+    /// </summary>
+    internal: static property System::String^  NotifyXLockedByUserY {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to &apos;{0}&apos; unlocked..
+    /// </summary>
+    internal: static property System::String^  NotifyXUnlocked {
         System::String^  get();
     }
     
@@ -398,6 +461,26 @@ inline System::String^  SharpSvnStrings::NotifyFetchExternalItemIntoX::get() {
     return ResourceManager->GetString(L"NotifyFetchExternalItemIntoX", resourceCulture);
 }
 
+inline System::String^  SharpSvnStrings::NotifyMergingDifferencesBetweenRepositoryUrlsIntoX::get() {
+    return ResourceManager->GetString(L"NotifyMergingDifferencesBetweenRepositoryUrlsIntoX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyMergingRXIntoY::get() {
+    return ResourceManager->GetString(L"NotifyMergingRXIntoY", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyMergingRXToRYIntoZ::get() {
+    return ResourceManager->GetString(L"NotifyMergingRXToRYIntoZ", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangelist::get() {
+    return ResourceManager->GetString(L"NotifyPathXIsNoLongerAMemberOfAChangelist", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyPathXIsNowAMemberOfChangelistY::get() {
+    return ResourceManager->GetString(L"NotifyPathXIsNowAMemberOfChangelistY", resourceCulture);
+}
+
 inline System::String^  SharpSvnStrings::NotifyPerformingStatusOnExternalItemAtX::get() {
     return ResourceManager->GetString(L"NotifyPerformingStatusOnExternalItemAtX", resourceCulture);
 }
@@ -408,6 +491,14 @@ inline System::String^  SharpSvnStrings::NotifyResolvedConflictedStateOfX::get()
 
 inline System::String^  SharpSvnStrings::NotifyRestoredX::get() {
     return ResourceManager->GetString(L"NotifyRestoredX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyReverseMergingRXIntoY::get() {
+    return ResourceManager->GetString(L"NotifyReverseMergingRXIntoY", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyReverseMergingRXToRYIntoZ::get() {
+    return ResourceManager->GetString(L"NotifyReverseMergingRXToRYIntoZ", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::NotifyRevertedX::get() {
@@ -436,6 +527,14 @@ inline System::String^  SharpSvnStrings::NotifyUpdatedExternalToRevisionX::get()
 
 inline System::String^  SharpSvnStrings::NotifyUpdatedToRevisionX::get() {
     return ResourceManager->GetString(L"NotifyUpdatedToRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyXLockedByUserY::get() {
+    return ResourceManager->GetString(L"NotifyXLockedByUserY", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyXUnlocked::get() {
+    return ResourceManager->GetString(L"NotifyXUnlocked", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {
