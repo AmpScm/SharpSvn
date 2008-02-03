@@ -10,6 +10,9 @@ using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoArgs,System.Collections.Generic.IList`1<SharpSvn.SvnInfoEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoEventArgs&):System.Boolean", MessageId="1#")];
+
 bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
 	if(!target)
@@ -25,7 +28,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	AprPool thePool(pool, false);
-	SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
 		SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PtrToString(path), info);

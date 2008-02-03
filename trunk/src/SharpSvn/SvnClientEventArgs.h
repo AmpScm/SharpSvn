@@ -184,6 +184,8 @@ namespace SharpSvn {
 		SvnLockInfo^ _lock;
 		String^ _changelistName;
 		SvnMergeRange^ _mergeRange;
+		bool _pathIsUri;
+		bool _mimeTypeIsBinary;
 
 	internal:
 		SvnNotifyEventArgs(const svn_wc_notify_t *notify)
@@ -204,7 +206,8 @@ namespace SharpSvn {
 		String^ _fullPath;
 		String^ _path;
 		String^ _mimeType;
-		SvnException^ _exception;
+		SvnException^ _exception;		
+
 	public:
 		/// <summary>The path the notification is about</summary>
 		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
@@ -212,8 +215,14 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_path && _notify)
+				if(!_path && _notify && _notify->path)
+				{
+					_pathIsUri = (0 != svn_path_is_url(_notify->path));
 					_path = SvnBase::Utf8_PtrToString(_notify->path);
+
+					if(!_pathIsUri && _path)
+						_path = _path->Replace('/', System::IO::Path::DirectorySeparatorChar);
+				}
 
 				return _path;
 			}
@@ -226,9 +235,19 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if(!_fullPath && Path)
-					_fullPath = System::IO::Path::GetFullPath(Path);
+					_fullPath = _pathIsUri ? Path : System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
+			}
+		}
+
+		/// <summary>Gets a boolean indicating whether the path is a Uri</summary>
+		property bool PathIsUri
+		{
+			bool get()
+			{
+				GC::KeepAlive(Path);
+				return _pathIsUri;
 			}
 		}
 
@@ -253,9 +272,21 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if(!_mimeType && _notify && _notify->mime_type)
+				{
 					_mimeType = SvnBase::Utf8_PtrToString(_notify->mime_type);
+					_mimeTypeIsBinary = (0 != svn_mime_type_is_binary(_notify->mime_type));
+				}
 
 				return _mimeType;
+			}
+		}
+
+		property bool MimeTypeIsBinary
+		{
+			bool get()
+			{
+				GC::KeepAlive(MimeType);
+				return _mimeTypeIsBinary;
 			}
 		}
 
@@ -348,6 +379,31 @@ namespace SharpSvn {
 			{
 				_notify = nullptr;
 				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+	ref class SvnClientArgs;
+
+	public ref class SvnBeforeCommandEventArgs sealed : public SvnEventArgs
+	{
+		initonly SvnClientArgs^ _clientArgs;
+
+	internal:
+		SvnBeforeCommandEventArgs(SvnClientArgs^ args)
+		{
+			if(!args)
+				throw gcnew ArgumentNullException("args");
+
+			_clientArgs = args;
+		}
+
+	internal:
+		property SvnClientArgs^ CommandArgs
+		{
+			SvnClientArgs^ get()
+			{
+				return _clientArgs;
 			}
 		}
 	};

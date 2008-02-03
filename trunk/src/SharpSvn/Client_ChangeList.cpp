@@ -29,7 +29,7 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, 
 	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnListChangelistArgs^ args = dynamic_cast<SvnListChangelistArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnListChangelistArgs^ args = dynamic_cast<SvnListChangelistArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
 		SvnListChangelistEventArgs^ e = gcnew SvnListChangelistEventArgs(path, changelist);

@@ -12,6 +12,7 @@ using System::Collections::Generic::IDictionary;
 
 namespace SharpSvn {
 	ref class SvnTarget;
+	ref class SvnClientContext;
 
 	namespace Apr {
 		ref class AprPool;

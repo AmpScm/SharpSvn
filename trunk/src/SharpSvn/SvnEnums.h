@@ -64,7 +64,7 @@ namespace SharpSvn {
 		Delete			= svn_wc_notify_delete,
 		Restore			= svn_wc_notify_restore,
 		Revert			= svn_wc_notify_revert,
-		FailedRevert	= svn_wc_notify_failed_revert,
+		RevertFailed	= svn_wc_notify_failed_revert,
 		Resolved		= svn_wc_notify_resolved,
 		Skip			= svn_wc_notify_skip,
 		UpdateDelete	= svn_wc_notify_update_delete,
@@ -78,7 +78,7 @@ namespace SharpSvn {
 		CommitAdded		= svn_wc_notify_commit_added,
 		CommitDeleted	= svn_wc_notify_commit_deleted,
 		CommitReplaced	= svn_wc_notify_commit_replaced,
-		CommitBeforeDelta=svn_wc_notify_commit_postfix_txdelta,
+		CommitSendData	=svn_wc_notify_commit_postfix_txdelta,
 		BlameRevision	= svn_wc_notify_blame_revision,
 		// 1.2+
 		Locked			= svn_wc_notify_locked,
