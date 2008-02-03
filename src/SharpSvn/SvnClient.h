@@ -22,6 +22,7 @@ namespace SharpSvn {
 	ref class SvnProgressEventArgs;
 	ref class SvnLogEventArgs;
 	ref class SvnNotifyEventArgs;
+	ref class SvnBeforeCommandEventArgs;
 
 	ref class SvnClientArgs;
 	ref class SvnClientArgsWithCommit;
@@ -71,6 +72,7 @@ namespace SharpSvn {
 	ref class SvnRecoverRepositoryArgs;
 
 	ref class SvnUpdateResult;
+	ref class SvnClientNotifier;
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -79,7 +81,7 @@ namespace SharpSvn {
 	using System::IO::Stream;
 	using System::IO::FileStream;
 
-	/// <summary>Subversion client instance; main entrance to Subversion api</summary>
+	/// <summary>Subversion client instance; main entrance to the Subversion Client api</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClient : public SvnClientContext
 	{
@@ -88,8 +90,9 @@ namespace SharpSvn {
 		SvnClientArgs^ _currentArgs;
 	internal:
 		bool _noLogMessageRequired;
+
 	internal:
-		property SvnClientArgs^ CurrentArgs
+		property SvnClientArgs^ CurrentCommandArgs
 		{
 			SvnClientArgs^ get()
 			{
@@ -158,38 +161,45 @@ namespace SharpSvn {
 		/// raised on the <see cref="SvnClientArgs" /> object and 
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnCancelEventArgs^>^		Cancel;
+		event EventHandler<SvnCancelEventArgs^>^ Cancel;
 		/// <summary>
 		/// Raised on progress. The event is first 
 		/// raised on the <see cref="SvnClientArgs" /> object and 
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnProgressEventArgs^>^		Progress;
+		event EventHandler<SvnProgressEventArgs^>^ Progress;
 		/// <summary>
 		/// Raised on notifications. The event is first 
 		/// raised on the <see cref="SvnClientArgs" /> object and 
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnNotifyEventArgs^>^		Notify;
+		event EventHandler<SvnNotifyEventArgs^>^ Notify;
 		/// <summary>
 		/// Raised on progress. The event is first 
 		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and 
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnCommittingEventArgs^>^	Committing;
+		event EventHandler<SvnCommittingEventArgs^>^ Committing;
 		/// <summary>
 		/// Raised on progress. The event is first 
 		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and 
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnConflictEventArgs^>^		Conflict;
+		event EventHandler<SvnConflictEventArgs^>^ Conflict;
 
 		/// <summary>
 		/// Raised when a subversion exception occurs.
 		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel 
 		/// throwing the exception
 		/// </summary>
-		event EventHandler<SvnErrorEventArgs^>^		SvnError;
+		event EventHandler<SvnErrorEventArgs^>^ SvnError;
+
+		/// <summary>
+		/// Raised just before a command is executed. The provided <see cref="SvnClientArgs" />
+		/// object MUST BE threated as read only. Handling this command allows
+		/// <see cref="SvnClientNotifier" /> to provide full command output.
+		/// </summary>
+		event EventHandler<SvnBeforeCommandEventArgs^>^	BeforeCommand;
 
 	protected:
 		/// <summary>Invokes the <see cref="Cancel" /> event</summary>
@@ -204,6 +214,8 @@ namespace SharpSvn {
 		virtual void OnConflict(SvnConflictEventArgs^ e);
 		/// <summary>Invokes the <see cref="Exception" /> event</summary>
 		virtual void OnSvnError(SvnErrorEventArgs^ e);
+		/// <summary>Invokes the <see cref="BeforeCommand" /> event</summary>
+		virtual void OnBeforeCommand(SvnBeforeCommandEventArgs^ e);
 
 	internal:
 		void HandleClientCancel(SvnCancelEventArgs^ e);
@@ -212,6 +224,7 @@ namespace SharpSvn {
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
 		void HandleClientError(SvnErrorEventArgs^ e);
+		void HandleBeforeCommand(SvnBeforeCommandEventArgs^ e);
 
 		static const char* GetEolPtr(SvnLineStyle style);
 #pragma endregion

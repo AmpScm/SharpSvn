@@ -147,6 +147,60 @@
   <data name="NonUtf8ConvertableLine" xml:space="preserve">
     <value>{This line was not parsable as Utf8}</value>
   </data>
+  <data name="NotifyAtRevisionX" xml:space="preserve">
+    <value>At revision {0}.</value>
+  </data>
+  <data name="NotifyCheckedOutExternalAtRevisionX" xml:space="preserve">
+    <value>Checked out external at revision {0}.</value>
+  </data>
+  <data name="NotifyCheckedOutRevisionX" xml:space="preserve">
+    <value>Checked out revision {0}.</value>
+  </data>
+  <data name="NotifyExportedExternalAtRevisionX" xml:space="preserve">
+    <value>Exported external at revision {0}.</value>
+  </data>
+  <data name="NotifyExportedRevisionX" xml:space="preserve">
+    <value>Exported revision {0}.</value>
+  </data>
+  <data name="NotifyExternalAtRevisionX" xml:space="preserve">
+    <value>External at revision {0}.</value>
+  </data>
+  <data name="NotifyFailedToRevertX" xml:space="preserve">
+    <value>Failed to revert '{0}' -- try updating instead</value>
+  </data>
+  <data name="NotifyFetchExternalItemIntoX" xml:space="preserve">
+    <value>Fetching external item into '{0}'</value>
+  </data>
+  <data name="NotifyPerformingStatusOnExternalItemAtX" xml:space="preserve">
+    <value>Performing status on external item at '{0}'</value>
+  </data>
+  <data name="NotifyResolvedConflictedStateOfX" xml:space="preserve">
+    <value>Resolved conflicted state of '{0}'</value>
+  </data>
+  <data name="NotifyRestoredX" xml:space="preserve">
+    <value>Restored '{0}'</value>
+  </data>
+  <data name="NotifyRevertedX" xml:space="preserve">
+    <value>Reverted '{0}'</value>
+  </data>
+  <data name="NotifySkippedMissingTargetX" xml:space="preserve">
+    <value>Skipped missing target '{0}'</value>
+  </data>
+  <data name="NotifySkippedMissingX" xml:space="preserve">
+    <value>Skipped missing '{0}'</value>
+  </data>
+  <data name="NotifyStatusAgainstRevisionX" xml:space="preserve">
+    <value>Status against revision: {0}</value>
+  </data>
+  <data name="NotifyTransmittingFileData" xml:space="preserve">
+    <value>Transmitting file data</value>
+  </data>
+  <data name="NotifyUpdatedExternalToRevisionX" xml:space="preserve">
+    <value>Updated external to revision {0}.</value>
+  </data>
+  <data name="NotifyUpdatedToRevisionX" xml:space="preserve">
+    <value>Updated to revision {0}.</value>
+  </data>
   <data name="RevisionNumberMustBeAtLeast0" xml:space="preserve">
     <value>Revision number must be at least 0</value>
   </data>

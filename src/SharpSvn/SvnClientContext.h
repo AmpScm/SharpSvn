@@ -24,6 +24,8 @@ namespace SharpSvn {
 		AuthorizationInitialized
 	};
 
+	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
+	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientContext : public SvnBase
 	{
 		svn_client_ctx_t *_ctx;

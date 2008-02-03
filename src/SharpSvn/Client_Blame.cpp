@@ -9,6 +9,8 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetBlame(SharpSvn.SvnTarget,SharpSvn.SvnBlameArgs,System.Collections.Generic.IList`1<SharpSvn.SvnBlameEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetBlame(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<SharpSvn.SvnBlameEventArgs>&):System.Boolean", MessageId="1#")];
 
 bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler)
 {
@@ -28,7 +30,7 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 
 	AprPool thePool(pool, false);
 
-	SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
 		SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date, 

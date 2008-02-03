@@ -4,7 +4,6 @@
 // Please read the SharpSvnLicense.txt file for more details
 
 #include "stdafx.h"
-
 #include "SvnAll.h"
 
 using namespace SharpSvn::Apr;

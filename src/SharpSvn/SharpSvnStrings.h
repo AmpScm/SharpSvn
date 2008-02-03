@@ -118,6 +118,132 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to At revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyAtRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Checked out external at revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyCheckedOutExternalAtRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Checked out revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyCheckedOutRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Exported external at revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyExportedExternalAtRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Exported revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyExportedRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to External at revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyExternalAtRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Failed to revert &apos;{0}&apos; -- try updating instead.
+    /// </summary>
+    internal: static property System::String^  NotifyFailedToRevertX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Fetching external item into &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifyFetchExternalItemIntoX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Performing status on external item at &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifyPerformingStatusOnExternalItemAtX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Resolved conflicted state of &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifyResolvedConflictedStateOfX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Restored &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifyRestoredX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Reverted &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifyRevertedX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Skipped missing target &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifySkippedMissingTargetX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Skipped missing &apos;{0}&apos;.
+    /// </summary>
+    internal: static property System::String^  NotifySkippedMissingX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Status against revision: {0}.
+    /// </summary>
+    internal: static property System::String^  NotifyStatusAgainstRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Transmitting file data.
+    /// </summary>
+    internal: static property System::String^  NotifyTransmittingFileData {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Updated external to revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyUpdatedExternalToRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to Updated to revision {0}..
+    /// </summary>
+    internal: static property System::String^  NotifyUpdatedToRevisionX {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to Revision number must be at least 0.
     /// </summary>
     internal: static property System::String^  RevisionNumberMustBeAtLeast0 {
@@ -238,6 +364,78 @@ inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {
 
 inline System::String^  SharpSvnStrings::NonUtf8ConvertableLine::get() {
     return ResourceManager->GetString(L"NonUtf8ConvertableLine", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyAtRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyAtRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyCheckedOutExternalAtRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyCheckedOutExternalAtRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyCheckedOutRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyCheckedOutRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyExportedExternalAtRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyExportedExternalAtRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyExportedRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyExportedRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyExternalAtRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyExternalAtRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyFailedToRevertX::get() {
+    return ResourceManager->GetString(L"NotifyFailedToRevertX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyFetchExternalItemIntoX::get() {
+    return ResourceManager->GetString(L"NotifyFetchExternalItemIntoX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyPerformingStatusOnExternalItemAtX::get() {
+    return ResourceManager->GetString(L"NotifyPerformingStatusOnExternalItemAtX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyResolvedConflictedStateOfX::get() {
+    return ResourceManager->GetString(L"NotifyResolvedConflictedStateOfX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyRestoredX::get() {
+    return ResourceManager->GetString(L"NotifyRestoredX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyRevertedX::get() {
+    return ResourceManager->GetString(L"NotifyRevertedX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifySkippedMissingTargetX::get() {
+    return ResourceManager->GetString(L"NotifySkippedMissingTargetX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifySkippedMissingX::get() {
+    return ResourceManager->GetString(L"NotifySkippedMissingX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyStatusAgainstRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyStatusAgainstRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyTransmittingFileData::get() {
+    return ResourceManager->GetString(L"NotifyTransmittingFileData", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyUpdatedExternalToRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyUpdatedExternalToRevisionX", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::NotifyUpdatedToRevisionX::get() {
+    return ResourceManager->GetString(L"NotifyUpdatedToRevisionX", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {
