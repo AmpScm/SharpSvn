@@ -81,9 +81,9 @@ namespace SharpSvn {
 		CommitSendData	=svn_wc_notify_commit_postfix_txdelta,
 		BlameRevision	= svn_wc_notify_blame_revision,
 		// 1.2+
-		Locked			= svn_wc_notify_locked,
+		LockLocked		= svn_wc_notify_locked,
 		LockUnlocked	= svn_wc_notify_unlocked,
-		LockFailed		= svn_wc_notify_failed_lock,
+		LockFailedLock	= svn_wc_notify_failed_lock,
 		LockFailedUnlock=svn_wc_notify_failed_unlock,
 
 		// 1.5+

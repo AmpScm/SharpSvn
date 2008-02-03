@@ -22,7 +22,7 @@ namespace SharpSvn {
 	ref class SvnProgressEventArgs;
 	ref class SvnLogEventArgs;
 	ref class SvnNotifyEventArgs;
-	ref class SvnBeforeCommandEventArgs;
+	ref class SvnProcessingEventArgs;
 
 	ref class SvnClientArgs;
 	ref class SvnClientArgsWithCommit;
@@ -199,7 +199,7 @@ namespace SharpSvn {
 		/// object MUST BE threated as read only. Handling this command allows
 		/// <see cref="SvnClientNotifier" /> to provide full command output.
 		/// </summary>
-		event EventHandler<SvnBeforeCommandEventArgs^>^	BeforeCommand;
+		event EventHandler<SvnProcessingEventArgs^>^	Processing;
 
 	protected:
 		/// <summary>Invokes the <see cref="Cancel" /> event</summary>
@@ -214,8 +214,8 @@ namespace SharpSvn {
 		virtual void OnConflict(SvnConflictEventArgs^ e);
 		/// <summary>Invokes the <see cref="Exception" /> event</summary>
 		virtual void OnSvnError(SvnErrorEventArgs^ e);
-		/// <summary>Invokes the <see cref="BeforeCommand" /> event</summary>
-		virtual void OnBeforeCommand(SvnBeforeCommandEventArgs^ e);
+		/// <summary>Invokes the <see cref="Processing" /> event</summary>
+		virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
 	internal:
 		void HandleClientCancel(SvnCancelEventArgs^ e);
@@ -224,7 +224,7 @@ namespace SharpSvn {
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
 		void HandleClientError(SvnErrorEventArgs^ e);
-		void HandleBeforeCommand(SvnBeforeCommandEventArgs^ e);
+		void HandleProcessing(SvnProcessingEventArgs^ e);
 
 		static const char* GetEolPtr(SvnLineStyle style);
 #pragma endregion

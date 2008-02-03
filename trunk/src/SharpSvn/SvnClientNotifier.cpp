@@ -10,10 +10,8 @@
 using namespace SharpSvn::Apr;
 using namespace SharpSvn;
 
-void SvnClientNotifier::OnBeforeCommand(SvnBeforeCommandEventArgs^ e)
+void SvnClientNotifier::OnProcessing(SvnProcessingEventArgs^ e)
 {
-	UNUSED_ALWAYS(e);
-
 	// Reset parameters
 	_receivedSomeChange = false;
 	_isCheckout = (nullptr != dynamic_cast<SvnCheckOutArgs^>(e->CommandArgs));
@@ -23,6 +21,7 @@ void SvnClientNotifier::OnBeforeCommand(SvnBeforeCommandEventArgs^ e)
 	_inExternal = 0;
 }
 
+// Code is +- equivalent to those in notify.c of subversions svn project
 void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 {
 	if(!e)
@@ -236,85 +235,57 @@ void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 
 		WriteProgress(".");
 		break;			
-	}
 
-#if 0
-	// TODO: Implement rest of the notifies
-
-	case svn_wc_notify_locked:
-		if ((err = svn_cmdline_printf(pool, _("'%s' locked by user '%s'.\n"),
-			path_local, n->lock->owner)))
-			goto print_error;
+	case SvnNotifyAction::LockLocked:
+		WriteLine(String::Format(SharpSvnStrings::NotifyXLockedByUserY, e->Lock->Owner, e->Path));
+		break;
+	case SvnNotifyAction::LockUnlocked:
+		WriteLine(String::Format(SharpSvnStrings::NotifyXUnlocked, e->Path));
+		break;
+	case SvnNotifyAction::LockFailedLock:
+	case SvnNotifyAction::LockFailedUnlock:
+		WriteLine(e->Error->Message);
 		break;
 
-	case svn_wc_notify_unlocked:
-		if ((err = svn_cmdline_printf(pool, _("'%s' unlocked.\n"),
-			path_local)))
-			goto print_error;
+	case SvnNotifyAction::ChangelistSet:
+		WriteLine(String::Format(SharpSvnStrings::NotifyPathXIsNowAMemberOfChangelistY, e->Path, e->ChangelistName));
 		break;
-
-	case svn_wc_notify_failed_lock:
-	case svn_wc_notify_failed_unlock:
-		svn_handle_warning(stderr, n->err);
+	case SvnNotifyAction::ChangelistClear:
+		WriteLine(String::Format(SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangelist, e->Path));
 		break;
-
-	case svn_wc_notify_changelist_set:
-		if ((err = svn_cmdline_printf(pool, _("Path '%s' is now a member of "
-			"changelist '%s'.\n"),
-			path_local, n->changelist_name)))
-			goto print_error;
+	case SvnNotifyAction::ChangelistFailed:
+	case SvnNotifyAction::ChangelistMoved:
+		WriteLine(e->Error->Message);
 		break;
-
-	case svn_wc_notify_changelist_clear:
-		if ((err = svn_cmdline_printf(pool,
-			_("Path '%s' is no longer a member of "
-			"a changelist.\n"),
-			path_local)))
-			goto print_error;
+	case SvnNotifyAction::MergeBegin:
+		if(!e->MergeRange)
+		{
+			WriteLine(String::Format(SharpSvnStrings::NotifyMergingDifferencesBetweenRepositoryUrlsIntoX, 
+				e->Path));
+		}
+		else if((e->MergeRange->Start == e->MergeRange->End-1) 
+			|| (e->MergeRange->Start == e->MergeRange->End))
+		{
+			WriteLine(String::Format(SharpSvnStrings::NotifyMergingRXIntoY, 
+				e->MergeRange->End, e->Path));
+		}
+		else if(e->MergeRange->End == e->MergeRange->Start-1)
+		{
+			WriteLine(String::Format(SharpSvnStrings::NotifyReverseMergingRXIntoY, 
+				e->MergeRange->Start, e->Path));
+		}
+		else if(e->MergeRange->Start < e->MergeRange->End)
+		{
+			WriteLine(String::Format(SharpSvnStrings::NotifyMergingRXToRYIntoZ, 
+				e->MergeRange->Start+1, e->MergeRange->End, e->Path)); // Note: Start+1
+		}
+		else /*if(e->MergeRange->Start > e->MergeRange->End - 1)*/
+		{
+			WriteLine(String::Format(SharpSvnStrings::NotifyReverseMergingRXToRYIntoZ, 
+				e->MergeRange->Start, e->MergeRange->End+1, e->Path)); // Note: End+1
+		}
 		break;
-
-	case svn_wc_notify_changelist_failed:
-		svn_handle_warning(stderr, n->err);
-		svn_error_clear(n->err);
-		break;
-
-	case svn_wc_notify_changelist_moved:
-		svn_handle_warning(stderr, n->err);
-		svn_error_clear(n->err);
-		break;
-
-	case svn_wc_notify_merge_begin:
-		if (n->merge_range == NULL)
-			err = svn_cmdline_printf(pool,
-			_("--- Merging differences between "
-			"repository URLs into '%s':\n"),
-			path_local);
-		else if (n->merge_range->start == n->merge_range->end - 1
-			|| n->merge_range->start == n->merge_range->end)
-			err = svn_cmdline_printf(pool, _("--- Merging r%ld into '%s':\n"),
-			n->merge_range->end, path_local);
-		else if (n->merge_range->start - 1 == n->merge_range->end)
-			err = svn_cmdline_printf(pool,
-			_("--- Reverse-merging r%ld into '%s':\n"),
-			n->merge_range->start, path_local);
-		else if (n->merge_range->start < n->merge_range->end)
-			err = svn_cmdline_printf(pool,
-			_("--- Merging r%ld through r%ld into "
-			"'%s':\n"),
-			n->merge_range->start + 1,
-			n->merge_range->end, path_local);
-		else /* n->merge_range->start > n->merge_range->end - 1 */
-			err = svn_cmdline_printf(pool,
-			_("--- Reverse-merging r%ld through r%ld "
-			"into '%s':\n"),
-			n->merge_range->start,
-			n->merge_range->end + 1, path_local);
-		if (err)
-			goto print_error;
-		break;
-
 	default:
 		break;
-}
-#endif
+	}
 }

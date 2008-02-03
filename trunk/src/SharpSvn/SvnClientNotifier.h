@@ -38,7 +38,7 @@ namespace SharpSvn {
 			_client = client;
 			_textWriter = tw;
 			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
-			_client->BeforeCommand += gcnew EventHandler<SvnBeforeCommandEventArgs^>(this, &SvnClientNotifier::HandleBeforeCommand);
+			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientNotifier::HandleProcessing);
 		}
 
 		SvnClientNotifier(SvnClient^ client, System::Text::StringBuilder^ sb)			
@@ -51,7 +51,7 @@ namespace SharpSvn {
 			_client = client;
 			_textWriter = gcnew System::IO::StringWriter(sb);
 			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
-			_client->BeforeCommand += gcnew EventHandler<SvnBeforeCommandEventArgs^>(this, &SvnClientNotifier::HandleBeforeCommand);
+			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientNotifier::HandleProcessing);
 		}
 
 		SvnClientNotifier(SvnClientArgs^ clientArgs, System::IO::TextWriter^ tw)
@@ -84,7 +84,7 @@ namespace SharpSvn {
 			if(_client)
 			{
 				_client->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
-				_client->BeforeCommand -= gcnew EventHandler<SvnBeforeCommandEventArgs^>(this, &SvnClientNotifier::HandleBeforeCommand);
+				_client->Processing -= gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientNotifier::HandleProcessing);
 			}
 			if(_args)
 				_args->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);				
@@ -103,7 +103,7 @@ namespace SharpSvn {
 		}
 
 		virtual void OnNotify(SvnNotifyEventArgs^ e);
-		virtual void OnBeforeCommand(SvnBeforeCommandEventArgs^ e);
+		virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
 		/// <summary>Writes the specified message to the result writer</summary>
 		virtual void Write(String^ message)
@@ -132,16 +132,16 @@ namespace SharpSvn {
 			if(!_afterInitial && !_client)
 			{
 				_afterInitial = true;
-				OnBeforeCommand(gcnew SvnBeforeCommandEventArgs(_args));
+				OnProcessing(gcnew SvnProcessingEventArgs(_args));
 			}
 
 			OnNotify(e);
 		}
 
-		void HandleBeforeCommand(Object^ sender, SvnBeforeCommandEventArgs^ e)
+		void HandleProcessing(Object^ sender, SvnProcessingEventArgs^ e)
 		{
 			UNUSED_ALWAYS(sender);
-			OnBeforeCommand(e);
+			OnProcessing(e);
 		}
 	};
 
