@@ -9,6 +9,7 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests
 {
@@ -185,7 +186,7 @@ namespace SharpSvn.Tests
 		{
 			using (SvnClient client = NewSvnClient(false, false))
 			{
-				IList<SvnListEventArgs> items;
+				Collection<SvnListEventArgs> items;
 				client.GetList(ReposUri, out items);
 
 				Assert.That(items, Is.Not.Null, "Items retrieved");
@@ -197,7 +198,7 @@ namespace SharpSvn.Tests
 		{
 			using (SvnClient client = NewSvnClient(false, false))
 			{
-				IList<SvnInfoEventArgs> items;
+				Collection<SvnInfoEventArgs> items;
 				client.GetInfo(ReposUri, new SvnInfoArgs(), out items);
 
 				Assert.That(items, Is.Not.Null, "Items retrieved");
@@ -226,7 +227,7 @@ namespace SharpSvn.Tests
 
 				client.Add(file);
 
-				IList<SvnStatusEventArgs> items;
+				Collection<SvnStatusEventArgs> items;
 				client.GetStatus(WcPath, out items);
 
 				Assert.That(items, Is.Not.Null, "Status retrieved");
