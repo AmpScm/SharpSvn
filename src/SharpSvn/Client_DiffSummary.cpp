@@ -97,7 +97,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	}
 }
 
-bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list)
+bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] Collection<SvnDiffSummaryEventArgs^>^% list)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -112,11 +112,11 @@ bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDi
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnDiffSummaryEventArgs^>^>(results);
+		list = results;
 	}
 }
 
-bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] IList<SvnDiffSummaryEventArgs^>^% list)
+bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] Collection<SvnDiffSummaryEventArgs^>^% list)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -133,6 +133,6 @@ bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArg
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnDiffSummaryEventArgs^>^>(results);
+		list = results;
 	}
 }

@@ -130,7 +130,7 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocUnixSvnString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			const svn_string_t* AllocSvnString(array<char>^ value);
+			const svn_string_t* AllocSvnString(array<Byte>^ value);
 		};
 	}
 }

@@ -89,7 +89,7 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 	}
 }
 
-bool SvnClient::GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, [Out]Collection<SvnListChangeListEventArgs^>^% list)
 {
 	if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
@@ -97,7 +97,7 @@ bool SvnClient::GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEven
 	return GetChangeList(rootPath, gcnew SvnListChangeListArgs(), list);
 }
 
-bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]Collection<SvnListChangeListEventArgs^>^% list)
 {
 	if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
@@ -115,6 +115,6 @@ bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Ou
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnListChangeListEventArgs^>^>(who);
+		list = results;
 	}
 }

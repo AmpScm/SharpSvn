@@ -92,7 +92,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 	}
 }
 
-bool SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list)
+bool SvnClient::GetPropertyList(SvnTarget^ target, [Out] Collection<SvnPropertyListEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -105,11 +105,11 @@ bool SvnClient::GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEv
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnPropertyListEventArgs^>^>(results);
+		list = results;
 	}
 }
 
-bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list)
+bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] Collection<SvnPropertyListEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -124,6 +124,6 @@ bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [O
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnPropertyListEventArgs^>^>(results);
+		list = results;
 	}
 }
