@@ -71,7 +71,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets the list of changelist-names</summary>
+		/// <summary>Gets the list of changelist-names</summary>
 		property SvnChangeListCollection^ ChangeLists
 		{
 			SvnChangeListCollection^ get()
@@ -132,7 +132,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets the list of changelist-names</summary>
+		/// <summary>Gets the list of changelist-names</summary>
 		property SvnChangeListCollection^ ChangeLists
 		{
 			SvnChangeListCollection^ get()
@@ -205,7 +205,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets the list of changelist-names</summary>
+		/// <summary>Gets the list of changelist-names</summary>
 		property SvnChangeListCollection^ ChangeLists
 		{
 			SvnChangeListCollection^ get()

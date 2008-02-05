@@ -58,7 +58,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets the list of changelist-names to commit</summary>
+		/// <summary>Gets the list of changelist-names to commit</summary>
 		property SvnChangeListCollection^ ChangeLists
 		{
 			SvnChangeListCollection^ get()
