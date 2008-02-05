@@ -77,7 +77,7 @@ bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets
 	return InternalLog(safe_cast<ICollection<String^>^>(targets), baseTarget->Revision, args, logHandler);
 }
 
-bool SvnClient::GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems)
+bool SvnClient::GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -90,11 +90,11 @@ bool SvnClient::GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logIte
 	}
 	finally
 	{
-		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+		logItems = results;
 	}
 }
 
-bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems)
+bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -109,11 +109,11 @@ bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEv
 	}
 	finally
 	{
-		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+		logItems = results;
 	}
 }
 
-bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, [Out] IList<SvnLogEventArgs^>^% logItems)
+bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
 	if(!baseTarget)
 		throw gcnew ArgumentNullException("baseTarget");
@@ -126,11 +126,11 @@ bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, 
 	}
 	finally
 	{
-		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+		logItems = results;
 	}
 }
 
-bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems)
+bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
 	if(!baseTarget)
 		throw gcnew ArgumentNullException("baseTarget");
@@ -145,7 +145,7 @@ bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, 
 	}
 	finally
 	{
-		logItems = safe_cast<IList<SvnLogEventArgs^>^>(results);
+		logItems = results;
 	}
 }
 
