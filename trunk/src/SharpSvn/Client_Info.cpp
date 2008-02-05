@@ -118,7 +118,7 @@ bool SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 	}
 }
 
-bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^% info)
+bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] Collection<SvnInfoEventArgs^>^% info)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -133,6 +133,6 @@ bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInf
 	}
 	finally
 	{
-		info = safe_cast<IList<SvnInfoEventArgs^>^>(results);
+		info = results;
 	}
 }

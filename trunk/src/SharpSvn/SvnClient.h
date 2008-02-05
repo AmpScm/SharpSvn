@@ -80,6 +80,7 @@ namespace SharpSvn {
 	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
+	using System::Collections::ObjectModel::Collection;
 	using System::IO::Stream;
 	using System::IO::FileStream;
 
@@ -407,11 +408,11 @@ namespace SharpSvn {
 		bool Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatusEventArgs^>^ statusHandler);
 
 		/// <summary>Recursively gets a list of 'interesting' status data for the specified path</summary>
-		bool GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		bool GetStatus(String^ path, [Out] Collection<SvnStatusEventArgs^>^% statuses);
 		/// <summary>Gets the status data for the specified path</summary>
 		bool GetStatus(String^ path, [Out] SvnStatusEventArgs^% status);
 		/// <summary>Gets a list of status data for the specified path</summary>
-		bool GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses);
+		bool GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<SvnStatusEventArgs^>^% statuses);
 
 #pragma endregion
 
@@ -431,13 +432,13 @@ namespace SharpSvn {
 
 		/// <overloads>Retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnTarget^ target, [Out] IList<SvnLogEventArgs^>^% logItems);
+		bool GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
+		bool GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, [Out] IList<SvnLogEventArgs^>^% logItems);
+		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
+		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 
 	private:
 		bool InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
@@ -459,8 +460,8 @@ namespace SharpSvn {
 		bool List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListEventArgs^>^ listHandler);
 
 		/// <overloads>Gets a list of directory entries in the repository. (<c>svn list</c>)</overloads>
-		bool GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list);
-		bool GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnListEventArgs^>^% list);
+		bool GetList(SvnTarget^ target, [Out] Collection<SvnListEventArgs^>^% list);
+		bool GetList(SvnTarget^ target, SvnListArgs^ args, [Out] Collection<SvnListEventArgs^>^% list);
 #pragma endregion
 
 	public:
@@ -475,7 +476,7 @@ namespace SharpSvn {
 		/// <summary>Gets information about the specified target</summary>
 		bool GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info);
 		/// <summary>Gets information about the specified target</summary>
-		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] IList<SvnInfoEventArgs^>^% info);
+		bool GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] Collection<SvnInfoEventArgs^>^% info);
 
 #pragma endregion
 

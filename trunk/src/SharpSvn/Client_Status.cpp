@@ -89,7 +89,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	}
 }
 
-bool SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statuses)
+bool SvnClient::GetStatus(String^ path, [Out] Collection<SvnStatusEventArgs^>^% statuses)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -102,7 +102,7 @@ bool SvnClient::GetStatus(String^ path, [Out] IList<SvnStatusEventArgs^>^% statu
 	}
 	finally
 	{
-		statuses = safe_cast<IList<SvnStatusEventArgs^>^>(results);
+		statuses = results;
 	}
 }
 
@@ -131,7 +131,7 @@ bool SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
 	}
 }
 
-bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStatusEventArgs^>^% statuses)
+bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<SvnStatusEventArgs^>^% statuses)
 {
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -146,6 +146,6 @@ bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] IList<SvnStat
 	}
 	finally
 	{
-		statuses = safe_cast<IList<SvnStatusEventArgs^>^>(results);
+		statuses = results;
 	}
 }

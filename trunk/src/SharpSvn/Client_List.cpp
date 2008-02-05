@@ -94,7 +94,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	}
 }
 
-bool SvnClient::GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list)
+bool SvnClient::GetList(SvnTarget^ target, [Out] Collection<SvnListEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -107,12 +107,12 @@ bool SvnClient::GetList(SvnTarget^ target, [Out] IList<SvnListEventArgs^>^% list
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnListEventArgs^>^>(results);
+		list = results;
 	}
 }
 
 
-bool SvnClient::GetList(SvnTarget^ target, SvnListArgs^ args, [Out] IList<SvnListEventArgs^>^% list)
+bool SvnClient::GetList(SvnTarget^ target, SvnListArgs^ args, [Out] Collection<SvnListEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
