@@ -41,7 +41,7 @@ namespace SharpSvn {
 		{
 			virtual SvnClientCommandType get() override sealed
 			{
-				return (SvnClientCommandType)0;
+				return SvnClientCommandType::Unknown;
 			}
 		}
 
@@ -95,7 +95,7 @@ namespace SharpSvn {
 		{
 			virtual SvnClientCommandType get() override sealed
 			{
-				return (SvnClientCommandType)0;
+				return SvnClientCommandType::Unknown;
 			}
 		}
 	};
@@ -126,7 +126,7 @@ namespace SharpSvn {
 		{
 			virtual SvnClientCommandType get() override sealed
 			{
-				return (SvnClientCommandType)0;
+				return SvnClientCommandType::Unknown;
 			}
 		}
 	};

@@ -8,8 +8,9 @@
 // Included from SvnClientEventArgs.h
 
 namespace SharpSvn {
+	using System::Collections::ObjectModel::Collection;
 
-public ref class SvnCancelEventArgs : public SvnEventArgs
+	public ref class SvnCancelEventArgs : public SvnEventArgs
 	{
 		bool _cancel;
 
@@ -68,7 +69,7 @@ public ref class SvnCancelEventArgs : public SvnEventArgs
 		const apr_array_header_t *_commitItems;
 		bool _cancel;
 		String^ _logMessage;
-		IList<SvnCommitItem^>^ _items;
+		Collection<SvnCommitItem^>^ _items;
 	internal:
 		SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
 
@@ -97,9 +98,9 @@ public ref class SvnCancelEventArgs : public SvnEventArgs
 			}
 		}
 
-		property IList<SvnCommitItem^>^ Items
+		property Collection<SvnCommitItem^>^ Items
 		{
-			IList<SvnCommitItem^>^ get();
+			Collection<SvnCommitItem^>^ get();
 		}
 
 		virtual void Detach(bool keepProperties) override;
@@ -114,7 +115,7 @@ public ref class SvnCancelEventArgs : public SvnEventArgs
 		initonly bool _isBinary;
 		initonly SvnConflictAction _action;
 		initonly SvnConflictReason _reason;
-		
+
 		String^ _propertyName;
 		String^ _path;
 		String^ _mimeType;

@@ -113,7 +113,7 @@ public:
 
 
 
-IList<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
+Collection<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
 {
 	if(!_items && _commitItems)
 	{
@@ -123,7 +123,7 @@ IList<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
 
 		aprItems->CopyTo(items, 0);
 
-		_items = safe_cast<IList<SvnCommitItem^>^>(items);
+		_items = gcnew Collection<SvnCommitItem^>(safe_cast<IList<SvnCommitItem^>^>(items));
 	}
 
 	return _items;

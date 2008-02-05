@@ -60,7 +60,7 @@ SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header
 	_mergeRanges = SvnAppliedMergeItem::CreateRangeList(mergeInfo);
 }
 
-IList<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
+Collection<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
 {
 	if(!rangeList)
 		throw gcnew ArgumentNullException("rangeList");
@@ -72,5 +72,5 @@ IList<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *
 	for(int i = 0; i < rangeList->nelts; i++)
 		ranges[i] = gcnew SvnMergeRange(mrgRange[i]->start, mrgRange[i]->end, 0 != mrgRange[i]->inheritable);
 
-	return array<SvnMergeRange>::AsReadOnly(ranges);
+	return gcnew Collection<SvnMergeRange^>(safe_cast<IList<SvnMergeRange^>^>(ranges));
 }

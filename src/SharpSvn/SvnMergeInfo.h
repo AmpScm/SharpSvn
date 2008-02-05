@@ -109,10 +109,10 @@ namespace SharpSvn {
 	public ref class SvnAppliedMergeItem sealed
 	{
 		initonly Uri^ _uri;
-		IList<SvnMergeRange^>^ _ranges;
+		Collection<SvnMergeRange^>^ _ranges;
 
 	internal:
-		SvnAppliedMergeItem(Uri^ uri, IList<SvnMergeRange^>^ ranges)
+		SvnAppliedMergeItem(Uri^ uri, Collection<SvnMergeRange^>^ ranges)
 		{
 			if(!uri)
 				throw gcnew ArgumentNullException("uri");
@@ -125,7 +125,7 @@ namespace SharpSvn {
 
 
 	internal:
-		static IList<SvnMergeRange^>^ CreateRangeList(apr_array_header_t *rangeList);
+		static Collection<SvnMergeRange^>^ CreateRangeList(apr_array_header_t *rangeList);
 
 	public:
 		property Uri^ Uri
@@ -136,9 +136,9 @@ namespace SharpSvn {
 			}
 		}
 
-		property IList<SvnMergeRange^>^ MergeRanges
+		property Collection<SvnMergeRange^>^ MergeRanges
 		{
-			IList<SvnMergeRange^>^ get()
+			Collection<SvnMergeRange^>^ get()
 			{
 				return _ranges;
 			}
@@ -188,7 +188,7 @@ namespace SharpSvn {
 	public ref class SvnAvailableMergeInfo
 	{
 		initonly SvnTarget^ _target;
-		initonly IList<SvnMergeRange^>^ _mergeRanges;
+		initonly Collection<SvnMergeRange^>^ _mergeRanges;
 	internal:
 		SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool);
 
@@ -203,9 +203,9 @@ namespace SharpSvn {
 		}
 
 	public:
-		property IList<SvnMergeRange^>^ MergeRanges
+		property Collection<SvnMergeRange^>^ MergeRanges
 		{
-			IList<SvnMergeRange^>^ get()
+			Collection<SvnMergeRange^>^ get()
 			{
 				return _mergeRanges;
 			}
