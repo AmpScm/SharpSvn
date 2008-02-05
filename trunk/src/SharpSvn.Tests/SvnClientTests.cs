@@ -285,7 +285,6 @@ namespace SharpSvn.Tests
 		[Test]
 		public void TestChangeLists()
 		{
-			/*
 			string file1 = Path.Combine(WcPath, "ChangeListFile1");
 			string file2 = Path.Combine(WcPath, "ChangeListFile2");
 			string file3 = Path.Combine(WcPath, "ChangeListFile3");
@@ -295,7 +294,7 @@ namespace SharpSvn.Tests
 				SvnInfoArgs ia = new SvnInfoArgs();
 				ia.ThrowOnError = false;
 				SvnInfoEventArgs iea;
-				IList<SvnInfoEventArgs> ee;
+				Collection<SvnInfoEventArgs> ee;
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile1"), ia, out ee), Is.False);
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile2"), ia, out ee), Is.False);
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile3"), ia, out ee), Is.False);
@@ -319,14 +318,19 @@ namespace SharpSvn.Tests
 				client.AddToChangeList(file2, "ChangeListTest-2");
 				client.AddToChangeList(file3, "ChangeListTest-3");
 
-				IList<string> paths;
-				client.GetChangeList(WcPath, "ChangeListTest-2", out paths);
+				Collection<SvnListChangeListEventArgs> paths;
+				SvnListChangeListArgs a = new SvnListChangeListArgs();
+				a.ChangeLists.Add("ChangeListTest-2");
+
+				client.GetChangeList(WcPath, a, out paths);
 
 				Assert.That(paths, Is.Not.Null);
 				Assert.That(paths.Count, Is.EqualTo(1));
-				Assert.That(paths[0], Is.EqualTo(Path.GetFullPath(file2)));
+				Assert.That(paths[0].Path, Is.EqualTo(Path.GetFullPath(file2)));
 
-				client.GetChangeList(WcPath, "ChangeListTest-4", out paths);
+				a = new SvnListChangeListArgs();
+				a.ChangeLists.Add("ChangeListTest-4");
+				client.GetChangeList(WcPath, a, out paths);
 
 				Assert.That(paths, Is.Not.Null);
 				Assert.That(paths.Count, Is.EqualTo(0));
@@ -341,7 +345,9 @@ namespace SharpSvn.Tests
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.False);
 
 				bool visited = false;
-				client.ListChangeList(WcPath, "ChangeListTest-3", delegate(object sender, SvnListChangeListEventArgs e)
+				a = new SvnListChangeListArgs();
+				a.ChangeLists.Add("ChangeListTest-3");
+				client.ListChangeList(WcPath,a, delegate(object sender, SvnListChangeListEventArgs e)
 				{
 					Assert.That(e.Path, Is.EqualTo(file3));
 					visited = true;
@@ -363,7 +369,7 @@ namespace SharpSvn.Tests
 
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile3"), ia, out ee), Is.True);
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.True);
-			}*/
+			}
 		}
 
 		[Test]

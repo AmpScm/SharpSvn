@@ -104,7 +104,6 @@ bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Ou
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	IList<SvnListChangeListEventArgs^>^ who = nullptr;
 	list = nullptr;
 
 	InfoItemCollection<SvnListChangeListEventArgs^>^ results = gcnew InfoItemCollection<SvnListChangeListEventArgs^>();
