@@ -10,8 +10,9 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoArgs,System.Collections.Generic.IList`1<SharpSvn.SvnInfoEventArgs>&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoEventArgs&):System.Boolean", MessageId="1#")];
+
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoEventArgs&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetInfo(SharpSvn.SvnTarget,SharpSvn.SvnInfoArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnInfoEventArgs>&)", MessageId="2#")];
 
 bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {

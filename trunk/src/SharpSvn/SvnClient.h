@@ -409,8 +409,6 @@ namespace SharpSvn {
 
 		/// <summary>Recursively gets a list of 'interesting' status data for the specified path</summary>
 		bool GetStatus(String^ path, [Out] Collection<SvnStatusEventArgs^>^% statuses);
-		/// <summary>Gets the status data for the specified path</summary>
-		bool GetStatus(String^ path, [Out] SvnStatusEventArgs^% status);
 		/// <summary>Gets a list of status data for the specified path</summary>
 		bool GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<SvnStatusEventArgs^>^% statuses);
 

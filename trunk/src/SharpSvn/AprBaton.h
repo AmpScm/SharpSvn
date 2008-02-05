@@ -11,7 +11,7 @@ namespace SharpSvn {
 		using System::Runtime::InteropServices::GCHandle;
 
 		generic<typename T>
-		ref class AprBaton : public SvnBase, public IDisposable
+		ref class AprBaton : public IDisposable
 		{
 			GCHandle _handle;
 

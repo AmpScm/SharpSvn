@@ -10,9 +10,8 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetStatus(System.String,SharpSvn.SvnStatusArgs,System.Collections.Generic.IList`1<SharpSvn.SvnStatusEventArgs>&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetStatus(System.String,SharpSvn.SvnStatusEventArgs&):System.Boolean", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetStatus(System.String,System.Collections.Generic.IList`1<SharpSvn.SvnStatusEventArgs>&):System.Boolean", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetStatus(System.String,SharpSvn.SvnStatusArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnStatusEventArgs>&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetStatus(System.String,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnStatusEventArgs>&)", MessageId="1#")];
 
 bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
@@ -103,31 +102,6 @@ bool SvnClient::GetStatus(String^ path, [Out] Collection<SvnStatusEventArgs^>^% 
 	finally
 	{
 		statuses = results;
-	}
-}
-
-bool SvnClient::GetStatus(String^ path, [Out] SvnStatusEventArgs^% status)
-{
-	if(String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-
-	InfoItemCollection<SvnStatusEventArgs^>^ results = gcnew InfoItemCollection<SvnStatusEventArgs^>();
-
-	SvnStatusArgs^ args = gcnew SvnStatusArgs();
-	args->Depth = SvnDepth::Empty;
-	args->GetAll = true;
-	args->NoIgnore = true;
-
-	try
-	{
-		return Status(path, args, results->Handler);
-	}
-	finally
-	{
-		if(results->Count > 0)
-			status = results[0];
-		else
-			status = nullptr;
 	}
 }
 
