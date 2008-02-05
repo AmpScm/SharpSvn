@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
@@ -110,8 +110,8 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		aprPaths->Handle,
 		(svn_depth_t)args->Depth,
 		args->KeepLocks,
-		args->KeepChangelist,
-		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+		args->KeepChangeList,
+		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
 		pool.Handle);
 

@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -190,10 +190,10 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 	return nullptr;
 }
 
-bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!targetStrings)
-		throw gcnew ArgumentNullException("targetStrings");
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
 	else if(!pegRevision)
 		throw gcnew ArgumentNullException("pegRevision");
 	else if(!args)
@@ -220,7 +220,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targetStrings, SvnRevision^ pe
 		svn_opt_revision_t end = args->End->ToSvnRevision(SvnRevision::Zero);
 
 		svn_error_t *r = svn_client_log4(
-			AllocArray(targetStrings, %pool),
+			AllocArray(targets, %pool),
 			&pegRev,
 			&start,
 			&end,

@@ -16,13 +16,21 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _keepLocks;
-		bool _keepChangelist;
-		IList<String^>^ _changelists;
+		bool _keepChangeList;
+		SvnChangeListCollection^ _changelists;
 
 	public:
 		SvnCommitArgs()
 		{
 			_depth = SvnDepth::Infinity;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Commit;
+			}
 		}
 
 	public:
@@ -51,32 +59,25 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets the list of changelist-names to commit</summary>
-		property ICollection<String^>^ Changelists
+		property SvnChangeListCollection^ ChangeLists
 		{
-			ICollection<String^>^ get()
+			SvnChangeListCollection^ get()
 			{
 				if(!_changelists)
-					_changelists = gcnew List<String^>();
+					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
-			}
-			void set(ICollection<String^>^ value)
-			{
-				if(value)
-					_changelists = gcnew List<String^>(value);
-				else
-					_changelists = nullptr;
 			}
 		}
 
-		property bool KeepChangelist
+		property bool KeepChangeList
 		{
 			bool get()
 			{
-				return _keepChangelist;
+				return _keepChangeList;
 			}
 			void set(bool value)
 			{
-				_keepChangelist = value;
+				_keepChangeList = value;
 			}
 		}
 	};
@@ -92,6 +93,14 @@ namespace SharpSvn {
 		SvnImportArgs()
 		{
 			_depth = SvnDepth::Infinity;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Import;
+			}
 		}
 
 		property SvnDepth Depth

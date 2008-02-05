@@ -6,23 +6,24 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Boolean", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionProperties(SharpSvn.SvnUriTarget,SharpSvn.SvnPropertyCollection&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionProperties(SharpSvn.SvnUriTarget,SharpSvn.SvnGetRevisionPropertiesArgs,SharpSvn.SvnPropertyCollection&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionProperties(SharpSvn.SvnUriTarget,SharpSvn.SvnGetRevisionPropertiesArgs,SharpSvn.SvnPropertyCollection&)")];
 
-bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list)
+bool SvnClient::GetRevisionProperties(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	return GetRevisionPropertyList(target, gcnew SvnRevisionPropertyListArgs(), list);
+	return GetRevisionProperties(target, gcnew SvnGetRevisionPropertiesArgs(), list);
 }
 
-bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] IDictionary<String^, Object^>^% list)
+bool SvnClient::GetRevisionProperties(SvnUriTarget^ target, SvnGetRevisionPropertiesArgs^ args, [Out] SvnPropertyCollection^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");

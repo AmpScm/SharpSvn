@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.CleanUp(System.String,SharpSvn.SvnCleanUpArgs):System.Boolean")];

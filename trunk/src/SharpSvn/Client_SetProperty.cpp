@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -126,7 +126,7 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 		(svn_depth_t)args->Depth,
 		args->SkipChecks,
 		(svn_revnum_t)args->BaseRevision,
-		CreateChangelistsList(args->Changelists, pool), // Intersect Changelists
+		CreateChangeListsList(args->ChangeLists, pool), // Intersect ChangeLists
 		CtxHandle,
 		pool->Handle);
 

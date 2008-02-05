@@ -17,14 +17,13 @@ namespace SharpSvn {
 	{
 		bool _bdbNoFSyncCommit;
 		bool _bdbKeepLogs;
-		SvnRepositoryFilesystem _reposType;
+		SvnRepositoryFileSystem _reposType;
 		SvnRepositoryCompatibility _reposCompat;
 
 	public:
 		SvnCreateRepositoryArgs()
 		{
 		}
-
 
 		property bool BerkeleyDBNoFSyncAtCommit
 		{
@@ -35,6 +34,14 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_bdbNoFSyncCommit = value;
+			}
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return (SvnClientCommandType)0;
 			}
 		}
 
@@ -50,13 +57,13 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnRepositoryFilesystem RepositoryType
+		property SvnRepositoryFileSystem RepositoryType
 		{
-			SvnRepositoryFilesystem get()
+			SvnRepositoryFileSystem get()
 			{
 				return _reposType;
 			}
-			void set(SvnRepositoryFilesystem value)
+			void set(SvnRepositoryFileSystem value)
 			{
 				_reposType = EnumVerifier::Verify(value);
 			}
@@ -83,6 +90,14 @@ namespace SharpSvn {
 		SvnDeleteRepositoryArgs()
 		{
 		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return (SvnClientCommandType)0;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s RecoverRepository method</summary>
@@ -104,6 +119,14 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_nonBlocking = value;
+			}
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return (SvnClientCommandType)0;
 			}
 		}
 	};

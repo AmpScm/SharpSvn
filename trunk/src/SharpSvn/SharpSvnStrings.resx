@@ -124,7 +124,7 @@
     <value>This argument is not a valid path. A Uri was specified</value>
   </data>
   <data name="ArgumentMustBeAValidRepositoryUri" xml:space="preserve">
-    <value>The argyment must be a valid absolute repository Uri</value>
+    <value>The argument must be a valid absolute repository Uri</value>
   </data>
   <data name="DepthMustBeRecursiveValue" xml:space="preserve">
     <value>Depth must be Empty, Files or Infinity in 1.4 compatible compilation</value>
@@ -133,7 +133,7 @@
     <value>The handler is not registered at this time</value>
   </data>
   <data name="InvalidCharacterInClientName" xml:space="preserve">
-    <value>Invalid character in clientname</value>
+    <value>Invalid character in client name</value>
   </data>
   <data name="InvalidSvnRevisionTypeValue" xml:space="preserve">
     <value>Invalid SvnRevisionType value specified</value>
@@ -145,7 +145,7 @@
     <value>One or more items in the list are null</value>
   </data>
   <data name="NonUtf8ConvertableLine" xml:space="preserve">
-    <value>{This line was not parsable as Utf8}</value>
+    <value>{This line does not contain non-Utf8 characters}</value>
   </data>
   <data name="NotifyAtRevisionX" xml:space="preserve">
     <value>At revision {0}.</value>
@@ -180,11 +180,11 @@
   <data name="NotifyMergingRXToRYIntoZ" xml:space="preserve">
     <value>--- Merging r{0} through r{1} into '{2}':</value>
   </data>
-  <data name="NotifyPathXIsNoLongerAMemberOfAChangelist" xml:space="preserve">
-    <value>Path '{0}' is no longer a member of a changelist.</value>
+  <data name="NotifyPathXIsNoLongerAMemberOfAChangeList" xml:space="preserve">
+    <value>Path '{0}' is no longer a member of a change list.</value>
   </data>
-  <data name="NotifyPathXIsNowAMemberOfChangelistY" xml:space="preserve">
-    <value>Path '{0}' is now a member of changelist '{1}'.</value>
+  <data name="NotifyPathXIsNowAMemberOfChangeListY" xml:space="preserve">
+    <value>Path '{0}' is now a member of change list '{1}'.</value>
   </data>
   <data name="NotifyPerformingStatusOnExternalItemAtX" xml:space="preserve">
     <value>Performing status on external item at '{0}'</value>
@@ -228,6 +228,9 @@
   <data name="NotifyXUnlocked" xml:space="preserve">
     <value>'{0}' unlocked.</value>
   </data>
+  <data name="PathCountDoesNotMatchRevisions" xml:space="preserve">
+    <value>The number of elements in the paths collection does not match the number in revisions</value>
+  </data>
   <data name="RevisionNumberMustBeAtLeast0" xml:space="preserve">
     <value>Revision number must be at least 0</value>
   </data>
@@ -244,7 +247,7 @@
     <value>The specified target is not a valid Path target</value>
   </data>
   <data name="TheTargetIsNotAValidUriOrPathTarget" xml:space="preserve">
-    <value>The specified target is not a valur Uri or Path target</value>
+    <value>The specified target is not a value Uri or Path target</value>
   </data>
   <data name="TheTargetIsNotAValidUriTarget" xml:space="preserve">
     <value>The specified target is not a valid Uri target</value>

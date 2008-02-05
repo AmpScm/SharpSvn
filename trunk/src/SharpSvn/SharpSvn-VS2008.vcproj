@@ -587,6 +587,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnChangeList.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClient.h"
 					>
 				</File>
@@ -643,6 +647,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnCommandLineArgumentCollection.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnCommitItem.h"
 					>
 				</File>
@@ -659,7 +667,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnMergeSourcesCollection.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnPathTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnPropertyValue.h"
 					>
 				</File>
 				<File

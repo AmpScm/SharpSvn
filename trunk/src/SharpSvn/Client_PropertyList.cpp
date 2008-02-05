@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -77,7 +77,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 			&pegrev,
 			&rev,
 			(svn_depth_t)args->Depth,
-			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			svnclient_property_list_handler,
 			(void*)_clientBatton->Handle,			
 			CtxHandle,

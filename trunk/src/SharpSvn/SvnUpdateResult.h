@@ -6,7 +6,7 @@
 #pragma once
 
 namespace SharpSvn {
-	using namespace SharpSvn::Apr;
+	using namespace SharpSvn::Implementation;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 	using System::Collections::Generic::IEnumerator;
@@ -42,7 +42,7 @@ namespace SharpSvn {
 			else if(!revisions)
 				throw gcnew ArgumentNullException("revisions");
 			else if(paths->Count != revisions->Count)
-				throw gcnew ArgumentException();
+				throw gcnew ArgumentException(SharpSvnStrings::PathCountDoesNotMatchRevisions, "paths");
 
 			if(revision < 0)
 				revision = -1;

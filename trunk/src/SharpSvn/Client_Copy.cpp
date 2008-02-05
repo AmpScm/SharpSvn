@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -100,7 +100,7 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
 bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri)
 {
 	if(!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTarget");
+		throw gcnew ArgumentNullException("sourceTargets");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
@@ -171,7 +171,7 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ 
 bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
 	if(!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTarget");
+		throw gcnew ArgumentNullException("sourceTargets");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if(!args)

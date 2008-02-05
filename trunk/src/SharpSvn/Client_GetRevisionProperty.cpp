@@ -6,17 +6,15 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,SharpSvn.SvnPropertyValue&):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,SharpSvn.SvnPropertyValue&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnPropertyValue&):System.Boolean", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.String&):System.Boolean", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Boolean", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,System.String&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.Collections.Generic.IList`1<optional(System.Runtime.CompilerServices.IsSignUnspecifiedByte) System.SByte>&):System.Boolean")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,System.Collections.Generic.IDictionary`2<System.String,System.Object>&):System.Boolean")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetRevisionProperty(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnGetRevisionPropertyArgs,System.String&):System.Boolean")];
 
 bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value)
 {
@@ -28,14 +26,14 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), value);
 }
 
-bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% bytes)
+bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] SvnPropertyValue^% value)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), bytes);
+	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), value);
 }
 
 bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value)
@@ -47,36 +45,21 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
-	AprPool pool(%_pool);
+	SvnPropertyValue^ propertyValue = nullptr;
+	value = nullptr;
 
-	svn_string_t *result = nullptr;
-	svn_revnum_t set_rev = 0;
-
-	svn_error_t* r = svn_client_revprop_get(
-		pool.AllocString(propertyName),
-		&result,
-		pool.AllocString(target->TargetName),
-		target->Revision->AllocSvnRevision(%pool),
-		&set_rev,
-		CtxHandle,
-		pool.Handle);
-
-	if(!r || !result || !result->data)
+	try
 	{
-		value = Utf8_PtrToString(result->data, (int)result->len);
-
-		if(propertyName->StartsWith("svn:")) // Make sure properties return in the same format they were added
-			value = value->Replace("\n", Environment::NewLine);
+		return GetRevisionProperty(target, propertyName, args, propertyValue);
 	}
-	else
-		value = nullptr;
-
-	return args->HandleResult(this, r);
+	finally
+	{
+		if(propertyValue)
+			value = propertyValue->StringValue;
+	}
 }
 
-bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] IList<char>^% value)
+bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -101,12 +84,25 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		CtxHandle,
 		pool.Handle);
 
-	if(!r || !result || !result->data)
+	if(!r && result && result->data)
 	{
-		value = safe_cast<IList<char>^>(PtrToByteArray(result->data, (int)result->len));
+		String^ data = nullptr;
+
+		try
+		{
+			data = Utf8_PtrToString(result);
+		}
+		catch(ArgumentException^)
+		{}
+
+		if(data && propertyName->StartsWith("svn:", StringComparison::Ordinal)) // Make sure properties return in the same format they were added
+			data = data->Replace("\n", Environment::NewLine);
+
+		if(data)
+			value = gcnew SvnPropertyValue(propertyName, data);
+		else
+			value = gcnew SvnPropertyValue(propertyName, PtrToByteArray(result->data, (int)result->len));
 	}
-	else
-		value = nullptr;
 
 	return args->HandleResult(this, r);
 }

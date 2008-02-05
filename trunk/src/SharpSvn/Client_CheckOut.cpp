@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.CheckOut(SharpSvn.SvnUriTarget,System.String,SharpSvn.SvnCheckOutArgs,SharpSvn.SvnUpdateResult&):System.Boolean", MessageId="3#")];
@@ -57,7 +57,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	
-	switch(args->Revision->Type)
+	switch(args->Revision->RevisionType)
 	{
 		case SvnRevisionType::None: // Translated to head
 		case SvnRevisionType::Date:
@@ -86,7 +86,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 		&coRev,
 		(svn_depth_t)args->Depth,
 		args->IgnoreExternals,
-		args->AllowUnversionedObstructions,
+		args->AllowObstructions,
 		CtxHandle,
 		pool.Handle);
 

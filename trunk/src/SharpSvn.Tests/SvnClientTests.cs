@@ -247,10 +247,10 @@ namespace SharpSvn.Tests
 				}
 
 				client.Add(file);
-				client.AddToChangelist(file, "WriteTest-Items");
+				client.AddToChangeList(file, "WriteTest-Items");
 
 				SvnCommitArgs ca = new SvnCommitArgs();
-				ca.Changelists.Add("WriteTest-Items");
+				ca.ChangeLists.Add("WriteTest-Items");
 				client.Commit(WcPath);
 
 				using (MemoryStream ms = new MemoryStream())
@@ -315,23 +315,23 @@ namespace SharpSvn.Tests
 				client.Add(file3);
 				client.Add(file4);
 
-				client.AddToChangelist(file2, "ChangeListTest-2");
-				client.AddToChangelist(file3, "ChangeListTest-3");
+				client.AddToChangeList(file2, "ChangeListTest-2");
+				client.AddToChangeList(file3, "ChangeListTest-3");
 
 				IList<string> paths;
-				client.GetChangelist(WcPath, "ChangeListTest-2", out paths);
+				client.GetChangeList(WcPath, "ChangeListTest-2", out paths);
 
 				Assert.That(paths, Is.Not.Null);
 				Assert.That(paths.Count, Is.EqualTo(1));
 				Assert.That(paths[0], Is.EqualTo(Path.GetFullPath(file2)));
 
-				client.GetChangelist(WcPath, "ChangeListTest-4", out paths);
+				client.GetChangeList(WcPath, "ChangeListTest-4", out paths);
 
 				Assert.That(paths, Is.Not.Null);
 				Assert.That(paths.Count, Is.EqualTo(0));
 
 				SvnCommitArgs ca = new SvnCommitArgs();
-				ca.Changelists.Add("ChangeListTest-2");
+				ca.ChangeLists.Add("ChangeListTest-2");
 
 				client.Commit(WcPath, ca);
 
@@ -340,7 +340,7 @@ namespace SharpSvn.Tests
 				Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.False);
 
 				bool visited = false;
-				client.ListChangelist(WcPath, "ChangeListTest-3", delegate(object sender, SvnListChangelistEventArgs e)
+				client.ListChangeList(WcPath, "ChangeListTest-3", delegate(object sender, SvnListChangeListEventArgs e)
 				{
 					Assert.That(e.Path, Is.EqualTo(file3));
 					visited = true;
@@ -711,7 +711,7 @@ namespace SharpSvn.Tests
 				bool visited = false;
 				client.Info(file, delegate(object sender, SvnInfoEventArgs e)
 				{
-					Assert.That(e.Changelist, Is.Null);
+					Assert.That(e.ChangeList, Is.Null);
 					Assert.That(e.Checksum, Is.Null);
 					Assert.That(e.ConflictNew, Is.Null);
 					Assert.That(e.ConflictOld, Is.Null);
@@ -745,7 +745,7 @@ namespace SharpSvn.Tests
 				visited = false;
 				client.Info(file, delegate(object sender, SvnInfoEventArgs e)
 					{
-						Assert.That(e.Changelist, Is.Null);
+						Assert.That(e.ChangeList, Is.Null);
 						Assert.That(e.Checksum, Is.EqualTo("d41d8cd98f00b204e9800998ecf8427e"));
 						Assert.That(e.ConflictNew, Is.Null);
 						Assert.That(e.ConflictOld, Is.Null);
@@ -777,7 +777,7 @@ namespace SharpSvn.Tests
 				visited = false;
 				client.Info(new Uri(WcUri, "InfoFile"), delegate(object sender, SvnInfoEventArgs e)
 				{
-					Assert.That(e.Changelist, Is.Null);
+					Assert.That(e.ChangeList, Is.Null);
 					Assert.That(e.Checksum, Is.Null);
 					Assert.That(e.ConflictNew, Is.Null);
 					Assert.That(e.ConflictOld, Is.Null);
@@ -830,7 +830,7 @@ namespace SharpSvn.Tests
 
 				bool visited = false;
 				SvnListArgs a = new SvnListArgs();
-				a.EntryItems = SvnDirEntryItems.AllFields;
+				a.EntryItems = SvnDirEntryItems.AllFieldsV15;
 
 				client.List(new SvnPathTarget(WcPath), a, delegate(object sender, SvnListEventArgs e)
 					{
@@ -991,7 +991,7 @@ namespace SharpSvn.Tests
 				client.Commit(WcPath);
 				client.Update(WcPath);
 
-				IList<Uri> sources;
+				SvnMergeSourcesCollection sources;
 				client.GetSuggestedMergeSources(new SvnPathTarget(merge1), out sources);
 
 				Assert.That(sources.Count, Is.EqualTo(0));

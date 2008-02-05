@@ -14,6 +14,8 @@
 #include "AprBaton.h"
 
 #include "SvnClientConfiguration.h"
+#include "SvnPropertyValue.h"
+#include "SvnMergeSourcesCollection.h"
 
 namespace SharpSvn {
 
@@ -51,7 +53,7 @@ namespace SharpSvn {
 	ref class SvnPropertyListArgs;
 	ref class SvnSetRevisionPropertyArgs;
 	ref class SvnGetRevisionPropertyArgs;
-	ref class SvnRevisionPropertyListArgs;
+	ref class SvnGetRevisionPropertiesArgs;
 	ref class SvnLockArgs;
 	ref class SvnUnlockArgs;
 	ref class SvnWriteArgs;
@@ -61,9 +63,9 @@ namespace SharpSvn {
 	ref class SvnDiffArgs;
 	ref class SvnDiffSummaryArgs;
 	ref class SvnBlameArgs;
-	ref class SvnAddToChangelistArgs;
-	ref class SvnRemoveFromChangelistArgs;
-	ref class SvnListChangelistArgs;
+	ref class SvnAddToChangeListArgs;
+	ref class SvnRemoveFromChangeListArgs;
+	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
 	ref class SvnGetAvailableMergeInfoArgs;
@@ -72,7 +74,7 @@ namespace SharpSvn {
 	ref class SvnRecoverRepositoryArgs;
 
 	ref class SvnUpdateResult;
-	ref class SvnClientNotifier;
+	ref class SvnClientReporter;
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -85,7 +87,7 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClient : public SvnClientContext
 	{
-		initonly SharpSvn::Apr::AprBaton<SvnClient^>^ _clientBatton;
+		initonly AprBaton<SvnClient^>^ _clientBatton;
 		AprPool _pool;
 		SvnClientArgs^ _currentArgs;
 	internal:
@@ -197,7 +199,7 @@ namespace SharpSvn {
 		/// <summary>
 		/// Raised just before a command is executed. The provided <see cref="SvnClientArgs" />
 		/// object MUST BE threated as read only. Handling this command allows
-		/// <see cref="SvnClientNotifier" /> to provide full command output.
+		/// <see cref="SvnClientReporter" /> to provide full command output.
 		/// </summary>
 		event EventHandler<SvnProcessingEventArgs^>^	Processing;
 
@@ -438,7 +440,7 @@ namespace SharpSvn {
 		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, [Out] IList<SvnLogEventArgs^>^% logItems);
 
 	private:
-		bool InternalLog(ICollection<String^>^ paths, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+		bool InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 #pragma endregion
 
 	public:
@@ -708,14 +710,10 @@ namespace SharpSvn {
 		/// <summary>Gets the specified property from the specfied path</summary>
 		/// <returns>true if property is set, otherwise false</returns>
 		/// <exception type="SvnException">path is not a valid workingcopy path</exception>
-		bool GetProperty(SvnTarget^ target, String^ propertyName, [Out] IList<char>^% bytes);
+		bool GetProperty(SvnTarget^ target, String^ propertyName, [Out] SvnPropertyValue^% bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] IDictionary<SvnTarget^, String^>^% properties);
-		/// <summary>Sets the specified property on the specfied path to value</summary>
-		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] IDictionary<SvnTarget^, IList<char>^>^% properties);
-
+		bool GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, [Out] SvnTargetPropertyCollection^% properties);
 		/// <summary>Tries to get a property from the specified path (<c>svn propget</c>)</summary>
 		/// <remarks>Eats all (non-argument) exceptions</remarks>
 		/// <returns>True if the property is fetched, otherwise false</returns>
@@ -759,23 +757,22 @@ namespace SharpSvn {
 #pragma region // GetRevisionProperty Client Command
 		/// <overloads>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</overloads>
 		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value);
-		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] IList<char>^% value);
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] SvnPropertyValue^% value);
 		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value);
-		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] IList<char>^% value);
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
 #pragma endregion
 
 	public:
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
-		/// <overloads>Gets all revision properties on a revision on the specified target (<c>svn proplist --revision</c>)</overloads>
-		bool GetRevisionPropertyList(SvnUriTarget^ target, [Out] IDictionary<String^, Object^>^% list);
-		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] IDictionary<String^, Object^>^% list);
+		/// <overloads>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</overloads>
+		bool GetRevisionProperties(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list);
+		bool GetRevisionProperties(SvnUriTarget^ target, SvnGetRevisionPropertiesArgs^ args, [Out] SvnPropertyCollection^% list);
 #pragma endregion
-
 
 	public:
 		/////////////////////////////////////////
-#pragma region // DifferenceMerge Client Command
+#pragma region // DiffMerge Client Command
 		/// <overloads>Merges the differences between two sources to a working copy path (<c>svn merge</c>)</overloads>
 		/// <summary>
 		/// Merges the changes from <paramref name="mergeFrom" /> to <paramref name="mergeTo" /> into <paramRef name="targetPath" />
@@ -831,31 +828,31 @@ namespace SharpSvn {
 
 	public:
 		/// <overloads>Associate the specified path(s) with the specified changelist (<c>svn changelist</c>)</overloads>
-		bool AddToChangelist(String^ path, String^ changelist);
-		bool AddToChangelist(String^ path, String^ changelist, SvnAddToChangelistArgs^ args);
-		bool AddToChangelist(ICollection<String^>^ paths, String^ changelist);
-		bool AddToChangelist(ICollection<String^>^ paths, String^ changelist, SvnAddToChangelistArgs^ args);
+		bool AddToChangeList(String^ target, String^ changeList);
+		bool AddToChangeList(String^ target, String^ changeList, SvnAddToChangeListArgs^ args);
+		bool AddToChangeList(ICollection<String^>^ targets, String^ changeList);
+		bool AddToChangeList(ICollection<String^>^ targets, String^ changeList, SvnAddToChangeListArgs^ args);
 		/// <overloads>Deassociate the specified path(s) from the specified changelist (<c>svn changelist</c>)</overloads>
-		bool RemoveFromChangelist(String^ path);
-		bool RemoveFromChangelist(String^ path, SvnRemoveFromChangelistArgs^ args);
-		bool RemoveFromChangelist(ICollection<String^>^ paths);
-		bool RemoveFromChangelist(ICollection<String^>^ paths, SvnRemoveFromChangelistArgs^ args);
+		bool RemoveFromChangeList(String^ target);
+		bool RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs^ args);
+		bool RemoveFromChangeList(ICollection<String^>^ targets);
+		bool RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFromChangeListArgs^ args);
 		/// <overloads>Streamingly gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool ListChangelist(String^ rootPath, EventHandler<SvnListChangelistEventArgs^>^ changelistHandler);
-		bool ListChangelist(String^ rootPath, SvnListChangelistArgs^ args, EventHandler<SvnListChangelistEventArgs^>^ changelistHandler);
+		bool ListChangeList(String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
+		bool ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
 
 		/// <overloads>Gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool GetChangelist(String^ rootPath, [Out]IList<SvnListChangelistEventArgs^>^% list);
-		bool GetChangelist(String^ rootPath, SvnListChangelistArgs^ args, [Out]IList<SvnListChangelistEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
 
 	public:
 		/// <overloads>Gets a list of Uri's which might be valid merge sources (<c>svn mergeinfo</c>)</overloads>
 		/// <summary>Gets a list of Uri's which might be valid merge sources</summary>
 		/// <remarks>The list contains copy-from locations and previous merge locations</remarks>
-		bool GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources);
+		bool GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSourcesCollection^% mergeSources);
 		/// <summary>Gets a list of Uri's which might be valid merge sources</summary>
 		/// <remarks>The list contains copy-from locations and previous merge locations</remarks>
-		bool GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]IList<Uri^>^% mergeSources);
+		bool GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSourcesCollection^% mergeSources);
 
 	public:
 		/// <overloads>Gets the merges which are applied on the specified target (<c>svn mergeinfo</c>)</overloads>
@@ -891,11 +888,11 @@ namespace SharpSvn {
 		/// <summary>Gets the repository root from the specified path</summary>
 		/// <value>The repository root <see cref="Uri" /> or <c>null</c> if the uri is not a working copy path</value>
 		/// <remarks>SharpSvn makes sure the uri ends in a '/'</remarks>
-		Uri^ GetRepositoryRoot(String^ path);
+		Uri^ GetRepositoryRoot(String^ target);
 
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>
-		bool GetUuidFromUri(Uri^ uri, [Out] Guid% uuid);
+		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id);
 
 	private:
 		~SvnClient();

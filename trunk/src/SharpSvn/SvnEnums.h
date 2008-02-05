@@ -8,6 +8,54 @@
 namespace SharpSvn {
 	using System::Globalization::CultureInfo;
 
+	public enum class SvnClientCommandType
+	{
+		Unknown = 0,
+	
+		// Add new members at the end
+		Add,
+		AddToChangeList,
+		Blame,
+		CheckOut,
+		CleanUp,
+		Commit,
+		Copy,
+		CreateDirectory,
+		Delete,
+		Diff,
+		DiffMerge,
+		DiffSummary,
+		Export,
+		GetAppliedMergeInfo,
+		GetAvailableMergeInfo,
+		GetProperty,
+		GetRevisionProperty,
+		GetRevisionProperties,
+		GetSuggestedMergeSources,
+		Import,
+		Info,
+		List,
+		ListChangeList,
+		Lock,
+		Log,
+		Merge,
+		Move,
+		PropertyList,
+		ReintegrationMerge,
+		Relocate,
+		RemoveFromChangeList,
+		Resolved,
+		Revert,		
+		SetProperty,
+		SetRevisionProperty,
+		Status,
+		Switch,
+		Unlock,
+		Update,
+		Write
+		// Add new members at the end!
+	};
+
 	public enum class SvnDepth
 	{
 		/// <summary>Depth undetermined or ignored</summary>
@@ -34,7 +82,7 @@ namespace SharpSvn {
 		/// files or subdirectories not already present; those subdirectories'
 		/// this_dir entries will have depth-empty.
 		/// </summary>
-		Immediates		= svn_depth_immediates,
+		Children		= svn_depth_immediates,
 
 		/// <summary>
 		/// D + all descendants (full recursion from D). Updates will pull in any
@@ -88,10 +136,10 @@ namespace SharpSvn {
 
 		// 1.5+
 		Exists			= svn_wc_notify_exists,
-		ChangelistSet	= svn_wc_notify_changelist_set,
-		ChangelistClear = svn_wc_notify_changelist_clear,
-		ChangelistFailed= svn_wc_notify_changelist_failed,
-		ChangelistMoved	= svn_wc_notify_changelist_moved,
+		ChangeListSet	= svn_wc_notify_changelist_set,
+		ChangeListClear = svn_wc_notify_changelist_clear,
+		ChangeListFailed= svn_wc_notify_changelist_failed,
+		ChangeListMoved	= svn_wc_notify_changelist_moved,
 		MergeBegin		= svn_wc_notify_merge_begin,
 		UpdateReplace	= svn_wc_notify_update_replace,
 	};
@@ -143,7 +191,7 @@ namespace SharpSvn {
 		None				= svn_wc_status_none,
 
 		/// <summary>is not a versioned thing in this wc</summary>
-		Unversioned			= svn_wc_status_unversioned,
+		NotVersioned		= svn_wc_status_unversioned,
 
 		/// <summary>exists, but uninteresting</summary>
 		Normal				= svn_wc_status_normal,
@@ -215,32 +263,34 @@ namespace SharpSvn {
 	{
 		None			= 0,
 
-		/** An indication that you are interested in the @c kind field */
+		/// <summary>An indication that you are interested in the Kind field</summary>
 		Kind			= SVN_DIRENT_KIND,
 
-		/** An indication that you are interested in the @c size field */
+		/// <summary>An indication that you are interested in the @c size field</summary>
 		Size			= SVN_DIRENT_SIZE,
 
-		/** An indication that you are interested in the @c has_props field */
+		/// <summary>An indication that you are interested in the @c has_props field</summary>
 		HasProperties	= SVN_DIRENT_HAS_PROPS,
 
-		/** An indication that you are interested in the @c created_rev field */
+		/// <summary>An indication that you are interested in the @c created_rev field</summary>
 		CreatedRevision	= SVN_DIRENT_CREATED_REV,
 
-		/** An indication that you are interested in the @c time field */
+		/// <summary>An indication that you are interested in the @c time field</summary>
 		Time			= SVN_DIRENT_TIME,
 
-		/** An indication that you are interested in the @c last_author field */
+		/// <summary>An indication that you are interested in the @c last_author field</summary>
 		LastAuthor		= SVN_DIRENT_LAST_AUTHOR,
 
-		/** A combination of all the dirent fields */
-		AllFields		= Kind | Size | HasProperties | CreatedRevision | Time | LastAuthor,
-		//AllFields	was SVN_DIRENT_ALL, but that value does not allow future extension without side-effects
 
-		SnvListDefault	= Kind | Time
+
+		/// <summary>A combination of all the dirent fields at Subversion 1.5</summary>
+		AllFieldsV15	= Kind | Size | HasProperties | CreatedRevision | Time | LastAuthor,
+
+		/// <summary>The fields loaded if no other value is specified</summary>
+		SvnListDefault	= Kind | Time
 	};
 
-	public enum class SvnRepositoryFilesystem
+	public enum class SvnRepositoryFileSystem
 	{
 		Default			= 0,
 		FsFs			= 1,
@@ -272,11 +322,11 @@ namespace SharpSvn {
 	public enum class SvnLineStyle
 	{
 		Native=0,
-		CariageReturnLineFeed,
-		LineFeed,
-		CariageReturn,
-		Windows = CariageReturnLineFeed,
-		Unix = LineFeed
+		CarriageReturnLinefeed,
+		Linefeed,
+		CarriageReturn,
+		Windows = CarriageReturnLinefeed,
+		Unix = Linefeed
 	};
 
 	public enum class SvnConflictChoice
@@ -314,7 +364,7 @@ namespace SharpSvn {
 		/// <summary>object is unknown or missing</summary>
 		Missing = svn_wc_conflict_reason_missing,
 		/// <summary>object is unversioned</summary>
-		Unversioned = svn_wc_conflict_reason_unversioned
+		NotVersioned = svn_wc_conflict_reason_unversioned
 	};
 
 	public enum class SvnConflictAction

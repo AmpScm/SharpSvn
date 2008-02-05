@@ -12,13 +12,13 @@ using System::Collections::Generic::ICollection;
 
 
 namespace SharpSvn {
-	namespace Apr {
+	namespace Implementation {
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true)]
 		[SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
 		ref class AprPool sealed : public SvnHandleBase, public System::IDisposable
 		{
-			static const __int64 StandardMemoryPressure = 512*1024;
+			static const int StandardMemoryPressure = 512*1024;
 
 			ref class AprPoolTag : public IDisposable
 			{
@@ -87,7 +87,7 @@ namespace SharpSvn {
 			/// <summary>Creates a new root pool</summary>
 			AprPool();
 			/// <summary>Attaches to the specified pool</summary>
-			AprPool(apr_pool_t *attachHandle, bool destroyPool);
+			AprPool(apr_pool_t *handle, bool destroyPool);
 
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			void Ensure()

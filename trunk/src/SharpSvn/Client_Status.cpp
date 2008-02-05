@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -76,7 +76,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			args->Update,
 			args->NoIgnore,
 			args->IgnoreExternals,
-			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,
 			pool.Handle);
 

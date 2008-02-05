@@ -21,6 +21,14 @@ namespace SharpSvn {
 		{
 		}
 
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Lock;
+			}
+		}
+
 		property String^ Comment
 		{
 			String^ get()
@@ -58,6 +66,14 @@ namespace SharpSvn {
 		{
 		}
 
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Unlock;
+			}
+		}
+
 		property bool BreakLock
 		{
 			bool get()
@@ -82,6 +98,14 @@ namespace SharpSvn {
 	public:
 		SvnCopyArgs()
 		{
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Copy;
+			}
 		}
 
 		property bool MakeParents
@@ -121,6 +145,14 @@ namespace SharpSvn {
 	public:
 		SvnMoveArgs()
 		{
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Move;
+			}
 		}
 
 		property bool Force
@@ -169,6 +201,14 @@ namespace SharpSvn {
 		SvnCreateDirectoryArgs()
 		{}
 
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::CreateDirectory;
+			}
+		}
+
 		property bool MakeParents
 		{
 			bool get()
@@ -192,6 +232,14 @@ namespace SharpSvn {
 	public:
 		SvnDeleteArgs()
 		{}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Delete;
+			}
+		}
 
 		/// <summary>If Force is not set then this operation will fail if any path contains locally modified
 		/// and/or unversioned items. If Force is set such items will be deleted.</summary>

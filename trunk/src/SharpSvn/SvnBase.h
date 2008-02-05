@@ -13,8 +13,9 @@ using System::Collections::Generic::IDictionary;
 namespace SharpSvn {
 	ref class SvnTarget;
 	ref class SvnClientContext;
+	ref class SvnPropertyCollection;
 
-	namespace Apr {
+	namespace Implementation {
 		ref class AprPool;
 
 		/// <summary>Main class of Subversion api. This class is responsible for loading the unmanaged api</summary>
@@ -51,7 +52,8 @@ namespace SharpSvn {
 		internal:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
-			static array<char>^ PtrToByteArray(const char* ptr, int length);
+			static String^ Utf8_PtrToString(const svn_string_t *str);
+			static array<Byte>^ PtrToByteArray(const char* ptr, int length);
 
 			static Object^ PtrToStringOrByteArray(const char* ptr, int length);
 
@@ -66,13 +68,13 @@ namespace SharpSvn {
 			static String^ CanonicalizePath(String^ path);
 
 			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
-			static apr_array_header_t *AllocPathArray(ICollection<String^>^ strings, AprPool^ pool);
+			static apr_array_header_t *AllocPathArray(ICollection<String^>^ paths, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);
 
-			static apr_array_header_t *CreateChangelistsList(ICollection<String^>^ changelists, AprPool^ pool);
+			static apr_array_header_t *CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool);
 
-			static IDictionary<String^, Object^>^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
+			static SvnPropertyCollection^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]

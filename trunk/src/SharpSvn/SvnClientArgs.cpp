@@ -8,7 +8,7 @@
 #include "SvnAll.h"
 #include <svn_config.h>
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
@@ -46,7 +46,7 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 		return false;
 }
 
-bool SvnClientArgs::InvokationCanceled::get()
+bool SvnClientArgs::InvocationCanceled::get()
 {
 	return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
 }

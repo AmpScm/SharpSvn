@@ -9,7 +9,7 @@
 #include <svn_config.h>
 
 using namespace SharpSvn;
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 
 #define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
 
@@ -84,11 +84,12 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 
 			SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
 
-			sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex);			
+			if(0 < sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex))
+			{
+				char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
 
-			char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
-
-			innerError = svn_error_create(_abusedErrorCode, creator, forwardData);
+				innerError = svn_error_create(_abusedErrorCode, creator, forwardData);
+			}
 		}
 	}
 
@@ -142,9 +143,9 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			try
 			{
 				void *container = nullptr;
-				sscanf(error->message + prefixLength, "%p", &container);
 
-				return SvnExceptionContainer::Fetch((SvnExceptionContainer*)container);
+				if(sscanf(error->message + prefixLength, "%p", &container) > 0)
+					return SvnExceptionContainer::Fetch((SvnExceptionContainer*)container);
 			}
 			catch(Exception^)
 			{}
@@ -371,7 +372,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			return gcnew SvnBreakIterationException(error);
 
 		case SVN_ERR_UNKNOWN_CHANGELIST:
-			return gcnew SvnUnknownChangelistException(error);
+			return gcnew SvnUnknownChangeListException(error);
 
 		case SVN_ERR_BASE:
 		case SVN_ERR_PLUGIN_LOAD_FAILURE:

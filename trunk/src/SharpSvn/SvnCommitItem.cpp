@@ -7,7 +7,7 @@
 
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo)

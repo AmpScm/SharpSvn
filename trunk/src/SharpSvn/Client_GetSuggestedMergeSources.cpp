@@ -6,15 +6,15 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,System.Collections.Generic.IList`1<System.Uri>&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,System.Collections.Generic.IList`1<System.Uri>&):System.Boolean", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,System.Collections.Generic.IList`1<System.Uri>&):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,SharpSvn.SvnMergeSourcesCollection&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnMergeSourcesCollection&):System.Boolean", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetSuggestedMergeSources(SharpSvn.SvnTarget,SharpSvn.SvnGetSuggestedMergeSourcesArgs,SharpSvn.SvnMergeSourcesCollection&)")];
 
-bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% mergeSources)
+bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSourcesCollection^% mergeSources)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -22,7 +22,7 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]IList<Uri^>^% m
 	return GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeSources);
 }
 
-bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]IList<Uri^>^% mergeSources)
+bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSourcesCollection^% mergeSources)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -46,15 +46,15 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 
 	if(!r && svnMergeSources)
 	{
-		array<Uri^>^ uris = gcnew array<Uri^>(svnMergeSources->nelts);
+		SvnMergeSourcesCollection^ sourceList = gcnew SvnMergeSourcesCollection();
 
 		const char** sources = (const char**)svnMergeSources->elts;
 		for(int i = 0; i < svnMergeSources->nelts; i++)
 		{
-			uris[i] = gcnew Uri(Utf8_PtrToString(sources[i]), UriKind::Absolute);
+			sourceList->Add(gcnew SvnMergeSource(gcnew Uri(Utf8_PtrToString(sources[i]), UriKind::Absolute)));
 		}
 		
-		mergeSources = safe_cast<IList<Uri^>^>(uris);
+		mergeSources = sourceList;
 	}
 
 	return args->HandleResult(this, r);

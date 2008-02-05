@@ -11,11 +11,12 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 
 
 [module: SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", Scope="member", Target="SharpSvn.Apr.AprPool.Dispose(System.Boolean):System.Void", MessageId="_tag")];
 [module: SuppressMessage("Microsoft.Design", "CA1047:DoNotDeclareProtectedMembersInSealedTypes", Scope="member", Target="SharpSvn.Apr.AprPool.Dispose(System.Boolean):System.Void")];
+[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope="member", Target="SharpSvn.Apr.AprPool.#StandardMemoryPressure")];
 
 AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
 {
@@ -63,7 +64,7 @@ void AprPool::Destroy()
 	}
 }
 
-AprPool::AprPool(SharpSvn::Apr::AprPool ^parentPool)
+AprPool::AprPool(AprPool ^parentPool)
 {
 	if(!parentPool)
 		throw gcnew ArgumentNullException("parentPool");
