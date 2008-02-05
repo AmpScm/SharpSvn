@@ -16,13 +16,21 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
-		bool _allowUnversionedObstructions;
+		bool _allowObstructions;
 
 	public:
 		SvnCheckOutArgs()
 		{
 			_depth = SvnDepth::Unknown;
 			_revision = SvnRevision::Head;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Update;
+			}
 		}
 
 		property SvnDepth Depth
@@ -64,15 +72,27 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool AllowUnversionedObstructions
+		/// <summary>Gets or sets the AllowObsstructions value</summary>
+		/// <remarks>
+		/// <para> If AllowObstructions is TRUE then the update tolerates
+		/// existing unversioned items that obstruct added paths from @a URL.  Only
+		/// obstructions of the same type (file or dir) as the added item are
+		/// tolerated.  The text of obstructing files is left as-is, effectively
+		/// treating it as a user modification after the update.  Working
+		/// properties of obstructing items are set equal to the base properties.</para>
+		/// <para>If AllowObstructions is FALSE then the update will abort
+		/// if there are any unversioned obstructing items
+		/// </para>
+		/// </remarks>
+		property bool AllowObstructions
 		{
 			bool get()
 			{
-				return _allowUnversionedObstructions;
+				return _allowObstructions;
 			}
 			void set(bool value)
 			{
-				_allowUnversionedObstructions = value;
+				_allowObstructions = value;
 			}
 		}
 	};
@@ -83,7 +103,7 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _ignoreExternals;
-		bool _allowUnversionedObstructions;
+		bool _allowObstructions;
 		SvnRevision^ _revision;
 		bool _keepDepth;
 
@@ -92,6 +112,14 @@ namespace SharpSvn {
 		{
 			_depth = SvnDepth::Unknown;
 			_revision = SvnRevision::Head;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Update;
+			}
 		}
 
 		/// <summary>Gets or sets the depth of the update</summary>
@@ -177,15 +205,15 @@ namespace SharpSvn {
 		/// If AllowUnversionedObstructions is <c>false</c> then the update will abort
 		/// if there are any unversioned obstructing items.
 		/// </remarks>
-		property bool AllowUnversionedObstructions
+		property bool AllowObstructions
 		{
 			bool get()
 			{
-				return _allowUnversionedObstructions;
+				return _allowObstructions;
 			}
 			void set(bool value)
 			{
-				_allowUnversionedObstructions = value;
+				_allowObstructions = value;
 			}
 		}
 	};
@@ -196,7 +224,7 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		SvnRevision^ _revision;
-		bool _allowUnversionedObstructions;
+		bool _allowObstructions;
 		bool _ignoreExternals;
 		bool _keepDepth;
 
@@ -205,6 +233,14 @@ namespace SharpSvn {
 		{
 			_depth = SvnDepth::Infinity;
 			_revision = SvnRevision::None;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Switch;
+			}
 		}
 
 		property SvnDepth Depth
@@ -246,15 +282,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool AllowUnversionedObstructions
+		property bool AllowObstructions
 		{
 			bool get()
 			{
-				return _allowUnversionedObstructions;
+				return _allowObstructions;
 			}
 			void set(bool value)
 			{
-				_allowUnversionedObstructions = value;
+				_allowObstructions = value;
 			}
 		}
 
@@ -273,25 +309,21 @@ namespace SharpSvn {
 
 	public ref class SvnMergeBaseArgs abstract : public SvnClientArgsWithConflict
 	{
-		IList<String^>^ _mergeArguments;
+		SvnCommandLineArgumentCollection^ _mergeArguments;
 	protected:
 		SvnMergeBaseArgs()
 		{
 		}
 
 	public:
-		property IList<String^>^ MergeArguments
+		property SvnCommandLineArgumentCollection^ MergeArguments
 		{
-			IList<String^>^ get()
+			SvnCommandLineArgumentCollection^ get()
 			{
+				if(!_mergeArguments)
+					_mergeArguments = gcnew SvnCommandLineArgumentCollection();
+
 				return _mergeArguments;
-			}
-			void set(IList<String^>^ value)
-			{
-				if(value)
-					_mergeArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
-				else
-					_mergeArguments = nullptr;
 			}
 		}
 	};
@@ -309,6 +341,14 @@ namespace SharpSvn {
 		SvnDiffMergeArgs()
 		{
 			_depth = SvnDepth::Unknown;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Merge;
+			}
 		}
 
 		property SvnDepth Depth
@@ -387,6 +427,14 @@ namespace SharpSvn {
 			_depth = SvnDepth::Unknown;
 		}
 
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Merge;
+			}
+		}
+
 		property SvnDepth Depth
 		{
 			SvnDepth get()
@@ -457,6 +505,14 @@ namespace SharpSvn {
 	public:
 		SvnReintegrationMergeArgs()
 		{
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::ReintegrationMerge;
+			}
 		}
 
 		property bool Force

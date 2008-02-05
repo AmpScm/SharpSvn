@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<FxCopProject Version="1.35" Name="My FxCop Project">
+<FxCopProject Version="1.36" Name="SharpSvn">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
   <Stylesheet Apply="False">http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl</Stylesheet>
@@ -14,12 +14,12 @@
   <SourceLookup>True</SourceLookup>
   <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
   <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
-  <Spelling Locale="en-us" />
-  <VersionAware>False</VersionAware>
+  <Spelling Locale="en-US" />
   <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
   <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
   <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
   <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
  </ProjectOptions>
  <Targets>
   <AssemblyReferenceDirectories>
@@ -42,5 +42,677 @@
   <Groups />
   <Settings />
  </Rules>
- <FxCopReport Version="1.35" />
+ <FxCopReport Version="1.36">
+  <Namespaces>
+   <Namespace Name="SharpSvn.Apr">
+    <Messages>
+     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-02-04 17:06:44Z">
+      <Issue>
+       <Item>SharpSvn.Apr</Item>
+      </Issue>
+     </Message>
+    </Messages>
+   </Namespace>
+  </Namespaces>
+  <Targets>
+   <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll">
+    <Modules>
+     <Module Name="sharpsvn.dll">
+      <Namespaces>
+       <Namespace Name="SharpSvn">
+        <Types>
+         <Type Name="SvnChangeItem">
+          <Members>
+           <Member Name="#.ctor(System.String,SharpSvn.SvnChangeAction,System.String,System.Int64)">
+            <Messages>
+             <Message TypeName="DoNotDeclareProtectedMembersInSealedTypes" Category="Microsoft.Design" CheckId="CA1047" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>'SvnChangeItem::SvnChangeItem(String^, SvnChangeAction, String^, long long)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnCheckOutArgs">
+          <Members>
+           <Member Name="#AllowUnversionedObstructions">
+            <Messages>
+             <Message Id="Unversioned" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Unversioned</Item>
+               <Item>'SvnCheckOutArgs::AllowUnversionedObstructions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnClient">
+          <Members>
+           <Member Name="#AddToChangeList(System.Collections.Generic.ICollection`1&lt;System.String&gt;,System.String)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::AddToChangeList(ICollection&lt;String^&gt;^, String^)'</Item>
+               <Item>changelist</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#AddToChangeList(System.Collections.Generic.ICollection`1&lt;System.String&gt;,System.String,SharpSvn.SvnAddToChangeListArgs)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::AddToChangeList(ICollection&lt;String^&gt;^, String^, SvnAddToChangeListArgs^)'</Item>
+               <Item>changelist</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#AddToChangeList(System.String,System.String)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::AddToChangeList(String^, String^)'</Item>
+               <Item>changelist</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#AddToChangeList(System.String,System.String,SharpSvn.SvnAddToChangeListArgs)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::AddToChangeList(String^, String^, SvnAddToChangeListArgs^)'</Item>
+               <Item>changelist</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Diff(SharpSvn.SvnTarget,SharpSvn.SvnRevision,SharpSvn.SvnRevision,SharpSvn.SvnDiffArgs,System.IO.FileStream&amp;)">
+            <Messages>
+             <Message Id="&lt;Module&gt;.apr_file_close(apr_file_t*)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2008-02-04 17:06:44Z">
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnClient::Diff(SvnTarget^, SvnRevision^, SvnRevision^, SvnDiffArgs^, FileStream^%)'</Item>
+               <Item>'Global::apr_file_close(apr_file_t*)'</Item>
+              </Issue>
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnClient::Diff(SvnTarget^, SvnRevision^, SvnRevision^, SvnDiffArgs^, FileStream^%)'</Item>
+               <Item>'Global::apr_file_close(apr_file_t*)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffArgs,System.IO.FileStream&amp;)">
+            <Messages>
+             <Message Id="&lt;Module&gt;.apr_file_close(apr_file_t*)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2008-02-04 17:06:44Z">
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnClient::Diff(SvnTarget^, SvnTarget^, SvnDiffArgs^, FileStream^%)'</Item>
+               <Item>'Global::apr_file_close(apr_file_t*)'</Item>
+              </Issue>
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnClient::Diff(SvnTarget^, SvnTarget^, SvnDiffArgs^, FileStream^%)'</Item>
+               <Item>'Global::apr_file_close(apr_file_t*)'</Item>
+              </Issue>
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnClient::Diff(SvnTarget^, SvnTarget^, SvnDiffArgs^, FileStream^%)'</Item>
+               <Item>'Global::apr_file_close(apr_file_t*)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetProperty(SharpSvn.SvnTarget,System.String,SharpSvn.SvnGetPropertyArgs,System.Collections.Generic.IDictionary`2&lt;SharpSvn.SvnTarget,System.Collections.Generic.IList`1&lt;{modopt(System.Runtime.CompilerServices.IsSignUnspecifiedByte)}System.SByte&gt;&gt;&amp;)">
+            <Messages>
+             <Message Id="3#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-02-04 17:06:44Z">
+              <Issue>
+               <Item>'properties'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetProperty(SharpSvn.SvnTarget,System.String,System.Collections.Generic.IList`1&lt;{modopt(System.Runtime.CompilerServices.IsSignUnspecifiedByte)}System.SByte&gt;&amp;)">
+            <Messages>
+             <Message Id="2#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-02-04 17:06:44Z">
+              <Issue>
+               <Item>'bytes'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetRepositoryIdFromUri(System.Uri,System.Guid&amp;)">
+            <Messages>
+             <Message Id="1#" TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021" Created="2008-02-04 17:06:44Z">
+              <Issue>
+               <Item>'id'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#GetRepositoryRoot(System.String)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::GetRepositoryRoot(String^)'</Item>
+               <Item>toPath</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+             <Message Id="System.String.EndsWith(System.String,System.StringComparison)" TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309" Created="2008-02-04 17:06:44Z">
+              <Issue Name="StringComparison">
+               <Item>'SvnClient::GetRepositoryRoot(String^)'</Item>
+               <Item>StringComparison.InvariantCulture</Item>
+               <Item>'String::EndsWith(String^, StringComparison)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#Import(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo&amp;)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::Import(String^, Uri^, SvnImportArgs^, SvnCommitInfo^%)'</Item>
+               <Item>uri</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#InternalLog(System.Collections.Generic.ICollection`1&lt;System.String&gt;,SharpSvn.SvnRevision,SharpSvn.SvnLogArgs,System.EventHandler`1&lt;SharpSvn.SvnLogEventArgs&gt;)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::InternalLog(ICollection&lt;String^&gt;^, SvnRevision^, SvnLogArgs^, EventHandler&lt;SvnLogEventArgs^&gt;^)'</Item>
+               <Item>targetStrings</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RemoteCopy(System.Collections.Generic.ICollection`1&lt;SharpSvn.SvnUriTarget&gt;,System.Uri)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::RemoteCopy(ICollection&lt;SvnUriTarget^&gt;^, Uri^)'</Item>
+               <Item>sourceTarget</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#RemoteCopy(System.Collections.Generic.ICollection`1&lt;SharpSvn.SvnUriTarget&gt;,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitInfo&amp;)">
+            <Messages>
+             <Message TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208" Created="2008-02-04 17:06:44Z">
+              <Issue Name="IncorrectParameterName">
+               <Item>'SvnClient::RemoteCopy(ICollection&lt;SvnUriTarget^&gt;^, Uri^, SvnCopyArgs^, SvnCommitInfo^%)'</Item>
+               <Item>sourceTarget</Item>
+               <Item>'paramName'</Item>
+               <Item>'ArgumentNullException'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnClientReporter">
+          <Members>
+           <Member Name="#.ctor(SharpSvn.SvnClient,System.IO.TextWriter)">
+            <Messages>
+             <Message Id="tw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="MemberParameter">
+               <Item>'SvnClientReporter::SvnClientReporter(SvnClient^, TextWriter^)'</Item>
+               <Item>tw</Item>
+               <Item>'tw'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#.ctor(SharpSvn.SvnClientArgs,System.IO.TextWriter)">
+            <Messages>
+             <Message Id="tw" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="MemberParameter">
+               <Item>'SvnClientReporter::SvnClientReporter(SvnClientArgs^, TextWriter^)'</Item>
+               <Item>tw</Item>
+               <Item>'tw'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnCommandlineArguments">
+          <Messages>
+           <Message Id="Commandline" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+            <Issue Name="Type">
+             <Item>Commandline</Item>
+             <Item>'SvnCommandlineArguments'</Item>
+            </Issue>
+           </Message>
+           <Message TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710" Created="2008-02-04 17:06:44Z">
+            <Issue>
+             <Item>'SvnCommandlineArguments'</Item>
+             <Item>Collection</Item>
+            </Issue>
+           </Message>
+          </Messages>
+         </Type>
+         <Type Name="SvnConflictReason">
+          <Members>
+           <Member Name="#Unversioned">
+            <Messages>
+             <Message Id="Unversioned" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Unversioned</Item>
+               <Item>'SvnConflictReason::Unversioned'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnDepth">
+          <Members>
+           <Member Name="#Immediates">
+            <Messages>
+             <Message Id="Immediates" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Immediates</Item>
+               <Item>'SvnDepth::Immediates'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnException">
+          <Members>
+           <Member Name="#Create(svn_error_t*,System.Boolean)">
+            <Messages>
+             <Message Id="&lt;Module&gt;.sscanf(System.optional(IsConst) optional(IsSignUnspecifiedByte) SByte*,System.optional(IsConst) optional(IsSignUnspecifiedByte) SByte*)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2008-02-04 17:06:44Z">
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnException::Create(svn_error_t*, bool)'</Item>
+               <Item>'Global::sscanf(const char*, const char*, ...)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CreateExceptionSvnError(System.String,System.Exception)">
+            <Messages>
+             <Message Id="&lt;Module&gt;.sprintf_s(System.optional(IsSignUnspecifiedByte) SByte*,System.UInt32,System.optional(IsConst) optional(IsSignUnspecifiedByte) SByte*)" TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806" Created="2008-02-04 17:06:44Z">
+              <Issue Name="HResultOrErrorCode">
+               <Item>'SvnException::CreateExceptionSvnError(String^, Exception^)'</Item>
+               <Item>'Global::sprintf_s(char*, unsigned int, const char*, ...)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnInfoEventArgs">
+          <Members>
+           <Member Name="#RepositoryUuid">
+            <Messages>
+             <Message Id="Uuid" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Uuid</Item>
+               <Item>'SvnInfoEventArgs::RepositoryUuid'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnLineStyle">
+          <Members>
+           <Member Name="#CariageReturn">
+            <Messages>
+             <Message Id="Cariage" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Cariage</Item>
+               <Item>'SvnLineStyle::CariageReturn'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#CariageReturnLineFeed">
+            <Messages>
+             <Message Id="LineFeed" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2008-02-04 17:06:44Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>LineFeed</Item>
+               <Item>'SvnLineStyle::CariageReturnLineFeed'</Item>
+               <Item>Linefeed</Item>
+              </Issue>
+             </Message>
+             <Message Id="Cariage" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Cariage</Item>
+               <Item>'SvnLineStyle::CariageReturnLineFeed'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#LineFeed">
+            <Messages>
+             <Message Id="LineFeed" TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702" Created="2008-02-04 17:06:44Z">
+              <Issue Name="MemberShouldBeDiscreteTerm">
+               <Item>LineFeed</Item>
+               <Item>'SvnLineStyle::LineFeed'</Item>
+               <Item>Linefeed</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnLockInfo">
+          <Members>
+           <Member Name="#IsWebDavComment">
+            <Messages>
+             <Message Id="Dav" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Dav</Item>
+               <Item>'SvnLockInfo::IsWebDavComment'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnLogEventArgs">
+          <Members>
+           <Member Name="#MergLogNestingLevel">
+            <Messages>
+             <Message Id="Merg" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Merg</Item>
+               <Item>'SvnLogEventArgs::MergLogNestingLevel'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnRepositoryFileSystem">
+          <Members>
+           <Member Name="#FsFs">
+            <Messages>
+             <Message Id="Fs" TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Fs</Item>
+               <Item>'SvnRepositoryFileSystem::FsFs'</Item>
+               <Item>FS</Item>
+              </Issue>
+              <Issue Name="Member">
+               <Item>Fs</Item>
+               <Item>'SvnRepositoryFileSystem::FsFs'</Item>
+               <Item>FS</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnRepositorySession">
+          <Messages>
+           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2008-02-04 17:06:44Z">
+            <Issue>
+             <Item>'SvnRepositorySession'</Item>
+            </Issue>
+           </Message>
+          </Messages>
+          <Members>
+           <Member Name="#!SvnRepositorySession()">
+            <Messages>
+             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-02-04 17:06:44Z" FixCategory="NonBreaking">
+              <Issue>
+               <Item>'SvnRepositorySession::!SvnRepositorySession(void)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#_clientBatton">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-04 17:06:44Z">
+              <Issue>
+               <Item>'SvnRepositorySession::_clientBatton'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnRevision">
+          <Members>
+           <Member Name="#Type">
+            <Messages>
+             <Message TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721" Created="2008-02-04 17:06:44Z" FixCategory="NonBreaking">
+              <Issue Name="BaseType">
+               <Item>'SvnRevision::Type'</Item>
+               <Item>'Object::GetType(void)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnStatus">
+          <Members>
+           <Member Name="#Unversioned">
+            <Messages>
+             <Message Id="Unversioned" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Unversioned</Item>
+               <Item>'SvnStatus::Unversioned'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnStatusEventArgs">
+          <Members>
+           <Member Name="#ReposContentStatus">
+            <Messages>
+             <Message Id="Repos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Repos</Item>
+               <Item>'SvnStatusEventArgs::ReposContentStatus'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+           <Member Name="#ReposPropertyStatus">
+            <Messages>
+             <Message Id="Repos" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Repos</Item>
+               <Item>'SvnStatusEventArgs::ReposPropertyStatus'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnSwitchArgs">
+          <Members>
+           <Member Name="#AllowUnversionedObstructions">
+            <Messages>
+             <Message Id="Unversioned" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Unversioned</Item>
+               <Item>'SvnSwitchArgs::AllowUnversionedObstructions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="SvnUpdateArgs">
+          <Members>
+           <Member Name="#AllowUnversionedObstructions">
+            <Messages>
+             <Message Id="Unversioned" TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704" Created="2008-02-04 17:06:44Z">
+              <Issue Name="Member">
+               <Item>Unversioned</Item>
+               <Item>'SvnUpdateArgs::AllowUnversionedObstructions'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+       <Namespace Name="SharpSvn.Apr">
+        <Types>
+         <Type Name="AprBaton`1">
+          <Members>
+           <Member Name="#Finalize()">
+            <Messages>
+             <Message TypeName="FinalizersShouldCallBaseClassFinalizer" Category="Microsoft.Usage" CheckId="CA2220" Created="2008-02-04 17:06:44Z">
+              <Issue>
+               <Item>'AprBaton&lt;T&gt;::Finalize(void)'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+         <Type Name="AprPool">
+          <Members>
+           <Member Name="#StandardMemoryPressure">
+            <Messages>
+             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-04 17:06:44Z">
+              <Issue>
+               <Item>'AprPool::StandardMemoryPressure'</Item>
+              </Issue>
+             </Message>
+            </Messages>
+           </Member>
+          </Members>
+         </Type>
+        </Types>
+       </Namespace>
+      </Namespaces>
+      <Resources>
+       <Resource Name="SharpSvn.SharpSvnStrings.resources">
+        <Messages>
+         <Message Id="argyment" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Created="2008-02-04 17:06:44Z">
+          <Issue Name="StringResource">
+           <Item>'SharpSvn.SharpSvnStrings.resx'</Item>
+           <Item>ArgumentMustBeAValidRepositoryUri</Item>
+           <Item>argyment</Item>
+           <Item>The argyment must be a valid absolute repository Uri</Item>
+          </Issue>
+         </Message>
+         <Message Id="changelist" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Created="2008-02-04 17:06:44Z">
+          <Issue Name="StringResource">
+           <Item>'SharpSvn.SharpSvnStrings.resx'</Item>
+           <Item>NotifyPathXIsNoLongerAMemberOfAChangeList</Item>
+           <Item>changelist</Item>
+           <Item>Path '{0}' is no longer a member of a changelist.</Item>
+          </Issue>
+          <Issue Name="StringResource">
+           <Item>'SharpSvn.SharpSvnStrings.resx'</Item>
+           <Item>NotifyPathXIsNowAMemberOfChangeListY</Item>
+           <Item>changelist</Item>
+           <Item>Path '{0}' is now a member of changelist '{1}'.</Item>
+          </Issue>
+         </Message>
+         <Message Id="clientname" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Created="2008-02-04 17:06:44Z">
+          <Issue Name="StringResource">
+           <Item>'SharpSvn.SharpSvnStrings.resx'</Item>
+           <Item>InvalidCharacterInClientName</Item>
+           <Item>clientname</Item>
+           <Item>Invalid character in clientname</Item>
+          </Issue>
+         </Message>
+         <Message Id="parsable" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Created="2008-02-04 17:06:44Z">
+          <Issue Name="StringResource">
+           <Item>'SharpSvn.SharpSvnStrings.resx'</Item>
+           <Item>NonUtf8ConvertableLine</Item>
+           <Item>parsable</Item>
+           <Item>{This line was not parsable as Utf8}</Item>
+          </Issue>
+         </Message>
+         <Message Id="valur" TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703" Created="2008-02-04 17:06:44Z">
+          <Issue Name="StringResource">
+           <Item>'SharpSvn.SharpSvnStrings.resx'</Item>
+           <Item>TheTargetIsNotAValidUriOrPathTarget</Item>
+           <Item>valur</Item>
+           <Item>The specified target is not a valur Uri or Path target</Item>
+          </Issue>
+         </Message>
+        </Messages>
+       </Resource>
+      </Resources>
+     </Module>
+    </Modules>
+   </Target>
+  </Targets>
+  <Rules>
+   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
+    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidOutParameters" Category="Microsoft.Design" CheckId="CA1021">
+    <Resolution Name="Default">Consider a design that does not require that {0} be an out parameter.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
+    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
+   </Rule>
+   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
+    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
+   </Rule>
+   <Rule TypeName="CompoundWordsShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1702">
+    <Resolution Name="MemberShouldBeDiscreteTerm">The compound word '{0}' in member name {1} exists as a discrete term. If your usage is intended to be single word, case it as '{2}' or strip the first token entirely if it represents any sort of Hungarian notation.</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotDeclareProtectedMembersInSealedTypes" Category="Microsoft.Design" CheckId="CA1047">
+    <Resolution Name="Member">Make member {0} private, public, or internal (Friend in Visual Basic).</Resolution>
+   </Rule>
+   <Rule TypeName="DoNotIgnoreMethodResults" Category="Microsoft.Usage" CheckId="CA1806">
+    <Resolution Name="HResultOrErrorCode">{0} calls {1} but does not use the HRESULT or error code that the method returns. This could lead to unexpected behavior in error conditions or low-resource situations. Use the result in a conditional statement, assign the result to a variable, or pass it as an argument to another method.</Resolution>
+   </Rule>
+   <Rule TypeName="FinalizersShouldCallBaseClassFinalizer" Category="Microsoft.Usage" CheckId="CA2220">
+    <Resolution Name="Default">Modify {0} so that it calls its base class' finalize method.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeCasedCorrectly" Category="Microsoft.Naming" CheckId="CA1709">
+    <Resolution Name="Member">Correct the casing of '{0}' in member name {1} by changing it to '{2}'.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1704">
+    <Resolution Name="Member">Correct the spelling of '{0}' in member name {1} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="MemberParameter">In method {0}, correct the spelling of '{1}' in parameter name {2} or remove it entirely if it represents any sort of Hungarian notation.</Resolution>
+    <Resolution Name="Type">Correct the spelling of '{0}' in type name {1}.</Resolution>
+   </Rule>
+   <Rule TypeName="IdentifiersShouldHaveCorrectSuffix" Category="Microsoft.Naming" CheckId="CA1710">
+    <Resolution Name="Default">Rename {0} to end in '{1}'.</Resolution>
+   </Rule>
+   <Rule TypeName="InstantiateArgumentExceptionsCorrectly" Category="Microsoft.Usage" CheckId="CA2208">
+    <Resolution Name="IncorrectParameterName">Method {0} passes '{1}' as the {2} argument to a {3} constructor. Replace this argument with one of the method's parameter names. Note that the provided parameter name should have the exact casing as declared on the method.</Resolution>
+   </Rule>
+   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
+    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
+   </Rule>
+   <Rule TypeName="PropertyNamesShouldNotMatchGetMethods" Category="Microsoft.Naming" CheckId="CA1721">
+    <Resolution Name="BaseType">The property name {0} is confusing given the existence of inherited method {1}. Rename or remove this property.</Resolution>
+   </Rule>
+   <Rule TypeName="ResourceStringsShouldBeSpelledCorrectly" Category="Microsoft.Naming" CheckId="CA1703">
+    <Resolution Name="StringResource">In resource {0}, referenced by name '{1}', correct the spelling of '{2}' in string value '{3}'.</Resolution>
+   </Rule>
+   <Rule TypeName="UseOrdinalStringComparison" Category="Microsoft.Globalization" CheckId="CA1309">
+    <Resolution Name="StringComparison">{0} passes {1} as an argument to {2}. Replace this usage with StringComparison.Ordinal or StringComparison.OrdinalIgnoreCase if appropriate.</Resolution>
+   </Rule>
+  </Rules>
+ </FxCopReport>
 </FxCopProject>

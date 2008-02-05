@@ -12,7 +12,7 @@ using namespace System;
 
 
 namespace SharpSvn {
-	namespace Apr {
+	namespace Implementation {
 		using System::IO::Stream;
 
 		ref class SvnStreamWrapper : public IDisposable

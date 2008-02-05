@@ -10,7 +10,7 @@
 
 namespace SharpSvn {
 	namespace Security {
-		using SharpSvn::Apr::AprBaton;
+		using namespace SharpSvn::Implementation;
 		using System::Collections::Generic::Dictionary;
 		using System::Collections::Generic::List;
 
@@ -94,7 +94,7 @@ namespace SharpSvn {
 
 		ref class SvnAuthentication;
 
-		interface class ISvnAuthWrapper
+		interface class ISvnAuthWrapper : public IDisposable
 		{
 			svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool);
 
@@ -164,6 +164,11 @@ namespace SharpSvn {
 				_retryLimit = 128;
 			}
 
+			~SvnAuthWrapper()
+			{
+				delete _baton;
+			}
+
 		public:
 			virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) abstract;
 
@@ -195,31 +200,31 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnUsernamePasswordEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnUserNamePasswordEventArgs : public SvnAuthorizationEventArgs
 		{
-			initonly String ^_initialUsername;
+			initonly String ^_initialUserName;
 			String ^_username;
 			String ^_password;
 		public:
-			SvnUsernamePasswordEventArgs(String^ initialUsername, String^ realm, bool maySave)
+			SvnUserNamePasswordEventArgs(String^ initialUserName, String^ realm, bool maySave)
 				: SvnAuthorizationEventArgs(realm, maySave)
 			{
-				_initialUsername = initialUsername;
-				_username = initialUsername ? initialUsername : "";
+				_initialUserName = initialUserName;
+				_username = initialUserName ? initialUserName : "";
 				_password = "";
 			}
 
 			/// <summary>Default username; can be NULL</summary>
-			property String^ InitialUsername
+			property String^ InitialUserName
 			{
 				String^ get()
 				{
-					return _initialUsername;
+					return _initialUserName;
 				}
 			}
 
 			/// <summary>The username to authorize with</summary>
-			property String^ Username
+			property String^ UserName
 			{
 				String^ get()
 				{
@@ -245,11 +250,11 @@ namespace SharpSvn {
 			}
 
 		internal:
-			ref class Wrapper sealed : public SvnAuthWrapper<SvnUsernamePasswordEventArgs^>
+			ref class Wrapper sealed : public SvnAuthWrapper<SvnUserNamePasswordEventArgs^>
 			{
 			public:
-				Wrapper(EventHandler<SvnUsernamePasswordEventArgs^>^ handler, SvnAuthentication^ authentication)
-					: SvnAuthWrapper<SvnUsernamePasswordEventArgs^>(handler, authentication)
+				Wrapper(EventHandler<SvnUserNamePasswordEventArgs^>^ handler, SvnAuthentication^ authentication)
+					: SvnAuthWrapper<SvnUserNamePasswordEventArgs^>(handler, authentication)
 				{
 				}
 
@@ -257,18 +262,18 @@ namespace SharpSvn {
 			};
 		};
 
-		public ref class SvnUsernameEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnUserNameEventArgs : public SvnAuthorizationEventArgs
 		{
 			String ^_username;
 		public:
-			SvnUsernameEventArgs(String^ realm, bool maySave)
+			SvnUserNameEventArgs(String^ realm, bool maySave)
 				: SvnAuthorizationEventArgs(realm, maySave)
 			{
 				_username = "";
 			}
 
 			/// <summary>The username to authorize with</summary>
-			property String^ Username
+			property String^ UserName
 			{
 				String^ get()
 				{
@@ -281,11 +286,11 @@ namespace SharpSvn {
 			}
 
 		internal:
-			ref class Wrapper sealed : public SvnAuthWrapper<SvnUsernameEventArgs^>
+			ref class Wrapper sealed : public SvnAuthWrapper<SvnUserNameEventArgs^>
 			{
 			public:
-				Wrapper(EventHandler<SvnUsernameEventArgs^>^ handler, SvnAuthentication^ authentication)
-					: SvnAuthWrapper<SvnUsernameEventArgs^>(handler, authentication)
+				Wrapper(EventHandler<SvnUserNameEventArgs^>^ handler, SvnAuthentication^ authentication)
+					: SvnAuthWrapper<SvnUserNameEventArgs^>(handler, authentication)
 				{
 				}
 
@@ -362,8 +367,8 @@ namespace SharpSvn {
 				}
 			}
 
-			/// <summary>FingerPrint name of the certificate</summary>
-			property String^ FingerPrint
+			/// <summary>Fingerprint name of the certificate</summary>
+			property String^ Fingerprint
 			{
 				String^ get()
 				{
@@ -519,7 +524,7 @@ namespace SharpSvn {
 				if(!handler)
 					throw gcnew ArgumentNullException("handler");
 				else if(limit < 0)
-					throw gcnew ArgumentOutOfRangeException("limit out of range");
+					throw gcnew ArgumentOutOfRangeException("limit");
 
 				ISvnAuthWrapper^ wrapper;
 
@@ -533,16 +538,16 @@ namespace SharpSvn {
 			}
 
 		public:
-			event EventHandler<SvnUsernamePasswordEventArgs^>^ UsernamePasswordHandlers
+			event EventHandler<SvnUserNamePasswordEventArgs^>^ UserNamePasswordHandlers
 			{
-				void add(EventHandler<SvnUsernamePasswordEventArgs^>^ e)
+				void add(EventHandler<SvnUserNamePasswordEventArgs^>^ e)
 				{
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
-					ISvnAuthWrapper^ handler = gcnew SvnUsernamePasswordEventArgs::Wrapper(e, this);
+					ISvnAuthWrapper^ handler = gcnew SvnUserNamePasswordEventArgs::Wrapper(e, this);
 
 					if(!_wrappers->ContainsKey(e))
 					{
@@ -552,12 +557,12 @@ namespace SharpSvn {
 					}
 				}
 
-				void remove(EventHandler<SvnUsernamePasswordEventArgs^>^ e)
+				void remove(EventHandler<SvnUserNamePasswordEventArgs^>^ e)
 				{
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ wrapper;
 
@@ -570,16 +575,16 @@ namespace SharpSvn {
 				}
 			}
 
-			event EventHandler<SvnUsernameEventArgs^>^ UsernameHandlers
+			event EventHandler<SvnUserNameEventArgs^>^ UserNameHandlers
 			{
-				void add(EventHandler<SvnUsernameEventArgs^>^ e)
+				void add(EventHandler<SvnUserNameEventArgs^>^ e)
 				{
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
-					ISvnAuthWrapper^ handler = gcnew SvnUsernameEventArgs::Wrapper(e, this);
+					ISvnAuthWrapper^ handler = gcnew SvnUserNameEventArgs::Wrapper(e, this);
 
 					if(!_wrappers->ContainsKey(e))
 					{
@@ -589,12 +594,12 @@ namespace SharpSvn {
 					}
 				}
 
-				void remove(EventHandler<SvnUsernameEventArgs^>^ e)
+				void remove(EventHandler<SvnUserNameEventArgs^>^ e)
 				{
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ wrapper;
 
@@ -614,7 +619,7 @@ namespace SharpSvn {
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslServerTrustEventArgs::Wrapper(e, this);
 
@@ -631,7 +636,7 @@ namespace SharpSvn {
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ wrapper;
 
@@ -651,7 +656,7 @@ namespace SharpSvn {
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslClientCertificateEventArgs::Wrapper(e, this);
 
@@ -668,7 +673,7 @@ namespace SharpSvn {
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ wrapper;
 
@@ -688,7 +693,7 @@ namespace SharpSvn {
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslClientCertificatePasswordEventArgs::Wrapper(e, this);
 
@@ -705,7 +710,7 @@ namespace SharpSvn {
 					if(_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
-						throw gcnew ArgumentNullException("e");
+						return;
 
 					ISvnAuthWrapper^ wrapper;
 
@@ -729,21 +734,21 @@ namespace SharpSvn {
 			void AddConsoleHandlers();
 
 		private:
-			static void ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e);
-			static void ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e);
-			static void ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e);
+			static void ImpSubversionFileUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e);
+			static void ImpSubversionFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
+			static void ImpSubversionWindowsFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
 			static void ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
 			static void ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
 			static void ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
 			static void ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
 
 		private:
-			static initonly EventHandler<SvnUsernameEventArgs^>^						_subversionFileUsernameHandler
-				= gcnew EventHandler<SvnUsernameEventArgs^>(ImpSubversionFileUsernameHandler);
-			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				_subversionFileUsernamePasswordHandler
-				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpSubversionFileUsernamePasswordHandler);
-			static initonly EventHandler<SvnUsernamePasswordEventArgs^>^				_subversionWindowsUsernamePasswordHandler
-				= gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpSubversionWindowsFileUsernamePasswordHandler);
+			static initonly EventHandler<SvnUserNameEventArgs^>^						_subversionFileUserNameHandler
+				= gcnew EventHandler<SvnUserNameEventArgs^>(ImpSubversionFileUserNameHandler);
+			static initonly EventHandler<SvnUserNamePasswordEventArgs^>^				_subversionFileUserNamePasswordHandler
+				= gcnew EventHandler<SvnUserNamePasswordEventArgs^>(ImpSubversionFileUserNamePasswordHandler);
+			static initonly EventHandler<SvnUserNamePasswordEventArgs^>^				_subversionWindowsUserNamePasswordHandler
+				= gcnew EventHandler<SvnUserNamePasswordEventArgs^>(ImpSubversionWindowsFileUserNamePasswordHandler);
 			static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionFileSslServerTrustHandler
 				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionFileSslServerTrustHandler);
 			static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			_subversionFileSslClientCertificateHandler
@@ -755,23 +760,23 @@ namespace SharpSvn {
 
 
 		public:
-			/// <summary>Subversion UsernameHandler file backend (managed representation)</summary>
-			static property EventHandler<SvnUsernameEventArgs^>^						SubversionFileUsernameHandler
+			/// <summary>Subversion UserNameHandler file backend (managed representation)</summary>
+			static property EventHandler<SvnUserNameEventArgs^>^						SubversionFileUserNameHandler
 			{
-				EventHandler<SvnUsernameEventArgs^>^ get() { return _subversionFileUsernameHandler; } 
+				EventHandler<SvnUserNameEventArgs^>^ get() { return _subversionFileUserNameHandler; } 
 			}
 
-			/// <summary>Subversion UsernamePasswordHandler file backend (managed representation)</summary>
-			static property EventHandler<SvnUsernamePasswordEventArgs^>^				SubversionFileUsernamePasswordHandler
+			/// <summary>Subversion UserNamePasswordHandler file backend (managed representation)</summary>
+			static property EventHandler<SvnUserNamePasswordEventArgs^>^				SubversionFileUserNamePasswordHandler
 			{
-				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return _subversionFileUsernamePasswordHandler; } 
+				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return _subversionFileUserNamePasswordHandler; } 
 			}
 
-			/// <summary>Subversion UsernameHandler file backend using Windows CryptoStore (managed representation)</summary>
-			/// <remarks>Should be added after <see cref="SubversionFileUsernamePasswordHandler" /></remarks>
-			static property EventHandler<SvnUsernamePasswordEventArgs^>^				SubversionWindowsUsernamePasswordHandler
+			/// <summary>Subversion UserNameHandler file backend using Windows CryptoStore (managed representation)</summary>
+			/// <remarks>Should be added after <see cref="SubversionFileUserNamePasswordHandler" /></remarks>
+			static property EventHandler<SvnUserNamePasswordEventArgs^>^				SubversionWindowsUserNamePasswordHandler
 			{
-				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return _subversionWindowsUsernamePasswordHandler; } 
+				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return _subversionWindowsUserNamePasswordHandler; } 
 			}
 
 			/// <summary>Subversion SslServerTrust file backend (managed representation)</summary>
@@ -801,23 +806,23 @@ namespace SharpSvn {
 		private:
 			static void MaybePrintRealm(SvnAuthorizationEventArgs^ e);
 			static String^ ReadPassword();
-			static void ImpConsoleUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e);
-			static void ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e);
+			static void ImpConsoleUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e);
+			static void ImpConsoleUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
 			static void ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
 			static void ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
 			static void ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
 
 		public:
-			/// <summary>Console based UsernameHandler implementation</summary>
-			static property EventHandler<SvnUsernameEventArgs^>^ ConsoleUsernameHandler
+			/// <summary>Console based UserNameHandler implementation</summary>
+			static property EventHandler<SvnUserNameEventArgs^>^ ConsoleUserNameHandler
 			{
-				EventHandler<SvnUsernameEventArgs^>^ get() { return gcnew EventHandler<SvnUsernameEventArgs^>(ImpConsoleUsernameHandler); }
+				EventHandler<SvnUserNameEventArgs^>^ get() { return gcnew EventHandler<SvnUserNameEventArgs^>(ImpConsoleUserNameHandler); }
 			}
 
-			/// <summary>Console based UsernamePasswordHandler implementation</summary>
-			static property EventHandler<SvnUsernamePasswordEventArgs^>^ ConsoleUsernamePasswordHandler
+			/// <summary>Console based UserNamePasswordHandler implementation</summary>
+			static property EventHandler<SvnUserNamePasswordEventArgs^>^ ConsoleUserNamePasswordHandler
 			{
-				EventHandler<SvnUsernamePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnUsernamePasswordEventArgs^>(ImpConsoleUsernamePasswordHandler); }
+				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnUserNamePasswordEventArgs^>(ImpConsoleUserNamePasswordHandler); }
 			}
 
 			/// <summary>Console based SslServerTrust implementation</summary>

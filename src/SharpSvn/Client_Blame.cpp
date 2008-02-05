@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetBlame(SharpSvn.SvnTarget,SharpSvn.SvnBlameArgs,System.Collections.Generic.IList`1<SharpSvn.SvnBlameEventArgs>&):System.Boolean", MessageId="2#")];

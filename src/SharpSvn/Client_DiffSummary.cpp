@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetDiffSummary(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffSummaryArgs,System.Collections.Generic.IList`1<SharpSvn.SvnDiffSummaryEventArgs>&):System.Boolean", MessageId="3#")];
@@ -82,7 +82,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 			&toRev,
 			(svn_depth_t)args->Depth,
 			args->IgnoreAncestry,
-			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			svn_client_diff_summarize_func_handler,
 			(void*)_clientBatton->Handle,
 			CtxHandle,

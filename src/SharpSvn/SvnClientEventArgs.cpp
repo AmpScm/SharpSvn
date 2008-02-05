@@ -8,7 +8,7 @@
 #include "SvnAll.h"
 #include <svn_config.h>
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 

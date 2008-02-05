@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -58,7 +58,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!SvnBase::IsValidReposUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
 	if(RemoteImport(path, target, args, commitInfo))
 	{
@@ -66,7 +66,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 		aa->ThrowOnError = args->ThrowOnError;
 		aa->Depth = args->Depth;
 
-		aa->AllowUnversionedObstructions = true; // This is the trick
+		aa->AllowObstructions = true; // This is the trick
 		aa->SvnError += gcnew EventHandler<SvnErrorEventArgs^>(args, &SvnImportArgs::HandleOnSvnError);
 
 		try

@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include "SvnChangeList.h"
+#include "SvnCommandLineArgumentCollection.h"
+
 namespace SharpSvn {
 	ref class SvnException;
 	using System::Collections::ObjectModel::Collection;
@@ -56,6 +59,11 @@ namespace SharpSvn {
 		}
 
 	public:
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			SvnClientCommandType get() abstract;
+		}
+
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
 		/// If an exception would occur, the method returns false and the <see cref="Exception" /> property
@@ -90,7 +98,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool InvokationCanceled
+		property bool InvocationCanceled
 		{
 			bool get();
 		}
@@ -102,7 +110,7 @@ namespace SharpSvn {
 
 	/// <summary>Base class of all <see cref="SvnClient" /> arguments which allow committing</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnClientArgsWithCommit : public SvnClientArgs
+	public ref class SvnClientArgsWithCommit abstract : public SvnClientArgs
 	{
 		String^ _logMessage;
 
@@ -143,7 +151,7 @@ namespace SharpSvn {
 
 	/// <summary>Base class of all <see cref="SvnClient" /> arguments which allow handling conflicts</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnClientArgsWithConflict : public SvnClientArgs
+	public ref class SvnClientArgsWithConflict abstract : public SvnClientArgs
 	{
 		String^ _logMessage;
 
@@ -185,6 +193,14 @@ namespace SharpSvn {
 		SvnWriteArgs()
 		{
 			_revision = SvnRevision::None;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Write;
+			}
 		}
 
 		property SvnRevision^ Revision

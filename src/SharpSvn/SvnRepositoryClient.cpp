@@ -10,11 +10,11 @@
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
 using namespace SharpSvn;
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 
 
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnRepositoryClient.DeleteRepository(System.String,SharpSvn.SvnDeleteRepositoryArgs):System.Boolean")];
-[module: SuppressMessage("Microsoft.Naming", "CA1706:ShortAcronymsShouldBeUppercase", Scope="member", Target="SharpSvn.SvnRepositoryFilesystem.FsFs", MessageId="Member")];
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope="member", Target="SharpSvn.SvnRepositoryFileSystem.#FsFs", MessageId="Fs")];
 
 SvnRepositoryClient::SvnRepositoryClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
@@ -79,14 +79,14 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
 	switch(args->RepositoryType)
 	{
-	case SvnRepositoryFilesystem::FsFs:
+	case SvnRepositoryFileSystem::FsFs:
 		apr_hash_set(
 			fs_config,
 			SVN_FS_CONFIG_FS_TYPE,
 			APR_HASH_KEY_STRING,
 			SVN_FS_TYPE_FSFS);
 		break;
-	case SvnRepositoryFilesystem::BerkeleyDB:
+	case SvnRepositoryFileSystem::BerkeleyDB:
 		apr_hash_set(
 			fs_config,
 			SVN_FS_CONFIG_FS_TYPE,

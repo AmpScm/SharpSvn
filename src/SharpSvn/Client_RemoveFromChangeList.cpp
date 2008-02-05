@@ -6,40 +6,40 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-bool SvnClient::RemoveFromChangelist(String^ path)
+bool SvnClient::RemoveFromChangeList(String^ target)
 {
-	if(String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+	if(String::IsNullOrEmpty(target))
+		throw gcnew ArgumentNullException("target");
 
-	return RemoveFromChangelist(NewSingleItemCollection(path), gcnew SvnRemoveFromChangelistArgs());
+	return RemoveFromChangeList(NewSingleItemCollection(target), gcnew SvnRemoveFromChangeListArgs());
 }
 
-bool SvnClient::RemoveFromChangelist(String^ path, SvnRemoveFromChangelistArgs^ args)
+bool SvnClient::RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+	if(String::IsNullOrEmpty(target))
+		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return RemoveFromChangelist(NewSingleItemCollection(path), args);
+	return RemoveFromChangeList(NewSingleItemCollection(target), args);
 }
 
-bool SvnClient::RemoveFromChangelist(ICollection<String^>^ paths)
+bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets)
 {
-	if(!paths)
-		throw gcnew ArgumentNullException("paths");
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
 
-	return RemoveFromChangelist(paths, gcnew SvnRemoveFromChangelistArgs());
+	return RemoveFromChangeList(targets, gcnew SvnRemoveFromChangeListArgs());
 }
 
-bool SvnClient::RemoveFromChangelist(ICollection<String^>^ paths, SvnRemoveFromChangelistArgs^ args)
+bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFromChangeListArgs^ args)
 {
-	if(!paths)
-		throw gcnew ArgumentNullException("paths");
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -48,9 +48,9 @@ bool SvnClient::RemoveFromChangelist(ICollection<String^>^ paths, SvnRemoveFromC
 	AprPool pool(%_pool);
 
 	svn_error_t *r = svn_client_remove_from_changelists(
-		AllocPathArray(paths, %pool),
+		AllocPathArray(targets, %pool),
 		(svn_depth_t)args->Depth,
-		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
 		pool.Handle);
 

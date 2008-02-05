@@ -8,7 +8,7 @@
 #include "AprPool.h"
 
 using namespace System;
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 
 namespace SharpSvn {
 	namespace Security {

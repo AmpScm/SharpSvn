@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -56,7 +56,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	else if(!target)
 		throw gcnew ArgumentNullException("args");
 
-	switch(target->Revision->Type)
+	switch(target->Revision->RevisionType)
 	{
 	case SvnRevisionType::Number:
 	case SvnRevisionType::Head:
@@ -84,7 +84,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		(svn_depth_t)args->Depth,
 		args->KeepDepth,
 		args->IgnoreExternals,
-		args->AllowUnversionedObstructions,
+		args->AllowObstructions,
 		CtxHandle,
 		pool.Handle);
 

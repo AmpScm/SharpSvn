@@ -19,7 +19,7 @@ namespace SharpSvn {
 		bool _noIgnore;
 		bool _ignoreExternals;
 		SvnRevision^ _revision;
-		ICollection<String^>^ _changelists;
+		SvnChangeListCollection^ _changelists;
 
 	public:
 		event EventHandler<SvnStatusEventArgs^>^ Status;
@@ -35,6 +35,14 @@ namespace SharpSvn {
 		{
 			_depth = SvnDepth::Infinity;
 			_revision = SvnRevision::None;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Status;
+			}
 		}
 
 		property SvnRevision^ Revision
@@ -113,20 +121,13 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets the list of changelist-names</summary>
-		property ICollection<String^>^ Changelists
+		property SvnChangeListCollection^ ChangeLists
 		{
-			ICollection<String^>^ get()
+			SvnChangeListCollection^ get()
 			{
 				if(!_changelists)
-					_changelists = gcnew List<String^>();
+					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
-			}
-			void set(ICollection<String^>^ value)
-			{
-				if(value)
-					_changelists = gcnew List<String^>(value);
-				else
-					_changelists = nullptr;
 			}
 		}
 	};
@@ -154,7 +155,15 @@ namespace SharpSvn {
 		{
 			_depth = SvnDepth::Files;
 			_revision = SvnRevision::None;
-			_entryItems = SvnDirEntryItems::SnvListDefault;
+			_entryItems = SvnDirEntryItems::SvnListDefault;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::List;
+			}
 		}
 
 		property SvnDepth Depth
@@ -243,6 +252,14 @@ namespace SharpSvn {
 			//_limit = 0;
 			//_noLogChangedPaths = false;
 			//_strictHistory = false;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Log;
+			}
 		}
 
 		property SvnRevision^ Start
@@ -357,7 +374,7 @@ namespace SharpSvn {
 	{
 		SvnRevision^ _revision;
 		SvnDepth _depth;
-		ICollection<String^>^ _changelists;
+		SvnChangeListCollection^ _changelists;
 
 	public:
 		event EventHandler<SvnInfoEventArgs^>^ Info;
@@ -373,6 +390,14 @@ namespace SharpSvn {
 		{
 			_revision = SvnRevision::None;
 			_depth = SvnDepth::Empty;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Info;
+			}
 		}
 
 		property SvnDepth Depth
@@ -403,20 +428,13 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets the list of changelist-names</summary>
-		property ICollection<String^>^ Changelists
+		property SvnChangeListCollection^ ChangeLists
 		{
-			ICollection<String^>^ get()
+			SvnChangeListCollection^ get()
 			{
 				if(!_changelists)
-					_changelists = gcnew List<String^>();
+					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
-			}
-			void set(ICollection<String^>^ value)
-			{
-				if(value)
-					_changelists = gcnew List<String^>(value);
-				else
-					_changelists = nullptr;
 			}
 		}
 	};
@@ -431,12 +449,20 @@ namespace SharpSvn {
 		bool _ignoreContentType;
 		String^ _headerEncoding;
 		String^ _relativeFrom;
-		ICollection<String^>^ _diffArguments;
-		ICollection<String^>^ _changelists;
+		SvnCommandLineArgumentCollection^ _diffArguments;
+		SvnChangeListCollection^ _changelists;
 	public:
 		SvnDiffArgs()
 		{
 			_depth = SvnDepth::Infinity;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Diff;
+			}
 		}
 
 		property SvnDepth Depth
@@ -499,18 +525,14 @@ namespace SharpSvn {
 			}
 		}
 
-		property ICollection<String^>^ DiffArguments
+		property SvnCommandLineArgumentCollection^ DiffArguments
 		{
-			ICollection<String^>^ get()
+			SvnCommandLineArgumentCollection^ get()
 			{
+				if(!_diffArguments)
+					_diffArguments = gcnew SvnCommandLineArgumentCollection();
+
 				return _diffArguments;
-			}
-			void set(ICollection<String^>^ value)
-			{
-				if(value)
-					_diffArguments = (gcnew System::Collections::Generic::List<String^>(value))->AsReadOnly();
-				else
-					_diffArguments = nullptr;
 			}
 		}
 
@@ -530,20 +552,13 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets the list of changelist-names</summary>
-		property ICollection<String^>^ Changelists
+		property SvnChangeListCollection^ ChangeLists
 		{
-			ICollection<String^>^ get()
+			SvnChangeListCollection^ get()
 			{
 				if(!_changelists)
-					_changelists = gcnew List<String^>();
+					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
-			}
-			void set(ICollection<String^>^ value)
-			{
-				if(value)
-					_changelists = gcnew List<String^>(value);
-				else
-					_changelists = nullptr;
 			}
 		}
 	};
@@ -554,11 +569,19 @@ namespace SharpSvn {
 	{
 		bool _noticeAncestry;
 		SvnDepth _depth;
-		ICollection<String^>^ _changelists;
+		SvnChangeListCollection^ _changelists;
 	public:
 		SvnDiffSummaryArgs()
 		{
 			_depth = SvnDepth::Infinity;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::DiffSummary;
+			}
 		}
 
 	public:
@@ -596,20 +619,13 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets the list of changelist-names</summary>
-		property ICollection<String^>^ Changelists
+		property SvnChangeListCollection^ ChangeLists
 		{
-			ICollection<String^>^ get()
+			SvnChangeListCollection^ get()
 			{
 				if(!_changelists)
-					_changelists = gcnew List<String^>();
+					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
-			}
-			void set(ICollection<String^>^ value)
-			{
-				if(value)
-					_changelists = gcnew List<String^>(value);
-				else
-					_changelists = nullptr;
 			}
 		}
 	};
@@ -630,6 +646,14 @@ namespace SharpSvn {
 		{
 			_from = SvnRevision::Zero;
 			_to = SvnRevision::Head;
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::Blame;
+			}
 		}
 
 	public:
@@ -729,6 +753,14 @@ namespace SharpSvn {
 		SvnGetSuggestedMergeSourcesArgs()
 		{
 		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::GetSuggestedMergeSources;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetAppliedMergeInfo method</summary>
@@ -739,6 +771,14 @@ namespace SharpSvn {
 		SvnGetAppliedMergeInfoArgs()
 		{
 		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::GetAppliedMergeInfo;
+			}
+		}
 	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetAvailableMergeInfo method</summary>
@@ -748,6 +788,14 @@ namespace SharpSvn {
 	public:
 		SvnGetAvailableMergeInfoArgs()
 		{
+		}
+
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::GetAvailableMergeInfo;
+			}
 		}
 	};
 

@@ -41,14 +41,14 @@ namespace SharpSvn.UI
 
 		internal void Bind(SvnClient svnClient)
 		{
-			svnClient.Authenticator.UsernameHandlers += new EventHandler<SharpSvn.Security.SvnUsernameEventArgs>(DialogUsernameHandler);
-			svnClient.Authenticator.UsernamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUsernamePasswordEventArgs>(DialogUsernamePasswordHandler);
+			svnClient.Authenticator.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
+			svnClient.Authenticator.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
 			svnClient.Authenticator.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
 			svnClient.Authenticator.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
 			svnClient.Authenticator.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
 		}
 
-		void DialogUsernameHandler(Object sender, SvnUsernameEventArgs e)
+		void DialogUserNameHandler(Object sender, SvnUserNameEventArgs e)
 		{
             using (UsernameDialog dlg = new UsernameDialog())
             {
@@ -68,19 +68,19 @@ namespace SharpSvn.UI
                     return;
                 }
 
-                e.Username = dlg.usernameBox.Text;
+                e.UserName = dlg.usernameBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
 
             }
 		}
 
-		void DialogUsernamePasswordHandler(Object sender, SvnUsernamePasswordEventArgs e)
+		void DialogUserNamePasswordHandler(Object sender, SvnUserNamePasswordEventArgs e)
 		{
             string description = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsernameAndPassword);
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(5, 1))
             {
                 // If Windows XP/Windows 2003 or higher: Use the windows password dialog
-                GetUsernamePasswordWindows(e, description);
+                GetUserNamePasswordWindows(e, description);
 
                 return;
             }
@@ -94,9 +94,9 @@ namespace SharpSvn.UI
                 if(Image != null)
                     dlg.SetImage(Image);
 
-                if (!string.IsNullOrEmpty(e.InitialUsername))
+                if (!string.IsNullOrEmpty(e.InitialUserName))
                 {
-                    dlg.usernameBox.Text = e.InitialUsername;
+                    dlg.usernameBox.Text = e.InitialUserName;
                     dlg.passwordBox.Select();
                 }
 
@@ -105,18 +105,18 @@ namespace SharpSvn.UI
                 if (r != DialogResult.OK)
                 {
                     e.Save = dlg.rememberCheck.Checked;
-                    e.Username = e.Password = null;
+                    e.UserName = e.Password = null;
                     e.Cancel = e.Break = true;
                     return;
                 }
 
-                e.Username = dlg.usernameBox.Text;
+                e.UserName = dlg.usernameBox.Text;
                 e.Password = dlg.passwordBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
             }
 		}
 
-        private void GetUsernamePasswordWindows(SvnUsernamePasswordEventArgs e, string description)
+        private void GetUserNamePasswordWindows(SvnUserNamePasswordEventArgs e, string description)
         {            
             NativeMethods.CREDUI_INFO info = new NativeMethods.CREDUI_INFO();
             info.pszCaptionText = Strings.ConnectToSubversion;
@@ -124,7 +124,7 @@ namespace SharpSvn.UI
             info.hwndParent = (_window != null) ? _window.Handle : IntPtr.Zero;
             info.cbSize = Marshal.SizeOf(typeof(NativeMethods.CREDUI_INFO));
 
-            StringBuilder sbUsername = new StringBuilder(e.InitialUsername ?? "", 1024);
+            StringBuilder sbUserName = new StringBuilder(e.InitialUserName ?? "", 1024);
             StringBuilder sbPassword = new StringBuilder("", 1024);
 
             bool dlgSave = false;
@@ -133,16 +133,16 @@ namespace SharpSvn.UI
             if (e.MaySave)
                 flags |= (int)NativeMethods.CREDUI_FLAGS.SHOW_SAVE_CHECK_BOX;
 
-            switch (NativeMethods.CredUIPromptForCredentials(ref info, e.Realm, IntPtr.Zero, 0, sbUsername, 1024, sbPassword, 1024, ref dlgSave,
+            switch (NativeMethods.CredUIPromptForCredentials(ref info, e.Realm, IntPtr.Zero, 0, sbUserName, 1024, sbPassword, 1024, ref dlgSave,
                 (NativeMethods.CREDUI_FLAGS)flags))
             {
                 case NativeMethods.CredUIReturnCodes.NO_ERROR:
-                    e.Username = sbUsername.ToString();
+                    e.UserName = sbUserName.ToString();
                     e.Password = sbPassword.ToString();
                     e.Save = e.MaySave && dlgSave;
                     break;
                 case NativeMethods.CredUIReturnCodes.ERROR_CANCELLED:
-                    e.Username = null;
+                    e.UserName = null;
                     e.Password = null;
                     e.Save = false;
                     e.Cancel = e.Break = true;
@@ -159,7 +159,7 @@ namespace SharpSvn.UI
                     dlg.SetImage(Image);
 
                 dlg.hostname.Text = e.CommonName;
-                dlg.fingerprint.Text = e.FingerPrint;
+                dlg.fingerprint.Text = e.Fingerprint;
                 dlg.validFrom.Text = e.ValidFrom;
                 dlg.validTo.Text = e.ValidUntil;
                 dlg.issuer.Text = e.Issuer;

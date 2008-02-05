@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -19,11 +19,11 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 	{
 	case SvnLineStyle::Native:
 		return nullptr;
-	case SvnLineStyle::CariageReturnLineFeed:
+	case SvnLineStyle::CarriageReturnLinefeed:
 		return "CRLF";
-	case SvnLineStyle::LineFeed:
+	case SvnLineStyle::Linefeed:
 		return "LF";
-	case SvnLineStyle::CariageReturn:
+	case SvnLineStyle::CarriageReturn:
 		return "CR";
 	default:
 		throw gcnew ArgumentOutOfRangeException("style");

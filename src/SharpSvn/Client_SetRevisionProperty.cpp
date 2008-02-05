@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -51,7 +51,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		propertyName, 
 		// Subversion does no normalization on the property value; so we have to do this before sending it
 		// to the server
-		propertyName->StartsWith("svn:") ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
+		propertyName->StartsWith("svn:", StringComparison::Ordinal) ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
 		args,
 		%pool);
 }

@@ -62,7 +62,7 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to The argyment must be a valid absolute repository Uri.
+    ///   Looks up a localized string similar to The argument must be a valid absolute repository Uri.
     /// </summary>
     internal: static property System::String^  ArgumentMustBeAValidRepositoryUri {
         System::String^  get();
@@ -83,7 +83,7 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to Invalid character in clientname.
+    ///   Looks up a localized string similar to Invalid character in client name.
     /// </summary>
     internal: static property System::String^  InvalidCharacterInClientName {
         System::String^  get();
@@ -111,7 +111,7 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to {This line was not parsable as Utf8}.
+    ///   Looks up a localized string similar to {This line does not contain non-Utf8 characters}.
     /// </summary>
     internal: static property System::String^  NonUtf8ConvertableLine {
         System::String^  get();
@@ -195,16 +195,16 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to Path &apos;{0}&apos; is no longer a member of a changelist..
+    ///   Looks up a localized string similar to Path &apos;{0}&apos; is no longer a member of a change list..
     /// </summary>
-    internal: static property System::String^  NotifyPathXIsNoLongerAMemberOfAChangelist {
+    internal: static property System::String^  NotifyPathXIsNoLongerAMemberOfAChangeList {
         System::String^  get();
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to Path &apos;{0}&apos; is now a member of changelist &apos;{1}&apos;..
+    ///   Looks up a localized string similar to Path &apos;{0}&apos; is now a member of change list &apos;{1}&apos;..
     /// </summary>
-    internal: static property System::String^  NotifyPathXIsNowAMemberOfChangelistY {
+    internal: static property System::String^  NotifyPathXIsNowAMemberOfChangeListY {
         System::String^  get();
     }
     
@@ -307,6 +307,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to The number of elements in the paths collection does not match the number in revisions.
+    /// </summary>
+    internal: static property System::String^  PathCountDoesNotMatchRevisions {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to Revision number must be at least 0.
     /// </summary>
     internal: static property System::String^  RevisionNumberMustBeAtLeast0 {
@@ -342,7 +349,7 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to The specified target is not a valur Uri or Path target.
+    ///   Looks up a localized string similar to The specified target is not a value Uri or Path target.
     /// </summary>
     internal: static property System::String^  TheTargetIsNotAValidUriOrPathTarget {
         System::String^  get();
@@ -473,12 +480,12 @@ inline System::String^  SharpSvnStrings::NotifyMergingRXToRYIntoZ::get() {
     return ResourceManager->GetString(L"NotifyMergingRXToRYIntoZ", resourceCulture);
 }
 
-inline System::String^  SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangelist::get() {
-    return ResourceManager->GetString(L"NotifyPathXIsNoLongerAMemberOfAChangelist", resourceCulture);
+inline System::String^  SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangeList::get() {
+    return ResourceManager->GetString(L"NotifyPathXIsNoLongerAMemberOfAChangeList", resourceCulture);
 }
 
-inline System::String^  SharpSvnStrings::NotifyPathXIsNowAMemberOfChangelistY::get() {
-    return ResourceManager->GetString(L"NotifyPathXIsNowAMemberOfChangelistY", resourceCulture);
+inline System::String^  SharpSvnStrings::NotifyPathXIsNowAMemberOfChangeListY::get() {
+    return ResourceManager->GetString(L"NotifyPathXIsNowAMemberOfChangeListY", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::NotifyPerformingStatusOnExternalItemAtX::get() {
@@ -535,6 +542,10 @@ inline System::String^  SharpSvnStrings::NotifyXLockedByUserY::get() {
 
 inline System::String^  SharpSvnStrings::NotifyXUnlocked::get() {
     return ResourceManager->GetString(L"NotifyXUnlocked", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::PathCountDoesNotMatchRevisions::get() {
+    return ResourceManager->GetString(L"PathCountDoesNotMatchRevisions", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {

@@ -1,4 +1,4 @@
-// $Id: SvnPathTarget.h 171 2007-10-14 19:38:35Z bhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007 
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
@@ -12,36 +12,37 @@ namespace SharpSvn {
 
 	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnClientNotifier : public IDisposable
+	public ref class SvnClientReporter : public System::MarshalByRefObject, public IDisposable
 	{
 		initonly SvnClient^ _client;
 		initonly SvnClientArgs^ _args;
 		initonly TextWriter^ _textWriter;
+		initonly IFormatProvider^ _fp;
 		bool _afterInitial;
 
 	private:
+		SvnClientCommandType _commandType;
 		bool _receivedSomeChange;
-		bool _isCheckout;
-		bool _isExport;
 		bool _suppressFinalLine;
 		bool _sentFirstTxdelta;
 		int _inExternal;
 
 	public:
-		SvnClientNotifier(SvnClient^ client, System::IO::TextWriter^ tw)
+		SvnClientReporter(SvnClient^ client, System::IO::TextWriter^ to)
 		{
 			if(!client)
 				throw gcnew ArgumentNullException("client");
-			else if(!tw)
-				throw gcnew ArgumentNullException("tw");
+			else if(!to)
+				throw gcnew ArgumentNullException("to");
 
 			_client = client;
-			_textWriter = tw;
-			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
-			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientNotifier::HandleProcessing);
+			_textWriter = to;
+			_fp = to->FormatProvider;
+			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
+			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
 		}
 
-		SvnClientNotifier(SvnClient^ client, System::Text::StringBuilder^ sb)			
+		SvnClientReporter(SvnClient^ client, System::Text::StringBuilder^ sb)			
 		{
 			if(!client)
 				throw gcnew ArgumentNullException("client");
@@ -49,24 +50,39 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("sb");
 
 			_client = client;
-			_textWriter = gcnew System::IO::StringWriter(sb);
-			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
-			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientNotifier::HandleProcessing);
+			_textWriter = gcnew System::IO::StringWriter(sb, (IFormatProvider^)nullptr);
+			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
+			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
 		}
 
-		SvnClientNotifier(SvnClientArgs^ clientArgs, System::IO::TextWriter^ tw)
+		SvnClientReporter(SvnClient^ client, System::Text::StringBuilder^ sb, IFormatProvider^ formatProvider)			
+		{
+			if(!client)
+				throw gcnew ArgumentNullException("client");
+			else if(!sb)
+				throw gcnew ArgumentNullException("sb");
+
+			_client = client;
+			_fp = formatProvider;
+			_textWriter = gcnew System::IO::StringWriter(sb, formatProvider);
+			_client->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
+			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
+		}
+
+		SvnClientReporter(SvnClientArgs^ clientArgs, System::IO::TextWriter^ to)
 		{
 			if(!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
-			else if(!tw)
-				throw gcnew ArgumentNullException("tw");
+			else if(!to)
+				throw gcnew ArgumentNullException("to");
 
 			_args = clientArgs;
-			_textWriter = tw;
-			_args->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
+			_textWriter = to;
+			_fp = to->FormatProvider;
+			_args->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
 		}
 
-		SvnClientNotifier(SvnClientArgs^ clientArgs, System::Text::StringBuilder^ sb)
+		SvnClientReporter(SvnClientArgs^ clientArgs, System::Text::StringBuilder^ sb)
 		{
 			if(!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
@@ -74,31 +90,56 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("sb");
 
 			_args = clientArgs;
-			_textWriter = gcnew System::IO::StringWriter(sb);
-			_args->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
+			_textWriter = gcnew System::IO::StringWriter(sb, (IFormatProvider^)nullptr);
+			_args->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
+		}
+
+		SvnClientReporter(SvnClientArgs^ clientArgs, System::Text::StringBuilder^ sb, IFormatProvider^ formatProvider)
+		{
+			if(!clientArgs)
+				throw gcnew ArgumentNullException("clientArgs");
+			else if(!sb)
+				throw gcnew ArgumentNullException("sb");
+
+			_args = clientArgs;
+			_fp = formatProvider;
+			_textWriter = gcnew System::IO::StringWriter(sb, formatProvider);
+			_args->Notify += gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
 		}
 
 	public:
-		~SvnClientNotifier()
+		~SvnClientReporter()
 		{
 			if(_client)
 			{
-				_client->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);
-				_client->Processing -= gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientNotifier::HandleProcessing);
+				_client->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
+				_client->Processing -= gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
 			}
 			if(_args)
-				_args->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientNotifier::HandleNotify);				
+				_args->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
+
+			_textWriter->Close();
+		}
+
+	public:
+		property bool SuppressFinalLine
+		{
+			bool get()
+			{
+				return _suppressFinalLine;
+			}
+			void set(bool value)
+			{
+				_suppressFinalLine = value;
+			}
 		}
 
 	protected:
-		property SvnClientArgs^ CurrentCommandArgs
+		property SvnClientCommandType CurrentCommandType
 		{
-			SvnClientArgs^ get()
+			SvnClientCommandType get()
 			{
-				if(_args)
-					return _args;
-				else
-					return _client->CurrentCommandArgs;
+				return _commandType;
 			}
 		}
 
@@ -106,22 +147,22 @@ namespace SharpSvn {
 		virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
 		/// <summary>Writes the specified message to the result writer</summary>
-		virtual void Write(String^ message)
+		virtual void Write(String^ value)
 		{
-			_textWriter->Write(message);
+			_textWriter->Write(value);
 		}
 
 		/// <summary>Writes the progress message to the result writer</summary>
 		/// <remarks>The default implementation calls <see cref="Write(String^)" /> with the specified message</remarks>
-		virtual void WriteProgress(String^ message)
+		virtual void WriteProgress(String^ value)
 		{
-			Write(message);
+			Write(value);
 		}
 
 		/// <summary>Writes the specified message to the result writer and appends a <see cref="System::Environment::NewLine" /></summary>
-		virtual void WriteLine(String^ message)
+		virtual void WriteLine(String^ value)
 		{
-			_textWriter->WriteLine(message);
+			_textWriter->WriteLine(value);
 		}
 
 	private:
@@ -132,7 +173,7 @@ namespace SharpSvn {
 			if(!_afterInitial && !_client)
 			{
 				_afterInitial = true;
-				OnProcessing(gcnew SvnProcessingEventArgs(_args));
+				OnProcessing(gcnew SvnProcessingEventArgs(_args->ClientCommandType));
 			}
 
 			OnNotify(e);

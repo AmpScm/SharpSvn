@@ -10,7 +10,7 @@
 #include "svn_dso.h"
 #include "svn_utf.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
 #pragma unmanaged
@@ -33,7 +33,9 @@ void SvnBase::EnsureLoaded()
 	{
 		_aprInitialized = true;
 
-		apr_initialize(); // First
+		if(apr_initialize()) // First
+			throw gcnew InvalidOperationException();
+
 		svn_dso_initialize(); // Before first pool
 
 		apr_pool_t* pool = svn_pool_create(nullptr);
@@ -140,14 +142,23 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 	return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
 }
 
-array<char>^ SvnBase::PtrToByteArray(const char* ptr, int length)
+String^ SvnBase::Utf8_PtrToString(const svn_string_t* str)
+{
+	if(!str || !str->data)
+		return nullptr;
+
+	return gcnew String(str->data, 0, str->len, System::Text::Encoding::UTF8);
+}
+
+
+array<Byte>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 {
 	if(!ptr || length < 0)
 		return nullptr;
 
-	array<char>^ bytes = gcnew array<char>(length);
+	array<Byte>^ bytes = gcnew array<Byte>(length);
 
-	pin_ptr<char> pBytes = &bytes[0];
+	pin_ptr<Byte> pBytes = &bytes[0];
 
 	memcpy(pBytes, ptr, length);
 
@@ -166,6 +177,10 @@ Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 		return Utf8_PtrToString(ptr, length);
 	}
 	catch(System::Text::DecoderFallbackException^)
+	{
+		return SvnBase::PtrToByteArray(ptr, length);
+	}
+	catch(ArgumentException^)
 	{
 		return SvnBase::PtrToByteArray(ptr, length);
 	}
@@ -257,14 +272,14 @@ apr_array_header_t *SvnBase::AllocCopyArray(System::Collections::IEnumerable^ ta
 	return aprTargets->Handle;
 }
 
-IDictionary<String^, Object^>^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool)
+SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool)
 {
 	if(!propHash)
 		throw gcnew ArgumentNullException("propHash");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	SortedList<String^, Object^>^ _properties = gcnew SortedList<String^, Object^>();
+	SvnPropertyCollection^ _properties = gcnew SvnPropertyCollection();
 
 	for (apr_hash_index_t* hi = apr_hash_first(pool->Handle, propHash); hi; hi = apr_hash_next(hi))
 	{
@@ -277,13 +292,23 @@ IDictionary<String^, Object^>^ SvnBase::CreatePropertyDictionary(apr_hash_t* pro
 		String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
 		Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
 
-		_properties->Add(key, value);
+		String^ str = dynamic_cast<String^>(value);
+
+		if(str)
+		{
+			if(key->StartsWith("svn:", StringComparison::Ordinal))
+				str = str->Replace("\n", Environment::NewLine);
+
+			_properties->Add(gcnew SvnPropertyValue(key, str));
+		}
+		else
+			_properties->Add(gcnew SvnPropertyValue(key, safe_cast<array<Byte>^>(value)));
 	}
 
-	return safe_cast<IDictionary<String^, Object^>^>(_properties);
+	return _properties;
 }
 
-apr_array_header_t *SvnBase::CreateChangelistsList(ICollection<String^>^ changelists, AprPool^ pool)
+apr_array_header_t *SvnBase::CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool)
 {
 	if(changelists && changelists->Count > 0)
 		return AllocArray(changelists, pool);

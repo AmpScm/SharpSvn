@@ -86,11 +86,11 @@ namespace SharpSvn {
 			case SvnRevisionType::Head:
 				return "HEAD";
 			default:
-				throw gcnew InvalidOperationException(SharpSvnStrings::InvalidSvnRevisionTypeValue);
+				return nullptr;
 			}
 		}
 
-		property SvnRevisionType Type
+		property SvnRevisionType RevisionType
 		{
 			SvnRevisionType get()
 			{
@@ -132,7 +132,7 @@ namespace SharpSvn {
 			if(!other)
 				return false;
 
-			switch(Type)
+			switch(RevisionType)
 			{
 			case SvnRevisionType::None:
 			case SvnRevisionType::Committed:
@@ -145,7 +145,7 @@ namespace SharpSvn {
 			case SvnRevisionType::Date:
 				return _value == other->_value;
 			default:
-				throw gcnew InvalidOperationException(SharpSvnStrings::InvalidSvnRevisionTypeValue);
+				return false;
 			}
 		}
 
@@ -225,7 +225,7 @@ namespace SharpSvn {
 
 		virtual String^ ToString() override
 		{
-			if(Revision->Type == SvnRevisionType::None)
+			if(Revision->RevisionType == SvnRevisionType::None)
 				return TargetName;
 			else
 				return TargetName + "@" + Revision->ToString();

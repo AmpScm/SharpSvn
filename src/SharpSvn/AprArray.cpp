@@ -6,12 +6,12 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCStrPathMarshaller")];
-[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCanonicalMarshaller")];
-[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprSvnRevNumMarshaller")];
-[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Apr.AprCStrMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCStrPathMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCanonicalMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprSvnRevNumMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCStrMarshaller")];
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 
 generic<typename T, typename R>
 AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)

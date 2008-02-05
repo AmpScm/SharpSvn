@@ -1,4 +1,4 @@
-// $Id: SvnMergeInfo.cpp 171 2007-10-14 19:38:35Z bhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007 
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
@@ -7,22 +7,21 @@
 #include "SvnAll.h"
 #include "SvnClientNotifier.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
-void SvnClientNotifier::OnProcessing(SvnProcessingEventArgs^ e)
+void SvnClientReporter::OnProcessing(SvnProcessingEventArgs^ e)
 {
 	// Reset parameters
 	_receivedSomeChange = false;
-	_isCheckout = (nullptr != dynamic_cast<SvnCheckOutArgs^>(e->CommandArgs));
-	_isExport = (nullptr != dynamic_cast<SvnExportArgs^>(e->CommandArgs));
+	_commandType = e->CommandType;
 	_suppressFinalLine = false;
 	_sentFirstTxdelta = false;
 	_inExternal = 0;
 }
 
 // Code is +- equivalent to those in notify.c of subversions svn project
-void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
+void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 {
 	if(!e)
 		throw gcnew ArgumentNullException("e");
@@ -31,9 +30,9 @@ void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 	{
 	case SvnNotifyAction::Skip:
 		if(e->ContentState == SvnNotifyState::Missing)
-			WriteLine(String::Format(SharpSvnStrings::NotifySkippedMissingTargetX, e->Path));
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedMissingTargetX, e->Path));
 		else
-			WriteLine(String::Format(SharpSvnStrings::NotifySkippedMissingX, e->Path));
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedMissingX, e->Path));
 		break;
 
 	case SvnNotifyAction::UpdateDelete:
@@ -66,16 +65,16 @@ void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 		WriteLine("   " + e->Path);
 		break;
 	case SvnNotifyAction::Restore:
-		WriteLine(String::Format(SharpSvnStrings::NotifyRestoredX, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyRestoredX, e->Path));
 		break;
 	case SvnNotifyAction::Revert:
-		WriteLine(String::Format(SharpSvnStrings::NotifyRevertedX, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyRevertedX, e->Path));
 		break;
 	case SvnNotifyAction::RevertFailed:
-		WriteLine(String::Format(SharpSvnStrings::NotifyFailedToRevertX, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyFailedToRevertX, e->Path));
 		break;
 	case SvnNotifyAction::Resolved:
-		WriteLine(String::Format(SharpSvnStrings::NotifyResolvedConflictedStateOfX, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyResolvedConflictedStateOfX, e->Path));
 		break;
 	case SvnNotifyAction::Add:
 		if(e->MimeType && e->MimeTypeIsBinary)
@@ -154,42 +153,42 @@ void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 		_inExternal++; // Remember that we're now "inside" an externals definition.
 
 		WriteLine("");
-		WriteLine(String::Format(SharpSvnStrings::NotifyFetchExternalItemIntoX, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyFetchExternalItemIntoX, e->Path));
 		break;
 	case SvnNotifyAction::UpdateCompleted:
 		if(!_suppressFinalLine)
 		{
 			if(e->Revision >= 0)
 			{
-				if(_isExport)
+				if(CurrentCommandType == SvnClientCommandType::Export)
 				{
 					if(_inExternal)
-						WriteLine(String::Format(SharpSvnStrings::NotifyExportedExternalAtRevisionX, e->Revision));
+						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyExportedExternalAtRevisionX, e->Revision));
 					else
-						WriteLine(String::Format(SharpSvnStrings::NotifyExportedRevisionX, e->Revision));
+						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyExportedRevisionX, e->Revision));
 				}
-				else if(_isCheckout)
+				else if(CurrentCommandType == SvnClientCommandType::CheckOut)
 				{
 					if(_inExternal)
-						WriteLine(String::Format(SharpSvnStrings::NotifyCheckedOutExternalAtRevisionX, e->Revision));
+						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyCheckedOutExternalAtRevisionX, e->Revision));
 					else
-						WriteLine(String::Format(SharpSvnStrings::NotifyCheckedOutRevisionX, e->Revision));
+						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyCheckedOutRevisionX, e->Revision));
 				}
 				else
 				{
 					if(_receivedSomeChange)
 					{
 						if(_inExternal)
-							WriteLine(String::Format(SharpSvnStrings::NotifyUpdatedExternalToRevisionX, e->Revision));
+							WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyUpdatedExternalToRevisionX, e->Revision));
 						else
-							WriteLine(String::Format(SharpSvnStrings::NotifyUpdatedToRevisionX, e->Revision));
+							WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyUpdatedToRevisionX, e->Revision));
 					}
 					else
 					{
 						if(_inExternal)
-							WriteLine(String::Format(SharpSvnStrings::NotifyExternalAtRevisionX, e->Revision));
+							WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyExternalAtRevisionX, e->Revision));
 						else
-							WriteLine(String::Format(SharpSvnStrings::NotifyAtRevisionX, e->Revision));
+							WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyAtRevisionX, e->Revision));
 					}
 				}
 			}
@@ -203,11 +202,11 @@ void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 		break;
 
 	case SvnNotifyAction::StatusExternal:
-		WriteLine(String::Format(SharpSvnStrings::NotifyPerformingStatusOnExternalItemAtX, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyPerformingStatusOnExternalItemAtX, e->Path));
 		break;
 	case SvnNotifyAction::StatusCompleted:
 		if(e->Revision >= 0)
-			WriteLine(String::Format(SharpSvnStrings::NotifyStatusAgainstRevisionX, e->Revision)); // Svn: %6ld
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyStatusAgainstRevisionX, e->Revision)); // Svn: %6ld
 		break;
 
 	case SvnNotifyAction::CommitModified:
@@ -237,51 +236,51 @@ void SvnClientNotifier::OnNotify(SvnNotifyEventArgs^ e)
 		break;			
 
 	case SvnNotifyAction::LockLocked:
-		WriteLine(String::Format(SharpSvnStrings::NotifyXLockedByUserY, e->Lock->Owner, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyXLockedByUserY, e->Lock->Owner, e->Path));
 		break;
 	case SvnNotifyAction::LockUnlocked:
-		WriteLine(String::Format(SharpSvnStrings::NotifyXUnlocked, e->Path));
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyXUnlocked, e->Path));
 		break;
 	case SvnNotifyAction::LockFailedLock:
 	case SvnNotifyAction::LockFailedUnlock:
 		WriteLine(e->Error->Message);
 		break;
 
-	case SvnNotifyAction::ChangelistSet:
-		WriteLine(String::Format(SharpSvnStrings::NotifyPathXIsNowAMemberOfChangelistY, e->Path, e->ChangelistName));
+	case SvnNotifyAction::ChangeListSet:
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyPathXIsNowAMemberOfChangeListY, e->Path, e->ChangeListName));
 		break;
-	case SvnNotifyAction::ChangelistClear:
-		WriteLine(String::Format(SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangelist, e->Path));
+	case SvnNotifyAction::ChangeListClear:
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangeList, e->Path));
 		break;
-	case SvnNotifyAction::ChangelistFailed:
-	case SvnNotifyAction::ChangelistMoved:
+	case SvnNotifyAction::ChangeListFailed:
+	case SvnNotifyAction::ChangeListMoved:
 		WriteLine(e->Error->Message);
 		break;
 	case SvnNotifyAction::MergeBegin:
 		if(!e->MergeRange)
 		{
-			WriteLine(String::Format(SharpSvnStrings::NotifyMergingDifferencesBetweenRepositoryUrlsIntoX, 
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyMergingDifferencesBetweenRepositoryUrlsIntoX, 
 				e->Path));
 		}
 		else if((e->MergeRange->Start == e->MergeRange->End-1) 
 			|| (e->MergeRange->Start == e->MergeRange->End))
 		{
-			WriteLine(String::Format(SharpSvnStrings::NotifyMergingRXIntoY, 
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyMergingRXIntoY, 
 				e->MergeRange->End, e->Path));
 		}
 		else if(e->MergeRange->End == e->MergeRange->Start-1)
 		{
-			WriteLine(String::Format(SharpSvnStrings::NotifyReverseMergingRXIntoY, 
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyReverseMergingRXIntoY, 
 				e->MergeRange->Start, e->Path));
 		}
 		else if(e->MergeRange->Start < e->MergeRange->End)
 		{
-			WriteLine(String::Format(SharpSvnStrings::NotifyMergingRXToRYIntoZ, 
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyMergingRXToRYIntoZ, 
 				e->MergeRange->Start+1, e->MergeRange->End, e->Path)); // Note: Start+1
 		}
 		else /*if(e->MergeRange->Start > e->MergeRange->End - 1)*/
 		{
-			WriteLine(String::Format(SharpSvnStrings::NotifyReverseMergingRXToRYIntoZ, 
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyReverseMergingRXToRYIntoZ, 
 				e->MergeRange->Start, e->MergeRange->End+1, e->Path)); // Note: End+1
 		}
 		break;

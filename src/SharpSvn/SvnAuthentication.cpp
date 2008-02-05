@@ -10,7 +10,7 @@
 #include "Wincrypt.h"
 
 using namespace SharpSvn;
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn::Security;
 using System::Text::StringBuilder;
 
@@ -32,9 +32,9 @@ void SvnAuthentication::Clear()
 
 void SvnAuthentication::AddSubversionFileHandlers()
 {
-	UsernameHandlers						+= SubversionFileUsernameHandler;
-	UsernamePasswordHandlers				+= SubversionWindowsUsernamePasswordHandler;
-	UsernamePasswordHandlers				+= SubversionFileUsernamePasswordHandler;
+	UserNameHandlers						+= SubversionFileUserNameHandler;
+	UserNamePasswordHandlers				+= SubversionWindowsUserNamePasswordHandler;
+	UserNamePasswordHandlers				+= SubversionFileUserNamePasswordHandler;
 	SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler;
 	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
@@ -43,8 +43,8 @@ void SvnAuthentication::AddSubversionFileHandlers()
 
 void SvnAuthentication::AddConsoleHandlers()
 {
-	UsernameHandlers						+= ConsoleUsernameHandler;
-	UsernamePasswordHandlers				+= ConsoleUsernamePasswordHandler;
+	UserNameHandlers						+= ConsoleUserNameHandler;
+	UserNamePasswordHandlers				+= ConsoleUserNamePasswordHandler;
 	SslServerTrustHandlers					+= ConsoleSslServerTrustHandler;
 	SslClientCertificateHandlers			+= ConsoleSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= ConsoleSslClientCertificatePasswordHandler;
@@ -78,13 +78,13 @@ struct AuthPromptWrappers
 
 
 ////////////////////////////////////////////////////////////////
-#pragma region // Username handler wrapper
+#pragma region // UserName handler wrapper
 
 svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_username_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnUsernameEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUsernameEventArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnUserNameEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUserNameEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnUsernameEventArgs^ args = gcnew SvnUsernameEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
+	SvnUserNameEventArgs^ args = gcnew SvnUserNameEventArgs(SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
 	AprPool tmpPool(pool, false);
 	*cred = nullptr;
@@ -105,20 +105,20 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 	*cred = (svn_auth_cred_username_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_username_t));
 
-	(*cred)->username = tmpPool.AllocString(args->Username);
+	(*cred)->username = tmpPool.AllocString(args->UserName);
 	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnUsernameEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnUserNameEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileUsernameHandler))
+	if(_handler->Equals(SvnAuthentication::SubversionFileUserNameHandler))
 	{
 		svn_auth_get_username_provider(&provider, pool->Handle);
 	}
@@ -130,13 +130,13 @@ svn_auth_provider_object_t *SvnUsernameEventArgs::Wrapper::GetProviderPtr(AprPoo
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////
-#pragma region // UsernamePassword handler wrapper
+#pragma region // UserNamePassword handler wrapper
 
 svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simple_t **cred, void *baton, const char *realm, const char *username, svn_boolean_t may_save, apr_pool_t *pool)
 {
-	SvnAuthWrapper<SvnUsernamePasswordEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUsernamePasswordEventArgs^>^>::Get((IntPtr)baton);
+	SvnAuthWrapper<SvnUserNamePasswordEventArgs^>^ wrapper = AprBaton<SvnAuthWrapper<SvnUserNamePasswordEventArgs^>^>::Get((IntPtr)baton);
 
-	SvnUsernamePasswordEventArgs^ args = gcnew SvnUsernamePasswordEventArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
+	SvnUserNamePasswordEventArgs^ args = gcnew SvnUserNamePasswordEventArgs(SvnBase::Utf8_PtrToString(username), SvnBase::Utf8_PtrToString(realm), may_save != 0);
 
 	AprPool tmpPool(pool, false);
 	*cred = nullptr;
@@ -156,25 +156,25 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 
 	*cred = (svn_auth_cred_simple_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_simple_t));
 
-	(*cred)->username = tmpPool.AllocString(args->Username);
+	(*cred)->username = tmpPool.AllocString(args->UserName);
 	(*cred)->password = tmpPool.AllocString(args->Password);
 	(*cred)->may_save = args->Save;
 
 	return nullptr;
 }
 
-svn_auth_provider_object_t *SvnUsernamePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
 	if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileUsernamePasswordHandler))
+	if(_handler->Equals(SvnAuthentication::SubversionFileUserNamePasswordHandler))
 	{
 		svn_auth_get_simple_provider(&provider, pool->Handle);
 	}
-	else if(_handler->Equals(SvnAuthentication::SubversionWindowsUsernamePasswordHandler))
+	else if(_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
 	{
 		svn_auth_get_windows_simple_provider(&provider, pool->Handle);
 	}
@@ -304,7 +304,7 @@ svn_auth_provider_object_t *SvnSslClientCertificateEventArgs::Wrapper::GetProvid
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////
-#pragma region // UsernamePassword handler wrapper
+#pragma region // UserNamePassword handler wrapper
 
 svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_auth_cred_ssl_client_cert_pw_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool)
 {
@@ -398,27 +398,27 @@ String^ SvnAuthentication::ReadPassword()
 }
 
 
-void SvnAuthentication::ImpConsoleUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
+void SvnAuthentication::ImpConsoleUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
-	Console::Write("Username: ");
-	e->Username = Console::ReadLine();
+	Console::Write("UserName: ");
+	e->UserName = Console::ReadLine();
 }
 
-void SvnAuthentication::ImpConsoleUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
+void SvnAuthentication::ImpConsoleUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
-	if(!e->InitialUsername)
+	if(!e->InitialUserName)
 	{
-		Console::Write("Username: ");
-		e->Username = Console::ReadLine();
+		Console::Write("UserName: ");
+		e->UserName = Console::ReadLine();
 	}
 	else
-		e->Username = e->InitialUsername;
+		e->UserName = e->InitialUserName;
 
 	Console::WriteLine();
 
@@ -463,7 +463,7 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 		e->ValidFrom,
 		e->ValidUntil,
 		e->Issuer,
-		e->FingerPrint);
+		e->Fingerprint);
 
 	try
 	{
@@ -518,21 +518,21 @@ void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 	Console::WriteLine();
 }
 
-void SvnAuthentication::ImpSubversionFileUsernameHandler(Object ^sender, SvnUsernameEventArgs^ e)
+void SvnAuthentication::ImpSubversionFileUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
-void SvnAuthentication::ImpSubversionFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
+void SvnAuthentication::ImpSubversionFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
-void SvnAuthentication::ImpSubversionWindowsFileUsernamePasswordHandler(Object ^sender, SvnUsernamePasswordEventArgs^ e)
+void SvnAuthentication::ImpSubversionWindowsFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);

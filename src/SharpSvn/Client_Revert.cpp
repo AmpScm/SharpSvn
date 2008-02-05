@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
@@ -59,7 +59,7 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 	svn_error_t *r = svn_client_revert2(
 		aprPaths->Handle,
 		(svn_depth_t)args->Depth,
-		CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
 		pool.Handle);
 

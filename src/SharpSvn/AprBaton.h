@@ -6,12 +6,12 @@
 #pragma once
 
 namespace SharpSvn {
-	namespace Apr
+	namespace Implementation
 	{
 		using System::Runtime::InteropServices::GCHandle;
 
 		generic<typename T>
-		ref class AprBaton : public SharpSvn::Apr::SvnBase, public IDisposable
+		ref class AprBaton : public SvnBase, public IDisposable
 		{
 			GCHandle _handle;
 

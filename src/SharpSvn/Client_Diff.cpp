@@ -8,7 +8,7 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 using System::IO::File;
@@ -46,9 +46,6 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result)
 
 	return Diff(from, to, gcnew SvnDiffArgs(), result);
 }
-
-// Fxcop or vc++ code generating bug
-[module: SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffArgs,System.IO.FileStream&):System.Boolean", MessageId="openFlags")];
 
 bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result)
 {
@@ -106,11 +103,13 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 			pool.AllocString(args->HeaderEncoding),
 			tmpOut,
 			tmpErr,
-			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,
 			pool.Handle);
 
-		apr_file_close(tmpOut);
+		apr_status_t cr = apr_file_close(tmpOut);
+		GC::KeepAlive(cr); // Shut up warning
+
 		tmpOut = nullptr;
 
 		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
@@ -121,10 +120,16 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]Fil
 	finally
 	{
 		if(tmpErr)
-			apr_file_close(tmpErr);
+		{
+			apr_status_t cr = apr_file_close(tmpErr);
+			GC::KeepAlive(cr); // Shut up warning
+		}
 
 		if(tmpOut)
-			apr_file_close(tmpOut);
+		{
+			apr_status_t cr = apr_file_close(tmpOut);
+			GC::KeepAlive(cr); // Shut up warning
+		}
 
 		if(tempErr && File::Exists(tempErr))
 		{
@@ -200,7 +205,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 			pool.AllocString(args->HeaderEncoding),
 			tmpOut,
 			tmpErr,
-			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,
 			pool.Handle);
 
@@ -212,10 +217,16 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 	finally
 	{
 		if(tmpErr)
-			apr_file_close(tmpErr);
+		{
+			apr_status_t cr = apr_file_close(tmpErr);
+			GC::KeepAlive(cr); // Shut up warning
+		}
 
 		if(tmpOut)
-			apr_file_close(tmpOut);
+		{
+			apr_status_t cr = apr_file_close(tmpOut);
+			GC::KeepAlive(cr); // Shut up warning
+		}
 
 		if(tempErr && File::Exists(tempErr))
 		{

@@ -98,7 +98,7 @@ namespace SharpSvn
 
 		}
 
-		bool Authenticator_UsernamePasswordHandlers(object sender, SharpSvn.Security.SvnUsernamePasswordEventArgs e)
+		bool Authenticator_UsernamePasswordHandlers(object sender, SharpSvn.Security.SvnUserNamePasswordEventArgs e)
 		{
 			return false;
 		}

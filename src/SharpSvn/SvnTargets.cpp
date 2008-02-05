@@ -66,7 +66,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 
 svn_opt_revision_t SvnRevision::ToSvnRevision(SvnRevision^ noneValue)
 {
-	if(Type != SvnRevisionType::None || !noneValue)
+	if(RevisionType != SvnRevisionType::None || !noneValue)
 		return ToSvnRevision();
 	else
 		return noneValue->ToSvnRevision();

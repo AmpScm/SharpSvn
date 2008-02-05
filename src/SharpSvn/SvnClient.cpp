@@ -8,12 +8,12 @@
 #include "SvnAll.h"
 
 using namespace SharpSvn;
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 
 using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetUuidFromUri(System.Uri,System.Guid&):System.Boolean", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1047:DoNotDeclareProtectedMembersInSealedTypes", Scope="member", Target="SharpSvn.SvnClient+ArgsStore.Dispose(System.Boolean):System.Void")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRepositoryIdFromUri(System.Uri,System.Guid&)", MessageId="1#")];
 
 SvnClient::SvnClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
@@ -339,14 +339,14 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 		return nullptr;
 }
 
-bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
+bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-	uuid = Guid::Empty;
+	id = Guid::Empty;
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
@@ -360,7 +360,7 @@ bool SvnClient::GetUuidFromUri(Uri^ uri, [Out] Guid% uuid)
 		return false;
 	else
 	{
-		uuid = Guid(Utf8_PtrToString(uuidStr));
+		id = Guid(Utf8_PtrToString(uuidStr));
 		return true;
 	}
 }
@@ -382,7 +382,7 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 	{
 		String^ urlString = Utf8_PtrToString(resultUrl);
 
-		if(!urlString->EndsWith("/", StringComparison::InvariantCulture))
+		if(!urlString->EndsWith("/", StringComparison::Ordinal))
 			urlString += "/";
 
 		if(Uri::TryCreate(urlString, UriKind::Absolute, uri))
@@ -395,25 +395,25 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.GetRepositoryRoot(System.String):System.Uri")];
 
-Uri^ SvnClient::GetRepositoryRoot(String^ path)
+Uri^ SvnClient::GetRepositoryRoot(String^ target)
 {
-	if(String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+	if(String::IsNullOrEmpty(target))
+		throw gcnew ArgumentNullException("target");
+	else if(!IsNotUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	const char* resultUrl = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 
-	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocPath(path), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocPath(target), CtxHandle, pool.Handle);
 
 	if(!err && resultUrl)
 	{
 		Uri^ uri = nullptr;
 		String^ urlString = Utf8_PtrToString(resultUrl);
 
-		if(!urlString->EndsWith("/", StringComparison::InvariantCulture))
+		if(!urlString->EndsWith("/", StringComparison::Ordinal))
 			urlString += "/";
 
 		if(Uri::TryCreate(urlString, UriKind::Absolute, uri))
@@ -446,7 +446,7 @@ SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)
 	_client = client;
 	try
 	{
-		client->HandleProcessing(gcnew SvnProcessingEventArgs(args));
+		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->ClientCommandType));
 	}
 	catch(Exception^)
 	{

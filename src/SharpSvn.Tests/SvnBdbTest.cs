@@ -26,7 +26,7 @@ namespace SharpSvn.Tests
             SvnRepositoryClient reposClient = new SvnRepositoryClient();
 
             SvnCreateRepositoryArgs ra = new SvnCreateRepositoryArgs();
-            ra.RepositoryType = SvnRepositoryFilesystem.BerkeleyDB;
+            ra.RepositoryType = SvnRepositoryFileSystem.BerkeleyDB;
             reposClient.CreateRepository(path, ra);
 
             Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));

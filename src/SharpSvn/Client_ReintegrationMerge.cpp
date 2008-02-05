@@ -1,4 +1,4 @@
-// $Id: Client_Merge.cpp 171 2007-10-14 19:38:35Z bhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007 
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 

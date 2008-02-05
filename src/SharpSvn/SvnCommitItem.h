@@ -8,7 +8,7 @@
 #include "AprArray.h"
 
 namespace SharpSvn {
-	using namespace SharpSvn::Apr;
+	using namespace SharpSvn::Implementation;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 

@@ -6,22 +6,22 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangelist(System.String,System.String,SharpSvn.SvnListChangelistArgs,System.Collections.Generic.IList`1<System.String>&):System.Boolean")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangelist(System.String,SharpSvn.SvnListChangelistArgs,System.Collections.Generic.IList`1<SharpSvn.SvnListChangelistEventArgs>&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangelist(System.String,System.Collections.Generic.IList`1<SharpSvn.SvnListChangelistEventArgs>&):System.Boolean", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.String,SharpSvn.SvnListChangeListArgs,System.Collections.Generic.IList`1<System.String>&):System.Boolean")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,SharpSvn.SvnListChangeListArgs,System.Collections.Generic.IList`1<SharpSvn.SvnListChangeListEventArgs>&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetChangeList(System.String,System.Collections.Generic.IList`1<SharpSvn.SvnListChangeListEventArgs>&):System.Boolean", MessageId="1#")];
 
-bool SvnClient::ListChangelist(String^ rootPath, EventHandler<SvnListChangelistEventArgs^>^ changelistHandler)
+bool SvnClient::ListChangeList(String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
 	if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
-	else if(!changelistHandler)
-		throw gcnew ArgumentNullException("changelistHandler");
+	else if(!changeListHandler)
+		throw gcnew ArgumentNullException("changeListHandler");
 
-	return ListChangelist(rootPath, gcnew SvnListChangelistArgs(), changelistHandler);
+	return ListChangeList(rootPath, gcnew SvnListChangeListArgs(), changeListHandler);
 }
 
 static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, const char *changelist, apr_pool_t *pool)
@@ -29,13 +29,13 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, 
 	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnListChangelistArgs^ args = dynamic_cast<SvnListChangelistArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+	SvnListChangeListArgs^ args = dynamic_cast<SvnListChangeListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	if(args)
 	{
-		SvnListChangelistEventArgs^ e = gcnew SvnListChangelistEventArgs(path, changelist);
+		SvnListChangeListEventArgs^ e = gcnew SvnListChangeListEventArgs(path, changelist);
 		try
 		{
-			args->OnListChangelist(e);
+			args->OnListChangeList(e);
 
 			if(e->Cancel)
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
@@ -56,7 +56,7 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, 
 }
 
 
-bool SvnClient::ListChangelist(String^ rootPath, SvnListChangelistArgs^ args, EventHandler<SvnListChangelistEventArgs^>^ changelistHandler)
+bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
 	if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
@@ -67,13 +67,13 @@ bool SvnClient::ListChangelist(String^ rootPath, SvnListChangelistArgs^ args, Ev
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(changelistHandler)
-		args->ListChangelist += changelistHandler;
+	if(changeListHandler)
+		args->ListChangeList += changeListHandler;
 	try
 	{
 		svn_error_t* r = svn_client_get_changelists(
 			pool.AllocPath(rootPath),
-			CreateChangelistsList(args->Changelists, %pool), // Intersect Changelists
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			(svn_depth_t)args->Depth,
 			svnclient_changelist_handler,
 			(void*)_clientBatton->Handle,
@@ -84,37 +84,37 @@ bool SvnClient::ListChangelist(String^ rootPath, SvnListChangelistArgs^ args, Ev
 	}
 	finally
 	{
-		if(changelistHandler)
-			args->ListChangelist -= changelistHandler;
+		if(changeListHandler)
+			args->ListChangeList -= changeListHandler;
 	}
 }
 
-bool SvnClient::GetChangelist(String^ rootPath, [Out]IList<SvnListChangelistEventArgs^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {
 	if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 
-	return GetChangelist(rootPath, gcnew SvnListChangelistArgs(), list);
+	return GetChangeList(rootPath, gcnew SvnListChangeListArgs(), list);
 }
 
-bool SvnClient::GetChangelist(String^ rootPath, SvnListChangelistArgs^ args, [Out]IList<SvnListChangelistEventArgs^>^% list)
+bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list)
 {
 	if(String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	IList<SvnListChangelistEventArgs^>^ who = nullptr;
+	IList<SvnListChangeListEventArgs^>^ who = nullptr;
 	list = nullptr;
 
-	InfoItemCollection<SvnListChangelistEventArgs^>^ results = gcnew InfoItemCollection<SvnListChangelistEventArgs^>();
+	InfoItemCollection<SvnListChangeListEventArgs^>^ results = gcnew InfoItemCollection<SvnListChangeListEventArgs^>();
 
 	try
 	{
-		return ListChangelist(rootPath, args, results->Handler);
+		return ListChangeList(rootPath, args, results->Handler);
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnListChangelistEventArgs^>^>(who);
+		list = safe_cast<IList<SvnListChangeListEventArgs^>^>(who);
 	}
 }

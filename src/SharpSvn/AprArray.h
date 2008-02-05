@@ -11,7 +11,7 @@ using namespace System;
 #include "AprPool.h"
 
 namespace SharpSvn {
-	namespace Apr {
+	namespace Implementation {
 
 		using System::Collections::Generic::ICollection;
 

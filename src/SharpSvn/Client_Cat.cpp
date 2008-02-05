@@ -9,7 +9,7 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
-using namespace SharpSvn::Apr;
+using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
