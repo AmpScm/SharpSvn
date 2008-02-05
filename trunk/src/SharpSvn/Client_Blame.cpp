@@ -100,7 +100,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	}
 }
 
-bool SvnClient::GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list)
+bool SvnClient::GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -113,11 +113,11 @@ bool SvnClient::GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% li
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnBlameEventArgs^>^>(results);
+		list = results;
 	}
 }
 
-bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] IList<SvnBlameEventArgs^>^% list)
+bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -132,6 +132,6 @@ bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] IList<SvnB
 	}
 	finally
 	{
-		list = safe_cast<IList<SvnBlameEventArgs^>^>(results);
+		list = results;
 	}
 }

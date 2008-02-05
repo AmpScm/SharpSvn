@@ -4,7 +4,7 @@
 // Please read the SharpSvnLicense.txt file for more details
 
 #pragma once
-
+#ifdef UNUSED_FOR_NOW
 #include "SvnClientContext.h"
 
 namespace SharpSvn {
@@ -16,12 +16,16 @@ namespace SharpSvn {
 		initonly AprBaton<SvnRepositorySession^>^ _clientBatton;
 		AprPool _pool;
 
+	private:
+		svn_ra_callbacks2_t* _callbacks;
+
 	public:
 		SvnRepositorySession(void);
 
 	private:
 		~SvnRepositorySession();
-		!SvnRepositorySession();
+		void Initialize();
 
 	};
 }
+#endif

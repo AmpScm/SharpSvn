@@ -679,13 +679,13 @@ namespace SharpSvn {
 		bool SetProperty(String^ path, String^ propertyName, String^ value);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, IList<char>^ bytes);
+		bool SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
 		bool SetProperty(String^ path, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, IList<char>^ bytes, SvnSetPropertyArgs^ args);
+		bool SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args);
 
 		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
 		/// <summary>Removes the specified property from the specfied path</summary>
@@ -728,8 +728,8 @@ namespace SharpSvn {
 		bool PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, EventHandler<SvnPropertyListEventArgs^>^ listHandler);
 
 		/// <overloads>Gets all properties on files or dirs (<c>svn proplist</c>)</overloads>
-		bool GetPropertyList(SvnTarget^ target, [Out] IList<SvnPropertyListEventArgs^>^% list);
-		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] IList<SvnPropertyListEventArgs^>^% list);
+		bool GetPropertyList(SvnTarget^ target, [Out] Collection<SvnPropertyListEventArgs^>^% list);
+		bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] Collection<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
 
 
@@ -738,9 +738,9 @@ namespace SharpSvn {
 #pragma region // SetRevisionProperty Client Command
 		/// <overloads>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</overloads>
 		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value);
-		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes);
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, ICollection<Byte>^ bytes);
 		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value);
-		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, IList<char>^ bytes);
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, ICollection<Byte>^ bytes);
 
 		/// <overloads>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</overloads>
 		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName);
@@ -820,8 +820,8 @@ namespace SharpSvn {
 		bool DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
 		bool DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler);
 		/// <overloads>Retrieves the differences between two revisions or paths (<c>svn diff --summarize</c>)</overloads>
-		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
-		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] IList<SvnDiffSummaryEventArgs^>^% list);
+		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] Collection<SvnDiffSummaryEventArgs^>^% list);
+		bool GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] Collection<SvnDiffSummaryEventArgs^>^% list);
 #pragma endregion
 
 
@@ -841,8 +841,8 @@ namespace SharpSvn {
 		bool ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler);
 
 		/// <overloads>Gets the contents of the specified changelist below a specified directory (<c>svn changelist</c>)</overloads>
-		bool GetChangeList(String^ rootPath, [Out]IList<SvnListChangeListEventArgs^>^% list);
-		bool GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]IList<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, [Out]Collection<SvnListChangeListEventArgs^>^% list);
+		bool GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]Collection<SvnListChangeListEventArgs^>^% list);
 
 	public:
 		/// <overloads>Gets a list of Uri's which might be valid merge sources (<c>svn mergeinfo</c>)</overloads>
@@ -872,8 +872,8 @@ namespace SharpSvn {
 		bool Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);
 		bool Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBlameEventArgs^>^ blameHandler);
 		/// <overloads>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>
-		bool GetBlame(SvnTarget^ target, [Out] IList<SvnBlameEventArgs^>^% list);
-		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] IList<SvnBlameEventArgs^>^% list);
+		bool GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>^% list);
+		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list);
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>

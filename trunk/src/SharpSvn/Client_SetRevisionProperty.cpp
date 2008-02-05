@@ -22,7 +22,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), value);
 }
 
-bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, IList<char>^ bytes)
+bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, ICollection<Byte>^ bytes)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -56,7 +56,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		%pool);
 }
 
-bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, IList<char>^ bytes)
+bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, ICollection<Byte>^ bytes)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -69,11 +69,11 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 	AprPool pool(%_pool);
 
-	array<char> ^byteArray = safe_cast<array<char>>(bytes);
+	array<Byte> ^byteArray = safe_cast<array<Byte>>(bytes);
 
 	if(!byteArray)
 	{
-		byteArray = gcnew array<char>(bytes->Count);
+		byteArray = gcnew array<Byte>(bytes->Count);
 
 		bytes->CopyTo(byteArray, 0);
 	}

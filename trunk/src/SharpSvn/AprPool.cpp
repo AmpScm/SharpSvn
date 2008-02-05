@@ -281,18 +281,18 @@ const svn_string_t* AprPool::AllocUnixSvnString(String^ value)
 }
 
 
-const svn_string_t* AprPool::AllocSvnString(array<char>^ bytes)
+const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
 {
 	if(!bytes)
-		bytes = gcnew array<char>(0);
+		bytes = gcnew array<Byte>(0);
 
 	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));
 
-	char* pChars = (char*)AllocCleared(bytes->Length+1);
+	char* pChars = (char*)(Byte*)AllocCleared(bytes->Length+1);
 	pStr->data = pChars;
 	pStr->len = bytes->Length;
 
-	pin_ptr<char> pBytes = &bytes[0];
+	pin_ptr<Byte> pBytes = &bytes[0];
 	memcpy(pChars, pBytes, bytes->Length);
 
 	return pStr;
