@@ -156,6 +156,11 @@ namespace SharpSvn {
 		String^ _logMessage;
 
 	public:
+		/// <summary>
+		/// Raised on conflict. The event is first 
+		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and 
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
 		event EventHandler<SvnConflictEventArgs^>^ Conflict;
 
 	protected:
@@ -164,6 +169,7 @@ namespace SharpSvn {
 		}
 
 	protected public:
+		/// <summary>Invokes the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e)
 		{
 			Conflict(this, e);
