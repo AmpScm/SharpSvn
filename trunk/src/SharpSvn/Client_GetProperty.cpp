@@ -72,7 +72,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 	apr_hash_t* pHash = nullptr;
 
-	svn_error_t *r = svn_client_propget4(
+	svn_error_t *r = svn_client_propget3(
 		&pHash,
 		pool.AllocString(propertyName),
 		pool.AllocString(target->TargetName),
