@@ -69,8 +69,8 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"				
+				Description="Copying libraries"
+				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -160,8 +160,8 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"		
+				Description="Copying libraries"
+				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -249,8 +249,8 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"				
+				Description="Copying libraries"
+				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -338,8 +338,8 @@
 			/>
 			<Tool
 				Name="VCPreLinkEventTool"
-				Description="Copying BDB library"
-				CommandLine="copy /y &quot;..\..\imports\release\bin\SharpSvn-*-$(PlatformName).dll&quot; &quot;$(TargetDir)\&quot;"
+				Description="Copying libraries"
+				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
