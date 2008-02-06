@@ -3,8 +3,9 @@
   <property name="dbFilename" value="db-${dbVersion}.NC.tar.gz" />
   
 	<regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
+
 	
-	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &lt; '4.5'}" />
+	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_win32" if="${dbVersion &lt; '4.5'}" />
 	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &gt;= '4.5'}" />
 
 	<property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
