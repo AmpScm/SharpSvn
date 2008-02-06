@@ -569,6 +569,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnChangeList.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClient.h"
 					>
 				</File>
@@ -621,6 +625,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientNotifier.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnCommandLineArgumentCollection.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnCommitItem.h"
 					>
 				</File>
@@ -637,11 +649,23 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnMergeSourcesCollection.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnPathTarget.h"
 					>
 				</File>
 				<File
+					RelativePath=".\SvnPropertyValue.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnRepositoryClient.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnRepositorySession.h"
 					>
 				</File>
 				<File
@@ -685,6 +709,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientNotifier.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnCommitItem.cpp"
 					>
 				</File>
@@ -698,6 +726,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnRepositoryClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnRepositorySession.cpp"
 					>
 				</File>
 				<File
