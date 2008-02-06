@@ -116,9 +116,10 @@ using namespace System::Security::Permissions;
 #if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
 #pragma comment(lib, "serf.lib")
 #endif
+
 #pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "libdb45.lib")
+#pragma comment(lib, "libdb" APR_STRINGIFY(DB_VERSION_MAJOR) APR_STRINGIFY(DB_VERSION_MINOR) ".lib")
 
 #if (APR_MAJOR_VERSION == 0) && (APR_MINOR_VERSION == 9)
 #  pragma comment(lib, "apr.lib")
