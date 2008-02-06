@@ -249,6 +249,10 @@
 				<include name="nunit.framework.xml" />
 			</fileset>
 		</copy>
+		<echo file="${release}/copylibs.cmd">@echo off
+xcopy /y /q "..\..\imports\release\bin\*-%1.dll" %2
+
+</echo>
 	</target>
 
 </project>
