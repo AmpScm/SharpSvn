@@ -15,6 +15,8 @@ using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetUuidFromUri(System.Uri,System.Guid&):System.Boolean", MessageId="1#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRepositoryIdFromUri(System.Uri,System.Guid&)", MessageId="1#")];
 
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SharpSvn.SvnClient.#set_AdministrativeDirectoryName(System.String)")];
+
 SvnClient::SvnClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
@@ -25,6 +27,24 @@ SvnClient::SvnClient()
 SvnClient::~SvnClient()
 {
 	delete _clientBatton;
+}
+
+// Allow changing the AdministrativeDirectory for users willing to take the risks involved. 
+void SvnClient::AdministrativeDirectoryName::set(String^ value)
+{
+	if(String::IsNullOrEmpty(value))
+		throw gcnew ArgumentNullException("value");
+
+	AprPool pool;
+
+	svn_error_t* err = svn_wc_set_adm_dir(pool.AllocString(value), pool.Handle);
+	if(err)
+		throw SvnException::Create(err); // Property setters should not throw argument exceptions
+	else
+	{
+		_admDir = svn_wc_get_adm_dir(pool.Handle);
+		_administrativeDirName = Utf8_PtrToString(_admDir);
+	}
 }
 
 struct SvnClientCallBacks
@@ -142,7 +162,7 @@ void SvnClient::HandleClientConflictResolver(SvnConflictEventArgs^ e)
 		if(e->Cancel)
 			return;
 	}
-	
+
 	OnConflict(e);
 }
 

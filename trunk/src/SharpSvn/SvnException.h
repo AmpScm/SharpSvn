@@ -74,6 +74,19 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the root cause of the exception; commonly the most <see cref="InnerException" /></summary>
+		property Exception^ RootCause
+		{
+			Exception^ get()
+			{
+				Exception^ e = this;
+				while(e->InnerException)
+					e = e->InnerException;
+
+				return e;
+			}
+		}
+
 	public:
 		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
 		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
@@ -127,11 +140,14 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyLockException, SvnWorkingCopyException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemLockException, SvnFileSystemException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemOutOfDateException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryIOException, SvnException); // Does not extent Repository Exception (= RA library exception)	
+	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryHookException, SvnRepositoryException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthenticationException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthorizationException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnDiffException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientApiException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnDiskFullException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnIllegalTargetException, SvnException);
 }

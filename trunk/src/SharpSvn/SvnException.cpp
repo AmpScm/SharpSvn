@@ -244,20 +244,21 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_CONFLICT:
 		case SVN_ERR_FS_REP_CHANGED:
 		case SVN_ERR_FS_REP_NOT_MUTABLE:
-		case SVN_ERR_FS_MALFORMED_SKEL:
-		case SVN_ERR_FS_TXN_OUT_OF_DATE:
+		case SVN_ERR_FS_MALFORMED_SKEL:		
 		case SVN_ERR_FS_BERKELEY_DB:
 		case SVN_ERR_FS_BERKELEY_DB_DEADLOCK:
 		case SVN_ERR_FS_TRANSACTION_DEAD:
 		case SVN_ERR_FS_TRANSACTION_NOT_DEAD:
 		case SVN_ERR_FS_UNKNOWN_FS_TYPE:
-		case SVN_ERR_FS_NO_USER:
-		case SVN_ERR_FS_OUT_OF_DATE:		
+		case SVN_ERR_FS_NO_USER:		
 		case SVN_ERR_FS_UNSUPPORTED_FORMAT:
 		case SVN_ERR_FS_REP_BEING_WRITTEN:
 		case SVN_ERR_FS_TXN_NAME_TOO_LONG:
 		case SVN_ERR_FS_NO_SUCH_NODE_ORIGIN:
 			return gcnew SvnFileSystemException(error);
+		case SVN_ERR_FS_OUT_OF_DATE:
+		case SVN_ERR_FS_TXN_OUT_OF_DATE:
+			return gcnew SvnFileSystemOutOfDateException(error);
 		case SVN_ERR_FS_PATH_ALREADY_LOCKED:
 		case SVN_ERR_FS_PATH_NOT_LOCKED:
 		case SVN_ERR_FS_BAD_LOCK_TOKEN:
@@ -267,16 +268,17 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_LOCK_EXPIRED:
 			return gcnew SvnFileSystemLockException(error);
 		case SVN_ERR_REPOS_LOCKED:
-		case SVN_ERR_REPOS_HOOK_FAILURE:
 		case SVN_ERR_REPOS_BAD_ARGS:
 		case SVN_ERR_REPOS_NO_DATA_FOR_REPORT:
 		case SVN_ERR_REPOS_BAD_REVISION_REPORT:
 		case SVN_ERR_REPOS_UNSUPPORTED_VERSION:
 		case SVN_ERR_REPOS_DISABLED_FEATURE:
+			return gcnew SvnRepositoryException(error);
+		case SVN_ERR_REPOS_HOOK_FAILURE:
 		case SVN_ERR_REPOS_POST_COMMIT_HOOK_FAILED:
 		case SVN_ERR_REPOS_POST_LOCK_HOOK_FAILED:
 		case SVN_ERR_REPOS_POST_UNLOCK_HOOK_FAILED:
-			return gcnew SvnRepositoryException(error);
+			return gcnew SvnRepositoryHookException(error);
 		case SVN_ERR_RA_ILLEGAL_URL:
 		case SVN_ERR_RA_UNKNOWN_AUTH:
 		case SVN_ERR_RA_NOT_IMPLEMENTED:
@@ -374,6 +376,9 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_UNKNOWN_CHANGELIST:
 			return gcnew SvnUnknownChangeListException(error);
 
+		case SVN_ERR_ILLEGAL_TARGET:
+			return gcnew SvnIllegalTargetException(error);
+
 		case SVN_ERR_BASE:
 		case SVN_ERR_PLUGIN_LOAD_FAILURE:
 		case SVN_ERR_MALFORMED_FILE:
@@ -383,7 +388,6 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_TEST_FAILED:
 		case SVN_ERR_UNSUPPORTED_FEATURE:
 		case SVN_ERR_BAD_PROP_KIND:
-		case SVN_ERR_ILLEGAL_TARGET:
 		case SVN_ERR_DELTA_MD5_CHECKSUM_ABSENT:
 		case SVN_ERR_DIR_NOT_EMPTY:
 		case SVN_ERR_EXTERNAL_PROGRAM:
@@ -397,6 +401,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_REVNUM_PARSE_FAILURE:
 			// TODO: Split out
 			return gcnew SvnException(error);
+		
+
 
 		default:
 			if(APR_STATUS_IS_EACCES(error->apr_err))
