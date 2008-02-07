@@ -1010,19 +1010,13 @@ namespace SharpSvn.Tests
 				Assert.That(sources.Count, Is.EqualTo(1));
 
 				Uri fromUri = new Uri(ReposUri, new Uri("folder/mmerge-1", UriKind.Relative));
-				Assert.That(sources[0], Is.EqualTo(fromUri));
+				Assert.That(sources[0].Uri, Is.EqualTo(fromUri));
 
 				SvnAppliedMergeInfo applied;
 				client.GetAppliedMergeInfo(new SvnPathTarget(merge2), out applied);
 
 				Assert.That(applied, Is.Not.Null);
 				Assert.That(applied.AppliedMerges.Count, Is.EqualTo(0));
-				/*Assert.That(applied.AppliedMerges[0].Uri, Is.EqualTo(fromUri));
-				Assert.That(applied.AppliedMerges[0].MergeRanges, Is.Not.Null);
-				Assert.That(applied.AppliedMerges[0].MergeRanges.Count, Is.EqualTo(1));
-				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Start, Is.EqualTo(ci.Revision-1));
-				Assert.That(applied.AppliedMerges[0].MergeRanges[0].End, Is.EqualTo(ci.Revision));
-				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Inheritable, Is.True);*/
 				Assert.That(applied.Target, Is.Not.Null);
 
 				SvnAvailableMergeInfo available;
@@ -1061,6 +1055,19 @@ namespace SharpSvn.Tests
 				Assert.That(available, Is.Not.Null);
 				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
 				Assert.That(available.Target, Is.Not.Null);
+
+
+				client.GetAppliedMergeInfo(new SvnPathTarget(merge2), out applied);
+
+				Assert.That(applied, Is.Not.Null);
+				Assert.That(applied.AppliedMerges.Count, Is.EqualTo(1));
+				Assert.That(applied.AppliedMerges[0].Uri, Is.EqualTo(fromUri));
+				Assert.That(applied.AppliedMerges[0].MergeRanges, Is.Not.Null);
+				Assert.That(applied.AppliedMerges[0].MergeRanges.Count, Is.EqualTo(1));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Start, Is.EqualTo(ci.Revision));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].End, Is.EqualTo(ci.Revision+2));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Inheritable, Is.True);
+				Assert.That(applied.Target, Is.Not.Null);
 			}
 		}
 
