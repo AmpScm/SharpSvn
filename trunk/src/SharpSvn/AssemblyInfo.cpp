@@ -56,7 +56,7 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007")];
+[assembly:AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2008")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

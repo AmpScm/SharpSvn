@@ -253,6 +253,10 @@
 xcopy /y /q "..\..\imports\release\bin\*-%1.dll" %2
 
 </echo>
+    <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h">
+      <filterchain>
+				</filterchain>
+    </copy>
 	</target>
 
 </project>

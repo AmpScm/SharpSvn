@@ -1283,6 +1283,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the length of the file text or 0 for directories</summary>
 		property __int64 FileSize
 		{
 			__int64 get()
@@ -1291,6 +1292,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets a boolean indicating whether this node has svn properties</summary>
 		property bool HasProperties
 		{
 			bool get()
@@ -1299,6 +1301,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the last revision in which this node changed</summary>
 		property __int64 Revision
 		{
 			__int64 get()
@@ -1307,6 +1310,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the time of the last change</summary>
 		property DateTime Time
 		{
 			DateTime get()
@@ -1314,6 +1318,8 @@ namespace SharpSvn {
 				return _time;
 			}
 		}
+
+		/// <summary>Gets the author of the last revision of this file</summary>
 		property String^ Author
 		{
 			String^ get()
@@ -1508,56 +1514,6 @@ namespace SharpSvn {
 		}
 	};
 
-	/*public ref class SvnRevisionPropertyListEventArgs : public SvnCancelEventArgs
-	{
-		apr_hash_t* _propHash;
-		IDictionary<String^, Object^>^ _properties;
-		AprPool^ _pool;
-
-	internal:
-		SvnRevisionPropertyListEventArgs(apr_hash_t* prop_hash, AprPool ^pool)
-		{
-			if(!prop_hash)
-				throw gcnew ArgumentNullException("prop_hash");
-			else if(!pool)
-				throw gcnew ArgumentNullException("pool");
-
-			_propHash = prop_hash;
-			_pool = pool;
-		}
-
-	public:
-		property IDictionary<String^, Object^>^ Properties
-		{
-			IDictionary<String^, Object^>^ get()
-			{
-				if(!_properties && _propHash && _pool)
-					_properties = SvnBase::CreatePropertyDictionary(_propHash, _pool);
-				
-				return _properties;
-			}
-		}
-
-	public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if(keepProperties)
-				{
-					GC::KeepAlive(Properties);
-					//					GC::KeepAlive(Entry);
-				}
-			}
-			finally
-			{
-				_propHash = nullptr;
-				_pool = nullptr;
-
-				__super::Detach(keepProperties);
-			}
-		}
-	};*/
 
 	public ref class SvnListChangeListEventArgs : public SvnCancelEventArgs
 	{
@@ -1590,7 +1546,6 @@ namespace SharpSvn {
 				return _changelist;
 			}
 		}
-
 
 	public:
 		virtual void Detach(bool keepProperties) override
