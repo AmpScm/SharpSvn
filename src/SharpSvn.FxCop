@@ -25,7 +25,37 @@
   <AssemblyReferenceDirectories>
    <Directory>$(ProjectDir)/SharpSvn/bin/debug/</Directory>
   </AssemblyReferenceDirectories>
-  <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll" Analyze="True" AnalyzeAllChildren="True" />
+  <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll" Analyze="True" AnalyzeAllChildren="False">
+   <Modules AnalyzeAllChildren="False">
+    <Module Name="sharpsvn.dll" Analyze="True" AnalyzeAllChildren="False">
+     <Namespaces AnalyzeAllChildren="False">
+      <Namespace Name="" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="&lt;CppImplementationDetails&gt;" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="&lt;CrtImplementationDetails&gt;" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="SharpSvn" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="SharpSvn.Implementation" Analyze="True" AnalyzeAllChildren="False">
+       <Types AnalyzeAllChildren="False">
+        <Type Name="AprArray`2" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprBaton`1" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprCanonicalMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprCStrMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprCStrPathMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprPool" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprPool+AprPoolTag" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprSvnRevNumMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="IItemMarshaller`1" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnBase" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnHandleBase" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnStreamWrapper" Analyze="True" AnalyzeAllChildren="True" />
+       </Types>
+      </Namespace>
+      <Namespace Name="SharpSvn.Security" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="vc_attributes" Analyze="True" AnalyzeAllChildren="True" />
+     </Namespaces>
+     <Resources AnalyzeAllChildren="True" />
+    </Module>
+   </Modules>
+  </Target>
  </Targets>
  <Rules>
   <RuleFiles>
@@ -42,121 +72,5 @@
   <Groups />
   <Settings />
  </Rules>
- <FxCopReport Version="1.36">
-  <Namespaces>
-   <Namespace Name="SharpSvn.Implementation">
-    <Messages>
-     <Message TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020" Created="2008-02-05 12:38:01Z">
-      <Issue>
-       <Item>SharpSvn.Implementation</Item>
-      </Issue>
-     </Message>
-    </Messages>
-   </Namespace>
-  </Namespaces>
-  <Targets>
-   <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll">
-    <Modules>
-     <Module Name="sharpsvn.dll">
-      <Namespaces>
-       <Namespace Name="SharpSvn">
-        <Types>
-         <Type Name="SvnRepositorySession">
-          <Messages>
-           <Message TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812" Created="2008-02-05 12:38:01Z">
-            <Issue>
-             <Item>'SvnRepositorySession'</Item>
-            </Issue>
-           </Message>
-          </Messages>
-          <Members>
-           <Member Name="#!SvnRepositorySession()">
-            <Messages>
-             <Message TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822" Created="2008-02-05 12:38:01Z" FixCategory="NonBreaking">
-              <Issue>
-               <Item>'SvnRepositorySession::!SvnRepositorySession(void)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#_clientBatton">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-05 12:38:01Z">
-              <Issue>
-               <Item>'SvnRepositorySession::_clientBatton'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-       <Namespace Name="SharpSvn.Implementation">
-        <Types>
-         <Type Name="AprBaton`1">
-          <Members>
-           <Member Name="#Finalize()">
-            <Messages>
-             <Message TypeName="FinalizersShouldCallBaseClassFinalizer" Category="Microsoft.Usage" CheckId="CA2220" Created="2008-02-05 12:38:01Z">
-              <Issue>
-               <Item>'AprBaton&lt;T&gt;::Finalize(void)'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-         <Type Name="AprPool">
-          <Members>
-           <Member Name="#Dispose(System.Boolean)">
-            <Messages>
-             <Message Id="_tag" TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213" Created="2008-02-05 12:38:01Z">
-              <Issue>
-               <Item>'AprPool'</Item>
-               <Item>'AprPool::_tag'</Item>
-               <Item>'AprPool::AprPoolTag'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-           <Member Name="#StandardMemoryPressure">
-            <Messages>
-             <Message TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823" Created="2008-02-05 12:38:01Z">
-              <Issue>
-               <Item>'AprPool::StandardMemoryPressure'</Item>
-              </Issue>
-             </Message>
-            </Messages>
-           </Member>
-          </Members>
-         </Type>
-        </Types>
-       </Namespace>
-      </Namespaces>
-     </Module>
-    </Modules>
-   </Target>
-  </Targets>
-  <Rules>
-   <Rule TypeName="AvoidNamespacesWithFewTypes" Category="Microsoft.Design" CheckId="CA1020">
-    <Resolution Name="Default">Consider merging the types defined in '{0}' with another namespace.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUninstantiatedInternalClasses" Category="Microsoft.Performance" CheckId="CA1812">
-    <Resolution Name="Default">{0} is an internal class that is apparently never instantiated. If so, remove the code from the assembly. If this class is intended to contain only static methods, consider adding a private constructor to prevent the compiler from generating a default constructor.</Resolution>
-   </Rule>
-   <Rule TypeName="AvoidUnusedPrivateFields" Category="Microsoft.Performance" CheckId="CA1823">
-    <Resolution Name="Default">It appears that field {0} is never used or is only ever assigned to. Use this field or remove it.</Resolution>
-   </Rule>
-   <Rule TypeName="DisposableFieldsShouldBeDisposed" Category="Microsoft.Usage" CheckId="CA2213">
-    <Resolution Name="Default">{0} contains field {1} that is of IDisposable type: {2}. Change the Dispose method on {0} to call Dispose or Close on this field.</Resolution>
-   </Rule>
-   <Rule TypeName="FinalizersShouldCallBaseClassFinalizer" Category="Microsoft.Usage" CheckId="CA2220">
-    <Resolution Name="Default">Modify {0} so that it calls its base class' finalize method.</Resolution>
-   </Rule>
-   <Rule TypeName="MarkMembersAsStatic" Category="Microsoft.Performance" CheckId="CA1822">
-    <Resolution Name="Default">The 'this' parameter (or 'Me' in Visual Basic) of {0} is never used. Mark the member as static (or Shared in Visual Basic) or use 'this'/'Me' in the method body or at least one property accessor, if appropriate.</Resolution>
-   </Rule>
-  </Rules>
- </FxCopReport>
+ <FxCopReport Version="1.36" />
 </FxCopProject>
