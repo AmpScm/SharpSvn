@@ -108,7 +108,7 @@ namespace SharpSvn {
 		SvnClient();
 
 	private:
-		static initonly String^ _administrativeDirName = Utf8_PtrToString(_admDir);
+		static String^ _administrativeDirName = Utf8_PtrToString(_admDir);
 		void Initialize();
 
 	public:
@@ -132,12 +132,19 @@ namespace SharpSvn {
 		/// <summary>
 		/// Gets the name of the subversion administrative directories. Most commonly ".svn"
 		/// </summary>
+		/// <remarks>
+		/// An internal implementation of a setter is available on this property. Users should read 
+		/// the subversion implementation of svn_wc_set_adm_dir before invoking the setter of this property 
+		/// via reflection
+		/// </remarks>
 		property static String^ AdministrativeDirectoryName
 		{
 			String^ get()
 			{
 				return _administrativeDirName;
 			}
+		internal:
+			void set(String^ value);
 		}
 
 	private:
