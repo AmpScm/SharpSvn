@@ -115,6 +115,7 @@ namespace SharpSvn {
 		initonly bool _isBinary;
 		initonly SvnConflictAction _action;
 		initonly SvnConflictReason _reason;
+		initonly SvnConflictType _type;
 
 		String^ _propertyName;
 		String^ _path;
@@ -139,6 +140,7 @@ namespace SharpSvn {
 			_nodeKind = (SvnNodeKind)description->node_kind;
 			_action = (SvnConflictAction)description->action;
 			_reason = (SvnConflictReason)description->reason;
+			_type = (SvnConflictType)description->kind;
 			// We ignore the administrative baton for now
 		}
 
@@ -261,6 +263,14 @@ namespace SharpSvn {
 			SvnConflictReason get()
 			{
 				return _reason;
+			}
+		}
+
+		property SvnConflictType ConflictType
+		{
+			SvnConflictType get()
+			{
+				return _type;
 			}
 		}
 
