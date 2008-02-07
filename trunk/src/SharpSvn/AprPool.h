@@ -132,5 +132,88 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(array<Byte>^ value);
 		};
+
+
+		ref class AprStreamFile sealed : IDisposable
+		{
+		private:
+			AprPool^ _pool;
+			apr_file_t* _extHandle;
+			apr_file_t* _intHandle;
+			bool _exit;
+			initonly System::IO::Stream^ _stream;
+			initonly System::Threading::Thread^ _thread;
+
+		private:
+			~AprStreamFile()
+			{
+				_exit = true;
+				if(_extHandle)
+				{
+					if(!apr_file_close(_extHandle))
+					{
+						if(!_thread->Join(60000)) // 60 sec Timeout should never happen
+							throw gcnew InvalidOperationException(SharpSvnStrings::IOThreadBlocked);
+					}
+
+					_extHandle = nullptr;
+				}
+			}
+
+			void Runner()
+			{
+				array<Byte>^ buffer = gcnew array<Byte>(2048);
+				pin_ptr<Byte> pBuffer = &buffer[0];
+
+				apr_size_t nRead = buffer->Length;
+				apr_status_t r;
+
+				while(APR_EOF != (r = apr_file_read(_intHandle, pBuffer, &nRead)))
+				{
+					if(r == APR_SUCCESS)
+						_stream->Write(buffer, 0, nRead);
+					else if(!APR_STATUS_IS_EAGAIN(r) && !APR_STATUS_IS_EINTR(r))
+						break; // Most errors are fatal
+
+					nRead = buffer->Length;
+				}
+			}
+
+		public:
+			AprStreamFile(System::IO::Stream^ stream, AprPool^ pool)
+			{
+				if(!stream)
+					throw gcnew ArgumentNullException("stream");
+				else if(!pool)
+					throw gcnew ArgumentNullException("pool");
+
+				_stream = stream;
+				_thread = gcnew System::Threading::Thread(gcnew System::Threading::ThreadStart(this, &AprStreamFile::Runner));
+				_pool = pool;
+			}
+
+		public:
+
+			apr_file_t* CreateHandle()
+			{
+				if(!_extHandle)
+				{
+					apr_file_t* extHandle = nullptr;
+					apr_file_t* intHandle = nullptr;
+					if(apr_file_pipe_create(&intHandle, &extHandle, _pool->Handle) || !extHandle || !intHandle)
+					{
+						_extHandle = nullptr;
+						_intHandle = nullptr;
+						throw gcnew InvalidOperationException();
+					}
+
+					_extHandle = extHandle;
+					_intHandle = intHandle;
+
+					_thread->Start();
+				}
+				return _extHandle;
+			}
+		};
 	}
 }

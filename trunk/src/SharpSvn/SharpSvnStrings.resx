@@ -141,6 +141,9 @@
   <data name="InvalidUri" xml:space="preserve">
     <value>Invalid Uri string</value>
   </data>
+  <data name="IOThreadBlocked" xml:space="preserve">
+    <value>The IO Thread Blocked -- Do you have a deadlock?</value>
+  </data>
   <data name="ItemInListIsNull" xml:space="preserve">
     <value>One or more items in the list are null</value>
   </data>

@@ -585,15 +585,19 @@ namespace SharpSvn.Tests
 					sw.WriteLine(end);
 				}
 
-				FileStream diffOutput;
+				MemoryStream diffOutput = new MemoryStream();
 
-				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Head), out diffOutput);
+				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Head), diffOutput);
 				VerifyDiffOutput(origLine, newLine, diffOutput);
 
-				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Committed), out diffOutput);
+				diffOutput = new MemoryStream();
+
+				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Committed), diffOutput);
 				VerifyDiffOutput(origLine, newLine, diffOutput);
 
-				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new Uri(WcUri, "DiffTest"), out diffOutput);
+				diffOutput = new MemoryStream();
+
+				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new Uri(WcUri, "DiffTest"), diffOutput);
 				VerifyDiffOutput(origLine, newLine, diffOutput);
 
 				SvnCommitInfo info;
@@ -642,10 +646,9 @@ namespace SharpSvn.Tests
 			}
 		}
 
-		private static void VerifyDiffOutput(string origLine, string newLine, FileStream diffOutput)
+		private static void VerifyDiffOutput(string origLine, string newLine, Stream diffOutput)
 		{
-			string path = diffOutput.Name;
-			Assert.That(File.Exists(path));
+			diffOutput.Position = 0;
 			using (StreamReader sr = new StreamReader(diffOutput))
 			{
 				bool foundMin = false;
@@ -669,7 +672,6 @@ namespace SharpSvn.Tests
 				Assert.That(foundMin, "Found -");
 				Assert.That(foundPlus, "Found +");
 			}
-			Assert.That(!File.Exists(path));
 		}
 
 		[Test]
