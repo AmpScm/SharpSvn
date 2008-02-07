@@ -37,112 +37,64 @@ public:
 };
 
 
-bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result)
+bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
+	else if(!result)
+		throw gcnew ArgumentNullException("result");
 
 	return Diff(from, to, gcnew SvnDiffArgs(), result);
 }
 
-bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result)
+bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ result)
 {
 	if(!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
+	else if(!result)
+		throw gcnew ArgumentNullException("result");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
+	ArgsStore store(this, args);	
 	AprPool pool(%_pool);
 
-	String^ tempOut = System::IO::Path::GetTempFileName();
-	String^ tempErr = System::IO::Path::GetTempFileName();
+	AprStreamFile out(result, %pool);
+	AprStreamFile err(gcnew System::IO::MemoryStream(), %pool);
 
-	apr_file_t* tmpOut = nullptr;
-	apr_file_t* tmpErr = nullptr;
-	try
-	{
-		const apr_int32_t openFlags = APR_FOPEN_CREATE | APR_FOPEN_TRUNCATE | APR_BUFFERED | APR_FOPEN_WRITE;
+	svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
+	svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
-		svn_error_t *err;
+	ICollection<String^>^ diffArgs = args->DiffArguments;
 
-		err = svn_io_file_open(&tmpOut, pool.AllocString(tempOut), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle);
-		if(!err)
-			err = svn_io_file_open(&tmpErr, pool.AllocString(tempErr), openFlags, APR_FPROT_OS_DEFAULT, pool.Handle);
+	if(!diffArgs)
+		diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-		if(	err || !tmpOut || !tmpErr)
-		{
-			if(err)
-				throw SvnException::Create(err);
+	svn_error_t *r = svn_client_diff4(
+		AllocArray(diffArgs, %pool),
+		pool.AllocString(from->TargetName),
+		&fromRev,
+		pool.AllocString(to->TargetName),
+		&toRev,
+		args->RelativeToPath ? pool.AllocPath(args->RelativeToPath) : nullptr,
+		(svn_depth_t)args->Depth,
+		args->IgnoreAncestry,
+		args->NoDeleted,
+		args->IgnoreContentType,
+		pool.AllocString(args->HeaderEncoding),
+		out.CreateHandle(),
+		err.CreateHandle(),
+		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+		CtxHandle,
+		pool.Handle);
 
-			throw gcnew System::IO::IOException("Can't create temporary files for diffing");
-		}
-
-		svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-		svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-
-		ICollection<String^>^ diffArgs = args->DiffArguments;
-
-		if(!diffArgs)
-			diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
-
-		svn_error_t *r = svn_client_diff4(
-			AllocArray(diffArgs, %pool),
-			pool.AllocString(from->TargetName),
-			&fromRev,
-			pool.AllocString(to->TargetName),
-			&toRev,
-			args->RelativeToPath ? pool.AllocPath(args->RelativeToPath) : nullptr,
-			(svn_depth_t)args->Depth,
-			args->IgnoreAncestry,
-			args->NoDeleted,
-			args->IgnoreContentType,
-			pool.AllocString(args->HeaderEncoding),
-			tmpOut,
-			tmpErr,
-			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-			CtxHandle,
-			pool.Handle);
-
-		apr_status_t cr = apr_file_close(tmpOut);
-		GC::KeepAlive(cr); // Shut up warning
-
-		tmpOut = nullptr;
-
-		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
-		tempOut = nullptr;
-
-		return args->HandleResult(this, r);
-	}
-	finally
-	{
-		if(tmpErr)
-		{
-			apr_status_t cr = apr_file_close(tmpErr);
-			GC::KeepAlive(cr); // Shut up warning
-		}
-
-		if(tmpOut)
-		{
-			apr_status_t cr = apr_file_close(tmpOut);
-			GC::KeepAlive(cr); // Shut up warning
-		}
-
-		if(tempErr && File::Exists(tempErr))
-		{
-			File::Delete(tempErr);
-		}
-		if(tempOut && File::Exists(tempOut))
-		{
-			File::Delete(tempOut);
-		}
-	}
+	return args->HandleResult(this, r);
 }
 
-bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result)
+bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stream^ result)
 {
 	if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -150,11 +102,13 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
+	else if(!result)
+		throw gcnew ArgumentNullException("result");
 
 	return Diff(source, from, to, gcnew SvnDiffArgs(), result);
 }
 
-bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result)
+bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result)
 {
 	if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -162,79 +116,42 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
+	else if(!result)
+		throw gcnew ArgumentNullException("result");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	String^ tempOut = System::IO::Path::GetTempFileName();
-	String^ tempErr = System::IO::Path::GetTempFileName();
+	AprStreamFile out(result, %pool);
+	AprStreamFile err(gcnew System::IO::MemoryStream(), %pool);
 
-	apr_file_t* tmpOut = nullptr;
-	apr_file_t* tmpErr = nullptr;
+	svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
+	svn_opt_revision_t fromRev = from->ToSvnRevision();
+	svn_opt_revision_t toRev = to->ToSvnRevision();
 
-	try
-	{		
-		if(	apr_file_open(&tmpOut, pool.AllocPath(tempOut), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
-			apr_file_open(&tmpErr, pool.AllocPath(tempErr), APR_CREATE | APR_BUFFERED, APR_FPROT_OS_DEFAULT, pool.Handle) ||
-			!tmpOut || !tmpErr)
-		{
-			throw gcnew System::IO::IOException("Can't create temporary files for diffing");
-		}
+	ICollection<String^>^ diffArgs = args->DiffArguments;
 
-		svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
-		svn_opt_revision_t fromRev = from->ToSvnRevision();
-		svn_opt_revision_t toRev = to->ToSvnRevision();
+	if(!diffArgs)
+		diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-		ICollection<String^>^ diffArgs = args->DiffArguments;
+	svn_error_t *r = svn_client_diff_peg4(
+		AllocArray(diffArgs, %pool),
+		pool.AllocString(source->TargetName),
+		&pegRev,
+		&fromRev,
+		&toRev,
+		args->RelativeToPath ? pool.AllocPath(args->RelativeToPath) : nullptr,
+		(svn_depth_t)args->Depth,
+		args->IgnoreAncestry,
+		args->NoDeleted,
+		args->IgnoreContentType,
+		pool.AllocString(args->HeaderEncoding),
+		out.CreateHandle(),
+		err.CreateHandle(),
+		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+		CtxHandle,
+		pool.Handle);
 
-		if(!diffArgs)
-			diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
-
-		svn_error_t *r = svn_client_diff_peg4(
-			AllocArray(diffArgs, %pool),
-			pool.AllocString(source->TargetName),
-			&pegRev,
-			&fromRev,
-			&toRev,
-			args->RelativeToPath ? pool.AllocPath(args->RelativeToPath) : nullptr,
-			(svn_depth_t)args->Depth,
-			args->IgnoreAncestry,
-			args->NoDeleted,
-			args->IgnoreContentType,
-			pool.AllocString(args->HeaderEncoding),
-			tmpOut,
-			tmpErr,
-			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-			CtxHandle,
-			pool.Handle);
-
-		result = gcnew DeleteOnCloseStream(tempOut, System::IO::FileMode::Open);
-		tempOut = nullptr;
-
-		return args->HandleResult(this, r);
-	}
-	finally
-	{
-		if(tmpErr)
-		{
-			apr_status_t cr = apr_file_close(tmpErr);
-			GC::KeepAlive(cr); // Shut up warning
-		}
-
-		if(tmpOut)
-		{
-			apr_status_t cr = apr_file_close(tmpOut);
-			GC::KeepAlive(cr); // Shut up warning
-		}
-
-		if(tempErr && File::Exists(tempErr))
-		{
-			File::Delete(tempErr);
-		}
-		if(tempOut && File::Exists(tempOut))
-		{
-			File::Delete(tempOut);
-		}
-	}
+	return args->HandleResult(this, r);
 }

@@ -104,6 +104,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to The IO Thread Blocked -- Do you have a deadlock?.
+    /// </summary>
+    internal: static property System::String^  IOThreadBlocked {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to One or more items in the list are null.
     /// </summary>
     internal: static property System::String^  ItemInListIsNull {
@@ -426,6 +433,10 @@ inline System::String^  SharpSvnStrings::InvalidSvnRevisionTypeValue::get() {
 
 inline System::String^  SharpSvnStrings::InvalidUri::get() {
     return ResourceManager->GetString(L"InvalidUri", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::IOThreadBlocked::get() {
+    return ResourceManager->GetString(L"IOThreadBlocked", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {

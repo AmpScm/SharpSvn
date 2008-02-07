@@ -623,6 +623,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientEventArgs_Status.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClientNotifier.h"
 					>
 				</File>

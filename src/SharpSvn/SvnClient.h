@@ -82,7 +82,6 @@ namespace SharpSvn {
 	using System::Collections::Generic::IList;
 	using System::Collections::ObjectModel::Collection;
 	using System::IO::Stream;
-	using System::IO::FileStream;
 
 	/// <summary>Subversion client instance; main entrance to the Subversion Client api</summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -814,10 +813,10 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Diff Client Command
 		/// <overloads>Retrieves the differences between two revisions or paths (<c>svn diff</c>)</overloads>
-		bool Diff(SvnTarget^ from, SvnTarget^ to, [Out]FileStream^% result);
-		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
-		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, [Out]FileStream^% result);
-		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, [Out]FileStream^% result);
+		bool Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result);
+		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ result);
+		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stream^ result);
+		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result);
 #pragma endregion
 
 	public:
