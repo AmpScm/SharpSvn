@@ -29,27 +29,27 @@ static svn_error_t *svnclient_property_list_handler(void *baton, const char *pat
 
 	SvnPropertyListArgs^ args = dynamic_cast<SvnPropertyListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	AprPool aprPool(pool, false);
-	if(args)
+	if(!args)
+		return nullptr;
+
+	SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(path, prop_hash, %aprPool);
+	try
 	{
-		SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(path, prop_hash, %aprPool);
-		try
-		{
-			args->OnPropertyList(e);
+		args->OnPropertyList(e);
 
-			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
-		}
-		catch(Exception^ e)
-		{
-			return SvnException::CreateExceptionSvnError("Property list receiver", e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+		if(e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
+		else
+			return nullptr;
 	}
-
-	return nullptr;
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("Property list receiver", e);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
 }
 
 bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, EventHandler<SvnPropertyListEventArgs^>^ listHandler)

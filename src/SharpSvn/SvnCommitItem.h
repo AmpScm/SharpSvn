@@ -108,7 +108,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_uri && _info && _info->url)
-					_uri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->url));
+					_uri = SvnBase::Utf8_PtrToUri(_info->url, _nodeKind);
 
 				return _uri;
 			}
@@ -127,7 +127,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_copyFromUri && _info && _info->copyfrom_url)
-					_copyFromUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->copyfrom_url));
+					_copyFromUri = SvnBase::Utf8_PtrToUri(_info->copyfrom_url, _nodeKind);
 
 				return _copyFromUri;
 			}

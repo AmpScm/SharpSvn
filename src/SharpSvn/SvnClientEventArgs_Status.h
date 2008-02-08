@@ -191,6 +191,8 @@ namespace SharpSvn {
 			if(!entry)
 				throw gcnew ArgumentNullException("entry");
 
+			_entry = entry;
+
 			_revision = entry->revision;
 			_nodeKind = (SvnNodeKind)entry->kind;
 			_schedule = (SvnSchedule)entry->schedule;
@@ -236,15 +238,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_uri && _entry && _entry->url)
-				{
-					String^ url = SvnBase::Utf8_PtrToString(_entry->url);
-
-					if(_nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
-						url += "/";
-
-					if(!System::Uri::TryCreate(url, UriKind::Absolute, _uri))
-						_uri = nullptr;
-				}
+					_uri = SvnBase::Utf8_PtrToUri(_entry->url, _nodeKind);
 
 				return _uri;
 			}
@@ -255,17 +249,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_repositoryUri && _entry && _entry->repos)
-				{
-					String^ url = SvnBase::Utf8_PtrToString(_entry->repos);
-
-					if(_nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
-						url += "/";
-
-					System::Uri^ result;
-
-					if(System::Uri::TryCreate(url, UriKind::Absolute, result))
-						_repositoryUri = result;
-				}
+					_repositoryUri = SvnBase::Utf8_PtrToUri(_entry->repos, SvnNodeKind::Directory);
 
 				return _repositoryUri;
 			}
@@ -335,15 +319,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_copyFrom && _entry && _entry->copyfrom_url)
-				{
-					String^ url = SvnBase::Utf8_PtrToString(_entry->copyfrom_url);
-
-					if(_nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
-						url += "/";
-
-					if(!System::Uri::TryCreate(url, UriKind::Absolute, _repositoryUri))
-						_copyFrom = nullptr;
-				}
+					_copyFrom = SvnBase::Utf8_PtrToUri(_entry->copyfrom_url, _nodeKind);
 
 				return _copyFrom;
 			}
@@ -639,6 +615,7 @@ namespace SharpSvn {
 		initonly DateTime _oodLastCommitDate;
 		initonly SvnNodeKind _oodLastCommitNodeKind;
 		String^ _oodLastCommitAuthor;
+		initonly SvnNodeKind _nodeKind;
 
 	internal:
 		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status)
@@ -660,6 +637,8 @@ namespace SharpSvn {
 			_reposPropertyStatus = (SvnStatus)status->repos_prop_status;
 
 			_oodLastCommitRev = status->ood_last_cmt_rev;
+
+			_nodeKind = status->entry ? (SvnNodeKind)status->entry->kind : SvnNodeKind::None;
 
 			if(status->ood_last_cmt_rev != SVN_INVALID_REVNUM)
 			{
@@ -769,7 +748,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_uri && _status && _status->url)
-					_uri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_status->url));
+					_uri = SvnBase::Utf8_PtrToUri(_status->url, _nodeKind);
 
 				return _uri;
 			}
@@ -825,12 +804,21 @@ namespace SharpSvn {
 
 		property SvnWorkingCopyInfo^ WorkingCopyInfo
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			SvnWorkingCopyInfo^ get()
 			{
 				if(!_wcInfo && _status->entry)
 					_wcInfo = gcnew SvnWorkingCopyInfo(_status->entry);
 
 				return _wcInfo;
+			}
+		}
+
+		property SvnNodeKind NodeKind
+		{
+			SvnNodeKind get()
+			{
+				return _nodeKind;
 			}
 		}
 

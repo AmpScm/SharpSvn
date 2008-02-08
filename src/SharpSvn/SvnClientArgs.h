@@ -104,7 +104,6 @@ namespace SharpSvn {
 		}
 
 	internal:
-		[System::Diagnostics::DebuggerStepThroughAttribute()]
 		bool HandleResult(SvnClientContext^ client, svn_error_t *error);
 	};
 

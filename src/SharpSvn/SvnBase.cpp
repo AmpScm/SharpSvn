@@ -150,6 +150,26 @@ String^ SvnBase::Utf8_PtrToString(const svn_string_t* str)
 	return gcnew String(str->data, 0, str->len, System::Text::Encoding::UTF8);
 }
 
+Uri^ SvnBase::Utf8_PtrToUri(const char *ptr, SvnNodeKind nodeKind)
+{
+	if(!ptr)
+		return nullptr;
+
+	String^ url = Utf8_PtrToString(ptr);
+
+	if(!url)
+		return nullptr;
+	else if(nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
+		url += "/";
+
+	Uri^ uri;
+
+	if(Uri::TryCreate(url, UriKind::Absolute, uri))
+		return uri;
+	else
+		return nullptr;
+}
+
 
 array<Byte>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 {

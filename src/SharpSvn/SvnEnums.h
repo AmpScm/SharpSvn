@@ -147,14 +147,6 @@ namespace SharpSvn {
 		UpdateReplace	= svn_wc_notify_update_replace,
 	};
 
-	public enum class SvnNodeKind
-	{
-		None		= svn_node_none,
-		File		= svn_node_file,
-		Directory	= svn_node_dir,
-		Unknown		= svn_node_unknown
-	};
-
 	public enum class SvnNotifyState
 	{
 		None		= svn_wc_notify_state_inapplicable,

@@ -30,27 +30,27 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 
 	AprPool thePool(pool, false);
 	SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(args)
+	if(!args)
+		return nullptr;
+
+	SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PtrToString(path), info);
+	try
 	{
-		SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PtrToString(path), info);
-		try
-		{
-			args->OnInfo(e);
+		args->OnInfo(e);
 
-			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Info receiver canceled operation");
-		}
-		catch(Exception^ e)
-		{
-			return SvnException::CreateExceptionSvnError("Info receiver", e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+		if(e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Info receiver canceled operation");
+		else
+			return nullptr;
 	}
-
-	return nullptr;
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("Info receiver", e);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
 }
 
 bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoEventArgs^>^ infoHandler)

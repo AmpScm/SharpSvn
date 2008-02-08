@@ -31,28 +31,28 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 	AprPool thePool(pool, false);
 
 	SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(args)
+	if(!args)
+		return nullptr;
+
+	SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date, 
+		merged_path, line, %thePool);
+	try
 	{
-		SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date, 
-													   merged_path, line, %thePool);
-		try
-		{
-			args->OnBlameHandler(e);
+		args->OnBlameHandler(e);
 
-			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
-		}
-		catch(Exception^ e)
-		{
-			return SvnException::CreateExceptionSvnError("Diff summary receiver", e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+		if(e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
+		else
+			return nullptr;
 	}
-
-	return nullptr;
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("Diff summary receiver", e);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
 }
 
 
