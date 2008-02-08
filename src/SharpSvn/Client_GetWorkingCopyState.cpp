@@ -25,6 +25,8 @@ bool SvnClient::GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateAr
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!IsNotUri(targetPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);	
