@@ -668,7 +668,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime LastChangeDate
+		property DateTime LastChangeTime
 		{
 			DateTime get()
 			{
