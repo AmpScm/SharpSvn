@@ -787,7 +787,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.FullPath, Is.EqualTo(file));
 					Assert.That(e.HasLocalInfo, Is.True);
 					Assert.That(e.LastChangeAuthor, Is.Null);
-					Assert.That(e.LastChangeDate, Is.EqualTo(DateTime.MinValue));
+					Assert.That(e.LastChangeTime, Is.EqualTo(DateTime.MinValue));
 					Assert.That(e.LastChangeRevision, Is.EqualTo(0)); // Not committed yet
 					Assert.That(e.Lock, Is.Null);
 					Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
@@ -821,7 +821,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.FullPath, Is.EqualTo(file));
 						Assert.That(e.HasLocalInfo, Is.True);
 						Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-						Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+						Assert.That(e.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 						Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
 						Assert.That(e.Lock, Is.Null);
 						Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
@@ -853,8 +853,8 @@ namespace SharpSvn.Tests
 					Assert.That(e.FullPath, Is.Null);
 					Assert.That(e.HasLocalInfo, Is.False);
 					Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-					Assert.That(e.LastChangeDate, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-					Assert.That(e.LastChangeDate, Is.LessThan(DateTime.UtcNow + new TimeSpan(0, 5, 0)));
+					Assert.That(e.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+					Assert.That(e.LastChangeTime, Is.LessThan(DateTime.UtcNow + new TimeSpan(0, 5, 0)));
 					Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
 					Assert.That(e.Lock, Is.Null);
 					Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
