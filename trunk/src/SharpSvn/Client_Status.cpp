@@ -72,7 +72,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			(void*)_clientBatton->Handle,
 			(svn_depth_t)args->Depth,
 			args->GetAll,
-			args->Update,
+			args->ContactRepository,
 			args->NoIgnore,
 			args->IgnoreExternals,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists

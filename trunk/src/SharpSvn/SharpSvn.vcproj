@@ -625,6 +625,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientEventArgs_Status.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClientNotifier.h"
 					>
 				</File>
@@ -819,6 +823,10 @@
 				</File>
 				<File
 					RelativePath=".\Client_GetSuggestedMergeSources.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Client_GetWorkingCopyState.cpp"
 					>
 				</File>
 				<File

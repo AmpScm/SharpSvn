@@ -182,4 +182,6 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientApiException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnDiskFullException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnIllegalTargetException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnObstructedUpdateException, SvnWorkingCopyException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnInvalidNodeKindException, SvnWorkingCopyException);
 }

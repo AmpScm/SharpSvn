@@ -188,15 +188,24 @@ Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 
 DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 {
-	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+	if(aprTime == 0)
+		return DateTime::MinValue;
+	else
+	{
+		__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
 
-	return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Utc);
+		return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Utc);
+	}
 }
 
 apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)
 {
 	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
-	return (time.ToBinary() - aprTimeBase) / 10;
+
+	if(time != DateTime::MinValue)
+		return (time.ToBinary() - aprTimeBase) / 10;
+	else
+		return 0;
 }
 
 static SvnHandleBase::SvnHandleBase()

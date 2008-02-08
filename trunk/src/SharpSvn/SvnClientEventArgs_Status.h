@@ -107,7 +107,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime CreationDate
+		property DateTime CreationTime
 		{
 			DateTime get()
 			{
@@ -115,7 +115,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime ExpirationDate
+		property DateTime ExpirationTime
 		{
 			DateTime get()
 			{
@@ -648,7 +648,7 @@ namespace SharpSvn {
 			else if(!status)
 				throw gcnew ArgumentNullException("status");
 
-			_path = path;
+			_path = path->Replace('/', System::IO::Path::DirectorySeparatorChar);
 			_status = status;
 
 			_wcContentStatus = (SvnStatus)status->text_status;
@@ -794,7 +794,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Out of Date: Last commit date of the item</summary>
-		property DateTime RemoteUpdateCommitDate
+		property DateTime RemoteUpdateCommitTime
 		{
 			DateTime get()
 			{
@@ -857,6 +857,35 @@ namespace SharpSvn {
 			{
 				_status = nullptr;
 				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+	public ref class SvnWorkingCopyState sealed
+	{
+		bool _isText;
+		String^ _pristineFile;
+	internal:
+		SvnWorkingCopyState(bool isText, String^ pristineFile)
+		{
+			_isText = isText;
+			_pristineFile = pristineFile;
+		}
+
+	public:
+		property String^ WorkingCopyBasePath
+		{
+			String^ get()
+			{
+				return _pristineFile;
+			}
+		}
+
+		property bool IsTextFile
+		{
+			bool get()
+			{
+				return _isText;
 			}
 		}
 	};

@@ -190,8 +190,10 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_ENTRY_ATTRIBUTE_INVALID:
 			return gcnew SvnEntryException(error);
 		case SVN_ERR_WC_OBSTRUCTED_UPDATE:
+			return gcnew SvnObstructedUpdateException(error);
 		case SVN_ERR_WC_NOT_DIRECTORY:
 		case SVN_ERR_WC_NOT_FILE:
+			return gcnew SvnInvalidNodeKindException(error);
 		case SVN_ERR_WC_BAD_ADM_LOG:
 		case SVN_ERR_WC_PATH_NOT_FOUND:
 		case SVN_ERR_WC_NOT_UP_TO_DATE:
