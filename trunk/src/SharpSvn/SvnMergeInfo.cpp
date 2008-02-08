@@ -35,12 +35,7 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInf
 
 		if(pUri && ranges)
 		{
-			Uri^ uri;
-
-			if(Uri::TryCreate(SvnBase::Utf8_PtrToString(pUri, (int)klen), UriKind::Absolute, uri))
-			{
-				list->Add(gcnew SvnAppliedMergeItem(uri, SvnAppliedMergeItem::CreateRangeList(ranges)));
-			}
+			list->Add(gcnew SvnAppliedMergeItem(SvnBase::Utf8_PtrToUri(pUri, SvnNodeKind::Unknown), SvnAppliedMergeItem::CreateRangeList(ranges)));
 		}		
 	}
 	_appliedMerges = list;

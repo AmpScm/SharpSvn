@@ -30,27 +30,27 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	AprPool thePool(pool, false);
 
 	SvnListArgs^ args = dynamic_cast<SvnListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(args)
+	if(!args)
+		return nullptr;
+
+	SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path);
+	try
 	{
-		SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path);
-		try
-		{
-			args->OnList(e);
+		args->OnList(e);
 
-			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
-		}
-		catch(Exception^ e)
-		{
-			return SvnException::CreateExceptionSvnError("List receiver", e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+		if(e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
+		else
+			return nullptr;
 	}
-
-	return nullptr;
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("List receiver", e);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
 }
 
 bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListEventArgs^>^ listHandler)

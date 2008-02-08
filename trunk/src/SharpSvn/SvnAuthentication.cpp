@@ -91,12 +91,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 	try
 	{
 		wrapper->Raise(args);
-
 	}
 	catch(Exception^ e)
 	{
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
+
 	if(args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
@@ -143,7 +143,6 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 	try
 	{
 		wrapper->Raise(args);
-
 	}
 	catch(Exception^ e)
 	{
@@ -207,7 +206,6 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 	try
 	{
 		wrapper->Raise(args);
-
 	}
 	catch(Exception^ e)
 	{
@@ -265,7 +263,6 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 	try
 	{
 		wrapper->Raise(args);
-
 	}
 	catch(Exception^ e)
 	{
@@ -317,7 +314,6 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 	try
 	{
 		wrapper->Raise(args);
-
 	}
 	catch(Exception^ e)
 	{

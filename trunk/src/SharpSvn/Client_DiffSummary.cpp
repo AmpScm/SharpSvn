@@ -32,27 +32,28 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 	AprPool thePool(pool, false);
 
 	SvnDiffSummaryArgs^ args = dynamic_cast<SvnDiffSummaryArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(args)
-	{
-		SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff);
-		try
-		{
-			args->OnSummaryHandler(e);
+	if(!args)
+		return nullptr;
 
-			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
-		}
-		catch(Exception^ e)
-		{
-			return SvnException:: CreateExceptionSvnError("Diff summary receiver", e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+	SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff);
+	try
+	{
+		args->OnSummaryHandler(e);
+
+		if(e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
+		else
+			return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		return SvnException:: CreateExceptionSvnError("Diff summary receiver", e);
+	}
+	finally
+	{
+		e->Detach(false);
 	}
 
-	return nullptr;
 }
 
 

@@ -155,37 +155,38 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 
 	SvnLogArgs^ args = dynamic_cast<SvnLogArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnLogArgs
 	AprPool aprPool(pool, false);
-	if(args)
+	if(!args)
+		return nullptr;
+
+	if(log_entry->revision == SVN_INVALID_REVNUM)
 	{
-		if(log_entry->revision == SVN_INVALID_REVNUM)
-		{
-			// This marks the end of logs at this level,
-			args->_mergeLogLevel--;
-			return nullptr;
-		}
-
-		SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool);
-
-		if(log_entry->has_children)
-			args->_mergeLogLevel++;
-
-		try
-		{
-			args->OnLog(e);
-
-			if(e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Log receiver canceled operation");
-		}
-		catch(Exception^ e)
-		{
-			return SvnException::CreateExceptionSvnError("Log receiver", e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+		// This marks the end of logs at this level,
+		args->_mergeLogLevel--;
+		return nullptr;
 	}
-	return nullptr;
+
+	SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool);
+
+	if(log_entry->has_children)
+		args->_mergeLogLevel++;
+
+	try
+	{
+		args->OnLog(e);
+
+		if(e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Log receiver canceled operation");
+		else
+			return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("Log receiver", e);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
 }
 
 bool SvnClient::InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)

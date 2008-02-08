@@ -51,7 +51,7 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 		const char** sources = (const char**)svnMergeSources->elts;
 		for(int i = 0; i < svnMergeSources->nelts; i++)
 		{
-			sourceList->Add(gcnew SvnMergeSource(gcnew Uri(Utf8_PtrToString(sources[i]), UriKind::Absolute)));
+			sourceList->Add(gcnew SvnMergeSource(Utf8_PtrToUri(sources[i], SvnNodeKind::Unknown)));
 		}
 		
 		mergeSources = sourceList;

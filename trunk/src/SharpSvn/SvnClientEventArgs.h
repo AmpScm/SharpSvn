@@ -611,7 +611,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_uri && _info && _info->URL)
-					_uri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->URL));
+					_uri = SvnBase::Utf8_PtrToUri(_info->URL, _nodeKind);
 
 				return _uri;
 			}
@@ -640,10 +640,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_reposRootUri && _info && _info->repos_root_URL)
-				{
-					// Subversion does not add a / at the end; but to use the Uri infrastructure we require a /
-					_reposRootUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->repos_root_URL) + "/");
-				}
+					_reposRootUri = SvnBase::Utf8_PtrToUri(_info->repos_root_URL, SvnNodeKind::Directory);
 
 				return _reposRootUri;
 			}
@@ -719,7 +716,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if(!_copyFromUri && _info && _info->copyfrom_url && HasLocalInfo)
-					_copyFromUri = gcnew System::Uri(SvnBase::Utf8_PtrToString(_info->copyfrom_url));
+					_copyFromUri = SvnBase::Utf8_PtrToUri(_info->copyfrom_url, _nodeKind);
 
 				return _copyFromUri;
 			}

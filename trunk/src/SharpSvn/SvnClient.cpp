@@ -341,22 +341,20 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 	if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
+	path = System::IO::Path::GetFullPath(path);
+
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	AprPool pool(%_pool);
 
 	const char* url = nullptr;
 
-	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocString(path), pool.Handle);
+	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocPath(path), pool.Handle);
 
 	if(!err && url)
-	{
-		String ^uriStr = Utf8_PtrToString(url);
+		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
 
-		return gcnew Uri(uriStr);
-	}
-	else
-		return nullptr;
+	return nullptr;
 }
 
 bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
@@ -399,17 +397,8 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocCanonical(uri->ToString()), CtxHandle, pool.Handle);
 
 	if(!err && resultUrl)
-	{
-		String^ urlString = Utf8_PtrToString(resultUrl);
+		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
 
-		if(!urlString->EndsWith("/", StringComparison::Ordinal))
-			urlString += "/";
-
-		if(Uri::TryCreate(urlString, UriKind::Absolute, uri))
-		{
-			return uri;
-		}
-	}
 	return nullptr;
 }
 
@@ -429,18 +418,8 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocPath(target), CtxHandle, pool.Handle);
 
 	if(!err && resultUrl)
-	{
-		Uri^ uri = nullptr;
-		String^ urlString = Utf8_PtrToString(resultUrl);
+		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
 
-		if(!urlString->EndsWith("/", StringComparison::Ordinal))
-			urlString += "/";
-
-		if(Uri::TryCreate(urlString, UriKind::Absolute, uri))
-		{
-			return uri;
-		}
-	}
 	return nullptr;
 }
 

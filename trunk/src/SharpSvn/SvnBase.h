@@ -15,6 +15,14 @@ namespace SharpSvn {
 	ref class SvnClientContext;
 	ref class SvnPropertyCollection;
 
+	public enum class SvnNodeKind
+	{
+		None		= svn_node_none,
+		File		= svn_node_file,
+		Directory	= svn_node_dir,
+		Unknown		= svn_node_unknown
+	};
+
 	namespace Implementation {
 		ref class AprPool;
 
@@ -53,6 +61,7 @@ namespace SharpSvn {
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
 			static String^ Utf8_PtrToString(const svn_string_t *str);
+			static Uri^ Utf8_PtrToUri(const char *str, SvnNodeKind nodeKind);
 			static array<Byte>^ PtrToByteArray(const char* ptr, int length);
 
 			static Object^ PtrToStringOrByteArray(const char* ptr, int length);
