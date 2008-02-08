@@ -824,6 +824,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Client_GetWorkingCopyState.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Client_Import.cpp"
 					>
 				</File>

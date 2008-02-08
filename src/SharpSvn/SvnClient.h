@@ -72,9 +72,11 @@ namespace SharpSvn {
 	ref class SvnCreateRepositoryArgs;
 	ref class SvnDeleteRepositoryArgs;
 	ref class SvnRecoverRepositoryArgs;
+	ref class SvnGetWorkingCopyStateArgs;
 
 	ref class SvnUpdateResult;
 	ref class SvnClientReporter;
+	ref class SvnWorkingCopyState;
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -820,6 +822,9 @@ namespace SharpSvn {
 #pragma endregion
 
 	public:
+
+
+	public:
 		/////////////////////////////////////////
 #pragma region // Diff Summary Command
 		/// <overloads>Streamingly retrieves the differences between two revisions or paths (<c>svn diff --summarize</c>)</overloads>
@@ -898,6 +903,10 @@ namespace SharpSvn {
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>
 		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id);
+
+	public:
+		bool GetWorkingCopyState(String^ targetPath, [Out] SvnWorkingCopyState^% result);
+		bool GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateArgs^ args, [Out] SvnWorkingCopyState^% result);
 
 	private:
 		~SvnClient();

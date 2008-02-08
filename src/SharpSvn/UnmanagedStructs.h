@@ -31,3 +31,6 @@ struct svn_stream_t
 
 struct svn_auth_baton_t
 {};
+
+struct svn_wc_adm_access_t
+{};

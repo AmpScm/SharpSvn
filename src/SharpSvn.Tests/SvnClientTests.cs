@@ -58,7 +58,7 @@ namespace SharpSvn.Tests
 
 				return _wc;
 			}
-		}		
+		}
 
 		static void TouchFile(string filename)
 		{
@@ -130,7 +130,7 @@ namespace SharpSvn.Tests
 			client.Committing += delegate(object sender, SvnCommittingEventArgs e)
 			{
 				Assert.That(true, Is.EqualTo(expectCommit), "Commit expected");
-				if(e.LogMessage == null)
+				if (e.LogMessage == null)
 					e.LogMessage = "";
 			};
 
@@ -347,7 +347,7 @@ namespace SharpSvn.Tests
 				bool visited = false;
 				a = new SvnListChangeListArgs();
 				a.ChangeLists.Add("ChangeListTest-3");
-				client.ListChangeList(WcPath,a, delegate(object sender, SvnListChangeListEventArgs e)
+				client.ListChangeList(WcPath, a, delegate(object sender, SvnListChangeListEventArgs e)
 				{
 					Assert.That(e.Path, Is.EqualTo(file3));
 					visited = true;
@@ -530,7 +530,8 @@ namespace SharpSvn.Tests
 				TouchFile(remote);
 				client.Add(remote);
 
-				client.Commit(WcPath);
+				SvnCommitInfo ci;
+				client.Commit(WcPath, out ci);
 
 				Assert.That(ItemExists(new Uri(WcUri, "LocalDeleteBase")), Is.True, "Remote base does exist");
 				Assert.That(ItemExists(new Uri(WcUri, "RemoteDeleteBase")), Is.True, "Local base does exist");
@@ -539,12 +540,66 @@ namespace SharpSvn.Tests
 				client.RemoteDelete(new Uri(WcUri, "RemoteDeleteBase"));
 
 				bool visited = false;
+				int n = 0;
 				client.Status(local, delegate(object sender, SvnStatusEventArgs e)
 				{
+					Assert.That(n++, Is.EqualTo(0));
 					Assert.That(e.FullPath, Is.EqualTo(local));
 					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
 					Assert.That(e.Switched, Is.False);
 					Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
+					Assert.That(e.IsRemoteUpdated, Is.EqualTo(false));
+					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
+					Assert.That(e.LocalCopied, Is.EqualTo(false));
+					Assert.That(e.LocalLocked, Is.EqualTo(false));
+					Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
+					Assert.That(e.Path, Is.EqualTo(local));
+					Assert.That(e.RemoteContentStatus, Is.EqualTo(SvnStatus.None));
+					Assert.That(e.RemoteLock, Is.Null);
+					Assert.That(e.RemotePropertyStatus, Is.EqualTo(SvnStatus.None));
+					Assert.That(e.RemoteUpdateCommitAuthor, Is.Null);
+					Assert.That(e.RemoteUpdateCommitTime, Is.EqualTo(DateTime.MinValue));
+					Assert.That(e.RemoteUpdateNodeKind, Is.EqualTo(SvnNodeKind.None));
+					Assert.That(e.RemoteUpdateRevision, Is.EqualTo(-1L));
+					Assert.That(e.Switched, Is.EqualTo(false));
+
+					Assert.That(e.WorkingCopyInfo, Is.Not.Null);
+					Assert.That(e.WorkingCopyInfo.AvailableProperties, Is.Null);
+					Assert.That(e.WorkingCopyInfo.CachableProperties, Is.Null);
+					Assert.That(e.WorkingCopyInfo.ChangeList, Is.Null);
+					Assert.That(e.WorkingCopyInfo.CheckSum, Is.Null);
+					Assert.That(e.WorkingCopyInfo.ConflictNewFile, Is.Null);
+					Assert.That(e.WorkingCopyInfo.ConflictOldFile, Is.Null);
+					Assert.That(e.WorkingCopyInfo.ConflictWorkFile, Is.Null);
+					Assert.That(e.WorkingCopyInfo.CopiedFrom, Is.Null);
+					Assert.That(e.WorkingCopyInfo.CopiedFromRevision, Is.EqualTo(-1L));
+					Assert.That(e.WorkingCopyInfo.Depth, Is.EqualTo(SvnDepth.Infinity));
+					Assert.That(e.WorkingCopyInfo.HasProperties, Is.False);
+					Assert.That(e.WorkingCopyInfo.HasPropertyChanges, Is.False);
+					Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
+					Assert.That(e.WorkingCopyInfo.IsCopy, Is.False);
+					Assert.That(e.WorkingCopyInfo.IsDeleted, Is.False);
+					Assert.That(e.WorkingCopyInfo.IsIncomplete, Is.False);
+					Assert.That(e.WorkingCopyInfo.KeepLocal, Is.False);
+					Assert.That(e.WorkingCopyInfo.LastChangeAuthor, Is.Null);
+					Assert.That(e.WorkingCopyInfo.LastChangeRevision, Is.EqualTo(ci.Revision));
+					Assert.That(e.WorkingCopyInfo.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
+					Assert.That(e.WorkingCopyInfo.LockComment, Is.Null);
+					Assert.That(e.WorkingCopyInfo.LockOwner, Is.Null);
+					Assert.That(e.WorkingCopyInfo.LockTime, Is.EqualTo(DateTime.MinValue));
+					Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);
+					Assert.That(e.WorkingCopyInfo.Name, Is.Null);
+					Assert.That(e.WorkingCopyInfo.NodeKind, Is.EqualTo(SvnNodeKind.File));
+					Assert.That(e.WorkingCopyInfo.PropertyChangeTime, Is.EqualTo(DateTime.MinValue));
+					Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
+					Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.Null);
+					Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.Null);
+					Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
+					Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Delete));
+					Assert.That(e.WorkingCopyInfo.TextChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
+					Assert.That(e.WorkingCopyInfo.Uri, Is.Null);
+					Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(0L));
+
 					visited = true;
 				});
 				Assert.That(visited, "Visited handler");
@@ -604,7 +659,7 @@ namespace SharpSvn.Tests
 				client.Commit(diffFile, out info);
 
 				bool visited = false;
-				client.DiffSummary(new SvnUriTarget(WcUri, info.Revision-1), WcUri,
+				client.DiffSummary(new SvnUriTarget(WcUri, info.Revision - 1), WcUri,
 					delegate(object sender, SvnDiffSummaryEventArgs e)
 					{
 						if (e.Path == "DiffTest")
@@ -620,7 +675,7 @@ namespace SharpSvn.Tests
 				int n = 0;
 
 				client.Blame(new SvnPathTarget(diffFile), delegate(object sender, SvnBlameEventArgs e)
-				{					
+				{
 					Assert.That(e.Author, Is.EqualTo(Environment.UserName));
 					Assert.That(e.LineNumber, Is.EqualTo((long)n));
 					switch (n)
@@ -845,13 +900,13 @@ namespace SharpSvn.Tests
 					{
 						Assert.That(e.Entry, Is.Not.Null, "Entry set");
 
-						if (e.ItemPath == "LocalFileForTestList")
+						if (e.Path == "LocalFileForTestList")
 						{
 							Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
 							Assert.That(e.Lock, Is.Null);
 							Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
 							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
-							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
+							Assert.That(e.Entry.NodeKind, Is.EqualTo(SvnNodeKind.File));
 							Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
 							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 							visited = true;
@@ -865,19 +920,33 @@ namespace SharpSvn.Tests
 					{
 						Assert.That(e.Entry, Is.Not.Null, "Entry set");
 
-						if (e.ItemPath == "LocalFileForTestList")
+						if (e.Path == "LocalFileForTestList")
 						{
 							Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
 							Assert.That(e.Lock, Is.Null);
 							Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
 							Assert.That(e.Entry.FileSize, Is.EqualTo(0));
-							Assert.That(e.Entry.Kind, Is.EqualTo(SvnNodeKind.File));
+							Assert.That(e.Entry.NodeKind, Is.EqualTo(SvnNodeKind.File));
 							Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
 							Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 							visited = true;
 						}
 					});
 				Assert.That(visited, Is.True, "Visited is true");
+
+				SvnWorkingCopyState state;
+				client.GetWorkingCopyState(oneFile, out state);
+
+				Assert.That(state, Is.Not.Null);
+				Assert.That(state.IsTextFile, Is.True);
+				Assert.That(state.WorkingCopyBasePath, Is.Not.Null);
+
+				client.SetProperty(oneFile, "svn:mime-type", "application/binary");
+
+				client.GetWorkingCopyState(oneFile, out state);
+
+				Assert.That(state, Is.Not.Null);
+				Assert.That(state.IsTextFile, Is.False);
 			}
 		}
 
@@ -901,7 +970,7 @@ namespace SharpSvn.Tests
 				string renamedLogFile = Path.Combine(WcPath, "LogTestFileDest");
 				client.Move(logFile, renamedLogFile);
 				a.LogMessage = "Commit 3" + Environment.NewLine + "With newline";
-				client.Commit(WcPath,a);
+				client.Commit(WcPath, a);
 
 				int n = 0;
 				SvnLogArgs la = new SvnLogArgs();
@@ -914,7 +983,7 @@ namespace SharpSvn.Tests
 
 						Assert.That(e.Author, Is.EqualTo(Environment.UserName));
 						Assert.That(e.Cancel, Is.False);
-						Assert.That(e.Date, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+						Assert.That(e.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
 						Assert.That(e.HasChildren, Is.False);
 						switch (n)
 						{
@@ -1024,7 +1093,7 @@ namespace SharpSvn.Tests
 				Assert.That(available, Is.Not.Null);
 				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
 				Assert.That(available.MergeRanges[0].Start, Is.EqualTo(ci.Revision));
-				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision+1));
+				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision + 1));
 				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
 				Assert.That(available.Target, Is.Not.Null);
 
@@ -1065,7 +1134,7 @@ namespace SharpSvn.Tests
 				Assert.That(applied.AppliedMerges[0].MergeRanges, Is.Not.Null);
 				Assert.That(applied.AppliedMerges[0].MergeRanges.Count, Is.EqualTo(1));
 				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Start, Is.EqualTo(ci.Revision));
-				Assert.That(applied.AppliedMerges[0].MergeRanges[0].End, Is.EqualTo(ci.Revision+2));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].End, Is.EqualTo(ci.Revision + 2));
 				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Inheritable, Is.True);
 				Assert.That(applied.Target, Is.Not.Null);
 			}

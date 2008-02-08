@@ -445,7 +445,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime Date
+		property DateTime Time
 		{
 			DateTime get()
 			{
@@ -917,7 +917,7 @@ namespace SharpSvn {
 			_time = (entry->time != 0) ? SvnBase::DateTimeFromAprTime(entry->time) : DateTime::MinValue;
 		}
 	public:
-		property SvnNodeKind Kind
+		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
 			{
@@ -1002,6 +1002,7 @@ namespace SharpSvn {
 		const svn_dirent_t *_pDirEnt;
 
 		String^ _absPath;
+		String^ _fullPath;
 		SvnLockInfo^ _lock;
 		SvnDirEntry^ _entry;
 
@@ -1021,7 +1022,8 @@ namespace SharpSvn {
 		}
 
 	public:
-		property String^ ItemPath
+		/// <summary>Gets the path of the item</summary>
+		property String^ Path
 		{
 			String^ get()
 			{
@@ -1029,6 +1031,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the origin path of the item</summary>
 		property String^ BasePath
 		{
 			String^ get()
@@ -1070,7 +1073,7 @@ namespace SharpSvn {
 			{
 				if(keepProperties)
 				{
-					GC::KeepAlive(ItemPath);
+					GC::KeepAlive(Path);
 					GC::KeepAlive(BasePath);
 					GC::KeepAlive(Lock);
 					GC::KeepAlive(Entry);
@@ -1412,7 +1415,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime MergedDate
+		property DateTime MergedTime
 		{
 			DateTime get()
 			{
@@ -1450,5 +1453,4 @@ namespace SharpSvn {
 			}
 		}
 	};
-
 }

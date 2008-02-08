@@ -52,8 +52,11 @@ namespace SharpSvn {
 		Switch,
 		Unlock,
 		Update,
-		Write
+		Write,
+		// Wc library helper
+		GetWorkingCopyInfo,
 		// Add new members at the end!
+
 	};
 
 	public enum class SvnDepth

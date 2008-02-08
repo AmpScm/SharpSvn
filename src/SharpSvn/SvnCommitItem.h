@@ -33,7 +33,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime Date
+		property DateTime Time
 		{
 			DateTime get()
 			{

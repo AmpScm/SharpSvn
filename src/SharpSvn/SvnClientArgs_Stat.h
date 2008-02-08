@@ -72,6 +72,12 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether all status properties should be retrieved</summary>
+		/// <remarks>
+		/// If @a get_all is set, retrieve all entries; otherwise,
+		/// retrieve only "interesting" entries (local mods and/or
+		/// out of date
+		/// </remarks>
 		property bool GetAll
 		{
 			bool get()
@@ -84,7 +90,16 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool Update
+		/// <summary>Gets or sets a boolean indicating whether the repository should be contacted to retrieve aut of date information</summary>
+		/// <remarks>
+		/// If Update is set, contact the repository and augment the
+		/// status structures with information about out-of-dateness (with
+		/// respect to @a revision).  Also, if @a result_rev is not @c NULL,
+		/// set @a *result_rev to the actual revision against which the
+		/// working copy was compared (result_rev is not meaningful unless
+		/// update is set
+		/// </remarks>
+		property bool ContactRepository
 		{
 			bool get()
 			{
@@ -108,6 +123,15 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether externals should be ignored</summary>
+		/// <remarks>
+		/// If IgnoreExternals is not set, then recurse into externals
+		/// definitions (if any exist) after handling the main target.  This
+		/// calls the client notification function (in @a ctx) with the @c
+		/// svn_wc_notify_status_external action before handling each externals
+		/// definition, and with @c svn_wc_notify_status_completed
+		/// after each.
+		/// </remarks>
 		property bool IgnoreExternals
 		{
 			bool get()
@@ -799,4 +823,48 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnGetWorkingCopyStateArgs : public SvnClientArgs
+	{
+		bool _dontGetBaseFile;
+		bool _dontGetFileData;
+
+	public:
+		virtual property SvnClientCommandType ClientCommandType
+		{
+			virtual SvnClientCommandType get() override sealed
+			{
+				return SvnClientCommandType::GetWorkingCopyInfo;
+			}
+		}
+
+	public:
+		SvnGetWorkingCopyStateArgs()
+		{
+		}
+
+		property bool GetBaseFile
+		{
+			bool get()
+			{
+				return !_dontGetBaseFile;
+			}
+			void set(bool value)
+			{
+				_dontGetBaseFile = !value;
+			}
+		}
+
+		property bool GetFileData
+		{
+			bool get()
+			{
+				return !_dontGetFileData;
+			}
+			void set(bool value)
+			{
+				_dontGetFileData = !value;
+			}
+		}
+
+	};
 };
