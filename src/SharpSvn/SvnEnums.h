@@ -129,7 +129,7 @@ namespace SharpSvn {
 		CommitAdded		= svn_wc_notify_commit_added,
 		CommitDeleted	= svn_wc_notify_commit_deleted,
 		CommitReplaced	= svn_wc_notify_commit_replaced,
-		CommitSendData	=svn_wc_notify_commit_postfix_txdelta,
+		CommitSendData	= svn_wc_notify_commit_postfix_txdelta,
 		BlameRevision	= svn_wc_notify_blame_revision,
 		// 1.2+
 		LockLocked		= svn_wc_notify_locked,
