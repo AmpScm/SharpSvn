@@ -807,7 +807,7 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnWorkingCopyInfo^ get()
 			{
-				if(!_wcInfo && _status->entry)
+				if(!_wcInfo && _status && _status->entry)
 					_wcInfo = gcnew SvnWorkingCopyInfo(_status->entry);
 
 				return _wcInfo;
