@@ -75,8 +75,10 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	svn_string_t *result = nullptr;
 	svn_revnum_t set_rev = 0;
 
+	const char* pName = pool.AllocString(propertyName);
+
 	svn_error_t* r = svn_client_revprop_get(
-		pool.AllocString(propertyName),
+		pName,
 		&result,
 		pool.AllocString(target->TargetName),
 		target->Revision->AllocSvnRevision(%pool),
@@ -95,7 +97,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		catch(ArgumentException^)
 		{}
 
-		if(data && propertyName->StartsWith("svn:", StringComparison::Ordinal)) // Make sure properties return in the same format they were added
+		if(svn_prop_needs_translation(pName)) // Make sure properties return in the same format they were added
 			data = data->Replace("\n", Environment::NewLine);
 
 		if(data)

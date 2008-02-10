@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
+using SharpSvn.Implementation;
 
 namespace SharpSvn.Tests
 {
@@ -32,6 +33,13 @@ namespace SharpSvn.Tests
             Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
             Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
         }
+
+		[Test]
+		public void TestAllProps()
+		{
+			Assert.That(SvnPropertyNames.AllSvnRevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
+			Assert.That(SvnPropertyNames.TortoiseSvnDirectoryProperties.Contains(SvnPropertyNames.TortoiseSvnLogMinSize));
+		}
 
     }
 }

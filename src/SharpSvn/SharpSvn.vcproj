@@ -661,6 +661,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnNames.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnPathTarget.h"
 					>
 				</File>
@@ -730,6 +734,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnMergeInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnNames.cpp"
 					>
 				</File>
 				<File
