@@ -325,7 +325,7 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 
 		if(str)
 		{
-			if(key->StartsWith("svn:", StringComparison::Ordinal))
+			if(svn_prop_needs_translation(pKey))
 				str = str->Replace("\n", Environment::NewLine);
 
 			_properties->Add(gcnew SvnPropertyValue(key, str));

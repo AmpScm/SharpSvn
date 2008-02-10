@@ -111,6 +111,8 @@ void SvnClientContext::EnsureState(SvnContextState state)
 				_contextState = SvnContextState::AuthorizationInitialized;
 			}
 		}
+
+		// TODO: Initialize Plink for ssh sessions?
 	}
 }
 

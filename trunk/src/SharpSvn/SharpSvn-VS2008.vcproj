@@ -495,10 +495,6 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<File
-				RelativePath=".\resource1.h"
-				>
-			</File>
 			<Filter
 				Name="Headers"
 				>
@@ -663,6 +659,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnNames.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnPathTarget.h"
 					>
 				</File>
@@ -732,6 +732,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnMergeInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnNames.cpp"
 					>
 				</File>
 				<File
