@@ -393,7 +393,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property String^ CheckSum
+		property String^ Checksum
 		{
 			String^ get()
 			{
@@ -488,7 +488,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property Collection<String^>^ CachableProperties
+		property Collection<String^>^ CacheableProperties
 		{
 			Collection<String^>^ get()
 			{
@@ -579,12 +579,12 @@ namespace SharpSvn {
 					GC::KeepAlive(ConflictNewFile);
 					GC::KeepAlive(ConflictWorkFile);
 					GC::KeepAlive(PropertyRejectFile);
-					GC::KeepAlive(CheckSum);
+					GC::KeepAlive(Checksum);
 					GC::KeepAlive(LastChangeAuthor);
 					GC::KeepAlive(LockToken);
 					GC::KeepAlive(LockOwner);
 					GC::KeepAlive(LockComment);
-					GC::KeepAlive(CachableProperties);
+					GC::KeepAlive(CacheableProperties);
 					GC::KeepAlive(AvailableProperties);
 					GC::KeepAlive(ChangeList);
 				}

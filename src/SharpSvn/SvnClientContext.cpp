@@ -6,9 +6,11 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
+#include "UnmanagedStructs.h"
 #include <svn_config.h>
 
 using namespace SharpSvn;
+using namespace Microsoft::Win32;
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
@@ -66,22 +68,29 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 	return _ctx;
 }
 
-void SvnClientContext::EnsureState(SvnContextState state)
+void SvnClientContext::EnsureState(SvnContextState requiredState)
 {
 	if(!_pool)
 		throw gcnew ObjectDisposedException("SvnClient");
 
-	if(state < State)
+	if(requiredState < State)
 		return;
 
-	if(State < SvnContextState::ConfigLoaded && state >= SvnContextState::ConfigLoaded)
+	if(State < SvnContextState::ConfigLoaded && requiredState >= SvnContextState::ConfigLoaded)
 	{
 		LoadConfigurationDefault();
 
 		System::Diagnostics::Debug::Assert(State == SvnContextState::ConfigLoaded);
 	}
 
-	if(state >= SvnContextState::AuthorizationInitialized)
+	if(requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
+	{
+		ApplyCustomRemoteConfig();
+
+		System::Diagnostics::Debug::Assert(State == SvnContextState::CustomRemoteConfigApplied);
+	}
+
+	if(requiredState >= SvnContextState::AuthorizationInitialized)
 	{
 		if(State < SvnContextState::AuthorizationInitialized)
 		{
@@ -114,6 +123,111 @@ void SvnClientContext::EnsureState(SvnContextState state)
 
 		// TODO: Initialize Plink for ssh sessions?
 	}
+}
+
+void SvnClientContext::ApplyCustomRemoteConfig()
+{
+	// Look for a custom SSH client; Windows most common SVN client uses their own setting, so we should to :(
+	ApplyCustomSsh();
+
+	_contextState = SvnContextState::CustomRemoteConfigApplied;
+}
+
+
+void SvnClientContext::ApplyCustomSsh()
+{
+	svn_config_t *cfg = CtxHandle->config ? (svn_config_t *)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING) : nullptr;
+
+	if(!cfg)
+		return;
+
+	String^ customSshConfig;
+
+	try
+	{
+		// Allow overriding the TortoiseSVN setting at our own level. 
+		// Probably never used, but allow overriding Tortoise settings anyway
+		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\SSH", nullptr)); 
+	}
+	catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
+	{ customSshConfig = nullptr; }
+	catch (UnauthorizedAccessException^)
+	{ customSshConfig = nullptr; }
+
+	if(!customSshConfig)
+	{
+		try
+		{
+			// Use the TortoiseSVN setting
+			customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\TortoiseSVN\\SSH", nullptr)); 
+		}
+		catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
+		{ customSshConfig = nullptr; }
+		catch (UnauthorizedAccessException^)
+		{ customSshConfig = nullptr; }
+	}	
+
+	if(customSshConfig)
+	{
+		// allocate in Ctx pool!
+		svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig->Replace('\\', '/')));
+		return;
+	}
+
+	AprPool pool(_pool);
+
+	// Get the setting from the subversion config, to make sure it makes any sense (The default is "", which we must always replace)
+
+	const char* cmd = nullptr;
+	const char* val = nullptr;
+
+	if(!cfg)
+		return;
+
+	svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh");
+
+	if(val && val[0] == '$')
+	{
+		// svn/client.c: If the scheme definition begins with "$varname", it means there is an
+		//                   environment variable which can override the command.
+
+		val++;
+		int len = strcspn(val, " ");
+		char* var = apr_pstrmemdup(pool.Handle, val, len);
+		cmd = getenv(var);
+
+		if(!cmd)
+			val += len;
+	}
+
+	if(!cmd && val)
+	{
+		char** argv = nullptr;
+		if(!apr_tokenize_to_argv(val, &argv, pool.Handle) && argv && argv[0])
+			cmd = argv[0];
+	}
+
+	if(cmd)
+	{
+		String^ sCmd = Utf8_PtrToString(cmd); // We have an utf8 encoded string and like to use the unicode windows api
+		wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
+		wchar_t* app = (wchar_t*)pool.Alloc((sCmd->Length+1) * sizeof(wchar_t));
+		wchar_t* pFile = nullptr;
+
+		for(int i = 0; i < sCmd->Length; i++)
+			app[i] = sCmd[i];
+
+		app[sCmd->Length] = 0;
+
+		if(SearchPathW(nullptr, app, L".exe", 1000, buffer, &pFile) && pFile)
+		{
+			return; // The specified executable exists. Use it!
+		}
+	}
+	// Ok: registry unset, setting invalid. Let's set our own plink handler
+
+	GC::KeepAlive(this); //TODO: Set our own handler
+	// svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig));
 }
 
 void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)

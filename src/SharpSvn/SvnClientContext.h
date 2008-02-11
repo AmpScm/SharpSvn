@@ -21,6 +21,7 @@ namespace SharpSvn {
 	{
 		Initial,
 		ConfigLoaded,
+		CustomRemoteConfigApplied,
 		AuthorizationInitialized
 	};
 
@@ -50,6 +51,10 @@ namespace SharpSvn {
 			svn_client_ctx_t *get();
 		}
 
+		virtual void ApplyCustomRemoteConfig();
+	private:
+		void ApplyCustomSsh();
+
 	public:
 		/// <summary>Loads the subversion configuration from the specified path</summary>
 		void LoadConfiguration(String^ path);
@@ -61,7 +66,7 @@ namespace SharpSvn {
 		void MergeConfiguration(String^ path);
 
 	internal:
-		void EnsureState(SvnContextState state);
+		void EnsureState(SvnContextState requiredState);
 
 		property SvnContextState State
 		{

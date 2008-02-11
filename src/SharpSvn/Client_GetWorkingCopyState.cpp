@@ -11,6 +11,11 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetWorkingCopyState(System.String,SharpSvn.SvnWorkingCopyState&)", MessageId="1#")]
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetWorkingCopyState(System.String,SharpSvn.SvnGetWorkingCopyStateArgs,SharpSvn.SvnWorkingCopyState&)")]
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetWorkingCopyState(System.String,SharpSvn.SvnGetWorkingCopyStateArgs,SharpSvn.SvnWorkingCopyState&)", MessageId="2#")]
+
 bool SvnClient::GetWorkingCopyState(String^ targetPath, [Out] SvnWorkingCopyState^% result)
 {
 	if(String::IsNullOrEmpty(targetPath))
@@ -50,7 +55,7 @@ bool SvnClient::GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateAr
 
 		const char* basePath = nullptr;
 		r = svn_wc_get_pristine_copy_path(pool.AllocPath(targetPath), &basePath, pool.Handle);
-	
+
 		if(r)
 			return args->HandleResult(this, r);
 

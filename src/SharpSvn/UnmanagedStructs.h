@@ -34,3 +34,6 @@ struct svn_auth_baton_t
 
 struct svn_wc_adm_access_t
 {};
+
+struct svn_config_t
+{};

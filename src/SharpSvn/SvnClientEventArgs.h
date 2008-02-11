@@ -999,7 +999,6 @@ namespace SharpSvn {
 		const svn_dirent_t *_pDirEnt;
 
 		String^ _absPath;
-		String^ _fullPath;
 		SvnLockInfo^ _lock;
 		SvnDirEntry^ _entry;
 
