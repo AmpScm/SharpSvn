@@ -1,5 +1,6 @@
 #pragma once
 #include "svn_props.h"
+#include "svn_config.h"
 namespace SharpSvn {
 	namespace Implementation {
 
@@ -91,6 +92,65 @@ namespace SharpSvn {
 					TortoiseSvnAutoProps
 				}));
 			// /TortoiseSvn
+		};
+
+		public ref class SvnConfigNames sealed
+		{
+			SvnConfigNames()
+			{}
+
+		public:
+			static initonly String^ ServersCategory					= SVN_CONFIG_CATEGORY_SERVERS;
+			static initonly String^		GroupsSection				= SVN_CONFIG_SECTION_GROUPS;
+			static initonly String^		GlobalSection				= SVN_CONFIG_SECTION_GLOBAL;
+			static initonly String^		HttpProxyHost				= SVN_CONFIG_OPTION_HTTP_PROXY_HOST;
+			static initonly String^		HttpProxyPort				= SVN_CONFIG_OPTION_HTTP_PROXY_PORT;
+			static initonly String^		HttpProxyUserName			= SVN_CONFIG_OPTION_HTTP_PROXY_USERNAME;
+			static initonly String^		HttpProxyPassword			= SVN_CONFIG_OPTION_HTTP_PROXY_PASSWORD;
+			static initonly String^		HttpProxyExceptions			= SVN_CONFIG_OPTION_HTTP_PROXY_EXCEPTIONS;
+			static initonly String^		HttpTimeout					= SVN_CONFIG_OPTION_HTTP_TIMEOUT;
+			static initonly String^		HttpCompression				= SVN_CONFIG_OPTION_HTTP_COMPRESSION;
+			/* SVN_CONFIG_OPTION_NEON_DEBUG_MASK: only available in debug builds of svn itself */
+			static initonly String^		HttpAuthTypes				= SVN_CONFIG_OPTION_HTTP_AUTH_TYPES;
+			static initonly String^		HttpLibrary					= SVN_CONFIG_OPTION_HTTP_LIBRARY;
+
+			static initonly String^		SslAuthorityFiles			= SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
+			static initonly String^		SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
+			static initonly String^		SslClientCertificateFile	= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
+			static initonly String^		SslClientCertificatePassword= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_PASSWORD;
+			
+		public:
+			static initonly String^ ConfigCategory					= SVN_CONFIG_CATEGORY_CONFIG;
+			static initonly String^		AuthSection					= SVN_CONFIG_SECTION_AUTH;
+			static initonly String^			StorePasswords			= SVN_CONFIG_OPTION_STORE_PASSWORDS;
+			static initonly String^			StoreAuthCredentials	= SVN_CONFIG_OPTION_STORE_AUTH_CREDS;
+
+			static initonly String^		HelpersSection				= SVN_CONFIG_SECTION_HELPERS;
+			static initonly String^			EditorCommand			= SVN_CONFIG_OPTION_EDITOR_CMD;
+			static initonly String^			DiffCommand				= SVN_CONFIG_OPTION_DIFF_CMD;
+			static initonly String^			Diff3Command			= SVN_CONFIG_OPTION_DIFF3_CMD;
+			static initonly String^			Diff3HasProgramArguments= SVN_CONFIG_OPTION_DIFF3_HAS_PROGRAM_ARG;
+			static initonly String^			MergeToolCommand		= SVN_CONFIG_OPTION_MERGE_TOOL_CMD;
+
+			static initonly String^		MiscellanySection			= SVN_CONFIG_SECTION_MISCELLANY;
+			static initonly String^			GlobalIgnores			= SVN_CONFIG_OPTION_GLOBAL_IGNORES;
+			static initonly String^			LogEncoding				= SVN_CONFIG_OPTION_LOG_ENCODING;
+			static initonly String^			UseCommitTimes			= SVN_CONFIG_OPTION_USE_COMMIT_TIMES;
+			static initonly String^			TemplateRoot			= SVN_CONFIG_OPTION_TEMPLATE_ROOT;
+			static initonly String^			EnableAutoProps			= SVN_CONFIG_OPTION_ENABLE_AUTO_PROPS;
+			static initonly String^			NoUnlock				= SVN_CONFIG_OPTION_NO_UNLOCK;
+			static initonly String^			MimeTypesFile			= SVN_CONFIG_OPTION_MIMETYPES_FILE;
+			static initonly String^			PreservedConflictFileExtensions	= SVN_CONFIG_OPTION_PRESERVED_CF_EXTS;
+			static initonly String^			InteractiveConflicts	= SVN_CONFIG_OPTION_INTERACTIVE_CONFLICTS;
+
+			static initonly String^		TunnelsSection				= SVN_CONFIG_SECTION_TUNNELS;
+
+			static initonly String^		AutoPropsSection			= SVN_CONFIG_SECTION_AUTO_PROPS;
+
+
+			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores 
+				= gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
+						dynamic_cast<IList<String^>^>(safe_cast<String^>(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES)->Split(' ')));
 		};
 	}
 }

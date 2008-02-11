@@ -570,10 +570,10 @@ namespace SharpSvn.Tests
 
 					Assert.That(e.WorkingCopyInfo, Is.Not.Null);
 					Assert.That(e.WorkingCopyInfo.AvailableProperties, Is.Null);
-					Assert.That(e.WorkingCopyInfo.CachableProperties, Is.Not.Null);
-					Assert.That(e.WorkingCopyInfo.CachableProperties.Contains("svn:externals"));
+					Assert.That(e.WorkingCopyInfo.CacheableProperties, Is.Not.Null);
+					Assert.That(e.WorkingCopyInfo.CacheableProperties.Contains("svn:externals"));
 					Assert.That(e.WorkingCopyInfo.ChangeList, Is.Null);
-					Assert.That(e.WorkingCopyInfo.CheckSum, Is.Not.Null);
+					Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
 					Assert.That(e.WorkingCopyInfo.ConflictNewFile, Is.Null);
 					Assert.That(e.WorkingCopyInfo.ConflictOldFile, Is.Null);
 					Assert.That(e.WorkingCopyInfo.ConflictWorkFile, Is.Null);
@@ -782,10 +782,10 @@ namespace SharpSvn.Tests
 							Assert.That(e.WorkingCopyInfo.Name, Is.EqualTo(""));
 
 						Assert.That(e.WorkingCopyInfo.AvailableProperties, Is.Null);
-						Assert.That(e.WorkingCopyInfo.CachableProperties, Is.All.Not.EqualTo(""));
+						Assert.That(e.WorkingCopyInfo.CacheableProperties, Is.All.Not.EqualTo(""));
 						Assert.That(e.WorkingCopyInfo.ChangeList, Is.EqualTo((nn == 6) ? "MyList" : null));
 						if(nn >= 0)
-							Assert.That(e.WorkingCopyInfo.CheckSum, Is.Not.Null);
+							Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
 
 						Assert.That(e.WorkingCopyInfo.Uri, Is.EqualTo(e.Uri));
 						Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(ReposUri));

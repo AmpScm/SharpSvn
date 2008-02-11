@@ -19,24 +19,6 @@ using System::IO::FileMode;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnDiffArgs,System.IO.FileStream&):System.Boolean", MessageId="3#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Diff(SharpSvn.SvnTarget,SharpSvn.SvnTarget,System.IO.FileStream&):System.Boolean", MessageId="2#")];
 
-ref class DeleteOnCloseStream : public System::IO::FileStream
-{
-	initonly String^ _fullPath;
-public:
-	DeleteOnCloseStream(String ^path, FileMode fileMode)
-		: FileStream(path, fileMode)
-	{
-		_fullPath = path;
-	}
-
-	virtual void Close() override
-	{
-		FileStream::Close();
-		File::Delete(_fullPath);
-	}
-};
-
-
 bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result)
 {
 	if(!from)
