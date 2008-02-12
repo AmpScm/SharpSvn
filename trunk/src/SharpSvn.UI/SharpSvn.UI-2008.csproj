@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.20706</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E929A4D4-6C65-4D00-9432-E082169BDDC3}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -131,7 +131,7 @@
     <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
       <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
       <Name>SharpSvn</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
