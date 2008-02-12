@@ -599,6 +599,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.WorkingCopyInfo.PropertyChangeTime, Is.EqualTo(DateTime.MinValue));
 					Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
 					Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.Null);
+					Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.EqualTo(Guid.Empty));
 					Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(ReposUri));
 					Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
 					Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Delete));
