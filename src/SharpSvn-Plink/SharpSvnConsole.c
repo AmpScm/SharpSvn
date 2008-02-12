@@ -6,9 +6,12 @@
 #pragma comment(lib, "credui.lib")
 
 #define console_get_userpass_input putty_console_get_userpass_input
+#define cleanup_exit putty_cleanup_exit
 
 #include "PuttySrc/Windows/wincons.c"
 #undef console_get_userpass_input
+#undef cleanup_exit
+
 
 #ifndef MIN
 #define MIN(x, y) ((x < y) ? x : y)
@@ -101,6 +104,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	char captionBuffer[256];
 	char messageBuffer[256];
 	const char* host = sPlinkCurrentConfig ? sPlinkCurrentConfig->host : NULL;
+	static int nRun;
 
 	if(!host)
 		host = "localhost";
@@ -114,6 +118,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 		return 1;
 	}
 
+	nRun++;
 	sPlinkShouldConfirm = FALSE;	
 
 	if(!userName[0] && sPlinkCurrentConfig && sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
@@ -128,10 +133,18 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	info.hwndParent = GetOwnerHwnd();
 	info.pszCaptionText = captionBuffer;
 	info.pszMessageText = messageBuffer;
-	
-	dwResult = CredUIPromptForCredentials(&info, host, NULL, 0, userName, CREDUI_MAX_USERNAME_LENGTH, password, CREDUI_MAX_PASSWORD_LENGTH, &bSave,
-				CREDUI_FLAGS_ALWAYS_SHOW_UI | CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
-				| (p->prompts[0]->echo ? 0 : CREDUI_FLAGS_KEEP_USERNAME));
+
+	dwResult = CredUIPromptForCredentials(
+		&info, 
+		host, 
+		NULL, 
+		nRun > 1 ? ERROR_LOGON_FAILURE : 0, 
+		userName, CREDUI_MAX_USERNAME_LENGTH, 
+		password, CREDUI_MAX_PASSWORD_LENGTH, 
+		&bSave,
+		CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
+		| CREDUI_FLAGS_ALWAYS_SHOW_UI
+		| (p->prompts[0]->echo ? 0 : CREDUI_FLAGS_KEEP_USERNAME));
 
 	if(p->prompts[0]->echo)
 	{
@@ -153,10 +166,11 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 		return 0;
 }
 
-void sPlinkConfirm()
+void cleanup_exit(int code)
 {
 	if(sPlinkCurrentConfig && sPlinkCurrentConfig->host)
 	{		
 		CredUIConfirmCredentials(sPlinkCurrentConfig->host, sPlinkShouldConfirm);
 	}
+	putty_cleanup_exit(code);
 }
