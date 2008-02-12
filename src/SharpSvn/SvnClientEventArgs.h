@@ -401,7 +401,7 @@ namespace SharpSvn {
 		{
 			KeyedCollection<String^, SvnChangeItem^>^  get()
 			{
-				if(!_changedPaths && _entry && _pool)
+				if(!_changedPaths && _entry && _entry->changed_paths && _pool)
 				{
 					_changedPaths = gcnew ChangedPathsCollection();
 
@@ -963,7 +963,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_author && _entry->last_author)
+				if(!_author && _entry && _entry->last_author)
 					_author = SvnBase::Utf8_PtrToString(_entry->last_author);
 
 				return _author;
