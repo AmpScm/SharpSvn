@@ -25,7 +25,7 @@
 			IntermediateDirectory="obj_2008\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfATL="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -50,9 +50,9 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
-				DebugInformationFormat="4"
+				DebugInformationFormat="3"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
@@ -99,7 +99,7 @@
 			IntermediateDirectory="obj_2008\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfATL="1"
-			CharacterSet="1"
+			CharacterSet="2"
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
@@ -125,7 +125,7 @@
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				WarningLevel="3"
 				DebugInformationFormat="3"
 			/>
@@ -218,7 +218,7 @@
 				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="1"
@@ -296,7 +296,7 @@
 				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
-				SubSystem="1"
+				SubSystem="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
 				TargetMachine="17"
@@ -334,6 +334,14 @@
 			>
 			<File
 				RelativePath=".\SharpSvn-Plink.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\SharpSvnCmdLine.c"
+				>
+			</File>
+			<File
+				RelativePath=".\SharpSvnConsole.c"
 				>
 			</File>
 			<File
@@ -432,42 +440,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\PuttySrc\cmdline.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -504,6 +477,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -540,6 +514,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -578,6 +553,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -614,6 +590,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -650,6 +627,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -688,6 +666,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -724,6 +703,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -760,6 +740,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -798,6 +779,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -836,6 +818,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -872,6 +855,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -910,6 +894,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -948,6 +933,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -986,6 +972,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1024,6 +1011,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1062,6 +1050,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1100,6 +1089,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1138,6 +1128,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1176,6 +1167,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1214,6 +1206,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1252,6 +1245,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1290,6 +1284,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1328,6 +1323,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1366,6 +1362,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1404,6 +1401,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1442,6 +1440,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1480,6 +1479,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1518,6 +1518,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1556,6 +1557,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1594,6 +1596,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1632,6 +1635,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1670,6 +1674,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1708,6 +1713,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1744,6 +1750,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1780,6 +1787,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1816,6 +1824,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1840,44 +1849,6 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\PuttySrc\windows\wincons.c"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-							UsePrecompiledHeader="0"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
-							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
 				</File>
@@ -1890,6 +1861,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1926,6 +1898,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1962,6 +1935,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -1998,6 +1972,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2034,6 +2009,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2070,6 +2046,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2106,6 +2083,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2144,6 +2122,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2180,6 +2159,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2216,6 +2196,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2252,6 +2233,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -2288,6 +2270,7 @@
 						<Tool
 							Name="VCCLCompilerTool"
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
