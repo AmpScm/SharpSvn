@@ -7,6 +7,7 @@
 
 extern Config* sPlinkCurrentConfig = NULL;
 
+
 void cmdline_run_saved(Config *cfg)
 {
 	putty_cmdline_run_saved(cfg);
