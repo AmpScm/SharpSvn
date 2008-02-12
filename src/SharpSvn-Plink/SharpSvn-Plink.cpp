@@ -4,6 +4,11 @@
 #include "stdafx.h"
 #include "SharpSvn-Plink.h"
 
+extern "C" {
+
+	extern int main(int argc, char** argv);
+};
+
 #define MAX_LOADSTRING 100
 
 // Global Variables:
@@ -11,12 +16,14 @@ HINSTANCE hInst;								// current instance
 TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
 TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
 
+
 // Forward declarations of functions included in this code module:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
-/*
+
+
 int APIENTRY _tWinMain(HINSTANCE hInstance,
                      HINSTANCE hPrevInstance,
                      LPTSTR    lpCmdLine,
@@ -25,35 +32,11 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
- 	// TODO: Place code here.
-	MSG msg;
-	HACCEL hAccelTable;
+	_set_printf_count_output(true); // Required for disconnect message and HTTP Proxy of plink
 
-	// Initialize global strings
-	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
-	LoadString(hInstance, IDC_SHARPSVNPLINK, szWindowClass, MAX_LOADSTRING);
-	MyRegisterClass(hInstance);
 
-	// Perform application initialization:
-	if (!InitInstance (hInstance, nCmdShow))
-	{
-		return FALSE;
-	}
-
-	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_SHARPSVNPLINK));
-
-	// Main message loop:
-	while (GetMessage(&msg, NULL, 0, 0))
-	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
-	}
-
-	return (int) msg.wParam;
-}*/
+	return main(__argc, __argv);
+}
 
 
 
