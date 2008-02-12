@@ -194,7 +194,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="PuttySrc\windows;PuttySrc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
@@ -272,7 +272,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="2"
+				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="PuttySrc\windows;PuttySrc"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
