@@ -353,6 +353,8 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 
 	if(!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
+	else if(err)
+		svn_error_clear(err);
 
 	return nullptr;
 }
@@ -375,7 +377,11 @@ bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
 	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocCanonical(uri->ToString()), CtxHandle, pool.Handle);
 
 	if(err || !uuidStr)
+	{
+		if(err)
+			svn_error_clear(err);
 		return false;
+	}
 	else
 	{
 		id = Guid(Utf8_PtrToString(uuidStr));
@@ -398,6 +404,8 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 
 	if(!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
+	else if(err)
+		svn_error_clear(err);
 
 	return nullptr;
 }
@@ -419,6 +427,8 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 
 	if(!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
+	else if(err)
+		svn_error_clear(err);
 
 	return nullptr;
 }
