@@ -63,7 +63,7 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, ICollection<Byte
 
 	AprPool pool(%_pool);
 
-	array<Byte> ^byteArray = safe_cast<array<Byte>>(bytes);
+	array<Byte> ^byteArray = dynamic_cast<array<Byte>^>(bytes);
 
 	if(!byteArray)
 	{
