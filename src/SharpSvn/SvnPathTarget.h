@@ -23,6 +23,8 @@ namespace SharpSvn {
 		{
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
+			else if(!SvnBase::IsNotUri(path))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = CanonicalizePath(path);
 			_fullPath = GetFullPath(_path);
@@ -33,6 +35,8 @@ namespace SharpSvn {
 		{
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
+			else if(!SvnBase::IsNotUri(path))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = CanonicalizePath(path);
 			_fullPath = GetFullPath(_path);
@@ -43,6 +47,8 @@ namespace SharpSvn {
 		{
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
+			else if(!SvnBase::IsNotUri(path))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = CanonicalizePath(path);
 			_fullPath = GetFullPath(_path);
@@ -53,6 +59,8 @@ namespace SharpSvn {
 		{
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
+			else if(!SvnBase::IsNotUri(path))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = CanonicalizePath(path);
 			_fullPath = GetFullPath(_path);
@@ -63,6 +71,8 @@ namespace SharpSvn {
 		{
 			if(String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
+			else if(!SvnBase::IsNotUri(path))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = CanonicalizePath(path);
 			_fullPath = GetFullPath(_path);

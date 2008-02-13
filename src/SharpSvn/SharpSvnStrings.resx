@@ -261,4 +261,10 @@
   <data name="VerifyEnumFailed" xml:space="preserve">
     <value>The value {0} is not a valid {1}</value>
   </data>
+  <data name="AllUrisMustBeOnTheSameServer" xml:space="preserve">
+    <value>All provided Uri's must be on the same server</value>
+  </data>
+  <data name="CollectionMustContainAtLeastOneItem" xml:space="preserve">
+    <value>The collection must at least contain one item</value>
+  </data>
 </root>

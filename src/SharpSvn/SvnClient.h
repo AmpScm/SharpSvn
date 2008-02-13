@@ -428,26 +428,35 @@ namespace SharpSvn {
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
 		bool Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
-		/// <summary>Gets log messages of the specified target</summary>
-		bool Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <summary>Gets log messages of the specified target</summary>
-		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler);
+		/// <remarks>A pegrevision applied on the target overrides one set on the args object</remarks>
+		bool Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+
 		/// <summary>Gets log messages of the specified target</summary>
-		bool Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+		/// <remarks>A pegrevision applied on the target overrides one set on the args object</remarks>
+		bool Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+
+		/// <summary>Gets log messages of the specified target path</summary>
+		bool Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+
+		/// <summary>Gets log messages of the specified target path</summary>
+		bool Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <overloads>Retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
 		bool GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
+		bool GetLog(Uri^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, [Out] Collection<SvnLogEventArgs^>^% logItems);
+		bool GetLog(String^ targetPath, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
+		bool GetLog(ICollection<Uri^>^ targets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
+		/// <summary>Gets log messages of the specified target</summary>
+		bool GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 
 	private:
-		bool InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+		bool InternalLog(ICollection<String^>^ targets, Uri^ logRoot, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 #pragma endregion
 
 	public:
@@ -895,6 +904,7 @@ namespace SharpSvn {
 		/// <value>The repository root <see cref="Uri" /> or <c>null</c> if the uri is not a repository uri</value>
 		/// <remarks>SharpSvn makes sure the uri ends in a '/'</remarks>
 		Uri^ GetRepositoryRoot(Uri^ uri);
+
 		/// <summary>Gets the repository root from the specified path</summary>
 		/// <value>The repository root <see cref="Uri" /> or <c>null</c> if the uri is not a working copy path</value>
 		/// <remarks>SharpSvn makes sure the uri ends in a '/'</remarks>
