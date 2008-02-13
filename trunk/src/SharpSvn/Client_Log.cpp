@@ -22,131 +22,154 @@ bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 	else if(!logHandler)
 		throw gcnew ArgumentNullException("logHandler");
 
-	return InternalLog(NewSingleItemCollection(target->TargetName), target->Revision, gcnew SvnLogArgs(), logHandler);
+	SvnLogArgs^ args = gcnew SvnLogArgs();
+	args->OriginRevision = target->Revision;
+
+	SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);	
+
+	if(uriTarget)
+		return Log(uriTarget->Uri, args, logHandler);
+	else
+		return Log(static_cast<SvnPathTarget^>(target)->Path, args, logHandler);
 }
 
-bool SvnClient::Log(SvnTarget^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return InternalLog(NewSingleItemCollection(target->TargetName), target->Revision, args, logHandler);
+	return InternalLog(NewSingleItemCollection(CanonicalizeUri(target)->ToString()), nullptr, args, logHandler);
 }
 
-bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	return Log(baseTarget, relativeTargets, gcnew SvnLogArgs(), logHandler);
+	if(String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!IsNotUri(targetPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
+
+	return InternalLog(NewSingleItemCollection(CanonicalizePath(targetPath)), nullptr, args, logHandler);
 }
 
-bool SvnClient::Log(SvnUriTarget^ baseTarget, ICollection<Uri^>^ relativeTargets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!baseTarget)
-		throw gcnew ArgumentNullException("baseTarget");
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ targets;
-
-	if(!relativeTargets || !relativeTargets->Count)
-		targets = gcnew array<String^>(1);
-	else
+	Uri^ first = nullptr;
+	String^ root = nullptr;
+	bool moreThanOne = false;
+	for each(Uri^ uri in targets)
 	{
-		targets = gcnew array<String^>(1 + relativeTargets->Count);
-		Uri^ baseUri = baseTarget->Uri;
+		if(!uri)
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 
-		int i = 1;
-		for each(Uri^ uri in relativeTargets)
+		if(!uri->IsAbsoluteUri)
 		{
-			if(!uri)
-				throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "relativeTargets");
+			if(args->BaseUri)
+				uri = gcnew Uri(args->BaseUri, uri);
 
-			Uri^ relUri = baseUri->MakeRelativeUri(gcnew Uri(baseUri, uri));
+			if(!uri->IsAbsoluteUri)
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "targets");
+		}
 
-			if(relUri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "relativeTargets");
+		if(!first)
+		{
+			first = uri;
+			root = uri->AbsolutePath->TrimEnd('/');
+			continue;
+		}
 
-			targets[i] = relUri->ToString();
-			i++;
+		if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
+			throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
+
+		String^ itemPath = uri->AbsolutePath->TrimEnd('/');
+
+		int nEnd = Math::Min(root->Length, itemPath->Length)-1;
+
+		while(nEnd >= 0 && String::Compare(root, 0, itemPath, 0, nEnd))
+		{
+			nEnd = root->LastIndexOf('/', nEnd)-1;
+		}
+
+		if(nEnd >= root->Length - 1)
+		{}
+		else if(nEnd > 1)
+			root = root->Substring(0, nEnd);
+		else
+			root = "/";
+	}
+
+	System::Collections::Generic::List<String^>^ rawTargets = gcnew System::Collections::Generic::List<String^>();
+	Uri^ rootUri = gcnew Uri(first, root); 
+	if(moreThanOne)
+	{		
+		// Invoke with primary url followed by relative subpaths
+		rawTargets->Add(CanonicalizeUri(rootUri)->ToString());
+
+		for each(Uri^ uri in targets)
+		{
+			if(!uri->IsAbsoluteUri && args->BaseUri) // Allow relative Uri's relative from the first
+				uri = gcnew Uri(args->BaseUri, uri);
+
+			uri = CanonicalizeUri(uri);
+
+			rawTargets->Add(rootUri->MakeRelativeUri(uri)->ToString());
 		}
 	}
+	else
+		rawTargets->Add(CanonicalizeUri(first)->ToString());
 
-	targets[0] = baseTarget->TargetName;
-
-	return InternalLog(safe_cast<ICollection<String^>^>(targets), baseTarget->Revision, args, logHandler);
+	return InternalLog(safe_cast<ICollection<String^>^>(targets), rootUri, args, logHandler);
 }
 
-bool SvnClient::GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems)
+bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!target)
-		throw gcnew ArgumentNullException("target");
-
-	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
-
-	try
-	{
-		return Log(target, results->Handler);
-	}
-	finally
-	{
-		logItems = results;
-	}
-}
-
-bool SvnClient::GetLog(SvnTarget^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
-{
-	if(!target)
-		throw gcnew ArgumentNullException("target");
+	if(!targetPaths)
+		throw gcnew ArgumentNullException("targetPaths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!targetPaths->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "targets");
 
-	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+	// This overload is not supported by the Subversion runtime at this time. We fake it useing the client api
+	Uri^ first = nullptr;
 
-	try
+	System::Collections::Generic::List<Uri^>^ targetsUris = gcnew System::Collections::Generic::List<Uri^>();
+
+	for each(String^ path in targetPaths)
 	{
-		return Log(target, args, results->Handler);
-	}
-	finally
-	{
-		logItems = results;
-	}
-}
+		if(!path)
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targetPaths");
+		else if(!IsNotUri(path))
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPaths");
 
-bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, [Out] Collection<SvnLogEventArgs^>^% logItems)
-{
-	if(!baseTarget)
-		throw gcnew ArgumentNullException("baseTarget");
+		Uri^ uri = GetUriFromWorkingCopy(path);
 
-	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+		if(!uri)
+		{
+			ArgsStore store(this, args);
 
-	try
-	{
-		return Log(baseTarget, subTargets, results->Handler);
+			// HACK: We must provide some kind of svn error, to eventually replace this method with real svn client code
+			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_NOT_DIRECTORY, nullptr, nullptr));
+		}
+
+		if(!first)
+			first = uri;
+		else if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
+		{
+			// TODO: Give some kind of meaningfull error. We just ignore other repository paths in logging now
+			continue;
+		}
+
+		targetsUris->Add(uri);
 	}
-	finally
-	{
-		logItems = results;
-	}
-}
 
-bool SvnClient::GetLog(SvnUriTarget^ baseTarget, ICollection<Uri^>^ subTargets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
-{
-	if(!baseTarget)
-		throw gcnew ArgumentNullException("baseTarget");
-	else if(!args)
-		throw gcnew ArgumentNullException("args");
-
-	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
-
-	try
-	{
-		return Log(baseTarget, subTargets, args, results->Handler);
-	}
-	finally
-	{
-		logItems = results;
-	}
+	return Log(targetsUris, args, logHandler);
 }
 
 static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entry, apr_pool_t *pool)
@@ -189,12 +212,10 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 	}
 }
 
-bool SvnClient::InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevision, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if(!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!pegRevision)
-		throw gcnew ArgumentNullException("pegRevision");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -203,6 +224,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevis
 	AprPool pool(%_pool);
 
 	args->_mergeLogLevel = 0; // Clear log level
+	args->_searchRoot = searchRoot;
 	if(logHandler)
 		args->Log += logHandler;
 	try
@@ -214,7 +236,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevis
 		else
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
-		svn_opt_revision_t pegRev = pegRevision->ToSvnRevision();
+		svn_opt_revision_t pegRev = args->OriginRevision->ToSvnRevision();
 		svn_opt_revision_t start = args->Start->ToSvnRevision(SvnRevision::Head);
 		svn_opt_revision_t end = args->End->ToSvnRevision(SvnRevision::Zero);
 
@@ -239,5 +261,101 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, SvnRevision^ pegRevis
 	{
 		if(logHandler)
 			args->Log -= logHandler;
+
+		args->_searchRoot = nullptr;
+	}
+}
+
+bool SvnClient::GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(target, results->Handler);
+	}
+	finally
+	{
+		logItems = results;
+	}
+}
+
+bool SvnClient::GetLog(Uri^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
+{
+	if(!target)
+		throw gcnew ArgumentNullException("target");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(target, args, results->Handler);
+	}
+	finally
+	{
+		logItems = results;
+	}
+}
+
+bool SvnClient::GetLog(String^ targetPath, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
+{
+	if(!targetPath)
+		throw gcnew ArgumentNullException("targetPath");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(targetPath, args, results->Handler);
+	}
+	finally
+	{
+		logItems = results;
+	}
+}
+
+
+bool SvnClient::GetLog(ICollection<Uri^>^ targets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
+{
+	if(!targets)
+		throw gcnew ArgumentNullException("targets");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(targets, args, results->Handler);
+	}
+	finally
+	{
+		logItems = results;
+	}
+}
+
+bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
+{
+	if(!targetPaths)
+		throw gcnew ArgumentNullException("targetPaths");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(targetPaths, args, results->Handler);
+	}
+	finally
+	{
+		logItems = results;
 	}
 }

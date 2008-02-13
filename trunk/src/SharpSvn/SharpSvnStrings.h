@@ -55,6 +55,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to All provided Uri&apos;s must be on the same server.
+    /// </summary>
+    internal: static property System::String^  AllUrisMustBeOnTheSameServer {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to This argument is not a valid path. A Uri was specified.
     /// </summary>
     internal: static property System::String^  ArgumentMustBeAPathNotAUri {
@@ -65,6 +72,13 @@ ref class SharpSvnStrings {
     ///   Looks up a localized string similar to The argument must be a valid absolute repository Uri.
     /// </summary>
     internal: static property System::String^  ArgumentMustBeAValidRepositoryUri {
+        System::String^  get();
+    }
+    
+    /// <summary>
+    ///   Looks up a localized string similar to The collection must at least contain one item.
+    /// </summary>
+    internal: static property System::String^  CollectionMustContainAtLeastOneItem {
         System::String^  get();
     }
     
@@ -407,12 +421,20 @@ inline System::String^  SharpSvnStrings::AllTargetsMustBeUriOrPath::get() {
     return ResourceManager->GetString(L"AllTargetsMustBeUriOrPath", resourceCulture);
 }
 
+inline System::String^  SharpSvnStrings::AllUrisMustBeOnTheSameServer::get() {
+    return ResourceManager->GetString(L"AllUrisMustBeOnTheSameServer", resourceCulture);
+}
+
 inline System::String^  SharpSvnStrings::ArgumentMustBeAPathNotAUri::get() {
     return ResourceManager->GetString(L"ArgumentMustBeAPathNotAUri", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::ArgumentMustBeAValidRepositoryUri::get() {
     return ResourceManager->GetString(L"ArgumentMustBeAValidRepositoryUri", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::CollectionMustContainAtLeastOneItem::get() {
+    return ResourceManager->GetString(L"CollectionMustContainAtLeastOneItem", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {

@@ -243,10 +243,11 @@ namespace SharpSvn {
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Log(SvnTarget^, SvnLogArgs^, EventHandler{SvnLogEventArgs^}^ logHandler)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Log(Uri^, SvnLogArgs^, EventHandler{SvnLogEventArgs^}^ logHandler)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnLogArgs : public SvnClientArgs
 	{
+		SvnRevision^ _pegRevision;
 		SvnRevision^ _start;
 		SvnRevision^ _end;
 		int _limit;
@@ -254,10 +255,12 @@ namespace SharpSvn {
 		bool _strictNodeHistory;
 		bool _includeMerged;
 		bool _ommitMessages;
+		Uri^ _baseUri;
 		Collection<String^>^ _retrieveProperties;
 
 	internal:
 		int _mergeLogLevel; // Used by log handler to provide mergeLogLevel
+		Uri^ _searchRoot;
 
 	public:
 		event EventHandler<SvnLogEventArgs^>^ Log;
@@ -283,6 +286,22 @@ namespace SharpSvn {
 			virtual SvnClientCommandType get() override sealed
 			{
 				return SvnClientCommandType::Log;
+			}
+		}
+
+		/// <summary>Gets the revision in which the Url's are evaluated (Aka peg revision)</summary>
+		property SvnRevision^ OriginRevision
+		{
+			SvnRevision^ get()
+			{
+				return _pegRevision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if(value)
+					_pegRevision = value;
+				else
+					_pegRevision = SvnRevision::None;
 			}
 		}
 
@@ -316,6 +335,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets the limit on the number of log items fetched</summary>
 		property int Limit
 		{
 			int get()
@@ -329,6 +349,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
 		property bool LogChangedPaths
 		{
 			bool get()
@@ -341,6 +362,9 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether only the history of this exact node should be fetched (Aka stop on copying)</summary>
+		/// <remarks>If @a StrictNodeHistory is set, copy history (if any exists) will
+		/// not be traversed while harvesting revision logs for each target. </remarks>
 		property bool StrictNodeHistory
 		{
 			bool get()
@@ -353,6 +377,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether the merged revisions should be fetched instead of the node changes</summary>
 		property bool IncludeMergedRevisions
 		{
 			bool get()
@@ -365,6 +390,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether the logmessage should be fetched</summary>
 		property bool OmitMessages
 		{
 			bool get()
@@ -377,6 +403,20 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets the base uri to which relative Uri's are relative</summary>
+		property Uri^ BaseUri
+		{
+			Uri^ get()
+			{
+				return _baseUri;
+			}
+			void set(Uri^ value)
+			{
+				_baseUri = value;
+			}
+		}
+
+		/// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
 		property Collection<String^>^ RetrieveProperties
 		{
 			Collection<String^>^ get();

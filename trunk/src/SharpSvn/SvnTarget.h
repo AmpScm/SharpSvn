@@ -200,7 +200,7 @@ namespace SharpSvn {
 	public ref class SvnTarget abstract : public SvnBase, public IEquatable<SvnTarget^>
 	{
 		initonly SvnRevision^ _revision;
-	protected:
+	internal:
 		SvnTarget(SvnRevision^ revision)
 		{
 			if(revision == nullptr)
