@@ -70,6 +70,11 @@
 				<arg value="NTLM=1" />
 				<arg value="NTLM_STATIC=1" />
 			</exec>
+			<exec program="mt.exe" workingdir="${saslDir}/lib">
+        <arg value="-manifest" />
+        <arg value="${saslDllName}.manifest" />
+        <arg value="-outputresource:${saslDllName};2" />
+      </exec>
 		</OnceBlock>
 		<copy todir="build/${platform}/lib/lib">
       <fileset basedir="${saslDir}/lib">
