@@ -3,6 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
+		Copy-Dependencies.cmd = Copy-Dependencies.cmd
 		SharpSvn.FxCop = SharpSvn.FxCop
 		SharpSvn.shfb = SharpSvn.shfb
 	EndProjectSection
@@ -23,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Tests-VS2008", "Sh
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpDns", "SharpDns\SharpDns-vs2008.vcproj", "{B851CBAC-93CB-4338-A0B9-6B091ED4DAC3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn-Plink", "SharpSvn-Plink\SharpSvn-Plink-vs2008.vcproj", "{3B2682F1-0092-4422-8E12-588163AD9422}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpPlink", "SharpPlink\SharpPlink-vs2008.vcproj", "{3B2682F1-0092-4422-8E12-588163AD9422}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
