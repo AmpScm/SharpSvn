@@ -69,7 +69,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 	AprPool pool(%_pool);
 
-	array<Byte> ^byteArray = safe_cast<array<Byte>>(bytes);
+	array<Byte> ^byteArray = dynamic_cast<array<Byte>^>(bytes);
 
 	if(!byteArray)
 	{
