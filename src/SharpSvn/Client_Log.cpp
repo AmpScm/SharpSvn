@@ -104,6 +104,9 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			root = "/";
 	}
 
+	if(!root->EndsWith("/", StringComparison::Ordinal))
+		root += '/';
+
 	System::Collections::Generic::List<String^>^ rawTargets = gcnew System::Collections::Generic::List<String^>();
 	Uri^ rootUri = gcnew Uri(first, root); 
 	if(moreThanOne)
@@ -154,7 +157,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 		{
 			ArgsStore store(this, args);
 
-			// HACK: We must provide some kind of svn error, to eventually replace this method with real svn client code
+			// We must provide some kind of svn error, to eventually replace this method with real svn client code
 			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_NOT_DIRECTORY, nullptr, nullptr));
 		}
 
@@ -162,6 +165,11 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 			first = uri;
 		else if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
 		{
+			ArgsStore store(this, args);
+
+			// We must provide some kind of svn error, to eventually replace this method with real svn client code
+			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_BAD_PATH, nullptr, "Working copy paths must be in the same repository"));
+
 			// TODO: Give some kind of meaningfull error. We just ignore other repository paths in logging now
 			continue;
 		}
@@ -188,7 +196,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 		return nullptr;
 	}
 
-	SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool);
+	SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool, args->_searchRoot);
 
 	if(log_entry->has_children)
 		args->_mergeLogLevel++;

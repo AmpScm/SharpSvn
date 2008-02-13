@@ -186,5 +186,6 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 		nullptr,
 		pool.Handle);
 
+
 	return args->HandleResult(this, r);
 }

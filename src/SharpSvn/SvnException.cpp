@@ -257,6 +257,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_REP_BEING_WRITTEN:
 		case SVN_ERR_FS_TXN_NAME_TOO_LONG:
 		case SVN_ERR_FS_NO_SUCH_NODE_ORIGIN:
+		case SVN_ERR_FS_UNSUPPORTED_UPGRADE:
 			return gcnew SvnFileSystemException(error);
 		case SVN_ERR_FS_OUT_OF_DATE:
 		case SVN_ERR_FS_TXN_OUT_OF_DATE:
@@ -275,6 +276,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_REPOS_BAD_REVISION_REPORT:
 		case SVN_ERR_REPOS_UNSUPPORTED_VERSION:
 		case SVN_ERR_REPOS_DISABLED_FEATURE:
+		case SVN_ERR_REPOS_UNSUPPORTED_UPGRADE:
 			return gcnew SvnRepositoryException(error);
 		case SVN_ERR_REPOS_HOOK_FAILURE:
 		case SVN_ERR_REPOS_POST_COMMIT_HOOK_FAILED:

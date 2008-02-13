@@ -71,7 +71,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -79,7 +79,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB44-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="0"
@@ -161,7 +161,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -169,7 +169,7 @@
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB44-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				RandomizedBaseAddress="1"
@@ -250,7 +250,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -258,7 +258,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB44-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				DataExecutionPrevention="2"
 				TargetMachine="1"
@@ -338,7 +338,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="..\..\imports\release\copylibs.cmd &quot;$(PlatformName)&quot; &quot;$(TargetDir)&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -346,7 +346,7 @@
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
-				AssemblyLinkResource="..\..\imports\release\bin\SharpSvn-DB44-20-$(PlatformName).dll;..\..\imports\release\bin\SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				DataExecutionPrevention="2"
 				TargetMachine="17"

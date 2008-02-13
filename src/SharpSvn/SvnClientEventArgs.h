@@ -334,17 +334,18 @@ namespace SharpSvn {
 		AprPool^ _pool;
 
 		String^ _author;
-		DateTime _date;
+		initonly DateTime _date;
 		String^ _message;
-		__int64 _revision;
-		bool _hasChildren;
-		int _mergeLevel;
+		initonly __int64 _revision;
+		initonly bool _hasChildren;
+		initonly int _mergeLevel;
+		initonly Uri^ _logOrigin;
 
 		const char* _pcAuthor;
 		const char* _pcMessage;
 
 	internal:
-		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool)
+		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool, Uri^ logOrigin)
 		{
 			if(!entry)
 				throw gcnew ArgumentNullException("entry");
@@ -379,6 +380,7 @@ namespace SharpSvn {
 			_hasChildren = entry->has_children ? true : false;
 
 			_mergeLevel = mergeLevel;
+			_logOrigin = logOrigin;
 		}
 
 	private:
@@ -488,6 +490,15 @@ namespace SharpSvn {
 			int get()
 			{
 				return _mergeLevel;
+			}
+		}
+
+		/// <summary>Gets the log origin SharpSvn used for retrieving the logfile</summary>
+		property Uri^ LogOrigin
+		{
+			Uri^ get()
+			{
+				return _logOrigin;
 			}
 		}
 
