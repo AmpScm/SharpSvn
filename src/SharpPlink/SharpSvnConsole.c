@@ -5,10 +5,12 @@
 #include "Tlhelp32.h"
 #pragma comment(lib, "credui.lib")
 
+#define verify_ssh_host_key putty_verify_ssh_host_key
 #define console_get_userpass_input putty_console_get_userpass_input
 #define cleanup_exit putty_cleanup_exit
 
 #include "PuttySrc/Windows/wincons.c"
+#undef verify_ssh_host_key
 #undef console_get_userpass_input
 #undef cleanup_exit
 
@@ -164,6 +166,89 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	}
 	else
 		return 0;
+}
+
+int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
+						char *keystr, char *fingerprint,
+						void (*callback)(void *ctx, int result), void *ctx)
+{
+	int ret;
+
+	static const char absentmsg[] =
+		"The server's host key is not cached in the registry. You\n"
+		"have no guarantee that the server is the computer you\n"
+		"think it is.\n"
+		"The server's %s key fingerprint is:\n"
+		"%s\n"
+		"If you trust this host, enter \"y\" to add the key to\n"
+		"PuTTY's cache and carry on connecting.\n"
+		"If you want to carry on connecting just once, without\n"
+		"adding the key to the cache, enter \"n\".\n"
+		"If you do not trust this host, press Return to abandon the\n"
+		"connection.\n"
+		"Store key in cache? (y/n) ";
+
+	static const char wrongmsg_batch[] =
+		"WARNING - POTENTIAL SECURITY BREACH!\n"
+		"The server's host key does not match the one PuTTY has\n"
+		"cached in the registry. This means that either the\n"
+		"server administrator has changed the host key, or you\n"
+		"have actually connected to another computer pretending\n"
+		"to be the server.\n"
+		"The new %s key fingerprint is:\n"
+		"%s\n"
+		"Connection abandoned.\n";
+	static const char wrongmsg[] =
+		"WARNING - POTENTIAL SECURITY BREACH!\n"
+		"The server's host key does not match the one PuTTY has\n"
+		"cached in the registry. This means that either the\n"
+		"server administrator has changed the host key, or you\n"
+		"have actually connected to another computer pretending\n"
+		"to be the server.\n"
+		"The new %s key fingerprint is:\n"
+		"%s\n"
+		"If you were expecting this change and trust the new key,\n"
+		"enter \"y\" to update PuTTY's cache and continue connecting.\n"
+		"If you want to carry on connecting but without updating\n"
+		"the cache, enter \"n\".\n"
+		"If you want to abandon the connection completely, press\n"
+		"Return to cancel. Pressing Return is the ONLY guaranteed\n"
+		"safe choice.\n"
+		"Update cached key? (y/n, Return cancels connection) ";
+
+	static const char abandoned[] = "Connection abandoned.\n";
+
+	char buffer[2048];
+	int result;
+
+	if(console_batch_mode)
+		return putty_verify_ssh_host_key(frontend, host, port, keytype, keystr, fingerprint, callback, ctx);
+
+	/*
+	* Verify the key against the registry.
+	*/
+	ret = verify_host_key(host, port, keytype, keystr);
+
+	if (ret == 0)		       /* success - key matched OK */
+		return 1;
+
+	if (ret == 2) {		       /* key was different */
+		sprintf_s(buffer, sizeof(buffer), wrongmsg, keytype, fingerprint);
+	}
+	if (ret == 1) {		       /* key was absent */
+		sprintf_s(buffer, sizeof(buffer), absentmsg, keytype, fingerprint);
+	}
+
+	result = MessageBox(GetOwnerHwnd(), buffer, (ret == 2) ? "SharpPlink - POTENTIAL SECURITY BREACH" : "SharpPlink - Unknown Host Key", 
+		MB_YESNOCANCEL | ((ret == 2) ? MB_ICONSTOP : MB_ICONINFORMATION));
+
+	if(result == IDYES)
+		store_host_key(host, port, keytype, keystr);
+
+	if(result == IDYES || result == IDNO)
+		return 1;
+
+	return 0; // Abort
 }
 
 void cleanup_exit(int code)

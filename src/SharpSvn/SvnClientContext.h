@@ -35,6 +35,10 @@ namespace SharpSvn {
 		int _authCookie;
 		SvnContextState _contextState;
 		initonly SvnAuthentication^ _authentication;
+
+		static initonly Object^ _plinkLock = gcnew Object();
+		static String^ _plinkPath;
+
 	internal:
 		SvnClientContext(AprPool^ pool);
 
@@ -74,6 +78,12 @@ namespace SharpSvn {
 			{
 				return _contextState;
 			}
+		}
+
+		/// <summary>Gets the path to SharpSvn's plink. The path is encoded to be safe for subversion configuration settings</summary>
+		static property String^ PlinkPath
+		{
+			String^ get();
 		}
 
 	public:

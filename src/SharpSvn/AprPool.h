@@ -171,7 +171,7 @@ namespace SharpSvn {
 				while(APR_EOF != (r = apr_file_read(_intHandle, pBuffer, &nRead)))
 				{
 					if(r == APR_SUCCESS)
-						_stream->Write(buffer, 0, nRead);
+						_stream->Write(buffer, 0, (int)nRead);
 					else if(!APR_STATUS_IS_EAGAIN(r) && !APR_STATUS_IS_EINTR(r))
 						break; // Most errors are fatal
 

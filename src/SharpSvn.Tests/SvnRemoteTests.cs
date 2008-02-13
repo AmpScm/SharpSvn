@@ -31,5 +31,21 @@ namespace SharpSvn.Tests
 			Assert.That(ee, Is.Not.Null);
 			Assert.That(ee[0].Entry.Author, Is.Not.Null);
 		}
+
+		public void TestSsh()
+		{
+			SvnClient cl = new SvnClient();
+			bool found = false;
+
+			cl.List(new Uri("svn+ssh://nietver.nl/home/svn/repos/openwrt"), delegate(object Sender, SvnListEventArgs e)
+			{
+				Assert.That(e.Entry, Is.Not.Null);
+				Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
+				Assert.That(e.Entry.Author, Is.Not.Null);
+				found = true;
+			});
+
+			Assert.That(found);
+		}
 	}
 }

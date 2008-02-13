@@ -2,7 +2,7 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="SharpSvn-Plink"
+	Name="SharpPlink"
 	ProjectGUID="{3B2682F1-0092-4422-8E12-588163AD9422}"
 	RootNamespace="SharpSvnPlink"
 	Keyword="Win32Proj"
@@ -333,7 +333,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath=".\SharpSvn-Plink.cpp"
+				RelativePath=".\SharpPlink.cpp"
 				>
 			</File>
 			<File
@@ -391,7 +391,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SharpSvn-Plink.h"
+				RelativePath=".\SharpPlink.h"
 				>
 			</File>
 			<File
@@ -409,11 +409,11 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\SharpSvn-Plink.ico"
+				RelativePath=".\SharpPlink.ico"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpSvn-Plink.rc"
+				RelativePath=".\SharpPlink.rc"
 				>
 			</File>
 			<File

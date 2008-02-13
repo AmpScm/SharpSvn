@@ -10,7 +10,9 @@
 #include <svn_config.h>
 
 using namespace SharpSvn;
+using namespace System::Threading;
 using namespace Microsoft::Win32;
+using System::IO::Path;
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
@@ -226,8 +228,47 @@ void SvnClientContext::ApplyCustomSsh()
 	}
 	// Ok: registry unset, setting invalid. Let's set our own plink handler
 
-	GC::KeepAlive(this); //TODO: Set our own handler
-	// svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig));
+	String^ plinkPath = PlinkPath;
+
+	if(plinkPath)
+	{
+		// Allocate in Ctx pool
+		svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(plinkPath)); 
+	}
+}
+
+String^ SvnClientContext::PlinkPath::get()
+{
+	Monitor::Enter(_plinkLock);
+	try
+	{
+		if(!_plinkPath)
+		{
+			_plinkPath = "";
+			Uri^ codeBase;
+
+			if(Uri::TryCreate(SvnClientContext::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase) && (codeBase->IsUnc || codeBase->IsFile))
+			{
+				String^ path = Path::GetFullPath(codeBase->LocalPath);
+
+				path = Path::Combine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
+
+				if(System::IO::File::Exists(path))
+				{
+					_plinkPath = path->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+
+					if(_plinkPath->Contains(" "))
+						_plinkPath = "\"" + _plinkPath + "\"";					
+				}
+			}
+		}
+
+		return String::IsNullOrEmpty(_plinkPath) ? nullptr : _plinkPath;
+	}
+	finally
+	{
+		Monitor::Exit(_plinkLock);
+	}
 }
 
 void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
