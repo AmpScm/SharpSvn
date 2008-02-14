@@ -53,7 +53,7 @@ namespace SharpSvn {
 	ref class SvnPropertyListArgs;
 	ref class SvnSetRevisionPropertyArgs;
 	ref class SvnGetRevisionPropertyArgs;
-	ref class SvnGetRevisionPropertiesArgs;
+	ref class SvnRevisionPropertyListArgs;
 	ref class SvnLockArgs;
 	ref class SvnUnlockArgs;
 	ref class SvnWriteArgs;
@@ -782,8 +782,8 @@ namespace SharpSvn {
 		/////////////////////////////////////////
 #pragma region // Properties List Client Command
 		/// <overloads>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</overloads>
-		bool GetRevisionProperties(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list);
-		bool GetRevisionProperties(SvnUriTarget^ target, SvnGetRevisionPropertiesArgs^ args, [Out] SvnPropertyCollection^% list);
+		bool GetRevisionPropertyList(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list);
+		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] SvnPropertyCollection^% list);
 #pragma endregion
 
 	public:
@@ -885,7 +885,7 @@ namespace SharpSvn {
 		/// <summary>Gets a list of merges which can be applied on target</summary>
 		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo);
 		/// <summary>Gets a list of merges which can be applied on target</summary>
-		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo);
+		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetAvailableMergeInfoArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo);
 
 	public:
 		/// <overloads>Streamingly retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>

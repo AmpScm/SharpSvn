@@ -484,3 +484,20 @@ void SvnClient::AddClientName(String^ name, System::Version^ version)
 		_clientName += " " + name + "/" + version->ToString();
 	}
 }
+
+const char* SvnClient::GetEolPtr(SvnLineStyle style)
+{
+	switch(style)
+	{
+	case SvnLineStyle::Native:
+		return nullptr;
+	case SvnLineStyle::CarriageReturnLinefeed:
+		return "CRLF";
+	case SvnLineStyle::Linefeed:
+		return "LF";
+	case SvnLineStyle::CarriageReturn:
+		return "CR";
+	default:
+		throw gcnew ArgumentOutOfRangeException("style");
+	}
+}

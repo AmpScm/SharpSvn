@@ -189,48 +189,68 @@ namespace SharpSvn {
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnWriteArgs : public SvnClientArgs
+	public ref class SvnMergeBaseArgs abstract : public SvnClientArgsWithConflict
 	{
-		SvnRevision^ _revision;
+		SvnCommandLineArgumentCollection^ _mergeArguments;
+	protected:
+		SvnMergeBaseArgs()
+		{
+		}
+
 	public:
-		SvnWriteArgs()
+		property SvnCommandLineArgumentCollection^ MergeArguments
 		{
-			_revision = SvnRevision::None;
-		}
+			SvnCommandLineArgumentCollection^ get()
+			{
+				if (!_mergeArguments)
+					_mergeArguments = gcnew SvnCommandLineArgumentCollection();
 
-		virtual property SvnClientCommandType ClientCommandType
-		{
-			virtual SvnClientCommandType get() override sealed
-			{
-				return SvnClientCommandType::Write;
-			}
-		}
-
-		property SvnRevision^ Revision
-		{
-			SvnRevision^ get()
-			{
-				return _revision;
-			}
-			void set(SvnRevision^ value)
-			{
-				if (value)
-					_revision = value;
-				else
-					_revision = SvnRevision::None;
+				return _mergeArguments;
 			}
 		}
 	};
 }
 
-#include "SvnClientArgs_Commit.h"
-#include "SvnClientArgs_Update.h"
-#include "SvnClientArgs_Wc.h"
-#include "SvnClientArgs_Repos.h"
-#include "SvnClientArgs_Properties.h"
-#include "SvnClientArgs_Stat.h"
-#include "SvnClientArgs_Admin.h"
-
-
+/*
+#include "Args/Add.h"
+#include "Args/AddToChangeList.h"
+#include "Args/Blame.h"
+#include "Args/CheckOut.h"
+#include "Args/CleanUp.h"
+#include "Args/Commit.h"
+#include "Args/Copy.h"
+#include "Args/CreateDirectory.h"
+#include "Args/Delete.h"
+#include "Args/Diff.h"
+#include "Args/DiffMerge.h"
+#include "Args/DiffSummary.h"
+#include "Args/Export.h"
+#include "Args/GetAppliedMergeInfo.h"
+#include "Args/GetAvailableMergeInfo.h"
+#include "Args/GetProperty.h"
+#include "Args/GetRevisionProperty.h"
+#include "Args/GetSuggestedMergeSources.h"
+#include "Args/GetWorkingCopyState.h"
+#include "Args/Import.h"
+#include "Args/Info.h"
+#include "Args/List.h"
+#include "Args/ListChangeList.h"
+#include "Args/Lock.h"
+#include "Args/Log.h"
+#include "Args/Merge.h"
+#include "Args/Move.h"
+#include "Args/PropertyList.h"
+#include "Args/ReintegrationMerge.h"
+#include "Args/Relocate.h"
+#include "Args/RemoveFromChangeList.h"
+#include "Args/Resolved.h"
+#include "Args/Revert.h"
+#include "Args/RevisionPropertyList.h"
+#include "Args/SetProperty.h"
+#include "Args/SetRevisionProperty.h"
+#include "Args/Status.h"
+#include "Args/Switch.h"
+#include "Args/Unlock.h"
+#include "Args/Update.h"
+#include "Args/Write.h"
+*/
