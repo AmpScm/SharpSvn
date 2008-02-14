@@ -148,14 +148,6 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 	return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
 }
 
-String^ SvnBase::Utf8_PtrToString(const svn_string_t* str)
-{
-	if (!str || !str->data)
-		return nullptr;
-
-	return gcnew String(str->data, 0, str->len, System::Text::Encoding::UTF8);
-}
-
 Uri^ SvnBase::Utf8_PtrToUri(const char *ptr, SvnNodeKind nodeKind)
 {
 	if (!ptr)

@@ -44,6 +44,7 @@ bool SvnClient::GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateAr
 	if (r)
 		return args->HandleResult(this, r);
 
+	svn_ra_get_dated_revision
 	try
 	{
 		svn_boolean_t pIsBinary = 0;

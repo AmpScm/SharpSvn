@@ -140,14 +140,12 @@ namespace SharpSvn {
 			AprPool^ _pool;
 			apr_file_t* _extHandle;
 			apr_file_t* _intHandle;
-			bool _exit;
 			initonly System::IO::Stream^ _stream;
 			initonly System::Threading::Thread^ _thread;
 
 		private:
 			~AprStreamFile()
 			{
-				_exit = true;
 				if (_extHandle)
 				{
 					if (!apr_file_close(_extHandle))

@@ -14,7 +14,6 @@
 using namespace SharpSvn::Implementation;
 
 
-[module: SuppressMessage("Microsoft.Design", "CA1020:AvoidNamespacesWithFewTypes", Scope="namespace", Target="SharpSvn.Implementation")];
 [module: SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", Scope="member", Target="SharpSvn.Implementation.AprPool.Dispose(System.Boolean):System.Void", MessageId="_tag")];
 [module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope="member", Target="SharpSvn.Implementation.AprPool.#StandardMemoryPressure")];
 
