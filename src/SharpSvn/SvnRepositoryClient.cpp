@@ -6,8 +6,10 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
+#include "SvnClientArgs_Admin.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
+
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;

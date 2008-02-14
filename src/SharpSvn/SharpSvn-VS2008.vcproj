@@ -451,24 +451,10 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="Apr"
+			Name="Common"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\AprArray.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AprPool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnStreamWrapper.cpp"
-					>
-				</File>
-			</Filter>
 			<Filter
 				Name="Headers"
 				>
@@ -485,20 +471,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnStreamWrapper.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="Common"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
-			>
-			<Filter
-				Name="Headers"
-				>
-				<File
 					RelativePath=".\resource.h"
 					>
 				</File>
@@ -514,6 +486,14 @@
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\AprArray.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\AprPool.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\Stdafx.cpp"
 					>
@@ -554,6 +534,10 @@
 					RelativePath=".\SvnBase.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnStreamWrapper.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -587,30 +571,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientArgs_Commit.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs_Properties.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs_Repos.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs_Stat.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs_Update.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs_Wc.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnClientConfiguration.h"
 					>
 				</File>
@@ -624,10 +584,6 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientEventArgs_Global.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientEventArgs_Status.h"
 					>
 				</File>
 				<File
@@ -648,6 +604,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnLockInfo.h"
 					>
 				</File>
 				<File
@@ -688,6 +648,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnWorkingCopyState.h"
 					>
 				</File>
 				<File
@@ -753,7 +717,7 @@
 			</Filter>
 			<Filter
 				Name="Commands"
-				Filter="Client_*.cpp"
+				Filter="Commands\*.cpp"
 				>
 				<File
 					RelativePath=".\Commands\Add.cpp"
@@ -765,14 +729,6 @@
 				</File>
 				<File
 					RelativePath=".\Commands\Blame.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Cat.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\ChangeList.cpp"
 					>
 				</File>
 				<File
@@ -852,6 +808,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\ListChangeList.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Lock.cpp"
 					>
 				</File>
@@ -917,6 +877,242 @@
 				</File>
 				<File
 					RelativePath=".\Commands\Update.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\Write.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Args"
+				>
+				<File
+					RelativePath=".\Args\Add.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\AddToChangeList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Blame.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\CheckOut.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\CleanUp.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Commit.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Copy.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\CreateDirectory.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Delete.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Diff.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\DiffMerge.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\DiffSummary.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Export.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetAppliedMergeInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetAvailableMergeInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetProperty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetRevisionProperty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetSuggestedMergeSources.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetWorkingCopyState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Import.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Info.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\List.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\ListChangeList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Lock.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Log.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Merge.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Move.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\PropertyList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\ReintegrationMerge.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Relocate.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\RemoveFromChangeList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Resolved.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Revert.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\RevisionPropertyList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\SetProperty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\SetRevisionProperty.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Status.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Switch.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Unlock.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Update.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Write.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="EventArgs"
+				>
+				<File
+					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnCancelEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnConflictEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnDiffSummaryEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnErrorEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnInfoEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnListChangeListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnLogEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnProcessingEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnProgressEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
 					>
 				</File>
 			</Filter>

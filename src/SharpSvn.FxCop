@@ -42,9 +42,12 @@
         <Type Name="AprCStrPathMarshaller" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="AprPool" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="AprPool+AprPoolTag" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprStreamFile" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="AprSvnRevNumMarshaller" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="IItemMarshaller`1" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="SvnBase" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnChangeItemCollection" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnCommitItemCollection" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="SvnHandleBase" Analyze="True" AnalyzeAllChildren="True" />
         <Type Name="SvnStreamWrapper" Analyze="True" AnalyzeAllChildren="True" />
        </Types>
