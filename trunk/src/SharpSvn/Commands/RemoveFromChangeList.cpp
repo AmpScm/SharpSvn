@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/RemoveFromChangeList.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -14,6 +15,8 @@ bool SvnClient::RemoveFromChangeList(String^ target)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
+	else if(!IsNotUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return RemoveFromChangeList(NewSingleItemCollection(target), gcnew SvnRemoveFromChangeListArgs());
 }
@@ -24,6 +27,8 @@ bool SvnClient::RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!IsNotUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return RemoveFromChangeList(NewSingleItemCollection(target), args);
 }

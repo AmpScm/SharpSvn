@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Diff.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 

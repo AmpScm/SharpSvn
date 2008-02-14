@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/SetProperty.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -18,6 +19,8 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, String^ value)
 		throw gcnew ArgumentNullException("propertyName");
 	else if(!value)
 		throw gcnew ArgumentNullException("value");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return SetProperty(path, propertyName, value, gcnew SvnSetPropertyArgs());
 }
@@ -28,6 +31,8 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, ICollection<Byte
 		throw gcnew ArgumentNullException("path");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
@@ -40,6 +45,8 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, String^ value, S
 		throw gcnew ArgumentNullException("path");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!value)
@@ -56,6 +63,8 @@ bool SvnClient::SetProperty(String^ path, String^ propertyName, ICollection<Byte
 		throw gcnew ArgumentNullException("path");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 	else if(!bytes)
@@ -81,6 +90,8 @@ bool SvnClient::DeleteProperty(String^ path, String^ propertyName)
 		throw gcnew ArgumentNullException("path");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return DeleteProperty(path, propertyName, gcnew SvnSetPropertyArgs());
 }
@@ -93,6 +104,8 @@ bool SvnClient::DeleteProperty(String^ path, String^ propertyName, SvnSetPropert
 		throw gcnew ArgumentNullException("propertyName");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	AprPool pool(%_pool);
 
@@ -107,6 +120,8 @@ bool SvnClient::InternalSetProperty(String^ path, String^ propertyName, const sv
 		throw gcnew ArgumentNullException("propertyName");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
 	ArgsStore store(this, args);

@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/ReintegrationMerge.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -28,6 +29,8 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
 		throw gcnew ArgumentNullException("source");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!IsNotUri(targetPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);

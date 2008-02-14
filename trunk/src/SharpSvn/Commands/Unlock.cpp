@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Unlock.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -25,6 +26,8 @@ bool SvnClient::Unlock(String^ target)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if(!IsNotUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }

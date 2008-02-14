@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Switch.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -17,6 +18,8 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
@@ -29,6 +32,8 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
@@ -39,6 +44,8 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
@@ -53,6 +60,8 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!target)
 		throw gcnew ArgumentNullException("args");
 

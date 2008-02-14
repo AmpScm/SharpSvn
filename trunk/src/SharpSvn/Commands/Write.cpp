@@ -6,6 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 #include "SvnStreamWrapper.h"
+#include "Args/Write.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 

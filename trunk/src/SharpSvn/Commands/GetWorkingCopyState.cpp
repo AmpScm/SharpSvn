@@ -1,10 +1,12 @@
-// $Id: Client_GetSuggestedMergeSources.cpp 219 2008-02-05 11:32:46Z bhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/GetWorkingCopyState.h"
+
 #include "UnmanagedStructs.h"
 
 using namespace SharpSvn::Implementation;
@@ -19,6 +21,8 @@ bool SvnClient::GetWorkingCopyState(String^ targetPath, [Out] SvnWorkingCopyStat
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
+	else if(!IsNotUri(targetPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	return GetWorkingCopyState(targetPath, gcnew SvnGetWorkingCopyStateArgs(), result);
 }

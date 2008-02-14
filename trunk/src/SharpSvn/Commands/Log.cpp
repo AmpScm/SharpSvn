@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Log.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -372,4 +373,18 @@ bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out
 	{
 		logItems = results;
 	}
+}
+
+Collection<String^>^ SvnLogArgs::RetrieveProperties::get()
+{
+	if (!_retrieveProperties)
+	{
+		_retrieveProperties = gcnew Collection<String^>();
+
+		_retrieveProperties->Add(SVN_PROP_REVISION_AUTHOR);
+		_retrieveProperties->Add(SVN_PROP_REVISION_DATE);
+		_retrieveProperties->Add(SVN_PROP_REVISION_LOG);
+	}
+
+	return _retrieveProperties;
 }

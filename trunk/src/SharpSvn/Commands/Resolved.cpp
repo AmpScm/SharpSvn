@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Resolved.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -14,6 +15,8 @@ bool SvnClient::Resolved(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return Resolved(path, gcnew SvnResolvedArgs());
 }
@@ -22,6 +25,8 @@ bool SvnClient::Resolved(String^ path, SvnConflictChoice choice)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(SvnConflictChoice::Postpone == choice)
 		throw gcnew ArgumentOutOfRangeException("choice");
 
@@ -34,6 +39,8 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
