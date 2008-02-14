@@ -52,7 +52,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -142,7 +142,7 @@
 				AdditionalOptions="/MP"
 				Optimization="0"
 				InlineFunctionExpansion="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -231,7 +231,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -319,7 +319,7 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/MP"
 				Optimization="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
@@ -756,167 +756,167 @@
 				Filter="Client_*.cpp"
 				>
 				<File
-					RelativePath=".\Client_Add.cpp"
+					RelativePath=".\Commands\Add.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_AddToChangeList.cpp"
+					RelativePath=".\Commands\AddToChangeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Blame.cpp"
+					RelativePath=".\Commands\Blame.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Cat.cpp"
+					RelativePath=".\Commands\Cat.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_ChangeList.cpp"
+					RelativePath=".\Commands\ChangeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_CheckOut.cpp"
+					RelativePath=".\Commands\CheckOut.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_CleanUp.cpp"
+					RelativePath=".\Commands\CleanUp.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Commit.cpp"
+					RelativePath=".\Commands\Commit.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Copy.cpp"
+					RelativePath=".\Commands\Copy.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_CreateDirectory.cpp"
+					RelativePath=".\Commands\CreateDirectory.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Delete.cpp"
+					RelativePath=".\Commands\Delete.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Diff.cpp"
+					RelativePath=".\Commands\Diff.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_DiffMerge.cpp"
+					RelativePath=".\Commands\DiffMerge.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_DiffSummary.cpp"
+					RelativePath=".\Commands\DiffSummary.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Export.cpp"
+					RelativePath=".\Commands\Export.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_GetAppliedMergeInfo.cpp"
+					RelativePath=".\Commands\GetAppliedMergeInfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_GetAvailableMergeInfo.cpp"
+					RelativePath=".\Commands\GetAvailableMergeInfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_GetProperty.cpp"
+					RelativePath=".\Commands\GetProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_GetRevisionProperty.cpp"
+					RelativePath=".\Commands\GetRevisionProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_GetSuggestedMergeSources.cpp"
+					RelativePath=".\Commands\GetSuggestedMergeSources.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_GetWorkingCopyState.cpp"
+					RelativePath=".\Commands\GetWorkingCopyState.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Import.cpp"
+					RelativePath=".\Commands\Import.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Info.cpp"
+					RelativePath=".\Commands\Info.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_List.cpp"
+					RelativePath=".\Commands\List.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Lock.cpp"
+					RelativePath=".\Commands\Lock.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Log.cpp"
+					RelativePath=".\Commands\Log.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Merge.cpp"
+					RelativePath=".\Commands\Merge.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Move.cpp"
+					RelativePath=".\Commands\Move.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_PropertyList.cpp"
+					RelativePath=".\Commands\PropertyList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_ReintegrationMerge.cpp"
+					RelativePath=".\Commands\ReintegrationMerge.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Relocate.cpp"
+					RelativePath=".\Commands\Relocate.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_RemoveFromChangeList.cpp"
+					RelativePath=".\Commands\RemoveFromChangeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Resolved.cpp"
+					RelativePath=".\Commands\Resolved.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Revert.cpp"
+					RelativePath=".\Commands\Revert.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_RevisionPropertyList.cpp"
+					RelativePath=".\Commands\RevisionPropertyList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_SetProperty.cpp"
+					RelativePath=".\Commands\SetProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_SetRevisionProperty.cpp"
+					RelativePath=".\Commands\SetRevisionProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Status.cpp"
+					RelativePath=".\Commands\Status.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Switch.cpp"
+					RelativePath=".\Commands\Switch.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Unlock.cpp"
+					RelativePath=".\Commands\Unlock.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Client_Update.cpp"
+					RelativePath=".\Commands\Update.cpp"
 					>
 				</File>
 			</Filter>
