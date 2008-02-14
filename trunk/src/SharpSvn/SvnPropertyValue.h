@@ -61,6 +61,31 @@ namespace SharpSvn {
 			_value = value;
 		}
 
+	internal:
+
+		static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target)
+		{
+			if(!propertyName)
+				throw gcnew ArgumentNullException("propertyName");
+			else if(!value)
+				throw gcnew ArgumentNullException("value");
+
+			String^ name = SvnBase::Utf8_PtrToString(propertyName);		
+
+			Object^ val = SvnBase::PtrToStringOrByteArray(value->data, (int)value->len);
+			String^ strVal = dynamic_cast<String^>(val);
+
+			if(strVal)
+			{
+				if(svn_prop_needs_translation(propertyName))
+					strVal = strVal->Replace("\n", Environment::NewLine);
+
+				return gcnew SvnPropertyValue(name, strVal, target);
+			}
+			else
+				return gcnew SvnPropertyValue(name, safe_cast<array<Byte>^>(val), target);
+		}
+
 	public:
 		/// <summary>Gets the <see cref="SvnTarget" /> the <see cref="SvnPropertyValue" /> applies to; 
 		/// <c>null</c> if it applies to a revision property</summary>

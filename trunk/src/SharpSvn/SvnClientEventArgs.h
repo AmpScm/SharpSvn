@@ -328,6 +328,23 @@ namespace SharpSvn {
 		}
 	};
 
+	namespace Implementation {
+		public ref class SvnChangeItemCollection sealed : System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>
+		{
+		internal:
+			SvnChangeItemCollection()
+			{}
+		protected:
+			virtual String^ GetKeyForItem(SvnChangeItem^ item) override
+			{
+				if(!item)
+					throw gcnew ArgumentNullException("item");
+
+				return item->Path;
+			}
+		};
+	}
+
 	public ref class SvnLogEventArgs : public SvnCancelEventArgs
 	{
 		svn_log_entry_t* _entry;
@@ -343,6 +360,7 @@ namespace SharpSvn {
 
 		const char* _pcAuthor;
 		const char* _pcMessage;
+		SvnPropertyCollection^ _customProperties;
 
 	internal:
 		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool, Uri^ logOrigin)
@@ -361,7 +379,6 @@ namespace SharpSvn {
 			
 			if(entry->revprops)
 				svn_compat_log_revprops_out(&pcAuthor, &pcDate, &pcMessage, entry->revprops);
-
 
 			if(pcDate)
 			{
@@ -383,29 +400,17 @@ namespace SharpSvn {
 			_logOrigin = logOrigin;
 		}
 
-	private:
-		ref class ChangedPathsCollection sealed : System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>
-		{
-		protected:
-			virtual String^ GetKeyForItem(SvnChangeItem^ item) override
-			{
-				if(!item)
-					throw gcnew ArgumentNullException("item");
-
-				return item->Path;
-			}
-		};
-
-		ChangedPathsCollection^ _changedPaths;
+	private:		
+		SvnChangeItemCollection^ _changedPaths;
 	public:
 
-		property KeyedCollection<String^, SvnChangeItem^>^ ChangedPaths
+		property SvnChangeItemCollection^ ChangedPaths
 		{
-			KeyedCollection<String^, SvnChangeItem^>^  get()
+			SvnChangeItemCollection^  get()
 			{
 				if(!_changedPaths && _entry && _entry->changed_paths && _pool)
 				{
-					_changedPaths = gcnew ChangedPathsCollection();
+					_changedPaths = gcnew SvnChangeItemCollection();
 
 					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths); hi; hi = apr_hash_next(hi))
 					{
@@ -426,6 +431,13 @@ namespace SharpSvn {
 
 				return _changedPaths;
 			}
+		}
+
+		/// <summary>Gets the list of custom properties retrieved with the log</summary>
+		/// <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
+		property SvnPropertyCollection^ CustomProperties
+		{
+			SvnPropertyCollection^ get();
 		}
 
 		property __int64 Revision
@@ -513,6 +525,7 @@ namespace SharpSvn {
 					GC::KeepAlive(ChangedPaths);
 					GC::KeepAlive(Author);
 					GC::KeepAlive(LogMessage);
+					GC::KeepAlive(CustomProperties);
 				}
 			}
 			finally
