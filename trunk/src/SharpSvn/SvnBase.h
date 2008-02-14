@@ -77,6 +77,7 @@ namespace SharpSvn {
 			static String^ CanonicalizePath(String^ path);
 
 			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
+			static apr_array_header_t *AllocCanonicalArray(ICollection<String^>^ paths, AprPool^ pool);
 			static apr_array_header_t *AllocPathArray(ICollection<String^>^ paths, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool);
 			static apr_array_header_t *AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool);

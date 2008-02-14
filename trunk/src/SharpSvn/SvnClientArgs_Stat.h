@@ -276,6 +276,7 @@ namespace SharpSvn {
 		{
 			_start = SvnRevision::Head;
 			_end = SvnRevision::Zero;
+			_pegRevision = SvnRevision::None;
 			//_limit = 0;
 			//_noLogChangedPaths = false;
 			//_strictHistory = false;

@@ -657,7 +657,7 @@ namespace SharpSvn.Tests
 				Touch2(local6);
 
 				Guid reposGuid;
-				
+
 				client.GetRepositoryIdFromUri(WcUri, out reposGuid);
 
 				for (int mode = 0; mode < 4; mode++)
@@ -777,7 +777,7 @@ namespace SharpSvn.Tests
 
 						Assert.That(e.WorkingCopyInfo, Is.Not.Null);
 
-						if(nn >= 0)
+						if (nn >= 0)
 							Assert.That(e.WorkingCopyInfo.Name, Is.EqualTo(Path.GetFileName(e.Path)));
 						else
 							Assert.That(e.WorkingCopyInfo.Name, Is.EqualTo(""));
@@ -785,7 +785,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.WorkingCopyInfo.AvailableProperties, Is.Null);
 						Assert.That(e.WorkingCopyInfo.CacheableProperties, Is.All.Not.EqualTo(""));
 						Assert.That(e.WorkingCopyInfo.ChangeList, Is.EqualTo((nn == 6) ? "MyList" : null));
-						if(nn >= 0)
+						if (nn >= 0)
 							Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
 
 						Assert.That(e.WorkingCopyInfo.Uri, Is.EqualTo(e.Uri));
@@ -793,7 +793,7 @@ namespace SharpSvn.Tests
 						/*if(a.ContactRepository)
 							Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(reposGuid));
 						else*/
-							Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(Guid.Empty));
+						Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(Guid.Empty));
 
 						Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
 						Assert.That(e.WorkingCopyInfo.IsDeleted, Is.False);
@@ -818,7 +818,7 @@ namespace SharpSvn.Tests
 							Assert.That(e.WorkingCopyInfo.LastChangeAuthor, Is.EqualTo(Environment.UserName));
 							Assert.That(e.WorkingCopyInfo.CopiedFromRevision, Is.EqualTo(-1L));
 						}
-						
+
 						Assert.That(e.WorkingCopyInfo.Depth, Is.EqualTo(SvnDepth.Infinity));
 						Assert.That(e.WorkingCopyInfo.HasProperties, Is.EqualTo(nn >= 0));
 						Assert.That(e.WorkingCopyInfo.HasPropertyChanges, Is.EqualTo((nn == 1) || (nn == 4)));
@@ -864,7 +864,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.WorkingCopyInfo.LockComment, Is.Null);
 						Assert.That(e.WorkingCopyInfo.LockOwner, Is.Null);
 						Assert.That(e.WorkingCopyInfo.LockTime, Is.EqualTo(DateTime.MinValue));
-						Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);						
+						Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);
 						Assert.That(e.WorkingCopyInfo.NodeKind, Is.EqualTo(nn >= 0 ? SvnNodeKind.File : SvnNodeKind.Directory));
 						Assert.That(e.WorkingCopyInfo.PropertyChangeTime, Is.EqualTo(DateTime.MinValue));
 						Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
@@ -1459,6 +1459,88 @@ namespace SharpSvn.Tests
 				ma.Force = true;
 				client.Move(ren1 + ".ren2", ren1 + ".ren3", ma);
 				client.Commit(WcPath);
+			}
+		}
+
+		[Test]
+		public void TestMultiLogs()
+		{
+			using (SvnClient client = NewSvnClient(false, false))
+			{
+				bool touched = false;
+				Assert.That(client.Log(new SvnUriTarget(new Uri("http://svn.collab.net/repos/svn/trunk/")),
+					delegate(object sender, SvnLogEventArgs e)
+					{
+						touched = true;
+						e.Cancel = true;
+						Assert.That(e.MergeLogNestingLevel, Is.EqualTo(0));
+						Assert.That(e.Revision, Is.GreaterThan(20000L));
+						Assert.That(e.LogMessage, Is.Not.Null);
+						Assert.That(e.Time, Is.GreaterThan(new DateTime(2008, 01, 01)));
+						Assert.That(e.Author, Is.Not.Null);
+						Assert.That(e.ChangedPaths, Is.Not.Null);
+						Assert.That(e.LogOrigin, Is.Null);
+					}), Is.False);
+
+				Assert.That(touched);
+
+				List<Uri> uris = new List<Uri>();
+				long rev = 0;
+
+				Assert.That(client.Log(new SvnUriTarget(new Uri("http://svn.collab.net/repos/svn/trunk/")),
+					delegate(object sender, SvnLogEventArgs e)
+					{
+						foreach (SvnChangeItem item in e.ChangedPaths)
+						{
+							Uri uri = new Uri(new Uri("http://svn.collab.net/repos/"), item.Path.TrimStart('/'));
+
+							if (item.Action == SvnChangeAction.Delete)
+								uris.Remove(uri);
+							else if(item.Action == SvnChangeAction.Add || item.Action == SvnChangeAction.Modify)
+								uris.Add(uri);
+						}
+
+						if (uris.Count > 10)
+						{
+							e.Cancel = true;
+							rev = e.Revision - 1;
+						}
+					}), Is.False);
+				
+				Assert.That(uris.Count, Is.GreaterThan(10));
+
+				uris.Clear();
+				uris.Add(new Uri("http://svn.collab.net/repos/svn/trunk/README"));
+				uris.Add(new Uri("http://svn.collab.net/repos/svn/trunk/INSTALL"));
+				SvnLogArgs args = new SvnLogArgs();
+				args.Start = 23000;
+				args.End = 19000;
+				args.Limit = 100;
+				args.OriginRevision = 23000;
+				touched = false;
+				client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
+					{
+						Assert.That(e.LogOrigin, Is.Not.Null);
+						touched = true;
+					});
+
+				Assert.That(touched);
+			}
+		}
+
+		[Test, ExpectedException(typeof(SvnRepositoryIOException))]
+		public void ExpectLogException()
+		{
+			using (SvnClient client = NewSvnClient(false, false))
+			{
+				// Throws an SvnRepositoryIOException in 1.5.x@29330
+
+				List<Uri> uris = new List<Uri>();
+				uris.Add(new Uri("http://svn.collab.net/repos/svn/README"));
+				uris.Add(new Uri("http://svn.collab.net/repos/svn/INSTALL"));
+				SvnLogArgs args = new SvnLogArgs();
+				client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
+					{ });
 			}
 		}
 	}

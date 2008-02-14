@@ -119,7 +119,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMerg
 
 	array<SvnRevisionRange^>^ revs = gcnew array<SvnRevisionRange^>(mergeRange->Count);
 
-	mergeRange->CopyTo(safe_cast<array<SvnMergeRange^>^>(revs), 0);
+	mergeRange->CopyTo(static_cast<array<SvnMergeRange^>^>(revs), 0);
 
 	return Merge(targetPath, source, safe_cast<ICollection<SvnRevisionRange^>^>(revs), args);
 }
