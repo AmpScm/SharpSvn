@@ -324,20 +324,7 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 
 		apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-		String^ key = SvnBase::Utf8_PtrToString(pKey, (int)keyLen);
-		Object^ value = SvnBase::PtrToStringOrByteArray(propVal->data, (int)propVal->len);
-
-		String^ str = dynamic_cast<String^>(value);
-
-		if(str)
-		{
-			if(svn_prop_needs_translation(pKey))
-				str = str->Replace("\n", Environment::NewLine);
-
-			_properties->Add(gcnew SvnPropertyValue(key, str));
-		}
-		else
-			_properties->Add(gcnew SvnPropertyValue(key, safe_cast<array<Byte>^>(value)));
+		_properties->Add(SvnPropertyValue::Create(pKey, propVal, nullptr));
 	}
 
 	return _properties;
