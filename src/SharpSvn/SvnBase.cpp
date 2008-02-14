@@ -108,6 +108,8 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
 	if(!uri)
 		throw gcnew ArgumentNullException("uri");
+	else if(!uri->IsAbsoluteUri)
+		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 	String^ path = uri->AbsolutePath;
 	if(path->Length > 0 && path[path->Length -1] == '/')

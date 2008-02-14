@@ -150,7 +150,7 @@ namespace SharpSvn {
 
 			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores 
 				= gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
-						dynamic_cast<IList<String^>^>(safe_cast<String^>(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES)->Split(' ')));
+						dynamic_cast<IList<String^>^>(static_cast<String^>(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES)->Split(' ')));
 		};
 	}
 }

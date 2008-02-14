@@ -170,6 +170,32 @@ namespace SharpSvn {
 			return !(rev1 == rev2);
 		}
 
+		static operator SvnRevision^(__int64 value)
+		{
+			return value ? gcnew SvnRevision(value) : Zero;
+		}
+
+		static operator SvnRevision^(SvnRevisionType value)
+		{
+			switch(value)
+			{
+			case SvnRevisionType::None:
+				return None;
+			case SvnRevisionType::Head:
+				return Head;
+			case SvnRevisionType::Working:
+				return Working;
+			case SvnRevisionType::Base:
+				return Base;
+			case SvnRevisionType::Previous:
+				return Previous;
+			case SvnRevisionType::Committed:
+				return Committed;
+			default:
+				return gcnew SvnRevision(value);
+			}
+		}
+
 	internal:
 		svn_opt_revision_t ToSvnRevision();
 		svn_opt_revision_t ToSvnRevision(SvnRevision^ noneValue);

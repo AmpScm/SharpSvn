@@ -40,7 +40,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return InternalLog(NewSingleItemCollection(CanonicalizeUri(target)->ToString()), nullptr, args, logHandler);
+	return InternalLog(NewSingleItemCollection(target->ToString()), nullptr, args, logHandler);
 }
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -50,7 +50,7 @@ bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEve
 	else if(!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
-	return InternalLog(NewSingleItemCollection(CanonicalizePath(targetPath)), nullptr, args, logHandler);
+	return InternalLog(NewSingleItemCollection(targetPath), nullptr, args, logHandler);
 }
 
 bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -83,6 +83,8 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			root = uri->AbsolutePath->TrimEnd('/');
 			continue;
 		}
+		else
+			moreThanOne = true;
 
 		if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
 			throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
@@ -93,7 +95,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 
 		while(nEnd >= 0 && String::Compare(root, 0, itemPath, 0, nEnd))
 		{
-			nEnd = root->LastIndexOf('/', nEnd)-1;
+			nEnd = root->LastIndexOf('/', nEnd-1);
 		}
 
 		if(nEnd >= root->Length - 1)
@@ -105,29 +107,29 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 	}
 
 	if(!root->EndsWith("/", StringComparison::Ordinal))
-		root += '/';
+		root += "/";
 
 	System::Collections::Generic::List<String^>^ rawTargets = gcnew System::Collections::Generic::List<String^>();
 	Uri^ rootUri = gcnew Uri(first, root); 
 	if(moreThanOne)
 	{		
 		// Invoke with primary url followed by relative subpaths
-		rawTargets->Add(CanonicalizeUri(rootUri)->ToString());
+		rawTargets->Add(rootUri->ToString());
 
 		for each(Uri^ uri in targets)
 		{
 			if(!uri->IsAbsoluteUri && args->BaseUri) // Allow relative Uri's relative from the first
 				uri = gcnew Uri(args->BaseUri, uri);
 
-			uri = CanonicalizeUri(uri);
+			uri = rootUri->MakeRelativeUri(uri);
 
-			rawTargets->Add(rootUri->MakeRelativeUri(uri)->ToString());
+			rawTargets->Add(uri->ToString());
 		}
 	}
 	else
-		rawTargets->Add(CanonicalizeUri(first)->ToString());
+		rawTargets->Add(first->ToString());
 
-	return InternalLog(safe_cast<ICollection<String^>^>(targets), rootUri, args, logHandler);
+	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, args, logHandler);
 }
 
 bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -249,7 +251,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 		svn_opt_revision_t end = args->End->ToSvnRevision(SvnRevision::Zero);
 
 		svn_error_t *r = svn_client_log4(
-			AllocArray(targets, %pool),
+			AllocCanonicalArray(targets, %pool),
 			&pegRev,
 			&start,
 			&end,
