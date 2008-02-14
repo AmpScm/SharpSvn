@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -17,7 +17,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Import(String^ path, Uri^ target)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -27,7 +27,7 @@ bool SvnClient::Import(String^ path, Uri^ target)
 
 bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -37,7 +37,7 @@ bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitIn
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -51,7 +51,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -60,7 +60,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 	else if(!SvnBase::IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
-	if(RemoteImport(path, target, args, commitInfo))
+	if (RemoteImport(path, target, args, commitInfo))
 	{
 		SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
 		aa->ThrowOnError = args->ThrowOnError;
@@ -84,7 +84,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -94,7 +94,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target)
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -104,7 +104,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% co
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -118,7 +118,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
@@ -145,7 +145,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		CtxHandle,
 		pool.Handle);
 
-	if(commit_info)
+	if (commit_info)
 		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
 	return args->HandleResult(this, r);

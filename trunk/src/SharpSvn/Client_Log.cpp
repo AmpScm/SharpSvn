@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -17,7 +17,7 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(SharpSvn.SvnUriTarget,System.Collections.Generic.ICollection`1<System.Uri>,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")];
 bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!logHandler)
 		throw gcnew ArgumentNullException("logHandler");
@@ -25,9 +25,9 @@ bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 	SvnLogArgs^ args = gcnew SvnLogArgs();
 	args->OriginRevision = target->Revision;
 
-	SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);	
+	SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);
 
-	if(uriTarget)
+	if (uriTarget)
 		return Log(uriTarget->Uri, args, logHandler);
 	else
 		return Log(static_cast<SvnPathTarget^>(target)->Path, args, logHandler);
@@ -35,7 +35,7 @@ bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 
 bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -45,7 +45,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
@@ -55,7 +55,7 @@ bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEve
 
 bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -63,21 +63,21 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 	Uri^ first = nullptr;
 	String^ root = nullptr;
 	bool moreThanOne = false;
-	for each(Uri^ uri in targets)
+	for each (Uri^ uri in targets)
 	{
-		if(!uri)
+		if (!uri)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 
-		if(!uri->IsAbsoluteUri)
+		if (!uri->IsAbsoluteUri)
 		{
-			if(args->BaseUri)
+			if (args->BaseUri)
 				uri = gcnew Uri(args->BaseUri, uri);
 
-			if(!uri->IsAbsoluteUri)
+			if (!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "targets");
 		}
 
-		if(!first)
+		if (!first)
 		{
 			first = uri;
 			root = uri->AbsolutePath->TrimEnd('/');
@@ -86,19 +86,19 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 		else
 			moreThanOne = true;
 
-		if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
+		if (Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
 			throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
 
 		String^ itemPath = uri->AbsolutePath->TrimEnd('/');
 
 		int nEnd = Math::Min(root->Length, itemPath->Length)-1;
 
-		while(nEnd >= 0 && String::Compare(root, 0, itemPath, 0, nEnd))
+		while (nEnd >= 0 && String::Compare(root, 0, itemPath, 0, nEnd))
 		{
 			nEnd = root->LastIndexOf('/', nEnd-1);
 		}
 
-		if(nEnd >= root->Length - 1)
+		if (nEnd >= root->Length - 1)
 		{}
 		else if(nEnd > 1)
 			root = root->Substring(0, nEnd);
@@ -106,19 +106,19 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			root = "/";
 	}
 
-	if(!root->EndsWith("/", StringComparison::Ordinal))
+	if (!root->EndsWith("/", StringComparison::Ordinal))
 		root += "/";
 
 	System::Collections::Generic::List<String^>^ rawTargets = gcnew System::Collections::Generic::List<String^>();
-	Uri^ rootUri = gcnew Uri(first, root); 
-	if(moreThanOne)
-	{		
+	Uri^ rootUri = gcnew Uri(first, root);
+	if (moreThanOne)
+	{
 		// Invoke with primary url followed by relative subpaths
 		rawTargets->Add(rootUri->ToString());
 
-		for each(Uri^ uri in targets)
+		for each (Uri^ uri in targets)
 		{
-			if(!uri->IsAbsoluteUri && args->BaseUri) // Allow relative Uri's relative from the first
+			if (!uri->IsAbsoluteUri && args->BaseUri) // Allow relative Uri's relative from the first
 				uri = gcnew Uri(args->BaseUri, uri);
 
 			uri = rootUri->MakeRelativeUri(uri);
@@ -134,7 +134,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 
 bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!targetPaths)
+	if (!targetPaths)
 		throw gcnew ArgumentNullException("targetPaths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -146,16 +146,16 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 
 	System::Collections::Generic::List<Uri^>^ targetsUris = gcnew System::Collections::Generic::List<Uri^>();
 
-	for each(String^ path in targetPaths)
+	for each (String^ path in targetPaths)
 	{
-		if(!path)
+		if (!path)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targetPaths");
 		else if(!IsNotUri(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPaths");
 
 		Uri^ uri = GetUriFromWorkingCopy(path);
 
-		if(!uri)
+		if (!uri)
 		{
 			ArgsStore store(this, args);
 
@@ -163,7 +163,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_NOT_DIRECTORY, nullptr, nullptr));
 		}
 
-		if(!first)
+		if (!first)
 			first = uri;
 		else if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
 		{
@@ -188,10 +188,10 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 
 	SvnLogArgs^ args = dynamic_cast<SvnLogArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnLogArgs
 	AprPool aprPool(pool, false);
-	if(!args)
+	if (!args)
 		return nullptr;
 
-	if(log_entry->revision == SVN_INVALID_REVNUM)
+	if (log_entry->revision == SVN_INVALID_REVNUM)
 	{
 		// This marks the end of logs at this level,
 		args->_mergeLogLevel--;
@@ -200,14 +200,14 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 
 	SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool, args->_searchRoot);
 
-	if(log_entry->has_children)
+	if (log_entry->has_children)
 		args->_mergeLogLevel++;
 
 	try
 	{
 		args->OnLog(e);
 
-		if(e->Cancel)
+		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Log receiver canceled operation");
 		else
 			return nullptr;
@@ -224,7 +224,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 
 bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -235,13 +235,13 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 
 	args->_mergeLogLevel = 0; // Clear log level
 	args->_searchRoot = searchRoot;
-	if(logHandler)
+	if (logHandler)
 		args->Log += logHandler;
 	try
 	{
 		apr_array_header_t* retrieveProperties;
 
-		if(args->RetrievePropertiesUsed)
+		if (args->RetrievePropertiesUsed)
 			retrieveProperties = AllocArray(args->RetrieveProperties, %pool);
 		else
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
@@ -269,7 +269,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 	}
 	finally
 	{
-		if(logHandler)
+		if (logHandler)
 			args->Log -= logHandler;
 
 		args->_searchRoot = nullptr;
@@ -278,7 +278,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 
 bool SvnClient::GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
@@ -295,7 +295,7 @@ bool SvnClient::GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% l
 
 bool SvnClient::GetLog(Uri^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -314,7 +314,7 @@ bool SvnClient::GetLog(Uri^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEve
 
 bool SvnClient::GetLog(String^ targetPath, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
-	if(!targetPath)
+	if (!targetPath)
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -334,7 +334,7 @@ bool SvnClient::GetLog(String^ targetPath, SvnLogArgs^ args, [Out] Collection<Sv
 
 bool SvnClient::GetLog(ICollection<Uri^>^ targets, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -353,7 +353,7 @@ bool SvnClient::GetLog(ICollection<Uri^>^ targets, SvnLogArgs^ args, [Out] Colle
 
 bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
-	if(!targetPaths)
+	if (!targetPaths)
 		throw gcnew ArgumentNullException("targetPaths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

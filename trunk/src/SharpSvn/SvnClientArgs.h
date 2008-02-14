@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -126,7 +126,7 @@ namespace SharpSvn {
 		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>
 		virtual void OnCommitting(SvnCommittingEventArgs^ e)
 		{
-			if(LogMessage && !e->LogMessage)
+			if (LogMessage && !e->LogMessage)
 				e->LogMessage = LogMessage;
 
 			Committing(this, e);
@@ -156,8 +156,8 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>
-		/// Raised on conflict. The event is first 
-		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and 
+		/// Raised on conflict. The event is first
+		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnConflictEventArgs^>^ Conflict;
@@ -187,7 +187,7 @@ namespace SharpSvn {
 				_logMessage = value;
 			}
 		}
-	};	
+	};
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -216,7 +216,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -12,7 +12,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Resolved(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return Resolved(path, gcnew SvnResolvedArgs());
@@ -20,7 +20,7 @@ bool SvnClient::Resolved(String^ path)
 
 bool SvnClient::Resolved(String^ path, SvnConflictChoice choice)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(SvnConflictChoice::Postpone == choice)
 		throw gcnew ArgumentOutOfRangeException("choice");
@@ -30,7 +30,7 @@ bool SvnClient::Resolved(String^ path, SvnConflictChoice choice)
 
 bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

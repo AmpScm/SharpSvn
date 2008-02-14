@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -30,7 +30,7 @@ namespace SharpSvn {
 
 		SvnRevisionRange(SvnRevision^ start, SvnRevision^ end)
 		{
-			if(!start)
+			if (!start)
 				throw gcnew ArgumentNullException("start");
 			else if(!end)
 				throw gcnew ArgumentNullException("end");
@@ -43,7 +43,7 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
-				return _start; 
+				return _start;
 			}
 		}
 
@@ -114,7 +114,7 @@ namespace SharpSvn {
 	internal:
 		SvnAppliedMergeItem(Uri^ uri, Collection<SvnMergeRange^>^ ranges)
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!ranges)
 				throw gcnew ArgumentNullException("ranges");
@@ -131,8 +131,8 @@ namespace SharpSvn {
 		property Uri^ Uri
 		{
 			System::Uri^ get()
-			{ 
-				return _uri; 
+			{
+				return _uri;
 			}
 		}
 

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using System::IO::Path;
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	_pool = pool;
@@ -24,7 +24,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 
 	svn_error_t *r = svn_client_create_context(&ctx, pool->Handle);
 
-	if(r)
+	if (r)
 		throw SvnException::Create(r);
 
 	ctx->client_name = pool->AllocString(SvnBase::_clientName);
@@ -35,7 +35,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 
 SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 {
-	if(!fromContext)
+	if (!fromContext)
 		throw gcnew ArgumentNullException("fromContext");
 
 	fromContext->_pool->Ensure();
@@ -45,7 +45,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 
 	svn_error_t *r = svn_client_create_context(&ctx, _pool->Handle);
 
-	if(r)
+	if (r)
 		throw SvnException::Create(r);
 
 	_ctx = ctx;
@@ -61,7 +61,7 @@ SvnClientContext::~SvnClientContext()
 
 svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 {
-	if(!_ctx)
+	if (!_ctx)
 		throw gcnew ObjectDisposedException("SvnClientContext");
 
 	_pool->Ensure();
@@ -72,29 +72,29 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 
 void SvnClientContext::EnsureState(SvnContextState requiredState)
 {
-	if(!_pool)
+	if (!_pool)
 		throw gcnew ObjectDisposedException("SvnClient");
 
-	if(requiredState < State)
+	if (requiredState < State)
 		return;
 
-	if(State < SvnContextState::ConfigLoaded && requiredState >= SvnContextState::ConfigLoaded)
+	if (State < SvnContextState::ConfigLoaded && requiredState >= SvnContextState::ConfigLoaded)
 	{
 		LoadConfigurationDefault();
 
 		System::Diagnostics::Debug::Assert(State == SvnContextState::ConfigLoaded);
 	}
 
-	if(requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
+	if (requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
 	{
 		ApplyCustomRemoteConfig();
 
 		System::Diagnostics::Debug::Assert(State == SvnContextState::CustomRemoteConfigApplied);
 	}
 
-	if(requiredState >= SvnContextState::AuthorizationInitialized)
+	if (requiredState >= SvnContextState::AuthorizationInitialized)
 	{
-		if(State < SvnContextState::AuthorizationInitialized)
+		if (State < SvnContextState::AuthorizationInitialized)
 		{
 			_authPool = gcnew AprPool(_pool);
 			int authCookie;
@@ -106,7 +106,7 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 		}
 		else
 		{
-			if(_authCookie != Authenticator->Cookie)
+			if (_authCookie != Authenticator->Cookie)
 			{
 				// Authenticator configuration has changed; reload the baton and its backend
 
@@ -140,36 +140,36 @@ void SvnClientContext::ApplyCustomSsh()
 {
 	svn_config_t *cfg = CtxHandle->config ? (svn_config_t *)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING) : nullptr;
 
-	if(!cfg)
+	if (!cfg)
 		return;
 
 	String^ customSshConfig;
 
 	try
 	{
-		// Allow overriding the TortoiseSVN setting at our own level. 
+		// Allow overriding the TortoiseSVN setting at our own level.
 		// Probably never used, but allow overriding Tortoise settings anyway
-		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\SSH", nullptr)); 
+		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\SSH", nullptr));
 	}
 	catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
 	{ customSshConfig = nullptr; }
 	catch (UnauthorizedAccessException^)
 	{ customSshConfig = nullptr; }
 
-	if(!customSshConfig)
+	if (!customSshConfig)
 	{
 		try
 		{
 			// Use the TortoiseSVN setting
-			customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\TortoiseSVN\\SSH", nullptr)); 
+			customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\TortoiseSVN\\SSH", nullptr));
 		}
 		catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
 		{ customSshConfig = nullptr; }
 		catch (UnauthorizedAccessException^)
 		{ customSshConfig = nullptr; }
-	}	
+	}
 
-	if(customSshConfig)
+	if (customSshConfig)
 	{
 		// allocate in Ctx pool!
 		svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig->Replace('\\', '/')));
@@ -183,12 +183,12 @@ void SvnClientContext::ApplyCustomSsh()
 	const char* cmd = nullptr;
 	const char* val = nullptr;
 
-	if(!cfg)
+	if (!cfg)
 		return;
 
 	svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh");
 
-	if(val && val[0] == '$')
+	if (val && val[0] == '$')
 	{
 		// svn/client.c: If the scheme definition begins with "$varname", it means there is an
 		//                   environment variable which can override the command.
@@ -198,30 +198,30 @@ void SvnClientContext::ApplyCustomSsh()
 		char* var = apr_pstrmemdup(pool.Handle, val, len);
 		cmd = getenv(var);
 
-		if(!cmd)
+		if (!cmd)
 			val += len;
 	}
 
-	if(!cmd && val)
+	if (!cmd && val)
 	{
 		char** argv = nullptr;
-		if(!apr_tokenize_to_argv(val, &argv, pool.Handle) && argv && argv[0])
+		if (!apr_tokenize_to_argv(val, &argv, pool.Handle) && argv && argv[0])
 			cmd = argv[0];
 	}
 
-	if(cmd)
+	if (cmd)
 	{
 		String^ sCmd = Utf8_PtrToString(cmd); // We have an utf8 encoded string and like to use the unicode windows api
 		wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
 		wchar_t* app = (wchar_t*)pool.Alloc((sCmd->Length+1) * sizeof(wchar_t));
 		wchar_t* pFile = nullptr;
 
-		for(int i = 0; i < sCmd->Length; i++)
+		for (int i = 0; i < sCmd->Length; i++)
 			app[i] = sCmd[i];
 
 		app[sCmd->Length] = 0;
 
-		if(SearchPathW(nullptr, app, L".exe", 1000, buffer, &pFile) && pFile)
+		if (SearchPathW(nullptr, app, L".exe", 1000, buffer, &pFile) && pFile)
 		{
 			return; // The specified executable exists. Use it!
 		}
@@ -230,10 +230,10 @@ void SvnClientContext::ApplyCustomSsh()
 
 	String^ plinkPath = PlinkPath;
 
-	if(plinkPath)
+	if (plinkPath)
 	{
 		// Allocate in Ctx pool
-		svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(plinkPath)); 
+		svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(plinkPath));
 	}
 }
 
@@ -242,23 +242,23 @@ String^ SvnClientContext::PlinkPath::get()
 	Monitor::Enter(_plinkLock);
 	try
 	{
-		if(!_plinkPath)
+		if (!_plinkPath)
 		{
 			_plinkPath = "";
 			Uri^ codeBase;
 
-			if(Uri::TryCreate(SvnClientContext::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase) && (codeBase->IsUnc || codeBase->IsFile))
+			if (Uri::TryCreate(SvnClientContext::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase) && (codeBase->IsUnc || codeBase->IsFile))
 			{
 				String^ path = Path::GetFullPath(codeBase->LocalPath);
 
 				path = Path::Combine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
 
-				if(System::IO::File::Exists(path))
+				if (System::IO::File::Exists(path))
 				{
 					_plinkPath = path->Replace(System::IO::Path::DirectorySeparatorChar, '/');
 
-					if(_plinkPath->Contains(" "))
-						_plinkPath = "\"" + _plinkPath + "\"";					
+					if (_plinkPath->Contains(" "))
+						_plinkPath = "\"" + _plinkPath + "\"";
 				}
 			}
 		}
@@ -273,10 +273,10 @@ String^ SvnClientContext::PlinkPath::get()
 
 void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 {
-	if(State >= SvnContextState::ConfigLoaded)
+	if (State >= SvnContextState::ConfigLoaded)
 		throw gcnew InvalidOperationException("Configuration already loaded");
 
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		path = nullptr;
 
 	AprPool tmpPool(_pool);
@@ -284,18 +284,18 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 
 	svn_error_t* err = nullptr;
 
-	if(ensurePath)
+	if (ensurePath)
 	{
 		err = svn_config_ensure(szPath, tmpPool.Handle);
 
-		if(err)
+		if (err)
 			throw SvnException::Create(err);
 	}
 
 	apr_hash_t* cfg = nullptr;
 	err = svn_config_get_config(&cfg, szPath, _pool->Handle);
 
-	if(err)
+	if (err)
 		throw SvnException::Create(err);
 
 	CtxHandle->config = cfg;
@@ -315,10 +315,10 @@ void SvnClientContext::LoadConfigurationDefault()
 
 void SvnClientContext::MergeConfiguration(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	if(State < SvnContextState::ConfigLoaded)
+	if (State < SvnContextState::ConfigLoaded)
 		LoadConfigurationDefault();
 
 	AprPool tmpPool(_pool);
@@ -327,6 +327,6 @@ void SvnClientContext::MergeConfiguration(String^ path)
 
 	svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);
 
-	if(err)
+	if (err)
 		throw SvnException::Create(err);
 }

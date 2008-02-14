@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -68,7 +68,7 @@ namespace SharpSvn {
 			{
 				TManaged get(int index)
 				{
-					if(index < 0 || index >= Count)
+					if (index < 0 || index >= Count)
 						throw gcnew ArgumentOutOfRangeException("index", "Index out of range");
 
 					const char* pData = Handle->elts;
@@ -88,7 +88,7 @@ namespace SharpSvn {
 
 			void CopyTo(array<TManaged>^ item, int offset)
 			{
-				for(int i = 0; i < Count; i++)
+				for (int i = 0; i < Count; i++)
 					item[i+offset] = default[i];
 			}
 

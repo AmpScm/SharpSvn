@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -38,9 +38,9 @@ namespace SharpSvn {
 
 #include "SvnClientEventArgs_Global.h"
 #include "SvnClientEventArgs_Status.h"
-	
+
 namespace SharpSvn {
-	
+
 	public ref class SvnNotifyEventArgs sealed : public SvnEventArgs
 	{
 		const svn_wc_notify_t *_notify;
@@ -59,7 +59,7 @@ namespace SharpSvn {
 	internal:
 		SvnNotifyEventArgs(const svn_wc_notify_t *notify)
 		{
-			if(!notify)
+			if (!notify)
 				throw gcnew ArgumentNullException("notify");
 
 			_notify = notify;
@@ -75,7 +75,7 @@ namespace SharpSvn {
 		String^ _fullPath;
 		String^ _path;
 		String^ _mimeType;
-		SvnException^ _exception;		
+		SvnException^ _exception;
 
 	public:
 		/// <summary>The path the notification is about</summary>
@@ -84,12 +84,12 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_path && _notify && _notify->path)
+				if (!_path && _notify && _notify->path)
 				{
 					_pathIsUri = (0 != svn_path_is_url(_notify->path));
 					_path = SvnBase::Utf8_PtrToString(_notify->path);
 
-					if(!_pathIsUri && _path)
+					if (!_pathIsUri && _path)
 						_path = _path->Replace('/', System::IO::Path::DirectorySeparatorChar);
 				}
 
@@ -103,7 +103,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path)
+				if (!_fullPath && Path)
 					_fullPath = _pathIsUri ? Path : System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -140,7 +140,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_mimeType && _notify && _notify->mime_type)
+				if (!_mimeType && _notify && _notify->mime_type)
 				{
 					_mimeType = SvnBase::Utf8_PtrToString(_notify->mime_type);
 					_mimeTypeIsBinary = (0 != svn_mime_type_is_binary(_notify->mime_type));
@@ -200,7 +200,7 @@ namespace SharpSvn {
 		{
 			SvnLockInfo^ get()
 			{
-				if(!_lock && _notify && _notify->lock)
+				if (!_lock && _notify && _notify->lock)
 					_lock = gcnew SvnLockInfo(_notify->lock, false);
 
 				return _lock;
@@ -211,7 +211,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_changelistName && _notify && _notify->changelist_name)
+				if (!_changelistName && _notify && _notify->changelist_name)
 					_changelistName = SvnBase::Utf8_PtrToString(_notify->changelist_name);
 
 				return _changelistName;
@@ -230,7 +230,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Path);
@@ -241,7 +241,7 @@ namespace SharpSvn {
 					GC::KeepAlive(MergeRange);
 				}
 
-				if(_lock)
+				if (_lock)
 					_lock->Detach(keepProperties);
 			}
 			finally
@@ -252,7 +252,7 @@ namespace SharpSvn {
 		}
 	};
 
-	ref class SvnClientArgs;	
+	ref class SvnClientArgs;
 
 	public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
 	{
@@ -262,7 +262,7 @@ namespace SharpSvn {
 		SvnProcessingEventArgs(SvnClientCommandType commandType)
 		{
 			EnumVerifier::Verify(commandType);
-			
+
 			_commandType = commandType;
 		}
 
@@ -285,7 +285,7 @@ namespace SharpSvn {
 	internal:
 		SvnChangeItem(String^ path, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision)
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
 			_path = path;
@@ -337,7 +337,7 @@ namespace SharpSvn {
 		protected:
 			virtual String^ GetKeyForItem(SvnChangeItem^ item) override
 			{
-				if(!item)
+				if (!item)
 					throw gcnew ArgumentNullException("item");
 
 				return item->Path;
@@ -365,7 +365,7 @@ namespace SharpSvn {
 	internal:
 		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool, Uri^ logOrigin)
 		{
-			if(!entry)
+			if (!entry)
 				throw gcnew ArgumentNullException("entry");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
@@ -376,16 +376,16 @@ namespace SharpSvn {
 			const char* pcAuthor = nullptr;
 			const char* pcDate = nullptr;
 			const char* pcMessage = nullptr;
-			
-			if(entry->revprops)
+
+			if (entry->revprops)
 				svn_compat_log_revprops_out(&pcAuthor, &pcDate, &pcMessage, entry->revprops);
 
-			if(pcDate)
+			if (pcDate)
 			{
 				apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
 				svn_error_t *err = pcDate ? svn_time_from_cstring(&when, pcDate, pool->Handle) : nullptr;
 
-				if(!err)
+				if (!err)
 					_date = SvnBase::DateTimeFromAprTime(when);
 			}
 			else
@@ -400,7 +400,7 @@ namespace SharpSvn {
 			_logOrigin = logOrigin;
 		}
 
-	private:		
+	private:
 		SvnChangeItemCollection^ _changedPaths;
 	public:
 
@@ -408,7 +408,7 @@ namespace SharpSvn {
 		{
 			SvnChangeItemCollection^  get()
 			{
-				if(!_changedPaths && _entry && _entry->changed_paths && _pool)
+				if (!_changedPaths && _entry && _entry->changed_paths && _pool)
 				{
 					_changedPaths = gcnew SvnChangeItemCollection();
 
@@ -452,7 +452,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_author && _pcAuthor)
+				if (!_author && _pcAuthor)
 					_author = SvnBase::Utf8_PtrToString(_pcAuthor);
 
 				return _author;
@@ -472,11 +472,11 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_message && _pcMessage)
+				if (!_message && _pcMessage)
 				{
 					_message = SvnBase::Utf8_PtrToString(_pcMessage);
 
-					if(_message)
+					if (_message)
 					{
 						// Subversion log messages always use \n newlines
 						_message = _message->Replace("\n", Environment::NewLine);
@@ -519,7 +519,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(ChangedPaths);
@@ -573,7 +573,7 @@ namespace SharpSvn {
 	internal:
 		SvnInfoEventArgs(String^ path, const svn_info_t* info)
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!info)
 				throw gcnew ArgumentNullException("info");
@@ -582,7 +582,7 @@ namespace SharpSvn {
 			_path = path;
 			_rev = info->rev;
 			_nodeKind = (SvnNodeKind)info->kind;
-			if(info->last_changed_author)
+			if (info->last_changed_author)
 			{
 				_lastChangeRev = info->last_changed_rev;
 				_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
@@ -590,7 +590,7 @@ namespace SharpSvn {
 			_hasWcInfo = info->has_wc_info != 0;
 			_wcSchedule = (SvnSchedule)info->schedule;
 			_copyFromRev = info->copyfrom_rev;
-			if(_hasWcInfo)
+			if (_hasWcInfo)
 			{
 				_contentTime = SvnBase::DateTimeFromAprTime(info->text_time);
 				_propertyTime = SvnBase::DateTimeFromAprTime(info->prop_time);
@@ -598,12 +598,12 @@ namespace SharpSvn {
 
 			_depth = (SvnDepth)info->depth;
 
-			if(info->size == (apr_size_t)-1)
+			if (info->size == (apr_size_t)-1)
 				_size = -1;
 			else
 				_size = info->size;
 
-			if(info->working_size == (apr_size_t)-1)
+			if (info->working_size == (apr_size_t)-1)
 				_wcSize = -1;
 			else
 				_wcSize = info->working_size;
@@ -623,7 +623,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path && HasLocalInfo)
+				if (!_fullPath && Path && HasLocalInfo)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -634,7 +634,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_uri && _info && _info->URL)
+				if (!_uri && _info && _info->URL)
 					_uri = SvnBase::Utf8_PtrToUri(_info->URL, _nodeKind);
 
 				return _uri;
@@ -663,7 +663,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_reposRootUri && _info && _info->repos_root_URL)
+				if (!_reposRootUri && _info && _info->repos_root_URL)
 					_reposRootUri = SvnBase::Utf8_PtrToUri(_info->repos_root_URL, SvnNodeKind::Directory);
 
 				return _reposRootUri;
@@ -674,7 +674,7 @@ namespace SharpSvn {
 		{
 			Guid get()
 			{
-				if(!_reposUuid && _info && _info->repos_UUID)
+				if (!_reposUuid && _info && _info->repos_UUID)
 					_reposUuid = SvnBase::Utf8_PtrToString(_info->repos_UUID);
 
 				return _reposUuid ? Guid(_reposUuid) : Guid::Empty;
@@ -701,7 +701,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_lastChangeAuthor && _info && _info->last_changed_author)
+				if (!_lastChangeAuthor && _info && _info->last_changed_author)
 					_lastChangeAuthor = SvnBase::Utf8_PtrToString(_info->last_changed_author);
 
 				return _lastChangeAuthor;
@@ -712,7 +712,7 @@ namespace SharpSvn {
 		{
 			SvnLockInfo^ get()
 			{
-				if(!_lock && _info && _info->lock)
+				if (!_lock && _info && _info->lock)
 					_lock = gcnew SvnLockInfo(_info->lock, HasLocalInfo);
 
 				return _lock;
@@ -739,7 +739,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_copyFromUri && _info && _info->copyfrom_url && HasLocalInfo)
+				if (!_copyFromUri && _info && _info->copyfrom_url && HasLocalInfo)
 					_copyFromUri = SvnBase::Utf8_PtrToUri(_info->copyfrom_url, _nodeKind);
 
 				return _copyFromUri;
@@ -774,7 +774,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_checksum && _info && _info->checksum && HasLocalInfo)
+				if (!_checksum && _info && _info->checksum && HasLocalInfo)
 					_checksum = SvnBase::Utf8_PtrToString(_info->checksum);
 
 				return _checksum;
@@ -785,7 +785,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflict_old && _info && _info->conflict_old && HasLocalInfo)
+				if (!_conflict_old && _info && _info->conflict_old && HasLocalInfo)
 					_conflict_old = SvnBase::Utf8_PtrToString(_info->conflict_old);
 
 				return _conflict_old;
@@ -796,7 +796,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflict_new && _info && _info->conflict_new && HasLocalInfo)
+				if (!_conflict_new && _info && _info->conflict_new && HasLocalInfo)
 					_conflict_new = SvnBase::Utf8_PtrToString(_info->conflict_new);
 
 				return _conflict_new;
@@ -807,7 +807,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflict_wrk && _info && _info->conflict_wrk && HasLocalInfo)
+				if (!_conflict_wrk && _info && _info->conflict_wrk && HasLocalInfo)
 					_conflict_wrk = SvnBase::Utf8_PtrToString(_info->conflict_wrk);
 
 				return _conflict_wrk;
@@ -818,7 +818,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_prejfile && _info && _info->prejfile && HasLocalInfo)
+				if (!_prejfile && _info && _info->prejfile && HasLocalInfo)
 					_prejfile = SvnBase::Utf8_PtrToString(_info->prejfile);
 
 				return _prejfile;
@@ -837,7 +837,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_changelist && _info && _info->changelist)
+				if (!_changelist && _info && _info->changelist)
 					_changelist = SvnBase::Utf8_PtrToString(_info->changelist);
 
 				return _changelist;
@@ -865,7 +865,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Path);
@@ -883,7 +883,7 @@ namespace SharpSvn {
 					GC::KeepAlive(ChangeList);
 				}
 
-				if(_lock)
+				if (_lock)
 					_lock->Detach(keepProperties);
 			}
 			finally
@@ -900,7 +900,7 @@ namespace SharpSvn {
 	public:
 		SvnErrorEventArgs(SvnException ^exception)
 		{
-			if(!exception)
+			if (!exception)
 				throw gcnew ArgumentNullException("exception");
 
 			_exception = exception;
@@ -927,7 +927,7 @@ namespace SharpSvn {
 	internal:
 		SvnDirEntry(const svn_dirent_t *entry)
 		{
-			if(!entry)
+			if (!entry)
 				throw gcnew ArgumentNullException("entry");
 
 			_entry = entry;
@@ -987,7 +987,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_author && _entry && _entry->last_author)
+				if (!_author && _entry && _entry->last_author)
 					_author = SvnBase::Utf8_PtrToString(_entry->last_author);
 
 				return _author;
@@ -999,7 +999,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Author);
 				}
@@ -1029,7 +1029,7 @@ namespace SharpSvn {
 	internal:
 		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
 		{
-			if(!path)
+			if (!path)
 				throw gcnew ArgumentNullException("path");
 			else if(!abs_path)
 				throw gcnew ArgumentNullException("abs_path");
@@ -1056,7 +1056,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_absPath && _pAbsPath)
+				if (!_absPath && _pAbsPath)
 					_absPath = SvnBase::Utf8_PtrToString(_pAbsPath);
 
 				return _absPath;
@@ -1067,7 +1067,7 @@ namespace SharpSvn {
 		{
 			SvnLockInfo^ get()
 			{
-				if(!_lock && _pLock)
+				if (!_lock && _pLock)
 					_lock = gcnew SvnLockInfo(_pLock, false);
 
 				return _lock;
@@ -1078,7 +1078,7 @@ namespace SharpSvn {
 		{
 			SvnDirEntry^ get()
 			{
-				if(!_entry && _pDirEnt)
+				if (!_entry && _pDirEnt)
 					_entry = gcnew SvnDirEntry(_pDirEnt);
 
 				return _entry;
@@ -1091,7 +1091,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 					GC::KeepAlive(BasePath);
@@ -1099,9 +1099,9 @@ namespace SharpSvn {
 					GC::KeepAlive(Entry);
 				}
 
-				if(_lock)
+				if (_lock)
 					_lock->Detach(keepProperties);
-				if(_entry)
+				if (_entry)
 					_entry->Detach(keepProperties);
 			}
 			finally
@@ -1125,7 +1125,7 @@ namespace SharpSvn {
 	internal:
 		SvnPropertyListEventArgs(const char *path, apr_hash_t* prop_hash, AprPool ^pool)
 		{
-			if(!path)
+			if (!path)
 				throw gcnew ArgumentNullException("path");
 			else if(!prop_hash)
 				throw gcnew ArgumentNullException("prop_hash");
@@ -1150,7 +1150,7 @@ namespace SharpSvn {
 		{
 			SvnPropertyCollection^ get()
 			{
-				if(!_properties && _propHash && _pool)
+				if (!_properties && _propHash && _pool)
 					_properties = SvnBase::CreatePropertyDictionary(_propHash, _pool);
 
 				return _properties;
@@ -1162,7 +1162,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 					GC::KeepAlive(Properties);
@@ -1188,7 +1188,7 @@ namespace SharpSvn {
 	internal:
 		SvnListChangeListEventArgs(const char *path, const char *changelist)
 		{
-			if(!path)
+			if (!path)
 				throw gcnew ArgumentNullException("path");
 
 			_path = SvnBase::Utf8_PtrToString(path)->Replace('/', System::IO::Path::DirectorySeparatorChar);
@@ -1217,7 +1217,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 				}
@@ -1239,7 +1239,7 @@ namespace SharpSvn {
 	internal:
 		SvnDiffSummaryEventArgs(const svn_client_diff_summarize_t *diffSummary)
 		{
-			if(!diffSummary)
+			if (!diffSummary)
 				throw gcnew ArgumentNullException("diffSummary");
 
 			_diffSummary = diffSummary;
@@ -1254,7 +1254,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_path && _diffSummary)
+				if (!_path && _diffSummary)
 					_path = SvnBase::Utf8_PtrToString(_diffSummary->path);
 
 				return _path;
@@ -1290,7 +1290,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 				}
@@ -1320,11 +1320,11 @@ namespace SharpSvn {
 		String^ _mergedPath;
 
 	internal:
-		SvnBlameEventArgs(__int64 revision, __int64 lineNr, const char* author, const char* date, 
-			svn_revnum_t merged_revision, const char *merged_author, const char *merged_date, 
+		SvnBlameEventArgs(__int64 revision, __int64 lineNr, const char* author, const char* date,
+			svn_revnum_t merged_revision, const char *merged_author, const char *merged_date,
 			const char *merged_path, const char* line, AprPool^ pool)
 		{
-			if(!pool)
+			if (!pool)
 				throw gcnew ArgumentNullException("pool");
 			else if(!author)
 				throw gcnew ArgumentNullException("author");
@@ -1341,18 +1341,18 @@ namespace SharpSvn {
 			apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
 			svn_error_t *err = svn_time_from_cstring(&when, date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 
-			if(!err)
+			if (!err)
 				_date = SvnBase::DateTimeFromAprTime(when);
 
 			_mergedRevision = merged_revision;
 			_pcMergedAuthor = merged_author;
 			_pcMergedPath = merged_path;
 
-			if(merged_date)
+			if (merged_date)
 			{
 				err = svn_time_from_cstring(&when, merged_date, pool->Handle);
 
-				if(!err)
+				if (!err)
 					_mergedDate = SvnBase::DateTimeFromAprTime(when);
 			}
 		}
@@ -1378,7 +1378,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-				return _date; 
+				return _date;
 			}
 		}
 
@@ -1386,7 +1386,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_author && _pcAuthor)
+				if (!_author && _pcAuthor)
 					_author = SvnBase::Utf8_PtrToString(_pcAuthor);
 
 				return _author;
@@ -1397,7 +1397,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_line && _pcLine)
+				if (!_line && _pcLine)
 				{
 					try
 					{
@@ -1417,7 +1417,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_mergedAuthor && _pcMergedAuthor)
+				if (!_mergedAuthor && _pcMergedAuthor)
 					_mergedAuthor = SvnBase::Utf8_PtrToString(_pcMergedAuthor);
 
 				return _mergedAuthor;
@@ -1428,7 +1428,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_mergedPath && _pcMergedPath)
+				if (!_mergedPath && _pcMergedPath)
 					_mergedPath = SvnBase::Utf8_PtrToString(_pcMergedPath);
 
 				return _mergedPath;
@@ -1439,7 +1439,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-				return _mergedDate; 
+				return _mergedDate;
 			}
 		}
 
@@ -1455,7 +1455,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Author);
 					GC::KeepAlive(Line);

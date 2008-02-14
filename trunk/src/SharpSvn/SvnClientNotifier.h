@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -30,7 +30,7 @@ namespace SharpSvn {
 	public:
 		SvnClientReporter(SvnClient^ client, System::IO::TextWriter^ to)
 		{
-			if(!client)
+			if (!client)
 				throw gcnew ArgumentNullException("client");
 			else if(!to)
 				throw gcnew ArgumentNullException("to");
@@ -42,9 +42,9 @@ namespace SharpSvn {
 			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
 		}
 
-		SvnClientReporter(SvnClient^ client, System::Text::StringBuilder^ sb)			
+		SvnClientReporter(SvnClient^ client, System::Text::StringBuilder^ sb)
 		{
-			if(!client)
+			if (!client)
 				throw gcnew ArgumentNullException("client");
 			else if(!sb)
 				throw gcnew ArgumentNullException("sb");
@@ -55,9 +55,9 @@ namespace SharpSvn {
 			_client->Processing += gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
 		}
 
-		SvnClientReporter(SvnClient^ client, System::Text::StringBuilder^ sb, IFormatProvider^ formatProvider)			
+		SvnClientReporter(SvnClient^ client, System::Text::StringBuilder^ sb, IFormatProvider^ formatProvider)
 		{
-			if(!client)
+			if (!client)
 				throw gcnew ArgumentNullException("client");
 			else if(!sb)
 				throw gcnew ArgumentNullException("sb");
@@ -71,7 +71,7 @@ namespace SharpSvn {
 
 		SvnClientReporter(SvnClientArgs^ clientArgs, System::IO::TextWriter^ to)
 		{
-			if(!clientArgs)
+			if (!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
 			else if(!to)
 				throw gcnew ArgumentNullException("to");
@@ -84,7 +84,7 @@ namespace SharpSvn {
 
 		SvnClientReporter(SvnClientArgs^ clientArgs, System::Text::StringBuilder^ sb)
 		{
-			if(!clientArgs)
+			if (!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
 			else if(!sb)
 				throw gcnew ArgumentNullException("sb");
@@ -96,7 +96,7 @@ namespace SharpSvn {
 
 		SvnClientReporter(SvnClientArgs^ clientArgs, System::Text::StringBuilder^ sb, IFormatProvider^ formatProvider)
 		{
-			if(!clientArgs)
+			if (!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
 			else if(!sb)
 				throw gcnew ArgumentNullException("sb");
@@ -110,12 +110,12 @@ namespace SharpSvn {
 	public:
 		~SvnClientReporter()
 		{
-			if(_client)
+			if (_client)
 			{
 				_client->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
 				_client->Processing -= gcnew EventHandler<SvnProcessingEventArgs^>(this, &SvnClientReporter::HandleProcessing);
 			}
-			if(_args)
+			if (_args)
 				_args->Notify -= gcnew EventHandler<SvnNotifyEventArgs^>(this, &SvnClientReporter::HandleNotify);
 
 			_textWriter->Close();
@@ -170,7 +170,7 @@ namespace SharpSvn {
 		{
 			UNUSED_ALWAYS(sender);
 
-			if(!_afterInitial && !_client)
+			if (!_afterInitial && !_client)
 			{
 				_afterInitial = true;
 				OnProcessing(gcnew SvnProcessingEventArgs(_args->ClientCommandType));

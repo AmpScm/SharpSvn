@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -51,8 +51,8 @@ using namespace System::Security::Permissions;
 									   ", neon " NEON_VERSION
 									   ", serf " SERF_VERSION
 									   " and " OPENSSL_VERSION_TEXT
-									   ". Dynamically linked to Berkeley DB" BDB_VERSION 
-									   " and Cyrus Sasl " SASL_VERSION ")")];
+									   ". Dynamically linked to Berkeley DB" BDB_VERSION
+									   ", Cyrus Sasl " SASL_VERSION " and Putty's Plink)")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];

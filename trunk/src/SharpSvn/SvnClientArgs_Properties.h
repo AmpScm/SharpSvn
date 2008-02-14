@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -64,7 +64,7 @@ namespace SharpSvn {
 			}
 			void set(__int64 value)
 			{
-				if(value >= 0)
+				if (value >= 0)
 					_baseRevision = value;
 				else
 					_baseRevision = SVN_INVALID_REVNUM;
@@ -76,7 +76,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -113,7 +113,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -137,7 +137,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -186,7 +186,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -210,7 +210,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -238,8 +238,8 @@ namespace SharpSvn {
 		property bool Force
 		{
 			bool get()
-			{ 
-				return _force; 
+			{
+				return _force;
 			}
 			void set(bool value)
 			{
@@ -247,7 +247,7 @@ namespace SharpSvn {
 			}
 		}
 	};
-			
+
 	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetRevisionProperty</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetRevisionPropertyArgs : public SvnClientArgs

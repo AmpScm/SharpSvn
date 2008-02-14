@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -13,7 +13,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Revert(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return Revert(path, gcnew SvnRevertArgs());
@@ -21,7 +21,7 @@ bool SvnClient::Revert(String^ path)
 
 bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -31,7 +31,7 @@ bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 
 bool SvnClient::Revert(ICollection<String^>^ paths)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	return Revert(paths, gcnew SvnRevertArgs());
@@ -39,14 +39,14 @@ bool SvnClient::Revert(ICollection<String^>^ paths)
 
 bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	for each(String^ path in paths)
+	for each (String^ path in paths)
 	{
-		if(String::IsNullOrEmpty(path))
+		if (String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 

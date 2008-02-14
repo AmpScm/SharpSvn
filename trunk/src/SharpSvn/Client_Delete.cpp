@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -15,7 +15,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Delete(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return Delete(NewSingleItemCollection(path), gcnew SvnDeleteArgs());
@@ -23,7 +23,7 @@ bool SvnClient::Delete(String^ path)
 
 bool SvnClient::Delete(String^ path, SvnDeleteArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -36,7 +36,7 @@ bool SvnClient::Delete(String^ path, SvnDeleteArgs^ args)
 
 bool SvnClient::Delete(ICollection<String^>^ paths)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	return Delete(paths, gcnew SvnDeleteArgs());
@@ -44,14 +44,14 @@ bool SvnClient::Delete(ICollection<String^>^ paths)
 
 bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	for each(String^ path in paths)
+	for each (String^ path in paths)
 	{
-		if(String::IsNullOrEmpty(path))
+		if (String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 		else if(!IsNotUri(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
@@ -77,7 +77,7 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 
 bool SvnClient::RemoteDelete(Uri^ uri)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
@@ -88,7 +88,7 @@ bool SvnClient::RemoteDelete(Uri^ uri)
 
 bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -100,7 +100,7 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args)
 
 bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -112,7 +112,7 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^
 
 bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris)
 {
-	if(!uris)
+	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	SvnCommitInfo^ commitInfo;
 
@@ -122,7 +122,7 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris)
 
 bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args)
 {
-	if(!uris)
+	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -133,7 +133,7 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args)
 
 bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!uris)
+	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -143,9 +143,9 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	array<String^>^ uriData = gcnew array<String^>(uris->Count);
 	int i = 0;
 
-	for each(Uri^ uri in uris)
+	for each (Uri^ uri in uris)
 	{
-		if(uri == nullptr)
+		if (uri == nullptr)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uris");
@@ -168,7 +168,7 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 		CtxHandle,
 		pool.Handle);
 
-	if(commit_info)
+	if (commit_info)
 		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
 	return args->HandleResult(this, r);

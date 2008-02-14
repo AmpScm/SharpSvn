@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSourcesCollection^% mergeSources)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeSources);
@@ -24,7 +24,7 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSources
 
 bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSourcesCollection^% mergeSources)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -44,16 +44,16 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 		CtxHandle,
 		pool.Handle);
 
-	if(!r && svnMergeSources)
+	if (!r && svnMergeSources)
 	{
 		SvnMergeSourcesCollection^ sourceList = gcnew SvnMergeSourcesCollection();
 
 		const char** sources = (const char**)svnMergeSources->elts;
-		for(int i = 0; i < svnMergeSources->nelts; i++)
+		for (int i = 0; i < svnMergeSources->nelts; i++)
 		{
 			sourceList->Add(gcnew SvnMergeSource(Utf8_PtrToUri(sources[i], SvnNodeKind::Unknown)));
 		}
-		
+
 		mergeSources = sourceList;
 	}
 

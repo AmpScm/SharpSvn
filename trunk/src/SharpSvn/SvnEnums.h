@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -11,7 +11,7 @@ namespace SharpSvn {
 	public enum class SvnClientCommandType
 	{
 		Unknown = 0,
-	
+
 		// Add new members at the end
 		Add,
 		AddToChangeList,
@@ -45,7 +45,7 @@ namespace SharpSvn {
 		Relocate,
 		RemoveFromChangeList,
 		Resolved,
-		Revert,		
+		Revert,
 		SetProperty,
 		SetRevisionProperty,
 		Status,
@@ -94,7 +94,7 @@ namespace SharpSvn {
 		/// default update behavior.
 		/// </summary>
 		Infinity		= svn_depth_infinity,
-	};	
+	};
 
 	public enum class SvnRevisionType
 	{
@@ -369,7 +369,7 @@ namespace SharpSvn {
 		/// <summary>Attempting to add object</summary>
 		Add = svn_wc_conflict_action_add,
 		/// <summary>Attempting to delete object</summary>
-		Delete = svn_wc_conflict_action_delete   
+		Delete = svn_wc_conflict_action_delete
 	};
 
 	public enum class SvnIgnoreSpacing
@@ -391,7 +391,7 @@ namespace SharpSvn {
 		where T : System::Enum
 		static T Verify(T value)
 		{
-			if(!Enum::IsDefined(T::typeid, value))
+			if (!Enum::IsDefined(T::typeid, value))
 				throw gcnew ArgumentOutOfRangeException("value", value, String::Format(CultureInfo::InvariantCulture, SharpSvnStrings::VerifyEnumFailed, value, T::typeid->FullName));
 
 			return value;

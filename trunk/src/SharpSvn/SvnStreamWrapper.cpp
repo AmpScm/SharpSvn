@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -61,7 +61,7 @@ static svn_error_t *svnStreamClose(void *baton)
 {
 	SvnStreamWrapper^ sw = AprBaton<SvnStreamWrapper^>::Get((IntPtr)baton);
 
-	if(sw->Stream->CanWrite)
+	if (sw->Stream->CanWrite)
 		sw->Stream->Flush();
 
 	return nullptr;
@@ -71,13 +71,13 @@ void SvnStreamWrapper::Init(bool enableRead, bool enableWrite)
 {
 	_svnStream = svn_stream_create((void*)_streamBatton->Handle, _pool->Handle);
 
-	if(!_svnStream)
+	if (!_svnStream)
 		throw gcnew InvalidOperationException("Can't create svn stream");
 
 
-	if(enableRead)
+	if (enableRead)
 		svn_stream_set_read(_svnStream, svnStreamRead);
-	if(enableWrite)
+	if (enableWrite)
 		svn_stream_set_write(_svnStream, svnStreamWrite);
 
 	svn_stream_set_close(_svnStream, svnStreamClose);

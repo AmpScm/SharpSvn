@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace SharpSvn::Implementation;
 generic<typename T, typename R>
 AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)
 {
-	if(!items)
+	if (!items)
 		throw gcnew ArgumentNullException("items");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -25,7 +25,7 @@ AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)
 	_pool = pool;
 	_handle = apr_array_make(pool->Handle, items->Count, _marshaller->ItemSize);
 
-	for each(T t in items)
+	for each (T t in items)
 	{
 		void* ptr = apr_array_push(_handle);
 
@@ -36,15 +36,15 @@ AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)
 generic<typename T, typename R>
 AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 {
-	if(!items)
+	if (!items)
 		throw gcnew ArgumentNullException("items");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	int nItems = 0;
-	for each(T t in items)
+	for each (T t in items)
 	{
-		if(!t)
+		if (!t)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "items");
 
 		nItems++;
@@ -54,7 +54,7 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 	_pool = pool;
 	_handle = apr_array_make(pool->Handle, nItems, _marshaller->ItemSize);
 
-	for each(T t in items)
+	for each (T t in items)
 	{
 		void* ptr = apr_array_push(_handle);
 
@@ -66,7 +66,7 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 generic<typename T, typename R>
 AprArray<T,R>::AprArray(const apr_array_header_t* handle, AprPool ^pool)
 {
-	if(!handle)
+	if (!handle)
 		throw gcnew ArgumentNullException("handle");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -85,14 +85,14 @@ AprArray<T,R>::~AprArray()
 
 apr_array_header_t *SvnBase::AllocArray(ICollection<String^>^ strings, AprPool^ pool)
 {
-	if(!strings)
+	if (!strings)
 		throw gcnew ArgumentNullException("strings");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	for each(String^ s in strings)
+	for each (String^ s in strings)
 	{
-		if(!s)
+		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "strings");
 	}
 	AprArray<String^, AprCStrMarshaller^>^ aprStrings = gcnew AprArray<String^, AprCStrMarshaller^>(strings, pool);
@@ -102,14 +102,14 @@ apr_array_header_t *SvnBase::AllocArray(ICollection<String^>^ strings, AprPool^ 
 
 apr_array_header_t *SvnBase::AllocCanonicalArray(ICollection<String^>^ paths, AprPool^ pool)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	for each(String^ s in paths)
+	for each (String^ s in paths)
 	{
-		if(!s)
+		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(paths, pool);
@@ -120,14 +120,14 @@ apr_array_header_t *SvnBase::AllocCanonicalArray(ICollection<String^>^ paths, Ap
 
 apr_array_header_t *SvnBase::AllocPathArray(ICollection<String^>^ paths, AprPool^ pool)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	for each(String^ s in paths)
+	for each (String^ s in paths)
 	{
-		if(!s)
+		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, pool);

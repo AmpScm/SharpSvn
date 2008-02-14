@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -12,7 +12,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -24,7 +24,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, ICollection<Byte>^ bytes)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -36,7 +36,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -47,8 +47,8 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 	AprPool pool(%_pool);
 
-	return InternalSetRevisionProperty(target, 
-		propertyName, 
+	return InternalSetRevisionProperty(target,
+		propertyName,
 		// Subversion does no normalization on the property value; so we have to do this before sending it
 		// to the server
 		propertyName->StartsWith("svn:", StringComparison::Ordinal) ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
@@ -58,7 +58,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, ICollection<Byte>^ bytes)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -71,15 +71,15 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 	array<Byte> ^byteArray = dynamic_cast<array<Byte>^>(bytes);
 
-	if(!byteArray)
+	if (!byteArray)
 	{
 		byteArray = gcnew array<Byte>(bytes->Count);
 
 		bytes->CopyTo(byteArray, 0);
 	}
 
-	return InternalSetRevisionProperty(target, 
-		propertyName, 
+	return InternalSetRevisionProperty(target,
+		propertyName,
 		pool.AllocSvnString(byteArray),
 		args,
 		%pool);
@@ -87,7 +87,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -97,7 +97,7 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 
 bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -106,8 +106,8 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 
 	AprPool pool(%_pool);
 
-	return InternalSetRevisionProperty(target, 
-		propertyName, 
+	return InternalSetRevisionProperty(target,
+		propertyName,
 		nullptr,
 		args,
 		%pool);
@@ -115,7 +115,7 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 
 bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
@@ -128,8 +128,8 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 	svn_revnum_t set_rev = 0;
 
 	svn_error_t *r = svn_client_revprop_set(
-		pool->AllocString(propertyName), 
-		value, 
+		pool->AllocString(propertyName),
+		value,
 		pool->AllocString(target->TargetName),
 		target->Revision->AllocSvnRevision(pool),
 		&set_rev,

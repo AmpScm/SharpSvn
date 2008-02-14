@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace SharpSvn;
 
 bool SvnClient::Commit(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	SvnCommitInfo^ commitInfo = nullptr;
@@ -26,7 +26,7 @@ bool SvnClient::Commit(String^ path)
 
 bool SvnClient::Commit(String^ path, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
@@ -34,7 +34,7 @@ bool SvnClient::Commit(String^ path, [Out] SvnCommitInfo^% commitInfo)
 
 bool SvnClient::Commit(ICollection<String^>^ paths)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	SvnCommitInfo^ commitInfo = nullptr;
@@ -44,7 +44,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths)
 
 bool SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	return Commit(paths, gcnew SvnCommitArgs(), commitInfo);
@@ -52,7 +52,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commit
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -64,7 +64,7 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -74,7 +74,7 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% 
 
 bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -86,14 +86,14 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
 
 bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	for each(String^ path in paths)
+	for each (String^ path in paths)
 	{
-		if(String::IsNullOrEmpty(path))
+		if (String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 
@@ -115,7 +115,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		CtxHandle,
 		pool.Handle);
 
-	if(commitInfoPtr && !r)
+	if (commitInfoPtr && !r)
 		commitInfo = gcnew SvnCommitInfo(commitInfoPtr, %pool);
 	else
 		commitInfo = nullptr;

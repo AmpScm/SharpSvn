@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -14,7 +14,7 @@ using namespace SharpSvn;
 
 bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!blameHandler)
 		throw gcnew ArgumentNullException("blameHandler");
@@ -22,8 +22,8 @@ bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
 	return Blame(target, gcnew SvnBlameArgs(), blameHandler);
 }
 
-static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author, 
-													   const char *date, svn_revnum_t merged_revision,  const char *merged_author, 
+static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author,
+													   const char *date, svn_revnum_t merged_revision,  const char *merged_author,
 													   const char *merged_date, const char *merged_path, const char *line, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
@@ -31,16 +31,16 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 	AprPool thePool(pool, false);
 
 	SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(!args)
+	if (!args)
 		return nullptr;
 
-	SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date, 
+	SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date,
 		merged_path, line, %thePool);
 	try
 	{
 		args->OnBlameHandler(e);
 
-		if(e->Cancel)
+		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
 		else
 			return nullptr;
@@ -58,7 +58,7 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 
 bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBlameEventArgs^>^ blameHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -67,7 +67,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(blameHandler)
+	if (blameHandler)
 		args->BlameHandler += blameHandler;
 	try
 	{
@@ -95,14 +95,14 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	}
 	finally
 	{
-		if(blameHandler)
+		if (blameHandler)
 			args->BlameHandler -= blameHandler;
 	}
 }
 
 bool SvnClient::GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>^% list)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	InfoItemCollection<SvnBlameEventArgs^>^ results = gcnew InfoItemCollection<SvnBlameEventArgs^>();
@@ -119,7 +119,7 @@ bool SvnClient::GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>
 
 bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -15,7 +15,7 @@ using namespace SharpSvn;
 
 bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
@@ -32,7 +32,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 	AprPool thePool(pool, false);
 
 	SvnDiffSummaryArgs^ args = dynamic_cast<SvnDiffSummaryArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(!args)
+	if (!args)
 		return nullptr;
 
 	SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff);
@@ -40,7 +40,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 	{
 		args->OnSummaryHandler(e);
 
-		if(e->Cancel)
+		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
 		else
 			return nullptr;
@@ -59,7 +59,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 
 bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
@@ -70,7 +70,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(summaryHandler)
+	if (summaryHandler)
 		args->SummaryHandler += summaryHandler;
 	try
 	{
@@ -94,14 +94,14 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	}
 	finally
 	{
-		if(summaryHandler)
+		if (summaryHandler)
 			args->SummaryHandler -= summaryHandler;
 	}
 }
 
 bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] Collection<SvnDiffSummaryEventArgs^>^% list)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
@@ -120,7 +120,7 @@ bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] Collection<
 
 bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] Collection<SvnDiffSummaryEventArgs^>^% list)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");

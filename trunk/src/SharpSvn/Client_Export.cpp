@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -33,7 +33,7 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
@@ -45,7 +45,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% result)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
@@ -55,7 +55,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% 
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
@@ -69,7 +69,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] SvnUpdateResult^% result)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
@@ -99,7 +99,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 		CtxHandle,
 		pool.Handle);
 
-	if(args->HandleResult(this, r))
+	if (args->HandleResult(this, r))
 	{
 		result = gcnew SvnUpdateResult(resultRev);
 		return true;

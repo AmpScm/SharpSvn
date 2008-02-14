@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -15,7 +15,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!statusHandler)
 		throw gcnew ArgumentNullException("statusHandler");
@@ -28,7 +28,7 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnStatusArgs^ args = dynamic_cast<SvnStatusArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(args)
+	if (args)
 	{
 		SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status);
 		try
@@ -44,7 +44,7 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 
 bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatusEventArgs^>^ statusHandler)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -57,7 +57,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(statusHandler)
+	if (statusHandler)
 		args->Status += statusHandler;
 	try
 	{
@@ -83,14 +83,14 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 	}
 	finally
 	{
-		if(statusHandler)
+		if (statusHandler)
 			args->Status -= statusHandler;
 	}
 }
 
 bool SvnClient::GetStatus(String^ path, [Out] Collection<SvnStatusEventArgs^>^% statuses)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	InfoItemCollection<SvnStatusEventArgs^>^ results = gcnew InfoItemCollection<SvnStatusEventArgs^>();
@@ -107,7 +107,7 @@ bool SvnClient::GetStatus(String^ path, [Out] Collection<SvnStatusEventArgs^>^% 
 
 bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<SvnStatusEventArgs^>^% statuses)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -12,7 +12,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::RemoveFromChangeList(String^ target)
 {
-	if(String::IsNullOrEmpty(target))
+	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
 
 	return RemoveFromChangeList(NewSingleItemCollection(target), gcnew SvnRemoveFromChangeListArgs());
@@ -20,7 +20,7 @@ bool SvnClient::RemoveFromChangeList(String^ target)
 
 bool SvnClient::RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs^ args)
 {
-	if(String::IsNullOrEmpty(target))
+	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -30,7 +30,7 @@ bool SvnClient::RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs
 
 bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 
 	return RemoveFromChangeList(targets, gcnew SvnRemoveFromChangeListArgs());
@@ -38,7 +38,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets)
 
 bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFromChangeListArgs^ args)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

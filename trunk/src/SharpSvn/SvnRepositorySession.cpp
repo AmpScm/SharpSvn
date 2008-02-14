@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -34,7 +34,7 @@ void SvnRepositorySession::Initialize()
 {
 	svn_ra_callbacks2_t* cb = nullptr;
 
-	if(svn_ra_create_callbacks(&cb, _pool.Handle))
+	if (svn_ra_create_callbacks(&cb, _pool.Handle))
 		throw gcnew InvalidOperationException();
 
 	_callbacks = cb;

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -65,7 +65,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -124,10 +124,10 @@ namespace SharpSvn {
 
 		/// <summary>Gets or sets the depth of the update</summary>
 		/// <remarks>
-		/// <para>If Depth is Infinity, update fully recursively. Else if it 
-		/// is Immediates or Files, update each target and its file 
-		/// entries, but not its subdirectories.  Else if Empty, update 
-		/// exactly each target, nonrecursively (essentially, update the 
+		/// <para>If Depth is Infinity, update fully recursively. Else if it
+		/// is Immediates or Files, update each target and its file
+		/// entries, but not its subdirectories.  Else if Empty, update
+		/// exactly each target, nonrecursively (essentially, update the
 		/// target's properties).</para>
 		/// <para>If Depth is Unknown, take the working depth from the specified paths
 		/// </para>
@@ -160,7 +160,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets a value indicating whether to ignore externals 
+		/// <summary>Gets or sets a value indicating whether to ignore externals
 		/// definitions as part of this operation.</summary>
 		property bool IgnoreExternals
 		{
@@ -188,13 +188,13 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
 			}
 		}
-		
+
 		/// <summary>If @a allow_unver_obstructions is <c>true</c> then the update tolerates
 		/// existing unversioned items that obstruct added paths from @a URL</summary>
 		/// <remarks>
@@ -275,7 +275,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -320,7 +320,7 @@ namespace SharpSvn {
 		{
 			SvnCommandLineArgumentCollection^ get()
 			{
-				if(!_mergeArguments)
+				if (!_mergeArguments)
 					_mergeArguments = gcnew SvnCommandLineArgumentCollection();
 
 				return _mergeArguments;
@@ -336,7 +336,7 @@ namespace SharpSvn {
 		bool _ignoreAncestry;
 		bool _force;
 		bool _recordOnly;
-		bool _dryRun;		
+		bool _dryRun;
 	public:
 		SvnDiffMergeArgs()
 		{
@@ -537,7 +537,7 @@ namespace SharpSvn {
 			{
 				_dryRun = value;
 			}
-		}		
+		}
 	};
 };
 

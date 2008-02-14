@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Write(SvnTarget^ target, Stream^ toStream)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!toStream)
 		throw gcnew ArgumentNullException("toStream");
@@ -26,7 +26,7 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ toStream)
 
 bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!toStream)
 		throw gcnew ArgumentNullException("toStream");

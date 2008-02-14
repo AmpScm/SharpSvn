@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -12,7 +12,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::AddToChangeList(String^ target, String^ changeList)
 {
-	if(String::IsNullOrEmpty(target))
+	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -22,7 +22,7 @@ bool SvnClient::AddToChangeList(String^ target, String^ changeList)
 
 bool SvnClient::AddToChangeList(String^ target, String^ changeList, SvnAddToChangeListArgs^ args)
 {
-	if(String::IsNullOrEmpty(target))
+	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
 	else if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -34,7 +34,7 @@ bool SvnClient::AddToChangeList(String^ target, String^ changeList, SvnAddToChan
 
 bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeList)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
@@ -44,7 +44,7 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeLis
 
 bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeList, SvnAddToChangeListArgs^ args)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");

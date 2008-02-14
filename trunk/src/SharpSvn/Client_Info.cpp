@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!infoHandler)
 		throw gcnew ArgumentNullException("infoHandler");
@@ -30,7 +30,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 
 	AprPool thePool(pool, false);
 	SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(!args)
+	if (!args)
 		return nullptr;
 
 	SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PtrToString(path), info);
@@ -38,7 +38,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 	{
 		args->OnInfo(e);
 
-		if(e->Cancel)
+		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Info receiver canceled operation");
 		else
 			return nullptr;
@@ -55,7 +55,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 
 bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -66,13 +66,13 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(infoHandler)
+	if (infoHandler)
 		args->Info += infoHandler;
 	try
 	{
 		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 
-		if(dynamic_cast<SvnUriTarget^>(target) && (target->Revision == SvnRevision::None))
+		if (dynamic_cast<SvnUriTarget^>(target) && (target->Revision == SvnRevision::None))
 		{
 			pegRev.kind = svn_opt_revision_head;
 		}
@@ -94,14 +94,14 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	}
 	finally
 	{
-		if(infoHandler)
+		if (infoHandler)
 			args->Info -= infoHandler;
 	}
 }
 
 bool SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
@@ -112,7 +112,7 @@ bool SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 	}
 	finally
 	{
-		if(results->Count > 0)
+		if (results->Count > 0)
 			info = results[0];
 		else
 			info = nullptr;
@@ -121,7 +121,7 @@ bool SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 
 bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] Collection<SvnInfoEventArgs^>^% info)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

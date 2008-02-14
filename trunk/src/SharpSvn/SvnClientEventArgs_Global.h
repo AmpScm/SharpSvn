@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -131,7 +131,7 @@ namespace SharpSvn {
 	internal:
 		SvnConflictEventArgs(const svn_wc_conflict_description_t *description)
 		{
-			if(!description)
+			if (!description)
 				throw gcnew ArgumentNullException("description");
 
 			_description = description;
@@ -162,7 +162,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_path && _description && _description->path)
+				if (!_path && _description && _description->path)
 					_path = SvnBase::Utf8_PtrToString(_description->path);
 
 				return _path;
@@ -173,7 +173,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_propertyName && _description && _description->property_name)
+				if (!_propertyName && _description && _description->property_name)
 					_propertyName = SvnBase::Utf8_PtrToString(_description->property_name);
 
 				return _propertyName;
@@ -184,7 +184,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_mimeType && _description && _description->mime_type)
+				if (!_mimeType && _description && _description->mime_type)
 					_mimeType = SvnBase::Utf8_PtrToString(_description->mime_type);
 
 				return _mimeType;
@@ -195,7 +195,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_baseFile && _description && _description->base_file)
+				if (!_baseFile && _description && _description->base_file)
 					_baseFile = SvnBase::Utf8_PtrToString(_description->base_file);
 
 				return _baseFile;
@@ -206,7 +206,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_theirFile && _description && _description->their_file)
+				if (!_theirFile && _description && _description->their_file)
 					_theirFile = SvnBase::Utf8_PtrToString(_description->their_file);
 
 				return _theirFile;
@@ -217,7 +217,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_myFile && _description && _description->my_file)
+				if (!_myFile && _description && _description->my_file)
 					_myFile = SvnBase::Utf8_PtrToString(_description->my_file);
 
 				return _myFile;
@@ -228,10 +228,10 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(_mergeResult)
+				if (_mergeResult)
 					return _mergeResult;
 
-				if(!_mergedFile && _description && _description->merged_file)
+				if (!_mergedFile && _description && _description->merged_file)
 					_mergedFile  = SvnBase::Utf8_PtrToString(_description->merged_file);
 
 				return _mergedFile;
@@ -287,7 +287,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 					GC::KeepAlive(PropertyName);

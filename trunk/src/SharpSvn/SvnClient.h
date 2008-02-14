@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -134,8 +134,8 @@ namespace SharpSvn {
 		/// Gets the name of the subversion administrative directories. Most commonly ".svn"
 		/// </summary>
 		/// <remarks>
-		/// An internal implementation of a setter is available on this property. Users should read 
-		/// the subversion implementation of svn_wc_set_adm_dir before invoking the setter of this property 
+		/// An internal implementation of a setter is available on this property. Users should read
+		/// the subversion implementation of svn_wc_set_adm_dir before invoking the setter of this property
 		/// via reflection
 		/// </remarks>
 		property static String^ AdministrativeDirectoryName
@@ -157,7 +157,7 @@ namespace SharpSvn {
 		{
 			SvnClientConfiguration^ get()
 			{
-				if(!_config)
+				if (!_config)
 					_config = gcnew SvnClientConfiguration(this);
 
 				return _config;
@@ -168,39 +168,39 @@ namespace SharpSvn {
 #pragma region // Client events
 	public:
 		/// <summary>
-		/// Raised to allow canceling operations. The event is first 
-		/// raised on the <see cref="SvnClientArgs" /> object and 
+		/// Raised to allow canceling operations. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnCancelEventArgs^>^ Cancel;
 		/// <summary>
-		/// Raised on progress. The event is first 
-		/// raised on the <see cref="SvnClientArgs" /> object and 
+		/// Raised on progress. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnProgressEventArgs^>^ Progress;
 		/// <summary>
-		/// Raised on notifications. The event is first 
-		/// raised on the <see cref="SvnClientArgs" /> object and 
+		/// Raised on notifications. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnNotifyEventArgs^>^ Notify;
 		/// <summary>
-		/// Raised on progress. The event is first 
-		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and 
+		/// Raised on progress. The event is first
+		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnCommittingEventArgs^>^ Committing;
 		/// <summary>
-		/// Raised on conflict. The event is first 
-		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and 
+		/// Raised on conflict. The event is first
+		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnConflictEventArgs^>^ Conflict;
 
 		/// <summary>
 		/// Raised when a subversion exception occurs.
-		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel 
+		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel
 		/// throwing the exception
 		/// </summary>
 		event EventHandler<SvnErrorEventArgs^>^ SvnError;
