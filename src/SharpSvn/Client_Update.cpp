@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -18,7 +18,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Update(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	SvnUpdateResult^ result;
@@ -27,7 +27,7 @@ bool SvnClient::Update(String^ path)
 
 bool SvnClient::Update(String^ path, [Out] SvnUpdateResult^% updateResult)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), updateResult);
@@ -36,7 +36,7 @@ bool SvnClient::Update(String^ path, [Out] SvnUpdateResult^% updateResult)
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -48,7 +48,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% updateResult)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -58,7 +58,7 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult^
 
 bool SvnClient::Update(ICollection<String^>^ paths)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	SvnUpdateResult^ result;
@@ -68,7 +68,7 @@ bool SvnClient::Update(ICollection<String^>^ paths)
 
 bool SvnClient::Update(ICollection<String^>^ paths, [Out] SvnUpdateResult^% updateResult)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	return Update(paths, gcnew SvnUpdateArgs(), updateResult);
@@ -77,7 +77,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, [Out] SvnUpdateResult^% upda
 
 bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -89,7 +89,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args)
 
 bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% updateResult)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -107,9 +107,9 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 
 	updateResult = nullptr;
 
-	for each(String^ s in paths)
+	for each (String^ s in paths)
 	{
-		if(String::IsNullOrEmpty(s))
+		if (String::IsNullOrEmpty(s))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
 
@@ -132,7 +132,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 		CtxHandle,
 		pool.Handle);
 
-	if(args->HandleResult(this, r))
+	if (args->HandleResult(this, r))
 	{
 		AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 

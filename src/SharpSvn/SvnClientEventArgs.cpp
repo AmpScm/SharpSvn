@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -14,7 +14,7 @@ using namespace SharpSvn;
 
 SvnException^ SvnNotifyEventArgs::Error::get()
 {
-	if(!_exception && _notify && _notify->err)
+	if (!_exception && _notify && _notify->err)
 		_exception = SvnException::Create(_notify->err);
 
 	return _exception;
@@ -22,7 +22,7 @@ SvnException^ SvnNotifyEventArgs::Error::get()
 
 SvnCommittingEventArgs::SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool)
 {
-	if(!commitItems)
+	if (!commitItems)
 		throw gcnew ArgumentNullException("commitItems");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -33,15 +33,15 @@ SvnCommittingEventArgs::SvnCommittingEventArgs(const apr_array_header_t *commitI
 
 void SvnCommittingEventArgs::Detach(bool keepProperties)
 {
-	if(!_commitItems)
+	if (!_commitItems)
 		return;
 
 	try
 	{
-		if(keepProperties)
+		if (keepProperties)
 		{
-			if(Items)
-				for each(SvnCommitItem^ item in Items)
+			if (Items)
+				for each (SvnCommitItem^ item in Items)
 				{
 					item->Detach(true);
 				}
@@ -56,7 +56,7 @@ void SvnCommittingEventArgs::Detach(bool keepProperties)
 
 SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool)
 {
-	if(!commitInfo)
+	if (!commitInfo)
 		throw gcnew ArgumentNullException("commitInfo");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -67,7 +67,7 @@ SvnCommitInfo::SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool)
 	apr_time_t when = 0;
 	svn_error_t *err = svn_time_from_cstring(&when, commitInfo->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 
-	if(!err)
+	if (!err)
 		_date = SvnBase::DateTimeFromAprTime(when);
 	else
 		_date = DateTime::MinValue;
@@ -115,7 +115,7 @@ public:
 
 SvnCommitItemCollection^ SvnCommittingEventArgs::Items::get()
 {
-	if(!_items && _commitItems)
+	if (!_items && _commitItems)
 	{
 		AprArray<SvnCommitItem^, SvnCommitItemMarshaller^>^ aprItems = gcnew AprArray<SvnCommitItem^, SvnCommitItemMarshaller^>(_commitItems, _pool);
 
@@ -131,7 +131,7 @@ SvnCommitItemCollection^ SvnCommittingEventArgs::Items::get()
 
 SvnMergeRange^ SvnNotifyEventArgs::MergeRange::get()
 {
-	if(!_mergeRange && _notify && _notify->merge_range)
+	if (!_mergeRange && _notify && _notify->merge_range)
 		_mergeRange = gcnew SvnMergeRange(_notify->merge_range->start, _notify->merge_range->end, _notify->merge_range->inheritable != 0);
 
 	return _mergeRange;
@@ -139,7 +139,7 @@ SvnMergeRange^ SvnNotifyEventArgs::MergeRange::get()
 
 SvnPropertyCollection^ SvnLogEventArgs::CustomProperties::get()
 {
-	if(!_customProperties && _entry && _entry->revprops)
+	if (!_customProperties && _entry && _entry->revprops)
 	{
 		_customProperties = gcnew SvnPropertyCollection();
 

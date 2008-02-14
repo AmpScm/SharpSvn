@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -11,7 +11,7 @@ using namespace SharpSvn;
 
 bool SvnClient::Add(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return Add(path, gcnew SvnAddArgs());
@@ -19,7 +19,7 @@ bool SvnClient::Add(String^ path)
 
 bool SvnClient::Add(String^ path, SvnDepth depth)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	SvnAddArgs ^args = gcnew SvnAddArgs();
@@ -31,7 +31,7 @@ bool SvnClient::Add(String^ path, SvnDepth depth)
 
 bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

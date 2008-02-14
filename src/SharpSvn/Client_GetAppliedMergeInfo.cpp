@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, [Out]SvnAppliedMergeInfo^% mergeState)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return GetAppliedMergeInfo(target, gcnew SvnGetAppliedMergeInfoArgs(), mergeState);
@@ -24,7 +24,7 @@ bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, [Out]SvnAppliedMergeInfo^
 
 bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArgs^ args, [Out]SvnAppliedMergeInfo^% mergeState)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -42,7 +42,7 @@ bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArg
 		CtxHandle,
 		pool.Handle);
 
-	if(!r && svnMergeInfo)
+	if (!r && svnMergeInfo)
 	{
 		mergeState = gcnew SvnAppliedMergeInfo(target, svnMergeInfo, %pool);
 	}

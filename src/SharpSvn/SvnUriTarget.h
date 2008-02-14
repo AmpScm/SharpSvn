@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -19,7 +19,7 @@ namespace SharpSvn {
 		SvnUriTarget (Uri^ uri, SvnRevision^ revision)
 			: SvnTarget(revision)
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
@@ -32,7 +32,7 @@ namespace SharpSvn {
 		SvnUriTarget (Uri^ uri)
 			: SvnTarget(SvnRevision::None)
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
@@ -45,7 +45,7 @@ namespace SharpSvn {
 		SvnUriTarget (Uri^ uri, __int64 revision)
 			: SvnTarget(gcnew SvnRevision(revision))
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
@@ -58,7 +58,7 @@ namespace SharpSvn {
 		SvnUriTarget (Uri^ uri, DateTime date)
 			: SvnTarget(gcnew SvnRevision(date))
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
@@ -71,7 +71,7 @@ namespace SharpSvn {
 		SvnUriTarget (Uri^ uri, SvnRevisionType type)
 			: SvnTarget(gcnew SvnRevision(type))
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			else if(!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
@@ -83,7 +83,7 @@ namespace SharpSvn {
 
 		static SvnUriTarget^ FromUri(Uri^ value)
 		{
-			if(!value)
+			if (!value)
 				throw gcnew ArgumentNullException("value");
 
 			return gcnew SvnUriTarget(value);
@@ -112,7 +112,7 @@ namespace SharpSvn {
 
 		static bool TryParse(String^ path, [Out] SvnUriTarget^% pegUri)
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 
 			AprPool ^pool = gcnew AprPool();
@@ -129,7 +129,7 @@ namespace SharpSvn {
 	internal:
 		static bool TryParse(String^ targetString, [Out] SvnUriTarget ^% target, AprPool^ pool)
 		{
-			if(String::IsNullOrEmpty(targetString))
+			if (String::IsNullOrEmpty(targetString))
 				throw gcnew ArgumentNullException("targetString");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
@@ -139,11 +139,11 @@ namespace SharpSvn {
 
 			const char* path = pool->AllocPath(targetString);
 
-			if(!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
+			if (!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
 			{
 				System::Uri^ uri = nullptr;
 
-				if(System::Uri::TryCreate(Utf8_PtrToString(truePath), UriKind::Absolute, uri))
+				if (System::Uri::TryCreate(Utf8_PtrToString(truePath), UriKind::Absolute, uri))
 				{
 					SvnRevision^ pegRev = SvnRevision::Load(&rev);
 

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -26,7 +26,7 @@ namespace SharpSvn {
 		public:
 			SvnStreamWrapper(Stream^ stream, bool enableRead, bool enableWrite, AprPool^ pool)
 			{
-				if(!stream)
+				if (!stream)
 					throw gcnew ArgumentNullException("stream");
 				else if(!enableRead && !enableWrite)
 					throw gcnew ArgumentException("enableRead or enableWrite must be set to true");
@@ -35,7 +35,7 @@ namespace SharpSvn {
 				_streamBatton = gcnew AprBaton<SvnStreamWrapper^>(this);
 				_pool = pool;
 
-				if(enableRead && !_stream->CanRead)
+				if (enableRead && !_stream->CanRead)
 					throw gcnew InvalidOperationException("Can't enable reading on an unreadable stream");
 				else if(enableWrite && !_stream->CanWrite)
 					throw gcnew InvalidOperationException("Can't enable writing on an unwritable stream");

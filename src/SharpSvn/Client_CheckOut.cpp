@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -14,7 +14,7 @@ using namespace SharpSvn;
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
-	if(!url)
+	if (!url)
 		throw gcnew ArgumentNullException("url");
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -26,7 +26,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult ^% updateInfo)
 {
-	if(!url)
+	if (!url)
 		throw gcnew ArgumentNullException("url");
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -36,7 +36,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult 
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
 {
-	if(!url)
+	if (!url)
 		throw gcnew ArgumentNullException("url");
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -50,13 +50,13 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] SvnUpdateResult ^% updateInfo)
 {
-	if(!url)
+	if (!url)
 		throw gcnew ArgumentNullException("url");
 	else if(String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	
+
 	switch(args->Revision->RevisionType)
 	{
 		case SvnRevisionType::None: // Translated to head

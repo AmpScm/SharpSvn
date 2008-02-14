@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -12,7 +12,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -22,7 +22,7 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source)
 
 bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnReintegrationMergeArgs^ args)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -34,7 +34,7 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
 	AprPool pool(%_pool);
 
 	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-	
+
 	svn_error_t *r = svn_client_merge_reintegrate(
 		pool.AllocString(source->TargetName),
 		&pegRev,

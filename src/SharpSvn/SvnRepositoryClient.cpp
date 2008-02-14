@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -27,7 +27,7 @@ SvnRepositoryClient::~SvnRepositoryClient()
 
 String^ SvnRepositoryClient::FindRepositoryRoot(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	EnsureState(SvnContextState::ConfigLoaded);
@@ -43,7 +43,7 @@ String^ SvnRepositoryClient::FindRepositoryRoot(String^ path)
 
 void SvnRepositoryClient::CreateRepository(String^ repositoryPath)
 {
-	if(String::IsNullOrEmpty(repositoryPath))
+	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 
 	CreateRepository(repositoryPath, gcnew SvnCreateRepositoryArgs());
@@ -51,7 +51,7 @@ void SvnRepositoryClient::CreateRepository(String^ repositoryPath)
 
 bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepositoryArgs^ args)
 {
-	if(String::IsNullOrEmpty(repositoryPath))
+	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -136,7 +136,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
 void SvnRepositoryClient::DeleteRepository(String^ repositoryPath)
 {
-	if(String::IsNullOrEmpty(repositoryPath))
+	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 
 	DeleteRepository(repositoryPath, gcnew SvnDeleteRepositoryArgs());
@@ -144,7 +144,7 @@ void SvnRepositoryClient::DeleteRepository(String^ repositoryPath)
 
 bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepositoryArgs^ args)
 {
-	if(String::IsNullOrEmpty(repositoryPath))
+	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -161,7 +161,7 @@ bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepo
 
 void SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
 {
-	if(String::IsNullOrEmpty(repositoryPath))
+	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 
 	RecoverRepository(repositoryPath, gcnew SvnRecoverRepositoryArgs());
@@ -169,7 +169,7 @@ void SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
 
 bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRepositoryArgs^ args)
 {
-	if(String::IsNullOrEmpty(repositoryPath))
+	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

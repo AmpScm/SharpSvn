@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -53,7 +53,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -149,7 +149,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -210,7 +210,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -299,7 +299,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_pegRevision = value;
 				else
 					_pegRevision = SvnRevision::None;
@@ -314,7 +314,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_start = value;
 				else
 					_start = SvnRevision::None;
@@ -329,7 +329,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_end = value;
 				else
 					_end = SvnRevision::None;
@@ -485,7 +485,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -497,7 +497,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -594,7 +594,7 @@ namespace SharpSvn {
 		{
 			SvnCommandLineArgumentCollection^ get()
 			{
-				if(!_diffArguments)
+				if (!_diffArguments)
 					_diffArguments = gcnew SvnCommandLineArgumentCollection();
 
 				return _diffArguments;
@@ -609,7 +609,7 @@ namespace SharpSvn {
 			}
 			void set(String^ value)
 			{
-				if(String::IsNullOrEmpty(value))
+				if (String::IsNullOrEmpty(value))
 					_relativeFrom = nullptr;
 				else
 					_relativeFrom = value;
@@ -621,7 +621,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -688,7 +688,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -739,7 +739,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(!value)
+				if (!value)
 					throw gcnew ArgumentNullException("value");
 
 				_from = value;
@@ -754,7 +754,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(!value)
+				if (!value)
 					throw gcnew ArgumentNullException("value");
 
 				_to = value;

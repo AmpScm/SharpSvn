@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -78,7 +78,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_path && _info)
+				if (!_path && _info)
 					_path = SvnBase::Utf8_PtrToString(_info->path);
 				return _path;
 			}
@@ -88,7 +88,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path)
+				if (!_fullPath && Path)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -107,7 +107,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_uri && _info && _info->url)
+				if (!_uri && _info && _info->url)
 					_uri = SvnBase::Utf8_PtrToUri(_info->url, _nodeKind);
 
 				return _uri;
@@ -126,7 +126,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_copyFromUri && _info && _info->copyfrom_url)
+				if (!_copyFromUri && _info && _info->copyfrom_url)
 					_copyFromUri = SvnBase::Utf8_PtrToUri(_info->copyfrom_url, _nodeKind);
 
 				return _copyFromUri;
@@ -150,7 +150,7 @@ namespace SharpSvn {
 		internal:
 			SvnCommitItemCollection(IList<SvnCommitItem^>^ items)
 			{
-				for each(SvnCommitItem^ i in items)
+				for each (SvnCommitItem^ i in items)
 				{
 					Add(i);
 				}
@@ -159,7 +159,7 @@ namespace SharpSvn {
 		protected:
 			virtual String^ GetKeyForItem(SvnCommitItem^ item) override
 			{
-				if(!item)
+				if (!item)
 					throw gcnew ArgumentNullException("item");
 
 				return item->Path;

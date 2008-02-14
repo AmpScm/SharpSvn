@@ -1,5 +1,5 @@
 // $Id: SvnClientEventArgs_Global.h 234 2008-02-07 15:26:14Z bhuijben $
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -25,7 +25,7 @@ namespace SharpSvn {
 	internal:
 		SvnLockInfo(const svn_lock_t *lock, bool localData)
 		{
-			if(!lock)
+			if (!lock)
 				throw gcnew ArgumentNullException("lock");
 
 			_localData = localData;
@@ -40,7 +40,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_path && _lock)
+				if (!_path && _lock)
 					_path = SvnBase::Utf8_PtrToString(_lock->path);
 
 				return _path;
@@ -53,7 +53,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && _localData && Path)
+				if (!_fullPath && _localData && Path)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -64,7 +64,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_token && _lock)
+				if (!_token && _lock)
 					_token = SvnBase::Utf8_PtrToString(_lock->token);
 
 				return _token;
@@ -75,7 +75,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_owner && _lock)
+				if (!_owner && _lock)
 					_owner = SvnBase::Utf8_PtrToString(_lock->owner);
 
 				return _owner;
@@ -86,11 +86,11 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_comment && _lock && _lock->comment)
+				if (!_comment && _lock && _lock->comment)
 				{
 					_comment = SvnBase::Utf8_PtrToString(_lock->comment);
 
-					if(_comment)
+					if (_comment)
 						_comment = _comment->Replace("\n", Environment::NewLine);
 				}
 
@@ -128,7 +128,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 					GC::KeepAlive(Token);
@@ -188,7 +188,7 @@ namespace SharpSvn {
 	internal:
 		SvnWorkingCopyInfo(svn_wc_entry_t *entry)
 		{
-			if(!entry)
+			if (!entry)
 				throw gcnew ArgumentNullException("entry");
 
 			_entry = entry;
@@ -218,7 +218,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_name && _entry && _entry->name)
+				if (!_name && _entry && _entry->name)
 					_name = SvnBase::Utf8_PtrToString(_entry->name)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
 				return _name;
@@ -237,7 +237,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_uri && _entry && _entry->url)
+				if (!_uri && _entry && _entry->url)
 					_uri = SvnBase::Utf8_PtrToUri(_entry->url, _nodeKind);
 
 				return _uri;
@@ -248,7 +248,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_repositoryUri && _entry && _entry->repos)
+				if (!_repositoryUri && _entry && _entry->repos)
 					_repositoryUri = SvnBase::Utf8_PtrToUri(_entry->repos, SvnNodeKind::Directory);
 
 				return _repositoryUri;
@@ -259,7 +259,7 @@ namespace SharpSvn {
 		{
 			Guid get()
 			{
-				if(!_repositoryId && _entry && _entry->uuid)
+				if (!_repositoryId && _entry && _entry->uuid)
 					_repositoryId = SvnBase::Utf8_PtrToString(_entry->uuid);
 
 				return _repositoryId ? Guid(_repositoryId) : Guid::Empty;
@@ -318,7 +318,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_copyFrom && _entry && _entry->copyfrom_url)
+				if (!_copyFrom && _entry && _entry->copyfrom_url)
 					_copyFrom = SvnBase::Utf8_PtrToUri(_entry->copyfrom_url, _nodeKind);
 
 				return _copyFrom;
@@ -337,7 +337,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflictOld && _entry && _entry->conflict_old)
+				if (!_conflictOld && _entry && _entry->conflict_old)
 					_conflictOld = SvnBase::Utf8_PtrToString(_entry->conflict_old)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
 				return _conflictOld;
@@ -348,7 +348,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflictNew && _entry && _entry->conflict_new)
+				if (!_conflictNew && _entry && _entry->conflict_new)
 					_conflictNew = SvnBase::Utf8_PtrToString(_entry->conflict_new)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
 				return _conflictNew;
@@ -359,7 +359,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_conflictWork && _entry && _entry->conflict_wrk)
+				if (!_conflictWork && _entry && _entry->conflict_wrk)
 					_conflictWork = SvnBase::Utf8_PtrToString(_entry->conflict_wrk)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
 				return _conflictWork;
@@ -370,7 +370,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_prejfile && _entry && _entry->prejfile)
+				if (!_prejfile && _entry && _entry->prejfile)
 					_prejfile = SvnBase::Utf8_PtrToString(_entry->prejfile)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
 				return _prejfile;
@@ -397,7 +397,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_checksum && _entry && _entry->checksum)
+				if (!_checksum && _entry && _entry->checksum)
 					_checksum = SvnBase::Utf8_PtrToString(_entry->checksum);
 
 				return _checksum;
@@ -424,7 +424,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_lastChangeAuthor && _entry && _entry->cmt_author)
+				if (!_lastChangeAuthor && _entry && _entry->cmt_author)
 					_lastChangeAuthor = SvnBase::Utf8_PtrToString(_entry->cmt_author);
 
 				return _lastChangeAuthor;
@@ -435,7 +435,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_lockToken && _entry && _entry->lock_token)
+				if (!_lockToken && _entry && _entry->lock_token)
 					_lockToken = SvnBase::Utf8_PtrToString(_entry->lock_token);
 
 				return _lockToken;
@@ -446,7 +446,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_lockOwner && _entry && _entry->lock_owner)
+				if (!_lockOwner && _entry && _entry->lock_owner)
 					_lockOwner = SvnBase::Utf8_PtrToString(_entry->lock_owner);
 
 				return _lockOwner;
@@ -457,7 +457,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_lockComment && _entry && _entry->lock_comment)
+				if (!_lockComment && _entry && _entry->lock_comment)
 					_lockComment = SvnBase::Utf8_PtrToString(_entry->lock_comment);
 
 				return _lockOwner;
@@ -492,13 +492,13 @@ namespace SharpSvn {
 		{
 			Collection<String^>^ get()
 			{
-				if(!_cachableProperties && _entry && _entry->cachable_props)
+				if (!_cachableProperties && _entry && _entry->cachable_props)
 				{
 					Collection<String^>^ items = gcnew Collection<String^>();
 
-					for each(String^ i in SvnBase::Utf8_PtrToString(_entry->cachable_props)->Split(' '))
+					for each (String^ i in SvnBase::Utf8_PtrToString(_entry->cachable_props)->Split(' '))
 					{
-						if(!String::IsNullOrEmpty(i))
+						if (!String::IsNullOrEmpty(i))
 							items->Add(i);
 					}
 
@@ -512,13 +512,13 @@ namespace SharpSvn {
 		{
 			Collection<String^>^ get()
 			{
-				if(!_availableProperties && _entry && _entry->present_props)
+				if (!_availableProperties && _entry && _entry->present_props)
 				{
 					Collection<String^>^ items = gcnew Collection<String^>();
 
-					for each(String^ i in SvnBase::Utf8_PtrToString(_entry->present_props)->Split(' '))
+					for each (String^ i in SvnBase::Utf8_PtrToString(_entry->present_props)->Split(' '))
 					{
-						if(!String::IsNullOrEmpty(i))
+						if (!String::IsNullOrEmpty(i))
 							items->Add(i);
 					}
 
@@ -532,7 +532,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_changelist && _entry && _entry->changelist)
+				if (!_changelist && _entry && _entry->changelist)
 					_changelist = SvnBase::Utf8_PtrToString(_entry->changelist);
 
 				return _changelist;
@@ -568,7 +568,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Name);
 					GC::KeepAlive(Uri);
@@ -620,7 +620,7 @@ namespace SharpSvn {
 	internal:
 		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status)
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!status)
 				throw gcnew ArgumentNullException("status");
@@ -640,7 +640,7 @@ namespace SharpSvn {
 
 			_nodeKind = status->entry ? (SvnNodeKind)status->entry->kind : SvnNodeKind::None;
 
-			if(status->ood_last_cmt_rev != SVN_INVALID_REVNUM)
+			if (status->ood_last_cmt_rev != SVN_INVALID_REVNUM)
 			{
 				_oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_last_cmt_date);
 				_oodLastCommitNodeKind = (SvnNodeKind)status->ood_kind;
@@ -662,7 +662,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_fullPath && Path)
+				if (!_fullPath && Path)
 					_fullPath = System::IO::Path::GetFullPath(Path);
 
 				return _fullPath;
@@ -736,7 +736,7 @@ namespace SharpSvn {
 		{
 			SvnLockInfo^ get()
 			{
-				if(!_reposLock && _status && _status->repos_lock)
+				if (!_reposLock && _status && _status->repos_lock)
 					_reposLock = gcnew SvnLockInfo(_status->repos_lock, false);
 
 				return _reposLock;
@@ -747,7 +747,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_uri && _status && _status->url)
+				if (!_uri && _status && _status->url)
 					_uri = SvnBase::Utf8_PtrToUri(_status->url, _nodeKind);
 
 				return _uri;
@@ -786,7 +786,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_oodLastCommitAuthor && _status && _status->ood_last_cmt_author && IsRemoteUpdated)
+				if (!_oodLastCommitAuthor && _status && _status->ood_last_cmt_author && IsRemoteUpdated)
 					_oodLastCommitAuthor = SvnBase::Utf8_PtrToString(_status->ood_last_cmt_author);
 
 				return _oodLastCommitAuthor;
@@ -807,7 +807,7 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnWorkingCopyInfo^ get()
 			{
-				if(!_wcInfo && _status && _status->entry)
+				if (!_wcInfo && _status && _status->entry)
 					_wcInfo = gcnew SvnWorkingCopyInfo(_status->entry);
 
 				return _wcInfo;
@@ -827,7 +827,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Uri);
@@ -836,9 +836,9 @@ namespace SharpSvn {
 					GC::KeepAlive(WorkingCopyInfo);
 				}
 
-				if(_reposLock)
+				if (_reposLock)
 					_reposLock->Detach(keepProperties);
-				if(_wcInfo)
+				if (_wcInfo)
 					_wcInfo->Detach(keepProperties);
 			}
 			finally

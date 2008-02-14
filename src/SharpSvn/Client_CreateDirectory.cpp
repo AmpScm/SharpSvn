@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -15,7 +15,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::CreateDirectory(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return CreateDirectories(NewSingleItemCollection(path), gcnew SvnCreateDirectoryArgs());
@@ -23,7 +23,7 @@ bool SvnClient::CreateDirectory(String^ path)
 
 bool SvnClient::CreateDirectory(String^ path, SvnCreateDirectoryArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -34,7 +34,7 @@ bool SvnClient::CreateDirectory(String^ path, SvnCreateDirectoryArgs^ args)
 
 bool SvnClient::CreateDirectories(ICollection<String^>^ paths)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
 	return CreateDirectories(paths, gcnew SvnCreateDirectoryArgs());
@@ -42,14 +42,14 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths)
 
 bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirectoryArgs^ args)
 {
-	if(!paths)
+	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	for each(String^ path in paths)
+	for each (String^ path in paths)
 	{
-		if(String::IsNullOrEmpty(path))
+		if (String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 		else if(!IsNotUri(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
@@ -74,7 +74,7 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 
 bool SvnClient::RemoteCreateDirectory(Uri^ uri)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 
 	return RemoteCreateDirectory(uri, gcnew SvnCreateDirectoryArgs());
@@ -82,7 +82,7 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri)
 
 bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -96,7 +96,7 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args)
 
 bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -108,7 +108,7 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [O
 
 bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args)
 {
-	if(!uris)
+	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -121,7 +121,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 
 bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
-	if(!uris)
+	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -131,9 +131,9 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	array<String^>^ uriData = gcnew array<String^>(uris->Count);
 	int i = 0;
 
-	for each(Uri^ uri in uris)
+	for each (Uri^ uri in uris)
 	{
-		if(uri == nullptr)
+		if (uri == nullptr)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uris");
@@ -155,7 +155,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 		CtxHandle,
 		pool.Handle);
 
-	if(commit_info)
+	if (commit_info)
 		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
 
 	return args->HandleResult(this, r);

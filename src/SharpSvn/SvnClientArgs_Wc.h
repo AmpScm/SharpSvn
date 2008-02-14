@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -175,7 +175,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -303,7 +303,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
@@ -360,7 +360,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -404,7 +404,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}
@@ -452,7 +452,7 @@ namespace SharpSvn {
 		{
 			SvnChangeListCollection^ get()
 			{
-				if(!_changelists)
+				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
 			}

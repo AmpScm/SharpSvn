@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -19,7 +19,7 @@ namespace SharpSvn {
 	public:
 		SvnUpdateResult(__int64 revision)
 		{
-			if(revision < 0)
+			if (revision < 0)
 				revision = -1;
 
 			_revision = revision;
@@ -27,7 +27,7 @@ namespace SharpSvn {
 
 		SvnUpdateResult(IDictionary<String^, SvnUpdateResult^>^ resultMap, __int64 revision)
 		{
-			if(revision < 0)
+			if (revision < 0)
 				revision = -1;
 
 			_revision = revision;
@@ -37,14 +37,14 @@ namespace SharpSvn {
 	internal:
 		SvnUpdateResult(ICollection<String^>^ paths, ICollection<__int64>^ revisions, __int64 revision)
 		{
-			if(!paths)
+			if (!paths)
 				throw gcnew ArgumentNullException("paths");
 			else if(!revisions)
 				throw gcnew ArgumentNullException("revisions");
 			else if(paths->Count != revisions->Count)
 				throw gcnew ArgumentException(SharpSvnStrings::PathCountDoesNotMatchRevisions, "paths");
 
-			if(revision < 0)
+			if (revision < 0)
 				revision = -1;
 
 			_revision = revision;
@@ -52,9 +52,9 @@ namespace SharpSvn {
 			IEnumerator<String^>^ ePath = paths->GetEnumerator();
 			IEnumerator<__int64>^ eRev = revisions->GetEnumerator();
 
-			while(ePath->MoveNext() && eRev->MoveNext())
+			while (ePath->MoveNext() && eRev->MoveNext())
 			{
-				if(!(_resultMap->ContainsKey(ePath->Current)))
+				if (!(_resultMap->ContainsKey(ePath->Current)))
 					_resultMap->Add(ePath->Current, gcnew SvnUpdateResult(eRev->Current));
 			}
 		}

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -21,7 +21,7 @@ namespace SharpSvn {
 		SvnPathTarget(String^ path, SvnRevision^ revision)
 			: SvnTarget(revision)
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
@@ -33,7 +33,7 @@ namespace SharpSvn {
 		SvnPathTarget(String^ path)
 			: SvnTarget(SvnRevision::None)
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
@@ -45,7 +45,7 @@ namespace SharpSvn {
 		SvnPathTarget(String^ path, __int64 revision)
 			: SvnTarget(gcnew SvnRevision(revision))
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
@@ -57,7 +57,7 @@ namespace SharpSvn {
 		SvnPathTarget(String^ path, DateTime date)
 			: SvnTarget(gcnew SvnRevision(date))
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
@@ -69,7 +69,7 @@ namespace SharpSvn {
 		SvnPathTarget(String^ path, SvnRevisionType type)
 			: SvnTarget(gcnew SvnRevision(type))
 		{
-			if(String::IsNullOrEmpty(path))
+			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
@@ -108,7 +108,7 @@ namespace SharpSvn {
 	internal:
 		static bool TryParse(String^ targetName, [Out] SvnPathTarget ^% target, AprPool^ pool)
 		{
-			if(String::IsNullOrEmpty(targetName))
+			if (String::IsNullOrEmpty(targetName))
 				throw gcnew ArgumentNullException("targetName");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
@@ -118,12 +118,12 @@ namespace SharpSvn {
 
 			const char* path = pool->AllocPath(targetName);
 
-			if(!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
+			if (!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
 			{
 
 				String^ realPath = Utf8_PtrToString(truePath);
 
-				if(!realPath->Contains("://"))
+				if (!realPath->Contains("://"))
 				{
 					SvnRevision^ pegRev = SvnRevision::Load(&rev);
 

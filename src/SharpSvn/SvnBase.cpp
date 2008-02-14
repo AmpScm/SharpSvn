@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -22,9 +22,9 @@ static SvnBase::SvnBase()
 	System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
 
 	String^ platform = Environment::OSVersion->Platform.ToString();
-	_clientName =  platform + "/" + Environment::OSVersion->Version->ToString() + 
+	_clientName =  platform + "/" + Environment::OSVersion->Version->ToString() +
 		" " + name->Name + "/" + name->Version->ToString();
-		
+
 	_clientNames->Add(platform);
 	_clientNames->Add(name->Name);
 
@@ -33,11 +33,11 @@ static SvnBase::SvnBase()
 
 void SvnBase::EnsureLoaded()
 {
-	if(!_aprInitialized)
+	if (!_aprInitialized)
 	{
 		_aprInitialized = true;
 
-		if(apr_initialize()) // First
+		if (apr_initialize()) // First
 			throw gcnew InvalidOperationException();
 
 		svn_dso_initialize(); // Before first pool
@@ -63,10 +63,10 @@ SvnBase::SvnBase()
 
 bool SvnBase::IsValidReposUri(Uri^ uri)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	
-	if(!uri->IsAbsoluteUri)
+
+	if (!uri->IsAbsoluteUri)
 		return false;
 	else if(String::IsNullOrEmpty(uri->Scheme))
 		return false;
@@ -77,11 +77,11 @@ bool SvnBase::IsValidReposUri(Uri^ uri)
 
 bool SvnBase::IsNotUri(String ^path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		return false;
 
 	// Use the same stupid algorithm subversion uses to choose between Uri's and paths
-	for(int i = 0; i < path->Length; i++)
+	for (int i = 0; i < path->Length; i++)
 	{
 		wchar_t c = path[i];
 		switch(c)
@@ -90,14 +90,14 @@ bool SvnBase::IsNotUri(String ^path)
 		case '/':
 			return true;
 		case ':':
-			if(i < path->Length-2)
+			if (i < path->Length-2)
 			{
-				if((path[i+1] == '/') && (path[i+2] == '/'))
+				if ((path[i+1] == '/') && (path[i+2] == '/'))
 					return false;
 			}
 			return true;
 		default:
-			if(!wchar_t::IsLetter(c))
+			if (!wchar_t::IsLetter(c))
 				return true;
 		}
 	}
@@ -106,13 +106,13 @@ bool SvnBase::IsNotUri(String ^path)
 
 Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
-	if(!uri)
+	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(!uri->IsAbsoluteUri)
 		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 	String^ path = uri->AbsolutePath;
-	if(path->Length > 0 && path[path->Length -1] == '/')
+	if (path->Length > 0 && path[path->Length -1] == '/')
 	{
 		// Create a new uri with all / and \ characters at the end removed
 		return gcnew Uri(uri, path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
@@ -123,10 +123,10 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 String^ SvnBase::CanonicalizePath(String^ path)
 {
-	if(!path)
+	if (!path)
 		throw gcnew ArgumentNullException("path");
 
-	if(path->Length > 0 && ((path[path->Length-1] == System::IO::Path::DirectorySeparatorChar) || (path[path->Length-1] == System::IO::Path::AltDirectorySeparatorChar)))
+	if (path->Length > 0 && ((path[path->Length-1] == System::IO::Path::DirectorySeparatorChar) || (path[path->Length-1] == System::IO::Path::AltDirectorySeparatorChar)))
 		return path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
 
 	return path;
@@ -134,7 +134,7 @@ String^ SvnBase::CanonicalizePath(String^ path)
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr)
 {
-	if(!ptr)
+	if (!ptr)
 		return nullptr;
 
 	return Utf8_PtrToString(ptr, (int)::strlen(ptr));
@@ -142,7 +142,7 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr)
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 {
-	if(!ptr || length < 0)
+	if (!ptr || length < 0)
 		return nullptr;
 
 	return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
@@ -150,7 +150,7 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 
 String^ SvnBase::Utf8_PtrToString(const svn_string_t* str)
 {
-	if(!str || !str->data)
+	if (!str || !str->data)
 		return nullptr;
 
 	return gcnew String(str->data, 0, str->len, System::Text::Encoding::UTF8);
@@ -158,19 +158,19 @@ String^ SvnBase::Utf8_PtrToString(const svn_string_t* str)
 
 Uri^ SvnBase::Utf8_PtrToUri(const char *ptr, SvnNodeKind nodeKind)
 {
-	if(!ptr)
+	if (!ptr)
 		return nullptr;
 
 	String^ url = Utf8_PtrToString(ptr);
 
-	if(!url)
+	if (!url)
 		return nullptr;
 	else if(nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
 		url += "/";
 
 	Uri^ uri;
 
-	if(Uri::TryCreate(url, UriKind::Absolute, uri))
+	if (Uri::TryCreate(url, UriKind::Absolute, uri))
 		return uri;
 	else
 		return nullptr;
@@ -179,7 +179,7 @@ Uri^ SvnBase::Utf8_PtrToUri(const char *ptr, SvnNodeKind nodeKind)
 
 array<Byte>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 {
-	if(!ptr || length < 0)
+	if (!ptr || length < 0)
 		return nullptr;
 
 	array<Byte>^ bytes = gcnew array<Byte>(length);
@@ -193,7 +193,7 @@ array<Byte>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 
 Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 {
-	if(!ptr || length < 0)
+	if (!ptr || length < 0)
 		return nullptr;
 	else if(length == 0)
 		return "";
@@ -214,7 +214,7 @@ Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 
 DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 {
-	if(aprTime == 0)
+	if (aprTime == 0)
 		return DateTime::MinValue;
 	else
 	{
@@ -228,7 +228,7 @@ apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)
 {
 	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
 
-	if(time != DateTime::MinValue)
+	if (time != DateTime::MinValue)
 		return (time.ToBinary() - aprTimeBase) / 10;
 	else
 		return 0;
@@ -279,12 +279,12 @@ public:
 
 apr_array_header_t *SvnBase::AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 
-	for each(SvnTarget^ s in targets)
+	for each (SvnTarget^ s in targets)
 	{
-		if(!s)
+		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 	}
 	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
@@ -294,12 +294,12 @@ apr_array_header_t *SvnBase::AllocCopyArray(ICollection<SvnTarget^>^ targets, Ap
 
 apr_array_header_t *SvnBase::AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 
-	for each(SvnTarget^ s in targets)
+	for each (SvnTarget^ s in targets)
 	{
-		if(!s)
+		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 	}
 	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
@@ -309,7 +309,7 @@ apr_array_header_t *SvnBase::AllocCopyArray(System::Collections::IEnumerable^ ta
 
 SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool)
 {
-	if(!propHash)
+	if (!propHash)
 		throw gcnew ArgumentNullException("propHash");
 	else if(!pool)
 		throw gcnew ArgumentNullException("pool");
@@ -332,7 +332,7 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 
 apr_array_header_t *SvnBase::CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool)
 {
-	if(changelists && changelists->Count > 0)
+	if (changelists && changelists->Count > 0)
 		return AllocArray(changelists, pool);
 
 	return nullptr;

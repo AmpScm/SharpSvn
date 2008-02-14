@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -15,7 +15,7 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetList(SharpSvn.SvnTarget,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnListEventArgs>&)", MessageId="1#")];
 bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
@@ -30,7 +30,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	AprPool thePool(pool, false);
 
 	SvnListArgs^ args = dynamic_cast<SvnListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(!args)
+	if (!args)
 		return nullptr;
 
 	SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path);
@@ -38,7 +38,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	{
 		args->OnList(e);
 
-		if(e->Cancel)
+		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
 		else
 			return nullptr;
@@ -55,7 +55,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 
 bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListEventArgs^>^ listHandler)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -66,7 +66,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(listHandler)
+	if (listHandler)
 		args->List += listHandler;
 	try
 	{
@@ -89,14 +89,14 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	}
 	finally
 	{
-		if(listHandler)
+		if (listHandler)
 			args->List -= listHandler;
 	}
 }
 
 bool SvnClient::GetList(SvnTarget^ target, [Out] Collection<SvnListEventArgs^>^% list)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	InfoItemCollection<SvnListEventArgs^>^ results = gcnew InfoItemCollection<SvnListEventArgs^>();
@@ -114,7 +114,7 @@ bool SvnClient::GetList(SvnTarget^ target, [Out] Collection<SvnListEventArgs^>^%
 
 bool SvnClient::GetList(SvnTarget^ target, SvnListArgs^ args, [Out] Collection<SvnListEventArgs^>^% list)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

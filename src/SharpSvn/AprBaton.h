@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -18,7 +18,7 @@ namespace SharpSvn {
 		public:
 			AprBaton(T value)
 			{
-				if(value == nullptr)
+				if (value == nullptr)
 					throw gcnew ArgumentNullException("value");
 
 				_handle = GCHandle::Alloc(value, System::Runtime::InteropServices::GCHandleType::WeakTrackResurrection);
@@ -27,13 +27,13 @@ namespace SharpSvn {
 		private:
 			!AprBaton()
 			{
-				if(_handle.IsAllocated)
+				if (_handle.IsAllocated)
 					_handle.Free();
 			}
 
 			~AprBaton()
 			{
-				if(_handle.IsAllocated)
+				if (_handle.IsAllocated)
 					_handle.Free();
 			}
 		public:

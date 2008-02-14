@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,19 +16,19 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
 	else if(!SvnBase::IsValidReposUri(sourceUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
-	
+
 	return GetAvailableMergeInfo(target, sourceUri, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeInfo);
 }
 
 bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
@@ -51,7 +51,7 @@ bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetS
 		CtxHandle,
 		pool.Handle);
 
-	if(!r && svnMergeInfo)
+	if (!r && svnMergeInfo)
 	{
 		mergeInfo = gcnew SvnAvailableMergeInfo(target, svnMergeInfo, %pool);
 	}

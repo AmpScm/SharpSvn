@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -17,7 +17,7 @@ namespace SharpSvn {
 	public:
 		SvnPropertyValue(String^ key, String^ value)
 		{
-			if(String::IsNullOrEmpty(key))
+			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
 			else if(String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("value");
@@ -28,7 +28,7 @@ namespace SharpSvn {
 
 		SvnPropertyValue(String^ key, array<Byte>^ value)
 		{
-			if(String::IsNullOrEmpty(key))
+			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
 			else if(!value)
 				throw gcnew ArgumentNullException("value");
@@ -39,7 +39,7 @@ namespace SharpSvn {
 
 		SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
 		{
-			if(String::IsNullOrEmpty(key))
+			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
 			else if(String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("value");
@@ -51,7 +51,7 @@ namespace SharpSvn {
 
 		SvnPropertyValue(String^ key, array<Byte>^ value, SvnTarget^ target)
 		{
-			if(String::IsNullOrEmpty(key))
+			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
 			else if(!value)
 				throw gcnew ArgumentNullException("value");
@@ -65,19 +65,19 @@ namespace SharpSvn {
 
 		static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target)
 		{
-			if(!propertyName)
+			if (!propertyName)
 				throw gcnew ArgumentNullException("propertyName");
 			else if(!value)
 				throw gcnew ArgumentNullException("value");
 
-			String^ name = SvnBase::Utf8_PtrToString(propertyName);		
+			String^ name = SvnBase::Utf8_PtrToString(propertyName);
 
 			Object^ val = SvnBase::PtrToStringOrByteArray(value->data, (int)value->len);
 			String^ strVal = dynamic_cast<String^>(val);
 
-			if(strVal)
+			if (strVal)
 			{
-				if(svn_prop_needs_translation(propertyName))
+				if (svn_prop_needs_translation(propertyName))
 					strVal = strVal->Replace("\n", Environment::NewLine);
 
 				return gcnew SvnPropertyValue(name, strVal, target);
@@ -87,7 +87,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		/// <summary>Gets the <see cref="SvnTarget" /> the <see cref="SvnPropertyValue" /> applies to; 
+		/// <summary>Gets the <see cref="SvnTarget" /> the <see cref="SvnPropertyValue" /> applies to;
 		/// <c>null</c> if it applies to a revision property</summary>
 		property SvnTarget^ Target
 		{
@@ -117,16 +117,16 @@ namespace SharpSvn {
 		{
 			ICollection<Byte>^ get()
 			{
-				if(!_value)
+				if (!_value)
 					_value = System::Text::Encoding::UTF8->GetBytes(_strValue);
-				
+
 				return safe_cast<ICollection<Byte>^>(_value);
 			}
 		}
 
 		virtual String^ ToString() override
 		{
-			if(StringValue)
+			if (StringValue)
 				return StringValue;
 			else
 				return "<raw>";
@@ -139,7 +139,7 @@ namespace SharpSvn {
 	protected:
 		virtual String^ GetKeyForItem(SvnPropertyValue^ item) override
 		{
-			if(!item)
+			if (!item)
 				return nullptr;
 			else
 				return item->Key;
@@ -152,7 +152,7 @@ namespace SharpSvn {
 	protected:
 		virtual SvnTarget^ GetKeyForItem(SvnPropertyValue^ item) override
 		{
-			if(!item)
+			if (!item)
 				return nullptr;
 			else
 				return item->Target;

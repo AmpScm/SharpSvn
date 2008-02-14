@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -46,19 +46,19 @@ namespace SharpSvn {
 				[System::Diagnostics::DebuggerStepThroughAttribute()]
 				void Ensure()
 				{
-					if(_disposed)
+					if (_disposed)
 						throw gcnew ObjectDisposedException("AprPool");
 
-					if(_parent)
+					if (_parent)
 						_parent->Ensure();
 				}
 
 			internal:
 				bool IsValid()
 				{
-					if(_disposed)
+					if (_disposed)
 						return false;
-					if(_parent)
+					if (_parent)
 						return _parent->IsValid();
 
 					return true;
@@ -92,7 +92,7 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			void Ensure()
 			{
-				if(!_tag)
+				if (!_tag)
 					throw gcnew ObjectDisposedException("AprPool");
 
 				_tag->Ensure();
@@ -148,11 +148,11 @@ namespace SharpSvn {
 			~AprStreamFile()
 			{
 				_exit = true;
-				if(_extHandle)
+				if (_extHandle)
 				{
-					if(!apr_file_close(_extHandle))
+					if (!apr_file_close(_extHandle))
 					{
-						if(!_thread->Join(60000)) // 60 sec Timeout should never happen
+						if (!_thread->Join(60000)) // 60 sec Timeout should never happen
 							throw gcnew InvalidOperationException(SharpSvnStrings::IOThreadBlocked);
 					}
 
@@ -168,9 +168,9 @@ namespace SharpSvn {
 				apr_size_t nRead = buffer->Length;
 				apr_status_t r;
 
-				while(APR_EOF != (r = apr_file_read(_intHandle, pBuffer, &nRead)))
+				while (APR_EOF != (r = apr_file_read(_intHandle, pBuffer, &nRead)))
 				{
-					if(r == APR_SUCCESS)
+					if (r == APR_SUCCESS)
 						_stream->Write(buffer, 0, (int)nRead);
 					else if(!APR_STATUS_IS_EAGAIN(r) && !APR_STATUS_IS_EINTR(r))
 						break; // Most errors are fatal
@@ -182,7 +182,7 @@ namespace SharpSvn {
 		public:
 			AprStreamFile(System::IO::Stream^ stream, AprPool^ pool)
 			{
-				if(!stream)
+				if (!stream)
 					throw gcnew ArgumentNullException("stream");
 				else if(!pool)
 					throw gcnew ArgumentNullException("pool");
@@ -196,11 +196,11 @@ namespace SharpSvn {
 
 			apr_file_t* CreateHandle()
 			{
-				if(!_extHandle)
+				if (!_extHandle)
 				{
 					apr_file_t* extHandle = nullptr;
 					apr_file_t* intHandle = nullptr;
-					if(apr_file_pipe_create(&intHandle, &extHandle, _pool->Handle) || !extHandle || !intHandle)
+					if (apr_file_pipe_create(&intHandle, &extHandle, _pool->Handle) || !extHandle || !intHandle)
 					{
 						_extHandle = nullptr;
 						_intHandle = nullptr;

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -20,7 +20,7 @@ using namespace SharpSvn::Implementation;
 
 AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
 {
-	if(!handle)
+	if (!handle)
 		throw gcnew ArgumentNullException("handle");
 
 	_handle = handle;
@@ -40,18 +40,18 @@ AprPool::!AprPool()
 
 void AprPool::Destroy()
 {
-	if(_handle)
+	if (_handle)
 	{
-		if(_tag->IsValid()) // Don't crash the finalizer; dont Destroy if parent is deleted
+		if (_tag->IsValid()) // Don't crash the finalizer; dont Destroy if parent is deleted
 		{
 			delete _tag; // Dispose
 
 			apr_pool_t* handle = _handle;
-			if(handle)
+			if (handle)
 			{
 				_handle = nullptr;
 
-				if(_destroyPool)
+				if (_destroyPool)
 				{
 					svn_pool_destroy(handle);
 
@@ -66,7 +66,7 @@ void AprPool::Destroy()
 
 AprPool::AprPool(AprPool ^parentPool)
 {
-	if(!parentPool)
+	if (!parentPool)
 		throw gcnew ArgumentNullException("parentPool");
 
 	_tag = gcnew AprPoolTag(parentPool->_tag);
@@ -90,7 +90,7 @@ void AprPool::Clear()
 
 	delete _tag;
 
-	if(_parent)
+	if (_parent)
 		_tag = gcnew AprPoolTag(_parent->_tag);
 	else
 		_tag = gcnew AprPoolTag();
@@ -102,7 +102,7 @@ void* AprPool::Alloc(size_t size)
 {
 	void *p = apr_palloc(Handle, size);
 
-	if(!p)
+	if (!p)
 		throw gcnew ArgumentException("apr_palloc returned null; We have crashed before you see this (See svn sourcecode)", "size");
 
 	return p;
@@ -112,7 +112,7 @@ void* AprPool::AllocCleared(size_t size)
 {
 	void *p = apr_pcalloc(Handle, size);
 
-	if(!p)
+	if (!p)
 		throw gcnew ArgumentException("apr_pcalloc returned null; We have crashed before you see this (See svn sourcecode)", "size");
 
 	return p;
@@ -120,10 +120,10 @@ void* AprPool::AllocCleared(size_t size)
 
 const char* AprPool::AllocString(String^ value)
 {
-	if(!value)
+	if (!value)
 		value = "";
 
-	if(value->Length >= 1)
+	if (value->Length >= 1)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
@@ -131,7 +131,7 @@ const char* AprPool::AllocString(String^ value)
 
 		pin_ptr<unsigned char> pBytes = &bytes[0];
 
-		if(pData && pBytes)
+		if (pData && pBytes)
 			memcpy(pData, pBytes, bytes->Length);
 
 		pData[bytes->Length] = 0;
@@ -144,10 +144,10 @@ const char* AprPool::AllocString(String^ value)
 
 const char* AprPool::AllocUnixString(String^ value)
 {
-	if(!value)
+	if (!value)
 		value = "";
 
-	if(value->Length >= 1)
+	if (value->Length >= 1)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
@@ -155,7 +155,7 @@ const char* AprPool::AllocUnixString(String^ value)
 
 		pin_ptr<unsigned char> pBytes = &bytes[0];
 
-		if(pData && pBytes)
+		if (pData && pBytes)
 			memcpy(pData, pBytes, bytes->Length);
 
 		pData[bytes->Length] = 0;
@@ -165,18 +165,18 @@ const char* AprPool::AllocUnixString(String^ value)
 
 		pFrom = pTo = pData;
 
-		while(*pFrom)
+		while (*pFrom)
 		{
 			switch(*pFrom)
 			{
 			case '\r':
 				*pTo++ = '\n';
-				if(*(++pFrom) == '\n')
+				if (*(++pFrom) == '\n')
 					pFrom++;
 				break;
 			case '\n':
 				*pTo++ = '\n';
-				if(*(++pFrom) == '\r')
+				if (*(++pFrom) == '\r')
 					pFrom++;
 				break;
 
@@ -196,29 +196,29 @@ const char* AprPool::AllocUnixString(String^ value)
 
 const char* AprPool::AllocPath(String^ value)
 {
-	if(!value)
+	if (!value)
 		throw gcnew ArgumentNullException("value");
 
-	if(value->Length >= 1)
+	if (value->Length >= 1)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
 		int len = bytes->Length;
 
-		while(len && ((bytes[len-1] == System::IO::Path::DirectorySeparatorChar) || bytes[len-1] == System::IO::Path::AltDirectorySeparatorChar))
+		while (len && ((bytes[len-1] == System::IO::Path::DirectorySeparatorChar) || bytes[len-1] == System::IO::Path::AltDirectorySeparatorChar))
 			len--;
 
 		char* pData = (char*)Alloc(len+1);
 
 		pin_ptr<unsigned char> pBytes = &bytes[0];
 
-		if(pData && pBytes)
+		if (pData && pBytes)
 		{
 			memcpy(pData, pBytes, len);
 
 			// Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
-			for(int i = 0; i < len; i++)
-				if((pData[i] == System::IO::Path::DirectorySeparatorChar) || (pData[i] == System::IO::Path::AltDirectorySeparatorChar))
+			for (int i = 0; i < len; i++)
+				if ((pData[i] == System::IO::Path::DirectorySeparatorChar) || (pData[i] == System::IO::Path::AltDirectorySeparatorChar))
 					pData[i] = '/';
 		}
 
@@ -232,10 +232,10 @@ const char* AprPool::AllocPath(String^ value)
 
 const char* AprPool::AllocCanonical(String^ value)
 {
-	if(!value)
+	if (!value)
 		value = "";
 
-	if(value->Length >= 1)
+	if (value->Length >= 1)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
@@ -244,7 +244,7 @@ const char* AprPool::AllocCanonical(String^ value)
 
 		const char* resPath = svn_path_canonicalize(pcBytes, Handle);
 
-		if(resPath == pcBytes)
+		if (resPath == pcBytes)
 			resPath = apr_pstrdup(Handle, resPath);
 
 		return resPath;
@@ -255,7 +255,7 @@ const char* AprPool::AllocCanonical(String^ value)
 
 const svn_string_t* AprPool::AllocSvnString(String^ value)
 {
-	if(!value)
+	if (!value)
 		value = "";
 
 	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));
@@ -268,7 +268,7 @@ const svn_string_t* AprPool::AllocSvnString(String^ value)
 
 const svn_string_t* AprPool::AllocUnixSvnString(String^ value)
 {
-	if(!value)
+	if (!value)
 		value = "";
 
 	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));
@@ -282,7 +282,7 @@ const svn_string_t* AprPool::AllocUnixSvnString(String^ value)
 
 const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
 {
-	if(!bytes)
+	if (!bytes)
 		bytes = gcnew array<Byte>(0);
 
 	svn_string_t* pStr = (svn_string_t*)AllocCleared(sizeof(svn_string_t));

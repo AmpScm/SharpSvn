@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -17,7 +17,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetRevisionProperties(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return GetRevisionProperties(target, gcnew SvnGetRevisionPropertiesArgs(), list);
@@ -25,7 +25,7 @@ bool SvnClient::GetRevisionProperties(SvnUriTarget^ target, [Out] SvnPropertyCol
 
 bool SvnClient::GetRevisionProperties(SvnUriTarget^ target, SvnGetRevisionPropertiesArgs^ args, [Out] SvnPropertyCollection^% list)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -43,11 +43,11 @@ bool SvnClient::GetRevisionProperties(SvnUriTarget^ target, SvnGetRevisionProper
 		&props,
 		pool.AllocString(target->ToString()),
 		target->Revision->AllocSvnRevision(%pool),
-		&set_rev,			
+		&set_rev,
 		CtxHandle,
 		pool.Handle);
 
-	if(!r && props)
+	if (!r && props)
 	{
 		list = CreatePropertyDictionary(props, %pool);
 	}

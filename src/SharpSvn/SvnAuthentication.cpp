@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -53,7 +53,7 @@ void SvnAuthentication::AddConsoleHandlers()
 /// <summary>Retrieves an authorization baton allocated in the specified pool; containing the current authorization settings</summary>
 svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(AprPool ^pool, [Out] int% cookie)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>^ authArray = gcnew AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>(_handlers, pool);
@@ -97,7 +97,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
 
-	if(args->Cancel)
+	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
@@ -113,12 +113,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 svn_auth_provider_object_t *SvnUserNameEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileUserNameHandler))
+	if (_handler->Equals(SvnAuthentication::SubversionFileUserNameHandler))
 	{
 		svn_auth_get_username_provider(&provider, pool->Handle);
 	}
@@ -148,7 +148,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 	{
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-	if(args->Cancel)
+	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
@@ -164,12 +164,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 
 svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileUserNamePasswordHandler))
+	if (_handler->Equals(SvnAuthentication::SubversionFileUserNamePasswordHandler))
 	{
 		svn_auth_get_simple_provider(&provider, pool->Handle);
 	}
@@ -211,7 +211,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 	{
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-	if(args->Cancel)
+	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
@@ -227,12 +227,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 
 svn_auth_provider_object_t *SvnSslServerTrustEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileSslServerTrustHandler))
+	if (_handler->Equals(SvnAuthentication::SubversionFileSslServerTrustHandler))
 	{
 		svn_auth_get_ssl_server_trust_file_provider(&provider, pool->Handle);
 	}
@@ -268,7 +268,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 	{
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-	if(args->Cancel)
+	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
@@ -284,12 +284,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 
 svn_auth_provider_object_t *SvnSslClientCertificateEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificateHandler))
+	if (_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificateHandler))
 	{
 		svn_auth_get_ssl_client_cert_file_provider(&provider, pool->Handle);
 	}
@@ -319,7 +319,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 	{
 		return SvnException::CreateExceptionSvnError("Authorization handler", e);
 	}
-	if(args->Cancel)
+	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
 	else if(args->Break)
 		return nullptr;
@@ -334,12 +334,12 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 
 svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_auth_provider_object_t *provider = nullptr;
 
-	if(_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificatePasswordHandler))
+	if (_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificatePasswordHandler))
 	{
 		svn_auth_get_ssl_client_cert_pw_file_provider(&provider, pool->Handle);
 	}
@@ -355,10 +355,10 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
 ///////////////////////////////
 void SvnAuthentication::MaybePrintRealm(SvnAuthorizationEventArgs^ e)
 {
-	if(!e)
+	if (!e)
 		throw gcnew ArgumentNullException("e");
 
-	if(e->Realm)
+	if (e->Realm)
 		Console::WriteLine("Authentication realm: {0}", e->Realm);
 }
 
@@ -374,7 +374,7 @@ String^ SvnAuthentication::ReadPassword()
 		switch(key->Key)
 		{
 		case ConsoleKey::Backspace:
-			if(sb->Length > 0)
+			if (sb->Length > 0)
 			{
 				Console::Write("\b \b");
 
@@ -388,7 +388,7 @@ String^ SvnAuthentication::ReadPassword()
 			sb->Append(key->KeyChar);
 		}
 	}
-	while(key->Key != ConsoleKey::Enter);
+	while (key->Key != ConsoleKey::Enter);
 
 	return sb->ToString();
 }
@@ -408,7 +408,7 @@ void SvnAuthentication::ImpConsoleUserNamePasswordHandler(Object ^sender, SvnUse
 	UNUSED_ALWAYS(sender);
 	MaybePrintRealm(e);
 
-	if(!e->InitialUserName)
+	if (!e->InitialUserName)
 	{
 		Console::Write("UserName: ");
 		e->UserName = Console::ReadLine();
@@ -428,24 +428,24 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 	UNUSED_ALWAYS(sender);
 	Console::WriteLine("Error validating server certificate for '{0}':", e->Realm);
 
-	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::UnknownCertificateAuthority))
+	if (SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::UnknownCertificateAuthority))
 	{
 		Console::WriteLine(" - The certificate is not issued by a trusted authority. Use the\n"
 			"   fingerprint to validate the certificate manually!");
 	}
-	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CommonNameMismatch))
+	if (SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CommonNameMismatch))
 	{
 		Console::WriteLine(" - The certificate hostname does not match.");
 	}
-	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CertificateNotValidYet))
+	if (SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CertificateNotValidYet))
 	{
 		Console::WriteLine(" - The certificate is not yet valid.");
 	}
-	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CertificateExpired))
+	if (SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::CertificateExpired))
 	{
 		Console::WriteLine(" - The certificate is has expired.");
 	}
-	if(SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::UnknownSslProviderFailure))
+	if (SvnCertificateTrustFailures::None != (e->Failures & SvnCertificateTrustFailures::UnknownSslProviderFailure))
 	{
 		Console::WriteLine(" - The certificate has an unknown error.");
 	}
@@ -464,7 +464,7 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
 	try
 	{
 		bool breakOut = false;
-		while(!breakOut)
+		while (!breakOut)
 		{
 			Console::Write("(R)eject, accept (t)emporarily or accept (p)ermanently? ");
 

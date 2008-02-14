@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -21,7 +21,7 @@ using System::IO::FileMode;
 
 bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
@@ -33,7 +33,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result)
 
 bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ result)
 {
-	if(!from)
+	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
@@ -41,7 +41,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 		throw gcnew ArgumentNullException("result");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);	
+	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
 	AprStreamFile out(result, %pool);
@@ -52,7 +52,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 
 	ICollection<String^>^ diffArgs = args->DiffArguments;
 
-	if(!diffArgs)
+	if (!diffArgs)
 		diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
 	svn_error_t *r = svn_client_diff4(
@@ -78,7 +78,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 
 bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stream^ result)
 {
-	if(!source)
+	if (!source)
 		throw gcnew ArgumentNullException("source");
 	else if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -92,7 +92,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stre
 
 bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result)
 {
-	if(!source)
+	if (!source)
 		throw gcnew ArgumentNullException("source");
 	else if(!from)
 		throw gcnew ArgumentNullException("from");
@@ -114,7 +114,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 
 	ICollection<String^>^ diffArgs = args->DiffArguments;
 
-	if(!diffArgs)
+	if (!diffArgs)
 		diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
 	svn_error_t *r = svn_client_diff_peg4(

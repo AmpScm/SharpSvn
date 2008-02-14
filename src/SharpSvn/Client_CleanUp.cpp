@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -14,7 +14,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::CleanUp(String ^path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return CleanUp(path, gcnew SvnCleanUpArgs());
@@ -22,7 +22,7 @@ bool SvnClient::CleanUp(String ^path)
 
 bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

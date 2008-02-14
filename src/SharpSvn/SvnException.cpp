@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -29,7 +29,7 @@ private:
 
 		System::Diagnostics::Debug::Assert(ptr->_id == _idValue);
 
-		if(ptr->_id == _idValue)
+		if (ptr->_id == _idValue)
 		{
 			delete ptr;
 		}
@@ -52,7 +52,7 @@ public:
 	{
 		System::Diagnostics::Debug::Assert(container && container->_id == _idValue);
 
-		if(container->_id == _idValue)
+		if (container->_id == _idValue)
 			return container->_exception;
 		else
 			return nullptr;
@@ -60,7 +60,7 @@ public:
 
 private:
 	~SvnExceptionContainer()
-	{		
+	{
 		System::Diagnostics::Debug::Assert(_id == _idValue);
 		_id = 0;
 		_exception = nullptr;
@@ -74,17 +74,17 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 
 	svn_error_t *innerError = nullptr;
 
-	if(exception)
+	if (exception)
 	{
 		svn_error_t *creator = svn_error_create(_abusedErrorCode, nullptr, "{Managed Exception Blob}");
 
-		if(creator->pool)
+		if (creator->pool)
 		{
 			char ptrBuffer[2*sizeof(void*) + 4]; // Should be enough for a ptr
 
 			SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
 
-			if(0 < sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex))
+			if (0 < sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex))
 			{
 				char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
 
@@ -101,12 +101,12 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 [module: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="SharpSvn.SvnException.GetErrorText(svn_error_t*):System.String")];
 String^ SvnException::GetErrorText(svn_error_t *error)
 {
-	if(!error)
+	if (!error)
 		return "";
 
 	try
 	{
-		if(error->message)
+		if (error->message)
 			return SvnBase::Utf8_PtrToString(error->message);
 
 		char buffer[1024];
@@ -131,20 +131,20 @@ SvnException^ SvnException::Create(svn_error_t *error)
 [module: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="SharpSvn.SvnException.Create(svn_error_t*,System.Boolean):System.Exception")];
 Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 {
-	if(!error)
+	if (!error)
 		return nullptr;
 
 	static const int prefixLength = (int)strlen(MANAGED_EXCEPTION_PREFIX);
 
-	if(error->apr_err == _abusedErrorCode)
+	if (error->apr_err == _abusedErrorCode)
 	{
-		if(error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, prefixLength))
+		if (error->message && !strncmp(MANAGED_EXCEPTION_PREFIX, error->message, prefixLength))
 		{
 			try
 			{
 				void *container = nullptr;
 
-				if(sscanf(error->message + prefixLength, "%p", &container) > 0)
+				if (sscanf(error->message + prefixLength, "%p", &container) > 0)
 					return SvnExceptionContainer::Fetch((SvnExceptionContainer*)container);
 			}
 			catch(Exception^)
@@ -246,13 +246,13 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_CONFLICT:
 		case SVN_ERR_FS_REP_CHANGED:
 		case SVN_ERR_FS_REP_NOT_MUTABLE:
-		case SVN_ERR_FS_MALFORMED_SKEL:		
+		case SVN_ERR_FS_MALFORMED_SKEL:
 		case SVN_ERR_FS_BERKELEY_DB:
 		case SVN_ERR_FS_BERKELEY_DB_DEADLOCK:
 		case SVN_ERR_FS_TRANSACTION_DEAD:
 		case SVN_ERR_FS_TRANSACTION_NOT_DEAD:
 		case SVN_ERR_FS_UNKNOWN_FS_TYPE:
-		case SVN_ERR_FS_NO_USER:		
+		case SVN_ERR_FS_NO_USER:
 		case SVN_ERR_FS_UNSUPPORTED_FORMAT:
 		case SVN_ERR_FS_REP_BEING_WRITTEN:
 		case SVN_ERR_FS_TXN_NAME_TOO_LONG:
@@ -368,7 +368,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			//		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
 			//			return gcnew SvnException(error);
 
-		case SVN_ERR_CANCELLED:			
+		case SVN_ERR_CANCELLED:
 			return gcnew SvnOperationCanceledException(error);
 
 		case SVN_ERR_CEASE_INVOCATION:
@@ -405,11 +405,11 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_REVNUM_PARSE_FAILURE:
 			// TODO: Split out
 			return gcnew SvnException(error);
-		
+
 
 
 		default:
-			if(APR_STATUS_IS_EACCES(error->apr_err))
+			if (APR_STATUS_IS_EACCES(error->apr_err))
 				return gcnew SvnAuthorizationException(error);
 			else if(APR_STATUS_IS_ENOSPC(error->apr_err))
 				return gcnew SvnDiskFullException(error);
@@ -419,7 +419,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 	}
 	finally
 	{
-		if(clearError)
+		if (clearError)
 			svn_error_clear(error);
 	}
 }

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -17,7 +17,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% value)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
@@ -27,7 +27,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% va
 
 	bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
 
-	if(ok && result && (result->Count >= 0))
+	if (ok && result && (result->Count >= 0))
 		value = result[0]->StringValue;
 
 	return ok;
@@ -35,7 +35,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% va
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnPropertyValue^% value)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
@@ -43,9 +43,9 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnProperty
 	SvnTargetPropertyCollection^ result;
 	value = nullptr;
 
-	if(GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result))
+	if (GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result))
 	{
-		if(result->Count)
+		if (result->Count)
 			value = result[0];
 
 		return true;
@@ -56,7 +56,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnProperty
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, SvnTargetPropertyCollection^% properties)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
@@ -84,11 +84,11 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		CtxHandle,
 		pool.Handle);
 
-	if(pHash)
+	if (pHash)
 	{
 		SvnTargetPropertyCollection^ rd = gcnew SvnTargetPropertyCollection();
 
-		for(apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
+		for (apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
 		{
 			const char* pKey;
 			apr_ssize_t keyLen;
@@ -102,7 +102,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 			SvnTarget^ itemTarget = SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen));
 
-			if(strVal)
+			if (strVal)
 				rd->Add(gcnew SvnPropertyValue(propertyName, strVal, itemTarget));
 			else
 				rd->Add(gcnew SvnPropertyValue(propertyName, safe_cast<array<Byte>^>(val), itemTarget));
@@ -116,7 +116,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^% value)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
@@ -127,7 +127,7 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
 	SvnGetPropertyArgs^ args = gcnew SvnGetPropertyArgs();
 	args->ThrowOnError = false;
 
-	if(GetProperty(target, propertyName, args, result))
+	if (GetProperty(target, propertyName, args, result))
 	{
 		value = result[0]->StringValue;
 		return true;

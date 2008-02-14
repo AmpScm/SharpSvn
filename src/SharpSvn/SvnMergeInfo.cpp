@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -13,7 +13,7 @@ using System::Collections::Generic::List;
 SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo, AprPool^ pool)
 {
 	// Pool is only available during the constructor
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!mergeInfo)
 		throw gcnew ArgumentNullException("mergeInfo");
@@ -33,10 +33,10 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInf
 		apr_array_header_t *ranges;
 		apr_hash_this(hi, (const void **) &pUri, &klen, (void**)&ranges);
 
-		if(pUri && ranges)
+		if (pUri && ranges)
 		{
 			list->Add(gcnew SvnAppliedMergeItem(SvnBase::Utf8_PtrToUri(pUri, SvnNodeKind::Unknown), SvnAppliedMergeItem::CreateRangeList(ranges)));
-		}		
+		}
 	}
 	_appliedMerges = list;
 }
@@ -44,7 +44,7 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInf
 SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool)
 {
 	// Pool is only available during the constructor
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!mergeInfo)
 		throw gcnew ArgumentNullException("mergeInfo");
@@ -57,14 +57,14 @@ SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header
 
 Collection<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
 {
-	if(!rangeList)
+	if (!rangeList)
 		throw gcnew ArgumentNullException("rangeList");
 
 	array<SvnMergeRange^>^ ranges = gcnew array<SvnMergeRange^>(rangeList->nelts);
 
 	const svn_merge_range_t** mrgRange = (const svn_merge_range_t**)rangeList->elts;
 
-	for(int i = 0; i < rangeList->nelts; i++)
+	for (int i = 0; i < rangeList->nelts; i++)
 		ranges[i] = gcnew SvnMergeRange(mrgRange[i]->start, mrgRange[i]->end, 0 != mrgRange[i]->inheritable);
 
 	return gcnew Collection<SvnMergeRange^>(safe_cast<IList<SvnMergeRange^>^>(ranges));

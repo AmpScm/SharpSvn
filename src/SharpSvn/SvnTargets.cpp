@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -13,7 +13,7 @@ using namespace SharpSvn;
 
 SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 {
-	if(!revData)
+	if (!revData)
 		throw gcnew ArgumentNullException("revData");
 
 	SvnRevisionType type = (SvnRevisionType)revData->kind;
@@ -66,7 +66,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 
 svn_opt_revision_t SvnRevision::ToSvnRevision(SvnRevision^ noneValue)
 {
-	if(RevisionType != SvnRevisionType::None || !noneValue)
+	if (RevisionType != SvnRevisionType::None || !noneValue)
 		return ToSvnRevision();
 	else
 		return noneValue->ToSvnRevision();
@@ -74,7 +74,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision(SvnRevision^ noneValue)
 
 svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
 {
-	if(!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_opt_revision_t *rev = (svn_opt_revision_t *)pool->Alloc(sizeof(svn_opt_revision_t));
@@ -86,13 +86,13 @@ svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
 
 bool SvnTarget::TryParse(String^ targetName, [Out] SvnTarget^% target)
 {
-	if(String::IsNullOrEmpty(targetName))
+	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 
 	SvnUriTarget^ uriTarget = nullptr;
 	SvnPathTarget^ pathTarget = nullptr;
 
-	if(targetName->Contains("://") && SvnUriTarget::TryParse(targetName, uriTarget))
+	if (targetName->Contains("://") && SvnUriTarget::TryParse(targetName, uriTarget))
 	{
 		target = uriTarget;
 		return true;
@@ -109,7 +109,7 @@ bool SvnTarget::TryParse(String^ targetName, [Out] SvnTarget^% target)
 
 SvnTarget^ SvnTarget::FromUri(Uri^ value)
 {
-	if(!value)
+	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	return gcnew SvnUriTarget(value);
@@ -134,7 +134,7 @@ String^ SvnPathTarget::GetFullPath(String ^path)
 
 bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)
 {
-	if(String::IsNullOrEmpty(targetName))
+	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 
 	AprPool pool;
@@ -144,12 +144,12 @@ bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)
 
 SvnTarget^ SvnTarget::FromString(String^ value)
 {
-	if(!value)
+	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnTarget^ result;
 
-	if(SvnTarget::TryParse(value, result))
+	if (SvnTarget::TryParse(value, result))
 	{
 		return result;
 	}
@@ -159,12 +159,12 @@ SvnTarget^ SvnTarget::FromString(String^ value)
 
 SvnPathTarget^ SvnPathTarget::FromString(String^ value)
 {
-	if(!value)
+	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnPathTarget^ result;
 
-	if(SvnPathTarget::TryParse(value, result))
+	if (SvnPathTarget::TryParse(value, result))
 	{
 		return result;
 	}
@@ -174,12 +174,12 @@ SvnPathTarget^ SvnPathTarget::FromString(String^ value)
 
 SvnUriTarget^ SvnUriTarget::FromString(String^ value)
 {
-	if(!value)
+	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnUriTarget^ result;
 
-	if(SvnUriTarget::TryParse(value, result))
+	if (SvnUriTarget::TryParse(value, result))
 	{
 		return result;
 	}

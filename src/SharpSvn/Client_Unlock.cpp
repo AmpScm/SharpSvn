@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -23,7 +23,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Unlock(String^ target)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
@@ -31,7 +31,7 @@ bool SvnClient::Unlock(String^ target)
 
 bool SvnClient::Unlock(Uri^ target)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
@@ -39,7 +39,7 @@ bool SvnClient::Unlock(Uri^ target)
 
 bool SvnClient::Unlock(ICollection<String^>^ targets)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 
 	return Unlock(targets, gcnew SvnUnlockArgs());
@@ -47,7 +47,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets)
 
 bool SvnClient::Unlock(ICollection<Uri^>^ targets)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 
 	return Unlock(targets, gcnew SvnUnlockArgs());
@@ -56,7 +56,7 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets)
 
 bool SvnClient::Unlock(String^ target, SvnUnlockArgs^ args)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -66,7 +66,7 @@ bool SvnClient::Unlock(String^ target, SvnUnlockArgs^ args)
 
 bool SvnClient::Unlock(Uri^ target, SvnUnlockArgs^ args)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -76,7 +76,7 @@ bool SvnClient::Unlock(Uri^ target, SvnUnlockArgs^ args)
 
 bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -86,13 +86,13 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	int i = 0;
 	bool checked = false;
 	bool allUri = false;
-	for each(String^ target in targets)
+	for each (String^ target in targets)
 	{
-		if(String::IsNullOrEmpty(target))
+		if (String::IsNullOrEmpty(target))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 
 		bool isUri = IsNotUri(target);
-		if(checked && (isUri != allUri))
+		if (checked && (isUri != allUri))
 			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "targets");
 		else
 		{
@@ -100,11 +100,11 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 			allUri = isUri;
 		}
 
-		if(isUri)
+		if (isUri)
 		{
 			Uri^ uri;
 
-			if(!Uri::TryCreate(target, UriKind::Absolute, uri))
+			if (!Uri::TryCreate(target, UriKind::Absolute, uri))
 				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "targets");
 			else if(!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
@@ -133,7 +133,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 
 bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -141,9 +141,9 @@ bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
 	int i = 0;
-	for each(Uri^ uri in targets)
+	for each (Uri^ uri in targets)
 	{
-		if(!uri)
+		if (!uri)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");

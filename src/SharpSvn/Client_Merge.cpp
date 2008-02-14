@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -12,19 +12,19 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!source)
 		throw gcnew ArgumentNullException("source");
 	else if(!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
-	
+
 	return Merge(targetPath, source, NewSingleItemCollection(mergeRange), gcnew SvnMergeArgs());
 }
 
 bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange, SvnMergeArgs^ args)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -32,19 +32,19 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ m
 		throw gcnew ArgumentNullException("mergeRange");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	
+
 	return Merge(targetPath, source, NewSingleItemCollection(mergeRange), args);
 }
 
 bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!source)
 		throw gcnew ArgumentNullException("source");
 	else if(!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
-	
+
 	return Merge(targetPath, source, mergeRange, gcnew SvnMergeArgs());
 }
 
@@ -79,7 +79,7 @@ public:
 
 bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange, SvnMergeArgs^ args)
 {
-	if(String::IsNullOrEmpty(targetPath))
+	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 	else if(!source)
 		throw gcnew ArgumentNullException("source");
@@ -94,7 +94,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevi
 
 	AprArray<SvnRevisionRange^, RevisionRangeMarshaller^>^ mergeList = gcnew AprArray<SvnRevisionRange^, RevisionRangeMarshaller^>(mergeRange, %pool);
 	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-	
+
 	svn_error_t *r = svn_client_merge_peg3(
 		pool.AllocString(source->TargetName),
 		mergeList->Handle,
@@ -114,7 +114,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevi
 
 bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange, SvnMergeArgs^ args)
 {
-	if(!mergeRange)
+	if (!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
 
 	array<SvnRevisionRange^>^ revs = gcnew array<SvnRevisionRange^>(mergeRange->Count);

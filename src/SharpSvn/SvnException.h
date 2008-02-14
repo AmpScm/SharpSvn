@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -17,7 +17,7 @@ namespace SharpSvn {
 #define DOXYGEN_SHOULD_SKIP_THIS
 #define SVN_ERROR_START [CLSCompliant(false)] public enum class SvnErrorCode { None=0,
 #define SVN_ERROR_END };
-		
+
 #include "svn_error_codes.h"
 
 	}
@@ -40,7 +40,7 @@ namespace SharpSvn {
 
 		static Exception^ GetInnerException(svn_error_t *error)
 		{
-			if(error && error->child)
+			if (error && error->child)
 				return Create(error->child, false);
 			else
 				return nullptr;
@@ -57,7 +57,7 @@ namespace SharpSvn {
 		SvnException(svn_error_t *error)
 			: Exception(GetErrorText(error), GetInnerException(error))
 		{
-			if(error)
+			if (error)
 				_errorCode = error->apr_err;
 		}
 
@@ -65,7 +65,7 @@ namespace SharpSvn {
 		SvnException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
 			: Exception(info, context)
 		{
-			if(!info)
+			if (!info)
 				throw gcnew ArgumentNullException("info");
 			UNUSED_ALWAYS(context);
 
@@ -112,7 +112,7 @@ namespace SharpSvn {
 			Exception^ get()
 			{
 				Exception^ e = this;
-				while(e->InnerException)
+				while (e->InnerException)
 					e = e->InnerException;
 
 				return e;
@@ -123,7 +123,7 @@ namespace SharpSvn {
 		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
 		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
 		{
-			if(!info)
+			if (!info)
 				throw gcnew ArgumentNullException("info");
 			Exception::GetObjectData(info, context);
 
@@ -174,7 +174,7 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemLockException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemOutOfDateException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryException, SvnException);
-	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryIOException, SvnException); // Does not extent Repository Exception (= RA library exception)	
+	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryIOException, SvnException); // Does not extent Repository Exception (= RA library exception)
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryHookException, SvnRepositoryException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthenticationException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthorizationException, SvnException);

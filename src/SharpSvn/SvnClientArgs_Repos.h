@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -87,7 +87,7 @@ namespace SharpSvn {
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and
 	/// <see cref="SvnClient::RemoteCopy(SvnUriTarget^,Uri^,SvnCopyArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCopyArgs : public SvnClientArgsWithCommit
@@ -134,7 +134,7 @@ namespace SharpSvn {
 		}
 	};
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Move(String^,String^,SvnMoveArgs^)" /> and 
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Move(String^,String^,SvnMoveArgs^)" /> and
 	/// <see cref="SvnClient::RemoteMove(Uri^,Uri^,SvnMoveArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnMoveArgs : public SvnClientArgs

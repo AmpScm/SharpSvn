@@ -5,7 +5,7 @@ namespace SharpSvn {
 	namespace Implementation {
 
 
-		public ref class SvnPropertyNames sealed 
+		public ref class SvnPropertyNames sealed
 		{
 			SvnPropertyNames()
 			{}
@@ -71,8 +71,8 @@ namespace SharpSvn {
 			static initonly String^ WebViewerPathRevision		= "webviewer:pathrevision";
 
 			/// <summary>Gets a list of TortoiseSvn defined directory properties, which are applied recursively on all directories below the set root</summary>
-			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ TortoiseSvnDirectoryProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^> 
-				{  
+			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ TortoiseSvnDirectoryProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^>
+				{
 					BugTrackLabel,
 					BugTrackMessage,
 					BugTrackNumber,
@@ -118,7 +118,7 @@ namespace SharpSvn {
 			static initonly String^		SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
 			static initonly String^		SslClientCertificateFile	= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
 			static initonly String^		SslClientCertificatePassword= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_PASSWORD;
-			
+
 		public:
 			static initonly String^ ConfigCategory					= SVN_CONFIG_CATEGORY_CONFIG;
 			static initonly String^		AuthSection					= SVN_CONFIG_SECTION_AUTH;
@@ -148,7 +148,7 @@ namespace SharpSvn {
 			static initonly String^		AutoPropsSection			= SVN_CONFIG_SECTION_AUTO_PROPS;
 
 
-			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores 
+			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores
 				= gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
 						dynamic_cast<IList<String^>^>(static_cast<String^>(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES)->Split(' ')));
 		};

@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -16,7 +16,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::ListChangeList(String^ rootPath, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
-	if(String::IsNullOrEmpty(rootPath))
+	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 	else if(!changeListHandler)
 		throw gcnew ArgumentNullException("changeListHandler");
@@ -30,14 +30,14 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, 
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnListChangeListArgs^ args = dynamic_cast<SvnListChangeListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if(args)
+	if (args)
 	{
 		SvnListChangeListEventArgs^ e = gcnew SvnListChangeListEventArgs(path, changelist);
 		try
 		{
 			args->OnListChangeList(e);
 
-			if(e->Cancel)
+			if (e->Cancel)
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
 		}
 		catch(Exception^ e)
@@ -58,7 +58,7 @@ static svn_error_t *svnclient_changelist_handler(void *baton, const char *path, 
 
 bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, EventHandler<SvnListChangeListEventArgs^>^ changeListHandler)
 {
-	if(String::IsNullOrEmpty(rootPath))
+	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -67,7 +67,7 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	if(changeListHandler)
+	if (changeListHandler)
 		args->ListChangeList += changeListHandler;
 	try
 	{
@@ -84,14 +84,14 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 	}
 	finally
 	{
-		if(changeListHandler)
+		if (changeListHandler)
 			args->ListChangeList -= changeListHandler;
 	}
 }
 
 bool SvnClient::GetChangeList(String^ rootPath, [Out]Collection<SvnListChangeListEventArgs^>^% list)
 {
-	if(String::IsNullOrEmpty(rootPath))
+	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 
 	return GetChangeList(rootPath, gcnew SvnListChangeListArgs(), list);
@@ -99,7 +99,7 @@ bool SvnClient::GetChangeList(String^ rootPath, [Out]Collection<SvnListChangeLis
 
 bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Out]Collection<SvnListChangeListEventArgs^>^% list)
 {
-	if(String::IsNullOrEmpty(rootPath))
+	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");

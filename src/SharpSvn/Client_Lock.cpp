@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -15,7 +15,7 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Lock(String^ target, String^ comment)
 {
-	if(String::IsNullOrEmpty(target))
+	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
 	else if(!comment)
 		throw gcnew ArgumentNullException("comment");
@@ -28,7 +28,7 @@ bool SvnClient::Lock(String^ target, String^ comment)
 
 bool SvnClient::Lock(Uri^ target, String^ comment)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!comment)
 		throw gcnew ArgumentNullException("comment");
@@ -43,7 +43,7 @@ bool SvnClient::Lock(Uri^ target, String^ comment)
 
 bool SvnClient::Lock(ICollection<String^>^ targets, String^ comment)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!comment)
 		throw gcnew ArgumentNullException("comment");
@@ -56,7 +56,7 @@ bool SvnClient::Lock(ICollection<String^>^ targets, String^ comment)
 
 bool SvnClient::Lock(ICollection<Uri^>^ targets, String^ comment)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!comment)
 		throw gcnew ArgumentNullException("comment");
@@ -69,7 +69,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, String^ comment)
 
 bool SvnClient::Lock(String^ target, SvnLockArgs^ args)
 {
-	if(String::IsNullOrEmpty(target))
+	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -79,7 +79,7 @@ bool SvnClient::Lock(String^ target, SvnLockArgs^ args)
 
 bool SvnClient::Lock(Uri^ target, SvnLockArgs^ args)
 {
-	if(!target)
+	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -91,7 +91,7 @@ bool SvnClient::Lock(Uri^ target, SvnLockArgs^ args)
 
 bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -101,13 +101,13 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 	int i = 0;
 	bool allUri = false;
 	bool checked = false;
-	for each(String^ target in targets)
+	for each (String^ target in targets)
 	{
-		if(String::IsNullOrEmpty(target))
+		if (String::IsNullOrEmpty(target))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 
 		bool isUri = IsNotUri(target);
-		if(checked && (isUri != allUri))
+		if (checked && (isUri != allUri))
 			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "targets");
 		else
 		{
@@ -115,11 +115,11 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 			allUri = isUri;
 		}
 
-		if(isUri)
+		if (isUri)
 		{
 			Uri^ uri;
 
-			if(!Uri::TryCreate(target, UriKind::Absolute, uri))
+			if (!Uri::TryCreate(target, UriKind::Absolute, uri))
 				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "targets");
 			else if(!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
@@ -149,7 +149,7 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 
 bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 {
-	if(!targets)
+	if (!targets)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
@@ -158,9 +158,9 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
 	int i = 0;
-	for each(Uri^ uri in targets)
+	for each (Uri^ uri in targets)
 	{
-		if(!uri)
+		if (!uri)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");

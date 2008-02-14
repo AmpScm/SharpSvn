@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -26,7 +26,7 @@ namespace SharpSvn {
 
 		SvnRevision(int revision)
 		{
-			if(revision < 0)
+			if (revision < 0)
 				throw gcnew ArgumentOutOfRangeException("revision");
 
 			_type = SvnRevisionType::Number;
@@ -35,7 +35,7 @@ namespace SharpSvn {
 
 		SvnRevision(__int64 revision)
 		{
-			if(revision < 0)
+			if (revision < 0)
 				throw gcnew ArgumentOutOfRangeException("revision");
 
 			_type = SvnRevisionType::Number;
@@ -102,7 +102,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-				if(_type == SvnRevisionType::Number)
+				if (_type == SvnRevisionType::Number)
 					return _value;
 				else
 					return 0;
@@ -113,7 +113,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-				if(_type == SvnRevisionType::Date)
+				if (_type == SvnRevisionType::Date)
 					return DateTime(_value);
 
 				return DateTime::MinValue;
@@ -129,7 +129,7 @@ namespace SharpSvn {
 
 		virtual bool Equals(SvnRevision^ other)
 		{
-			if(!other)
+			if (!other)
 				return false;
 
 			switch(RevisionType)
@@ -156,7 +156,7 @@ namespace SharpSvn {
 
 		static bool operator == (SvnRevision^ rev1, SvnRevision^ rev2)
 		{
-			if(!rev1)
+			if (!rev1)
 				return !rev2;
 			else if(!rev2)
 				return false;
@@ -229,7 +229,7 @@ namespace SharpSvn {
 	internal:
 		SvnTarget(SvnRevision^ revision)
 		{
-			if(revision == nullptr)
+			if (revision == nullptr)
 				_revision = SvnRevision::None;
 			else
 				_revision = revision;
@@ -251,7 +251,7 @@ namespace SharpSvn {
 
 		virtual String^ ToString() override
 		{
-			if(Revision->RevisionType == SvnRevisionType::None)
+			if (Revision->RevisionType == SvnRevisionType::None)
 				return TargetName;
 			else
 				return TargetName + "@" + Revision->ToString();
@@ -272,10 +272,10 @@ namespace SharpSvn {
 
 		virtual bool Equals(SvnTarget^ other)
 		{
-			if(!other)
+			if (!other)
 				return false;
 
-			if(!String::Equals(other->TargetName, TargetName))
+			if (!String::Equals(other->TargetName, TargetName))
 				return false;
 
 			return Revision->Equals(other->Revision);

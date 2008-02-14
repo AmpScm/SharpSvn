@@ -1,5 +1,5 @@
 // $Id$
-// Copyright (c) SharpSvn Project 2007 
+// Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
 
@@ -153,7 +153,7 @@ namespace SharpSvn {
 		protected:
 			SvnAuthWrapper(EventHandler<T>^ handler, SvnAuthentication^ authentication)
 			{
-				if(!handler)
+				if (!handler)
 					throw gcnew ArgumentNullException("handler");
 				else if(!authentication)
 					throw gcnew ArgumentNullException("authentication");
@@ -314,7 +314,7 @@ namespace SharpSvn {
 				String^ certificateValidUntil, String^ certificateIssuer, String^ certificateValue, String^ realm, bool maySave)
 				: SvnAuthorizationEventArgs(realm, maySave)
 			{
-				if(!certificateCommonName)
+				if (!certificateCommonName)
 					throw gcnew ArgumentNullException("certificateCommonName");
 				else if(!certificateFingerprint)
 					throw gcnew ArgumentNullException("certificateFingerprint");
@@ -521,14 +521,14 @@ namespace SharpSvn {
 		public:
 			void SetRetryLimit(Delegate^ handler, int limit)
 			{
-				if(!handler)
+				if (!handler)
 					throw gcnew ArgumentNullException("handler");
 				else if(limit < 0)
 					throw gcnew ArgumentOutOfRangeException("limit");
 
 				ISvnAuthWrapper^ wrapper;
 
-				if(_wrappers->TryGetValue(handler, wrapper))
+				if (_wrappers->TryGetValue(handler, wrapper))
 				{
 					wrapper->RetryLimit = limit;
 					_cookie++;
@@ -542,14 +542,14 @@ namespace SharpSvn {
 			{
 				void add(EventHandler<SvnUserNamePasswordEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnUserNamePasswordEventArgs::Wrapper(e, this);
 
-					if(!_wrappers->ContainsKey(e))
+					if (!_wrappers->ContainsKey(e))
 					{
 						_cookie++;
 						_wrappers->Add(e, handler);
@@ -559,14 +559,14 @@ namespace SharpSvn {
 
 				void remove(EventHandler<SvnUserNamePasswordEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
 
-					if(_wrappers->TryGetValue(e, wrapper))
+					if (_wrappers->TryGetValue(e, wrapper))
 					{
 						_cookie++;
 						_wrappers->Remove(e);
@@ -579,14 +579,14 @@ namespace SharpSvn {
 			{
 				void add(EventHandler<SvnUserNameEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnUserNameEventArgs::Wrapper(e, this);
 
-					if(!_wrappers->ContainsKey(e))
+					if (!_wrappers->ContainsKey(e))
 					{
 						_cookie++;
 						_wrappers->Add(e, handler);
@@ -596,14 +596,14 @@ namespace SharpSvn {
 
 				void remove(EventHandler<SvnUserNameEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
 
-					if(_wrappers->TryGetValue(e, wrapper))
+					if (_wrappers->TryGetValue(e, wrapper))
 					{
 						_cookie++;
 						_wrappers->Remove(e);
@@ -616,14 +616,14 @@ namespace SharpSvn {
 			{
 				void add(EventHandler<SvnSslServerTrustEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslServerTrustEventArgs::Wrapper(e, this);
 
-					if(!_wrappers->ContainsKey(e))
+					if (!_wrappers->ContainsKey(e))
 					{
 						_cookie++;
 						_wrappers->Add(e, handler);
@@ -633,14 +633,14 @@ namespace SharpSvn {
 
 				void remove(EventHandler<SvnSslServerTrustEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
 
-					if(_wrappers->TryGetValue(e, wrapper))
+					if (_wrappers->TryGetValue(e, wrapper))
 					{
 						_cookie++;
 						_wrappers->Remove(e);
@@ -653,14 +653,14 @@ namespace SharpSvn {
 			{
 				void add(EventHandler<SvnSslClientCertificateEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslClientCertificateEventArgs::Wrapper(e, this);
 
-					if(!_wrappers->ContainsKey(e))
+					if (!_wrappers->ContainsKey(e))
 					{
 						_cookie++;
 						_wrappers->Add(e, handler);
@@ -670,14 +670,14 @@ namespace SharpSvn {
 
 				void remove(EventHandler<SvnSslClientCertificateEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
 
-					if(_wrappers->TryGetValue(e, wrapper))
+					if (_wrappers->TryGetValue(e, wrapper))
 					{
 						_cookie++;
 						_wrappers->Remove(e);
@@ -690,14 +690,14 @@ namespace SharpSvn {
 			{
 				void add(EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslClientCertificatePasswordEventArgs::Wrapper(e, this);
 
-					if(!_wrappers->ContainsKey(e))
+					if (!_wrappers->ContainsKey(e))
 					{
 						_cookie++;
 						_wrappers->Add(e, handler);
@@ -707,14 +707,14 @@ namespace SharpSvn {
 
 				void remove(EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ e)
 				{
-					if(_readOnly)
+					if (_readOnly)
 						throw gcnew InvalidOperationException();
 					else if(!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
 
-					if(_wrappers->TryGetValue(e, wrapper))
+					if (_wrappers->TryGetValue(e, wrapper))
 					{
 						_cookie++;
 						_wrappers->Remove(e);
@@ -763,44 +763,44 @@ namespace SharpSvn {
 			/// <summary>Subversion UserNameHandler file backend (managed representation)</summary>
 			static property EventHandler<SvnUserNameEventArgs^>^						SubversionFileUserNameHandler
 			{
-				EventHandler<SvnUserNameEventArgs^>^ get() { return _subversionFileUserNameHandler; } 
+				EventHandler<SvnUserNameEventArgs^>^ get() { return _subversionFileUserNameHandler; }
 			}
 
 			/// <summary>Subversion UserNamePasswordHandler file backend (managed representation)</summary>
 			static property EventHandler<SvnUserNamePasswordEventArgs^>^				SubversionFileUserNamePasswordHandler
 			{
-				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return _subversionFileUserNamePasswordHandler; } 
+				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return _subversionFileUserNamePasswordHandler; }
 			}
 
 			/// <summary>Subversion UserNameHandler file backend using Windows CryptoStore (managed representation)</summary>
 			/// <remarks>Should be added after <see cref="SubversionFileUserNamePasswordHandler" /></remarks>
 			static property EventHandler<SvnUserNamePasswordEventArgs^>^				SubversionWindowsUserNamePasswordHandler
 			{
-				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return _subversionWindowsUserNamePasswordHandler; } 
+				EventHandler<SvnUserNamePasswordEventArgs^>^ get() { return _subversionWindowsUserNamePasswordHandler; }
 			}
 
 			/// <summary>Subversion SslServerTrust file backend (managed representation)</summary>
 			static property EventHandler<SvnSslServerTrustEventArgs^>^				SubversionFileSslServerTrustHandler
 			{
-				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionFileSslServerTrustHandler; } 
+				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionFileSslServerTrustHandler; }
 			}
 
 			/// <summary>Subversion SslClientCertificate file backend (managed representation)</summary>
 			static property EventHandler<SvnSslClientCertificateEventArgs^>^			SubversionFileSslClientCertificateHandler
 			{
-				EventHandler<SvnSslClientCertificateEventArgs^>^ get() { return _subversionFileSslClientCertificateHandler; } 
+				EventHandler<SvnSslClientCertificateEventArgs^>^ get() { return _subversionFileSslClientCertificateHandler; }
 			}
 
 			/// <summary>Subversion SslClientCertificatePassword file backend (managed representation)</summary>
 			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ SubversionFileSslClientCertificatePasswordHandler
 			{
-				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return _subversionFileSslClientCertificatePasswordHandler; } 
+				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return _subversionFileSslClientCertificatePasswordHandler; }
 			}
 
 			/// <summary>Subversion CryptoApi Ssl Trust handler</summary>
 			static property EventHandler<SvnSslServerTrustEventArgs^>^				SubversionWindowsSslServerTrustHandler
 			{
-				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionWindowsSslServerTrustHandler; } 
+				EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionWindowsSslServerTrustHandler; }
 			}
 
 		private:
