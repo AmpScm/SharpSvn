@@ -69,7 +69,7 @@ namespace SharpSvn {
 		const apr_array_header_t *_commitItems;
 		bool _cancel;
 		String^ _logMessage;
-		Collection<SvnCommitItem^>^ _items;
+		SvnCommitItemCollection^ _items;
 	internal:
 		SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
 
@@ -98,9 +98,9 @@ namespace SharpSvn {
 			}
 		}
 
-		property Collection<SvnCommitItem^>^ Items
+		property SvnCommitItemCollection^ Items
 		{
-			Collection<SvnCommitItem^>^ get();
+			SvnCommitItemCollection^ get();
 		}
 
 		virtual void Detach(bool keepProperties) override;

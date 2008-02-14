@@ -143,4 +143,28 @@ namespace SharpSvn {
 
 		void Detach(bool keepProperties);
 	};
+
+	namespace Implementation {
+		public ref class SvnCommitItemCollection sealed : public System::Collections::ObjectModel::KeyedCollection<String^, SvnCommitItem^>
+		{
+		internal:
+			SvnCommitItemCollection(IList<SvnCommitItem^>^ items)
+			{
+				for each(SvnCommitItem^ i in items)
+				{
+					Add(i);
+				}
+			}
+
+		protected:
+			virtual String^ GetKeyForItem(SvnCommitItem^ item) override
+			{
+				if(!item)
+					throw gcnew ArgumentNullException("item");
+
+				return item->Path;
+			}
+		};
+
+	}
 }

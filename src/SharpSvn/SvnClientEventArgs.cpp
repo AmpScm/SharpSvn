@@ -113,7 +113,7 @@ public:
 
 
 
-Collection<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
+SvnCommitItemCollection^ SvnCommittingEventArgs::Items::get()
 {
 	if(!_items && _commitItems)
 	{
@@ -123,7 +123,7 @@ Collection<SvnCommitItem^>^ SvnCommittingEventArgs::Items::get()
 
 		aprItems->CopyTo(items, 0);
 
-		_items = gcnew Collection<SvnCommitItem^>(safe_cast<IList<SvnCommitItem^>^>(items));
+		_items = gcnew SvnCommitItemCollection(safe_cast<IList<SvnCommitItem^>^>(items));
 	}
 
 	return _items;
@@ -137,3 +137,24 @@ SvnMergeRange^ SvnNotifyEventArgs::MergeRange::get()
 	return _mergeRange;
 }
 
+SvnPropertyCollection^ SvnLogEventArgs::CustomProperties::get()
+{
+	if(!_customProperties && _entry && _entry->revprops)
+	{
+		_customProperties = gcnew SvnPropertyCollection();
+
+		for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->revprops); hi; hi = apr_hash_next(hi))
+		{
+			const char* pKey;
+			apr_ssize_t keyLen;
+			svn_string_t *pValue;
+
+			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pValue);
+
+			SvnPropertyValue^ pv = SvnPropertyValue::Create(pKey, pValue, nullptr);
+
+			_customProperties->Add(pv);
+		}
+	}
+	return _customProperties;
+}

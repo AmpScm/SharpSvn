@@ -88,22 +88,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 	if(!r && result && result->data)
 	{
-		String^ data = nullptr;
-
-		try
-		{
-			data = Utf8_PtrToString(result);
-		}
-		catch(ArgumentException^)
-		{}
-
-		if(svn_prop_needs_translation(pName)) // Make sure properties return in the same format they were added
-			data = data->Replace("\n", Environment::NewLine);
-
-		if(data)
-			value = gcnew SvnPropertyValue(propertyName, data);
-		else
-			value = gcnew SvnPropertyValue(propertyName, PtrToByteArray(result->data, (int)result->len));
+		value = SvnPropertyValue::Create(pName, result, nullptr);
 	}
 
 	return args->HandleResult(this, r);
