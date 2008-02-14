@@ -5,14 +5,15 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/List.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetList(SharpSvn.SvnTarget,SharpSvn.SvnListArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnListEventArgs>&)", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetList(SharpSvn.SvnTarget,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnListEventArgs>&)", MessageId="1#")];
+
 bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHandler)
 {
 	if (!target)

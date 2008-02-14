@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Status.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -17,6 +18,8 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!statusHandler)
 		throw gcnew ArgumentNullException("statusHandler");
 

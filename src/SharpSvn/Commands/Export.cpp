@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Export.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -13,30 +14,14 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,SharpSvn.SvnExportArgs,SharpSvn.SvnUpdateResult&):System.Boolean", MessageId="3#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Export(SharpSvn.SvnTarget,System.String,SharpSvn.SvnUpdateResult&):System.Boolean", MessageId="2#")];
 
-const char* SvnClient::GetEolPtr(SvnLineStyle style)
-{
-	switch(style)
-	{
-	case SvnLineStyle::Native:
-		return nullptr;
-	case SvnLineStyle::CarriageReturnLinefeed:
-		return "CRLF";
-	case SvnLineStyle::Linefeed:
-		return "LF";
-	case SvnLineStyle::CarriageReturn:
-		return "CR";
-	default:
-		throw gcnew ArgumentOutOfRangeException("style");
-	}
-}
-
-
 bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
+	else if(!IsNotUri(toPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	SvnUpdateResult^ result;
 
@@ -49,6 +34,8 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% 
 		throw gcnew ArgumentNullException("from");
 	else if(!toPath)
 		throw gcnew ArgumentNullException("toPath");
+	else if(!IsNotUri(toPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	return Export(from, toPath, gcnew SvnExportArgs(), result);
 }

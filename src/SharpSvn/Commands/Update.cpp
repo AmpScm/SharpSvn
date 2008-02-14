@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/Update.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -20,6 +21,8 @@ bool SvnClient::Update(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	SvnUpdateResult^ result;
 	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), result);
@@ -29,6 +32,8 @@ bool SvnClient::Update(String^ path, [Out] SvnUpdateResult^% updateResult)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), updateResult);
 }
@@ -38,6 +43,8 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -50,6 +57,8 @@ bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult^
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if(!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -111,6 +120,8 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 	{
 		if (String::IsNullOrEmpty(s))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
+		else if(!IsNotUri(s))
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

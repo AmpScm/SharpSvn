@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/CheckOut.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;

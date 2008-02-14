@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/GetAvailableMergeInfo.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -23,10 +24,10 @@ bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]Sv
 	else if(!SvnBase::IsValidReposUri(sourceUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
 
-	return GetAvailableMergeInfo(target, sourceUri, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeInfo);
+	return GetAvailableMergeInfo(target, sourceUri, gcnew SvnGetAvailableMergeInfoArgs(), mergeInfo);
 }
 
-bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo)
+bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetAvailableMergeInfoArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");

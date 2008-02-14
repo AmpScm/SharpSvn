@@ -5,6 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "Args/GetProperty.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
