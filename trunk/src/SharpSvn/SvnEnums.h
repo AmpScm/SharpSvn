@@ -380,21 +380,26 @@ namespace SharpSvn {
 		IgnoreAll	= svn_diff_file_ignore_space_all
 	};
 
-	ref class EnumVerifier
+	namespace Implementation
 	{
-	private:
-		EnumVerifier()
-		{}
 
-	public:
-		generic<typename T>
-		where T : System::Enum
-		static T Verify(T value)
+		ref class EnumVerifier
 		{
-			if (!Enum::IsDefined(T::typeid, value))
-				throw gcnew ArgumentOutOfRangeException("value", value, String::Format(CultureInfo::InvariantCulture, SharpSvnStrings::VerifyEnumFailed, value, T::typeid->FullName));
+		private:
+			EnumVerifier()
+			{}
 
-			return value;
-		}
-	};
+		public:
+			generic<typename T>
+			where T : System::Enum
+			static T Verify(T value)
+			{
+				if (!Enum::IsDefined(T::typeid, value))
+					throw gcnew ArgumentOutOfRangeException("value", value, String::Format(CultureInfo::InvariantCulture, SharpSvnStrings::VerifyEnumFailed, value, T::typeid->FullName));
+
+				return value;
+			}
+		};
+
+	}
 }

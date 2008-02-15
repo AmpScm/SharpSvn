@@ -1,4 +1,4 @@
-// $Id: SvnClientEventArgs.cpp 223 2008-02-05 14:51:56Z bhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details

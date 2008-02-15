@@ -194,7 +194,7 @@ void SvnClientContext::ApplyCustomSsh()
 		//                   environment variable which can override the command.
 
 		val++;
-		int len = strcspn(val, " ");
+		int len = (int)strcspn(val, " ");
 		char* var = apr_pstrmemdup(pool.Handle, val, len);
 		cmd = getenv(var);
 

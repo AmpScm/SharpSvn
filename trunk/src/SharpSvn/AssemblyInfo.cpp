@@ -45,9 +45,6 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyDescriptionAttribute("SharpSvn (Compiled statically with subversion " SVN_VER_NUMBER
 									   ", apr " APR_VERSION_STRING
 									   ", apr-util " APU_VERSION_STRING
-#if (APU_HAVE_APR_ICONV != 0)
-									   ", apr-iconv " API_VERSION_STRING
-#endif
 									   ", neon " NEON_VERSION
 									   ", serf " SERF_VERSION
 									   " and " OPENSSL_VERSION_TEXT
