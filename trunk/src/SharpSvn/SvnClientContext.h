@@ -34,6 +34,8 @@ namespace SharpSvn {
 		};
 	}
 
+	ref class SvnErrorEventArgs;
+
 	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientContext : public SvnBase
@@ -51,7 +53,9 @@ namespace SharpSvn {
 
 	internal:
 		bool _dontLoadMimeFile;
+		bool _dontEnablePlink;
 		SvnClientContext(AprPool^ pool);
+		virtual void HandleClientError(SvnErrorEventArgs^ e);
 
 	public:
 		SvnClientContext(SvnClientContext ^fromContext);

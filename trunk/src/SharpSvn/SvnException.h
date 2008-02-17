@@ -184,4 +184,9 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnIllegalTargetException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnObstructedUpdateException, SvnWorkingCopyException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnInvalidNodeKindException, SvnWorkingCopyException);
+
+	/// <summary>SharpSvn SvnClient exception</summary>
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientException, SvnException);
+	/// <summary>SharpSvn configuration loader exception</summary>
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientConfigurationException, SvnClientException);
 }
