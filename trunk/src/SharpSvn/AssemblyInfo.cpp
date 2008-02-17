@@ -68,7 +68,7 @@ using namespace System::Security::Permissions;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.5.0.3")];
+[assembly:AssemblyVersionAttribute("1.4999.0.1")];
 [assembly:NeutralResourcesLanguageAttribute("en")];
 
 [assembly:ComVisible(false)];
