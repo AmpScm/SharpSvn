@@ -131,7 +131,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 
 	commitInfo = nullptr;
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
+	EnsureState(SvnContextState::AuthorizationInitialized, SvnExtendedState::MimeTypesLoaded);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 

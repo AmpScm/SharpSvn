@@ -17,13 +17,22 @@ namespace SharpSvn {
 
 	using SharpSvn::Security::SvnAuthentication;
 
-	public enum class SvnContextState
+	namespace Implementation
 	{
-		Initial,
-		ConfigLoaded,
-		CustomRemoteConfigApplied,
-		AuthorizationInitialized
-	};
+		enum class SvnContextState
+		{
+			Initial,
+			ConfigLoaded,
+			CustomRemoteConfigApplied,
+			AuthorizationInitialized,
+		};
+
+		[Flags]
+		enum class SvnExtendedState
+		{
+			MimeTypesLoaded = 0x01,
+		};
+	}
 
 	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -34,12 +43,14 @@ namespace SharpSvn {
 		AprPool^ _authPool;
 		int _authCookie;
 		SvnContextState _contextState;
+		SvnExtendedState _xState;
 		initonly SvnAuthentication^ _authentication;
 
 		static initonly Object^ _plinkLock = gcnew Object();
 		static String^ _plinkPath;
 
 	internal:
+		bool _dontLoadMimeFile;
 		SvnClientContext(AprPool^ pool);
 
 	public:
@@ -58,6 +69,7 @@ namespace SharpSvn {
 		virtual void ApplyCustomRemoteConfig();
 	private:
 		void ApplyCustomSsh();
+		void ApplyMimeTypes();
 
 	public:
 		/// <summary>Loads the subversion configuration from the specified path</summary>
@@ -71,6 +83,7 @@ namespace SharpSvn {
 
 	internal:
 		void EnsureState(SvnContextState requiredState);
+		void EnsureState(SvnContextState requiredState, SvnExtendedState xState);
 
 		property SvnContextState State
 		{
