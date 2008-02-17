@@ -13,8 +13,8 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnBlameArgs : public SvnClientArgs
 	{
-		SvnRevision ^_from;
-		SvnRevision ^_to;
+		SvnRevision ^_start;
+		SvnRevision ^_end;
 		SvnIgnoreSpacing _ignoreSpace;
 		bool _ignoreEol;
 		bool _ignoreMime;
@@ -23,8 +23,8 @@ namespace SharpSvn {
 	public:
 		SvnBlameArgs()
 		{
-			_from = SvnRevision::Zero;
-			_to = SvnRevision::Head;
+			_start = SvnRevision::Zero;
+			_end = SvnRevision::Head;
 		}
 
 		virtual property SvnClientCommandType ClientCommandType
@@ -45,18 +45,42 @@ namespace SharpSvn {
 		}
 
 	public:
+
+		/// <summary>Gets or sets the blame range as <see cref="SvnRevisionRange" /></summary>
+		property SvnRevisionRange^ Range
+		{
+			SvnRevisionRange^ get()
+			{
+				return gcnew SvnRevisionRange(Start, End);
+			}
+
+			void set(SvnRevisionRange^ value)
+			{
+				if(!value)
+				{
+					Start = nullptr;
+					End = nullptr;
+				}
+				else
+				{
+					Start = value->StartRevision;
+					End = value->EndRevision;
+				}
+			}
+		}
+
 		property SvnRevision^ Start
 		{
 			SvnRevision^ get()
 			{
-				return _from;
+				return _start;
 			}
 			void set(SvnRevision^ value)
 			{
-				if (!value)
-					throw gcnew ArgumentNullException("value");
-
-				_from = value;
+				if (value)
+					_start = value;
+				else
+					_start = SvnRevision::None;
 			}
 		}
 
@@ -64,14 +88,14 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
-				return _to;
+				return _end;
 			}
 			void set(SvnRevision^ value)
 			{
-				if (!value)
-					throw gcnew ArgumentNullException("value");
-
-				_to = value;
+				if (value)
+					_end = value;
+				else
+					_end = SvnRevision::None;
 			}
 		}
 
