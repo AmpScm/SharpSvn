@@ -105,14 +105,36 @@ namespace SharpSvn {
 		}
 	};
 
+	ref class SvnAppliedMergeItem;
+
+	namespace Implementation {
+		public ref class SvnAppliedMergesList sealed : KeyedCollection<Uri^, SvnAppliedMergeItem^>
+		{
+		internal:
+			SvnAppliedMergesList()
+			{}
+		protected:
+			virtual Uri^ GetKeyForItem(SvnAppliedMergeItem^ item) override;
+		};
+
+		public ref class SvnMergeRangeCollection sealed : Collection<SvnMergeRange^>
+		{
+		internal:
+			SvnMergeRangeCollection(IList<SvnMergeRange^>^ list)
+				: Collection(list)
+			{}
+
+		};
+	}
+
 	[DebuggerDisplayAttribute("Uri={Uri}")]
 	public ref class SvnAppliedMergeItem sealed
 	{
 		initonly Uri^ _uri;
-		Collection<SvnMergeRange^>^ _ranges;
+		SvnMergeRangeCollection^ _ranges;
 
 	internal:
-		SvnAppliedMergeItem(Uri^ uri, Collection<SvnMergeRange^>^ ranges)
+		SvnAppliedMergeItem(Uri^ uri, SvnMergeRangeCollection^ ranges)
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
@@ -123,9 +145,8 @@ namespace SharpSvn {
 			_ranges = ranges;
 		}
 
-
 	internal:
-		static Collection<SvnMergeRange^>^ CreateRangeList(apr_array_header_t *rangeList);
+		static SvnMergeRangeCollection^ CreateRangeList(apr_array_header_t *rangeList);
 
 	public:
 		property Uri^ Uri
@@ -136,32 +157,22 @@ namespace SharpSvn {
 			}
 		}
 
-		property Collection<SvnMergeRange^>^ MergeRanges
+		property SvnMergeRangeCollection^ MergeRanges
 		{
-			Collection<SvnMergeRange^>^ get()
+			SvnMergeRangeCollection^ get()
 			{
 				return _ranges;
 			}
 		}
 	};
 
+	
+
 	public ref class SvnAppliedMergeInfo sealed
 	{
-#pragma region // AppliedMergesList
-	internal:
-		ref class AppliedMergesList sealed : KeyedCollection<Uri^, SvnAppliedMergeItem^>
-		{
-		protected:
-			virtual Uri^ GetKeyForItem(SvnAppliedMergeItem^ item) override
-			{
-				return item ? item->Uri : nullptr;
-			}
-		};
-#pragma endregion
-
 	private:
 		initonly SvnTarget^ _target;
-		initonly AppliedMergesList^ _appliedMerges;
+		initonly SvnAppliedMergesList^ _appliedMerges;
 
 	internal:
 		SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo, AprPool^ pool);
@@ -176,9 +187,9 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether MergeInfo is available for the specified target</summary>
-		property KeyedCollection<Uri^, SvnAppliedMergeItem^>^ AppliedMerges
+		property SvnAppliedMergesList^ AppliedMerges
 		{
-			KeyedCollection<Uri^, SvnAppliedMergeItem^>^ get()
+			SvnAppliedMergesList^ get()
 			{
 				return _appliedMerges;
 			}

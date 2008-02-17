@@ -24,7 +24,7 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInf
 
 	// mergeInfo: hash mapping <const char *> source URLs to an <apr_array_header_t *> list of <svn_merge_range_t>
 
-	AppliedMergesList^ list = gcnew AppliedMergesList();
+	SvnAppliedMergesList^ list = gcnew SvnAppliedMergesList();
 
 	for (apr_hash_index_t *hi = apr_hash_first(pool->Handle, mergeInfo); hi; hi = apr_hash_next(hi))
 	{
@@ -55,7 +55,7 @@ SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header
 	_mergeRanges = SvnAppliedMergeItem::CreateRangeList(mergeInfo);
 }
 
-Collection<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
+SvnMergeRangeCollection^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
 {
 	if (!rangeList)
 		throw gcnew ArgumentNullException("rangeList");
@@ -67,5 +67,10 @@ Collection<SvnMergeRange^>^ SvnAppliedMergeItem::CreateRangeList(apr_array_heade
 	for (int i = 0; i < rangeList->nelts; i++)
 		ranges[i] = gcnew SvnMergeRange(mrgRange[i]->start, mrgRange[i]->end, 0 != mrgRange[i]->inheritable);
 
-	return gcnew Collection<SvnMergeRange^>(safe_cast<IList<SvnMergeRange^>^>(ranges));
+	return gcnew SvnMergeRangeCollection(safe_cast<IList<SvnMergeRange^>^>(ranges));
+}
+
+Uri^ SvnAppliedMergesList::GetKeyForItem(SvnAppliedMergeItem^ item)
+{
+	return item ? item->Uri : nullptr;
 }
