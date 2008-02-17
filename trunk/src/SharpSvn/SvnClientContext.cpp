@@ -71,6 +71,7 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 
 void SvnClientContext::HandleClientError(SvnErrorEventArgs^ e)
 {
+	UNUSED_ALWAYS(e);
 	/* NOOP at SvnClientContext level */
 }
 
