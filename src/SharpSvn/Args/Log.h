@@ -38,6 +38,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Initializes a new <see cref="SvnLogArgs" /> instance with default properties</summary>
 		SvnLogArgs()
 		{
 			_start = SvnRevision::Head;
@@ -46,6 +47,16 @@ namespace SharpSvn {
 			//_limit = 0;
 			//_noLogChangedPaths = false;
 			//_strictHistory = false;
+		}
+
+		/// <summary>Initializes a new <see cref="SvnLogArgs" /> instance with the specified range</summary>
+		SvnLogArgs(SvnRevisionRange^ range)
+		{
+			if(!range)
+				throw gcnew ArgumentNullException("range");
+
+			Range = range;
+			_pegRevision = SvnRevision::None;
 		}
 
 		virtual property SvnClientCommandType ClientCommandType
@@ -69,6 +80,30 @@ namespace SharpSvn {
 					_pegRevision = value;
 				else
 					_pegRevision = SvnRevision::None;
+			}
+		}
+
+
+		/// <summary>Gets or sets the log range as <see cref="SvnRevisionRange" /></summary>
+		property SvnRevisionRange^ Range
+		{
+			SvnRevisionRange^ get()
+			{
+				return gcnew SvnRevisionRange(Start, End);
+			}
+
+			void set(SvnRevisionRange^ value)
+			{
+				if(!value)
+				{
+					Start = nullptr;
+					End = nullptr;
+				}
+				else
+				{
+					Start = value->StartRevision;
+					End = value->EndRevision;
+				}
 			}
 		}
 
