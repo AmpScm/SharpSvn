@@ -234,7 +234,7 @@ namespace SharpSvn {
 		void HandleClientGetCommitLog(SvnCommittingEventArgs^ e);
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
-		void HandleClientError(SvnErrorEventArgs^ e);
+		virtual void HandleClientError(SvnErrorEventArgs^ e) override;
 		void HandleProcessing(SvnProcessingEventArgs^ e);
 
 		static const char* GetEolPtr(SvnLineStyle style);
@@ -827,7 +827,9 @@ namespace SharpSvn {
 		bool Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result);
 		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ result);
 		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stream^ result);
+		bool Diff(SvnTarget^ source, SvnRevisionRange^ range, Stream^ result);
 		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result);
+		bool Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ args, Stream^ result);
 #pragma endregion
 
 	public:
