@@ -268,6 +268,6 @@
     <value>The collection must at least contain one item</value>
   </data>
   <data name="LoadingMimeTypesMapFileFailed" xml:space="preserve">
-    <value>The loading of the subversion mimetypes map file failed</value>
+    <value>The loading of the subversion mime mapping file failed</value>
   </data>
 </root>

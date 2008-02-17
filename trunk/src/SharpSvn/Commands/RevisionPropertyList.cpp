@@ -11,10 +11,9 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnPropertyCollection&)", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnGetRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnGetRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)")];
 
 bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list)
 {
