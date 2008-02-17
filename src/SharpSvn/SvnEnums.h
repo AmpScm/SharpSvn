@@ -330,13 +330,21 @@ namespace SharpSvn {
 		/// 'conflicted', so user can run 'svn resolved' later</summary>
 		Postpone		= svn_wc_conflict_choose_postpone,
 
-		/// <summary>user chooses the base file</summary>
+		/// <summary>Choose the base file</summary>
 		Base			= svn_wc_conflict_choose_base,
-		/// <summary>user chooses their file</summary>
+
+		/// <summary>Choose the incoming file</summary>
+		TheirsFull		= svn_wc_conflict_choose_theirs_full,
+
+		/// <summary>Choose the local file</summary>
+		MineFull		= svn_wc_conflict_choose_mine_full,
+
+
+		/// <summary>Choose their on all conflicts; further use auto-merged</summary>
 		Theirs			= svn_wc_conflict_choose_theirs,
-		/// <summary>user chooses own version of file</summary>
+		/// <summary>Choose local version on all conflicts; further use auto-merged</summary>
 		Mine			= svn_wc_conflict_choose_mine,
-		/// <summary>user chooses the merged-file</summary>
+		/// <summary>Choose the 'merged file'. The result file of the automatic merging; possibly with local edits</summary>
 		Merged			= svn_wc_conflict_choose_merged,
 	};
 
