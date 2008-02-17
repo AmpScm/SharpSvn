@@ -28,3 +28,13 @@ void SvnClientConfiguration::LoadSvnMimeTypes::set(bool value)
 {
 	_client->_dontLoadMimeFile = !value;
 }
+
+bool SvnClientConfiguration::EnableSharpPlink::get()
+{
+	return !_client->_dontEnablePlink;
+}
+
+void SvnClientConfiguration::EnableSharpPlink::set(bool value)
+{
+	_client->_dontEnablePlink = !value;
+}

@@ -66,8 +66,12 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 
 	_pool->Ensure();
 
-
 	return _ctx;
+}
+
+void SvnClientContext::HandleClientError(SvnErrorEventArgs^ e)
+{
+	/* NOOP at SvnClientContext level */
 }
 
 void SvnClientContext::EnsureState(SvnContextState requiredState)
@@ -160,10 +164,17 @@ void SvnClientContext::ApplyMimeTypes()
 	{
 		svn_error_t* err;
 
-		if ((err = svn_io_parse_mimetypes_file(&(CtxHandle->mimetypes_map),
-			mimetypes_file, _pool->Handle)))
+		if ((err = svn_io_parse_mimetypes_file(&(CtxHandle->mimetypes_map), mimetypes_file, _pool->Handle)))
 		{
-			throw SvnException::Create(err);
+			SvnClientConfigurationException^ exception = 
+				gcnew SvnClientConfigurationException(SharpSvnStrings::LoadingMimeTypesMapFileFailed, SvnException::Create(err));
+
+			SvnErrorEventArgs^ ee = gcnew SvnErrorEventArgs(exception);
+
+			HandleClientError(ee);
+
+			if(!ee->Cancel)
+				throw exception;
 		}
 	}
 }
@@ -190,7 +201,7 @@ void SvnClientContext::ApplyCustomSsh()
 	{
 		// Allow overriding the TortoiseSVN setting at our own level.
 		// Probably never used, but allow overriding Tortoise settings anyway
-		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\SSH", nullptr));
+		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
 	}
 	catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
 	{ customSshConfig = nullptr; }
@@ -216,6 +227,9 @@ void SvnClientContext::ApplyCustomSsh()
 		svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig->Replace('\\', '/')));
 		return;
 	}
+
+	if (_dontEnablePlink)
+		return;
 
 	AprPool pool(_pool);
 

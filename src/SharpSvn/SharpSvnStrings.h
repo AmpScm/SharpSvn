@@ -132,6 +132,13 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
+    ///   Looks up a localized string similar to The loading of the subversion mimetypes map file failed.
+    /// </summary>
+    internal: static property System::String^  LoadingMimeTypesMapFileFailed {
+        System::String^  get();
+    }
+    
+    /// <summary>
     ///   Looks up a localized string similar to {This line does not contain non-Utf8 characters}.
     /// </summary>
     internal: static property System::String^  NonUtf8ConvertableLine {
@@ -463,6 +470,10 @@ inline System::String^  SharpSvnStrings::IOThreadBlocked::get() {
 
 inline System::String^  SharpSvnStrings::ItemInListIsNull::get() {
     return ResourceManager->GetString(L"ItemInListIsNull", resourceCulture);
+}
+
+inline System::String^  SharpSvnStrings::LoadingMimeTypesMapFileFailed::get() {
+    return ResourceManager->GetString(L"LoadingMimeTypesMapFileFailed", resourceCulture);
 }
 
 inline System::String^  SharpSvnStrings::NonUtf8ConvertableLine::get() {
