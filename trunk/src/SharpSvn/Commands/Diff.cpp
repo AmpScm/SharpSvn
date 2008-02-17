@@ -91,6 +91,32 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stre
 	return Diff(source, from, to, gcnew SvnDiffArgs(), result);
 }
 
+bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, Stream^ result)
+{
+	if (!source)
+		throw gcnew ArgumentNullException("source");
+	else if(!range)
+		throw gcnew ArgumentNullException("range");
+	else if(!result)
+		throw gcnew ArgumentNullException("result");
+
+	return Diff(source, range, gcnew SvnDiffArgs(), result);
+}
+
+bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ args, Stream^ result)
+{
+	if (!source)
+		throw gcnew ArgumentNullException("source");
+	else if(!range)
+		throw gcnew ArgumentNullException("range");
+	else if(!result)
+		throw gcnew ArgumentNullException("result");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+
+	return Diff(source, range->StartRevision, range->EndRevision, args, result);
+}
+
 bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result)
 {
 	if (!source)
@@ -101,6 +127,8 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 		throw gcnew ArgumentNullException("to");
 	else if(!result)
 		throw gcnew ArgumentNullException("result");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
