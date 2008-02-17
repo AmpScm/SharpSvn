@@ -825,10 +825,8 @@ namespace SharpSvn {
 #pragma region // Diff Client Command
 		/// <overloads>Retrieves the differences between two revisions or paths (<c>svn diff</c>)</overloads>
 		bool Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result);
-		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ result);
-		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stream^ result);
+		bool Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ result);		
 		bool Diff(SvnTarget^ source, SvnRevisionRange^ range, Stream^ result);
-		bool Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result);
 		bool Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ args, Stream^ result);
 #pragma endregion
 

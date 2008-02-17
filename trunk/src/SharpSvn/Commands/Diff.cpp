@@ -38,6 +38,8 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 		throw gcnew ArgumentNullException("from");
 	else if(!to)
 		throw gcnew ArgumentNullException("to");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
 	else if(!result)
 		throw gcnew ArgumentNullException("result");
 
@@ -77,20 +79,6 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 	return args->HandleResult(this, r);
 }
 
-bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, Stream^ result)
-{
-	if (!source)
-		throw gcnew ArgumentNullException("source");
-	else if(!from)
-		throw gcnew ArgumentNullException("from");
-	else if(!to)
-		throw gcnew ArgumentNullException("to");
-	else if(!result)
-		throw gcnew ArgumentNullException("result");
-
-	return Diff(source, from, to, gcnew SvnDiffArgs(), result);
-}
-
 bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, Stream^ result)
 {
 	if (!source)
@@ -114,22 +102,6 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return Diff(source, range->StartRevision, range->EndRevision, args, result);
-}
-
-bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnDiffArgs^ args, Stream^ result)
-{
-	if (!source)
-		throw gcnew ArgumentNullException("source");
-	else if(!from)
-		throw gcnew ArgumentNullException("from");
-	else if(!to)
-		throw gcnew ArgumentNullException("to");
-	else if(!result)
-		throw gcnew ArgumentNullException("result");
-	else if(!args)
-		throw gcnew ArgumentNullException("args");
-
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
@@ -138,8 +110,8 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevision^ from, SvnRevision^ to, SvnD
 	AprStreamFile err(gcnew System::IO::MemoryStream(), %pool);
 
 	svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
-	svn_opt_revision_t fromRev = from->ToSvnRevision();
-	svn_opt_revision_t toRev = to->ToSvnRevision();
+	svn_opt_revision_t fromRev = range->StartRevision->ToSvnRevision();
+	svn_opt_revision_t toRev = range->EndRevision->ToSvnRevision();
 
 	ICollection<String^>^ diffArgs = args->DiffArguments;
 
