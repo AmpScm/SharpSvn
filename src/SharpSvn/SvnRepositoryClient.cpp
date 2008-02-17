@@ -27,17 +27,17 @@ SvnRepositoryClient::~SvnRepositoryClient()
 {
 }
 
-String^ SvnRepositoryClient::FindRepositoryRoot(String^ path)
+String^ SvnRepositoryClient::FindRepositoryRoot(Uri^ repositoryUri)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+	if (!repositoryUri)
+		throw gcnew ArgumentNullException("repositoryUri");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 
 	AprPool pool(%_pool);
 
 	const char* root = svn_repos_find_root_path(
-		pool.AllocPath(path),
+		pool.AllocCanonical(repositoryUri->ToString()),
 		pool.Handle);
 
 	return root ? Utf8_PtrToString(root) : nullptr;

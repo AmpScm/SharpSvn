@@ -11,6 +11,10 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
+
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SharpSvn.SvnClientException.#.ctor(svn_error_t*)")];
+[module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SharpSvn.SvnClientConfigurationException.#.ctor(svn_error_t*)")];
+
 #define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
 
 static const int _abusedErrorCode = SVN_ERR_TEST_FAILED; // Used for plugging in managed exceptions; this ID is an implementation detail

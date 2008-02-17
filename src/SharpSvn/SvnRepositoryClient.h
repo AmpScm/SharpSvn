@@ -30,7 +30,7 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Helper which allows splitting file:/// uri's in the repository root and the file within</summary>
-		String^ FindRepositoryRoot(String^ path);
+		String^ FindRepositoryRoot(Uri^ repositoryUri);
 
 		/// <summary>Creates a default repository at the specified local path</summary>
 		void CreateRepository(String^ repositoryPath);

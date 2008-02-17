@@ -27,7 +27,7 @@ bool SvnClient::Unlock(String^ target)
 	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if(!IsNotUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
