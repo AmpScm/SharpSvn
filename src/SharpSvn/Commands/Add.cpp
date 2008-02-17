@@ -37,8 +37,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-
-	EnsureState(SvnContextState::ConfigLoaded);
+	EnsureState(SvnContextState::ConfigLoaded, SvnExtendedState::MimeTypesLoaded);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 

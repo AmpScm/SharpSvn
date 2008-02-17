@@ -675,6 +675,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClientConfiguration.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnClientContext.cpp"
 					>
 				</File>

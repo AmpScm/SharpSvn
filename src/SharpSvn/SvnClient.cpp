@@ -245,7 +245,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 		else if(ea->LogMessage)
 			*log_msg = tmpPool->AllocUnixString(ea->LogMessage);
-		else if(client->Configuration->LogMessageRequired)
+		else if(!client->_noLogMessageRequired)
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
 		else
 			*log_msg = tmpPool->AllocString("");
@@ -431,16 +431,6 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 		svn_error_clear(err);
 
 	return nullptr;
-}
-
-
-bool SvnClientConfiguration::LogMessageRequired::get()
-{
-	return !_client->_noLogMessageRequired;
-}
-void SvnClientConfiguration::LogMessageRequired::set(bool value)
-{
-	_client->_noLogMessageRequired = !value;
 }
 
 SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)

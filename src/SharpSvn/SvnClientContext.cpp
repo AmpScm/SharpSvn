@@ -127,6 +127,47 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 	}
 }
 
+void SvnClientContext::EnsureState(SvnContextState requiredState, SvnExtendedState xState)
+{
+	EnsureState(requiredState);
+
+	if (0 == (int)(xState & ~_xState))
+		return; // No changes to apply
+
+	if (0 != (int)((xState & ~_xState) & SvnExtendedState::MimeTypesLoaded))
+		ApplyMimeTypes();
+}
+
+void SvnClientContext::ApplyMimeTypes()
+{
+	if (0 != (int)(_xState & SvnExtendedState::MimeTypesLoaded))
+		return;
+
+	_xState = _xState | SvnExtendedState::MimeTypesLoaded;
+
+	// The following code matches those in subversion/subversion/main.c
+	// Note: We allocate everything in the context pool
+
+	svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
+
+	const char *mimetypes_file;
+
+	svn_config_get(cfg, &mimetypes_file,
+		SVN_CONFIG_SECTION_MISCELLANY,
+		SVN_CONFIG_OPTION_MIMETYPES_FILE, FALSE);
+
+	if (mimetypes_file && *mimetypes_file)
+	{
+		svn_error_t* err;
+
+		if ((err = svn_io_parse_mimetypes_file(&(CtxHandle->mimetypes_map),
+			mimetypes_file, _pool->Handle)))
+		{
+			throw SvnException::Create(err);
+		}
+	}
+}
+
 void SvnClientContext::ApplyCustomRemoteConfig()
 {
 	// Look for a custom SSH client; Windows most common SVN client uses their own setting, so we should to :(
