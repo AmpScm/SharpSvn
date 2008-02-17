@@ -290,7 +290,6 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_NO_REPOS_UUID:
 		case SVN_ERR_RA_UNSUPPORTED_ABI_VERSION:
 		case SVN_ERR_RA_NOT_LOCKED:
-		case SVN_ERR_RA_UNKNOWN_CAPABILITY:
 		case SVN_ERR_RA_PARTIAL_REPLAY_NOT_SUPPORTED:
 			return gcnew SvnRepositoryIOException(error);
 
@@ -403,10 +402,10 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_VERSION_MISMATCH:
 		case SVN_ERR_MERGEINFO_PARSE_ERROR:
 		case SVN_ERR_REVNUM_PARSE_FAILURE:
+		case SVN_ERR_RESERVED_FILENAME_SPECIFIED:
+		case SVN_ERR_UNKNOWN_CAPABILITY:
 			// TODO: Split out
 			return gcnew SvnException(error);
-
-
 
 		default:
 			if (APR_STATUS_IS_EACCES(error->apr_err))
