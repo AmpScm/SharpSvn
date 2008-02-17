@@ -132,7 +132,7 @@ ref class SharpSvnStrings {
     }
     
     /// <summary>
-    ///   Looks up a localized string similar to The loading of the subversion mimetypes map file failed.
+    ///   Looks up a localized string similar to The loading of the subversion mime mapping file failed.
     /// </summary>
     internal: static property System::String^  LoadingMimeTypesMapFileFailed {
         System::String^  get();
