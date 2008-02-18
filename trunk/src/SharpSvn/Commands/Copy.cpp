@@ -84,7 +84,7 @@ bool SvnClient::Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, Svn
 	return args->HandleResult(this, r);
 }
 
-bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
+bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri)
 {
 	if (!sourceTarget)
 		throw gcnew ArgumentNullException("sourceTarget");
@@ -98,7 +98,7 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri)
 	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, gcnew SvnCopyArgs(), commitInfo);
 }
 
-bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri)
+bool SvnClient::RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri)
 {
 	if (!sourceTargets)
 		throw gcnew ArgumentNullException("sourceTargets");
@@ -110,7 +110,7 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 	return RemoteCopy(sourceTargets, toUri, gcnew SvnCopyArgs(), commitInfo);
 }
 
-bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
 {
 	if (!sourceTarget)
 		throw gcnew ArgumentNullException("sourceTarget");
@@ -120,7 +120,7 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnComm
 	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, gcnew SvnCopyArgs(), commitInfo);
 }
 
-bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
 {
 	if (!sourceTargets)
 		throw gcnew ArgumentNullException("sourceTargets");
@@ -130,7 +130,7 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 	return RemoteCopy(sourceTargets, toUri, gcnew SvnCopyArgs(), commitInfo);
 }
 
-bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args)
+bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args)
 {
 	if (!sourceTarget)
 		throw gcnew ArgumentNullException("sourceTarget");
@@ -143,7 +143,7 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ 
 	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, args, commitInfo);
 }
 
-bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args)
+bool SvnClient::RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args)
 {
 	if (!sourceTargets)
 		throw gcnew ArgumentNullException("sourceTargets");
@@ -156,7 +156,7 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 	return RemoteCopy(sourceTargets, toUri, args, commitInfo);
 }
 
-bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
 	if (!sourceTarget)
 		throw gcnew ArgumentNullException("sourceTarget");
@@ -169,7 +169,7 @@ bool SvnClient::RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ 
 }
 
 
-bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo)
 {
 	if (!sourceTargets)
 		throw gcnew ArgumentNullException("sourceTargets");
@@ -179,6 +179,17 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		throw gcnew ArgumentNullException("args");
 	else if(!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
+
+	bool isFirst = false;
+	bool isLocal = false;
+
+	for each(SvnTarget^ target in sourceTargets)
+	{
+		if (isFirst)
+			isLocal = (nullptr != dynamic_cast<SvnPathTarget^>(target));
+		else if (isLocal != (nullptr != dynamic_cast<SvnPathTarget^>(target)))
+			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath);
+	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);

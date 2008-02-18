@@ -630,14 +630,14 @@ namespace SharpSvn {
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
 		bool Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, SvnCopyArgs^ args);
 		/// <overloads>Duplicate something in repository, remembering history (<c>svn copy</c>)</overloads>
-		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri);
-		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri);
-		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
-		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
-		bool RemoteCopy(SvnUriTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri);
+		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri);
+		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
+		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
+		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
 #pragma endregion
 
 	public:
