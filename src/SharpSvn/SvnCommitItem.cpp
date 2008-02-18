@@ -10,6 +10,21 @@
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
+SvnCommitInfo^ SvnCommitInfo::Create(SvnClient^ client, SvnClientArgs^ args, const svn_commit_info_t *commitInfo, AprPool^ pool)
+{
+	if (!client)
+		throw gcnew ArgumentNullException("client");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+	else if (!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	if(!commitInfo || (commitInfo->revision <= 0L))
+		return nullptr;
+
+	return gcnew SvnCommitInfo(commitInfo, pool);
+}
+
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo)
 {
 	if (!commitItemInfo)

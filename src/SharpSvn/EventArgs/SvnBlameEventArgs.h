@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-public ref class SvnBlameEventArgs : public SvnCancelEventArgs
+	public ref class SvnBlameEventArgs : public SvnCancelEventArgs
 	{
 		initonly __int64 _revision;
 		initonly __int64 _lineNr;
@@ -32,10 +32,6 @@ public ref class SvnBlameEventArgs : public SvnCancelEventArgs
 		{
 			if (!pool)
 				throw gcnew ArgumentNullException("pool");
-			else if(!author)
-				throw gcnew ArgumentNullException("author");
-			else if(!date)
-				throw gcnew ArgumentNullException("date");
 			else if(!line)
 				throw gcnew ArgumentNullException("line");
 
@@ -45,10 +41,18 @@ public ref class SvnBlameEventArgs : public SvnCancelEventArgs
 			_pcLine = line;
 
 			apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
-			svn_error_t *err = svn_time_from_cstring(&when, date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 
-			if (!err)
-				_date = SvnBase::DateTimeFromAprTime(when);
+			svn_error_t *err;
+
+			if(date)
+			{
+				err = svn_time_from_cstring(&when, date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
+
+				if (!err)
+					_date = SvnBase::DateTimeFromAprTime(when);
+			}
+			else
+				_date = DateTime::MinValue;
 
 			_mergedRevision = merged_revision;
 			_pcMergedAuthor = merged_author;
@@ -80,7 +84,7 @@ public ref class SvnBlameEventArgs : public SvnCancelEventArgs
 			}
 		}
 
-		property DateTime Date
+		property DateTime Time
 		{
 			DateTime get()
 			{

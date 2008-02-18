@@ -105,7 +105,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 	else
 		switch(args->Revision->RevisionType)
 	{
-		case SvnRevisionType::Date:
+		case SvnRevisionType::Time:
 		case SvnRevisionType::Number:
 		case SvnRevisionType::Head:
 			break;

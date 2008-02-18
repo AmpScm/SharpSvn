@@ -61,7 +61,7 @@ namespace SharpSvn {
 
 		SvnRevision(DateTime date)
 		{
-			_type = SvnRevisionType::Date;
+			_type = SvnRevisionType::Time;
 			_value = date.ToBinary();
 		}
 
@@ -73,7 +73,7 @@ namespace SharpSvn {
 				return "";
 			case SvnRevisionType::Number:
 				return _value.ToString(System::Globalization::CultureInfo::InvariantCulture);
-			case SvnRevisionType::Date:
+			case SvnRevisionType::Time:
 				return "{" + DateTime(_value).ToString("s", System::Globalization::CultureInfo::InvariantCulture) + "}";
 			case SvnRevisionType::Committed:
 				return "COMMITTED";
@@ -109,11 +109,11 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime Date
+		property DateTime Time
 		{
 			DateTime get()
 			{
-				if (_type == SvnRevisionType::Date)
+				if (_type == SvnRevisionType::Time)
 					return DateTime(_value);
 
 				return DateTime::MinValue;
@@ -142,7 +142,7 @@ namespace SharpSvn {
 			case SvnRevisionType::Head:
 				return true;
 			case SvnRevisionType::Number:
-			case SvnRevisionType::Date:
+			case SvnRevisionType::Time:
 				return _value == other->_value;
 			default:
 				return false;

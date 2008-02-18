@@ -159,18 +159,21 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	AprPool pool(%_pool);
 
 	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
-	svn_commit_info_t* commit_info = nullptr;
+
+	svn_commit_info_t* commitInfoPtr = nullptr;
 
 	svn_error_t *r = svn_client_delete3(
-		&commit_info,
+		&commitInfoPtr,
 		aprPaths->Handle,
 		args->Force,
 		args->KeepLocal,
 		CtxHandle,
 		pool.Handle);
 
-	if (commit_info)
-		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+	if (commitInfoPtr)
+		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+	else
+		commitInfo = nullptr;
 
 	return args->HandleResult(this, r);
 }

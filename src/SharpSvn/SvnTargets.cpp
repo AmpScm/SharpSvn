@@ -35,7 +35,7 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 		return Head;
 	case SvnRevisionType::Number:
 		return gcnew SvnRevision(revData->value.number);
-	case SvnRevisionType::Date:
+	case SvnRevisionType::Time:
 		// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
 		return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
 	default:
@@ -55,7 +55,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 	case SvnRevisionType::Number:
 		r.value.number = (svn_revnum_t)_value;
 		break;
-	case SvnRevisionType::Date:
+	case SvnRevisionType::Time:
 		{
 			r.value.date = SvnBase::AprTimeFromDateTime(DateTime::FromBinary(_value));
 		}

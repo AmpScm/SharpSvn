@@ -13,6 +13,8 @@ namespace SharpSvn {
 	using System::Collections::Generic::IList;
 
 	ref class SvnCommitItem;
+	ref class SvnClient;
+	ref class SvnClientArgs;
 
 	public ref class SvnCommitInfo sealed
 	{
@@ -22,6 +24,9 @@ namespace SharpSvn {
 		initonly String^ _postCommitError;
 
 	internal:
+		static SvnCommitInfo^ Create(SvnClient^ client, SvnClientArgs^ args, const svn_commit_info_t *commitInfo, AprPool^ pool);
+
+	private:
 		SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool);
 
 	public:

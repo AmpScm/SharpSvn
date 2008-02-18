@@ -100,7 +100,7 @@ namespace SharpSvn {
 	{
 		None		= svn_opt_revision_unspecified,
 		Number		= svn_opt_revision_number,
-		Date		= svn_opt_revision_date,
+		Time		= svn_opt_revision_date,
 		Committed	= svn_opt_revision_committed,
 		Previous	= svn_opt_revision_previous,
 		Base		= svn_opt_revision_base,

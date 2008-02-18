@@ -116,8 +116,8 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		CtxHandle,
 		pool.Handle);
 
-	if (commitInfoPtr && !r)
-		commitInfo = gcnew SvnCommitInfo(commitInfoPtr, %pool);
+	if (commitInfoPtr)
+		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
 	else
 		commitInfo = nullptr;
 

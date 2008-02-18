@@ -69,7 +69,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	{
 	case SvnRevisionType::Number:
 	case SvnRevisionType::Head:
-	case SvnRevisionType::Date:
+	case SvnRevisionType::Time:
 		break;
 	default:
 		// Throw the error before we allocate the unmanaged resources
