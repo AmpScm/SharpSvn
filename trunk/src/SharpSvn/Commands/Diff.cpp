@@ -48,7 +48,7 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 	AprPool pool(%_pool);
 
 	AprStreamFile out(result, %pool);
-	AprStreamFile err(gcnew System::IO::MemoryStream(), %pool);
+	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
 
 	svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 	svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
