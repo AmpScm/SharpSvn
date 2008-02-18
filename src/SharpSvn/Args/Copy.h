@@ -9,8 +9,8 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and
-	/// <see cref="SvnClient::RemoteCopy(SvnUriTarget^,Uri^,SvnCopyArgs^)" /></summary>
+	/// <summary>Extended Parameter container of SvnClient.Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and
+	/// <see cref="SvnClient::RemoteCopy(SvnTarget^,Uri^,SvnCopyArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCopyArgs : public SvnClientArgsWithCommit
 	{
