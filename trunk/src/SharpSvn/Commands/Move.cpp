@@ -216,7 +216,10 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 		CtxHandle,
 		pool.Handle);
 
-	commitInfo = commitInfoPtr ? gcnew SvnCommitInfo(commitInfoPtr, %pool) : nullptr;
+	if (commitInfoPtr)
+		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+	else
+		commitInfo = nullptr;
 
 	return args->HandleResult(this, r);
 }

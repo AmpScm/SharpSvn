@@ -17,6 +17,7 @@ namespace SharpSvn {
 	public ref class SvnClientArgs abstract
 	{
 		bool _noThrowOnError;
+		bool _noThrowOnCancel;
 		SvnException^ _exception;
 
 	public:
@@ -78,6 +79,23 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noThrowOnError = !value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
+		/// If an exception would occur, the method returns false and the <see cref="Exception" /> property
+		/// is set to the exception which would have been throw.
+		/// </summary>
+		property bool ThrowOnCancel
+		{
+			bool get()
+			{
+				return !_noThrowOnCancel;
+			}
+			void set(bool value)
+			{
+				_noThrowOnCancel = !value;
 			}
 		}
 

@@ -61,7 +61,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 	switch(args->Revision->RevisionType)
 	{
 		case SvnRevisionType::None: // Translated to head
-		case SvnRevisionType::Date:
+		case SvnRevisionType::Time:
 		case SvnRevisionType::Number:
 		case SvnRevisionType::Head:
 			break;

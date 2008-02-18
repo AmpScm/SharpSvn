@@ -40,7 +40,9 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 		}
 	}
 
-	if (ThrowOnError)
+	if(!ThrowOnCancel && err == SVN_ERR_CANCELLED)
+		return false;
+	else if (ThrowOnError)
 		throw _exception;
 	else
 		return false;

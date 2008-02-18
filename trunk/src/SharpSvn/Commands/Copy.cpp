@@ -184,10 +184,10 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	svn_commit_info_t* pInfo = nullptr;
+	svn_commit_info_t* commitInfoPtr = nullptr;
 
 	svn_error_t *r = svn_client_copy4(
-		&pInfo,
+		&commitInfoPtr,
 		AllocCopyArray(sourceTargets, %pool),
 		pool.AllocCanonical(toUri->ToString()),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
@@ -195,8 +195,8 @@ bool SvnClient::RemoteCopy(ICollection<SvnUriTarget^>^ sourceTargets, Uri^ toUri
 		CtxHandle,
 		pool.Handle);
 
-	if (pInfo)
-		commitInfo = gcnew SvnCommitInfo(pInfo, %pool);
+	if (commitInfoPtr)
+		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
 	else
 		commitInfo = nullptr;
 

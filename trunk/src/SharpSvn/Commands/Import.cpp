@@ -135,10 +135,10 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	svn_commit_info_t *commit_info = nullptr;
+	svn_commit_info_t *commitInfoPtr = nullptr;
 
 	svn_error_t *r = svn_client_import3(
-		&commit_info,
+		&commitInfoPtr,
 		pool.AllocPath(path),
 		pool.AllocCanonical(target->ToString()),
 		(svn_depth_t)args->Depth,
@@ -147,8 +147,10 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		CtxHandle,
 		pool.Handle);
 
-	if (commit_info)
-		commitInfo = gcnew SvnCommitInfo(commit_info, %pool);
+	if (commitInfoPtr)
+		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+	else
+		commitInfo = nullptr;
 
 	return args->HandleResult(this, r);
 }

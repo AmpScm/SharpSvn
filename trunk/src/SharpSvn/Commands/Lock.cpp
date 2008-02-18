@@ -97,55 +97,21 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
-
-	int i = 0;
-	bool allUri = false;
-	bool checked = false;
-	for each (String^ target in targets)
+	for each(String^ target in targets)
 	{
 		if (String::IsNullOrEmpty(target))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-
-		bool isUri = IsNotUri(target);
-		if (checked && (isUri != allUri))
-			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "targets");
-		else
-		{
-			checked = true;
-			allUri = isUri;
-		}
-
-		if (isUri)
-		{
-			Uri^ uri;
-
-			if (!Uri::TryCreate(target, UriKind::Absolute, uri))
-				throw gcnew ArgumentException(SharpSvnStrings::InvalidUri, "targets");
-			else if(!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
-
-			targetStrings[i++] = uri->ToString();
-		}
-		else
-			targetStrings[i++] = target;
+		else if(!IsNotUri(target))
+			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targets");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+	AprArray<String^, AprCStrPathMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrPathMarshaller^>(targets, %pool);
 
-
-	svn_error_t* r = svn_client_lock(
-		aprTargets->Handle,
-		pool.AllocUnixString(args->Comment),
-		args->StealLock,
-		CtxHandle,
-		pool.Handle);
-
-	return args->HandleResult(this, r);
+	return LockInternal(aprTargets, args, %pool);
 }
 
 bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
@@ -154,7 +120,6 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 		throw gcnew ArgumentNullException("targets");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-
 
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
@@ -175,12 +140,25 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 
 	AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
+	return LockInternal(aprTargets, args, %pool);
+}
+
+generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
+bool SvnClient::LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^ args, AprPool^ pool)
+{
+	if(!items)
+		throw gcnew ArgumentNullException("items");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
 	svn_error_t* r = svn_client_lock(
-		aprTargets->Handle,
-		pool.AllocString(args->Comment),
+		items->Handle,
+		pool->AllocString(args->Comment),
 		args->StealLock,
 		CtxHandle,
-		pool.Handle);
+		pool->Handle);
 
 	return args->HandleResult(this, r);
 }

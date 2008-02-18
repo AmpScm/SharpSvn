@@ -671,6 +671,11 @@ namespace SharpSvn {
 		bool Lock(Uri^ target, SvnLockArgs^ args);
 		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
 		bool Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args);
+		
+	private:
+		generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
+		bool LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^ args, AprPool^ pool);
+			
 #pragma endregion
 
 	public:
@@ -685,6 +690,10 @@ namespace SharpSvn {
 		bool Unlock(Uri^ target, SvnUnlockArgs^ args);
 		bool Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args);
 		bool Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args);
+
+	private:
+		generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
+		bool UnlockInternal(AprArray<String^, TMarshaller>^ items, SvnUnlockArgs^ args, AprPool^ pool);			
 #pragma endregion
 
 	public:
