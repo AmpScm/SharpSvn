@@ -180,13 +180,16 @@ bool SvnClient::RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, S
 	else if(!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	bool isFirst = false;
+	bool isFirst = true;
 	bool isLocal = false;
 
 	for each(SvnTarget^ target in sourceTargets)
 	{
 		if (isFirst)
+		{
 			isLocal = (nullptr != dynamic_cast<SvnPathTarget^>(target));
+			isFirst = false;
+		}
 		else if (isLocal != (nullptr != dynamic_cast<SvnPathTarget^>(target)))
 			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath);
 	}

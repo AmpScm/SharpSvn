@@ -21,6 +21,8 @@ namespace SharpSvn {
 		String^ _relativeFrom;
 		SvnCommandLineArgumentCollection^ _diffArguments;
 		SvnChangeListCollection^ _changelists;
+		Stream^ _errorStream;
+
 	public:
 		SvnDiffArgs()
 		{
@@ -129,6 +131,18 @@ namespace SharpSvn {
 				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
+			}
+		}
+
+		property Stream^ ErrorStream
+		{
+			Stream^ get()
+			{
+				return _errorStream;
+			}
+			void set(Stream^ value)
+			{
+				_errorStream = value;
 			}
 		}
 	};
