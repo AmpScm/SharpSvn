@@ -1,4 +1,5 @@
 // $Id$
+// Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
 using System.Diagnostics;
