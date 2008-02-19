@@ -48,6 +48,10 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib, Version=0.85.4.369, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\imports\release\lib-AnyCPU\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.4.0.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\imports\release\lib-AnyCPU\nunit.framework.dll</HintPath>
@@ -57,6 +61,51 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\AddTest.cs" />
+    <Compile Include="Commands\AuthenticationTest.cs" />
+    <Compile Include="Commands\BlameTest.cs" />
+    <Compile Include="Commands\CheckOutTest.cs" />
+    <Compile Include="Commands\CleanUpTest.cs" />
+    <Compile Include="Commands\CommitTest.cs" />
+    <Compile Include="Commands\CopyTest.cs" />
+    <Compile Include="Commands\CreateDirectoryTest.cs" />
+    <Compile Include="Commands\DeleteTest.cs" />
+    <Compile Include="Commands\DiffTest.cs" />
+    <Compile Include="Commands\ExceptionTest.cs" />
+    <Compile Include="Commands\ExportTest.cs" />
+    <Compile Include="Commands\GetPropertyTest.cs" />
+    <Compile Include="Commands\GetRevisionPropertyTest.cs" />
+    <Compile Include="Commands\ImportTest.cs" />
+    <Compile Include="Commands\ListTest.cs" />
+    <Compile Include="Commands\LockTest.cs" />
+    <Compile Include="Commands\LogTest.cs" />
+    <Compile Include="Commands\MergeTest.cs" />
+    <Compile Include="Commands\MoveTest.cs" />
+    <Compile Include="Commands\PropertyListTest.cs" />
+    <Compile Include="Commands\RelocateTest.cs" />
+    <Compile Include="Commands\ResolvedTest.cs" />
+    <Compile Include="Commands\RevertTest.cs" />
+    <Compile Include="Commands\RevisionPropertyListTest.cs" />
+    <Compile Include="Commands\RevisionTest.cs" />
+    <Compile Include="Commands\SetPropertyTest.cs" />
+    <Compile Include="Commands\SetRevisionPropertyTest.cs" />
+    <Compile Include="Commands\StatusTest.cs" />
+    <Compile Include="Commands\SwitchTest.cs" />
+    <Compile Include="Commands\TestBase.cs" />
+    <Compile Include="Commands\UnlockTest.cs" />
+    <Compile Include="Commands\UpdateTest.cs" />
+    <Compile Include="Commands\WriteTest.cs" />
+    <Compile Include="Commands\Utils\Constants.cs" />
+    <Compile Include="Commands\Utils\delegates.cs" />
+    <Compile Include="Commands\Utils\enums.cs" />
+    <Compile Include="Commands\Utils\Msg.cs" />
+    <Compile Include="Commands\Utils\ProcessReader.cs" />
+    <Compile Include="Commands\Utils\structs.cs" />
+    <Compile Include="Commands\Utils\Win32.cs" />
+    <Compile Include="Commands\ZMiscTests.cs" />
+    <None Include="Zips\conflictwc.zip" />
+    <None Include="Zips\repos.zip" />
+    <None Include="Zips\wc.zip" />
     <Compile Include="SvnBdbTest.cs" />
     <Compile Include="SvnClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
