@@ -88,7 +88,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 
 	if (args->HandleResult(this, r))
 	{
-		result = gcnew SvnUpdateResult(resultRev);
+		result = SvnUpdateResult::Create(this, args, resultRev);
 		return true;
 	}
 	else

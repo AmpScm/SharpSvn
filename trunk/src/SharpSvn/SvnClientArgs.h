@@ -102,21 +102,21 @@ namespace SharpSvn {
 		/// <summary>
 		/// Gets the last exception thrown by a Subversion api command to which this argument was provided
 		/// </summary>
-		property SvnException^ Exception
+		property SvnException^ LastException
 		{
 			SvnException^ get()
 			{
 				return _exception;
 			}
 
-		protected public:
+		internal:
 			void set(SvnException^ value)
 			{
 				_exception = value;
 			}
 		}
 
-		property bool InvocationCanceled
+		property bool IsLastInvocationCanceled
 		{
 			bool get();
 		}

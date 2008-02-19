@@ -62,7 +62,7 @@ namespace SharpSvn {
 		SvnRevision(DateTime date)
 		{
 			_type = SvnRevisionType::Time;
-			_value = date.ToBinary();
+			_value = date.ToUniversalTime().Ticks;
 		}
 
 		virtual String^ ToString() override
@@ -74,7 +74,7 @@ namespace SharpSvn {
 			case SvnRevisionType::Number:
 				return _value.ToString(System::Globalization::CultureInfo::InvariantCulture);
 			case SvnRevisionType::Time:
-				return "{" + DateTime(_value).ToString("s", System::Globalization::CultureInfo::InvariantCulture) + "}";
+				return "{" + DateTime(_value, DateTimeKind::Utc).ToString("s", System::Globalization::CultureInfo::InvariantCulture) + "}";
 			case SvnRevisionType::Committed:
 				return "COMMITTED";
 			case SvnRevisionType::Previous:
@@ -114,7 +114,7 @@ namespace SharpSvn {
 			DateTime get()
 			{
 				if (_type == SvnRevisionType::Time)
-					return DateTime(_value);
+					return DateTime(_value, DateTimeKind::Utc);
 
 				return DateTime::MinValue;
 			}

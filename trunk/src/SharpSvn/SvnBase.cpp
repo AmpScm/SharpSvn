@@ -216,6 +216,18 @@ DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 	}
 }
 
+DateTime SvnBase::DateTimeFromAprTimeLocal(apr_time_t aprTime)
+{
+	if (aprTime == 0)
+		return DateTime::MinValue;
+	else
+	{
+		__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+
+		return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Local).ToUniversalTime();
+	}
+}
+
 apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)
 {
 	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();

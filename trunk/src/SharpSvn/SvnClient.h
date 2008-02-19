@@ -74,6 +74,7 @@ namespace SharpSvn {
 	ref class SvnRecoverRepositoryArgs;
 	ref class SvnGetWorkingCopyStateArgs;
 
+	ref class SvnCommitResult;
 	ref class SvnUpdateResult;
 	ref class SvnClientReporter;
 	ref class SvnWorkingCopyState;
@@ -252,7 +253,7 @@ namespace SharpSvn {
 		/// <summary>Performs a recursive checkout of <paramref name="url" /> to <paramref name="path" /></summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult ^% updateInfo);
+		bool CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult^% result);
 
 		/// <summary>Performs a checkout of <paramref name="url" /> to <paramref name="path" /> to the specified param</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
@@ -263,7 +264,7 @@ namespace SharpSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
+		bool CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] SvnUpdateResult^% result);
 #pragma endregion
 
 	public:
@@ -277,7 +278,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(String^ path, [Out] SvnUpdateResult ^% updateInfo);
+		bool Update(String^ path, [Out] SvnUpdateResult^% result);
 		/// <summary>Recursively updates the specified path</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -285,7 +286,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified path to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
+		bool Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% result);
 
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
@@ -294,7 +295,7 @@ namespace SharpSvn {
 		/// <summary>Recursively updates the specified paths to the latest (HEAD) revision</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Update(ICollection<String^>^ paths, [Out] SvnUpdateResult ^% updateInfo);
+		bool Update(ICollection<String^>^ paths, [Out] SvnUpdateResult^% result);
 		/// <summary>Updates the specified paths to the specified revision</summary>
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
@@ -304,7 +305,7 @@ namespace SharpSvn {
 		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		/// <returns>true if the operation succeeded; false if it did not</returns>
-		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
+		bool Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% result);
 
 #pragma endregion
 
@@ -317,13 +318,13 @@ namespace SharpSvn {
 		bool Export(SvnTarget^ from, String^ toPath);
 		/// <summary>Recursively exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		bool Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult ^% updateInfo);
+		bool Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% result);
 		/// <summary>Exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
 		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args);
 		/// <summary>Exports the specified target to the specified path</summary>
 		/// <remarks>Subversion optimizes this call if you specify a workingcopy file instead of an url</remarks>
-		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
+		bool Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] SvnUpdateResult^% result);
 #pragma endregion
 
 	public:
@@ -338,7 +339,7 @@ namespace SharpSvn {
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult ^% updateInfo);
+		bool Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult^% result);
 
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
@@ -348,7 +349,7 @@ namespace SharpSvn {
 		/// <summary>Switches a path recursively to the specified target</summary>
 		/// <exception type="SvnException">Operation failed</exception>
 		/// <exception type="ArgumentException">Parameters invalid</exception>
-		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] SvnUpdateResult ^% updateInfo);
+		bool Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] SvnUpdateResult^% result);
 #pragma endregion
 
 		/////////////////////////////////////////
@@ -510,9 +511,9 @@ namespace SharpSvn {
 		/// <overloads>Create a new directory under version control at the repository (<c>svn mkdir</c>)</overloads>
 		bool RemoteCreateDirectory(Uri^ uri);
 		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args);
-		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitResult^% result);
 		bool RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args);
-		bool RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 	public:
@@ -529,10 +530,10 @@ namespace SharpSvn {
 		/// <overloads>Remove files and directories from version control at the repository (<c>svn delete|remove</c>)</overloads>
 		bool RemoteDelete(Uri^ uri);
 		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args);
-		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitResult^% result);
 		bool RemoteDelete(ICollection<Uri^>^ uris);
 		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args);
-		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitResult^% result);
 
 #pragma endregion
 
@@ -548,7 +549,7 @@ namespace SharpSvn {
 		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
-		bool Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
+		bool Import(String^ path, Uri^ target, [Out] SvnCommitResult^% result);
 		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
@@ -556,17 +557,17 @@ namespace SharpSvn {
 		/// <summary>Performs a working copy import to the specified Uri,
 		/// by importing the root remotely, checking that out and then adding the files locally</summary>
 		/// <remarks>Implemented as an Add follwed by an obstructed checkout</remarks>
-		bool Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result);
 
 		/// <overloads>Commit an unversioned file or tree into the repository (<c>svn import</c>)</overloads>
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
 		bool RemoteImport(String^ path, Uri^ target);
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
-		bool RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteImport(String^ path, Uri^ target, [Out] SvnCommitResult^% result);
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
 		bool RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args);
 		/// <summary>Importing as the subversion api does; without creating a working directory</summary>
-		bool RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 	public:
@@ -574,13 +575,13 @@ namespace SharpSvn {
 #pragma region // Commit Client Command
 		/// <overloads>Send changes from your working copy to the repository (<c>svn commit</c>)</overloads>
 		bool Commit(String^ path);
-		bool Commit(String^ path, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(String^ path, [Out] SvnCommitResult^% result);
 		bool Commit(ICollection<String^>^ paths);
-		bool Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(ICollection<String^>^ paths, [Out] SvnCommitResult^% result);
 		bool Commit(String^ path, SvnCommitArgs^ args);
-		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitResult^% result);
 		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args);
-		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 
@@ -632,12 +633,12 @@ namespace SharpSvn {
 		/// <overloads>Duplicate something in repository, remembering history (<c>svn copy</c>)</overloads>
 		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri);
 		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri);
-		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitResult^% result);
+		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitResult^% result);
 		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
 		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
-		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
+		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 	public:
@@ -651,12 +652,12 @@ namespace SharpSvn {
 		/// <overloads>Move and/or rename something in repository, remembering history (<c>svn move</c>)</overloads>
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri);
 		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri);
-		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitResult^% result);
+		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitResult^% result);
 		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args);
 		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args);
-		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
-		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo);
+		bool RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitResult^% result);
+		bool RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 	public:

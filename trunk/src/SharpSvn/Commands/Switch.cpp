@@ -70,6 +70,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	case SvnRevisionType::Number:
 	case SvnRevisionType::Head:
 	case SvnRevisionType::Time:
+	case SvnRevisionType::None: // = Head
 		break;
 	default:
 		// Throw the error before we allocate the unmanaged resources
@@ -97,7 +98,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		CtxHandle,
 		pool.Handle);
 
-	result = gcnew SvnUpdateResult(rev);
+	result = SvnUpdateResult::Create(this, args, rev);
 
 	return args->HandleResult(this, r);
 }
