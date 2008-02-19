@@ -33,6 +33,17 @@ namespace SharpSvn.Tests.Commands
 			Client.Authenticator.Clear();
 
 			bool arrived = false;
+			SvnLogArgs a = new SvnLogArgs();
+			a.Limit = 1;
+			Assert.That(Client.Log(new Uri("svn://svn.tartarus.org/sgt/putty-0.60/misc.c"),
+				delegate(object sender, SvnLogEventArgs e)
+				{
+					arrived = true;
+				}));
+
+			Assert.That(arrived);
+
+			arrived = false;
 			Assert.That(Client.Info(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"),
 				delegate(object sender, SvnInfoEventArgs e)
 				{
