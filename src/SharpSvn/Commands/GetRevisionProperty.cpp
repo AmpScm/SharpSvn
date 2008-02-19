@@ -75,6 +75,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 
 	svn_string_t *result = nullptr;
 	svn_revnum_t set_rev = 0;
+	svn_opt_revision_t rev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head);
 
 	const char* pName = pool.AllocString(propertyName);
 
@@ -82,7 +83,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		pName,
 		&result,
 		pool.AllocString(target->TargetName),
-		target->Revision->AllocSvnRevision(%pool),
+		&rev,
 		&set_rev,
 		CtxHandle,
 		pool.Handle);

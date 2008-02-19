@@ -10,27 +10,27 @@
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Commit(System.String,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="1#")];
 
 bool SvnClient::Commit(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	SvnCommitInfo^ commitInfo = nullptr;
+	SvnCommitResult^ result = nullptr;
 
-	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
+	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), result);
 }
 
-bool SvnClient::Commit(String^ path, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Commit(String^ path, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), commitInfo);
+	return Commit(NewSingleItemCollection(path), gcnew SvnCommitArgs(), result);
 }
 
 bool SvnClient::Commit(ICollection<String^>^ paths)
@@ -38,17 +38,17 @@ bool SvnClient::Commit(ICollection<String^>^ paths)
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	SvnCommitInfo^ commitInfo = nullptr;
+	SvnCommitResult^ result = nullptr;
 
-	return Commit(paths, gcnew SvnCommitArgs(), commitInfo);
+	return Commit(paths, gcnew SvnCommitArgs(), result);
 }
 
-bool SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Commit(ICollection<String^>^ paths, [Out] SvnCommitResult^% result)
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
 
-	return Commit(paths, gcnew SvnCommitArgs(), commitInfo);
+	return Commit(paths, gcnew SvnCommitArgs(), result);
 }
 
 bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
@@ -58,19 +58,19 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo = nullptr;
+	SvnCommitResult^ result = nullptr;
 
-	return Commit(NewSingleItemCollection(path), args, commitInfo);
+	return Commit(NewSingleItemCollection(path), args, result);
 }
 
-bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return Commit(NewSingleItemCollection(path), args, commitInfo);
+	return Commit(NewSingleItemCollection(path), args, result);
 }
 
 bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
@@ -80,12 +80,12 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo = nullptr;
+	SvnCommitResult^ result = nullptr;
 
-	return Commit(paths, args, commitInfo);
+	return Commit(paths, args, result);
 }
 
-bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -117,9 +117,9 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		pool.Handle);
 
 	if (commitInfoPtr)
-		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
 	else
-		commitInfo = nullptr;
+		result = nullptr;
 
 	return args->HandleResult(this, r);
 }

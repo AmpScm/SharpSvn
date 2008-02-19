@@ -112,4 +112,12 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnCommandResult abstract
+	{
+	internal:
+		SvnCommandResult()
+		{}
+	};
+
 }

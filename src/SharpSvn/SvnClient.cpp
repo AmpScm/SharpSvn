@@ -440,7 +440,7 @@ SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)
 	else if(client->_currentArgs)
 		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
-	args->Exception = nullptr;
+	args->LastException = nullptr;
 	client->_currentArgs = args;
 	_client = client;
 	try

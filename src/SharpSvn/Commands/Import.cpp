@@ -12,10 +12,10 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.Import(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteImport(System.String,System.Uri,SharpSvn.SvnImportArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="3#")];
 
 bool SvnClient::Import(String^ path, Uri^ target)
 {
@@ -27,14 +27,14 @@ bool SvnClient::Import(String^ path, Uri^ target)
 	return Import(path, target, gcnew SvnImportArgs());
 }
 
-bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	return Import(path, target, gcnew SvnImportArgs(), commitInfo);
+	return Import(path, target, gcnew SvnImportArgs(), result);
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
@@ -46,12 +46,12 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo;
+	SvnCommitResult^ result;
 
-	return Import(path, target, args, commitInfo);
+	return Import(path, target, args, result);
 }
 
-bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -62,7 +62,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 	else if(!SvnBase::IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
-	if (RemoteImport(path, target, args, commitInfo))
+	if (RemoteImport(path, target, args, result))
 	{
 		SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
 		aa->ThrowOnError = args->ThrowOnError;
@@ -77,7 +77,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 		}
 		finally
 		{
-			args->Exception = aa->Exception;
+			args->LastException = aa->LastException;
 		}
 	}
 	else
@@ -94,14 +94,14 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target)
 	return RemoteImport(path, target, gcnew SvnImportArgs());
 }
 
-bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!target)
 		throw gcnew ArgumentNullException("target");
 
-	return RemoteImport(path, target, gcnew SvnImportArgs(), commitInfo);
+	return RemoteImport(path, target, gcnew SvnImportArgs(), result);
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
@@ -113,12 +113,12 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo;
+	SvnCommitResult^ result;
 
-	return RemoteImport(path, target, args, commitInfo);
+	return RemoteImport(path, target, args, result);
 }
 
-bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -129,7 +129,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	else if(!SvnBase::IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
-	commitInfo = nullptr;
+	result = nullptr;
 
 	EnsureState(SvnContextState::AuthorizationInitialized, SvnExtendedState::MimeTypesLoaded);
 	ArgsStore store(this, args);
@@ -148,9 +148,9 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		pool.Handle);
 
 	if (commitInfoPtr)
-		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
 	else
-		commitInfo = nullptr;
+		result = nullptr;
 
 	return args->HandleResult(this, r);
 }

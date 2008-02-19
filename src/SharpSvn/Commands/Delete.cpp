@@ -11,8 +11,8 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteDelete(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnDeleteArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteDelete(System.Uri,SharpSvn.SvnDeleteArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteDelete(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnDeleteArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteDelete(System.Uri,SharpSvn.SvnDeleteArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
 
 bool SvnClient::Delete(String^ path)
 {
@@ -63,10 +63,10 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 	AprPool pool(%_pool);
 
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
-	svn_commit_info_t* commitInfo = nullptr;
+	svn_commit_info_t* result = nullptr;
 
 	svn_error_t *r = svn_client_delete3(
-		&commitInfo,
+		&result,
 		aprPaths->Handle,
 		args->Force,
 		args->KeepLocal,
@@ -99,7 +99,7 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args)
 	return RemoteDelete(NewSingleItemCollection(uri), args);
 }
 
-bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
@@ -108,16 +108,17 @@ bool SvnClient::RemoteDelete(Uri^ uri, SvnDeleteArgs^ args, [Out] SvnCommitInfo^
 	else if(!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-	return RemoteDelete(NewSingleItemCollection(uri), args, commitInfo);
+	return RemoteDelete(NewSingleItemCollection(uri), args, result);
 }
 
 bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris)
 {
 	if (!uris)
 		throw gcnew ArgumentNullException("uris");
-	SvnCommitInfo^ commitInfo;
 
-	return RemoteDelete(uris, gcnew SvnDeleteArgs(), commitInfo);
+	SvnCommitResult^ result;
+
+	return RemoteDelete(uris, gcnew SvnDeleteArgs(), result);
 }
 
 
@@ -127,19 +128,19 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	SvnCommitInfo^ commitInfo;
+	SvnCommitResult^ result;
 
-	return RemoteDelete(uris, args, commitInfo);
+	return RemoteDelete(uris, args, result);
 }
 
-bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	commitInfo = nullptr;
+	result = nullptr;
 
 	array<String^>^ uriData = gcnew array<String^>(uris->Count);
 	int i = 0;
@@ -171,9 +172,9 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 		pool.Handle);
 
 	if (commitInfoPtr)
-		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
 	else
-		commitInfo = nullptr;
+		result = nullptr;
 
 	return args->HandleResult(this, r);
 }

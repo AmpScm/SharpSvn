@@ -48,7 +48,7 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 		return false;
 }
 
-bool SvnClientArgs::InvocationCanceled::get()
+bool SvnClientArgs::IsLastInvocationCanceled::get()
 {
 	return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
 }

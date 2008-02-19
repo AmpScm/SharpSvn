@@ -11,10 +11,10 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Collections.Generic.ICollection`1<System.Uri>,System.Uri,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Collections.Generic.ICollection`1<System.Uri>,System.Uri,SharpSvn.SvnMoveArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnMoveArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Collections.Generic.ICollection`1<System.Uri>,System.Uri,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Collections.Generic.ICollection`1<System.Uri>,System.Uri,SharpSvn.SvnMoveArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteMove(System.Uri,System.Uri,SharpSvn.SvnMoveArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="3#")];
 
 bool SvnClient::Move(String^ sourcePath, String^ toPath)
 {
@@ -96,9 +96,9 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri)
 	else if(!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	SvnCommitInfo^ commitInfo = nullptr;
+	SvnCommitResult^ result = nullptr;
 
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), commitInfo);
+	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
 }
 
 bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri)
@@ -110,12 +110,12 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri)
 	else if(!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	SvnCommitInfo^ commitInfo = nullptr;
+	SvnCommitResult^ result = nullptr;
 
-	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), commitInfo);
+	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
 }
 
-bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitResult^% result)
 {
 	if (!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
@@ -126,17 +126,17 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitInfo^% com
 	else if(!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), commitInfo);
+	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
 }
 
-bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitResult^% result)
 {
 	if (!sourceUris)
 		throw gcnew ArgumentNullException("sourceUris");
 	else if(!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
-	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), commitInfo);
+	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
 }
 
 bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args)
@@ -148,8 +148,8 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args)
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo = nullptr;
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, commitInfo);
+	SvnCommitResult^ result = nullptr;
+	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
 }
 
 bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args)
@@ -161,11 +161,11 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo = nullptr;
-	return RemoteMove(sourceUris, toUri, args, commitInfo);
+	SvnCommitResult^ result = nullptr;
+	return RemoteMove(sourceUris, toUri, args, result);
 }
 
-bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
@@ -174,10 +174,10 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] 
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, commitInfo);
+	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
 }
 
-bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!sourceUris)
 		throw gcnew ArgumentNullException("sourceUris");
@@ -217,9 +217,9 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 		pool.Handle);
 
 	if (commitInfoPtr)
-		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
 	else
-		commitInfo = nullptr;
+		result = nullptr;
 
 	return args->HandleResult(this, r);
 }

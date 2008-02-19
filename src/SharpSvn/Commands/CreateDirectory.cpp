@@ -11,8 +11,8 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCreateDirectories(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnCreateDirectoryArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")]
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCreateDirectory(System.Uri,SharpSvn.SvnCreateDirectoryArgs,SharpSvn.SvnCommitInfo&):System.Boolean", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCreateDirectories(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnCreateDirectoryArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")]
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCreateDirectory(System.Uri,SharpSvn.SvnCreateDirectoryArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
 
 bool SvnClient::CreateDirectory(String^ path)
 {
@@ -61,10 +61,10 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 	AprPool pool(%_pool);
 
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
-	svn_commit_info_t* commitInfo = nullptr;
+	svn_commit_info_t* result = nullptr;
 
 	svn_error_t *r = svn_client_mkdir3(
-		&commitInfo,
+		&result,
 		aprPaths->Handle,
 		args->MakeParents,
 		CtxHandle,
@@ -90,12 +90,12 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args)
 	else if(!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-	SvnCommitInfo^ commitInfo;
+	SvnCommitResult^ result;
 
-	return RemoteCreateDirectory(uri, args, commitInfo);
+	return RemoteCreateDirectory(uri, args, result);
 }
 
-bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
@@ -104,7 +104,7 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [O
 	else if(!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-	return RemoteCreateDirectories(NewSingleItemCollection(uri), args, commitInfo);
+	return RemoteCreateDirectories(NewSingleItemCollection(uri), args, result);
 }
 
 bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args)
@@ -114,20 +114,20 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnCommitInfo^ commitInfo;
+	SvnCommitResult^ result;
 
-	return RemoteCreateDirectories(uris, args, commitInfo);
+	return RemoteCreateDirectories(uris, args, result);
 
 }
 
-bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitInfo^% commitInfo)
+bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirectoryArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (!uris)
 		throw gcnew ArgumentNullException("uris");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	commitInfo = nullptr;
+	result = nullptr;
 
 	array<String^>^ uriData = gcnew array<String^>(uris->Count);
 	int i = 0;
@@ -157,9 +157,9 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 		pool.Handle);
 
 	if (commitInfoPtr)
-		commitInfo = SvnCommitInfo::Create(this, args, commitInfoPtr, %pool);
+		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
 	else
-		commitInfo = nullptr;
+		result = nullptr;
 
 	return args->HandleResult(this, r);
 }

@@ -16,7 +16,7 @@ namespace SharpSvn {
 	ref class SvnClient;
 	ref class SvnClientArgs;
 
-	public ref class SvnCommitInfo sealed
+	public ref class SvnCommitResult sealed : public SvnCommandResult
 	{
 		initonly __int64 _revision;
 		initonly DateTime _date;
@@ -24,10 +24,10 @@ namespace SharpSvn {
 		initonly String^ _postCommitError;
 
 	internal:
-		static SvnCommitInfo^ Create(SvnClient^ client, SvnClientArgs^ args, const svn_commit_info_t *commitInfo, AprPool^ pool);
+		static SvnCommitResult^ Create(SvnClient^ client, SvnClientArgs^ args, const svn_commit_info_t *commitInfo, AprPool^ pool);
 
 	private:
-		SvnCommitInfo(const svn_commit_info_t *commitInfo, AprPool^ pool);
+		SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ pool);
 
 	public:
 		property __int64 Revision
