@@ -1,0 +1,98 @@
+// $Id$
+// Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
+using System;
+using System.IO;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+
+namespace SharpSvn.Tests.Commands
+{
+	/// <summary>
+	/// Tests for the Client::Checkout method
+	/// </summary>
+	[TestFixture]
+	public class DeleteTests : TestBase
+	{
+		[SetUp]
+		public override void SetUp()
+		{
+			base.SetUp();
+			this.ExtractRepos();
+			this.ExtractWorkingCopy();
+		}
+
+		[TearDown]
+		public override void TearDown()
+		{
+			base.TearDown();
+		}
+
+
+		/// <summary>
+		/// Tests deleting files in a working copy
+		/// </summary>
+		/// //TODO: Implement the variable admAccessBaton
+		[Test]
+		public void TestDeleteWCFiles()
+		{
+			string path1 = Path.Combine(this.WcPath, "Form.cs");
+			string path2 = Path.Combine(this.WcPath, "AssemblyInfo.cs");
+
+			SvnDeleteArgs a = new SvnDeleteArgs();
+
+			Assert.That(Client.Delete(new string[] { path1, path2 }, a));
+
+			Assert.IsTrue(!File.Exists(path1), "File not deleted");
+			Assert.IsTrue(!File.Exists(path2), "File not deleted");
+
+			Assert.That(this.GetSvnStatus(path1), Is.EqualTo('D'), "File not deleted");
+			Assert.That(this.GetSvnStatus(path2), Is.EqualTo('D'), "File not deleted");
+		}
+
+		/// <summary>
+		/// Tests deleting a directory in the repository
+		/// </summary>
+		//TODO: Implement the variable admAccessBaton
+		[Test]
+		public void TestDeleteFromRepos()
+		{
+			Uri path1 = new Uri(this.ReposUrl, "doc");
+			Uri path2 = new Uri(this.ReposUrl, "Form.cs");
+
+			SvnCommitResult ci;
+			SvnDeleteArgs a = new SvnDeleteArgs();
+
+			Assert.That(Client.RemoteDelete(new Uri[] { path1, path2 }, a, out ci));
+
+			String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
+			Assert.IsTrue(cmd.IndexOf("doc") == -1, "Directory wasn't deleted ");
+			Assert.IsTrue(cmd.IndexOf("Form.cs") == -1, "Directory wasn't deleted");
+
+			Assert.That(ci, Is.Not.Null, "CommitInfo is invalid");
+		}
+
+		[Test]
+		public void TestForceDelete()
+		{
+			string path = Path.Combine(this.WcPath, "Form.cs");
+
+			// modify the file
+			using (StreamWriter writer = new StreamWriter(path, true))
+			{
+				writer.WriteLine("Hi ho");
+			}
+
+			// this will throw if force doesn't work
+			SvnDeleteArgs a = new SvnDeleteArgs();
+			a.ThrowOnError = false;
+
+			Assert.That(Client.Delete(path, a), Is.False);
+
+			a.ThrowOnError = true;
+			a.Force = true;
+
+			Assert.That(Client.Delete(path, a), Is.True, "Delete failed");
+		}
+
+	}
+}
