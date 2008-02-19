@@ -14,6 +14,9 @@
 		<if test="${not file::exists('downloads/' + nunitFilename)}">
 			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
 		</if>
+		<if test="${not file::exists('download/' + sharpZipFilename)}">
+      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
+    </if>
 		<if test="${not file::exists('downloads/' + saslFilename)}">
 			<get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="downloads/${saslFilename}" />
 		</if>
@@ -35,6 +38,9 @@
 		</if>
 		<if test="${not directory::exists(nunitDir)}">
 			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />
+		</if>
+		<if test="${not directory::exists(sharpZipLibDir)}">
+			<unzip zipfile="downloads/${sharpZipFilename}" todir="${sharpZipLibDir}"  />
 		</if>
 		<if test="${not directory::exists(saslDir)}">
 			<UnTar tarfile="downloads/${saslFilename}" todir="build/${platform}" compresstype="gzip" />
