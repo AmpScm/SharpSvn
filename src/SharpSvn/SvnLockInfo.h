@@ -119,7 +119,11 @@ namespace SharpSvn {
 			}
 		}
 
-	public:
+		void Detach()
+		{
+			Detach(true);
+		}
+	protected public:
 		virtual void Detach(bool keepProperties)
 		{
 			try

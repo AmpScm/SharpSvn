@@ -193,7 +193,7 @@ namespace SharpSvn {
 			SvnMergeRange^ get();
 		}
 
-	public:
+	protected public:
 		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
 		virtual void Detach(bool keepProperties) override

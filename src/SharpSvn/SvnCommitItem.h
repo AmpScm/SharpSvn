@@ -146,6 +146,12 @@ namespace SharpSvn {
 			}
 		}
 
+		void Detach()
+		{
+			Detach(true);
+		}
+
+	protected public:
 		void Detach(bool keepProperties);
 	};
 

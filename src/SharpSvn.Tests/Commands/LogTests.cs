@@ -62,7 +62,7 @@ namespace SharpSvn.Tests.Commands
 
 		private void LogCallback(object sender, SvnLogEventArgs e)
 		{
-			e.Detach(true);
+			e.Detach();
 			this.logMessages.Add(e);
 		}
 

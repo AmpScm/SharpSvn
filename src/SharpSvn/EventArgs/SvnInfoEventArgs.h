@@ -329,7 +329,7 @@ public ref class SvnInfoEventArgs : public SvnCancelEventArgs
 			}
 		}
 
-	public:
+	protected public:
 		virtual void Detach(bool keepProperties) override
 		{
 			try
