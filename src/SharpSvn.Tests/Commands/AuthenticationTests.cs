@@ -5,206 +5,113 @@ using System.IO;
 using NUnit.Framework;
 
 using SharpSvn;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
 {
 	/// <summary>
 	/// Tests the Authentication class.
 	/// </summary>
+	[TestFixture]
 	public class AuthenticationTests : TestBase
 	{
-		/*[SetUp]
+		[SetUp]
 		public override void SetUp()
 		{
 			base.SetUp();
 			this.ExtractRepos();
-            
-		}        
+
+			_serverTrustTicked = false;
+			_userNamePasswordTicked = false;
+			_userArgs = null;
+		}
 
 		[Test]
 		public void TestSimpleProvider()
 		{
-			AuthenticationProvider simpleProvider = 
-				AuthenticationProvider.GetSimpleProvider();
-			DoTestCachingProviders( simpleProvider );
-		}
+			Client.Authenticator.Clear();
 
-		[Test]
-		public void TestWindowsSimpleProvider()
-		{
-			AuthenticationProvider winProvider = 
-				AuthenticationProvider.GetWindowsSimpleProvider();
-			DoTestCachingProviders( winProvider );
-		}
-
-		private void DoTestCachingProviders( AuthenticationProvider provider )
-		{
-			string configDir = this.FindDirName( this.GetTempFile() );
-			ClientConfig.CreateConfigDir( configDir );
-			Client client = new Client( configDir );
-			client.AuthBaton.Add( provider );
-			client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
-				new SimplePromptDelegate( this.SimplePrompt ), 1 ) );
-            
-
-			this.SetReposAuth();
-			System.Diagnostics.Process process = this.StartSvnServe( this.ReposPath );
-			try
-			{
-				DirectoryEntry[] entries;
-				// this time we should be prompted
-				entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
-					Revision.Head, Recurse.None );
-				Assert.IsTrue( this.prompted );
-				Assert.IsTrue( entries.Length > 0 );
-				this.prompted = false;
-
-				// create a new client, against the same config dir
-				client = new Client( configDir );
-				client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
-				client.AuthBaton.Add( AuthenticationProvider.GetSimplePromptProvider(
-					new SimplePromptDelegate( NullPrompt ), 1 ) );
-
-				// this should fail
-				try
+			bool arrived = false;
+			Assert.That(Client.Info(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"),
+				delegate(object sender, SvnInfoEventArgs e)
 				{
-					client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
-						Revision.Head, Recurse.None );
-					Assert.Fail( "Should have failed" );
-				}
-				catch( AuthorizationFailedException )
+					arrived = true;
+				}));
+
+
+			arrived = false;
+			Client.Authenticator.SslServerTrustHandlers += new EventHandler<SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlersAllow);
+			Assert.That(Client.List(new Uri("https://svn.apache.org/repos/asf/apr/"),
+				delegate(object sender, SvnListEventArgs e)
 				{
-					// swallow
-				}
+					arrived = true;
+				}));
 
-				// with the new baton, it should succeed
-				client = new Client( configDir );
-				client.AuthBaton.Add( provider );
+			Assert.That(arrived);
+		}
 
-				// do it once more. This will fail if the provider didn't cache
-				entries = client.List( string.Format( "svn://localhost:{0}", PortNumber ), 
-					Revision.Head, Recurse.None );
-				Assert.IsTrue( entries.Length > 0 );
-				Assert.IsFalse( this.prompted );
-			}
-			finally
-			{
-				process.CloseMainWindow();
-				System.Threading.Thread.Sleep( 500 );
-				if (!process.HasExited)
+		bool _serverTrustTicked;
+		bool _userNamePasswordTicked;
+		SvnUserNamePasswordEventArgs _userArgs;
+
+		[Test]
+		public void TestSimpleSslCert()
+		{
+			Client.Authenticator.Clear();
+			Client.Authenticator.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlers);
+			Client.Authenticator.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(Authenticator_UserNamePasswordHandlers);
+			bool arrived = false;
+			SvnInfoArgs a = new SvnInfoArgs();
+			a.ThrowOnCancel = false;
+			a.ThrowOnError = false;
+
+			Assert.That(Client.Info(new Uri("https://sharpsvn.googlecode.com/svn/trunk/"), a,
+				delegate(object sender, SvnInfoEventArgs e)
 				{
-					process.Kill();
-					process.WaitForExit();
-				}
-			}
+					arrived = true;
+				}), Is.False);
+
+			Assert.That(a.LastException, Is.Not.Null);
+			Assert.That(a.LastException, Is.InstanceOfType(typeof(SvnException)));
+			Assert.That(a.LastException.RootCause, Is.InstanceOfType(typeof(SvnAuthorizationException)));
+			Assert.That(arrived, Is.False);
+			Assert.That(_serverTrustTicked);
+			Assert.That(_userNamePasswordTicked);
+
+			Assert.That(_userArgs, Is.Not.Null);
+			Assert.That(_userArgs.InitialUserName, Is.Not.Null);
+			Assert.That(_userArgs.Realm.Contains("Google Code Subversion"));
+			Assert.That(_userArgs.RealmUri, Is.EqualTo(new Uri("https://sharpsvn.googlecode.com/")));
 		}
 
-       
-		/// <summary>
-		///  Test connecting to an SSL repository and failing.
-		/// </summary>
-		[Test]
-		public void TestSslServerPromptFail()
+		void Authenticator_UserNamePasswordHandlers(object sender, SharpSvn.Security.SvnUserNamePasswordEventArgs e)
 		{
-			this.Client.AuthBaton.Add( AuthenticationProvider.GetSslServerTrustPromptProvider( new 
-				SslServerTrustPromptDelegate( this.SslServerTrustFailCallback  ) ) );           
-
-			try
-			{
-				DirectoryEntry[] entries = 
-					this.Client.List( SSLTESTREPOS, Revision.Head, Recurse.None );
-				Assert.Fail( "Client.List should have thrown an exception" ); 
-			}
-			catch( SvnClientException )
-			{}
-
-			Assert.IsTrue( this.callbackCalled, "Callback not called" );
+			GC.KeepAlive(e.InitialUserName);
+			GC.KeepAlive(e.Realm);
+			_userArgs = e;
+			_userNamePasswordTicked = true;
+			e.Cancel = true;
+			e.Break = true;
 		}
 
-		/// <summary>
-		/// Test a successfull connection to an SSL repository.
-		/// </summary>
-		[Test]
-		public void TestSslServerPromptSuccess()
+		void Authenticator_SslServerTrustHandlers(object sender, SharpSvn.Security.SvnSslServerTrustEventArgs e)
 		{
-			this.Client.AuthBaton.Add( AuthenticationProvider.GetSslServerTrustPromptProvider( new 
-				SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
-                      
-			DirectoryEntry[] entries = 
-				this.Client.List( SSLTESTREPOS, Revision.Head, Recurse.None );
-           
-			Assert.IsTrue( entries.Length > 0, "No entries returned" );
-			Assert.IsTrue( this.callbackCalled, "Callback not called" );
+			Assert.That(e.Break, Is.False);
+			Assert.That(e.Cancel, Is.False);
+			Assert.That(e.CommonName, Is.EqualTo("*.googlecode.com"));
+			Assert.That(DateTime.Parse(e.ValidFrom), Is.LessThan(DateTime.Now));
+			Assert.That(DateTime.Parse(e.ValidUntil), Is.GreaterThan(DateTime.Now));
+			_serverTrustTicked = true;
+			e.AcceptedFailures = e.Failures;
 		}
 
-		[Test]
-		public void TestSslServerFileSuccess()
+		void Authenticator_SslServerTrustHandlersAllow(object sender, SharpSvn.Security.SvnSslServerTrustEventArgs e)
 		{
-			this.Client.AuthBaton.Add( 
-				AuthenticationProvider.GetSslServerTrustFileProvider() );
-			this.Client.AuthBaton.Add( 
-				AuthenticationProvider.GetSslServerTrustPromptProvider( new 
-				SslServerTrustPromptDelegate( this.SslServerTrustAcceptCallback  ) ) );
-            
-
-			// first get the certificate to be trusted
-			this.acceptedFailures = SslFailures.CertificateAuthorityUnknown |
-				SslFailures.CertificateNameMismatch | 
-				SslFailures.Other;
-			this.maySave = true;
-
-            
-			this.Client.List( SSLTESTREPOS, Revision.Head, Recurse.None );
-
-			// now try to get them to take it from the config dir
-			DirectoryEntry[] entries = this.Client.List( SSLTESTREPOS,
-				Revision.Head, Recurse.None );
-			Assert.IsTrue( entries.Length > 0, "No entries returned" );
-
-            
+			Assert.That(e.Break, Is.False);
+			Assert.That(e.Cancel, Is.False);
+			_serverTrustTicked = true;
+			e.AcceptedFailures = e.Failures;
 		}
-
-
-		SslServerTrustCredential SslServerTrustFailCallback( string realm, 
-			SslFailures failures, SslServerCertificateInfo info, bool maySave )
-		{
-			this.callbackCalled = true;
-			return null;//new SslServerTrustCredential();
-		}
-
-		SslServerTrustCredential SslServerTrustAcceptCallback( string realm,
-			SslFailures failures, SslServerCertificateInfo info, bool maySave )
-		{
-			Assert.IsTrue( (failures & SslFailures.CertificateAuthorityUnknown) != 0,
-				"Certificate authority should have been unknown" );
-			Assert.IsTrue( (failures & SslFailures.CertificateNameMismatch) != 0,
-				"There should have been a mismatch." );
-
-			SslServerTrustCredential cred = new SslServerTrustCredential();
-			cred.AcceptedFailures = this.acceptedFailures;
-			cred.MaySave = this.maySave;
-
-			this.callbackCalled = true;
-
-			return cred;
-		}
-
-		private SimpleCredential SimplePrompt( string realm, string username, bool maySave )
-		{
-			this.prompted = true;
-			return new SimpleCredential( "user", "password", maySave );
-		}
-
-		private SimpleCredential NullPrompt( string realm, string username, bool maySave )
-		{
-			// fails
-			return null;
-		}
-
-		private bool prompted = false;
-		private SslFailures acceptedFailures = 0;
-		private bool maySave = false;
-		private bool callbackCalled = false;
-		private const string SSLTESTREPOS=@"https://svn.d-90.nl/svn/test";*/
 	}
 }

@@ -66,7 +66,6 @@ namespace SharpSvn {
 			static Object^ PtrToStringOrByteArray(const char* ptr, int length);
 
 			static DateTime DateTimeFromAprTime(apr_time_t aprTime);
-			static DateTime DateTimeFromAprTimeLocal(apr_time_t aprTime);
 			static apr_time_t AprTimeFromDateTime(DateTime time);
 
 			/// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>

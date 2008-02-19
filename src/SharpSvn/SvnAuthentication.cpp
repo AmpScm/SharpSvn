@@ -13,6 +13,7 @@ using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn::Security;
 using System::Text::StringBuilder;
+using namespace System::Text::RegularExpressions;
 
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
 
@@ -353,7 +354,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
 
 
 ///////////////////////////////
-void SvnAuthentication::MaybePrintRealm(SvnAuthorizationEventArgs^ e)
+void SvnAuthentication::MaybePrintRealm(SvnAuthenticationEventArgs^ e)
 {
 	if (!e)
 		throw gcnew ArgumentNullException("e");
@@ -561,4 +562,27 @@ void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
 	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+}
+
+Uri^ SvnAuthenticationEventArgs::RealmUri::get()
+{
+	if(_realmUri || !Realm)
+		return _realmUri;
+
+	Match^ m = _reRealmUri->Match(Realm);
+
+	Uri^ uri;
+
+	if(m->Success)
+	{
+		String^ uriValue = m->Groups[1]->Value;
+
+		if(uriValue && !uriValue->EndsWith("/", StringComparison::Ordinal))
+			uriValue += "/";
+
+		if(Uri::TryCreate(uriValue, UriKind::Absolute, uri))
+			_realmUri = uri;
+	}
+
+	return _realmUri;
 }
