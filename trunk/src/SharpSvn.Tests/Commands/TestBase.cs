@@ -297,7 +297,7 @@ namespace SharpSvn.Tests.Commands
 		/// <param name="notification">An object containing information about the notification</param>
 		public virtual void NotifyCallback(object sender, SvnNotifyEventArgs e)
 		{
-			e.Detach(true);
+			e.Detach();
 			this.notifications.Add(e);
 		}
 

@@ -395,7 +395,7 @@ namespace SharpSvn {
 			void HandleItem(Object^ sender, T e)
 			{
 				UNUSED_ALWAYS(sender);
-				e->Detach(true);
+				e->Detach();
 				Add(e);
 			}
 
