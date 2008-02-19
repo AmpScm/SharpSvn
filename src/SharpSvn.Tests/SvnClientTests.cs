@@ -535,7 +535,7 @@ namespace SharpSvn.Tests
 				TouchFile(remote);
 				client.Add(remote);
 
-				SvnCommitInfo ci;
+				SvnCommitResult ci;
 				client.Commit(WcPath, out ci);
 
 				Assert.That(ItemExists(new Uri(WcUri, "LocalDeleteBase")), Is.True, "Remote base does exist");
@@ -632,7 +632,7 @@ namespace SharpSvn.Tests
 				string local5 = Path.Combine(WcPath, "statTst/LocalStatBase5");
 				string local6 = Path.Combine(WcPath, "statTst/LocalStatBase6");
 
-				SvnCommitInfo ci;
+				SvnCommitResult ci;
 
 				Touch2(local);
 				client.Add(local);
@@ -921,7 +921,7 @@ namespace SharpSvn.Tests
 				}
 
 				client.Add(diffFile);
-				SvnCommitInfo ci;
+				SvnCommitResult ci;
 				client.Commit(diffFile, out ci);
 
 				using (StreamWriter sw = File.CreateText(diffFile))
@@ -946,7 +946,7 @@ namespace SharpSvn.Tests
 				client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new Uri(WcUri, "DiffTest"), diffOutput);
 				VerifyDiffOutput(origLine, newLine, diffOutput);
 
-				SvnCommitInfo info;
+				SvnCommitResult info;
 				client.Commit(diffFile, out info);
 
 				bool visited = false;
@@ -1095,7 +1095,7 @@ namespace SharpSvn.Tests
 				});
 				Assert.That(visited);
 
-				SvnCommitInfo commitData;
+				SvnCommitResult commitData;
 				client.Commit(WcPath, out commitData);
 				visited = false;
 				client.Info(file, delegate(object sender, SvnInfoEventArgs e)
@@ -1173,7 +1173,7 @@ namespace SharpSvn.Tests
 				TouchFile(oneFile);
 				client.Add(oneFile);
 
-				SvnCommitInfo ci;
+				SvnCommitResult ci;
 				client.Commit(WcPath, out ci);
 				SvnUpdateResult r;
 				client.Update(WcPath, out r);
@@ -1356,7 +1356,7 @@ namespace SharpSvn.Tests
 
 				client.Add(f1);
 
-				SvnCommitInfo ci;
+				SvnCommitResult ci;
 				client.Commit(WcPath, out ci);
 				client.Copy(new SvnPathTarget(merge1), merge2);
 				client.Commit(WcPath);
