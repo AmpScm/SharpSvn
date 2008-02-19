@@ -185,7 +185,7 @@
 			</exec>
 		</OnceBlock>
 	</target>
-	<target name="copy-result" depends="build-svn">
+	<target name="copy-result" depends="build-svn,misc-copy">
 		<copy todir="${release}/lib" flatten="true">
 			<fileset basedir="build/win32">
 				<include name="subversion/${Configuration}/**/*.lib" />
@@ -242,13 +242,7 @@
 			<fileset basedir="${platformBase}\apr-util\include">
 				<include name="**.h" />
 			</fileset>
-		</copy>
-		<copy todir="${release}/lib-AnyCPU">
-			<fileset basedir="${nunitDir}/bin">
-				<include name="nunit.framework.dll" />
-				<include name="nunit.framework.xml" />
-			</fileset>
-		</copy>
+		</copy>		
 		<echo file="${release}/copylibs.cmd">@echo off
 xcopy /y /q "..\..\imports\release\bin\*-%1.dll" %2
 
