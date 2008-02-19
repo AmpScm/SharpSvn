@@ -13,19 +13,25 @@ namespace SharpSvn {
 		using namespace SharpSvn::Implementation;
 		using System::Collections::Generic::Dictionary;
 		using System::Collections::Generic::List;
+		using System::Text::RegularExpressions::Regex;
+		using System::Text::RegularExpressions::RegexOptions;
+		using System::Net::ICredentials;
+		using System::Net::NetworkCredential;
 
 		ref class SvnAuthentication;
 
-		public ref class SvnAuthorizationEventArgs abstract: public EventArgs
+		public ref class SvnAuthenticationEventArgs abstract: public EventArgs
 		{
 			initonly bool _maySave;
 			initonly String^ _realm;
+			static initonly Regex^ _reRealmUri = gcnew Regex("^\\<(?<server>[a-z]+://[^ >]+)\\> (?<realm>.*)$", RegexOptions::ExplicitCapture | RegexOptions::Singleline);
 			bool _save;
 			bool _cancel;
 			bool _break;
+			Uri^ _realmUri;
 
 		protected:
-			SvnAuthorizationEventArgs(String^ realm, bool maySave)
+			SvnAuthenticationEventArgs(String^ realm, bool maySave)
 			{
 				_realm = realm;
 				_maySave = maySave;
@@ -52,6 +58,11 @@ namespace SharpSvn {
 				{
 					return _realm;
 				}
+			}
+
+			property Uri^ RealmUri
+			{
+				Uri^ get();
 			}
 
 			property bool Save
@@ -141,7 +152,7 @@ namespace SharpSvn {
 		};
 
 		generic<typename T>
-		where T : SvnAuthorizationEventArgs
+		where T : SvnAuthenticationEventArgs
 		ref class SvnAuthWrapper abstract : public ISvnAuthWrapper
 		{
 		protected:
@@ -200,14 +211,14 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnUserNamePasswordEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnUserNamePasswordEventArgs : public SvnAuthenticationEventArgs
 		{
 			initonly String ^_initialUserName;
 			String ^_username;
 			String ^_password;
 		public:
 			SvnUserNamePasswordEventArgs(String^ initialUserName, String^ realm, bool maySave)
-				: SvnAuthorizationEventArgs(realm, maySave)
+				: SvnAuthenticationEventArgs(realm, maySave)
 			{
 				_initialUserName = initialUserName;
 				_username = initialUserName ? initialUserName : "";
@@ -262,12 +273,12 @@ namespace SharpSvn {
 			};
 		};
 
-		public ref class SvnUserNameEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnUserNameEventArgs : public SvnAuthenticationEventArgs
 		{
 			String ^_username;
 		public:
 			SvnUserNameEventArgs(String^ realm, bool maySave)
-				: SvnAuthorizationEventArgs(realm, maySave)
+				: SvnAuthenticationEventArgs(realm, maySave)
 			{
 				_username = "";
 			}
@@ -298,7 +309,7 @@ namespace SharpSvn {
 			};
 		};
 
-		public ref class SvnSslServerTrustEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnSslServerTrustEventArgs : public SvnAuthenticationEventArgs
 		{
 			initonly SvnCertificateTrustFailures _failures;
 			initonly String^ _certCommonName;
@@ -312,7 +323,7 @@ namespace SharpSvn {
 		public:
 			SvnSslServerTrustEventArgs (SvnCertificateTrustFailures failures, String^ certificateCommonName, String^ certificateFingerprint, String^ certificateValidFrom,
 				String^ certificateValidUntil, String^ certificateIssuer, String^ certificateValue, String^ realm, bool maySave)
-				: SvnAuthorizationEventArgs(realm, maySave)
+				: SvnAuthenticationEventArgs(realm, maySave)
 			{
 				if (!certificateCommonName)
 					throw gcnew ArgumentNullException("certificateCommonName");
@@ -425,12 +436,12 @@ namespace SharpSvn {
 			};
 		};
 
-		public ref class SvnSslClientCertificateEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnSslClientCertificateEventArgs : public SvnAuthenticationEventArgs
 		{
 			String^ _certificateFile;
 		public:
 			SvnSslClientCertificateEventArgs(String^ realm, bool maySave)
-				: SvnAuthorizationEventArgs(realm, maySave)
+				: SvnAuthenticationEventArgs(realm, maySave)
 			{
 			}
 
@@ -460,12 +471,12 @@ namespace SharpSvn {
 			};
 		};
 
-		public ref class SvnSslClientCertificatePasswordEventArgs : public SvnAuthorizationEventArgs
+		public ref class SvnSslClientCertificatePasswordEventArgs : public SvnAuthenticationEventArgs
 		{
 			String^ _password;
 		public:
 			SvnSslClientCertificatePasswordEventArgs(String^ realm, bool maySave)
-				: SvnAuthorizationEventArgs(realm, maySave)
+				: SvnAuthenticationEventArgs(realm, maySave)
 			{
 			}
 
@@ -494,13 +505,54 @@ namespace SharpSvn {
 				virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
 			};
 		};
+	}
 
+	namespace Implementation {
+		using namespace SharpSvn::Security;
+		using System::Net::ICredentials;
+		using System::Net::NetworkCredential;
+
+		ref class SvnCredentialWrapper sealed
+		{
+			initonly ICredentials^ _credentials;
+
+		public:
+			SvnCredentialWrapper(ICredentials^ credentials)
+			{
+				if(!credentials)
+					throw gcnew ArgumentNullException("credentials");
+
+				_credentials = credentials;
+			}
+
+			void OnUserNamePassword(Object^ sender, SvnUserNamePasswordEventArgs^ e)
+			{
+				UNUSED_ALWAYS(sender);
+				NetworkCredential^ nc = _credentials->GetCredential(e->RealmUri, "SVN");
+
+				e->UserName = nc->UserName;
+				e->Password = nc->Password;
+			}
+
+			void OnUserName(Object^ sender, SvnUserNameEventArgs^ e)
+			{
+				UNUSED_ALWAYS(sender);
+				NetworkCredential^ nc = _credentials->GetCredential(e->RealmUri, "SVN");
+
+				e->UserName = nc->UserName;
+			}
+		};
+	}
+
+	namespace Security {
 
 		/// <summary>Container for all subversion authentication settings on a client</summary>
 		public ref class SvnAuthentication : public SvnBase
 		{
 			Dictionary<Delegate^, ISvnAuthWrapper^>^ _wrappers;
 			List<ISvnAuthWrapper^>^ _handlers;
+			ICredentials^ _defaultCredentials;
+			SvnCredentialWrapper^ _credentialWrapper;
 			bool _readOnly;
 			int _cookie;
 
@@ -733,6 +785,42 @@ namespace SharpSvn {
 			/// <summary>Adds all default console handlers</summary>
 			void AddConsoleHandlers();
 
+		public:
+			/// <summary>Simple credential handler to provide a static credential</summary>
+			/// <remarks>When set implements a <see cref="UserNameHandlers" /> and <see cref="UserNamePasswordHandlers" /> 
+			/// instance over the specified credential instance</remarks>
+			property ICredentials^ DefaultCredentials
+			{
+				ICredentials^ get()
+				{
+					return _defaultCredentials;
+				}
+				void set(ICredentials^ value)
+				{
+					if(_defaultCredentials == value)
+						return;
+
+					if(_credentialWrapper)
+					{
+						UserNameHandlers -= gcnew EventHandler<SvnUserNameEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserName);
+						UserNamePasswordHandlers -= gcnew EventHandler<SvnUserNamePasswordEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserNamePassword);
+						_credentialWrapper = nullptr;
+					}
+
+					if(value)
+					{
+						_defaultCredentials = value;
+						_credentialWrapper = gcnew SvnCredentialWrapper(value);
+
+						UserNameHandlers += gcnew EventHandler<SvnUserNameEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserName);
+						UserNamePasswordHandlers += gcnew EventHandler<SvnUserNamePasswordEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserNamePassword);
+
+						SetRetryLimit(gcnew EventHandler<SvnUserNameEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserName), 1);
+						SetRetryLimit(gcnew EventHandler<SvnUserNamePasswordEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserNamePassword), 1);
+					}
+				}
+			}
+
 		private:
 			static void ImpSubversionFileUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e);
 			static void ImpSubversionFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
@@ -804,7 +892,7 @@ namespace SharpSvn {
 			}
 
 		private:
-			static void MaybePrintRealm(SvnAuthorizationEventArgs^ e);
+			static void MaybePrintRealm(SvnAuthenticationEventArgs^ e);
 			static String^ ReadPassword();
 			static void ImpConsoleUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e);
 			static void ImpConsoleUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
