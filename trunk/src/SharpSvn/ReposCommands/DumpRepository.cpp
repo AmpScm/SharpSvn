@@ -100,10 +100,10 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	svn_revnum_t start;
 	svn_revnum_t end;
 
-	r = get_revnum(&start, args->Start->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
+	r = get_revnum(&start, args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
 	if(!r)
 		return args->HandleResult(this, r);
-	r = get_revnum(&end, args->Start->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
+	r = get_revnum(&end, args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
 	if(!r)
 		return args->HandleResult(this, r);
 

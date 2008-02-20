@@ -65,17 +65,10 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	else if(!target)
 		throw gcnew ArgumentNullException("args");
 
-	switch(target->Revision->RevisionType)
-	{
-	case SvnRevisionType::Number:
-	case SvnRevisionType::Head:
-	case SvnRevisionType::Time:
-	case SvnRevisionType::None: // = Head
-		break;
-	default:
-		// Throw the error before we allocate the unmanaged resources
-		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific, "target");
-	}
+	if(args->Revision->RequiresWorkingCopy)
+		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
+	else if(target->Revision->RequiresWorkingCopy)
+		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "target");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
@@ -83,7 +76,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 
 	svn_revnum_t rev = 0;
 	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-	svn_opt_revision_t toRev = args->Revision->ToSvnRevision(SvnRevision::Head);
+	svn_opt_revision_t toRev = args->Revision->Or(target->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
 
 	svn_error_t *r = svn_client_switch2(
 		&rev,

@@ -22,7 +22,7 @@ namespace SharpSvn {
 		SvnExportArgs()
 		{
 			_depth = SvnDepth::Infinity;
-			_revision = SvnRevision::Head;
+			_revision = SvnRevision::None;
 		}
 
 		virtual property SvnClientCommandType ClientCommandType

@@ -102,17 +102,8 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 		throw gcnew ArgumentNullException("paths");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
-	else
-		switch(args->Revision->RevisionType)
-	{
-		case SvnRevisionType::Time:
-		case SvnRevisionType::Number:
-		case SvnRevisionType::Head:
-			break;
-		default:
-			// Throw the error before we allocate the unmanaged resources
-			throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific, "args");
-	}
+	else if(args->Revision->RequiresWorkingCopy)
+		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
 
 	updateResult = nullptr;
 
@@ -131,7 +122,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 
 	apr_array_header_t* revs = nullptr;
-	svn_opt_revision_t uRev = args->Revision->ToSvnRevision(SvnRevision::Head);
+	svn_opt_revision_t uRev = args->Revision->Or(SvnRevision::Head)->ToSvnRevision();
 
 	svn_error_t *r = svn_client_update3(&revs,
 		aprPaths->Handle,

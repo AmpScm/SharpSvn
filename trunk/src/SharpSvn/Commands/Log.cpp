@@ -252,8 +252,8 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
 		svn_opt_revision_t pegRev = args->OriginRevision->ToSvnRevision();
-		svn_opt_revision_t start = args->Start->ToSvnRevision(SvnRevision::Head);
-		svn_opt_revision_t end = args->End->ToSvnRevision(SvnRevision::Zero);
+		svn_opt_revision_t start = args->Start->Or(SvnRevision::Head)->ToSvnRevision();
+		svn_opt_revision_t end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
 
 		svn_error_t *r = svn_client_log4(
 			AllocCanonicalArray(targets, %pool),

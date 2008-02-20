@@ -154,6 +154,24 @@ namespace SharpSvn {
 			return _type.GetHashCode() ^ _value.GetHashCode();
 		}
 
+		/// <summary>Gets a boolean indicating whether the revisionnumber requires a workingcopy to make any sense</summary>
+		property bool RequiresWorkingCopy
+		{
+			bool get()
+			{
+				switch(RevisionType)
+				{
+				case SvnRevisionType::None:
+				case SvnRevisionType::Time:
+				case SvnRevisionType::Head:
+				case SvnRevisionType::Number:				
+					return false;
+				default:
+					return true;
+				}					
+			}
+		}
+
 		static bool operator == (SvnRevision^ rev1, SvnRevision^ rev2)
 		{
 			if (!rev1)
@@ -163,7 +181,6 @@ namespace SharpSvn {
 
 			return rev1->Equals(rev2);
 		}
-
 
 		static bool operator != (SvnRevision^ rev1, SvnRevision^ rev2)
 		{
@@ -197,8 +214,16 @@ namespace SharpSvn {
 		}
 
 	internal:
+		SvnRevision^ Or(SvnRevision^ alternate)
+		{
+			if(RevisionType != SvnRevisionType::None)
+				return this;
+			else
+				return alternate ? alternate : SvnRevisionType::None;
+		}
+
+	internal:
 		svn_opt_revision_t ToSvnRevision();
-		svn_opt_revision_t ToSvnRevision(SvnRevision^ noneValue);
 
 		svn_opt_revision_t* AllocSvnRevision(AprPool ^pool);
 
@@ -229,7 +254,7 @@ namespace SharpSvn {
 	internal:
 		SvnTarget(SvnRevision^ revision)
 		{
-			if (revision == nullptr)
+			if (!revision)
 				_revision = SvnRevision::None;
 			else
 				_revision = revision;

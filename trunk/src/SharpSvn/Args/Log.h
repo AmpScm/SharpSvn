@@ -41,8 +41,8 @@ namespace SharpSvn {
 		/// <summary>Initializes a new <see cref="SvnLogArgs" /> instance with default properties</summary>
 		SvnLogArgs()
 		{
-			_start = SvnRevision::Head;
-			_end = SvnRevision::Zero;
+			_start = SvnRevision::None;
+			_end = SvnRevision::None;
 			_pegRevision = SvnRevision::None;
 			//_limit = 0;
 			//_noLogChangedPaths = false;

@@ -23,7 +23,7 @@ namespace SharpSvn {
 		SvnUpdateArgs()
 		{
 			_depth = SvnDepth::Unknown;
-			_revision = SvnRevision::Head;
+			_revision = SvnRevision::None;
 		}
 
 		virtual property SvnClientCommandType ClientCommandType
