@@ -101,7 +101,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
 	svn_error_t *r = svn_client_merge_peg3(
-		pool.AllocString(source->TargetName),
+		pool.AllocString(source->SvnTargetName),
 		mergeList->Handle,
 		&pegRev,
 		pool.AllocPath(targetPath),

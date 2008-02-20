@@ -131,7 +131,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
 
-		targetStrings[i++] = uri->ToString();
+		targetStrings[i++] = UriToCanonicalString(uri);
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

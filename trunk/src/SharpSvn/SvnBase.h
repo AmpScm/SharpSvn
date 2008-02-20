@@ -84,6 +84,19 @@ namespace SharpSvn {
 			static apr_array_header_t *CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool);
 
 			static SvnPropertyCollection^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
+
+			static String^ UriToCanonicalString(Uri^ value)
+			{
+				if(!value)
+					return nullptr;
+
+				String^ name = CanonicalizeUri(value)->ToString();
+
+				if(name && name->Length && (name[name->Length-1] == '/'))
+					return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
+				else
+					return name;
+			}
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]

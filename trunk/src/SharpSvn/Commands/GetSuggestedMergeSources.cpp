@@ -40,7 +40,7 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 	svn_opt_revision_t rev = target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 	svn_error_t* r = svn_client_suggest_merge_sources(
 		&svnMergeSources,
-		pool.AllocString(target->TargetName),
+		pool.AllocString(target->SvnTargetName),
 		&rev,
 		CtxHandle,
 		pool.Handle);

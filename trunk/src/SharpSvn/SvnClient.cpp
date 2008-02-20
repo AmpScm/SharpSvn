@@ -374,7 +374,7 @@ bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
 
 	const char* uuidStr = nullptr;
 
-	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocCanonical(uri->ToString()), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocCanonical(uri), CtxHandle, pool.Handle);
 
 	if (err || !uuidStr)
 	{
@@ -400,7 +400,7 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 
-	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocCanonical(uri->ToString()), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocCanonical(uri), CtxHandle, pool.Handle);
 
 	if (!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);

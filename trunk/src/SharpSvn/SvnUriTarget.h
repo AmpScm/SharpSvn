@@ -110,6 +110,16 @@ namespace SharpSvn {
 			}
 		}
 
+	internal:
+		property String^ SvnTargetName
+		{
+			virtual String^ get() override
+			{
+				return UriToCanonicalString(_uri);
+			}
+		}
+
+	public:
 		static bool TryParse(String^ path, [Out] SvnUriTarget^% pegUri)
 		{
 			if (String::IsNullOrEmpty(path))

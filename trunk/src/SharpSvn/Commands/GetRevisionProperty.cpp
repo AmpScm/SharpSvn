@@ -82,7 +82,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	svn_error_t* r = svn_client_revprop_get(
 		pName,
 		&result,
-		pool.AllocString(target->TargetName),
+		pool.AllocString(target->SvnTargetName),
 		&rev,
 		&set_rev,
 		CtxHandle,

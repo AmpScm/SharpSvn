@@ -46,9 +46,9 @@ bool SvnClient::GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetA
 
 	svn_error_t* r = svn_client_mergeinfo_get_available(
 		&svnMergeInfo,
-		pool.AllocString(target->TargetName),
+		pool.AllocString(target->SvnTargetName),
 		target->Revision->AllocSvnRevision(%pool),
-		pool.AllocCanonical(sourceUri->ToString()),
+		pool.AllocCanonical(sourceUri),
 		CtxHandle,
 		pool.Handle);
 

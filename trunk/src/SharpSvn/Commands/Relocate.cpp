@@ -52,8 +52,8 @@ bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args
 
 	svn_error_t *r = svn_client_relocate(
 		pool.AllocPath(path),
-		pool.AllocCanonical(from->ToString()),
-		pool.AllocCanonical(to->ToString()),
+		pool.AllocCanonical(from),
+		pool.AllocCanonical(to),
 		!args->NonRecursive,
 		CtxHandle,
 		pool.Handle);

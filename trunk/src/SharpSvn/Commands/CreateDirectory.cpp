@@ -139,7 +139,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uris");
 
-		uriData[i++] = uri->ToString();
+		uriData[i++] = UriToCanonicalString(uri);
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

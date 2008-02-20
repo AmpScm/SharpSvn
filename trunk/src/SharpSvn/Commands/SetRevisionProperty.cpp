@@ -131,7 +131,7 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 	svn_error_t *r = svn_client_revprop_set(
 		pool->AllocString(propertyName),
 		value,
-		pool->AllocString(target->TargetName),
+		pool->AllocString(target->SvnTargetName),
 		target->Revision->AllocSvnRevision(pool),
 		&set_rev,
 		args->Force,
