@@ -27,15 +27,34 @@ namespace SharpSvn.Tests.Commands
 		}
 
 		[Test]
-		[Ignore("Fails on svnserve")]
 		public void Test()
 		{
 			// start a svnserve process on this repos
 			Process svnserve = this.StartSvnServe(this.ReposPath.Replace('\\', '/'));
-			Thread.Sleep(3000);
+
 			try
 			{
-				Uri localUri = new Uri(String.Format("svn://localhost:{0}/", PortNumber));
+				Uri localUri = new Uri(String.Format("svn://127.0.0.1:{0}/", PortNumber));
+
+				bool svnServeAvailable = false;
+				for (int i = 0; i < 10; i++)
+				{
+					SvnInfoArgs ia = new SvnInfoArgs();
+					ia.ThrowOnError = false;
+
+					Client.Info(localUri, ia,
+						delegate(object sender, SvnInfoEventArgs e)
+						{
+							svnServeAvailable = true;
+						});
+
+					if (svnServeAvailable)
+						break;
+					Thread.Sleep(3000);
+				}
+
+				Assert.That(svnServeAvailable);
+								
 				Assert.That(Client.Relocate(this.WcPath, ReposUrl, localUri));
 
 				Collection<SvnInfoEventArgs> list;

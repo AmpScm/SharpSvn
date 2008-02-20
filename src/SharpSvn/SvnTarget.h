@@ -249,6 +249,16 @@ namespace SharpSvn {
 			virtual String^ get() = 0;
 		}
 
+	internal:
+		property String^ SvnTargetName
+		{
+			virtual String^ get()
+			{
+				return TargetName;				
+			}
+		}
+
+	public:
 		virtual String^ ToString() override
 		{
 			if (Revision->RevisionType == SvnRevisionType::None)
@@ -275,7 +285,7 @@ namespace SharpSvn {
 			if (!other)
 				return false;
 
-			if (!String::Equals(other->TargetName, TargetName))
+			if (!String::Equals(other->SvnTargetName, TargetName))
 				return false;
 
 			return Revision->Equals(other->Revision);

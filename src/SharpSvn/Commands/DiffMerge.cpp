@@ -44,9 +44,9 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 	svn_opt_revision_t mergeToRev = mergeTo->Revision->ToSvnRevision();
 
 	svn_error_t *r = svn_client_merge3(
-		pool.AllocString(mergeFrom->TargetName),
+		pool.AllocString(mergeFrom->SvnTargetName),
 		&mergeFromRev,
-		pool.AllocString(mergeTo->TargetName),
+		pool.AllocString(mergeTo->SvnTargetName),
 		&mergeToRev,
 		pool.AllocPath(targetPath),
 		(svn_depth_t)args->Depth,

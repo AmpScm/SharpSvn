@@ -152,7 +152,7 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 		else if(!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uris");
 
-		uriData[i++] = uri->ToString();
+		uriData[i++] = UriToCanonicalString(uri);
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

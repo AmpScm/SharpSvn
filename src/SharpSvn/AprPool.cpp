@@ -229,6 +229,14 @@ const char* AprPool::AllocPath(String^ value)
 		return (const char*)AllocCleared(1);
 }
 
+const char* AprPool::AllocCanonical(Uri^ value)
+{
+	if(!value)
+		return AllocCanonical((String^)nullptr);
+
+	return AllocCanonical(value->ToString());
+}
+
 const char* AprPool::AllocCanonical(String^ value)
 {
 	if (!value)

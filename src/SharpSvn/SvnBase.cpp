@@ -114,6 +114,8 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 	String^ path = uri->AbsolutePath;
 	if (path->Length > 0 && path[path->Length -1] == '/')
 	{
+		if(path->Length == 1) // Remove only the last /
+			return gcnew Uri(uri->GetComponents(UriComponents::HostAndPort | UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::UriEscaped)->TrimEnd('/'));
 		// Create a new uri with all / and \ characters at the end removed
 		return gcnew Uri(uri, path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
 	}
@@ -254,7 +256,7 @@ public:
 		svn_client_copy_source_t **src = (svn_client_copy_source_t**)ptr;
 		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
 
-		(*src)->path = pool->AllocString(value->TargetName);
+		(*src)->path = pool->AllocCanonical(value->SvnTargetName);
 		(*src)->revision = value->Revision->AllocSvnRevision(pool);
 		(*src)->peg_revision = value->Revision->AllocSvnRevision(pool);
 	}

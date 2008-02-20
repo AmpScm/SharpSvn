@@ -88,7 +88,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	svn_error_t *r = svn_client_switch2(
 		&rev,
 		pool.AllocPath(path),
-		pool.AllocString(target->TargetName),
+		pool.AllocString(target->SvnTargetName),
 		&pegRev,
 		&toRev,
 		(svn_depth_t)args->Depth,

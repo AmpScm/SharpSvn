@@ -207,7 +207,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 	svn_error_t *r = svn_client_copy4(
 		&commitInfoPtr,
 		AllocCopyArray(sourceTargets, %pool),
-		pool.AllocCanonical(toUri->ToString()),
+		pool.AllocCanonical(toUri),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,
 		CtxHandle,

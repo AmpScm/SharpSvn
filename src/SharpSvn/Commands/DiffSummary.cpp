@@ -79,9 +79,9 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 		svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Base, SvnRevision::Head);
 
 		svn_error_t *r = svn_client_diff_summarize2(
-			pool.AllocString(from->TargetName),
+			pool.AllocString(from->SvnTargetName),
 			&fromRev,
-			pool.AllocString(to->TargetName),
+			pool.AllocString(to->SvnTargetName),
 			&toRev,
 			(svn_depth_t)args->Depth,
 			args->IgnoreAncestry,

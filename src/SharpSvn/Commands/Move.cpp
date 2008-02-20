@@ -197,7 +197,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 		else if(!SvnBase::IsValidReposUri(u))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUris");
 
-		uris->Add(u->ToString());
+		uris->Add(UriToCanonicalString(u));
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -209,7 +209,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	svn_error_t *r = svn_client_move5(
 		&commitInfoPtr,
 		AllocArray(uris, %pool),
-		pool.AllocString(toUri->ToString()),
+		pool.AllocCanonical(toUri),
 		args->Force,
 		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
 		args->MakeParents,

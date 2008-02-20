@@ -80,7 +80,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
 		svn_error_t *r = svn_client_blame4(
-			pool.AllocString(target->TargetName),
+			pool.AllocString(target->SvnTargetName),
 			&pegRev,
 			args->Start->AllocSvnRevision(%pool),
 			args->End->AllocSvnRevision(%pool),

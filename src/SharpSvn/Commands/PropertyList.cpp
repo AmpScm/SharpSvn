@@ -74,7 +74,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
 
 		svn_error_t* r = svn_client_proplist3(
-			pool.AllocString(target->TargetName),
+			pool.AllocString(target->SvnTargetName),
 			&pegrev,
 			&rev,
 			(svn_depth_t)args->Depth,
