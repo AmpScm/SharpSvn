@@ -105,6 +105,29 @@ for %%I in (*.html) DO (
 popd
 %SVN% ci --username user /tmp/trunk -m "Add medium product to products list"
 
+REM ======================= Revision 10 =============================
+%SVN% --username copier copy file:///tmp/repos/trunk file:///tmp/repos/branches/b -m "Create branch b"
+
+
+REM ======================= Revision 11 =============================
+%SVN% up /tmp/branch-a
+pushd files\11
+for %%I in (*.html) DO (
+   set f=%%I
+   set to=\tmp\branch-a\!f:-=\!
+   copy !f! !to! || echo Failed to copy !f! to !to!
+   %SVN% add !to!
+   %SVN% ps svn:eol-style native !to!
+)
+popd
+%SVN% ci --username auser /tmp/branch-a -m "Add product roadmap"
+
+REM ======================= Revision 12 =============================
+%SVN% co file:///tmp/repos/branches/b \tmp\branch-b
+pushd \tmp\branch-b
+%SVN% merge file:///tmp/repos/branches/a
+%SVN% ci --username merger -m "Merge branch a - product roadmap"
+popd
 
 
 %SVNADMIN% dump \tmp\repos > own.repos.dump
