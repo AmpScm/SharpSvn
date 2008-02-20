@@ -72,6 +72,38 @@ pushd \tmp\trunk
 %SVN% ci --username merger -m "Merge branch a.  Added medium product"
 popd
 
+REM ======================= Revision 7 ==============================
+%SVN% up /tmp/branch-a
+%SVN% mkdir /tmp/branch-a/blocked
+pushd files\6
+for %%I in (*.html) DO (
+   set f=%%I
+   set to=\tmp\branch-a\!f:-=\!
+   copy !f! !to! || echo Failed to copy !f! to !to!
+   %SVN% add !to!
+   %SVN% ps svn:eol-style native !to!
+)
+popd
+%SVN% ci --username auser /tmp/branch-a -m "Create blocked folder.  This should only ever exist on branch a"
+
+REM ======================= Revision 8 ==============================
+pushd \tmp\trunk
+%SVN% up .
+%SVN% merge --record-only -r 6:7 file:///tmp/repos/branches/a
+%SVN% ci --username blocker -m "Block r7 from branch a"
+popd
+
+REM ======================= Revision 9 ==============================
+pushd files\9
+for %%I in (*.html) DO (
+   set f=%%I
+   set to=\tmp\trunk\!f:-=\!
+   copy !f! !to! || echo Failed to copy !f! to !to!
+   %SVN% add !to!
+   %SVN% ps svn:eol-style native !to!
+)
+popd
+%SVN% ci --username user /tmp/trunk -m "Add medium product to products list"
 
 
 
