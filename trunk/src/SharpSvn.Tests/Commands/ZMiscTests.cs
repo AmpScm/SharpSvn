@@ -84,11 +84,14 @@ namespace SharpSvn.Tests.Commands
 		private static extern bool SetEnvironmentVariable(string name, string value);
 
 		[Test]
-		[Ignore("Fails on binding")]
-		public void TestChangeAdminDirectoryName()
+		public void TestChangeAdministrativeDirectoryName()
 		{
 			string newAdminDir = "_svn";
-			typeof(SvnClient).InvokeMember("AdministrativeDirectoryName", BindingFlags.SetProperty | BindingFlags.Static | BindingFlags.NonPublic, null, Client, new object[] { newAdminDir });
+			PropertyInfo pi = typeof(SvnClient).GetProperty("AdministrativeDirectoryName", BindingFlags.SetProperty | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
+
+			Assert.That(pi, Is.Not.Null);
+			
+			pi.SetValue(null, newAdminDir, null);
 			try
 			{
 				Assert.AreEqual(newAdminDir, SvnClient.AdministrativeDirectoryName,
@@ -102,7 +105,7 @@ namespace SharpSvn.Tests.Commands
 			}
 			finally
 			{
-				typeof(SvnClient).InvokeMember("AdministrativeDirectoryName", BindingFlags.SetProperty | BindingFlags.Static | BindingFlags.NonPublic, null, Client, new object[] { ".svn" });
+				pi.SetValue(null, ".svn", null);
 				Assert.AreEqual(".svn", SvnClient.AdministrativeDirectoryName, "Settings original admin dir failed");
 			}
 		}
