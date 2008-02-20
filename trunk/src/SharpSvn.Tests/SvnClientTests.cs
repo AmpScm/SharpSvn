@@ -98,7 +98,7 @@ namespace SharpSvn.Tests
 			using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
 			{
 				SvnCreateRepositoryArgs cra = new SvnCreateRepositoryArgs();
-				cra.RepositoryCompatibility = SvnRepositoryCompatibility.SubversionPre15;
+				cra.RepositoryCompatibility = SvnRepositoryCompatibility.Default;
 				reposClient.CreateRepository(RepositoryPath, cra);
 			}
 
@@ -603,7 +603,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(ReposUri));
 					Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
 					Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Delete));
-					Assert.That(e.WorkingCopyInfo.TextChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
+					Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
 					Assert.That(e.WorkingCopyInfo.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
 					Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(0L));
 
@@ -829,7 +829,7 @@ namespace SharpSvn.Tests
 							Assert.That(e.WorkingCopyInfo.LastChangeRevision, Is.EqualTo(-1L));
 							Assert.That(e.WorkingCopyInfo.LastChangeTime, Is.EqualTo(DateTime.MinValue));
 							Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Add));
-							Assert.That(e.WorkingCopyInfo.TextChangeTime, Is.EqualTo(DateTime.MinValue));
+							Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.EqualTo(DateTime.MinValue));
 							Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
 							Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(-1L));
 						}
@@ -852,12 +852,12 @@ namespace SharpSvn.Tests
 
 							if (nn >= 0)
 							{
-								Assert.That(e.WorkingCopyInfo.TextChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
+								Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
 								Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(36L));
 							}
 							else
 							{
-								Assert.That(e.WorkingCopyInfo.TextChangeTime, Is.EqualTo(DateTime.MinValue));
+								Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.EqualTo(DateTime.MinValue));
 								Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(0L));
 							}
 						}
