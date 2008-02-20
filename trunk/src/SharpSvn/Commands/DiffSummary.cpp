@@ -75,14 +75,11 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 		args->SummaryHandler += summaryHandler;
 	try
 	{
-		svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Base, SvnRevision::Head);
-		svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Base, SvnRevision::Head);
-
 		svn_error_t *r = svn_client_diff_summarize2(
 			pool.AllocString(from->SvnTargetName),
-			&fromRev,
+			from->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
 			pool.AllocString(to->SvnTargetName),
-			&toRev,
+			to->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
 			(svn_depth_t)args->Depth,
 			args->IgnoreAncestry,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists

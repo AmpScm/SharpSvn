@@ -36,11 +36,9 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-
 	svn_error_t *r = svn_client_merge_reintegrate(
 		pool.AllocString(source->SvnTargetName),
-		&pegRev,
+		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocPath(targetPath),
 		args->Force,
 		args->DryRun,

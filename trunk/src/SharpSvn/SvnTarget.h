@@ -325,6 +325,6 @@ namespace SharpSvn {
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnTarget^% target);
 	internal:
-		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
+		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
 	};
 }

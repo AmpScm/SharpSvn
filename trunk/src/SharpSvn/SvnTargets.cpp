@@ -107,16 +107,16 @@ SvnTarget^ SvnTarget::FromUri(Uri^ value)
 	return gcnew SvnUriTarget(value);
 }
 
-svn_opt_revision_t SvnPathTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
+SvnRevision^ SvnPathTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
 {
 	UNUSED_ALWAYS(uriNoneValue);
-	return Revision->Or(fileNoneValue)->ToSvnRevision();
+	return Revision->Or(fileNoneValue);
 }
 
-svn_opt_revision_t SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
+SvnRevision^ SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
 {
 	UNUSED_ALWAYS(fileNoneValue);
-	return Revision->Or(uriNoneValue)->ToSvnRevision();
+	return Revision->Or(uriNoneValue);
 }
 
 String^ SvnPathTarget::GetFullPath(String ^path)
