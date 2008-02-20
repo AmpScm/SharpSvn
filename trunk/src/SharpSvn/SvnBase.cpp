@@ -114,8 +114,6 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 	String^ path = uri->AbsolutePath;
 	if (path->Length > 0 && path[path->Length -1] == '/')
 	{
-		if(path->Length == 1) // Remove only the last /
-			return gcnew Uri(uri->GetComponents(UriComponents::HostAndPort | UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::UriEscaped)->TrimEnd('/'));
 		// Create a new uri with all / and \ characters at the end removed
 		return gcnew Uri(uri, path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
 	}

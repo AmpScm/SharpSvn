@@ -42,6 +42,7 @@ namespace SharpSvn.Tests.Commands
 					SvnInfoArgs ia = new SvnInfoArgs();
 					ia.ThrowOnError = false;
 
+					// This test also checks whether "svn://127.0.0.1:{0}/" is correctly canonicalized to "svn://127.0.0.1:{0}"
 					Client.Info(localUri, ia,
 						delegate(object sender, SvnInfoEventArgs e)
 						{
@@ -63,7 +64,7 @@ namespace SharpSvn.Tests.Commands
 				Assert.That(Client.GetInfo(WcPath, a, out list));
 
 				Assert.That(list.Count, Is.GreaterThan(0));
-				Assert.That(list[0].RepositoryRoot.ToString().StartsWith(localUri.ToString()));
+				Assert.That(list[0].Uri.ToString().StartsWith(localUri.ToString()));
 			}
 			finally
 			{
