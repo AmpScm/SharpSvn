@@ -1,14 +1,15 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Xml;
 using NUnit.Framework;
-using System.Collections;
-using System.Globalization;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
 using NUnit.Framework.SyntaxHelpers;
-
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -40,7 +41,7 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Log(this.ReposUrl, a, new EventHandler<SvnLogEventArgs>(LogCallback));
 
-			Assert.AreEqual(clientLogs.Length, this.logMessages.Count,
+			Assert.That(this.logMessages.Count, Is.EqualTo(clientLogs.Length),
 				"Number of log entries differs");
 			for (int i = 0; i < this.logMessages.Count; i++)
 				clientLogs[i].CheckMatch(this.logMessages[i]);
@@ -56,7 +57,7 @@ namespace SharpSvn.Tests.Commands
 			a.Range = new SvnRevisionRange(1, 1);
 
 			this.Client.Log(this.ReposUrl, a, new EventHandler<SvnLogEventArgs>(LogCallback));
-			Assert.AreEqual(1, this.logMessages.Count);
+			Assert.That(this.logMessages.Count, Is.EqualTo(1));
 			Assert.That(this.logMessages[0].LogMessage, Is.EqualTo("Æ e i a æ å, sjø"));
 		}
 

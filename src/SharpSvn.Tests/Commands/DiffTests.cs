@@ -1,12 +1,13 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
+using System.Collections;
 using System.IO;
 using System.Text;
-
-using SharpSvn;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -70,10 +71,10 @@ namespace SharpSvn.Tests.Commands
 				a, outstream);
 
 			string err = Encoding.Default.GetString(errstream.ToArray());
-			Assert.AreEqual(string.Empty, err, "Error in diff: " + err);
+			Assert.That(err, Is.EqualTo(string.Empty), "Error in diff: " + err);
 
 			string apiDiff = Encoding.Default.GetString(outstream.ToArray());
-			Assert.AreEqual(clientDiff, apiDiff, "Diffs differ");
+			Assert.That(apiDiff, Is.EqualTo(clientDiff), "Diffs differ");
 		}
 
 		[Test]
@@ -102,7 +103,7 @@ namespace SharpSvn.Tests.Commands
 				outstream));
 
 			string diff = Encoding.ASCII.GetString(outstream.ToArray());
-			Assert.IsTrue(diff.IndexOf("application/octet-stream") >= 0);
+			Assert.That(diff.IndexOf("application/octet-stream") >= 0);
 
 
 			outstream = new MemoryStream();
@@ -117,9 +118,9 @@ namespace SharpSvn.Tests.Commands
 				a,
 				outstream);
 
-			Assert.IsTrue(outstream.Length > 0);
+			Assert.That(outstream.Length > 0);
 			diff = Encoding.ASCII.GetString(outstream.ToArray());
-			Assert.IsTrue(diff.IndexOf("application/octet-stream") < 0);
+			Assert.That(diff.IndexOf("application/octet-stream") < 0);
 		}
 
 

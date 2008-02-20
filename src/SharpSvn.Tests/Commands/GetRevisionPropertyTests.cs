@@ -1,14 +1,16 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
+using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
-using System.Text;
 
 /// <summary>
 /// Tests the Client::RevPropGet	
 /// </summary>
-
 namespace SharpSvn.Tests.Commands
 {
 	[TestFixture]
@@ -37,7 +39,7 @@ namespace SharpSvn.Tests.Commands
 			string value;
 			Assert.That(Client.GetRevisionProperty(this.ReposUrl, "cow", out value));
 
-			Assert.AreEqual("moo", value, "Wrong property value");
+			Assert.That(value, Is.EqualTo("moo"), "Wrong property value");
 		}
 	}
 }

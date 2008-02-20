@@ -1,11 +1,12 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using System.IO;
 using System.Collections;
-using NUnit.Framework;
+using System.IO;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -34,7 +35,7 @@ namespace SharpSvn.Tests.Commands
 			SvnBlameArgs a = new SvnBlameArgs();
 			Assert.That(this.Client.Blame(path, a, new EventHandler<SvnBlameEventArgs>(this.Receiver)));
 
-			Assert.AreEqual(cmdline.Length, this.blames.Count);
+			Assert.That(this.blames.Count, Is.EqualTo(cmdline.Length));
 			for (int i = 0; i < cmdline.Length; i++)
 			{
 				Blame.CheckEqual(cmdline[i], (Blame)this.blames[i]);
@@ -54,9 +55,9 @@ namespace SharpSvn.Tests.Commands
 
 			Blame[] b = (Blame[])this.blames.ToArray(typeof(Blame));
 
-			Assert.AreEqual(-1, b[0].Revision);
-			Assert.AreEqual(null, b[0].Author);
-			Assert.AreEqual(DateTime.MinValue, b[0].Date);
+			Assert.That(b[0].Revision, Is.EqualTo(-1));
+			Assert.That(b[0].Author, Is.EqualTo(null));
+			Assert.That(b[0].Date, Is.EqualTo(DateTime.MinValue));
 
 		}
 

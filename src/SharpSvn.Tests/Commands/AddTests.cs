@@ -3,9 +3,10 @@
 using System;
 using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
-using SharpSvn;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -35,9 +36,9 @@ namespace SharpSvn.Tests.Commands
 			a.Depth = SvnDepth.Empty;
 			this.Client.Add(testFile, a);
 
-			Assert.IsTrue(this.Notifications.Length > 0, "No notification callbacks received");
+			Assert.That(this.Notifications.Length > 0, "No notification callbacks received");
 
-			Assert.AreEqual('A', this.GetSvnStatus(testFile), "svn st does not report the file as added");
+			Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
 		}
 
 		/// <summary>
@@ -56,8 +57,8 @@ namespace SharpSvn.Tests.Commands
 			// do a non-recursive add here
 			this.Client.Add(dir1, a);
 
-			Assert.IsTrue(this.Notifications.Length == 1, "Too many or no notifications received. Added recursively?");
-			Assert.AreEqual('A', this.GetSvnStatus(dir1), "Subdirectory not added");
+			Assert.That(this.Notifications.Length == 1, "Too many or no notifications received. Added recursively?");
+			Assert.That(this.GetSvnStatus(dir1), Is.EqualTo('A'), "Subdirectory not added");
 
 			Assert.That(GetSvnStatus(dir2), Is.Not.EqualTo('A'), "Recursive add");
 			Assert.That(GetSvnStatus(testFile1), Is.Not.EqualTo('A'), "Recursive add");
@@ -80,11 +81,11 @@ namespace SharpSvn.Tests.Commands
 			this.Client.Add(dir1, a);
 
 			// enough notifications?
-			Assert.AreEqual(4, this.Notifications.Length, "Received wrong number of notifications");
-			Assert.AreEqual('A', this.GetSvnStatus(dir1), "Subdirectory not added");
-			Assert.AreEqual('A', this.GetSvnStatus(dir2), "Subsubdirectory not added");
-			Assert.AreEqual('A', this.GetSvnStatus(testFile1), "File in subdirectory not added");
-			Assert.AreEqual('A', this.GetSvnStatus(testFile2), "File in subsubdirectory not added");
+			Assert.That(this.Notifications.Length, Is.EqualTo(4), "Received wrong number of notifications");
+			Assert.That(this.GetSvnStatus(dir1), Is.EqualTo('A'), "Subdirectory not added");
+			Assert.That(this.GetSvnStatus(dir2), Is.EqualTo('A'), "Subsubdirectory not added");
+			Assert.That(this.GetSvnStatus(testFile1), Is.EqualTo('A'), "File in subdirectory not added");
+			Assert.That(this.GetSvnStatus(testFile2), Is.EqualTo('A'), "File in subsubdirectory not added");
 		}
 
 		[Test]

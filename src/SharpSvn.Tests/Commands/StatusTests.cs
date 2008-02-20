@@ -1,12 +1,13 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using System.Collections.ObjectModel;
-
-
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -42,33 +43,33 @@ namespace SharpSvn.Tests.Commands
 			SvnStatusArgs a = new SvnStatusArgs();
 
 			Client.Status(unversioned, a, new EventHandler<SvnStatusEventArgs>(StatusFunc));
-			Assert.AreEqual(this.currentStatus.LocalContentStatus, SvnStatus.NotVersioned,
+			Assert.That(SvnStatus.NotVersioned, Is.EqualTo(this.currentStatus.LocalContentStatus),
 				"Wrong text status on " + unversioned);
-			Assert.IsTrue(string.Compare(unversioned, currentStatus.Path, true) == 0, "Unversioned filenames don't match");
+			Assert.That(string.Compare(unversioned, currentStatus.Path, true) == 0, "Unversioned filenames don't match");
 
 
 			Client.Status(added, a, new EventHandler<SvnStatusEventArgs>(StatusFunc));
-			Assert.AreEqual(this.currentStatus.LocalContentStatus, SvnStatus.Added,
+			Assert.That(SvnStatus.Added, Is.EqualTo(this.currentStatus.LocalContentStatus),
 				"Wrong text status on " + added);
-			Assert.IsTrue(string.Compare(added, currentStatus.Path, true) == 0, "Added filenames don't match");
+			Assert.That(string.Compare(added, currentStatus.Path, true) == 0, "Added filenames don't match");
 
 
 			Client.Status(changed, a, new EventHandler<SvnStatusEventArgs>(StatusFunc));
-			Assert.AreEqual(this.currentStatus.LocalContentStatus, SvnStatus.Modified,
+			Assert.That(SvnStatus.Modified, Is.EqualTo(this.currentStatus.LocalContentStatus),
 				"Wrong text status " + changed);
-			Assert.IsTrue(string.Compare(changed, this.currentStatus.Path, true) == 0, "Changed filenames don't match");
+			Assert.That(string.Compare(changed, this.currentStatus.Path, true) == 0, "Changed filenames don't match");
 
 
 			Client.Status(propChange, a, new EventHandler<SvnStatusEventArgs>(StatusFunc));
-			Assert.AreEqual(this.currentStatus.LocalPropertyStatus, SvnStatus.Modified,
+			Assert.That(SvnStatus.Modified, Is.EqualTo(this.currentStatus.LocalPropertyStatus),
 				"Wrong property status " + propChange);
-			Assert.IsTrue(string.Compare(propChange, currentStatus.Path, true) == 0, "Propchanged filenames don't match");
+			Assert.That(string.Compare(propChange, currentStatus.Path, true) == 0, "Propchanged filenames don't match");
 
 			a.GetAll = true;
 			currentStatus = null;
 
 			Client.Status(ignored, a, new EventHandler<SvnStatusEventArgs>(StatusFunc));
-			Assert.AreEqual(SvnStatus.Ignored, this.currentStatus.LocalContentStatus,
+			Assert.That(this.currentStatus.LocalContentStatus, Is.EqualTo(SvnStatus.Ignored),
 				"Wrong content status " + ignored);
 		}
 
@@ -144,15 +145,15 @@ namespace SharpSvn.Tests.Commands
 			string propChange = Path.Combine(this.WcPath, "App.ico");
 
 			Status status = this.Client.SingleStatus(unversioned);
-			Assert.AreEqual(StatusKind.Unversioned, status.TextStatus,
+			Assert.That( status.TextStatus, Is.EqualTo(StatusKind.Unversioned),
 				"Wrong text status on " + unversioned);
 
 			status = this.Client.SingleStatus(added);
-			Assert.AreEqual(StatusKind.Added, status.TextStatus,
+			Assert.That( status.TextStatus, Is.EqualTo(StatusKind.Added),
 				"Wrong text status on " + added);
 
 			status = this.Client.SingleStatus(changed);
-			Assert.AreEqual(StatusKind.Modified, status.TextStatus,
+			Assert.That( status.TextStatus, Is.EqualTo(StatusKind.Modified),
 				"Wrong text status " + changed);
 
 			this.RunCommand("svn", "ps foo bar " + propChange);
@@ -167,7 +168,7 @@ namespace SharpSvn.Tests.Commands
 		{
 			string doesntExist = Path.Combine(this.WcPath, "doesnt.exist");
 			Status status = this.Client.SingleStatus(doesntExist);
-			Assert.AreEqual(Status.None, status);
+			Assert.That( status, Is.EqualTo(Status.None));
 		}
 
 		[Test]
@@ -176,7 +177,7 @@ namespace SharpSvn.Tests.Commands
 			string dir = Path.Combine(this.WcPath, "Unversioned");
 			string file = Path.Combine(dir, "file.txt");
 			Status status = this.Client.SingleStatus(file);
-			Assert.AreEqual(Status.None, status);
+			Assert.That( status, Is.EqualTo(Status.None));
 
 		}
 
@@ -184,11 +185,11 @@ namespace SharpSvn.Tests.Commands
 		public void TestSingleStatusNodeKind()
 		{
 			string file = Path.Combine(this.WcPath, "Form.cs");
-			Assert.AreEqual(NodeKind.File, this.Client.SingleStatus(file).Entry.Kind);
-			Assert.AreEqual("Form.cs", this.Client.SingleStatus(file).Entry.Name);
+			Assert.That( this.Client.SingleStatus(file).Entry.Kind, Is.EqualTo(NodeKind.File));
+			Assert.That( this.Client.SingleStatus(file).Entry.Name, Is.EqualTo("Form.cs"));
 
 			Status dir = this.Client.SingleStatus(this.WcPath);
-			Assert.AreEqual(NodeKind.Directory, this.Client.SingleStatus(this.WcPath).Entry.Kind);
+			Assert.That( this.Client.SingleStatus(this.WcPath).Entry.Kind, Is.EqualTo(NodeKind.Directory));
 		}
 
 
@@ -199,15 +200,15 @@ namespace SharpSvn.Tests.Commands
 			string form = Path.Combine(this.WcPath, "Form.cs");
 			Status status1 = this.Client.SingleStatus(form);
 			Status status2 = this.Client.SingleStatus(form);
-			Assert.AreEqual(status1, status2);
-			Assert.AreEqual(status1.Entry, status2.Entry);
+			Assert.That( status2, Is.EqualTo(status1));
+			Assert.That( status2.Entry, Is.EqualTo(status1.Entry));
 
 			using (StreamWriter w = new StreamWriter(form, true))
 				w.WriteLine("Moo");
 
 			status2 = this.Client.SingleStatus(form);
-			Assert.IsTrue(!status1.Equals(status2), "Should be non-equal");
-			Assert.AreEqual(status1.Entry, status2.Entry);
+			Assert.That(!status1.Equals(status2), "Should be non-equal");
+			Assert.That( status2.Entry, Is.EqualTo(status1.Entry));
 
 			// unversioned items have no .Entry
 			string unversioned = Path.Combine(this.WcPath, "Unversioned.txt");
@@ -215,7 +216,7 @@ namespace SharpSvn.Tests.Commands
 				w.WriteLine("Moo");
 			status2 = this.Client.SingleStatus(unversioned);
 			Assert.IsNull(status2.Entry, "Entry should be null");
-			Assert.IsTrue(!status2.Equals(status1), "Should not be similar");
+			Assert.That(!status2.Equals(status1), "Should not be similar");
 		}
 
 		[Test]
@@ -234,9 +235,9 @@ namespace SharpSvn.Tests.Commands
 
 			Status s = this.Client.SingleStatus(form);
 			Assert.IsNotNull(s.Entry.LockToken);
-			Assert.AreEqual(Environment.UserName, s.Entry.LockOwner);
-			Assert.AreEqual(DateTime.Now.Date, s.Entry.LockCreationDate.ToLocalTime().Date);
-			Assert.AreEqual("test", s.Entry.LockComment);
+			Assert.That( s.Entry.LockOwner, Is.EqualTo(Environment.UserName));
+			Assert.That( s.Entry.LockCreationDate.ToLocalTime().Date, Is.EqualTo(DateTime.Now.Date));
+			Assert.That( s.Entry.LockComment, Is.EqualTo("test"));
 		}
 
 		[Test]
@@ -251,9 +252,9 @@ namespace SharpSvn.Tests.Commands
 			Status s = this.currentStatus;
 
 			Assert.IsNotNull(s.Entry.LockToken);
-			Assert.AreEqual(Environment.UserName, s.Entry.LockOwner);
-			Assert.AreEqual(DateTime.Now.Date, s.Entry.LockCreationDate.ToLocalTime().Date);
-			Assert.AreEqual("test", s.Entry.LockComment);
+			Assert.That( s.Entry.LockOwner, Is.EqualTo(Environment.UserName));
+			Assert.That( s.Entry.LockCreationDate.ToLocalTime().Date, Is.EqualTo(DateTime.Now.Date));
+			Assert.That( s.Entry.LockComment, Is.EqualTo("test"));
 
 		}
 
@@ -268,9 +269,9 @@ namespace SharpSvn.Tests.Commands
 				false, true, true, false);
 			Status status = this.currentStatus;
 			Assert.IsNotNull(status.ReposLock);
-			Assert.AreEqual(Environment.UserName, status.ReposLock.Owner);
-			Assert.AreEqual(status.ReposLock.CreationDate.ToLocalTime().Date, DateTime.Now.Date);
-			Assert.AreEqual("test", status.ReposLock.Comment);
+			Assert.That( status.ReposLock.Owner, Is.EqualTo(Environment.UserName));
+			Assert.That( DateTime.Now.Date, Is.EqualTo(status.ReposLock.CreationDate.ToLocalTime().Date));
+			Assert.That( status.ReposLock.Comment, Is.EqualTo("test"));
 			Assert.IsFalse(status.ReposLock.IsDavComment);
 		}*/
 
@@ -301,20 +302,20 @@ namespace SharpSvn.Tests.Commands
 
 				Match match = INFO.Match(this.output);
 
-				Assert.AreEqual(match.Groups["url"].Value, entry.Uri.ToString(), "Url differs");
-				Assert.AreEqual(match.Groups["name"].Value, entry.Name, "Name differs");
-				Assert.AreEqual(int.Parse(match.Groups["revision"].Value), entry.Revision,
+				Assert.That(entry.Uri.ToString(), Is.EqualTo(match.Groups["url"].Value), "Url differs");
+				Assert.That(entry.Name, Is.EqualTo(match.Groups["name"].Value), "Name differs");
+				Assert.That(entry.Revision, Is.EqualTo(int.Parse(match.Groups["revision"].Value)),
 					"Revision differs");
-				Assert.AreEqual(match.Groups["nodekind"].Value.ToLower(), entry.NodeKind.ToString().ToLower(),
+				Assert.That(entry.NodeKind.ToString().ToLower(), Is.EqualTo(match.Groups["nodekind"].Value.ToLower()),
 					"Node kind differs");
-				Assert.AreEqual(match.Groups["reposuuid"].Value, entry.RepositoryId.ToString(),
+				Assert.That(entry.RepositoryId.ToString(), Is.EqualTo(match.Groups["reposuuid"].Value),
 					"Repository UUID differs");
-				Assert.AreEqual(match.Groups["schedule"].Value.ToLower(), entry.Schedule.ToString().ToLower(),
+				Assert.That(entry.Schedule.ToString().ToLower(), Is.EqualTo(match.Groups["schedule"].Value.ToLower()),
 					"Schedule differs");
-				Assert.AreEqual(match.Groups["lastchangedauthor"].Value, entry.LastChangeAuthor,
+				Assert.That(entry.LastChangeAuthor, Is.EqualTo(match.Groups["lastchangedauthor"].Value),
 					"Last changed author differs");
-				Assert.AreEqual(match.Groups["locktoken"].Value, entry.LockToken, "Lock token differs");
-				Assert.AreEqual(match.Groups["lockowner"].Value, entry.LockOwner, "Lock owner differs");
+				Assert.That(entry.LockToken, Is.EqualTo(match.Groups["locktoken"].Value), "Lock token differs");
+				Assert.That(entry.LockOwner, Is.EqualTo(match.Groups["lockowner"].Value), "Lock owner differs");
 			}
 
 			private string output;

@@ -4,7 +4,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -47,7 +49,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(Client.RemoteImport(truePath, trueDstUrl, a));
 
 			String cmd = this.RunCommand("svn", "list " + this.ReposUrl.ToString());
-			Assert.IsTrue(cmd.IndexOf("testfile.txt") >= 0, "File wasn't imported ");
+			Assert.That(cmd.IndexOf("testfile.txt") >= 0, "File wasn't imported ");
 		}
 
 		/// <summary>
@@ -67,7 +69,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(Client.Import(dir1, trueDstUrl, a));
 
 			String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
-			Assert.IsTrue(cmd.IndexOf("newDir2") >= 0, "File wasn't imported");
+			Assert.That(cmd.IndexOf("newDir2") >= 0, "File wasn't imported");
 
 		}
 
