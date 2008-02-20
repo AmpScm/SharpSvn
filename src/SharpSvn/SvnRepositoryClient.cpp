@@ -101,25 +101,32 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
 	switch(args->RepositoryCompatibility)
 	{
-	case SvnRepositoryCompatibility::SubversionPre14:
+	case SvnRepositoryCompatibility::Subversion10:
+		// Use 1.1-1.3 format
 		apr_hash_set(
 			fs_config,
 			SVN_FS_CONFIG_PRE_1_4_COMPATIBLE,
 			APR_HASH_KEY_STRING,
 			"1");
 		// fall through
-	case SvnRepositoryCompatibility::SubversionPre15:
+	case SvnRepositoryCompatibility::Subversion14:
+		// Use 1.4 format
 		apr_hash_set(
 			fs_config,
 			SVN_FS_CONFIG_PRE_1_5_COMPATIBLE,
 			APR_HASH_KEY_STRING,
 			"1");
 		// fall through
+	case SvnRepositoryCompatibility::Subversion15:
+		// Use 1.5 format
+		// 
 
 		// .....
 
 		break;
+	case SvnRepositoryCompatibility::Default:
 	default:
+		// Use default format
 		break;
 	}
 

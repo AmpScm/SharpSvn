@@ -571,7 +571,8 @@ namespace SharpSvn {
 			svn_auth_baton_t *GetAuthorizationBaton(AprPool ^pool, [Out] int% cookie);
 
 		public:
-			void SetRetryLimit(Delegate^ handler, int limit)
+			generic<typename TSvnAuthenticationEventArgs> where TSvnAuthenticationEventArgs : SvnAuthenticationEventArgs
+			void SetRetryLimit(EventHandler<TSvnAuthenticationEventArgs>^ handler, int limit)
 			{
 				if (!handler)
 					throw gcnew ArgumentNullException("handler");

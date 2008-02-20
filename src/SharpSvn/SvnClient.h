@@ -627,18 +627,31 @@ namespace SharpSvn {
 #pragma region // Copy Client Command
 		/// <overloads>Duplicate something in working copy, remembering history (<c>svn copy</c>)</overloads>
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath);
-		bool Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath);
+		
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath);
+
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
-		bool Copy(ICollection<SvnTarget^>^ sourceTargets, String^ toPath, SvnCopyArgs^ args);
+
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, SvnCopyArgs^ args);
 		/// <overloads>Duplicate something in repository, remembering history (<c>svn copy</c>)</overloads>
 		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri);
-		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri);
+
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri);
 		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitResult^% result);
-		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, [Out] SvnCommitResult^% result);
+
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, [Out] SvnCommitResult^% result);
 		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
-		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
+
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
 		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
-		bool RemoteCopy(ICollection<SvnTarget^>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
+
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 	public:
@@ -815,11 +828,13 @@ namespace SharpSvn {
 #pragma region // Merge Client Command
 		/// <overloads>Merges the changes in the specified revisions from source to targetPath</overloads>
 		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange);
-		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange);
-		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange);
+
+		generic<typename TRevisionRange> where TRevisionRange : SvnRevisionRange
+		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisionRange>^ mergeRange);
+
 		bool Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ mergeRange, SvnMergeArgs^ args);
-		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange, SvnMergeArgs^ args);
-		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange, SvnMergeArgs^ args);
+		generic<typename TRevisionRange> where TRevisionRange : SvnRevisionRange
+		bool Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisionRange>^ mergeRange, SvnMergeArgs^ args);
 #pragma endregion
 
 	public:
