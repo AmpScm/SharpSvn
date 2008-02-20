@@ -82,8 +82,8 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 		svn_error_t *r = svn_client_blame4(
 			pool.AllocString(target->SvnTargetName),
 			&pegRev,
-			args->Start->AllocSvnRevision(%pool),
-			args->End->AllocSvnRevision(%pool),
+			args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool),
+			args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool),
 			options,
 			args->IgnoreMimeType,
 			args->IncludeMergedRevisions,

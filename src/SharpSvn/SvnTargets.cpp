@@ -64,14 +64,6 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 	return r;
 }
 
-svn_opt_revision_t SvnRevision::ToSvnRevision(SvnRevision^ noneValue)
-{
-	if (RevisionType != SvnRevisionType::None || !noneValue)
-		return ToSvnRevision();
-	else
-		return noneValue->ToSvnRevision();
-}
-
 svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
 {
 	if (!pool)
@@ -118,13 +110,13 @@ SvnTarget^ SvnTarget::FromUri(Uri^ value)
 svn_opt_revision_t SvnPathTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
 {
 	UNUSED_ALWAYS(uriNoneValue);
-	return Revision->ToSvnRevision(fileNoneValue);
+	return Revision->Or(fileNoneValue)->ToSvnRevision();
 }
 
 svn_opt_revision_t SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue)
 {
 	UNUSED_ALWAYS(fileNoneValue);
-	return Revision->ToSvnRevision(uriNoneValue);
+	return Revision->Or(uriNoneValue)->ToSvnRevision();
 }
 
 String^ SvnPathTarget::GetFullPath(String ^path)

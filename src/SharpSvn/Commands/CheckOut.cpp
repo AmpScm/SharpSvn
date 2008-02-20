@@ -58,17 +58,10 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	switch(args->Revision->RevisionType)
-	{
-		case SvnRevisionType::None: // Translated to head
-		case SvnRevisionType::Time:
-		case SvnRevisionType::Number:
-		case SvnRevisionType::Head:
-			break;
-		default:
-			// Throw the error before we allocate the unmanaged resources
-			throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
-	}
+	if(args->Revision->RequiresWorkingCopy)
+		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
+	else if(url->Revision->RequiresWorkingCopy)
+		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "url");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
@@ -76,9 +69,8 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 
 	svn_revnum_t version = 0;
 
-	//svn_opt_peg_Re
 	svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
-	svn_opt_revision_t coRev = args->Revision->ToSvnRevision(SvnRevision::Head);
+	svn_opt_revision_t coRev = args->Revision->Or(url->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
 
 	svn_error_t* r = svn_client_checkout3(&version,
 		pool.AllocString(url->SvnTargetName),

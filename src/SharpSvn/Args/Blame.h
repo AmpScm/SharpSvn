@@ -23,8 +23,8 @@ namespace SharpSvn {
 	public:
 		SvnBlameArgs()
 		{
-			_start = SvnRevision::Zero;
-			_end = SvnRevision::Head;
+			_start = SvnRevision::None;
+			_end = SvnRevision::None;
 		}
 
 		virtual property SvnClientCommandType ClientCommandType

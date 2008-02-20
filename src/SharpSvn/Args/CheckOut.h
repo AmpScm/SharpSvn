@@ -22,7 +22,7 @@ namespace SharpSvn {
 		SvnCheckOutArgs()
 		{
 			_depth = SvnDepth::Unknown;
-			_revision = SvnRevision::Head;
+			_revision = SvnRevision::None;
 		}
 
 		virtual property SvnClientCommandType ClientCommandType
@@ -57,6 +57,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets the revision to load. Defaults to the peg revision or Head</summary>
 		property SvnRevision^ Revision
 		{
 			SvnRevision^ get()
