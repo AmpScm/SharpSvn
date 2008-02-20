@@ -294,9 +294,14 @@ namespace SharpSvn {
 
 	public enum class SvnRepositoryCompatibility
 	{
+		/// <summary>Create a repository with the latest available format</summary>
 		Default				= 0,
-		SubversionPre14		= 1,
-		SubversionPre15		= 2,
+		/// <summary>Create a repository in a Subversion 1.0-1.3 compatible format</summary>
+		Subversion10		= 1,
+		/// <summary>Create a repository in Subversion 1.4 compatible format</summary>
+		Subversion14		= 2,
+		/// <summary>Create a repository in Subversion 1.5 compatible format</summary>
+		Subversion15		= 3,
 	};
 
 	public enum class SvnDiffKind
@@ -351,7 +356,7 @@ namespace SharpSvn {
 	public enum class SvnConflictType
 	{
 		/// <summary>textual conflict (on a file)</summary>
-		Text			= svn_wc_conflict_kind_text,
+		Content			= svn_wc_conflict_kind_text,
 		/// <summary>property conflict (on a file or dir)</summary>
 		Property		= svn_wc_conflict_kind_property,
 	};

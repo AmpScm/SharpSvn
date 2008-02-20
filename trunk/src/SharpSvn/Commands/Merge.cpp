@@ -37,7 +37,8 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ m
 	return Merge(targetPath, source, NewSingleItemCollection(mergeRange), args);
 }
 
-bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange)
+generic<typename TRevisionRange> where TRevisionRange : SvnRevisionRange
+bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisionRange>^ mergeRange)
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
@@ -46,10 +47,11 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevi
 	else if(!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
 
-	return Merge(targetPath, source, mergeRange, gcnew SvnMergeArgs());
+	return Merge<TRevisionRange>(targetPath, source, mergeRange, gcnew SvnMergeArgs());
 }
 
-ref class RevisionRangeMarshaller sealed : public IItemMarshaller<SvnRevisionRange^>
+generic<typename TRevisionRange> where TRevisionRange : SvnRevisionRange
+ref class RevisionRangeMarshaller sealed : public IItemMarshaller<TRevisionRange>
 {
 public:
 	property int ItemSize
@@ -60,7 +62,7 @@ public:
 		}
 	}
 
-	virtual void Write(SvnRevisionRange^ value, void* ptr, AprPool^ pool)
+	virtual void Write(TRevisionRange value, void* ptr, AprPool^ pool)
 	{
 		svn_opt_revision_range_t** ppRange = (svn_opt_revision_range_t**)ptr;
 		*ppRange = (svn_opt_revision_range_t*)pool->Alloc(sizeof(svn_opt_revision_range_t));
@@ -69,7 +71,7 @@ public:
 		(*ppRange)->end = value->EndRevision->ToSvnRevision();
 	}
 
-	virtual SvnRevisionRange^ Read(const void* ptr, AprPool^ pool)
+	virtual TRevisionRange Read(const void* ptr, AprPool^ pool)
 	{
 		UNUSED_ALWAYS(ptr);
 		UNUSED_ALWAYS(pool);
@@ -78,7 +80,8 @@ public:
 	}
 };
 
-bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevisionRange^>^ mergeRange, SvnMergeArgs^ args)
+generic<typename TRevisionRange> where TRevisionRange : SvnRevisionRange
+bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisionRange>^ mergeRange, SvnMergeArgs^ args)
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
@@ -93,7 +96,8 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevi
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	AprArray<SvnRevisionRange^, RevisionRangeMarshaller^>^ mergeList = gcnew AprArray<SvnRevisionRange^, RevisionRangeMarshaller^>(mergeRange, %pool);
+	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList 
+		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
 	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
 	svn_error_t *r = svn_client_merge_peg3(
@@ -111,21 +115,4 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnRevi
 		pool.Handle);
 
 	return args->HandleResult(this, r);
-}
-
-bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange, SvnMergeArgs^ args)
-{
-	if (!mergeRange)
-		throw gcnew ArgumentNullException("mergeRange");
-
-	array<SvnRevisionRange^>^ revs = gcnew array<SvnRevisionRange^>(mergeRange->Count);
-
-	mergeRange->CopyTo(static_cast<array<SvnMergeRange^>^>(revs), 0);
-
-	return Merge(targetPath, source, safe_cast<ICollection<SvnRevisionRange^>^>(revs), args);
-}
-
-bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<SvnMergeRange^>^ mergeRange)
-{
-	return Merge(targetPath, source, mergeRange, gcnew SvnMergeArgs());
 }
