@@ -45,7 +45,12 @@ get_revnum(svn_revnum_t *revnum, const svn_opt_revision_t *revision,
 	else if (revision->kind == svn_opt_revision_head)
 		*revnum = youngest;
 	else if (revision->kind == svn_opt_revision_date)
-		SVN_ERR(svn_repos_dated_revision(revnum, repos, revision->value.date, pool));
+	{
+		svn_error_t* r = svn_repos_dated_revision(revnum, repos, revision->value.date, pool);
+
+		if(r)
+			return r;
+	}
 	else if (revision->kind == svn_opt_revision_unspecified)
 		*revnum = SVN_INVALID_REVNUM;
 	else
