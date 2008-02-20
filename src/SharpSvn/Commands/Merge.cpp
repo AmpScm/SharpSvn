@@ -98,12 +98,11 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 
 	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList 
 		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
-	svn_opt_revision_t pegRev = source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
 
 	svn_error_t *r = svn_client_merge_peg3(
 		pool.AllocString(source->SvnTargetName),
 		mergeList->Handle,
-		&pegRev,
+		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocPath(targetPath),
 		(svn_depth_t)args->Depth,
 		args->IgnoreAncestry,

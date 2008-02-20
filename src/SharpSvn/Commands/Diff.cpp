@@ -50,9 +50,6 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 	AprStreamFile out(result, %pool);
 	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
 
-	svn_opt_revision_t fromRev = from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-	svn_opt_revision_t toRev = to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head);
-
 	ICollection<String^>^ diffArgs = args->DiffArguments;
 
 	if (!diffArgs)
@@ -61,9 +58,9 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 	svn_error_t *r = svn_client_diff4(
 		AllocArray(diffArgs, %pool),
 		pool.AllocString(from->SvnTargetName),
-		&fromRev,
+		from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocString(to->SvnTargetName),
-		&toRev,
+		to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		args->RelativeToPath ? pool.AllocPath(args->RelativeToPath) : nullptr,
 		(svn_depth_t)args->Depth,
 		args->IgnoreAncestry,

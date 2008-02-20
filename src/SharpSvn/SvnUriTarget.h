@@ -166,6 +166,6 @@ namespace SharpSvn {
 			return false;
 		}
 
-		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
+		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
 	};
 }

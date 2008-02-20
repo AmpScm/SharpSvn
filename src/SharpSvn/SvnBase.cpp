@@ -255,8 +255,8 @@ public:
 		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
 
 		(*src)->path = pool->AllocCanonical(value->SvnTargetName);
-		(*src)->revision = value->Revision->AllocSvnRevision(pool);
-		(*src)->peg_revision = value->Revision->AllocSvnRevision(pool);
+		(*src)->revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
+		(*src)->peg_revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
 	}
 
 	virtual SvnTarget^ Read(const void* ptr, AprPool^ pool)

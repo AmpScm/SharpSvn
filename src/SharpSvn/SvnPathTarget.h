@@ -142,6 +142,6 @@ namespace SharpSvn {
 		static operator SvnPathTarget^(String^ value) { return value ? FromString(value) : nullptr; }
 
 	internal:
-		virtual svn_opt_revision_t GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
+		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
 	};
 }
