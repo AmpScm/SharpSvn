@@ -567,10 +567,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientArgs_Admin.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnClientConfiguration.h"
 					>
 				</File>
@@ -580,10 +576,6 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientEventArgs_Global.h"
 					>
 				</File>
 				<File
@@ -1117,6 +1109,54 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Repository Args"
+				>
+				<File
+					RelativePath=".\ReposArgs\CreateRepository.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposArgs\DeleteRepository.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposArgs\DumpRepository.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposArgs\LoadRepository.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposArgs\RecoverRepository.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Repository Commands"
+				>
+				<File
+					RelativePath=".\ReposCommands\CreateRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposCommands\DeleteRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposCommands\DumpRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposCommands\LoadRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposCommands\RecoverRepository.cpp"
 					>
 				</File>
 			</Filter>

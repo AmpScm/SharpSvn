@@ -12,6 +12,12 @@
 #include "AprBaton.h"
 
 namespace SharpSvn {
+	ref class SvnCreateRepositoryArgs;
+	ref class SvnDeleteRepositoryArgs;
+	ref class SvnRecoverRepositoryArgs;
+	ref class SvnLoadRepositoryArgs;
+	ref class SvnDumpRepositoryArgs;
+
 
 	/// <summary>
 	/// Managed wrapper of some of the most common repository management functions.
@@ -33,18 +39,24 @@ namespace SharpSvn {
 		String^ FindRepositoryRoot(Uri^ repositoryUri);
 
 		/// <summary>Creates a default repository at the specified local path</summary>
-		void CreateRepository(String^ repositoryPath);
+		bool CreateRepository(String^ repositoryPath);
 		/// <summary>Creates a default repository at the specified local path</summary>
 		bool CreateRepository(String^ repositoryPath, SvnCreateRepositoryArgs^ args);
 		/// <summary>Deletes the repository at the specified local path</summary>
-		void DeleteRepository(String^ repositoryPath);
+		bool DeleteRepository(String^ repositoryPath);
 		/// <summary>Deletes the repository at the specified local path</summary>
 		bool DeleteRepository(String^ repositoryPath, SvnDeleteRepositoryArgs^ args);
 
 		/// <summary>Recovers the repository at the specified local path</summary>
-		void RecoverRepository(String^ repositoryPath);
+		bool RecoverRepository(String^ repositoryPath);
 		/// <summary>Recovers the repository at the specified local path</summary>
 		bool RecoverRepository(String^ repositoryPath, SvnRecoverRepositoryArgs^ args);
+
+		bool LoadRepository(String^ repositoryPath, Stream^ from);
+		bool LoadRepository(String^ repositoryPath, Stream^ from, SvnLoadRepositoryArgs^ args);
+
+		bool DumpRepository(String^ repositoryPath, Stream^ to);
+		bool DumpRepository(String^ repositoryPath, Stream^ to, SvnDumpRepositoryArgs^ args);
 
 	private:
 		~SvnRepositoryClient();

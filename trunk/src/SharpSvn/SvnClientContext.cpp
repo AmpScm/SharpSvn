@@ -75,6 +75,12 @@ void SvnClientContext::HandleClientError(SvnErrorEventArgs^ e)
 	/* NOOP at SvnClientContext level */
 }
 
+void SvnClientContext::HandleProcessing(SvnProcessingEventArgs^ e)
+{
+	UNUSED_ALWAYS(e);
+	/* NOOP at SvnClientContext level */
+}
+
 void SvnClientContext::EnsureState(SvnContextState requiredState)
 {
 	if (!_pool)
@@ -385,4 +391,25 @@ void SvnClientContext::MergeConfiguration(String^ path)
 
 	if (err)
 		throw SvnException::Create(err);
+}
+
+SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ args)
+{
+	if (!args)
+		throw gcnew ArgumentNullException("args");
+	else if(client->_currentArgs)
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+
+	args->LastException = nullptr;
+	client->_currentArgs = args;
+	_client = client;
+	try
+	{
+		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->ClientCommandType));
+	}
+	catch(Exception^)
+	{
+		client->_currentArgs = nullptr;
+		throw;
+	}
 }

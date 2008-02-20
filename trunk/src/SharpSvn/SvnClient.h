@@ -92,18 +92,8 @@ namespace SharpSvn {
 	{
 		initonly AprBaton<SvnClient^>^ _clientBatton;
 		AprPool _pool;
-		SvnClientArgs^ _currentArgs;
 	internal:
 		bool _noLogMessageRequired;
-
-	internal:
-		property SvnClientArgs^ CurrentCommandArgs
-		{
-			SvnClientArgs^ get()
-			{
-				return _currentArgs;
-			}
-		}
 
 	public:
 		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
@@ -235,8 +225,8 @@ namespace SharpSvn {
 		void HandleClientGetCommitLog(SvnCommittingEventArgs^ e);
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflictResolver(SvnConflictEventArgs^ e);
-		virtual void HandleClientError(SvnErrorEventArgs^ e) override;
-		void HandleProcessing(SvnProcessingEventArgs^ e);
+		virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
+		virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
 
 		static const char* GetEolPtr(SvnLineStyle style);
 #pragma endregion
@@ -942,19 +932,6 @@ namespace SharpSvn {
 
 	private:
 		~SvnClient();
-
-		// Used as auto-dispose class for setting the _currentArgs property
-		ref class ArgsStore sealed
-		{
-			initonly SvnClient^ _client;
-		public:
-			ArgsStore(SvnClient^ client, SvnClientArgs^ args);
-
-			~ArgsStore()
-			{
-				_client->_currentArgs = nullptr;
-			}
-		};
 	};
 }
 #include "SvnClientArgs.h"

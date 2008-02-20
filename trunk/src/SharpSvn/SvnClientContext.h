@@ -35,6 +35,8 @@ namespace SharpSvn {
 	}
 
 	ref class SvnErrorEventArgs;
+	ref class SvnProcessingEventArgs;
+	ref class SvnClientArgs;
 
 	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -51,11 +53,25 @@ namespace SharpSvn {
 		static initonly Object^ _plinkLock = gcnew Object();
 		static String^ _plinkPath;
 
+	private:
+		// For SvnClient and SvnReposClient
+		SvnClientArgs^ _currentArgs;
+
+	internal:
+		property SvnClientArgs^ CurrentCommandArgs
+		{
+			SvnClientArgs^ get()
+			{
+				return _currentArgs;
+			}
+		}
+
 	internal:
 		bool _dontLoadMimeFile;
 		bool _dontEnablePlink;
 		SvnClientContext(AprPool^ pool);
 		virtual void HandleClientError(SvnErrorEventArgs^ e);
+		virtual void HandleProcessing(SvnProcessingEventArgs^ e);
 
 	public:
 		SvnClientContext(SvnClientContext ^fromContext);
@@ -111,6 +127,20 @@ namespace SharpSvn {
 				return _authentication;
 			}
 		}
+
+	private protected:
+		// Used as auto-dispose class for setting the _currentArgs property
+		ref class ArgsStore sealed
+		{
+			initonly SvnClientContext^ _client;
+		public:
+			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args);
+
+			~ArgsStore()
+			{
+				_client->_currentArgs = nullptr;
+			}
+		};
 	};
 
 	public ref class SvnCommandResult abstract
