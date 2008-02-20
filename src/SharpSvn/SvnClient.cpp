@@ -87,8 +87,8 @@ System::Version^ SvnClient::SharpSvnVersion::get()
 
 void SvnClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
-	if (_currentArgs)
-		_currentArgs->OnCancel(e);
+	if (CurrentCommandArgs)
+		CurrentCommandArgs->OnCancel(e);
 
 	if (e->Cancel)
 		return;
@@ -103,8 +103,8 @@ void SvnClient::OnCancel(SvnCancelEventArgs^ e)
 
 void SvnClient::HandleClientProgress(SvnProgressEventArgs^ e)
 {
-	if (_currentArgs)
-		_currentArgs->OnProgress(e);
+	if (CurrentCommandArgs)
+		CurrentCommandArgs->OnProgress(e);
 
 	OnProgress(e);
 }
@@ -137,8 +137,8 @@ void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
 
 void SvnClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
-	if (_currentArgs)
-		_currentArgs->OnNotify(e);
+	if (CurrentCommandArgs)
+		CurrentCommandArgs->OnNotify(e);
 
 	OnNotify(e);
 }
@@ -176,9 +176,9 @@ void SvnClient::HandleClientError(SvnErrorEventArgs^ e)
 	if (e->Cancel)
 		return;
 
-	if (_currentArgs)
+	if (CurrentCommandArgs)
 	{
-		_currentArgs->OnSvnError(e);
+		CurrentCommandArgs->OnSvnError(e);
 
 		if (e->Cancel)
 			return;
@@ -431,27 +431,6 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 		svn_error_clear(err);
 
 	return nullptr;
-}
-
-SvnClient::ArgsStore::ArgsStore(SvnClient^ client, SvnClientArgs^ args)
-{
-	if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if(client->_currentArgs)
-		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
-
-	args->LastException = nullptr;
-	client->_currentArgs = args;
-	_client = client;
-	try
-	{
-		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->ClientCommandType));
-	}
-	catch(Exception^)
-	{
-		client->_currentArgs = nullptr;
-		throw;
-	}
 }
 
 void SvnClient::AddClientName(String^ name, System::Version^ version)

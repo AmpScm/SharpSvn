@@ -37,3 +37,6 @@ struct svn_wc_adm_access_t
 
 struct svn_config_t
 {};
+
+struct svn_fs_t
+{};
