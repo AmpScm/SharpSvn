@@ -16,12 +16,20 @@ using SharpSvn.Tests.Commands.Utils;
 
 namespace SharpSvn.Tests.Commands
 {
+	public enum TestReposType
+	{
+		Empty,
+		AnkhRepos,
+		CollabRepos
+	}
 	/// <summary>
 	/// Serves as a base class for tests for NSvn::Core::Add
 	/// </summary>
 	[TestFixture]
 	public class TestBase
 	{
+		List<string> pathsToDelete = new List<string>();
+		SortedList<TestReposType, string> _reposs = new SortedList<TestReposType, string>();
 		Uri _reposUri;
 		string _reposPath;
 		string _wcPath;
@@ -31,6 +39,92 @@ namespace SharpSvn.Tests.Commands
 			string asm = this.GetType().FullName;
 			this.REPOS_FILE = "repos.zip";
 			this.WC_FILE = "wc.zip";
+		}
+
+		[TestFixtureTearDown]
+		public virtual void TestFixtureTearDown()
+		{
+			foreach (string path in pathsToDelete)
+			{
+				RecursiveDelete(path);
+			}
+			pathsToDelete.Clear();
+		}
+
+		protected string GetTempDir()
+		{
+			string file = Path.GetTempFileName();
+			File.Delete(file);
+			Directory.CreateDirectory(file);
+			pathsToDelete.Add(file);
+			return file;
+		}
+
+		protected Uri PathToUri(string path)
+		{
+			return new Uri("file:///" + Path.GetFullPath(path).Replace(Path.DirectorySeparatorChar, '/'));
+		}
+
+
+		protected string CreateRepos(TestReposType type)
+		{
+			string path = GetTempDir();
+			pathsToDelete.Add(path);
+
+			switch (type)
+			{
+				case TestReposType.Empty:
+					{
+						SvnRepositoryClient rc= new SvnRepositoryClient();
+						rc.CreateRepository(path);
+						return path;
+					}
+				case TestReposType.CollabRepos:
+					{
+						SvnRepositoryClient rc = new SvnRepositoryClient();
+						rc.CreateRepository(path);
+						using(FileStream fs = File.OpenRead(Path.Combine(ProjectBase, "Zips/Collabnet-MT.repos")))
+						{
+							rc.LoadRepository(path, fs);
+						}
+
+						
+						return path;
+					}
+				case TestReposType.AnkhRepos:
+					{
+						UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
+						return path;
+					}
+				default:
+					throw new ArgumentException();
+			}
+		}
+
+		public string GetRepos(TestReposType type)
+		{
+			string dir;
+			if (!_reposs.TryGetValue(type, out dir))
+			{
+				dir = CreateRepos(type);
+				_reposs[type] = dir;
+			}
+			return dir;
+		}
+
+		public Uri GetReposUri(TestReposType type)
+		{
+			Uri u = PathToUri(GetRepos(type));
+
+			if (!u.ToString().EndsWith("/"))
+				u = new Uri(u.ToString() + "/");
+
+			return u;
+		}
+
+		protected Uri CollabReposUri
+		{
+			get { return GetReposUri(TestReposType.CollabRepos); }
 		}
 
 		[SetUp]
@@ -46,17 +140,20 @@ namespace SharpSvn.Tests.Commands
 
 		protected static void RecursiveDelete(string path)
 		{
-			foreach (FileInfo f in new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories))
+			if (Directory.Exists(path))
 			{
-				f.Attributes = FileAttributes.Normal;
-			}
+				foreach (FileInfo f in new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories))
+				{
+					f.Attributes = FileAttributes.Normal;
+				}
 
-			foreach (DirectoryInfo f in new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories))
-			{
-				f.Attributes = FileAttributes.Normal;
-			}
+				foreach (DirectoryInfo f in new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories))
+				{
+					f.Attributes = FileAttributes.Normal;
+				}
 
-			Directory.Delete(path, true);
+				Directory.Delete(path, true);
+			}
 		}
 
 		[TearDown]

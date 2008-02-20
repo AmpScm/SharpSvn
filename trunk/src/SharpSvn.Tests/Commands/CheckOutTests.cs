@@ -31,6 +31,31 @@ namespace SharpSvn.Tests.Commands
 			RecursiveDelete(this.newWc);
 		}
 
+		[Test]
+		public void TestPegCheckOuts()
+		{
+			Uri repos = new Uri(GetReposUri(TestReposType.CollabRepos), "trunk/");
+
+			SvnUpdateResult result;
+			Assert.That(Client.CheckOut(repos, GetTempDir(), out result));
+
+			Assert.That(result, Is.Not.Null);
+			long head = result.Revision;
+
+			Assert.That(Client.CheckOut(new SvnUriTarget(repos, head - 10), GetTempDir(), out result));
+			Assert.That(result.Revision, Is.EqualTo(head - 10));
+
+			SvnCheckOutArgs a = new SvnCheckOutArgs();
+			a.Revision = head - 5;
+
+			Assert.That(Client.CheckOut(new SvnUriTarget(repos, head - 10), GetTempDir(), a, out result));
+			Assert.That(result.Revision, Is.EqualTo(head - 5));
+
+			Assert.That(Client.CheckOut(repos, GetTempDir(), a, out result));
+			Assert.That(result.Revision, Is.EqualTo(head - 5));
+		}
+
+
 		/// <summary>
 		/// Test a standard checkout operation
 		/// </summary>
@@ -66,6 +91,5 @@ namespace SharpSvn.Tests.Commands
 
 		private bool progressCalled = false;
 		private string newWc;
-
 	}
 }

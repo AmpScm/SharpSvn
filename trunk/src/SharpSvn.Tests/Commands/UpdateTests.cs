@@ -37,6 +37,27 @@ namespace SharpSvn.Tests.Commands
 			RecursiveDelete(this.wc2);
 		}
 
+		[Test]
+		public void RevTests()
+		{
+			string dir = GetTempDir();
+
+			SvnUpdateResult result;
+			Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk")), dir, out result));
+
+			long head = result.Revision;
+
+			Assert.That(Client.Update(dir, out result));
+			Assert.That(result.Revision, Is.EqualTo(head));
+
+			SvnUpdateArgs ua = new SvnUpdateArgs();
+
+			ua.Revision = head - 5;
+
+			Assert.That(Client.Update(dir, ua, out result));
+			Assert.That(result.Revision, Is.EqualTo(head-5));
+		}
+
 		/// <summary>
 		/// Deletes a file, then calls update on the working copy to restore it 
 		/// from the text-base
