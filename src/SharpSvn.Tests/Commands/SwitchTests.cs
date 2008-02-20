@@ -25,6 +25,33 @@ namespace SharpSvn.Tests.Commands
 			base.ExtractWorkingCopy();
 		}
 
+		[Test]
+		public void PegTests()
+		{
+			string dir = GetTempDir();
+
+			SvnUpdateResult result;
+			Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk")), dir, out result));
+
+			long head = result.Revision;
+
+			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/a")), out result));			
+			Assert.That(result.Revision, Is.EqualTo(head));
+
+			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/c"), head-3), out result));
+			Assert.That(result.Revision, Is.EqualTo(head - 3));
+
+			SvnSwitchArgs sa = new SvnSwitchArgs();
+			sa.Revision = head - 4;
+			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/b"), head - 5), sa, out result));
+			Assert.That(result.Revision, Is.EqualTo(head - 4));
+
+			sa = new SvnSwitchArgs();
+			sa.Revision = head - 7;
+			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/a")), sa, out result));
+			Assert.That(result.Revision, Is.EqualTo(head - 7));
+		}
+
 		/// <summary>
 		/// Try to switch wc to repos/doc
 		/// </summary>
