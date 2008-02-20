@@ -252,7 +252,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property DateTime TextChangeTime
+		property DateTime ContentChangeTime
 		{
 			DateTime get()
 			{
