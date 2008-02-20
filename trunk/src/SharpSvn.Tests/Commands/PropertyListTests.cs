@@ -1,12 +1,13 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
-using System.IO;
-using SharpSvn;
-using System.Text;
+using System.Collections;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -36,11 +37,11 @@ namespace SharpSvn.Tests.Commands
 
 			Assert.That(eList.Count, Is.EqualTo(1));
 
-			Assert.AreEqual(2, eList[0].Properties.Count,
+			Assert.That(eList[0].Properties.Count, Is.EqualTo(2),
 				"Wrong number of properties");
-			Assert.AreEqual("bar", eList[0].Properties["foo"].ToString(),
+			Assert.That(eList[0].Properties["foo"].ToString(), Is.EqualTo("bar"),
 				"Wrong property");
-			Assert.AreEqual("foo", eList[0].Properties["kung"].ToString(),
+			Assert.That(eList[0].Properties["kung"].ToString(), Is.EqualTo("foo"),
 				"Wrong property");
 		}
 	}

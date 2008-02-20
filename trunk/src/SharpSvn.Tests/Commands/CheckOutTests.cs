@@ -1,8 +1,11 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -37,11 +40,11 @@ namespace SharpSvn.Tests.Commands
 			SvnCheckOutArgs a = new SvnCheckOutArgs();
 			this.Client.CheckOut(this.ReposUrl, this.newWc, a);
 
-			Assert.IsTrue(File.Exists(Path.Combine(this.newWc, "Form.cs")),
+			Assert.That(File.Exists(Path.Combine(this.newWc, "Form.cs")),
 				"Checked out file not there");
-			Assert.IsTrue(Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
+			Assert.That(Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
 				"No admin directory found");
-			Assert.AreEqual("", this.RunCommand("svn", "st \"" + this.newWc + "\"").Trim(),
+			Assert.That(this.RunCommand("svn", "st \"" + this.newWc + "\"").Trim(), Is.EqualTo(""),
 				"Wrong status");
 		}
 
@@ -53,7 +56,7 @@ namespace SharpSvn.Tests.Commands
 			this.Client.Progress += new EventHandler<SvnProgressEventArgs>(Client_Progress);
 			this.Client.CheckOut(new Uri("http://ankhsvn.com/svn/test"), this.newWc, a);
 
-			Assert.IsTrue(progressCalled, "Progress delegate not called");
+			Assert.That(progressCalled, "Progress delegate not called");
 		}
 
 		void Client_Progress(object sender, SvnProgressEventArgs args)

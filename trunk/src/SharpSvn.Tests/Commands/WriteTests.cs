@@ -1,10 +1,13 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
+using System.Collections;
 using System.IO;
-using SharpSvn;
 using System.Text;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -36,7 +39,7 @@ namespace SharpSvn.Tests.Commands
 			this.Client.Write(path, stream);
 
 			string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
-			Assert.AreEqual(clientOutput, wrapperOutput,
+			Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
 				"String from wrapper not the same as string from client");
 
 		}
@@ -55,7 +58,7 @@ namespace SharpSvn.Tests.Commands
 			this.Client.Write(new SvnUriTarget(path, SvnRevision.Head), stream);
 
 			string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
-			Assert.AreEqual(clientOutput, wrapperOutput,
+			Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
 				"String from wrapper not the same as string from client");
 		}
 
@@ -77,7 +80,7 @@ namespace SharpSvn.Tests.Commands
 			this.Client.Write(new SvnUriTarget(toPath, ci.Revision), stream);
 
 			string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
-			Assert.AreEqual(clientOutput, wrapperOutput,
+			Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
 				"String from wrapper not the same as string from client");
 
 		}

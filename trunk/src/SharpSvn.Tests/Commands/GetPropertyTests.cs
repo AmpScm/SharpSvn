@@ -1,10 +1,12 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
+using System.Collections;
 using System.IO;
-using SharpSvn;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {

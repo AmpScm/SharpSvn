@@ -1,9 +1,12 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -42,8 +45,8 @@ namespace SharpSvn.Tests.Commands
 
 			Assert.That(Client.Delete(new string[] { path1, path2 }, a));
 
-			Assert.IsTrue(!File.Exists(path1), "File not deleted");
-			Assert.IsTrue(!File.Exists(path2), "File not deleted");
+			Assert.That(!File.Exists(path1), "File not deleted");
+			Assert.That(!File.Exists(path2), "File not deleted");
 
 			Assert.That(this.GetSvnStatus(path1), Is.EqualTo('D'), "File not deleted");
 			Assert.That(this.GetSvnStatus(path2), Is.EqualTo('D'), "File not deleted");
@@ -65,8 +68,8 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(Client.RemoteDelete(new Uri[] { path1, path2 }, a, out ci));
 
 			String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
-			Assert.IsTrue(cmd.IndexOf("doc") == -1, "Directory wasn't deleted ");
-			Assert.IsTrue(cmd.IndexOf("Form.cs") == -1, "Directory wasn't deleted");
+			Assert.That(cmd.IndexOf("doc") == -1, "Directory wasn't deleted ");
+			Assert.That(cmd.IndexOf("Form.cs") == -1, "Directory wasn't deleted");
 
 			Assert.That(ci, Is.Not.Null, "CommitInfo is invalid");
 		}

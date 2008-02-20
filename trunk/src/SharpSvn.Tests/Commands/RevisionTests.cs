@@ -1,7 +1,10 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
 using System.Globalization;
+using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
@@ -18,29 +21,29 @@ namespace SharpSvn.Tests.Commands
 		public void TestToString()
 		{
 			SvnRevision revision = SvnRevision.Base;
-			Assert.AreEqual("BASE", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("BASE"));
 
 			revision = SvnRevision.Committed;
-			Assert.AreEqual("COMMITTED", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("COMMITTED"));
 
 			revision = SvnRevision.Head;
-			Assert.AreEqual("HEAD", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("HEAD"));
 
 			revision = SvnRevision.Previous;
-			Assert.AreEqual("PREVIOUS", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("PREVIOUS"));
 
 			revision = SvnRevision.None;
-			Assert.AreEqual("", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo(""));
 
 			revision = SvnRevision.Working;
-			Assert.AreEqual("WORKING", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("WORKING"));
 
 			DateTime t = DateTime.UtcNow;
 			revision = new SvnRevision(t);
-			Assert.AreEqual("{" + t.ToString("s", CultureInfo.InvariantCulture) + "}", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("{" + t.ToString("s", CultureInfo.InvariantCulture) + "}"));
 
 			revision = new SvnRevision(42);
-			Assert.AreEqual("42", revision.ToString());
+			Assert.That(revision.ToString(), Is.EqualTo("42"));
 		}
 
 		/// <summary>
@@ -56,10 +59,10 @@ namespace SharpSvn.Tests.Commands
 			this.DoTestParse( "base", Revision.Base );
 			this.DoTestParse( "previous", Revision.Previous );
 
-			Assert.AreEqual( "42", Revision.Parse("42").ToString() );
+			Assert.That( Revision.Parse("42").ToString() , Is.EqualTo( "42"));
 
 			DateTime t = DateTime.Now;
-			Assert.AreEqual( t.ToString(), Revision.Parse(t.ToString()).ToString() );
+			Assert.That( Revision.Parse(t.ToString(), Is.EqualTo( t.ToString())).ToString() );
 
 			// this should throw
 			try
@@ -75,20 +78,20 @@ namespace SharpSvn.Tests.Commands
 		public void TestSvnRevisionTypes()
 		{
 			SvnRevision r = new SvnRevision(DateTime.Now);
-			Assert.AreEqual(SvnRevisionType.Time, r.RevisionType);
+			Assert.That(r.RevisionType, Is.EqualTo(SvnRevisionType.Time));
 
 			r = new SvnRevision(42);
-			Assert.AreEqual(SvnRevisionType.Number, r.RevisionType);
+			Assert.That(r.RevisionType, Is.EqualTo(SvnRevisionType.Number));
 
 			r = 42;
-			Assert.AreEqual(SvnRevisionType.Number, r.RevisionType);
+			Assert.That(r.RevisionType, Is.EqualTo(SvnRevisionType.Number));
 
-			Assert.AreEqual(SvnRevisionType.Base, SvnRevision.Base.RevisionType);
-			Assert.AreEqual(SvnRevisionType.Committed, SvnRevision.Committed.RevisionType);
-			Assert.AreEqual(SvnRevisionType.Head, SvnRevision.Head.RevisionType);
-			Assert.AreEqual(SvnRevisionType.Previous, SvnRevision.Previous.RevisionType);
-			Assert.AreEqual(SvnRevisionType.None, SvnRevision.None.RevisionType);
-			Assert.AreEqual(SvnRevisionType.Working, SvnRevision.Working.RevisionType);
+			Assert.That(SvnRevision.Base.RevisionType, Is.EqualTo(SvnRevisionType.Base));
+			Assert.That(SvnRevision.Committed.RevisionType, Is.EqualTo(SvnRevisionType.Committed));
+			Assert.That(SvnRevision.Head.RevisionType, Is.EqualTo(SvnRevisionType.Head));
+			Assert.That(SvnRevision.Previous.RevisionType, Is.EqualTo(SvnRevisionType.Previous));
+			Assert.That(SvnRevision.None.RevisionType, Is.EqualTo(SvnRevisionType.None));
+			Assert.That(SvnRevision.Working.RevisionType, Is.EqualTo(SvnRevisionType.Working));
 		}
 
 		[Test]
@@ -106,7 +109,7 @@ namespace SharpSvn.Tests.Commands
 
 		private void DoTestParse( string s, SvnRevision rev )
 		{
-			Assert.AreEqual( new SvnRevision(.Parse(s), rev );
+			Assert.That( rev , Is.EqualTo( new SvnRevision(.Parse(s)));
 		}*/
 	}
 }

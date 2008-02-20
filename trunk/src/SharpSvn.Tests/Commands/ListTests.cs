@@ -2,12 +2,12 @@
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
-using NUnit.Framework;
-using System.Text.RegularExpressions;
-
-using SharpSvn;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -119,9 +119,9 @@ namespace SharpSvn.Tests.Commands
 
 			public void Match(SvnDirEntry ent)
 			{
-				Assert.AreEqual(this.createdRevision, ent.Revision,
+				Assert.That(ent.Revision, Is.EqualTo(this.createdRevision),
 					"CreatedRevision differs");
-				Assert.AreEqual(this.size, ent.FileSize,
+				Assert.That(ent.FileSize, Is.EqualTo(this.size),
 					"Size differs");
 
 				// strip off time portion
@@ -129,10 +129,10 @@ namespace SharpSvn.Tests.Commands
 				entryTime = entryTime - entryTime.TimeOfDay;
 
 				long delta = Math.Abs(this.time.Ticks - entryTime.Ticks);
-				Assert.IsTrue(delta < TICKS_PER_MINUTE,
+				Assert.That(delta < TICKS_PER_MINUTE,
 					"Time differs: " + this.time + " vs " +
 					entryTime + " Delta is " + delta);
-				Assert.AreEqual(this.author, ent.Author, "Last author differs");
+				Assert.That(ent.Author, Is.EqualTo(this.author), "Last author differs");
 			}
 
 			public string Path

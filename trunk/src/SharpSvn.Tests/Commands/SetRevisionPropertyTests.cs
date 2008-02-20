@@ -1,13 +1,17 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
+using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 /// <summary>
 /// Tests the Client::RevPropSet	
 /// </summary>
-
 namespace SharpSvn.Tests.Commands
 {
 	[TestFixture]
@@ -32,7 +36,7 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.SetRevisionProperty(new SvnUriTarget(ReposUrl, SvnRevision.Head), "cow", propval);
 
-			Assert.AreEqual("moo", this.RunCommand("svn", "propget cow --revprop -r head " + this.ReposUrl).Trim(),
+			Assert.That(this.RunCommand("svn", "propget cow --revprop -r head " + this.ReposUrl).Trim(), Is.EqualTo("moo"),
 				"Couldn't set prop on selected Repos!");
 		}
 	}

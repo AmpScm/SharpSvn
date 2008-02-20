@@ -1,10 +1,12 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
-using SharpSvn;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -46,7 +48,7 @@ namespace SharpSvn.Tests.Commands
 			File.Delete(filePath);
 			this.Client.Update(this.WcPath);
 
-			Assert.IsTrue(File.Exists(filePath), "File not restored after update");
+			Assert.That(File.Exists(filePath), "File not restored after update");
 		}
 
 		/// <summary>
@@ -66,7 +68,7 @@ namespace SharpSvn.Tests.Commands
 			using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "Form.cs")))
 				s = r.ReadToEnd();
 
-			Assert.AreEqual("Moo", s, "File not updated");
+			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
 		}
 
 		[Test]
@@ -92,11 +94,11 @@ namespace SharpSvn.Tests.Commands
 			string s;
 			using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "Form.cs")))
 				s = r.ReadToEnd();
-			Assert.AreEqual("Moo", s, "File not updated");
+			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
 
 			using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "AssemblyInfo.cs")))
 				s = r.ReadToEnd();
-			Assert.AreEqual("Moo", s, "File not updated");
+			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
 		}
 
 		private string wc2;

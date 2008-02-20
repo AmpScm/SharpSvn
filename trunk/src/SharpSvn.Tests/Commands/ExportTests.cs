@@ -1,9 +1,11 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
-
+using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -38,9 +40,9 @@ namespace SharpSvn.Tests.Commands
 		{
 			this.Client.Export(new SvnUriTarget(ReposUrl, SvnRevision.Head), this.newWc);
 
-			Assert.IsTrue(File.Exists(Path.Combine(this.newWc, "Form.cs")),
+			Assert.That(File.Exists(Path.Combine(this.newWc, "Form.cs")),
 				"Exported file not there");
-			Assert.IsTrue(!Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
+			Assert.That(!Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
 				".svn directory found");
 		}
 		/// <summary>
@@ -51,9 +53,9 @@ namespace SharpSvn.Tests.Commands
 		{
 			this.Client.Export(new SvnPathTarget(this.WcPath), this.newWc);
 
-			Assert.IsTrue(File.Exists(Path.Combine(this.newWc, "Form.cs")),
+			Assert.That(File.Exists(Path.Combine(this.newWc, "Form.cs")),
 				"Exported file not there");
-			Assert.IsTrue(!Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
+			Assert.That(!Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
 				".svn directory found");
 		}
 
@@ -64,7 +66,7 @@ namespace SharpSvn.Tests.Commands
 			a.Depth = SvnDepth.Empty;
 			SvnUpdateResult r;
 			this.Client.Export(this.WcPath, this.newWc, a, out r);
-			Assert.AreEqual(0, Directory.GetDirectories(this.newWc).Length);
+			Assert.That(Directory.GetDirectories(this.newWc).Length, Is.EqualTo(0));
 		}
 
 		private string newWc;

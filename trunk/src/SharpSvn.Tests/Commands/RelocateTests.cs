@@ -1,14 +1,15 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
-
-using SharpSvn;
-using System.Collections.ObjectModel;
-using NUnit.Framework.SyntaxHelpers;
+using System.Text.RegularExpressions;
 using System.Threading;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -55,7 +56,7 @@ namespace SharpSvn.Tests.Commands
 				}
 
 				Assert.That(svnServeAvailable);
-								
+
 				Assert.That(Client.Relocate(this.WcPath, ReposUrl, localUri));
 
 				Collection<SvnInfoEventArgs> list;

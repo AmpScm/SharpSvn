@@ -1,13 +1,14 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using System.IO;
-using NUnit.Framework;
 using System.Collections;
-
-using SharpSvn;
-using NUnit.Framework.SyntaxHelpers;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
+
 namespace SharpSvn.Tests.Commands
 {
 	/// <summary>
@@ -41,7 +42,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(info, Is.Not.Null);
 
 			char status = this.GetSvnStatus(filepath);
-			Assert.AreEqual(0, status, "File not committed");
+			Assert.That(status, Is.EqualTo((char)0), "File not committed");
 		}
 
 		/// <summary>
@@ -65,7 +66,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.IsNotNull(info);
 
 			char locked = this.RunCommand("svn", "status " + filepath)[5];
-			Assert.IsTrue(locked == 'K', "File was unlocked while lock should be kept");
+			Assert.That(locked == 'K', "File was unlocked while lock should be kept");
 
 			using (StreamWriter w = new StreamWriter(filepath))
 				w.Write("Bah");
@@ -75,7 +76,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.IsNotNull(info);
 
 			string output = this.RunCommand("svn", "status " + filepath);
-			Assert.AreEqual(String.Empty, output);
+			Assert.That(output, Is.EqualTo(String.Empty));
 		}
 
 		/// <summary>
@@ -94,7 +95,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(this.Client.Commit(filepath, a));
 
 			char status = this.GetSvnStatus(filepath);
-			Assert.AreEqual(0, status, "File not committed");
+			Assert.That(status, Is.EqualTo((char)0), "File not committed");
 
 		}
 
@@ -116,10 +117,10 @@ namespace SharpSvn.Tests.Commands
 			this.logMessage = "Moo ";
 			CommitInfo info = this.Client.Commit(new string[] { this.WcPath }, Recurse.Full);
 
-			Assert.AreEqual(Environment.UserName, info.Author, "Wrong username");
+			Assert.That( info.Author, Is.EqualTo(Environment.UserName), "Wrong username");
 			string output = this.RunCommand("svn", "log " + this.filepath + " -r HEAD");
 
-			Assert.IsTrue(output.IndexOf(this.logMessage) >= 0,
+			Assert.That(output.IndexOf(this.logMessage) >= 0,
 				"Log message not set");
 
 		}*/
@@ -141,7 +142,7 @@ namespace SharpSvn.Tests.Commands
 			la.End = SvnRevision.Head;
 
 			Collection<SvnLogEventArgs> logList;
-			//SvnLo
+
 			Client.GetLog(WcPath, la, out logList);
 
 			Assert.That(logList, Is.Not.Null);
@@ -207,11 +208,11 @@ namespace SharpSvn.Tests.Commands
 
 		private void LogMessageCallback(object sender, SvnCommittingEventArgs e)
 		{
-			Assert.AreEqual(1, e.Items.Count, "Wrong number of commit items");
-			Assert.IsTrue(e.Items[0].Path.IndexOf(this.filepath) >= 0,
+			Assert.That(e.Items.Count, Is.EqualTo(1), "Wrong number of commit items");
+			Assert.That(e.Items[0].Path.IndexOf(this.filepath) >= 0,
 				"Wrong path");
-			Assert.AreEqual(SvnNodeKind.File, e.Items[0].NodeKind, "Wrong kind");
-			Assert.AreEqual(6, e.Items[0].Revision, "Wrong revision");
+			Assert.That(e.Items[0].NodeKind, Is.EqualTo(SvnNodeKind.File), "Wrong kind");
+			Assert.That(e.Items[0].Revision, Is.EqualTo(6), "Wrong revision");
 		}
 
 		private void CancelLogMessage(object sender, SvnCommittingEventArgs e)

@@ -1,11 +1,13 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
+using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -43,7 +45,7 @@ namespace SharpSvn.Tests.Commands
 			string realUrl = this.GetUrl(formPath);
 			Uri url = this.Client.GetUriFromWorkingCopy(formPath);
 
-			Assert.AreEqual(realUrl, url.ToString(), "URL wrong");
+			Assert.That(url.ToString(), Is.EqualTo(realUrl), "URL wrong");
 
 		}
 
@@ -73,7 +75,7 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Update(this.WcPath);
 
-			Assert.IsTrue(this.cancels > 0, "No cancellation callbacks");
+			Assert.That(this.cancels > 0, "No cancellation callbacks");
 
 			this.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.Cancel);
 			this.Client.Cancel += new EventHandler<SvnCancelEventArgs>(this.ReallyCancel);
@@ -90,23 +92,26 @@ namespace SharpSvn.Tests.Commands
 			PropertyInfo pi = typeof(SvnClient).GetProperty("AdministrativeDirectoryName", BindingFlags.SetProperty | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 
 			Assert.That(pi, Is.Not.Null);
-			
+
 			pi.SetValue(null, newAdminDir, null);
 			try
 			{
-				Assert.AreEqual(newAdminDir, SvnClient.AdministrativeDirectoryName,
+				Assert.That(SvnClient.AdministrativeDirectoryName, Is.EqualTo(newAdminDir),
 					"Admin directory name should now be " + newAdminDir);
 
 				string newwc = this.FindDirName(Path.Combine(Path.GetTempPath(), "moo"));
 				this.Client.CheckOut(this.ReposUrl, newwc);
 
-				Assert.IsTrue(Directory.Exists(Path.Combine(newwc, newAdminDir)),
+				Assert.That(Directory.Exists(Path.Combine(newwc, newAdminDir)),
 					"Admin directory with new name not found");
+
+				Assert.That(Directory.Exists(Path.Combine(newwc, ".svn")), Is.False,
+					"Admin directory with old name found");
 			}
 			finally
 			{
 				pi.SetValue(null, ".svn", null);
-				Assert.AreEqual(".svn", SvnClient.AdministrativeDirectoryName, "Settings original admin dir failed");
+				Assert.That(SvnClient.AdministrativeDirectoryName, Is.EqualTo(".svn"), "Settings original admin dir failed");
 			}
 		}
 
@@ -120,11 +125,11 @@ namespace SharpSvn.Tests.Commands
 			Client.GetWorkingCopyState(Path.Combine(this.WcPath, "Form.cs"), out state);
 
 			// first on a file
-			Assert.IsTrue(state.IsTextFile);
+			Assert.That(state.IsTextFile);
 
 			Client.GetWorkingCopyState(Path.Combine(this.WcPath, "App.ico"), out state);
 
-			Assert.IsFalse(state.IsTextFile);
+			Assert.That(state.IsTextFile, Is.False);
 
 
 			Client.GetWorkingCopyState(this.WcPath, out state);
@@ -143,7 +148,7 @@ namespace SharpSvn.Tests.Commands
 			string ignored = this.CreateTextFile("foo.bar");
 			this.RunCommand("svn", "ps svn:ignore foo.bar " + this.WcPath);
 
-			Assert.IsTrue(this.Client.IsIgnored(ignored));
+			Assert.That(this.Client.IsIgnored(ignored));
 			Assert.IsFalse(this.Client.IsIgnored(
 				Path.Combine(this.WcPath, "Form1.cs")));
 		}
@@ -155,7 +160,7 @@ namespace SharpSvn.Tests.Commands
 			Directory.CreateDirectory(ignored);
 			this.RunCommand("svn", "ps svn:ignore Foo " + this.WcPath);
 
-			Assert.IsTrue(this.Client.IsIgnored(ignored));
+			Assert.That(this.Client.IsIgnored(ignored));
 		}*/
 
 		[Test]
@@ -174,7 +179,7 @@ namespace SharpSvn.Tests.Commands
 				client.LoadConfigurationDefault();
 				//ClientConfig config = new ClientConfig();
 
-				Assert.IsTrue(Directory.Exists(configDir));
+				Assert.That(Directory.Exists(configDir));
 			}
 			finally
 			{

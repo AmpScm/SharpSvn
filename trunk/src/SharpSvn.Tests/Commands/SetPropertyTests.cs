@@ -1,8 +1,13 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
+using System;
+using System.Collections;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -29,7 +34,7 @@ namespace SharpSvn.Tests.Commands
 
 			byte[] propval = Encoding.UTF8.GetBytes("baa");
 			this.Client.SetProperty(filePath, "moo", propval);
-			Assert.AreEqual("baa", this.RunCommand("svn", "propget moo " + filePath).Trim(),
+			Assert.That(this.RunCommand("svn", "propget moo " + filePath).Trim(), Is.EqualTo("baa"),
 				"PropSet didn't work!");
 		}
 
@@ -47,10 +52,10 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.SetProperty(WcPath, "moo", propval, a);
 
-			Assert.AreEqual("baa", this.RunCommand("svn", "propget moo " + this.WcPath).Trim(),
+			Assert.That(this.RunCommand("svn", "propget moo " + this.WcPath).Trim(), Is.EqualTo("baa"),
 				"PropSet didn't work on directory!");
 
-			Assert.AreEqual("baa", this.RunCommand("svn", "propget moo " + filePath).Trim(),
+			Assert.That(this.RunCommand("svn", "propget moo " + filePath).Trim(), Is.EqualTo("baa"),
 				"PropSet didn't work on file!");
 		}
 

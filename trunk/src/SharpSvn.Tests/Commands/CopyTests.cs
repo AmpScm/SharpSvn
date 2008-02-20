@@ -1,10 +1,12 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
-using NUnit.Framework;
 using System;
+using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
+using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -69,7 +71,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(ci, Is.Not.Null);
 
 			String cmd = this.RunCommand("svn", "list " + this.ReposUrl.ToString());
-			Assert.IsTrue(cmd.IndexOf("copyDebug") >= 0, "File wasn't copied");
+			Assert.That(cmd.IndexOf("copyDebug") >= 0, "File wasn't copied");
 		}
 
 		/// <summary>
@@ -101,8 +103,8 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(ci, Is.Not.Null);
 
 			String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
-			Assert.IsTrue(cmd.IndexOf("Form.cs") >= 0, "File wasn't copied");
-			Assert.IsTrue(cmd.IndexOf("copyForm") >= 0, "Copied file doens't exist");
+			Assert.That(cmd.IndexOf("Form.cs") >= 0, "File wasn't copied");
+			Assert.That(cmd.IndexOf("copyForm") >= 0, "Copied file doens't exist");
 		}
 	}
 }

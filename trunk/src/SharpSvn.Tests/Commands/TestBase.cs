@@ -2,17 +2,17 @@
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using SharpSvn.Tests.Commands.Utils;
+using NUnit.Framework.SyntaxHelpers;
 using ICSharpCode.SharpZipLib.Zip;
-using ICSharpCode.SharpZipLib.Core;
-using SharpSvn;
-using System.Collections.Generic;
 
+using SharpSvn;
+using SharpSvn.Tests.Commands.Utils;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -230,14 +230,14 @@ namespace SharpSvn.Tests.Commands
 		/// </summary>
 		public Uri ReposUrl
 		{
-			get 
+			get
 			{
 				if (_reposUri == null)
 					ExtractRepos();
 
 				System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
-				
-				return _reposUri; 
+
+				return _reposUri;
 			}
 		}
 
@@ -246,14 +246,14 @@ namespace SharpSvn.Tests.Commands
 		/// </summary>
 		public string ReposPath
 		{
-			get 
+			get
 			{
 				if (_reposPath == null)
 					ExtractRepos();
 
 				System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
 
-				return _reposPath; 
+				return _reposPath;
 			}
 		}
 
@@ -373,7 +373,7 @@ namespace SharpSvn.Tests.Commands
 
 		protected virtual void LogMessage(object sender, SvnCommittingEventArgs e)
 		{
-			if(e.LogMessage == null)
+			if (e.LogMessage == null)
 				e.LogMessage = "";
 		}
 
@@ -438,7 +438,5 @@ namespace SharpSvn.Tests.Commands
 		private SvnClient client;
 
 		protected List<SvnNotifyEventArgs> notifications;
-
-
 	}
 }

@@ -1,8 +1,11 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
+using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -39,7 +42,7 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Resolved(filePath);
 
-			Assert.AreEqual('M', this.GetSvnStatus(filePath), "Resolve didn't work!");
+			Assert.That(this.GetSvnStatus(filePath), Is.EqualTo('M'), "Resolve didn't work!");
 
 		}
 
@@ -54,9 +57,9 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Resolved(this.path, a);
 
-			Assert.AreEqual('M', this.GetSvnStatus(this.path),
+			Assert.That(this.GetSvnStatus(this.path), Is.EqualTo('M'),
 				" Resolve didn't work! Directory still conflicted");
-			Assert.AreEqual('M', this.GetSvnStatus(Path.Combine(this.path, "Form.cs")),
+			Assert.That(this.GetSvnStatus(Path.Combine(this.path, "Form.cs")), Is.EqualTo('M'),
 				"Resolve didn't work! File still conflicted");
 		}
 

@@ -1,8 +1,11 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using NUnit.Framework;
+using System.Collections;
 using System.IO;
+using System.Text.RegularExpressions;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -35,7 +38,7 @@ namespace SharpSvn.Tests.Commands
 			this.ModifyFile(out oldContents, out newContents, filePath, filePath, SvnDepth.Empty);
 
 
-			Assert.AreEqual(oldContents, newContents, "File not reverted");
+			Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
 
 		}
 
@@ -50,7 +53,7 @@ namespace SharpSvn.Tests.Commands
 			this.ModifyFile(out oldContents, out newContents, Path.Combine(this.WcPath, "Form.cs"),
 				this.WcPath, SvnDepth.Infinity);
 
-			Assert.AreEqual(oldContents, newContents, "File not reverted");
+			Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
 
 		}
 

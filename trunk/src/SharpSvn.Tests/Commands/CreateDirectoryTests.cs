@@ -1,9 +1,12 @@
 // $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
-using NUnit.Framework;
+using System;
+using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using System;
+using NUnit.Framework;
+using NUnit.Framework.SyntaxHelpers;
+using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -31,7 +34,7 @@ namespace SharpSvn.Tests.Commands
 			string path = Path.Combine(this.WcPath, "foo");
 			Assert.That(Client.CreateDirectory(path));
 
-			Assert.AreEqual('A', this.GetSvnStatus(path), "Wrong status code");
+			Assert.That(this.GetSvnStatus(path), Is.EqualTo('A'), "Wrong status code");
 		}
 
 		/// <summary>
@@ -45,7 +48,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(Client.RemoteCreateDirectory(url));
 
 			string output = this.RunCommand("svn", "ls " + this.ReposUrl);
-			Assert.IsTrue(Regex.IsMatch(output, @"mooNewDirectory/"), "No new dir found: " + output);
+			Assert.That(Regex.IsMatch(output, @"mooNewDirectory/"), "No new dir found: " + output);
 
 		}
 	}
