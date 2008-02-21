@@ -35,11 +35,12 @@ namespace SharpSvn.PowerShell
 
             if ((helpfileAttributes == null || helpfileAttributes.Length == 0) && cmdletAttributes.Length == 1)
                 return new CmdletConfigurationEntry(cmdletAttributes[0].VerbName + "-" + cmdletAttributes[0].NounName,
-                    t, null);
+                    t, "SharpSvnPSSnapin.dll-Help.xml");
             
             throw new InvalidOperationException("Multiple attributes should not be possible");
 
         }
+
         public override string Description
         {
             get { return ""; }
