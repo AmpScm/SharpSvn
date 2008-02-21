@@ -10,10 +10,9 @@
 namespace SharpSvn {
 	using namespace System;
 
-	public ref class SvnUriTarget sealed : public SvnTarget, Implementation::ISvnTargetInstance
+	public ref class SvnUriTarget sealed : public SvnTarget
 	{
 		initonly Uri^ _uri;
-
 
 	public:
 		SvnUriTarget (Uri^ uri, SvnRevision^ revision)
