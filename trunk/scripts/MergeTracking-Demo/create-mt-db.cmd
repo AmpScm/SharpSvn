@@ -68,7 +68,7 @@ REM ======================= Revision 5 ==============================
 REM ======================= Revision 6 ==============================
 pushd \tmp\trunk
 %SVN% up .
-%SVN% merge file:///tmp/repos/branches/a
+%SVN% merge --reintegrate file:///tmp/repos/branches/a
 %SVN% ci --username merger -m "Merge branch a.  Added medium product"
 popd
 
