@@ -132,7 +132,10 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 		}
 	}
 	else
+	{
+		rootUri = nullptr;
 		rawTargets->Add(first->ToString());
+	}
 
 	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, args, logHandler);
 }
