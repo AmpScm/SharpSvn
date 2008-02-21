@@ -105,16 +105,22 @@ namespace SharpSvn {
 		}
 	};
 
-	ref class SvnAppliedMergeItem;
+	ref class SvnMergeItem;
 
 	namespace Implementation {
-		public ref class SvnAppliedMergesList sealed : KeyedCollection<Uri^, SvnAppliedMergeItem^>
+		public ref class SvnMergeItemCollection sealed : KeyedCollection<Uri^, SvnMergeItem^>
 		{
 		internal:
-			SvnAppliedMergesList()
+			SvnMergeItemCollection()
 			{}
+
+			SvnMergeItemCollection(svn_mergeinfo_t mergeInfo, AprPool^ pool);
+
+		public:
+			static bool TryParse(String^ input, [Out] SvnMergeItemCollection^% items);
+
 		protected:
-			virtual Uri^ GetKeyForItem(SvnAppliedMergeItem^ item) override;
+			virtual Uri^ GetKeyForItem(SvnMergeItem^ item) override;
 		};
 
 		public ref class SvnMergeRangeCollection sealed : Collection<SvnMergeRange^>
@@ -124,17 +130,20 @@ namespace SharpSvn {
 				: Collection(list)
 			{}
 
+
+		internal:
+			static SvnMergeRangeCollection^ Create(apr_array_header_t *rangeList);
 		};
 	}
 
 	[DebuggerDisplayAttribute("Uri={Uri}")]
-	public ref class SvnAppliedMergeItem sealed
+	public ref class SvnMergeItem sealed
 	{
 		initonly Uri^ _uri;
 		SvnMergeRangeCollection^ _ranges;
 
 	internal:
-		SvnAppliedMergeItem(Uri^ uri, SvnMergeRangeCollection^ ranges)
+		SvnMergeItem(Uri^ uri, SvnMergeRangeCollection^ ranges)
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
@@ -144,9 +153,6 @@ namespace SharpSvn {
 			_uri = uri;
 			_ranges = ranges;
 		}
-
-	internal:
-		static SvnMergeRangeCollection^ CreateRangeList(apr_array_header_t *rangeList);
 
 	public:
 		property Uri^ Uri
@@ -172,10 +178,10 @@ namespace SharpSvn {
 	{
 	private:
 		initonly SvnTarget^ _target;
-		initonly SvnAppliedMergesList^ _appliedMerges;
+		initonly SvnMergeItemCollection^ _appliedMerges;
 
 	internal:
-		SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo, AprPool^ pool);
+		SvnAppliedMergeInfo(SvnTarget^ target, svn_mergeinfo_t mergeInfo, AprPool^ pool);
 
 	public:
 		property SvnTarget^ Target
@@ -186,10 +192,10 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets a boolean indicating whether MergeInfo is available for the specified target</summary>
-		property SvnAppliedMergesList^ AppliedMerges
+		/// <summary>Gets a list of applied merges</summary>
+		property SvnMergeItemCollection^ AppliedMerges
 		{
-			SvnAppliedMergesList^ get()
+			SvnMergeItemCollection^ get()
 			{
 				return _appliedMerges;
 			}

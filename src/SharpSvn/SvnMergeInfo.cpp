@@ -10,7 +10,7 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
-SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInfo, AprPool^ pool)
+SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, svn_mergeinfo_t mergeInfo, AprPool^ pool)
 {
 	// Pool is only available during the constructor
 	if (!target)
@@ -21,24 +21,7 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, apr_hash_t* mergeInf
 		throw gcnew ArgumentNullException("pool");
 
 	_target = target;
-
-	// mergeInfo: hash mapping <const char *> source URLs to an <apr_array_header_t *> list of <svn_merge_range_t>
-
-	SvnAppliedMergesList^ list = gcnew SvnAppliedMergesList();
-
-	for (apr_hash_index_t *hi = apr_hash_first(pool->Handle, mergeInfo); hi; hi = apr_hash_next(hi))
-	{
-		const char *pUri;
-		apr_ssize_t klen;
-		apr_array_header_t *ranges;
-		apr_hash_this(hi, (const void **) &pUri, &klen, (void**)&ranges);
-
-		if (pUri && ranges)
-		{
-			list->Add(gcnew SvnAppliedMergeItem(SvnBase::Utf8_PtrToUri(pUri, SvnNodeKind::Unknown), SvnAppliedMergeItem::CreateRangeList(ranges)));
-		}
-	}
-	_appliedMerges = list;
+	_appliedMerges = gcnew SvnMergeItemCollection(mergeInfo, pool);
 }
 
 SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool)
@@ -52,10 +35,10 @@ SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header
 		throw gcnew ArgumentNullException("pool");
 
 	_target = target;
-	_mergeRanges = SvnAppliedMergeItem::CreateRangeList(mergeInfo);
+	_mergeRanges = SvnMergeRangeCollection::Create(mergeInfo);
 }
 
-SvnMergeRangeCollection^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t *rangeList)
+SvnMergeRangeCollection^ SvnMergeRangeCollection::Create(apr_array_header_t *rangeList)
 {
 	if (!rangeList)
 		throw gcnew ArgumentNullException("rangeList");
@@ -70,7 +53,49 @@ SvnMergeRangeCollection^ SvnAppliedMergeItem::CreateRangeList(apr_array_header_t
 	return gcnew SvnMergeRangeCollection(safe_cast<IList<SvnMergeRange^>^>(ranges));
 }
 
-Uri^ SvnAppliedMergesList::GetKeyForItem(SvnAppliedMergeItem^ item)
+SvnMergeItemCollection::SvnMergeItemCollection(svn_mergeinfo_t mergeInfo, AprPool^ pool)
+{
+	if (!mergeInfo)
+		throw gcnew ArgumentNullException("mergeInfo");
+	else if (!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	for (apr_hash_index_t *hi = apr_hash_first(pool->Handle, mergeInfo); hi; hi = apr_hash_next(hi))
+	{
+		const char *pUri;
+		apr_ssize_t klen;
+		apr_array_header_t *ranges;
+		apr_hash_this(hi, (const void **) &pUri, &klen, (void**)&ranges);
+
+		if (pUri && ranges)
+		{
+			Add(gcnew SvnMergeItem(SvnBase::Utf8_PtrToUri(pUri, SvnNodeKind::Unknown), SvnMergeRangeCollection::Create(ranges)));
+		}
+	}
+}
+
+bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollection^% items)
+{
+	if(String::IsNullOrEmpty(input))
+		throw gcnew ArgumentNullException("input");
+
+	AprPool pool;
+
+	svn_mergeinfo_t mergeInfo = nullptr;
+
+	svn_error_t* r = svn_mergeinfo_parse(&mergeInfo, pool.AllocString(input), pool.Handle);
+
+	if(r)
+	{
+		svn_error_clear(r);
+		return false;
+	}
+
+	items = gcnew SvnMergeItemCollection(mergeInfo, %pool);
+	return true;
+}
+
+Uri^ SvnMergeItemCollection::GetKeyForItem(SvnMergeItem^ item)
 {
 	return item ? item->Uri : nullptr;
 }

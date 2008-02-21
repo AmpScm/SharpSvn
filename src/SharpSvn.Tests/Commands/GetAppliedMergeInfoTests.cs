@@ -25,7 +25,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(applied, Is.Not.Null);
 			Assert.That(applied.AppliedMerges.Count, Is.EqualTo(3));
 
-			foreach (SvnAppliedMergeItem mi in applied.AppliedMerges)
+			foreach (SvnMergeItem mi in applied.AppliedMerges)
 			{
 				if (mi.Uri == new Uri(CollabReposUri, "trunk"))
 				{

@@ -34,7 +34,7 @@ bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArg
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	apr_hash_t* svnMergeInfo = nullptr;
+	svn_mergeinfo_t svnMergeInfo = nullptr;
 
 	svn_error_t* r = svn_client_mergeinfo_get_merged(
 		&svnMergeInfo,
