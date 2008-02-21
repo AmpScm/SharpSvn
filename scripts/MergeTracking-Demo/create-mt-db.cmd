@@ -129,5 +129,52 @@ pushd \tmp\branch-b
 %SVN% ci --username merger -m "Merge branch a - product roadmap"
 popd
 
+REM ======================= Revision 13 =============================
+%SVN% up /tmp/branch-b
+pushd files\13
+for %%I in (*.html) DO (
+   set f=%%I
+   set to=\tmp\branch-b\!f:-=\!
+   copy !f! !to! || echo Failed to copy !f! to !to!
+   %SVN% add !to!
+   %SVN% ps svn:eol-style native !to!
+)
+popd
+%SVN% ci --username buser /tmp/branch-b -m "Update info about our company"
+
+REM ======================= Revision 14 =============================
+%SVN% up /tmp/trunk
+pushd \tmp\trunk
+%SVN% merge file:///tmp/repos/branches/b
+popd
+%SVN% ci --username merger /tmp/trunk -m "Merge branch b - product roadmap and update about page"
+
+REM ======================= Revision 15 =============================
+%SVN% co file:///tmp/repos/branches/c \tmp\branch-c
+pushd \tmp\branch-c
+%SVN% merge file:///tmp/repos/trunk
+%SVN% ci --username merger -m "Synch branch back up with trunk"
+popd
+
+REM ======================= Revision 16 =============================
+%SVN% up /tmp/branch-c
+pushd files\16
+for %%I in (*.html) DO (
+   set f=%%I
+   set to=\tmp\branch-c\!f:-=\!
+   copy !f! !to! || echo Failed to copy !f! to !to!
+   %SVN% add !to!
+   %SVN% ps svn:eol-style native !to!
+)
+popd
+%SVN% ci --username cuser /tmp/branch-c -m "Added new job to jobs page"
+
+REM ======================= Revision 17 =============================
+%SVN% up /tmp/trunk
+pushd \tmp\trunk
+%SVN% merge file:///tmp/repos/branches/c
+popd
+%SVN% ci --username merger /tmp/trunk -m "Merged branch c back to trunk"
+
 
 %SVNADMIN% dump \tmp\repos > own.repos.dump
