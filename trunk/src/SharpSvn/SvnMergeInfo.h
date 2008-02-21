@@ -11,8 +11,10 @@ namespace SharpSvn {
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::IList;
+	using System::Collections::Generic::IEnumerable;
 	using System::Collections::Generic::SortedList;
 	using System::Collections::ObjectModel::KeyedCollection;
+	using System::Collections::ObjectModel::Collection;
 	using System::Diagnostics::DebuggerDisplayAttribute;
 
 	[DebuggerDisplayAttribute("Range={StartRevision}-{EndRevision}")]
@@ -61,7 +63,7 @@ namespace SharpSvn {
 	{
 		initonly bool _inheritable;
 
-	internal:
+	public:
 		SvnMergeRange(__int64 start, __int64 end, bool inheritable)
 			: SvnRevisionRange(start, end)
 		{
@@ -103,38 +105,93 @@ namespace SharpSvn {
 		{
 			return String::Format(System::Globalization::CultureInfo::InvariantCulture, "r{0}-{1}", Start, End);
 		}
+
+	internal:
+		svn_merge_range_t* AllocMergeRange(AprPool^ pool);
 	};
 
-	ref class SvnMergeItem;
+	ref class SvnMergeItem;	
+	ref class SvnMergeDiffArgs;
+	ref class SvnMergeRemoveArgs;
 
-	namespace Implementation {
-		public ref class SvnMergeItemCollection sealed : KeyedCollection<Uri^, SvnMergeItem^>
+	public ref class SvnMergeItemCollection sealed : KeyedCollection<Uri^, SvnMergeItem^>
+	{
+	internal:
+		SvnMergeItemCollection(svn_mergeinfo_t mergeInfo, AprPool^ pool);
+
+	public:
+		/// <summary>Initializes a new instance of the <see cref="SvnMergeItemCollection" /> class with default properties</summary>
+		SvnMergeItemCollection()
+		{}
+
+		/// <summary>Initializes a new instance of the <see cref="SvnMergeItemCollection" /> class with the values from the specified collection</summary>
+		SvnMergeItemCollection(IEnumerable<SvnMergeItem^>^ items)
 		{
-		internal:
-			SvnMergeItemCollection()
-			{}
+			if (!items)
+				throw gcnew ArgumentNullException("items");
 
-			SvnMergeItemCollection(svn_mergeinfo_t mergeInfo, AprPool^ pool);
+			for each (SvnMergeItem^ item in items)
+			{
+				Add(item);
+			}
+		}
 
-		public:
-			static bool TryParse(String^ input, [Out] SvnMergeItemCollection^% items);
+	public:
+		static bool TryParse(String^ input, [Out] SvnMergeItemCollection^% items);
 
-		protected:
-			virtual Uri^ GetKeyForItem(SvnMergeItem^ item) override;
-		};
+	public:
+		bool TryDiff(ICollection<SvnMergeItem^>^ to, [Out] SvnMergeItemCollection^% added, [Out] SvnMergeItemCollection^% removed);
+		bool TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDiffArgs^ args, [Out] SvnMergeItemCollection^% added, [Out] SvnMergeItemCollection^% removed);
 
-		public ref class SvnMergeRangeCollection sealed : Collection<SvnMergeRange^>
+	public:
+		bool TryRemove(ICollection<SvnMergeItem^>^ items, [Out] SvnMergeItemCollection^% rest);
+		/// <remarks>ConsiderInheritance is ignored at this time</remarks>
+		bool TryRemove(ICollection<SvnMergeItem^>^ items, SvnMergeRemoveArgs^ args, [Out] SvnMergeItemCollection^% rest);
+		bool TryIntersect(ICollection<SvnMergeItem^>^ to, [Out] SvnMergeItemCollection^% intersected);
+
+	public:
+		virtual String^ ToString() override;
+
+	internal:
+		svn_mergeinfo_t AllocMergeInfo(AprPool^ pool);
+
+	protected:
+		virtual Uri^ GetKeyForItem(SvnMergeItem^ item) override;
+	};
+
+	public ref class SvnMergeRangeCollection sealed : Collection<SvnMergeRange^>
+	{
+	public:
+		SvnMergeRangeCollection()
+		{}
+
+		SvnMergeRangeCollection(ICollection<SvnMergeRange^>^ list)
 		{
-		internal:
-			SvnMergeRangeCollection(IList<SvnMergeRange^>^ list)
-				: Collection(list)
-			{}
+			if (!list)
+				throw gcnew ArgumentNullException("list");
 
+			for each(SvnMergeRange^ i in list)
+				Add(i);
+		}
 
-		internal:
-			static SvnMergeRangeCollection^ Create(apr_array_header_t *rangeList);
-		};
-	}
+	public:
+		bool TryDiff(ICollection<SvnMergeRange^>^ to, [Out] SvnMergeRangeCollection^% added, [Out] SvnMergeRangeCollection^% removed);
+		bool TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeDiffArgs^ args, [Out] SvnMergeRangeCollection^% added, [Out] SvnMergeRangeCollection^% removed);
+
+	public:
+		bool TryRemove(ICollection<SvnMergeRange^>^ items, [Out] SvnMergeRangeCollection^% rest);
+		bool TryRemove(ICollection<SvnMergeRange^>^ items, SvnMergeRemoveArgs^ args, [Out] SvnMergeRangeCollection^% rest);
+		bool TryIntersect(ICollection<SvnMergeRange^>^ to, [Out] SvnMergeRangeCollection^% intersected);
+
+	public:
+		virtual String^ ToString() override;
+
+	internal:
+		static SvnMergeRangeCollection^ Create(apr_array_header_t *rangeList);
+
+		apr_array_header_t *AllocMergeRange(AprPool^ pool);
+	};
+
 
 	[DebuggerDisplayAttribute("Uri={Uri}")]
 	public ref class SvnMergeItem sealed
@@ -171,8 +228,6 @@ namespace SharpSvn {
 			}
 		}
 	};
-
-	
 
 	public ref class SvnAppliedMergeInfo sealed
 	{

@@ -583,19 +583,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommandLineArgumentCollection.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnCommitItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnEnums.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnException.h"
 					>
 				</File>
 				<File
@@ -603,19 +591,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeSourcesCollection.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnNames.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPathTarget.h"
 					>
 				</File>
 				<File
@@ -631,15 +607,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnTarget.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnUpdateResult.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnUriTarget.h"
 					>
 				</File>
 				<File
@@ -683,18 +651,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommitItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnException.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfo.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnNames.cpp"
 					>
 				</File>
@@ -706,13 +662,9 @@
 					RelativePath=".\SvnRepositorySession.cpp"
 					>
 				</File>
-				<File
-					RelativePath=".\SvnTargets.cpp"
-					>
-				</File>
 			</Filter>
 			<Filter
-				Name="Commands"
+				Name="Commands Sources"
 				Filter="Commands\*.cpp"
 				>
 				<File
@@ -881,7 +833,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Args"
+				Name="Commands Args"
 				>
 				<File
 					RelativePath=".\Args\Add.h"
@@ -1157,6 +1109,74 @@
 				</File>
 				<File
 					RelativePath=".\ReposCommands\RecoverRepository.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Types"
+				>
+				<File
+					RelativePath=".\SvnCommandLineArgumentCollection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnEnums.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfoArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeSourcesCollection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnPathTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTargets.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Types Sources"
+				>
+				<File
+					RelativePath=".\SvnCommitItem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnException.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeItemCollection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeRangeCollection.cpp"
 					>
 				</File>
 			</Filter>

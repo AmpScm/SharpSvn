@@ -114,13 +114,13 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("pool");
 
 			svn_opt_revision_t rev;
+			svn_error_t* r;
 			const char* truePath;
 
 			const char* path = pool->AllocPath(targetName);
 
-			if (!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
+			if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
 			{
-
 				String^ realPath = Utf8_PtrToString(truePath);
 
 				if (!realPath->Contains("://"))
@@ -130,8 +130,9 @@ namespace SharpSvn {
 					target = gcnew SvnPathTarget(realPath, pegRev);
 					return true;
 				}
-
 			}
+			else
+				svn_error_clear(r);
 
 			target = nullptr;
 			return false;
@@ -139,7 +140,7 @@ namespace SharpSvn {
 
 	public:
 		static SvnPathTarget^ FromString(String^ value);
-		static operator SvnPathTarget^(String^ value) { return value ? FromString(value) : nullptr; }
+		static operator SvnPathTarget^(String^ value) { return value ? gcnew SvnPathTarget(value) : nullptr; }
 
 	internal:
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
