@@ -1,0 +1,3 @@
+/* Empty file used for custom build task */
+
+Convert SharpSvnStrings.resx to SharpSvnStrings.h

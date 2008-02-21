@@ -1,0 +1,98 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+	<target name="download">
+		<mkdir dir="downloads" />
+		<if test="${not file::exists('downloads/' + opensslFilename)}">
+			<get src="http://www.openssl.org/source/${opensslFilename}" dest="downloads/${opensslFilename}" />
+		</if>
+		<if test="${not file::exists('downloads/' + dbFilename)}">
+			<get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="downloads/${dbFilename}" />
+		</if>
+		<if test="${not file::exists('downloads/' + zlibFilename)}">
+			<get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
+		</if>
+		<if test="${not file::exists('downloads/' + nunitFilename)}">
+			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
+		</if>
+		<if test="${not file::exists('download/' + sharpZipFilename)}">
+      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
+    </if>
+		<if test="${not file::exists('downloads/' + saslFilename)}">
+			<get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="downloads/${saslFilename}" />
+		</if>
+		<if test="${not file::exists('downloads/' + bindFilename)}">
+			<get src="http://ftp.isc.org/isc/bind9/9.4.1-P1/${bindFilename}" dest="downloads/${bindFilename}" />
+		</if>
+	</target>
+
+	<target name="extract" depends="download">
+		<mkdir dir="build" />
+		<if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
+			<UnTar tarfile="downloads/${opensslFilename}" todir="build/${platform}" compresstype="gzip" />
+		</if>
+		<if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
+			<UnTar tarfile="downloads/${dbFilename}" todir="build" compresstype="gzip" />
+		</if>
+		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
+			<UnTar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
+		</if>
+		<if test="${not directory::exists(nunitDir)}">
+			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />
+		</if>
+		<if test="${not directory::exists(sharpZipLibDir)}">
+			<unzip zipfile="downloads/${sharpZipFilename}" todir="${sharpZipLibDir}"  />
+		</if>
+		<if test="${not directory::exists(saslDir)}">
+			<UnTar tarfile="downloads/${saslFilename}" todir="build/${platform}" compresstype="gzip" />
+		</if>
+		<if test="${not directory::exists(bindDir)}">
+			<UnTar tarfile="downloads/${bindFilename}" todir="build/${platform}" compresstype="gzip" />
+		</if>
+	</target>
+	<target name="checkout">
+		<property name="platformBase" value="build/${platform}" />
+		<property name="svnBase" value="${platformBase}/subversion" />
+
+		<if test="${not directory::exists(svnBase)}">
+			<Svn verbose="true">
+				<arg line="--non-interactive co" />
+				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnBuildType == 'trunk'}" />
+				<arg value="http://svn.collab.net/repos/svn/tags/" if="${svnBuildType == 'tag'}" />
+				<arg value="http://svn.collab.net/repos/svn/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />				
+				<arg value="${svnBase}" />
+			</Svn>
+		</if>
+		<if test="${not directory::exists(platformBase + '/neon')}">
+			<Svn verbose="true">
+				<arg line="co" />
+				<arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
+				<arg value="build/${platform}/neon" />
+			</Svn>
+			<!-- Write version for subversion configure script -->
+			<echo message="${neonVersion}" file="${platformBase}/neon/.version" />
+		</if>
+		<if test="${not directory::exists('build/apr')}">
+			<Svn verbose="true">
+				<arg line="co" />
+				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
+				<arg value="build/apr" />
+			</Svn>
+		</if>
+		<if test="${not directory::exists('build/apr-util')}">
+			<Svn verbose="true">
+				<arg line="co" />
+				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
+				<arg value="build/apr-util" />
+			</Svn>
+		</if>
+		<if test="${not directory::exists(platformBase + '/serf')}">
+			<Svn verbose="true">
+				<arg line="co" />
+				<arg value="http://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
+				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />				
+				<arg value="http://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />				
+				<arg value="${platformBase}/serf" />
+			</Svn>
+		</if>
+	</target>
+</project>

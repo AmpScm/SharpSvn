@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<FxCopProject Version="1.36" Name="SharpSvn">
+ <ProjectOptions>
+  <SharedProject>True</SharedProject>
+  <Stylesheet Apply="False">http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl</Stylesheet>
+  <SaveMessages>
+   <Project Status="Active, Excluded" NewOnly="False" />
+   <Report Status="Active" NewOnly="False" />
+  </SaveMessages>
+  <ProjectFile Compress="True" DefaultTargetCheck="True" DefaultRuleCheck="True" SaveByRuleGroup="" Deterministic="True" />
+  <EnableControlFlowAnalysis>True</EnableControlFlowAnalysis>
+  <EnableMultithreadedLoad>True</EnableMultithreadedLoad>
+  <EnableMultithreadedAnalysis>True</EnableMultithreadedAnalysis>
+  <SourceLookup>True</SourceLookup>
+  <AnalysisExceptionsThreshold>10</AnalysisExceptionsThreshold>
+  <RuleExceptionsThreshold>1</RuleExceptionsThreshold>
+  <Spelling Locale="en-US" />
+  <OverrideRuleVisibilities>False</OverrideRuleVisibilities>
+  <CustomDictionaries SearchFxCopDir="True" SearchUserProfile="True" SearchProjectDir="True" />
+  <SearchGlobalAssemblyCache>False</SearchGlobalAssemblyCache>
+  <DeadlockDetectionTimeout>120</DeadlockDetectionTimeout>
+  <IgnoreGeneratedCode>False</IgnoreGeneratedCode>
+ </ProjectOptions>
+ <Targets>
+  <AssemblyReferenceDirectories>
+   <Directory>$(ProjectDir)/SharpSvn/bin/debug/</Directory>
+  </AssemblyReferenceDirectories>
+  <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll" Analyze="True" AnalyzeAllChildren="False">
+   <Modules AnalyzeAllChildren="False">
+    <Module Name="sharpsvn.dll" Analyze="True" AnalyzeAllChildren="False">
+     <Namespaces AnalyzeAllChildren="False">
+      <Namespace Name="" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="&lt;CppImplementationDetails&gt;" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="&lt;CrtImplementationDetails&gt;" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="SharpSvn" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="SharpSvn.Implementation" Analyze="True" AnalyzeAllChildren="False">
+       <Types AnalyzeAllChildren="False">
+        <Type Name="AprArray`2" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprBaton`1" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprCanonicalMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprCStrMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprCStrPathMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprPool" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprPool+AprPoolTag" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprStreamFile" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="AprSvnRevNumMarshaller" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="IItemMarshaller`1" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnBase" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnChangeItemCollection" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnCommitItemCollection" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnHandleBase" Analyze="True" AnalyzeAllChildren="True" />
+        <Type Name="SvnStreamWrapper" Analyze="True" AnalyzeAllChildren="True" />
+       </Types>
+      </Namespace>
+      <Namespace Name="SharpSvn.Security" Analyze="True" AnalyzeAllChildren="True" />
+      <Namespace Name="vc_attributes" Analyze="True" AnalyzeAllChildren="True" />
+     </Namespaces>
+     <Resources AnalyzeAllChildren="True" />
+    </Module>
+   </Modules>
+  </Target>
+ </Targets>
+ <Rules>
+  <RuleFiles>
+   <RuleFile Name="$(FxCopDir)\Rules\DesignRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\GlobalizationRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\InteroperabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\MobilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\NamingRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PerformanceRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\PortabilityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\SecurityRules.dll" Enabled="True" AllRulesEnabled="True" />
+   <RuleFile Name="$(FxCopDir)\Rules\UsageRules.dll" Enabled="True" AllRulesEnabled="True" />
+  </RuleFiles>
+  <Groups />
+  <Settings />
+ </Rules>
+ <FxCopReport Version="1.36" />
+</FxCopProject>
