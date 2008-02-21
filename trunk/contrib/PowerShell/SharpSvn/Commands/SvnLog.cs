@@ -39,7 +39,7 @@ namespace SharpSvn.PowerShell.Commands
                 Client.GetLog(u, SvnArguments, out logItems);
             else
                 Client.GetLog(Target, SvnArguments, out logItems);
-            WriteObject(logItems, true);
+            WriteObject(logItems, /*enumerateCollection*/ true);
         }
     }
 }

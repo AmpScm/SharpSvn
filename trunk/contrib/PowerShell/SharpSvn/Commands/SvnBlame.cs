@@ -44,7 +44,7 @@ namespace SharpSvn.PowerShell.Commands
         {
             Collection<SvnBlameEventArgs> blameResults;
             Client.GetBlame(GetTarget<SvnTarget>(), SvnArguments, out blameResults);
-            WriteObject(blameResults, true);
+            WriteObject(blameResults, /*enumerateCollection*/ true);
         }
     }
 }

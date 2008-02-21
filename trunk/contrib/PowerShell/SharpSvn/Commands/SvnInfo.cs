@@ -19,7 +19,7 @@ namespace SharpSvn.PowerShell.Commands
         {
             Collection<SvnInfoEventArgs> infoItems;
             Client.GetInfo(GetTarget<SvnTarget>(), SvnArguments, out infoItems);
-            WriteObject(infoItems, true);
+            WriteObject(infoItems, /*enumerateCollection*/ true);
         }
     }
 }
