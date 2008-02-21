@@ -10,7 +10,7 @@
 namespace SharpSvn {
 	using namespace System;
 
-	public ref class SvnUriTarget sealed : public SvnTarget
+	public ref class SvnUriTarget sealed : public SvnTarget, Implementation::ISvnTargetInstance
 	{
 		initonly Uri^ _uri;
 
@@ -145,11 +145,12 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("pool");
 
 			svn_opt_revision_t rev;
+			svn_error_t* r;
 			const char* truePath;
 
 			const char* path = pool->AllocPath(targetString);
 
-			if (!svn_opt_parse_path(&rev, &truePath, path, pool->Handle))
+			if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
 			{
 				System::Uri^ uri = nullptr;
 
@@ -161,6 +162,8 @@ namespace SharpSvn {
 					return true;
 				}
 			}
+			else
+				svn_error_clear(r);
 
 			target = nullptr;
 			return false;

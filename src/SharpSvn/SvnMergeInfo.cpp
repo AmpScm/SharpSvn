@@ -38,64 +38,17 @@ SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header
 	_mergeRanges = SvnMergeRangeCollection::Create(mergeInfo);
 }
 
-SvnMergeRangeCollection^ SvnMergeRangeCollection::Create(apr_array_header_t *rangeList)
+svn_merge_range_t* SvnMergeRange::AllocMergeRange(AprPool^ pool)
 {
-	if (!rangeList)
-		throw gcnew ArgumentNullException("rangeList");
-
-	array<SvnMergeRange^>^ ranges = gcnew array<SvnMergeRange^>(rangeList->nelts);
-
-	const svn_merge_range_t** mrgRange = (const svn_merge_range_t**)rangeList->elts;
-
-	for (int i = 0; i < rangeList->nelts; i++)
-		ranges[i] = gcnew SvnMergeRange(mrgRange[i]->start, mrgRange[i]->end, 0 != mrgRange[i]->inheritable);
-
-	return gcnew SvnMergeRangeCollection(safe_cast<IList<SvnMergeRange^>^>(ranges));
-}
-
-SvnMergeItemCollection::SvnMergeItemCollection(svn_mergeinfo_t mergeInfo, AprPool^ pool)
-{
-	if (!mergeInfo)
-		throw gcnew ArgumentNullException("mergeInfo");
-	else if (!pool)
+	if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	for (apr_hash_index_t *hi = apr_hash_first(pool->Handle, mergeInfo); hi; hi = apr_hash_next(hi))
-	{
-		const char *pUri;
-		apr_ssize_t klen;
-		apr_array_header_t *ranges;
-		apr_hash_this(hi, (const void **) &pUri, &klen, (void**)&ranges);
+	svn_merge_range_t* range = (svn_merge_range_t*)pool->AllocCleared(sizeof(svn_merge_range_t));
 
-		if (pUri && ranges)
-		{
-			Add(gcnew SvnMergeItem(SvnBase::Utf8_PtrToUri(pUri, SvnNodeKind::Unknown), SvnMergeRangeCollection::Create(ranges)));
-		}
-	}
+	range->start = (svn_revnum_t)Start;
+	range->end = (svn_revnum_t)End;
+	range->inheritable = Inheritable;
+
+	return range;
 }
 
-bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollection^% items)
-{
-	if(String::IsNullOrEmpty(input))
-		throw gcnew ArgumentNullException("input");
-
-	AprPool pool;
-
-	svn_mergeinfo_t mergeInfo = nullptr;
-
-	svn_error_t* r = svn_mergeinfo_parse(&mergeInfo, pool.AllocString(input), pool.Handle);
-
-	if(r)
-	{
-		svn_error_clear(r);
-		return false;
-	}
-
-	items = gcnew SvnMergeItemCollection(mergeInfo, %pool);
-	return true;
-}
-
-Uri^ SvnMergeItemCollection::GetKeyForItem(SvnMergeItem^ item)
-{
-	return item ? item->Uri : nullptr;
-}

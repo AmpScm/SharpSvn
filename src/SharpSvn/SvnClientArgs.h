@@ -170,8 +170,6 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientArgsWithConflict abstract : public SvnClientArgs
 	{
-		String^ _logMessage;
-
 	public:
 		/// <summary>
 		/// Raised on conflict. The event is first
@@ -190,20 +188,6 @@ namespace SharpSvn {
 		virtual void OnConflict(SvnConflictEventArgs^ e)
 		{
 			Conflict(this, e);
-		}
-
-	public:
-		property String^ LogMessage
-		{
-			String^ get()
-			{
-				return _logMessage;
-			}
-
-			void set(String^ value)
-			{
-				_logMessage = value;
-			}
 		}
 	};
 
@@ -229,46 +213,4 @@ namespace SharpSvn {
 	};
 }
 
-/*
-#include "Args/Add.h"
-#include "Args/AddToChangeList.h"
-#include "Args/Blame.h"
-#include "Args/CheckOut.h"
-#include "Args/CleanUp.h"
-#include "Args/Commit.h"
-#include "Args/Copy.h"
-#include "Args/CreateDirectory.h"
-#include "Args/Delete.h"
-#include "Args/Diff.h"
-#include "Args/DiffMerge.h"
-#include "Args/DiffSummary.h"
-#include "Args/Export.h"
-#include "Args/GetAppliedMergeInfo.h"
-#include "Args/GetAvailableMergeInfo.h"
-#include "Args/GetProperty.h"
-#include "Args/GetRevisionProperty.h"
-#include "Args/GetSuggestedMergeSources.h"
-#include "Args/GetWorkingCopyState.h"
-#include "Args/Import.h"
-#include "Args/Info.h"
-#include "Args/List.h"
-#include "Args/ListChangeList.h"
-#include "Args/Lock.h"
-#include "Args/Log.h"
-#include "Args/Merge.h"
-#include "Args/Move.h"
-#include "Args/PropertyList.h"
-#include "Args/ReintegrationMerge.h"
-#include "Args/Relocate.h"
-#include "Args/RemoveFromChangeList.h"
-#include "Args/Resolved.h"
-#include "Args/Revert.h"
-#include "Args/RevisionPropertyList.h"
-#include "Args/SetProperty.h"
-#include "Args/SetRevisionProperty.h"
-#include "Args/Status.h"
-#include "Args/Switch.h"
-#include "Args/Unlock.h"
-#include "Args/Update.h"
-#include "Args/Write.h"
-*/
+#include "SvnMergeInfoArgs.h"
