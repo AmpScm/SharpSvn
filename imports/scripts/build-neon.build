@@ -10,6 +10,7 @@
 						<token key="MAJOR" value="${NEON_MAJOR_VERSION}" />
 						<token key="MINOR" value="${NEON_MINOR_VERSION}" />
 					</replacetokens>
+					<replacestring from="#define socklen_t" to="// # define socklen_t" />
 				</filterchain>
 			</loadfile>
 			<echo file="${svnBase}/../neon/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
