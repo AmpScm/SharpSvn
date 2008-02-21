@@ -15,13 +15,10 @@
 			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
 		</if>
 		<if test="${not file::exists('download/' + sharpZipFilename)}">
-      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
-    </if>
+			<get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
+		</if>
 		<if test="${not file::exists('downloads/' + saslFilename)}">
 			<get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="downloads/${saslFilename}" />
-		</if>
-		<if test="${not file::exists('downloads/' + bindFilename)}">
-			<get src="http://ftp.isc.org/isc/bind9/9.4.1-P1/${bindFilename}" dest="downloads/${bindFilename}" />
 		</if>
 	</target>
 
@@ -44,9 +41,6 @@
 		</if>
 		<if test="${not directory::exists(saslDir)}">
 			<UnTar tarfile="downloads/${saslFilename}" todir="build/${platform}" compresstype="gzip" />
-		</if>
-		<if test="${not directory::exists(bindDir)}">
-			<UnTar tarfile="downloads/${bindFilename}" todir="build/${platform}" compresstype="gzip" />
 		</if>
 	</target>
 	<target name="checkout">
