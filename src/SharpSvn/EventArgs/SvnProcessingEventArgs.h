@@ -21,7 +21,7 @@ public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
 			_commandType = commandType;
 		}
 
-	internal:
+	public:
 		property SvnClientCommandType CommandType
 		{
 			SvnClientCommandType get()
