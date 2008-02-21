@@ -6,7 +6,8 @@ using System.Collections.ObjectModel;
 
 namespace SharpSvn.PowerShell
 {
-    
+    // TODO: Globbing support
+
     public abstract class SvnSingleTargetCommand<TArgument> :
         SvnCommandBase<TArgument>
         where TArgument : SvnClientArgs, new()

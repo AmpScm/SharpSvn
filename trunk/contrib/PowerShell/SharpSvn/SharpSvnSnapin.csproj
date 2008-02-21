@@ -47,6 +47,11 @@
     <Compile Include="Commands\SvnCleanup.cs" />
     <Compile Include="Commands\SvnCommit.cs" />
     <Compile Include="Commands\SvnCopy.cs" />
+    <Compile Include="Commands\SvnDelete.cs" />
+    <Compile Include="Commands\SvnGetAppliedMergeInfo.cs" />
+    <Compile Include="Commands\SvnGetAvailableMergeInfo.cs" />
+    <Compile Include="Commands\SvnMerge.cs" />
+    <Compile Include="Commands\SvnStatus.cs" />
     <Compile Include="Commands\SvnUpdate.cs" />
     <Compile Include="SharpSvnSnapIn.cs">
       <SubType>Component</SubType>

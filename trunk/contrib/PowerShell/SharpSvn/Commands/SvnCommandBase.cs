@@ -34,6 +34,13 @@ namespace SharpSvn.PowerShell
                         WriteError(new ErrorRecord(e.Exception, e.Exception.SvnErrorCode.ToString(), ErrorCategory.FromStdErr, null));
                         e.Cancel = true;
                     };
+                    _client.Processing += delegate(object sender, SvnProcessingEventArgs e)
+                    {
+                    };
+                    _client.Progress += delegate(object sender, SvnProgressEventArgs e)
+                    {
+                        
+                    };
                     _client.Notify += delegate(object sender, SvnNotifyEventArgs e)
                     {
                     };

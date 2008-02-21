@@ -9,7 +9,10 @@ namespace SharpSvn.PowerShell
         public const string SvnBlame = "SvnBlame";
         public const string SvnLog = "SvnLog";
         public const string SvnInfo = "SvnInfo";
+        public const string SvnStatus = "SvnStatus";
         public const string Items = "Items";
         public const string Item = "Item";
+        public const string SvnAvailableMerges = "SvnAvailableMerges";
+        public const string SvnAppliedMerges = "SvnAppliedMerges";
     }
 }
