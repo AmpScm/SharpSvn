@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Management.Automation;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.PowerShell
 {
@@ -20,6 +21,26 @@ namespace SharpSvn.PowerShell
         {
             get { return _target; }
             set { _target = value; }
+        }
+
+        public TTarget GetTarget<TTarget>() where TTarget : SvnTarget
+        {
+            SvnTarget rslt;
+            if (SvnTarget.TryParse(Target, out rslt))
+                return rslt as TTarget;
+            return null;
+        }
+
+        public bool TryGetUri(out Uri u)
+        {
+            SvnUriTarget t = GetTarget<SvnUriTarget>();
+            if (t != null)
+            {
+                u = t.Uri;
+                return true;
+            }
+            u = null;
+            return false;
         }
     }
     public abstract class SvnMultipleTargetCommand<TArgument> : 
@@ -42,6 +63,21 @@ namespace SharpSvn.PowerShell
                   _targets;
             }
             set { _targets = value; }
+        }
+
+        protected Collection<SvnTarget> GetSvnTargets<TTarget>() where TTarget : SvnTarget
+        {
+            Collection<SvnTarget> rslt = new Collection<SvnTarget>();
+            foreach (string targetName in Targets)
+            {
+                SvnTarget target;
+                if (SvnTarget.TryParse(targetName, out target) &&
+                    target is TTarget)
+                {
+                    rslt.Add(target);
+                }
+            }
+            return rslt;
         }
     }
 }

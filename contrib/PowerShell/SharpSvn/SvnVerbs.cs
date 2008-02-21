@@ -11,6 +11,6 @@ namespace SharpSvn.PowerShell
         public const string Export = "SvnExport";
         public const string Merge = "SvnMerge";
         public const string Add = "SvnAdd";
-
+        public const string Cleanup = "SvnCleanup";
     }
 }
