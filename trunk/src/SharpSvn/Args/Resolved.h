@@ -5,7 +5,7 @@
 
 #pragma once
 
-// Included from SvnClientArgs.h
+
 
 namespace SharpSvn {
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Resolved(String^, SvnResolvedArgs^)" /></summary>

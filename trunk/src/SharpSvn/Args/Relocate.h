@@ -5,7 +5,7 @@
 
 #pragma once
 
-// Included from SvnClientArgs.h
+
 
 namespace SharpSvn {
 
