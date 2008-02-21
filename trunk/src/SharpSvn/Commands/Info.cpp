@@ -72,13 +72,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	try
 	{
 		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-
-		if (dynamic_cast<SvnUriTarget^>(target) && (target->Revision == SvnRevision::None))
-		{
-			pegRev.kind = svn_opt_revision_head;
-		}
-
-		svn_opt_revision_t rev = args->Revision->ToSvnRevision();
+		svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
 		svn_error_t* r = svn_client_info2(
 			pool.AllocString(target->SvnTargetName),
