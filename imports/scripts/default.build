@@ -31,8 +31,6 @@
 	<include buildfile="build-apr.build" />
 	<include buildfile="build-sasl.build" />
 	<include buildfile="build-subversion.build" />
-	<!-- SharpDns -->
-	<include buildfile="build-bind.build" />
 
 	<target name="clean">
 		<delete>
@@ -80,7 +78,7 @@
 	<property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />	
 	<property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
 
-	<target name="build" depends="download,extract,checkout, build-svn, build-bind, copy-result">
+	<target name="build" depends="download,extract,checkout, build-svn, copy-result">
 
 	</target>
 
