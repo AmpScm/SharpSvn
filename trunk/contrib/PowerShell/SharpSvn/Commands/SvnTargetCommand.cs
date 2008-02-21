@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 
 namespace SharpSvn.PowerShell
 {
+    
     public abstract class SvnSingleTargetCommand<TArgument> :
         SvnCommandBase<TArgument>
         where TArgument : SvnClientArgs, new()
@@ -19,7 +20,7 @@ namespace SharpSvn.PowerShell
         [Parameter(Position = 0, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
         public string Target
         {
-            get { return _target; }
+            get { return _target == null ? SessionState.Path.CurrentLocation.Path : _target; }
             set { _target = value; }
         }
 
