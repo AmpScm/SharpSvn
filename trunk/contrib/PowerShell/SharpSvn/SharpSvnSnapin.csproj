@@ -43,7 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\SvnAdd.cs" />
+    <Compile Include="Commands\SvnBlame.cs" />
+    <Compile Include="Commands\SvnCleanup.cs" />
     <Compile Include="Commands\SvnCommit.cs" />
+    <Compile Include="Commands\SvnCopy.cs" />
     <Compile Include="Commands\SvnUpdate.cs" />
     <Compile Include="SharpSvnSnapIn.cs">
       <SubType>Component</SubType>

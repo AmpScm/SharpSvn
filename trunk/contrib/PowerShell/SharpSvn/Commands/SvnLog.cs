@@ -7,8 +7,20 @@ using System.Collections.ObjectModel;
 namespace SharpSvn.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, SvnNouns.SvnLog)]
-    public sealed class SvnLog : SvnMultipleTargetCommand<SvnLogArgs>
+    public sealed class SvnLog : SvnSingleTargetCommand<SvnLogArgs>
     {
+        [Parameter]
+        public SvnRevision Start
+        {
+            get { return SvnArguments.Start; }
+            set { SvnArguments.Start = value; }
+        }
+        [Parameter]
+        public SvnRevision End
+        {
+            get { return SvnArguments.End; }
+            set { SvnArguments.End = value; }
+        }
 
         [Parameter]
         public int Limit
@@ -21,7 +33,12 @@ namespace SharpSvn.PowerShell.Commands
         protected override void ProcessRecord()
         {
             Collection<SvnLogEventArgs> logItems;
-            Client.GetLog(Targets, SvnArguments, out logItems);
+            
+            Uri u;
+            if (TryGetUri(out u))
+                Client.GetLog(u, SvnArguments, out logItems);
+            else
+                Client.GetLog(Target, SvnArguments, out logItems);
             WriteObject(logItems, true);
         }
     }

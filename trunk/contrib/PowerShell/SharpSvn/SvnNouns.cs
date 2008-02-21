@@ -6,6 +6,7 @@ namespace SharpSvn.PowerShell
 {
     public static class SvnNouns
     {
+        public const string SvnBlame = "SvnBlame";
         public const string SvnLog = "SvnLog";
         public const string SvnInfo = "SvnInfo";
         public const string Items = "Items";
