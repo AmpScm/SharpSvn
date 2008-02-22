@@ -157,6 +157,5 @@ namespace SharpSvn {
 			else
 				return item->Target;
 		}
-
 	};
 }

@@ -81,6 +81,7 @@
     <Compile Include="Commands\GetRevisionPropertyTests.cs" />
     <Compile Include="Commands\GetSuggestedMergeSourcesTests.cs" />
     <Compile Include="Commands\ImportTests.cs" />
+    <Compile Include="Commands\InfoTests.cs" />
     <Compile Include="Commands\ListTests.cs" />
     <Compile Include="Commands\LockTests.cs" />
     <Compile Include="Commands\LogTests.cs" />
