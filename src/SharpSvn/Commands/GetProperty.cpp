@@ -29,7 +29,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% va
 	bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
 
 	if (ok && result && (result->Count >= 0))
-		value = result[0]->StringValue;
+		value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
 
 	return ok;
 }
@@ -47,7 +47,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnProperty
 	if (GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result))
 	{
 		if (result->Count)
-			value = result[0];
+			value = static_cast<IList<SvnPropertyValue^>^>(result)[0];
 
 		return true;
 	}
@@ -130,7 +130,7 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
 
 	if (GetProperty(target, propertyName, args, result))
 	{
-		value = result[0]->StringValue;
+		value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
 		return true;
 	}
 	else
