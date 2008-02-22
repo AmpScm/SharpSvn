@@ -72,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <DependencyDownload Include="SharpSvn">
-      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.340.29492.zip</Url>
+      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.349.29523.zip</Url>
       <TargetDir>..\autolib</TargetDir>
       <Version>2</Version>
       <Visible>false</Visible>
