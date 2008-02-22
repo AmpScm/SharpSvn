@@ -14,7 +14,7 @@
 		<if test="${not file::exists('downloads/' + nunitFilename)}">
 			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
 		</if>
-		<if test="${not file::exists('download/' + sharpZipFilename)}">
+		<if test="${not file::exists('downloads/' + sharpZipFilename)}">
 			<get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
 		</if>
 		<if test="${not file::exists('downloads/' + saslFilename)}">
