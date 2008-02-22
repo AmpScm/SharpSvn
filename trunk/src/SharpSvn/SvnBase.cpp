@@ -61,6 +61,14 @@ SvnBase::SvnBase()
 {
 }
 
+AprPool^ SvnBase::SmallThreadPool::get()
+{
+	if(!_threadPool || !_threadPool->IsValid()) // Recreate if disposed for some reason
+		_threadPool = gcnew AprPool();
+	
+	return _threadPool;
+}
+
 bool SvnBase::IsValidReposUri(Uri^ uri)
 {
 	if (!uri)

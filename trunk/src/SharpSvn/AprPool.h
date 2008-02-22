@@ -98,6 +98,11 @@ namespace SharpSvn {
 				_tag->Ensure();
 			}
 
+			bool IsValid()
+			{
+				return _tag && _tag->IsValid();
+			}
+
 		internal:
 			property apr_pool_t* Handle
 			{

@@ -57,6 +57,16 @@ namespace SharpSvn {
 				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
 			}
 
+			[ThreadStatic]
+			static AprPool^ _threadPool;
+
+			/// <summary>Gets a small thread-local pool usable for small one shot actions</summary>
+			/// <remarks>The memory allocated by the pool is only freed after the thread is closed; so use with care</remarks>
+			static property AprPool^ SmallThreadPool
+			{
+				AprPool^ get();				
+			}
+
 		internal:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);

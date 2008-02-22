@@ -74,7 +74,7 @@ private:
 
 svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ exception)
 {
-	AprPool tmpPool;
+	AprPool tmpPool(SvnBase::SmallThreadPool);
 
 	svn_error_t *innerError = nullptr;
 
@@ -97,7 +97,8 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 		}
 	}
 
-	return svn_error_create(SVN_ERR_CANCELLED, innerError, tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
+	// Use svn_error_createf to make sure the value is copied
+	return svn_error_createf(SVN_ERR_CANCELLED, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
 }
 
 
