@@ -50,6 +50,7 @@
     <Compile Include="Commands\SvnDelete.cs" />
     <Compile Include="Commands\SvnGetAppliedMergeInfo.cs" />
     <Compile Include="Commands\SvnGetAvailableMergeInfo.cs" />
+    <Compile Include="Commands\SvnList.cs" />
     <Compile Include="Commands\SvnMerge.cs" />
     <Compile Include="Commands\SvnStatus.cs" />
     <Compile Include="Commands\SvnUpdate.cs" />

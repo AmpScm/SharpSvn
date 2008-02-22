@@ -43,7 +43,7 @@ namespace SharpSvn.PowerShell
 
         public override string Description
         {
-            get { return ""; }
+            get { return "Powershell implementation of the Subversion commandline interface"; }
         }
 
         public override string Name
@@ -54,7 +54,7 @@ namespace SharpSvn.PowerShell
 
         public override string Vendor
         {
-            get { return "AnkhSVN"; }
+            get { return "SharpSvn Contrib"; }
         }
     }
 
