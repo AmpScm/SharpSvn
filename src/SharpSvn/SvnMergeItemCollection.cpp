@@ -62,7 +62,7 @@ bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollectio
 	if(String::IsNullOrEmpty(input))
 		throw gcnew ArgumentNullException("input");
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	svn_mergeinfo_t mergeInfo = nullptr;
 
@@ -96,7 +96,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDif
 	added = nullptr;
 	removed = nullptr;
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	SvnMergeItemCollection^ toCol = dynamic_cast<SvnMergeItemCollection^>(to);
 
@@ -148,7 +148,7 @@ bool SvnMergeItemCollection::TryRemove(ICollection<SvnMergeItem^>^ items, SvnMer
 
 	rest = nullptr;
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	svn_mergeinfo_t result = nullptr;
 
@@ -180,7 +180,7 @@ bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, [Out] 
 
 	intersected = nullptr;
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	svn_mergeinfo_t result = nullptr;
 
@@ -202,7 +202,7 @@ bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, [Out] 
 
 String^ SvnMergeItemCollection::ToString()
 {
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	svn_string_t* result = nullptr;
 

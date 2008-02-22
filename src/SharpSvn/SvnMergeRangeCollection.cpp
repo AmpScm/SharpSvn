@@ -88,7 +88,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeD
 	added = nullptr;
 	removed = nullptr;
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	SvnMergeRangeCollection^ toCol = dynamic_cast<SvnMergeRangeCollection^>(to);
 
@@ -140,7 +140,7 @@ bool SvnMergeRangeCollection::TryRemove(ICollection<SvnMergeRange^>^ items, SvnM
 
 	rest = nullptr;
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	apr_array_header_t* result = nullptr;
 
@@ -172,7 +172,7 @@ bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, [Out
 
 	intersected = nullptr;
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	apr_array_header_t* result = nullptr;
 
@@ -194,7 +194,7 @@ bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, [Out
 
 String^ SvnMergeRangeCollection::ToString()
 {
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	svn_string_t* result = nullptr;
 

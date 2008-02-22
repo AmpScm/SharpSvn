@@ -35,7 +35,7 @@ void SvnClient::AdministrativeDirectoryName::set(String^ value)
 	if (String::IsNullOrEmpty(value))
 		throw gcnew ArgumentNullException("value");
 
-	AprPool pool;
+	AprPool pool(SmallThreadPool);
 
 	svn_error_t* err = svn_wc_set_adm_dir(pool.AllocString(value), pool.Handle);
 	if (err)
@@ -342,8 +342,6 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 		throw gcnew ArgumentNullException("path");
 
 	path = System::IO::Path::GetFullPath(path);
-
-	EnsureState(SvnContextState::ConfigLoaded);
 
 	AprPool pool(%_pool);
 

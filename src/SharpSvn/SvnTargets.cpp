@@ -129,7 +129,7 @@ bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 
-	AprPool pool;
+	AprPool pool(SvnBase::SmallThreadPool);
 
 	return TryParse(targetName, target, %pool);
 }

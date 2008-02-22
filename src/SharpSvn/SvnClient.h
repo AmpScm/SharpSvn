@@ -17,6 +17,8 @@
 #include "SvnPropertyValue.h"
 #include "SvnMergeSourcesCollection.h"
 
+#include "SvnUtils.h"
+
 namespace SharpSvn {
 
 	ref class SvnCommittingEventArgs;
@@ -909,6 +911,7 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
+		/// <remarks>See also <see cref="SvnUtils::GetUriFromWorkingCopy" /></remarks>
 		Uri^ GetUriFromWorkingCopy(String^ path);
 
 		/// <overloads>Gets the repository root from the specified uri or path</overloads>
