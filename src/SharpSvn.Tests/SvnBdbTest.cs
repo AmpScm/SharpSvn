@@ -10,6 +10,7 @@ using System.Text;
 using NUnit.Framework;
 using SharpSvn.Implementation;
 using NUnit.Framework.SyntaxHelpers;
+using System.Reflection;
 
 namespace SharpSvn.Tests
 {
@@ -49,5 +50,18 @@ namespace SharpSvn.Tests
 			Assert.That(new SvnUriTarget(new Uri("svn://127.0.0.1:1234")).TargetName, Is.EqualTo("svn://127.0.0.1:1234/"));
 		}
 
+		[Test]
+		public void TestResourceLoading()
+		{
+			Type tp = typeof(SvnClient).Assembly.GetType("SharpSvn.SharpSvnStrings", false);
+
+			Assert.That(tp, Is.Not.Null, "SharpSvnStrings type exists in SharpSvn");
+
+			PropertyInfo pi = tp.GetProperty("ArgumentMustBeAValidRepositoryUri", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.GetProperty);
+
+			Assert.That(pi, Is.Not.Null, "ArgumentMustBeAValidRepositoryUri is a valid property on SharpSvnStrings");
+
+			Assert.That(pi.GetValue(null, null), Is.Not.Null);	
+		}
     }
 }
