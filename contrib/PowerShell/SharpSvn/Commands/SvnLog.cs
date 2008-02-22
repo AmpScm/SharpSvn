@@ -32,14 +32,16 @@ namespace SharpSvn.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            Collection<SvnLogEventArgs> logItems;
-            
             Uri u;
             if (TryGetUri(out u))
-                Client.GetLog(u, SvnArguments, out logItems);
+				Client.Log(u, SvnArguments, new EventHandler<SvnLogEventArgs>(HandleLog));
             else
-                Client.GetLog(Target, SvnArguments, out logItems);
-            WriteObject(logItems, /*enumerateCollection*/ true);
+                Client.Log(Target, SvnArguments, new EventHandler<SvnLogEventArgs>(HandleLog));            
         }
+
+		void HandleLog(object sender, SvnLogEventArgs e)
+		{
+			WriteObject(e);
+		}
     }
 }

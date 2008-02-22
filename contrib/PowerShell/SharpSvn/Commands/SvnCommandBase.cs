@@ -14,12 +14,12 @@ namespace SharpSvn.PowerShell
             : base()
         { }
 
-        [Parameter(HelpMessage="The default credential to use for authentication.")]
-        public ICredentials Credential
-        {
-            get { return Client.Authenticator.DefaultCredentials; }
-            set { Client.Authenticator.DefaultCredentials = value; }
-        }
+		//[Parameter(HelpMessage="The default credential to use for authentication.")]
+		//public ICredentials Credential
+		//{
+		//    get { return Client.Authenticator.DefaultCredentials; }
+		//    set { Client.Authenticator.DefaultCredentials = value; }
+		//}
 
         SvnClient _client;
         protected SvnClient Client

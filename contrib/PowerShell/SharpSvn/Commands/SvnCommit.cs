@@ -39,7 +39,9 @@ namespace SharpSvn.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            Client.Commit(Targets, SvnArguments);
+			SvnCommitInfo info;
+			if (Client.Commit(Targets, SvnArguments, out info))
+				WriteObject(info);
         }
     }
 }
