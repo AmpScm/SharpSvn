@@ -43,8 +43,10 @@ namespace SharpSvn.PowerShell.Commands
         protected override void ProcessRecord()
         {
             Collection<SvnBlameEventArgs> blameResults;
-            Client.GetBlame(GetTarget<SvnTarget>(), SvnArguments, out blameResults);
-            WriteObject(blameResults, /*enumerateCollection*/ true);
+			Client.Blame(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnBlameEventArgs e)
+			{
+				WriteObject(e);
+			});
         }
     }
 }

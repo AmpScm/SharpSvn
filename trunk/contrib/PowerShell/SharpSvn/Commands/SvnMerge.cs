@@ -35,7 +35,7 @@ namespace SharpSvn.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            Client.Merge(Target, GetSource<SvnTarget>(), MergeRanges, SvnArguments);
+            Client.Merge(Target, GetSource<SvnTarget>(), new List<SvnMergeRange>(MergeRanges), SvnArguments);
         }
     }
 }

@@ -11,9 +11,10 @@ namespace SharpSvn.PowerShell.Commands
     {
         protected override void ProcessRecord()
         {
-            Collection<SvnStatusEventArgs> statuses;
-            Client.GetStatus(Target, SvnArguments, out statuses);
-            WriteObject(SvnArguments, /*enumerateCollection*/ true);
+			Client.Status(Target, SvnArguments, delegate(object sender, SvnStatusEventArgs e)
+			{
+				WriteObject(e);
+			});
         }
     }
 }

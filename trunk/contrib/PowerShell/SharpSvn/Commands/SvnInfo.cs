@@ -17,9 +17,10 @@ namespace SharpSvn.PowerShell.Commands
         }
         protected override void ProcessRecord()
         {
-            Collection<SvnInfoEventArgs> infoItems;
-            Client.GetInfo(GetTarget<SvnTarget>(), SvnArguments, out infoItems);
-            WriteObject(infoItems, /*enumerateCollection*/ true);
+			Client.Info(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnInfoEventArgs e)
+			{
+				WriteObject(e);
+			});
         }
     }
 }

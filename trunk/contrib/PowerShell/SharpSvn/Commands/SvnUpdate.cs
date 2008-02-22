@@ -45,7 +45,10 @@ namespace SharpSvn.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            Client.Update(Targets, SvnArguments);
+			SvnUpdateResult result;
+			if (Client.Update(Targets, SvnArguments, out result))
+				WriteObject(result);
+
         }
     }
 }
