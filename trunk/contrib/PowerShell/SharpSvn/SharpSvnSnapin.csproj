@@ -28,16 +28,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpSvn, Version=1.4999.293.1, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
+    <Reference Include="SharpSvn, Version=1.4999.340.29492, Culture=neutral, PublicKeyToken=d729672594885a28, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\lib\SharpSvn.dll</HintPath>
+      <HintPath>..\autolib\SharpSvn\SharpSvn.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Data" />
     <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Program Files\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0\System.Management.Automation.dll</HintPath>
+      <HintPath>$(ProgramFiles)\Reference Assemblies\Microsoft\WindowsPowerShell\v1.0\System.Management.Automation.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -69,7 +69,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <DependencyDownload Include="SharpSvn">
+      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.340.29492.zip</Url>
+      <TargetDir>..\autolib</TargetDir>
+      <Version>2</Version>
+      <Visible>false</Visible>
+    </DependencyDownload>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\tools\TurtleTasks\QQn.TurtleTasks.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
