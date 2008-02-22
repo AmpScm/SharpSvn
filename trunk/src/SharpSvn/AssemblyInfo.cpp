@@ -57,6 +57,9 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
+#ifdef DEBUG
+[assembly:InternalsVisibleTo("SharpSvn.Tests, PublicKey=002400000480000094000000060200000024000052534131000400000100010049a546f2a497ff798d171c7efcb1d83da3dd03973db41c1de3a8811261f1f2183153cbf3b6b85ce1c50ff412adcebcd47e0882c1a315cfae1b1408df8dbfc1bf2d113ab457765606c520bd88de814cd0285b4d6acfb926559487ca3ca34b8ba9f4af2cc349c9904af58e74d448d500ebb61843ecd1ff602348392fb9b2f582b7")]
+#endif
 //
 // Version information for an assembly consists of the following four values:
 //

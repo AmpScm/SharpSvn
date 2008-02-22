@@ -412,7 +412,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating SharpSvnStrings.h"
-						CommandLine="ResGen.exe /str:c++ SharpSvnStrings.resx&#x0D;&#x0A;"
+						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx&#x0D;&#x0A;"
 						AdditionalDependencies="SharpSvnStrings.resx"
 						Outputs="SharpSvnStrings.h"
 					/>
@@ -423,7 +423,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating SharpSvnStrings.h"
-						CommandLine="ResGen.exe /str:c++ SharpSvnStrings.resx&#x0D;&#x0A;"
+						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx&#x0D;&#x0A;"
 						AdditionalDependencies="SharpSvnStrings.resx"
 						Outputs="SharpSvnStrings.h"
 					/>
@@ -434,7 +434,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating SharpSvnStrings.h"
-						CommandLine="ResGen.exe /str:c++ SharpSvnStrings.resx&#x0D;&#x0A;"
+						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx&#x0D;&#x0A;"
 						AdditionalDependencies="SharpSvnStrings.resx"
 						Outputs="SharpSvnStrings.h"
 					/>
@@ -445,7 +445,7 @@
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Generating SharpSvnStrings.h"
-						CommandLine="ResGen.exe /str:c++ SharpSvnStrings.resx&#x0D;&#x0A;"
+						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpSvnStrings.resx&#x0D;&#x0A;"
 						AdditionalDependencies="SharpSvnStrings.resx"
 						Outputs="SharpSvnStrings.h"
 					/>

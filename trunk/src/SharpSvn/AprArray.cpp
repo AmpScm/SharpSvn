@@ -45,7 +45,7 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 	for each (T t in items)
 	{
 		if (!t)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "items");
+			throw gcnew ArgumentException(SharpSvn::SharpSvnStrings::ItemInListIsNull, "items");
 
 		nItems++;
 	}

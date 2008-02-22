@@ -14,6 +14,8 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>SharpSvn.Tests.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -101,6 +103,7 @@
     <Compile Include="Commands\UpdateTests.cs" />
     <Compile Include="Commands\Utils\ProcessReader.cs" />
     <Compile Include="Commands\Utils\Win32.cs" />
+    <None Include="SharpSvn.Tests.snk" />
     <None Include="Zips\Collabnet-MT.repos" />
     <None Include="Zips\conflictwc.zip" />
     <None Include="Zips\repos.zip" />
