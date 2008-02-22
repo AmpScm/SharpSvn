@@ -87,6 +87,7 @@
     <Compile Include="Commands\LogTests.cs" />
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
+    <Compile Include="Commands\PathCasingTests.cs" />
     <Compile Include="Commands\PropertyListTests.cs" />
     <Compile Include="Commands\RelocateTests.cs" />
     <Compile Include="Commands\ResolvedTests.cs" />

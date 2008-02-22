@@ -1182,6 +1182,22 @@
 					>
 				</File>
 			</Filter>
+			<Filter
+				Name="Utils Args"
+				>
+				<File
+					RelativePath=".\SvnUtils.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Utils Sources"
+				>
+				<File
+					RelativePath=".\SvnUtils.cpp"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\AssemblyInfo.cpp"
