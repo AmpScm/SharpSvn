@@ -6,7 +6,7 @@ using System.Management.Automation;
 namespace SharpSvn.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, SvnNouns.SvnAvailableMerges)]
-    public sealed class SvnGetAvailableMergeInfo : SvnSingleTargetCommand<SvnGetSuggestedMergeSourcesArgs>
+    public sealed class SvnGetAvailableMergeInfo : SvnSingleTargetCommand<SvnGetAvailableMergeInfoArgs>
     {
         Uri _sourceUri;
 
