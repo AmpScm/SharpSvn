@@ -88,6 +88,12 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return Time.GetHashCode() ^ SvnEventArgs::SafeGetHashCode(Author);
+		}
+
 	protected public:
 		virtual void Detach(bool keepProperties)
 		{
@@ -176,6 +182,12 @@ namespace SharpSvn {
 
 				return _entry;
 			}
+		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return Path->GetHashCode();
 		}
 
 

@@ -193,6 +193,12 @@ namespace SharpSvn {
 			SvnMergeRange^ get();
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return SafeGetHashCode(Path) ^ Revision.GetHashCode() ^ ContentState.GetHashCode();
+		}
+
 	protected public:
 		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>

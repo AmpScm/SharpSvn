@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-public ref class SvnInfoEventArgs : public SvnCancelEventArgs
+	public ref class SvnInfoEventArgs : public SvnCancelEventArgs
 	{
 		const svn_info_t* _info;
 		initonly String^ _path;
@@ -327,6 +327,12 @@ public ref class SvnInfoEventArgs : public SvnCancelEventArgs
 			{
 				return _size;
 			}
+		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return SafeGetHashCode(Path) ^ SafeGetHashCode(Uri) ^ Revision.GetHashCode();
 		}
 
 	protected public:

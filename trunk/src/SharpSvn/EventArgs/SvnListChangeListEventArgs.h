@@ -12,7 +12,8 @@ namespace SharpSvn {
 	public ref class SvnListChangeListEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
-		initonly String^ _changelist;
+		const char* _pChangeList;
+		String^ _changelist;
 
 	internal:
 		SvnListChangeListEventArgs(const char *path, const char *changelist)
@@ -21,7 +22,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 
 			_path = SvnBase::Utf8_PtrToString(path)->Replace('/', System::IO::Path::DirectorySeparatorChar);
-			_changelist = SvnBase::Utf8_PtrToString(changelist);
+			_pChangeList = changelist;
 		}
 
 	public:
@@ -37,6 +38,9 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+				if(!_changelist && _pChangeList)
+					_changelist = SvnBase::Utf8_PtrToString(_pChangeList);
+
 				return _changelist;
 			}
 		}
@@ -49,10 +53,12 @@ namespace SharpSvn {
 				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
+					GC::KeepAlive(ChangeList);
 				}
 			}
 			finally
 			{
+				_pChangeList = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}

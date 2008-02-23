@@ -123,6 +123,15 @@ namespace SharpSvn {
 		{
 			Detach(true);
 		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			String^ owner = Owner;
+			String^ path = Path;
+			return (owner ? owner->GetHashCode() : 0) ^ (path ? path->GetHashCode() : 0) ^ CreationTime.GetHashCode();
+		}
+
 	protected public:
 		virtual void Detach(bool keepProperties)
 		{

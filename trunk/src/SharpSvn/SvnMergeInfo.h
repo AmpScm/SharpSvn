@@ -95,6 +95,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
 			return Start.GetHashCode();
