@@ -240,20 +240,6 @@ namespace SharpSvn {
 	};
 
 	[Flags]
-	public enum class SvnCertificateTrustFailures
-	{
-		None						=	0,
-		CertificateNotValidYet		=	SVN_AUTH_SSL_NOTYETVALID,
-		CertificateExpired			=	SVN_AUTH_SSL_EXPIRED,
-		CommonNameMismatch			=	SVN_AUTH_SSL_CNMISMATCH,
-		UnknownCertificateAuthority =	SVN_AUTH_SSL_UNKNOWNCA,
-
-		UnknownSslProviderFailure	=	SVN_AUTH_SSL_OTHER,
-
-		MaskAllFailures				=	CertificateNotValidYet | CertificateExpired | CommonNameMismatch | UnknownCertificateAuthority | UnknownSslProviderFailure
-	};
-
-	[Flags]
 	public enum class SvnDirEntryItems
 	{
 		None			= 0,
