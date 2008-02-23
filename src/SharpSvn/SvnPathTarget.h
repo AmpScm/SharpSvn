@@ -112,6 +112,9 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("targetName");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
+			
+			if(!SvnBase::IsNotUri(targetName))
+				return false;
 
 			svn_opt_revision_t rev;
 			svn_error_t* r;

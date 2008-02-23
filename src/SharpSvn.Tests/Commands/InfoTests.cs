@@ -1,4 +1,4 @@
-﻿// $Id: ListTests.cs 303 2008-02-20 13:19:48Z bhuijben $
+﻿// $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
