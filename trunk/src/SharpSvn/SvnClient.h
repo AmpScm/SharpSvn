@@ -708,25 +708,45 @@ namespace SharpSvn {
 		/// <overloads>Set the value of a property on files, dirs (<c>svn propset</c>)</overloads>
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, String^ value);
+		bool SetProperty(String^ target, String^ propertyName, String^ value);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes);
+		bool SetProperty(String^ target, String^ propertyName, ICollection<Byte>^ bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
+		bool SetProperty(String^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args);
+		bool SetProperty(String^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args);
+
+		/// <overloads>Set the value of a property on files, dirs (<c>svn propset</c>)</overloads>
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool SetProperty(Uri^ target, String^ propertyName, String^ value);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool SetProperty(Uri^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+		bool SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args);
+
 
 		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(String^ path, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(String^ path, String^ propertyName, SvnSetPropertyArgs^ args);
+		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
+		/// <summary>Removes the specified property from the specfied path</summary>
+		bool DeleteProperty(Uri^ target, String^ propertyName);
+		/// <summary>Removes the specified property from the specfied path</summary>
+		bool DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 
 	internal:
-		bool InternalSetProperty(String^ path, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+		bool InternalSetProperty(SvnTarget^ path, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
 
 #pragma endregion
 
