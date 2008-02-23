@@ -59,6 +59,12 @@ namespace SharpSvn {
 				return _copyFromRevision;
 			}
 		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return CopyFromRevision.GetHashCode() ^ Path->GetHashCode();
+		}
 	};
 
 	namespace Implementation {
@@ -245,6 +251,12 @@ namespace SharpSvn {
 			{
 				return _logOrigin;
 			}
+		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override 
+		{
+			return Revision.GetHashCode();
 		}
 
 	protected public:

@@ -31,7 +31,6 @@ namespace SharpSvn {
 			}
 		}
 
-
 		property SvnDepth Depth
 		{
 			SvnDepth get()

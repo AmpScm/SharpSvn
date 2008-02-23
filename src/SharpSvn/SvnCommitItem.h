@@ -62,6 +62,12 @@ namespace SharpSvn {
 				return _postCommitError;
 			}
 		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return Revision.GetHashCode();
+		}
 	};
 
 	public ref class SvnCommitItem sealed
@@ -144,6 +150,12 @@ namespace SharpSvn {
 			{
 				return _copyFromRevision;
 			}
+		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return Revision.GetHashCode();
 		}
 
 		void Detach()

@@ -40,6 +40,12 @@ namespace SharpSvn {
 		{
 			UNUSED_ALWAYS(keepProperties);
 		}
+
+	internal:
+		static int SafeGetHashCode(Object^ value)
+		{
+			return value ? value->GetHashCode() : 0;
+		}
 	};
 };
 

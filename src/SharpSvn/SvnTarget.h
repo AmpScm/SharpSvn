@@ -152,6 +152,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
 			return _type.GetHashCode() ^ _value.GetHashCode();
@@ -319,11 +320,11 @@ namespace SharpSvn {
 			return Revision->Equals(other->Revision);
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
 			return TargetName->GetHashCode();
 		}
-
 
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnTarget^% target);

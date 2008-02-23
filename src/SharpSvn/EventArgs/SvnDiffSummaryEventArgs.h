@@ -65,6 +65,13 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			String^ path = Path;
+			return path ? path->GetHashCode() : __super::GetHashCode();
+		}
+
 	protected public:
 		virtual void Detach(bool keepProperties) override
 		{

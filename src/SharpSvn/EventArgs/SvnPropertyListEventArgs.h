@@ -51,6 +51,12 @@ public ref class SvnPropertyListEventArgs : public SvnCancelEventArgs
 			}
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return Path->GetHashCode();
+		}
+
 	protected public:
 		virtual void Detach(bool keepProperties) override
 		{

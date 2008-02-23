@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
+	public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
 	{
 		initonly SvnClientCommandType _commandType;
 
@@ -28,6 +28,12 @@ public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
 			{
 				return _commandType;
 			}
+		}
+
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return CommandType.GetHashCode();
 		}
 	};
 

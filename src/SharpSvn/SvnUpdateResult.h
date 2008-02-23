@@ -113,6 +113,11 @@ namespace SharpSvn {
 				return _resultMap;
 			}
 		}
+
+		virtual int GetHashCode() override
+		{
+			return Revision.GetHashCode();
+		}
 	};
 
 }

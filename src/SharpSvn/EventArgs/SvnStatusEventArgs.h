@@ -430,6 +430,12 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Serves as a hashcode for the specified type</summary>
+		virtual int GetHashCode() override
+		{
+			return Depth.GetHashCode() ^ SvnEventArgs::SafeGetHashCode(Name) ^ SvnEventArgs::SafeGetHashCode(Uri) ^ Revision.GetHashCode();
+		}
+
 	protected public:
 		virtual void Detach(bool keepProperties)
 		{

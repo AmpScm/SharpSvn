@@ -585,19 +585,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommitItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnLockInfo.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnNames.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPropertyValue.h"
 					>
 				</File>
 				<File
@@ -606,10 +594,6 @@
 				</File>
 				<File
 					RelativePath=".\SvnRepositorySession.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnUpdateResult.h"
 					>
 				</File>
 				<File
@@ -1122,11 +1106,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnCommitItem.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnEnums.h"
 					>
 				</File>
 				<File
 					RelativePath=".\SvnException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnLockInfo.h"
 					>
 				</File>
 				<File
@@ -1146,11 +1138,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnPropertyValue.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnTarget.h"
 					>
 				</File>
 				<File
 					RelativePath=".\SvnTargets.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnUpdateResult.h"
 					>
 				</File>
 				<File
