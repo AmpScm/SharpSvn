@@ -3,7 +3,7 @@
 
 // All required libraries SharpSvn needs to bind to the current build
 
-
+#pragma comment(lib, "intl3_svn.lib")
 
 #pragma comment(lib, "libeay32.lib")
 #pragma comment(lib, "ssleay32.lib")
