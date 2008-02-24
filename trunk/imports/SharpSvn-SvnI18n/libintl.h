@@ -3,6 +3,10 @@
 
 #pragma once
 
+#ifndef SHARPSVN_NO_ABORT
+#include <stdlib.h> // The header containing abort()
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -36,6 +40,29 @@ static __forceinline char* dcgettext(const char* domain, const char* msgid, int 
 }
 
 char * bindtextdomain (const char * domainname, const char * dirname);
+
+typedef void *sharpsvn_abort_t();
+extern sharpsvn_abort_t* sharpsvn_abort;
+
+#ifndef SHARPSVN_NO_ABORT
+/*// The header containing abort() */
+#include <stdlib.h> 
+
+
+#ifdef abort
+/* Might be defined by some kind of debugging framework */
+# undef abort
+#endif
+
+static __forceinline void __cdecl abort()
+{
+	if(sharpsvn_abort)
+		(*sharpsvn_abort)(); // Allow throwing some kind of non-terminating exception
+
+	abort(); // Raise the original abort method
+}
+#endif
+
 
 #ifdef __cplusplus
 }

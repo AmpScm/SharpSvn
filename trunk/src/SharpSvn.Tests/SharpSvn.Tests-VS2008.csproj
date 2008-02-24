@@ -114,6 +114,7 @@
     <Compile Include="Commands\ZMiscTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="LocalizationTests.cs" />
     <Compile Include="SvnBdbTest.cs" />
     <Compile Include="SvnClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
