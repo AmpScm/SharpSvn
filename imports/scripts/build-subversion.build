@@ -54,7 +54,7 @@
       <copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
     </if>
     <if test="${platform == 'x64'}">
-      <copy todir="${release}/lib">
+      <copy todir="${release}/lib-x64">
         <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
           <include name="*.lib" />
         </fileset>
@@ -270,10 +270,12 @@
       xcopy /y /q "..\..\imports\release\bin\*-%1.dll" %2
 
     </echo>
-    <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h">
-      <filterchain>
-      </filterchain>
+    <copy todir="${release}/po" flatten="true">
+	<fileset basedir="${platformBase}\subversion\subversion">
+		<include name="**/*.po" />
+	</fileset>
     </copy>
+    <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" />
   </target>
 
 </project>

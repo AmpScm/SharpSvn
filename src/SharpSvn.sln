@@ -5,6 +5,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.UI", "SharpSvn.UI\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn", "SharpSvn\SharpSvn.vcproj", "{A3166809-1484-4442-BF75-5FB0E8356381}"
 	ProjectSection(ProjectDependencies) = postProject
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {0CC79A1A-463D-40BB-91E0-3B1391B519C6}
 		{3B2682F1-0092-4422-8E12-588163AD9422} = {3B2682F1-0092-4422-8E12-588163AD9422}
 	EndProjectSection
 EndProject
@@ -22,6 +23,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpPlink", "SharpPlink\SharpPlink.vcproj", "{3B2682F1-0092-4422-8E12-588163AD9422}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Z-Tools", "Z-Tools", "{7B4B080F-80E3-4907-87E4-8038F2470696}"
+	ProjectSection(FolderStartupServices) = postProject
+		{B4F97281-0DBD-4835-9ED8-7DFB966E87FF} = {B4F97281-0DBD-4835-9ED8-7DFB966E87FF}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Po2Resx", "tools\Po2Resx\Po2Resx.csproj", "{0CC79A1A-463D-40BB-91E0-3B1391B519C6}"
 EndProject
 Global
 	GlobalSection(TextTemplating) = postSolution
@@ -70,8 +78,19 @@ Global
 		{3B2682F1-0092-4422-8E12-588163AD9422}.Release|x64.Build.0 = Release|x64
 		{3B2682F1-0092-4422-8E12-588163AD9422}.Release|x86.ActiveCfg = Release|Win32
 		{3B2682F1-0092-4422-8E12-588163AD9422}.Release|x86.Build.0 = Release|Win32
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Debug|x64.Build.0 = Debug|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Debug|x86.Build.0 = Debug|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x64.ActiveCfg = Release|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x64.Build.0 = Release|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x86.ActiveCfg = Release|Any CPU
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {7B4B080F-80E3-4907-87E4-8038F2470696}
 	EndGlobalSection
 EndGlobal

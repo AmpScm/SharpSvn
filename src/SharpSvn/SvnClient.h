@@ -123,6 +123,12 @@ namespace SharpSvn {
 		static void AddClientName(String^ name, System::Version^ version);
 
 
+		/// <summary>Enables the subversion localization engine. (Costs +- 400 KByte ram/language used)</summary>
+		/// <remarks>By default the subversion layer uses english messages for everything. After this method is called all messages are routed via
+		/// the managed resource handler</remarks>
+		static void EnableSubversionLocalization();
+
+
 		/// <summary>
 		/// Gets the name of the subversion administrative directories. Most commonly ".svn"
 		/// </summary>

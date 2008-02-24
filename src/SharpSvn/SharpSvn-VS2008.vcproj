@@ -30,6 +30,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -119,6 +120,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -210,6 +212,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -297,6 +300,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -449,6 +453,70 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<Filter
+				Name="Subversion"
+				>
+				<File
+					RelativePath=".\SvnText\SvnText.de.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.es.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.fr.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.it.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.ja.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.ko.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.nb.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.pl.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.pt-BR.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.sv.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.zh-CN.resx"
+					SubType="Designer"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnText\SvnText.zh-TW.resx"
+					SubType="Designer"
+					>
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="Common"
@@ -532,6 +600,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnLocalization.cpp"
 					>
 				</File>
 				<File
