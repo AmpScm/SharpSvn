@@ -106,9 +106,6 @@ String^ SvnUtils::GetTruePath(String^ path)
 		if(hSearch == INVALID_HANDLE_VALUE)
 			return nullptr;
 
-		if(nNext > 0)
-			pTxt[nNext] = '\\'; // Revert 0 to '\'
-
 		if(!isFirst)
 			result->Append((wchar_t)'\\');
 
@@ -118,6 +115,8 @@ String^ SvnUtils::GetTruePath(String^ path)
 
 		if(nNext < 0)
 			break;
+		else
+			pTxt[nNext] = '\\'; // Revert 0 to '\'
 
 		nStart = nNext+1;
 		isFirst= false;
