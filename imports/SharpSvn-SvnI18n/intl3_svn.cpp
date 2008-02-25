@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <stdlib.h> // The header containing abort()
+
 #define SHARPSVN_NO_ABORT
 #include "libintl.h"
 
