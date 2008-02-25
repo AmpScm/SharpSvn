@@ -1,4 +1,5 @@
 #include <stdio.h>
+#define SHARPSVN_NO_ABORT
 #include "libintl.h"
 
 sharpsvn_dgettext_t* sharpsvn_dgettext = NULL;
@@ -10,4 +11,9 @@ char * bindtextdomain (const char * domainname, const char * dirname)
 	dirname; // Unused
 
 	return "/some/directory"; // Result is completely ignored. Should return the bound directory
+}
+
+void sharpsvn_real_abort(void)
+{
+	abort();
 }

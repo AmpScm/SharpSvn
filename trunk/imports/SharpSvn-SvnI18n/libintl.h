@@ -43,6 +43,7 @@ char * bindtextdomain (const char * domainname, const char * dirname);
 
 typedef void *sharpsvn_abort_t();
 extern sharpsvn_abort_t* sharpsvn_abort;
+extern void sharpsvn_real_abort(void);
 
 #ifndef SHARPSVN_NO_ABORT
 /*// The header containing abort() */
@@ -59,7 +60,7 @@ static __forceinline void __cdecl abort()
 	if(sharpsvn_abort)
 		(*sharpsvn_abort)(); // Allow throwing some kind of non-terminating exception
 
-	abort(); // Raise the original abort method
+	sharpsvn_real_abort(); // Raise the original abort method
 }
 #endif
 
