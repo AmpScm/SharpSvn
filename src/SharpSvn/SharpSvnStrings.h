@@ -91,6 +91,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A fatal error occured within the subversion API - (Use Ctrl+C to copy message).
+        /// </summary>
+        internal: static property System::String^  FatalExceptionInSubversionApi {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The handler is not registered at this time.
         /// </summary>
         internal: static property System::String^  HandlerIsNotRegisteredAtThisTime {
@@ -343,6 +350,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please restart this application before continuing.\n\nStacktrace:\n{0}.
+        /// </summary>
+        internal: static property System::String^  PleaseRestartThisApplicationBeforeContinuing {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revision number must be at least 0.
         /// </summary>
         internal: static property System::String^  RevisionNumberMustBeAtLeast0 {
@@ -450,6 +464,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {
         return ResourceManager->GetString(L"DepthMustBeRecursiveValue", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::FatalExceptionInSubversionApi::get() {
+        return ResourceManager->GetString(L"FatalExceptionInSubversionApi", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::HandlerIsNotRegisteredAtThisTime::get() {
@@ -594,6 +612,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::PathCountDoesNotMatchRevisions::get() {
         return ResourceManager->GetString(L"PathCountDoesNotMatchRevisions", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing::get() {
+        return ResourceManager->GetString(L"PleaseRestartThisApplicationBeforeContinuing", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {

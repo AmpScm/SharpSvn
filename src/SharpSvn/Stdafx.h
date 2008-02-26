@@ -9,6 +9,7 @@
 
 #pragma once
 
+#define _WIN32_WINNT 0x0500 // 2000 and higher
 #pragma warning(push)
 #pragma warning(disable: 4635)
 #pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target.

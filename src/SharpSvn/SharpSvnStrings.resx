@@ -270,4 +270,10 @@
   <data name="LoadingMimeTypesMapFileFailed" xml:space="preserve">
     <value>The loading of the subversion mime mapping file failed</value>
   </data>
+  <data name="FatalExceptionInSubversionApi" xml:space="preserve">
+    <value>A fatal error occured within the subversion API - (Use Ctrl+C to copy message)</value>
+  </data>
+  <data name="PleaseRestartThisApplicationBeforeContinuing" xml:space="preserve">
+    <value>Please restart this application before continuing.\n\nStacktrace:\n{0}</value>
+  </data>
 </root>
