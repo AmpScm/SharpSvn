@@ -25,6 +25,8 @@ AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
 	_handle = handle;
 	_tag = gcnew AprPoolTag();
 	_destroyPool = destroyPool;
+	if(destroyPool)
+		GC::AddMemoryPressure(AprPool::StandardMemoryPressure);
 }
 
 AprPool::~AprPool()
