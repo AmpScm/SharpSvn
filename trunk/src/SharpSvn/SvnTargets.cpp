@@ -10,6 +10,7 @@
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnTarget.op_Implicit(System.String):SharpSvn.SvnTarget")];
 
 using namespace SharpSvn;
+using System::IO::Path;
 
 SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 {
@@ -119,9 +120,37 @@ SvnRevision^ SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevisio
 	return Revision->Or(uriNoneValue);
 }
 
-String^ SvnPathTarget::GetFullPath(String ^path)
+String^ SvnPathTarget::GetFullTarget(String ^path)
 {
-	return System::IO::Path::GetFullPath(path)->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+	return System::IO::Path::GetFullPath(path);
+}
+
+String^ SvnPathTarget::GetTargetPath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+	else if (!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+	String^ dualSeparator = String::Concat(Path::DirectorySeparatorChar, Path::DirectorySeparatorChar);
+	String^ singleSeparator = Path::DirectorySeparatorChar.ToString();
+
+	int nRoot = 0;
+	if(System::IO::Path::IsPathRooted(path))
+		nRoot = System::IO::Path::GetPathRoot(path)->Length;
+
+	int nNext;
+	while ((nNext = path->IndexOf(dualSeparator, nRoot, StringComparison::Ordinal)) >= 0)
+		path = path->Remove(nNext, 1);
+
+	if(path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
+	{
+		path = path->TrimEnd(Path::DirectorySeparatorChar);
+		if(path->Length < nRoot)
+			path += singleSeparator;
+	}
+
+	return path;
 }
 
 bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)

@@ -12,10 +12,13 @@ namespace SharpSvn {
 
 	public ref class SvnPathTarget sealed : public SvnTarget
 	{
-		String^ _path;
-		String^ _fullPath;
+		initonly String^ _path;
+		initonly String^ _fullPath;
 
-		static String^ GetFullPath(String ^path);
+	private:
+		static String^ GetFullTarget(String^ path);
+	public:
+		static String^ GetTargetPath(String^ path);
 
 	public:
 		SvnPathTarget(String^ path, SvnRevision^ revision)
@@ -26,8 +29,8 @@ namespace SharpSvn {
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-			_path = CanonicalizePath(path);
-			_fullPath = GetFullPath(_path);
+			_path = GetTargetPath(path);
+			_fullPath = GetFullTarget(_path);
 		}
 
 		SvnPathTarget(String^ path)
@@ -38,8 +41,8 @@ namespace SharpSvn {
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-			_path = CanonicalizePath(path);
-			_fullPath = GetFullPath(_path);
+			_path = GetTargetPath(path);
+			_fullPath = GetFullTarget(_path);
 		}
 
 		SvnPathTarget(String^ path, __int64 revision)
@@ -50,8 +53,8 @@ namespace SharpSvn {
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-			_path = CanonicalizePath(path);
-			_fullPath = GetFullPath(_path);
+			_path = GetTargetPath(path);
+			_fullPath = GetFullTarget(_path);
 		}
 
 		SvnPathTarget(String^ path, DateTime date)
@@ -62,8 +65,8 @@ namespace SharpSvn {
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-			_path = CanonicalizePath(path);
-			_fullPath = GetFullPath(_path);
+			_path = GetTargetPath(path);
+			_fullPath = GetFullTarget(_path);
 		}
 
 		SvnPathTarget(String^ path, SvnRevisionType type)
@@ -74,19 +77,28 @@ namespace SharpSvn {
 			else if(!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-			_path = CanonicalizePath(path);
-			_fullPath = GetFullPath(_path);
+			_path = GetTargetPath(path);
+			_fullPath = GetFullTarget(_path);
 		}
 
 		property String^ TargetName
 		{
 			virtual String^ get() override
 			{
-				return _fullPath->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+				return _path;
+			}
+		}
+	internal:
+		property String^ SvnTargetName
+		{
+			virtual String^ get() override
+			{
+				return _path->Replace(System::IO::Path::DirectorySeparatorChar, '/')->TrimEnd('/');
 			}
 		}
 
-		property String^ Path
+	public:
+		property String^ TargetPath
 		{
 			String^ get()
 			{

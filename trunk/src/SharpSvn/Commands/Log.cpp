@@ -35,7 +35,7 @@ bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandle
 	if (uriTarget)
 		return Log(uriTarget->Uri, args, logHandler);
 	else
-		return Log(static_cast<SvnPathTarget^>(target)->Path, args, logHandler);
+		return Log(target->SvnTargetName, args, logHandler);
 }
 
 bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
