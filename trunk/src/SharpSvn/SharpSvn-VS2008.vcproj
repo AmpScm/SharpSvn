@@ -76,7 +76,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
@@ -167,7 +167,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
@@ -257,7 +257,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
@@ -346,7 +346,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
@@ -599,6 +599,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\SvnAbortHandler.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnBase.cpp"
 					>
 				</File>
@@ -678,6 +682,10 @@
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\SvnAuthentication.Cache.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\SvnAuthentication.cpp"
 					>
