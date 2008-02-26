@@ -78,7 +78,7 @@ namespace Po2Resx
 		{
 			foreach (FileInfo file in files)
 			{
-				FileInfo toFile = new FileInfo(Path.Combine(toDir, prefix + "." + Path.GetFileNameWithoutExtension(file.Name).Replace('_', '-') + ".resx"));
+				FileInfo toFile = new FileInfo(Path.Combine(toDir, prefix + "." + Path.GetFileNameWithoutExtension(file.Name).Replace('_', '-').ToLowerInvariant() + ".resx"));
 
 				if (!force && toFile.Exists && toFile.LastWriteTime > file.LastWriteTime)
 					continue; // File up2date
