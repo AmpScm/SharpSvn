@@ -7,7 +7,6 @@
 
 #include "SvnAll.h"
 #include "SvnAuthentication.h"
-#include "Wincrypt.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -17,10 +16,18 @@ using namespace System::Text::RegularExpressions;
 
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
 
-SvnAuthentication::SvnAuthentication()
+SvnAuthentication::SvnAuthentication(SvnClientContext^ context, AprPool^ parentPool)
 {
+	if (!context)
+		throw gcnew ArgumentNullException("context");
+	else
+
 	_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();
 	_handlers = gcnew List<ISvnAuthWrapper^>();
+
+	_parentPool = parentPool;
+	_authPool = gcnew AprPool(_parentPool);
+	_clientContext = context;
 
 	AddSubversionFileHandlers(); // Add handlers which use no interaction by default
 }
@@ -29,6 +36,8 @@ void SvnAuthentication::Clear()
 {
 	_wrappers->Clear();
 	_handlers->Clear();
+	_cookie++;
+	ClearAuthenticationCache();
 }
 
 void SvnAuthentication::AddSubversionFileHandlers()
@@ -52,18 +61,32 @@ void SvnAuthentication::AddConsoleHandlers()
 }
 
 /// <summary>Retrieves an authorization baton allocated in the specified pool; containing the current authorization settings</summary>
-svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(AprPool ^pool, [Out] int% cookie)
+svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(int% cookie)
 {
-	if (!pool)
-		throw gcnew ArgumentNullException("pool");
+	if(_currentBaton && _cookie == cookie)
+		return _currentBaton;
 
-	AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>^ authArray = gcnew AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>(_handlers, pool);
+	AprPool tmpPool(_parentPool);
+
+	apr_hash_t* creds = nullptr;
+
+	if(_currentBaton)
+		creds = clone_credentials(get_cache(_currentBaton), nullptr, %tmpPool);
+
+	_authPool->Clear();
+
+	AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>^ authArray = gcnew AprArray<ISvnAuthWrapper^, SvnAuthProviderMarshaller^>(_handlers, _authPool);
 
 	svn_auth_baton_t *rslt = nullptr;
 
-	svn_auth_open(&rslt, authArray->Handle, pool->Handle);
+	svn_auth_open(&rslt, authArray->Handle, _authPool->Handle);
 
-	cookie = _cookie;
+	if(creds)
+		clone_credentials(creds, get_cache(rslt), _authPool);
+
+	_currentBaton = rslt;
+
+	cookie = _cookie;	
 	return rslt;
 }
 
