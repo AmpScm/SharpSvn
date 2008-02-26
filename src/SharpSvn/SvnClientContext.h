@@ -44,7 +44,6 @@ namespace SharpSvn {
 	{
 		svn_client_ctx_t *_ctx;
 		AprPool^ _pool;
-		AprPool^ _authPool;
 		int _authCookie;
 		SvnContextState _contextState;
 		SvnExtendedState _xState;

@@ -30,7 +30,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 	ctx->client_name = pool->AllocString(SvnBase::_clientName);
 
 	_ctx = ctx;
-	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
+	_authentication = gcnew SharpSvn::Security::SvnAuthentication(this, pool);
 }
 
 SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
@@ -49,12 +49,11 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 		throw SvnException::Create(r);
 
 	_ctx = ctx;
-	_authentication = gcnew SharpSvn::Security::SvnAuthentication();
+	_authentication = gcnew SharpSvn::Security::SvnAuthentication(this, _pool);
 }
 
 SvnClientContext::~SvnClientContext()
 {
-	delete _authPool;
 	_ctx = nullptr;
 	_pool = nullptr;
 }
@@ -107,10 +106,9 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 	{
 		if (State < SvnContextState::AuthorizationInitialized)
 		{
-			_authPool = gcnew AprPool(_pool);
 			int authCookie;
 
-			CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(_authPool, authCookie);
+			CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(authCookie);
 			_authCookie = authCookie;
 
 			_contextState = SvnContextState::AuthorizationInitialized;
@@ -123,11 +121,10 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 
 				_contextState = SvnContextState::ConfigLoaded;
 				CtxHandle->auth_baton = nullptr;
-				_authPool->Clear();
 
 				int authCookie;
 
-				CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(_authPool, authCookie);
+				CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(authCookie);
 				_authCookie = authCookie;
 
 				_contextState = SvnContextState::AuthorizationInitialized;

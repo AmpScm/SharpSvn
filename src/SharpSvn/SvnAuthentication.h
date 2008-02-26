@@ -559,20 +559,25 @@ namespace SharpSvn {
 		};
 	}
 
+	ref class SvnClientContext;
 	namespace Security {
 
 		/// <summary>Container for all subversion authentication settings on a client</summary>
 		public ref class SvnAuthentication : public SvnBase
 		{
-			Dictionary<Delegate^, ISvnAuthWrapper^>^ _wrappers;
-			List<ISvnAuthWrapper^>^ _handlers;
+			initonly SvnClientContext^ _clientContext;
+			initonly Dictionary<Delegate^, ISvnAuthWrapper^>^ _wrappers;
+			initonly List<ISvnAuthWrapper^>^ _handlers;
+			initonly AprPool^ _authPool;
+			initonly AprPool^ _parentPool;
 			ICredentials^ _defaultCredentials;
 			SvnCredentialWrapper^ _credentialWrapper;
 			bool _readOnly;
 			int _cookie;
-
+			svn_auth_baton_t *_currentBaton;
+			
 		internal:
-			SvnAuthentication();
+			SvnAuthentication(SvnClientContext^ context, AprPool^ pool);
 
 			property int Cookie
 			{
@@ -583,7 +588,14 @@ namespace SharpSvn {
 			}
 
 			/// <summary>Retrieves an authorization baton allocated in the specified pool; containing the current authorization settings</summary>
-			svn_auth_baton_t *GetAuthorizationBaton(AprPool ^pool, [Out] int% cookie);
+			svn_auth_baton_t *GetAuthorizationBaton(int% cookie);
+
+		private:
+			static apr_hash_t* get_cache(svn_auth_baton_t* baton);
+			static apr_hash_t* clone_credentials(apr_hash_t *from, apr_hash_t *to, AprPool^ pool);
+
+		/*internal:
+			apr_hash_t *CloneCredentials();*/
 
 		public:
 			generic<typename TSvnAuthenticationEventArgs> where TSvnAuthenticationEventArgs : SvnAuthenticationEventArgs
@@ -604,6 +616,12 @@ namespace SharpSvn {
 				else
 					throw gcnew ArgumentException("HandlerIsNotRegisteredAtThisTime", "handler");
 			}
+
+		public:
+			/// <summary>Copies the in-memory cache from the specified client to this client; merging and overwriting existing credentials</summary>
+			void CopyAuthenticationCache(SvnClientContext^ client);
+			/// <summary>Clears the in-memory authentication cache of this client</summary>
+			void ClearAuthenticationCache();
 
 		public:
 			event EventHandler<SvnUserNamePasswordEventArgs^>^ UserNamePasswordHandlers
@@ -792,7 +810,7 @@ namespace SharpSvn {
 			}
 
 		public:
-			/// <summary>Removes all currently registered providers</summary>
+			/// <summary>Removes all currently registered providers and caching data</summary>
 			void Clear();
 
 			/// <summary>Adds all default subversion-configuration-based handlers</summary>
