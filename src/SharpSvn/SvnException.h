@@ -119,6 +119,32 @@ namespace SharpSvn {
 			}
 		}
 
+		Exception^ GetCause(System::Type^ exceptionType)
+		{
+			if (!exceptionType)
+				throw gcnew ArgumentNullException("exceptionType");
+			else if(!Exception::typeid->IsAssignableFrom(exceptionType))
+				throw gcnew ArgumentException();
+
+			Exception^ e = this;
+
+			while(e)
+			{
+				if (exceptionType->IsAssignableFrom(e->GetType()))
+					return e;
+
+				e = e->InnerException;
+			}
+
+			return nullptr;
+		}
+
+		generic<typename T> where T : Exception
+		T GetCause()			
+		{
+			return (T)GetCause(T::typeid);
+		}
+
 	public:
 		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
 		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
