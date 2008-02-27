@@ -78,7 +78,7 @@ namespace SharpSvn {
 		/// retrieve only "interesting" entries (local mods and/or
 		/// out of date
 		/// </remarks>
-		property bool GetAll
+		property bool RetrieveAllEntries
 		{
 			bool get()
 			{

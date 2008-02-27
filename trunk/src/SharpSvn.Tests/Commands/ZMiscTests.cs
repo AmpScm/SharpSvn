@@ -120,7 +120,7 @@ namespace SharpSvn.Tests.Commands
 		{
 			SvnWorkingCopyState state;
 			SvnGetWorkingCopyStateArgs a = new SvnGetWorkingCopyStateArgs();
-			a.GetFileData = true;
+			a.RetrieveFileData = true;
 
 			Client.GetWorkingCopyState(Path.Combine(this.WcPath, "Form.cs"), out state);
 

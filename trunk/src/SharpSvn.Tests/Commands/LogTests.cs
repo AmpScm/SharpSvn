@@ -37,7 +37,7 @@ namespace SharpSvn.Tests.Commands
 			Array.Reverse(clientLogs);
 			SvnLogArgs a = new SvnLogArgs();
 			a.Range = new SvnRevisionRange(1, SvnRevision.Head);
-			a.LogChangedPaths = false;
+			a.RetrieveChangedPaths = false;
 
 			this.Client.Log(this.ReposUrl, a, new EventHandler<SvnLogEventArgs>(LogCallback));
 
