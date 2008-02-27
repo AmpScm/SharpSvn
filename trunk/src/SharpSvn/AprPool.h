@@ -222,3 +222,6 @@ namespace SharpSvn {
 		};
 	}
 }
+
+/* Loosly from apr 1.3/trunk: This function is not available in apr 1.2 as used 2008-02-26 */
+void sharpsvn_apr_hash_clear(apr_hash_t *ht);

@@ -52,7 +52,7 @@ MessageBoxA(
     __in_opt LPCSTR lpText,
     __in_opt LPCSTR lpCaption,
     __in UINT uType);
-
+}
 
 void __cdecl sharpsvn_abort_handler()
 {
