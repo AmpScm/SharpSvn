@@ -274,6 +274,6 @@
     <value>A fatal error occured within the subversion API - (Use Ctrl+C to copy message)</value>
   </data>
   <data name="PleaseRestartThisApplicationBeforeContinuing" xml:space="preserve">
-    <value>Please restart this application before continuing.\n\nStacktrace:\n{0}</value>
+    <value>Please restart this application before continuing.\n\nStack trace:\n{0}</value>
   </data>
 </root>

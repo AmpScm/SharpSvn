@@ -131,7 +131,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 	return uri;
 }
 
-String^ SvnBase::CanonicalizePath(String^ path)
+/*String^ SvnBase::CanonicalizePath(String^ path)
 {
 	if (!path)
 		throw gcnew ArgumentNullException("path");
@@ -140,7 +140,7 @@ String^ SvnBase::CanonicalizePath(String^ path)
 		return path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
 
 	return path;
-}
+}*/
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr)
 {
@@ -279,22 +279,8 @@ public:
 	}
 };
 
-apr_array_header_t *SvnBase::AllocCopyArray(ICollection<SvnTarget^>^ targets, AprPool^ pool)
-{
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-
-	for each (SvnTarget^ s in targets)
-	{
-		if (!s)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-	}
-	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
-
-	return aprTargets->Handle;
-}
-
-apr_array_header_t *SvnBase::AllocCopyArray(System::Collections::IEnumerable^ targets, AprPool^ pool)
+generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+apr_array_header_t *SvnBase::AllocCopyArray(ICollection<TSvnTarget>^ targets, AprPool^ pool)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");

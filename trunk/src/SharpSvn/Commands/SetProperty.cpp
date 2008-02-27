@@ -11,6 +11,14 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#SetProperty(System.String,System.String,System.String)")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#SetProperty(System.String,System.String,System.Collections.Generic.ICollection`1<System.Byte>,SharpSvn.SvnSetPropertyArgs)")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#SetProperty(System.String,System.String,System.String,SharpSvn.SvnSetPropertyArgs)")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#DeleteProperty(System.String,System.String)")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#DeleteProperty(System.String,System.String,SharpSvn.SvnSetPropertyArgs)")];
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#SetProperty(System.String,System.String,System.Collections.Generic.ICollection`1<System.Byte>)")];
+
 bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value)
 {
 	if (String::IsNullOrEmpty(target))
@@ -210,7 +218,7 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 	else if(String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (target->Revision->RevisionType != SvnRevisionType::None)
-		throw gcnew ArgumentException();
+		throw gcnew ArgumentOutOfRangeException("target");
 
 	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
 	ArgsStore store(this, args);

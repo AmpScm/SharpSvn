@@ -10,6 +10,10 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnMergeItemCollection.#TryDiff(System.Collections.Generic.ICollection`1<SharpSvn.SvnMergeItem>,SharpSvn.SvnMergeItemCollection&,SharpSvn.SvnMergeItemCollection&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnMergeItemCollection.#TryDiff(System.Collections.Generic.ICollection`1<SharpSvn.SvnMergeItem>,SharpSvn.SvnMergeDiffArgs,SharpSvn.SvnMergeItemCollection&,SharpSvn.SvnMergeItemCollection&)", MessageId="2#")];
+
 SvnMergeItemCollection::SvnMergeItemCollection(svn_mergeinfo_t mergeInfo, AprPool^ pool)
 {
 	if (!mergeInfo)

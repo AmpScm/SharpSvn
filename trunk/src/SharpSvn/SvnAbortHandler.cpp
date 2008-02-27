@@ -13,8 +13,18 @@
 
 using namespace SharpSvn;
 
-ref class SvnThreadAbortException sealed : InvalidOperationException
+[Serializable]
+ref class SvnThreadAbortException : InvalidOperationException
 {
+public:
+	SvnThreadAbortException()
+	{
+	}
+protected:
+	SvnThreadAbortException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+		: InvalidOperationException(info, context)
+	{
+	}
 };
 
 /*

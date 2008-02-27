@@ -11,7 +11,6 @@ namespace SharpSvn {
 	using System::Collections::Generic::IList;
 	using System::Collections::Generic::IEnumerator;
 
-
 	public ref class SvnUpdateResult sealed : public SvnCommandResult
 	{
 		initonly __int64 _revision;
@@ -25,8 +24,11 @@ namespace SharpSvn {
 			_revision = revision;
 		}
 
+	public:
 		SvnUpdateResult(IDictionary<String^, SvnUpdateResult^>^ resultMap, __int64 revision)
 		{
+			if (!resultMap)
+				throw gcnew ArgumentNullException("resultMap");
 			if (revision < 0)
 				revision = -1;
 
@@ -44,17 +46,6 @@ namespace SharpSvn {
 
 			return gcnew SvnUpdateResult(revision);
 		}
-
-		static SvnUpdateResult^ Create(SvnClient^ client, SvnClientArgs^ args, IDictionary<String^, SvnUpdateResult^>^ resultMap, __int64 revision)
-		{
-			if (!client)
-				throw gcnew ArgumentNullException("client");
-			else if (!args)
-				throw gcnew ArgumentNullException("args");
-
-			return gcnew SvnUpdateResult(resultMap, revision);
-		}
-
 
 	internal:
 		SvnUpdateResult(ICollection<String^>^ paths, ICollection<__int64>^ revisions, __int64 revision)
@@ -109,7 +100,7 @@ namespace SharpSvn {
 		property IDictionary<String^,SvnUpdateResult^>^ ResultMap
 		{
 			IDictionary<String^,SvnUpdateResult^>^ get()
-			{
+			{				
 				return _resultMap;
 			}
 		}

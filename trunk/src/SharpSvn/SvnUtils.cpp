@@ -14,7 +14,7 @@ using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
 using namespace System::IO;
 
-Uri^ SvnUtils::GetUriFromWorkingCopy(String^ path)
+Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -35,7 +35,7 @@ Uri^ SvnUtils::GetUriFromWorkingCopy(String^ path)
 	return nullptr;
 }
 
-String^ SvnUtils::GetTruePath(String^ path)
+String^ SvnTools::GetTruePath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -53,7 +53,7 @@ String^ SvnUtils::GetTruePath(String^ path)
 	if (path->Length > 2 && (path[1] == ':') && ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')))
 	{
 		if ((path[2] == '\\') && !path->Contains("\\."))
-			root = Path::GetPathRoot(path)->ToLowerInvariant(); // 'A:\' -> 'a:\'
+			root = Path::GetPathRoot(path)->ToUpperInvariant(); // 'a:\' -> 'A:\'
 	}
 	else if (path->StartsWith("\\\\", StringComparison::Ordinal))
 	{		
@@ -62,7 +62,7 @@ String^ SvnUtils::GetTruePath(String^ path)
 		if (next > 0)
 			next = path->IndexOf('\\', next+1);
 
-		if ((next > 0) && (0 > path->IndexOf("\\.", next+1)))
+		if ((next > 0) && (0 > path->IndexOf("\\.", next+1, StringComparison::Ordinal)))
 			root = Path::GetPathRoot(path);
 	}
 
@@ -83,11 +83,11 @@ String^ SvnUtils::GetTruePath(String^ path)
 	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
 	size_t len = sizeof(wchar_t)* (path->Length+1+4);
 	wchar_t* pSec = (wchar_t*)_alloca(len);
-	wcscpy_s(pSec, len, L"\\\\?\\");
-	wcscat_s(pSec, len, pChars);
+
+	if(wcscpy_s(pSec, len, L"\\\\?\\") || wcscat_s(pSec, len, pChars))
+		return nullptr;
 
 	wchar_t *pTxt = &pSec[4]; // The point after '\\?\'
-	
 
 	int nStart = root->Length;
 	bool isFirst = true;
@@ -111,7 +111,7 @@ String^ SvnUtils::GetTruePath(String^ path)
 
 		result->Append(gcnew String(filedata.cFileName));		
 
-		::FindClose(hSearch); // Close search request
+		GC::KeepAlive(::FindClose(hSearch)); // Close search request
 
 		if(nNext < 0)
 			break;

@@ -742,9 +742,9 @@ namespace SharpSvn {
 
 		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
 		/// <summary>Removes the specified property from the specfied path</summary>
-		bool DeleteProperty(String^ path, String^ propertyName);
+		bool DeleteProperty(String^ target, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
-		bool DeleteProperty(String^ path, String^ propertyName, SvnSetPropertyArgs^ args);
+		bool DeleteProperty(String^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(Uri^ target, String^ propertyName);
@@ -752,7 +752,7 @@ namespace SharpSvn {
 		bool DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 
 	internal:
-		bool InternalSetProperty(SvnTarget^ path, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+		bool InternalSetProperty(SvnTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
 
 #pragma endregion
 
@@ -937,7 +937,7 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
-		/// <remarks>See also <see cref="SvnUtils::GetUriFromWorkingCopy" /></remarks>
+		/// <remarks>See also <see cref="SvnTools::GetUriFromWorkingCopy" /></remarks>
 		Uri^ GetUriFromWorkingCopy(String^ path);
 
 		/// <overloads>Gets the repository root from the specified uri or path</overloads>
