@@ -10,6 +10,10 @@
 				<arg value="VC-WIN64A" if="${platform=='x64'}" />
 				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
 				<arg value="-D_CRT_SECURE_NO_DEPRECATE" />
+				<arg value="no-dso" />
+				<arg value="no-krb5" />
+				<arg value="no-hw" />
+				<arg value="enable-tlsext" />
 			</exec>
 		</OnceBlock>
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
