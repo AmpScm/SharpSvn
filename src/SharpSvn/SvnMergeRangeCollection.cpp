@@ -10,6 +10,9 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnMergeRangeCollection.#TryDiff(System.Collections.Generic.ICollection`1<SharpSvn.SvnMergeRange>,SharpSvn.SvnMergeRangeCollection&,SharpSvn.SvnMergeRangeCollection&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnMergeRangeCollection.#TryDiff(System.Collections.Generic.ICollection`1<SharpSvn.SvnMergeRange>,SharpSvn.SvnMergeDiffArgs,SharpSvn.SvnMergeRangeCollection&,SharpSvn.SvnMergeRangeCollection&)", MessageId="2#")];
+
 SvnMergeRangeCollection^ SvnMergeRangeCollection::Create(apr_array_header_t *rangeList)
 {
 	if (!rangeList)

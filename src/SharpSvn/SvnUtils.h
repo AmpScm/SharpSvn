@@ -10,10 +10,10 @@
 
 namespace SharpSvn {
 
-	public ref class SvnUtils sealed : SvnBase
+	public ref class SvnTools sealed : SvnBase
 	{
 	private:
-		SvnUtils()
+		SvnTools()
 		{} // Static class
 
 	public:

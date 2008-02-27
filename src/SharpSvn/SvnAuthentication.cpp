@@ -15,6 +15,7 @@ using System::Text::StringBuilder;
 using namespace System::Text::RegularExpressions;
 
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
+[module: SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope="type", Target="SharpSvn.Security.SvnAuthentication")];
 
 SvnAuthentication::SvnAuthentication(SvnClientContext^ context, AprPool^ parentPool)
 {

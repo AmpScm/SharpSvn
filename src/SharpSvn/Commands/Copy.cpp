@@ -11,10 +11,10 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnUriTarget,System.Uri,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(SharpSvn.SvnUriTarget,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(System.Collections.Generic.ICollection`1<SharpSvn.SvnUriTarget>,System.Uri,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.RemoteCopy(System.Collections.Generic.ICollection`1<SharpSvn.SvnUriTarget>,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitResult&):System.Boolean", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#RemoteCopy`1(System.Collections.Generic.ICollection`1<!!0>,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitResult&)", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#RemoteCopy(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnCommitResult&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#RemoteCopy`1(System.Collections.Generic.ICollection`1<!!0>,System.Uri,SharpSvn.SvnCommitResult&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#RemoteCopy(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitResult&)", MessageId="3#")];
 
 bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath)
 {
@@ -75,7 +75,7 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 
 	svn_error_t *r = svn_client_copy4(
 		&pInfo,
-		AllocCopyArray(sourceTargets, %pool),
+		AllocCopyArray<TSvnTarget>(sourceTargets, %pool),
 		pool.AllocPath(toPath),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,
@@ -206,7 +206,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 
 	svn_error_t *r = svn_client_copy4(
 		&commitInfoPtr,
-		AllocCopyArray(sourceTargets, %pool),
+		AllocCopyArray<TSvnTarget>(sourceTargets, %pool),
 		pool.AllocCanonical(toUri),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,

@@ -124,7 +124,7 @@ namespace SharpSvn {
 			if (!exceptionType)
 				throw gcnew ArgumentNullException("exceptionType");
 			else if(!Exception::typeid->IsAssignableFrom(exceptionType))
-				throw gcnew ArgumentException();
+				throw gcnew ArgumentOutOfRangeException("exceptionType");
 
 			Exception^ e = this;
 

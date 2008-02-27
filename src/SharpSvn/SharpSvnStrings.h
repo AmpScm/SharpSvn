@@ -350,7 +350,7 @@ namespace SharpSvn {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please restart this application before continuing.\n\nStacktrace:\n{0}.
+        ///   Looks up a localized string similar to Please restart this application before continuing.\n\nStack trace:\n{0}.
         /// </summary>
         internal: static property System::String^  PleaseRestartThisApplicationBeforeContinuing {
             System::String^  get();

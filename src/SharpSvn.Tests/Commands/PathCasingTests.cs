@@ -74,11 +74,11 @@ namespace SharpSvn.Tests.Commands
 			FileInfo fif = new FileInfo(path);
 			Assert.That(fif.Name, Is.Not.EqualTo(Path.GetFileName(_casedFile)));
 
-			Assert.That(Path.GetFileName(SvnUtils.GetTruePath(path)), Is.EqualTo(Path.GetFileName(_casedFile)));
+			Assert.That(Path.GetFileName(SvnTools.GetTruePath(path)), Is.EqualTo(Path.GetFileName(_casedFile)));
 
-			string dir = SvnUtils.GetTruePath(Path.GetDirectoryName(_casedFile));
+			string dir = SvnTools.GetTruePath(Path.GetDirectoryName(_casedFile));
 
-			Assert.That(SvnUtils.GetTruePath(_casedFile.ToUpperInvariant()), Is.EqualTo(Path.Combine(dir, Path.GetFileName(_casedFile))));
+			Assert.That(SvnTools.GetTruePath(_casedFile.ToUpperInvariant()), Is.EqualTo(Path.Combine(dir, Path.GetFileName(_casedFile))));
 		}
 
 	}
