@@ -74,7 +74,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			svnclient_status_handler,
 			(void*)_clientBatton->Handle,
 			(svn_depth_t)args->Depth,
-			args->GetAll,
+			args->RetrieveAllEntries,
 			args->ContactRepository,
 			args->NoIgnore,
 			args->IgnoreExternals,

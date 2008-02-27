@@ -65,7 +65,7 @@ namespace SharpSvn.Tests.Commands
 				"Wrong property status " + propChange);
 			Assert.That(string.Compare(propChange, currentStatus.Path, true) == 0, "Propchanged filenames don't match");
 
-			a.GetAll = true;
+			a.RetrieveAllEntries = true;
 			currentStatus = null;
 
 			Client.Status(ignored, a, new EventHandler<SvnStatusEventArgs>(StatusFunc));
@@ -277,7 +277,7 @@ namespace SharpSvn.Tests.Commands
 
 		private void StatusFunc(object sender, SvnStatusEventArgs e)
 		{
-			e.Detach(true);
+			e.Detach();
 			this.currentStatus = e;
 		}
 

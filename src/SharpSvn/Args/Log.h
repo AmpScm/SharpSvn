@@ -152,7 +152,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
-		property bool LogChangedPaths
+		property bool RetrieveChangedPaths
 		{
 			bool get()
 			{
@@ -180,7 +180,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets a boolean indicating whether the merged revisions should be fetched instead of the node changes</summary>
-		property bool IncludeMergedRevisions
+		property bool RetrieveMergedRevisions
 		{
 			bool get()
 			{
@@ -193,15 +193,15 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets or sets a boolean indicating whether the logmessage should be fetched</summary>
-		property bool OmitMessages
+		property bool RetrieveLogMessages
 		{
 			bool get()
 			{
-				return _ommitMessages;
+				return !_ommitMessages;
 			}
 			void set(bool value)
 			{
-				_ommitMessages = value;
+				_ommitMessages = !value;
 			}
 		}
 

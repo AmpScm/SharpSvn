@@ -665,7 +665,7 @@ namespace SharpSvn.Tests
 					SvnStatusArgs a = new SvnStatusArgs();
 
 					a.ContactRepository = mode % 2 == 1;
-					a.GetAll = mode > 1;
+					a.RetrieveAllEntries = mode > 1;
 
 					int n = 0;
 
@@ -870,7 +870,7 @@ namespace SharpSvn.Tests
 						Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
 					});
 
-					if (a.GetAll)
+					if (a.RetrieveAllEntries)
 						Assert.That(n, Is.EqualTo(7));
 					else if (a.ContactRepository)
 						Assert.That(n, Is.EqualTo(5));

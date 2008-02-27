@@ -11,8 +11,8 @@ namespace SharpSvn {
 
 	public ref class SvnGetWorkingCopyStateArgs : public SvnClientArgs
 	{
-		bool _dontGetBaseFile;
-		bool _dontGetFileData;
+		bool _getBaseFile;
+		bool _getFileData;
 
 	public:
 		virtual property SvnClientCommandType ClientCommandType
@@ -28,27 +28,27 @@ namespace SharpSvn {
 		{
 		}
 
-		property bool GetBaseFile
+		property bool RetrieveBaseFile
 		{
 			bool get()
 			{
-				return !_dontGetBaseFile;
+				return _getBaseFile;
 			}
 			void set(bool value)
 			{
-				_dontGetBaseFile = !value;
+				_getBaseFile = value;
 			}
 		}
 
-		property bool GetFileData
+		property bool RetrieveFileData
 		{
 			bool get()
 			{
-				return !_dontGetFileData;
+				return _getFileData;
 			}
 			void set(bool value)
 			{
-				_dontGetFileData = !value;
+				_getFileData = value;
 			}
 		}
 
