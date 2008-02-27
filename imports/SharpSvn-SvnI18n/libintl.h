@@ -41,7 +41,7 @@ static __forceinline char* dcgettext(const char* domain, const char* msgid, int 
 
 char * bindtextdomain (const char * domainname, const char * dirname);
 
-typedef void *sharpsvn_abort_t();
+typedef void sharpsvn_abort_t(void);
 extern sharpsvn_abort_t* sharpsvn_abort;
 extern void sharpsvn_real_abort(void);
 
