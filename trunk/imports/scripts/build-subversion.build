@@ -189,6 +189,16 @@
           <echo message="${projtext}" file="${sourceFile}" />
         </do>
       </foreach>
+      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c">
+/* Appended by sharpsvn/imports/scripts/build-subversion.build */
+apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+{
+  if (!auth_baton)
+    return NULL;
+    
+  return auth_baton->creds_cache;
+}
+      </echo>
     </OnceBlock>
   </target>
 
