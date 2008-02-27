@@ -601,6 +601,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\SvnAbortHandler.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnBase.cpp"
 					>
 				</File>
@@ -680,6 +684,10 @@
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\SvnAuthentication.Cache.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\SvnAuthentication.cpp"
 					>

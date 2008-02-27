@@ -50,7 +50,6 @@ namespace SharpSvn.Tests.Commands
 					arrived = true;
 				}));
 
-
 			arrived = false;
 			Client.Authenticator.SslServerTrustHandlers += new EventHandler<SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlersAllow);
 			Assert.That(Client.List(new Uri("https://svn.apache.org/repos/asf/apr/"),
@@ -60,6 +59,10 @@ namespace SharpSvn.Tests.Commands
 				}));
 
 			Assert.That(arrived);
+
+			SvnClient cl2 = new SvnClient();
+			cl2.Authenticator.CopyAuthenticationCache(Client);
+			cl2.Authenticator.ClearAuthenticationCache();
 		}
 
 		bool _serverTrustTicked;
@@ -85,7 +88,7 @@ namespace SharpSvn.Tests.Commands
 
 			Assert.That(a.LastException, Is.Not.Null);
 			Assert.That(a.LastException, Is.InstanceOfType(typeof(SvnException)));
-			Assert.That(a.LastException.RootCause, Is.InstanceOfType(typeof(SvnAuthorizationException)));
+			Assert.That(a.LastException.GetCause<SvnAuthorizationException>(), Is.Not.Null);
 			Assert.That(arrived, Is.False);
 			Assert.That(_serverTrustTicked);
 			Assert.That(_userNamePasswordTicked);

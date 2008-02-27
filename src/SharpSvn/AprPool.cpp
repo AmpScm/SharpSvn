@@ -305,3 +305,19 @@ const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
 
 	return pStr;
 }
+
+/* Loosly from apr 1.3/trunk: This function is not available in apr 1.2 as used 2008-02-26 */
+void sharpsvn_apr_hash_clear(apr_hash_t *ht)
+{
+	const void* key;
+	apr_ssize_t len;
+
+	AprPool tmpPool(SvnBase::SmallThreadPool);
+
+    apr_hash_index_t *hi;
+	for (hi = apr_hash_first(tmpPool.Handle, ht); hi; hi = apr_hash_next(hi))
+	{
+		apr_hash_this(hi, &key, &len, nullptr);
+        apr_hash_set(ht, key, len, nullptr);
+	}
+}
