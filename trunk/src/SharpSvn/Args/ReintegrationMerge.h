@@ -13,7 +13,6 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnReintegrationMergeArgs : public SvnMergeBaseArgs
 	{
-		bool _force;
 		bool _dryRun;
 	public:
 		SvnReintegrationMergeArgs()
@@ -25,18 +24,6 @@ namespace SharpSvn {
 			virtual SvnClientCommandType get() override sealed
 			{
 				return SvnClientCommandType::ReintegrationMerge;
-			}
-		}
-
-		property bool Force
-		{
-			bool get()
-			{
-				return _force;
-			}
-			void set(bool value)
-			{
-				_force = value;
 			}
 		}
 

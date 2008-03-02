@@ -40,7 +40,6 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
 		pool.AllocString(source->SvnTargetName),
 		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocPath(targetPath),
-		args->Force,
 		args->DryRun,
 		args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
 		CtxHandle,
