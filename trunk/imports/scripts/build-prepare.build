@@ -49,7 +49,7 @@
 
 		<if test="${not directory::exists(svnBase)}">
 			<Svn verbose="true">
-				<arg line="--non-interactive co" />
+				<arg value="co" />
 				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnBuildType == 'trunk'}" />
 				<arg value="http://svn.collab.net/repos/svn/tags/" if="${svnBuildType == 'tag'}" />
 				<arg value="http://svn.collab.net/repos/svn/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />				
@@ -58,7 +58,7 @@
 		</if>
 		<if test="${not directory::exists(platformBase + '/neon')}">
 			<Svn verbose="true">
-				<arg line="co" />
+				<arg value="co" />
 				<arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
 				<arg value="build/${platform}/neon" />
 			</Svn>
@@ -67,21 +67,21 @@
 		</if>
 		<if test="${not directory::exists('build/apr')}">
 			<Svn verbose="true">
-				<arg line="co" />
+				<arg value="co" />
 				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
 				<arg value="build/apr" />
 			</Svn>
 		</if>
 		<if test="${not directory::exists('build/apr-util')}">
 			<Svn verbose="true">
-				<arg line="co" />
+				<arg value="co" />
 				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
 				<arg value="build/apr-util" />
 			</Svn>
 		</if>
 		<if test="${not directory::exists(platformBase + '/serf')}">
 			<Svn verbose="true">
-				<arg line="co" />
+				<arg value="co" />
 				<arg value="http://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
 				<arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />				
 				<arg value="http://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />				
