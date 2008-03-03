@@ -5,12 +5,12 @@
 		<!-- When referenced installs a Win32 SharpSvn into the directory DIR_SharpSvn -->
 		<ComponentGroup Id="LOCAL_SharpSvn_Win32">
 			<ComponentRef Id="C_LOCAL_SharpSvn.dll" />
-			<ComponentRef Id="C_LOCAL_SharpSvn-DB44-20-win32.dll" />
-			<ComponentRef Id="C_LOCAL_SharpSvn-Sasl21-22-win32.dll" />
-			<ComponentRef Id="C_LOCAL_SharpPlink-Win32.svnExe" />
+			<ComponentRef Id="C_LOCAL_SharpSvn_DB44_20_win32.dll" />
+			<ComponentRef Id="C_LOCAL_SharpSvn_Sasl21_22_win32.dll" />
+			<ComponentRef Id="C_LOCAL_SharpPlink_Win32.svnExe" />
 			<?ifdef SharpSvn_Pdb?>
 			<ComponentRef Id="C_LOCAL_SharpSvn.pdb" />
-			<ComponentRef Id="C_LOCAL_SharpPlink-Win32.pdb" />
+			<ComponentRef Id="C_LOCAL_SharpPlink_Win32.pdb" />
 			<?endif?>
 			<?ifndef SharpSvn_NoXml?>
 			<ComponentRef Id="C_LOCAL_SharpSvn.xml" />
@@ -48,14 +48,14 @@
 			<Component Id="C_LOCAL_SharpSvn.dll" Guid="32EB117A-B450-4137-B453-072D03DAECB1">
 				<File Id="CF_LOCAL_SharpSvn.dll" Name="SharpSvn.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
 			</Component>
-			<Component Id="C_LOCAL_SharpSvn-DB44-20-win32.dll" Guid="29EEA692-708D-499B-8543-E4B43D1293AE">
-				<File Id="CF_LOCAL_SharpSvn-DB44-20-win32.dll" Name="SharpSvn-DB44-20-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
+			<Component Id="C_LOCAL_SharpSvn_DB44_20_win32.dll" Guid="29EEA692-708D-499B-8543-E4B43D1293AE">
+				<File Id="CF_LOCAL_SharpSvn_DB44_20_win32.dll" Name="SharpSvn-DB44-20-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
 			</Component>
-			<Component Id="C_LOCAL_SharpSvn-Sasl21-22-win32.dll" Guid="84E09CD6-03F4-4BD1-A12F-7CBFCC82CBB7">
-				<File Id="CF_LOCAL_SharpSvn-Sasl21-22-win32.dll" Name="SharpSvn-Sasl21-22-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
+			<Component Id="C_LOCAL_SharpSvn_Sasl21_22_win32.dll" Guid="84E09CD6-03F4-4BD1-A12F-7CBFCC82CBB7">
+				<File Id="CF_LOCAL_SharpSvn_Sasl21_22_win32.dll" Name="SharpSvn-Sasl21-22-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
 			</Component>
-			<Component Id="C_LOCAL_SharpPlink-Win32.svnExe" Guid="34F616E9-637E-44F0-9416-F79325560FDE">
-				<File Id="CF_LOCAL_SharpPlink-Win32.svnExe" Name="SharpPlink-Win32.svnExe" Vital="yes" KeyPath="yes" Checksum="yes" />
+			<Component Id="C_LOCAL_SharpPlink_Win32.svnExe" Guid="34F616E9-637E-44F0-9416-F79325560FDE">
+				<File Id="CF_LOCAL_SharpPlink_Win32.svnExe" Name="SharpPlink-Win32.svnExe" Vital="yes" KeyPath="yes" Checksum="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
@@ -64,8 +64,8 @@
 			<Component Id="C_LOCAL_SharpSvn.pdb" Guid="F38A631A-F9DE-4A4C-B4DD-2C94FA4A7E1F">
 				<File Id="CF_LOCAL_SharpSvn.pdb" Name="SharpSvn.pdb" KeyPath="yes" />
 			</Component>
-			<Component Id="C_LOCAL_SharpPlink-Win32.pdb" Guid="F3ED7757-1A3E-4F56-8CCE-811924222608">
-				<File Id="CF_LOCAL_SharpPlink-Win32.pdb" Name="SharpPlink-Win32.pdb" KeyPath="yes" />
+			<Component Id="C_LOCAL_SharpPlink_Win32.pdb" Guid="F3ED7757-1A3E-4F56-8CCE-811924222608">
+				<File Id="CF_LOCAL_SharpPlink_Win32.pdb" Name="SharpPlink-Win32.pdb" KeyPath="yes" />
 			</Component>
 		</DirectoryRef>
 	</Fragment>
