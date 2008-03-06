@@ -124,3 +124,52 @@ String^ SvnTools::GetTruePath(String^ path)
 
 	return result->ToString();
 }
+
+// Optimized version of Directory::Exists() with several security checks removed
+inline bool IsDirectory(String^ path)
+{
+	pin_ptr<const wchar_t> p = PtrToStringChars(path);
+	DWORD r = ::GetFileAttributesW(p);
+
+	if(r == INVALID_FILE_ATTRIBUTES)
+		return false;
+	
+	return (r & FILE_ATTRIBUTE_DIRECTORY) != 0;
+}
+
+bool SvnTools::IsManagedPath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	path = Path::Combine(path, SvnClient::AdministrativeDirectoryName);
+
+	return IsDirectory(path);
+}
+
+bool SvnTools::IsBelowManagedPath(String^ path)
+{
+	if(String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	// We search from the root, instead of the other way around to optimize the disk cache
+	// (We probably never need to access the disk when called a few times in a row)
+
+	path = Path::GetFullPath(path);
+
+	int nStart = Path::GetPathRoot(path)->Length;
+	int i;
+
+	while(0 >= (i = path->IndexOf('\\', nStart)))
+	{
+		if(IsDirectory(Path::Combine(path->Substring(0, i), SvnClient::AdministrativeDirectoryName)))
+			return true;
+
+		nStart = i+1;
+	}
+
+	if(nStart >= (path->Length-1))
+		return false; // Path ends with a \, probably disk root
+
+	return IsDirectory(Path::Combine(path, SvnClient::AdministrativeDirectoryName));
+}
