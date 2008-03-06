@@ -23,5 +23,15 @@ namespace SharpSvn {
 		/// <summary>Gets the pathname exactly like it is on disk</summary>
 		static String^ GetTruePath(String^ path);
 
+
+		/// <summary>Gets a boolean indicating whether the path contains a subversion Working Copy</summary>
+		/// <remarks>Assumes path is a directory</remarks>
+		static bool IsManagedPath(String^ path);
+
+		/// <summary>Gets a boolean indicating whether at least one of the 
+		/// parent paths or the path itself is a working copy.
+		/// </summary>
+		/// <remarks>Assumes path is a directory</remarks>
+		static bool IsBelowManagedPath(String^ path);
 	};
 }
