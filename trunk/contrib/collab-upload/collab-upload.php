@@ -10,8 +10,7 @@ curl_setopt($c, CURLOPT_FOLLOWLOCATION, true);
 curl_setopt($c, CURLOPT_NOPROGRESS, false);
 curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($c, CURLOPT_AUTOREFERER, true);
-curl_setopt($c, CURLOPT_COOKIEFILE, "/tmp/curl-cookies.txt");
-curl_setopt($c, CURLOPT_COOKIEJAR, "/tmp/curl-cookie-jar.txt");
+curl_setopt($c, CURLOPT_COOKIEFILE, "");
 curl_setopt($c, CURLOPT_USERAGENT, "Mozilla/8.0 (compatible; Collab-Upload.php/1.0)");
 $posturl = "http://" . $argv[3] . ".open.collab.net/servlets/ProjectDocumentAdd?folderID=" .$argv[4];
 
