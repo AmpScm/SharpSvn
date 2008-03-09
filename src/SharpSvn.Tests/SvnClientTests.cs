@@ -159,6 +159,10 @@ namespace SharpSvn.Tests
 
 				TouchFile(Path.Combine(trunkPath, "test.txt"));
 
+                Assert.That(SvnTools.IsManagedPath(trunkPath));
+                Assert.That(SvnTools.IsBelowManagedPath(trunkPath));
+                Assert.That(SvnTools.IsBelowManagedPath(Path.Combine(trunkPath, "q/r/s/t/u/v/test.txt")));
+
 				client.Add(Path.Combine(trunkPath, "test.txt"));
 
 				TouchFile(Path.Combine(trunkPath, "dir/test.txt"), true);

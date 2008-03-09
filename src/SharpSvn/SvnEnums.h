@@ -332,9 +332,9 @@ namespace SharpSvn {
 
 
 		/// <summary>Choose their on all conflicts; further use auto-merged</summary>
-		Theirs			= svn_wc_conflict_choose_theirs,
+		Theirs			= svn_wc_conflict_choose_theirs_conflict,
 		/// <summary>Choose local version on all conflicts; further use auto-merged</summary>
-		Mine			= svn_wc_conflict_choose_mine,
+		Mine			= svn_wc_conflict_choose_mine_conflict,
 		/// <summary>Choose the 'merged file'. The result file of the automatic merging; possibly with local edits</summary>
 		Merged			= svn_wc_conflict_choose_merged,
 	};

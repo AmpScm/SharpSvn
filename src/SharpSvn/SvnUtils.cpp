@@ -160,7 +160,7 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	int nStart = Path::GetPathRoot(path)->Length;
 	int i;
 
-	while(0 >= (i = path->IndexOf('\\', nStart)))
+	while(0 < (i = path->IndexOf('\\', nStart)))
 	{
 		if(IsDirectory(Path::Combine(path->Substring(0, i), SvnClient::AdministrativeDirectoryName)))
 			return true;
