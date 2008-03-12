@@ -61,6 +61,39 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(this.logMessages[0].LogMessage, Is.EqualTo("Æ e i a æ å, sjø"));
 		}
 
+        [Test]
+        public void LogFromFile()
+        {
+            Uri repos = this.GetReposUri(TestReposType.CollabRepos);
+
+            string dir = GetTempDir();
+
+            using (SvnClient client = new SvnClient())
+            {
+                client.CheckOut(new Uri(repos, "trunk/"), dir);
+
+                int n = 0;
+                client.Log(Path.Combine(dir, "index.html"),
+                    delegate(object sender, SvnLogEventArgs e)
+                    {
+                        switch (n++)
+                        {
+                            case 0:
+                                Assert.That(e.LogMessage, Is.EqualTo("Merge branch b - product roadmap and update about page"));
+                                break;
+                            case 1:
+                                Assert.That(e.LogMessage, Is.EqualTo("Merge branch a.  Added medium product"));
+                                break;
+                            case 2:
+                                Assert.That(e.LogMessage, Is.EqualTo("Create initial product structure"));
+                                break;
+                        }
+                    });
+                Assert.That(n, Is.EqualTo(3));
+
+            }
+        }
+
 		private void LogCallback(object sender, SvnLogEventArgs e)
 		{
 			e.Detach();
