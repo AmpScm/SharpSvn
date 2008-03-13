@@ -13,10 +13,6 @@
       <title localize="false">Documentation and Wiki FAQ</title>
       <filename>HtmlSnippet3.html</filename>
     </component>
-    <component visibility="1" type="Html" order="4">
-      <title localize="false">Wiki</title>
-      <filename>HtmlSnippet5.html</filename>
-    </component>
   </component_list>
 </page>
 
