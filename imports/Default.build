@@ -8,7 +8,7 @@
 	<property name="subversionVersion" value="1.5.x" />
 	<!-- -->
 	<property name="opensslVersion" value="0.9.8g" />
-	<property name="neonVersion" value="0.28.0" />
+	<property name="neonVersion" value="0.28.1" />
 
 	<property name="aprVersion" value="1.2.12" />
 	<property name="aprUtilVersion" value="1.2.12" />
