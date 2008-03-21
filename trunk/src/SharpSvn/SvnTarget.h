@@ -132,7 +132,7 @@ namespace SharpSvn {
 			if (!other)
 				return false;
 
-			if(other->RevisionType == RevisionType)
+			if(other->RevisionType != RevisionType)
 				return false;
 
 			switch(RevisionType)

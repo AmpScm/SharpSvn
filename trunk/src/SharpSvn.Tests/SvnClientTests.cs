@@ -1556,6 +1556,16 @@ namespace SharpSvn.Tests
             SvnPathTarget path = new SvnPathTarget(".\\bladiebla.txt");
 
             Assert.That(path.TargetName, Is.EqualTo("bladiebla.txt"));
+
+            Assert.That(SvnRevision.Base == SvnRevision.Base);
+            Assert.That(SvnRevision.Base.Equals(SvnRevision.Base));
+            Assert.That(SvnRevision.Base.Equals(SvnRevisionType.Base));
+            Assert.That(SvnRevision.Base == SvnRevisionType.Base);
+
+            Assert.That(SvnRevision.Working == SvnRevision.Working);
+            Assert.That(SvnRevision.Working.Equals(SvnRevision.Working));
+            Assert.That(SvnRevision.Working.Equals(SvnRevisionType.Working));
+            Assert.That(SvnRevision.Working == SvnRevisionType.Working);
         }
 	}
 }
