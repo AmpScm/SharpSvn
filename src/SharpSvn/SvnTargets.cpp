@@ -132,12 +132,21 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
+	path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);
+
 	String^ dualSeparator = String::Concat(Path::DirectorySeparatorChar, Path::DirectorySeparatorChar);
 	String^ singleSeparator = Path::DirectorySeparatorChar.ToString();
 
 	int nRoot = 0;
 	if(System::IO::Path::IsPathRooted(path))
 		nRoot = System::IO::Path::GetPathRoot(path)->Length;
+	else 
+	{
+		// Some api's (e.g. diff) check for a base of '.'; remove that
+
+		while(path->StartsWith(".\\", StringComparison::Ordinal))
+			path = path->Substring(2);
+	}
 
 	int nNext;
 	while ((nNext = path->IndexOf(dualSeparator, nRoot, StringComparison::Ordinal)) >= 0)
@@ -148,7 +157,7 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 		path = path->TrimEnd(Path::DirectorySeparatorChar);
 		if(path->Length < nRoot)
 			path += singleSeparator;
-	}
+	}	
 
 	return path;
 }

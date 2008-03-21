@@ -1549,5 +1549,13 @@ namespace SharpSvn.Tests
 					{ });
 			}
 		}
+
+        [Test]
+        public void DontCanonicalizeToDotSlash()
+        {
+            SvnPathTarget path = new SvnPathTarget(".\\bladiebla.txt");
+
+            Assert.That(path.TargetName, Is.EqualTo("bladiebla.txt"));
+        }
 	}
 }
