@@ -138,26 +138,33 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	String^ singleSeparator = Path::DirectorySeparatorChar.ToString();
 
 	int nRoot = 0;
-	if(System::IO::Path::IsPathRooted(path))
+	if (System::IO::Path::IsPathRooted(path))
 		nRoot = System::IO::Path::GetPathRoot(path)->Length;
-	else 
-	{
-		// Some api's (e.g. diff) check for a base of '.'; remove that
-
-		while(path->StartsWith(".\\", StringComparison::Ordinal))
-			path = path->Substring(2);
-	}
 
 	int nNext;
+	// Remove double backslash
 	while ((nNext = path->IndexOf(dualSeparator, nRoot, StringComparison::Ordinal)) >= 0)
 		path = path->Remove(nNext, 1);
 
-	if(path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
+	// Remove '\.\'
+	if (path->StartsWith(".\\"))
+		path = path->Substring(2);
+
+	if (path->EndsWith("\\."))
+		path = path->Substring(0, path->Length-2);
+
+	while ((nNext = path->IndexOf("\\.\\", nRoot, StringComparison::Ordinal)) >= 0)
+		path = path->Remove(nNext, 2);
+
+	if (path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
 	{
 		path = path->TrimEnd(Path::DirectorySeparatorChar);
 		if(path->Length < nRoot)
 			path += singleSeparator;
 	}	
+
+	if(path->Length == 0)
+		path = ".";
 
 	return path;
 }
