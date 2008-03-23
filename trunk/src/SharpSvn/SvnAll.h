@@ -9,10 +9,16 @@
 
 #include "AprPool.h"
 #include "AprArray.h"
+#include "SvnBase.h"
+
+#include "SvnUtils.h"
+
 #include "SvnClientContext.h"
 
 #include "SvnClient.h"
 #include "SvnRepositoryClient.h"
+
+
 
 #include "SvnPathTarget.h"
 #include "SvnUriTarget.h"
@@ -21,3 +27,4 @@
 
 #include "SvnAuthentication.h"
 #include "SvnUpdateResult.h"
+

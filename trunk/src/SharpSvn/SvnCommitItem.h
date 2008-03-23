@@ -100,7 +100,7 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if (!_fullPath && Path)
-					_fullPath = System::IO::Path::GetFullPath(Path);
+					_fullPath = SvnTools::GetNormalizedFullPath(Path);
 
 				return _fullPath;
 			}

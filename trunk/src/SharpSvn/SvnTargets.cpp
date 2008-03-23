@@ -122,7 +122,7 @@ SvnRevision^ SvnUriTarget::GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevisio
 
 String^ SvnPathTarget::GetFullTarget(String ^path)
 {
-	return System::IO::Path::GetFullPath(path);
+	return SvnTools::GetNormalizedFullPath(path);
 }
 
 String^ SvnPathTarget::GetTargetPath(String^ path)
@@ -147,15 +147,15 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 		path = path->Remove(nNext, 1);
 
 	// Remove '\.\'
-	if (path->StartsWith(".\\"))
+	while ((nNext = path->IndexOf("\\.\\", nRoot, StringComparison::Ordinal)) >= 0)
+		path = path->Remove(nNext, 2);
+
+	while (path->StartsWith(".\\"))
 		path = path->Substring(2);
 
 	if (path->EndsWith("\\."))
 		path = path->Substring(0, path->Length-2);
-
-	while ((nNext = path->IndexOf("\\.\\", nRoot, StringComparison::Ordinal)) >= 0)
-		path = path->Remove(nNext, 2);
-
+	
 	if (path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
 	{
 		path = path->TrimEnd(Path::DirectorySeparatorChar);

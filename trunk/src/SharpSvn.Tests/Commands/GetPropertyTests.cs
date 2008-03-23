@@ -40,7 +40,7 @@ namespace SharpSvn.Tests.Commands
 
 			Assert.That(pval.StringValue, Is.EqualTo("bar"));
 			Assert.That(pval.Key, Is.EqualTo("foo"));
-			Assert.That(pval.Target.TargetName, Is.EqualTo(path.Replace(Path.DirectorySeparatorChar, '/')));
+			Assert.That(pval.Target.TargetName, Is.EqualTo(path));
 		}
 	}
 }
