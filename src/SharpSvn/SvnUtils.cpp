@@ -19,7 +19,7 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	path = System::IO::Path::GetFullPath(path);
+	path = SvnTools::GetNormalizedFullPath(path);
 
 	AprPool pool(SmallThreadPool);
 
@@ -77,6 +77,27 @@ String^ SvnTools::GetTruePath(String^ path)
 			root = "";
 	}
 
+	return FindTruePath(path, root);
+}
+
+String^ SvnTools::GetFullTruePath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	path = Path::GetFullPath(path);
+	String^ root = Path::GetPathRoot(path);
+
+	if(root->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
+		root = root->ToLowerInvariant();
+	else if(wchar_t::IsLower(root, 0))
+		root = root->ToUpperInvariant();
+
+	return FindTruePath(path, root);
+}
+
+String^ SvnTools::FindTruePath(String^ path, String^ root)
+{
 	// Okay, now we have a normalized path and it's root in normal form. Now we need to find the exact casing of the next parts
 	StringBuilder^ result = gcnew StringBuilder(root, path->Length + 16);
 
@@ -172,4 +193,26 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 		return false; // Path ends with a \, probably disk root
 
 	return IsDirectory(Path::Combine(path, SvnClient::AdministrativeDirectoryName));
+}
+
+String^ SvnTools::GetNormalizedFullPath(String^ path)
+{
+	path = Path::GetFullPath(path);
+
+	if(path->Length >= 2 && path[1] == ':')
+	{
+		wchar_t c = path[0];
+
+		if((c >= 'a') && (c <= 'z'))
+			path = wchar_t::ToUpperInvariant(c) + path->Substring(1);
+	}
+	else if(path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
+	{
+		String^ root = Path::GetPathRoot(path)->ToLowerInvariant();
+	
+		if(!path->StartsWith(root, StringComparison::Ordinal))
+			path = root + path->Substring(root->Length);
+	}
+
+	return path;
 }

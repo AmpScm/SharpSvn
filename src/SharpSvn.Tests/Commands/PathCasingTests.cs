@@ -79,6 +79,10 @@ namespace SharpSvn.Tests.Commands
 			string dir = SvnTools.GetTruePath(Path.GetDirectoryName(_casedFile));
 
 			Assert.That(SvnTools.GetTruePath(_casedFile.ToUpperInvariant()), Is.EqualTo(Path.Combine(dir, Path.GetFileName(_casedFile))));
+
+            Assert.That(SvnTools.GetTruePath("c:\\"), Is.EqualTo(SvnTools.GetTruePath("C:\\")));
+
+            Assert.That(Path.GetFullPath("C:\\"), Is.Not.EqualTo(Path.GetFullPath("c:\\")));
 		}
 
 	}

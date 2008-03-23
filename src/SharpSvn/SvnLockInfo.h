@@ -43,14 +43,14 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>The path the notification is about, translated via <see cref="System::IO::Path::GetFullPath" /></summary>
+		/// <summary>The path the notification is about, translated via <see cref="SvnTools::GetNormalizedFullPath" /></summary>
 		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
 		property String^ FullPath
 		{
 			String^ get()
 			{
 				if (!_fullPath && _localData && Path)
-					_fullPath = System::IO::Path::GetFullPath(Path);
+					_fullPath = SvnTools::GetNormalizedFullPath(Path);
 
 				return _fullPath;
 			}

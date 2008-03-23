@@ -206,6 +206,9 @@ void SvnClientContext::ApplyCustomSsh()
 		// Allow overriding the TortoiseSVN setting at our own level.
 		// Probably never used, but allow overriding Tortoise settings anyway
 		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
+
+		if(!customSshConfig)
+			customSshConfig = dynamic_cast<String^>(Registry::LocalMachine->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
 	}
 	catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
 	{ customSshConfig = nullptr; }
@@ -308,7 +311,7 @@ String^ SvnClientContext::PlinkPath::get()
 
 			if (Uri::TryCreate(SvnClientContext::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase) && (codeBase->IsUnc || codeBase->IsFile))
 			{
-				String^ path = Path::GetFullPath(codeBase->LocalPath);
+				String^ path = SvnTools::GetNormalizedFullPath(codeBase->LocalPath);
 
 				path = Path::Combine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
 

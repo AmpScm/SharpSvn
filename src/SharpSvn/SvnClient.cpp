@@ -341,7 +341,7 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	path = System::IO::Path::GetFullPath(path);
+	path = SvnTools::GetNormalizedFullPath(path);
 
 	AprPool pool(%_pool);
 

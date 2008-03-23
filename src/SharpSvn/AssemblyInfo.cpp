@@ -41,7 +41,7 @@ using namespace System::Security::Permissions;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 2.0")];
+[assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 2.0-3.5")];
 [assembly:AssemblyDescriptionAttribute("SharpSvn (Compiled statically with subversion " SVN_VER_NUMBER
 									   ", apr " APR_VERSION_STRING
 									   ", apr-util " APU_VERSION_STRING

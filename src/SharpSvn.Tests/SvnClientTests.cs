@@ -1534,7 +1534,7 @@ namespace SharpSvn.Tests
 			}
 		}
 
-		[Test, ExpectedException(typeof(SvnRepositoryIOException))]
+		[Test, ExpectedException(typeof(SvnFileSystemException))]
 		public void ExpectLogException()
 		{
 			using (SvnClient client = NewSvnClient(false, false))

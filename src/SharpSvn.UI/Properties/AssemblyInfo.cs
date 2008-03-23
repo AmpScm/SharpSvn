@@ -12,7 +12,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("SharpSvn.UI")]
-[assembly: AssemblyCopyright("Copyright © QQn Project 2007")]
+[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2008")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
