@@ -1566,6 +1566,20 @@ namespace SharpSvn.Tests
             Assert.That(SvnRevision.Working.Equals(SvnRevision.Working));
             Assert.That(SvnRevision.Working.Equals(SvnRevisionType.Working));
             Assert.That(SvnRevision.Working == SvnRevisionType.Working);
+
+            DirectoryInfo dir = new DirectoryInfo("c:\\");
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                Assert.That(file.FullName.StartsWith("c:\\"));
+            }
+
+            dir = new DirectoryInfo("C:\\");
+
+            foreach (FileInfo file in dir.GetFiles())
+            {
+                Assert.That(file.FullName.StartsWith("C:\\"));
+            }
         }
 	}
 }
