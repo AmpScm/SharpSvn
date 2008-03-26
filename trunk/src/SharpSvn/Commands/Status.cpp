@@ -76,7 +76,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			(svn_depth_t)args->Depth,
 			args->RetrieveAllEntries,
 			args->ContactRepository,
-			args->NoIgnore,
+			args->RetrieveIgnoredEntries,
 			args->IgnoreExternals,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,

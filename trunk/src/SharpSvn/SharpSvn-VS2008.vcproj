@@ -856,7 +856,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Resolved.cpp"
+					RelativePath=".\Commands\Resolve.cpp"
 					>
 				</File>
 				<File
@@ -1024,7 +1024,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Resolved.h"
+					RelativePath=".\Args\Resolve.h"
 					>
 				</File>
 				<File

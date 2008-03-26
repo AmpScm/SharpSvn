@@ -315,7 +315,7 @@ namespace SharpSvn {
 		Unix = Linefeed
 	};
 
-	public enum class SvnConflictChoice
+	public enum class SvnAccept
 	{
 		/// <summary>Don't resolve the conflict now.  Let subversion mark the path
 		/// 'conflicted', so user can run 'svn resolved' later</summary>
