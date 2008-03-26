@@ -35,11 +35,11 @@ namespace SharpSvn {
 			_entryItems = SvnDirEntryItems::SvnListDefault;
 		}
 
-		virtual property SvnClientCommandType ClientCommandType
+		virtual property SvnCommandType CommandType
 		{
-			virtual SvnClientCommandType get() override sealed
+			virtual SvnCommandType get() override sealed
 			{
-				return SvnClientCommandType::List;
+				return SvnCommandType::List;
 			}
 		}
 

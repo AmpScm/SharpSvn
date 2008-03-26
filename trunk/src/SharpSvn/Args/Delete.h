@@ -19,11 +19,11 @@ namespace SharpSvn {
 		SvnDeleteArgs()
 		{}
 
-		virtual property SvnClientCommandType ClientCommandType
+		virtual property SvnCommandType CommandType
 		{
-			virtual SvnClientCommandType get() override sealed
+			virtual SvnCommandType get() override sealed
 			{
-				return SvnClientCommandType::Delete;
+				return SvnCommandType::Delete;
 			}
 		}
 

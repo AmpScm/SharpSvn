@@ -405,7 +405,7 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 	_client = client;
 	try
 	{
-		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->ClientCommandType));
+		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->CommandType));
 	}
 	catch(Exception^)
 	{

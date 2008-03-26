@@ -20,6 +20,7 @@ namespace SharpSvn {
 		initonly SvnNotifyState _propertyState;
 		initonly SvnLockState _lockState;
 		initonly __int64 _revision;
+		initonly SvnCommandType _commandType;
 		SvnLockInfo^ _lock;
 		String^ _changelistName;
 		SvnMergeRange^ _mergeRange;
@@ -27,7 +28,7 @@ namespace SharpSvn {
 		bool _mimeTypeIsBinary;
 
 	internal:
-		SvnNotifyEventArgs(const svn_wc_notify_t *notify)
+		SvnNotifyEventArgs(const svn_wc_notify_t *notify, SvnCommandType commandType)
 		{
 			if (!notify)
 				throw gcnew ArgumentNullException("notify");
@@ -39,6 +40,7 @@ namespace SharpSvn {
 			_propertyState = (SvnNotifyState)notify->prop_state;
 			_lockState = (SvnLockState)notify->lock_state;
 			_revision = notify->revision;
+			_commandType = commandType;
 		}
 
 	private:
@@ -87,6 +89,15 @@ namespace SharpSvn {
 			{
 				GC::KeepAlive(Path);
 				return _pathIsUri;
+			}
+		}
+
+		/// <summary>Gets the commandtype of the command responsible for calling the notify</summary>
+		property SvnCommandType CommandType
+		{
+			SvnCommandType get()
+			{
+				return _commandType;
 			}
 		}
 

@@ -11,10 +11,10 @@ namespace SharpSvn {
 
 	public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
 	{
-		initonly SvnClientCommandType _commandType;
+		initonly SvnCommandType _commandType;
 
 	internal:
-		SvnProcessingEventArgs(SvnClientCommandType commandType)
+		SvnProcessingEventArgs(SvnCommandType commandType)
 		{
 			EnumVerifier::Verify(commandType);
 
@@ -22,9 +22,9 @@ namespace SharpSvn {
 		}
 
 	public:
-		property SvnClientCommandType CommandType
+		property SvnCommandType CommandType
 		{
-			SvnClientCommandType get()
+			SvnCommandType get()
 			{
 				return _commandType;
 			}

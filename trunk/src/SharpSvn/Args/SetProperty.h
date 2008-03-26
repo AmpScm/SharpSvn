@@ -23,11 +23,11 @@ namespace SharpSvn {
 			_depth = SvnDepth::Empty;
 			_baseRevision = SVN_INVALID_REVNUM;
 		}
-		virtual property SvnClientCommandType ClientCommandType
+		virtual property SvnCommandType CommandType
 		{
-			virtual SvnClientCommandType get() override sealed
+			virtual SvnCommandType get() override sealed
 			{
-				return SvnClientCommandType::SetProperty;
+				return SvnCommandType::SetProperty;
 			}
 		}
 
