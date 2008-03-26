@@ -5,7 +5,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
-#include "Args/Resolved.h"
+#include "Args/Resolve.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
@@ -18,22 +18,20 @@ bool SvnClient::Resolved(String^ path)
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	return Resolved(path, gcnew SvnResolvedArgs());
+	return Resolve(path, SvnAccept::Merged, gcnew SvnResolveArgs());
 }
 
-bool SvnClient::Resolved(String^ path, SvnConflictChoice choice)
+bool SvnClient::Resolve(String^ path, SvnAccept choice)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if(!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if(SvnConflictChoice::Postpone == choice)
-		throw gcnew ArgumentOutOfRangeException("choice");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");	
 
-	return Resolved(path, gcnew SvnResolvedArgs(choice));
+	return Resolve(path, choice, gcnew SvnResolveArgs());
 }
 
-bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
+bool SvnClient::Resolve(String^ path, SvnAccept choice, SvnResolveArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -42,6 +40,11 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 	else if(!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
+	if(SvnAccept::Postpone == choice)
+		throw gcnew ArgumentOutOfRangeException("choice");
+	
+	EnumVerifier::Verify(choice);
+
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
@@ -49,7 +52,7 @@ bool SvnClient::Resolved(String^ path, SvnResolvedArgs^ args)
 	svn_error_t *r = svn_client_resolved2(
 		pool.AllocPath(path),
 		(svn_depth_t)args->Depth,
-		(svn_wc_conflict_choice_t)args->Choice,
+		(svn_wc_conflict_choice_t)choice,
 		CtxHandle,
 		pool.Handle);
 

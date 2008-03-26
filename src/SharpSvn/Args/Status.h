@@ -111,7 +111,9 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool NoIgnore
+		/// <summary>Gets or sets a boolean indicating whether ignored files should be retrieved</summary>
+		/// <remarks>If RetrieveIgnoredEntries is set add files or directories that match ignore patterns.</remarks>
+		property bool RetrieveIgnoredEntries
 		{
 			bool get()
 			{

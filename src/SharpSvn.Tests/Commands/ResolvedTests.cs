@@ -52,10 +52,10 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestResolveDirectory()
 		{
-			SvnResolvedArgs a = new SvnResolvedArgs();
+			SvnResolveArgs a = new SvnResolveArgs();
 			a.Depth = SvnDepth.Infinity;
 
-			this.Client.Resolved(this.path, a);
+			this.Client.Resolve(this.path, SvnAccept.Merged, a);
 
 			Assert.That(this.GetSvnStatus(this.path), Is.EqualTo('M'),
 				" Resolve didn't work! Directory still conflicted");

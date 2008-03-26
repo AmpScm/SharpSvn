@@ -47,7 +47,7 @@ namespace SharpSvn {
 	ref class SvnImportArgs;
 	ref class SvnListArgs;
 	ref class SvnRevertArgs;
-	ref class SvnResolvedArgs;
+	ref class SvnResolveArgs;
 	ref class SvnCopyArgs;
 	ref class SvnMoveArgs;
 	ref class SvnSetPropertyArgs;
@@ -596,12 +596,13 @@ namespace SharpSvn {
 	public:
 		/////////////////////////////////////////
 #pragma region // Resolved Client Command
-		/// <overloads>Remove 'conflicted' state on working copy files or directories (<c>svn resolved</c>)</overloads>
+		/// <overloads>Remove 'conflicted' state on a working copy file or directory using the specified choice</overloads>
+		/// <remarks>Calls <see cref="Resolve(String,SvnAccept)" /> with SvnAccept.Merged</remarks>
 		bool Resolved(String^ path);
-		/// <overloads>Remove 'conflicted' state on working copy files or directories using the specified choice</overloads>
-		bool Resolved(String^ path, SvnConflictChoice choice);
-		/// <overloads>Remove 'conflicted' state on working copy files or directories (<c>svn resolved</c>)</overloads>
-		bool Resolved(String^ path, SvnResolvedArgs^ args);
+		/// <overloads>Remove 'conflicted' state on a working copy file or directory using the specified choice</overloads>
+		bool Resolve(String^ path, SvnAccept choice);
+		/// <overloads>Remove 'conflicted' state on working copy files or directories (<c>svn resolve</c>)</overloads>
+		bool Resolve(String^ path, SvnAccept choice, SvnResolveArgs^ args);
 #pragma endregion
 
 

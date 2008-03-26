@@ -12,7 +12,7 @@ namespace SharpSvn {
 	public ref class SvnConflictEventArgs sealed : public SvnCancelEventArgs
 	{
 		const svn_wc_conflict_description_t* _description;
-		SvnConflictChoice _result;
+		SvnAccept _result;
 
 		initonly SvnNodeKind _nodeKind;
 		initonly bool _isBinary;
@@ -38,7 +38,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("description");
 
 			_description = description;
-			_result = SvnConflictChoice::Postpone;
+			_result = SvnAccept::Postpone;
 
 			_nodeKind = (SvnNodeKind)description->node_kind;
 			_action = (SvnConflictAction)description->action;
@@ -48,13 +48,13 @@ namespace SharpSvn {
 		}
 
 	public:
-		property SvnConflictChoice Choice
+		property SvnAccept Choice
 		{
-			SvnConflictChoice get()
+			SvnAccept get()
 			{
 				return _result;
 			}
-			void set(SvnConflictChoice value)
+			void set(SvnAccept value)
 			{
 				_result = EnumVerifier::Verify(value);
 			}

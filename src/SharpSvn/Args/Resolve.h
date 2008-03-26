@@ -10,22 +10,14 @@
 namespace SharpSvn {
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Resolved(String^, SvnResolvedArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnResolvedArgs : public SvnClientArgs
+	public ref class SvnResolveArgs : public SvnClientArgs
 	{
 		SvnDepth _depth;
-		SvnConflictChoice _choice;
 
 	public:
-		SvnResolvedArgs()
+		SvnResolveArgs()
 		{
 			_depth = SvnDepth::Empty;
-			_choice = SvnConflictChoice::Merged;
-		}
-
-		SvnResolvedArgs(SvnConflictChoice choice)
-		{
-			_depth = SvnDepth::Empty;
-			_choice = EnumVerifier::Verify(choice);
 		}
 
 		virtual property SvnClientCommandType ClientCommandType
@@ -45,18 +37,6 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
-			}
-		}
-
-		property SvnConflictChoice Choice
-		{
-			SvnConflictChoice get()
-			{
-				return _choice;
-			}
-			void set(SvnConflictChoice value)
-			{
-				_choice = EnumVerifier::Verify(value);
 			}
 		}
 	};
