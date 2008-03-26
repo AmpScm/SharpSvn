@@ -21,7 +21,7 @@ namespace SharpSvn {
 		bool _afterInitial;
 
 	private:
-		SvnClientCommandType _commandType;
+		SvnCommandType _commandType;
 		bool _receivedSomeChange;
 		bool _suppressFinalLine;
 		bool _sentFirstTxdelta;
@@ -135,9 +135,9 @@ namespace SharpSvn {
 		}
 
 	protected:
-		property SvnClientCommandType CurrentCommandType
+		property SvnCommandType CurrentCommandType
 		{
-			SvnClientCommandType get()
+			SvnCommandType get()
 			{
 				return _commandType;
 			}
@@ -173,7 +173,7 @@ namespace SharpSvn {
 			if (!_afterInitial && !_client)
 			{
 				_afterInitial = true;
-				OnProcessing(gcnew SvnProcessingEventArgs(_args->ClientCommandType));
+				OnProcessing(gcnew SvnProcessingEventArgs(_args->CommandType));
 			}
 
 			OnNotify(e);

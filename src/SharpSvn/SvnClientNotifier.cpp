@@ -160,14 +160,14 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 		{
 			if (e->Revision >= 0)
 			{
-				if (CurrentCommandType == SvnClientCommandType::Export)
+				if (CurrentCommandType == SvnCommandType::Export)
 				{
 					if (_inExternal)
 						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyExportedExternalAtRevisionX, e->Revision));
 					else
 						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyExportedRevisionX, e->Revision));
 				}
-				else if(CurrentCommandType == SvnClientCommandType::CheckOut)
+				else if(CurrentCommandType == SvnCommandType::CheckOut)
 				{
 					if (_inExternal)
 						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyCheckedOutExternalAtRevisionX, e->Revision));

@@ -8,7 +8,7 @@
 namespace SharpSvn {
 	using System::Globalization::CultureInfo;
 
-	public enum class SvnClientCommandType
+	public enum class SvnCommandType
 	{
 		Unknown = 0,
 

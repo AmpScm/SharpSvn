@@ -60,9 +60,9 @@ namespace SharpSvn {
 		}
 
 	public:
-		virtual property SvnClientCommandType ClientCommandType
+		virtual property SvnCommandType CommandType
 		{
-			SvnClientCommandType get() abstract;
+			SvnCommandType get() abstract;
 		}
 
 		/// <summary>

@@ -25,11 +25,11 @@ namespace SharpSvn {
 			_end = SvnRevision::None;
 		}
 
-		virtual property SvnClientCommandType ClientCommandType
+		virtual property SvnCommandType CommandType
 		{
-			virtual SvnClientCommandType get() override sealed
+			virtual SvnCommandType get() override sealed
 			{
-				return SvnClientCommandType::Unknown;
+				return SvnCommandType::Unknown;
 			}
 		}
 
