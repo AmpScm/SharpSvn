@@ -49,7 +49,7 @@ bool SvnClient::Resolve(String^ path, SvnAccept choice, SvnResolveArgs^ args)
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	svn_error_t *r = svn_client_resolved2(
+	svn_error_t *r = svn_client_resolve(
 		pool.AllocPath(path),
 		(svn_depth_t)args->Depth,
 		(svn_wc_conflict_choice_t)choice,
