@@ -11,7 +11,7 @@
 #include "AprArray.h"
 #include "SvnBase.h"
 
-#include "SvnUtils.h"
+#include "SvnTools.h"
 
 #include "SvnClientContext.h"
 
