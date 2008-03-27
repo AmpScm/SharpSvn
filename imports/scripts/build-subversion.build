@@ -214,6 +214,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <arg value="/t:__LIBS__" />
         <arg value="/t:svn" />
         <arg value="/t:svnadmin" />
+        <arg value="/t:svnversion" />
       </exec>
     </OnceBlock>
   </target>
