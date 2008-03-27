@@ -17,7 +17,7 @@
 #include "SvnPropertyValue.h"
 #include "SvnMergeSourcesCollection.h"
 
-#include "SvnUtils.h"
+#include "SvnTools.h"
 
 namespace SharpSvn {
 

@@ -1264,7 +1264,7 @@
 				Name="Utils Args"
 				>
 				<File
-					RelativePath=".\SvnUtils.h"
+					RelativePath=".\SvnTools.h"
 					>
 				</File>
 			</Filter>
@@ -1272,7 +1272,7 @@
 				Name="Utils Sources"
 				>
 				<File
-					RelativePath=".\SvnUtils.cpp"
+					RelativePath=".\SvnTools.cpp"
 					>
 				</File>
 			</Filter>

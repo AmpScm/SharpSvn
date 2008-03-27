@@ -1557,6 +1557,8 @@ namespace SharpSvn.Tests
 
             Assert.That(path.TargetName, Is.EqualTo("bladiebla.txt"));
 
+            Assert.That(SvnTools.GetNormalizedFullPath("c:\\windows\\"), Is.EqualTo("C:\\windows"));
+
             Assert.That(SvnRevision.Base == SvnRevision.Base);
             Assert.That(SvnRevision.Base.Equals(SvnRevision.Base));
             Assert.That(SvnRevision.Base.Equals(SvnRevisionType.Base));

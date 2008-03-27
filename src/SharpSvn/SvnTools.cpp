@@ -7,7 +7,7 @@
 
 #include <malloc.h>
 #include "SvnAll.h"
-#include "SvnUtils.h"
+#include "SvnTools.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -75,6 +75,14 @@ String^ SvnTools::GetTruePath(String^ path)
 		}
 		else
 			root = "";
+	}
+
+	if(root && path->Length > root->Length && path[path->Length-1] == '\\')
+	{
+		path = path->TrimEnd('\\');
+
+		if(path->Length <= root->Length)
+			return root;
 	}
 
 	return FindTruePath(path, root);
@@ -205,14 +213,23 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 
 		if((c >= 'a') && (c <= 'z'))
 			path = wchar_t::ToUpperInvariant(c) + path->Substring(1);
+
+		String^ r = path->TrimEnd('\\');
+
+		if(r->Length > 3)
+			return r;
+		else
+			return path->Substring(0, 3);
 	}
 	else if(path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
 	{
 		String^ root = Path::GetPathRoot(path)->ToLowerInvariant();
 	
 		if(!path->StartsWith(root, StringComparison::Ordinal))
-			path = root + path->Substring(root->Length);
+			path = root + path->Substring(root->Length)->TrimEnd('\\');
 	}
+	else
+		path = path->TrimEnd('\\');
 
 	return path;
 }
