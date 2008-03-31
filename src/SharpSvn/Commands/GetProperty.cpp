@@ -131,10 +131,13 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
 	if (GetProperty(target, propertyName, args, result))
 	{
 		if(result->Count > 0)
+		{
 			value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
 
-		return true;
+			return true;
+		}
+
+		// Fall through if no property fetched
 	}
-	else
-		return false;
+	return false;
 }
