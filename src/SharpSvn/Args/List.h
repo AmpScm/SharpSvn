@@ -94,6 +94,40 @@ namespace SharpSvn {
 				_fetchLocks = value;
 			}
 		}
+
+	internal:
+		String^ _queryRoot;
+		Uri^ _repositoryRoot;
+		void Prepare(SvnTarget^ target)
+		{
+			_repositoryRoot = nullptr;
+
+			SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);
+			if (uriTarget)
+				_queryRoot = uriTarget->SvnTargetName;			
+			else
+				_queryRoot = nullptr;
+		}
+
+		Uri^ CalculateRepositoryRoot(const char* abs_path)
+		{
+			if(_repositoryRoot || !_queryRoot)
+				return _repositoryRoot;
+			
+			String^ qr = _queryRoot;
+			_queryRoot = nullptr; // Only parse in the first call, which matches the exact request
+
+			String^ path = SvnBase::Utf8_PtrToString(abs_path+1); // Skip the initial '/'
+
+			if(qr->EndsWith(path, StringComparison::Ordinal))
+			{
+				String^ root = qr->Substring(0, qr->Length-path->Length);
+
+				Uri::TryCreate(root, UriKind::Absolute, _repositoryRoot);
+			}
+
+			return _repositoryRoot;
+		}
 	};
 
 }

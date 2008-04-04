@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using System.Net;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -71,6 +72,25 @@ namespace SharpSvn.Tests.Commands
 				entry.Match(ent.Entry);
 			}
 		}
+
+        [Test]
+        public void ListSharp()
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                client.Authenticator.Clear();
+                client.Authenticator.DefaultCredentials = new NetworkCredential("guest", "");
+
+                client.List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"),
+                    delegate(object sender, SvnListEventArgs e)
+                    {
+                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/")));
+                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/")));
+                        Assert.That(e.BasePath, Is.EqualTo("/trunk"));
+                    });
+
+            }
+        }
 
 		private class Entry
 		{

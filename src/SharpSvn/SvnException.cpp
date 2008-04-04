@@ -326,6 +326,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_SVN_BAD_VERSION:
 		case SVN_ERR_RA_SVN_NO_MECHANISMS:
 		case SVN_ERR_RA_SERF_SSPI_INITIALISATION_FAILED:
+		case SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED:
 			return gcnew SvnRepositoryIOException(error);
 
 		case SVN_ERR_AUTHN_CREDS_UNAVAILABLE:

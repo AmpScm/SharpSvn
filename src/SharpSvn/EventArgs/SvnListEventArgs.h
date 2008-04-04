@@ -18,6 +18,8 @@ namespace SharpSvn {
 		initonly __int64 _rev;
 		initonly DateTime _time;
 		String^ _author;
+		Uri^ _repositoryRoot;
+
 	internal:
 		SvnDirEntry(const svn_dirent_t *entry)
 		{
@@ -29,7 +31,7 @@ namespace SharpSvn {
 			_fileSize = entry->size;
 			_hasProperties = (entry->has_props != 0);
 			_rev = entry->created_rev;
-			_time = (entry->time != 0) ? SvnBase::DateTimeFromAprTime(entry->time) : DateTime::MinValue;
+			_time = (entry->time != 0) ? SvnBase::DateTimeFromAprTime(entry->time) : DateTime::MinValue;			
 		}
 	public:
 		property SvnNodeKind NodeKind
@@ -86,7 +88,7 @@ namespace SharpSvn {
 
 				return _author;
 			}
-		}
+		}		
 
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
@@ -124,9 +126,11 @@ namespace SharpSvn {
 		String^ _absPath;
 		SvnLockInfo^ _lock;
 		SvnDirEntry^ _entry;
+		Uri^ _repositoryRoot;
+		Uri^ _baseUri;
 
 	internal:
-		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path)
+		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot)
 		{
 			if (!path)
 				throw gcnew ArgumentNullException("path");
@@ -138,6 +142,7 @@ namespace SharpSvn {
 			_pDirEnt = dirent;
 			_pLock = lock;
 			_pAbsPath = abs_path;
+			_repositoryRoot = repositoryRoot;
 		}
 
 	public:
@@ -159,6 +164,29 @@ namespace SharpSvn {
 					_absPath = SvnBase::Utf8_PtrToString(_pAbsPath);
 
 				return _absPath;
+			}
+		}
+
+		/// <summary>When retrieving a listing using an Uri target: contains the repository root</summary>
+		/// <value>The Repository root or <c>null</c> when the repository root is not available</value>
+		property Uri^ RepositoryRoot
+		{
+			Uri^ get()
+			{
+				return _repositoryRoot;
+			}
+		}
+
+		/// <summary>When retrieving a listing using an Uri target: contains the uri from which Path is relative</summary>
+		/// <value>The Base Uri or <c>null</c> when the repository root is not available</value>
+		property Uri^ BaseUri
+		{
+			Uri^ get()
+			{
+				if (!_baseUri && (_repositoryRoot && (_absPath || _pAbsPath)))
+					_baseUri = gcnew Uri(RepositoryRoot, BasePath->Substring(1) + "/");
+
+				return _baseUri;
 			}
 		}
 
