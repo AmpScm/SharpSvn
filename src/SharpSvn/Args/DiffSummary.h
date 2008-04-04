@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::DiffSummary(SvnTarget^,SvnTarget^,SvnDiffSummaryArgs^,EventHandler{SvnDiffSummaryEventArgs^}^)" /></summary>
+	/// <summary>Extended Parameter container for SvnClient.DiffSummary</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnDiffSummaryArgs : public SvnClientArgs
 	{
