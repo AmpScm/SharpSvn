@@ -67,7 +67,7 @@ namespace SharpSvn {
 
 			_depth = (SvnDepth)info->depth;
 
-			if (info->size == (apr_size_t)-1)
+			if (info->size == SVN_INFO_SIZE_UNKNOWN)
 				_size = -1;
 			else
 				_size = info->size;

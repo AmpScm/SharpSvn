@@ -34,7 +34,7 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	if (!args)
 		return nullptr;
 
-	SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path);
+	SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path, args->CalculateRepositoryRoot(abs_path));
 	try
 	{
 		args->OnList(e);
@@ -66,6 +66,8 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+
+	args->Prepare(target);
 
 	if (listHandler)
 		args->List += listHandler;
