@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::ListChangeList(String^,SvnListChangeListArgs^,EventHandler{SvnListChangeListEventArgs^}^)" /></summary>
+	/// <summary>Extended Parameter container for SvnClient.ListChangeList</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnListChangeListArgs : public SvnClientArgs
 	{
