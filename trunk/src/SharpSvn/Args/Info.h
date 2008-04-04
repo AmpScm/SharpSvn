@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler{SvnInfoEventArgs^}^ infoHandler)" /></summary>
+	/// <summary>Extended Parameter container of SvnClient.Info</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnInfoArgs : public SvnClientArgs
 	{
