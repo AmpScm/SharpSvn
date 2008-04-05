@@ -78,8 +78,8 @@ namespace SharpSvn.Tests.Commands
         {
             using (SvnClient client = new SvnClient())
             {
-                client.Authenticator.Clear();
-                client.Authenticator.DefaultCredentials = new NetworkCredential("guest", "");
+                Client.Authentication.Clear();
+                Client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
 
                 client.List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"),
                     delegate(object sender, SvnListEventArgs e)

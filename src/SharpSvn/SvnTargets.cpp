@@ -150,10 +150,10 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	while ((nNext = path->IndexOf("\\.\\", nRoot, StringComparison::Ordinal)) >= 0)
 		path = path->Remove(nNext, 2);
 
-	while (path->StartsWith(".\\"))
+	while (path->StartsWith(".\\", StringComparison::Ordinal))
 		path = path->Substring(2);
 
-	if (path->EndsWith("\\."))
+	if (path->EndsWith("\\.", StringComparison::Ordinal))
 		path = path->Substring(0, path->Length-2);
 	
 	if (path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))

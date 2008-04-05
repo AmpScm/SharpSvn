@@ -119,6 +119,16 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets the <see cref="SvnAuthentication" /> instance managing authentication on behalf of this client</summary>
+		property SvnAuthentication^ Authentication
+		{
+			SvnAuthentication^ get()
+			{
+				return _authentication;
+			}
+		}
+
+		[Obsolete("Please use .Authentication instead")]
 		property SvnAuthentication^ Authenticator
 		{
 			SvnAuthentication^ get()

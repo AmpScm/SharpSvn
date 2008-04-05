@@ -1583,5 +1583,42 @@ namespace SharpSvn.Tests
                 Assert.That(file.FullName.StartsWith("C:\\"));
             }
         }
+
+        [Test]
+        public void TryParseShouldReturnFalse()
+        {
+            SvnPathTarget pt;
+            Assert.That(SvnPathTarget.TryParse("http://qqn.nl/2233234", out pt), Is.False);
+        }
+
+		[Test]
+		public void TouchMe()
+		{
+			using (SvnClient client = new SvnClient())
+			{
+				SvnStatusArgs a = new SvnStatusArgs();
+				a.RetrieveAllEntries = true;
+				a.RetrieveIgnoredEntries = true;
+				a.ThrowOnError = false;
+
+				int n = 0;
+				client.Status(@"F:\QQn\sharpsvn\src\SharpSvn.SourceIndexer.Tests\Properties\AssemblyInfo.cs", a,
+					delegate(object sender, SvnStatusEventArgs e)
+					{
+						n++;
+					});
+
+				Assert.That(n, Is.EqualTo(1));
+
+				n = 0;
+				client.Status("F:\\QQn\\sharpsvn\\src\\SharpSvn.SourceIndexer\\Properties", a,
+					delegate(object sender, SvnStatusEventArgs e)
+					{
+						n++;
+					});
+
+				Assert.That(n, Is.EqualTo(2));
+			}
+		}
 	}
 }

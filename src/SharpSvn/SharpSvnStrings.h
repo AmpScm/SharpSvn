@@ -91,7 +91,7 @@ namespace SharpSvn {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to A fatal error occured within the subversion API - (Use Ctrl+C to copy message).
+        ///   Looks up a localized string similar to A fatal error occurred within the subversion API - (Use Ctrl+C to copy message).
         /// </summary>
         internal: static property System::String^  FatalExceptionInSubversionApi {
             System::String^  get();
@@ -147,7 +147,7 @@ namespace SharpSvn {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {This line does not contain non-Utf8 characters}.
+        ///   Looks up a localized string similar to {This line does contain non-Utf8 characters}.
         /// </summary>
         internal: static property System::String^  NonUtf8ConvertableLine {
             System::String^  get();

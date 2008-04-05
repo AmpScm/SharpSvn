@@ -41,11 +41,11 @@ namespace SharpSvn.UI
 
 		internal void Bind(SvnClient svnClient)
 		{
-			svnClient.Authenticator.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
-			svnClient.Authenticator.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
-			svnClient.Authenticator.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
-			svnClient.Authenticator.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
-			svnClient.Authenticator.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
+			svnClient.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
+			svnClient.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
+			svnClient.Authentication.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
+			svnClient.Authentication.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
+			svnClient.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
 		}
 
 		void DialogUserNameHandler(Object sender, SvnUserNameEventArgs e)
