@@ -13,6 +13,7 @@ using namespace SharpSvn;
 
 bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 {
+	// Note: client can be null if called from a not SvnClient command
 	if (!error)
 	{
 		_exception = nullptr;
@@ -27,17 +28,18 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 
 	SvnClient^ svnClient = dynamic_cast<SvnClient^>(client);
 
-	if (_exception && svnClient)
+	if (_exception)
 	{
 		SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
-
-		if (svnClient)
+		if(svnClient)
 		{
 			svnClient->HandleClientError(ea);
-
-			if (ea->Cancel)
-				return false;
 		}
+		else
+			OnSvnError(ea);
+
+		if (ea->Cancel)
+			return false;
 	}
 
 	if(!ThrowOnCancel && err == SVN_ERR_CANCELLED)

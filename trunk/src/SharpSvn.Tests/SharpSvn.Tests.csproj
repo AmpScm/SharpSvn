@@ -14,6 +14,8 @@
     <OldToolsVersion>2.0</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>SharpSvn.Tests.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,14 +75,19 @@
     <Compile Include="Commands\DiffTests.cs" />
     <Compile Include="Commands\ExceptionTests.cs" />
     <Compile Include="Commands\ExportTests.cs" />
+    <Compile Include="Commands\GetAppliedMergeInfoTests.cs" />
+    <Compile Include="Commands\GetAvailableMergeInfoTests.cs" />
     <Compile Include="Commands\GetPropertyTests.cs" />
     <Compile Include="Commands\GetRevisionPropertyTests.cs" />
+    <Compile Include="Commands\GetSuggestedMergeSourcesTests.cs" />
     <Compile Include="Commands\ImportTests.cs" />
+    <Compile Include="Commands\InfoTests.cs" />
     <Compile Include="Commands\ListTests.cs" />
     <Compile Include="Commands\LockTests.cs" />
     <Compile Include="Commands\LogTests.cs" />
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
+    <Compile Include="Commands\PathCasingTests.cs" />
     <Compile Include="Commands\PropertyListTests.cs" />
     <Compile Include="Commands\RelocateTests.cs" />
     <Compile Include="Commands\ResolvedTests.cs" />
@@ -98,6 +105,8 @@
     <Compile Include="Commands\UpdateTests.cs" />
     <Compile Include="Commands\Utils\ProcessReader.cs" />
     <Compile Include="Commands\Utils\Win32.cs" />
+    <None Include="SharpSvn.Tests.snk" />
+    <None Include="Zips\Collabnet-MT.repos" />
     <None Include="Zips\conflictwc.zip" />
     <None Include="Zips\repos.zip" />
     <None Include="Zips\wc.zip" />
@@ -105,6 +114,8 @@
     <Compile Include="Commands\ZMiscTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DiffTests.cs" />
+    <Compile Include="LocalizationTests.cs" />
     <Compile Include="SvnBdbTest.cs" />
     <Compile Include="SvnClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -61,8 +61,8 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(arrived);
 
 			SvnClient cl2 = new SvnClient();
-			cl2.Authenticator.CopyAuthenticationCache(Client);
-			cl2.Authenticator.ClearAuthenticationCache();
+			cl2.Authentication.CopyAuthenticationCache(Client);
+			cl2.Authentication.ClearAuthenticationCache();
 		}
 
 		bool _serverTrustTicked;

@@ -276,4 +276,7 @@
   <data name="PleaseRestartThisApplicationBeforeContinuing" xml:space="preserve">
     <value>Please restart this application before continuing.\n\nStack trace:\n{0}</value>
   </data>
+  <data name="FileXNotFound" xml:space="preserve">
+    <value>File '{0}' not found</value>
+  </data>
 </root>

@@ -98,6 +98,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to File &apos;{0}&apos; not found.
+        /// </summary>
+        internal: static property System::String^  FileXNotFound {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The handler is not registered at this time.
         /// </summary>
         internal: static property System::String^  HandlerIsNotRegisteredAtThisTime {
@@ -468,6 +475,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::FatalExceptionInSubversionApi::get() {
         return ResourceManager->GetString(L"FatalExceptionInSubversionApi", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::FileXNotFound::get() {
+        return ResourceManager->GetString(L"FileXNotFound", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::HandlerIsNotRegisteredAtThisTime::get() {
