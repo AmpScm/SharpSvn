@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include "SvnEnums.h"
 #include "SvnChangeList.h"
 #include "SvnCommandLineArgumentCollection.h"
 
@@ -60,6 +61,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
 		virtual property SvnCommandType CommandType
 		{
 			SvnCommandType get() abstract;
@@ -67,7 +69,7 @@ namespace SharpSvn {
 
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
-		/// If an exception would occur, the method returns false and the <see cref="Exception" /> property
+		/// If an exception would occur, the method returns false and the <see cref="LastException" /> property
 		/// is set to the exception which would have been throw.
 		/// </summary>
 		property bool ThrowOnError
@@ -83,9 +85,9 @@ namespace SharpSvn {
 		}
 
 		/// <summary>
-		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
-		/// If an exception would occur, the method returns false and the <see cref="Exception" /> property
-		/// is set to the exception which would have been throw.
+		/// Gets or sets a boolean indicating whether the call must throw an error if the operation is cancelled
+		/// <see cref="IsLastInvocationCanceled" /> is true and the returnvalue <c>false</c> if the operation was canceled.
+		/// (The <see cref="LastException" /> property is set to the cancel exception)
 		/// </summary>
 		property bool ThrowOnCancel
 		{
@@ -131,14 +133,14 @@ namespace SharpSvn {
 	{
 		String^ _logMessage;
 
-	public:
-		/// <summary>Raised just before committing to allow modifying the log message</summary>
-		event EventHandler<SvnCommittingEventArgs^>^ Committing;
-
 	protected:
 		SvnClientArgsWithCommit()
 		{
 		}
+
+	public:
+		/// <summary>Raised just before committing to allow modifying the log message</summary>
+		event EventHandler<SvnCommittingEventArgs^>^ Committing;	
 
 	protected public:
 		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>
@@ -184,7 +186,7 @@ namespace SharpSvn {
 		}
 
 	protected public:
-		/// <summary>Invokes the <see cref="Conflict" /> event</summary>
+		/// <summary>Raises the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e)
 		{
 			Conflict(this, e);

@@ -123,7 +123,7 @@ namespace SharpSvn {
 		static void AddClientName(String^ name, System::Version^ version);
 
 
-		/// <summary>Enables the subversion localization engine. (Costs +- 400 KByte ram/language used)</summary>
+		/// <summary>Enables the subversion localization engine. (Costs +- 400 KByte ram/language used and slows error handling within the subversion engine)</summary>
 		/// <remarks>By default the subversion layer uses english messages for everything. After this method is called all messages are routed via
 		/// the managed resource handler</remarks>
 		static void EnableSubversionLocalization();
@@ -205,26 +205,25 @@ namespace SharpSvn {
 		event EventHandler<SvnErrorEventArgs^>^ SvnError;
 
 		/// <summary>
-		/// Raised just before a command is executed. The provided <see cref="SvnClientArgs" />
-		/// object MUST BE threated as read only. Handling this command allows
-		/// <see cref="SvnClientReporter" /> to provide full command output.
+		/// Raised just before a command is executed. This allows a listener
+		/// to cleanup before a new command is started
 		/// </summary>
 		event EventHandler<SvnProcessingEventArgs^>^	Processing;
 
 	protected:
-		/// <summary>Invokes the <see cref="Cancel" /> event</summary>
+		/// <summary>Raises the <see cref="Cancel" /> event.</summary>
 		virtual void OnCancel(SvnCancelEventArgs^ e);
-		/// <summary>Invokes the <see cref="Progress" /> event</summary>
+		/// <summary>Raises the <see cref="Progress" /> event.</summary>
 		virtual void OnProgress(SvnProgressEventArgs^ e);
-		/// <summary>Invokes the <see cref="Committing" /> event</summary>
+		/// <summary>Raises the <see cref="Committing" /> event.</summary>
 		virtual void OnCommitting(SvnCommittingEventArgs^ e);
-		/// <summary>Invokes the <see cref="Notify" /> event</summary>
+		/// <summary>Raises the <see cref="Notify" /> event.</summary>
 		virtual void OnNotify(SvnNotifyEventArgs^ e);
-		/// <summary>Invokes the <see cref="Conflict" /> event</summary>
+		/// <summary>Raises the <see cref="Conflict" /> event.</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e);
-		/// <summary>Invokes the <see cref="Exception" /> event</summary>
+		/// <summary>Raises the <see cref="Exception" /> event.</summary>
 		virtual void OnSvnError(SvnErrorEventArgs^ e);
-		/// <summary>Invokes the <see cref="Processing" /> event</summary>
+		/// <summary>Raises the <see cref="Processing" /> event.</summary>
 		virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
 	internal:
@@ -1097,9 +1096,9 @@ namespace SharpSvn {
 		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id);
 
 	public:
-		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
+		/// <summary>Gets the Pristine file and/or text file status of a working copy path</summary>
 		bool GetWorkingCopyState(String^ targetPath, [Out] SvnWorkingCopyState^% result);
-		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
+		/// <summary>Gets the Pristine file and/or text file status of a working copy path</summary>
 		bool GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateArgs^ args, [Out] SvnWorkingCopyState^% result);
 
 	private:
