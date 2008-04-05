@@ -132,8 +132,8 @@ namespace SharpSvn.Tests.Commands
 		{
 			this.notifications = new List<SvnNotifyEventArgs>();
 			this.client = new SvnClient();
-			//this.client.Authenticator.Clear();
-			//this.client.Authenticator.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(
+			//this.Client.Authentication.Clear();
+			//this.Client.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(
 			//this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
 			client.Committing += new EventHandler<SvnCommittingEventArgs>(LogMessage);
 		}

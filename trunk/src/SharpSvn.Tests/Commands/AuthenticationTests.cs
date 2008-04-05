@@ -30,7 +30,7 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestSimpleProvider()
 		{
-			Client.Authenticator.Clear();
+			Client.Authentication.Clear();
 
 			bool arrived = false;
 			SvnLogArgs a = new SvnLogArgs();
@@ -51,7 +51,7 @@ namespace SharpSvn.Tests.Commands
 				}));
 
 			arrived = false;
-			Client.Authenticator.SslServerTrustHandlers += new EventHandler<SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlersAllow);
+			Client.Authentication.SslServerTrustHandlers += new EventHandler<SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlersAllow);
 			Assert.That(Client.List(new Uri("https://svn.apache.org/repos/asf/apr/"),
 				delegate(object sender, SvnListEventArgs e)
 				{
@@ -72,9 +72,9 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestSimpleSslCert()
 		{
-			Client.Authenticator.Clear();
-			Client.Authenticator.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlers);
-			Client.Authenticator.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(Authenticator_UserNamePasswordHandlers);
+			Client.Authentication.Clear();
+			Client.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlers);
+			Client.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(Authenticator_UserNamePasswordHandlers);
 			bool arrived = false;
 			SvnInfoArgs a = new SvnInfoArgs();
 			a.ThrowOnCancel = false;

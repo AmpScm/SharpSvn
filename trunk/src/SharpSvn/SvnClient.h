@@ -840,7 +840,6 @@ namespace SharpSvn {
 		bool DeleteProperty(String^ target, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(String^ target, String^ propertyName, SvnSetPropertyArgs^ args);
-		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(Uri^ target, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
@@ -1072,7 +1071,6 @@ namespace SharpSvn {
 		bool Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler);
 		/// <summary>Streamingly retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</summary>
 		bool Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBlameEventArgs^>^ blameHandler);
-		/// <overloads>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>
 		/// <summary>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</summary>
 		bool GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>^% list);
 		/// <summary>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</summary>
