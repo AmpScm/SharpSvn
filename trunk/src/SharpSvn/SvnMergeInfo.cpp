@@ -24,7 +24,7 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, svn_mergeinfo_t merg
 	_appliedMerges = gcnew SvnMergeItemCollection(mergeInfo, pool);
 }
 
-SvnAvailableMergeInfo::SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool)
+SvnEligableMergeInfo::SvnEligableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool)
 {
 	// Pool is only available during the constructor
 	if (!target)

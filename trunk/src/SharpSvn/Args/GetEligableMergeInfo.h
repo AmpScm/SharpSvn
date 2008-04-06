@@ -11,10 +11,10 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetAvailableMergeInfo method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnGetAvailableMergeInfoArgs : public SvnClientArgs
+	public ref class SvnGetEligableMergeInfoArgs : public SvnClientArgs
 	{
 	public:
-		SvnGetAvailableMergeInfoArgs()
+		SvnGetEligableMergeInfoArgs()
 		{
 		}
 
@@ -22,7 +22,7 @@ namespace SharpSvn {
 		{
 			virtual SvnCommandType get() override sealed
 			{
-				return SvnCommandType::GetAvailableMergeInfo;
+				return SvnCommandType::GetEligableMergeInfo;
 			}
 		}
 	};

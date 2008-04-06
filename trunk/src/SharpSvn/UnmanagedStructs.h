@@ -40,3 +40,6 @@ struct svn_config_t
 
 struct svn_fs_t
 {};
+
+struct svn_diff_t
+{};
