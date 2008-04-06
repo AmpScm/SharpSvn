@@ -250,7 +250,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 		apr_array_header_t* retrieveProperties;
 
 		if (args->RetrievePropertiesUsed)
-			retrieveProperties = AllocArray(args->RetrieveProperties, %pool);
+			retrieveProperties = args->RetrieveProperties->Count ? AllocArray(args->RetrieveProperties, %pool) : nullptr;
 		else
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
@@ -378,15 +378,34 @@ bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out
 	}
 }
 
-Collection<String^>^ SvnLogArgs::RetrieveProperties::get()
+SvnRevisionPropertyNameCollection::SvnRevisionPropertyNameCollection(bool initialEmpty)
+	: KeyedCollection<String^,String^>(StringComparer::Ordinal, 10) // Start using hashtable at 10 items
+{
+	if(!initialEmpty)
+	{
+		Add(SVN_PROP_REVISION_AUTHOR);
+		Add(SVN_PROP_REVISION_DATE);
+		Add(SVN_PROP_REVISION_LOG);
+	}
+}
+
+void SvnRevisionPropertyNameCollection::AddDefaultProperties()
+{
+	if(!Contains(SVN_PROP_REVISION_AUTHOR))
+		Add(SVN_PROP_REVISION_AUTHOR);
+
+	if(!Contains(SVN_PROP_REVISION_DATE))
+		Add(SVN_PROP_REVISION_DATE);
+
+	if(!Contains(SVN_PROP_REVISION_LOG))
+		Add(SVN_PROP_REVISION_LOG);
+}
+
+SvnRevisionPropertyNameCollection^ SvnLogArgs::RetrieveProperties::get()
 {
 	if (!_retrieveProperties)
 	{
-		_retrieveProperties = gcnew Collection<String^>();
-
-		_retrieveProperties->Add(SVN_PROP_REVISION_AUTHOR);
-		_retrieveProperties->Add(SVN_PROP_REVISION_DATE);
-		_retrieveProperties->Add(SVN_PROP_REVISION_LOG);
+		_retrieveProperties = gcnew SvnRevisionPropertyNameCollection(false);
 	}
 
 	return _retrieveProperties;
