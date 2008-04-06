@@ -9,6 +9,22 @@
 
 namespace SharpSvn {
 
+	public ref class SvnRevisionPropertyNameCollection sealed : KeyedCollection<String^, String^>
+	{
+	internal:
+		SvnRevisionPropertyNameCollection(bool initialEmpty);
+
+	public:
+		void AddDefaultProperties();
+
+	protected:
+		virtual String^ GetKeyForItem(String^ item) override
+		{
+			return item;
+		}		
+	};
+
+
 	/// <summary>Extended Parameter container of SvnClient.Log</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnLogArgs : public SvnClientArgs
@@ -22,7 +38,7 @@ namespace SharpSvn {
 		bool _includeMerged;
 		bool _ommitMessages;
 		Uri^ _baseUri;
-		Collection<String^>^ _retrieveProperties;
+		SvnRevisionPropertyNameCollection^ _retrieveProperties;
 
 	internal:
 		int _mergeLogLevel; // Used by log handler to provide mergeLogLevel
@@ -219,9 +235,9 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
-		property Collection<String^>^ RetrieveProperties
+		property SvnRevisionPropertyNameCollection^ RetrieveProperties
 		{
-			Collection<String^>^ get();
+			SvnRevisionPropertyNameCollection^ get();
 		}
 
 	internal:
