@@ -790,7 +790,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetAvailableMergeInfo.cpp"
+					RelativePath=".\Commands\GetEligableMergeInfo.cpp"
 					>
 				</File>
 				<File
@@ -958,7 +958,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetAvailableMergeInfo.h"
+					RelativePath=".\Args\GetEligableMergeInfo.h"
 					>
 				</File>
 				<File

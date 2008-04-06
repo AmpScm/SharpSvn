@@ -788,7 +788,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetAvailableMergeInfo.cpp"
+					RelativePath=".\Commands\GetEligableMergeInfo.cpp"
 					>
 				</File>
 				<File
@@ -956,7 +956,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetAvailableMergeInfo.h"
+					RelativePath=".\Args\GetEligableMergeInfo.h"
 					>
 				</File>
 				<File
@@ -1188,11 +1188,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnDiff.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnEnums.h"
 					>
 				</File>
 				<File
 					RelativePath=".\SvnException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnFileDiff.h"
 					>
 				</File>
 				<File
@@ -1244,7 +1252,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnDiff.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnException.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnFileDiff.cpp"
 					>
 				</File>
 				<File

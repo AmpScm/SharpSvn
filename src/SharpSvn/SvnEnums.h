@@ -27,7 +27,7 @@ namespace SharpSvn {
 		DiffSummary,
 		Export,
 		GetAppliedMergeInfo,
-		GetAvailableMergeInfo,
+		GetEligableMergeInfo,
 		GetProperty,
 		GetRevisionProperty,		
 		GetSuggestedMergeSources,
@@ -54,7 +54,7 @@ namespace SharpSvn {
 		Update,
 		Write,
 		// Wc library helper
-		GetWorkingCopyInfo,
+		GetWorkingCopyInfo = 0x1001,
 		// Add new members at the end!
 
 	};

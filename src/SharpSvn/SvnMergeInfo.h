@@ -258,12 +258,12 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnAvailableMergeInfo
+	public ref class SvnEligableMergeInfo
 	{
 		initonly SvnTarget^ _target;
 		initonly Collection<SvnMergeRange^>^ _mergeRanges;
 	internal:
-		SvnAvailableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool);
+		SvnEligableMergeInfo(SvnTarget^ target, apr_array_header_t* mergeInfo, AprPool^ pool);
 
 	public:
 		/// <summary>Gets a boolean indicating whether MergeInfo is available for the specified target</summary>

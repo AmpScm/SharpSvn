@@ -70,7 +70,7 @@ namespace SharpSvn {
 	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
-	ref class SvnGetAvailableMergeInfoArgs;
+	ref class SvnGetEligableMergeInfoArgs;
 	ref class SvnCreateRepositoryArgs;
 	ref class SvnDeleteRepositoryArgs;
 	ref class SvnRecoverRepositoryArgs;
@@ -1060,9 +1060,9 @@ namespace SharpSvn {
 	public:
 		/// <overloads>Gets a list of available merges which can be applied on the specified target (<c>svn mergeinfo</c>)</overloads>
 		/// <summary>Gets a list of merges which can be applied on target</summary>
-		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, [Out]SvnAvailableMergeInfo^% mergeInfo);
+		bool GetEligableMergeInfo(SvnTarget ^target, SvnUriTarget^ sourceUri, [Out]SvnEligableMergeInfo^% mergeInfo);
 		/// <summary>Gets a list of merges which can be applied on target</summary>
-		bool GetAvailableMergeInfo(SvnTarget ^target, Uri^ sourceUri, SvnGetAvailableMergeInfoArgs^ args, [Out]SvnAvailableMergeInfo^% mergeInfo);
+		bool GetEligableMergeInfo(SvnTarget ^target, SvnUriTarget^ sourceUri, SvnGetEligableMergeInfoArgs^ args, [Out]SvnEligableMergeInfo^% mergeInfo);
 
 	public:
 		/// <overloads>Streamingly retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>
