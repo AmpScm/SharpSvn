@@ -84,7 +84,7 @@ namespace SharpSvn {
 		};
 	}
 
-	public ref class SvnLogEventArgs : public SvnCancelEventArgs
+	public ref class SvnLoggingEventArgs abstract : public SvnCancelEventArgs
 	{
 		svn_log_entry_t* _entry;
 		AprPool^ _pool;
@@ -92,17 +92,14 @@ namespace SharpSvn {
 		String^ _author;
 		initonly DateTime _date;
 		String^ _message;
-		initonly __int64 _revision;
-		initonly bool _hasChildren;
-		initonly int _mergeLevel;
-		initonly Uri^ _logOrigin;
+		initonly __int64 _revision;		
 
 		const char* _pcAuthor;
 		const char* _pcMessage;
 		SvnPropertyCollection^ _customProperties;
 
 	internal:
-		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool, Uri^ logOrigin)
+		SvnLoggingEventArgs(svn_log_entry_t *entry, AprPool ^pool)
 		{
 			if (!entry)
 				throw gcnew ArgumentNullException("entry");
@@ -133,10 +130,6 @@ namespace SharpSvn {
 			_revision = entry->revision;
 			_pcAuthor = pcAuthor;
 			_pcMessage = pcMessage;
-			_hasChildren = entry->has_children ? true : false;
-
-			_mergeLevel = mergeLevel;
-			_logOrigin = logOrigin;
 		}
 
 	private:
@@ -224,34 +217,7 @@ namespace SharpSvn {
 
 				return _message;
 			}
-		}
-
-		/// <summary>Set to true when the following items are merged-child items of this item.</summary>
-		property bool HasChildren
-		{
-			bool get()
-			{
-				return _hasChildren;
-			}
-		}
-
-		/// <summary>Gets the nesting level of the logs via merges</summary>
-		property int MergeLogNestingLevel
-		{
-			int get()
-			{
-				return _mergeLevel;
-			}
-		}
-
-		/// <summary>Gets the log origin SharpSvn used for retrieving the logfile</summary>
-		property Uri^ LogOrigin
-		{
-			Uri^ get()
-			{
-				return _logOrigin;
-			}
-		}
+		}		
 
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override 
@@ -280,6 +246,51 @@ namespace SharpSvn {
 				_pcMessage = nullptr;
 				_pcAuthor = nullptr;
 				__super::Detach(keepProperties);
+			}
+		}
+	};
+
+
+	public ref class SvnLogEventArgs : public SvnLoggingEventArgs
+	{
+		initonly Uri^ _logOrigin;
+		initonly bool _hasChildren;
+		initonly int _mergeLevel;
+
+	internal:
+		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, Uri^ logOrigin, AprPool ^pool)
+			: SvnLoggingEventArgs(entry, pool)
+		{
+			_hasChildren = entry->has_children ? true : false;
+			_mergeLevel = mergeLevel;
+			_logOrigin = logOrigin;
+		}
+
+	public:
+				/// <summary>Gets the log origin SharpSvn used for retrieving the logfile</summary>
+		property Uri^ LogOrigin
+		{
+			Uri^ get()
+			{
+				return _logOrigin;
+			}
+		}
+
+		/// <summary>Set to true when the following items are merged-child items of this item.</summary>
+		property bool HasChildren
+		{
+			bool get()
+			{
+				return _hasChildren;
+			}
+		}
+
+		/// <summary>Gets the nesting level of the logs via merges</summary>
+		property int MergeLogNestingLevel
+		{
+			int get()
+			{
+				return _mergeLevel;
 			}
 		}
 

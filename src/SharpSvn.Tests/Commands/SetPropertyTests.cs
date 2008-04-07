@@ -57,7 +57,8 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.SetProperty(WcPath, "moo", propval, a);
 
-            Assert.That(ticked, Is.True);
+            if(SvnClient.Version >= new Version(1,6))
+                Assert.That(ticked, Is.True);
 
 			Assert.That(this.RunCommand("svn", "propget moo " + this.WcPath).Trim(), Is.EqualTo("baa"),
 				"PropSet didn't work on directory!");

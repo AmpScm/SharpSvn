@@ -25,6 +25,8 @@ namespace SharpSvn {
 	ref class SvnCancelEventArgs;
 	ref class SvnProgressEventArgs;
 	ref class SvnLogEventArgs;
+	ref class SvnMergesEligibleEventArgs;
+	ref class SvnMergesMergedEventArgs;
 	ref class SvnNotifyEventArgs;
 	ref class SvnProcessingEventArgs;
 
@@ -49,6 +51,8 @@ namespace SharpSvn {
 	ref class SvnRevertArgs;
 	ref class SvnResolveArgs;
 	ref class SvnCopyArgs;
+	ref class SvnMergesEligibleArgs;
+	ref class SvnMergesMergedArgs;
 	ref class SvnMoveArgs;
 	ref class SvnSetPropertyArgs;
 	ref class SvnGetPropertyArgs;
@@ -70,7 +74,7 @@ namespace SharpSvn {
 	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
-	ref class SvnGetEligableMergeInfoArgs;
+	ref class SvnLogEligibleMergesArgs;
 	ref class SvnCreateRepositoryArgs;
 	ref class SvnDeleteRepositoryArgs;
 	ref class SvnRecoverRepositoryArgs;
@@ -1058,11 +1062,16 @@ namespace SharpSvn {
 		bool GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArgs^ args, [Out]SvnAppliedMergeInfo^% mergeInfo);
 
 	public:
-		/// <overloads>Gets a list of available merges which can be applied on the specified target (<c>svn mergeinfo</c>)</overloads>
-		/// <summary>Gets a list of merges which can be applied on target</summary>
-		bool GetEligableMergeInfo(SvnTarget ^target, SvnUriTarget^ sourceUri, [Out]SvnEligableMergeInfo^% mergeInfo);
-		/// <summary>Gets a list of merges which can be applied on target</summary>
-		bool GetEligableMergeInfo(SvnTarget ^target, SvnUriTarget^ sourceUri, SvnGetEligableMergeInfoArgs^ args, [Out]SvnEligableMergeInfo^% mergeInfo);
+		bool ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, EventHandler<SvnMergesEligibleEventArgs^>^ handler);
+		bool ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnMergesEligibleArgs^ args, EventHandler<SvnMergesEligibleEventArgs^>^ handler);
+		bool GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, [Out] Collection<SvnMergesEligibleEventArgs^>^% list);
+		bool GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnMergesEligibleArgs^ args, [Out] Collection<SvnMergesEligibleEventArgs^>^% list);
+
+	public:
+		bool ListMergesMerged(SvnTarget ^target, SvnUriTarget^ source, EventHandler<SvnMergesMergedEventArgs^>^ handler);
+		bool ListMergesMerged(SvnTarget ^target, SvnUriTarget^ source, SvnMergesMergedArgs^ args, EventHandler<SvnMergesMergedEventArgs^>^ handler);
+		bool GetMergesMerged(SvnTarget ^target, SvnUriTarget^ source, [Out] Collection<SvnMergesMergedEventArgs^>^% list);
+		bool GetMergesMerged(SvnTarget ^target, SvnUriTarget^ source, SvnMergesMergedArgs^ args, [Out] Collection<SvnMergesMergedEventArgs^>^% list);
 
 	public:
 		/// <overloads>Streamingly retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</overloads>

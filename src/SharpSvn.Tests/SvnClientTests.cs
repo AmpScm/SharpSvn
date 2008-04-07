@@ -1385,14 +1385,14 @@ namespace SharpSvn.Tests
 				Assert.That(applied.AppliedMerges.Count, Is.EqualTo(0));
 				Assert.That(applied.Target, Is.Not.Null);
 
-				SvnAvailableMergeInfo available;
-				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+                Collection<SvnMergesEligibleEventArgs> available;
+				client.GetMergesEligible(new SvnPathTarget(merge2), fromUri, out available);
 				Assert.That(available, Is.Not.Null);
-				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
-				Assert.That(available.MergeRanges[0].Start, Is.EqualTo(ci.Revision));
-				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision + 1));
-				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
-				Assert.That(available.Target, Is.Not.Null);
+				Assert.That(available.Count, Is.EqualTo(0));
+				/*Assert.That(available[0].Revision, Is.EqualTo(ci.Revision));
+				//Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision + 1));
+				//Assert.That(available.MergeRanges[0].Inheritable, Is.True);
+				Assert.That(available[0].SourceUri, Is.Not.Null);*/
 
 				using (StreamWriter fs = File.AppendText(f1))
 				{
@@ -1400,28 +1400,23 @@ namespace SharpSvn.Tests
 				}
 				client.Commit(merge1);
 
-				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+				client.GetMergesEligible(new SvnPathTarget(merge2), fromUri, out available);
 				Assert.That(available, Is.Not.Null);
-				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
-				Assert.That(available.MergeRanges[0].Start, Is.EqualTo(ci.Revision));
-				Assert.That(available.MergeRanges[0].End, Is.EqualTo(ci.Revision + 2));
-				Assert.That(available.MergeRanges[0].Inheritable, Is.True);
-				Assert.That(available.Target, Is.Not.Null);
+				Assert.That(available.Count, Is.EqualTo(1));
+				Assert.That(available[0].Revision, Is.EqualTo(4L));
+				Assert.That(available[0].SourceUri, Is.Not.Null);
 
-				client.Merge(merge2, fromUri, available.MergeRanges[0]);
+				client.Merge(merge2, fromUri, available[0].AsRange());
 
-				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+                client.GetMergesEligible(new SvnPathTarget(merge2), fromUri, out available);
 				Assert.That(available, Is.Not.Null);
-				Assert.That(available.MergeRanges.Count, Is.EqualTo(0));
-				Assert.That(available.Target, Is.Not.Null);
+				Assert.That(available.Count, Is.EqualTo(0));
 
 				client.Commit(WcPath);
 
-				client.GetAvailableMergeInfo(new SvnPathTarget(merge2), fromUri, out available);
+				client.GetMergesEligible(new SvnPathTarget(merge2), fromUri, out available);
 				Assert.That(available, Is.Not.Null);
-				Assert.That(available.MergeRanges.Count, Is.EqualTo(1));
-				Assert.That(available.Target, Is.Not.Null);
-
+				Assert.That(available.Count, Is.EqualTo(0));
 
 				client.GetAppliedMergeInfo(new SvnPathTarget(merge2), out applied);
 
@@ -1430,7 +1425,7 @@ namespace SharpSvn.Tests
 				Assert.That(applied.AppliedMerges[0].Uri, Is.EqualTo(fromUri));
 				Assert.That(applied.AppliedMerges[0].MergeRanges, Is.Not.Null);
 				Assert.That(applied.AppliedMerges[0].MergeRanges.Count, Is.EqualTo(1));
-				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Start, Is.EqualTo(ci.Revision));
+				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Start, Is.EqualTo(ci.Revision+1));
 				Assert.That(applied.AppliedMerges[0].MergeRanges[0].End, Is.EqualTo(ci.Revision + 2));
 				Assert.That(applied.AppliedMerges[0].MergeRanges[0].Inheritable, Is.True);
 				Assert.That(applied.Target, Is.Not.Null);
@@ -1589,36 +1584,6 @@ namespace SharpSvn.Tests
         {
             SvnPathTarget pt;
             Assert.That(SvnPathTarget.TryParse("http://qqn.nl/2233234", out pt), Is.False);
-        }
-
-		[Test]
-		public void TouchMe()
-		{
-			using (SvnClient client = new SvnClient())
-			{
-				SvnStatusArgs a = new SvnStatusArgs();
-				a.RetrieveAllEntries = true;
-				a.RetrieveIgnoredEntries = true;
-				a.ThrowOnError = false;
-
-				int n = 0;
-				client.Status(@"F:\QQn\sharpsvn\src\SharpSvn.SourceIndexer.Tests\Properties\AssemblyInfo.cs", a,
-					delegate(object sender, SvnStatusEventArgs e)
-					{
-						n++;
-					});
-
-				Assert.That(n, Is.EqualTo(1));
-
-				n = 0;
-				client.Status("F:\\QQn\\sharpsvn\\src\\SharpSvn.SourceIndexer\\Properties", a,
-					delegate(object sender, SvnStatusEventArgs e)
-					{
-						n++;
-					});
-
-				Assert.That(n, Is.EqualTo(2));
-			}
-		}
+        }		
 	}
 }

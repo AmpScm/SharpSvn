@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
 	[TestFixture]
-	public class GetAvailableMergeInfoTests : TestBase
+	public class GetEligableMergeInfoTests : TestBase
 	{
 		[Test]
 		public void VerifyCollabNetRepos()
@@ -25,31 +26,26 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(msc.Count, Is.EqualTo(3));
 			foreach (SvnMergeSource ms in msc)
 			{
-				SvnAvailableMergeInfo info;
+                Collection<SvnMergesEligibleEventArgs> info;
 
-				Assert.That(Client.GetAvailableMergeInfo(me, ms.Uri, out info));
+                Assert.That(ms.Uri, Is.Not.Null);
+
+                Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
 				Assert.That(info, Is.Not.Null);
 
 				if (ms.Uri == new Uri(CollabReposUri, "trunk"))
 				{
-					Assert.That(info.MergeRanges.Count, Is.EqualTo(1));
-					Assert.That(info.MergeRanges[0].Start, Is.EqualTo(16L));
-					Assert.That(info.MergeRanges[0].End, Is.EqualTo(17L));
-					Assert.That(info.MergeRanges[0].Inheritable, Is.True);
+                    
+					Assert.That(info.Count, Is.EqualTo(1));
+					Assert.That(info[0].Revision, Is.EqualTo(17L));
 				}
 				else if (ms.Uri == new Uri(CollabReposUri, "branches/a"))
 				{
-					Assert.That(info.MergeRanges.Count, Is.EqualTo(1));
-					Assert.That(info.MergeRanges[0].Start, Is.EqualTo(11L));
-					Assert.That(info.MergeRanges[0].End, Is.EqualTo(17L));
-					Assert.That(info.MergeRanges[0].Inheritable, Is.True);
+					Assert.That(info.Count, Is.EqualTo(0));
 				}
 				else if (ms.Uri == new Uri(CollabReposUri, "branches/b"))
 				{
-					Assert.That(info.MergeRanges.Count, Is.EqualTo(1));
-					Assert.That(info.MergeRanges[0].Start, Is.EqualTo(13L));
-					Assert.That(info.MergeRanges[0].End, Is.EqualTo(17L));
-					Assert.That(info.MergeRanges[0].Inheritable, Is.True);
+					Assert.That(info.Count, Is.EqualTo(0));
 				}
 				else
 					Assert.That(false, "Strange branch found");

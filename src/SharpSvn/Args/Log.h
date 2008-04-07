@@ -21,7 +21,12 @@ namespace SharpSvn {
 		virtual String^ GetKeyForItem(String^ item) override
 		{
 			return item;
-		}		
+		}
+
+	public:
+		static initonly String^ Author = SVN_PROP_REVISION_AUTHOR;
+		static initonly String^ Date = SVN_PROP_REVISION_DATE;
+		static initonly String^ Log = SVN_PROP_REVISION_LOG;
 	};
 
 
@@ -206,20 +211,7 @@ namespace SharpSvn {
 			{
 				_includeMerged = value;
 			}
-		}
-
-		/// <summary>Gets or sets a boolean indicating whether the logmessage should be fetched</summary>
-		property bool RetrieveLogMessages
-		{
-			bool get()
-			{
-				return !_ommitMessages;
-			}
-			void set(bool value)
-			{
-				_ommitMessages = !value;
-			}
-		}
+		}	
 
 		/// <summary>Gets or sets the base uri to which relative Uri's are relative</summary>
 		property Uri^ BaseUri

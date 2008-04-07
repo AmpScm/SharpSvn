@@ -206,7 +206,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 		return nullptr;
 	}
 
-	SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, %aprPool, args->_searchRoot);
+	SvnLogEventArgs^ e = gcnew SvnLogEventArgs(log_entry, args->_mergeLogLevel, args->_searchRoot, %aprPool);
 
 	if (log_entry->has_children)
 		args->_mergeLogLevel++;
