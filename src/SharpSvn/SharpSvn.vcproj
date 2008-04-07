@@ -790,10 +790,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetEligableMergeInfo.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\Commands\GetProperty.cpp"
 					>
 				</File>
@@ -835,6 +831,14 @@
 				</File>
 				<File
 					RelativePath=".\Commands\Merge.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\MergesEligible.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\MergesMerged.cpp"
 					>
 				</File>
 				<File
@@ -958,10 +962,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetEligableMergeInfo.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Args\GetProperty.h"
 					>
 				</File>
@@ -1003,6 +1003,14 @@
 				</File>
 				<File
 					RelativePath=".\Args\Merge.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\MergesEligible.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\MergesMerged.h"
 					>
 				</File>
 				<File
@@ -1107,6 +1115,14 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnLogEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnMergesEligibleEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnMergesMergedEventArgs.h"
 					>
 				</File>
 				<File
