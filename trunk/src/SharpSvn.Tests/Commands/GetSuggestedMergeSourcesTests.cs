@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -21,22 +22,22 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(msc.Count, Is.EqualTo(3));
 			foreach (SvnMergeSource ms in msc)
 			{
-				SvnAvailableMergeInfo info;
+                Collection<SvnMergesEligibleEventArgs> info;
 
-				Assert.That(Client.GetAvailableMergeInfo(me, ms.Uri, out info));
+				Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
 				Assert.That(info, Is.Not.Null);
 				
 				if (ms.Uri == new Uri(CollabReposUri, "trunk"))
 				{
-					Assert.That(info.MergeRanges.Count, Is.EqualTo(1));
+					Assert.That(info.Count, Is.EqualTo(1));
 				}
 				else if (ms.Uri == new Uri(CollabReposUri, "branches/a"))
 				{
-					Assert.That(info.MergeRanges.Count, Is.EqualTo(1));
+					Assert.That(info.Count, Is.EqualTo(0));
 				}
 				else if (ms.Uri == new Uri(CollabReposUri, "branches/b"))
 				{
-					Assert.That(info.MergeRanges.Count, Is.EqualTo(1));
+					Assert.That(info.Count, Is.EqualTo(0));
 				}
 				else
 					Assert.That(false, "Strange branch found");

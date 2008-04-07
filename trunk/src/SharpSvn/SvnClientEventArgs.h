@@ -60,6 +60,8 @@ namespace SharpSvn {
 #include "EventArgs/SvnListEventArgs.h"
 #include "EventArgs/SvnListChangeListEventArgs.h"
 #include "EventArgs/SvnLogEventArgs.h"
+#include "EventArgs/SvnMergesEligibleEventArgs.h"
+#include "EventArgs/SvnMergesMergedEventArgs.h"
 #include "EventArgs/SvnProcessingEventArgs.h"
 #include "EventArgs/SvnProgressEventArgs.h"
 #include "EventArgs/SvnPropertyListEventArgs.h"
