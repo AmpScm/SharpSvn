@@ -151,14 +151,10 @@ namespace SharpSvn.Tests.Commands
                     case SvnNotifyAction.CommitSendData:
                     case SvnNotifyAction.CommitAdded:
                     case SvnNotifyAction.CommitDeleted:
+                    case SvnNotifyAction.CommitReplaced:
                         // Verify if the pre subversion 1.5.x rc1 bug is still present
                         Assert.That(!found);
                         return;
-                    
-                    
-                    case SvnNotifyAction.CommitReplaced:
-                        Assert.That(found);
-                        break;
                 }
             }
 
