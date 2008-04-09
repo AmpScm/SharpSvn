@@ -132,11 +132,40 @@ namespace SharpSvn.Tests.Commands
 		{
 			this.notifications = new List<SvnNotifyEventArgs>();
 			this.client = new SvnClient();
+            client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
 			//this.Client.Authentication.Clear();
 			//this.Client.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(
 			//this.client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
 			client.Committing += new EventHandler<SvnCommittingEventArgs>(LogMessage);
 		}
+
+        protected virtual void OnClientNotify(object sender, SvnNotifyEventArgs e)
+        {
+            bool found = File.Exists(e.FullPath) || Directory.Exists(e.FullPath) || Directory.Exists(Path.GetDirectoryName(e.FullPath));
+
+            if (e.CommandType == SvnCommandType.Commit)
+            {
+                switch (e.Action)
+                {
+                    case SvnNotifyAction.CommitModified:
+                    case SvnNotifyAction.CommitSendData:
+                    case SvnNotifyAction.CommitAdded:
+                    case SvnNotifyAction.CommitDeleted:
+                        // Verify if the pre subversion 1.5.x rc1 bug is still present
+                        Assert.That(!found);
+                        return;
+                    
+                    
+                    case SvnNotifyAction.CommitReplaced:
+                        Assert.That(found);
+                        break;
+                }
+            }
+
+            Assert.That(found,
+                "{0} is not a valid path and it's directory does not exist\n (Raw value = {1}, Current Directory = {2}, Action = {3}, CommandType = {4})", 
+                e.FullPath, e.Path, Environment.CurrentDirectory, e.Action, e.CommandType);
+        }
 
 		protected static void RecursiveDelete(string path)
 		{
@@ -285,15 +314,13 @@ namespace SharpSvn.Tests.Commands
 
 			//System.Diagnostics.Trace.Assert(File.Exists(command), "Command exists");
 
-			Process proc = new Process();
-			proc.StartInfo.FileName = command;
-			proc.StartInfo.Arguments = args;
-			proc.StartInfo.CreateNoWindow = true;
-			proc.StartInfo.RedirectStandardOutput = true;
-			proc.StartInfo.RedirectStandardError = true;
-			proc.StartInfo.UseShellExecute = false;
+            ProcessStartInfo psi = new ProcessStartInfo(command, args);
+			psi.CreateNoWindow = true;
+			psi.RedirectStandardOutput = true;
+			psi.RedirectStandardError = true;
+			psi.UseShellExecute = false;
 
-			proc.Start();
+			Process proc = Process.Start(psi);
 
 			//Console.WriteLine( proc.MainModule.FileName );
 
@@ -412,15 +439,6 @@ namespace SharpSvn.Tests.Commands
 			return path;
 		}
 
-
-
-
-
-
-
-
-
-
 		/// <summary>
 		/// generate a unique directory name
 		/// </summary>
@@ -484,12 +502,10 @@ namespace SharpSvn.Tests.Commands
 			ProcessStartInfo psi = new ProcessStartInfo("svnserve",
 				String.Format("--daemon --root {0} --listen-host 127.0.0.1 --listen-port {1}", root,
 				PortNumber));
-			psi.UseShellExecute = true;
-			Process p = new Process();
-			p.StartInfo = psi;
-			p.Start();
+			//psi.UseShellExecute = true;
+            psi.CreateNoWindow = true;
 
-			return p;
+			return Process.Start(psi);
 		}
 
 		protected void SetReposAuth()

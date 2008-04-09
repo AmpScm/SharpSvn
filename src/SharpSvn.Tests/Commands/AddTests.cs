@@ -39,6 +39,8 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(this.Notifications.Length > 0, "No notification callbacks received");
 
 			Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
+
+            Assert.That(Client.Commit(WcPath));
 		}
 
 		/// <summary>
