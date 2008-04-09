@@ -1403,7 +1403,7 @@ namespace SharpSvn.Tests
 				client.GetMergesEligible(new SvnPathTarget(merge2), fromUri, out available);
 				Assert.That(available, Is.Not.Null);
 				Assert.That(available.Count, Is.EqualTo(1));
-				Assert.That(available[0].Revision, Is.EqualTo(4L));
+				Assert.That(available[0].Revision, Is.EqualTo(15L));
 				Assert.That(available[0].SourceUri, Is.Not.Null);
 
 				client.Merge(merge2, fromUri, available[0].AsRange());

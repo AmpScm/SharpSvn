@@ -37,6 +37,8 @@ namespace SharpSvn.Tests.Commands
 
 			SvnCommitResult info;
 
+            
+
 			Assert.That(this.Client.Commit(this.WcPath, out info));
 
 			Assert.That(info, Is.Not.Null);
@@ -191,6 +193,11 @@ namespace SharpSvn.Tests.Commands
 			string output = this.RunCommand("svn", "st " + this.WcPath).Trim();
 			Assert.That(output[0], Is.EqualTo('M'), "File committed even for a cancelled log message");
 		}
+
+        void VerifyNotify(object sender, SvnNotifyEventArgs e)
+        {
+            Assert.That(File.Exists(e.FullPath), "{0} does exist; path was defined as {1}", e.FullPath, e.Path);
+        }
 
 		[Test]
 		[ExpectedException(typeof(SvnWorkingCopyLockException))]

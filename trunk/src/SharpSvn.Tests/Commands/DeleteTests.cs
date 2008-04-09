@@ -34,7 +34,6 @@ namespace SharpSvn.Tests.Commands
 		/// <summary>
 		/// Tests deleting files in a working copy
 		/// </summary>
-		/// //TODO: Implement the variable admAccessBaton
 		[Test]
 		public void TestDeleteWCFiles()
 		{
@@ -50,7 +49,32 @@ namespace SharpSvn.Tests.Commands
 
 			Assert.That(this.GetSvnStatus(path1), Is.EqualTo('D'), "File not deleted");
 			Assert.That(this.GetSvnStatus(path2), Is.EqualTo('D'), "File not deleted");
+
+            Assert.That(Client.Commit(WcPath));
 		}
+
+        [Test]
+        public void TestReplacedStatus()
+        {
+            string file = CreateTextFile("ToBeReplaced.vb");
+
+            Client.Add(file);
+            Assert.That(Client.Commit(WcPath));
+            Client.Delete(file);
+
+            file = CreateTextFile("ToBeReplaced.vb");
+            Assert.That(Client.Add(file));
+
+            bool reached = false;
+            Assert.That(Client.Status(file, delegate(object sender, SvnStatusEventArgs e)
+            {
+                reached = true;
+                Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Replaced));
+            }));
+            Assert.That(reached);
+
+            Assert.That(Client.Commit(WcPath));
+        }
 
 		/// <summary>
 		/// Tests deleting a directory in the repository
