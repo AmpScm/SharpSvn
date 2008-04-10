@@ -96,7 +96,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 
 		String^ itemPath = uri->AbsolutePath->TrimEnd('/');
 
-		int nEnd = Math::Min(root->Length, itemPath->Length)-1;
+		int nEnd = Math::Min(root->Length, itemPath->Length);
 
 		while (nEnd >= 0 && String::Compare(root, 0, itemPath, 0, nEnd, StringComparison::Ordinal))
 		{

@@ -1,6 +1,7 @@
 ﻿<project schemaVersion="1.6.0.2">
     <assemblies>
-        <assembly assemblyPath=".\SharpSvn\bin_2008\Win32\Release\SharpSvn.dll" xmlCommentsPath=".\SharpSvn\bin_2008\Win32\Release\SharpSvn.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\..\sharpsvn-dist\release\SharpSvn\SharpSvn.dll" xmlCommentsPath="..\..\sharpsvn-dist\release\SharpSvn\SharpSvn.xml" commentsOnly="False" />
+        <assembly assemblyPath="..\..\sharpsvn-dist\release\SharpSvn\SharpSvn.UI.dll" xmlCommentsPath="..\..\sharpsvn-dist\release\SharpSvn\SharpSvn.UI.xml" commentsOnly="False" />
     </assemblies>
     <namespaceSummaries>
         <namespaceSummaryItem name="" isDocumented="False" />
@@ -24,7 +25,7 @@
     <WorkingPath path="" />
     <CleanIntermediates>True</CleanIntermediates>
     <KeepLogFile>True</KeepLogFile>
-    <HelpFileFormat>Help1xAndWebsite</HelpFileFormat>
+    <HelpFileFormat>Help2xAndWebsite</HelpFileFormat>
     <PurgeDuplicateTopics>True</PurgeDuplicateTopics>
     <CppCommentsFixup>True</CppCommentsFixup>
     <FrameworkVersion>2.0.50727</FrameworkVersion>
@@ -33,11 +34,11 @@
     <Preliminary>True</Preliminary>
     <RootNamespaceContainer>False</RootNamespaceContainer>
     <RootNamespaceTitle />
-    <HelpTitle>SharpSvn - Subversion for .Net</HelpTitle>
+    <HelpTitle>SharpSvn - Subversion Support for .Net</HelpTitle>
     <HtmlHelpName>Documentation</HtmlHelpName>
     <Language>en-US</Language>
-    <CopyrightHref>http://code.google.com/p/sharpsvn/</CopyrightHref>
-    <CopyrightText>Copyright (c) QQn Project</CopyrightText>
+    <CopyrightHref>http://sharpsvn.open.collab.net/</CopyrightHref>
+    <CopyrightText>Copyright (c) SharpSvn Project and QQn</CopyrightText>
     <FeedbackEMailAddress />
     <HeaderText />
     <FooterText />
