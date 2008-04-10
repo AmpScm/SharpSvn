@@ -118,6 +118,14 @@ namespace SharpSvn.Tests.Commands
             });
             Assert.That(touched);
 
+            touched = false;
+            Client.Log(Path.Combine(dir, "index.html"), a, delegate(object sender, SvnLogEventArgs e)
+            {
+                touched = true;
+
+            });
+            Assert.That(touched);
+
 
             touched = false;
             Client.Log(new string[] 
@@ -129,6 +137,23 @@ namespace SharpSvn.Tests.Commands
                 touched = true;
             });
 
+            Assert.That(touched);
+        }
+
+        [Test]
+        public void TestLogSingleFile()
+        {
+            bool touched = false;
+            SvnLogArgs a = new SvnLogArgs();
+            string dir = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
+            touched = false;
+
+            Client.Log(Path.Combine(dir, "index.html"), a, delegate(object sender, SvnLogEventArgs e)
+                {
+                    touched = true;
+
+                });
             Assert.That(touched);
         }
 

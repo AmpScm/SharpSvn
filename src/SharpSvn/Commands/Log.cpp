@@ -56,7 +56,7 @@ bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEve
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	return InternalLog(NewSingleItemCollection(
-		SvnPathTarget::GetTargetPath(targetPath)->Replace(Path::DirectorySeparatorChar, '/')),
+		SvnPathTarget::GetTargetPath(targetPath)->Replace(System::IO::Path::DirectorySeparatorChar, '/')),
 		nullptr, args, logHandler);
 }
 
