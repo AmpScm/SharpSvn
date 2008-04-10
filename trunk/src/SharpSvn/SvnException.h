@@ -48,10 +48,8 @@ namespace SharpSvn {
 
 	internal:
 		static SvnException^ Create(svn_error_t *error);
-		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);
-
-	private:
 		static Exception^ Create(svn_error_t *error, bool clearError);
+		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);		
 
 	private protected:
 		SvnException(svn_error_t *error)

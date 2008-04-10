@@ -234,12 +234,6 @@ namespace SharpSvn {
 			}
 			finally
 			{
-				if(_notify && _notify->err && !_clearedErr)
-				{
-					_clearedErr = true;
-					svn_error_clear(_notify->err);
-				}
-
 				_notify = nullptr;
 				__super::Detach(keepProperties);
 			}
