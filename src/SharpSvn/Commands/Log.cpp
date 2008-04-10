@@ -55,7 +55,9 @@ bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEve
 	else if(!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
-	return InternalLog(NewSingleItemCollection(targetPath), nullptr, args, logHandler);
+	return InternalLog(NewSingleItemCollection(
+		SvnPathTarget::GetTargetPath(targetPath)->Replace(Path::DirectorySeparatorChar, '/')),
+		nullptr, args, logHandler);
 }
 
 bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -255,7 +257,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
 		svn_opt_revision_t pegRev = args->OriginRevision->ToSvnRevision();
-		svn_opt_revision_t start = args->Start->Or(SvnRevision::Head)->ToSvnRevision();
+		svn_opt_revision_t start = args->Start->Or(args->OriginRevision)->Or(SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
 
 		svn_error_t *r = svn_client_log4(
