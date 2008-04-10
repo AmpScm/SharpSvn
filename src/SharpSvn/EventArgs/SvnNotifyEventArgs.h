@@ -26,6 +26,7 @@ namespace SharpSvn {
 		SvnMergeRange^ _mergeRange;
 		bool _pathIsUri;
 		bool _mimeTypeIsBinary;
+		bool _clearedErr;
 
 	internal:
 		SvnNotifyEventArgs(const svn_wc_notify_t *notify, SvnCommandType commandType)
@@ -233,6 +234,12 @@ namespace SharpSvn {
 			}
 			finally
 			{
+				if(_notify && _notify->err && !_clearedErr)
+				{
+					_clearedErr = true;
+					svn_error_clear(_notify->err);
+				}
+
 				_notify = nullptr;
 				__super::Detach(keepProperties);
 			}
