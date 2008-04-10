@@ -94,6 +94,44 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        [Test]
+        public void TestLocalLogVariants()
+        {
+            SvnLogArgs a = new SvnLogArgs();
+            string dir = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
+
+            bool touched = false;
+            Client.Log(dir, delegate(object sender, SvnLogEventArgs e)
+            {
+                touched = true;                
+            });
+            Assert.That(touched);
+
+            touched = false;
+
+            touched = false;
+            Client.Log(dir, a, delegate(object sender, SvnLogEventArgs e)
+            {
+                touched = true;
+
+            });
+            Assert.That(touched);
+
+            
+            touched = false;
+            Client.Log(new string[] 
+            {
+                dir,
+                Path.Combine(dir, "index.html")
+            }, a, delegate(object sender, SvnLogEventArgs e)
+            {
+                touched = true;
+            });
+
+            Assert.That(touched);
+        }
+
 		private void LogCallback(object sender, SvnLogEventArgs e)
 		{
 			e.Detach();
