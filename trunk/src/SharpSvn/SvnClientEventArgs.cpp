@@ -14,8 +14,11 @@ using namespace SharpSvn;
 
 SvnException^ SvnNotifyEventArgs::Error::get()
 {
-	if (!_exception && _notify && _notify->err)
+	if (!_exception && _notify && _notify->err && !_clearedErr)
+	{
 		_exception = SvnException::Create(_notify->err);
+		_clearedErr = true;		
+	}
 
 	return _exception;
 }
