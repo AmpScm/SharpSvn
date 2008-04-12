@@ -9,16 +9,23 @@
 	<!-- -->
 	<property name="opensslVersion" value="0.9.8g" />
 	<property name="neonVersion" value="0.28.2" />
-
+	
 	<property name="aprVersion" value="1.2.12" />
 	<property name="aprUtilVersion" value="1.2.12" />
 	<property name="dbVersion" value="4.4.20" />
 	<property name="zlibVersion" value="1.2.3" />
 	<property name="serfVersion" value="0.1.3" />
-	<property name="saslVersion" value="2.1.22" />	
+	<property name="saslVersion" value="2.1.22" />
+	
+	<!-- For testcase -->	
 	<property name="nunitVersion" value="2.4.3" />
 	<property name="sharpZipVersion" value="0854" />
 	
+	<!-- When using -D:buildHttpd=true -->
+	<property name="httpdVersion" value="2.2.8" />
+	<property name="aprIconvVersion" value="1.2.1" />
+	
+	<!-- Prefer http or https -->
 	<property name="httpOrHttps" value="http" />
 
   <!-- Prefix to use for dependency DLL's -->
