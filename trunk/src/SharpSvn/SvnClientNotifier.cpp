@@ -252,7 +252,6 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 	case SvnNotifyAction::ChangeListClear:
 		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyPathXIsNoLongerAMemberOfAChangeList, e->Path));
 		break;
-	case SvnNotifyAction::ChangeListFailed:
 	case SvnNotifyAction::ChangeListMoved:
 		WriteLine(e->Error->Message);
 		break;
