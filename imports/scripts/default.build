@@ -1,15 +1,30 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-	<property name="Configuration" value="Release" />
-	<property name="dllPrefix" value="SharpSvn-" />
-	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" />
+	<property name="Configuration" value="Release" overwrite="false" />
+	<property name="dllPrefix" value="SharpSvn-" overwrite="false" />
+	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
+	
+	<if test="${not property::exists('VSversion')}">
+		<!-- Auto detect VS 2005 and VS 2008 -->
+		<if test="${environment::variable-exists('VCINSTALLDIR')}">
+			<property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
+			
+			<property name="VSversion" value="2005" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 8')}" />
+			<property name="VSversion" value="2008" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 9.0')}" />
+		</if>
+		
+		<if test="${not property::exists('VSversion')}">
+			<fail message="VSversion variable not defined and autodetect failed" />
+		</if>
+		<echo message="Using Visual Studio ${VSversion} for building" />
+	</if>
+	
+	<property name="VS" value="2005" overwrite="false" />
+	<property name="buildHttpd" value="false" overwrite="false" />
 
 	<if test="${platform != 'win32' and platform != 'x64'}">
 		<fail message="Platform must be win32 or x64 at this time" />
 	</if>
-
-	<property name="build-WIN32" value="true" />
-	<property name="build-WIN64-X64" value="false" />
 
 	<setenv>
 		<variable name="OPENSSL_STATIC" value="1" />
@@ -21,16 +36,16 @@
 
 	<include buildfile="tasks.build" />
 
-	<include buildfile="build-prepare.build" />
+	<include buildfile="prepare.build" />
 
-	<include buildfile="build-bdb.build" />
-	<include buildfile="build-zlib.build" />
-	<include buildfile="build-openssl.build" />
-	<include buildfile="build-serf.build" />
-	<include buildfile="build-neon.build" />
-	<include buildfile="build-apr.build" />
-	<include buildfile="build-sasl.build" />
-	<include buildfile="build-subversion.build" />
+	<include buildfile="bdb.build" />
+	<include buildfile="zlib.build" />
+	<include buildfile="openssl.build" />
+	<include buildfile="serf.build" />
+	<include buildfile="neon.build" />
+	<include buildfile="apr.build" />
+	<include buildfile="sasl.build" />
+	<include buildfile="subversion.build" />
 
 	<target name="clean">
 		<delete>

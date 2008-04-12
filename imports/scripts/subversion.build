@@ -2,7 +2,12 @@
 <project basedir=".." default="build">
 
   <target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-apr">
-
+	<if test="${VSversion != '2005'}">
+		<VCBuild platform="${platform}">
+			<arg line="/upgrade" />
+			<arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
+		</VCBuild>
+	</if>
     <VCBuild platform="${platform}" configuration="release">
       <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
     </VCBuild>
@@ -12,15 +17,15 @@
         <include name="**/*.h" />
       </fileset>
     </copy>
+    <copy todir="build/${platform}/lib/xml/expat/lib" file="release/include/apr-1/expat.h" />
     <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />
     <copy todir="build/${platform}/lib/include">
       <fileset basedir="SharpSvn-SvnI18n">
         <include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/lib/xml/expat/lib" file="build/apr-util/xml/expat/lib/expat.h" />
     <copy todir="build/${platform}/lib/include">
-      <fileset basedir="build/apr/include">
+      <fileset basedir="${aprDir}/include">
         <include name="arch/win32/**.h" />
       </fileset>
     </copy>
@@ -118,7 +123,8 @@
         <arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
         <arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
         <arg line="-t vcproj" />
-        <arg line="--vsnet-version=2005" />
+        <arg line="--vsnet-version=2005" if="${VSversion=='2005'}"/>
+        <arg line="--vsnet-version=2008" if="${VSversion=='2008'}"/>
         <arg value="--release" />
         <arg value="--with-apr=../lib" />
         <arg value="--with-apr-util=../lib" />
@@ -211,7 +217,6 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <arg value="subversion_vcnet.sln" />
         <arg value="/p:Configuration=Release" />
         <arg value="/p:Platform=${platform}" />
-        <arg value="/t:__LIBS__" />
         <arg value="/t:svn" />
         <arg value="/t:svnadmin" />
         <arg value="/t:svnversion" />
