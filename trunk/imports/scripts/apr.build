@@ -2,6 +2,7 @@
 <project basedir=".." default="build">
 	<property name="aprDir" value="build/httpd/srclib/apr" />
 	<property name="aprUtilDir" value="build/httpd/srclib/apr-util" />
+	<property name="aprIconvDir" value="build/httpd/srclib/apr-iconv" />
 	<property name="httpdDir" value="build/httpd" />
 
 	<target name="upgrade-apr" depends="checkout">
@@ -138,6 +139,11 @@
 		<copy todir="${aprIncludeDir}">
 			<fileset basedir="${aprUtilDir}/xml/expat/lib">
 				<include name="expat.h" />
+			</fileset>
+		</copy>
+		<copy todir="${aprDir}/release" if="${buildHttpd=='true'}">
+			<fileset basedir="${aprDir}/libr">
+				<include name="**/*.lib" />
 			</fileset>
 		</copy>
 	</target>
