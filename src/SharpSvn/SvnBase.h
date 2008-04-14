@@ -92,6 +92,7 @@ namespace SharpSvn {
 			generic<typename TSvnTarget> where TSvnTarget : SvnTarget
 			static apr_array_header_t *AllocCopyArray(ICollection<TSvnTarget>^ targets, AprPool^ pool);
 
+			[DebuggerStepThrough]
 			static apr_array_header_t *CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool);
 
 			static SvnPropertyCollection^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);

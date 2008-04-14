@@ -123,6 +123,60 @@ namespace SharpSvn.Tests.Commands
 			this.Client.Add(newFile, a);
 		}
 
+        [Test]
+        public void TestAddAndDelete()
+        {
+            string dir = GetTempDir();
+            Uri uri = new Uri(CollabReposUri, "trunk/");
+
+            Client.CheckOut(uri, dir);
+
+            string file = Path.Combine(dir, "test.txt");
+            TouchFile(file);
+            Client.Add(file);
+
+            SvnDeleteArgs da = new SvnDeleteArgs();
+            da.Force = true;
+
+            Client.Delete(file, da);
+            Assert.That(!File.Exists(file));
+
+            file += ".2";
+
+            TouchFile(file);
+            Client.Add(file);
+
+            Client.Commit(WcPath);            
+
+            File.Delete(file);
+            Assert.That(!File.Exists(file));
+
+            da.ThrowOnError = false; // This throws an error in 1.5 but succeeds anyway
+            bool ok = Client.Delete(file, da);
+
+            Assert.That(!ok, "This fails in 1.5!");
+
+
+            file += ".3";
+
+            TouchFile(file);
+            Client.Add(file);
+
+            Client.Commit(WcPath);
+
+            File.Delete(file);
+            Assert.That(!File.Exists(file));
+
+            da.ThrowOnError = true; // This works in 1.5
+            da.KeepLocal = true;
+            Client.Delete(file, da);
+            
+            Client.Status(dir, 
+                delegate(object sender, SvnStatusEventArgs e)
+                {
+                    Assert.That(false, "Nothing modified");
+                });
+        }
 
 		private void CreateSubdirectories(out string dir1, out string dir2, out string testFile1, out string testFile2)
 		{

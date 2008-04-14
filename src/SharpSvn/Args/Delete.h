@@ -31,6 +31,7 @@ namespace SharpSvn {
 		/// and/or unversioned items. If Force is set such items will be deleted.</summary>
 		property bool Force
 		{
+			[DebuggerStepThrough]
 			bool get()
 			{
 				return _force;
@@ -43,6 +44,7 @@ namespace SharpSvn {
 
 		property bool KeepLocal
 		{
+			[DebuggerStepThrough]
 			bool get()
 			{
 				return _keepLocal;

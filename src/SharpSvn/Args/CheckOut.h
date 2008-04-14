@@ -29,7 +29,7 @@ namespace SharpSvn {
 		{
 			virtual SvnCommandType get() override sealed
 			{
-				return SvnCommandType::Update;
+				return SvnCommandType::CheckOut;
 			}
 		}
 
