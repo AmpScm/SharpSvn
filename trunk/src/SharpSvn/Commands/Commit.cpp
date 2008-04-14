@@ -111,7 +111,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		aprPaths->Handle,
 		(svn_depth_t)args->Depth,
 		args->KeepLocks,
-		args->KeepChangeList,
+		args->KeepChangeLists,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
 		pool.Handle);

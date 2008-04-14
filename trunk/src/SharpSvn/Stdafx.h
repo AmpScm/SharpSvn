@@ -35,4 +35,6 @@
 
 using System::Runtime::InteropServices::OutAttribute;
 using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
+using System::Diagnostics::DebuggerStepThroughAttribute;
+using System::Diagnostics::DebuggerDisplayAttribute;
 #include "SharpSvnStrings.h"

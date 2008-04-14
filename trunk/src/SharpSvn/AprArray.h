@@ -46,6 +46,7 @@ namespace SharpSvn {
 		internal:
 			property apr_array_header_t *Handle
 			{
+				[DebuggerStepThrough]
 				apr_array_header_t *get()
 				{
 					_pool->Ensure();

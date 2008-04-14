@@ -15,7 +15,7 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _keepLocks;
-		bool _keepChangeList;
+		bool _keepChangeLists;
 		SvnChangeListCollection^ _changelists;
 
 	public:
@@ -68,15 +68,15 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool KeepChangeList
+		property bool KeepChangeLists
 		{
 			bool get()
 			{
-				return _keepChangeList;
+				return _keepChangeLists;
 			}
 			void set(bool value)
 			{
-				_keepChangeList = value;
+				_keepChangeLists = value;
 			}
 		}
 	};
