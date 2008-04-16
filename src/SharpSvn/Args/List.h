@@ -70,7 +70,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnDirEntryItems EntryItems
+		property SvnDirEntryItems RetrieveEntries
 		{
 			SvnDirEntryItems get()
 			{
@@ -83,7 +83,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool FetchLocks
+		property bool RetrieveLocks
 		{
 			bool get()
 			{

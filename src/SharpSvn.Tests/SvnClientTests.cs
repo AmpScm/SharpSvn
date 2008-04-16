@@ -1189,7 +1189,7 @@ namespace SharpSvn.Tests
 
 				bool visited = false;
 				SvnListArgs a = new SvnListArgs();
-				a.EntryItems = SvnDirEntryItems.AllFieldsV15;
+				a.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 
 				client.List(new SvnPathTarget(WcPath), a, delegate(object sender, SvnListEventArgs e)
 					{

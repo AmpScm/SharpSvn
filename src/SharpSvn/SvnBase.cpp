@@ -22,7 +22,7 @@ static SvnBase::SvnBase()
 	System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
 
 	String^ platform = Environment::OSVersion->Platform.ToString();
-	_clientName =  platform + "/" + Environment::OSVersion->Version->ToString() +
+	_clientName = "/Static " + platform + "/" + Environment::OSVersion->Version->ToString(2) + 
 		" " + name->Name + "/" + name->Version->ToString();
 
 	_clientNames->Add(platform);

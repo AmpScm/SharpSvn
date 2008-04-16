@@ -38,9 +38,10 @@ namespace SharpSvn {
 		initonly SvnDepth _depth;
 		initonly __int64 _wcSize;
 		initonly __int64 _size;
+		initonly SvnDepth _walkerDepth;
 
 	internal:
-		SvnInfoEventArgs(String^ path, const svn_info_t* info)
+		SvnInfoEventArgs(String^ path, const svn_info_t* info, SvnDepth depth)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
@@ -76,6 +77,8 @@ namespace SharpSvn {
 				_wcSize = -1;
 			else
 				_wcSize = info->working_size;
+
+			_walkerDepth = depth;
 		}
 	public:
 		property String^ Path
@@ -83,6 +86,15 @@ namespace SharpSvn {
 			String^ get()
 			{
 				return _path;
+			}
+		}
+
+		/// <summary>Gets the depth passed to the Info call</summary>
+		property SvnDepth WalkerDepth
+		{
+			SvnDepth get()
+			{
+				return _walkerDepth; 
 			}
 		}
 
