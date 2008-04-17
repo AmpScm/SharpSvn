@@ -414,7 +414,6 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets a boolean indicating whether the node should stay after being deleted from subversion</summary>
 		property bool KeepLocal
 		{
 			bool get()
@@ -423,14 +422,13 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the depth of the working copy as specified on this node</summary>
 		property SvnDepth Depth
 		{
 			SvnDepth get()
 			{
 				return _depth;
 			}
-		}		
+		}
 
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
@@ -491,10 +489,9 @@ namespace SharpSvn {
 		initonly SvnNodeKind _oodLastCommitNodeKind;
 		String^ _oodLastCommitAuthor;
 		initonly SvnNodeKind _nodeKind;
-		initonly SvnDepth _walkerDepth;
 
 	internal:
-		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status, SvnDepth walkerDepth)
+		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
@@ -521,8 +518,6 @@ namespace SharpSvn {
 				_oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_last_cmt_date);
 				_oodLastCommitNodeKind = (SvnNodeKind)status->ood_kind;
 			}
-
-			_walkerDepth = walkerDepth;
 		}
 
 	public:
@@ -697,15 +692,6 @@ namespace SharpSvn {
 			SvnNodeKind get()
 			{
 				return _nodeKind;
-			}
-		}
-
-		/// <summary>Gets the depth passed to the Status call</summary>
-		property SvnDepth WalkerDepth
-		{
-			SvnDepth get()
-			{
-				return _walkerDepth; 
 			}
 		}
 
