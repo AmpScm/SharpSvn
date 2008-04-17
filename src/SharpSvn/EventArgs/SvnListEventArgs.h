@@ -128,10 +128,9 @@ namespace SharpSvn {
 		SvnDirEntry^ _entry;
 		Uri^ _repositoryRoot;
 		Uri^ _baseUri;
-		initonly SvnDepth _walkerDepth;
 
 	internal:
-		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot, SvnDepth walkerDepth)
+		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot)
 		{
 			if (!path)
 				throw gcnew ArgumentNullException("path");
@@ -144,7 +143,6 @@ namespace SharpSvn {
 			_pLock = lock;
 			_pAbsPath = abs_path;
 			_repositoryRoot = repositoryRoot;
-			_walkerDepth = walkerDepth;
 		}
 
 	public:
@@ -192,7 +190,6 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets lock information if RetrieveLocks is set on the args object</summary>
 		property SvnLockInfo^ Lock
 		{
 			SvnLockInfo^ get()
@@ -204,7 +201,6 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the information specified in RetrieveEntries on the args object</summary>
 		property SvnDirEntry^ Entry
 		{
 			SvnDirEntry^ get()
@@ -213,15 +209,6 @@ namespace SharpSvn {
 					_entry = gcnew SvnDirEntry(_pDirEnt);
 
 				return _entry;
-			}
-		}
-
-		/// <summary>Gets the depth passed to the List call</summary>
-		property SvnDepth WalkerDepth
-		{
-			SvnDepth get()
-			{
-				return _walkerDepth; 
 			}
 		}
 

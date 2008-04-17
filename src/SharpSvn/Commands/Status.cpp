@@ -33,7 +33,7 @@ static void svnclient_status_handler(void *baton, const char *path, svn_wc_statu
 	SvnStatusArgs^ args = dynamic_cast<SvnStatusArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	if (args)
 	{
-		SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status, args->Depth);
+		SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status);
 		try
 		{
 			args->OnStatus(e);
