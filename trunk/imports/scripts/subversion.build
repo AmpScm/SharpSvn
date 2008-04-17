@@ -195,6 +195,20 @@
           <echo message="${projtext}" file="${sourceFile}" />
         </do>
       </foreach>
+      <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
+      <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
+        <arg value="-n" />
+        <arg value="${svnBase}/subversion/" />
+      </exec>
+      <loadfile file="build/subversion-${subversionVersion}_${platform}-version.txt" property="svnWcVersion">
+        <filterchain>
+          <replacestring from='M' to='' />
+          <replacestring from='S' to='' />
+        </filterchain>
+      </loadfile>
+      <if test="${string::get-length(svnWcVersion) &gt; 20}">
+        <property name="svnWcVersion" value="?" />
+      </if>
       <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c">
 /* Appended by sharpsvn/imports/scripts/build-subversion.build */
 apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
@@ -204,6 +218,17 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
     
   return auth_baton->creds_cache;
 }
+      </echo>
+      
+      <!-- Trim whitespace (and the newline added by NAnt) -->
+      <property name="svnWcVersion" value="${string::trim(svnWcVersion)}" />
+      
+      <!-- Add more version information to the subversion binaries and functions -->
+      <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
+#undef SVN_VER_TAG
+#undef SVN_VER_NUMTAG
+#define SVN_VER_TAG  " (SharpSvn:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string:to-upper(platform)}"
+#define SVN_VER_NUMTAG "-SharpSvn-${subversionVersion}@${svnWcVersion}-${platform}"
       </echo>
     </OnceBlock>
   </target>
@@ -254,9 +279,17 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <exclude name="neon/src/COPYING.LIB" />
       </fileset>
     </copy>
-    <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
-    <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
-    <copy todir="${release}/include">
+    <if test="${platform!='win32'}">    
+      <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
+      <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
+      <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion-${platform}.exe" />
+    </if>
+    <if test="${platform=='win32'}">    
+      <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn.exe" />
+      <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin.exe" />
+      <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion.exe" />
+    </if>
+    <copy todir="${release}/include">     
       <fileset basedir="${svnBase}\subversion\include">
         <include name="**/*.h" />
       </fileset>

@@ -22,7 +22,10 @@ static SvnBase::SvnBase()
 	System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
 
 	String^ platform = Environment::OSVersion->Platform.ToString();
-	_clientName = "/Static " + platform + "/" + Environment::OSVersion->Version->ToString(2) + 
+
+	// This part is appended to something like "SVN/1.5.0 (SharpSvn:branch/1.5.X@12345) WIN32/" to form the user agent on web requests
+
+	_clientName = Environment::OSVersion->Version->ToString(2) + 
 		" " + name->Name + "/" + name->Version->ToString();
 
 	_clientNames->Add(platform);
