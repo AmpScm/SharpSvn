@@ -51,7 +51,7 @@
 			<Svn verbose="true">
 				<arg value="co" />
 				<arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnBuildType == 'trunk'}" />
-				<arg value="http://svn.collab.net/repos/svn/tags/" if="${svnBuildType == 'tag'}" />
+				<arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
 				<arg value="http://svn.collab.net/repos/svn/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />				
 				<arg value="${svnBase}" />
 			</Svn>
