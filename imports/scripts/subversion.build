@@ -227,7 +227,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
 #undef SVN_VER_TAG
 #undef SVN_VER_NUMTAG
-#define SVN_VER_TAG  " (SharpSvn:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string:to-upper(platform)}"
+#define SVN_VER_TAG  " (SharpSvn:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
 #define SVN_VER_NUMTAG "-SharpSvn-${subversionVersion}@${svnWcVersion}-${platform}"
       </echo>
     </OnceBlock>
