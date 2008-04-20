@@ -86,5 +86,26 @@ namespace SharpSvn.Tests.Commands
 					Assert.That(reached, Is.False);
 			}
 		}
+
+        [Test]
+        public void WcDirMissing()
+        {
+            string dir = GetTempDir();
+            SvnUpdateResult r;
+
+            Assert.That(Client.CheckOut(CollabReposUri, dir, out r));
+
+            Directory.Move(Path.Combine(dir, "trunk"), Path.Combine(dir, "banaan"));
+
+            SvnInfoEventArgs iaParent;
+            SvnInfoEventArgs iaTrunk;
+
+            Client.GetInfo(dir, out iaParent);
+            Client.GetInfo(Path.Combine(dir, "trunk"), out iaTrunk);
+
+            Assert.That(iaParent.FullPath, Is.EqualTo(dir));
+            Assert.That(iaTrunk.FullPath, Is.Not.EqualTo(dir));
+            Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
+        }
 	}
 }
