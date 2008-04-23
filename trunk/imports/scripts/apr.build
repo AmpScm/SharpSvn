@@ -1,150 +1,171 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-	<property name="aprDir" value="build/httpd/srclib/apr" />
-	<property name="aprUtilDir" value="build/httpd/srclib/apr-util" />
-	<property name="aprIconvDir" value="build/httpd/srclib/apr-iconv" />
-	<property name="httpdDir" value="build/httpd" />
+  <property name="aprDir" value="build/httpd/srclib/apr" />
+  <property name="aprUtilDir" value="build/httpd/srclib/apr-util" />
+  <property name="aprIconvDir" value="build/httpd/srclib/apr-iconv" />
+  <property name="httpdDir" value="build/httpd" />
 
-	<target name="upgrade-apr" depends="checkout">
-		<OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
-			<foreach item="File" property="project">
-				<in>
-					<items>
-						<include name="${aprDir}/**/*.dsp" />
-						<include name="${aprUtilDir}/**/*.dsp" />
-						<include name="${httpdDir}/**/*.dsp" if="${buildHttpd == 'true'}" />
-					</items>
-				</in>
-				<do>
-					<VCBuild platform="${platform}">
-						<arg line="/upgrade" />
-						<arg line="${project}" />
-					</VCBuild>
-				</do>
-			</foreach>
-		</OnceBlock>
-	</target>
-	<target name="prepare-apr" depends="upgrade-apr">
-		<OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">			
-			<foreach item="File" property="vcproj">
-				<in>
-					<items>						
-						<include name="${aprDir}/**/*.vcproj" />
-						<include name="${aprUtilDir}/**/*.vcproj" />
-						<include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
-					</items>
-				</in>
-				<do>
-					<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-				</do>
-			</foreach>
-			<foreach item="File" property="vcproj">
-				<in>
-					<items>						
-						<include name="${aprDir}/**/*.vcproj" />
-						<include name="${aprUtilDir}/**/*.vcproj" />
-						<include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
-					</items>
-				</in>
-				<do>
-					<echo message="Patching ${vcproj}" />
-					<loadfile file="${vcproj}" property="projtext">
-						<filterchain>
-							<replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;WIN32' />
-							<replacestring from='PreprocessorDefinitions="NDEBUG' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;NDEBUG' />
-							<replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib' />
-							<!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
-							<replacestring from='Optimization="2"' to='Optimization="1"' />
-							<replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
-							<!-- Increase security a little little bit in some cases -->
-							<replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
-						</filterchain>
-					</loadfile>
-					<echo message="${projtext}" file="${vcproj}" />
-				</do>
-			</foreach>
-			<foreach item="File" property="winHeader">
-				<in>
-					<items>
-						<include name="${httpdDir}/**/*.hw" if="${buildHttpd == 'true'}" />
-						<include name="${aprDir}/**/*.hw" />
-						<include name="${aprUtilDir}/**/*.hw" />
-						<include name="${aprUtilDir}/**/expat.h.in" />
-					</items>
-				</in>
-				<do>
-					<property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
-					<loadfile file="${winHeader}" property="headertext">
-						<filterchain>
-							<replacestring from='#define APU_HAVE_APR_ICONV' to='#define APU_HAVE_APR_ICONV     0 //' />
-							<replacestring from='#define APR_HAVE_IPV6' to='#define APR_HAVE_IPV6 1 //' />
-						</filterchain>
-					</loadfile>
-					<echo message="${headertext}" file="${winHeader2}" />
-				</do>
-			</foreach>
-		</OnceBlock>
-	</target>
-	<target name="build-apr" depends="download,extract,checkout, prepare-apr">
-		<OnceBlock file="build/apr-${aprVersion}_${platform}.build">
-			<!-- Prepare static builds (requires changed build order) -->
-			<foreach item="File" property="project">
-				<in>
-					<items>
-						<include name="${aprDir}/apr.vcproj" />
-						<include name="${aprUtilDir}/aprutil.vcproj" />
-						<include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
-					</items>
-				</in>
-				<do>
-					<VCBuild platform="${platform}">
-						<arg value="${project}" />
-						<arg value="${Configuration}|${platform}" />
-					</VCBuild>
-				</do>
-			</foreach>
-		</OnceBlock>		
-    
-		<copy todir="${release}/lib" flatten="true">
-			<fileset>
-				<include name="${aprDir}/LibR/apr-1.lib" />
-				<include name="${aprDir}/LibR/*.pdb" />
-				<include name="${aprUtilDir}//LibR/aprutil-1.lib" />
-				<include name="${aprUtilDir}//LibR/*.pdb" />
-				<include name="${aprUtilDir}//xml/expat/lib/LibR/xml.lib" />
-				<include name="${aprUtilDir}//xml/expat/lib/LibR/*.pdb" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/lib-x64" flatten="true">
-			<fileset>
-				<include name="${aprDir}/x64/LibR/apr-1.lib" />
-				<include name="${aprDir}/x64/LibR/*.pdb" />
-				<include name="${aprUtilDir}/x64/LibR/aprutil-1.lib" />
-				<include name="${aprUtilDir}/x64/LibR/*.pdb" />
-				<include name="${aprUtilDir}/xml/expat/lib/x64/LibR/xml.lib" />
-				<include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.pdb" />
-			</fileset>
-		</copy>
-		<property name="aprIncludeDir" value="${release}/include/apr-1" />
-		<copy todir="${aprIncludeDir}">
-			<fileset basedir="${aprDir}/include">
-				<include name="*.h" />
-			</fileset>
-		</copy>
-		<copy todir="${aprIncludeDir}">
-			<fileset basedir="${aprUtilDir}/include">
-				<include name="*.h" />
-			</fileset>
-		</copy>
-		<copy todir="${aprIncludeDir}">
-			<fileset basedir="${aprUtilDir}/xml/expat/lib">
-				<include name="expat.h" />
-			</fileset>
-		</copy>
-		<copy todir="${aprDir}/release" if="${buildHttpd=='true'}">
-			<fileset basedir="${aprDir}/libr">
-				<include name="**/*.lib" />
-			</fileset>
-		</copy>
-	</target>
+  <target name="upgrade-apr" depends="checkout">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
+      <exec program="perl.exe" workingdir="build/httpd">
+        <arg value="srclib/apr/build/cvtdsp.pl" />
+        <arg value="-2005" />
+      </exec>
+      <foreach item="File" property="project">
+        <in>
+          <items>
+            <include name="${aprDir}/**/*.dsp" />
+            <include name="${aprUtilDir}/**/*.dsp" />
+            <include name="${httpdDir}/**/*.dsp" if="${buildHttpd == 'true'}" />
+          </items>
+        </in>
+        <do>
+          <VCBuild platform="${platform}">
+            <arg line="/upgrade" />
+            <arg line="${project}" />
+          </VCBuild>
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="prepare-apr" depends="upgrade-apr">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
+      <foreach item="File" property="vcproj">
+        <in>
+          <items>
+            <include name="${aprDir}/**/*.vcproj" />
+            <include name="${aprUtilDir}/**/*.vcproj" />
+            <include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
+          </items>
+        </in>
+        <do>
+          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+        </do>
+      </foreach>
+      <foreach item="File" property="vcproj">
+        <in>
+          <items>
+            <include name="${aprDir}/apr.vcproj" />
+            <include name="${aprUtilDir}/aprutil.vcproj" />
+            <include name="${aprUtilDir}/xml/expat/lib/*.vcproj" />
+            <!--include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" /-->
+          </items>
+        </in>
+        <do>
+          <echo message="Patching ${vcproj}" />
+          <loadfile file="${vcproj}" property="projtext">
+            <filterchain>
+              <replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;WIN32' />
+              <replacestring from='PreprocessorDefinitions="NDEBUG' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;NDEBUG' />
+              <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib' />
+              <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
+              <replacestring from='Optimization="2"' to='Optimization="1"' />
+              <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
+              <!-- Increase security a little little bit in some cases -->
+              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${vcproj}" />
+        </do>
+      </foreach>
+      <foreach item="File" property="winHeader">
+        <in>
+          <items>
+            <include name="${httpdDir}/**/*.hw" if="${buildHttpd == 'true'}" />
+            <include name="${aprDir}/**/*.hw" />
+            <include name="${aprUtilDir}/**/*.hw" />
+            <include name="${aprUtilDir}/**/expat.h.in" />
+          </items>
+        </in>
+        <do>
+          <property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
+          <loadfile file="${winHeader}" property="headertext">
+            <filterchain>
+              <replacestring from='#define APU_HAVE_APR_ICONV' to='#define APU_HAVE_APR_ICONV     0 //' />
+              <replacestring from='#define APR_HAVE_IPV6' to='#define APR_HAVE_IPV6 1 //' />
+            </filterchain>
+          </loadfile>
+          <echo message="${headertext}" file="${winHeader2}" />
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="build-apr" depends="download,extract,checkout, prepare-apr">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.build">
+      <!-- Prepare static builds (requires changed build order) -->
+      <foreach item="File" property="project">
+        <in>
+          <items>
+            <include name="${aprDir}/apr.vcproj" />
+            <include name="${aprUtilDir}/aprutil.vcproj" />
+            <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
+          </items>
+        </in>
+        <do>
+          <VCBuild platform="${platform}">
+            <arg value="${project}" />
+            <arg value="${Configuration}|${platform}" />
+          </VCBuild>
+        </do>
+      </foreach>
+    </OnceBlock>
+
+    <copy todir="${release}/lib" flatten="true">
+      <fileset>
+        <include name="${aprDir}/LibR/apr-1.lib" />
+        <include name="${aprDir}/LibR/*.pdb" />
+        <include name="${aprUtilDir}/LibR/aprutil-1.lib" />
+        <include name="${aprUtilDir}/LibR/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/xml.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/LibR/apr-1.lib" />
+        <include name="${aprDir}/x64/LibR/*.pdb" />
+        <include name="${aprUtilDir}/x64/LibR/aprutil-1.lib" />
+        <include name="${aprUtilDir}/x64/LibR/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/xml.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.pdb" />
+      </fileset>
+    </copy>
+    <property name="aprIncludeDir" value="${release}/include/apr-1" />
+    <copy todir="${aprIncludeDir}">
+      <fileset basedir="${aprDir}/include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${aprIncludeDir}">
+      <fileset basedir="${aprUtilDir}/include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${aprIncludeDir}">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib">
+        <include name="expat.h" />
+      </fileset>
+    </copy>
+    <copy todir="${aprDir}/release" if="${buildHttpd=='true'}">
+      <fileset basedir="${aprDir}/libr">
+        <include name="**/*.lib" />
+      </fileset>
+    </copy>
+  </target>
+  <target name="build-httpd" depends="build-apr">
+    <if test="${platform != 'win32'}">
+      <fail message="Building apache is currently only supported for platform win32" />
+    </if>
+    <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
+      <copy todir="${httpdDir}" file="scripts/apache.sln" />
+
+      <exec program="msbuild.exe" workingdir="${httpdDir}">
+        <arg value="apache.sln" />
+        <arg value="/P:configuration=Release" />
+        <arg value="/P:platform=Win32" />
+        <arg value="/t:httpd" />
+        <arg value="/t:mod_dav" />
+      </exec>
+    </OnceBlock>
+  </target>
 </project>

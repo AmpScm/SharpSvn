@@ -1,13 +1,18 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 
+
   <target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-apr">
-	<if test="${VSversion != '2005'}">
-		<VCBuild platform="${platform}">
-			<arg line="/upgrade" />
-			<arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
-		</VCBuild>
-	</if>
+    <if test="${VSversion != '2005'}">
+      <VCBuild platform="${platform}">
+        <arg line="/upgrade" />
+        <arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
+      </VCBuild>
+    </if>
+    <if test="${(buildHttpd == 'true') and (platform == 'win32')}">
+      <call target="build-httpd" />
+      <copy todir="${httpdDir}/release" file="${release}/lib/libeay32.lib" />
+    </if>
     <VCBuild platform="${platform}" configuration="release">
       <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
     </VCBuild>
@@ -35,19 +40,15 @@
           <include name="*.lib" />
         </fileset>
       </copy>
-      <copy todir="build/win32/lib/release">
-        <fileset basedir="${release}/lib">
-          <include name="xml.lib" />
-          <include name="libeay32.lib" />
-          <include name="ssleay32.lib" />
-          <include name="apr-1.lib" />
-          <include name="aprutil-1.lib" />
-          <include name="intl3_svn.lib" />
-        </fileset>
-      </copy>
       <copy todir="build/win32/lib/lib">
         <fileset basedir="${release}/lib">
           <include name="libdb*.lib" />
+          <include name="libeay32.lib" />
+          <include name="ssleay32.lib" />
+          <include name="intl3_svn.lib" />
+          <include name="xml.lib" />
+          <include name="apr-1.lib" />
+          <include name="aprutil-1.lib" />          
         </fileset>
       </copy>
       <copy todir="build/win32/lib/zlib" flatten="true">
@@ -64,7 +65,7 @@
           <include name="*.lib" />
         </fileset>
       </copy>
-      <copy todir="build/x64/lib/release">
+      <copy todir="build/x64/lib/lib">
         <fileset basedir="${release}/lib-x64">
           <include name="xml.lib" />
           <include name="libeay32.lib" />
@@ -72,10 +73,6 @@
           <include name="apr-1.lib" />
           <include name="aprutil-1.lib" />
           <include name="intl3_svn.lib" />
-        </fileset>
-      </copy>
-      <copy todir="build/x64/lib/lib">
-        <fileset basedir="${release}/lib-x64">
           <include name="libdb*.lib" />
         </fileset>
       </copy>
@@ -126,8 +123,9 @@
         <arg line="--vsnet-version=2005" if="${VSversion=='2005'}"/>
         <arg line="--vsnet-version=2008" if="${VSversion=='2008'}"/>
         <arg value="--release" />
+        <arg value="--with-httpd=../../httpd" if="${(buildHttpd == 'true') and (platform == 'win32')}" />
         <arg value="--with-apr=../lib" />
-        <arg value="--with-apr-util=../lib" />
+        <arg value="--with-apr-util=../lib" />        
         <arg value="--with-berkeley-db=../lib" />
         <arg value="--with-openssl=../openssl-${opensslVersion}" />
         <arg value="--with-zlib=../lib/zlib" />
