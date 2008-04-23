@@ -56,6 +56,7 @@ namespace SharpSvn {
 		Write,
 		// Wc library helper
 		GetWorkingCopyInfo = 0x1001,
+		GetWorkingCopyVersion
 		// Add new members at the end!
 
 	};

@@ -32,13 +32,9 @@ namespace SharpSvn.Tests.Commands
 			this.RunCommand("svn", "ps --revprop -r HEAD foo bar " + this.ReposUrl);
 			this.RunCommand("svn", "ps --revprop -r HEAD kung foo " + this.ReposUrl);
 
-			int headRev = int.Parse(this.RunCommand("svnlook", "youngest " + this.ReposPath));
-
 			SvnPropertyCollection spc;
 			Assert.That(Client.GetRevisionPropertyList(new SvnUriTarget(ReposUrl, SvnRevision.Head), out spc));
 
-
-			//Assert.That( rev, Is.EqualTo( headRev), "Revision wrong" );
 			Assert.That(spc["foo"].ToString(), Is.EqualTo("bar"), "Wrong property value");
 			Assert.That(spc["kung"].ToString(), Is.EqualTo("foo"), "Wrong property value");
 		}

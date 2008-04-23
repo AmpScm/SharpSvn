@@ -106,6 +106,16 @@ namespace SharpSvn.Tests.Commands
             Assert.That(iaParent.FullPath, Is.EqualTo(dir));
             Assert.That(iaTrunk.FullPath, Is.Not.EqualTo(dir));
             Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
+
+            SvnWorkingCopyVersion ver;
+            Assert.That(Client.GetWorkingCopyVersion(dir, out ver));
+            Assert.That(ver, Is.Not.Null);
+
+            Assert.That(ver.Modified, Is.True);
+            Assert.That(ver.Switched, Is.False);
+            Assert.That(ver.Start, Is.EqualTo(17));
+            Assert.That(ver.End, Is.EqualTo(17));
+            Assert.That(ver.IncompleteWorkingCopy, Is.False);
         }
 	}
 }

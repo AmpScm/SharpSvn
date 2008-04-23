@@ -69,7 +69,6 @@ namespace SharpSvn.Tests.Commands
 			}
 			finally
 			{
-				svnserve.CloseMainWindow();
 				System.Threading.Thread.Sleep(500);
 				if (!svnserve.HasExited)
 				{

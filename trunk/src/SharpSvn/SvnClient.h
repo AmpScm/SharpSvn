@@ -79,11 +79,13 @@ namespace SharpSvn {
 	ref class SvnDeleteRepositoryArgs;
 	ref class SvnRecoverRepositoryArgs;
 	ref class SvnGetWorkingCopyStateArgs;
+	ref class SvnGetWorkingCopyVersionArgs;
 
 	ref class SvnCommitResult;
 	ref class SvnUpdateResult;
 	ref class SvnClientReporter;
 	ref class SvnWorkingCopyState;
+	ref class SvnWorkingCopyVersion;
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -1109,6 +1111,13 @@ namespace SharpSvn {
 		bool GetWorkingCopyState(String^ targetPath, [Out] SvnWorkingCopyState^% result);
 		/// <summary>Gets the Pristine file and/or text file status of a working copy path</summary>
 		bool GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateArgs^ args, [Out] SvnWorkingCopyState^% result);
+
+
+	public:
+		/// <summary>Gets the working copy version (<c>svnversion</c>)</summary>
+		bool GetWorkingCopyVersion(String^ targetPath, [Out] SvnWorkingCopyVersion^% version);
+		/// <summary>Gets the working copy version (<c>svnversion</c>)</summary>
+		bool GetWorkingCopyVersion(String^ targetPath, SvnGetWorkingCopyVersionArgs^ args, [Out] SvnWorkingCopyVersion^% version);
 
 	private:
 		~SvnClient();

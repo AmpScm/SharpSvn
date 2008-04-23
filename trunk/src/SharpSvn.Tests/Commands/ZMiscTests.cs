@@ -59,13 +59,14 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestUuidFromUrl()
 		{
-			string realUuid = this.RunCommand("svnlook", "uuid " + this.ReposPath).Trim();
-
 			Guid id;
 			Assert.That(this.Client.GetRepositoryIdFromUri(this.ReposUrl, out id));
-			Assert.That(id.ToString(), Is.EqualTo(new Guid(realUuid).ToString()), "UUID wrong");
+            Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
 		}
 
+        /// <summary>
+        /// Tests the cancel.
+        /// </summary>
 		[Test]
 		[ExpectedException(typeof(SvnOperationCanceledException))]
 		public void TestCancel()

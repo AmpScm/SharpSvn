@@ -233,3 +233,194 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 
 	return path;
 }
+
+static bool IsSeparator(String^ v, int index)
+{
+	if (index < 0 || (index >= v->Length))
+		return false;
+
+	wchar_t c = v[index];
+
+	return (c == Path::DirectorySeparatorChar) || (c == Path::AltDirectorySeparatorChar);
+}
+
+static bool IsDirSeparator(String^ v, int index)
+{
+	if (index < 0 || (index >= v->Length))
+		return false;
+
+	return (v[index] == Path::DirectorySeparatorChar);
+}
+
+static bool IsInvalid(String^ v, int index)
+{
+	if (index < 0 || (index >= v->Length))
+		return false;
+
+	return 0 <= Array::IndexOf(Path::InvalidPathChars, v[index]);
+}
+
+bool SvnTools::IsAbsolutePath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentException("path");
+
+	int c = path->Length;
+
+	if(path->Length < 3)
+		return false;
+
+	int i, n;
+	if (IsSeparator(path, 0))
+	{
+		if(!IsSeparator(path, 1))
+			return false;
+
+		for(i = 2; i < path->Length; i++)
+		{
+			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+				break;
+		}
+
+		if (i == 2 || !IsSeparator(path, i))
+			return false;
+
+		i++;
+
+		n = i;
+
+		for(; i < path->Length; i++)
+		{
+			if(!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+				break;
+		}
+
+		if(i == n || !IsSeparator(path, i))
+			return false;
+
+		i++;
+	}
+	else if ((path[1] != ':') || !IsSeparator(path, 2))
+		return false;
+	else if (!(((path[0] >= 'A') && (path[0] <= 'Z')) || ((path[0] >= 'a') && (path[0] <= 'z'))))
+		return false;
+	else
+		i = 3;	
+
+	while(i < c)
+	{
+		if (i >= c && IsSeparator(path, i))
+			return false; // '\'-s behind each other
+		
+		if(i < c && path[i] == '.')
+		{
+			int n = i;
+			n++;
+
+			if(n < c && path[n] == '.')
+				n++;
+
+			if (IsSeparator(path, n))
+				return false; // '\'-s behind each other
+		}
+
+		n = i;
+
+		while (i < c && !IsInvalid(path, i) && !IsSeparator(path, i))
+			i++;
+
+		if (n == i)
+			return false;
+		else if (i == c)
+			return true;
+		else if (!IsSeparator(path, i++))
+			return false;
+
+		if(i == c)
+			return false; // We don't like paths with a '\' at the end
+	}	
+
+	return true;
+}
+
+bool SvnTools::IsNormalizedFullPath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentException("path");
+
+	int c = path->Length;
+
+	if(path->Length < 3)
+		return false;
+
+	int i, n;
+	if (IsDirSeparator(path, 0))
+	{
+		if(!IsDirSeparator(path, 1))
+			return false;
+
+		for(i = 2; i < path->Length; i++)
+		{
+			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+				break;
+		}
+
+		if (i == 2 || !IsDirSeparator(path, i))
+			return false;
+
+		i++;
+
+		n = i;
+
+		for(; i < path->Length; i++)
+		{
+			if(!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+				break;
+		}
+
+		if(i == n || !IsDirSeparator(path, i))
+			return false;
+
+		i++;
+	}
+	else if ((path[1] != ':') || !IsDirSeparator(path, 2))
+		return false;
+	else if (!((path[0] >= 'A') && (path[0] <= 'Z')))
+		return false;
+	else
+		i = 3;	
+
+	while(i < c)
+	{
+		if (i >= c && IsDirSeparator(path, i))
+			return false; // '\'-s behind each other
+		
+		if(i < c && path[i] == '.')
+		{
+			int n = i;
+
+			while(n < c && path[n] == '.')
+				n++;
+			
+			if (IsSeparator(path, n) || n >= c)
+				return false; // Relative path
+		}
+
+		n = i;
+
+		while (i < c && !IsInvalid(path, i) && !IsDirSeparator(path, i) && path[i] != Path::AltDirectorySeparatorChar)
+			i++;
+
+		if (n == i)
+			return false;
+		else if (i == c)
+			return true;
+		else if (!IsDirSeparator(path, i++))
+			return false;
+
+		if(i == c)
+			return false; // We don't like paths with a '\' at the end
+	}	
+
+	return true;
+}
