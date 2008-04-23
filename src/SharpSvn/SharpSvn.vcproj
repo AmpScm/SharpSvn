@@ -806,6 +806,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Import.cpp"
 					>
 				</File>
@@ -975,6 +979,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\GetWorkingCopyState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetWorkingCopyVersion.h"
 					>
 				</File>
 				<File
@@ -1261,6 +1269,10 @@
 					RelativePath=".\SvnUriTarget.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnWorkingCopyVersion.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Types Sources"
@@ -1295,7 +1307,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Utils Args"
+				Name="Tools Args"
 				>
 				<File
 					RelativePath=".\SvnTools.h"
@@ -1303,7 +1315,7 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Utils Sources"
+				Name="Tools Sources"
 				>
 				<File
 					RelativePath=".\SvnTools.cpp"

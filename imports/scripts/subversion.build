@@ -90,9 +90,9 @@
       </fileset>
     </copy>
     <copy tofile="build/${platform}/lib/release/libapr-1.lib"
-			file="build/${platform}/lib/release/apr-1.lib" />
+			file="build/${platform}/lib/lib/apr-1.lib" />
     <copy tofile="build/${platform}/lib/release/libaprutil-1.lib"
-			file="build/${platform}/lib/release/aprutil-1.lib" />
+			file="build/${platform}/lib/lib/aprutil-1.lib" />
 
   </target>
 
@@ -163,7 +163,8 @@
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
               <replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
-              <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib' />
+              <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib zlibstat.lib' />
+              <replacestring from='AdditionalDependencies="advapi32.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib advapi32.lib' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
               <replacestring from='Optimization="2"' to='Optimization="1"' />
               <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
@@ -243,6 +244,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <arg value="/t:svn" />
         <arg value="/t:svnadmin" />
         <arg value="/t:svnversion" />
+        <arg value="/t:svnserve" />
       </exec>
     </OnceBlock>
   </target>
@@ -279,11 +281,13 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
     </copy>
     <if test="${platform!='win32'}">    
       <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
+      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve-${platform}.exe" />
       <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
       <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion-${platform}.exe" />
     </if>
     <if test="${platform=='win32'}">    
       <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn.exe" />
+      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve.exe" />
       <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin.exe" />
       <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion.exe" />
     </if>
