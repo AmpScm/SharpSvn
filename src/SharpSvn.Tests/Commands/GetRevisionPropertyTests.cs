@@ -31,9 +31,6 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestRevPropGetDir()
 		{
-
-			int headRev = int.Parse(this.RunCommand("svnlook", "youngest " + this.ReposPath));
-
 			this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + this.ReposUrl);
 
 			string value;

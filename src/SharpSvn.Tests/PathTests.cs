@@ -7,10 +7,10 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NUnit.Framework.SyntaxHelpers;
 
-namespace SharpSvn.Tests.Commands
+namespace SharpSvn.Tests
 {
 	[TestFixture]
-	public class PathCasingTests
+	public class PathTests
 	{
 		readonly string _casedFile;
 
@@ -21,7 +21,7 @@ namespace SharpSvn.Tests.Commands
 			int cchBuffer);
 
 
-		public PathCasingTests()
+        public PathTests()
 		{
 			_casedFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + "-CaSeD.TxT");
 			File.WriteAllText(_casedFile, "hi!");
@@ -84,6 +84,27 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(Path.GetFullPath("C:\\"), Is.Not.EqualTo(Path.GetFullPath("c:\\")));
 		}
+
+        [Test]
+        public void TestNormalizationTesters()
+        {
+            Assert.That(SvnTools.IsNormalizedFullPath("a:\\"), Is.False, "a:\\ is not normalized");
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\"), Is.True, "A:\\ is normalized");
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\\\"), Is.False, "A:\\\\ is not normalized");
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\.\\"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\..\\"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\...\\"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\..."), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\.svn"), Is.True);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\.svn\\"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\\t.svn"), Is.False);
+
+
+            Assert.That(SvnTools.IsAbsolutePath("a:\\"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath("A:\\"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath("a:/sdfsdfsd"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath("A:\\dfsdfds"), Is.True);
+        }
 
 	}
 }

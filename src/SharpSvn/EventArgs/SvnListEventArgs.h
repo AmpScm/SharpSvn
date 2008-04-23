@@ -190,6 +190,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets lock information if RetrieveLocks is set on the args object</summary>
 		property SvnLockInfo^ Lock
 		{
 			SvnLockInfo^ get()
@@ -201,6 +202,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the information specified in RetrieveEntries on the args object</summary>
 		property SvnDirEntry^ Entry
 		{
 			SvnDirEntry^ get()

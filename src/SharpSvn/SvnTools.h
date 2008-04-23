@@ -44,5 +44,15 @@ namespace SharpSvn {
 		/// Normalizes the path to a full path
 		/// </summary>
 		static String^ GetNormalizedFullPath(String^ path);
+
+		/// <summary>
+		/// Checks whether normalization is required
+		/// </summary>
+		static bool IsNormalizedFullPath(String^ path);
+
+		/// <summary>
+		/// Checks whether the specified path is an absolute path
+		/// </summary>
+		static bool IsAbsolutePath(String^ path);
 	};
 }

@@ -300,7 +300,7 @@ namespace SharpSvn.Tests.Commands
 		public string RunCommand(string command, string args)
 		{
 			if (command == "svn")
-				command = Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svn-win32.exe"));
+				command = Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svn.exe"));
 
 			//System.Diagnostics.Trace.Assert(File.Exists(command), "Command exists");
 
@@ -483,7 +483,7 @@ namespace SharpSvn.Tests.Commands
 		/// <returns></returns>
 		protected Process StartSvnServe(string root)
 		{
-			ProcessStartInfo psi = new ProcessStartInfo("svnserve",
+            ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svn.exe")),
 				String.Format("--daemon --root {0} --listen-host 127.0.0.1 --listen-port {1}", root,
 				PortNumber));
 			//psi.UseShellExecute = true;
