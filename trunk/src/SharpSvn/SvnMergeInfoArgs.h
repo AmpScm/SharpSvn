@@ -65,4 +65,33 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnMergeIntersectArgs : SvnClientArgs
+	{
+		bool _dontConsiderInheritance;
+
+	public:
+		SvnMergeIntersectArgs ()
+		{}
+
+		property bool ConsiderInheritance
+		{
+			bool get()
+			{
+				return !_dontConsiderInheritance;
+			}
+			void set(bool value)
+			{
+				_dontConsiderInheritance = !value;
+			}
+		}
+
+		virtual property SvnCommandType CommandType
+		{
+			virtual SvnCommandType get() override sealed
+			{
+				return SvnCommandType::Unknown;
+			}
+		}
+	};
+
 }
