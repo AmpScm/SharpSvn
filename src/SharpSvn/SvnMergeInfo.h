@@ -114,6 +114,7 @@ namespace SharpSvn {
 	ref class SvnMergeItem;	
 	ref class SvnMergeDiffArgs;
 	ref class SvnMergeRemoveArgs;
+	ref class SvnMergeIntersectArgs;
 
 	public ref class SvnMergeItemCollection sealed : KeyedCollection<Uri^, SvnMergeItem^>
 	{
@@ -149,6 +150,8 @@ namespace SharpSvn {
 		/// <remarks>ConsiderInheritance is ignored at this time</remarks>
 		bool TryRemove(ICollection<SvnMergeItem^>^ items, SvnMergeRemoveArgs^ args, [Out] SvnMergeItemCollection^% rest);
 		bool TryIntersect(ICollection<SvnMergeItem^>^ to, [Out] SvnMergeItemCollection^% intersected);
+		/// <remarks>ConsiderInheritance is ignored at this time</remarks>
+		bool TryIntersect(ICollection<SvnMergeItem^>^ to, SvnMergeIntersectArgs^ args, [Out] SvnMergeItemCollection^% intersected);
 
 	public:
 		virtual String^ ToString() override;
@@ -183,6 +186,7 @@ namespace SharpSvn {
 		bool TryRemove(ICollection<SvnMergeRange^>^ items, [Out] SvnMergeRangeCollection^% rest);
 		bool TryRemove(ICollection<SvnMergeRange^>^ items, SvnMergeRemoveArgs^ args, [Out] SvnMergeRangeCollection^% rest);
 		bool TryIntersect(ICollection<SvnMergeRange^>^ to, [Out] SvnMergeRangeCollection^% intersected);
+		bool TryIntersect(ICollection<SvnMergeRange^>^ to, SvnMergeIntersectArgs^ args, [Out] SvnMergeRangeCollection^% intersected);
 
 	public:
 		virtual String^ ToString() override;

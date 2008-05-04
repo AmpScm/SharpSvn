@@ -165,8 +165,16 @@ bool SvnMergeRangeCollection::TryRemove(ICollection<SvnMergeRange^>^ items, SvnM
 
 bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, [Out] SvnMergeRangeCollection^% intersected)
 {
+	return TryIntersect(to, gcnew SvnMergeIntersectArgs(), intersected);
+}
+
+bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, SvnMergeIntersectArgs^ args, [Out] SvnMergeRangeCollection^% intersected)
+{
 	if (!to)
 		throw gcnew ArgumentNullException("to");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
 
 	SvnMergeRangeCollection^ coll = dynamic_cast<SvnMergeRangeCollection^>(to);
 
@@ -179,7 +187,7 @@ bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, [Out
 
 	apr_array_header_t* result = nullptr;
 
-	svn_error_t* r = svn_rangelist_intersect(&result, AllocMergeRange(%pool), coll->AllocMergeRange(%pool), pool.Handle);
+	svn_error_t* r = svn_rangelist_intersect(&result, AllocMergeRange(%pool), coll->AllocMergeRange(%pool), args->ConsiderInheritance, pool.Handle);
 
 	if(r)
 	{
@@ -211,6 +219,6 @@ String^ SvnMergeRangeCollection::ToString()
 	else if(!result || !result->data)
 		return "";
 	
-	return SvnBase::Utf8_PtrToString(result->data, result->len);
+	return SvnBase::Utf8_PtrToString(result->data, (int)result->len);
 }
 

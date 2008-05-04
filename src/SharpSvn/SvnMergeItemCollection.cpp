@@ -174,8 +174,15 @@ bool SvnMergeItemCollection::TryRemove(ICollection<SvnMergeItem^>^ items, SvnMer
 
 bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, [Out] SvnMergeItemCollection^% intersected)
 {
+	return TryIntersect(to, gcnew SvnMergeIntersectArgs(), intersected);
+}
+
+bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, SvnMergeIntersectArgs^ args, [Out] SvnMergeItemCollection^% intersected)
+{
 	if (!to)
 		throw gcnew ArgumentNullException("to");
+	else if(!args)
+		throw gcnew ArgumentNullException("args");
 
 	SvnMergeItemCollection^ coll = dynamic_cast<SvnMergeItemCollection^>(to);
 
@@ -220,7 +227,7 @@ String^ SvnMergeItemCollection::ToString()
 	else if(!result || !result->data)
 		return "";
 	
-	return SvnBase::Utf8_PtrToString(result->data, result->len);
+	return SvnBase::Utf8_PtrToString(result->data, (int)result->len);
 }
 
 
