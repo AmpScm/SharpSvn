@@ -483,7 +483,7 @@ namespace SharpSvn.Tests.Commands
 		/// <returns></returns>
 		protected Process StartSvnServe(string root)
 		{
-            ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svn.exe")),
+            ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svnserve.exe")),
 				String.Format("--daemon --root {0} --listen-host 127.0.0.1 --listen-port {1}", root,
 				PortNumber));
 			//psi.UseShellExecute = true;
