@@ -5,7 +5,9 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "DelayImp.h"
 
+#include "db.h"
 #include "svn_dso.h"
 #include "svn_utf.h"
 #define SHARPSVN_NO_ABORT
@@ -79,14 +81,43 @@ void __cdecl sharpsvn_abort_handler()
 	throw gcnew SvnThreadAbortException();
 }
 
+static bool s_loaded = false, s_checked = false;
+svn_error_t* __cdecl sharpsvn_check_bdb()
+{
+	if (s_loaded)
+		return NULL;
+	
+	if(!s_checked)
+	{
+		s_checked = true;
+
+		try
+		{
+			int major, minor;
+			db_version(&major, &minor, NULL);
+			s_loaded = true;
+		}
+		catch(...)
+		{}
+	}
+
+
+	if(!s_loaded)
+		return svn_error_create(SVN_ERR_VERSION_MISMATCH, nullptr, "Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) not available");
+
+	return NULL;
+}
 
 #pragma unmanaged
 static bool SetHandler()
 {
 	sharpsvn_abort_t* handler = &sharpsvn_abort_handler;
 
+	InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
+
 	return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
 }
+
 #pragma managed
 void SvnBase::InstallAbortHandler()
 {

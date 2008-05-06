@@ -71,6 +71,7 @@
     <Compile Include="Commands\CommitTests.cs" />
     <Compile Include="Commands\CopyTests.cs" />
     <Compile Include="Commands\CreateDirectoryTests.cs" />
+    <Compile Include="Commands\CreateRepositoryTests.cs" />
     <Compile Include="Commands\DeleteTests.cs" />
     <Compile Include="Commands\DiffTests.cs" />
     <Compile Include="Commands\ExceptionTests.cs" />

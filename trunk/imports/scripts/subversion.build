@@ -182,6 +182,7 @@
             <include name="libsvn_ra_serf/win32_auth_sspi.c" />
             <include name="libsvn_fs_base/bdb/*.h" if="${aprUtilVersion >= '1.2.11'}"/>
             <include name="libsvn_fs_base/bdb/*.c" if="${aprUtilVersion >= '1.2.11'}"/>
+            <include name="libsvn_fs_base/fs.c" />
           </items>
         </in>
         <do>
@@ -189,6 +190,8 @@
             <filterchain>
               <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
               <replacestring from='&lt;apu_want.h&gt;' to='&lt;db.h&gt; /* APU ${aprUtilVersion} fix */' if="${aprUtilVersion >= '1.2.11'}" />
+              <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${sourceFile}" />
