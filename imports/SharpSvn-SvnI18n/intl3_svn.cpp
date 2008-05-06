@@ -5,7 +5,8 @@
 #include "libintl.h"
 
 sharpsvn_dgettext_t* sharpsvn_dgettext = NULL;
-extern sharpsvn_abort_t* sharpsvn_abort = NULL;
+sharpsvn_abort_t* sharpsvn_abort = NULL;
+sharpsvn_sharpsvn_check_bdb_availability_t* sharpsvn_sharpsvn_check_bdb_availability = NULL;
 
 char * bindtextdomain (const char * domainname, const char * dirname)
 {

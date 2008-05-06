@@ -39,6 +39,18 @@ static __forceinline char* dcgettext(const char* domain, const char* msgid, int 
 	return (char*)msgid;
 }
 
+struct svn_error_t;
+
+typedef struct svn_error_t* sharpsvn_sharpsvn_check_bdb_availability_t();
+extern sharpsvn_sharpsvn_check_bdb_availability_t* sharpsvn_sharpsvn_check_bdb_availability;
+static __forceinline struct svn_error_t* check_bdb_availability()
+{
+	if (sharpsvn_sharpsvn_check_bdb_availability)
+		return (*sharpsvn_sharpsvn_check_bdb_availability)();
+		
+	return NULL;
+}
+
 char * bindtextdomain (const char * domainname, const char * dirname);
 
 typedef void sharpsvn_abort_t(void);
