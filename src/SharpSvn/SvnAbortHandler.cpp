@@ -103,7 +103,7 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 
 
 	if(!s_loaded)
-		return svn_error_create(SVN_ERR_VERSION_MISMATCH, nullptr, "Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) not available");
+		return svn_error_create(SVN_ERR_FS_UNKNOWN_FS_TYPE, nullptr, "Subversion filesystem driver for Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) is not installed. Can't access this repository kind.");
 
 	return NULL;
 }
