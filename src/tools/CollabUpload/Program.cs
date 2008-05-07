@@ -184,6 +184,7 @@ namespace CollabUpload
                 wr = (HttpWebRequest)WebRequest.Create(requestUri + "&action=Add%20document");
                 wr.UserAgent = "Mozilla/8.0 (compatible; Collab Uploader C#)";
                 wr.CookieContainer = cookBox;
+                wr.Timeout = 1800 * 1000; // Half an hour should be enough 
                 using (WebFormWriter wfw = new WebFormWriter(wr, WebRequestPostDataEncoding.MultipartFormData, "POST"))
                 {
                     wfw.AddValue("name", args.Name ?? Path.GetFileName(file));
