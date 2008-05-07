@@ -119,6 +119,7 @@ namespace CollabUpload
 
             string requestUri = string.Format("http://{0}/servlets/ProjectDocumentAdd?folderID={1}", args.Site, args.Folder);
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(requestUri);
+            wr.UserAgent = "Mozilla/8.0 (compatible; Collab Uploader C#)";
             wr.CookieContainer = cookBox;
             string responseUri;
             string text;
@@ -141,6 +142,7 @@ namespace CollabUpload
                 StringBuilder sb = new StringBuilder();
 
                 wr = (HttpWebRequest)WebRequest.Create(new Uri(new Uri(responseUri), new Uri(form.GetAttribute("action"))));
+                wr.UserAgent = "Mozilla/8.0 (compatible; Collab Uploader C#)";
                 wr.CookieContainer = cookBox;
                 using(WebFormWriter wfw = new WebFormWriter(wr, WebRequestPostDataEncoding.WwwFormUrlEncoded, "POST"))
                 {
@@ -180,20 +182,20 @@ namespace CollabUpload
             {
                 Console.WriteLine("Uploading {0}", Path.GetFileName(file));
                 wr = (HttpWebRequest)WebRequest.Create(requestUri + "&action=Add%20document");
+                wr.UserAgent = "Mozilla/8.0 (compatible; Collab Uploader C#)";
                 wr.CookieContainer = cookBox;
-
                 using (WebFormWriter wfw = new WebFormWriter(wr, WebRequestPostDataEncoding.MultipartFormData, "POST"))
                 {
                     wfw.AddValue("name", args.Name ?? Path.GetFileName(file));
                     wfw.AddValue("status", args.Status ?? "Draft");
                     wfw.AddValue("description", args.Description ?? "Description");
-                    //wfw.AddValue("initiallylocked", "");
+                    wfw.AddValue("initiallylocked", "");
                     wfw.AddValue("type", "file");                    
                     wfw.AddValue("textFormat", "pre");
                     wfw.AddFile("file", file);                    
-                    //wfw.AddValue("docUrl", "");
+                    wfw.AddValue("docUrl", "");
                     wfw.AddValue("submit", "submit");
-                    //wfw.AddValue("maxDepth", "");
+                    wfw.AddValue("maxDepth", "");
                 }
 
                 using (WebResponse response = wr.GetResponse())
