@@ -97,6 +97,10 @@
   </target>
 
   <target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
+	<exec program="python.exe" failonerror="false" resultproperty="pythonAvailable" verbose="true">
+		<arg line="-V" />
+	</exec>
+      
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
       <!-- Patches for x64 builds; hopefully included in svn 1.5 -->
       <copy todir="${svnBase}/build/generator/" overwrite="true">
@@ -109,12 +113,21 @@
           <replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
         </filterchain>
       </loadfile>
-
       <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
-
-      <exec program="python.exe" failonerror="false" resultproperty="pythonAvailable" verbose="true">
-        <arg line="-V" />
-      </exec>
+      
+      <loadfile file="${svnBase}/build.conf" property="gen_win">
+        <filterchain>
+          <replacestring from='svn_repos_update()' to='svn_repos_up*ate()' />
+        </filterchain>
+      </loadfile>
+      <echo message="${gen_win}" file="${svnBase}/build.conf" />
+      
+      <loadfile file="${svnBase}/win-tests.py" property="gen_win">
+		<filterchain>
+			<replacestring from='for dll in dlls:' to='#' />
+			<replacestring from='copy_changed_file(dll' to='#'/>
+		</filterchain>
+	  </loadfile>
 
       <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
         <arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
@@ -248,6 +261,9 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <arg value="/t:svnadmin" />
         <arg value="/t:svnversion" />
         <arg value="/t:svnserve" />
+        <arg value="/t:svnsync" />
+        <arg value="/t:svnlook" />
+        <arg value="/t:__ALL_TESTS__" if="${VSversion == '2005'}"/>
       </exec>
     </OnceBlock>
   </target>
@@ -332,4 +348,21 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
     <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" />
   </target>
 
+  <target name="check" depends="build-svn">	
+	<loadfile file="${svnBase}/win-tests.py" property="gen_win">
+		<filterchain>
+			<replacestring from='for dll in dlls:' to='#' />
+			<replacestring from='copy_changed_file(dll' to='#'/>
+		</filterchain>
+	</loadfile>
+	<echo message="${gen_win}" file="${svnBase}/win-tests.py" />
+	
+	<exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
+        <arg line="/c win-tests.py" if="${pythonAvailable != '0'}" />
+        <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
+        <arg value="-r" />
+        <arg value="-v" />
+        <arg value="--bin=${path::get-full-path('release/bin')}" />
+    </exec>
+  </target>
 </project>
