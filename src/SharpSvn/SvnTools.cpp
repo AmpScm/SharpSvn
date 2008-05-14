@@ -424,3 +424,15 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 	return true;
 }
+
+Uri^ SvnTools::AppendPathSuffix(Uri^ uri, String^ pathSuffix)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
+	else if (String::IsNullOrEmpty(pathSuffix))
+		throw gcnew ArgumentNullException("pathSuffix");
+
+	Uri^ suffixUri = SvnBase::PathToUri(pathSuffix);
+
+	return gcnew Uri(uri, suffixUri);
+}

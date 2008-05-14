@@ -185,7 +185,7 @@ namespace SharpSvn {
 			Uri^ get()
 			{
 				if (!_baseUri && (_repositoryRoot && (_absPath || _pAbsPath)))
-					_baseUri = gcnew Uri(RepositoryRoot, BasePath->Substring(1) + "/");
+					_baseUri = gcnew Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + "/"));
 
 				return _baseUri;
 			}
