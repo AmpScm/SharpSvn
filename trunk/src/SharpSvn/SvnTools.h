@@ -54,5 +54,10 @@ namespace SharpSvn {
 		/// Checks whether the specified path is an absolute path
 		/// </summary>
 		static bool IsAbsolutePath(String^ path);
+
+		/// <summary>
+		/// Appends the specified path suffix to the given Uri
+		/// </summary>
+		static Uri^ AppendPathSuffix(Uri^ uri, String^ pathSuffix);
 	};
 }
