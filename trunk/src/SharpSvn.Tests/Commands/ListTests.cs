@@ -92,6 +92,41 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        [Test]
+        public void TestHash()
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                Uri reposUri = new Uri("https://svn.apache.org/repos/");
+                /*client.List(new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/"), 656380),
+                    delegate(object sender, SvnListEventArgs e)
+                    {
+                        if (string.IsNullOrEmpty(e.Path))
+                        {
+                            Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
+                            return;
+                        }
+
+                        Assert.That(e.EntryUri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")));
+                    });*/
+
+                client.List(new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/"), 656380),
+                    delegate(object sender, SvnListEventArgs e)
+                    {
+                        if (string.IsNullOrEmpty(e.Path))
+                        {
+                            Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
+                            Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")));
+                            return;
+                        }
+
+                        GC.KeepAlive(e);
+                    });
+
+
+            }
+        }
+
 		private class Entry
 		{
 			public Entry(string line)
