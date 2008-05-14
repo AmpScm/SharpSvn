@@ -30,7 +30,7 @@ namespace SharpSvn {
 	public:
 		SvnListArgs()
 		{
-			_depth = SvnDepth::Files;
+			_depth = SvnDepth::Children;
 			_revision = SvnRevision::None;
 			_entryItems = SvnDirEntryItems::SvnListDefault;
 		}
@@ -117,7 +117,7 @@ namespace SharpSvn {
 			String^ qr = _queryRoot;
 			_queryRoot = nullptr; // Only parse in the first call, which matches the exact request
 
-			String^ path = SvnBase::Utf8_PtrToString(abs_path+1); // Skip the initial '/'
+			String^ path = SvnBase::PathToUri(SvnBase::Utf8_PtrToString(abs_path+1))->ToString(); // Skip the initial '/'
 
 			if(qr->EndsWith(path, StringComparison::Ordinal))
 			{

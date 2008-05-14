@@ -128,6 +128,7 @@ namespace SharpSvn {
 		SvnDirEntry^ _entry;
 		Uri^ _repositoryRoot;
 		Uri^ _baseUri;
+		Uri^ _entryUri;
 
 	internal:
 		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot)
@@ -187,6 +188,22 @@ namespace SharpSvn {
 					_baseUri = gcnew Uri(RepositoryRoot, BasePath->Substring(1) + "/");
 
 				return _baseUri;
+			}
+		}
+
+		property Uri^ EntryUri
+		{
+			Uri^ get()
+			{
+				if(!_entryUri && BaseUri && Path && Entry)
+				{
+					if(Entry->NodeKind == SvnNodeKind::Directory)
+						_entryUri = gcnew Uri(BaseUri, SvnBase::PathToUri(Path + "/"));
+					else
+						_entryUri = gcnew Uri(BaseUri, SvnBase::PathToUri(Path));
+				}
+
+				return _entryUri;
 			}
 		}
 

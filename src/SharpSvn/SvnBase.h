@@ -84,6 +84,7 @@ namespace SharpSvn {
 			static bool IsValidReposUri(Uri^ uri);
 
 			static Uri^ CanonicalizeUri(Uri^ uri);
+			static Uri^ PathToUri(String^ path);
 			//static String^ CanonicalizePath(String^ path);
 
 			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);

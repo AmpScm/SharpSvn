@@ -134,6 +134,16 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 	return uri;
 }
 
+Uri^ SvnBase::PathToUri(String^ path)
+{
+	Uri^ result;
+
+	if(Uri::TryCreate(path->Replace("#", "%23"), UriKind::Relative, result))
+		return result;
+
+	throw gcnew ArgumentOutOfRangeException();
+}
+
 /*String^ SvnBase::CanonicalizePath(String^ path)
 {
 	if (!path)
