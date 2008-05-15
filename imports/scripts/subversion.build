@@ -348,7 +348,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
     <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" />
   </target>
 
-  <target name="check" depends="build-svn">	
+  <target name="check" depends="build-svn, copy-result">	
 	<loadfile file="${svnBase}/win-tests.py" property="gen_win">
 		<filterchain>
 			<replacestring from='for dll in dlls:' to='#' />
