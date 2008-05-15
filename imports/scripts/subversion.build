@@ -114,6 +114,14 @@
         </filterchain>
       </loadfile>
       <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
+      <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
+		<filterchain>
+		  <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
+		  <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
+		  <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
+		</filterchain>
+	  </loadfile>
+	  <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
       
       <loadfile file="${svnBase}/build.conf" property="gen_win">
         <filterchain>
@@ -243,7 +251,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
 #undef SVN_VER_TAG
 #undef SVN_VER_NUMTAG
 #define SVN_VER_TAG  " (SharpSvn:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
-#define SVN_VER_NUMTAG "-SharpSvn-${subversionVersion}@${svnWcVersion}-${platform}"
+#define SVN_VER_NUMTAG "-SharpSvn-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
       </echo>
     </OnceBlock>
   </target>
@@ -309,6 +317,8 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
       <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve.exe" />
       <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin.exe" />
       <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion.exe" />
+      <copy file="${svnBase}/release/subversion/svnlook/svnlook.exe" tofile="${release}/bin/svnlook.exe" />
+      <copy file="${svnBase}/release/subversion/svnsync/svnsync.exe" tofile="${release}/bin/svnsync.exe" />
     </if>
     <copy todir="${release}/include">     
       <fileset basedir="${svnBase}\subversion\include">
@@ -362,6 +372,8 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
         <arg value="-r" />
         <arg value="-v" />
+        <arg value="-c" />
+        <arg value="-p" />        
         <arg value="--bin=${path::get-full-path('release/bin')}" />
     </exec>
   </target>
