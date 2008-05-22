@@ -333,8 +333,21 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 
 apr_array_header_t *SvnBase::CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool)
 {
-	if (changelists && changelists->Count > 0)
+	if (!pool)
+		throw gcnew ArgumentNullException("pool");
+	else if (changelists && changelists->Count > 0)
 		return AllocArray(changelists, pool);
+
+	return nullptr;
+}
+
+apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, AprPool^ pool)
+{
+	if (!pool)
+		throw gcnew ArgumentNullException("pool");
+	else if(revProps && revProps->Count)
+	{
+	}
 
 	return nullptr;
 }

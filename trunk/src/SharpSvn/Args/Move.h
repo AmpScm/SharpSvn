@@ -12,7 +12,7 @@ namespace SharpSvn {
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Move(String^,String^,SvnMoveArgs^)" /> and
 	/// <see cref="SvnClient::RemoteMove(Uri^,Uri^,SvnMoveArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnMoveArgs : public SvnClientArgs
+	public ref class SvnMoveArgs : public SvnClientArgsWithCommit
 	{
 		bool _force;
 		bool _moveAsChild;

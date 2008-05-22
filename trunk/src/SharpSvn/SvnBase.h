@@ -14,6 +14,7 @@ namespace SharpSvn {
 	ref class SvnTarget;
 	ref class SvnClientContext;
 	ref class SvnPropertyCollection;
+	ref class SvnRevisionPropertyCollection;
 
 	public enum class SvnNodeKind
 	{
@@ -95,6 +96,9 @@ namespace SharpSvn {
 
 			[DebuggerStepThrough]
 			static apr_array_header_t *CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool);
+
+			[DebuggerStepThrough]
+			static apr_hash_t *CreateRevPropList(SvnRevisionPropertyCollection^ revProps, AprPool^ pool);
 
 			static SvnPropertyCollection^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
 

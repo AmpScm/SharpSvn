@@ -239,6 +239,7 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 		args->SkipChecks,
 		(svn_revnum_t)args->BaseRevision,
 		CreateChangeListsList(args->ChangeLists, pool), // Intersect ChangeLists
+		CreateRevPropList(args->LogProperties, pool),
 		CtxHandle,
 		pool->Handle);
 

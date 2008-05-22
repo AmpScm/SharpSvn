@@ -147,6 +147,29 @@ namespace SharpSvn {
 
 	};
 
+	public ref class SvnRevisionPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<String^, SvnPropertyValue^>
+	{
+	protected:
+		virtual String^ GetKeyForItem(SvnPropertyValue^ item) override
+		{
+			if (!item)
+				return nullptr;
+			else
+				return item->Key;
+		}
+
+	public:
+		void Add(String^ key, String^ value)
+		{
+			this->Add(gcnew SvnPropertyValue(key, value));
+		}
+
+		void Add(String^ key, array<Byte>^ value)
+		{
+			this->Add(gcnew SvnPropertyValue(key, value));
+		}
+	};
+
 	public ref class SvnTargetPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<SvnTarget^, SvnPropertyValue^>
 	{
 	protected:
@@ -157,5 +180,5 @@ namespace SharpSvn {
 			else
 				return item->Target;
 		}
-	};
+	};	
 }

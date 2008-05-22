@@ -144,6 +144,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		(svn_depth_t)args->Depth,
 		args->NoIgnore,
 		args->IgnoreUnknownNodeTypes,
+		CreateRevPropList(args->LogProperties, %pool),
 		CtxHandle,
 		pool.Handle);
 
