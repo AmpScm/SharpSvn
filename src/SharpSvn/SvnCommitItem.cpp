@@ -40,7 +40,10 @@ SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ p
 	if (!err)
 		_date = SvnBase::DateTimeFromAprTime(when);
 	else
+	{
+		svn_error_clear(err);
 		_date = DateTime::MinValue;
+	}
 
 	_author = SvnBase::Utf8_PtrToString(commitInfo->author);
 	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;

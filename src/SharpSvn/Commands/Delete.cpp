@@ -70,6 +70,7 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 		aprPaths->Handle,
 		args->Force,
 		args->KeepLocal,
+		nullptr,
 		CtxHandle,
 		pool.Handle);
 
@@ -168,6 +169,7 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 		aprPaths->Handle,
 		args->Force,
 		args->KeepLocal,
+		CreateRevPropList(args->LogProperties, %pool),
 		CtxHandle,
 		pool.Handle);
 

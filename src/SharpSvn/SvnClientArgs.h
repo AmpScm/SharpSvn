@@ -132,6 +132,7 @@ namespace SharpSvn {
 	public ref class SvnClientArgsWithCommit abstract : public SvnClientArgs
 	{
 		String^ _logMessage;
+		SvnRevisionPropertyCollection^ _extraProperties;
 
 	protected:
 		SvnClientArgsWithCommit()
@@ -164,6 +165,20 @@ namespace SharpSvn {
 			void set(String^ value)
 			{
 				_logMessage = value;
+			}
+		}
+
+	public:
+		/// <summary>Gets a list of 'extra' revision properties to set on commit</summary>
+		property SvnRevisionPropertyCollection^ LogProperties
+		{
+			[DebuggerStepThrough]
+			SvnRevisionPropertyCollection^ get()
+			{
+				if(!_extraProperties)
+					_extraProperties = gcnew SvnRevisionPropertyCollection();
+
+				return _extraProperties;
 			}
 		}
 	};

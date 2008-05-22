@@ -123,6 +123,8 @@ namespace SharpSvn {
 
 				if (!err)
 					_date = SvnBase::DateTimeFromAprTime(when);
+				else
+					svn_error_clear(err);
 			}
 			else
 				_date = DateTime::MinValue;

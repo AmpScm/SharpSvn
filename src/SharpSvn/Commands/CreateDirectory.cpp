@@ -67,6 +67,7 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 		&result,
 		aprPaths->Handle,
 		args->MakeParents,
+		nullptr,
 		CtxHandle,
 		pool.Handle);
 
@@ -153,6 +154,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 		&commitInfoPtr,
 		aprPaths->Handle,
 		args->MakeParents,
+		CreateRevPropList(args->LogProperties, %pool),
 		CtxHandle,
 		pool.Handle);
 
