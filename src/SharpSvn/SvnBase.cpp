@@ -347,6 +347,18 @@ apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, 
 		throw gcnew ArgumentNullException("pool");
 	else if(revProps && revProps->Count)
 	{
+		apr_hash_t* items = apr_hash_make(pool->Handle);
+		
+		for each(SvnPropertyValue^ value in revProps)
+		{
+			const char* key = pool->AllocString(value->Key);
+
+			const svn_string_t* val = pool->AllocSvnString((array<Byte>^)value->RawValue);
+
+			apr_hash_set(items, key, APR_HASH_KEY_STRING, val);
+		}
+
+		return items;
 	}
 
 	return nullptr;
