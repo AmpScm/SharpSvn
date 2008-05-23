@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
 
 
-  <target name="svn-prepare" depends="build-bdb, build-zlib, build-openssl, build-apr">
+  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr">
     <if test="${VSversion != '2005'}">
       <VCBuild platform="${platform}">
         <arg line="/upgrade" />
@@ -93,7 +93,18 @@
 			file="build/${platform}/lib/lib/apr-1.lib" />
     <copy tofile="build/${platform}/lib/release/libaprutil-1.lib"
 			file="build/${platform}/lib/lib/aprutil-1.lib" />
-
+  </target>
+  
+  <target name="svn-merge" depends="checkout">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
+      <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${subversionMerges}" />
+        <arg value="http://svn.collab.net/repos/svn/trunk/" />
+        <arg value="${svnBase}" />
+      </Svn>
+    </OnceBlock>
   </target>
 
   <target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
