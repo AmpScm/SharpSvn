@@ -113,6 +113,23 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        public void TestDash()
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                Uri uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test%23.txt");
+
+                string txt = "file/a/%23ABC";
+
+                Assert.That(Uri.UnescapeDataString(txt), Is.EqualTo("file/a/#ABC"));
+
+                SvnInfoEventArgs ie;
+                client.GetInfo(uri, out ie);
+
+                Assert.That(ie, Is.Not.Null);
+            }
+        }
+
         [Test]
         public void WcDirMissing()
         {

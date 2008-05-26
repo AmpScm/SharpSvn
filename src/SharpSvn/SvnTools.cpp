@@ -436,3 +436,11 @@ Uri^ SvnTools::AppendPathSuffix(Uri^ uri, String^ pathSuffix)
 
 	return gcnew Uri(uri, suffixUri);
 }
+
+String^ SvnTools::UriPartToPath(String^ stringToUnescape)
+{
+	if (!stringToUnescape)
+		throw gcnew ArgumentNullException("stringToUnescape");
+
+	return Uri::UnescapeDataString(stringToUnescape);
+}
