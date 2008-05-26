@@ -10,7 +10,8 @@
 #include "svn_dso.h"
 #include "svn_utf.h"
 
-using namespace SharpSvn::Implementation;
+using System::Text::StringBuilder;
+using System::IO::Path;
 using namespace SharpSvn;
 
 #pragma unmanaged
@@ -136,9 +137,25 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 Uri^ SvnBase::PathToUri(String^ path)
 {
+	if (!path)
+		throw gcnew ArgumentNullException("path");
+
+	StringBuilder^ sb = gcnew StringBuilder();
 	Uri^ result;
 
-	if(Uri::TryCreate(path->Replace("#", "%23"), UriKind::Relative, result))
+	bool afterFirst = false;
+
+	for each (String^ p in path->Split(Path::DirectorySeparatorChar, Path::AltDirectorySeparatorChar))
+	{
+		if (afterFirst)
+			sb->Append((Char)'/');
+		else
+			afterFirst = true;
+
+		sb->Append(Uri::EscapeDataString(p));
+	}
+
+	if(Uri::TryCreate(sb->ToString(), UriKind::Relative, result))
 		return result;
 
 	throw gcnew ArgumentOutOfRangeException();

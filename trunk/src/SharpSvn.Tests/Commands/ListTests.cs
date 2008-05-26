@@ -131,9 +131,30 @@ namespace SharpSvn.Tests.Commands
                             return;
                         }
                     });
+            }
+        }
 
+        [Test]
+        public void TestSpace()
+        {
+            using(SvnClient client = new SvnClient())
+            {
+                int n = 0;
+                client.List(new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with spaces"),
+                    delegate(object sender, SvnListEventArgs e)
+                    {
+                        if (string.IsNullOrEmpty(e.Path))
+                        {
+                            Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("http://sharpsvn.googlecode.com/svn/")));
+                            Assert.That(e.BaseUri, Is.EqualTo(new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with spaces/")));
+                            return;
+                        }
 
+                        n++;
+                    }
+                );
 
+                Assert.That(n, Is.EqualTo(2));
             }
         }
 
