@@ -236,7 +236,7 @@ const char* AprPool::AllocCanonical(Uri^ value)
 	if(!value)
 		return AllocCanonical((String^)nullptr);
 
-	return AllocCanonical(value->ToString());
+	return AllocCanonical(SvnBase::UriToString(value));
 }
 
 const char* AprPool::AllocCanonical(String^ value)
