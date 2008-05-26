@@ -59,5 +59,11 @@ namespace SharpSvn {
 		/// Appends the specified path suffix to the given Uri
 		/// </summary>
 		static Uri^ AppendPathSuffix(Uri^ uri, String^ pathSuffix);
+
+
+		/// <summary>
+		/// Converts a string from a Uri path to a local path name; unescaping when necessary
+		/// </summary>
+		static String^ UriPartToPath(String^ stringToUnescape);
 	};
 }
