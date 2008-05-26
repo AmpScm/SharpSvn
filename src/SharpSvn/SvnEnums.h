@@ -255,7 +255,7 @@ namespace SharpSvn {
 		HasProperties	= SVN_DIRENT_HAS_PROPS,
 
 		/// <summary>An indication that you are interested in the @c created_rev field</summary>
-		CreatedRevision	= SVN_DIRENT_CREATED_REV,
+		Revision	= SVN_DIRENT_CREATED_REV,
 
 		/// <summary>An indication that you are interested in the @c time field</summary>
 		Time			= SVN_DIRENT_TIME,
@@ -263,10 +263,8 @@ namespace SharpSvn {
 		/// <summary>An indication that you are interested in the @c last_author field</summary>
 		LastAuthor		= SVN_DIRENT_LAST_AUTHOR,
 
-
-
 		/// <summary>A combination of all the dirent fields at Subversion 1.5</summary>
-		AllFieldsV15	= Kind | Size | HasProperties | CreatedRevision | Time | LastAuthor,
+		AllFieldsV15	= Kind | Size | HasProperties | Revision | Time | LastAuthor,
 
 		/// <summary>The fields loaded if no other value is specified</summary>
 		SvnListDefault	= Kind | Time

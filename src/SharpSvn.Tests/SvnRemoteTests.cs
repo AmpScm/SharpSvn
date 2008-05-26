@@ -15,8 +15,10 @@ namespace SharpSvn.Tests
 		{
 			SvnClient cl = new SvnClient();
 			bool found = false;
+            SvnListArgs la = new SvnListArgs();
+            la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 
-			cl.List(new Uri("http://sharpsvn.googlecode.com/svn/trunk"), delegate(object Sender, SvnListEventArgs e)
+			cl.List(new Uri("http://sharpsvn.googlecode.com/svn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
 			{
 				Assert.That(e.Entry, Is.Not.Null);
 				Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
