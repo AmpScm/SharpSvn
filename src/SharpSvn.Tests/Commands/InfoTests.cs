@@ -88,6 +88,32 @@ namespace SharpSvn.Tests.Commands
 		}
 
         [Test]
+        public void TestSpace()
+        {
+            using(SvnClient client = new SvnClient())
+            {
+                Uri uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt#aaa");
+
+                string s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
+                Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
+
+                SvnUriTarget ut = new SvnUriTarget(uri);
+
+                Assert.That(ut.TargetName, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
+
+                uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder with spaces/test.txt#aaa");
+
+                s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
+                Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
+
+                SvnInfoEventArgs ie;
+                client.GetInfo(new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"), out ie);
+
+                Assert.That(ie, Is.Not.Null);
+            }
+        }
+
+        [Test]
         public void WcDirMissing()
         {
             string dir = GetTempDir();
