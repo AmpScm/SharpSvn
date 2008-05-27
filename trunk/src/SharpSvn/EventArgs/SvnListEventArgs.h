@@ -185,7 +185,18 @@ namespace SharpSvn {
 			Uri^ get()
 			{
 				if (!_baseUri && (_repositoryRoot && (_absPath || _pAbsPath)))
-					_baseUri = gcnew Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + "/"));
+				{
+					bool isFile = false;
+					if (_path && _path->Length == 0) // = Request Root
+					{
+						if(_pDirEnt && _pDirEnt->kind != svn_node_dir)
+							isFile = true;
+						else if(Entry && Entry->NodeKind != SvnNodeKind::Directory)
+							isFile = true;
+					}
+
+					_baseUri = gcnew Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
+				}
 
 				return _baseUri;
 			}
