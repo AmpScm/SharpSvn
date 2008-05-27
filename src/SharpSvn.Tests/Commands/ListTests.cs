@@ -74,6 +74,19 @@ namespace SharpSvn.Tests.Commands
 		}
 
         [Test]
+        public void TestRoot()
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                client.List(CollabReposUri, delegate(object sender, SvnListEventArgs e)
+                {
+                    Assert.That(e.RepositoryRoot, Is.EqualTo(CollabReposUri));
+                    Assert.That(e.RepositoryRoot.ToString().EndsWith("/"));
+                });
+            }
+        }
+
+        [Test]
         public void ListSharp()
         {
             using (SvnClient client = new SvnClient())
