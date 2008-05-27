@@ -197,7 +197,9 @@ namespace SharpSvn {
 			{
 				if(!_entryUri && BaseUri && Path && Entry)
 				{
-					if(Entry->NodeKind == SvnNodeKind::Directory)
+					if (Path->Length == 0)
+						_entryUri = BaseUri;
+					else if(Entry->NodeKind == SvnNodeKind::Directory)
 						_entryUri = gcnew Uri(BaseUri, SvnBase::PathToUri(Path + "/"));
 					else
 						_entryUri = gcnew Uri(BaseUri, SvnBase::PathToUri(Path));
