@@ -126,7 +126,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 	String^ path = uri->AbsolutePath;
-	if (path->Length > 0 && path[path->Length -1] == '/')
+	if (path->Length > 0 && (path[path->Length -1] == '/' || path->IndexOf('\\') >= 0))
 	{
 		// Create a new uri with all / and \ characters at the end removed
 		return gcnew Uri(uri, path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));

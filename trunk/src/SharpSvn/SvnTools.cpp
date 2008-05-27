@@ -444,3 +444,13 @@ String^ SvnTools::UriPartToPath(String^ stringToUnescape)
 
 	return Uri::UnescapeDataString(stringToUnescape);
 }
+
+Uri^ SvnTools::GetNormalizedUri(Uri^ uri)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
+	else if (!uri->IsAbsoluteUri)
+		throw gcnew ArgumentOutOfRangeException("uri");
+
+	return SvnBase::CanonicalizeUri(uri);
+}
