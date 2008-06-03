@@ -184,18 +184,26 @@ namespace SharpSvn {
 		{
 			Uri^ get()
 			{
-				if (!_baseUri && (_repositoryRoot && (_absPath || _pAbsPath)))
+				if (!_baseUri && (RepositoryRoot && (_absPath || _pAbsPath)))
 				{
-					bool isFile = false;
-					if (_path && _path->Length == 0) // = Request Root
+					if (String::IsNullOrEmpty(BasePath) || 
+						(BasePath->Length == 1 && BasePath[0] == '/'))
 					{
-						if(_pDirEnt && _pDirEnt->kind != svn_node_dir)
-							isFile = true;
-						else if(Entry && Entry->NodeKind != SvnNodeKind::Directory)
-							isFile = true;
+						_baseUri = RepositoryRoot;
 					}
+					else
+					{
+						bool isFile = false;
+						if (String::IsNullOrEmpty(_path)) // = Request Root
+						{
+							if(_pDirEnt && _pDirEnt->kind != svn_node_dir)
+								isFile = true;
+							else if(Entry && Entry->NodeKind != SvnNodeKind::Directory)
+								isFile = true;
+						}
 
-					_baseUri = gcnew Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
+						_baseUri = gcnew Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
+					}
 				}
 
 				return _baseUri;
