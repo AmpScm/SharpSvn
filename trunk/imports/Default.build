@@ -6,7 +6,7 @@
 
 	<!-- -->
 	<property name="subversionVersion" value="1.5.x" />
-	<property name="subversionMerges" value="31211" />
+	<property name="subversionMerges" value="31211,31516" />
 	<!-- -->
 	<property name="opensslVersion" value="0.9.8g" />
 	<property name="neonVersion" value="0.28.2" />
