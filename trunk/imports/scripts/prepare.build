@@ -65,13 +65,6 @@
 			<!-- Write version for subversion configure script -->
 			<echo message="${neonVersion}" file="${platformBase}/neon/.version" />
 		</if>
-		<if test="${(buildHttpd == 'true') and not directory::exists(httpdDir)}">
-			<Svn verbose="true">
-				<arg value="co" />
-				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}" />
-				<arg value="${httpdDir}" />
-			</Svn>
-		</if>
 		<if test="${not directory::exists(aprDir)}">
 			<Svn verbose="true">
 				<arg value="co" />
@@ -84,13 +77,6 @@
 				<arg value="co" />
 				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
 				<arg value="${aprUtilDir}" />
-			</Svn>
-		</if>
-		<if test="${(buildHttpd == 'true') and not directory::exists(aprIconvDir)}">
-			<Svn verbose="true">
-				<arg value="co" />
-				<arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}" />
-				<arg value="${aprIconvDir}" />
 			</Svn>
 		</if>
 		<if test="${not directory::exists(platformBase + '/serf')}">

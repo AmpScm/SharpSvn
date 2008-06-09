@@ -44,15 +44,9 @@
 #if (APR_MAJOR_VERSION == 0) && (APR_MINOR_VERSION == 9)
 #  pragma comment(lib, "apr.lib")
 #  pragma comment(lib, "aprutil.lib")
-#  if (APU_HAVE_APR_ICONV != 0)
-#    pragma comment(lib, "apriconv.lib")
-#  endif
 #elif (APR_MAJOR_VERSION == 1)
-#pragma comment(lib, "apr-1.lib")
-#pragma comment(lib, "aprutil-1.lib")
-#  if (APU_HAVE_APR_ICONV != 0)
-#    pragma comment(lib, "apriconv-1.lib")
-#  endif
+#  pragma comment(lib, "apr-1.lib")
+#  pragma comment(lib, "aprutil-1.lib")
 #else
-#error Only apr 0.9.* and 1.* are supported at this time
+#  error Only apr 0.9.* and 1.* are supported at this time
 #endif

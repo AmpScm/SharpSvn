@@ -82,6 +82,8 @@
           <echo message="${headertext}" file="${winHeader2}" />
         </do>
       </foreach>
+      <!-- Add Windows 2000 ipv6 workarounds -->
+      <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" />
     </OnceBlock>
   </target>
   <target name="build-apr" depends="download,extract,checkout, prepare-apr">

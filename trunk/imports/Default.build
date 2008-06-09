@@ -1,50 +1,50 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
-	<property name="svnBuildType" value="branch" />
-	<property name="serfBuildType" value="trunk" />
-	<property name="platform" value="win32" if="${not property::exists('platform')}" />
+  <property name="svnBuildType" value="branch" />
+  <property name="serfBuildType" value="trunk" />
+  <property name="platform" value="win32" if="${not property::exists('platform')}" />
 
-	<!-- -->
-	<property name="subversionVersion" value="1.5.x" />
-	<property name="subversionMerges" value="31211" />
-	<!-- -->
-	<property name="opensslVersion" value="0.9.8g" />
-	<property name="neonVersion" value="0.28.2" />
-	
-	<property name="aprVersion" value="1.2.12" />
-	<property name="aprUtilVersion" value="1.2.12" />
-	<property name="dbVersion" value="4.4.20" />
-	<property name="zlibVersion" value="1.2.3" />
-	<property name="serfVersion" value="0.1.3" />
-	<property name="saslVersion" value="2.1.22" />
-	
-	<!-- For testcase -->	
-	<property name="nunitVersion" value="2.4.3" />
-	<property name="sharpZipVersion" value="0854" />
-	
-	<!-- Prefer http or https -->
-	<property name="httpOrHttps" value="http" />
+  <!-- -->
+  <property name="subversionVersion" value="1.5.x" />
+  <property name="subversionMerges" value="31211,31516" />
+  <!-- -->
+  <property name="opensslVersion" value="0.9.8h" />
+  <property name="neonVersion" value="0.28.2" />
+
+  <property name="aprVersion" value="1.3.0" />
+  <property name="aprUtilVersion" value="1.3.0" />
+  <property name="dbVersion" value="4.4.20" />
+  <property name="zlibVersion" value="1.2.3" />
+  <property name="serfVersion" value="0.1.3" />
+  <property name="saslVersion" value="2.1.22" />
+
+  <!-- For testcase -->
+  <property name="nunitVersion" value="2.4.3" />
+  <property name="sharpZipVersion" value="0854" />
+
+  <!-- Prefer http or https -->
+  <property name="httpOrHttps" value="http" />
 
   <!-- Prefix to use for dependency DLL's -->
   <property name="dllPrefix" value="SharpSvn-" />
-  
-	<property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 8\VC" />
-	
-	<include buildfile="scripts/default.build" />
 
-	<target name="help">
-		<echo>
-			The following targets are defined
-			- build      - Build all
-			- clean      - Clean all
-			- distclean  - Clean all + clean downloads
-			- clean-svn  - Clean+Update subversion
-			
-			Use nant /D:platform=x64 to build/clean the x64 binaries (platform=win32 by default)
-			
-			The following targets try to start nant within the specified context using vcvars.cmd
-			- x86
-			- x64
-		</echo>
-	</target>
+  <property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 8\VC" />
+
+  <include buildfile="scripts/default.build" />
+
+  <target name="help">
+    <echo>
+      The following targets are defined
+      - build      - Build all
+      - clean      - Clean all
+      - distclean  - Clean all + clean downloads
+      - clean-svn  - Clean+Update subversion
+
+      Use nant /D:platform=x64 to build/clean the x64 binaries (platform=win32 by default)
+
+      The following targets try to start nant within the specified context using vcvars.cmd
+      - x86
+      - x64
+    </echo>
+  </target>
 </project>
