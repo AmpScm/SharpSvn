@@ -392,16 +392,7 @@ String^ SvnBase::UriToString(Uri^ value)
 				UriComponents::UserInfo |
 				UriComponents::Path, UriFormat::UriEscaped);
 	else
-	{
-		String^ v = value->PathAndQuery;
-
-		int n = v->IndexOf('?');
-
-		if(n >= 0)
-			v = v->Substring(0, n);
-
-		return Uri::EscapeUriString(v);
-	}
+		return Uri::EscapeUriString(value->ToString()); // Escape back to valid uri form
 }
 
 String^ SvnBase::UriToCanonicalString(Uri^ value)
