@@ -41,7 +41,7 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
 	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-	svn_opt_revision_t rev = args->Revision->ToSvnRevision();
+	svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
 	svn_error_t *r = svn_client_cat2(
 		wrapper.Handle,

@@ -28,6 +28,8 @@ namespace SharpSvn.Tests.Commands
 			{
                 Collection<SvnMergesEligibleEventArgs> info;
 
+                SvnMergesEligibleArgs me;
+                me.RetrieveProperties.A
                 Assert.That(ms.Uri, Is.Not.Null);
 
                 Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
