@@ -400,7 +400,7 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 	else if(client->_currentArgs)
 		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
-	args->LastException = nullptr;
+	args->Prepare();
 	client->_currentArgs = args;
 	_client = client;
 	try

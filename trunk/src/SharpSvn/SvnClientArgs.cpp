@@ -50,6 +50,11 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 		return false;
 }
 
+void SvnClientArgs::Prepare()
+{
+	LastException = nullptr;
+}
+
 bool SvnClientArgs::IsLastInvocationCanceled::get()
 {
 	return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);

@@ -81,6 +81,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>The entries name</summary>
 		property String^ Name
 		{
 			String^ get()
@@ -92,6 +93,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Base revision</summary>
 		property __int64 Revision
 		{
 			__int64 get()
@@ -100,6 +102,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Url in repository, including final '/' if the entry specifies a directory</summary>
 		property System::Uri^ Uri
 		{
 			System::Uri^ get()
@@ -111,6 +114,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>The repository Uri including a final '/'</summary>
 		property System::Uri^ RepositoryUri
 		{
 			System::Uri^ get()
@@ -122,17 +126,28 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the repository id as Guid</summary>
 		property Guid RepositoryId
 		{
 			Guid get()
 			{
-				if (!_repositoryId && _entry && _entry->uuid)
-					_repositoryId = SvnBase::Utf8_PtrToString(_entry->uuid);
-
-				return _repositoryId ? Guid(_repositoryId) : Guid::Empty;
+				return RepositoryIdValue ? Guid(RepositoryIdValue) : Guid::Empty;
 			}
 		}
 
+		/// <summary>Gets the repository id as String</summary>
+		property String^ RepositoryIdValue
+		{
+			String^ get()
+			{
+				if (!_repositoryId && _entry && _entry->uuid)
+					_repositoryId = SvnBase::Utf8_PtrToString(_entry->uuid);
+
+				return _repositoryId;
+			}
+		}
+
+		/// <summary>Gets the node kind</summary>
 		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
@@ -141,6 +156,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the node scheduling (add, delete, replace)</summary>
 		property SvnSchedule Schedule
 		{
 			SvnSchedule get()
@@ -149,6 +165,10 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets a boolean indicating whether the node is in a copied state 
+		/// (possibly because the entry is a child of a path that is 
+		/// scheduled for addition or replacement when the entry itself is 
+		/// normal</summary>
 		property bool IsCopy
 		{
 			bool get()
@@ -561,7 +581,14 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether the workingcopy is locked</summary>
+		[Obsolete("Use .Wedged")]
 		property bool LocalLocked
+		{
+			bool get() { return Wedged; }
+		}
+
+		/// <summary>Gets a boolean indicating whether the workingcopy is locked</summary>
+		property bool Wedged
 		{
 			bool get()
 			{
