@@ -107,10 +107,16 @@ namespace SharpSvn {
 				if(!value)
 					return nullptr;
 
-				return value->GetComponents(
-					UriComponents::SchemeAndServer |
-					UriComponents::UserInfo |
-					UriComponents::Path, UriFormat::UriEscaped);
+				if(value->IsAbsoluteUri)
+					return value->GetComponents(
+						UriComponents::SchemeAndServer |
+						UriComponents::UserInfo |
+						UriComponents::Path, UriFormat::UriEscaped);
+				else
+				{
+					// BUG: This must be fixed in a future commit!
+					return value->ToString();
+				}
 			}
 
 			static String^ UriToCanonicalString(Uri^ value)
