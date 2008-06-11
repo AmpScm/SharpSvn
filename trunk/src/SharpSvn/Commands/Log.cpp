@@ -45,7 +45,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
-	return InternalLog(NewSingleItemCollection(target->ToString()), nullptr, args, logHandler);
+	return InternalLog(NewSingleItemCollection(UriToString(target)), nullptr, args, logHandler);
 }
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -105,15 +105,27 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			nEnd = root->LastIndexOf('/', nEnd-1);
 		}
 
+		if(nEnd == root->Length && itemPath->Length > root->Length && itemPath[nEnd] != '/')
+		{	// root can't end in a '/', as that would have been trimmed !
+
+			nEnd = root->LastIndexOf('/', nEnd-1);
+		}
+
 		if (nEnd >= root->Length - 1)
 		{}
-		else if(nEnd > 1)
-			root = root->Substring(0, nEnd);
 		else
-			root = "/";
+		{
+			while(nEnd > 1 && nEnd < root->Length && root[nEnd-1] == '/')
+				nEnd--;
+
+			if(nEnd > 1)
+				root = root->Substring(0, nEnd);
+			else
+				root = "/";
+		}
 	}
 
-	if (!root->EndsWith("/", StringComparison::Ordinal))
+	if (moreThanOne && !root->EndsWith("/", StringComparison::Ordinal))
 		root += "/";
 
 	System::Collections::Generic::List<String^>^ rawTargets = gcnew System::Collections::Generic::List<String^>();
@@ -121,7 +133,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 	if (moreThanOne)
 	{
 		// Invoke with primary url followed by relative subpaths
-		rawTargets->Add(rootUri->ToString());
+		rawTargets->Add(UriToString(rootUri));
 
 		for each (Uri^ uri in targets)
 		{
@@ -130,13 +142,16 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 
 			uri = rootUri->MakeRelativeUri(uri);
 
-			rawTargets->Add(uri->ToString());
+			if(uri->IsAbsoluteUri) // Should have happened before				
+				throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
+
+			rawTargets->Add(UriToString(uri));
 		}
 	}
 	else
 	{
 		rootUri = nullptr;
-		rawTargets->Add(first->ToString());
+		rawTargets->Add(UriToString(first));
 	}
 
 	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, args, logHandler);

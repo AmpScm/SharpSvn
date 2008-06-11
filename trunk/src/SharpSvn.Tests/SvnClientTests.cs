@@ -560,7 +560,7 @@ namespace SharpSvn.Tests
 					Assert.That(e.IsRemoteUpdated, Is.EqualTo(false));
 					Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
 					Assert.That(e.LocalCopied, Is.EqualTo(false));
-					Assert.That(e.LocalLocked, Is.EqualTo(false));
+					Assert.That(e.Wedged, Is.EqualTo(false));
 					Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
 					Assert.That(e.Path, Is.EqualTo(local));
 					Assert.That(e.RemoteContentStatus, Is.EqualTo(SvnStatus.None));
@@ -738,7 +738,7 @@ namespace SharpSvn.Tests
 						}
 
 						Assert.That(e.LocalCopied, Is.EqualTo(nn == 4));
-						Assert.That(e.LocalLocked, Is.False);
+						Assert.That(e.Wedged, Is.False);
 						if (a.ContactRepository)
 						{
 							Assert.That(e.RemoteContentStatus, Is.EqualTo(nn == 2 ? SvnStatus.Deleted : SvnStatus.None));
