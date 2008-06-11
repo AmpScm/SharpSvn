@@ -102,35 +102,8 @@ namespace SharpSvn {
 
 			static SvnPropertyCollection^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
 
-			static String^ UriToString(Uri^ value)
-			{
-				if(!value)
-					return nullptr;
-
-				if(value->IsAbsoluteUri)
-					return value->GetComponents(
-						UriComponents::SchemeAndServer |
-						UriComponents::UserInfo |
-						UriComponents::Path, UriFormat::UriEscaped);
-				else
-				{
-					// BUG: This must be fixed in a future commit!
-					return value->ToString();
-				}
-			}
-
-			static String^ UriToCanonicalString(Uri^ value)
-			{
-				if(!value)
-					return nullptr;
-
-				String^ name = SvnBase::UriToString(CanonicalizeUri(value));
-
-				if(name && name->Length && (name[name->Length-1] == '/'))
-					return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
-				else
-					return name;
-			}
+			static String^ UriToString(Uri^ value);
+			static String^ UriToCanonicalString(Uri^ value);
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]

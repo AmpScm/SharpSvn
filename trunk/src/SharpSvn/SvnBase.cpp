@@ -71,7 +71,7 @@ AprPool^ SvnBase::SmallThreadPool::get()
 {
 	if(!_threadPool || !_threadPool->IsValid()) // Recreate if disposed for some reason
 		_threadPool = gcnew AprPool();
-	
+
 	return _threadPool;
 }
 
@@ -163,13 +163,13 @@ Uri^ SvnBase::PathToUri(String^ path)
 
 /*String^ SvnBase::CanonicalizePath(String^ path)
 {
-	if (!path)
-		throw gcnew ArgumentNullException("path");
+if (!path)
+throw gcnew ArgumentNullException("path");
 
-	if (path->Length > 0 && ((path[path->Length-1] == System::IO::Path::DirectorySeparatorChar) || (path[path->Length-1] == System::IO::Path::AltDirectorySeparatorChar)))
-		return path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
+if (path->Length > 0 && ((path[path->Length-1] == System::IO::Path::DirectorySeparatorChar) || (path[path->Length-1] == System::IO::Path::AltDirectorySeparatorChar)))
+return path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
 
-	return path;
+return path;
 }*/
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr)
@@ -365,7 +365,7 @@ apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, 
 	else if(revProps && revProps->Count)
 	{
 		apr_hash_t* items = apr_hash_make(pool->Handle);
-		
+
 		for each(SvnPropertyValue^ value in revProps)
 		{
 			const char* key = pool->AllocString(value->Key);
@@ -379,4 +379,40 @@ apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, 
 	}
 
 	return nullptr;
+}
+
+String^ SvnBase::UriToString(Uri^ value)
+{
+	if(!value)
+		return nullptr;
+
+	if(value->IsAbsoluteUri)
+		return value->GetComponents(
+				UriComponents::SchemeAndServer |
+				UriComponents::UserInfo |
+				UriComponents::Path, UriFormat::UriEscaped);
+	else
+	{
+		String^ v = value->PathAndQuery;
+
+		int n = v->IndexOf('?');
+
+		if(n >= 0)
+			v = v->Substring(0, n);
+
+		return Uri::EscapeUriString(v);
+	}
+}
+
+String^ SvnBase::UriToCanonicalString(Uri^ value)
+{
+	if(!value)
+		return nullptr;
+
+	String^ name = SvnBase::UriToString(CanonicalizeUri(value));
+
+	if(name && name->Length && (name[name->Length-1] == '/'))
+		return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
+	else
+		return name;
 }
