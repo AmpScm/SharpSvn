@@ -125,6 +125,7 @@ namespace SharpSvn {
 
 	internal:
 		bool HandleResult(SvnClientContext^ client, svn_error_t *error);
+		void Prepare();
 	};
 
 	/// <summary>Base class of all <see cref="SvnClient" /> arguments which allow committing</summary>
