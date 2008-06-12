@@ -14,6 +14,7 @@
 #include <libintl.h>
 
 using namespace SharpSvn;
+using System::IO::Path;
 
 [Serializable]
 ref class SvnThreadAbortException : InvalidOperationException
@@ -108,18 +109,49 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 	return NULL;
 }
 
+FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
+{
+	if (dliNotify != dliFailLoadLib)
+		return nullptr; // Nothing we can fix
+
+	::OutputDebugStringA("Automatic delay loading one of the SharpSvn helper DLLs failed; trying to work around\n");
+
+	AprPool pool(SvnBase::SmallThreadPool);
+	
+	Uri^ codeBase;
+
+	if (!Uri::TryCreate(SvnBase::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase))
+		return nullptr; // We don't know where we were loaded from
+
+	String^ path = Path::Combine(Path::GetDirectoryName(Path::GetFullPath(codeBase->LocalPath)), gcnew String(pdli->szDll));
+
+	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
+
+
+	HMODULE hMod = ::LoadLibraryW(pChars);
+
+	return (FARPROC)hMod;
+}
+
 #pragma unmanaged
 static bool SetHandler()
 {
 	sharpsvn_abort_t* handler = &sharpsvn_abort_handler;
 
 	InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
+	InterlockedExchangePointer((void**)&__pfnDliFailureHook2, (void*)SharpSvnDelayLoadFailure);
 
 	return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
 }
 
 #pragma managed
+
+
+
+
 void SvnBase::InstallAbortHandler()
 {
 	SetHandler();
+
+
 }
