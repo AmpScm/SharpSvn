@@ -205,6 +205,9 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 
 String^ SvnTools::GetNormalizedFullPath(String^ path)
 {
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
 	path = Path::GetFullPath(path);
 
 	if(path->Length >= 2 && path[1] == ':')
