@@ -45,7 +45,7 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
 		throw gcnew ArgumentNullException("modifiedPath");
 	else if((latestPath || ancestorPath) && String::IsNullOrEmpty(latestPath))
 		throw gcnew ArgumentNullException("latestPath");
-	else if(ancestorPath && String::IsNullOrEmpty("ancestorPath"))
+	else if(ancestorPath && String::IsNullOrEmpty(ancestorPath))
 		throw gcnew ArgumentNullException("ancestorPath");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
