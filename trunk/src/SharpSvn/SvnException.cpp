@@ -119,7 +119,8 @@ String^ SvnException::GetErrorText(svn_error_t *error)
 
 		svn_err_best_message(error, buffer, sizeof(buffer)-1);
 
-		return SvnBase::Utf8_PtrToString(buffer);
+		String^ msg = SvnBase::Utf8_PtrToString(buffer);
+		return msg ? msg->Trim() : nullptr;
 	}
 	catch(Exception^)
 	{
