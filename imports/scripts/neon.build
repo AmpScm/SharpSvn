@@ -16,6 +16,13 @@
 			<echo file="${svnBase}/../neon/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
 			<echo file="${svnBase}/../neon/config.h" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.h')}" />
 			<echo file="${svnBase}/../neon/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
+			
+			<loadfile file="${svnBase}/../neon/src/ne_socket.c" property="cFile">
+				<filterchain>
+					<replacestring from=" &amp;&amp; defined(IPPROTO_TCP)" to=" //&amp;&amp; defined(IPPROTO_TCP)" />
+				</filterchain>
+			</loadfile>
+			<echo file="${svnBase}/../neon/src/ne_socket.c" message="${cFile}" />
 		</OnceBlock>
 	</target>
 </project>
