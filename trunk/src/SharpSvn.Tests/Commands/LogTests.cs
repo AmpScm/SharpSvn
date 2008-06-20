@@ -183,7 +183,7 @@ namespace SharpSvn.Tests.Commands
         public void TestMultiLogs()
         {
             bool touched = false;
-            Assert.That(Client.Log(new SvnUriTarget(new Uri("http://svn.collab.net/repos/svn/trunk/")),
+            Assert.That(Client.Log(new Uri("http://svn.collab.net/repos/svn/trunk/"),
                 delegate(object sender, SvnLogEventArgs e)
                 {
                     touched = true;
@@ -202,7 +202,7 @@ namespace SharpSvn.Tests.Commands
             List<Uri> uris = new List<Uri>();
             long rev = 0;
 
-            Assert.That(Client.Log(new SvnUriTarget(new Uri("http://svn.collab.net/repos/svn/trunk/")),
+            Assert.That(Client.Log(new Uri("http://svn.collab.net/repos/svn/trunk/"),
                 delegate(object sender, SvnLogEventArgs e)
                 {
                     foreach (SvnChangeItem item in e.ChangedPaths)
@@ -338,7 +338,7 @@ namespace SharpSvn.Tests.Commands
                 n++;
             };
 
-            client.Log(new SvnUriTarget(new Uri(WcUri, "LogTestFileDest")), verify);
+            client.Log(new Uri(WcUri, "LogTestFileDest"), verify);
             Assert.That(n, Is.EqualTo(3));
 
             n = 0;
