@@ -20,23 +20,21 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.String,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)")];
 [module: SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Scope="member", Target="SharpSvn.SvnClient.#Log(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.EventHandler`1<SharpSvn.SvnLogEventArgs>)")];
 
-bool SvnClient::Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::Log(String^ targetPath, EventHandler<SvnLogEventArgs^>^ logHandler)
+{
+	if (String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+	return Log(targetPath, gcnew SvnLogArgs(), logHandler);
+}
+
+bool SvnClient::Log(Uri^ target, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!logHandler)
-		throw gcnew ArgumentNullException("logHandler");
 
-	SvnLogArgs^ args = gcnew SvnLogArgs();
-	args->OriginRevision = target->Revision;
-
-	SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);
-
-	if (uriTarget)
-		return Log(uriTarget->Uri, args, logHandler);
-	else
-		return Log(target->SvnTargetName, args, logHandler);
+	return Log(target, gcnew SvnLogArgs(), logHandler);
 }
+
 
 bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
@@ -301,7 +299,24 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 	}
 }
 
-bool SvnClient::GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems)
+bool SvnClient::GetLog(String^ targetPath, [Out] Collection<SvnLogEventArgs^>^% logItems)
+{
+	if (String::IsNullOrEmpty(targetPath))
+		throw gcnew ArgumentNullException("targetPath");
+
+	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
+
+	try
+	{
+		return Log(targetPath, results->Handler);
+	}
+	finally
+	{
+		logItems = results;
+	}
+}
+
+bool SvnClient::GetLog(Uri^ target, [Out] Collection<SvnLogEventArgs^>^% logItems)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");

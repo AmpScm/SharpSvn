@@ -433,7 +433,10 @@ namespace SharpSvn {
 #pragma region // Log Client Command
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
-		bool Log(SvnTarget^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
+		bool Log(String^ targetPath, EventHandler<SvnLogEventArgs^>^ logHandler);
+
+		/// <summary>Gets log messages of the specified target</summary>
+		bool Log(Uri^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <summary>Gets log messages of the specified target</summary>
 		/// <remarks>A pegrevision applied on the target overrides one set on the args object</remarks>
@@ -451,7 +454,9 @@ namespace SharpSvn {
 
 		/// <overloads>Retrieve the log messages for a set of revision(s) and/or file(s). (<c>svn log</c>)</overloads>
 		/// <summary>Gets log messages of the specified target</summary>
-		bool GetLog(SvnTarget^ target, [Out] Collection<SvnLogEventArgs^>^% logItems);
+		bool GetLog(String^ targetPath, [Out] Collection<SvnLogEventArgs^>^% logItems);
+		/// <summary>Gets log messages of the specified target</summary>
+		bool GetLog(Uri^ target, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
 		bool GetLog(Uri^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 		/// <summary>Gets log messages of the specified target</summary>
