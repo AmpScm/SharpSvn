@@ -31,6 +31,14 @@
 				<arg line="-f ms\nt.mak" />
 			</exec>
 		</OnceBlock>
+    <OnceBlock file="build/openssl-patch-OCSP_RESPONSE.tick">
+      <loadfile file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" property="ossl_typ">
+        <filterchain>
+          <replacestring from="#undef PKCS7_ISSUER_AND_SERIAL" to="#undef PKCS7_ISSUER_AND_SERIAL&#13;&#10;#undef OCSP_RESPONSE" />
+        </filterchain>
+      </loadfile>
+      <echo message="${ossl_typ}" file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" />
+    </OnceBlock>
 		<copy todir="${release}/lib">
 			<fileset basedir="build/win32/openssl-${opensslVersion}/out32">
 				<include name="*.lib" />
