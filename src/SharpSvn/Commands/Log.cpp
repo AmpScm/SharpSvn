@@ -127,7 +127,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 		root += "/";
 
 	System::Collections::Generic::List<String^>^ rawTargets = gcnew System::Collections::Generic::List<String^>();
-	Uri^ rootUri = gcnew Uri(first, root);
+	Uri^ rootUri = gcnew Uri(first, Uri::UnescapeDataString(root)); // URI .ctor escapes the 2nd parameter
 	if (moreThanOne)
 	{
 		// Invoke with primary url followed by relative subpaths
