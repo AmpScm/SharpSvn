@@ -113,7 +113,7 @@ namespace SharpSvn.Tests.Commands
 		{
 			Assert.That(e.Break, Is.False);
 			Assert.That(e.Cancel, Is.False);
-			Assert.That(e.CommonName, Is.EqualTo("*.googlecode.com"));
+			Assert.That(e.CommonName, Is.EqualTo("googlecode.com"));
 			Assert.That(DateTime.Parse(e.ValidFrom), Is.LessThan(DateTime.Now));
 			Assert.That(DateTime.Parse(e.ValidUntil), Is.GreaterThan(DateTime.Now));
 			_serverTrustTicked = true;
