@@ -28,10 +28,20 @@ namespace SharpSvn.Tests.Commands
 		public void TestBasicLock()
 		{
 			string filepath = Path.Combine(this.WcPath, "Form.cs");
-			this.Client.Lock(new string[] { filepath }, "Moo ");
+
+			SvnLockArgs la = new SvnLockArgs();
+			la.Comment = "Moo ";
+			la.Notify += new EventHandler<SvnNotifyEventArgs>(OnLockNotify);
+			this.Client.Lock(new string[] { filepath }, la);
 
 			char lockStatus = this.RunCommand("svn", "status " + filepath)[5];
 			Assert.That(lockStatus, Is.EqualTo('K'), "File not locked");
+		}
+
+		void OnLockNotify(object sender, SvnNotifyEventArgs e)
+		{
+			GC.KeepAlive(e);
+			//throw new NotImplementedException();
 		}
 	}
 }
