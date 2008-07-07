@@ -209,8 +209,20 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnObstructedUpdateException, SvnWorkingCopyException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnInvalidNodeKindException, SvnWorkingCopyException);
 
+	DECLARE_SVN_EXCEPTION_TYPE(SvnUnsupportedFeatureException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnUnknownCapabilityException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnChecksumMismatchException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnReservedNameUsedException, SvnException);
+
 	/// <summary>SharpSvn SvnClient exception</summary>
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientException, SvnException);
+
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientNoVersionedPathException, SvnClientException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientNoVersionedParentException, SvnClientException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientUnrelatedResourcesException, SvnClientException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientMissingLockTokenException, SvnClientException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientNotReadyToMergeException, SvnClientException);
+
 	/// <summary>SharpSvn configuration loader exception</summary>
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientConfigurationException, SvnClientException);
 }
