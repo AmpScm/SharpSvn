@@ -138,7 +138,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 Uri^ SvnBase::PathToUri(String^ path)
 {
-	if (!path)
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	StringBuilder^ sb = gcnew StringBuilder();

@@ -457,3 +457,11 @@ Uri^ SvnTools::GetNormalizedUri(Uri^ uri)
 
 	return SvnBase::CanonicalizeUri(uri);
 }
+
+Uri^ SvnTools::PathToRelativeUri(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	return SvnBase::PathToUri(path);
+}
