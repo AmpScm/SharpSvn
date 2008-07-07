@@ -351,8 +351,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_SVNDIFF_INVALID_COMPRESSED_DATA:
 		case SVN_ERR_DIFF_DATASOURCE_MODIFIED:
 			return gcnew SvnDiffException(error);
-
-		case SVN_ERR_CLIENT_VERSIONED_PATH_REQUIRED:
+		
 		case SVN_ERR_CLIENT_RA_ACCESS_REQUIRED:
 		case SVN_ERR_CLIENT_BAD_REVISION:
 		case SVN_ERR_CLIENT_DUPLICATE_COMMIT_URL:
@@ -363,13 +362,21 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_CLIENT_REVISION_RANGE:
 		case SVN_ERR_CLIENT_INVALID_RELOCATION:
 		case SVN_ERR_CLIENT_REVISION_AUTHOR_CONTAINS_NEWLINE:
-		case SVN_ERR_CLIENT_PROPERTY_NAME:
-		case SVN_ERR_CLIENT_UNRELATED_RESOURCES:
-		case SVN_ERR_CLIENT_MISSING_LOCK_TOKEN:
-		case SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED:
-		case SVN_ERR_CLIENT_NO_VERSIONED_PARENT:
-		case SVN_ERR_CLIENT_NOT_READY_TO_MERGE:
+		case SVN_ERR_CLIENT_PROPERTY_NAME:		
+		case SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED:				
 			return gcnew SvnClientApiException(error);
+
+		case SVN_ERR_CLIENT_VERSIONED_PATH_REQUIRED:
+			return gcnew SvnClientNoVersionedPathException(error);
+		case SVN_ERR_CLIENT_NO_VERSIONED_PARENT:
+			return gcnew SvnClientNoVersionedParentException(error);
+		case SVN_ERR_CLIENT_UNRELATED_RESOURCES:
+			return gcnew SvnClientUnrelatedResourcesException(error);
+		case SVN_ERR_CLIENT_MISSING_LOCK_TOKEN:
+			return gcnew SvnClientMissingLockTokenException(error);
+		
+		case SVN_ERR_CLIENT_NOT_READY_TO_MERGE:
+			return gcnew SvnClientNotReadyToMergeException(error);
 
 			//		case SVN_ERR_MERGE_INFO_PARSE_ERROR:
 			//			return gcnew SvnException(error);
@@ -395,24 +402,29 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_INCOMPLETE_DATA:
 		case SVN_ERR_INCORRECT_PARAMS:
 		case SVN_ERR_UNVERSIONED_RESOURCE:
-		case SVN_ERR_TEST_FAILED:
-		case SVN_ERR_UNSUPPORTED_FEATURE:
+		case SVN_ERR_TEST_FAILED:		
 		case SVN_ERR_BAD_PROP_KIND:
 		case SVN_ERR_DELTA_MD5_CHECKSUM_ABSENT:
 		case SVN_ERR_DIR_NOT_EMPTY:
 		case SVN_ERR_EXTERNAL_PROGRAM:
-		case SVN_ERR_SWIG_PY_EXCEPTION_SET:
-		case SVN_ERR_CHECKSUM_MISMATCH:
+		case SVN_ERR_SWIG_PY_EXCEPTION_SET:		
 		case SVN_ERR_INVALID_DIFF_OPTION:
 		case SVN_ERR_PROPERTY_NOT_FOUND:
 		case SVN_ERR_NO_AUTH_FILE_PATH:
 		case SVN_ERR_VERSION_MISMATCH:
 		case SVN_ERR_MERGEINFO_PARSE_ERROR:
-		case SVN_ERR_REVNUM_PARSE_FAILURE:
-		case SVN_ERR_RESERVED_FILENAME_SPECIFIED:
-		case SVN_ERR_UNKNOWN_CAPABILITY:
+		case SVN_ERR_REVNUM_PARSE_FAILURE:				
 			// TODO: Split out
 			return gcnew SvnException(error);
+
+		case SVN_ERR_UNSUPPORTED_FEATURE:
+			return gcnew SvnUnsupportedFeatureException(error);
+		case SVN_ERR_UNKNOWN_CAPABILITY:
+			return gcnew SvnUnknownCapabilityException(error);
+		case SVN_ERR_CHECKSUM_MISMATCH:
+			return gcnew SvnChecksumMismatchException(error);
+		case SVN_ERR_RESERVED_FILENAME_SPECIFIED:
+			return gcnew SvnReservedNameUsedException(error);
 
 		default:
 			if (APR_STATUS_IS_EACCES(error->apr_err))
