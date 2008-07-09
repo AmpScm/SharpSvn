@@ -134,15 +134,18 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		Uri^ suffix;
 		
 		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer, UriFormat::SafeUnescaped), UriKind::Absolute, root))
-			throw gcnew ArgumentException("Invalid Uri in scheme or server", "uri");
+			throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
 		
 		String^ part = "/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
 
 		if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')
 			part += '/';
 
+		if (!Uri::TryCreate(part, UriKind::Relative, suffix))
+			throw gcnew ArgumentException("Invalid Uri value in path", "uri");
+
 		Uri^ result;
-		if (Uri::TryCreate(root, part, result))
+		if (Uri::TryCreate(root, suffix, result))
 			return result;
 	}
 
