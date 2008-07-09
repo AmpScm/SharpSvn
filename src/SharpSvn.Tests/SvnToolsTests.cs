@@ -28,6 +28,17 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("file:///c:/"), "a%20b")).AbsoluteUri, Is.EqualTo("file:///c:/a%20b"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("file:///c:/"), "a%20b/")).AbsoluteUri, Is.EqualTo("file:///c:/a%20b"));
 
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file:///e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file://e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file:////e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share")).AbsoluteUri, Is.EqualTo("file://server/share"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\")).AbsoluteUri, Is.EqualTo("file://server//share")); // Should this case be fixed
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a\")).AbsoluteUri, Is.EqualTo("file://server//share/a"));
         }
 
         [Test]
@@ -45,6 +56,13 @@ namespace SharpSvn.Tests
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\a b\\test")).AbsoluteUri, Is.EqualTo("http://server/q/r/a%20b/test"));
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\a b\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/a%20b/test/"));
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/c%23/test/"));
+        }
+
+        [Test]
+        public void TestUriCanonicalization()
+        {
+            Assert.That(new Uri("svn://127.0.0.1:1234").ToString(), Is.EqualTo("svn://127.0.0.1:1234/"));
+            Assert.That(new SvnUriTarget(new Uri("svn://127.0.0.1:1234")).TargetName, Is.EqualTo("svn://127.0.0.1:1234/"));
         }
     }
 }

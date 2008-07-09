@@ -126,11 +126,24 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 	String^ path = uri->GetComponents(UriComponents::Path, UriFormat::SafeUnescaped);
+
 	if (path->Length > 0 && (path[path->Length -1] == '/' || path->IndexOf('\\') >= 0))
 	{
 		// Create a new uri with all / and \ characters at the end removed
-		Uri^ u = gcnew Uri(uri->GetComponents(UriComponents::SchemeAndServer, UriFormat::SafeUnescaped));
-		return gcnew Uri(u, "/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
+		Uri^ root;
+		Uri^ suffix;
+		
+		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer, UriFormat::SafeUnescaped), UriKind::Absolute, root))
+			throw gcnew ArgumentException("Invalid Uri in scheme or server", "uri");
+		
+		String^ part = "/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
+
+		if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')
+			part += '/';
+
+		Uri^ result;
+		if (Uri::TryCreate(root, part, result))
+			return result;
 	}
 
 	return uri;
