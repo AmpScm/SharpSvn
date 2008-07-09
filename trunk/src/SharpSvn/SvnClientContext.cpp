@@ -108,14 +108,14 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 		{
 			int authCookie;
 
-			CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(authCookie);
+			CtxHandle->auth_baton = Authentication->GetAuthorizationBaton(authCookie);
 			_authCookie = authCookie;
 
 			_contextState = SvnContextState::AuthorizationInitialized;
 		}
 		else
 		{
-			if (_authCookie != Authenticator->Cookie)
+			if (_authCookie != Authentication->Cookie)
 			{
 				// Authenticator configuration has changed; reload the baton and its backend
 
@@ -124,7 +124,7 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 
 				int authCookie;
 
-				CtxHandle->auth_baton = Authenticator->GetAuthorizationBaton(authCookie);
+				CtxHandle->auth_baton = Authentication->GetAuthorizationBaton(authCookie);
 				_authCookie = authCookie;
 
 				_contextState = SvnContextState::AuthorizationInitialized;

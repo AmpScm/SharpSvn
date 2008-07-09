@@ -128,15 +128,6 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Please use .Authentication instead")]
-		property SvnAuthentication^ Authenticator
-		{
-			SvnAuthentication^ get()
-			{
-				return _authentication;
-			}
-		}
-
 	private protected:
 		// Used as auto-dispose class for setting the _currentArgs property
 		ref class ArgsStore sealed
