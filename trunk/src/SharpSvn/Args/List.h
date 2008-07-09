@@ -117,7 +117,13 @@ namespace SharpSvn {
 			String^ qr = _queryRoot;
 			_queryRoot = nullptr; // Only parse in the first call, which matches the exact request
 
-			String^ path = SvnBase::PathToUri(SvnBase::Utf8_PtrToString(abs_path+1))->ToString(); // Skip the initial '/'
+			String^ absPath = SvnBase::Utf8_PtrToString(abs_path+1);
+			String^ path;
+			
+			if(absPath->Length > 0)
+				path = SvnBase::PathToUri(SvnBase::Utf8_PtrToString(abs_path+1))->ToString(); // Skip the initial '/'
+			else
+				path = "";
 
 			if(path->Length == 0)
 			{
