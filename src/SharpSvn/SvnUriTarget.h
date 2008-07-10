@@ -89,6 +89,7 @@ namespace SharpSvn {
 		}
 
 		static SvnUriTarget^ FromString(String^ value);
+		static SvnUriTarget^ FromString(String^ value, bool allowPegRevision);
 
 		static operator SvnUriTarget^(Uri^ value)				{ return value ? FromUri(value) : nullptr; }
 		static explicit operator SvnUriTarget^(String^ value)	{ return value ? FromString(value) : nullptr; }

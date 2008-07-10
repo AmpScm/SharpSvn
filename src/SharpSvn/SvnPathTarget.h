@@ -116,38 +116,47 @@ namespace SharpSvn {
 
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnPathTarget^% target);
+		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnPathTarget^% target);
 
 	internal:
-		static bool TryParse(String^ targetName, [Out] SvnPathTarget ^% target, AprPool^ pool)
+		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnPathTarget ^% target, AprPool^ pool)
 		{
 			if (String::IsNullOrEmpty(targetName))
 				throw gcnew ArgumentNullException("targetName");
 			else if(!pool)
 				throw gcnew ArgumentNullException("pool");
-			
+
 			if(!SvnBase::IsNotUri(targetName))
 				return false;
 
-			svn_opt_revision_t rev;
-			svn_error_t* r;
-			const char* truePath;
-
-			const char* path = pool->AllocPath(targetName);
-
-			if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
+			if(allowPegRevisions)
 			{
-				String^ realPath = Utf8_PtrToString(truePath);
+				svn_opt_revision_t rev;
+				svn_error_t* r;
+				const char* truePath;
 
-				if (!realPath->Contains("://"))
+				const char* path = pool->AllocPath(targetName);
+
+				if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
 				{
-					SvnRevision^ pegRev = SvnRevision::Load(&rev);
+					String^ realPath = Utf8_PtrToString(truePath);
 
-					target = gcnew SvnPathTarget(realPath, pegRev);
-					return true;
+					if (!realPath->Contains("://"))
+					{
+						SvnRevision^ pegRev = SvnRevision::Load(&rev);
+
+						target = gcnew SvnPathTarget(realPath, pegRev);
+						return true;
+					}
 				}
+				else
+					svn_error_clear(r);
 			}
 			else
-				svn_error_clear(r);
+			{
+				target = gcnew SvnPathTarget(targetName);
+				return true;
+			}
 
 			target = nullptr;
 			return false;
@@ -155,6 +164,8 @@ namespace SharpSvn {
 
 	public:
 		static SvnPathTarget^ FromString(String^ value);
+		static SvnPathTarget^ FromString(String^ value, bool allowPegRevision);
+
 		static operator SvnPathTarget^(String^ value) { return value ? gcnew SvnPathTarget(value) : nullptr; }
 
 	internal:
