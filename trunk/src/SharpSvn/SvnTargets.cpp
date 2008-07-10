@@ -79,18 +79,23 @@ svn_opt_revision_t* SvnRevision::AllocSvnRevision(AprPool ^pool)
 
 bool SvnTarget::TryParse(String^ targetName, [Out] SvnTarget^% target)
 {
+	return TryParse(targetName, false, target);
+}
+
+bool SvnTarget::TryParse(String^ targetName, bool allowPegRevision, [Out] SvnTarget^% target)
+{
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 
 	SvnUriTarget^ uriTarget = nullptr;
 	SvnPathTarget^ pathTarget = nullptr;
 
-	if (targetName->Contains("://") && SvnUriTarget::TryParse(targetName, uriTarget))
+	if (targetName->Contains("://") && SvnUriTarget::TryParse(targetName, allowPegRevision, uriTarget))
 	{
 		target = uriTarget;
 		return true;
 	}
-	else if(SvnPathTarget::TryParse(targetName, pathTarget))
+	else if(SvnPathTarget::TryParse(targetName, allowPegRevision, pathTarget))
 	{
 		target = pathTarget;
 		return true;
@@ -171,22 +176,32 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 
 bool SvnPathTarget::TryParse(String^ targetName, [Out] SvnPathTarget^% target)
 {
+	return TryParse(targetName, false, target);
+}
+
+bool SvnPathTarget::TryParse(String^ targetName, bool allowPegRevision, [Out] SvnPathTarget^% target)
+{
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 
 	AprPool pool(SvnBase::SmallThreadPool);
 
-	return TryParse(targetName, target, %pool);
+	return TryParse(targetName, allowPegRevision, target, %pool);
 }
 
 SvnTarget^ SvnTarget::FromString(String^ value)
+{
+	return FromString(value, false);
+}
+
+SvnTarget^ SvnTarget::FromString(String^ value, bool allowPegRevision)
 {
 	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnTarget^ result;
 
-	if (SvnTarget::TryParse(value, result))
+	if (SvnTarget::TryParse(value, allowPegRevision, result))
 	{
 		return result;
 	}
@@ -196,12 +211,17 @@ SvnTarget^ SvnTarget::FromString(String^ value)
 
 SvnPathTarget^ SvnPathTarget::FromString(String^ value)
 {
+	return FromString(value, false);
+}
+
+SvnPathTarget^ SvnPathTarget::FromString(String^ value, bool allowPegRevision)
+{
 	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnPathTarget^ result;
 
-	if (SvnPathTarget::TryParse(value, result))
+	if (SvnPathTarget::TryParse(value, allowPegRevision, result))
 	{
 		return result;
 	}
@@ -211,12 +231,17 @@ SvnPathTarget^ SvnPathTarget::FromString(String^ value)
 
 SvnUriTarget^ SvnUriTarget::FromString(String^ value)
 {
+	return FromString(value, false);
+}
+
+SvnUriTarget^ SvnUriTarget::FromString(String^ value, bool allowPegRevision)
+{
 	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnUriTarget^ result;
 
-	if (SvnUriTarget::TryParse(value, result))
+	if (SvnUriTarget::TryParse(value, allowPegRevision, result))
 	{
 		return result;
 	}

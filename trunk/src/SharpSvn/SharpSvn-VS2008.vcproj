@@ -1256,10 +1256,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnTargets.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnUpdateResult.h"
 					>
 				</File>
@@ -1301,6 +1297,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnMergeRangeCollection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTargets.cpp"
 					>
 				</File>
 			</Filter>

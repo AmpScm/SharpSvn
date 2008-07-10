@@ -298,9 +298,10 @@ namespace SharpSvn {
 
 		static SvnTarget^ FromUri(Uri^ value);
 		static SvnTarget^ FromString(String^ value);
+		static SvnTarget^ FromString(String^ value, bool allowPegRevisions);
 
 		static operator SvnTarget^(Uri^ value)			{ return value ? FromUri(value) : nullptr; }
-		static operator SvnTarget^(String^ value)		{ return value ? FromString(value) : nullptr; }
+		static operator SvnTarget^(String^ value)		{ return value ? FromString(value, false) : nullptr; }
 
 		virtual bool Equals(Object^ obj) override
 		{
@@ -328,6 +329,7 @@ namespace SharpSvn {
 
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnTarget^% target);
+		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnTarget^% target);
 	internal:
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
 	};
