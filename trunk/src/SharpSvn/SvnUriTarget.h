@@ -120,7 +120,13 @@ namespace SharpSvn {
 		}
 
 	public:
+
 		static bool TryParse(String^ path, [Out] SvnUriTarget^% pegUri)
+		{
+			return TryParse(path, false, pegUri);
+		}
+
+		static bool TryParse(String^ path, bool allowPegRevision, [Out] SvnUriTarget^% pegUri)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
@@ -128,7 +134,7 @@ namespace SharpSvn {
 			AprPool ^pool = gcnew AprPool();
 			try
 			{
-				return TryParse(path, pegUri, pool);
+				return TryParse(path, allowPegRevision, pegUri, pool);
 			}
 			finally
 			{
@@ -137,37 +143,7 @@ namespace SharpSvn {
 		}
 
 	internal:
-		static bool TryParse(String^ targetString, [Out] SvnUriTarget ^% target, AprPool^ pool)
-		{
-			if (String::IsNullOrEmpty(targetString))
-				throw gcnew ArgumentNullException("targetString");
-			else if(!pool)
-				throw gcnew ArgumentNullException("pool");
-
-			svn_opt_revision_t rev;
-			svn_error_t* r;
-			const char* truePath;
-
-			const char* path = pool->AllocPath(targetString);
-
-			if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
-			{
-				System::Uri^ uri = nullptr;
-
-				if (System::Uri::TryCreate(Utf8_PtrToString(truePath), UriKind::Absolute, uri))
-				{
-					SvnRevision^ pegRev = SvnRevision::Load(&rev);
-
-					target = gcnew SvnUriTarget(uri, pegRev);
-					return true;
-				}
-			}
-			else
-				svn_error_clear(r);
-
-			target = nullptr;
-			return false;
-		}
+		static bool TryParse(String^ targetString, bool allowPegRevision, [Out] SvnUriTarget ^% target, AprPool^ pool);
 
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
 	};

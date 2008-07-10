@@ -160,7 +160,7 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 
 	if (path->EndsWith("\\.", StringComparison::Ordinal))
 		path = path->Substring(0, path->Length-2);
-	
+
 	if (path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
 	{
 		path = path->TrimEnd(Path::DirectorySeparatorChar);
@@ -247,4 +247,49 @@ SvnUriTarget^ SvnUriTarget::FromString(String^ value, bool allowPegRevision)
 	}
 	else
 		throw gcnew System::ArgumentException(SharpSvnStrings::TheTargetIsNotAValidUriTarget, "value");
+}
+
+bool SvnUriTarget::TryParse(String^ targetString, bool allowPegRevision, [Out] SvnUriTarget ^% target, AprPool^ pool)
+{
+	if (String::IsNullOrEmpty(targetString))
+		throw gcnew ArgumentNullException("targetString");
+	else if(!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	if(allowPegRevision)
+	{
+		svn_opt_revision_t rev;
+		svn_error_t* r;
+		const char* truePath;
+
+		const char* path = pool->AllocPath(targetString);
+
+		if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
+		{
+			System::Uri^ uri = nullptr;
+
+			if (System::Uri::TryCreate(Utf8_PtrToString(truePath), UriKind::Absolute, uri))
+			{
+				SvnRevision^ pegRev = SvnRevision::Load(&rev);
+
+				target = gcnew SvnUriTarget(uri, pegRev);
+				return true;
+			}
+		}
+		else
+			svn_error_clear(r);
+	}
+	else
+	{
+		System::Uri^ uri;
+
+		if(System::Uri::TryCreate(targetString, UriKind::Absolute, uri))
+		{
+			target = gcnew SvnUriTarget(uri);
+			return true;
+		}
+	}
+
+	target = nullptr;
+	return false;
 }
