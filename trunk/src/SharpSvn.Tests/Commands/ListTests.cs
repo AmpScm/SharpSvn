@@ -106,6 +106,64 @@ namespace SharpSvn.Tests.Commands
         }
 
         [Test]
+        public void WorstLocalDir()
+        {
+            Uri uri = CollabReposUri;
+            string tmp = GetTempDir();
+
+            Client.CheckOut(uri, tmp);
+
+            string s1 = "start #";
+            string s2 = "q!@#$%^&()_- +={}[]',.Æeiaæå";
+            string s3  = "done!";
+
+            string d = tmp;
+            Directory.CreateDirectory(d = Path.Combine(d, s1));
+            Directory.CreateDirectory(d = Path.Combine(d, s2));
+            Directory.CreateDirectory(d = Path.Combine(d, s3));
+
+            string f1, f2;
+            TouchFile(f1 = Path.Combine(d, "file.txt"));
+            TouchFile(f2 = Path.Combine(d, s2 + ".txt"));
+
+            SvnAddArgs aa = new SvnAddArgs();
+            aa.AddParents = true;
+            Client.Add(f1, aa);
+            Client.Add(f2, aa);
+            Client.Commit(tmp);
+
+            SvnInfoEventArgs ea;
+            Client.GetInfo(d, out ea);
+
+            Uri r = new Uri(new Uri(new Uri(uri, SvnTools.PathToRelativeUri(s1 + "/")), SvnTools.PathToRelativeUri(s2 + "/")), SvnTools.PathToRelativeUri(s3+"/"));
+
+            Assert.That(r.ToString(), Is.EqualTo(ea.Uri.ToString()));
+
+            // Run with a .Net normalized Uri
+            Client.List(r,
+                delegate(object sender, SvnListEventArgs e)
+                {
+                    Assert.That(e.RepositoryRoot, Is.EqualTo(uri));
+                });
+
+            // Run with a SVN normalized Uri
+            Client.List(ea.Uri,
+                delegate(object sender, SvnListEventArgs e)
+                {
+                    Assert.That(e.RepositoryRoot, Is.EqualTo(uri));
+                });
+
+            r = new Uri(new Uri(new Uri(uri, SvnTools.PathToRelativeUri(s1 + "//")), SvnTools.PathToRelativeUri(s2 + "///")), SvnTools.PathToRelativeUri(s3 + "////"));
+
+            // Run with uncanonical Uri
+            Client.List(r,
+                delegate(object sender, SvnListEventArgs e)
+                {
+                    Assert.That(e.RepositoryRoot, Is.EqualTo(uri));
+                });
+        }
+
+        [Test]
         public void TestHash()
         {
             using (SvnClient client = new SvnClient())

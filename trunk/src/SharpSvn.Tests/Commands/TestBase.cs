@@ -140,21 +140,6 @@ namespace SharpSvn.Tests.Commands
         {
             bool found = File.Exists(e.FullPath) || Directory.Exists(e.FullPath) || Directory.Exists(Path.GetDirectoryName(e.FullPath));
 
-            if (e.CommandType == SvnCommandType.Commit)
-            {
-                switch (e.Action)
-                {
-                    case SvnNotifyAction.CommitModified:
-                    case SvnNotifyAction.CommitSendData:
-                    case SvnNotifyAction.CommitAdded:
-                    case SvnNotifyAction.CommitDeleted:
-                    case SvnNotifyAction.CommitReplaced:
-                        // Verify if the pre subversion 1.5.x rc1 bug is still present
-                        //Assert.That(!found);
-                        return;
-                }
-            }
-
             Assert.That(found,
                 "{0} is not a valid path and it's directory does not exist\n (Raw value = {1}, Current Directory = {2}, Action = {3}, CommandType = {4})", 
                 e.FullPath, e.Path, Environment.CurrentDirectory, e.Action, e.CommandType);
