@@ -445,7 +445,7 @@ String^ SvnTools::UriPartToPath(String^ stringToUnescape)
 	if (!stringToUnescape)
 		throw gcnew ArgumentNullException("stringToUnescape");
 
-	return Uri::UnescapeDataString(stringToUnescape);
+	return Uri::UnescapeDataString(stringToUnescape)->Replace('/', Path::DirectorySeparatorChar);
 }
 
 Uri^ SvnTools::GetNormalizedUri(Uri^ uri)
