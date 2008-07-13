@@ -118,6 +118,15 @@ bool SvnBase::IsNotUri(String ^path)
 	return true;
 }
 
+String^ SvnBase::RemoveDoubleSlashes(String^ input)
+{
+	int n;
+	
+	while(0 <= (n = input->IndexOf("//")))
+		input = input->Remove(n, 1);
+
+	return input;
+}
 Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
 	if (!uri)
@@ -136,7 +145,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer, UriFormat::SafeUnescaped), UriKind::Absolute, root))
 			throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
 		
-		String^ part = "/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar);
+		String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
 
 		if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')
 			part += '/';

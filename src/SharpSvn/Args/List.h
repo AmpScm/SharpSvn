@@ -113,18 +113,19 @@ namespace SharpSvn {
 		{
 			if(_repositoryRoot || !_queryRoot)
 				return _repositoryRoot;
-			
+
 			String^ qr = _queryRoot;
 			_queryRoot = nullptr; // Only parse in the first call, which matches the exact request
 
 			String^ absPath = SvnBase::Utf8_PtrToString(abs_path+1);
 			String^ path;
-			
+
 			if(absPath->Length > 0)
 				path = SvnBase::PathToUri(SvnBase::Utf8_PtrToString(abs_path+1))->ToString(); // Skip the initial '/'
 			else
 				path = "";
 
+			Uri^ rt;
 			if(path->Length == 0)
 			{
 				// Special case. The passed path is the solution root; EndsWith would always succeed
@@ -133,11 +134,26 @@ namespace SharpSvn {
 				else
 					_repositoryRoot = gcnew Uri(qr);
 			}
-			else if(qr->EndsWith(path, StringComparison::Ordinal))
+			else if (Uri::TryCreate(qr, UriKind::Absolute, rt))
 			{
-				String^ root = qr->Substring(0, qr->Length-path->Length);
+				int n = path->Length;
 
-				Uri::TryCreate(root, UriKind::Absolute, _repositoryRoot);
+				int up = 0;
+				while(--n > 0)
+				{
+					if (path[n] == '/')
+						up++;
+				}
+
+				if(qr[qr->Length-1] == '/')
+					up++;
+				else if(up == 0)
+					rt = gcnew Uri(rt, "./");
+
+				while(up-- > 0)
+					rt = gcnew Uri(rt, "../");
+
+				_repositoryRoot = rt;
 			}
 
 			return _repositoryRoot;

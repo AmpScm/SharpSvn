@@ -88,6 +88,8 @@ namespace SharpSvn {
 			static Uri^ PathToUri(String^ path);
 			//static String^ CanonicalizePath(String^ path);
 
+			static String^ RemoveDoubleSlashes(String^ input);
+
 			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
 			static apr_array_header_t *AllocCanonicalArray(ICollection<String^>^ paths, AprPool^ pool);
 			static apr_array_header_t *AllocPathArray(ICollection<String^>^ paths, AprPool^ pool);
