@@ -191,16 +191,24 @@ namespace SharpSvn.UI
 
 		void DialogSslClientCertificateHandler(Object sender, SvnSslClientCertificateEventArgs e)
 		{
-			String file;
-			bool save;
+            using (SslClientCertificateFileDialog dlg = new SslClientCertificateFileDialog())
+            {
+                dlg.Text = Strings.ConnectToSubversion;
+                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.ACertificateFileIsRequiredForAccessingServerXatY);
+                dlg.descriptionBox.Visible = true;
+                dlg.rememberCheck.Enabled = e.MaySave;
 
-			if (SharpSvnGui.AskClientCertificateFile(_window.Handle, "Connect to Subversion", e.Realm, e.MaySave, out file, out save))
-			{
-				e.CertificateFile = file;
-				e.Save = save && e.MaySave;
-			}
-			else
-                e.Cancel = e.Break = true;
+                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+
+                if (r != DialogResult.OK)
+                {
+                    e.Cancel = e.Break = true;
+                    return ;
+                }
+
+                e.CertificateFile = dlg.fileBox.Text;
+                e.Save = e.MaySave && dlg.rememberCheck.Checked;
+            }
 		}
 
 		void DialogSslClientCertificatePasswordHandler(Object sender, SvnSslClientCertificatePasswordEventArgs e)
