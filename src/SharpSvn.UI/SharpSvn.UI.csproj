@@ -45,13 +45,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Authentication\NativeMethods.cs" />
-    <Compile Include="Authentication\ServerCertificateInfo.cs" />
     <Compile Include="Authentication\SslClientCertificatePassPhraseDialog.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Authentication\SslClientCertificatePassPhraseDialog.Designer.cs">
       <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Authentication\NativeMethods.cs" />
+    <Compile Include="Authentication\ServerCertificateInfo.cs" />
+    <Compile Include="Authentication\SslClientCertificateFileDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Authentication\SslClientCertificateFileDialog.Designer.cs">
+      <DependentUpon>SslClientCertificateFileDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Authentication\SslServerCertificateTrustDialog.cs">
       <SubType>Form</SubType>
@@ -87,9 +93,9 @@
     <Compile Include="SvnClientUIHandler.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Authentication\SslClientCertificatePassPhraseDialog.resx">
+    <EmbeddedResource Include="Authentication\SslClientCertificateFileDialog.resx">
       <SubType>Designer</SubType>
-      <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
+      <DependentUpon>SslClientCertificateFileDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Authentication\SslServerCertificateTrustDialog.resx">
       <SubType>Designer</SubType>
@@ -107,6 +113,10 @@
   <ItemGroup>
     <None Include="Authentication\AuthenticationBanner.bmp" />
     <None Include="SharpSvn.UI.snk" />
+    <EmbeddedResource Include="Authentication\SslClientCertificatePassPhraseDialog.resx">
+      <DependentUpon>SslClientCertificatePassPhraseDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <SubType>Designer</SubType>
       <Generator>ResXFileCodeGenerator</Generator>
