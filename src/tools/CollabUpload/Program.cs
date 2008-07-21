@@ -6,6 +6,7 @@ using System.IO;
 using System.Xml;
 using System.Web;
 using QQn.TurtleUtils.IO;
+using System.Text.RegularExpressions;
 
 namespace CollabUpload
 {
@@ -21,6 +22,9 @@ namespace CollabUpload
             public string Name;
             public string Status;
             public string Description;
+
+            public string Result;
+
             public readonly List<string> Files = new List<string>();
         }
 
@@ -91,6 +95,12 @@ namespace CollabUpload
                             if (!argAvailable)
                                 return ArgError("--status requires argument");
                             aa.Status = value;
+                            i++;
+                            break;
+                        case "--result":
+                            if (!argAvailable)
+                                return ArgError("--result requires argument");
+                            aa.Result = value;
                             i++;
                             break;
                         default:
@@ -178,6 +188,9 @@ namespace CollabUpload
 
             // Ok, we are logged in; let's upload the files
 
+            if (!string.IsNullOrEmpty(args.Result) && File.Exists(args.Result))
+                File.Delete(args.Result);
+
             foreach (string file in args.Files)
             {
                 Console.WriteLine("Uploading {0}", Path.GetFileName(file));
@@ -207,6 +220,18 @@ namespace CollabUpload
                     {
                         Console.WriteLine("Upload failed");
                         return null;
+                    }
+
+                    // This page is currently not valid Xml; use regular expressions instead
+                    Regex re = new Regex("\\<a[^>]*href=\"(?<url>[^\"]*" + Regex.Escape(Path.GetFileName(file)) + ")\"[^>]*\\>"
+                        + "\\s*" + Regex.Escape(args.Name ?? Path.GetFileName(file)) + "\\s*</a>");
+
+                    Match m = re.Match(text);
+
+                    if (m.Success)
+                    {
+                        if (!string.IsNullOrEmpty(args.Result))
+                            File.AppendAllText(args.Result, new Uri(new Uri(requestUri), m.Groups["url"].Value).AbsoluteUri + Environment.NewLine);
                     }
                 }
             }
