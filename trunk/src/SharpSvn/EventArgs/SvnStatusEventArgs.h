@@ -13,6 +13,9 @@ namespace SharpSvn {
 
 	public ref class SvnWorkingCopyInfo sealed
 	{
+		// This class looks remarkibly simalar to SvnWorkingCopyEntryEventArgs
+		// I don't use them as the same to keep both open for future extensions
+		// in different directions
 		svn_wc_entry_t* _entry;
 
 		String^ _name;
