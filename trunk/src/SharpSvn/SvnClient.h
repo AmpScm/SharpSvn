@@ -386,32 +386,7 @@ namespace SharpSvn {
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		bool Add(String^ path, SvnAddArgs^ args);
 #pragma endregion
-
-	internal:
-		generic<typename T>
-		where T : SvnEventArgs
-		ref class InfoItemCollection : public System::Collections::ObjectModel::Collection<T>
-		{
-		public:
-			InfoItemCollection()
-			{}
-
-		internal:
-			void HandleItem(Object^ sender, T e)
-			{
-				UNUSED_ALWAYS(sender);
-				e->Detach();
-				Add(e);
-			}
-
-			property EventHandler<T>^ Handler
-			{
-				EventHandler<T>^ get()
-				{
-					return gcnew EventHandler<T>(this, &InfoItemCollection<T>::HandleItem);
-				}
-			}
-		};
+	
 	public:
 		/////////////////////////////////////////
 #pragma region // Status Client Command
@@ -1110,19 +1085,6 @@ namespace SharpSvn {
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>
 		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id);
-
-	public:
-		/// <summary>Gets the Pristine file and/or text file status of a working copy path</summary>
-		bool GetWorkingCopyState(String^ targetPath, [Out] SvnWorkingCopyState^% result);
-		/// <summary>Gets the Pristine file and/or text file status of a working copy path</summary>
-		bool GetWorkingCopyState(String^ targetPath, SvnGetWorkingCopyStateArgs^ args, [Out] SvnWorkingCopyState^% result);
-
-
-	public:
-		/// <summary>Gets the working copy version (<c>svnversion</c>)</summary>
-		bool GetWorkingCopyVersion(String^ targetPath, [Out] SvnWorkingCopyVersion^% version);
-		/// <summary>Gets the working copy version (<c>svnversion</c>)</summary>
-		bool GetWorkingCopyVersion(String^ targetPath, SvnGetWorkingCopyVersionArgs^ args, [Out] SvnWorkingCopyVersion^% version);
 
 	private:
 		~SvnClient();

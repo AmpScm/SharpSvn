@@ -671,7 +671,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnWorkingCopyState.h"
+					RelativePath=".\SvnWorkingCopyClient.h"
 					>
 				</File>
 				<File
@@ -724,6 +724,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnRepositorySession.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
 					>
 				</File>
 			</Filter>
@@ -797,14 +801,6 @@
 				</File>
 				<File
 					RelativePath=".\Commands\GetSuggestedMergeSources.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetWorkingCopyState.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
 					>
 				</File>
 				<File
@@ -976,14 +972,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetWorkingCopyState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\GetWorkingCopyVersion.h"
-					>
-				</File>
-				<File
 					RelativePath=".\Args\Import.h"
 					>
 				</File>
@@ -1151,6 +1139,10 @@
 					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
 					>
 				</File>
+				<File
+					RelativePath=".\EventArgs\SvnWorkingCopyEntryEventArgs.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Repository Args"
@@ -1264,7 +1256,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnWorkingCopyVersion.h"
+					RelativePath=".\Args\SvnWorkingCopyState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\SvnWorkingCopyVersion.h"
 					>
 				</File>
 			</Filter>
@@ -1317,6 +1313,38 @@
 				>
 				<File
 					RelativePath=".\SvnTools.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="WorkingCopy Args"
+				>
+				<File
+					RelativePath=".\Args\GetWorkingCopyVersion.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\WorkingCopyEntries.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\WorkingCopyState.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="WorkingCopy Sources"
+				>
+				<File
+					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\WorkingCopyEntries.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\WorkingCopyState.cpp"
 					>
 				</File>
 			</Filter>

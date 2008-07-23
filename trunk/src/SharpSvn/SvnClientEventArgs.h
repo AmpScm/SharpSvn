@@ -9,45 +9,7 @@
 #include "SvnCommitItem.h"
 #include "svn_compat.h"
 
-namespace SharpSvn {
-	using System::Collections::Generic::ICollection;
-	using System::Collections::Generic::IDictionary;
-	using System::Collections::Generic::IList;
-	using System::Collections::Generic::SortedList;
-	using System::Collections::ObjectModel::KeyedCollection;
-
-	ref class SvnException;
-	ref class SvnMergeRange;
-
-	public ref class SvnEventArgs abstract : public System::EventArgs
-	{
-	protected:
-		SvnEventArgs()
-		{
-		}
-
-	public:
-		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
-		/// <description>After this method is called all properties values are stored in managed code</description>
-		void Detach()
-		{
-			Detach(true);
-		}
-	protected public:
-		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
-		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
-		virtual void Detach(bool keepProperties)
-		{
-			UNUSED_ALWAYS(keepProperties);
-		}
-
-	internal:
-		static int SafeGetHashCode(Object^ value)
-		{
-			return value ? value->GetHashCode() : 0;
-		}
-	};
-};
+#include "EventArgs/SvnEventArgs.h"
 
 #include "EventArgs/SvnCancelEventArgs.h"
 #include "EventArgs/SvnCommittingEventArgs.h"
@@ -67,5 +29,6 @@ namespace SharpSvn {
 #include "EventArgs/SvnPropertyListEventArgs.h"
 #include "EventArgs/SvnStatusEventArgs.h"
 
-#include "SvnWorkingCopyState.h"
+#include "Args/SvnWorkingCopyState.h"
+#include "EventArgs/SvnWorkingCopyEntryEventArgs.h"
 

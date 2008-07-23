@@ -17,6 +17,11 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientArgs abstract
 	{
+		static SvnClientArgs()
+		{
+			SvnBase::EnsureLoaded();
+		}
+
 		bool _noThrowOnError;
 		bool _noThrowOnCancel;
 		SvnException^ _exception;

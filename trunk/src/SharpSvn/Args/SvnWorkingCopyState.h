@@ -10,23 +10,13 @@ namespace SharpSvn {
 	public ref class SvnWorkingCopyState sealed
 	{
 		bool _isText;
-		String^ _pristineFile;
 	internal:
-		SvnWorkingCopyState(bool isText, String^ pristineFile)
+		SvnWorkingCopyState(bool isText)
 		{
 			_isText = isText;
-			_pristineFile = pristineFile;
 		}
 
-	public:
-		property String^ WorkingCopyBasePath
-		{
-			String^ get()
-			{
-				return _pristineFile;
-			}
-		}
-
+	public:	
 		property bool IsTextFile
 		{
 			bool get()
