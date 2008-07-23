@@ -9,26 +9,23 @@ using namespace System;
 
 namespace SharpSvn {
 
-#define SVN_ERRDEF(x,y,z) x = x,
+using System::ComponentModel::DescriptionAttribute;
+
+#define SVN_ERRDEF(x,y,z) [DescriptionAttribute(z)] x = x,
 #define SVN_ERROR_BUILD_ARRAY
 #pragma warning(disable: 4634)
 
-	namespace Implementation {
 #define DOXYGEN_SHOULD_SKIP_THIS
 #define SVN_ERROR_START [CLSCompliant(false)] public enum class SvnErrorCode { None=0,
 #define SVN_ERROR_END };
 
 #include "svn_error_codes.h"
 
-	}
 #undef SVN_ERRDEF
 #undef SVN_ERROR_BUILD_ARRAY
 #undef DOXYGEN_SHOULD_SKIP_THIS
 #undef SVN_ERROR_START
 #undef SVN_ERROR_END
-
-	using SharpSvn::Implementation::SvnErrorCode;
-
 
 	[Serializable]
 	public ref class SvnException : public System::Exception
@@ -94,13 +91,13 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the raw subversion error code casted to a <see cref="SharpSvn::Implementation::SvnErrorCode" /></summary>
+		/// <summary>Gets the raw subversion error code casted to a <see cref="SharpSvn::SvnErrorCode" /></summary>
 		[CLSCompliant(false)]
-		property SharpSvn::Implementation::SvnErrorCode SvnErrorCode
+		property SharpSvn::SvnErrorCode SvnErrorCode
 		{
-			SharpSvn::Implementation::SvnErrorCode get()
+			SharpSvn::SvnErrorCode get()
 			{
-				return (SharpSvn::Implementation::SvnErrorCode)SubversionErrorCode;
+				return (SharpSvn::SvnErrorCode)SubversionErrorCode;
 			}
 		}
 
