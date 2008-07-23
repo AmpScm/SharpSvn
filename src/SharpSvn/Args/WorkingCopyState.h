@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-	public ref class SvnGetWorkingCopyStateArgs : public SvnClientArgs
+	public ref class SvnWorkingCopyStateArgs : public SvnClientArgs
 	{
 		bool _getBaseFile;
 		bool _getFileData;
@@ -24,20 +24,8 @@ namespace SharpSvn {
 		}
 
 	public:
-		SvnGetWorkingCopyStateArgs()
+		SvnWorkingCopyStateArgs()
 		{
-		}
-
-		property bool RetrieveBaseFile
-		{
-			bool get()
-			{
-				return _getBaseFile;
-			}
-			void set(bool value)
-			{
-				_getBaseFile = value;
-			}
 		}
 
 		property bool RetrieveFileData

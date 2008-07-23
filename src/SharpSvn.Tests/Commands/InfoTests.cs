@@ -151,7 +151,9 @@ namespace SharpSvn.Tests.Commands
             Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
 
             SvnWorkingCopyVersion ver;
-            Assert.That(Client.GetWorkingCopyVersion(dir, out ver));
+            SvnWorkingCopyClient wcC = new SvnWorkingCopyClient();
+
+            Assert.That(wcC.GetVersion(dir, out ver));
             Assert.That(ver, Is.Not.Null);
 
             Assert.That(ver.Modified, Is.True);

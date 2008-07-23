@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 #include "Args/GetWorkingCopyVersion.h"
-#include "SvnWorkingCopyVersion.h"
+#include "Args/SvnWorkingCopyVersion.h"
 
 #include "UnmanagedStructs.h"
 
@@ -15,15 +15,15 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-bool SvnClient::GetWorkingCopyVersion(String^ targetPath, [Out] SvnWorkingCopyVersion^% version)
+bool SvnWorkingCopyClient::GetVersion(String^ targetPath, [Out] SvnWorkingCopyVersion^% version)
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
 
-	return GetWorkingCopyVersion(targetPath, gcnew SvnGetWorkingCopyVersionArgs(), version);
+	return GetVersion(targetPath, gcnew SvnGetWorkingCopyVersionArgs(), version);
 }
 
-bool SvnClient::GetWorkingCopyVersion(String^ targetPath, SvnGetWorkingCopyVersionArgs^ args, [Out] SvnWorkingCopyVersion^% version)
+bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersionArgs^ args, [Out] SvnWorkingCopyVersion^% version)
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");

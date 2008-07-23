@@ -120,20 +120,21 @@ namespace SharpSvn.Tests.Commands
 		public void TestHasBinaryProp()
 		{
 			SvnWorkingCopyState state;
-			SvnGetWorkingCopyStateArgs a = new SvnGetWorkingCopyStateArgs();
+			SvnWorkingCopyStateArgs a = new SvnWorkingCopyStateArgs();
 			a.RetrieveFileData = true;
 
-			Client.GetWorkingCopyState(Path.Combine(this.WcPath, "Form.cs"), out state);
+            SvnWorkingCopyClient wcc = new SvnWorkingCopyClient();
+			wcc.GetState(Path.Combine(this.WcPath, "Form.cs"), out state);
 
 			// first on a file
 			Assert.That(state.IsTextFile);
 
-			Client.GetWorkingCopyState(Path.Combine(this.WcPath, "App.ico"), out state);
+			wcc.GetState(Path.Combine(this.WcPath, "App.ico"), out state);
 
 			Assert.That(state.IsTextFile, Is.False);
 
 
-			Client.GetWorkingCopyState(this.WcPath, out state);
+			wcc.GetState(this.WcPath, out state);
 
 			// check what happens for a dir
 			//Assert.IsFalse(state.IsTextFile);

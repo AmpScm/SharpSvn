@@ -203,12 +203,63 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	return IsDirectory(Path::Combine(path, SvnClient::AdministrativeDirectoryName));
 }
 
+static String^ LongGetFullPath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	// Subversion does not have a problem with paths over MAX_PATH, as long as they are absolute
+	if (!path->StartsWith("\\\\?\\"))
+		path = "\\\\?\\" + path;
+
+	pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
+	wchar_t rPath[1024];
+
+	ZeroMemory(rPath, sizeof(rPath));
+	const int sz = (sizeof(rPath) / sizeof(rPath[0]))-1;
+
+	unsigned c = GetFullPathNameW((LPCWSTR)pPath, sz, rPath, nullptr);
+
+	if(c == 0 || c >= sz)
+		throw gcnew PathTooLongException("GetFullPath for long paths failed");
+
+	path = gcnew String(rPath, 0, c);
+
+	if (path->StartsWith("\\\\?\\"))
+		path = path->Substring(4);
+
+	return path;
+}
+
 String^ SvnTools::GetNormalizedFullPath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	path = Path::GetFullPath(path);
+	try
+	{
+		path = Path::GetFullPath(path);
+	}
+	catch(PathTooLongException^)
+	{
+		// Path::GetFullPath() checked for strange characters for us!
+		// It would have throwed an ArgumentException for them
+
+		if (IsNormalizedFullPath(path))
+			return path; // Just pass through
+
+		try
+		{
+			path = LongGetFullPath(path);
+		}
+		catch(Exception^)
+		{
+			path = nullptr;
+		}
+
+		if(!path)
+			throw;
+	}
 
 	if(path->Length >= 2 && path[1] == ':')
 	{

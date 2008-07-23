@@ -6,6 +6,7 @@
 #pragma once
 
 #include "AprPool.h"
+#include "EventArgs/SvnEventArgs.h"
 
 using namespace System;
 using namespace SharpSvn::Implementation;
@@ -75,6 +76,15 @@ namespace SharpSvn {
 	public:
 		SvnClientContext(SvnClientContext ^fromContext);
 
+	public:
+		property bool IsCommandRunning
+		{
+			bool get()
+			{
+				return (_currentArgs != nullptr);
+			}
+		}
+
 	private:
 		~SvnClientContext();
 
@@ -139,6 +149,31 @@ namespace SharpSvn {
 			~ArgsStore()
 			{
 				_client->_currentArgs = nullptr;
+			}
+		};
+	internal:
+		generic<typename T>
+		where T : SvnEventArgs
+		ref class InfoItemCollection : public System::Collections::ObjectModel::Collection<T>
+		{
+		public:
+			InfoItemCollection()
+			{}
+
+		internal:
+			void HandleItem(Object^ sender, T e)
+			{
+				UNUSED_ALWAYS(sender);
+				e->Detach();
+				Add(e);
+			}
+
+			property EventHandler<T>^ Handler
+			{
+				EventHandler<T>^ get()
+				{
+					return gcnew EventHandler<T>(this, &InfoItemCollection<T>::HandleItem);
+				}
 			}
 		};
 	};
