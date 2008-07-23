@@ -203,6 +203,9 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr)
 	if (!ptr)
 		return nullptr;
 
+	if (!*ptr)
+		return "";
+
 	return Utf8_PtrToString(ptr, (int)::strlen(ptr));
 }
 
@@ -210,6 +213,9 @@ String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 {
 	if (!ptr || length < 0)
 		return nullptr;
+
+	if (!*ptr)
+		return "";
 
 	return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
 }
