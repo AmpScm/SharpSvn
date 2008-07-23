@@ -24,9 +24,9 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, Stream^ result)
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!to)
+	else if (!to)
 		throw gcnew ArgumentNullException("to");
-	else if(!result)
+	else if (!result)
 		throw gcnew ArgumentNullException("result");
 
 	return Diff(from, to, gcnew SvnDiffArgs(), result);
@@ -36,11 +36,11 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!to)
+	else if (!to)
 		throw gcnew ArgumentNullException("to");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!result)
+	else if (!result)
 		throw gcnew ArgumentNullException("result");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -80,9 +80,9 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, Stream^ result)
 {
 	if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!range)
+	else if (!range)
 		throw gcnew ArgumentNullException("range");
-	else if(!result)
+	else if (!result)
 		throw gcnew ArgumentNullException("result");
 
 	return Diff(source, range, gcnew SvnDiffArgs(), result);
@@ -92,11 +92,11 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 {
 	if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!range)
+	else if (!range)
 		throw gcnew ArgumentNullException("range");
-	else if(!result)
+	else if (!result)
 		throw gcnew ArgumentNullException("result");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

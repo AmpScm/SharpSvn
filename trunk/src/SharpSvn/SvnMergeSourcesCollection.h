@@ -8,7 +8,7 @@ namespace SharpSvn {
 	internal:
 		SvnMergeSource(System::Uri^ uri)
 		{
-			if(!uri)
+			if (!uri)
 				throw gcnew ArgumentNullException("uri");
 			_uri = uri;
 		}

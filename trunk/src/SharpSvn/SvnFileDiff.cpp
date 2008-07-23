@@ -16,9 +16,9 @@ SvnFileDiff::SvnFileDiff(svn_diff_t *diff, const char* originalPath, const char*
 						 const char* latestPath, const char* ancestorPath, AprPool^ pool)
 	: SvnDiff(diff, pool)
 {	
-	if(!originalPath)
+	if (!originalPath)
 		throw gcnew ArgumentNullException("originalPath");
-	else if(!modifiedPath)
+	else if (!modifiedPath)
 		throw gcnew ArgumentNullException("modifiedPath");
 
 	_originalPath = originalPath;
@@ -39,24 +39,24 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
 
 bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ latestPath, String^ ancestorPath, SvnFileDiffArgs^ args, [Out] SvnFileDiff^% diff)
 {
-	if(String::IsNullOrEmpty(originalPath))
+	if (String::IsNullOrEmpty(originalPath))
 		throw gcnew ArgumentNullException("originalPath");
-	else if(String::IsNullOrEmpty(modifiedPath))
+	else if (String::IsNullOrEmpty(modifiedPath))
 		throw gcnew ArgumentNullException("modifiedPath");
-	else if((latestPath || ancestorPath) && String::IsNullOrEmpty(latestPath))
+	else if ((latestPath || ancestorPath) && String::IsNullOrEmpty(latestPath))
 		throw gcnew ArgumentNullException("latestPath");
-	else if(ancestorPath && String::IsNullOrEmpty(ancestorPath))
+	else if (ancestorPath && String::IsNullOrEmpty(ancestorPath))
 		throw gcnew ArgumentNullException("ancestorPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	if(originalPath && !File::Exists(originalPath))
+	if (originalPath && !File::Exists(originalPath))
 		throw gcnew FileNotFoundException(String::Format(SharpSvnStrings::FileXNotFound, originalPath), originalPath);
-	else if(modifiedPath && !File::Exists(modifiedPath))
+	else if (modifiedPath && !File::Exists(modifiedPath))
 		throw gcnew FileNotFoundException(String::Format(SharpSvnStrings::FileXNotFound, modifiedPath), modifiedPath);
-	else if(latestPath && !File::Exists(latestPath))
+	else if (latestPath && !File::Exists(latestPath))
 		throw gcnew FileNotFoundException(String::Format(SharpSvnStrings::FileXNotFound, latestPath), latestPath);
-	else if(ancestorPath && !File::Exists(ancestorPath))
+	else if (ancestorPath && !File::Exists(ancestorPath))
 		throw gcnew FileNotFoundException(String::Format(SharpSvnStrings::FileXNotFound, ancestorPath), ancestorPath);
 
 	diff = nullptr;
@@ -83,9 +83,9 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
 		else
 			err = svn_diff_file_diff_2(&dp, origPath, modPath, options, pool->Handle);
 
-		if(err)
+		if (err)
 			return args->HandleResult(nullptr, err);
-		else if(!dp)
+		else if (!dp)
 			return false;
 
 		diff = gcnew SvnFileDiff(dp, origPath, modPath, latPath, ancPath, pool);
@@ -94,16 +94,16 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
 	}
 	finally
 	{
-		if(!diff)
+		if (!diff)
 			delete pool;
 	}	
 }
 
 bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
 {
-	if(!toStream)
+	if (!toStream)
 		throw gcnew ArgumentNullException("toStream");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	AprPool pool(Pool);
@@ -128,9 +128,9 @@ bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
 
 bool SvnFileDiff::WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs^ args)
 {
-	if(!toStream)
+	if (!toStream)
 		throw gcnew ArgumentNullException("toStream");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	AprPool pool(Pool);

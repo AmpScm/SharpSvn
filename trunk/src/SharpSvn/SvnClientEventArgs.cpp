@@ -24,7 +24,7 @@ SvnCommittingEventArgs::SvnCommittingEventArgs(const apr_array_header_t *commitI
 {
 	if (!commitItems)
 		throw gcnew ArgumentNullException("commitItems");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	this->_commitItems = commitItems;

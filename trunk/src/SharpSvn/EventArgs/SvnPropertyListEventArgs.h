@@ -21,9 +21,9 @@ public ref class SvnPropertyListEventArgs : public SvnCancelEventArgs
 		{
 			if (!path)
 				throw gcnew ArgumentNullException("path");
-			else if(!prop_hash)
+			else if (!prop_hash)
 				throw gcnew ArgumentNullException("prop_hash");
-			else if(!pool)
+			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
 
 			_path = SvnBase::Utf8_PtrToString(path);

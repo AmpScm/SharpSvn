@@ -34,7 +34,7 @@ namespace SharpSvn {
 		{
 			if (!start)
 				throw gcnew ArgumentNullException("start");
-			else if(!end)
+			else if (!end)
 				throw gcnew ArgumentNullException("end");
 
 			_start = start;
@@ -174,7 +174,7 @@ namespace SharpSvn {
 			if (!list)
 				throw gcnew ArgumentNullException("list");
 
-			for each(SvnMergeRange^ i in list)
+			for each (SvnMergeRange^ i in list)
 				Add(i);
 		}
 
@@ -209,7 +209,7 @@ namespace SharpSvn {
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
-			else if(!ranges)
+			else if (!ranges)
 				throw gcnew ArgumentNullException("ranges");
 
 			_uri = uri;

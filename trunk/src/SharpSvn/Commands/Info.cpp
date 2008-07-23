@@ -19,7 +19,7 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!infoHandler)
+	else if (!infoHandler)
 		throw gcnew ArgumentNullException("infoHandler");
 
 	return Info(target, gcnew SvnInfoArgs(), infoHandler);
@@ -58,7 +58,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	// We allow a null infoHandler; the args object might just handle it itself
@@ -118,7 +118,7 @@ bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] Collection<S
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();

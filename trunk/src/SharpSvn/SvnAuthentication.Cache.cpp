@@ -29,23 +29,23 @@ void SvnAuthentication::CopyAuthenticationCache(SharpSvn::SvnClientContext ^clie
 		throw gcnew ArgumentNullException("client");
 
 	svn_client_ctx_t* ctx = client->CtxHandle;
-	if(!ctx || !ctx->auth_baton)
+	if (!ctx || !ctx->auth_baton)
 		return; // Nothing to copy
 
 	apr_hash_t* cache = sharpsvn_svn_auth_get_credentials_cache(ctx->auth_baton);
 
-	if(!cache || !apr_hash_count(cache))
+	if (!cache || !apr_hash_count(cache))
 		return;
 
-	if(!_currentBaton)
+	if (!_currentBaton)
 		_clientContext->EnsureState(SvnContextState::AuthorizationInitialized);
 
-	if(!_currentBaton)
+	if (!_currentBaton)
 		return;
 
 	apr_hash_t *toCache = sharpsvn_svn_auth_get_credentials_cache(_currentBaton);
 
-	if(!toCache)
+	if (!toCache)
 		return;
 
 	clone_credentials(get_cache(ctx->auth_baton), toCache, _authPool);
@@ -53,12 +53,12 @@ void SvnAuthentication::CopyAuthenticationCache(SharpSvn::SvnClientContext ^clie
 
 void SvnAuthentication::ClearAuthenticationCache()
 {
-	if(!_currentBaton)
+	if (!_currentBaton)
 		return;
 		
 	apr_hash_t *hash = get_cache(_currentBaton);
 
-	if(hash)
+	if (hash)
 		sharpsvn_apr_hash_clear(hash);
 }
 
@@ -124,7 +124,7 @@ static svn_auth_cred_ssl_server_trust_t* clone_cred_ssl_servercert(const svn_aut
 
 apr_hash_t* SvnAuthentication::get_cache(svn_auth_baton_t* baton)
 {
-	if(!baton)
+	if (!baton)
 		throw gcnew ArgumentNullException("baton");
 
 	return sharpsvn_svn_auth_get_credentials_cache(baton);
@@ -152,7 +152,7 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 
 		pNewValue = nullptr;
 
-		if(!pValue)
+		if (!pValue)
 			continue;
 
 		if (MatchPrefix(pKey, SVN_AUTH_CRED_SIMPLE))
@@ -167,7 +167,7 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 			pNewValue = clone_cred_ssl_servercert((const svn_auth_cred_ssl_server_trust_t*)pValue, pool);
 		/* else: Unknown -> Don't copy */
 
-		if(pNewValue)
+		if (pNewValue)
 			apr_hash_set(hash_to, pKey, len, pNewValue);
 	}
 

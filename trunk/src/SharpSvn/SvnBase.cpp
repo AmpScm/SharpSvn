@@ -69,7 +69,7 @@ SvnBase::SvnBase()
 
 AprPool^ SvnBase::SmallThreadPool::get()
 {
-	if(!_threadPool || !_threadPool->IsValid()) // Recreate if disposed for some reason
+	if (!_threadPool || !_threadPool->IsValid()) // Recreate if disposed for some reason
 		_threadPool = gcnew AprPool();
 
 	return _threadPool;
@@ -82,7 +82,7 @@ bool SvnBase::IsValidReposUri(Uri^ uri)
 
 	if (!uri->IsAbsoluteUri)
 		return false;
-	else if(String::IsNullOrEmpty(uri->Scheme))
+	else if (String::IsNullOrEmpty(uri->Scheme))
 		return false;
 
 	return true;
@@ -122,7 +122,7 @@ String^ SvnBase::RemoveDoubleSlashes(String^ input)
 {
 	int n;
 	
-	while(0 <= (n = input->IndexOf("//")))
+	while (0 <= (n = input->IndexOf("//")))
 		input = input->Remove(n, 1);
 
 	return input;
@@ -131,7 +131,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	else if(!uri->IsAbsoluteUri)
+	else if (!uri->IsAbsoluteUri)
 		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
 	String^ path = uri->GetComponents(UriComponents::Path, UriFormat::SafeUnescaped);
@@ -181,7 +181,7 @@ Uri^ SvnBase::PathToUri(String^ path)
 		sb->Append(Uri::EscapeDataString(p));
 	}
 
-	if(Uri::TryCreate(sb->ToString(), UriKind::Relative, result))
+	if (Uri::TryCreate(sb->ToString(), UriKind::Relative, result))
 		return result;
 
 	throw gcnew ArgumentOutOfRangeException();
@@ -229,7 +229,7 @@ Uri^ SvnBase::Utf8_PtrToUri(const char *ptr, SvnNodeKind nodeKind)
 
 	if (!url)
 		return nullptr;
-	else if(nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
+	else if (nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
 		url += "/";
 
 	Uri^ uri;
@@ -259,7 +259,7 @@ Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 {
 	if (!ptr || length < 0)
 		return nullptr;
-	else if(length == 0)
+	else if (length == 0)
 		return "";
 
 	try
@@ -361,7 +361,7 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 {
 	if (!propHash)
 		throw gcnew ArgumentNullException("propHash");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	SvnPropertyCollection^ _properties = gcnew SvnPropertyCollection();
@@ -394,11 +394,11 @@ apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, 
 {
 	if (!pool)
 		throw gcnew ArgumentNullException("pool");
-	else if(revProps && revProps->Count)
+	else if (revProps && revProps->Count)
 	{
 		apr_hash_t* items = apr_hash_make(pool->Handle);
 
-		for each(SvnPropertyValue^ value in revProps)
+		for each (SvnPropertyValue^ value in revProps)
 		{
 			const char* key = pool->AllocString(value->Key);
 
@@ -415,10 +415,10 @@ apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, 
 
 String^ SvnBase::UriToString(Uri^ value)
 {
-	if(!value)
+	if (!value)
 		return nullptr;
 
-	if(value->IsAbsoluteUri)
+	if (value->IsAbsoluteUri)
 		return value->GetComponents(
 				UriComponents::SchemeAndServer |
 				UriComponents::UserInfo |
@@ -429,12 +429,12 @@ String^ SvnBase::UriToString(Uri^ value)
 
 String^ SvnBase::UriToCanonicalString(Uri^ value)
 {
-	if(!value)
+	if (!value)
 		return nullptr;
 
 	String^ name = SvnBase::UriToString(CanonicalizeUri(value));
 
-	if(name && name->Length && (name[name->Length-1] == '/'))
+	if (name && name->Length && (name[name->Length-1] == '/'))
 		return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
 	else
 		return name;

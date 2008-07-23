@@ -56,7 +56,7 @@ namespace SharpSvn {
 
 			void set(SvnRevisionRange^ value)
 			{
-				if(!value)
+				if (!value)
 				{
 					Start = nullptr;
 					End = nullptr;

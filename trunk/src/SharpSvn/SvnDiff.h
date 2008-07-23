@@ -96,7 +96,7 @@ namespace SharpSvn {
 			{
 				IComparer<TToken>^ get()
 				{
-					if(!_comparer)
+					if (!_comparer)
 						_comparer = CreateComparer();
 
 					return _comparer;

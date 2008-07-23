@@ -75,7 +75,7 @@ apr_array_header_t* SvnMergeRangeCollection::AllocMergeRange(AprPool^ pool)
 
 bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, [Out] SvnMergeRangeCollection^% added, [Out] SvnMergeRangeCollection^% removed)
 {
-	if(!to)
+	if (!to)
 		throw gcnew ArgumentNullException("to");
 	
 	return TryDiff(to, gcnew SvnMergeDiffArgs(), added, removed);
@@ -83,7 +83,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, [Out] Svn
 
 bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeDiffArgs^ args, [Out] SvnMergeRangeCollection^% added, [Out] SvnMergeRangeCollection^% removed)
 {
-	if(!to)
+	if (!to)
 		throw gcnew ArgumentNullException("to");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -95,7 +95,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeD
 
 	SvnMergeRangeCollection^ toCol = dynamic_cast<SvnMergeRangeCollection^>(to);
 
-	if(!toCol)
+	if (!toCol)
 		toCol = gcnew SvnMergeRangeCollection(to);
 
 	apr_array_header_t* addedPtr = nullptr;
@@ -103,7 +103,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeD
 
 	svn_error_t* r = svn_rangelist_diff(&removedPtr, &addedPtr, AllocMergeRange(%pool), toCol->AllocMergeRange(%pool), args->ConsiderInheritance, pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);		
 		return false;
@@ -114,7 +114,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeD
 	else
 		added = gcnew SvnMergeRangeCollection();
 
-	if(removedPtr)
+	if (removedPtr)
 		removed = SvnMergeRangeCollection::Create(removedPtr);
 	else
 		removed = gcnew SvnMergeRangeCollection();
@@ -138,7 +138,7 @@ bool SvnMergeRangeCollection::TryRemove(ICollection<SvnMergeRange^>^ items, SvnM
 		throw gcnew ArgumentNullException("args");
 
 	SvnMergeRangeCollection^ coll = dynamic_cast<SvnMergeRangeCollection^>(items);
-	if(!coll)
+	if (!coll)
 		coll = gcnew SvnMergeRangeCollection(items);
 
 	rest = nullptr;
@@ -149,13 +149,13 @@ bool SvnMergeRangeCollection::TryRemove(ICollection<SvnMergeRange^>^ items, SvnM
 
 	svn_error_t* r = svn_rangelist_remove(&result, coll->AllocMergeRange(%pool), AllocMergeRange(%pool), args->ConsiderInheritance, pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);		
 		return false;
 	}
 
-	if(result)
+	if (result)
 		rest = SvnMergeRangeCollection::Create(result);
 	else
 		rest = gcnew SvnMergeRangeCollection();
@@ -178,7 +178,7 @@ bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, SvnM
 
 	SvnMergeRangeCollection^ coll = dynamic_cast<SvnMergeRangeCollection^>(to);
 
-	if(!coll)
+	if (!coll)
 		coll = gcnew SvnMergeRangeCollection(to);
 
 	intersected = nullptr;
@@ -189,13 +189,13 @@ bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, SvnM
 
 	svn_error_t* r = svn_rangelist_intersect(&result, AllocMergeRange(%pool), coll->AllocMergeRange(%pool), args->ConsiderInheritance, pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);		
 		return false;
 	}
 
-	if(result)
+	if (result)
 		intersected = SvnMergeRangeCollection::Create(result);
 	else
 		intersected = gcnew SvnMergeRangeCollection();
@@ -211,12 +211,12 @@ String^ SvnMergeRangeCollection::ToString()
 
 	svn_error_t* r = svn_rangelist_to_string(&result, this->AllocMergeRange(%pool), pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);
 		return "";
 	}
-	else if(!result || !result->data)
+	else if (!result || !result->data)
 		return "";
 	
 	return SvnBase::Utf8_PtrToString(result->data, (int)result->len);

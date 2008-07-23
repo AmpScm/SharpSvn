@@ -44,7 +44,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!info)
+			else if (!info)
 				throw gcnew ArgumentNullException("info");
 
 			_info = info;

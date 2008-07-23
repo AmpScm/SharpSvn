@@ -18,7 +18,7 @@ bool SvnClient::Lock(String^ target, String^ comment)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(!comment)
+	else if (!comment)
 		throw gcnew ArgumentNullException("comment");
 
 	SvnLockArgs^ args = gcnew SvnLockArgs();
@@ -31,9 +31,9 @@ bool SvnClient::Lock(Uri^ target, String^ comment)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!comment)
+	else if (!comment)
 		throw gcnew ArgumentNullException("comment");
-	else if(!IsValidReposUri(target))
+	else if (!IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
 	SvnLockArgs^ args = gcnew SvnLockArgs();
@@ -46,7 +46,7 @@ bool SvnClient::Lock(ICollection<String^>^ targets, String^ comment)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!comment)
+	else if (!comment)
 		throw gcnew ArgumentNullException("comment");
 
 	SvnLockArgs^ args = gcnew SvnLockArgs();
@@ -59,7 +59,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, String^ comment)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!comment)
+	else if (!comment)
 		throw gcnew ArgumentNullException("comment");
 
 	SvnLockArgs^ args = gcnew SvnLockArgs();
@@ -72,7 +72,7 @@ bool SvnClient::Lock(String^ target, SvnLockArgs^ args)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return Lock(NewSingleItemCollection(target), args);
@@ -82,9 +82,9 @@ bool SvnClient::Lock(Uri^ target, SvnLockArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsValidReposUri(target))
+	else if (!IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
 	return Lock(NewSingleItemCollection(target), args);
@@ -94,14 +94,14 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	for each(String^ target in targets)
+	for each (String^ target in targets)
 	{
 		if (String::IsNullOrEmpty(target))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-		else if(!IsNotUri(target))
+		else if (!IsNotUri(target))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targets");
 	}
 
@@ -118,7 +118,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
@@ -128,7 +128,7 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 	{
 		if (!uri)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-		else if(!SvnBase::IsValidReposUri(uri))
+		else if (!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
 
 		targetStrings[i++] = UriToCanonicalString(uri);
@@ -146,11 +146,11 @@ bool SvnClient::Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
 bool SvnClient::LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^ args, AprPool^ pool)
 {
-	if(!items)
+	if (!items)
 		throw gcnew ArgumentNullException("items");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	svn_error_t* r = svn_client_lock(

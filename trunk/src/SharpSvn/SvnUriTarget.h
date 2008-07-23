@@ -20,9 +20,9 @@ namespace SharpSvn {
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
-			else if(!uri->IsAbsoluteUri)
+			else if (!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if(!SvnBase::IsValidReposUri(uri))
+			else if (!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
@@ -33,9 +33,9 @@ namespace SharpSvn {
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
-			else if(!uri->IsAbsoluteUri)
+			else if (!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if(!SvnBase::IsValidReposUri(uri))
+			else if (!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
@@ -46,9 +46,9 @@ namespace SharpSvn {
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
-			else if(!uri->IsAbsoluteUri)
+			else if (!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if(!SvnBase::IsValidReposUri(uri))
+			else if (!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
@@ -59,9 +59,9 @@ namespace SharpSvn {
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
-			else if(!uri->IsAbsoluteUri)
+			else if (!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if(!SvnBase::IsValidReposUri(uri))
+			else if (!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);
@@ -72,9 +72,9 @@ namespace SharpSvn {
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
-			else if(!uri->IsAbsoluteUri)
+			else if (!uri->IsAbsoluteUri)
 				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if(!SvnBase::IsValidReposUri(uri))
+			else if (!SvnBase::IsValidReposUri(uri))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 			_uri = CanonicalizeUri(uri);

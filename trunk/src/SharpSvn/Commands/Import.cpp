@@ -21,7 +21,7 @@ bool SvnClient::Import(String^ path, Uri^ target)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return Import(path, target, gcnew SvnImportArgs());
@@ -31,7 +31,7 @@ bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitResult^% result
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return Import(path, target, gcnew SvnImportArgs(), result);
@@ -41,9 +41,9 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result;
@@ -55,11 +55,11 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!SvnBase::IsValidReposUri(target))
+	else if (!SvnBase::IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
 	if (RemoteImport(path, target, args, result))
@@ -88,7 +88,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return RemoteImport(path, target, gcnew SvnImportArgs());
@@ -98,7 +98,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitResult^% 
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return RemoteImport(path, target, gcnew SvnImportArgs(), result);
@@ -108,9 +108,9 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result;
@@ -122,11 +122,11 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!SvnBase::IsValidReposUri(target))
+	else if (!SvnBase::IsValidReposUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
 	result = nullptr;

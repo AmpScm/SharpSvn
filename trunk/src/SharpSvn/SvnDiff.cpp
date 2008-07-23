@@ -68,6 +68,6 @@ generic<typename TToken> where TToken : ref class
 SvnDiff<TToken>::~SvnDiff()
 {
 	_diff = nullptr;
-	if(_diffBaton)
+	if (_diffBaton)
 		delete _diffBaton;
 }

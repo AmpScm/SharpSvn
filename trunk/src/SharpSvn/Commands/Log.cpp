@@ -40,7 +40,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return InternalLog(NewSingleItemCollection(UriToString(target)), nullptr, args, logHandler);
@@ -50,7 +50,7 @@ bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEve
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!IsNotUri(targetPath))
+	else if (!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	return InternalLog(NewSingleItemCollection(
@@ -62,7 +62,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	Uri^ first = nullptr;
@@ -103,7 +103,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			nEnd = root->LastIndexOf('/', nEnd-1);
 		}
 
-		if(nEnd == root->Length && itemPath->Length > root->Length && itemPath[nEnd] != '/')
+		if (nEnd == root->Length && itemPath->Length > root->Length && itemPath[nEnd] != '/')
 		{	// root can't end in a '/', as that would have been trimmed !
 
 			nEnd = root->LastIndexOf('/', nEnd-1);
@@ -113,10 +113,10 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 		{}
 		else
 		{
-			while(nEnd > 1 && nEnd < root->Length && root[nEnd-1] == '/')
+			while (nEnd > 1 && nEnd < root->Length && root[nEnd-1] == '/')
 				nEnd--;
 
-			if(nEnd > 1)
+			if (nEnd > 1)
 				root = root->Substring(0, nEnd);
 			else
 				root = "/";
@@ -140,7 +140,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 
 			uri = rootUri->MakeRelativeUri(uri);
 
-			if(uri->IsAbsoluteUri) // Should have happened before				
+			if (uri->IsAbsoluteUri) // Should have happened before				
 				throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
 
 			rawTargets->Add(UriToString(uri));
@@ -159,9 +159,9 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 {
 	if (!targetPaths)
 		throw gcnew ArgumentNullException("targetPaths");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!targetPaths->Count)
+	else if (!targetPaths->Count)
 		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "targetPaths");
 
 	// This overload is not supported by the Subversion runtime at this time. We fake it useing the client api
@@ -173,7 +173,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 	{
 		if (!path)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targetPaths");
-		else if(!IsNotUri(path))
+		else if (!IsNotUri(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPaths");
 
 		Uri^ uri = GetUriFromWorkingCopy(path);
@@ -188,7 +188,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 
 		if (!first)
 			first = uri;
-		else if(Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
+		else if (Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
 		{
 			ArgsStore store(this, args);
 
@@ -249,7 +249,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -337,7 +337,7 @@ bool SvnClient::GetLog(Uri^ target, SvnLogArgs^ args, [Out] Collection<SvnLogEve
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
@@ -356,7 +356,7 @@ bool SvnClient::GetLog(String^ targetPath, SvnLogArgs^ args, [Out] Collection<Sv
 {
 	if (!targetPath)
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
@@ -376,7 +376,7 @@ bool SvnClient::GetLog(ICollection<Uri^>^ targets, SvnLogArgs^ args, [Out] Colle
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
@@ -395,7 +395,7 @@ bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out
 {
 	if (!targetPaths)
 		throw gcnew ArgumentNullException("targetPaths");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnLogEventArgs^>^ results = gcnew InfoItemCollection<SvnLogEventArgs^>();
@@ -413,7 +413,7 @@ bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out
 SvnRevisionPropertyNameCollection::SvnRevisionPropertyNameCollection(bool initialEmpty)
 	: KeyedCollection<String^,String^>(StringComparer::Ordinal, 10) // Start using hashtable at 10 items
 {
-	if(!initialEmpty)
+	if (!initialEmpty)
 	{
 		Add(SVN_PROP_REVISION_AUTHOR);
 		Add(SVN_PROP_REVISION_DATE);
@@ -423,13 +423,13 @@ SvnRevisionPropertyNameCollection::SvnRevisionPropertyNameCollection(bool initia
 
 void SvnRevisionPropertyNameCollection::AddDefaultProperties()
 {
-	if(!Contains(SVN_PROP_REVISION_AUTHOR))
+	if (!Contains(SVN_PROP_REVISION_AUTHOR))
 		Add(SVN_PROP_REVISION_AUTHOR);
 
-	if(!Contains(SVN_PROP_REVISION_DATE))
+	if (!Contains(SVN_PROP_REVISION_DATE))
 		Add(SVN_PROP_REVISION_DATE);
 
-	if(!Contains(SVN_PROP_REVISION_LOG))
+	if (!Contains(SVN_PROP_REVISION_LOG))
 		Add(SVN_PROP_REVISION_LOG);
 }
 

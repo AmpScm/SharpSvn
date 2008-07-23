@@ -34,7 +34,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded, SvnExtendedState::MimeTypesLoaded);

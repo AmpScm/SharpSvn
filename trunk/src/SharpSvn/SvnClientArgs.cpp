@@ -31,7 +31,7 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 	if (_exception)
 	{
 		SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
-		if(svnClient)
+		if (svnClient)
 		{
 			svnClient->HandleClientError(ea);
 		}
@@ -42,7 +42,7 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 			return false;
 	}
 
-	if(!ThrowOnCancel && err == SVN_ERR_CANCELLED)
+	if (!ThrowOnCancel && err == SVN_ERR_CANCELLED)
 		return false;
 	else if (ThrowOnError)
 		throw _exception;

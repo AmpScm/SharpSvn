@@ -32,7 +32,7 @@ namespace SharpSvn {
 		{
 			if (!pool)
 				throw gcnew ArgumentNullException("pool");
-			else if(!line)
+			else if (!line)
 				throw gcnew ArgumentNullException("line");
 
 			_revision = revision;
@@ -44,7 +44,7 @@ namespace SharpSvn {
 
 			svn_error_t *err;
 
-			if(date)
+			if (date)
 			{
 				err = svn_time_from_cstring(&when, date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 

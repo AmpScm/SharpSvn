@@ -58,7 +58,7 @@ namespace SharpSvn {
 		{
 			SvnRevisionPropertyNameCollection^ get()
 			{
-				if(!_retrieveProperties)
+				if (!_retrieveProperties)
 					_retrieveProperties = gcnew SvnRevisionPropertyNameCollection(false);
 
 				return _retrieveProperties;

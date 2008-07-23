@@ -177,7 +177,7 @@ void SvnClientContext::ApplyMimeTypes()
 
 			HandleClientError(ee);
 
-			if(!ee->Cancel)
+			if (!ee->Cancel)
 				throw exception;
 		}
 	}
@@ -207,7 +207,7 @@ void SvnClientContext::ApplyCustomSsh()
 		// Probably never used, but allow overriding Tortoise settings anyway
 		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
 
-		if(!customSshConfig)
+		if (!customSshConfig)
 			customSshConfig = dynamic_cast<String^>(Registry::LocalMachine->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
 	}
 	catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
@@ -397,7 +397,7 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(client->_currentArgs)
+	else if (client->_currentArgs)
 		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	args->Prepare();

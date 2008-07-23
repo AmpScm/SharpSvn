@@ -15,7 +15,7 @@ bool SvnClient::RemoveFromChangeList(String^ target)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return RemoveFromChangeList(NewSingleItemCollection(target), gcnew SvnRemoveFromChangeListArgs());
@@ -25,9 +25,9 @@ bool SvnClient::RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return RemoveFromChangeList(NewSingleItemCollection(target), args);
@@ -45,7 +45,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFro
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);

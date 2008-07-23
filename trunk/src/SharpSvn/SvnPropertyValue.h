@@ -19,7 +19,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
-			else if(String::IsNullOrEmpty(key))
+			else if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("value");
 
 			_key = key;
@@ -30,7 +30,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
-			else if(!value)
+			else if (!value)
 				throw gcnew ArgumentNullException("value");
 
 			_key = key;
@@ -41,7 +41,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
-			else if(String::IsNullOrEmpty(key))
+			else if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("value");
 
 			_target = target;
@@ -53,7 +53,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
-			else if(!value)
+			else if (!value)
 				throw gcnew ArgumentNullException("value");
 
 			_target = target;
@@ -67,7 +67,7 @@ namespace SharpSvn {
 		{
 			if (!propertyName)
 				throw gcnew ArgumentNullException("propertyName");
-			else if(!value)
+			else if (!value)
 				throw gcnew ArgumentNullException("value");
 
 			String^ name = SvnBase::Utf8_PtrToString(propertyName);

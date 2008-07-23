@@ -17,7 +17,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
 	if (!url)
 		throw gcnew ArgumentNullException("url");
-	else if(String::IsNullOrEmpty(path))
+	else if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	SvnUpdateResult^ result;
@@ -29,7 +29,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult^
 {
 	if (!url)
 		throw gcnew ArgumentNullException("url");
-	else if(String::IsNullOrEmpty(path))
+	else if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	return CheckOut(url, path, gcnew SvnCheckOutArgs(), result);
@@ -39,9 +39,9 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
 {
 	if (!url)
 		throw gcnew ArgumentNullException("url");
-	else if(String::IsNullOrEmpty(path))
+	else if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnUpdateResult^ result;
@@ -53,14 +53,14 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 {
 	if (!url)
 		throw gcnew ArgumentNullException("url");
-	else if(String::IsNullOrEmpty(path))
+	else if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	if(args->Revision->RequiresWorkingCopy)
+	if (args->Revision->RequiresWorkingCopy)
 		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
-	else if(url->Revision->RequiresWorkingCopy)
+	else if (url->Revision->RequiresWorkingCopy)
 		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "url");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

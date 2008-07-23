@@ -25,7 +25,7 @@ AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
 	_handle = handle;
 	_tag = gcnew AprPoolTag();
 	_destroyPool = destroyPool;
-	if(destroyPool)
+	if (destroyPool)
 		GC::AddMemoryPressure(AprPool::StandardMemoryPressure);
 }
 
@@ -233,7 +233,7 @@ const char* AprPool::AllocPath(String^ value)
 
 const char* AprPool::AllocCanonical(Uri^ value)
 {
-	if(!value)
+	if (!value)
 		return AllocCanonical((String^)nullptr);
 
 	return AllocCanonical(SvnBase::UriToString(value));

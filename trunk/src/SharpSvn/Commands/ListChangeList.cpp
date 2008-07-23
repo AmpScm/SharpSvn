@@ -19,7 +19,7 @@ bool SvnClient::ListChangeList(String^ rootPath, EventHandler<SvnListChangeListE
 {
 	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
-	else if(!changeListHandler)
+	else if (!changeListHandler)
 		throw gcnew ArgumentNullException("changeListHandler");
 
 	return ListChangeList(rootPath, gcnew SvnListChangeListArgs(), changeListHandler);
@@ -61,7 +61,7 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 {
 	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
@@ -102,7 +102,7 @@ bool SvnClient::GetChangeList(String^ rootPath, SvnListChangeListArgs^ args, [Ou
 {
 	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	list = nullptr;

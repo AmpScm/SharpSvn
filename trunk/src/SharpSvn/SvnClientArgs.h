@@ -181,7 +181,7 @@ namespace SharpSvn {
 			[DebuggerStepThrough]
 			SvnRevisionPropertyCollection^ get()
 			{
-				if(!_extraProperties)
+				if (!_extraProperties)
 					_extraProperties = gcnew SvnRevisionPropertyCollection();
 
 				return _extraProperties;

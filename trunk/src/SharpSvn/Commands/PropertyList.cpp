@@ -18,7 +18,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEven
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!listHandler)
+	else if (!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
 
 	return PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
@@ -57,7 +57,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	// We allow a null listHandler; the args object might just handle it itself
@@ -114,7 +114,7 @@ bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [O
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnPropertyListEventArgs^>^ results = gcnew InfoItemCollection<SvnPropertyListEventArgs^>();

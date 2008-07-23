@@ -38,7 +38,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if(!_changelist && _pChangeList)
+				if (!_changelist && _pChangeList)
 					_changelist = SvnBase::Utf8_PtrToString(_pChangeList);
 
 				return _changelist;

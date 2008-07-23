@@ -52,9 +52,9 @@ namespace SharpSvn {
 		{
 			if (!paths)
 				throw gcnew ArgumentNullException("paths");
-			else if(!revisions)
+			else if (!revisions)
 				throw gcnew ArgumentNullException("revisions");
-			else if(paths->Count != revisions->Count)
+			else if (paths->Count != revisions->Count)
 				throw gcnew ArgumentException(SharpSvnStrings::PathCountDoesNotMatchRevisions, "paths");
 
 			if (revision < 0)

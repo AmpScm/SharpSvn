@@ -21,7 +21,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
 	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), value);
@@ -31,7 +31,7 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
 	return GetRevisionProperty(target, propertyName, gcnew SvnGetRevisionPropertyArgs(), value);
@@ -41,9 +41,9 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnPropertyValue^ propertyValue = nullptr;
@@ -64,9 +64,9 @@ bool SvnClient::GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

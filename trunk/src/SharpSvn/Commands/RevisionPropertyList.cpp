@@ -27,7 +27,7 @@ bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropert
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	// We allow a null listHandler; the args object might just handle it itself

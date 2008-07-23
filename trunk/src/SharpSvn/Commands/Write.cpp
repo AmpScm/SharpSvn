@@ -19,7 +19,7 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ toStream)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!toStream)
+	else if (!toStream)
 		throw gcnew ArgumentNullException("toStream");
 
 	return Write(target, toStream, gcnew SvnWriteArgs());
@@ -29,9 +29,9 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!toStream)
+	else if (!toStream)
 		throw gcnew ArgumentNullException("toStream");
-	else if(!args)
+	else if (!args)
 		throw gcnew ObjectDisposedException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

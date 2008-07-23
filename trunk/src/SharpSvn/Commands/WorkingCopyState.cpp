@@ -21,7 +21,7 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, [Out] SvnWorkingCopyStat
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!IsNotUri(targetPath))
+	else if (!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	return GetState(targetPath, gcnew SvnWorkingCopyStateArgs(), result);
@@ -31,9 +31,9 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsNotUri(targetPath))
+	else if (!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);

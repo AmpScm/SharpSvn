@@ -18,7 +18,7 @@ AprArray<T,R>::AprArray(ICollection<T>^ items, AprPool ^pool)
 {
 	if (!items)
 		throw gcnew ArgumentNullException("items");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	_marshaller = Activator::CreateInstance<R>();
@@ -38,7 +38,7 @@ AprArray<T,R>::AprArray(System::Collections::IEnumerable^ items, AprPool ^pool)
 {
 	if (!items)
 		throw gcnew ArgumentNullException("items");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	int nItems = 0;
@@ -68,7 +68,7 @@ AprArray<T,R>::AprArray(const apr_array_header_t* handle, AprPool ^pool)
 {
 	if (!handle)
 		throw gcnew ArgumentNullException("handle");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	_marshaller = Activator::CreateInstance<R>();
@@ -87,7 +87,7 @@ apr_array_header_t *SvnBase::AllocArray(ICollection<String^>^ strings, AprPool^ 
 {
 	if (!strings)
 		throw gcnew ArgumentNullException("strings");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	for each (String^ s in strings)
@@ -104,7 +104,7 @@ apr_array_header_t *SvnBase::AllocCanonicalArray(ICollection<String^>^ paths, Ap
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	for each (String^ s in paths)
@@ -122,7 +122,7 @@ apr_array_header_t *SvnBase::AllocPathArray(ICollection<String^>^ paths, AprPool
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	for each (String^ s in paths)

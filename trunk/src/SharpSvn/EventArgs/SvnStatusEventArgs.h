@@ -518,7 +518,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!status)
+			else if (!status)
 				throw gcnew ArgumentNullException("status");
 
 			_path = path->Replace('/', System::IO::Path::DirectorySeparatorChar);

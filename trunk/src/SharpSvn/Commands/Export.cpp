@@ -18,9 +18,9 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!toPath)
+	else if (!toPath)
 		throw gcnew ArgumentNullException("toPath");
-	else if(!IsNotUri(toPath))
+	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	SvnUpdateResult^ result;
@@ -32,9 +32,9 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% 
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!toPath)
+	else if (!toPath)
 		throw gcnew ArgumentNullException("toPath");
-	else if(!IsNotUri(toPath))
+	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	return Export(from, toPath, gcnew SvnExportArgs(), result);
@@ -44,9 +44,9 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!toPath)
+	else if (!toPath)
 		throw gcnew ArgumentNullException("toPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnUpdateResult^ result;
@@ -58,9 +58,9 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!toPath)
+	else if (!toPath)
 		throw gcnew ArgumentNullException("toPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

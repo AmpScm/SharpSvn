@@ -167,7 +167,7 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 					else
 						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyExportedRevisionX, e->Revision));
 				}
-				else if(CurrentCommandType == SvnCommandType::CheckOut)
+				else if (CurrentCommandType == SvnCommandType::CheckOut)
 				{
 					if (_inExternal)
 						WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyCheckedOutExternalAtRevisionX, e->Revision));
@@ -261,23 +261,23 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyMergingDifferencesBetweenRepositoryUrlsIntoX,
 				e->Path));
 		}
-		else if((e->MergeRange->Start == e->MergeRange->End-1)
+		else if ((e->MergeRange->Start == e->MergeRange->End-1)
 			|| (e->MergeRange->Start == e->MergeRange->End))
 		{
 			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyMergingRXIntoY,
 				e->MergeRange->End, e->Path));
 		}
-		else if(e->MergeRange->End == e->MergeRange->Start-1)
+		else if (e->MergeRange->End == e->MergeRange->Start-1)
 		{
 			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyReverseMergingRXIntoY,
 				e->MergeRange->Start, e->Path));
 		}
-		else if(e->MergeRange->Start < e->MergeRange->End)
+		else if (e->MergeRange->Start < e->MergeRange->End)
 		{
 			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyMergingRXToRYIntoZ,
 				e->MergeRange->Start+1, e->MergeRange->End, e->Path)); // Note: Start+1
 		}
-		else /*if(e->MergeRange->Start > e->MergeRange->End - 1)*/
+		else /*if (e->MergeRange->Start > e->MergeRange->End - 1)*/
 		{
 			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyReverseMergingRXToRYIntoZ,
 				e->MergeRange->Start, e->MergeRange->End+1, e->Path)); // Note: End+1

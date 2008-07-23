@@ -26,7 +26,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!SvnBase::IsNotUri(path))
+			else if (!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = GetTargetPath(path);
@@ -38,7 +38,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!SvnBase::IsNotUri(path))
+			else if (!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = GetTargetPath(path);
@@ -50,7 +50,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!SvnBase::IsNotUri(path))
+			else if (!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = GetTargetPath(path);
@@ -62,7 +62,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!SvnBase::IsNotUri(path))
+			else if (!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = GetTargetPath(path);
@@ -74,7 +74,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
-			else if(!SvnBase::IsNotUri(path))
+			else if (!SvnBase::IsNotUri(path))
 				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 			_path = GetTargetPath(path);
@@ -123,13 +123,13 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(targetName))
 				throw gcnew ArgumentNullException("targetName");
-			else if(!pool)
+			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
 
-			if(!SvnBase::IsNotUri(targetName))
+			if (!SvnBase::IsNotUri(targetName))
 				return false;
 
-			if(allowPegRevisions)
+			if (allowPegRevisions)
 			{
 				svn_opt_revision_t rev;
 				svn_error_t* r;
