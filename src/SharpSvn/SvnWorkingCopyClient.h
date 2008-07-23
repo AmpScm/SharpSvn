@@ -1,4 +1,4 @@
-// $Id: SvnClient.h 594 2008-06-20 01:43:34Z rhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details

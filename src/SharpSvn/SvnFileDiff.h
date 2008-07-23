@@ -1,4 +1,4 @@
-// $Id: SvnEnums.h 500 2008-03-26 17:47:22Z rhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
