@@ -523,6 +523,14 @@
 			Filter="h;hpp;hxx;hm;inl;inc;xsd"
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
+			<File
+				RelativePath=".\EventArgs\SvnEventArgs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\SvnStreamWrapper.h"
+				>
+			</File>
 			<Filter
 				Name="Headers"
 				>
