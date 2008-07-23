@@ -63,7 +63,7 @@ svn_mergeinfo_t SvnMergeItemCollection::AllocMergeInfo(AprPool^ pool)
 
 bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollection^% items)
 {
-	if(String::IsNullOrEmpty(input))
+	if (String::IsNullOrEmpty(input))
 		throw gcnew ArgumentNullException("input");
 
 	AprPool pool(SvnBase::SmallThreadPool);
@@ -72,7 +72,7 @@ bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollectio
 
 	svn_error_t* r = svn_mergeinfo_parse(&mergeInfo, pool.AllocString(input), pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);
 		return false;
@@ -84,7 +84,7 @@ bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollectio
 
 bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, [Out] SvnMergeItemCollection^% added, [Out] SvnMergeItemCollection^% removed)
 {
-	if(!to)
+	if (!to)
 		throw gcnew ArgumentNullException("to");
 	
 	return TryDiff(to, gcnew SvnMergeDiffArgs(), added, removed);
@@ -92,7 +92,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, [Out] SvnMe
 
 bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDiffArgs^ args, [Out] SvnMergeItemCollection^% added, [Out] SvnMergeItemCollection^% removed)
 {
-	if(!to)
+	if (!to)
 		throw gcnew ArgumentNullException("to");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -104,7 +104,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDif
 
 	SvnMergeItemCollection^ toCol = dynamic_cast<SvnMergeItemCollection^>(to);
 
-	if(!toCol)
+	if (!toCol)
 		toCol = gcnew SvnMergeItemCollection(to);
 
 	svn_mergeinfo_t addedPtr = nullptr;
@@ -112,7 +112,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDif
 
 	svn_error_t* r = svn_mergeinfo_diff(&removedPtr, &addedPtr, AllocMergeInfo(%pool), toCol->AllocMergeInfo(%pool), args->ConsiderInheritance, pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);		
 		return false;
@@ -123,7 +123,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDif
 	else
 		added = gcnew SvnMergeItemCollection();
 
-	if(removedPtr)
+	if (removedPtr)
 		removed = gcnew SvnMergeItemCollection(removedPtr, %pool);
 	else
 		removed = gcnew SvnMergeItemCollection();
@@ -147,7 +147,7 @@ bool SvnMergeItemCollection::TryRemove(ICollection<SvnMergeItem^>^ items, SvnMer
 	GC::KeepAlive(args);
 
 	SvnMergeItemCollection^ coll = dynamic_cast<SvnMergeItemCollection^>(items);
-	if(!coll)
+	if (!coll)
 		coll = gcnew SvnMergeItemCollection(items);
 
 	rest = nullptr;
@@ -158,13 +158,13 @@ bool SvnMergeItemCollection::TryRemove(ICollection<SvnMergeItem^>^ items, SvnMer
 
 	svn_error_t* r = svn_mergeinfo_remove(&result, coll->AllocMergeInfo(%pool), AllocMergeInfo(%pool), pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);		
 		return false;
 	}
 
-	if(result)
+	if (result)
 		rest = gcnew SvnMergeItemCollection(result, %pool);
 	else
 		rest = gcnew SvnMergeItemCollection();
@@ -181,12 +181,12 @@ bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, SvnMer
 {
 	if (!to)
 		throw gcnew ArgumentNullException("to");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnMergeItemCollection^ coll = dynamic_cast<SvnMergeItemCollection^>(to);
 
-	if(!coll)
+	if (!coll)
 		coll = gcnew SvnMergeItemCollection(to);
 
 	intersected = nullptr;
@@ -197,13 +197,13 @@ bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, SvnMer
 
 	svn_error_t* r = svn_mergeinfo_intersect(&result, AllocMergeInfo(%pool), coll->AllocMergeInfo(%pool), pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);		
 		return false;
 	}
 
-	if(result)
+	if (result)
 		intersected = gcnew SvnMergeItemCollection(result, %pool);
 	else
 		intersected = gcnew SvnMergeItemCollection();
@@ -219,12 +219,12 @@ String^ SvnMergeItemCollection::ToString()
 
 	svn_error_t* r = svn_mergeinfo_to_string(&result, AllocMergeInfo(%pool), pool.Handle);
 
-	if(r)
+	if (r)
 	{
 		svn_error_clear(r);
 		return "";
 	}
-	else if(!result || !result->data)
+	else if (!result || !result->data)
 		return "";
 	
 	return SvnBase::Utf8_PtrToString(result->data, (int)result->len);

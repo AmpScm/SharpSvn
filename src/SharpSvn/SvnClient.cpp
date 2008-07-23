@@ -243,9 +243,9 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 		if (ea->Cancel)
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
-		else if(ea->LogMessage)
+		else if (ea->LogMessage)
 			*log_msg = tmpPool->AllocUnixString(ea->LogMessage);
-		else if(!client->_noLogMessageRequired)
+		else if (!client->_noLogMessageRequired)
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
 		else
 			*log_msg = tmpPool->AllocString("");
@@ -351,7 +351,7 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 
 	if (!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
-	else if(err)
+	else if (err)
 		svn_error_clear(err);
 
 	return nullptr;
@@ -361,7 +361,7 @@ bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	else if(!SvnBase::IsValidReposUri(uri))
+	else if (!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	id = Guid::Empty;
@@ -391,7 +391,7 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	else if(!SvnBase::IsValidReposUri(uri))
+	else if (!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	const char* resultUrl = nullptr;
@@ -402,7 +402,7 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 
 	if (!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
-	else if(err)
+	else if (err)
 		svn_error_clear(err);
 
 	return nullptr;
@@ -414,7 +414,7 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	const char* resultUrl = nullptr;
@@ -425,7 +425,7 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 
 	if (!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
-	else if(err)
+	else if (err)
 		svn_error_clear(err);
 
 	return nullptr;
@@ -435,7 +435,7 @@ void SvnClient::AddClientName(String^ name, System::Version^ version)
 {
 	if (String::IsNullOrEmpty(name))
 		throw gcnew ArgumentNullException("name");
-	else if(!version)
+	else if (!version)
 		throw gcnew ArgumentNullException("version");
 
 	for (int i = 0; i < name->Length; i++)

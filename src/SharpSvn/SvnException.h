@@ -118,12 +118,12 @@ using System::ComponentModel::DescriptionAttribute;
 		{
 			if (!exceptionType)
 				throw gcnew ArgumentNullException("exceptionType");
-			else if(!Exception::typeid->IsAssignableFrom(exceptionType))
+			else if (!Exception::typeid->IsAssignableFrom(exceptionType))
 				throw gcnew ArgumentOutOfRangeException("exceptionType");
 
 			Exception^ e = this;
 
-			while(e)
+			while (e)
 			{
 				if (exceptionType->IsAssignableFrom(e->GetType()))
 					return e;

@@ -17,7 +17,7 @@ bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!blameHandler)
+	else if (!blameHandler)
 		throw gcnew ArgumentNullException("blameHandler");
 
 	return Blame(target, gcnew SvnBlameArgs(), blameHandler);
@@ -61,7 +61,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -120,7 +120,7 @@ bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnBlameEventArgs^>^ results = gcnew InfoItemCollection<SvnBlameEventArgs^>();

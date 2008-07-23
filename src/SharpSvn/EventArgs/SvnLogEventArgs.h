@@ -103,7 +103,7 @@ namespace SharpSvn {
 		{
 			if (!entry)
 				throw gcnew ArgumentNullException("entry");
-			else if(!pool)
+			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
 
 			_entry = entry;

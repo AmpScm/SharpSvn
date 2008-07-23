@@ -20,7 +20,7 @@ bool SvnClient::Move(String^ sourcePath, String^ toPath)
 {
 	if (String::IsNullOrEmpty(sourcePath))
 		throw gcnew ArgumentNullException("sourcePath");
-	else if(String::IsNullOrEmpty(toPath))
+	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 
 	return Move(NewSingleItemCollection(sourcePath), toPath, gcnew SvnMoveArgs());
@@ -30,7 +30,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath)
 {
 	if (!sourcePaths)
 		throw gcnew ArgumentNullException("sourcePaths");
-	else if(String::IsNullOrEmpty(toPath))
+	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 
 	return Move(sourcePaths, toPath, gcnew SvnMoveArgs());
@@ -40,9 +40,9 @@ bool SvnClient::Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args)
 {
 	if (String::IsNullOrEmpty(sourcePath))
 		throw gcnew ArgumentNullException("sourcePath");
-	else if(String::IsNullOrEmpty(toPath))
+	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return Move(NewSingleItemCollection(sourcePath), toPath, args);
@@ -52,16 +52,16 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 {
 	if (!sourcePaths)
 		throw gcnew ArgumentNullException("sourcePaths");
-	else if(String::IsNullOrEmpty(toPath))
+	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	for each (String^ s in sourcePaths)
 	{
 		if (String::IsNullOrEmpty(s))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourcePaths");
-		else if(!IsNotUri(s))
+		else if (!IsNotUri(s))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "sourcePaths");
 	}
 
@@ -90,11 +90,11 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri)
 {
 	if (!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!SvnBase::IsValidReposUri(sourceUri))
+	else if (!SvnBase::IsValidReposUri(sourceUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
-	else if(!SvnBase::IsValidReposUri(toUri))
+	else if (!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
 	SvnCommitResult^ result = nullptr;
@@ -106,9 +106,9 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri)
 {
 	if (!sourceUris)
 		throw gcnew ArgumentNullException("sourceUris");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!SvnBase::IsValidReposUri(toUri))
+	else if (!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
 	SvnCommitResult^ result = nullptr;
@@ -120,11 +120,11 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitResult^% r
 {
 	if (!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!SvnBase::IsValidReposUri(sourceUri))
+	else if (!SvnBase::IsValidReposUri(sourceUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
-	else if(!SvnBase::IsValidReposUri(toUri))
+	else if (!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
 	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
@@ -134,7 +134,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnC
 {
 	if (!sourceUris)
 		throw gcnew ArgumentNullException("sourceUris");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
 	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
@@ -144,9 +144,9 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args)
 {
 	if (!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result = nullptr;
@@ -157,9 +157,9 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 {
 	if (!sourceUris)
 		throw gcnew ArgumentNullException("sourceUris");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result = nullptr;
@@ -170,9 +170,9 @@ bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] 
 {
 	if (!sourceUri)
 		throw gcnew ArgumentNullException("sourceUri");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
@@ -182,11 +182,11 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 {
 	if (!sourceUris)
 		throw gcnew ArgumentNullException("sourceUris");
-	else if(!toUri)
+	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!SvnBase::IsValidReposUri(toUri))
+	else if (!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
 	System::Collections::Generic::List<String^>^ uris = gcnew System::Collections::Generic::List<String^>(sourceUris->Count);
@@ -195,7 +195,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	{
 		if (!u)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceUris");
-		else if(!SvnBase::IsValidReposUri(u))
+		else if (!SvnBase::IsValidReposUri(u))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUris");
 
 		uris->Add(UriToCanonicalString(u));

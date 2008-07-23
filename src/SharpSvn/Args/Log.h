@@ -73,7 +73,7 @@ namespace SharpSvn {
 		/// <summary>Initializes a new <see cref="SvnLogArgs" /> instance with the specified range</summary>
 		SvnLogArgs(SvnRevisionRange^ range)
 		{
-			if(!range)
+			if (!range)
 				throw gcnew ArgumentNullException("range");
 
 			Range = range;
@@ -115,7 +115,7 @@ namespace SharpSvn {
 
 			void set(SvnRevisionRange^ value)
 			{
-				if(!value)
+				if (!value)
 				{
 					Start = nullptr;
 					End = nullptr;

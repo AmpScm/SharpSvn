@@ -48,7 +48,7 @@ get_revnum(svn_revnum_t *revnum, const svn_opt_revision_t *revision,
 	{
 		svn_error_t* r = svn_repos_dated_revision(revnum, repos, revision->value.date, pool);
 
-		if(r)
+		if (r)
 			return r;
 	}
 	else if (revision->kind == svn_opt_revision_unspecified)
@@ -85,7 +85,7 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	svn_error_t* r;
 	svn_revnum_t youngest;
 
-	if(r = svn_repos_open(&repos, pool.AllocPath(repositoryPath), pool.Handle))
+	if (r = svn_repos_open(&repos, pool.AllocPath(repositoryPath), pool.Handle))
 		return args->HandleResult(this, r);
 
 	svn_fs_t *fs = svn_repos_fs(repos); // Always ok
@@ -94,20 +94,20 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	svn_fs_set_warning_func(svn_repos_fs(repos), warning_func, nullptr);
 
 	r = svn_fs_youngest_rev(&youngest, fs, pool.Handle);
-	if(!r)
+	if (!r)
 		return args->HandleResult(this, r);
 
 	svn_revnum_t start;
 	svn_revnum_t end;
 
 	r = get_revnum(&start, args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
-	if(!r)
+	if (!r)
 		return args->HandleResult(this, r);
 	r = get_revnum(&end, args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
-	if(!r)
+	if (!r)
 		return args->HandleResult(this, r);
 
-	if(start < end)
+	if (start < end)
 		return args->HandleResult(this, svn_error_create(SVN_ERR_CL_ARG_PARSING_ERROR, NULL, "First revision cannot be higher than second"));
 
 	MemoryStream^ strResult = gcnew MemoryStream();

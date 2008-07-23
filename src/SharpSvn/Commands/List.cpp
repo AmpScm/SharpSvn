@@ -18,7 +18,7 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!listHandler)
+	else if (!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
 
 	return List(target, gcnew SvnListArgs(), listHandler);
@@ -58,7 +58,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	// We allow a null listHandler; the args object might just handle it itself
@@ -119,7 +119,7 @@ bool SvnClient::GetList(SvnTarget^ target, SvnListArgs^ args, [Out] Collection<S
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnListEventArgs^>^ results = gcnew InfoItemCollection<SvnListEventArgs^>();

@@ -136,7 +136,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if(!_uri && _entry && _entry->url)
+				if (!_uri && _entry && _entry->url)
 					_uri = SvnBase::Utf8_PtrToUri(_entry->url, NodeKind);
 
 				return _uri;
@@ -169,7 +169,7 @@ namespace SharpSvn {
 		{
 			Guid get()
 			{
-				if(RepositoryIdValue)
+				if (RepositoryIdValue)
 					return Guid(_uuid);
 				else
 					return Guid::Empty;
@@ -480,7 +480,7 @@ namespace SharpSvn {
 		{
 			try
 			{
-				if(keepProperties)
+				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
 					GC::KeepAlive(FullPath);

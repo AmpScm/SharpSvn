@@ -19,9 +19,9 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, Even
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!logHandler)
+	else if (!logHandler)
 		throw gcnew ArgumentNullException("logHandler");
 	
 	return ListMergesEligible(target, source, gcnew SvnMergesEligibleArgs(), logHandler);
@@ -62,9 +62,9 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnM
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -110,7 +110,7 @@ bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, [Out]
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
 	
 	return GetMergesEligible(target, source, gcnew SvnMergesEligibleArgs(), list);
@@ -120,9 +120,9 @@ bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnMe
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnMergesEligibleEventArgs^>^ results = gcnew InfoItemCollection<SvnMergesEligibleEventArgs^>();

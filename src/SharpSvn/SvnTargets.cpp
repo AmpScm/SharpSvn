@@ -95,7 +95,7 @@ bool SvnTarget::TryParse(String^ targetName, bool allowPegRevision, [Out] SvnTar
 		target = uriTarget;
 		return true;
 	}
-	else if(SvnPathTarget::TryParse(targetName, allowPegRevision, pathTarget))
+	else if (SvnPathTarget::TryParse(targetName, allowPegRevision, pathTarget))
 	{
 		target = pathTarget;
 		return true;
@@ -164,11 +164,11 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	if (path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
 	{
 		path = path->TrimEnd(Path::DirectorySeparatorChar);
-		if(path->Length < nRoot)
+		if (path->Length < nRoot)
 			path += singleSeparator;
 	}	
 
-	if(path->Length == 0)
+	if (path->Length == 0)
 		path = ".";
 
 	return path;
@@ -253,10 +253,10 @@ bool SvnUriTarget::TryParse(String^ targetString, bool allowPegRevision, [Out] S
 {
 	if (String::IsNullOrEmpty(targetString))
 		throw gcnew ArgumentNullException("targetString");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	if(allowPegRevision)
+	if (allowPegRevision)
 	{
 		svn_opt_revision_t rev;
 		svn_error_t* r;
@@ -283,7 +283,7 @@ bool SvnUriTarget::TryParse(String^ targetString, bool allowPegRevision, [Out] S
 	{
 		System::Uri^ uri;
 
-		if(System::Uri::TryCreate(targetString, UriKind::Absolute, uri))
+		if (System::Uri::TryCreate(targetString, UriKind::Absolute, uri))
 		{
 			target = gcnew SvnUriTarget(uri);
 			return true;

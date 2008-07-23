@@ -15,9 +15,9 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ m
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!mergeRange)
+	else if (!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
 
 	return Merge(targetPath, source, NewSingleItemCollection(mergeRange), gcnew SvnMergeArgs());
@@ -27,11 +27,11 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, SvnRevisionRange^ m
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!mergeRange)
+	else if (!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return Merge(targetPath, source, NewSingleItemCollection(mergeRange), args);
@@ -42,9 +42,9 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!mergeRange)
+	else if (!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
 
 	return Merge<TRevisionRange>(targetPath, source, mergeRange, gcnew SvnMergeArgs());
@@ -85,11 +85,11 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!mergeRange)
+	else if (!mergeRange)
 		throw gcnew ArgumentNullException("mergeRange");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

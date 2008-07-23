@@ -20,7 +20,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% va
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!propertyName)
+	else if (!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
 
 	SvnTargetPropertyCollection^ result = nullptr;
@@ -38,7 +38,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnProperty
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!propertyName)
+	else if (!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
 
 	SvnTargetPropertyCollection^ result;
@@ -59,7 +59,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!propertyName)
+	else if (!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
 
 	properties = nullptr;
@@ -119,7 +119,7 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!propertyName)
+	else if (!propertyName)
 		throw gcnew ArgumentNullException("propertyName");
 
 	SvnTargetPropertyCollection^ result = nullptr;
@@ -130,7 +130,7 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
 
 	if (GetProperty(target, propertyName, args, result))
 	{
-		if(result->Count > 0)
+		if (result->Count > 0)
 		{
 			value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
 

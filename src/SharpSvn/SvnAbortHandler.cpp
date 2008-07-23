@@ -69,7 +69,7 @@ MessageBoxA(
 
 void __cdecl sharpsvn_abort_handler()
 {
-	if(!Environment::UserInteractive)
+	if (!Environment::UserInteractive)
 		return;
 
 	AprPool pool(SvnBase::SmallThreadPool); // Let's hope this still works.. Most abort()s in subversion are not as fatal as this
@@ -88,7 +88,7 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 	if (s_loaded)
 		return NULL;
 	
-	if(!s_checked)
+	if (!s_checked)
 	{
 		s_checked = true;
 
@@ -103,7 +103,7 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 	}
 
 
-	if(!s_loaded)
+	if (!s_loaded)
 		return svn_error_create(SVN_ERR_FS_UNKNOWN_FS_TYPE, nullptr, "Subversion filesystem driver for Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) is not installed. Can't access this repository kind.");
 
 	return NULL;

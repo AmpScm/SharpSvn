@@ -16,7 +16,7 @@ bool SvnClient::Revert(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return Revert(path, gcnew SvnRevertArgs());
@@ -26,9 +26,9 @@ bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return Revert(NewSingleItemCollection(path), args);
@@ -46,14 +46,14 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	for each (String^ path in paths)
 	{
 		if (String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
-		else if(!IsNotUri(path))
+		else if (!IsNotUri(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
 	}
 

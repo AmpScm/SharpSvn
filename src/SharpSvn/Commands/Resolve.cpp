@@ -15,7 +15,7 @@ bool SvnClient::Resolved(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	return Resolve(path, SvnAccept::Merged, gcnew SvnResolveArgs());
@@ -25,7 +25,7 @@ bool SvnClient::Resolve(String^ path, SvnAccept choice)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");	
 
 	return Resolve(path, choice, gcnew SvnResolveArgs());
@@ -35,12 +35,12 @@ bool SvnClient::Resolve(String^ path, SvnAccept choice, SvnResolveArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	if(SvnAccept::Postpone == choice)
+	if (SvnAccept::Postpone == choice)
 		throw gcnew ArgumentOutOfRangeException("choice");
 	
 	EnumVerifier::Verify(choice);

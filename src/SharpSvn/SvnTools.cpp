@@ -29,7 +29,7 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 
 	if (!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
-	else if(err)
+	else if (err)
 		svn_error_clear(err);
 
 	return nullptr;
@@ -68,7 +68,7 @@ String^ SvnTools::GetTruePath(String^ path)
 
 	if (!root)
 	{
-		if(path[0] == '\\' || path->Contains("\\."))
+		if (path[0] == '\\' || path->Contains("\\."))
 		{
 			path = Path::GetFullPath(path);
 			root = Path::GetPathRoot(path); // UNC paths are not case sensitive, but we keep the casing
@@ -77,11 +77,11 @@ String^ SvnTools::GetTruePath(String^ path)
 			root = "";
 	}
 
-	if(root && path->Length > root->Length && path[path->Length-1] == '\\')
+	if (root && path->Length > root->Length && path[path->Length-1] == '\\')
 	{
 		path = path->TrimEnd('\\');
 
-		if(path->Length <= root->Length)
+		if (path->Length <= root->Length)
 			return root;
 	}
 
@@ -96,9 +96,9 @@ String^ SvnTools::GetFullTruePath(String^ path)
 	path = Path::GetFullPath(path);
 	String^ root = Path::GetPathRoot(path);
 
-	if(root->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
+	if (root->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
 		root = root->ToLowerInvariant();
-	else if(wchar_t::IsLower(root, 0))
+	else if (wchar_t::IsLower(root, 0))
 		root = root->ToUpperInvariant();
 
 	return FindTruePath(path, root);
@@ -113,7 +113,7 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 	size_t len = sizeof(wchar_t)* (path->Length+1+4);
 	wchar_t* pSec = (wchar_t*)_alloca(len);
 
-	if(wcscpy_s(pSec, len, L"\\\\?\\") || wcscat_s(pSec, len, pChars))
+	if (wcscpy_s(pSec, len, L"\\\\?\\") || wcscat_s(pSec, len, pChars))
 		return nullptr;
 
 	wchar_t *pTxt = &pSec[4]; // The point after '\\?\'
@@ -121,28 +121,28 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 	int nStart = root->Length;
 	bool isFirst = true;
 
-	while(nStart < path->Length)
+	while (nStart < path->Length)
 	{
 		WIN32_FIND_DATAW filedata;
 
 		int nNext = path->IndexOf('\\', nStart);
 
-		if(nNext > 0)
+		if (nNext > 0)
 			pTxt[nNext] = 0; // Temporarily replace '\' with 0
 
 		HANDLE hSearch = FindFirstFileW(pSec, &filedata);
 
-		if(hSearch == INVALID_HANDLE_VALUE)
+		if (hSearch == INVALID_HANDLE_VALUE)
 			return nullptr;
 
-		if(!isFirst)
+		if (!isFirst)
 			result->Append((wchar_t)'\\');
 
 		result->Append(gcnew String(filedata.cFileName));		
 
 		GC::KeepAlive(::FindClose(hSearch)); // Close search request
 
-		if(nNext < 0)
+		if (nNext < 0)
 			break;
 		else
 			pTxt[nNext] = '\\'; // Revert 0 to '\'
@@ -160,7 +160,7 @@ inline bool IsDirectory(String^ path)
 	pin_ptr<const wchar_t> p = PtrToStringChars(path);
 	DWORD r = ::GetFileAttributesW(p);
 
-	if(r == INVALID_FILE_ATTRIBUTES)
+	if (r == INVALID_FILE_ATTRIBUTES)
 		return false;
 	
 	return (r & FILE_ATTRIBUTE_DIRECTORY) != 0;
@@ -178,7 +178,7 @@ bool SvnTools::IsManagedPath(String^ path)
 
 bool SvnTools::IsBelowManagedPath(String^ path)
 {
-	if(String::IsNullOrEmpty(path))
+	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
 	// We search from the root, instead of the other way around to optimize the disk cache
@@ -189,15 +189,15 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	int nStart = Path::GetPathRoot(path)->Length;
 	int i;
 
-	while(0 < (i = path->IndexOf('\\', nStart)))
+	while (0 < (i = path->IndexOf('\\', nStart)))
 	{
-		if(IsDirectory(Path::Combine(path->Substring(0, i), SvnClient::AdministrativeDirectoryName)))
+		if (IsDirectory(Path::Combine(path->Substring(0, i), SvnClient::AdministrativeDirectoryName)))
 			return true;
 
 		nStart = i+1;
 	}
 
-	if(nStart >= (path->Length-1))
+	if (nStart >= (path->Length-1))
 		return false; // Path ends with a \, probably disk root
 
 	return IsDirectory(Path::Combine(path, SvnClient::AdministrativeDirectoryName));
@@ -220,7 +220,7 @@ static String^ LongGetFullPath(String^ path)
 
 	unsigned c = GetFullPathNameW((LPCWSTR)pPath, sz, rPath, nullptr);
 
-	if(c == 0 || c >= sz)
+	if (c == 0 || c >= sz)
 		throw gcnew PathTooLongException("GetFullPath for long paths failed");
 
 	path = gcnew String(rPath, 0, c);
@@ -257,29 +257,29 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 			path = nullptr;
 		}
 
-		if(!path)
+		if (!path)
 			throw;
 	}
 
-	if(path->Length >= 2 && path[1] == ':')
+	if (path->Length >= 2 && path[1] == ':')
 	{
 		wchar_t c = path[0];
 
-		if((c >= 'a') && (c <= 'z'))
+		if ((c >= 'a') && (c <= 'z'))
 			path = wchar_t::ToUpperInvariant(c) + path->Substring(1);
 
 		String^ r = path->TrimEnd('\\');
 
-		if(r->Length > 3)
+		if (r->Length > 3)
 			return r;
 		else
 			return path->Substring(0, 3);
 	}
-	else if(path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
+	else if (path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
 	{
 		String^ root = Path::GetPathRoot(path)->ToLowerInvariant();
 	
-		if(!path->StartsWith(root, StringComparison::Ordinal))
+		if (!path->StartsWith(root, StringComparison::Ordinal))
 			path = root + path->Substring(root->Length)->TrimEnd('\\');
 	}
 	else
@@ -321,16 +321,16 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 	int c = path->Length;
 
-	if(path->Length < 3)
+	if (path->Length < 3)
 		return false;
 
 	int i, n;
 	if (IsSeparator(path, 0))
 	{
-		if(!IsSeparator(path, 1))
+		if (!IsSeparator(path, 1))
 			return false;
 
-		for(i = 2; i < path->Length; i++)
+		for (i = 2; i < path->Length; i++)
 		{
 			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
@@ -343,13 +343,13 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 		n = i;
 
-		for(; i < path->Length; i++)
+		for (; i < path->Length; i++)
 		{
-			if(!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
 		}
 
-		if(i == n || !IsSeparator(path, i))
+		if (i == n || !IsSeparator(path, i))
 			return false;
 
 		i++;
@@ -361,17 +361,17 @@ bool SvnTools::IsAbsolutePath(String^ path)
 	else
 		i = 3;	
 
-	while(i < c)
+	while (i < c)
 	{
 		if (i >= c && IsSeparator(path, i))
 			return false; // '\'-s behind each other
 		
-		if(i < c && path[i] == '.')
+		if (i < c && path[i] == '.')
 		{
 			int n = i;
 			n++;
 
-			if(n < c && path[n] == '.')
+			if (n < c && path[n] == '.')
 				n++;
 
 			if (IsSeparator(path, n))
@@ -390,7 +390,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 		else if (!IsSeparator(path, i++))
 			return false;
 
-		if(i == c)
+		if (i == c)
 			return false; // We don't like paths with a '\' at the end
 	}	
 
@@ -404,16 +404,16 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 	int c = path->Length;
 
-	if(path->Length < 3)
+	if (path->Length < 3)
 		return false;
 
 	int i, n;
 	if (IsDirSeparator(path, 0))
 	{
-		if(!IsDirSeparator(path, 1))
+		if (!IsDirSeparator(path, 1))
 			return false;
 
-		for(i = 2; i < path->Length; i++)
+		for (i = 2; i < path->Length; i++)
 		{
 			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
@@ -426,13 +426,13 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		n = i;
 
-		for(; i < path->Length; i++)
+		for (; i < path->Length; i++)
 		{
-			if(!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
 		}
 
-		if(i == n || !IsDirSeparator(path, i))
+		if (i == n || !IsDirSeparator(path, i))
 			return false;
 
 		i++;
@@ -444,16 +444,16 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 	else
 		i = 3;	
 
-	while(i < c)
+	while (i < c)
 	{
 		if (i >= c && IsDirSeparator(path, i))
 			return false; // '\'-s behind each other
 		
-		if(i < c && path[i] == '.')
+		if (i < c && path[i] == '.')
 		{
 			int n = i;
 
-			while(n < c && path[n] == '.')
+			while (n < c && path[n] == '.')
 				n++;
 			
 			if (IsSeparator(path, n) || n >= c)
@@ -472,7 +472,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 		else if (!IsDirSeparator(path, i++))
 			return false;
 
-		if(i == c)
+		if (i == c)
 			return false; // We don't like paths with a '\' at the end
 	}	
 

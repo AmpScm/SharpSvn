@@ -41,7 +41,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_start = value;
 				else
 					_start = SvnRevision::Zero;
@@ -56,7 +56,7 @@ namespace SharpSvn {
 			}
 			void set(SvnRevision^ value)
 			{
-				if(value)
+				if (value)
 					_end = value;
 				else
 					_end = SvnRevision::Head;

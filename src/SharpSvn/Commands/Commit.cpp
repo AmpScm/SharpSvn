@@ -55,7 +55,7 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result = nullptr;
@@ -67,7 +67,7 @@ bool SvnClient::Commit(String^ path, SvnCommitArgs^ args, [Out] SvnCommitResult^
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return Commit(NewSingleItemCollection(path), args, result);
@@ -77,7 +77,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args)
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result = nullptr;
@@ -89,7 +89,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	for each (String^ path in paths)

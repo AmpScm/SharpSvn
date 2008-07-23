@@ -23,11 +23,11 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!value)
+	else if (!value)
 		throw gcnew ArgumentNullException("value");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return SetProperty(target, propertyName, value, gcnew SvnSetPropertyArgs());
@@ -37,9 +37,9 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!value)
+	else if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	return SetProperty(target, propertyName, value, gcnew SvnSetPropertyArgs());
@@ -49,11 +49,11 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, ICollection<By
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
-	else if(!bytes)
+	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
 	return SetProperty(target, propertyName, bytes, gcnew SvnSetPropertyArgs());
@@ -63,9 +63,9 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!bytes)
+	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
 	return SetProperty(target, propertyName, bytes, gcnew SvnSetPropertyArgs());
@@ -75,13 +75,13 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value,
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!value)
+	else if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	AprPool pool(%_pool);
@@ -93,11 +93,11 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value, Sv
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!value)
+	else if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	AprPool pool(%_pool);
@@ -109,13 +109,13 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, ICollection<By
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!bytes)
+	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
 	AprPool pool(%_pool);
@@ -136,11 +136,11 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!bytes)
+	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
 	AprPool pool(%_pool);
@@ -161,9 +161,9 @@ bool SvnClient::DeleteProperty(String^ target, String^ propertyName)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	return DeleteProperty(target, propertyName, gcnew SvnSetPropertyArgs());
@@ -173,7 +173,7 @@ bool SvnClient::DeleteProperty(Uri^ target, String^ propertyName)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
 	return DeleteProperty(target, propertyName, gcnew SvnSetPropertyArgs());
@@ -183,11 +183,11 @@ bool SvnClient::DeleteProperty(String^ target, String^ propertyName, SvnSetPrope
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsNotUri(target))
+	else if (!IsNotUri(target))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	AprPool pool(%_pool);
@@ -199,9 +199,9 @@ bool SvnClient::DeleteProperty(Uri^ target, String^ propertyName, SvnSetProperty
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	AprPool pool(%_pool);
@@ -213,9 +213,9 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (target->Revision->RevisionType != SvnRevisionType::None)
 		throw gcnew ArgumentOutOfRangeException("target");

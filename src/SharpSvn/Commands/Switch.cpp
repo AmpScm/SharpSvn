@@ -18,9 +18,9 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	SvnUpdateResult^ result;
@@ -32,9 +32,9 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
 
 	return Switch(path, target, gcnew SvnSwitchArgs(), result);
@@ -44,11 +44,11 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnUpdateResult^ result;
@@ -60,14 +60,14 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!IsNotUri(path))
+	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if(!target)
+	else if (!target)
 		throw gcnew ArgumentNullException("args");
 
-	if(args->Revision->RequiresWorkingCopy)
+	if (args->Revision->RequiresWorkingCopy)
 		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
-	else if(target->Revision->RequiresWorkingCopy)
+	else if (target->Revision->RequiresWorkingCopy)
 		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "target");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

@@ -166,7 +166,7 @@ namespace SharpSvn {
 			{
 				if (!handler)
 					throw gcnew ArgumentNullException("handler");
-				else if(!authentication)
+				else if (!authentication)
 					throw gcnew ArgumentNullException("authentication");
 
 				_handler = handler;
@@ -342,15 +342,15 @@ namespace SharpSvn {
 			{
 				if (!certificateCommonName)
 					throw gcnew ArgumentNullException("certificateCommonName");
-				else if(!certificateFingerprint)
+				else if (!certificateFingerprint)
 					throw gcnew ArgumentNullException("certificateFingerprint");
-				else if(!certificateValidFrom)
+				else if (!certificateValidFrom)
 					throw gcnew ArgumentNullException("certificateValidFrom");
-				else if(!certificateValidUntil)
+				else if (!certificateValidUntil)
 					throw gcnew ArgumentNullException("certificateValidUntil");
-				else if(!certificateIssuer)
+				else if (!certificateIssuer)
 					throw gcnew ArgumentNullException("certificateIssuer");
-				else if(!certificateValue)
+				else if (!certificateValue)
 					throw gcnew ArgumentNullException("certificateValue");
 
 				_failures			= failures;
@@ -534,7 +534,7 @@ namespace SharpSvn {
 		public:
 			SvnCredentialWrapper(ICredentials^ credentials)
 			{
-				if(!credentials)
+				if (!credentials)
 					throw gcnew ArgumentNullException("credentials");
 
 				_credentials = credentials;
@@ -603,7 +603,7 @@ namespace SharpSvn {
 			{
 				if (!handler)
 					throw gcnew ArgumentNullException("handler");
-				else if(limit < 0)
+				else if (limit < 0)
 					throw gcnew ArgumentOutOfRangeException("limit");
 
 				ISvnAuthWrapper^ wrapper;
@@ -630,7 +630,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnUserNamePasswordEventArgs::Wrapper(e, this);
@@ -647,7 +647,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
@@ -667,7 +667,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnUserNameEventArgs::Wrapper(e, this);
@@ -684,7 +684,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
@@ -704,7 +704,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslServerTrustEventArgs::Wrapper(e, this);
@@ -721,7 +721,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
@@ -741,7 +741,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslClientCertificateEventArgs::Wrapper(e, this);
@@ -758,7 +758,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
@@ -778,7 +778,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ handler = gcnew SvnSslClientCertificatePasswordEventArgs::Wrapper(e, this);
@@ -795,7 +795,7 @@ namespace SharpSvn {
 				{
 					if (_readOnly)
 						throw gcnew InvalidOperationException();
-					else if(!e)
+					else if (!e)
 						return;
 
 					ISvnAuthWrapper^ wrapper;
@@ -831,17 +831,17 @@ namespace SharpSvn {
 				}
 				void set(ICredentials^ value)
 				{
-					if(_defaultCredentials == value)
+					if (_defaultCredentials == value)
 						return;
 
-					if(_credentialWrapper)
+					if (_credentialWrapper)
 					{
 						UserNameHandlers -= gcnew EventHandler<SvnUserNameEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserName);
 						UserNamePasswordHandlers -= gcnew EventHandler<SvnUserNamePasswordEventArgs^>(_credentialWrapper, &SvnCredentialWrapper::OnUserNamePassword);
 						_credentialWrapper = nullptr;
 					}
 
-					if(value)
+					if (value)
 					{
 						_defaultCredentials = value;
 						_credentialWrapper = gcnew SvnCredentialWrapper(value);

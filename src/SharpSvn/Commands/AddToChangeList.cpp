@@ -15,7 +15,7 @@ bool SvnClient::AddToChangeList(String^ target, String^ changeList)
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(changeList))
+	else if (String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 
 	return AddToChangeList(NewSingleItemCollection(target), changeList, gcnew SvnAddToChangeListArgs());
@@ -25,9 +25,9 @@ bool SvnClient::AddToChangeList(String^ target, String^ changeList, SvnAddToChan
 {
 	if (String::IsNullOrEmpty(target))
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(changeList))
+	else if (String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return AddToChangeList(NewSingleItemCollection(target), changeList, args);
@@ -37,7 +37,7 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeLis
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(String::IsNullOrEmpty(changeList))
+	else if (String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
 
 	return AddToChangeList(targets, changeList, gcnew SvnAddToChangeListArgs());
@@ -47,9 +47,9 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeLis
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
-	else if(String::IsNullOrEmpty(changeList))
+	else if (String::IsNullOrEmpty(changeList))
 		throw gcnew ArgumentNullException("changeList");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);

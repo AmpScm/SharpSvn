@@ -16,7 +16,7 @@ namespace SharpSvn {
 		SvnMergesMergedEventArgs(svn_log_entry_t *entry, SvnUriTarget^ source, AprPool ^pool)
 			: SvnLoggingEventArgs(entry, pool)
 		{
-			if(!source)
+			if (!source)
 				throw gcnew ArgumentNullException("source");
 
 			_source = source;

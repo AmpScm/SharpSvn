@@ -15,9 +15,9 @@ SvnAppliedMergeInfo::SvnAppliedMergeInfo(SvnTarget^ target, svn_mergeinfo_t merg
 	// Pool is only available during the constructor
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(!mergeInfo)
+	else if (!mergeInfo)
 		throw gcnew ArgumentNullException("mergeInfo");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	_target = target;

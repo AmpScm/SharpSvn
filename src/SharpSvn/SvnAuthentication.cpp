@@ -64,14 +64,14 @@ void SvnAuthentication::AddConsoleHandlers()
 /// <summary>Retrieves an authorization baton allocated in the specified pool; containing the current authorization settings</summary>
 svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(int% cookie)
 {
-	if(_currentBaton && _cookie == cookie)
+	if (_currentBaton && _cookie == cookie)
 		return _currentBaton;
 
 	AprPool tmpPool(_parentPool);
 
 	apr_hash_t* creds = nullptr;
 
-	if(_currentBaton)
+	if (_currentBaton)
 		creds = clone_credentials(get_cache(_currentBaton), nullptr, %tmpPool);
 
 	_authPool->Clear();
@@ -82,7 +82,7 @@ svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(int% cookie)
 
 	svn_auth_open(&rslt, authArray->Handle, _authPool->Handle);
 
-	if(creds)
+	if (creds)
 		clone_credentials(creds, get_cache(rslt), _authPool);
 
 	_currentBaton = rslt;
@@ -124,7 +124,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_username_prompt_func(svn_auth_cred_use
 
 	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
-	else if(args->Break)
+	else if (args->Break)
 		return nullptr;
 
 
@@ -175,7 +175,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
 	}
 	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
-	else if(args->Break)
+	else if (args->Break)
 		return nullptr;
 
 	*cred = (svn_auth_cred_simple_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_simple_t));
@@ -198,7 +198,7 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
 	{
 		svn_auth_get_simple_provider(&provider, pool->Handle);
 	}
-	else if(_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
+	else if (_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
 	{
 		svn_auth_get_windows_simple_provider(&provider, pool->Handle);
 	}
@@ -238,7 +238,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
 	}
 	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
-	else if(args->Break)
+	else if (args->Break)
 		return nullptr;
 
 
@@ -262,7 +262,7 @@ svn_auth_provider_object_t *SvnSslServerTrustEventArgs::Wrapper::GetProviderPtr(
 		svn_auth_get_ssl_server_trust_file_provider(&provider, pool->Handle);
 	}
 #if (SVN_VER_MAJOR > 1) || (SVN_VER_MINOR >= 5)
-	else if(_handler->Equals(SvnAuthentication::SubversionWindowsSslServerTrustHandler))
+	else if (_handler->Equals(SvnAuthentication::SubversionWindowsSslServerTrustHandler))
 	{
 		svn_auth_get_windows_ssl_server_trust_provider(&provider, pool->Handle);
 	}
@@ -295,7 +295,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_prompt_func(svn_auth_c
 	}
 	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
-	else if(args->Break)
+	else if (args->Break)
 		return nullptr;
 
 
@@ -346,7 +346,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func(svn_aut
 	}
 	if (args->Cancel)
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Authorization canceled operation");
-	else if(args->Break)
+	else if (args->Break)
 		return nullptr;
 
 	*cred = (svn_auth_cred_ssl_client_cert_pw_t *)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_client_cert_pw_t));
@@ -590,21 +590,21 @@ void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender
 
 Uri^ SvnAuthenticationEventArgs::RealmUri::get()
 {
-	if(_realmUri || !Realm)
+	if (_realmUri || !Realm)
 		return _realmUri;
 
 	Match^ m = _reRealmUri->Match(Realm);
 
 	Uri^ uri;
 
-	if(m->Success)
+	if (m->Success)
 	{
 		String^ uriValue = m->Groups[1]->Value;
 
-		if(uriValue && !uriValue->EndsWith("/", StringComparison::Ordinal))
+		if (uriValue && !uriValue->EndsWith("/", StringComparison::Ordinal))
 			uriValue += "/";
 
-		if(Uri::TryCreate(uriValue, UriKind::Absolute, uri))
+		if (Uri::TryCreate(uriValue, UriKind::Absolute, uri))
 			_realmUri = uri;
 	}
 

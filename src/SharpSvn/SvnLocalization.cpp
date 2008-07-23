@@ -47,9 +47,9 @@ namespace SharpSvn {
 
 			void SetParent(SvnLocalizerData^ parent)
 			{
-				if(!parent)
+				if (!parent)
 					throw gcnew ArgumentNullException("parent");
-				else if(_parent)
+				else if (_parent)
 					throw gcnew InvalidOperationException();
 
 				_parent = parent;
@@ -57,35 +57,35 @@ namespace SharpSvn {
 
 			char* GetText(const char* msgid, bool isWriter)
 			{
-				if(_res)
+				if (_res)
 				{
 					bool skip = false;
 					char* r = (char*)apr_hash_get(_ptrHash, &msgid, sizeof(char*));
 
-					if(r)
+					if (r)
 					{
-						if(r == _untranslatableMarker)
+						if (r == _untranslatableMarker)
 							skip = true;
 						else
 							return r;
 					}
 					
-					if(!skip)
+					if (!skip)
 					{
 						r = (char*)apr_hash_get(_pStrHash, msgid, APR_HASH_KEY_STRING);
 
-						if(r)
+						if (r)
 						{
-							if(r == _untranslatableMarker)
+							if (r == _untranslatableMarker)
 								skip = true;
 							else
 								return r;
 						}
 					}
 
-					if(!skip)
+					if (!skip)
 					{
-						if(!isWriter)
+						if (!isWriter)
 							return false; // Please upgrade lock
 
 						String^ value = _res->GetString(SvnBase::Utf8_PtrToString(msgid));
@@ -101,7 +101,7 @@ namespace SharpSvn {
 						return nullptr; // Must upgrade first
 				}
 				
-				if(_parent)
+				if (_parent)
 					return _parent->GetText(msgid, isWriter);
 
 				return const_cast<char*>(msgid);
@@ -140,7 +140,7 @@ static bool SetHandler()
 
 void SvnClient::EnableSubversionLocalization()
 {
-	if(SetHandler())
+	if (SetHandler())
 	{
 		SvnLocalizer::Initialize();		
 
@@ -168,7 +168,7 @@ char* SvnLocalizer::gettext(const char* msgid)
 		{
 			SvnLocalizerData^ ld;
 
-			if(!_langMap->TryGetValue(ci->Name, ld))
+			if (!_langMap->TryGetValue(ci->Name, ld))
 			{
 				lc = _rwLock->UpgradeToWriterLock(10000); // Raise exception after ten seconds.. Use english then
 				_isWriter = true;
@@ -177,15 +177,15 @@ char* SvnLocalizer::gettext(const char* msgid)
 				_langMap->Add(ci->Name, ld);
 
 				SvnLocalizerData^ ldI = ld;
-				while(ci->Parent)
+				while (ci->Parent)
 				{
 					ci = ci->Parent;
 
-					if(!ci->Name || ci == CultureInfo::InvariantCulture)
+					if (!ci->Name || ci == CultureInfo::InvariantCulture)
 						break;
 
 					SvnLocalizerData^ ldX;
-					if(_langMap->TryGetValue(ci->Name, ldX))
+					if (_langMap->TryGetValue(ci->Name, ldX))
 					{
 						ldI->SetParent(ld);
 						break;
@@ -203,7 +203,7 @@ char* SvnLocalizer::gettext(const char* msgid)
 
 			char* txt = ld->GetText(msgid, _isWriter);
 
-			if(!txt && !_isWriter)
+			if (!txt && !_isWriter)
 			{
 				lc = _rwLock->UpgradeToWriterLock(10000); // Raise exception after ten seconds.. Use english then
 
@@ -214,7 +214,7 @@ char* SvnLocalizer::gettext(const char* msgid)
 		}
 		finally
 		{
-			if(_isWriter)
+			if (_isWriter)
 				_rwLock->DowngradeFromWriterLock(lc);
 			_rwLock->ReleaseReaderLock();
 		}
@@ -231,7 +231,7 @@ static char* svn_gettext(const char* domain, const char* msgid, int category)
 	UNUSED_ALWAYS(domain);
 	UNUSED_ALWAYS(category);
 
-	if(!svn_gettext_enabled)
+	if (!svn_gettext_enabled)
 		return const_cast<char*>(msgid);
 
 	return SvnLocalizer::gettext(msgid);

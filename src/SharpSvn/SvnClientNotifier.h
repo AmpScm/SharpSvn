@@ -32,7 +32,7 @@ namespace SharpSvn {
 		{
 			if (!client)
 				throw gcnew ArgumentNullException("client");
-			else if(!to)
+			else if (!to)
 				throw gcnew ArgumentNullException("to");
 
 			_client = client;
@@ -46,7 +46,7 @@ namespace SharpSvn {
 		{
 			if (!client)
 				throw gcnew ArgumentNullException("client");
-			else if(!sb)
+			else if (!sb)
 				throw gcnew ArgumentNullException("sb");
 
 			_client = client;
@@ -59,7 +59,7 @@ namespace SharpSvn {
 		{
 			if (!client)
 				throw gcnew ArgumentNullException("client");
-			else if(!sb)
+			else if (!sb)
 				throw gcnew ArgumentNullException("sb");
 
 			_client = client;
@@ -73,7 +73,7 @@ namespace SharpSvn {
 		{
 			if (!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
-			else if(!to)
+			else if (!to)
 				throw gcnew ArgumentNullException("to");
 
 			_args = clientArgs;
@@ -86,7 +86,7 @@ namespace SharpSvn {
 		{
 			if (!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
-			else if(!sb)
+			else if (!sb)
 				throw gcnew ArgumentNullException("sb");
 
 			_args = clientArgs;
@@ -98,7 +98,7 @@ namespace SharpSvn {
 		{
 			if (!clientArgs)
 				throw gcnew ArgumentNullException("clientArgs");
-			else if(!sb)
+			else if (!sb)
 				throw gcnew ArgumentNullException("sb");
 
 			_args = clientArgs;

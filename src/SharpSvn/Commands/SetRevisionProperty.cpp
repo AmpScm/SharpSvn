@@ -15,9 +15,9 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!value)
+	else if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), value);
@@ -27,9 +27,9 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!bytes)
+	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
 	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), bytes);
@@ -39,11 +39,11 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!value)
+	else if (!value)
 		throw gcnew ArgumentNullException("value");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	AprPool pool(%_pool);
@@ -61,11 +61,11 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!bytes)
+	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	AprPool pool(%_pool);
@@ -90,7 +90,7 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
 	return DeleteRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs());
@@ -100,9 +100,9 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	AprPool pool(%_pool);
@@ -118,9 +118,9 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if(String::IsNullOrEmpty(propertyName))
+	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access

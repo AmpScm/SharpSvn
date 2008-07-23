@@ -28,7 +28,7 @@ namespace SharpSvn {
 			{
 				if (!stream)
 					throw gcnew ArgumentNullException("stream");
-				else if(!enableRead && !enableWrite)
+				else if (!enableRead && !enableWrite)
 					throw gcnew ArgumentException("enableRead or enableWrite must be set to true");
 
 				_stream = stream;
@@ -37,7 +37,7 @@ namespace SharpSvn {
 
 				if (enableRead && !_stream->CanRead)
 					throw gcnew InvalidOperationException("Can't enable reading on an unreadable stream");
-				else if(enableWrite && !_stream->CanWrite)
+				else if (enableWrite && !_stream->CanWrite)
 					throw gcnew InvalidOperationException("Can't enable writing on an unwritable stream");
 
 				Init(enableRead, enableWrite);

@@ -26,7 +26,7 @@ bool SvnClient::CreateDirectory(String^ path, SvnCreateDirectoryArgs^ args)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	return CreateDirectories(NewSingleItemCollection(path), args);
@@ -45,14 +45,14 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	for each (String^ path in paths)
 	{
 		if (String::IsNullOrEmpty(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
-		else if(!IsNotUri(path))
+		else if (!IsNotUri(path))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
 	}
 
@@ -86,9 +86,9 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!SvnBase::IsValidReposUri(uri))
+	else if (!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	SvnCommitResult^ result;
@@ -100,9 +100,9 @@ bool SvnClient::RemoteCreateDirectory(Uri^ uri, SvnCreateDirectoryArgs^ args, [O
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!SvnBase::IsValidReposUri(uri))
+	else if (!SvnBase::IsValidReposUri(uri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
 	return RemoteCreateDirectories(NewSingleItemCollection(uri), args, result);
@@ -112,7 +112,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 {
 	if (!uris)
 		throw gcnew ArgumentNullException("uris");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result;
@@ -125,7 +125,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 {
 	if (!uris)
 		throw gcnew ArgumentNullException("uris");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	result = nullptr;
@@ -137,7 +137,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	{
 		if (uri == nullptr)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "uris");
-		else if(!SvnBase::IsValidReposUri(uri))
+		else if (!SvnBase::IsValidReposUri(uri))
 			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uris");
 
 		uriData[i++] = UriToCanonicalString(uri);

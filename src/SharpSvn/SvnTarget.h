@@ -132,7 +132,7 @@ namespace SharpSvn {
 			if (!other)
 				return false;
 
-			if(other->RevisionType != RevisionType)
+			if (other->RevisionType != RevisionType)
 				return false;
 
 			switch(RevisionType)
@@ -180,7 +180,7 @@ namespace SharpSvn {
 		{
 			if (!rev1)
 				return !rev2;
-			else if(!rev2)
+			else if (!rev2)
 				return false;
 
 			return rev1->Equals(rev2);
@@ -220,7 +220,7 @@ namespace SharpSvn {
 	internal:
 		SvnRevision^ Or(SvnRevision^ alternate)
 		{
-			if(RevisionType != SvnRevisionType::None)
+			if (RevisionType != SvnRevisionType::None)
 				return this;
 			else
 				return alternate ? alternate : SvnRevisionType::None;

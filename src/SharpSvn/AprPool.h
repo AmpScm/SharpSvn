@@ -177,7 +177,7 @@ namespace SharpSvn {
 				{
 					if (r == APR_SUCCESS)
 						_stream->Write(buffer, 0, (int)nRead);
-					else if(!APR_STATUS_IS_EAGAIN(r) && !APR_STATUS_IS_EINTR(r))
+					else if (!APR_STATUS_IS_EAGAIN(r) && !APR_STATUS_IS_EINTR(r))
 						break; // Most errors are fatal
 
 					nRead = buffer->Length;
@@ -189,7 +189,7 @@ namespace SharpSvn {
 			{
 				if (!stream)
 					throw gcnew ArgumentNullException("stream");
-				else if(!pool)
+				else if (!pool)
 					throw gcnew ArgumentNullException("pool");
 
 				_stream = stream;

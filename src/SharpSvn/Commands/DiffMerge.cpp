@@ -15,9 +15,9 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!mergeFrom)
+	else if (!mergeFrom)
 		throw gcnew ArgumentNullException("mergeFrom");
-	else if(!mergeFrom)
+	else if (!mergeFrom)
 		throw gcnew ArgumentNullException("mergeTo");
 
 	return DiffMerge(targetPath, mergeFrom, mergeTo, gcnew SvnDiffMergeArgs());
@@ -27,11 +27,11 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!mergeFrom)
+	else if (!mergeFrom)
 		throw gcnew ArgumentNullException("mergeFrom");
-	else if(!mergeFrom)
+	else if (!mergeFrom)
 		throw gcnew ArgumentNullException("mergeTo");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

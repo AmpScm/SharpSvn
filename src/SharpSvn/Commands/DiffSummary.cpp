@@ -18,9 +18,9 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiff
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!to)
+	else if (!to)
 		throw gcnew ArgumentNullException("to");
-	else if(!summaryHandler)
+	else if (!summaryHandler)
 		throw gcnew ArgumentNullException("summaryHandler");
 
 	return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), summaryHandler);
@@ -62,9 +62,9 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!to)
+	else if (!to)
 		throw gcnew ArgumentNullException("to");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -101,7 +101,7 @@ bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] Collection<
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!to)
+	else if (!to)
 		throw gcnew ArgumentNullException("to");
 
 	InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
@@ -120,9 +120,9 @@ bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArg
 {
 	if (!from)
 		throw gcnew ArgumentNullException("from");
-	else if(!to)
+	else if (!to)
 		throw gcnew ArgumentNullException("to");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();

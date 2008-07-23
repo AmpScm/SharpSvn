@@ -15,7 +15,7 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source)
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
 
 	return ReintegrationMerge(targetPath, source, gcnew SvnReintegrationMergeArgs());
@@ -25,11 +25,11 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
-	else if(!source)
+	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if(!args)
+	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if(!IsNotUri(targetPath))
+	else if (!IsNotUri(targetPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

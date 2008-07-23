@@ -19,7 +19,7 @@ SvnCommitResult^ SvnCommitResult::Create(SvnClient^ client, SvnClientArgs^ args,
 	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	if(!commitInfo || (commitInfo->revision <= 0L))
+	if (!commitInfo || (commitInfo->revision <= 0L))
 		return nullptr;
 
 	return gcnew SvnCommitResult(commitInfo, pool);
@@ -29,7 +29,7 @@ SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ p
 {
 	if (!commitInfo)
 		throw gcnew ArgumentNullException("commitInfo");
-	else if(!pool)
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
 	_revision = commitInfo->revision;
