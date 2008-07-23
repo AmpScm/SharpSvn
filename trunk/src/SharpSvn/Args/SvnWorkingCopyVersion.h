@@ -1,4 +1,4 @@
-// $Id: SvnCommitItem.h 497 2008-03-23 23:07:07Z rhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
