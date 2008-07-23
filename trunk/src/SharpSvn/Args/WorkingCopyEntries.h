@@ -10,8 +10,32 @@
 namespace SharpSvn {
 
 	
-	public ref class SvnWorkingCopyEntriesArgs sealed : public SvnClientArgs
+	public ref class SvnWorkingCopyEntriesArgs : public SvnClientArgs
 	{
+		bool _hideSome;
+	public:
+		event EventHandler<SvnWorkingCopyEntryEventArgs^>^ Entry;
+
+	protected public:
+		virtual void OnEntry(SvnWorkingCopyEntryEventArgs^ e)
+		{
+			Entry(this, e);
+		}
+
+	public:
+		property bool ShowHidden
+		{
+			bool get()
+			{
+				return !_hideSome;
+			}
+			void set(bool value)
+			{
+				_hideSome = !value;
+			}
+		}
+
+
 	public:
 		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
 		virtual property SvnCommandType CommandType

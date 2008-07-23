@@ -27,17 +27,33 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Enumerates through the list of entries contained in the specified working copy path</summary>
-		bool ListEntries(String^ targetPath, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler);
+		/// <remarks>Only the entry structures representing files and SVN_WC_ENTRY_THIS_DIR contain complete information.  The entry
+		/// structures representing subdirs have only the `kind' and `state' fields filled in. If you want info on a subdir, you must use this
+		/// routine to open its @a path and read the @c SVN_WC_ENTRY_THIS_DIR structure, or call svn_wc_entry() on its @a path.
+		///</remarks>
+		bool ListEntries(String^ directory, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler);
 		/// <summary>Enumerates through the list of entries contained in the specified working copy path</summary>
-		bool ListEntries(String^ targetPath, SvnWorkingCopyEntriesArgs^ args, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler);
+		/// <remarks>Only the entry structures representing files and SVN_WC_ENTRY_THIS_DIR contain complete information.  The entry
+		/// structures representing subdirs have only the `kind' and `state' fields filled in. If you want info on a subdir, you must use this
+		/// routine to open its @a path and read the @c SVN_WC_ENTRY_THIS_DIR structure, or call svn_wc_entry() on its @a path.
+		///</remarks>
+		bool ListEntries(String^ directory, SvnWorkingCopyEntriesArgs^ args, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler);
 
 		/// <summary>Gets a list of entries contained in the specified working copy path</summary>
 		/// <remarks>Helper method used by AnkhSVN to detect nested working copies</remarks>
-		bool GetEntries(String^ targetPath, [Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list);
+		/// <remarks>Only the entry structures representing files and SVN_WC_ENTRY_THIS_DIR contain complete information.  The entry
+		/// structures representing subdirs have only the `kind' and `state' fields filled in. If you want info on a subdir, you must use this
+		/// routine to open its @a path and read the @c SVN_WC_ENTRY_THIS_DIR structure, or call svn_wc_entry() on its @a path.
+		///</remarks>
+		bool GetEntries(String^ directory, [Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list);
 
 		/// <summary>Gets a list of entries contained in the specified working copy path</summary>
 		/// <remarks>Helper method used by AnkhSVN to detect nested working copies</remarks>
-		bool GetEntries(String^ targetPath, SvnWorkingCopyEntriesArgs^ args,[Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list);
+		/// <remarks>Only the entry structures representing files and SVN_WC_ENTRY_THIS_DIR contain complete information.  The entry
+		/// structures representing subdirs have only the `kind' and `state' fields filled in. If you want info on a subdir, you must use this
+		/// routine to open its @a path and read the @c SVN_WC_ENTRY_THIS_DIR structure, or call svn_wc_entry() on its @a path.
+		///</remarks>
+		bool GetEntries(String^ directory, SvnWorkingCopyEntriesArgs^ args,[Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list);
 
 	public:
 		/// <summary>Gets the working copy version (<c>svnversion</c>)</summary>

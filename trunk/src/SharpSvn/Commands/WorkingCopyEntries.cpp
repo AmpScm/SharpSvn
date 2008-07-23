@@ -14,31 +14,86 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-bool SvnWorkingCopyClient::ListEntries(String^ targetPath, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler)
+bool SvnWorkingCopyClient::ListEntries(String^ directory, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler)
 {
-	if (!targetPath)
-		throw gcnew ArgumentNullException("targetPath");
-	else if(!entryHandler)
+	if (String::IsNullOrEmpty(directory))
+		throw gcnew ArgumentNullException("directory");
+	else if (!entryHandler)
 		throw gcnew ArgumentNullException("entryHandler");
-	
-	return ListEntries(targetPath, gcnew SvnWorkingCopyEntriesArgs(), entryHandler);
+	else if(!IsNotUri(directory))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "directory");
+
+	return ListEntries(directory, gcnew SvnWorkingCopyEntriesArgs(), entryHandler);
 }
 
-bool SvnWorkingCopyClient::ListEntries(String^ targetPath, SvnWorkingCopyEntriesArgs^ args, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler)
+bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesArgs^ args, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler)
 {
-	return false;
+	if (String::IsNullOrEmpty(directory))
+		throw gcnew ArgumentNullException("directory");	
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+	else if (!IsNotUri(directory))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "directory");
+
+	directory = SvnTools::GetNormalizedFullPath(directory);
+
+	ArgsStore store(this, args);
+	AprPool pool(%_pool);
+
+	if (entryHandler)
+		args->Entry += entryHandler;
+
+	try
+	{
+		const char* pPath = pool.AllocPath(directory);
+		svn_wc_adm_access_t* acc = nullptr;
+
+		svn_error_t* r = svn_wc_adm_open3(&acc, nullptr, pPath, false, 0, CtxHandle->cancel_func, CtxHandle->cancel_baton, pool.Handle);
+
+		if (r)
+			return args->HandleResult(this, r);
+
+		apr_hash_t* rslt = nullptr;
+
+		r = svn_wc_entries_read(&rslt, acc, args->ShowHidden, pool.Handle);
+        
+		if(!r)
+		{
+			apr_hash_index_t *hi;
+			const char* key;
+			svn_wc_entry_t *val;
+		
+			for (hi = apr_hash_first(pool.Handle, rslt); hi; hi = apr_hash_next(hi)) 
+			{
+				apr_hash_this(hi, (const void**)&key, nullptr, (void**)&val);
+				
+				SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(directory, key, val);
+
+				args->OnEntry(e);
+
+				e->Detach(false);
+			}
+		}
+
+		return args->HandleResult(this, r);
+	}
+	finally
+	{
+		if (entryHandler)
+			args->Entry -= entryHandler;
+	}
 }
 
-bool SvnWorkingCopyClient::GetEntries(String^ targetPath, [Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list)
+bool SvnWorkingCopyClient::GetEntries(String^ directory, [Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list)
 {
-	if (!targetPath)
-		throw gcnew ArgumentNullException("targetPath");
+	if (!directory)
+		throw gcnew ArgumentNullException("directory");
 
 	InfoItemCollection<SvnWorkingCopyEntryEventArgs^>^ results = gcnew InfoItemCollection<SvnWorkingCopyEntryEventArgs^>();
 
 	try
 	{
-		return ListEntries(targetPath, gcnew SvnWorkingCopyEntriesArgs(), results->Handler);
+		return ListEntries(directory, gcnew SvnWorkingCopyEntriesArgs(), results->Handler);
 	}
 	finally
 	{
@@ -46,10 +101,10 @@ bool SvnWorkingCopyClient::GetEntries(String^ targetPath, [Out] Collection<SvnWo
 	}
 }
 
-bool SvnWorkingCopyClient::GetEntries(String^ targetPath, SvnWorkingCopyEntriesArgs^ args,[Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list)
+bool SvnWorkingCopyClient::GetEntries(String^ directory, SvnWorkingCopyEntriesArgs^ args,[Out] Collection<SvnWorkingCopyEntryEventArgs^>^% list)
 {
-	if (!targetPath)
-		throw gcnew ArgumentNullException("targetPath");
+	if (!directory)
+		throw gcnew ArgumentNullException("directory");
 	else if(!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -57,7 +112,7 @@ bool SvnWorkingCopyClient::GetEntries(String^ targetPath, SvnWorkingCopyEntriesA
 
 	try
 	{
-		return ListEntries(targetPath, args, results->Handler);
+		return ListEntries(directory, args, results->Handler);
 	}
 	finally
 	{
