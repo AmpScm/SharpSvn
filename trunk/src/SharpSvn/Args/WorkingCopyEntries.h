@@ -23,6 +23,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets or sets a boolean indicating whether to return deleted or absent entries</summary>
 		property bool RetrieveHidden
 		{
 			bool get()
@@ -34,7 +35,6 @@ namespace SharpSvn {
 				_hideSome = !value;
 			}
 		}
-
 
 	public:
 		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>

@@ -9,14 +9,13 @@ namespace SharpSvn.Tests.Commands
     [TestFixture]
     public class ListEntries : TestBase
     {
-
         [Test]
         public void WalkEntries()
         {
             using (SvnWorkingCopyClient wcc = new SvnWorkingCopyClient())
             {
                 SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
-                a.ShowHidden = true;
+                a.RetrieveHidden = true;
 
                 bool touched = false;
                 Assert.That(wcc.ListEntries(WcPath, a,
