@@ -23,7 +23,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		property bool ShowHidden
+		property bool RetrieveHidden
 		{
 			bool get()
 			{
