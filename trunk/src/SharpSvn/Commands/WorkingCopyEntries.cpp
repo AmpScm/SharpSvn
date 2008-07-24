@@ -55,7 +55,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 
 		apr_hash_t* rslt = nullptr;
 
-		r = svn_wc_entries_read(&rslt, acc, args->ShowHidden, pool.Handle);
+		r = svn_wc_entries_read(&rslt, acc, args->RetrieveHidden, pool.Handle);
         
 		if (!r)
 		{
