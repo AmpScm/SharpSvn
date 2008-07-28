@@ -65,6 +65,13 @@ namespace SharpSvn {
 			SvnError(this, e);
 		}
 
+	internal:
+		virtual void RaiseOnNotify(SvnNotifyEventArgs^ e)
+		{
+			OnNotify(e);
+		}
+
+
 	public:
 		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
 		virtual property SvnCommandType CommandType
@@ -130,6 +137,7 @@ namespace SharpSvn {
 
 	internal:
 		bool HandleResult(SvnClientContext^ client, svn_error_t *error);
+		bool HandleResult(SvnClientContext^ client, SvnException^ error);
 		void Prepare();
 	};
 

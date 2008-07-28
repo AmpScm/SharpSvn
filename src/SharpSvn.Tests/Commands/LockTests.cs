@@ -69,16 +69,13 @@ namespace SharpSvn.Tests.Commands
 
             try
             {
-                Client.Lock(Path.Combine(wc2, "index.html"), "Second");
+                Client.Lock(index2, "Second");
 
-                Client.GetInfo(index2, out ii);
-                Assert.That(ii.Lock, Is.Null, "Not locked");
-
-                Assert.That(true, "Lock just didn't do anything");
+                Assert.That(false, "Lock just didn't do anything");
             }
-            catch (Exception ex)
+            catch (SvnFileSystemLockException ex)
             {
-                Assert.That(ex, Is.TypeOf(typeof(SvnException)));
+                Assert.That(ex.Message.Contains("index.html"));
             }
         }
 	}

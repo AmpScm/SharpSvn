@@ -738,24 +738,26 @@ namespace SharpSvn {
 	public:
 		/////////////////////////////////////////
 #pragma region // Lock Client Command
-		/// <overloads>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</overloads>
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(String^ target, String^ comment);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(Uri^ target, String^ comment);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(ICollection<String^>^ targets, String^ comment);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(ICollection<Uri^>^ targets, String^ comment);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(String^ target, SvnLockArgs^ args);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(Uri^ target, SvnLockArgs^ args);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
-		/// <summary>Lock working copy paths or URLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(ICollection<Uri^>^ targets, SvnLockArgs^ args);
+		/// <overloads>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</overloads>
+		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool Lock(String^ target, String^ comment);		
+		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool Lock(ICollection<String^>^ targets, String^ comment);		
+		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool Lock(String^ target, SvnLockArgs^ args);		
+		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);		
 		
+		/// <overloads>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</overloads>
+		/// <summary>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool RemoteLock(Uri^ target, String^ comment);
+		/// <summary>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool RemoteLock(ICollection<Uri^>^ targets, String^ comment);
+		/// <summary>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool RemoteLock(Uri^ target, SvnLockArgs^ args);
+		/// <summary>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
+		bool RemoteLock(ICollection<Uri^>^ targets, SvnLockArgs^ args);
+
 	private:
 		generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
 		bool LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^ args, AprPool^ pool);
@@ -765,23 +767,25 @@ namespace SharpSvn {
 	public:
 		/////////////////////////////////////////
 #pragma region // Lock Client Command
-		/// <overloads>Unlock working copy paths or URLs (<c>svn unlock</c>)</overloads>
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(String^ target);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(Uri^ target);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(ICollection<String^>^ targets);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(ICollection<Uri^>^ targets);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(String^ target, SvnUnlockArgs^ args);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(Uri^ target, SvnUnlockArgs^ args);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
-		bool Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args);
-		/// <summary>Unlock working copy paths or URLs (<c>svn unlock</c>)</summary>
+		/// <overloads>Unlock working copy paths  (<c>svn unlock</c>)</overloads>
+		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
+		bool Unlock(String^ target);		
+		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
+		bool Unlock(ICollection<String^>^ targets);		
+		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
+		bool Unlock(String^ target, SvnUnlockArgs^ args);				
+		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
 		bool Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args);
+
+		/// <overloads>UnlockURLs (<c>svn unlock</c>)</overloads>
+		/// <summary>UnlockURLs (<c>svn unlock</c>)</summary>
+		bool RemoteUnlock(Uri^ target);
+		/// <summary>UnlockURLs (<c>svn unlock</c>)</summary>
+		bool RemoteUnlock(ICollection<Uri^>^ targets);
+		/// <summary>UnlockURLs (<c>svn unlock</c>)</summary>
+		bool RemoteUnlock(Uri^ target, SvnUnlockArgs^ args);
+		/// <summary>UnlockURLs (<c>svn unlock</c>)</summary>
+		bool RemoteUnlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args);
 
 	private:
 		generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>

@@ -15,6 +15,7 @@ namespace SharpSvn {
 	{
 		String^ _comment;
 		bool _stealLock;
+		SvnException^ _result;
 
 	public:
 		SvnLockArgs()
@@ -51,6 +52,36 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_stealLock = value;
+			}
+		}
+
+	internal:
+		void Reset()
+		{
+			_result = nullptr;
+		}
+
+		virtual void RaiseOnNotify(SvnNotifyEventArgs^ e) override
+		{
+			if(!_result)
+				switch(e->Action)
+			{
+				case SvnNotifyAction::LockFailedLock:
+					if(e->Error)
+						_result = e->Error;
+					else
+						_result = gcnew SvnFileSystemLockException(String::Format("Locking failed on {0}", e->Path));
+					break;
+			}
+
+			__super::RaiseOnNotify(e);
+		}
+
+		property SvnException^ LockResult
+		{
+			SvnException^ get()
+			{
+				return _result;
 			}
 		}
 	};

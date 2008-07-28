@@ -138,7 +138,7 @@ void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
 void SvnClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
 	if (CurrentCommandArgs)
-		CurrentCommandArgs->OnNotify(e);
+		CurrentCommandArgs->RaiseOnNotify(e);
 
 	OnNotify(e);
 }

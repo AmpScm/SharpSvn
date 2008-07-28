@@ -5,8 +5,6 @@
 
 #pragma once
 
-
-
 namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnClient::Unlock(String^, SvnUnlockArgs^)" /></summary>
@@ -14,6 +12,7 @@ namespace SharpSvn {
 	public ref class SvnUnlockArgs : public SvnClientArgs
 	{
 		bool _breakLock;
+		SvnException^ _result;
 
 	public:
 		SvnUnlockArgs()
@@ -37,6 +36,35 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_breakLock = value;
+			}
+		}
+
+	internal:
+		void Reset()
+		{
+			_result = nullptr;
+		}
+
+		virtual void RaiseOnNotify(SvnNotifyEventArgs^ e) override
+		{
+			if(!_result)
+				switch(e->Action)
+			{
+				case SvnNotifyAction::LockFailedUnlock:
+					if(e->Error)
+						_result = e->Error;
+					else
+						_result = gcnew SvnFileSystemLockException(String::Format("Locking failed on {0}", e->Path));
+					break;
+			}
+			__super::RaiseOnNotify(e);
+		}
+
+		property SvnException^ UnlockResult
+		{
+			SvnException^ get()
+			{
+				return _result;
 			}
 		}
 	};

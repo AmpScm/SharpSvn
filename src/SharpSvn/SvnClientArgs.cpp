@@ -21,28 +21,39 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 	}
 
 	apr_status_t err = error->apr_err;
-	_exception = SvnException::Create(error); // Releases error
+
+	_exception = SvnException::Create(error);
 
 	if (err == SVN_ERR_CEASE_INVOCATION)
 		return false;
 
+	return HandleResult(client, _exception); // Releases error
+}
+
+bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ exception)
+{
+	_exception = exception;
+
+	if (!_exception)
+		return true;
+
+	if (_exception->SubversionErrorCode == SVN_ERR_CEASE_INVOCATION)
+		return false;
+
 	SvnClient^ svnClient = dynamic_cast<SvnClient^>(client);
 
-	if (_exception)
+	SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
+	if (svnClient)
 	{
-		SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
-		if (svnClient)
-		{
-			svnClient->HandleClientError(ea);
-		}
-		else
-			OnSvnError(ea);
-
-		if (ea->Cancel)
-			return false;
+		svnClient->HandleClientError(ea);
 	}
+	else
+		OnSvnError(ea);
 
-	if (!ThrowOnCancel && err == SVN_ERR_CANCELLED)
+	if (ea->Cancel)
+		return false;
+
+	if (!ThrowOnCancel && _exception->SubversionErrorCode == SVN_ERR_CANCELLED)
 		return false;
 	else if (ThrowOnError)
 		throw _exception;
