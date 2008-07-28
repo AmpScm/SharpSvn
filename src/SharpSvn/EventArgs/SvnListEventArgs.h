@@ -31,7 +31,7 @@ namespace SharpSvn {
 			_fileSize = entry->size;
 			_hasProperties = (entry->has_props != 0);
 			_rev = entry->created_rev;
-			_time = (entry->time != 0) ? SvnBase::DateTimeFromAprTime(entry->time) : DateTime::MinValue;			
+			_time = (entry->time != 0) ? SvnBase::DateTimeFromAprTime(entry->time) : DateTime::MinValue;
 		}
 	public:
 		property SvnNodeKind NodeKind
@@ -88,7 +88,7 @@ namespace SharpSvn {
 
 				return _author;
 			}
-		}		
+		}
 
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
@@ -186,7 +186,7 @@ namespace SharpSvn {
 			{
 				if (!_baseUri && (RepositoryRoot && (_absPath || _pAbsPath)))
 				{
-					if (String::IsNullOrEmpty(BasePath) || 
+					if (String::IsNullOrEmpty(BasePath) ||
 						(BasePath->Length == 1 && BasePath[0] == '/'))
 					{
 						_baseUri = RepositoryRoot;

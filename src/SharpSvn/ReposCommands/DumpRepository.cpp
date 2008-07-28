@@ -115,8 +115,8 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	SvnStreamWrapper strmResponse(strResult, false, true, %pool);
 
 	r = svn_repos_dump_fs2(
-		repos, 
-		strmTo.Handle, 
+		repos,
+		strmTo.Handle,
 		strmResponse.Handle,
 		start,
 		end,
@@ -125,6 +125,6 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 		nullptr,
 		nullptr,
 		pool.Handle);
-	
+
 	return args->HandleResult(this, r);
 }

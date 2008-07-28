@@ -41,7 +41,7 @@ namespace SharpSvn {
 			void set(bool value);
 		}
 
-		/// <summary>Gets or sets a boolean indicating whether to enable the SharpPlink handler when no other valid 
+		/// <summary>Gets or sets a boolean indicating whether to enable the SharpPlink handler when no other valid
 		/// handler for svn+ssh:// is registered</summary>
 		/// <remarks>The default value of this property is true; this matches the behaviour of TortoiseSvn</remarks>
 		/// <value>true if enabling SharpPlink on the first repository request, otherwise false</value>

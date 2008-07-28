@@ -170,7 +170,7 @@ void SvnClientContext::ApplyMimeTypes()
 
 		if ((err = svn_io_parse_mimetypes_file(&(CtxHandle->mimetypes_map), mimetypes_file, _pool->Handle)))
 		{
-			SvnClientConfigurationException^ exception = 
+			SvnClientConfigurationException^ exception =
 				gcnew SvnClientConfigurationException(SharpSvnStrings::LoadingMimeTypesMapFileFailed, SvnException::Create(err));
 
 			SvnErrorEventArgs^ ee = gcnew SvnErrorEventArgs(exception);

@@ -51,7 +51,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 
 	svn_repos_t* repos = nullptr;
 	svn_error_t* r;
-	
+
 	if (r = svn_repos_open(&repos, pool.AllocPath(repositoryPath), pool.Handle))
 		return args->HandleResult(this, r);
 
@@ -63,8 +63,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 	SvnStreamWrapper strmResponse(strResult, false, true, %pool);
 
 	r = svn_repos_load_fs2(
-		repos, 
-		strmFrom.Handle, 
+		repos,
+		strmFrom.Handle,
 		strmResponse.Handle,
 		(svn_repos_load_uuid)args->LoadIdType,
 		args->ImportParent ? pool.AllocCanonical(args->ImportParent) : nullptr,

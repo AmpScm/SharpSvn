@@ -140,7 +140,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 
 			uri = rootUri->MakeRelativeUri(uri);
 
-			if (uri->IsAbsoluteUri) // Should have happened before				
+			if (uri->IsAbsoluteUri) // Should have happened before
 				throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
 
 			rawTargets->Add(UriToString(uri));

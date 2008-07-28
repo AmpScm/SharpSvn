@@ -92,7 +92,7 @@ namespace SharpSvn {
 		String^ _author;
 		initonly DateTime _date;
 		String^ _message;
-		initonly __int64 _revision;		
+		initonly __int64 _revision;
 
 		const char* _pcAuthor;
 		const char* _pcMessage;
@@ -219,10 +219,10 @@ namespace SharpSvn {
 
 				return _message;
 			}
-		}		
+		}
 
 		/// <summary>Serves as a hashcode for the specified type</summary>
-		virtual int GetHashCode() override 
+		virtual int GetHashCode() override
 		{
 			return Revision.GetHashCode();
 		}

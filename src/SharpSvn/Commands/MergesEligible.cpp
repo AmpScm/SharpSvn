@@ -23,7 +23,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, Even
 		throw gcnew ArgumentNullException("source");
 	else if (!logHandler)
 		throw gcnew ArgumentNullException("logHandler");
-	
+
 	return ListMergesEligible(target, source, gcnew SvnMergesEligibleArgs(), logHandler);
 }
 
@@ -112,7 +112,7 @@ bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, [Out]
 		throw gcnew ArgumentNullException("target");
 	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	
+
 	return GetMergesEligible(target, source, gcnew SvnMergesEligibleArgs(), list);
 }
 

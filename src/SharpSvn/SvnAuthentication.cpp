@@ -87,7 +87,7 @@ svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(int% cookie)
 
 	_currentBaton = rslt;
 
-	cookie = _cookie;	
+	cookie = _cookie;
 	return rslt;
 }
 

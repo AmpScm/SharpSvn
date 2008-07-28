@@ -155,7 +155,7 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Raised just before committing to allow modifying the log message</summary>
-		event EventHandler<SvnCommittingEventArgs^>^ Committing;	
+		event EventHandler<SvnCommittingEventArgs^>^ Committing;
 
 	protected public:
 		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>

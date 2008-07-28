@@ -10,7 +10,7 @@
 #include "SvnAuthentication.h"
 
 //////////////////////////////////////////////////////////////////////////////////////
-// All this depends on intimate knowledge of implementation within 
+// All this depends on intimate knowledge of implementation within
 // subversion/libsvn_subr/auth.c. The sharpsvn_svn_auth_get_credentials_cache
 // method is patched into that method to make it possible to copy credentials
 // between different clients
@@ -55,7 +55,7 @@ void SvnAuthentication::ClearAuthenticationCache()
 {
 	if (!_currentBaton)
 		return;
-		
+
 	apr_hash_t *hash = get_cache(_currentBaton);
 
 	if (hash)
@@ -145,8 +145,8 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 	void* pNewValue;
 
 	AprPool tmpPool(pool);
- 
-	for (apr_hash_index_t *hi = apr_hash_first(tmpPool.Handle, from); hi; hi = apr_hash_next(hi)) 
+
+	for (apr_hash_index_t *hi = apr_hash_first(tmpPool.Handle, from); hi; hi = apr_hash_next(hi))
 	{
 		apr_hash_this(hi, (const void**)&pKey, &len, &pValue);
 

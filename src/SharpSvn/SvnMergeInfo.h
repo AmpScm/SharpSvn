@@ -111,7 +111,7 @@ namespace SharpSvn {
 		svn_merge_range_t* AllocMergeRange(AprPool^ pool);
 	};
 
-	ref class SvnMergeItem;	
+	ref class SvnMergeItem;
 	ref class SvnMergeDiffArgs;
 	ref class SvnMergeRemoveArgs;
 	ref class SvnMergeIntersectArgs;

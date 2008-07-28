@@ -575,7 +575,7 @@ namespace SharpSvn {
 			bool _readOnly;
 			int _cookie;
 			svn_auth_baton_t *_currentBaton;
-			
+
 		internal:
 			SvnAuthentication(SvnClientContext^ context, AprPool^ pool);
 
@@ -821,7 +821,7 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Simple credential handler to provide a static credential</summary>
-			/// <remarks>When set implements a <see cref="UserNameHandlers" /> and <see cref="UserNamePasswordHandlers" /> 
+			/// <remarks>When set implements a <see cref="UserNameHandlers" /> and <see cref="UserNamePasswordHandlers" />
 			/// instance over the specified credential instance</remarks>
 			property ICredentials^ DefaultCredentials
 			{

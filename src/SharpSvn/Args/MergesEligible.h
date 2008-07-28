@@ -63,7 +63,7 @@ namespace SharpSvn {
 
 				return _retrieveProperties;
 			}
-		}		
+		}
 
 	internal:
 		property bool RetrievePropertiesUsed

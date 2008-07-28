@@ -87,7 +87,7 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 {
 	if (s_loaded)
 		return NULL;
-	
+
 	if (!s_checked)
 	{
 		s_checked = true;
@@ -117,7 +117,7 @@ FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
 	::OutputDebugStringA("Automatic delay loading one of the SharpSvn helper DLLs failed; trying to work around\n");
 
 	AprPool pool(SvnBase::SmallThreadPool);
-	
+
 	Uri^ codeBase;
 
 	if (!Uri::TryCreate(SvnBase::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase))

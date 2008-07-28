@@ -69,7 +69,7 @@ apr_array_header_t* SvnMergeRangeCollection::AllocMergeRange(AprPool^ pool)
 	return arr->Handle;
 }
 
-// TODO: Most of these methods could be implemented in 100% managed code. 
+// TODO: Most of these methods could be implemented in 100% managed code.
 //		 The implementation of this methods is critical for merging functions, so should be tested
 
 
@@ -77,7 +77,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, [Out] Svn
 {
 	if (!to)
 		throw gcnew ArgumentNullException("to");
-	
+
 	return TryDiff(to, gcnew SvnMergeDiffArgs(), added, removed);
 }
 
@@ -105,7 +105,7 @@ bool SvnMergeRangeCollection::TryDiff(ICollection<SvnMergeRange^>^ to, SvnMergeD
 
 	if (r)
 	{
-		svn_error_clear(r);		
+		svn_error_clear(r);
 		return false;
 	}
 
@@ -151,7 +151,7 @@ bool SvnMergeRangeCollection::TryRemove(ICollection<SvnMergeRange^>^ items, SvnM
 
 	if (r)
 	{
-		svn_error_clear(r);		
+		svn_error_clear(r);
 		return false;
 	}
 
@@ -191,7 +191,7 @@ bool SvnMergeRangeCollection::TryIntersect(ICollection<SvnMergeRange^>^ to, SvnM
 
 	if (r)
 	{
-		svn_error_clear(r);		
+		svn_error_clear(r);
 		return false;
 	}
 
@@ -218,7 +218,7 @@ String^ SvnMergeRangeCollection::ToString()
 	}
 	else if (!result || !result->data)
 		return "";
-	
+
 	return SvnBase::Utf8_PtrToString(result->data, (int)result->len);
 }
 

@@ -56,7 +56,7 @@ String^ SvnTools::GetTruePath(String^ path)
 			root = Path::GetPathRoot(path)->ToUpperInvariant(); // 'a:\' -> 'A:\'
 	}
 	else if (path->StartsWith("\\\\", StringComparison::Ordinal))
-	{		
+	{
 		int next = path->IndexOf('\\', 2);
 
 		if (next > 0)
@@ -138,7 +138,7 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 		if (!isFirst)
 			result->Append((wchar_t)'\\');
 
-		result->Append(gcnew String(filedata.cFileName));		
+		result->Append(gcnew String(filedata.cFileName));
 
 		GC::KeepAlive(::FindClose(hSearch)); // Close search request
 
@@ -162,7 +162,7 @@ inline bool IsDirectory(String^ path)
 
 	if (r == INVALID_FILE_ATTRIBUTES)
 		return false;
-	
+
 	return (r & FILE_ATTRIBUTE_DIRECTORY) != 0;
 }
 
@@ -278,7 +278,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	else if (path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
 	{
 		String^ root = Path::GetPathRoot(path)->ToLowerInvariant();
-	
+
 		if (!path->StartsWith(root, StringComparison::Ordinal))
 			path = root + path->Substring(root->Length)->TrimEnd('\\');
 	}
@@ -359,13 +359,13 @@ bool SvnTools::IsAbsolutePath(String^ path)
 	else if (!(((path[0] >= 'A') && (path[0] <= 'Z')) || ((path[0] >= 'a') && (path[0] <= 'z'))))
 		return false;
 	else
-		i = 3;	
+		i = 3;
 
 	while (i < c)
 	{
 		if (i >= c && IsSeparator(path, i))
 			return false; // '\'-s behind each other
-		
+
 		if (i < c && path[i] == '.')
 		{
 			int n = i;
@@ -392,7 +392,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 		if (i == c)
 			return false; // We don't like paths with a '\' at the end
-	}	
+	}
 
 	return true;
 }
@@ -442,20 +442,20 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 	else if (!((path[0] >= 'A') && (path[0] <= 'Z')))
 		return false;
 	else
-		i = 3;	
+		i = 3;
 
 	while (i < c)
 	{
 		if (i >= c && IsDirSeparator(path, i))
 			return false; // '\'-s behind each other
-		
+
 		if (i < c && path[i] == '.')
 		{
 			int n = i;
 
 			while (n < c && path[n] == '.')
 				n++;
-			
+
 			if (IsSeparator(path, n) || n >= c)
 				return false; // Relative path
 		}
@@ -474,7 +474,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		if (i == c)
 			return false; // We don't like paths with a '\' at the end
-	}	
+	}
 
 	return true;
 }

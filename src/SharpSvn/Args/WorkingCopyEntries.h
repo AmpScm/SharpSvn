@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-	
+
 	public ref class SvnWorkingCopyEntriesArgs : public SvnClientArgs
 	{
 		bool _hideSome;
@@ -45,7 +45,7 @@ namespace SharpSvn {
 				return SvnCommandType::GetWorkingCopyEntries;
 			}
 		}
-	
+
 	};
 
 }

@@ -26,7 +26,7 @@ static SvnBase::SvnBase()
 
 	// This part is appended to something like "SVN/1.5.0 (SharpSvn:branch/1.5.X@12345) WIN32/" to form the user agent on web requests
 
-	_clientName = Environment::OSVersion->Version->ToString(2) + 
+	_clientName = Environment::OSVersion->Version->ToString(2) +
 		" " + name->Name + "/" + name->Version->ToString();
 
 	_clientNames->Add(platform);
@@ -121,7 +121,7 @@ bool SvnBase::IsNotUri(String ^path)
 String^ SvnBase::RemoveDoubleSlashes(String^ input)
 {
 	int n;
-	
+
 	while (0 <= (n = input->IndexOf("//")))
 		input = input->Remove(n, 1);
 
@@ -141,10 +141,10 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		// Create a new uri with all / and \ characters at the end removed
 		Uri^ root;
 		Uri^ suffix;
-		
+
 		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer, UriFormat::SafeUnescaped), UriKind::Absolute, root))
 			throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
-		
+
 		String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
 
 		if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')

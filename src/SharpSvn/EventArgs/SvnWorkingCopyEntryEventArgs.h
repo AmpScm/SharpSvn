@@ -71,7 +71,7 @@ namespace SharpSvn {
 			_pPath = path;
 			_entry = entry;
 			_rev = entry->revision;
-			_kind = (SvnNodeKind)entry->kind;			
+			_kind = (SvnNodeKind)entry->kind;
 			_schedule = (SvnSchedule)entry->schedule;
 			_copied = (entry->copied != 0);
 			_deleted = (entry->deleted != 0);
@@ -223,7 +223,7 @@ namespace SharpSvn {
 			{
 				return _incomplete;
 			}
-		}		
+		}
 
 		property System::Uri^ CopiedFrom
 		{

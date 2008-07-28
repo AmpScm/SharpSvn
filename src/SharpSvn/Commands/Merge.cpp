@@ -96,7 +96,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList 
+	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList
 		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
 
 	svn_error_t *r = svn_client_merge_peg3(

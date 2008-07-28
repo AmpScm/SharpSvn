@@ -100,7 +100,7 @@ namespace SharpSvn {
 		property IDictionary<String^,SvnUpdateResult^>^ ResultMap
 		{
 			IDictionary<String^,SvnUpdateResult^>^ get()
-			{				
+			{
 				return _resultMap;
 			}
 		}
