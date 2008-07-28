@@ -43,5 +43,43 @@ namespace SharpSvn.Tests.Commands
 			GC.KeepAlive(e);
 			//throw new NotImplementedException();
 		}
+
+        [Test]
+        public void DualLockTest()
+        {
+            string wc1 = GetTempDir();
+            string wc2 = GetTempDir();
+            Uri repos = new Uri(CollabReposUri, "trunk/");
+
+            Client.CheckOut(repos, wc1);
+            Client.CheckOut(repos, wc2);
+
+            string index1 = Path.Combine(wc1, "index.html");
+            string index2 = Path.Combine(wc2, "index.html");
+
+            SvnInfoEventArgs ii;
+            Client.GetInfo(index1, out ii);
+
+            Assert.That(ii.Lock, Is.Null, "Not locked");
+
+            Client.Lock(Path.Combine(wc1, "index.html"), "First");
+
+            Client.GetInfo(index1, out ii);
+            Assert.That(ii.Lock, Is.Not.Null, "Locked");
+
+            try
+            {
+                Client.Lock(Path.Combine(wc2, "index.html"), "Second");
+
+                Client.GetInfo(index2, out ii);
+                Assert.That(ii.Lock, Is.Null, "Not locked");
+
+                Assert.That(true, "Lock just didn't do anything");
+            }
+            catch (Exception ex)
+            {
+                Assert.That(ex, Is.TypeOf(typeof(SvnException)));
+            }
+        }
 	}
 }
