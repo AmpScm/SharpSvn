@@ -150,5 +150,5 @@ bool SvnClient::UnlockInternal(AprArray<String^, TMarshaller>^ items, SvnUnlockA
 	if (r || !args->UnlockResult)
 		return args->HandleResult(this, r);
 	else
-		return args->HandleResult(this, args->UnlockResult);	
+		return args->HandleResult(this, args->UnlockResult);
 }

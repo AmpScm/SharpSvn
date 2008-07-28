@@ -58,7 +58,7 @@ svn_mergeinfo_t SvnMergeItemCollection::AllocMergeInfo(AprPool^ pool)
 }
 
 
-// TODO: Most of these methods could be implemented in 100% managed code. 
+// TODO: Most of these methods could be implemented in 100% managed code.
 //		 The implementation of this methods is critical for merging functions, so should be tested
 
 bool SvnMergeItemCollection::TryParse(String^ input, [Out] SvnMergeItemCollection^% items)
@@ -86,7 +86,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, [Out] SvnMe
 {
 	if (!to)
 		throw gcnew ArgumentNullException("to");
-	
+
 	return TryDiff(to, gcnew SvnMergeDiffArgs(), added, removed);
 }
 
@@ -114,7 +114,7 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDif
 
 	if (r)
 	{
-		svn_error_clear(r);		
+		svn_error_clear(r);
 		return false;
 	}
 
@@ -160,7 +160,7 @@ bool SvnMergeItemCollection::TryRemove(ICollection<SvnMergeItem^>^ items, SvnMer
 
 	if (r)
 	{
-		svn_error_clear(r);		
+		svn_error_clear(r);
 		return false;
 	}
 
@@ -199,7 +199,7 @@ bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, SvnMer
 
 	if (r)
 	{
-		svn_error_clear(r);		
+		svn_error_clear(r);
 		return false;
 	}
 
@@ -226,7 +226,7 @@ String^ SvnMergeItemCollection::ToString()
 	}
 	else if (!result || !result->data)
 		return "";
-	
+
 	return SvnBase::Utf8_PtrToString(result->data, (int)result->len);
 }
 

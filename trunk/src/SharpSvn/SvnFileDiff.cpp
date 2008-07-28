@@ -12,10 +12,10 @@
 using namespace SharpSvn::Diff;
 using namespace System::IO;
 
-SvnFileDiff::SvnFileDiff(svn_diff_t *diff, const char* originalPath, const char* modifiedPath, 
+SvnFileDiff::SvnFileDiff(svn_diff_t *diff, const char* originalPath, const char* modifiedPath,
 						 const char* latestPath, const char* ancestorPath, AprPool^ pool)
 	: SvnDiff(diff, pool)
-{	
+{
 	if (!originalPath)
 		throw gcnew ArgumentNullException("originalPath");
 	else if (!modifiedPath)
@@ -96,7 +96,7 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
 	{
 		if (!diff)
 			delete pool;
-	}	
+	}
 }
 
 bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
@@ -108,9 +108,9 @@ bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
 
 	AprPool pool(Pool);
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);
-	
+
 	svn_error_t * err = svn_diff_file_output_merge(
-		wrapper.Handle, 
+		wrapper.Handle,
 		DiffHandle,
 		_originalPath,
 		_modifiedPath,
@@ -135,9 +135,9 @@ bool SvnFileDiff::WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs
 
 	AprPool pool(Pool);
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);
-	
+
 	svn_error_t * err = svn_diff_file_output_unified3(
-		wrapper.Handle, 
+		wrapper.Handle,
 		DiffHandle,
 		_originalPath,
 		_modifiedPath,

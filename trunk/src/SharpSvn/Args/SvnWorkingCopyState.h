@@ -16,7 +16,7 @@ namespace SharpSvn {
 			_isText = isText;
 		}
 
-	public:	
+	public:
 		property bool IsTextFile
 		{
 			bool get()

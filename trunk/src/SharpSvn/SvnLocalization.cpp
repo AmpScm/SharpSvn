@@ -33,7 +33,7 @@ namespace SharpSvn {
 			AprPool^ _pool;
 			apr_hash_t* _ptrHash;
 			apr_hash_t* _pStrHash;
-			
+
 
 		public:
 			SvnLocalizerData(CultureInfo^ ci, ResourceManager^ mgr, AprPool^ pool)
@@ -69,7 +69,7 @@ namespace SharpSvn {
 						else
 							return r;
 					}
-					
+
 					if (!skip)
 					{
 						r = (char*)apr_hash_get(_pStrHash, msgid, APR_HASH_KEY_STRING);
@@ -100,7 +100,7 @@ namespace SharpSvn {
 					else
 						return nullptr; // Must upgrade first
 				}
-				
+
 				if (_parent)
 					return _parent->GetText(msgid, isWriter);
 
@@ -142,7 +142,7 @@ void SvnClient::EnableSubversionLocalization()
 {
 	if (SetHandler())
 	{
-		SvnLocalizer::Initialize();		
+		SvnLocalizer::Initialize();
 
 		svn_gettext_enabled = true;
 	}
@@ -151,7 +151,7 @@ void SvnClient::EnableSubversionLocalization()
 void SvnLocalizer::Initialize()
 {
 	_rwLock = gcnew ReaderWriterLock();
-	_resManager = gcnew ResourceManager("SharpSvn.SvnText", SvnClient::typeid->Assembly);	
+	_resManager = gcnew ResourceManager("SharpSvn.SvnText", SvnClient::typeid->Assembly);
 	_langMap = gcnew Dictionary<String^,SvnLocalizerData^>(StringComparer::OrdinalIgnoreCase);
 	_pool = gcnew AprPool();
 }

@@ -66,7 +66,7 @@ namespace SharpSvn {
 			/// <remarks>The memory allocated by the pool is only freed after the thread is closed; so use with care</remarks>
 			static property AprPool^ SmallThreadPool
 			{
-				AprPool^ get();				
+				AprPool^ get();
 			}
 
 		internal:

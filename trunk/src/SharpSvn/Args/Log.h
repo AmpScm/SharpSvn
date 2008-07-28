@@ -211,7 +211,7 @@ namespace SharpSvn {
 			{
 				_includeMerged = value;
 			}
-		}	
+		}
 
 		/// <summary>Gets or sets the base uri to which relative Uri's are relative</summary>
 		property Uri^ BaseUri

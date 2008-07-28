@@ -166,5 +166,5 @@ bool SvnClient::LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^
 	if (r || !args->LockResult)
 		return args->HandleResult(this, r);
 	else
-		return args->HandleResult(this, args->LockResult);	
+		return args->HandleResult(this, args->LockResult);
 }

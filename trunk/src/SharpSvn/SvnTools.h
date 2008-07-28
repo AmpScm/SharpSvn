@@ -35,7 +35,7 @@ namespace SharpSvn {
 		/// <remarks>Assumes path is a directory</remarks>
 		static bool IsManagedPath(String^ path);
 
-		/// <summary>Gets a boolean indicating whether at least one of the 
+		/// <summary>Gets a boolean indicating whether at least one of the
 		/// parent paths or the path (file/directory) itself is a working copy.
 		/// </summary>
 		static bool IsBelowManagedPath(String^ path);

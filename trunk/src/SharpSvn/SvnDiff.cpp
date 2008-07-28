@@ -28,7 +28,7 @@ SvnDiff<TToken>::SvnDiff(SvnDiffSource<TToken>^ original, SvnDiffSource<TToken>^
 }
 
 generic<typename TToken> where TToken : ref class
-SvnDiff<TToken>::SvnDiff(SvnDiffSource<TToken>^ original, SvnDiffSource<TToken>^ modified, SvnDiffSource<TToken>^ latest)	
+SvnDiff<TToken>::SvnDiff(SvnDiffSource<TToken>^ original, SvnDiffSource<TToken>^ modified, SvnDiffSource<TToken>^ latest)
 {
 	Init(original, modified, latest, nullptr);
 }

@@ -23,7 +23,7 @@ namespace SharpSvn {
 
 		public:
 			virtual IEnumerator<TToken>^ GetEnumerator() abstract;
-		
+
 		private:
 			virtual System::Collections::IEnumerator^ OldGetEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
 			{
@@ -55,7 +55,7 @@ namespace SharpSvn {
 					return _diff;
 				}
 			}
-			
+
 		private:
 			array<SvnDiffSource<TToken>^>^ _origins;
 			array<IEnumerator<TToken>^>^ _walkers;
@@ -68,7 +68,7 @@ namespace SharpSvn {
 			SvnDiff(SvnDiffSource<TToken>^ original, SvnDiffSource<TToken>^ modified, SvnDiffSource<TToken>^ latest);
 			SvnDiff(SvnDiffSource<TToken>^ original, SvnDiffSource<TToken>^ modified, SvnDiffSource<TToken>^ latest, SvnDiffSource<TToken>^ ancestor);
 
-		internal:			
+		internal:
 			SvnDiff(svn_diff_t* diff, AprPool^ pool);
 
 		public:

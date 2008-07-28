@@ -104,7 +104,7 @@ namespace SharpSvn {
 
 			SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);
 			if (uriTarget)
-				_queryRoot = uriTarget->SvnTargetName;			
+				_queryRoot = uriTarget->SvnTargetName;
 			else
 				_queryRoot = nullptr;
 		}

@@ -29,7 +29,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, EventHandler<SvnWorkin
 bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesArgs^ args, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler)
 {
 	if (String::IsNullOrEmpty(directory))
-		throw gcnew ArgumentNullException("directory");	
+		throw gcnew ArgumentNullException("directory");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 	else if (!IsNotUri(directory))
@@ -56,17 +56,17 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 		apr_hash_t* rslt = nullptr;
 
 		r = svn_wc_entries_read(&rslt, acc, args->RetrieveHidden, pool.Handle);
-        
+
 		if (!r)
 		{
 			apr_hash_index_t *hi;
 			const char* key;
 			svn_wc_entry_t *val;
-		
-			for (hi = apr_hash_first(pool.Handle, rslt); hi; hi = apr_hash_next(hi)) 
+
+			for (hi = apr_hash_first(pool.Handle, rslt); hi; hi = apr_hash_next(hi))
 			{
 				apr_hash_this(hi, (const void**)&key, nullptr, (void**)&val);
-				
+
 				SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(directory, key, val);
 
 				args->OnEntry(e);

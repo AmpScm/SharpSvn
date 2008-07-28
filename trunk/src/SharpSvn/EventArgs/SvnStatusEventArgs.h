@@ -168,9 +168,9 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets a boolean indicating whether the node is in a copied state 
-		/// (possibly because the entry is a child of a path that is 
-		/// scheduled for addition or replacement when the entry itself is 
+		/// <summary>Gets a boolean indicating whether the node is in a copied state
+		/// (possibly because the entry is a child of a path that is
+		/// scheduled for addition or replacement when the entry itself is
 		/// normal</summary>
 		property bool IsCopy
 		{

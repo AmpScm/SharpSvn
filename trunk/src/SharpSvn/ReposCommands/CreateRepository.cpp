@@ -89,7 +89,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 		// fall through
 	case SvnRepositoryCompatibility::Subversion15:
 		// Use 1.5 format
-		// 
+		//
 
 		// .....
 

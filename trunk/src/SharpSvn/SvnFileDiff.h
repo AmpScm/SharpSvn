@@ -57,7 +57,7 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
-			virtual property SvnCommandType CommandType 
+			virtual property SvnCommandType CommandType
 			{
 				SvnCommandType get() override sealed
 				{
@@ -84,7 +84,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _originalPath; 
+					return _originalPath;
 				}
 				void set(String^ value)
 				{
@@ -97,7 +97,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _modifiedPath; 
+					return _modifiedPath;
 				}
 				void set(String^ value)
 				{
@@ -110,7 +110,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _latestPath; 
+					return _latestPath;
 				}
 				void set(String^ value)
 				{
@@ -123,7 +123,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _ancestorPath; 
+					return _ancestorPath;
 				}
 				void set(String^ value)
 				{
@@ -136,7 +136,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _conflictModified; 
+					return _conflictModified;
 				}
 				void set(String^ value)
 				{
@@ -149,7 +149,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _conflictLatest; 
+					return _conflictLatest;
 				}
 				void set(String^ value)
 				{
@@ -162,7 +162,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _conflictSeparator; 
+					return _conflictSeparator;
 				}
 				void set(String^ value)
 				{
@@ -196,7 +196,7 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
-			virtual property SvnCommandType CommandType 
+			virtual property SvnCommandType CommandType
 			{
 				SvnCommandType get() override sealed
 				{
@@ -220,7 +220,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _originalHeader; 
+					return _originalHeader;
 				}
 				void set(String^ value)
 				{
@@ -232,19 +232,19 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _modifiedHeader; 
+					return _modifiedHeader;
 				}
 				void set(String^ value)
 				{
 					_modifiedHeader = value;
 				}
-			}			
+			}
 
 			property String^ Header
 			{
 				String^ get()
 				{
-					return _header; 
+					return _header;
 				}
 				void set(String^ value)
 				{
@@ -282,7 +282,7 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
-			virtual property SvnCommandType CommandType 
+			virtual property SvnCommandType CommandType
 			{
 				SvnCommandType get() override sealed
 				{

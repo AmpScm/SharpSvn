@@ -166,7 +166,7 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 		path = path->TrimEnd(Path::DirectorySeparatorChar);
 		if (path->Length < nRoot)
 			path += singleSeparator;
-	}	
+	}
 
 	if (path->Length == 0)
 		path = ".";

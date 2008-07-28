@@ -168,11 +168,11 @@ namespace SharpSvn {
 				case SvnRevisionType::None:
 				case SvnRevisionType::Time:
 				case SvnRevisionType::Head:
-				case SvnRevisionType::Number:				
+				case SvnRevisionType::Number:
 					return false;
 				default:
 					return true;
-				}					
+				}
 			}
 		}
 
@@ -283,7 +283,7 @@ namespace SharpSvn {
 		{
 			virtual String^ get()
 			{
-				return TargetName;				
+				return TargetName;
 			}
 		}
 

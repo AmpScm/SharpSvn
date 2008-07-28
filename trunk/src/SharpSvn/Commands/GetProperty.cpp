@@ -66,7 +66,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	
+
 	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 	svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 	svn_revnum_t actualRev = 0;

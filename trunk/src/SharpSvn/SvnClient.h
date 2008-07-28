@@ -386,7 +386,7 @@ namespace SharpSvn {
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		bool Add(String^ path, SvnAddArgs^ args);
 #pragma endregion
-	
+
 	public:
 		/////////////////////////////////////////
 #pragma region // Status Client Command
@@ -652,7 +652,7 @@ namespace SharpSvn {
 		/// <overloads>Duplicate something in working copy, remembering history (<c>svn copy</c>)</overloads>
 		/// <summary>Duplicate something in working copy, remembering history (<c>svn copy</c>)</summary>
 		bool Copy(SvnTarget^ sourceTarget, String^ toPath);
-		
+
 		/// <summary>Duplicate something in working copy, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
@@ -740,14 +740,14 @@ namespace SharpSvn {
 #pragma region // Lock Client Command
 		/// <overloads>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</overloads>
 		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(String^ target, String^ comment);		
+		bool Lock(String^ target, String^ comment);
 		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(ICollection<String^>^ targets, String^ comment);		
+		bool Lock(ICollection<String^>^ targets, String^ comment);
 		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(String^ target, SvnLockArgs^ args);		
+		bool Lock(String^ target, SvnLockArgs^ args);
 		/// <summary>Lock working copy paths  in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
-		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);		
-		
+		bool Lock(ICollection<String^>^ targets, SvnLockArgs^ args);
+
 		/// <overloads>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</overloads>
 		/// <summary>LockURLs in the repository, so that no other user can commit changes to them (<c>svn lock</c>)</summary>
 		bool RemoteLock(Uri^ target, String^ comment);
@@ -761,7 +761,7 @@ namespace SharpSvn {
 	private:
 		generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
 		bool LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^ args, AprPool^ pool);
-			
+
 #pragma endregion
 
 	public:
@@ -769,11 +769,11 @@ namespace SharpSvn {
 #pragma region // Lock Client Command
 		/// <overloads>Unlock working copy paths  (<c>svn unlock</c>)</overloads>
 		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
-		bool Unlock(String^ target);		
+		bool Unlock(String^ target);
 		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
-		bool Unlock(ICollection<String^>^ targets);		
+		bool Unlock(ICollection<String^>^ targets);
 		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
-		bool Unlock(String^ target, SvnUnlockArgs^ args);				
+		bool Unlock(String^ target, SvnUnlockArgs^ args);
 		/// <summary>Unlock working copy paths  (<c>svn unlock</c>)</summary>
 		bool Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args);
 
@@ -789,7 +789,7 @@ namespace SharpSvn {
 
 	private:
 		generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
-		bool UnlockInternal(AprArray<String^, TMarshaller>^ items, SvnUnlockArgs^ args, AprPool^ pool);			
+		bool UnlockInternal(AprArray<String^, TMarshaller>^ items, SvnUnlockArgs^ args, AprPool^ pool);
 #pragma endregion
 
 	public:

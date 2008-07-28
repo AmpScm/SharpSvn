@@ -28,7 +28,7 @@ namespace SharpSvn {
 		Export,
 		GetAppliedMergeInfo,
 		GetProperty,
-		GetRevisionProperty,		
+		GetRevisionProperty,
 		GetSuggestedMergeSources,
 		Import,
 		Info,
