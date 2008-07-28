@@ -32,14 +32,6 @@ bool SvnClient::Unlock(String^ target)
 	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
-bool SvnClient::Unlock(Uri^ target)
-{
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-
-	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
-}
-
 bool SvnClient::Unlock(ICollection<String^>^ targets)
 {
 	if (!targets)
@@ -48,26 +40,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets)
 	return Unlock(targets, gcnew SvnUnlockArgs());
 }
 
-bool SvnClient::Unlock(ICollection<Uri^>^ targets)
-{
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-
-	return Unlock(targets, gcnew SvnUnlockArgs());
-}
-
-
 bool SvnClient::Unlock(String^ target, SvnUnlockArgs^ args)
-{
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-
-	return Unlock(NewSingleItemCollection(target), args);
-}
-
-bool SvnClient::Unlock(Uri^ target, SvnUnlockArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -101,7 +74,33 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	return UnlockInternal(aprTargets, args, %pool);
 }
 
-bool SvnClient::Unlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
+bool SvnClient::RemoteUnlock(Uri^ target)
+{
+	if (!target)
+		throw gcnew ArgumentNullException("target");
+
+	return RemoteUnlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
+}
+
+bool SvnClient::RemoteUnlock(ICollection<Uri^>^ targets)
+{
+	if (!targets)
+		throw gcnew ArgumentNullException("targets");
+
+	return RemoteUnlock(targets, gcnew SvnUnlockArgs());
+}
+
+bool SvnClient::RemoteUnlock(Uri^ target, SvnUnlockArgs^ args)
+{
+	if (!target)
+		throw gcnew ArgumentNullException("target");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	return RemoteUnlock(NewSingleItemCollection(target), args);
+}
+
+bool SvnClient::RemoteUnlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
@@ -140,11 +139,16 @@ bool SvnClient::UnlockInternal(AprArray<String^, TMarshaller>^ items, SvnUnlockA
 	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
+	args->Reset();
+
 	svn_error_t* r = svn_client_unlock(
 		items->Handle,
 		args->BreakLock,
 		CtxHandle,
 		pool->Handle);
 
-	return args->HandleResult(this, r);
+	if (r || !args->UnlockResult)
+		return args->HandleResult(this, r);
+	else
+		return args->HandleResult(this, args->UnlockResult);	
 }
