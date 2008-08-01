@@ -25,6 +25,7 @@
 			</exec>
 			<if test="${static != 'true'}">        
         <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" property="def">
+          <filterchain>
             <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" />
             <!-- Stupid bugs in openssl 0.9.8h :( -->
             <replacestring from="ENGINE_load_4758cca" to=";" />
@@ -81,11 +82,18 @@
     <copy 
       file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
       tofile="build/win32/openssl-${opensslVersion}/out32/ssleay32.lib" if="${static != 'true'}" />    
-		<copy todir="${release}/lib">
-			<fileset basedir="build/win32/openssl-${opensslVersion}/out32">
-				<include name="*.lib" />
-				<include name="*.exp" />
-				<include name="*.pdb" />
+		<copy todir="${release}/lib" flatten="true">
+			<fileset>
+				<include name="build/win32/openssl-${opensslVersion}/out32/*.lib" />
+				<include name="build/win32/openssl-${opensslVersion}/out32/*.exp" />
+				<include name="build/win32/openssl-${opensslVersion}/out32/*.pdb" />
+				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.lib" />
+				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.exp" />
+				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.pdb" />
+			</fileset>
+		</copy>
+		<copy todir="${release}/bin" flatten="true">
+			<fileset basedir="build/win32/openssl-${opensslVersion}/out32dll">
 				<include name="*.dll" />
 			</fileset>
 		</copy>
