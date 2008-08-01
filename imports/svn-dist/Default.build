@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<project basedir="." default="build-svn-dist">
+  <property name="applyMerges" value="false" />
+  <property name="static" value="false" />
+  <property name="downloads" value="../downloads/" />
+  <property name="dllPrefix" value="Svn-" />
+  <property name="intl" value="subversion" />
+  
+  <include buildfile="../Default.build" />
+  
+  
+  <target name="build-svn-dist" depends="build">
+  
+  </target>  
+</project>

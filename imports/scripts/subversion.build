@@ -1,45 +1,57 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
+   <property name="intl" value="sharpsvn" overwrite="false" />
+   
+  <target name="sharpintl">
+    <if test="${intl=='sharpsvn'}">
+      <if test="${VSversion != '2005'}">
+        <VCBuild platform="${platform}">
+          <arg line="/upgrade" />
+          <arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
+        </VCBuild>
+      </if>
 
-
-  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr">
-    <if test="${VSversion != '2005'}">
-      <VCBuild platform="${platform}">
-        <arg line="/upgrade" />
-        <arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
+      <VCBuild platform="${platform}" configuration="release">
+        <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
       </VCBuild>
+      <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />    
+      <if test="${platform == 'win32'}">
+        <copy todir="${release}/lib">
+          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+            <include name="*.lib" />
+          </fileset>
+        </copy>
+      </if>
+      <if test="${platform == 'x64'}">
+        <copy todir="${release}/lib-x64">
+          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+            <include name="*.lib" />
+          </fileset>
+        </copy>
+      </if>
     </if>
-    <if test="${(buildHttpd == 'true') and (platform == 'win32')}">
-      <call target="build-httpd" />
-      <copy todir="${httpdDir}/release" file="${release}/lib/libeay32.lib" />
-    </if>
-    <VCBuild platform="${platform}" configuration="release">
-      <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
-    </VCBuild>
+  </target>
+
+  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, sharpintl">
+        
     <!-- Fake direct result for subversion to hide platforms -->
     <copy todir="build/${platform}/lib/include">
       <fileset basedir="${release}/include/apr-1">
         <include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/lib/xml/expat/lib" file="release/include/apr-1/expat.h" />
-    <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />
-    <copy todir="build/${platform}/lib/include">
-      <fileset basedir="SharpSvn-SvnI18n">
-        <include name="**/*.h" />
-      </fileset>
-    </copy>
+    <copy todir="build/${platform}/lib/xml/expat/lib" file="release/include/apr-1/expat.h" />    
     <copy todir="build/${platform}/lib/include">
       <fileset basedir="${aprDir}/include">
         <include name="arch/win32/**.h" />
       </fileset>
     </copy>
+    <copy todir="build/${platform}/lib/include">
+      <fileset basedir="${release}/include">
+        <include name="**.h" />
+      </fileset>
+    </copy>
     <if test="${platform == 'win32'}">
-      <copy todir="${release}/lib">
-        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-          <include name="*.lib" />
-        </fileset>
-      </copy>
       <copy todir="build/win32/lib/lib">
         <fileset basedir="${release}/lib">
           <include name="libdb*.lib" />
@@ -47,8 +59,8 @@
           <include name="ssleay32.lib" />
           <include name="intl3_svn.lib" />
           <include name="xml.lib" />
-          <include name="apr-1.lib" />
-          <include name="aprutil-1.lib" />          
+          <include name="*apr-1.lib" />
+          <include name="*aprutil-1.lib" />
         </fileset>
       </copy>
       <copy todir="build/win32/lib/zlib" flatten="true">
@@ -70,8 +82,8 @@
           <include name="xml.lib" />
           <include name="libeay32.lib" />
           <include name="ssleay32.lib" />
-          <include name="apr-1.lib" />
-          <include name="aprutil-1.lib" />
+          <include name="*apr-1.lib" />
+          <include name="*aprutil-1.lib" />
           <include name="intl3_svn.lib" />
           <include name="libdb*.lib" />
         </fileset>
@@ -88,15 +100,13 @@
       <fileset basedir="${dbWindowsDir}">
         <include name="*.h" />
       </fileset>
-    </copy>
-    <copy tofile="build/${platform}/lib/release/libapr-1.lib"
-			file="build/${platform}/lib/lib/apr-1.lib" />
-    <copy tofile="build/${platform}/lib/release/libaprutil-1.lib"
-			file="build/${platform}/lib/lib/aprutil-1.lib" />
+    </copy>    
+    <copy tofile="build/${platform}/lib/release/libapr-1.lib" file="build/${platform}/lib/lib/apr-1.lib" if="${static=='true'}" />
+    <copy tofile="build/${platform}/lib/release/libaprutil-1.lib" file="build/${platform}/lib/lib/aprutil-1.lib" if="${static=='true'}" />
   </target>
   
   <target name="svn-merge" depends="checkout">
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged" if="${applyMerges == 'true'}">
       <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
         <arg value="merge" />
         <arg value="-c" />
@@ -164,8 +174,8 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
-        <arg value="--enable-nls" />
-        <arg value="--disable-shared" />
+        <arg value="--enable-nls" if="${intl == 'sharpsvn'}"/>
+        <arg value="--disable-shared" if="${static=='true'}"/>
       </exec>
       <!-- The ZLib build has already completed -->
 
@@ -194,7 +204,10 @@
         <do>
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
-              <replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
+              <replacestring from='PreprocessorDefinitions="WIN32'  if="${static=='true'}"
+                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
+              <replacestring from='PreprocessorDefinitions="WIN32'  if="${static!='true'}"
+                to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
               <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib zlibstat.lib' />
               <replacestring from='AdditionalDependencies="advapi32.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib advapi32.lib' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
@@ -203,6 +216,7 @@
               <replacestring from='InlineFunctionExpansion="2"' to='' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+              <replacestring from='OutputFile="$(OutDir)\libsvn_' to='OutputFile="$(OutDir)\${dllPrefix}svn_' />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
@@ -223,7 +237,7 @@
               <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
               <replacestring from='&lt;apu_want.h&gt;' to='&lt;db.h&gt; /* APU ${aprUtilVersion} fix */' if="${aprUtilVersion >= '1.2.11'}" />
               <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' />
+								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${sourceFile}" />
@@ -243,7 +257,7 @@
       <if test="${string::get-length(svnWcVersion) &gt; 20}">
         <property name="svnWcVersion" value="?" />
       </if>
-      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c">
+      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${applyMerges == 'true'}">
 /* Appended by sharpsvn/imports/scripts/build-subversion.build */
 apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
 {
@@ -278,10 +292,13 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <arg value="/p:Platform=${platform}" />
         <arg value="/t:svn" />
         <arg value="/t:svnadmin" />
+        <arg value="/t:svnmucc" />
         <arg value="/t:svnversion" />
         <arg value="/t:svnserve" />
         <arg value="/t:svnsync" />
         <arg value="/t:svnlook" />
+        <arg value="/t:svnauthz-validate" />
+        <arg value="/t:svn-populate-node-origins-index" />
         <arg value="/t:__ALL_TESTS__" if="${VSversion == '2005'}"/>
       </exec>
     </OnceBlock>
@@ -323,13 +340,15 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
       <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
       <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion-${platform}.exe" />
     </if>
-    <if test="${platform=='win32'}">    
-      <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn.exe" />
-      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve.exe" />
-      <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin.exe" />
-      <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion.exe" />
-      <copy file="${svnBase}/release/subversion/svnlook/svnlook.exe" tofile="${release}/bin/svnlook.exe" />
-      <copy file="${svnBase}/release/subversion/svnsync/svnsync.exe" tofile="${release}/bin/svnsync.exe" />
+    <if test="${platform=='win32'}">
+      <copy todir="${release}/bin" flatten="true">
+        <fileset basedir="${svnBase}/release">
+          <include name="**/*.dll" />
+          <include name="**/*.exe" />
+          <include name="**/*.pdb" />
+          <exclude name="**/*-test*" />
+        </fileset>
+      </copy>
     </if>
     <copy todir="${release}/include">     
       <fileset basedir="${svnBase}\subversion\include">
@@ -362,11 +381,11 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
 
     </echo>
     <copy todir="${release}/po" flatten="true">
-	<fileset basedir="${platformBase}\subversion\subversion">
-		<include name="**/*.po" />
-	</fileset>
+      <fileset basedir="${platformBase}\subversion\subversion">
+        <include name="**/*.po" />
+      </fileset>
     </copy>
-    <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" />
+    <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
   </target>
 
   <target name="check" depends="build-svn, copy-result">	

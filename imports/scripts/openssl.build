@@ -10,9 +10,9 @@
 				<arg value="VC-WIN64A" if="${platform=='x64'}" />
 				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
 				<arg value="-D_CRT_SECURE_NO_DEPRECATE" />
-				<arg value="no-dso" />
-				<arg value="no-krb5" />
-				<arg value="no-hw" />
+				<arg value="no-dso"/>
+				<arg value="no-krb5"/>
+				<arg value="no-hw"/>
 				<arg value="enable-tlsext" />
 			</exec>
 		</OnceBlock>
@@ -23,14 +23,49 @@
 			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='x64'}">
 				<arg line="/c ms\do_win64a.bat" />
 			</exec>
+			<if test="${static != 'true'}">        
+        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" property="def">
+            <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" />
+            <!-- Stupid bugs in openssl 0.9.8h :( -->
+            <replacestring from="ENGINE_load_4758cca" to=";" />
+            <replacestring from="ENGINE_load_aep" to=";" />
+            <replacestring from="ENGINE_load_atalla" to=";" />
+            <replacestring from="ENGINE_load_cswift" to=";" />
+            <replacestring from="ENGINE_load_chil" to=";" />
+            <replacestring from="ENGINE_load_nuron" to=";" />
+            <replacestring from="ENGINE_load_sureware" to=";" />
+            <replacestring from="ENGINE_load_ubsec" to=";" />
+            <replacestring from="ENGINE_load_gmp" to=";" />
+            <replacestring from="ENGINE_load_cryptodev" to=";" />
+            <replacestring from="ENGINE_load_padlock" to=";" />
+            <!-- / -->
+          </filterchain>
+        </loadfile>
+        <echo message="${def}" file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" />        
+        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/ssleay32.def" property="def">
+          <filterchain>
+            <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" />
+          </filterchain>
+        </loadfile>
+        <echo message="${def}" file="build/${platform}/openssl-${opensslVersion}/ms/ssleay32.def" />        
+        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/ntdll.mak" property="mk">
+          <filterchain>
+            <replacestring from="$(LIB_D)\$(SSL)" to="$(LIB_D)\${dllPrefix}$(SSL)" />
+            <replacestring from="$(LIB_D)\$(CRYPTO)" to="$(LIB_D)\${dllPrefix}$(CRYPTO)" />
+          </filterchain>
+        </loadfile>
+        <echo message="${mk}" file="build/${platform}/openssl-${opensslVersion}/ms/ntdll.mak" />        
+      </if>
 		</OnceBlock>
 	</target>
 	<target name="build-openssl" depends="prepare-openssl">
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
 			<exec program="nmake.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
-				<arg line="-f ms\nt.mak" />
+				<arg line="-f ms\nt.mak" if="${static == 'true'}" />
+				<arg line="-f ms\ntdll.mak" if="${static != 'true'}" />
 			</exec>
 		</OnceBlock>
+		<!-- OpenSL 0.9.8h on VS2008 patch -->
     <OnceBlock file="build/openssl-patch-OCSP_RESPONSE.tick">
       <loadfile file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" property="ossl_typ">
         <filterchain>
@@ -39,6 +74,13 @@
       </loadfile>
       <echo message="${ossl_typ}" file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" />
     </OnceBlock>
+    <!-- /Patch -->
+    <copy 
+      file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
+      tofile="build/win32/openssl-${opensslVersion}/out32/libeay32.lib" if="${static != 'true'}" />
+    <copy 
+      file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
+      tofile="build/win32/openssl-${opensslVersion}/out32/ssleay32.lib" if="${static != 'true'}" />    
 		<copy todir="${release}/lib">
 			<fileset basedir="build/win32/openssl-${opensslVersion}/out32">
 				<include name="*.lib" />

@@ -63,6 +63,32 @@
           <echo message="${projtext}" file="${vcproj}" />
         </do>
       </foreach>
+      <foreach item="File" property="vcproj">
+        <in>
+          <items>
+            <include name="${aprDir}/libapr.vcproj" />
+            <include name="${aprUtilDir}/libaprutil.vcproj" />
+          </items>
+        </in>
+        <do>
+          <echo message="Patching ${vcproj}" />
+          <loadfile file="${vcproj}" property="projtext">
+            <filterchain>
+              <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
+              <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
+              <!-- Import APR from APR-Util -->
+              <replacestring from='AdditionalDependencies="ws2_32.lib mswsock.lib"' to='AdditionalDependencies="libapr-1.lib xml.lib ws2_32.lib mswsock.lib"' />
+              
+              <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
+              <replacestring from='Optimization="2"' to='Optimization="1"' />
+              <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
+              <!-- Increase security a little little bit in some cases -->
+              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${vcproj}" />
+        </do>
+      </foreach>      
       <foreach item="File" property="winHeader">
         <in>
           <items>
@@ -92,9 +118,11 @@
       <foreach item="File" property="project">
         <in>
           <items>
-            <include name="${aprDir}/apr.vcproj" />
-            <include name="${aprUtilDir}/aprutil.vcproj" />
+            <include name="${aprDir}/apr.vcproj" if="${static=='true'}"/>
+            <include name="${aprUtilDir}/aprutil.vcproj" if="${static=='true'}"/>
+            <include name="${aprDir}/libapr.vcproj" if="${static!='true'}"/>
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
+            <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}"/>            
           </items>
         </in>
         <do>
@@ -102,30 +130,70 @@
             <arg value="${project}" />
             <arg value="${Configuration}|${platform}" />
           </VCBuild>
+          <if test="${static != 'true'}">
+            <copy todir="${aprUtilDir}">
+              <fileset basedir="${aprDir}/release">
+                <include name="*.lib" />
+              </fileset>
+            </copy>
+            <copy todir="${aprUtilDir}">
+              <fileset basedir="${aprUtilDir}/xml/expat/lib/LibR">
+                <include name="*.lib" />
+              </fileset>
+            </copy>
+          </if>
         </do>
       </foreach>
+      <if test="${static != 'true'}">
+        <!-- Delete xml and apr intermediates used for building apr-util -->
+        <delete>
+          <fileset basedir="${aprUtilDir}">
+            <include name="*.lib" />
+          </fileset>
+        </delete>
+      </if>
     </OnceBlock>
 
     <copy todir="${release}/lib" flatten="true">
       <fileset>
-        <include name="${aprDir}/LibR/apr-1.lib" />
+        <include name="${aprDir}/LibR/*.lib" />
         <include name="${aprDir}/LibR/*.pdb" />
-        <include name="${aprUtilDir}/LibR/aprutil-1.lib" />
+        <include name="${aprDir}/Release/*.lib" />
+        <include name="${aprDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/LibR/*.lib" />
         <include name="${aprUtilDir}/LibR/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/LibR/xml.lib" />
+        <include name="${aprUtilDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
         <include name="${aprUtilDir}/xml/expat/lib/LibR/*.pdb" />
       </fileset>
     </copy>
     <copy todir="${release}/lib-x64" flatten="true">
       <fileset>
-        <include name="${aprDir}/x64/LibR/apr-1.lib" />
+        <include name="${aprDir}/x64/LibR/*.lib" />
         <include name="${aprDir}/x64/LibR/*.pdb" />
-        <include name="${aprUtilDir}/x64/LibR/aprutil-1.lib" />
+        <include name="${aprDir}/x64/Release/*.lib" />
+        <include name="${aprDir}/x64/Release/*.pdb" />
+        <include name="${aprUtilDir}/x64/LibR/*.lib" />
         <include name="${aprUtilDir}/x64/LibR/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/xml.lib" />
+        <include name="${aprUtilDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/x64/Release/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" />
         <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.pdb" />
       </fileset>
     </copy>
+    <copy todir="${release}/bin" flatten="true">
+      <fileset>
+        <include name="${aprDir}/Release/*.dll" />
+        <include name="${aprUtilDir}/Release/*.dll" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin/x64" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/Release/*.dll" />
+        <include name="${aprUtilDir}/x64/Release/*.dll" />
+      </fileset>
+    </copy>    
     <property name="aprIncludeDir" value="${release}/include/apr-1" />
     <copy todir="${aprIncludeDir}">
       <fileset basedir="${aprDir}/include">
