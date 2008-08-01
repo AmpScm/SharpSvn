@@ -12,25 +12,27 @@ using SharpSvn.UI.Authentication;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using SharpSvn.UI.Properties;
+using System.ComponentModel;
 
 namespace SharpSvn.UI
 {
-	sealed class SvnClientUIHandler
-	{
-		readonly IWin32Window _window;
+    sealed class SvnClientUIHandler
+    {
+        readonly IWin32Window _window;
+        ISynchronizeInvoke _synchronizer;
 
-		sealed class ZeroWindowHandle : IWin32Window
-		{
-			public IntPtr Handle
-			{
-				get { return IntPtr.Zero; }
-			}
-		}
+        sealed class ZeroWindowHandle : IWin32Window
+        {
+            public IntPtr Handle
+            {
+                get { return IntPtr.Zero; }
+            }
+        }
 
-		public SvnClientUIHandler(IWin32Window window)
-		{
-			_window = window ?? new ZeroWindowHandle();
-		}
+        public SvnClientUIHandler(IWin32Window window)
+        {
+            _window = window ?? new ZeroWindowHandle();
+        }
 
         Image _bitmap;
         public Image Image
@@ -39,17 +41,29 @@ namespace SharpSvn.UI
             set { _bitmap = value; }
         }
 
-		internal void Bind(SvnClient svnClient)
-		{
-			svnClient.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
-			svnClient.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
-			svnClient.Authentication.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
-			svnClient.Authentication.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
-			svnClient.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
-		}
+        public ISynchronizeInvoke Synchronizer
+        {
+            get { return _synchronizer; }
+            set { _synchronizer = value; }
+        }
 
-		void DialogUserNameHandler(Object sender, SvnUserNameEventArgs e)
-		{
+        internal void Bind(SvnClient svnClient)
+        {
+            svnClient.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
+            svnClient.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
+            svnClient.Authentication.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
+            svnClient.Authentication.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
+            svnClient.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
+        }
+
+        void DialogUserNameHandler(Object sender, SvnUserNameEventArgs e)
+        {
+            if (Synchronizer != null && Synchronizer.InvokeRequired)
+            {
+                Synchronizer.Invoke(new EventHandler<SvnUserNameEventArgs>(DialogUserNameHandler), new object[] { sender, e });
+                return;
+            }
+
             using (UsernameDialog dlg = new UsernameDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
@@ -72,10 +86,16 @@ namespace SharpSvn.UI
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
 
             }
-		}
+        }
 
-		void DialogUserNamePasswordHandler(Object sender, SvnUserNamePasswordEventArgs e)
-		{
+        void DialogUserNamePasswordHandler(Object sender, SvnUserNamePasswordEventArgs e)
+        {
+            if (Synchronizer != null && Synchronizer.InvokeRequired)
+            {
+                Synchronizer.Invoke(new EventHandler<SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler), new object[] { sender, e });
+                return;
+            }
+
             string description = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsernameAndPassword);
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(5, 1))
             {
@@ -91,7 +111,7 @@ namespace SharpSvn.UI
                 dlg.descriptionBox.Text = description;
                 dlg.descriptionBox.Visible = true;
                 dlg.rememberCheck.Enabled = e.MaySave;
-                if(Image != null)
+                if (Image != null)
                     dlg.SetImage(Image);
 
                 if (!string.IsNullOrEmpty(e.InitialUserName))
@@ -114,10 +134,10 @@ namespace SharpSvn.UI
                 e.Password = dlg.passwordBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
             }
-		}
+        }
 
         private void GetUserNamePasswordWindows(SvnUserNamePasswordEventArgs e, string description)
-        {            
+        {
             NativeMethods.CREDUI_INFO info = new NativeMethods.CREDUI_INFO();
             info.pszCaptionText = Strings.ConnectToSubversion;
             info.pszMessageText = description;
@@ -150,8 +170,14 @@ namespace SharpSvn.UI
             }
         }
 
-		void DialogSslServerTrustHandler(Object sender, SvnSslServerTrustEventArgs e)
-		{
+        void DialogSslServerTrustHandler(Object sender, SvnSslServerTrustEventArgs e)
+        {
+            if (Synchronizer != null && Synchronizer.InvokeRequired)
+            {
+                Synchronizer.Invoke(new EventHandler<SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler), new object[] { sender, e });
+                return;
+            }
+
             using (SslServerCertificateTrustDialog dlg = new SslServerCertificateTrustDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
@@ -171,7 +197,7 @@ namespace SharpSvn.UI
                 bool invalidCommonName = (0 != (int)(e.Failures & SvnCertificateTrustFailures.CommonNameMismatch));
                 bool noTrustedIssuer = 0 != (int)(e.Failures & SvnCertificateTrustFailures.UnknownCertificateAuthority);
                 bool timeError = 0 != (int)(e.Failures & (SvnCertificateTrustFailures.CertificateExpired | SvnCertificateTrustFailures.CertificateNotValidYet));
-                
+
                 dlg.caUnknownImage.Image = noTrustedIssuer ? Error : Ok;
                 dlg.invalidDateImage.Image = timeError ? Error : Ok;
                 dlg.serverMismatchImage.Image = invalidCommonName ? Error : Ok;
@@ -187,10 +213,16 @@ namespace SharpSvn.UI
                 else
                     e.Cancel = e.Break = true;
             }
-		}
+        }
 
-		void DialogSslClientCertificateHandler(Object sender, SvnSslClientCertificateEventArgs e)
-		{
+        void DialogSslClientCertificateHandler(Object sender, SvnSslClientCertificateEventArgs e)
+        {
+            if (Synchronizer != null && Synchronizer.InvokeRequired)
+            {
+                Synchronizer.Invoke(new EventHandler<SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler), new object[] { sender, e });
+                return;
+            }
+
             using (SslClientCertificateFileDialog dlg = new SslClientCertificateFileDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
@@ -203,16 +235,22 @@ namespace SharpSvn.UI
                 if (r != DialogResult.OK)
                 {
                     e.Cancel = e.Break = true;
-                    return ;
+                    return;
                 }
 
                 e.CertificateFile = dlg.fileBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
             }
-		}
+        }
 
-		void DialogSslClientCertificatePasswordHandler(Object sender, SvnSslClientCertificatePasswordEventArgs e)
-		{
+        void DialogSslClientCertificatePasswordHandler(Object sender, SvnSslClientCertificatePasswordEventArgs e)
+        {
+            if (Synchronizer != null && Synchronizer.InvokeRequired)
+            {
+                Synchronizer.Invoke(new EventHandler<SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler), new object[] { sender, e });
+                return;
+            }
+
             using (SslClientCertificatePassPhraseDialog dlg = new SslClientCertificatePassPhraseDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
@@ -231,6 +269,6 @@ namespace SharpSvn.UI
                 e.Password = dlg.passPhraseBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
             }
-		}
-	}
+        }
+    }
 }
