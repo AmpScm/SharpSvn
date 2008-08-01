@@ -1,23 +1,24 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
+  <property name="downloads" value="downloads/" overwrite="false" />
 	<target name="download">
 		<mkdir dir="downloads" />
-		<if test="${not file::exists('downloads/' + opensslFilename)}">
+		<if test="${not file::exists(downloads + opensslFilename)}">
 			<get src="http://www.openssl.org/source/${opensslFilename}" dest="downloads/${opensslFilename}" />
 		</if>
-		<if test="${not file::exists('downloads/' + dbFilename)}">
+		<if test="${not file::exists(downloads + dbFilename)}">
 			<get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="downloads/${dbFilename}" />
 		</if>
-		<if test="${not file::exists('downloads/' + zlibFilename)}">
+		<if test="${not file::exists(downloads + zlibFilename)}">
 			<get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
 		</if>
-		<if test="${not file::exists('downloads/' + nunitFilename)}">
+		<if test="${not file::exists(downloads + nunitFilename)}">
 			<get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
 		</if>
-		<if test="${not file::exists('downloads/' + sharpZipFilename)}">
+		<if test="${not file::exists(downloads + sharpZipFilename)}">
 			<get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
 		</if>
-		<if test="${not file::exists('downloads/' + saslFilename)}">
+		<if test="${not file::exists(downloads + saslFilename)}">
 			<get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="downloads/${saslFilename}" />
 		</if>
 	</target>
@@ -25,22 +26,22 @@
 	<target name="extract" depends="download">
 		<mkdir dir="build" />
 		<if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
-			<UnTar tarfile="downloads/${opensslFilename}" todir="build/${platform}" compresstype="gzip" />
+			<UnTar tarfile="${downloads + opensslFilename}" todir="build/${platform}" compresstype="gzip" />
 		</if>
 		<if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
-			<UnTar tarfile="downloads/${dbFilename}" todir="build" compresstype="gzip" />
+			<UnTar tarfile="${downloads + dbFilename}" todir="build" compresstype="gzip" />
 		</if>
 		<if test="${not directory::exists('build/zlib-' + zlibVersion)}">
-			<UnTar tarfile="downloads/${zlibFilename}" todir="build" compresstype="gzip" />
+			<UnTar tarfile="${downloads + zlibFilename}" todir="build" compresstype="gzip" />
 		</if>
 		<if test="${not directory::exists(nunitDir)}">
-			<unzip zipfile="downloads/${nunitFilename}" todir="${nunitDir}"  />
+			<unzip zipfile="${downloads + nunitFilename}" todir="${nunitDir}"  />
 		</if>
 		<if test="${not directory::exists(sharpZipLibDir)}">
-			<unzip zipfile="downloads/${sharpZipFilename}" todir="${sharpZipLibDir}"  />
+			<unzip zipfile="${downloads + sharpZipFilename}" todir="${sharpZipLibDir}"  />
 		</if>
 		<if test="${not directory::exists(saslDir)}">
-			<UnTar tarfile="downloads/${saslFilename}" todir="build/${platform}" compresstype="gzip" />
+			<UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
 		</if>
 	</target>
 	<target name="checkout">

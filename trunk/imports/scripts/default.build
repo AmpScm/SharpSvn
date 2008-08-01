@@ -2,7 +2,9 @@
 <project basedir=".." default="build">
 	<property name="Configuration" value="Release" overwrite="false" />
 	<property name="dllPrefix" value="SharpSvn-" overwrite="false" />
-	<property name="dbDllName" value="SharpSvn-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
+	<property name="dbDllName" value="${dllPrefix}-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
+	<property name="static" value="true" overwrite="false" />
+	<property name="applyMerges" value="true" overwrite="false" />
 	
 	<if test="${not property::exists('VSversion')}">
 		<!-- Auto detect VS 2005 and VS 2008 -->
