@@ -78,7 +78,7 @@
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
               <!-- Import APR from APR-Util -->
               <replacestring from='AdditionalDependencies="ws2_32.lib mswsock.lib"' to='AdditionalDependencies="libapr-1.lib xml.lib ws2_32.lib mswsock.lib"' />
-              
+
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
               <replacestring from='Optimization="2"' to='Optimization="1"' />
               <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
@@ -88,7 +88,7 @@
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
         </do>
-      </foreach>      
+      </foreach>
       <foreach item="File" property="winHeader">
         <in>
           <items>
@@ -122,7 +122,7 @@
             <include name="${aprUtilDir}/aprutil.vcproj" if="${static=='true'}"/>
             <include name="${aprDir}/libapr.vcproj" if="${static!='true'}"/>
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
-            <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}"/>            
+            <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}"/>
           </items>
         </in>
         <do>
@@ -191,7 +191,7 @@
         <include name="${aprDir}/x64/Release/*.dll" />
         <include name="${aprUtilDir}/x64/Release/*.dll" />
       </fileset>
-    </copy>    
+    </copy>
     <property name="aprIncludeDir" value="${release}/include/apr-1" />
     <copy todir="${aprIncludeDir}">
       <fileset basedir="${aprDir}/include">

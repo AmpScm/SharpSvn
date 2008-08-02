@@ -2,62 +2,62 @@
 <project basedir=".." default="build">
   <property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
   <property name="zlibDir" value="build/zlib-${zlibVersion}" />
-  
-	<target name="prepare-zlib" depends="extract">
-		<OnceBlock file="${zlibDir}.prepared">
-			<foreach item="File" property="dsp">
-				<in>
-					<items basedir="${zlibDir}">
-						<include name="projects/visualc6/zlib.dsp" />
-					</items>
-				</in>
-				<do>
-					<VCBuild>
-						<arg line="/upgrade" />
-						<arg value="${dsp}" />
-					</VCBuild>
-				</do>
-			</foreach>
-		</OnceBlock>
-		<OnceBlock file="${zlibDir}_${platform}.prepared">
-			<foreach item="File" property="vcproj">
-				<in>
-					<items basedir="${zlibDir}">
-						<include name="projects/visualc6/zlib.vcproj" />
-					</items>
-				</in>
-				<do>
-					<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-				</do>
-			</foreach>
-		</OnceBlock>
-	</target>
-	<target name="build-zlib" depends="prepare-zlib, extract">
-		<VCBuild>
-			<arg value="${zlibDir}/projects/visualc6/zlib.vcproj" />
-			<arg value="LIB ${Configuration}|${platform}" />
-		</VCBuild>
-		<copy todir="${release}/lib">
-			<fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
-				<include name="*.dll" />
-				<include name="*.lib" />
-				<include name="*.exp" />
-				<include name="*.pdb" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/lib-x64">
-			<fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
-				<include name="*.dll" />
-				<include name="*.lib" />
-				<include name="*.exp" />
-				<include name="*.pdb" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/include">
-			<fileset basedir="${zlibDir}">
-				<include name="*.h" />
-				<exclude name="*.in.h" />
-			</fileset>
-		</copy>
-	</target>
+
+  <target name="prepare-zlib" depends="extract">
+    <OnceBlock file="${zlibDir}.prepared">
+      <foreach item="File" property="dsp">
+        <in>
+          <items basedir="${zlibDir}">
+            <include name="projects/visualc6/zlib.dsp" />
+          </items>
+        </in>
+        <do>
+          <VCBuild>
+            <arg line="/upgrade" />
+            <arg value="${dsp}" />
+          </VCBuild>
+        </do>
+      </foreach>
+    </OnceBlock>
+    <OnceBlock file="${zlibDir}_${platform}.prepared">
+      <foreach item="File" property="vcproj">
+        <in>
+          <items basedir="${zlibDir}">
+            <include name="projects/visualc6/zlib.vcproj" />
+          </items>
+        </in>
+        <do>
+          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="build-zlib" depends="prepare-zlib, extract">
+    <VCBuild>
+      <arg value="${zlibDir}/projects/visualc6/zlib.vcproj" />
+      <arg value="LIB ${Configuration}|${platform}" />
+    </VCBuild>
+    <copy todir="${release}/lib">
+      <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
+        <include name="*.dll" />
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64">
+      <fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
+        <include name="*.dll" />
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${zlibDir}">
+        <include name="*.h" />
+        <exclude name="*.in.h" />
+      </fileset>
+    </copy>
+  </target>
 </project>

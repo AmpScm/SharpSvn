@@ -1,17 +1,17 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="intl" value="sharpsvn" overwrite="false" />
-  <property name="svnBuildName" value="SharpSvn" overwrite="false" /> 
-   
+  <property name="svnBuildName" value="SharpSvn" overwrite="false" />
+
   <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, sharpintl-build">
-        
+
     <!-- Fake direct result for subversion to hide platforms -->
     <copy todir="build/${platform}/lib/include">
       <fileset basedir="${release}/include/apr-1">
         <include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/lib/xml/expat/lib" file="release/include/apr-1/expat.h" />    
+    <copy todir="build/${platform}/lib/xml/expat/lib" file="release/include/apr-1/expat.h" />
     <copy todir="build/${platform}/lib/include">
       <fileset basedir="${aprDir}/include">
         <include name="arch/win32/**.h" />
@@ -71,11 +71,11 @@
       <fileset basedir="${dbWindowsDir}">
         <include name="*.h" />
       </fileset>
-    </copy>    
+    </copy>
     <copy tofile="build/${platform}/lib/release/libapr-1.lib" file="build/${platform}/lib/lib/apr-1.lib" if="${static=='true'}" />
     <copy tofile="build/${platform}/lib/release/libaprutil-1.lib" file="build/${platform}/lib/lib/aprutil-1.lib" if="${static=='true'}" />
   </target>
-  
+
   <target name="svn-merge" depends="checkout">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged" if="${applyMerges == 'true'}">
       <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
@@ -89,10 +89,10 @@
   </target>
 
   <target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
-	<exec program="python.exe" failonerror="false" resultproperty="pythonAvailable" verbose="true">
-		<arg line="-V" />
-	</exec>
-      
+    <exec program="python.exe" failonerror="false" resultproperty="pythonAvailable" verbose="true">
+      <arg line="-V" />
+    </exec>
+
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
       <!-- Patches for x64 builds; hopefully included in svn 1.5 -->
       <copy todir="${svnBase}/build/generator/" overwrite="true">
@@ -107,27 +107,27 @@
       </loadfile>
       <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
       <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
-		<filterchain>
-		  <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
-		  <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
-		  <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
-		</filterchain>
-	  </loadfile>
-	  <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
-      
+        <filterchain>
+          <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
+          <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
+          <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
+        </filterchain>
+      </loadfile>
+      <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
+
       <loadfile file="${svnBase}/build.conf" property="gen_win">
         <filterchain>
           <replacestring from='svn_repos_update()' to='svn_repos_up*ate()' />
         </filterchain>
       </loadfile>
       <echo message="${gen_win}" file="${svnBase}/build.conf" />
-      
+
       <loadfile file="${svnBase}/win-tests.py" property="gen_win">
-		<filterchain>
-			<replacestring from='for dll in dlls:' to='#' />
-			<replacestring from='copy_changed_file(dll' to='#'/>
-		</filterchain>
-	  </loadfile>
+        <filterchain>
+          <replacestring from='for dll in dlls:' to='#' />
+          <replacestring from='copy_changed_file(dll' to='#'/>
+        </filterchain>
+      </loadfile>
 
       <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
         <arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
@@ -138,7 +138,7 @@
         <arg value="--release" />
         <arg value="--with-httpd=../../httpd" if="${(buildHttpd == 'true') and (platform == 'win32')}" />
         <arg value="--with-apr=../lib" />
-        <arg value="--with-apr-util=../lib" />        
+        <arg value="--with-apr-util=../lib" />
         <arg value="--with-berkeley-db=../lib" />
         <arg value="--with-openssl=../openssl-${opensslVersion}" />
         <arg value="--with-zlib=../lib/zlib" />
@@ -229,25 +229,25 @@
         <property name="svnWcVersion" value="?" />
       </if>
       <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${applyMerges == 'true'}">
-/* Appended by sharpsvn/imports/scripts/build-subversion.build */
-apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
-{
-  if (!auth_baton)
-    return NULL;
-    
-  return auth_baton->creds_cache;
-}
+        /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+        apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+        {
+        if (!auth_baton)
+        return NULL;
+
+        return auth_baton->creds_cache;
+        }
       </echo>
-      
+
       <!-- Trim whitespace (and the newline added by NAnt) -->
       <property name="svnWcVersion" value="${string::trim(svnWcVersion)}" />
-      
+
       <!-- Add more version information to the subversion binaries and functions -->
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
-#undef SVN_VER_TAG
-#undef SVN_VER_NUMTAG
-#define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
-#define SVN_VER_NUMTAG "-${svnBuildName}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
+        #undef SVN_VER_TAG
+        #undef SVN_VER_NUMTAG
+        #define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
+        #define SVN_VER_NUMTAG "-${svnBuildName}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
       </echo>
     </OnceBlock>
   </target>
@@ -305,7 +305,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         <exclude name="neon/src/COPYING.LIB" />
       </fileset>
     </copy>
-    <if test="${platform!='win32'}">    
+    <if test="${platform!='win32'}">
       <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
       <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve-${platform}.exe" />
       <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
@@ -321,7 +321,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
         </fileset>
       </copy>
     </if>
-    <copy todir="${release}/include">     
+    <copy todir="${release}/include">
       <fileset basedir="${svnBase}\subversion\include">
         <include name="**/*.h" />
       </fileset>
@@ -359,23 +359,23 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
     <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
   </target>
 
-  <target name="check" depends="build-svn, copy-result">	
-	<loadfile file="${svnBase}/win-tests.py" property="gen_win">
-		<filterchain>
-			<replacestring from='for dll in dlls:' to='#' />
-			<replacestring from='copy_changed_file(dll' to='#'/>
-		</filterchain>
-	</loadfile>
-	<echo message="${gen_win}" file="${svnBase}/win-tests.py" />
-	
-	<exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
-        <arg line="/c win-tests.py" if="${pythonAvailable != '0'}" />
-        <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
-        <arg value="-r" />
-        <arg value="-v" />
-        <arg value="-c" />
-        <arg value="-p" />        
-        <arg value="--bin=${path::get-full-path('release/bin')}" />
+  <target name="check" depends="build-svn, copy-result">
+    <loadfile file="${svnBase}/win-tests.py" property="gen_win">
+      <filterchain>
+        <replacestring from='for dll in dlls:' to='#' />
+        <replacestring from='copy_changed_file(dll' to='#'/>
+      </filterchain>
+    </loadfile>
+    <echo message="${gen_win}" file="${svnBase}/win-tests.py" />
+
+    <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
+      <arg line="/c win-tests.py" if="${pythonAvailable != '0'}" />
+      <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
+      <arg value="-r" />
+      <arg value="-v" />
+      <arg value="-c" />
+      <arg value="-p" />
+      <arg value="--bin=${path::get-full-path('release/bin')}" />
     </exec>
   </target>
 </project>
