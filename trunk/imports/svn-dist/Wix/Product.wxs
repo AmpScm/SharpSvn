@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="Slik Subversion $(var.SvnVersion)" 
-           Language="1033" Version="$(var.SvnVersion).0" 
+  <Product Id="*" Name="Slik Subversion $(var.SvnVersion)"
+           Language="1033" Version="$(var.SvnVersion).0"
            Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
     <?if $(var.Platform) = x86 ?>
-    <?include Win32.wxi ?>		
+    <?include Win32.wxi ?>
     <?elseif $(var.Platform) = x64 ?>
-    <?include x64.wxi?>    
+    <?include x64.wxi?>
     <?else?>
     <Package/>
     <?endif?>
-		<Media Id="1" Cabinet="SlikSvn.cab" EmbedCab="yes" CompressionLevel="high" />
+    <Media Id="1" Cabinet="SlikSvn.cab" EmbedCab="yes" CompressionLevel="high" />
     <Property Id="INSTALLLEVEL" Value="100" />
 
     <Upgrade Id="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
@@ -40,33 +40,33 @@
 
     <WixVariable Id="WixUILicenseRtf" Value="SlikSvnLicense.rtf" />
 
-		<Directory Id="TARGETDIR" Name="SourceDir">
+    <Directory Id="TARGETDIR" Name="SourceDir">
       <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
         <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install" Action="none">
           <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" Action="write"/>
         </RegistryKey>
         <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION_BIN]" Action="set" />
-      </Component>			
-		</Directory>
+      </Component>
+    </Directory>
 
     <DirectoryRef Id="INSTALLBASE">
       <Directory Id="INSTALLLOCATION" Name="SlikSvn">
-        <Directory Id="INSTALLLOCATION_BIN" Name="bin">    
+        <Directory Id="INSTALLLOCATION_BIN" Name="bin">
         </Directory>
         <Directory Id="DIR_SharpSvnLicenses" Name="Licenses">
-          
+
         </Directory>
       </Directory>
     </DirectoryRef>
 
     <UIRef Id="WixUI_Mondo"/>
-		<Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn and svnversion">
+    <Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn and svnversion">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svn.exe" />
       <ComponentGroupRef Id="svnversion.exe" />
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvn_LICENSES" />
-		</Feature>
+    </Feature>
     <Feature Id="ReposTools" Title="Repository Tools" Level="10" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnadmin.exe"/>
@@ -102,5 +102,5 @@
       <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
       <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
     </InstallExecuteSequence>
-	</Product>
+  </Product>
 </Wix>

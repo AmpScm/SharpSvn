@@ -3,17 +3,17 @@
   <property name="gettextFilename" value="gettext-${gettextVersion}.tar.gz" />
   <property name="gettextDir" value="${platform}/gettext-${gettextVersion}" />
   <target name="prepare-gettext" depends="extract">
-	<if test="${(intl != 'none') and (intl != 'sharpsvn')}">
-	
-	</if>
+    <if test="${(intl != 'none') and (intl != 'sharpsvn')}">
+
+    </if>
   </target>
   <target name="build-gettext" depends="prepare-gettext">
-	<if test="${(intl != 'none') and (intl != 'sharpsvn')}">
-	
-	</if>
+    <if test="${(intl != 'none') and (intl != 'sharpsvn')}">
+
+    </if>
   </target>
-  
-	<!--<target name="prepare-openssl" depends="extract">
+
+  <!--<target name="prepare-openssl" depends="extract">
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
 			<exec program="perl.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
 				<arg value="Configure" />

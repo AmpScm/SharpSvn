@@ -1,62 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
-	<property name="serfDir" value="build/${platform}/serf" />
-	<target name="prepare-serf" depends="checkout, generate-svnfiles">
-		<foreach item="File" property="vcproj">
-			<in>
-				<items basedir="${svnBase}">
-					<include name="serf/serf.vcproj" />
-					<!--include name="neon/neon.vcproj" /-->
-				</items>
-			</in>
-			<do>
-				<VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-			</do>
-		</foreach>
-		<OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
-			<foreach item="File" property="mak">
-				<in>
-					<items basedir="${platformBase}">
-						<include name="serf/serf.mak" />
-						<include name="neon/neon.mak" />
-					</items>
-				</in>
-				<do>
-					<loadfile file="${mak}" property="serfmak">
-						<filterchain>
-							<replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
-							<replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
-							<!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
-							<replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi " />
-							<!-- Don't include apr and openssl in the intermediate libraries -->
-							<replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" />
-							<replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" />
-							<replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(OPEN' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(OPEN' />
-							<replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' />
-							<!-- Only compile library, the testfiles don't like the small library -->
-							<replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
-							<replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
-							<replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' />
-						</filterchain>
-					</loadfile>
-					<echo file="${mak}" message="${serfmak}" />
-				</do>
-			</foreach>
-		</OnceBlock>
-	</target>
-	<target name="build-serf" depends="prepare-serf, build-zlib,build-apr">
-		<foreach item="File" property="vcproj">
-			<in>
-				<items basedir="${svnBase}/../serf">
-					<include name="serf.vcproj" />
-				</items>
-			</in>
-			<do>
-				<VCBuild platform="${platform}">
-					<arg value="${vcproj}" />
-					<arg value="${Configuration}|${platform}" />
-				</VCBuild>
-			</do>
-		</foreach>
-	</target>
+  <property name="serfDir" value="build/${platform}/serf" />
+  <target name="prepare-serf" depends="checkout, generate-svnfiles">
+    <foreach item="File" property="vcproj">
+      <in>
+        <items basedir="${svnBase}">
+          <include name="serf/serf.vcproj" />
+          <!--include name="neon/neon.vcproj" /-->
+        </items>
+      </in>
+      <do>
+        <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+      </do>
+    </foreach>
+    <OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
+      <foreach item="File" property="mak">
+        <in>
+          <items basedir="${platformBase}">
+            <include name="serf/serf.mak" />
+            <include name="neon/neon.mak" />
+          </items>
+        </in>
+        <do>
+          <loadfile file="${mak}" property="serfmak">
+            <filterchain>
+              <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
+              <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
+              <!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
+              <replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi " />
+              <!-- Don't include apr and openssl in the intermediate libraries -->
+              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" />
+              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" />
+              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(OPEN' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(OPEN' />
+              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' />
+              <!-- Only compile library, the testfiles don't like the small library -->
+              <replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
+              <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
+              <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' />
+            </filterchain>
+          </loadfile>
+          <echo file="${mak}" message="${serfmak}" />
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="build-serf" depends="prepare-serf, build-zlib,build-apr">
+    <foreach item="File" property="vcproj">
+      <in>
+        <items basedir="${svnBase}/../serf">
+          <include name="serf.vcproj" />
+        </items>
+      </in>
+      <do>
+        <VCBuild platform="${platform}">
+          <arg value="${vcproj}" />
+          <arg value="${Configuration}|${platform}" />
+        </VCBuild>
+      </do>
+    </foreach>
+  </target>
 </project>

@@ -1,159 +1,159 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-	<property name="Configuration" value="Release" overwrite="false" />
-	<property name="dllPrefix" value="SharpSvn-" overwrite="false" />
-	<property name="dbDllName" value="${dllPrefix}-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
-	<property name="static" value="true" overwrite="false" />
-	<property name="applyMerges" value="true" overwrite="false" />
-	
-	<if test="${not property::exists('VSversion')}">
-		<!-- Auto detect VS 2005 and VS 2008 -->
-		<if test="${environment::variable-exists('VCINSTALLDIR')}">
-			<property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
-			
-			<property name="VSversion" value="2005" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 8')}" />
-			<property name="VSversion" value="2008" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 9.0')}" />
-		</if>
-		
-		<if test="${not property::exists('VSversion')}">
-			<fail message="VSversion variable not defined and autodetect failed" />
-		</if>
-		<echo message="Using Visual Studio ${VSversion} for building" />
-	</if>
-	
-	<property name="VS" value="2005" overwrite="false" />
-	<property name="buildHttpd" value="false" overwrite="false" />
+  <property name="Configuration" value="Release" overwrite="false" />
+  <property name="dllPrefix" value="SharpSvn-" overwrite="false" />
+  <property name="dbDllName" value="${dllPrefix}-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
+  <property name="static" value="true" overwrite="false" />
+  <property name="applyMerges" value="true" overwrite="false" />
 
-	<if test="${platform != 'win32' and platform != 'x64'}">
-		<fail message="Platform must be win32 or x64 at this time" />
-	</if>
+  <if test="${not property::exists('VSversion')}">
+    <!-- Auto detect VS 2005 and VS 2008 -->
+    <if test="${environment::variable-exists('VCINSTALLDIR')}">
+      <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
 
-	<setenv>
-		<variable name="OPENSSL_STATIC" value="1" />
-		<variable name="ENABLE_IPV6" value="1" />
-	</setenv>
+      <property name="VSversion" value="2005" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 8')}" />
+      <property name="VSversion" value="2008" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 9.0')}" />
+    </if>
 
-	<property name="Configuration" value="release" />
-	<property name="release" value="release" />
+    <if test="${not property::exists('VSversion')}">
+      <fail message="VSversion variable not defined and autodetect failed" />
+    </if>
+    <echo message="Using Visual Studio ${VSversion} for building" />
+  </if>
 
-	<include buildfile="tasks.build" />
+  <property name="VS" value="2005" overwrite="false" />
+  <property name="buildHttpd" value="false" overwrite="false" />
 
-	<include buildfile="prepare.build" />
+  <if test="${platform != 'win32' and platform != 'x64'}">
+    <fail message="Platform must be win32 or x64 at this time" />
+  </if>
 
-	<include buildfile="bdb.build" />
-	<include buildfile="zlib.build" />
-	<include buildfile="openssl.build" />
-	<include buildfile="serf.build" />
-	<include buildfile="neon.build" />
-	<include buildfile="apr.build" />
-	<include buildfile="sasl.build" />
-	<include buildfile="gettext.build" />
-	<include buildfile="sharpintl.build" />
-	<include buildfile="subversion.build" />
+  <setenv>
+    <variable name="OPENSSL_STATIC" value="1" />
+    <variable name="ENABLE_IPV6" value="1" />
+  </setenv>
 
-	<target name="clean">
-		<delete>
-			<fileset basedir="build" defaultexcludes="false">
-				<include name="**" />
-			</fileset>
-		</delete>
-		<delete>
-			<fileset basedir="release">
-				<include name="**" />
-			</fileset>
-		</delete>
-	</target>
+  <property name="Configuration" value="release" />
+  <property name="release" value="release" />
 
-	<target name="distclean" depends="clean">
-		<delete>
-			<fileset basedir="downloads">
-				<include name="**" />
-			</fileset>
-		</delete>
-		<delete>
-			<fileset basedir="release">
-				<include name="**" />
-			</fileset>
-		</delete>
-	</target>
+  <include buildfile="tasks.build" />
 
-	<target name="win32" depends="x86">
-	</target>
-	
-	<target name="x86">
-		<exec program="${environment::get-variable('comspec')}">
-			<arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=win32 build"' />
-		</exec>
-	</target>
-		
-	<target name="x64">
-		<exec program="${environment::get-variable('comspec')}">
-			<arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86_amd64 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=x64 build"' />
-		</exec>
-	</target>
-			
-	<property name="nunitFilename" value="NUnit-${nunitVersion}-net-2.0.zip" />	
-	<property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
-	<property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />	
-	<property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
+  <include buildfile="prepare.build" />
 
-	<target name="build" depends="download,extract,checkout, build-svn, copy-result">
+  <include buildfile="bdb.build" />
+  <include buildfile="zlib.build" />
+  <include buildfile="openssl.build" />
+  <include buildfile="serf.build" />
+  <include buildfile="neon.build" />
+  <include buildfile="apr.build" />
+  <include buildfile="sasl.build" />
+  <include buildfile="gettext.build" />
+  <include buildfile="sharpintl.build" />
+  <include buildfile="subversion.build" />
 
-	</target>
+  <target name="clean">
+    <delete>
+      <fileset basedir="build" defaultexcludes="false">
+        <include name="**" />
+      </fileset>
+    </delete>
+    <delete>
+      <fileset basedir="release">
+        <include name="**" />
+      </fileset>
+    </delete>
+  </target>
 
-	<target name="misc-copy">
-		<copy todir="${release}/lib-AnyCPU">
-			<fileset basedir="${nunitDir}/bin">
-				<include name="nunit.framework.dll" />
-				<include name="nunit.framework.xml" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/lib-AnyCPU">
-			<fileset basedir="${sharpZipLibDir}/net-20">
-				<include name="ICSharpCode.SharpZipLib.dll" />
-			</fileset>
-		</copy>
-	</target>
-	
-	<target name="clean-svn" depends="update-svn">
-		<delete>
-			<fileset basedir="${release}">
-				<include name="lib/**" if="${platform == 'win32'}" />
-				<include name="lib-${platform}/**" if="${platform != 'win32'}" />
-				<include name="bin/*-${platform}.exe" />
-				<include name="bin/*-${platform}.dll" />
-			</fileset>
-		</delete>
-	</target>
-	<target name="update-svn">
-		<delete>
-			<fileset basedir="build">
-				<include name="subversion*_${platform}.*" />
-				<include name="serf*_${platform}.*" />
-				<include name="neon*_${platform}.*" />
-				<include name="${platform}/subversion/${Configuration}/**" />
-			</fileset>
-		</delete>
-		<Svn nonInteractive="false">
-			<arg line="revert -R build/${platform}/subversion" />
-		</Svn>
-		<Svn nonInteractive="false">
-			<arg line="revert -R build/${platform}/neon" />
-		</Svn>
-		<Svn nonInteractive="false">
-			<arg line="revert -R build/${platform}/serf" />
-		</Svn>
-		<Svn>
-			<arg line="up build/${platform}/subversion" />
-		</Svn>
-		<Svn>
-			<arg line="up build/${platform}/neon" />
-		</Svn>
-		<Svn>
-			<arg line="up build/${platform}/serf" />
-		</Svn>
-	</target>
-	<target name="svn-update" depends="update-svn">
-	</target>
+  <target name="distclean" depends="clean">
+    <delete>
+      <fileset basedir="downloads">
+        <include name="**" />
+      </fileset>
+    </delete>
+    <delete>
+      <fileset basedir="release">
+        <include name="**" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="win32" depends="x86">
+  </target>
+
+  <target name="x86">
+    <exec program="${environment::get-variable('comspec')}">
+      <arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=win32 build"' />
+    </exec>
+  </target>
+
+  <target name="x64">
+    <exec program="${environment::get-variable('comspec')}">
+      <arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86_amd64 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=x64 build"' />
+    </exec>
+  </target>
+
+  <property name="nunitFilename" value="NUnit-${nunitVersion}-net-2.0.zip" />
+  <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
+  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
+  <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
+
+  <target name="build" depends="download,extract,checkout, build-svn, copy-result">
+
+  </target>
+
+  <target name="misc-copy">
+    <copy todir="${release}/lib-AnyCPU">
+      <fileset basedir="${nunitDir}/bin">
+        <include name="nunit.framework.dll" />
+        <include name="nunit.framework.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-AnyCPU">
+      <fileset basedir="${sharpZipLibDir}/net-20">
+        <include name="ICSharpCode.SharpZipLib.dll" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="clean-svn" depends="update-svn">
+    <delete>
+      <fileset basedir="${release}">
+        <include name="lib/**" if="${platform == 'win32'}" />
+        <include name="lib-${platform}/**" if="${platform != 'win32'}" />
+        <include name="bin/*-${platform}.exe" />
+        <include name="bin/*-${platform}.dll" />
+      </fileset>
+    </delete>
+  </target>
+  <target name="update-svn">
+    <delete>
+      <fileset basedir="build">
+        <include name="subversion*_${platform}.*" />
+        <include name="serf*_${platform}.*" />
+        <include name="neon*_${platform}.*" />
+        <include name="${platform}/subversion/${Configuration}/**" />
+      </fileset>
+    </delete>
+    <Svn nonInteractive="false">
+      <arg line="revert -R build/${platform}/subversion" />
+    </Svn>
+    <Svn nonInteractive="false">
+      <arg line="revert -R build/${platform}/neon" />
+    </Svn>
+    <Svn nonInteractive="false">
+      <arg line="revert -R build/${platform}/serf" />
+    </Svn>
+    <Svn>
+      <arg line="up build/${platform}/subversion" />
+    </Svn>
+    <Svn>
+      <arg line="up build/${platform}/neon" />
+    </Svn>
+    <Svn>
+      <arg line="up build/${platform}/serf" />
+    </Svn>
+  </target>
+  <target name="svn-update" depends="update-svn">
+  </target>
 </project>
 

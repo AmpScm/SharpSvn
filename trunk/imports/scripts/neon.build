@@ -1,29 +1,29 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-	<property name="neonDir" value="build/${platform}/neon" />
-	<target name="prepare-neon" depends="checkout, prepare-serf">
-		<OnceBlock file="build/neon-${neonVersion}_${platform}.prepared">
-			<regex pattern="^(?'NEON_MAJOR_VERSION'\d+)\.(?'NEON_MINOR_VERSION'\d+)\.(?'NEON_MICRO_VERSION'\d+)$" input="${neonVersion}" />
-			<loadfile file="/config.hw.in" property="configfile">
-				<filterchain>
-					<replacetokens begintoken="@" endtoken="@">
-						<token key="VERSION" value="${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}" />
-						<token key="MAJOR" value="${NEON_MAJOR_VERSION}" />
-						<token key="MINOR" value="${NEON_MINOR_VERSION}" />
-					</replacetokens>
-					<replacestring from="#define socklen_t" to="// # define socklen_t" />
-				</filterchain>
-			</loadfile>
-			<echo file="${neonDir}/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
-			<echo file="${neonDir}/config.h" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.h')}" />
-			<echo file="${neonDir}/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
-			
-			<loadfile file="${neonDir}/src/ne_socket.c" property="cFile">
-				<filterchain>
-					<replacestring from=" &amp;&amp; defined(IPPROTO_TCP)" to=" //&amp;&amp; defined(IPPROTO_TCP)" />
-				</filterchain>
-			</loadfile>
-			<echo file="${neonDir}/src/ne_socket.c" message="${cFile}" />
-		</OnceBlock>
-	</target>
+  <property name="neonDir" value="build/${platform}/neon" />
+  <target name="prepare-neon" depends="checkout, prepare-serf">
+    <OnceBlock file="build/neon-${neonVersion}_${platform}.prepared">
+      <regex pattern="^(?'NEON_MAJOR_VERSION'\d+)\.(?'NEON_MINOR_VERSION'\d+)\.(?'NEON_MICRO_VERSION'\d+)$" input="${neonVersion}" />
+      <loadfile file="/config.hw.in" property="configfile">
+        <filterchain>
+          <replacetokens begintoken="@" endtoken="@">
+            <token key="VERSION" value="${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}" />
+            <token key="MAJOR" value="${NEON_MAJOR_VERSION}" />
+            <token key="MINOR" value="${NEON_MINOR_VERSION}" />
+          </replacetokens>
+          <replacestring from="#define socklen_t" to="// # define socklen_t" />
+        </filterchain>
+      </loadfile>
+      <echo file="${neonDir}/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
+      <echo file="${neonDir}/config.h" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.h')}" />
+      <echo file="${neonDir}/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
+
+      <loadfile file="${neonDir}/src/ne_socket.c" property="cFile">
+        <filterchain>
+          <replacestring from=" &amp;&amp; defined(IPPROTO_TCP)" to=" //&amp;&amp; defined(IPPROTO_TCP)" />
+        </filterchain>
+      </loadfile>
+      <echo file="${neonDir}/src/ne_socket.c" message="${cFile}" />
+    </OnceBlock>
+  </target>
 </project>

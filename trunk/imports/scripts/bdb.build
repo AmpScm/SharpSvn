@@ -2,85 +2,85 @@
 <project basedir=".." default="build">
   <property name="dbFilename" value="db-${dbVersion}.NC.tar.gz" />
   <property name="dbDir" value="build/db-${dbVersion}.NC" />
-	<regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
+  <regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
 
-	
-	<property name="dbWindowsDir" value="${dbDir}/build_win32" if="${dbVersion &lt; '4.5'}" />
-	<property name="dbWindowsDir" value="${dbDir}/build_windows" if="${dbVersion &gt;= '4.5'}" />
 
-	<property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
-	<property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
-	<property name="fullDbDllName" value="${dbDllName}-${platform}.dll" />
-	
-	<target name="prepare-bdb" depends="extract">
-		<OnceBlock file="build/db-${dbVersion}.prepared">
-			<foreach item="File" property="dsp">
-				<in>
-					<items basedir="${dbWindowsDir}">
-						<include name="*.dsp" />
-					</items>
-				</in>
-				<do>
-					<VCBuild>
-						<arg line="/upgrade" />
-						<arg value="${dsp}" />
-					</VCBuild>
-				</do>
-			</foreach>
-		</OnceBlock>
-		<OnceBlock file="build/db-${dbVersion}.patched">
-			<foreach item="File" property="vcproj">
-				<in>
-					<items basedir="${dbWindowsDir}">
-						<include name="*.vcproj" />
-					</items>
-				</in>
-				<do>
-					<loadfile file="${vcproj}" property="projtext">
-						<filterchain>
-							<replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-							<replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' />
-							<replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' />
-						</filterchain>
-					</loadfile>
-					<echo message="${projtext}" file="${vcproj}" />
-				</do>
-			</foreach>
-		</OnceBlock>
-	</target>
-	<target name="build-bdb" depends="prepare-bdb">
-		<VCBuild platform="${platform}">
-			<arg value="${dbWindowsDir}/db_dll.vcproj" />
-			<arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
-			<arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />			
-			<arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
-		</VCBuild>
-		<copy todir="${release}/lib">
-			<fileset basedir="${dbWindowsDir}/${Configuration}">				
-				<include name="*.lib" />
-				<include name="*.pdb" />
-				<include name="*.exp" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/lib-x64">
-			<fileset basedir="${dbWindowsDir}/${Configuration}_AMD64">
-				<include name="*.lib" />
-				<include name="*.pdb" />
-				<include name="*.exp" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/bin" flatten="true">
-			<fileset basedir="${dbWindowsDir}">
-				<include name="${Configuration}/*.dll" />
-				<include name="${Configuration}/*.pdb" />
-				<include name="${Configuration}_AMD64/*.dll" />
-				<include name="${Configuration}_AMD64/*.pdb" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/include">
-			<fileset basedir="${dbWindowsDir}">
-				<include name="*.h" />
-			</fileset>
-		</copy>
-	</target>
+  <property name="dbWindowsDir" value="${dbDir}/build_win32" if="${dbVersion &lt; '4.5'}" />
+  <property name="dbWindowsDir" value="${dbDir}/build_windows" if="${dbVersion &gt;= '4.5'}" />
+
+  <property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
+  <property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
+  <property name="fullDbDllName" value="${dbDllName}-${platform}.dll" />
+
+  <target name="prepare-bdb" depends="extract">
+    <OnceBlock file="build/db-${dbVersion}.prepared">
+      <foreach item="File" property="dsp">
+        <in>
+          <items basedir="${dbWindowsDir}">
+            <include name="*.dsp" />
+          </items>
+        </in>
+        <do>
+          <VCBuild>
+            <arg line="/upgrade" />
+            <arg value="${dsp}" />
+          </VCBuild>
+        </do>
+      </foreach>
+    </OnceBlock>
+    <OnceBlock file="build/db-${dbVersion}.patched">
+      <foreach item="File" property="vcproj">
+        <in>
+          <items basedir="${dbWindowsDir}">
+            <include name="*.vcproj" />
+          </items>
+        </in>
+        <do>
+          <loadfile file="${vcproj}" property="projtext">
+            <filterchain>
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+              <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' />
+              <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${vcproj}" />
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="build-bdb" depends="prepare-bdb">
+    <VCBuild platform="${platform}">
+      <arg value="${dbWindowsDir}/db_dll.vcproj" />
+      <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
+      <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
+      <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
+    </VCBuild>
+    <copy todir="${release}/lib">
+      <fileset basedir="${dbWindowsDir}/${Configuration}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+        <include name="*.exp" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64">
+      <fileset basedir="${dbWindowsDir}/${Configuration}_AMD64">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+        <include name="*.exp" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="${Configuration}/*.dll" />
+        <include name="${Configuration}/*.pdb" />
+        <include name="${Configuration}_AMD64/*.dll" />
+        <include name="${Configuration}_AMD64/*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+  </target>
 </project>

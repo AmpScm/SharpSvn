@@ -1,21 +1,21 @@
 <project>
-	<script language="C#">
-		<references>
-			<lib>
-				<include name="${nant::get-base-directory() + '/lib'}" asis="true" />
-			</lib>
-			<include name="ICSharpCode.SharpZipLib.dll"/>
-		</references>
-		<imports>
-			<import namespace="ICSharpCode.SharpZipLib"/>
-			<import namespace="ICSharpCode.SharpZipLib.Tar"/>
-			<import namespace="ICSharpCode.SharpZipLib.GZip"/>
-			<import namespace="ICSharpCode.SharpZipLib.BZip2"/>
-			<import namespace="System.Xml"/>
-			<import namespace="System.Xml.XPath"/>
-		</imports>
-		<code>
-			<![CDATA[			
+  <script language="C#">
+    <references>
+      <lib>
+        <include name="${nant::get-base-directory() + '/lib'}" asis="true" />
+      </lib>
+      <include name="ICSharpCode.SharpZipLib.dll"/>
+    </references>
+    <imports>
+      <import namespace="ICSharpCode.SharpZipLib"/>
+      <import namespace="ICSharpCode.SharpZipLib.Tar"/>
+      <import namespace="ICSharpCode.SharpZipLib.GZip"/>
+      <import namespace="ICSharpCode.SharpZipLib.BZip2"/>
+      <import namespace="System.Xml"/>
+      <import namespace="System.Xml.XPath"/>
+    </imports>
+    <code>
+      <![CDATA[			
 [TaskName("UnTar")]
 public class UnTar : Task 
 {
@@ -272,7 +272,7 @@ public class VCProjAddPlatform : NAnt.Core.Task
     }
 }
 ]]>
-		</code>
-	</script>
+    </code>
+  </script>
 </project>
 
