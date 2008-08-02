@@ -37,5 +37,24 @@
 			<include name="${aprUtilDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
 		</fileset>
 	</copy>
+	<copy
+		file="build/${platform}/subversion/subversion/LICENSE"
+		tofile="release/licenses/Subversion-License.txt" />
+	<copy 
+		file="${aprDir}/LICENSE"
+		tofile="release/licenses/APR-License.txt" />
+	<copy 
+		file="${aprUtilDir}/LICENSE"
+		tofile="release/licenses/Apr-Util-License.txt" />
+	<copy 
+		file="${dbDir}/LICENSE"
+		tofile="release/licenses/BerkeleyDB-License.txt" />
+	<copy
+		file="${aprDir}/xml/expat/COPYING"
+		tofile="release/licenses/Expat-License.txt" />
+	<copy
+		file="${saslDir}/COPYING"
+		tofile="release/licenses/Cyrus-Sasl-License.txt" />
+	
   </target>  
 </project>

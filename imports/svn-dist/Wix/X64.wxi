@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <Package InstallerVersion="300" Compressed="yes" Platform="x64"
+             InstallPrivileges="elevated" InstallScope="perMachine"/>
+
+  <DirectoryRef Id="TARGETDIR">
+    <Directory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLLOCATION" Name="SlikSvn">
+        <Directory Id="INSTALLLOCATION_BIN" Name="bin">
+
+        </Directory>
+      </Directory>
+    </Directory>
+  </DirectoryRef>
+</Include>

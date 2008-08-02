@@ -1,11 +1,21 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
-  <property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
-  <property name="opensslDir" value="build/${platform}/openssl-${opensslVersion}" />
+  <property name="gettextFilename" value="gettext-${gettextVersion}.tar.gz" />
+  <property name="gettextDir" value="${platform}/gettext-${gettextVersion}" />
+  <target name="prepare-gettext" depends="extract">
+	<if test="${(intl != 'none') and (intl != 'sharpsvn')}">
+	
+	</if>
+  </target>
+  <target name="build-gettext" depends="prepare-gettext">
+	<if test="${(intl != 'none') and (intl != 'sharpsvn')}">
+	
+	</if>
+  </target>
   
-	<target name="prepare-openssl" depends="extract">
+	<!--<target name="prepare-openssl" depends="extract">
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
-			<exec program="perl.exe" workingdir="${opensslDir}">
+			<exec program="perl.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
 				<arg value="Configure" />
 				<arg value="VC-WIN32" if="${platform=='win32'}" />
 				<arg value="VC-WIN64A" if="${platform=='x64'}" />
@@ -18,17 +28,17 @@
 			</exec>
 		</OnceBlock>
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
-			<exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='win32'}">
+			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='win32'}">
 				<arg line="/c ms\do_ms.bat" />
 			</exec>
-			<exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
+			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='x64'}">
 				<arg line="/c ms\do_win64a.bat" />
 			</exec>
 			<if test="${static != 'true'}">        
-        <loadfile file="${opensslDir}/ms/libeay32.def" property="def">
+        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" property="def">
           <filterchain>
             <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" />
-            <!-- Stupid bugs in openssl 0.9.8h :( -->
+            <!- - Stupid bugs in openssl 0.9.8h :( - ->
             <replacestring from="ENGINE_load_4758cca" to=";" />
             <replacestring from="ENGINE_load_aep" to=";" />
             <replacestring from="ENGINE_load_atalla" to=";" />
@@ -40,57 +50,57 @@
             <replacestring from="ENGINE_load_gmp" to=";" />
             <replacestring from="ENGINE_load_cryptodev" to=";" />
             <replacestring from="ENGINE_load_padlock" to=";" />
-            <!-- / -->
+            <!- - / - ->
           </filterchain>
         </loadfile>
-        <echo message="${def}" file="${opensslDir}/ms/libeay32.def" />        
-        <loadfile file="${opensslDir}/ms/ssleay32.def" property="def">
+        <echo message="${def}" file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" />        
+        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/ssleay32.def" property="def">
           <filterchain>
             <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" />
           </filterchain>
         </loadfile>
-        <echo message="${def}" file="${opensslDir}/ms/ssleay32.def" />        
-        <loadfile file="${opensslDir}/ms/ntdll.mak" property="mk">
+        <echo message="${def}" file="build/${platform}/openssl-${opensslVersion}/ms/ssleay32.def" />        
+        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/ntdll.mak" property="mk">
           <filterchain>
             <replacestring from="$(LIB_D)\$(SSL)" to="$(LIB_D)\${dllPrefix}$(SSL)" />
             <replacestring from="$(LIB_D)\$(CRYPTO)" to="$(LIB_D)\${dllPrefix}$(CRYPTO)" />
           </filterchain>
         </loadfile>
-        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />        
+        <echo message="${mk}" file="build/${platform}/openssl-${opensslVersion}/ms/ntdll.mak" />        
       </if>
 		</OnceBlock>
 	</target>
 	<target name="build-openssl" depends="prepare-openssl">
 		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
-			<exec program="nmake.exe" workingdir="${opensslDir}">
+			<exec program="nmake.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
 				<arg line="-f ms\nt.mak" if="${static == 'true'}" />
 				<arg line="-f ms\ntdll.mak" if="${static != 'true'}" />
 			</exec>
 		</OnceBlock>
-		<!-- OpenSL 0.9.8h on VS2008 patch -->
+		<!- - OpenSL 0.9.8h on VS2008 patch - ->
     <OnceBlock file="build/openssl-patch-OCSP_RESPONSE.tick">
-      <loadfile file="${opensslDir}/inc32/openssl/ossl_typ.h" property="ossl_typ">
+      <loadfile file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" property="ossl_typ">
         <filterchain>
           <replacestring from="#undef PKCS7_ISSUER_AND_SERIAL" to="#undef PKCS7_ISSUER_AND_SERIAL&#13;&#10;#undef OCSP_RESPONSE" />
         </filterchain>
       </loadfile>
-      <echo message="${ossl_typ}" file="${opensslDir}/inc32/openssl/ossl_typ.h" />
+      <echo message="${ossl_typ}" file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" />
     </OnceBlock>
-    <!-- /Patch -->
+    <!- - /Patch - ->
     <copy 
-      file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
-      tofile="build/${platform}/openssl-${opensslVersion}/out32/libeay32.lib" if="${static != 'true'}" />
+      file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
+      tofile="build/win32/openssl-${opensslVersion}/out32/libeay32.lib" if="${static != 'true'}" />
     <copy 
-      file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
-      tofile="build/${platform}/openssl-${opensslVersion}/out32/ssleay32.lib" if="${static != 'true'}" />    
+      file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
+      tofile="build/win32/openssl-${opensslVersion}/out32/ssleay32.lib" if="${static != 'true'}" />    
 		<copy todir="${release}/lib" flatten="true">
-			<fileset basedir="build/win32/openssl-${opensslVersion}">
-				<include name="out32/*.lib" />
-				<include name="out32/*.exp" />
-				<include name="out32/*.pdb" />
-				<include name="out32dll/*.lib" />
-				<include name="out32dll/*.exp" />
-				<include name="out32dll/*.pdb" />
+			<fileset>
+				<include name="build/win32/openssl-${opensslVersion}/out32/*.lib" />
+				<include name="build/win32/openssl-${opensslVersion}/out32/*.exp" />
+				<include name="build/win32/openssl-${opensslVersion}/out32/*.pdb" />
+				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.lib" />
+				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.exp" />
+				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.pdb" />
 			</fileset>
 		</copy>
 		<copy todir="${release}/bin" flatten="true">
@@ -98,25 +108,19 @@
 				<include name="*.dll" />
 			</fileset>
 		</copy>
-		<copy todir="${release}/bin/x64" flatten="true">
-			<fileset basedir="build/x64/openssl-${opensslVersion}/out32dll">
+		<copy todir="${release}/lib-x64">
+			<fileset basedir="build/x64/openssl-${opensslVersion}/out32">
+				<include name="*.lib" />
+				<include name="*.exp" />
+				<include name="*.pdb" />
 				<include name="*.dll" />
 			</fileset>
 		</copy>
-		<copy todir="${release}/lib-x64" flatten="true">
-			<fileset basedir="build/x64/openssl-${opensslVersion}">
-				<include name="out32/*.lib" />
-				<include name="out32/*.exp" />
-				<include name="out32/*.pdb" />
-				<include name="out32dll/*.lib" />
-				<include name="out32dll/*.exp" />
-				<include name="out32dll/*.pdb" />
-			</fileset>
-		</copy>
 		<copy todir="${release}/include">
-			<fileset basedir="${opensslDir}/inc32">
+			<fileset basedir="build/${platform}/openssl-${opensslVersion}/inc32">
 				<include name="**/*.h" />
 			</fileset>
 		</copy>
 	</target>
+	-->
 </project>

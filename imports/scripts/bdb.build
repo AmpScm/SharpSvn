@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="dbFilename" value="db-${dbVersion}.NC.tar.gz" />
-  
+  <property name="dbDir" value="build/db-${dbVersion}.NC" />
 	<regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
 
 	
-	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_win32" if="${dbVersion &lt; '4.5'}" />
-	<property name="dbWindowsDir" value="build/db-${dbVersion}.NC/build_windows" if="${dbVersion &gt;= '4.5'}" />
+	<property name="dbWindowsDir" value="${dbDir}/build_win32" if="${dbVersion &lt; '4.5'}" />
+	<property name="dbWindowsDir" value="${dbDir}/build_windows" if="${dbVersion &gt;= '4.5'}" />
 
 	<property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
 	<property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />

@@ -131,14 +131,12 @@
             <arg value="${Configuration}|${platform}" />
           </VCBuild>
           <if test="${static != 'true'}">
-            <copy todir="${aprUtilDir}">
-              <fileset basedir="${aprDir}/release">
-                <include name="*.lib" />
-              </fileset>
-            </copy>
-            <copy todir="${aprUtilDir}">
-              <fileset basedir="${aprUtilDir}/xml/expat/lib/LibR">
-                <include name="*.lib" />
+            <copy todir="${aprUtilDir}" flatten="true">
+              <fileset>
+                <include name="${aprDir}/release/*.lib" if="${platform=='win32'}" />
+                <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" if="${platform=='win32'}" />
+                <include name="${aprDir}/x64/release/*.lib" if="${platform=='x64'}" />
+                <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" if="${platform=='x64'}" />
               </fileset>
             </copy>
           </if>

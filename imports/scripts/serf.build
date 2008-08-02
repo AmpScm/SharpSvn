@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
+	<property name="serfDir" value="build/${platform}/serf" />
 	<target name="prepare-serf" depends="checkout, generate-svnfiles">
 		<foreach item="File" property="vcproj">
 			<in>

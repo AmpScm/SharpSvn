@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?if $(var.Platform) = x86 ?>
+  <Fragment>
+    <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin\" DiskId="1">
+      <Merge SourceFile="..\..\msm\Microsoft_VC80_CRT_x86.msm" Id="VC_CRT" Language="1033"/>
+      <!-- Primary Client Applications -->
+      <Component Id="svn.exe" Guid="441D7AC9-F28A-4EDF-845C-A17E91EA1E0A">
+        <File Name="svn.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svnversion.exe" Guid="87BE948F-08AD-476D-B944-EE956B98C942">
+        <File Name="svnversion.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <!-- Local Repository Tools -->
+      <Component Id="svnadmin.exe" Guid="88E79183-D419-4F55-A05A-5DB82DA0A391">
+        <File Name="svnadmin.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svnsync.exe" Guid="276B8FEC-C380-4AFC-BBBB-1D6251B3474D">
+        <File Name="svnsync.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svnlook.exe" Guid="4AD53387-7B77-4663-8840-ACEB31D116F9">
+        <File Name="svnlook.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svndumpfilter.exe" Guid="0BA4F0A0-F65C-4AFB-B806-030E1B08D1AA">
+        <File Name="svndumpfilter.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <!-- SvnServe -->
+      <Component Id="svnserve.exe" Guid="7EC3BCC8-7873-4DC7-8BE3-72B945D6EB4A">
+        <File Name="svnserve.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <!-- Extra Tools -->
+      <Component Id="svnmucc.exe" Guid="30951697-0A28-4D44-92BC-7F2B7F2A16CD">
+        <File Name="svnmucc.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svnauthz_validate.exe" Guid="6A9F1164-4ED0-440D-9950-37EE918D9E56">
+        <File Id="svnauthz_validate.exe" Name="svnauthz-validate.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_populate_node_origins_index.exe" Guid="44032186-CE94-4149-8594-8C48AA8781FA">
+        <File Id="svn_populate_node_origins_index.exe" Name="svn-populate-node-origins-index.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin\" DiskId="1">
+      <Component Id="DB.dll" Guid="DD2F46E2-2B09-45DB-B389-C1B80ABC0F42">
+        <File Id="DB44_20.dll" Name="SlikSvn-DB44-20-win32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libapr_1.dll" Guid="2E343AC4-4647-464B-8744-12D335C5D52B">
+        <File Id="libapr_1.dll" Name="SlikSvn-libapr-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libaprutil_1.dll" Guid="80AF758B-4529-4BF7-A736-3C5F3119A1F3">
+        <File Id="libaprutil_1.dll" Name="SlikSvn-libaprutil-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libeay32.dll" Guid="17719BC2-6FBC-4E26-AC0B-D25FE5A3869D">
+        <File Id="libeay32.dll" Name="SlikSvn-libeay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="Sasl.dll" Guid="1D46A26C-35A8-4651-AD9C-96922A3CE17C">
+        <File Id="Sasl21_22.dll" Name="SlikSvn-Sasl21-22-win32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="ssleay32.dll" Guid="638286E1-57C6-4DA8-98BD-5637A3AB021C">
+        <File Id="ssleay32.dll" Name="SlikSvn-ssleay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_client_1.dll" Guid="A2FECE9A-C184-4201-AE50-F586E9075BBB">
+        <File Id="svn_client_1.dll" Name="SlikSvn-svn_client-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_delta_1.dll" Guid="BD0A0833-F372-4CD3-AE70-8E0ABA761EAC">
+        <File Id="svn_delta_1.dll" Name="SlikSvn-svn_delta-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_diff_1.dll" Guid="0241AAD2-7ADC-4A1A-967C-18E11514B50B">
+        <File Id="svn_diff_1.dll" Name="SlikSvn-svn_diff-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_fs_1.dll" Guid="5D7C8665-2DC7-491D-B625-3D590F0157C1">
+        <File Id="svn_fs_1.dll" Name="SlikSvn-svn_fs-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_ra_1.dll" Guid="AA8EC216-7C96-47B3-9C5E-FFC7F992B108">
+        <File Id="svn_ra_1.dll" Name="SlikSvn-svn_ra-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_repos_1.dll" Guid="6CAB6F2C-0443-480D-83E8-2378831BDA9B">
+        <File Id="svn_repos_1.dll" Name="SlikSvn-svn_repos-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_subr_1.dll" Guid="5809AE86-3C31-4F46-8958-A11F913581D1">
+        <File Id="svn_subr_1.dll" Name="SlikSvn-svn_subr-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_wc_1.dll" Guid="11D6D089-0065-41DC-976B-E260EFFE4BFE">
+        <File Id="svn_wc_1.dll" Name="SlikSvn-svn_wc-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <?endif?>
+</Wix>

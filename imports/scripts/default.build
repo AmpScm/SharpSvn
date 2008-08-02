@@ -47,6 +47,8 @@
 	<include buildfile="neon.build" />
 	<include buildfile="apr.build" />
 	<include buildfile="sasl.build" />
+	<include buildfile="gettext.build" />
+	<include buildfile="sharpintl.build" />
 	<include buildfile="subversion.build" />
 
 	<target name="clean">
