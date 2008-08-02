@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/wix/2006/wi tools/wix.xsd">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Fragment>
-    <ComponentGroup Id="SharpSvn_LICENSES">
+    <ComponentGroup Id="SharpSvnImport_LICENSES">
       <ComponentRef Id="C_SSVNLICENSE_Apr" />
       <ComponentRef Id="C_SSVNLICENSE_AprUtil" />
       <ComponentRef Id="C_SSVNLICENSE_Apr" />
@@ -16,18 +16,24 @@
     </ComponentGroup>
   </Fragment>
   <Fragment>
+    <ComponentGroup Id="SharpSvn_LICENSES">
+      <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+      <ComponentRef Id="C_SSVNLICENSE_Putty" />
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
     <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
       <Component Id="C_SSVNLICENSE_Apr" Guid="9CEF71AD-9910-4798-B64F-EE61479038DA">
         <File Id="CF_SSVNLICENSE_Apr" Name="Apr-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_AprUtil" Guid="F7BA2B8B-4CDA-4F51-BD5C-E39759E5D2C8">
-        <File Id="CF_SSVNLICENSE_AprUtil" Name="AprUtil-License.txt" Vital="yes" KeyPath="yes"/>
+        <File Id="CF_SSVNLICENSE_AprUtil" Name="Apr-Util-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_BerkeleyDB" Guid="271A137D-097C-429C-9705-4140E658659C">
         <File Id="CF_SSVNLICENSE_BerkeleyDB" Name="BerkeleyDB-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_Cyrus_Sasl" Guid="A14954AB-3D8E-499A-80A9-D74407844058">
-        <File Id="CF_SSVNLICENSE_Cyrus_Sasl" Name="CyrusSasl-License.txt" Vital="yes" KeyPath="yes"/>
+        <File Id="CF_SSVNLICENSE_Cyrus_Sasl" Name="Cyrus-Sasl-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_Expat" Guid="D7F4D2ED-F428-4030-918C-3B1109A8F44E">
         <File Id="CF_SSVNLICENSE_Expat" Name="Expat-License.txt" Vital="yes" KeyPath="yes"/>
@@ -46,6 +52,13 @@
       </Component>
       <Component Id="C_SSVNLICENSE_Subversion" Guid="F54C1220-3835-4262-9193-FDC31055BD95">
         <File Id="C_SSVNLICENSE_Subversion" Name="Subversion-License.txt" Vital="yes" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
+      <Component Id="C_SSVNLICENSE_Putty" Guid="729355F8-CC28-4948-8CDB-625A49C40D6E">
+        <File Id="CF_SSVNLICENSE_Putty" Name="Putty-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
