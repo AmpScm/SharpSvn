@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="downloads" value="downloads/" overwrite="false" />
+  <property name="downloads" value="downloads" overwrite="false" />
+  <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
 	<target name="download">
 		<mkdir dir="downloads" />
 		<if test="${not file::exists(downloads + opensslFilename)}">
@@ -121,5 +122,8 @@
 		<copy
 			file="${zlibDir}/README"
 			tofile="release/licenses/ZLib-License.txt" />
+		<copy
+			file="${sharpSvnDir}/LICENSE.txt"
+			tofile="release/licenses/SharpSvn-License.txt" />
 	</target>
 </project>

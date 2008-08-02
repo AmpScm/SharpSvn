@@ -49,12 +49,23 @@
       </Component>			
 		</Directory>
 
+    <DirectoryRef Id="INSTALLBASE">
+      <Directory Id="INSTALLLOCATION" Name="SlikSvn">
+        <Directory Id="INSTALLLOCATION_BIN" Name="bin">    
+        </Directory>
+        <Directory Id="DIR_SharpSvnLicenses" Name="Licenses">
+          
+        </Directory>
+      </Directory>
+    </DirectoryRef>
+
     <UIRef Id="WixUI_Mondo"/>
 		<Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn and svnversion">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svn.exe" />
       <ComponentGroupRef Id="svnversion.exe" />
       <MergeRef Id="VC_CRT"/>
+      <ComponentGroupRef Id="SharpSvn_LICENSES" />
 		</Feature>
     <Feature Id="ReposTools" Title="Repository Tools" Level="10" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
       <ComponentRef Id="AddToPath"/>
@@ -63,11 +74,13 @@
       <ComponentGroupRef Id="svnlook.exe"/>
       <ComponentGroupRef Id="svndumpfilter.exe"/>
       <MergeRef Id="VC_CRT"/>
+      <ComponentGroupRef Id="SharpSvn_LICENSES" />
     </Feature>
     <Feature Id="SvnServe" Title="SvnServe" Level="90" Description="Install svnserve">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnserve.exe"/>
       <MergeRef Id="VC_CRT"/>
+      <ComponentGroupRef Id="SharpSvn_LICENSES" />
     </Feature>
     <Feature Id="ExtraTools" Title="Extra Tools" Level="110" Description="Install svnmucc, svnauthz_validate, svn_populate_node_origins_index">
       <ComponentRef Id="AddToPath"/>
@@ -75,6 +88,7 @@
       <ComponentGroupRef Id="svnauthz_validate.exe"/>
       <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
       <MergeRef Id="VC_CRT"/>
+      <ComponentGroupRef Id="SharpSvn_LICENSES" />
     </Feature>
 
     <UI>
