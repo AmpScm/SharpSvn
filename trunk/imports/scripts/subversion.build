@@ -1,38 +1,9 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-   <property name="intl" value="sharpsvn" overwrite="false" />
+  <property name="intl" value="sharpsvn" overwrite="false" />
+  <property name="svnBuildName" value="SharpSvn" overwrite="false" /> 
    
-  <target name="sharpintl">
-    <if test="${intl=='sharpsvn'}">
-      <if test="${VSversion != '2005'}">
-        <VCBuild platform="${platform}">
-          <arg line="/upgrade" />
-          <arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
-        </VCBuild>
-      </if>
-
-      <VCBuild platform="${platform}" configuration="release">
-        <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
-      </VCBuild>
-      <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />    
-      <if test="${platform == 'win32'}">
-        <copy todir="${release}/lib">
-          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-            <include name="*.lib" />
-          </fileset>
-        </copy>
-      </if>
-      <if test="${platform == 'x64'}">
-        <copy todir="${release}/lib-x64">
-          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-            <include name="*.lib" />
-          </fileset>
-        </copy>
-      </if>
-    </if>
-  </target>
-
-  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, sharpintl">
+  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, sharpintl-build">
         
     <!-- Fake direct result for subversion to hide platforms -->
     <copy todir="build/${platform}/lib/include">
@@ -91,7 +62,7 @@
       <copy todir="build/x64/lib/zlib" flatten="true">
         <fileset>
           <include name="build/zlib-${zlibVersion}/z*.h" />
-          <include name="${release}/lib/zlib.lib" />
+          <include name="${release}/lib-x64/zlib.lib" />
         </fileset>
       </copy>
       <copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
@@ -275,8 +246,8 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
 #undef SVN_VER_TAG
 #undef SVN_VER_NUMTAG
-#define SVN_VER_TAG  " (SharpSvn:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
-#define SVN_VER_NUMTAG "-SharpSvn-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
+#define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
+#define SVN_VER_NUMTAG "-${svnBuildName}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
       </echo>
     </OnceBlock>
   </target>
@@ -303,7 +274,7 @@ apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton
       </exec>
     </OnceBlock>
   </target>
-  <target name="copy-result" depends="build-svn,misc-copy">
+  <target name="copy-result" depends="build-svn,misc-copy,copy-licenses">
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32">
         <include name="subversion/${Configuration}/**/*.lib" />

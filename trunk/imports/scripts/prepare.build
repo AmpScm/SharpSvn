@@ -90,4 +90,36 @@
 			</Svn>
 		</if>
 	</target>
+	<target name="copy-licenses">
+		<copy
+			file="build/${platform}/subversion/subversion/LICENSE"
+			tofile="release/licenses/Subversion-License.txt" />
+		<copy 
+			file="${aprDir}/LICENSE"
+			tofile="release/licenses/Apr-License.txt" />
+		<copy 
+			file="${aprUtilDir}/LICENSE"
+			tofile="release/licenses/Apr-Util-License.txt" />
+		<copy 
+			file="${dbDir}/LICENSE"
+			tofile="release/licenses/BerkeleyDB-License.txt" />
+		<copy
+			file="${aprUtilDir}/xml/expat/COPYING"
+			tofile="release/licenses/Expat-License.txt" />
+		<copy
+			file="${saslDir}/COPYING"
+			tofile="release/licenses/Cyrus-Sasl-License.txt" />
+		<copy
+			file="${neonDir}/src/COPYING.LIB"
+			tofile="release/licenses/Neon-License.txt" />
+		<copy
+			file="${opensslDir}/LICENSE"
+			tofile="release/licenses/OpenSsl-License.txt" />
+		<copy
+			file="${serfDir}/LICENSE"
+			tofile="release/licenses/Serf-License.txt" />
+		<copy
+			file="${zlibDir}/README"
+			tofile="release/licenses/ZLib-License.txt" />
+	</target>
 </project>

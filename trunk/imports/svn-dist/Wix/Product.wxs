@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="*" Name="Slik Subversion $(var.SvnVersion)" 
+           Language="1033" Version="$(var.SvnVersion).0" 
+           Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
+    <?if $(var.Platform) = x86 ?>
+    <?include Win32.wxi ?>		
+    <?elseif $(var.Platform) = x64 ?>
+    <?include x64.wxi?>    
+    <?else?>
+    <Package/>
+    <?endif?>
+		<Media Id="1" Cabinet="SlikSvn.cab" EmbedCab="yes" CompressionLevel="high" />
+    <Property Id="INSTALLLEVEL" Value="100" />
+
+    <Upgrade Id="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
+      <UpgradeVersion Maximum="$(var.SvnVersion)" IncludeMaximum="no" Property="PREVIOUSVERSIONINSTALLED" MigrateFeatures="yes" />
+      <UpgradeVersion Minimum="$(var.SvnVersion)" IncludeMinimum="yes" Maximum="$(var.SvnVersion)" IncludeMaximum="yes" Property="EXACTVERSIONINSTALLED" />
+      <UpgradeVersion Minimum="$(var.SvnVersion)" IncludeMinimum="no" Property="NEWERVERSIONINSTALLED" OnlyDetect="yes"/>
+    </Upgrade>
+
+    <Property Id="ShortProductName" Value="Subversion" />
+    <Property Id="ARPCONTACT">Subversion - users@subversion.collab.net</Property>
+    <Property Id="ARPURLINFOABOUT">http://subversion.tigris.org/</Property>
+    <Property Id="ARPHELPLINK">http://subversion.tigris.org/</Property>
+    <Property Id="ARPURLUPDATEINFO">http://subversion.tigris.org/</Property>
+
+    <!-- Error messages -->
+    <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
+
+    <!-- Secure these -->
+    <Property Id="PREVIOUSVERSIONINSTALLED" Secure="yes" />
+    <Property Id="EXACTVERSIONINSTALLED" Secure="yes" />
+    <Property Id="NEWERVERSIONINSTALLED" Secure="yes" />
+
+    <!-- Errormessages -->
+    <CustomAction Id="ERRCA_CANCELNEWERVERSION" Error="[VSDVERSIONMSG]" />
+    <CustomAction Id="ERRCA_CANCELEXACTVERSION" Error="[VSDVERSIONMSG]" />
+    <CustomAction Id="ERRCA_UIANDADVERTISED" Error="[VSDUIANDADVERTISED]" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="SlikSvnLicense.rtf" />
+
+		<Directory Id="TARGETDIR" Name="SourceDir">
+      <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
+        <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install" Action="none">
+          <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" Action="write"/>
+        </RegistryKey>
+        <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION_BIN]" Action="set" />
+      </Component>			
+		</Directory>
+
+    <UIRef Id="WixUI_Mondo"/>
+		<Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn and svnversion">
+      <ComponentRef Id="AddToPath"/>
+      <ComponentGroupRef Id="svn.exe" />
+      <ComponentGroupRef Id="svnversion.exe" />
+      <MergeRef Id="VC_CRT"/>
+		</Feature>
+    <Feature Id="ReposTools" Title="Repository Tools" Level="10" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
+      <ComponentRef Id="AddToPath"/>
+      <ComponentGroupRef Id="svnadmin.exe"/>
+      <ComponentGroupRef Id="svnsync.exe"/>
+      <ComponentGroupRef Id="svnlook.exe"/>
+      <ComponentGroupRef Id="svndumpfilter.exe"/>
+      <MergeRef Id="VC_CRT"/>
+    </Feature>
+    <Feature Id="SvnServe" Title="SvnServe" Level="90" Description="Install svnserve">
+      <ComponentRef Id="AddToPath"/>
+      <ComponentGroupRef Id="svnserve.exe"/>
+      <MergeRef Id="VC_CRT"/>
+    </Feature>
+    <Feature Id="ExtraTools" Title="Extra Tools" Level="110" Description="Install svnmucc, svnauthz_validate, svn_populate_node_origins_index">
+      <ComponentRef Id="AddToPath"/>
+      <ComponentGroupRef Id="svnmucc.exe"/>
+      <ComponentGroupRef Id="svnauthz_validate.exe"/>
+      <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
+      <MergeRef Id="VC_CRT"/>
+    </Feature>
+
+    <UI>
+      <InstallUISequence>
+        <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
+        <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
+      </InstallUISequence>
+    </UI>
+    <InstallExecuteSequence>
+      <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
+      <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
+      <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
+    </InstallExecuteSequence>
+	</Product>
+</Wix>

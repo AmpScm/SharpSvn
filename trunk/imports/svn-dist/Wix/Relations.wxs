@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Fragment>
+    <ComponentGroup Id="svn.exe">
+      <ComponentRef Id="svn.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_client_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_diff_1.dll"/>
+      <ComponentGroupRef Id="svn_ra_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="svn_wc_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnversion.exe">
+      <ComponentRef Id="svnversion.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="svn_wc_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnadmin.exe">
+      <ComponentRef Id="svnadmin.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnsync.exe">
+      <ComponentRef Id="svnsync.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_ra_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnlook.exe">
+      <ComponentRef Id="svnlook.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_diff_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svndumpfilter.exe">
+      <ComponentRef Id="svndumpfilter.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnserve.exe">
+      <ComponentRef Id="svnserve.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="Sasl.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnmucc.exe">
+      <ComponentRef Id="svnmucc.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_client_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_ra_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svnauthz_validate.exe">
+      <ComponentRef Id="svnauthz_validate.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_populate_node_origins_index.exe">
+      <ComponentRef Id="svn_populate_node_origins_index.exe" />
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <!-- Shared libraries -->
+    <ComponentGroup Id="libapr_1.dll">
+      <ComponentRef Id="libapr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="libaprutil_1.dll">
+      <ComponentRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_client_1.dll">
+      <ComponentRef Id="svn_client_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_diff_1.dll"/>
+      <ComponentGroupRef Id="svn_ra_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="svn_wc_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_subr_1.dll">
+      <ComponentRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+    </ComponentGroup>      
+    <ComponentGroup Id="svn_delta_1.dll">
+      <ComponentRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_diff_1.dll">
+      <ComponentRef Id="svn_diff_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_ra_1.dll">
+      <ComponentRef Id="svn_ra_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="Sasl.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="libeay32.dll"/>
+      <ComponentGroupRef Id="ssleay32.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_wc_1.dll">
+      <ComponentRef Id="svn_wc_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_diff_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_repos_1.dll">
+      <ComponentRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="svn_fs_1.dll">
+      <ComponentRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="DB.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="DB.dll">
+      <ComponentRef Id="DB.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="Sasl.dll">
+      <ComponentRef Id="Sasl.dll"/>
+      <ComponentGroupRef Id="DB.dll"/>
+      <ComponentGroupRef Id="libeay32.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="libeay32.dll">
+      <ComponentRef Id="libeay32.dll"/>
+      
+    </ComponentGroup>
+    <ComponentGroup Id="ssleay32.dll">
+      <ComponentRef Id="ssleay32.dll"/>
+      <ComponentGroupRef Id="libeay32.dll"/>
+    </ComponentGroup>
+	</Fragment>
+</Wix>
