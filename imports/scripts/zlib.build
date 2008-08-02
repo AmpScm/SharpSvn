@@ -4,7 +4,7 @@
   <property name="zlibDir" value="build/zlib-${zlibVersion}" />
 
   <target name="prepare-zlib" depends="extract">
-    <OnceBlock file="${zlibDir}.prepared">
+    <OnceBlock file="build/zlib-${zlibVersion}.prepared">
       <foreach item="File" property="dsp">
         <in>
           <items basedir="${zlibDir}">

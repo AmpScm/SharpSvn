@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="downloads" value="downloads" overwrite="false" />
+  <property name="downloads" value="downloads/" overwrite="false" />
   <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
   <target name="download">
     <mkdir dir="downloads" />
@@ -125,5 +125,8 @@
     <copy
 			file="${sharpSvnDir}/LICENSE.txt"
 			tofile="release/licenses/SharpSvn-License.txt" />
+    <copy
+			file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
+			tofile="release/licenses/Putty-License.txt" />
   </target>
 </project>
