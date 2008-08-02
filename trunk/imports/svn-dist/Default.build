@@ -3,13 +3,39 @@
   <property name="applyMerges" value="false" />
   <property name="static" value="false" />
   <property name="downloads" value="../downloads/" />
-  <property name="dllPrefix" value="Svn-" />
+  <property name="dllPrefix" value="SlikSvn-" />
   <property name="intl" value="subversion" />
+  <property name="svnBuildName" value="SlikSvn" />
   
   <include buildfile="../Default.build" />
   
   
   <target name="build-svn-dist" depends="build">
-  
+	<delete>
+		<fileset basedir="dist-${platform}">
+			<include name="**" />
+		</fileset>
+	</delete>
+		
+	<mkdir dir="dist-${platform}" />
+	<copy todir="dist-${platform}/bin" flatten="true">
+		<fileset basedir="${svnBase}\release">
+			<include name="**/*.exe" />
+			<include name="**/*.dll" />
+			<exclude name="**/*test*" />
+		</fileset>
+	</copy>
+	<copy todir="dist-${platform}/bin" flatten="true">
+		<fileset>
+			<include name="${opensslDir}/out32dll/*.dll" />
+			<include name="${saslDir}/lib/*.dll" />
+			<include name="${dbWindowsDir}/Release/*.dll" if="${platform == 'win32'}" />
+			<include name="${dbWindowsDir}/Release_AMD64/*.dll" if="${platform == 'x64'}" />
+			<include name="${aprDir}/Release/*.dll" if="${platform == 'win32'}" />
+			<include name="${aprUtilDir}/Release/*.dll" if="${platform == 'win32'}" />
+			<include name="${aprDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
+			<include name="${aprUtilDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
+		</fileset>
+	</copy>
   </target>  
 </project>
