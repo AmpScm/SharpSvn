@@ -65,30 +65,30 @@
       <ComponentGroupRef Id="svn.exe" />
       <ComponentGroupRef Id="svnversion.exe" />
       <MergeRef Id="VC_CRT"/>
-      <ComponentGroupRef Id="SharpSvn_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
     </Feature>
-    <Feature Id="ReposTools" Title="Repository Tools" Level="10" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
+    <Feature Id="ReposTools" Title="Repository Tools" Level="50" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnadmin.exe"/>
       <ComponentGroupRef Id="svnsync.exe"/>
       <ComponentGroupRef Id="svnlook.exe"/>
       <ComponentGroupRef Id="svndumpfilter.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <ComponentGroupRef Id="SharpSvn_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
     </Feature>
-    <Feature Id="SvnServe" Title="SvnServe" Level="90" Description="Install svnserve">
+    <Feature Id="SvnServe" Title="SvnServe" Level="200" Description="Install svnserve">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnserve.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <ComponentGroupRef Id="SharpSvn_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
     </Feature>
-    <Feature Id="ExtraTools" Title="Extra Tools" Level="110" Description="Install svnmucc, svnauthz_validate, svn_populate_node_origins_index">
+    <Feature Id="ExtraTools" Title="Extra Tools" Level="300" Description="Install svnmucc, svnauthz_validate, svn_populate_node_origins_index">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnmucc.exe"/>
       <ComponentGroupRef Id="svnauthz_validate.exe"/>
       <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <ComponentGroupRef Id="SharpSvn_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
     </Feature>
 
     <UI>
