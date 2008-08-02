@@ -45,6 +45,9 @@
     <Compile Include="Relations.wxs" />
     <Compile Include="Win32.wxs" />
     <Compile Include="X64.wxs" />
+    <Compile Include="../Release/Licenses/SharpSvn-Licenses.wxs">
+      <Link>SharpSvn-Licenses.wxs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUIExtension">

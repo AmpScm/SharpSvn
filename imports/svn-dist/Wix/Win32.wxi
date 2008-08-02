@@ -5,10 +5,7 @@
 
   <DirectoryRef Id="TARGETDIR">
     <Directory Id="ProgramFilesFolder">
-      <Directory Id="INSTALLLOCATION" Name="SlikSvn">
-        <Directory Id="INSTALLLOCATION_BIN" Name="bin">
-
-        </Directory>
+      <Directory Id="INSTALLBASE">      
       </Directory>
     </Directory>
   </DirectoryRef>
