@@ -128,5 +128,8 @@
     <copy
 			file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
 			tofile="release/licenses/Putty-License.txt" />
+    <copy
+			file="${sharpSvnDir}/imports/scripts/SharpSvn-Licenses.wxs"
+			tofile="release/licenses/SharpSvn-Licenses.wxs" />
   </target>
 </project>
