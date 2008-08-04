@@ -22,8 +22,19 @@
     <if test="${not file::exists(downloads + saslFilename)}">
       <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
     </if>
-    <if test="${not file::exists(downloads + gettextFilename)}">
-      <get src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}" dest="${downloads}/${gettextFilename}" />
+    <if test="${intl == 'gettext'}">
+      <if test="${not file::exists(downloads + gettextFilename)}">
+        <get src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}" dest="${downloads}/${gettextFilename}" />
+      </if>
+      <if test="${not file::exists(downloads + gettextToolsFilename)}">
+        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsFilename}" dest="${downloads}/${gettextToolsFilename}" />
+      </if>
+      <if test="${not file::exists(downloads + gettextToolsRuntimeFilename)}">
+        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsRuntimeFilename}" dest="${downloads}/${gettextToolsRuntimeFilename}" />
+      </if>
+      <if test="${not file::exists(downloads + gettextToolsIconvFilename)}">
+        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}" dest="${downloads}/${gettextToolsIconvFilename}" />
+      </if>
     </if>
   </target>
 
@@ -47,8 +58,15 @@
     <if test="${not directory::exists(saslDir)}">
       <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
     </if>
-    <if test="${not directory::exists(gettextDir)}">
-      <UnTar tarfile="${downloads + gettextFilename}" todir="build" compresstype="gzip" />
+    <if test="${intl == 'gettext'}">
+      <if test="${not directory::exists(gettextDir)}">
+        <UnTar tarfile="${downloads + gettextFilename}" todir="build" compresstype="gzip" />
+      </if>
+      <if test="${not directory::exists(gettextToolsDir)}">
+        <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
+        <unzip zipfile="${downloads + gettextToolsRuntimeFilename}" todir="${gettextToolsDir}" />
+        <unzip zipfile="${downloads + gettextToolsIconvFilename}" todir="${gettextToolsDir}" />
+      </if>
     </if>
   </target>
   <target name="checkout">

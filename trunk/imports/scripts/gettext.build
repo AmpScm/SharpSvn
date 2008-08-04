@@ -1,7 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
   <property name="gettextFilename" value="gettext-${gettextVersion}.tar.gz" />
-  <property name="gettextDir" value="build/gettext-${gettextVersion}" />
+  <property name="gettextDir" value="build/gettext-${gettextVersion}" />  
+  
+  <property name="gettextToolsFilename" value="gettext-tools-0.13.1.bin.woe32.zip" />  
+  <property name="gettextToolsRuntimeFilename" value="gettext-runtime-0.13.1.bin.woe32.zip" />
+  <property name="gettextToolsIconvFilename" value="libiconv-1.9.1.bin.woe32.zip" />  
+  
+  <property name="gettextToolsDir" value="build/gettext-tools" />  
+  
   <target name="prepare-gettext" depends="extract" if="${(intl != 'none') and (intl != 'sharpsvn')}">
     <OnceBlock file="build/gettext-${gettextVersion}.patched">
       <loadfile file="${gettextDir}/gettext-runtime/config.h.in" property="configh">
@@ -79,7 +86,6 @@
         </filterchain>
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/gettextP.h" />    
-    </OnceBlock>
       <echo file="${gettextDir}/gettext-runtime/intl/gettext.def" verbose="true">
       ;LIBRARY ${dllPrefix}libintl-${platform}
   EXPORTS
@@ -95,72 +101,89 @@
       libintl_sprintf         @506
       libintl_bindtextdomain  @507
       </echo>    
+    </OnceBlock>
   </target>
   <target name="build-gettext" depends="prepare-gettext" if="${(intl != 'none') and (intl != 'sharpsvn')}">
-    <delete>
-      <fileset basedir="${gettextDir}/obj">
-        <include name="**" />
-      </fileset>
-    </delete>
-    <mkdir dir="${gettextDir}/obj/${platform}/release" />
-    <mkdir dir="${gettextDir}/bin/${platform}/release" />
-    <cl outputdir="${gettextDir}/obj/${platform}/release">
-      <arg value="/O1" /> <!-- Optimize for size -->
-      <arg value="/MD" /> <!-- Build dll -->
-      <defines>
-        <define name="SHARPSVN_GETTEXT" />
-        <define name="inline" value="__inline" />
-        <define name="USE_WIN32_THREADS" />
-        <define name="BUILDING_LIBINTL" value="1" />
-        <define name="HAVE_CONFIG_H" value="1" />
-        <define name="IN_LIBINTL" value="1" />
-        <define name="LIBDIR" value="1" />
-        <define name="alloca" value="_alloca" />
-      </defines>
-      <includedirs>
-        <include name="${gettextDir}/gettext-runtime/intl" />
-        <include name="${gettextDir}/gettext-tools/gnulib-lib" />
-      </includedirs>
-      
-      <sources basedir="${gettextDir}/gettext-runtime/intl">
-        <include name="*.c" />
-        <exclude name="intl-exports.c" />
-        <exclude name="tsearch*.c" />
-        <exclude name="os2*.c" />              
-      </sources>
-    </cl>
-    <link output="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll"
-      options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
-      /IMPLIB:"${gettextDir}/bin/${platform}/release/intl3_svn.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
-      /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
-      <sources basedir="${gettextDir}/obj/${platform}/release">
-        <include name="**/*.obj" />
-        <include name="${gettextDir}/gettext-runtime/intl/gettext.def" />
-      </sources>
-    </link>
-    <exec program="mt.exe">
-      <arg value="-nologo" />
-      <arg value="-manifest" />
-      <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" />
-      <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll;#2"' />
-    </exec>
-    <copy tofile="${release}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
-    <copy todir="${release}/lib">
-      <fileset basedir="${gettextDir}/bin/win32/release">
-        <include name="*.lib" />
-        <include name="*.exp" />
-      </fileset>
-    </copy>    
-    <copy todir="${release}/lib-x64">
-      <fileset basedir="${gettextDir}/bin/x64/release">
-        <include name="*.lib" />
-        <include name="*.exp" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin" flatten="true">
-      <fileset basedir="${gettextDir}/bin">
-        <include name="**/release/**/*.dll" />
-      </fileset>
-    </copy>
+    <OnceBlock file="build/gettext-${gettextVersion}-${platform}.build">
+      <mkdir dir="${gettextDir}/obj/${platform}/release" />
+      <mkdir dir="${gettextDir}/bin/${platform}/release" />
+      <cl outputdir="${gettextDir}/obj/${platform}/release">
+        <arg value="/O1" /> <!-- Optimize for size -->
+        <arg value="/MD" /> <!-- Build dll -->
+        <defines>
+          <define name="SHARPSVN_GETTEXT" />
+          <define name="inline" value="__inline" />
+          <define name="USE_WIN32_THREADS" />
+          <define name="BUILDING_LIBINTL" value="1" />
+          <define name="HAVE_CONFIG_H" value="1" />
+          <define name="IN_LIBINTL" value="1" />
+          <define name="LIBDIR" value="1" />
+          <define name="alloca" value="_alloca" />
+        </defines>
+        <includedirs>
+          <include name="${gettextDir}/gettext-runtime/intl" />
+          <include name="${gettextDir}/gettext-tools/gnulib-lib" />
+        </includedirs>
+        
+        <sources basedir="${gettextDir}/gettext-runtime/intl">
+          <include name="*.c" />
+          <exclude name="intl-exports.c" />
+          <exclude name="tsearch*.c" />
+          <exclude name="os2*.c" />              
+        </sources>
+      </cl>
+      <link output="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll"
+        options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
+        /IMPLIB:"${gettextDir}/bin/${platform}/release/intl3_svn.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
+        /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
+        <sources basedir="${gettextDir}/obj/${platform}/release">
+          <include name="**/*.obj" />
+          <include name="${gettextDir}/gettext-runtime/intl/gettext.def" />
+        </sources>
+      </link>
+      <exec program="mt.exe">
+        <arg value="-nologo" />
+        <arg value="-manifest" />
+        <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" />
+        <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll;#2"' />
+      </exec>
+      <copy tofile="${release}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
+      <copy todir="${release}/lib">
+        <fileset basedir="${gettextDir}/bin/win32/release">
+          <include name="*.lib" />
+          <include name="*.exp" />
+        </fileset>
+      </copy>    
+      <copy todir="${release}/lib-x64">
+        <fileset basedir="${gettextDir}/bin/x64/release">
+          <include name="*.lib" />
+          <include name="*.exp" />
+        </fileset>
+      </copy>
+      <copy todir="${release}/bin" flatten="true">
+        <fileset basedir="${gettextDir}/bin">
+          <include name="**/release/**/*.dll" />
+        </fileset>
+      </copy>
+    </OnceBlock>
+  </target>
+  
+  <target name="gettext-translate" depends="build-gettext, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+    <foreach item="File" property="po">
+      <in>
+        <items basedir="${svnBase}\subversion\po">
+          <include name="*.po" />
+        </items>
+      </in>
+      <do>        
+        <property name="lang" value="${path::get-file-name-without-extension(po)}" />
+        <echo message="Generating resources for ${lang}" />
+        <mkdir dir="${release}/share/locale/${lang}/LC_MESSAGES" />
+        <exec program="${gettextToolsDir}/bin/msgfmt.exe">
+          <arg line="-o ${release}/share/locale/${lang}/LC_MESSAGES/subversion.mo" />
+          <arg value="${po}" />
+        </exec>
+      </do>
+    </foreach>      
   </target>
 </project>
