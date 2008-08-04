@@ -145,7 +145,7 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
-        <arg value="--enable-nls" if="${intl == 'sharpsvn'}"/>
+        <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${static=='true'}"/>
       </exec>
       <!-- The ZLib build has already completed -->

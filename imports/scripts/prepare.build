@@ -5,22 +5,25 @@
   <target name="download">
     <mkdir dir="downloads" />
     <if test="${not file::exists(downloads + opensslFilename)}">
-      <get src="http://www.openssl.org/source/${opensslFilename}" dest="downloads/${opensslFilename}" />
+      <get src="http://www.openssl.org/source/${opensslFilename}" dest="${downloads}/${opensslFilename}" />
     </if>
     <if test="${not file::exists(downloads + dbFilename)}">
-      <get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="downloads/${dbFilename}" />
+      <get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="${downloads}/${dbFilename}" />
     </if>
     <if test="${not file::exists(downloads + zlibFilename)}">
-      <get src="http://www.zlib.net/${zlibFilename}" dest="downloads/${zlibFilename}" />
+      <get src="http://www.zlib.net/${zlibFilename}" dest="${downloads}/${zlibFilename}" />
     </if>
     <if test="${not file::exists(downloads + nunitFilename)}">
-      <get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="downloads/${nunitFilename}" />
+      <get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="${downloads}/${nunitFilename}" />
     </if>
     <if test="${not file::exists(downloads + sharpZipFilename)}">
-      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="downloads/${sharpZipFilename}" />
+      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="${downloads}/${sharpZipFilename}" />
     </if>
     <if test="${not file::exists(downloads + saslFilename)}">
-      <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="downloads/${saslFilename}" />
+      <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + gettextFilename)}">
+      <get src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}" dest="${downloads}/${gettextFilename}" />
     </if>
   </target>
 
@@ -43,6 +46,9 @@
     </if>
     <if test="${not directory::exists(saslDir)}">
       <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
+    </if>
+    <if test="${not directory::exists(gettextDir)}">
+      <UnTar tarfile="${downloads + gettextFilename}" todir="build" compresstype="gzip" />
     </if>
   </target>
   <target name="checkout">

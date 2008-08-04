@@ -3,36 +3,33 @@
   <property name="intl" value="sharpsvn" overwrite="false" />
   <property name="svnBuildName" value="SharpSvn" overwrite="false" />
 
-  <target name="sharpintl-prepare">
+  <target name="sharpintl-prepare" if="${intl=='sharpsvn'}">
+    <if test="${VSversion != '2005'}">
+      <VCBuild platform="${platform}">
+        <arg line="/upgrade" />
+        <arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
+      </VCBuild>
+    </if>
   </target>
 
-  <target name="sharpintl-build" depends="sharpintl-prepare">
-    <if test="${intl=='sharpsvn'}">
-      <if test="${VSversion != '2005'}">
-        <VCBuild platform="${platform}">
-          <arg line="/upgrade" />
-          <arg line="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
-        </VCBuild>
-      </if>
-
-      <VCBuild platform="${platform}" configuration="release">
-        <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
-      </VCBuild>
-      <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />
-      <if test="${platform == 'win32'}">
-        <copy todir="${release}/lib">
-          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-            <include name="*.lib" />
-          </fileset>
-        </copy>
-      </if>
-      <if test="${platform == 'x64'}">
-        <copy todir="${release}/lib-x64">
-          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-            <include name="*.lib" />
-          </fileset>
-        </copy>
-      </if>
+  <target name="sharpintl-build" depends="sharpintl-prepare" if="${intl=='sharpsvn'}">
+    <VCBuild platform="${platform}" configuration="release">
+      <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcproj" />
+    </VCBuild>
+    <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />
+    <if test="${platform == 'win32'}">
+      <copy todir="${release}/lib">
+        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+          <include name="*.lib" />
+        </fileset>
+      </copy>
+    </if>
+    <if test="${platform == 'x64'}">
+      <copy todir="${release}/lib-x64">
+        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+          <include name="*.lib" />
+        </fileset>
+      </copy>
     </if>
   </target>
 </project>
