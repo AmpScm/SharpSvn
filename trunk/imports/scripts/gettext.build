@@ -1,126 +1,166 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
   <property name="gettextFilename" value="gettext-${gettextVersion}.tar.gz" />
-  <property name="gettextDir" value="${platform}/gettext-${gettextVersion}" />
-  <target name="prepare-gettext" depends="extract">
-    <if test="${(intl != 'none') and (intl != 'sharpsvn')}">
-
-    </if>
-  </target>
-  <target name="build-gettext" depends="prepare-gettext">
-    <if test="${(intl != 'none') and (intl != 'sharpsvn')}">
-
-    </if>
-  </target>
-
-  <!--<target name="prepare-openssl" depends="extract">
-		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
-			<exec program="perl.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
-				<arg value="Configure" />
-				<arg value="VC-WIN32" if="${platform=='win32'}" />
-				<arg value="VC-WIN64A" if="${platform=='x64'}" />
-				<arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
-				<arg value="-D_CRT_SECURE_NO_DEPRECATE" />
-				<arg value="no-dso"/>
-				<arg value="no-krb5"/>
-				<arg value="no-hw"/>
-				<arg value="enable-tlsext" />
-			</exec>
-		</OnceBlock>
-		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
-			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='win32'}">
-				<arg line="/c ms\do_ms.bat" />
-			</exec>
-			<exec program="cmd.exe" workingdir="build/${platform}/openssl-${opensslVersion}" if="${platform=='x64'}">
-				<arg line="/c ms\do_win64a.bat" />
-			</exec>
-			<if test="${static != 'true'}">        
-        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" property="def">
-          <filterchain>
-            <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" />
-            <!- - Stupid bugs in openssl 0.9.8h :( - ->
-            <replacestring from="ENGINE_load_4758cca" to=";" />
-            <replacestring from="ENGINE_load_aep" to=";" />
-            <replacestring from="ENGINE_load_atalla" to=";" />
-            <replacestring from="ENGINE_load_cswift" to=";" />
-            <replacestring from="ENGINE_load_chil" to=";" />
-            <replacestring from="ENGINE_load_nuron" to=";" />
-            <replacestring from="ENGINE_load_sureware" to=";" />
-            <replacestring from="ENGINE_load_ubsec" to=";" />
-            <replacestring from="ENGINE_load_gmp" to=";" />
-            <replacestring from="ENGINE_load_cryptodev" to=";" />
-            <replacestring from="ENGINE_load_padlock" to=";" />
-            <!- - / - ->
-          </filterchain>
-        </loadfile>
-        <echo message="${def}" file="build/${platform}/openssl-${opensslVersion}/ms/libeay32.def" />        
-        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/ssleay32.def" property="def">
-          <filterchain>
-            <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" />
-          </filterchain>
-        </loadfile>
-        <echo message="${def}" file="build/${platform}/openssl-${opensslVersion}/ms/ssleay32.def" />        
-        <loadfile file="build/${platform}/openssl-${opensslVersion}/ms/ntdll.mak" property="mk">
-          <filterchain>
-            <replacestring from="$(LIB_D)\$(SSL)" to="$(LIB_D)\${dllPrefix}$(SSL)" />
-            <replacestring from="$(LIB_D)\$(CRYPTO)" to="$(LIB_D)\${dllPrefix}$(CRYPTO)" />
-          </filterchain>
-        </loadfile>
-        <echo message="${mk}" file="build/${platform}/openssl-${opensslVersion}/ms/ntdll.mak" />        
-      </if>
-		</OnceBlock>
-	</target>
-	<target name="build-openssl" depends="prepare-openssl">
-		<OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
-			<exec program="nmake.exe" workingdir="build/${platform}/openssl-${opensslVersion}">
-				<arg line="-f ms\nt.mak" if="${static == 'true'}" />
-				<arg line="-f ms\ntdll.mak" if="${static != 'true'}" />
-			</exec>
-		</OnceBlock>
-		<!- - OpenSL 0.9.8h on VS2008 patch - ->
-    <OnceBlock file="build/openssl-patch-OCSP_RESPONSE.tick">
-      <loadfile file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" property="ossl_typ">
+  <property name="gettextDir" value="build/gettext-${gettextVersion}" />
+  <target name="prepare-gettext" depends="extract" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+    <OnceBlock file="build/gettext-${gettextVersion}.patched">
+      <loadfile file="${gettextDir}/gettext-runtime/config.h.in" property="configh">
         <filterchain>
-          <replacestring from="#undef PKCS7_ISSUER_AND_SERIAL" to="#undef PKCS7_ISSUER_AND_SERIAL&#13;&#10;#undef OCSP_RESPONSE" />
+          <replacestring from="#undef USE_WIN32_THREADS" to="#define USE_WIN32_THREADS 1" />
+          <replacestring from="#undef HAVE_ALLOCAH" to="#define HAVE_ALLOCAH 1 //" />
+          <replacestring from="#undef HAVE_ALLOCA" to="#define HAVE_ALLOCA 1 //" />
+          <replacestring from="#undef HAVE_GETCWD" to="#define HAVE_GETCWD 1" />
+          <replacestring from="#undef inline" to="#define inline __inline" />        
+          <replacestring from="#undef HAVE_UINTMAX_T" to="#define HAVE_UINTMAX_T 1" />
+          <replacestring from="#undef HAVE_INTMAX_T" to="#define HAVE_INTMAX_T 1" />
+          <replacestring from="#undef uintmax_t" to="#define uintmax_t unsigned __int64" />
+          <replacestring from="#undef intmax_t" to="#define intmax_t __int64" />
+          <replacestring from="#define glthread_" to="// #undef glthread_" />
         </filterchain>
       </loadfile>
-      <echo message="${ossl_typ}" file="build/${platform}/openssl-${opensslVersion}/inc32/openssl/ossl_typ.h" />
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/config.h" />
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/config.h" />
+      <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.h.in" property="configh">
+        <filterchain>
+          <replacestring from="@HAVE_POSIX_PRINTF@" to="SHARPSVN_GETTEXT" />
+          <replacestring from="@HAVE_SNPRINTF@" to="SHARPSVN_GETTEXT" />
+          <replacestring from="@HAVE_ASPRINTF@" to="!SHARPSVN_GETTEXT" />
+          <replacestring from="@HAVE_WPRINTF@" to="!SHARPSVN_GETTEXT" />
+        </filterchain>
+      </loadfile>
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />    
+      <echo file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" append="true">
+#define nls_uint32 unsigned int
+#define LOCALEDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Locales"
+#define LOCALE_ALIAS_PATH "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\LocaleAliases"
+#define LIBDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Libs"
+</echo>
+<echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
+#define uintmax_t unsigned __int64
+#define intmax_t __int64
+#ifndef SIZE_MAX
+# define SIZE_MAX ((size_t) -1)
+#endif
+#ifndef SSIZE_MAX
+# define SSIZE_MAX ((ssize_t) (SIZE_MAX / 2))
+#endif
+
+</echo>
+<echo file="${gettextDir}/gettext-runtime/config.h" append="true">
+#define uintmax_t unsigned __int64
+#define intmax_t __int64
+#ifndef SIZE_MAX
+# define SIZE_MAX ((size_t) -1)
+#endif
+#ifndef SSIZE_MAX
+# define SSIZE_MAX ((ssize_t) (SIZE_MAX / 2))
+#endif
+
+</echo>
+      <loadfile file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" property="configh">
+        <filterchain>
+          <replacestring 
+              from="__libc_lock_define_initialized_recursive (static, lock)" 
+              to="static gl_recursive_lock_t lock = gl_recursive_lock_initializer;" />
+        </filterchain>
+      </loadfile>
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" />    
+      <loadfile file="${gettextDir}/gettext-runtime/intl/gettextP.h" property="configh">
+        <filterchain>
+          <replacestring 
+              from="# define gl_locale" 
+              to="# define _qnl_locale" />
+          <replacestring
+              from="_nl_locale"
+              to="gl_locale" />
+          <replacestring
+              from="_qnl_locale"
+              to="_nl_locale" />
+        </filterchain>
+      </loadfile>
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/gettextP.h" />    
     </OnceBlock>
-    <!- - /Patch - ->
-    <copy 
-      file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
-      tofile="build/win32/openssl-${opensslVersion}/out32/libeay32.lib" if="${static != 'true'}" />
-    <copy 
-      file="build/win32/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
-      tofile="build/win32/openssl-${opensslVersion}/out32/ssleay32.lib" if="${static != 'true'}" />    
-		<copy todir="${release}/lib" flatten="true">
-			<fileset>
-				<include name="build/win32/openssl-${opensslVersion}/out32/*.lib" />
-				<include name="build/win32/openssl-${opensslVersion}/out32/*.exp" />
-				<include name="build/win32/openssl-${opensslVersion}/out32/*.pdb" />
-				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.lib" />
-				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.exp" />
-				<include name="build/win32/openssl-${opensslVersion}/out32dll/*.pdb" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/bin" flatten="true">
-			<fileset basedir="build/win32/openssl-${opensslVersion}/out32dll">
-				<include name="*.dll" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/lib-x64">
-			<fileset basedir="build/x64/openssl-${opensslVersion}/out32">
-				<include name="*.lib" />
-				<include name="*.exp" />
-				<include name="*.pdb" />
-				<include name="*.dll" />
-			</fileset>
-		</copy>
-		<copy todir="${release}/include">
-			<fileset basedir="build/${platform}/openssl-${opensslVersion}/inc32">
-				<include name="**/*.h" />
-			</fileset>
-		</copy>
-	</target>
-	-->
+      <echo file="${gettextDir}/gettext-runtime/intl/gettext.def" verbose="true">
+      ;LIBRARY ${dllPrefix}libintl-${platform}
+  EXPORTS
+      gettext                 @401
+      dgettext                @402
+      dcgettext               @403
+      
+      libintl_gettext         @501
+      libintl_dgettext        @502
+      libintl_dcgettext       @503
+      libintl_printf          @504
+      libintl_fprintf         @505    
+      libintl_sprintf         @506
+      libintl_bindtextdomain  @507
+      </echo>    
+  </target>
+  <target name="build-gettext" depends="prepare-gettext" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+    <delete>
+      <fileset basedir="${gettextDir}/obj">
+        <include name="**" />
+      </fileset>
+    </delete>
+    <mkdir dir="${gettextDir}/obj/${platform}/release" />
+    <mkdir dir="${gettextDir}/bin/${platform}/release" />
+    <cl outputdir="${gettextDir}/obj/${platform}/release">
+      <arg value="/O1" /> <!-- Optimize for size -->
+      <arg value="/MD" /> <!-- Build dll -->
+      <defines>
+        <define name="SHARPSVN_GETTEXT" />
+        <define name="inline" value="__inline" />
+        <define name="USE_WIN32_THREADS" />
+        <define name="BUILDING_LIBINTL" value="1" />
+        <define name="HAVE_CONFIG_H" value="1" />
+        <define name="IN_LIBINTL" value="1" />
+        <define name="LIBDIR" value="1" />
+        <define name="alloca" value="_alloca" />
+      </defines>
+      <includedirs>
+        <include name="${gettextDir}/gettext-runtime/intl" />
+        <include name="${gettextDir}/gettext-tools/gnulib-lib" />
+      </includedirs>
+      
+      <sources basedir="${gettextDir}/gettext-runtime/intl">
+        <include name="*.c" />
+        <exclude name="intl-exports.c" />
+        <exclude name="tsearch*.c" />
+        <exclude name="os2*.c" />              
+      </sources>
+    </cl>
+    <link output="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll"
+      options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
+      /IMPLIB:"${gettextDir}/bin/${platform}/release/intl3_svn.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
+      /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
+      <sources basedir="${gettextDir}/obj/${platform}/release">
+        <include name="**/*.obj" />
+        <include name="${gettextDir}/gettext-runtime/intl/gettext.def" />
+      </sources>
+    </link>
+    <exec program="mt.exe">
+      <arg value="-nologo" />
+      <arg value="-manifest" />
+      <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" />
+      <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll;#2"' />
+    </exec>
+    <copy tofile="${release}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
+    <copy todir="${release}/lib">
+      <fileset basedir="${gettextDir}/bin/win32/release">
+        <include name="*.lib" />
+        <include name="*.exp" />
+      </fileset>
+    </copy>    
+    <copy todir="${release}/lib-x64">
+      <fileset basedir="${gettextDir}/bin/x64/release">
+        <include name="*.lib" />
+        <include name="*.exp" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin" flatten="true">
+      <fileset basedir="${gettextDir}/bin">
+        <include name="**/release/**/*.dll" />
+      </fileset>
+    </copy>
+  </target>
 </project>
