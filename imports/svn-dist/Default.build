@@ -4,7 +4,7 @@
   <property name="static" value="false" />
   <property name="downloads" value="../downloads/" />
   <property name="dllPrefix" value="SlikSvn-" />
-  <property name="intl" value="subversion" />
+  <property name="intl" value="gettext" />
   <property name="svnBuildName" value="SlikSvn" />
   
   <include buildfile="../Default.build" />
