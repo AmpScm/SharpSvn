@@ -350,7 +350,7 @@ namespace SharpSvn {
 				if (!_lockComment && _entry && _entry->lock_comment)
 					_lockComment = SvnBase::Utf8_PtrToString(_entry->lock_comment);
 
-				return _lockOwner;
+				return _lockComment;
 			}
 		}
 
