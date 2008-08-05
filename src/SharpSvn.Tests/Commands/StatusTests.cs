@@ -89,7 +89,7 @@ namespace SharpSvn.Tests.Commands
 
 			info.CheckEquals(statuses[0].WorkingCopyInfo);
 
-			//Status s = this.Client.SingleStatus(form);
+			//Status s = SingleStatus(client, form);
 
 			SvnStatusArgs a = new SvnStatusArgs();
 			this.Client.Status(form, a, new EventHandler<SvnStatusEventArgs>(this.StatusFunc));
@@ -99,6 +99,19 @@ namespace SharpSvn.Tests.Commands
 
 		}
 
+        [Test]
+        public void CheckRemoteStatus()
+        {
+            string dir = "f:\\ankhsvn\\trunk";// Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\.."));
+
+            SvnStatusArgs sa = new SvnStatusArgs();
+            sa.ContactRepository = true;
+
+            Collection<SvnStatusEventArgs> r;
+            Client.GetStatus(dir, sa, out r);
+
+            Assert.That(r.Count, Is.GreaterThan(0));
+        }
 
 		/// <summary>
 		/// Tests an update where we contact the repository
@@ -125,13 +138,27 @@ namespace SharpSvn.Tests.Commands
 					false, false, true, true);
 
 				Assert.AreEqual(this.currentStatus.RepositoryTextStatus,
-					StatusKind.Modified, "Wrong status");
+					SvnStatus.Modified, "Wrong status");
 			}
 			finally
 			{
 				PathUtils.RecursiveDelete(wc2);
 			}
-		}
+		}*/
+
+        SvnStatusEventArgs SingleStatus(SvnClient client, string path)
+        {
+            SvnStatusArgs sa = new SvnStatusArgs();
+            sa.Depth = SvnDepth.Empty;
+            sa.RetrieveAllEntries = true;
+
+            Collection<SvnStatusEventArgs> rslt;
+            client.GetStatus(path, sa, out rslt);
+
+            if(rslt.Count != 1)
+                return null;
+            return rslt[0];
+        }
 
 		[Test]
 		public void TestSingleStatus()
@@ -144,22 +171,22 @@ namespace SharpSvn.Tests.Commands
 
 			string propChange = Path.Combine(this.WcPath, "App.ico");
 
-			Status status = this.Client.SingleStatus(unversioned);
-			Assert.That( status.TextStatus, Is.EqualTo(StatusKind.Unversioned),
+			SvnStatusEventArgs status = SingleStatus(Client,unversioned);
+			Assert.That( status.LocalContentStatus, Is.EqualTo(SvnStatus.NotVersioned),
 				"Wrong text status on " + unversioned);
 
-			status = this.Client.SingleStatus(added);
-			Assert.That( status.TextStatus, Is.EqualTo(StatusKind.Added),
+			status = SingleStatus(Client, added);
+			Assert.That( status.LocalContentStatus, Is.EqualTo(SvnStatus.Added),
 				"Wrong text status on " + added);
 
-			status = this.Client.SingleStatus(changed);
-			Assert.That( status.TextStatus, Is.EqualTo(StatusKind.Modified),
+			status = SingleStatus(Client, changed);
+			Assert.That( status.LocalContentStatus, Is.EqualTo(SvnStatus.Modified),
 				"Wrong text status " + changed);
 
 			this.RunCommand("svn", "ps foo bar " + propChange);
-			status = this.Client.SingleStatus(propChange);
+			status = SingleStatus(Client, propChange);
 			Assert.AreEqual(
-				StatusKind.Modified, status.PropertyStatus,
+				SvnStatus.Modified, status.LocalPropertyStatus,
 				"Wrong property status " + propChange);
 		}
 
@@ -167,64 +194,39 @@ namespace SharpSvn.Tests.Commands
 		public void TestSingleStatusNonExistentPath()
 		{
 			string doesntExist = Path.Combine(this.WcPath, "doesnt.exist");
-			Status status = this.Client.SingleStatus(doesntExist);
-			Assert.That( status, Is.EqualTo(Status.None));
+			SvnStatusEventArgs status = SingleStatus(Client, doesntExist);
+			Assert.That( status, Is.Null);
 		}
 
-		[Test]
+		/*[Test]
 		public void TestSingleStatusUnversionedPath()
 		{
 			string dir = Path.Combine(this.WcPath, "Unversioned");
 			string file = Path.Combine(dir, "file.txt");
-			Status status = this.Client.SingleStatus(file);
-			Assert.That( status, Is.EqualTo(Status.None));
+			SvnStatusEventArgs status = SingleStatus(Client, file);
+			Assert.That( status, Is.EqualTo(SvnStatusEventArgs.None));
 
-		}
+		}*/
 
 		[Test]
 		public void TestSingleStatusNodeKind()
 		{
 			string file = Path.Combine(this.WcPath, "Form.cs");
-			Assert.That( this.Client.SingleStatus(file).Entry.Kind, Is.EqualTo(NodeKind.File));
-			Assert.That( this.Client.SingleStatus(file).Entry.Name, Is.EqualTo("Form.cs"));
+			Assert.That( SingleStatus(Client, file).NodeKind, Is.EqualTo(SvnNodeKind.File));
+			Assert.That( SingleStatus(Client, file).WorkingCopyInfo.Name, Is.EqualTo("Form.cs"));
 
-			Status dir = this.Client.SingleStatus(this.WcPath);
-			Assert.That( this.Client.SingleStatus(this.WcPath).Entry.Kind, Is.EqualTo(NodeKind.Directory));
+			SvnStatusEventArgs dir = SingleStatus(Client, this.WcPath);
+			Assert.That( SingleStatus(Client, this.WcPath).WorkingCopyInfo.NodeKind, Is.EqualTo(SvnNodeKind.Directory));
 		}
 
 
-
-		[Test]
-		public void TestStatusEquals()
-		{
-			string form = Path.Combine(this.WcPath, "Form.cs");
-			Status status1 = this.Client.SingleStatus(form);
-			Status status2 = this.Client.SingleStatus(form);
-			Assert.That( status2, Is.EqualTo(status1));
-			Assert.That( status2.Entry, Is.EqualTo(status1.Entry));
-
-			using (StreamWriter w = new StreamWriter(form, true))
-				w.WriteLine("Moo");
-
-			status2 = this.Client.SingleStatus(form);
-			Assert.That(!status1.Equals(status2), "Should be non-equal");
-			Assert.That( status2.Entry, Is.EqualTo(status1.Entry));
-
-			// unversioned items have no .Entry
-			string unversioned = Path.Combine(this.WcPath, "Unversioned.txt");
-			using (StreamWriter w = new StreamWriter(unversioned, false))
-				w.WriteLine("Moo");
-			status2 = this.Client.SingleStatus(unversioned);
-			Assert.IsNull(status2.Entry, "Entry should be null");
-			Assert.That(!status2.Equals(status1), "Should not be similar");
-		}
 
 		[Test]
 		public void LockSingleStatusIsNullForUnlocked()
 		{
 			string form = Path.Combine(this.WcPath, "Form.cs");
-			Status status1 = this.Client.SingleStatus(form);
-			Assert.IsNull(status1.Entry.LockToken);
+			SvnStatusEventArgs status1 = SingleStatus(Client, form);
+			Assert.IsNull(status1.WorkingCopyInfo.LockToken);
 		}
 
 		[Test]
@@ -233,11 +235,11 @@ namespace SharpSvn.Tests.Commands
 			string form = Path.Combine(this.WcPath, "Form.cs");
 			this.RunCommand("svn", "lock -m test " + form);
 
-			Status s = this.Client.SingleStatus(form);
-			Assert.IsNotNull(s.Entry.LockToken);
-			Assert.That( s.Entry.LockOwner, Is.EqualTo(Environment.UserName));
-			Assert.That( s.Entry.LockCreationDate.ToLocalTime().Date, Is.EqualTo(DateTime.Now.Date));
-			Assert.That( s.Entry.LockComment, Is.EqualTo("test"));
+			SvnStatusEventArgs s = SingleStatus(Client, form);
+			Assert.IsNotNull(s.WorkingCopyInfo.LockToken);
+			Assert.That( s.WorkingCopyInfo.LockOwner, Is.EqualTo(Environment.UserName));
+			Assert.That( s.WorkingCopyInfo.LockTime.ToLocalTime().Date, Is.EqualTo(DateTime.Now.Date));
+			Assert.That( s.WorkingCopyInfo.LockComment, Is.EqualTo("test"));
 		}
 
 		[Test]
@@ -246,19 +248,19 @@ namespace SharpSvn.Tests.Commands
 			string form = Path.Combine(this.WcPath, "Form.cs");
 			this.RunCommand("svn", "lock -m test " + form);
 
-			int youngest;
-			this.Client.Status(out youngest, form, Revision.Unspecified,
-				new StatusCallback(this.StatusFunc), false, true, false, false);
-			Status s = this.currentStatus;
+            SvnStatusArgs sa = new SvnStatusArgs();
 
-			Assert.IsNotNull(s.Entry.LockToken);
-			Assert.That( s.Entry.LockOwner, Is.EqualTo(Environment.UserName));
-			Assert.That( s.Entry.LockCreationDate.ToLocalTime().Date, Is.EqualTo(DateTime.Now.Date));
-			Assert.That( s.Entry.LockComment, Is.EqualTo("test"));
+            this.Client.Status(form, StatusFunc);
+			SvnStatusEventArgs s = this.currentStatus;
+
+			Assert.IsNotNull(s.WorkingCopyInfo.LockToken);
+			Assert.That( s.WorkingCopyInfo.LockOwner, Is.EqualTo(Environment.UserName));
+			Assert.That( s.WorkingCopyInfo.LockTime.ToLocalTime().Date, Is.EqualTo(DateTime.Now.Date));
+			Assert.That( s.WorkingCopyInfo.LockComment, Is.EqualTo("test"));
 
 		}
 
-		[Test]
+		/*[Test]
 		public void RepositoryLockStatus()
 		{
 			string form = Path.Combine(this.WcPath, "Form.cs");
