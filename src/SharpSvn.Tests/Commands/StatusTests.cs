@@ -102,7 +102,7 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void CheckRemoteStatus()
         {
-            string dir = "f:\\ankhsvn\\trunk";// Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\.."));
+            string dir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\.."));
 
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ContactRepository = true;
@@ -110,6 +110,22 @@ namespace SharpSvn.Tests.Commands
             Collection<SvnStatusEventArgs> r;
             Client.GetStatus(dir, sa, out r);
 
+            Assert.That(r.Count, Is.GreaterThan(0));
+        }
+
+        [Test]
+        public void CheckLocalRemoteStatus()
+        {
+            string dir = WcPath;
+
+            SvnStatusArgs sa = new SvnStatusArgs();
+            sa.ContactRepository = true;
+
+            Collection<SvnStatusEventArgs> r;
+            using (SvnClient c = new SvnClient())
+            {
+                c.GetStatus(dir, sa, out r);
+            }
             Assert.That(r.Count, Is.GreaterThan(0));
         }
 
