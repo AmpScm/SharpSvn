@@ -22,6 +22,11 @@
     </ComponentGroup>
   </Fragment>
   <Fragment>
+    <ComponentGroup Id="SharpSvnGettext_LICENSE">
+      <ComponentRef Id="C_SSVNLICENSE_GetTextRuntime" />
+    </ComponentGroup>
+  </Fragment>
+  <Fragment>
     <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
       <Component Id="C_SSVNLICENSE_Apr" Guid="9CEF71AD-9910-4798-B64F-EE61479038DA">
         <File Id="CF_SSVNLICENSE_Apr" Name="Apr-License.txt" Vital="yes" KeyPath="yes"/>
@@ -59,6 +64,13 @@
     <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
       <Component Id="C_SSVNLICENSE_Putty" Guid="729355F8-CC28-4948-8CDB-625A49C40D6E">
         <File Id="CF_SSVNLICENSE_Putty" Name="Putty-License.txt" Vital="yes" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
+      <Component Id="C_SSVNLICENSE_GetTextRuntime" Guid="247F2A80-E402-4395-9165-F2479E5689C9">
+        <File Id="C_SSVNLICENSE_GetTextRuntime" Name="GetText-Runtime-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
