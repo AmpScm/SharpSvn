@@ -48,8 +48,7 @@
         <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION_BIN]" Action="set" />
       </Component>
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="SlikSvn_MENU" Name="Subversion">
-          
+        <Directory Id="SlikSvn_MENU" Name="Subversion">          
         </Directory>
       </Directory>
     </Directory>
@@ -59,6 +58,7 @@
         <Component Id="SvnBook" Guid="3FB6C20B-97EE-4C9F-994F-DC1D1C3A09AB">
           <File Id="SvnBook.pdf" Name="svn-book.pdf" Vital="yes" KeyPath="yes" Source="$(sys.SOURCEFILEDIR)..\release\svn-book.pdf"/>
           <Shortcut Id="SvnBookSc" Directory="SlikSvn_MENU" Target="[#SvnBook.pdf]" Name="Version Control with Subversion" Description="Open the Subversion book in your PDF viewer" />
+          <RemoveFolder Id="DelProgMenu" Directory="SlikSvn_MENU" On="uninstall"/>
         </Component>
         <Directory Id="INSTALLLOCATION_BIN" Name="bin" />
         <Directory Id="DIR_SharpSvnLicenses" Name="Licenses" />
@@ -77,6 +77,7 @@
       <ComponentGroupRef Id="svnversion.exe" />
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
     <Feature Id="ReposTools" Title="Repository Tools" Level="1" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
       <ComponentRef Id="AddToPath"/>
@@ -86,6 +87,7 @@
       <ComponentGroupRef Id="svndumpfilter.exe"/>
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
     <Feature Id="SvnBook" Title="The Subversion Book" Level="3" Description="The Subversion Book (pdf): Version Control with Subversion">
       <ComponentRef Id="SvnBook"/>
@@ -95,6 +97,7 @@
       <ComponentGroupRef Id="svnserve.exe"/>
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
     <Feature Id="ExtraTools" Title="Extra Tools" Level="300" Description="Install svnmucc, svnauthz_validate, svn_populate_node_origins_index">
       <ComponentRef Id="AddToPath"/>
@@ -103,11 +106,12 @@
       <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+      <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
     <Feature Id="ClientLocalization" Title="Localized Messages" Level="2" Description="Localized texts in the tools">
       <ComponentGroupRef Id="Localization"/>
     </Feature>
-
+    
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>

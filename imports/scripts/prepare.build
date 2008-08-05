@@ -152,8 +152,11 @@
     <copy
 			file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
 			tofile="release/licenses/Putty-License.txt" />
+		<copy
+      file="${gettextDir}/gettext-runtime/COPYING"
+      tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
     <copy
 			file="${sharpSvnDir}/imports/scripts/SharpSvn-Licenses.wxs"
-			tofile="release/licenses/SharpSvn-Licenses.wxs" />
+			tofile="release/licenses/SharpSvn-Licenses.wxs" />    
   </target>
 </project>
