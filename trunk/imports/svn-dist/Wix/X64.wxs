@@ -58,6 +58,9 @@
       <Component Id="ssleay32.dll" Guid="360CA2FC-AE7B-4AB9-A9B9-CD051832E68A">
         <File Id="ssleay32.dll" Name="SlikSvn-ssleay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
+      <Component Id="libintl.dll" Guid="85710EB8-AC52-4BAF-81F5-E91C08F9B7B6">
+        <File Id="libintl.dll" Name="SlikSvn-libintl-x64.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
       <Component Id="svn_client_1.dll" Guid="AA3EA152-36AA-488B-B478-122F482A0BB8">
         <File Id="svn_client_1.dll" Name="SlikSvn-svn_client-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>

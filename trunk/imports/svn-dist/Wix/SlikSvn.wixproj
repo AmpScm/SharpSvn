@@ -41,6 +41,7 @@
     <SuppressIces>ICE61;ICE03;ICE82;ICE25</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Localization.wxs" />
     <Compile Include="Product.wxs" />
     <Compile Include="Relations.wxs" />
     <Compile Include="Win32.wxs" />
