@@ -47,14 +47,25 @@
         </RegistryKey>
         <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION_BIN]" Action="set" />
       </Component>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="SlikSvn_MENU" Name="Subversion">
+          
+        </Directory>
+      </Directory>
     </Directory>
 
     <DirectoryRef Id="INSTALLBASE">
       <Directory Id="INSTALLLOCATION" Name="SlikSvn">
-        <Directory Id="INSTALLLOCATION_BIN" Name="bin">
-        </Directory>
-        <Directory Id="DIR_SharpSvnLicenses" Name="Licenses">
-
+        <Component Id="SvnBook" Guid="3FB6C20B-97EE-4C9F-994F-DC1D1C3A09AB">
+          <File Id="SvnBook.pdf" Name="svn-book.pdf" Vital="yes" KeyPath="yes" Source="$(sys.SOURCEFILEDIR)..\release\svn-book.pdf"/>
+          <Shortcut Id="SvnBookSc" Directory="SlikSvn_MENU" Target="[#SvnBook.pdf]" Name="Version Control with Subversion" Description="Open the Subversion book in your PDF viewer" />
+        </Component>
+        <Directory Id="INSTALLLOCATION_BIN" Name="bin" />
+        <Directory Id="DIR_SharpSvnLicenses" Name="Licenses" />
+        <Directory Id="DIR_Share" Name="Share">
+          <Directory Id="DIR_Share_Locale" Name="Locale">
+            
+          </Directory>
         </Directory>
       </Directory>
     </DirectoryRef>
@@ -67,7 +78,7 @@
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
     </Feature>
-    <Feature Id="ReposTools" Title="Repository Tools" Level="50" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
+    <Feature Id="ReposTools" Title="Repository Tools" Level="1" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnadmin.exe"/>
       <ComponentGroupRef Id="svnsync.exe"/>
@@ -75,6 +86,9 @@
       <ComponentGroupRef Id="svndumpfilter.exe"/>
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+    </Feature>
+    <Feature Id="SvnBook" Title="The Subversion Book" Level="3" Description="The Subversion Book (pdf): Version Control with Subversion">
+      <ComponentRef Id="SvnBook"/>
     </Feature>
     <Feature Id="SvnServe" Title="SvnServe" Level="200" Description="Install svnserve">
       <ComponentRef Id="AddToPath"/>
@@ -90,16 +104,19 @@
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
     </Feature>
+    <Feature Id="ClientLocalization" Title="Localized Messages" Level="2" Description="Localized texts in the tools">
+      <ComponentGroupRef Id="Localization"/>
+    </Feature>
 
     <UI>
       <InstallUISequence>
         <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-        <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
+        <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND SVNREINSTALL="" AND NOT Installed</Custom>
       </InstallUISequence>
     </UI>
     <InstallExecuteSequence>
       <Custom Action="ERRCA_CANCELNEWERVERSION" After="FindRelatedProducts">NEWERVERSIONINSTALLED&lt;&gt;"" AND NOT Installed</Custom>
-      <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND ANKHSVNREINSTALL="" AND NOT Installed</Custom>
+      <Custom Action="ERRCA_CANCELEXACTVERSION" After="ERRCA_CANCELNEWERVERSION">EXACTVERSIONINSTALLED&lt;&gt;"" AND SVNREINSTALL="" AND NOT Installed</Custom>
       <RemoveExistingProducts After="InstallInitialize">PREVIOUSVERSIONINSTALLED&lt;&gt;"" OR EXACTVERSIONINSTALLED&lt;&gt;""</RemoveExistingProducts>
     </InstallExecuteSequence>
   </Product>

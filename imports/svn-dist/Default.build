@@ -25,6 +25,7 @@
 			<exclude name="**/*test*" />
 		</fileset>
 	</copy>
+	<get src="http://svnbook.red-bean.com/nightly/en/svn-book.pdf" dest="release/svn-book.pdf" />
 	<copy todir="dist-${platform}/bin" flatten="true">
 		<fileset>
 			<include name="${opensslDir}/out32dll/*.dll" />
@@ -35,8 +36,15 @@
 			<include name="${aprUtilDir}/Release/*.dll" if="${platform == 'win32'}" />
 			<include name="${aprDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
 			<include name="${aprUtilDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
+			<include name="${gettextDir}/bin/${platform}/release/*.dll" />
 		</fileset>
 	</copy>
+	<copy todir="dist-${platform}/share">
+    <fileset basedir="${release}/share">
+      <include name="**" />
+    </fileset>
+  </copy>
+	
 	
 	
   </target>  
