@@ -85,6 +85,14 @@ namespace SharpSvn {
 			}
 		}
 
+		property bool IsDisposed
+		{
+			bool get()
+			{
+				return !_ctx;
+			}
+		}
+
 	private:
 		~SvnClientContext();
 
