@@ -15,7 +15,7 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetEligableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnEligableMergeInfo&)", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetEligableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetEligableMergeInfoArgs,SharpSvn.SvnEligableMergeInfo&)")];
 
-bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, EventHandler<SvnMergesEligibleEventArgs^>^ logHandler)
+bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, EventHandler<SvnMergesEligibleEventArgs^>^ logHandler)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -58,7 +58,7 @@ static svn_error_t *svnclient_eligible_log_handler(void *baton, svn_log_entry_t 
 }
 
 
-bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnMergesEligibleArgs^ args, EventHandler<SvnMergesEligibleEventArgs^>^ handler)
+bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMergesEligibleArgs^ args, EventHandler<SvnMergesEligibleEventArgs^>^ handler)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -106,7 +106,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnM
 	}
 }
 
-bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, [Out] Collection<SvnMergesEligibleEventArgs^>^% list)
+bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnTarget^ source, [Out] Collection<SvnMergesEligibleEventArgs^>^% list)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -116,7 +116,7 @@ bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, [Out]
 	return GetMergesEligible(target, source, gcnew SvnMergesEligibleArgs(), list);
 }
 
-bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnUriTarget^ source, SvnMergesEligibleArgs^ args, [Out] Collection<SvnMergesEligibleEventArgs^>^% list)
+bool SvnClient::GetMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMergesEligibleArgs^ args, [Out] Collection<SvnMergesEligibleEventArgs^>^% list)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");

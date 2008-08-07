@@ -12,9 +12,9 @@ namespace SharpSvn {
 
 	public ref class SvnMergesEligibleEventArgs : public SvnLoggingEventArgs
 	{
-		initonly SvnUriTarget^ _source;
+		initonly SvnTarget^ _source;
 	internal:
-		SvnMergesEligibleEventArgs(svn_log_entry_t *entry, SvnUriTarget^ source, AprPool ^pool)
+		SvnMergesEligibleEventArgs(svn_log_entry_t *entry, SvnTarget^ source, AprPool ^pool)
 			: SvnLoggingEventArgs(entry, pool)
 		{
 			if (!source)
@@ -24,17 +24,23 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets the specified SourceUri or <c>null</c> if the source was a local path</summary>
 		property Uri^ SourceUri
 		{
 			Uri^ get()
 			{
-				return _source->Uri;
+				SvnUriTarget^ trg = dynamic_cast<SvnUriTarget^>(_source);
+				if (trg)
+					return trg->Uri;
+				else
+					return nullptr;
 			}
 		}
 
-		property SvnUriTarget^ SourceTarget
+		/// <summary>Gets the merge source passed to the SvnClient call</summary>
+		property SvnTarget^ SourceTarget
 		{
-			SvnUriTarget^ get()
+			SvnTarget^ get()
 			{
 				return _source;
 			}

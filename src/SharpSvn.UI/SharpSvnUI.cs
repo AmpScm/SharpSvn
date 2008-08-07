@@ -36,9 +36,10 @@ namespace SharpSvn.UI
         /// <summary>
         /// Binds the default userinterface to the <see cref="SvnClient"/> using <paramref name="parentWindow"/> as parent for the popup windows
         /// </summary>
-        /// <param name="svnClient"></param>
-        /// <param name="parentWindow"></param>
-        /// <param name="headerImage"></param>
+        /// <param name="svnClient">The SVN client.</param>
+        /// <param name="parentWindow">The parent window.</param>
+        /// <param name="synchronizer">The synchronizer.</param>
+        /// <param name="headerImage">The header image.</param>
         public static void Bind(SvnClient svnClient, IWin32Window parentWindow, ISynchronizeInvoke synchronizer, Image headerImage)
         {
             if (svnClient == null)

@@ -15,7 +15,7 @@ namespace SharpSvn {
 		SvnRevisionPropertyNameCollection^ _retrieveProperties;
 		bool _logChangedPaths;
 	internal:
-		SvnUriTarget^ _sourceTarget;
+		SvnTarget^ _sourceTarget;
 
 	public:
 		SvnMergesEligibleArgs()
