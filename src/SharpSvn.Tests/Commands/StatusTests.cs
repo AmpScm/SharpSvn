@@ -109,8 +109,6 @@ namespace SharpSvn.Tests.Commands
 
             Collection<SvnStatusEventArgs> r;
             Client.GetStatus(dir, sa, out r);
-
-            Assert.That(r.Count, Is.GreaterThan(0));
         }
 
         [Test]
