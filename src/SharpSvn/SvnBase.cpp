@@ -262,6 +262,15 @@ Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 	else if (length == 0)
 		return "";
 
+	for(int i = 0; i < length; i++)
+	{
+		if(!ptr[i])
+		{
+			// A string that contains a 0 byte can never be valid Utf-8
+			return SvnBase::PtrToByteArray(ptr, length);
+		}
+	}
+
 	try
 	{
 		return Utf8_PtrToString(ptr, length);
