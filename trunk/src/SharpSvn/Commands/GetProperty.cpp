@@ -73,9 +73,11 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 	apr_hash_t* pHash = nullptr;
 
+	const char* pName = pool.AllocString(propertyName);
+
 	svn_error_t *r = svn_client_propget3(
 		&pHash,
-		pool.AllocString(propertyName),
+		pName,
 		pool.AllocString(target->SvnTargetName),
 		&pegRev,
 		&rev,
@@ -97,16 +99,9 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-			Object^ val = PtrToStringOrByteArray(propVal->data, (int)propVal->len);
-
-			String^ strVal = dynamic_cast<String^>(val);
-
 			SvnTarget^ itemTarget = SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen));
 
-			if (strVal)
-				rd->Add(gcnew SvnPropertyValue(propertyName, strVal, itemTarget));
-			else
-				rd->Add(gcnew SvnPropertyValue(propertyName, safe_cast<array<Byte>^>(val), itemTarget));
+			rd->Add(SvnPropertyValue::Create(pName, propVal, itemTarget, propertyName));
 		}
 
 		properties = rd;
