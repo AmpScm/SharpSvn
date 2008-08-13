@@ -45,7 +45,7 @@ public ref class SvnPropertyListEventArgs : public SvnCancelEventArgs
 			SvnPropertyCollection^ get()
 			{
 				if (!_properties && _propHash && _pool)
-					_properties = SvnBase::CreatePropertyDictionary(_propHash, _pool);
+					_properties = SvnBase::CreatePropertyDictionary(_propHash, _pool, path);
 
 				return _properties;
 			}
