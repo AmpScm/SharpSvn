@@ -69,11 +69,6 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-        void a_Notify(object sender, SvnNotifyEventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
         //Test case to show up a bug in binary property retrieval.  
         [Test]
         public void TestPropSetGet()
@@ -90,8 +85,8 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(ret.Key, Is.EqualTo("TestBinaryCat"));
             Assert.That(ret.Target.TargetName, Is.EqualTo(path));
-            Assert.That(ret.RawValue,
-                Is.EqualTo(valueToSet), "Binary property retrieved is different");
+            Assert.That(ret.RawValue.Count,
+                Is.EqualTo(valueToSet.Length), "Binary property retrieved is of different length");
             Assert.That(ret.RawValue, Is.EqualTo(valueToSet),
                 "Binary property as retrieved is different to that set");
         }
