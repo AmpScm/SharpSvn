@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Slik Subversion $(var.SvnVersion)"
+  <Product Id="*" Name="Slik Subversion $(var.SvnVersion) ($(var.Platform))"
            Language="1033" Version="$(var.SvnVersion).0"
            Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
     <?if $(var.Platform) = x86 ?>
@@ -54,12 +54,20 @@
     </Directory>
 
     <DirectoryRef Id="INSTALLBASE">
-      <Directory Id="INSTALLLOCATION" Name="SlikSvn">
+      <Directory Id="INSTALLLOCATION" Name="SlikSvn" FileSource="$(var.distDir)">
         <Component Id="SvnBook" Guid="3FB6C20B-97EE-4C9F-994F-DC1D1C3A09AB">
-          <File Id="SvnBook.pdf" Name="svn-book.pdf" Vital="yes" KeyPath="yes" Source="$(sys.SOURCEFILEDIR)..\release\svn-book.pdf"/>
+          <File Id="SvnBook.pdf" Name="svn-book.pdf" Vital="yes" KeyPath="yes"/>
           <Shortcut Id="SvnBookSc" Directory="SlikSvn_MENU" Target="[#SvnBook.pdf]" Name="Version Control with Subversion" Description="Open the Subversion book in your PDF viewer" />
           <RemoveFolder Id="DelProgMenu" Directory="SlikSvn_MENU" On="uninstall"/>
         </Component>
+        <Component Id="SvnChanges" Guid="E72D748C-78B7-4280-B606-9D6E49D1BF41">
+          <File Id="SvnChanges.txt" Name="CHANGES.txt" Vital="yes" KeyPath="yes" />
+          <Shortcut Id="ChangesSc" Directory="SlikSvn_MENU" Target="[#SvnChanges.txt]" Name="Subversion Changes" Description="Open the Subversion Change List" />
+        </Component>
+        <Component Id="SvnReleaseNotes" Guid="D1C63D56-804A-43DC-A229-15CFF77EF344">
+          <File Id="ReleaseNotes.html" Name="ReleaseNotes.html" Vital="yes" KeyPath="yes" />
+          <Shortcut Id="ReleaseNotesSc" Directory="SlikSvn_MENU" Target="[#ReleaseNotes.html]" Name="Release Notes" Description="Open the Subversion Release Notes" />
+        </Component>        
         <Directory Id="INSTALLLOCATION_BIN" Name="bin" />
         <Directory Id="DIR_SharpSvnLicenses" Name="Licenses" />
         <Directory Id="DIR_Share" Name="Share">
@@ -70,7 +78,8 @@
       </Directory>
     </DirectoryRef>
 
-    <UIRef Id="WixUI_Mondo"/>
+    <UIRef Id="MyMondo"/>
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
     <Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn and svnversion">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svn.exe" />
@@ -89,8 +98,10 @@
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
-    <Feature Id="SvnBook" Title="The Subversion Book" Level="3" Description="The Subversion Book (pdf): Version Control with Subversion">
+    <Feature Id="SvnDocs" Title="Subversion Documentation" Level="3" Description="The Subversion Book (pdf), Changelog and release notes">
       <ComponentRef Id="SvnBook"/>
+      <ComponentRef Id="SvnChanges"/>
+      <ComponentRef Id="SvnReleaseNotes"/>
     </Feature>
     <Feature Id="SvnServe" Title="SvnServe" Level="200" Description="Install svnserve">
       <ComponentRef Id="AddToPath"/>
