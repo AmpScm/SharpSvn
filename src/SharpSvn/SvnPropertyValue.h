@@ -37,16 +37,19 @@ namespace SharpSvn {
 			_value = value;
 		}
 
-		SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
+		SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
 			else if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("value");
+			else if (!value)
+				throw gcnew ArgumentNullException("value");
 
 			_target = target;
 			_key = key;
-			_strValue = value;
+			_value = value;
+			_strValue = strValue;
 		}
 
 		SvnPropertyValue(String^ key, array<Byte>^ value, SvnTarget^ target)
@@ -67,10 +70,20 @@ namespace SharpSvn {
 		{
 			if (!propertyName)
 				throw gcnew ArgumentNullException("propertyName");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
 
 			String^ name = SvnBase::Utf8_PtrToString(propertyName);
+
+			return Create(propertyName, value, target, name);
+		}
+
+		static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target, String^ name)
+		{
+			if (!propertyName)
+				throw gcnew ArgumentNullException("propertyName");
+			else if (!value)
+				throw gcnew ArgumentNullException("value");
+			else if (!name)
+				throw gcnew ArgumentNullException("name");
 
 			Object^ val = SvnBase::PtrToStringOrByteArray(value->data, (int)value->len);
 			String^ strVal = dynamic_cast<String^>(val);
@@ -80,7 +93,7 @@ namespace SharpSvn {
 				if (svn_prop_needs_translation(propertyName))
 					strVal = strVal->Replace("\n", Environment::NewLine);
 
-				return gcnew SvnPropertyValue(name, strVal, target);
+				return gcnew SvnPropertyValue(name, SvnBase::PtrToByteArray(value->data, (int)value->len), strVal, target);
 			}
 			else
 				return gcnew SvnPropertyValue(name, safe_cast<array<Byte>^>(val), target);
