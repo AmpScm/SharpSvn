@@ -305,9 +305,9 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 
 	*result = svn_wc_create_conflict_result(svn_wc_conflict_choose_postpone, NULL, pool);
 
-	AprPool tmpPool(pool, false);
+	AprPool tmpPool(pool, false); // Connect to parent pool
 
-	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description);
+	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %tmpPool);
 
 	try
 	{

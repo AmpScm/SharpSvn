@@ -72,6 +72,7 @@ namespace SharpSvn {
 		internal:
 			static String^ Utf8_PtrToString(const char *ptr);
 			static String^ Utf8_PtrToString(const char *ptr, int length);
+			static String^ Utf8_PathPtrToString(const char *ptr, AprPool^ pool);
 			static Uri^ Utf8_PtrToUri(const char *str, SvnNodeKind nodeKind);
 			static array<Byte>^ PtrToByteArray(const char* ptr, int length);
 
