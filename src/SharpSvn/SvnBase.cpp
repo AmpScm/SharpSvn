@@ -248,9 +248,12 @@ array<Byte>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 
 	array<Byte>^ bytes = gcnew array<Byte>(length);
 
-	pin_ptr<Byte> pBytes = &bytes[0];
+	if (length > 0)
+	{
+		pin_ptr<Byte> pBytes = &bytes[0];
 
-	memcpy(pBytes, ptr, length);
+		memcpy(pBytes, ptr, length);
+	}
 
 	return bytes;
 }
