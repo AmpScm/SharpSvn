@@ -668,7 +668,7 @@ namespace SharpSvn.Tests
                 {
                     SvnStatusArgs a = new SvnStatusArgs();
 
-                    a.ContactRepository = mode % 2 == 1;
+                    a.RetrieveRemoteStatus = mode % 2 == 1;
                     a.RetrieveAllEntries = mode > 1;
 
                     int n = 0;
@@ -739,7 +739,7 @@ namespace SharpSvn.Tests
 
                         Assert.That(e.LocalCopied, Is.EqualTo(nn == 4));
                         Assert.That(e.Wedged, Is.False);
-                        if (a.ContactRepository)
+                        if (a.RetrieveRemoteStatus)
                         {
                             Assert.That(e.RemoteContentStatus, Is.EqualTo(nn == 2 ? SvnStatus.Deleted : SvnStatus.None));
                         }
@@ -751,14 +751,14 @@ namespace SharpSvn.Tests
                         Assert.That(e.RemoteLock, Is.Null);
                         Assert.That(e.RemotePropertyStatus, Is.EqualTo(SvnStatus.None));
 
-                        if (nn == 2 && a.ContactRepository)
+                        if (nn == 2 && a.RetrieveRemoteStatus)
                         {
                             Assert.That(e.RemoteUpdateCommitAuthor, Is.Null);
                             Assert.That(e.RemoteUpdateNodeKind, Is.EqualTo(SvnNodeKind.File));
                             Assert.That(e.RemoteUpdateCommitTime, Is.EqualTo(DateTime.MinValue));
                             Assert.That(e.RemoteUpdateRevision, Is.EqualTo(ci.Revision + 3));
                         }
-                        else if (nn == -1 && a.ContactRepository)
+                        else if (nn == -1 && a.RetrieveRemoteStatus)
                         {
                             Assert.That(e.RemoteUpdateCommitAuthor, Is.EqualTo(Environment.UserName));
                             Assert.That(e.RemoteUpdateNodeKind, Is.EqualTo(SvnNodeKind.Directory));
@@ -876,7 +876,7 @@ namespace SharpSvn.Tests
 
                     if (a.RetrieveAllEntries)
                         Assert.That(n, Is.EqualTo(7));
-                    else if (a.ContactRepository)
+                    else if (a.RetrieveRemoteStatus)
                         Assert.That(n, Is.EqualTo(5));
                     else
                         Assert.That(n, Is.EqualTo(4));

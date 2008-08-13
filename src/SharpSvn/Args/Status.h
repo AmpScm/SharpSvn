@@ -99,7 +99,7 @@ namespace SharpSvn {
 		/// working copy was compared (result_rev is not meaningful unless
 		/// update is set
 		/// </remarks>
-		property bool ContactRepository
+		property bool RetrieveRemoteStatus
 		{
 			bool get()
 			{
@@ -108,6 +108,19 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_update = value;
+			}
+		}
+
+		[Obsolete("Please use .RetrieveRemoteStatus instead")]
+		property bool ContactRepository
+		{
+			bool get()
+			{
+				return RetrieveRemoteStatus; 
+			}
+			void set(bool value)
+			{
+				RetrieveRemoteStatus = value;
 			}
 		}
 

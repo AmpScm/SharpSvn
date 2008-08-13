@@ -105,7 +105,7 @@ namespace SharpSvn.Tests.Commands
             string dir = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "..\\.."));
 
             SvnStatusArgs sa = new SvnStatusArgs();
-            sa.ContactRepository = true;
+            sa.RetrieveRemoteStatus = true;
 
             Collection<SvnStatusEventArgs> r;
             Client.GetStatus(dir, sa, out r);
@@ -117,14 +117,13 @@ namespace SharpSvn.Tests.Commands
             string dir = WcPath;
 
             SvnStatusArgs sa = new SvnStatusArgs();
-            sa.ContactRepository = true;
+            sa.RetrieveRemoteStatus = true;
 
             Collection<SvnStatusEventArgs> r;
             using (SvnClient c = new SvnClient())
             {
                 c.GetStatus(dir, sa, out r);
             }
-            Assert.That(r.Count, Is.GreaterThan(0));
         }
 
 		/// <summary>
