@@ -198,6 +198,18 @@ return path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path:
 return path;
 }*/
 
+String^ SvnBase::Utf8_PathPtrToString(const char *ptr, AprPool^ pool)
+{
+	if (!ptr || !pool)
+		return nullptr;
+
+	if (!*ptr)
+		return "";
+
+	return Utf8_PtrToString(svn_path_local_style(ptr, pool->Handle));
+}
+
+
 String^ SvnBase::Utf8_PtrToString(const char *ptr)
 {
 	if (!ptr)
