@@ -79,7 +79,7 @@ void __cdecl sharpsvn_abort_handler()
 
 	MessageBoxA(nullptr, pText, pTitle, MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
 
-	throw gcnew SvnThreadAbortException();
+	throw gcnew SvnThreadAbortException("Subversion raised an abort()\r\nPlease restart your application!");
 }
 
 static bool s_loaded = false, s_checked = false;
