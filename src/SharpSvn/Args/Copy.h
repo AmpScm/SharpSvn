@@ -16,10 +16,12 @@ namespace SharpSvn {
 	{
 		bool _makeParents;
 		bool _alwaysCopyBelow;
+		SvnRevision^ _revision;
 
 	public:
 		SvnCopyArgs()
 		{
+			_revision = SvnRevision::None;
 		}
 
 		virtual property SvnCommandType CommandType
@@ -52,6 +54,21 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_alwaysCopyBelow = value;
+			}
+		}
+
+		property SvnRevision^ Revision
+		{
+			SvnRevision^ get()
+			{
+				return _revision;
+			}
+			void set(SvnRevision^ value)
+			{
+				if (value)
+					_revision = value;
+				else
+					_revision = SvnRevision::None;
 			}
 		}
 	};

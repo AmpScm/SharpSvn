@@ -73,9 +73,23 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 
 	svn_commit_info_t* pInfo = nullptr;
 
+	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sourceTargets, %pool);
+
+	if(copies && args->Revision->RevisionType != SvnRevisionType::None)
+	{
+		svn_opt_revision_t* r = args->Revision->AllocSvnRevision(%pool);
+
+		for(int i = 0; i < copies->nelts; i++)
+		{
+			svn_client_copy_source_t* cp = ((svn_client_copy_source_t**)copies->elts)[i];
+
+			cp->revision = r;
+		}
+	}
+
 	svn_error_t *r = svn_client_copy4(
 		&pInfo,
-		AllocCopyArray<TSvnTarget>(sourceTargets, %pool),
+		copies,
 		pool.AllocPath(toPath),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,
@@ -203,11 +217,25 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
+	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sourceTargets, %pool);
+
+	if(copies && args->Revision->RevisionType != SvnRevisionType::None)
+	{
+		svn_opt_revision_t* r = args->Revision->AllocSvnRevision(%pool);
+
+		for(int i = 0; i < copies->nelts; i++)
+		{
+			svn_client_copy_source_t* cp = ((svn_client_copy_source_t**)copies->elts)[i];
+
+			cp->revision = r;
+		}
+	}
+
 	svn_commit_info_t* commitInfoPtr = nullptr;
 
 	svn_error_t *r = svn_client_copy4(
 		&commitInfoPtr,
-		AllocCopyArray<TSvnTarget>(sourceTargets, %pool),
+		copies,
 		pool.AllocCanonical(toUri),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->MakeParents,
