@@ -108,6 +108,16 @@
           <echo message="${headertext}" file="${winHeader2}" />
         </do>
       </foreach>
+      
+      <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
+        <filterchain>
+          <replacestring from='(apr_atomic_win32_ptr_val_fn)' to='' />
+          <replacestring from='(apr_atomic_win32_ptr_fn)' to='' />
+          <replacestring from='(apr_atomic_win32_ptr_val_val_fn)' to='' />
+          <replacestring from='(apr_atomic_win32_ptr_ptr_ptr_fn)' to='' />
+        </filterchain>
+      </loadfile>
+      <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
       <!-- Add Windows 2000 ipv6 workarounds -->
       <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" />
     </OnceBlock>
