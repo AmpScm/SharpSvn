@@ -69,15 +69,15 @@ MessageBoxA(
 
 void __cdecl sharpsvn_abort_handler()
 {
-	if (!Environment::UserInteractive)
-		return;
+	if (Environment::UserInteractive)
+	{
+		AprPool pool(SvnBase::SmallThreadPool); // Let's hope this still works.. Most abort()s in subversion are not as fatal as this
 
-	AprPool pool(SvnBase::SmallThreadPool); // Let's hope this still works.. Most abort()s in subversion are not as fatal as this
+		const char* pTitle = pool.AllocString(SharpSvnStrings::FatalExceptionInSubversionApi);
+		const char* pText = pool.AllocString(String::Format(SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing, Environment::StackTrace));
 
-	const char* pTitle = pool.AllocString(SharpSvnStrings::FatalExceptionInSubversionApi);
-	const char* pText = pool.AllocString(String::Format(SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing, Environment::StackTrace));
-
-	MessageBoxA(nullptr, pText, pTitle, MB_OK | MB_ICONERROR | MB_SYSTEMMODAL);
+		MessageBoxA(nullptr, pText, pTitle, MB_OK | MB_ICONERROR | MB_TASKMODAL);
+	}
 
 	throw gcnew SvnThreadAbortException("Subversion raised an abort()\r\nPlease restart your application!");
 }
