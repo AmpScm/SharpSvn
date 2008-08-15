@@ -23,6 +23,11 @@ public:
 	SvnThreadAbortException()
 	{
 	}
+
+	SvnThreadAbortException(String^ message)
+		: InvalidOperationException(message)
+	{
+	}
 protected:
 	SvnThreadAbortException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
 		: InvalidOperationException(info, context)
