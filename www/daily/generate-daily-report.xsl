@@ -99,8 +99,8 @@
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
-          The SharpSvn project provides Daily builds of the current development tree. These versions
-          are not tested, but may contain bugfixes (and new bugs) that are not in released versions. If
+          The SharpSvn project provides frequent builds of the current development tree. These versions
+          are not fully tested, but may contain bugfixes (and new bugs) that are not in released versions. If
           you are testing these daily builds (Thanks!) and find issues in it, please report those issues
           with the exact version.
         </p>
