@@ -37,7 +37,7 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 
 	try
 	{
-	svn_error_t* r;
+		svn_error_t* r;
 		svn_repos_t* repos;
 		if (r = svn_repos_open(&repos, pool.AllocPath(repositoryPath), pool.Handle))
 			return args->HandleResult(this, r);
@@ -172,7 +172,7 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ path, St
 		if (node)
 		{
 			AprPool subpool(%_pool);
-			String^ fullpath = SvnPathJoin(path, SvnBase::Utf8_PtrToString(node->name));
+			String^ fullpath = SvnBase::SvnPathJoin(path, SvnBase::Utf8_PtrToString(node->name));
 			svn_error_t* r = ProcessTree(node, fullpath, relativePath, args);
 
 			if (r)
@@ -182,7 +182,7 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ path, St
 			{
 				subpool.Clear();
 				node = node->sibling;
-				fullpath = SvnPathJoin(path, SvnBase::Utf8_PtrToString(node->name));
+				fullpath = SvnBase::SvnPathJoin(path, SvnBase::Utf8_PtrToString(node->name));
 				r = ProcessTree(node, fullpath, relativePath, args);
 				if (r)
 					return r;
@@ -191,53 +191,6 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ path, St
 	}
 
 	return nullptr;
-}
-
-String^ SvnLookClient::PreparePath(String^ path)
-{
-	if (path == nullptr)
-	{
-		throw gcnew ArgumentException("Local path not specified");
-	}
-	path = path->Trim();
-	path = path->Replace('\\', '/');
-	while (path->EndsWith("/"))
-	{
-		path = path->Substring(0, path->Length - 1);
-	}
-
-	return path;
-}
-
-String^ SvnLookClient::SvnPathJoin(String^ base, String^ component)
-{
-	if (String::IsNullOrEmpty(base) && String::IsNullOrEmpty(component))
-	{
-		throw gcnew ArgumentNullException("base", "Cannot combine two blank paths");
-	}
-	if (String::IsNullOrEmpty(component))
-	{
-		return base;
-	}
-	else if (String::IsNullOrEmpty(base))
-	{
-		return component;
-	}
-
-	base = PreparePath(base);
-	component = PreparePath(component);
-
-	if (component[0] == '/')
-	{
-		return component;
-	}
-
-	if (base->Length > 0 && base[base->Length - 1] == '/')
-	{
-		base = base->Substring(0, base->Length - 1);
-	}
-
-	return base + "/" + component;
 }
 
 bool SvnLookClient::GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems)

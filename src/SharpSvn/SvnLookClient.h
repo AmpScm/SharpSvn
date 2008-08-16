@@ -12,6 +12,7 @@
 
 namespace SharpSvn {
 	ref class SvnChangedArgs;
+	ref class SvnLookPropertyArgs;
 
 	/// <summary>
 	/// Managed wrapper of some of the most common svnlook functions
@@ -38,10 +39,15 @@ namespace SharpSvn {
 		bool GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 		bool GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 
+		bool Property(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args);
+		bool GetProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] String^% result);
+
+		bool GetAuthor(String^ repositoryPath, SvnLookPropertyArgs^ args, [Out] String^% result);
+		bool GetLog(String^ repositoryPath, SvnLookPropertyArgs^ args, [Out] String^% result);
+		bool GetDate(String^ repositoryPath, SvnLookPropertyArgs^ args, [Out] DateTime^% result);
+
 	private:
 		~SvnLookClient();
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ path, String^ relativePath, SvnChangedArgs^ args);
-		String^ PreparePath(String^ path);
-		String^ SvnPathJoin(String^ base, String^ component);
 	};
 }

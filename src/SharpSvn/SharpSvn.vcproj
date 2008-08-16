@@ -526,7 +526,15 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\Args\FileVersions.h"
+				>
+			</File>
+			<File
 				RelativePath=".\EventArgs\SvnEventArgs.h"
+				>
+			</File>
+			<File
+				RelativePath=".\EventArgs\SvnFileVersionEventArgs.h"
 				>
 			</File>
 			<File
@@ -1389,6 +1397,10 @@
 					RelativePath=".\LookArgs\SvnChangedArgs.h"
 					>
 				</File>
+				<File
+					RelativePath=".\LookArgs\SvnLookPropertyArgs.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Look Commands"
@@ -1397,10 +1409,18 @@
 					RelativePath=".\LookCommands\SvnLookChanged.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\LookCommands\SvnLookProperties.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<File
 			RelativePath=".\AssemblyInfo.cpp"
+			>
+		</File>
+		<File
+			RelativePath=".\Commands\FileVersions.cpp"
 			>
 		</File>
 		<File
