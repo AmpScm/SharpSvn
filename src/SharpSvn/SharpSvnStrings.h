@@ -372,6 +372,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The Working revision type is not supported here.
+        /// </summary>
+        internal: static property System::String^  RevisionTypeCantBeWorking {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revision type must be head, date or a specific revision number.
         /// </summary>
         internal: static property System::String^  RevisionTypeMustBeHeadDateOrSpecific {
@@ -632,6 +639,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {
         return ResourceManager->GetString(L"RevisionNumberMustBeAtLeast0", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::RevisionTypeCantBeWorking::get() {
+        return ResourceManager->GetString(L"RevisionTypeCantBeWorking", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific::get() {

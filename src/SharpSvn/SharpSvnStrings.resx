@@ -279,4 +279,7 @@
   <data name="FileXNotFound" xml:space="preserve">
     <value>File '{0}' not found</value>
   </data>
+  <data name="RevisionTypeCantBeWorking" xml:space="preserve">
+    <value>The Working revision type is not supported here</value>
+  </data>
 </root>
