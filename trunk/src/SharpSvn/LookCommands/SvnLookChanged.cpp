@@ -11,9 +11,14 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
-bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args)
+bool SvnLookClient::Changed(String^ repositoryPath, EventHandler<SvnChangedEventArgs^>^ changedHandler)
 {
-	return Changed(repositoryPath, args, nullptr);
+	if (String::IsNullOrEmpty(repositoryPath))
+		throw gcnew ArgumentNullException("repositoryPath");
+	else if(!changedHandler)
+		throw gcnew ArgumentNullException("changedHandler");
+
+	return Changed(repositoryPath, gcnew SvnChangedArgs(), changedHandler);
 }
 
 bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler)
@@ -235,8 +240,30 @@ String^ SvnLookClient::SvnPathJoin(String^ base, String^ component)
 	return base + "/" + component;
 }
 
+bool SvnLookClient::GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems)
+{
+	if (String::IsNullOrEmpty(repositoryPath))
+		throw gcnew ArgumentNullException("repositoryPath");
+
+	InfoItemCollection<SvnChangedEventArgs^>^ results = gcnew InfoItemCollection<SvnChangedEventArgs^>();
+
+	try
+	{
+		return Changed(repositoryPath, gcnew SvnChangedArgs(), results->Handler);
+	}
+	finally
+	{
+		changedItems = results;
+	}
+}
+
 bool SvnLookClient::GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems)
 {
+	if (String::IsNullOrEmpty(repositoryPath))
+		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
 	InfoItemCollection<SvnChangedEventArgs^>^ results = gcnew InfoItemCollection<SvnChangedEventArgs^>();
 
 	try

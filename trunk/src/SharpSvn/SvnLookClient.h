@@ -30,11 +30,12 @@ namespace SharpSvn {
 
 	public:
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
-		bool Changed(String^ repositoryPath, SvnChangedArgs^ args);
+		bool Changed(String^ repositoryPath, EventHandler<SvnChangedEventArgs^>^ changedHandler);
 
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
 		bool Changed(String^ repositoryPath, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler);
 
+		bool GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 		bool GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 
 	private:
