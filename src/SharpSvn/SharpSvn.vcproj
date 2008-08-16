@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="8.00"
 	Name="SharpSvn"
 	ProjectGUID="{A3166809-1484-4442-BF75-5FB0E8356381}"
 	RootNamespace="SharpSvn"
@@ -111,6 +111,95 @@
 			/>
 		</Configuration>
 		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
+			ConfigurationType="2"
+			CharacterSet="1"
+			ManagedExtensions="1"
+			WholeProgramOptimization="1"
+			>
+			<Tool
+				Name="VCPreBuildEventTool"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+			/>
+			<Tool
+				Name="VCCustomBuildTool"
+				Description=" "
+				CommandLine="&#x0D;&#x0A;"
+				AdditionalDependencies=" "
+				Outputs=" "
+			/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"
+			/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"
+			/>
+			<Tool
+				Name="VCMIDLTool"
+			/>
+			<Tool
+				Name="VCCLCompilerTool"
+				Optimization="1"
+				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
+				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
+				StringPooling="true"
+				RuntimeLibrary="2"
+				UsePrecompiledHeader="2"
+				GenerateXMLDocumentationFiles="true"
+				BrowseInformation="1"
+				WarningLevel="4"
+				DebugInformationFormat="3"
+			/>
+			<Tool
+				Name="VCManagedResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCResourceCompilerTool"
+			/>
+			<Tool
+				Name="VCPreLinkEventTool"
+				Description="Copying libraries"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+			/>
+			<Tool
+				Name="VCLinkerTool"
+				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
+				LinkIncremental="1"
+				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
+				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
+				GenerateDebugInformation="true"
+				TargetMachine="1"
+				KeyFile="SharpSvn.snk"
+			/>
+			<Tool
+				Name="VCALinkTool"
+			/>
+			<Tool
+				Name="VCManifestTool"
+			/>
+			<Tool
+				Name="VCXDCMakeTool"
+			/>
+			<Tool
+				Name="VCBscMakeTool"
+			/>
+			<Tool
+				Name="VCFxCopTool"
+			/>
+			<Tool
+				Name="VCAppVerifierTool"
+			/>
+			<Tool
+				Name="VCWebDeploymentTool"
+			/>
+			<Tool
+				Name="VCPostBuildEventTool"
+			/>
+		</Configuration>
+		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
@@ -175,95 +264,6 @@
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="17"
-				KeyFile="SharpSvn.snk"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
-			CharacterSet="1"
-			ManagedExtensions="1"
-			WholeProgramOptimization="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-				Description=" "
-				CommandLine="&#x0D;&#x0A;"
-				AdditionalDependencies=" "
-				Outputs=" "
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="1"
-				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
-				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
-				StringPooling="true"
-				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
-				GenerateXMLDocumentationFiles="true"
-				BrowseInformation="1"
-				WarningLevel="4"
-				DebugInformationFormat="3"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib"
-				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
-				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
-				GenerateDebugInformation="true"
-				TargetMachine="1"
 				KeyFile="SharpSvn.snk"
 			/>
 			<Tool
@@ -422,7 +422,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Debug|x64"
+					Name="Release|Win32"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -433,7 +433,7 @@
 					/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Release|Win32"
+					Name="Debug|x64"
 					>
 					<Tool
 						Name="VCCustomBuildTool"
@@ -584,7 +584,7 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="Debug|x64"
+						Name="Release|Win32"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -592,7 +592,7 @@
 						/>
 					</FileConfiguration>
 					<FileConfiguration
-						Name="Release|Win32"
+						Name="Debug|x64"
 						>
 						<Tool
 							Name="VCCLCompilerTool"
@@ -669,6 +669,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnLookClient.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnNames.h"
 					>
 				</File>
@@ -722,6 +726,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnClientNotifier.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\SvnLookClient.cpp"
 					>
 				</File>
 				<File
@@ -1090,6 +1098,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
 					>
 				</File>
@@ -1356,6 +1368,40 @@
 				<File
 					RelativePath=".\Commands\WorkingCopyState.cpp"
 					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Look Args"
+				>
+				<File
+					RelativePath=".\LookArgs\SvnChangedArgs.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Look Commands"
+				>
+				<File
+					RelativePath=".\LookCommands\SvnLookChanged.cpp"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)\$(InputName)1.obj"
+							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
