@@ -731,6 +731,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\LookCommands\SvnLookClient.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnNames.cpp"
 					>
 				</File>
@@ -1104,6 +1108,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
 					>
 				</File>
@@ -1385,14 +1393,10 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Look Sources"
+				Name="Look Commands"
 				>
 				<File
 					RelativePath=".\LookCommands\SvnLookChanged.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\SvnLookClient.cpp"
 					>
 				</File>
 			</Filter>

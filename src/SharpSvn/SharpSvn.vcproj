@@ -806,6 +806,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\FileVersions.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\GetAppliedMergeInfo.cpp"
 					>
 				</File>
@@ -974,6 +978,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Args\FileVersions.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Args\GetAppliedMergeInfo.h"
 					>
 				</File>
@@ -1115,6 +1123,10 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnErrorEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnFileVersionEventArgs.h"
 					>
 				</File>
 				<File
@@ -1384,24 +1396,6 @@
 				<File
 					RelativePath=".\LookCommands\SvnLookChanged.cpp"
 					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)\$(InputName)1.obj"
-							XMLDocumentationFileName="$(IntDir)\$(InputName)1.xdc"
-						/>
-					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
