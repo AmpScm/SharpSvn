@@ -28,6 +28,7 @@
 #include "EventArgs/SvnProgressEventArgs.h"
 #include "EventArgs/SvnPropertyListEventArgs.h"
 #include "EventArgs/SvnStatusEventArgs.h"
+#include "EventArgs/SvnChangedEventArgs.h"
 
 #include "Args/SvnWorkingCopyState.h"
 #include "EventArgs/SvnWorkingCopyEntryEventArgs.h"

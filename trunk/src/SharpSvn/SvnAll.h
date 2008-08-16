@@ -18,6 +18,7 @@
 #include "SvnClient.h"
 #include "SvnRepositoryClient.h"
 #include "SvnWorkingCopyClient.h"
+#include "SvnLookClient.h"
 
 #include "SvnPathTarget.h"
 #include "SvnUriTarget.h"

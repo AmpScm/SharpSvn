@@ -31,7 +31,7 @@ namespace SharpSvn {
 		AprPool _pool;
 
 	public:
-		///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
+		///<summary>Initializes a new <see cref="SvnRepositoryClient" /> instance with default properties</summary>
 		SvnRepositoryClient();
 
 	public:
