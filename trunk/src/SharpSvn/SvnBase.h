@@ -107,6 +107,8 @@ namespace SharpSvn {
 
 			static String^ UriToString(Uri^ value);
 			static String^ UriToCanonicalString(Uri^ value);
+			static String^ PreparePath(String^ path);
+			static String^ SvnPathJoin(String^ base, String^ component);
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
