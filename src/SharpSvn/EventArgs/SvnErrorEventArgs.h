@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-public ref class SvnErrorEventArgs : public SvnCancelEventArgs
+	public ref class SvnErrorEventArgs : public SvnCancelEventArgs
 	{
 		initonly SvnException ^_exception;
 	public:
