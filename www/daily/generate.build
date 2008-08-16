@@ -3,7 +3,7 @@
 
   <target name="build-log">
 	<loadfile file="../../last.uri" property="dlUrl" />
-	<loadfile file="../../last.exuri" property="dlExUrl" />
+	<loadfile file="../../last.ex.uri" property="dlExUrl" />
     <property name="dlUrl" value="${string::trim(dlUrl)}" />  
     <property name="dlExUrl" value="${string::trim(dlExUrl)}" />  
   
