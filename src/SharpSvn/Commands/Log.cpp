@@ -64,6 +64,8 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 		throw gcnew ArgumentNullException("targets");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!targets->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "targets");
 
 	Uri^ first = nullptr;
 	String^ root = nullptr;
