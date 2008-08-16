@@ -665,10 +665,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnLookClient.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnNames.h"
 					>
 				</File>
@@ -1349,6 +1345,10 @@
 		<Filter
 			Name="SvnLookClient"
 			>
+			<File
+				RelativePath=".\SvnLookClient.h"
+				>
+			</File>
 			<Filter
 				Name="Args"
 				>
@@ -1446,4 +1446,3 @@
 	<Globals>
 	</Globals>
 </VisualStudioProject>
-
