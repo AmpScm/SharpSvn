@@ -189,6 +189,7 @@ using System::ComponentModel::DescriptionAttribute;
 	DECLARE_SVN_EXCEPTION_TYPE(SvnStreamException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnNodeException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryNotFoundException, SvnEntryException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyLockException, SvnWorkingCopyException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemException, SvnException);
