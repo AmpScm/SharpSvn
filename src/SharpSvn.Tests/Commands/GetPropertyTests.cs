@@ -42,6 +42,45 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(pval.Key, Is.EqualTo("foo"));
 			Assert.That(pval.Target.TargetName, Is.EqualTo(path));
 		}
+
+		[Test]
+		public void TestNonExistentPropertyExistingFile()
+		{
+			string wc = GetTempDir();
+			Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+
+			SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
+			pa.ThrowOnError = false;
+
+			string value;
+			Assert.That(Client.GetProperty(Path.Combine(wc, "index.html"), 
+				"new-prop", out value), Is.True, 
+				"GetProperty succeeds on non existent property");
+
+			Assert.That(value, Is.Null, "No value available");
+		}
+
+		[Test, ExpectedException(typeof(SvnEntryNotFoundException),
+			ExpectedMessage="no-index.html", MatchType=MessageMatch.Contains)]
+		public void TestNonExistentPropertyNonExistingFile()
+		{
+			string wc = GetTempDir();
+			Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+
+			SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
+			pa.ThrowOnError = false;
+
+			string value;
+			Client.GetProperty(Path.Combine(wc, "no-index.html"), "new-prop", out value);
+		}
+
+		[Test, ExpectedException(typeof(SvnInvalidNodeKindException), 
+			ExpectedMessage="{632382A5-F992-4ab8-8D37-47977B190819}", MatchType=MessageMatch.Contains)]
+		public void TestNoWcProperty()
+		{
+			string value;
+			Client.GetProperty("c:/{632382A5-F992-4ab8-8D37-47977B190819}/no-file.txt", "no-prop", out value);
+		}
 	}
 }
 

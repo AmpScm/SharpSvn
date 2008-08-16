@@ -190,6 +190,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_NODE_UNEXPECTED_KIND:
 			return gcnew SvnNodeException(error);
 		case SVN_ERR_ENTRY_NOT_FOUND:
+			return gcnew SvnEntryNotFoundException(error);
 		case SVN_ERR_ENTRY_EXISTS:
 		case SVN_ERR_ENTRY_MISSING_REVISION:
 		case SVN_ERR_ENTRY_MISSING_URL:
