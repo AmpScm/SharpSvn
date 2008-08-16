@@ -208,7 +208,7 @@ String^ SvnLookClient::SvnPathJoin(String^ base, String^ component)
 {
 	if (String::IsNullOrEmpty(base) && String::IsNullOrEmpty(component))
 	{
-		throw gcnew ArgumentNullException("both strings null");
+		throw gcnew ArgumentNullException("base", "Cannot combine two blank paths");
 	}
 	if (String::IsNullOrEmpty(component))
 	{
