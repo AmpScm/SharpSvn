@@ -10,6 +10,7 @@ using System.Xml;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -39,7 +40,7 @@ namespace SharpSvn.Tests.Commands
             a.Range = new SvnRevisionRange(1, SvnRevision.Head);
             a.RetrieveChangedPaths = false;
 
-            this.Client.Log(this.ReposUrl, a, new EventHandler<SvnLogEventArgs>(LogCallback));
+            this.Client.Log(this.ReposUrl, a, LogCallback);
 
             Assert.That(this.logMessages.Count, Is.EqualTo(clientLogs.Length),
                 "Number of log entries differs");
@@ -56,7 +57,7 @@ namespace SharpSvn.Tests.Commands
             SvnLogArgs a = new SvnLogArgs();
             a.Range = new SvnRevisionRange(1, 1);
 
-            this.Client.Log(this.ReposUrl, a, new EventHandler<SvnLogEventArgs>(LogCallback));
+            this.Client.Log(this.ReposUrl, a, LogCallback);
             Assert.That(this.logMessages.Count, Is.EqualTo(1));
             Assert.That(this.logMessages[0].LogMessage, Is.EqualTo("Æ e i a æ å, sjø"));
         }
@@ -242,6 +243,14 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
+		[Test, ExpectedException(typeof(ArgumentException))]
+		public void TestNoMultiUris()
+		{
+			Collection<SvnLogEventArgs> result;
+			SvnLogArgs la = new SvnLogArgs();
+			Client.GetLog(new Uri[0], la, out result);
+		}
+
         [Test]
         public void TestLogCreate()
         {
@@ -369,9 +378,10 @@ namespace SharpSvn.Tests.Commands
         {
             e.Detach();
             this.logMessages.Add(e);
-        }
+		}
 
-        private ClientLogMessage[] ClientLog(string path)
+		#region SVN Client verifier 
+		private ClientLogMessage[] ClientLog(string path)
         {
             string output = this.RunCommand("svn", "log --xml " + path);
             XmlDocument doc = new XmlDocument();
@@ -446,10 +456,9 @@ namespace SharpSvn.Tests.Commands
             private string author;
             private string message;
             private int revision;
+		}
+		#endregion
 
-
-        }
-
-        private List<SvnLogEventArgs> logMessages = new List<SvnLogEventArgs>();
+		private List<SvnLogEventArgs> logMessages = new List<SvnLogEventArgs>();
     }
 }
