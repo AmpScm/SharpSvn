@@ -2,6 +2,11 @@
 <project name="Generate log" default="build-log" basedir=".">
 
   <target name="build-log">
+	<loadfile file="../../last.uri" property="dlUrl" />
+	<loadfile file="../../last.exuri" property="dlExUrl" />
+    <property name="dlUrl" value="${string::trim(dlUrl)}" />  
+    <property name="dlExUrl" value="${string::trim(dlExUrl)}" />  
+  
     <property name="baseDate" value="${datetime::to-string(datetime::now() - timespan::from-days(31))}" />
     <property name="baseDate" value="${string::substring(baseDate,6,4)}${string::substring(baseDate,0,2)}${string::substring(baseDate,3,2)}" />
     <exec program="svn.exe" verbose="true" output="project-log.xml">
@@ -14,7 +19,8 @@
       in="project-log.xml"
       out="index.html">
       <parameters>
-        <parameter name="latestUrl" namespaceuri="" value="${report.latestUrl}" />
+        <parameter name="latestUrl" namespaceuri="" value="${dlUrl}" />
+        <parameter name="latestExUrl" namespaceuri="" value="${dlExUrl}" />
         <parameter name="latestVersion" namespaceuri="" value="${report.latestVersion}" />
         <parameter name="latestName" namespaceuri="" value="${report.resultName}" />
         <parameter name="buildRev" namespaceuri="" value="${report.buildRev}" />
