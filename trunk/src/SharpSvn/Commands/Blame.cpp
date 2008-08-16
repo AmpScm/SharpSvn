@@ -84,7 +84,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 			args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool),
 			options,
 			args->IgnoreMimeType,
-			args->IncludeMergedRevisions,
+			args->RetrieveMergedRevisions,
 			svn_client_blame_receiver_handler2,
 			(void*)_clientBatton->Handle,
 			CtxHandle,

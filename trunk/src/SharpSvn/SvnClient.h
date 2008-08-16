@@ -74,9 +74,14 @@ namespace SharpSvn {
 	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
+
+	ref class SvnFileVersionsArgs;
+
 	ref class SvnCreateRepositoryArgs;
 	ref class SvnDeleteRepositoryArgs;
 	ref class SvnRecoverRepositoryArgs;
+
+
 	ref class SvnGetWorkingCopyStateArgs;
 	ref class SvnGetWorkingCopyVersionArgs;
 
@@ -1082,6 +1087,25 @@ namespace SharpSvn {
 		bool GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>^% list);
 		/// <summary>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</summary>
 		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list);
+
+
+	internal:
+		/// <overloads>Lists the versions of the specified file</overloads>
+		/// <summary>Lists the versions of the specified file</summary>
+		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
+		bool FileVersions(SvnTarget^ target, EventHandler<SvnFileVersionEventArgs^>^ versionHandler);
+		/// <summary>Lists the versions of the specified file</summary>
+		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
+		bool FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, EventHandler<SvnFileVersionEventArgs^>^ versionHandler);
+
+		/// <overloads>Gets a lists of versions of the specified file</overloads>
+		/// <summary>Gets a list of versions of the specified file</summary>
+		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
+		bool GetFileVersions(SvnTarget^ target, [Out] Collection<SvnFileVersionEventArgs^>^% list);
+
+		/// <summary>Gets a list of versions of the specified file</summary>
+		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
+		bool GetFileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, [Out] Collection<SvnFileVersionEventArgs^>^% list);
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>

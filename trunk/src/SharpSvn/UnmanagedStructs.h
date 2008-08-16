@@ -49,3 +49,6 @@ struct svn_fs_txn_t
 
 struct svn_fs_root_t
 {};
+
+struct svn_ra_session_t
+{};

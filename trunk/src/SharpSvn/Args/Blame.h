@@ -45,7 +45,6 @@ namespace SharpSvn {
 		}
 
 	public:
-
 		/// <summary>Gets or sets the blame range as <see cref="SvnRevisionRange" /></summary>
 		property SvnRevisionRange^ Range
 		{
@@ -135,7 +134,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool IncludeMergedRevisions
+		property bool RetrieveMergedRevisions
 		{
 			bool get()
 			{
@@ -144,6 +143,19 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_includeMergedRevisions = value;
+			}
+		}
+
+		[Obsolete("Please use .RetrieveMergeRevisions")]
+		property bool IncludeMergedRevisions
+		{
+			bool get()
+			{
+				return RetrieveMergedRevisions;
+			}
+			void set(bool value)
+			{
+				RetrieveMergedRevisions = value;
 			}
 		}
 	};
