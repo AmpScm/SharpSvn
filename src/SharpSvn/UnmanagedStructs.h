@@ -43,3 +43,9 @@ struct svn_fs_t
 
 struct svn_diff_t
 {};
+
+struct svn_fs_txn_t
+{};
+
+struct svn_fs_root_t
+{};
