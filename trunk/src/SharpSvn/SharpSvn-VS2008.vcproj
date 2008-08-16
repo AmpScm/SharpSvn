@@ -647,10 +647,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClient.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnClientArgs.h"
 					>
 				</File>
@@ -687,10 +683,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnWorkingCopyClient.h"
-					>
-				</File>
-				<File
 					RelativePath=".\UnmanagedStructs.h"
 					>
 				</File>
@@ -704,10 +696,6 @@
 				</File>
 				<File
 					RelativePath=".\SvnAuthentication.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClient.cpp"
 					>
 				</File>
 				<File
@@ -746,14 +734,141 @@
 					RelativePath=".\SvnRepositorySession.cpp"
 					>
 				</File>
+			</Filter>
+			<Filter
+				Name="Types"
+				>
 				<File
-					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
+					RelativePath=".\SvnCommandLineArgumentCollection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnCommitItem.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnDiff.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnEnums.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnException.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnFileDiff.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnLockInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfoArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeSourcesCollection.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnPathTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnPropertyValue.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnUpdateResult.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\SvnWorkingCopyState.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\SvnWorkingCopyVersion.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Commands Sources"
-				Filter="Commands\*.cpp"
+				Name="Types Sources"
+				>
+				<File
+					RelativePath=".\SvnCommitItem.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnDiff.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnException.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnFileDiff.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeInfo.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeItemCollection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMergeRangeCollection.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnTargets.cpp"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Tools Args"
+				>
+				<File
+					RelativePath=".\SvnTools.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Tools Sources"
+				>
+				<File
+					RelativePath=".\SvnTools.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="SvnClient"
+			>
+			<File
+				RelativePath=".\SvnClient.h"
+				>
+			</File>
+			<Filter
+				Name="Sources"
 				>
 				<File
 					RelativePath=".\Commands\Add.cpp"
@@ -908,6 +1023,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnClient.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Switch.cpp"
 					>
 				</File>
@@ -925,7 +1044,83 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Commands Args"
+				Name="EventArgs"
+				>
+				<File
+					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnCancelEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnConflictEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnDiffSummaryEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnErrorEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnFileVersionEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnInfoEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnListChangeListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnLogEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnMergesEligibleEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnMergesMergedEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnProcessingEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnProgressEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Args"
 				>
 				<File
 					RelativePath=".\Args\Add.h"
@@ -1096,92 +1291,12 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="SvnRepositoryClient"
+			>
 			<Filter
-				Name="EventArgs"
-				>
-				<File
-					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnCancelEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnConflictEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnDiffSummaryEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnErrorEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnFileVersionEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnInfoEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnListChangeListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnLogEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnMergesEligibleEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnMergesMergedEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnProcessingEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnProgressEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnWorkingCopyEntryEventArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Repository Args"
+				Name="Args"
 				>
 				<File
 					RelativePath=".\ReposArgs\CreateRepository.h"
@@ -1205,7 +1320,11 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="Repository Commands"
+				Name="EventArgs"
+				>
+			</Filter>
+			<Filter
+				Name="Sources"
 				>
 				<File
 					RelativePath=".\ReposCommands\CreateRepository.cpp"
@@ -1228,132 +1347,72 @@
 					>
 				</File>
 			</Filter>
+		</Filter>
+		<Filter
+			Name="SvnLookClient"
+			>
 			<Filter
-				Name="Types"
+				Name="Args"
 				>
 				<File
-					RelativePath=".\SvnCommandLineArgumentCollection.h"
+					RelativePath=".\LookArgs\SvnChangedArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommitItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnDiff.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnEnums.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnException.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnFileDiff.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnLockInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfoArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeSourcesCollection.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPathTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPropertyValue.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnUpdateResult.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnUriTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\SvnWorkingCopyState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\SvnWorkingCopyVersion.h"
+					RelativePath=".\LookArgs\SvnLookPropertyArgs.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Types Sources"
+				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\SvnCommitItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnDiff.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnException.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnFileDiff.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeItemCollection.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeRangeCollection.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnTargets.cpp"
+					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Tools Args"
+				Name="Sources"
 				>
 				<File
-					RelativePath=".\SvnTools.h"
+					RelativePath=".\LookCommands\SvnLookChanged.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\SvnLookProperties.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="SvnWorkingCopyClient"
+			>
+			<File
+				RelativePath=".\SvnWorkingCopyClient.h"
+				>
+			</File>
+			<Filter
+				Name="Sources"
+				>
+				<File
+					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\WorkingCopyEntries.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\WorkingCopyState.cpp"
 					>
 				</File>
 			</Filter>
 			<Filter
-				Name="Tools Sources"
-				>
-				<File
-					RelativePath=".\SvnTools.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="WorkingCopy Args"
+				Name="Args"
 				>
 				<File
 					RelativePath=".\Args\GetWorkingCopyVersion.h"
@@ -1369,34 +1428,10 @@
 				</File>
 			</Filter>
 			<Filter
-				Name="WorkingCopy Sources"
+				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\WorkingCopyEntries.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\WorkingCopyState.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Look Args"
-				>
-				<File
-					RelativePath=".\LookArgs\SvnChangedArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Look Commands"
-				>
-				<File
-					RelativePath=".\LookCommands\SvnLookChanged.cpp"
+					RelativePath=".\EventArgs\SvnWorkingCopyEntryEventArgs.h"
 					>
 				</File>
 			</Filter>
