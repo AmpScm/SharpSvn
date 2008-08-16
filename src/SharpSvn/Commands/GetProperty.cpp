@@ -29,7 +29,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% va
 	bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
 
 	if (ok && result && (result->Count > 0))
-		value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
+		value = result[0]->StringValue;
 
 	return ok;
 }
