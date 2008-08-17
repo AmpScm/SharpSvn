@@ -1,4 +1,4 @@
-// $Id: Export.cpp 623 2008-07-23 22:10:29Z rhuijben $
+// $Id$
 // Copyright (c) SharpSvn Project 2007
 // The Sourcecode of this project is available under the Apache 2.0 license
 // Please read the SharpSvnLicense.txt file for more details
@@ -75,7 +75,7 @@ static svn_error_t *file_version_window_handler(
 	return nullptr;
 }
 
-
+#pragma warning(disable: 4127) // conditional expression is constant on SVN_ERR
 
 static svn_error_t *file_version_handler(
 	void *baton,
