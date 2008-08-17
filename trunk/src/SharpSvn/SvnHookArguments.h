@@ -9,18 +9,37 @@
 namespace SharpSvn {
 	using namespace SharpSvn::Implementation;
 
+	public enum class SvnHookType
+	{
+		None,
+		PostCommit,
+		PostLock,
+		PostRevPropChange,
+		PostUnlock,
+		PreCommit,
+		PreLock,
+		PreRevPropChange,
+		PreUnlock,
+		StartCommit,
+	};
+
 	public ref class SvnHookArguments
 	{
 	public:
-		static bool ParsePostCommitArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePostLockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePostRevPropChangeArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePostUnlockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePreCommitArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePreLockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePreRevPropChangeArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParsePreUnlockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-		static bool ParseStartCommitArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParseHookArguments(array<String^>^ args, SvnHookType hookType, bool useConsole, [Out] SvnHookArguments^% data);
+	internal:
+		static bool ParsePostCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePostLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePostRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePostUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePreCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePreLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePreRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParsePreUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+		static bool ParseStartCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+
+	public:
+		static String^ GetHookFileName(String^ path, SvnHookType hookType);
 
 	protected:
 		static String^ ReadStdInText();
