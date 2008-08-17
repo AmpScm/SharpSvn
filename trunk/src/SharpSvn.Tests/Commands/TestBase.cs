@@ -414,6 +414,20 @@ namespace SharpSvn.Tests.Commands
 			return path;
 		}
 
+        protected string Configuration
+        {
+            get
+            {
+#if DEBUG
+                return "DEBUG";
+#elif RELEASE
+                return "RELEASE";
+#else
+#               error Unknown configuration
+#endif
+            }
+        }
+
 		/// <summary>
 		/// generate a unique directory name
 		/// </summary>

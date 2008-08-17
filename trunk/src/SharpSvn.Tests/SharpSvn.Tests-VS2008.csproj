@@ -95,6 +95,8 @@
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
+    <Compile Include="LookCommands\HookTestBase.cs" />
+    <Compile Include="LookCommands\VerifyTransactions.cs" />
     <Compile Include="PathTests.cs" />
     <Compile Include="Commands\PropertyListTests.cs" />
     <Compile Include="Commands\RelocateTests.cs" />
