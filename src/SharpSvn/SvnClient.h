@@ -1089,7 +1089,7 @@ namespace SharpSvn {
 		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list);
 
 
-	internal:
+	public:
 		/// <overloads>Lists the versions of the specified file</overloads>
 		/// <summary>Lists the versions of the specified file</summary>
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
