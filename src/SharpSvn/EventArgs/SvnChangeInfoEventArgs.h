@@ -8,10 +8,22 @@ namespace SharpSvn {
 
 	public ref class SvnChangeInfoEventArgs : public SvnLoggingEventArgs
 	{
+		initonly __int64 _baseRevision;
 	internal:
-		SvnChangeInfoEventArgs(svn_log_entry_t *entry, AprPool ^pool)
+		SvnChangeInfoEventArgs(svn_log_entry_t *entry, __int64 baseRevision, AprPool ^pool)
 			: SvnLoggingEventArgs(entry, pool)
 		{
+			_baseRevision = baseRevision;
+		}
+
+	public:
+		/// <summary>Gets the revision the change is based on</summary>
+		property __int64 BaseRevision
+		{
+			__int64 get()
+			{
+				return _baseRevision;
+			}
 		}
 	};
 }
