@@ -420,10 +420,8 @@ namespace SharpSvn.Tests.Commands
             {
 #if DEBUG
                 return "DEBUG";
-#elif RELEASE
-                return "RELEASE";
 #else
-#               error Unknown configuration
+                return "RELEASE";
 #endif
             }
         }
