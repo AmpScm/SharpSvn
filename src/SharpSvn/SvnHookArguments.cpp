@@ -13,7 +13,82 @@ using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
 using namespace System::IO;
 
-bool SvnHookArguments::ParsePostCommitArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+
+
+bool SvnHookArguments::ParseHookArguments(array<String^>^ args, SvnHookType hookType, bool useConsole, [Out] SvnHookArguments^% data)
+{
+	if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	switch(hookType)
+	{
+	case SvnHookType::PostCommit:
+		return ParsePostCommit(args, useConsole, data);
+	case SvnHookType::PostLock:
+		return ParsePostLock(args, useConsole, data);
+	case SvnHookType::PostRevPropChange:
+		return ParsePostRevPropChange(args, useConsole, data);
+	case SvnHookType::PostUnlock:
+		return ParsePostUnlock(args, useConsole, data);
+	case SvnHookType::PreCommit:
+		return ParsePreCommit(args, useConsole, data);
+	case SvnHookType::PreLock:
+		return ParsePreLock(args, useConsole, data);
+	case SvnHookType::PreRevPropChange:
+		return ParsePreRevPropChange(args, useConsole, data);
+	case SvnHookType::PreUnlock:
+		return ParsePreUnlock(args, useConsole, data);	
+	case SvnHookType::StartCommit:
+		return ParseStartCommit(args, useConsole, data);
+	default:
+		throw gcnew ArgumentOutOfRangeException("hookType", hookType, "Invalid hooktype passed");
+	}
+}
+
+String^ SvnHookArguments::GetHookFileName(String^ path, SvnHookType hookType)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	String^ name;
+
+	switch(hookType)
+	{
+	case SvnHookType::PostCommit:
+		name = "post-commit";
+		break;
+	case SvnHookType::PostLock:
+		name = "post-lock";
+		break;
+	case SvnHookType::PostRevPropChange:
+		name = "post-revprop-change";
+		break;
+	case SvnHookType::PostUnlock:
+		name = "post-unlock";
+		break;
+	case SvnHookType::PreCommit:
+		name = "pre-commit";
+		break;
+	case SvnHookType::PreLock:
+		name = "pre-lock";
+		break;
+	case SvnHookType::PreRevPropChange:
+		name = "pre-revprop-change";
+		break;
+	case SvnHookType::PreUnlock:
+		name = "pre-unlock";
+		break;
+	case SvnHookType::StartCommit:
+		name = "start-commit";
+		break;
+	default:
+		throw gcnew ArgumentOutOfRangeException("hookType", hookType, "Invalid hooktype passed");
+	}
+
+	return System::IO::Path::Combine(path, "hooks\\" + name);
+}
+
+bool SvnHookArguments::ParsePostCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -30,7 +105,7 @@ bool SvnHookArguments::ParsePostCommitArguments(array<String^>^ args, bool useCo
 	return true;
 }
 
-bool SvnHookArguments::ParsePostLockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -47,7 +122,7 @@ bool SvnHookArguments::ParsePostLockArguments(array<String^>^ args, bool useCons
 	return true;
 }
 
-bool SvnHookArguments::ParsePostRevPropChangeArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -70,7 +145,7 @@ bool SvnHookArguments::ParsePostRevPropChangeArguments(array<String^>^ args, boo
 	return true;
 }
 
-bool SvnHookArguments::ParsePostUnlockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -87,7 +162,7 @@ bool SvnHookArguments::ParsePostUnlockArguments(array<String^>^ args, bool useCo
 	return true;
 }
 
-bool SvnHookArguments::ParsePreCommitArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -104,7 +179,7 @@ bool SvnHookArguments::ParsePreCommitArguments(array<String^>^ args, bool useCon
 	return true;
 }
 
-bool SvnHookArguments::ParsePreLockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -122,7 +197,7 @@ bool SvnHookArguments::ParsePreLockArguments(array<String^>^ args, bool useConso
 	return true;
 }
 
-bool SvnHookArguments::ParsePreRevPropChangeArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -145,7 +220,7 @@ bool SvnHookArguments::ParsePreRevPropChangeArguments(array<String^>^ args, bool
 	return true;
 }
 
-bool SvnHookArguments::ParsePreUnlockArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -163,7 +238,7 @@ bool SvnHookArguments::ParsePreUnlockArguments(array<String^>^ args, bool useCon
 	return true;
 }
 
-bool SvnHookArguments::ParseStartCommitArguments(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParseStartCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
