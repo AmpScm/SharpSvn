@@ -837,6 +837,10 @@
 				Name="Tools Args"
 				>
 				<File
+					RelativePath=".\SvnHookArguments.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnTools.h"
 					>
 				</File>
@@ -844,6 +848,10 @@
 			<Filter
 				Name="Tools Sources"
 				>
+				<File
+					RelativePath=".\SvnHookArguments.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\SvnTools.cpp"
 					>
