@@ -1359,6 +1359,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\LookArgs\SvnChangeInfoArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\LookArgs\SvnLookClientArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\LookArgs\SvnLookPropertyArgs.h"
 					>
 				</File>
@@ -1370,12 +1378,20 @@
 					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
 					>
 				</File>
+				<File
+					RelativePath=".\EventArgs\SvnChangeInfoEventArgs.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
 				>
 				<File
 					RelativePath=".\LookCommands\SvnLookChanged.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\SvnLookChangeInfo.cpp"
 					>
 				</File>
 				<File
