@@ -258,5 +258,5 @@ bool SvnHookArguments::ParseStartCommit(array<String^>^ args, bool useConsole, [
 
 String^ SvnHookArguments::ReadStdInText()
 {
-	return "";
+	return System::Console::In->ReadToEnd();
 }
