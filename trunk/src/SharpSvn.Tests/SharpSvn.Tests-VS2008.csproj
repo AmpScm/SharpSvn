@@ -80,6 +80,7 @@
     <Compile Include="Commands\DiffTests.cs" />
     <Compile Include="Commands\ExceptionTests.cs" />
     <Compile Include="Commands\ExportTests.cs" />
+    <Compile Include="Commands\FileVersions.cs" />
     <Compile Include="Commands\GetAppliedMergeInfoTests.cs" />
     <Compile Include="Commands\GetAvailableMergeInfoTests.cs" />
     <Compile Include="Commands\GetPropertyTests.cs" />
@@ -87,13 +88,13 @@
     <Compile Include="Commands\GetSuggestedMergeSourcesTests.cs" />
     <Compile Include="Commands\ImportTests.cs" />
     <Compile Include="Commands\InfoTests.cs" />
-    <Compile Include="Commands\ListEntries.cs">
-    </Compile>
+    <Compile Include="Commands\ListEntries.cs" />
     <Compile Include="Commands\ListTests.cs" />
     <Compile Include="Commands\LockTests.cs" />
     <Compile Include="Commands\LogTests.cs" />
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
+    <Compile Include="LookCommands\ChangeInfoTests.cs" />
     <Compile Include="PathTests.cs" />
     <Compile Include="Commands\PropertyListTests.cs" />
     <Compile Include="Commands\RelocateTests.cs" />

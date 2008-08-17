@@ -7,11 +7,15 @@
 #include "SvnClientContext.h"
 #include "SvnClientEventArgs.h"
 #include "SvnClientArgs.h"
+#include "LookArgs/SvnLookClientArgs.h"
 
 #include "AprBaton.h"
 
+
 namespace SharpSvn {
+	ref class SvnChangeInfoArgs;
 	ref class SvnChangedArgs;
+	
 	ref class SvnLookPropertyArgs;
 
 	/// <summary>
@@ -28,6 +32,24 @@ namespace SharpSvn {
 	public:
 		///<summary>Initializes a new <see cref="SvnLookClient" /> instance with default properties</summary>
 		SvnLookClient();
+
+	public:
+		/// <overloads>Gets the change information of a change in a repository</overloads>
+		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
+		bool ChangeInfo(String^ repositoryPath, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
+
+		/// <summary>Gets the change information (author, date, log, paths, etc.) of a change in a repository</summary>
+		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
+		/// the args object to specify a specific version</remarks>
+		bool ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
+
+		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
+		bool GetChangeInfo(String^ repositoryPath, [Out] SvnChangeInfoEventArgs^% changeInfo);
+
+		/// <summary>Gets the change information (author, date, log, paths, etc.) of a change in a repository</summary>
+		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
+		/// the args object to specify a specific version</remarks>
+		bool GetChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, [Out] SvnChangeInfoEventArgs^% changeInfo);
 
 	public:
 		///<summary>Equivalent to <c>svnlook changed</c></summary>

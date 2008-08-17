@@ -184,6 +184,38 @@ namespace SharpSvn {
 				}
 			}
 		};
+
+		generic<typename T>
+		where T : SvnEventArgs
+		ref class SingleInfoItemReceiver
+		{
+			T _value;
+
+		public:
+			property T Value
+			{
+				T get()
+				{
+					return _value;
+				}
+			}
+
+		internal:
+			void HandleItem(Object^ sender, T e)
+			{
+				UNUSED_ALWAYS(sender);
+				e->Detach();
+				_value = e;
+			}
+
+			property EventHandler<T>^ Handler
+			{
+				EventHandler<T>^ get()
+				{
+					return gcnew EventHandler<T>(this, &SingleInfoItemReceiver<T>::HandleItem);
+				}
+			}
+		};
 	};
 
 	public ref class SvnCommandResult abstract
