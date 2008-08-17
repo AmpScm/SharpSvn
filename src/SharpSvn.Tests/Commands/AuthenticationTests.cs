@@ -44,7 +44,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(arrived);
 
 			arrived = false;
-			Assert.That(Client.Info(new Uri("http://sharpsvn.googlecode.com/svn/trunk/"),
+			Assert.That(Client.Info(new Uri("http://svn.collab.net/repos/svn/trunk/"),
 				delegate(object sender, SvnInfoEventArgs e)
 				{
 					arrived = true;

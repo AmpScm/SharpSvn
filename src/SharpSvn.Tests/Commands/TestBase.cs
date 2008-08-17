@@ -62,8 +62,16 @@ namespace SharpSvn.Tests.Commands
 
 		protected Uri PathToUri(string path)
 		{
-			return new Uri("file:///" + Path.GetFullPath(path).Replace(Path.DirectorySeparatorChar, '/'));
+            return PathToUri(path, false);
 		}
+
+        protected Uri PathToUri(string path, bool endSlash)
+        {
+            if ((endSlash || Directory.Exists(path)) && !path.EndsWith("/") && !path.EndsWith("\\"))
+                path += '/';
+
+            return new Uri("file:///" + Path.GetFullPath(path).Replace(Path.DirectorySeparatorChar, '/'));
+        }
 
 
 		protected string CreateRepos(TestReposType type)
@@ -114,10 +122,7 @@ namespace SharpSvn.Tests.Commands
 
 		public Uri GetReposUri(TestReposType type)
 		{
-			Uri u = PathToUri(GetRepos(type));
-
-			if (!u.ToString().EndsWith("/"))
-				u = new Uri(u.ToString() + "/");
+			Uri u = PathToUri(GetRepos(type), true);
 
 			return u;
 		}
