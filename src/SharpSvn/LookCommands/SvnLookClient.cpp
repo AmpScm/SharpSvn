@@ -18,7 +18,3 @@ SvnLookClient::SvnLookClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
 }
-
-SvnLookClient::~SvnLookClient()
-{
-}

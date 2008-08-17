@@ -8,7 +8,6 @@ using namespace System::Security::Permissions;
 [assembly:SecurityPermissionAttribute(SecurityAction::RequestMinimum, SkipVerification=false)];
 namespace SharpSvn {
     using namespace System;
-    
     using namespace System;
     ref class SharpSvnStrings;
     

@@ -15,7 +15,7 @@
 namespace SharpSvn {
 	ref class SvnChangeInfoArgs;
 	ref class SvnChangedArgs;
-	
+
 	ref class SvnLookPropertyArgs;
 
 	/// <summary>
@@ -34,7 +34,7 @@ namespace SharpSvn {
 		SvnLookClient();
 
 	public:
-		/// <overloads>Gets the change information of a change in a repository</overloads>
+		/// <overloads>Gets the change information of a change directly from a repository</overloads>
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
 		bool ChangeInfo(String^ repositoryPath, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
 
@@ -43,6 +43,7 @@ namespace SharpSvn {
 		/// the args object to specify a specific version</remarks>
 		bool ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
 
+		/// <overloads>Gets the change information of a change directly from a repository</overloads>
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
 		bool GetChangeInfo(String^ repositoryPath, [Out] SvnChangeInfoEventArgs^% changeInfo);
 
@@ -52,24 +53,35 @@ namespace SharpSvn {
 		bool GetChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, [Out] SvnChangeInfoEventArgs^% changeInfo);
 
 	public:
+		/// <overloads>Gets the changed paths directly from a repository</overloads>
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
 		bool Changed(String^ repositoryPath, EventHandler<SvnChangedEventArgs^>^ changedHandler);
 
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
 		bool Changed(String^ repositoryPath, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler);
 
+		/// <overloads>Gets the changed paths directly from a repository</overloads>
+		///<summary>Equivalent to <c>svnlook changed</c></summary>
 		bool GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
+		///<summary>Equivalent to <c>svnlook changed</c></summary>
 		bool GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 
-		bool Property(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args);
-		bool GetProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] String^% result);
-
-		bool GetAuthor(String^ repositoryPath, SvnLookPropertyArgs^ args, [Out] String^% result);
-		bool GetLog(String^ repositoryPath, SvnLookPropertyArgs^ args, [Out] String^% result);
-		bool GetDate(String^ repositoryPath, SvnLookPropertyArgs^ args, [Out] DateTime^% result);
+	public:
+		/// <overloads>Gets a revision property directly from a repository</overloads>
+		/// <summary>Gets the specified revision property directly from the repository</summary>
+		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, [Out] String^% value);
+		/// <summary>Gets the specified revision property directly from the repository</summary>
+		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, [Out] SvnPropertyValue^% value);
+		/// <summary>Gets the specified revision property directly from the repository</summary>
+		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
+		/// the args object to specify a specific version</remarks>
+		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] String^% value);
+		/// <summary>Gets the specified revision property directly from the repository</summary>
+		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
+		/// the args object to specify a specific version</remarks>
+		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] SvnPropertyValue^% value);
 
 	private:
-		~SvnLookClient();
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ path, String^ relativePath, SvnChangedArgs^ args);
 	};
 }

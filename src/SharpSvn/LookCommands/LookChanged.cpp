@@ -17,6 +17,8 @@ bool SvnLookClient::Changed(String^ repositoryPath, EventHandler<SvnChangedEvent
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if(!changedHandler)
 		throw gcnew ArgumentNullException("changedHandler");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	return Changed(repositoryPath, gcnew SvnChangedArgs(), changedHandler);
 }
@@ -27,6 +29,8 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
@@ -39,7 +43,7 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 	{
 		svn_error_t* r;
 		svn_repos_t* repos;
-		if (r = svn_repos_open(&repos, pool.AllocPath(repositoryPath), pool.Handle))
+		if (r = svn_repos_open(&repos, pool.AllocCanonical(repositoryPath), pool.Handle))
 			return args->HandleResult(this, r);
 
 		svn_fs_t* fs = svn_repos_fs(repos);
@@ -119,7 +123,7 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 			return args->HandleResult(this, r);
 
 		svn_repos_node_t* tree = svn_repos_node_from_baton(edit_baton);
-		r = ProcessTree(tree, repositoryPath, String::Empty, args);
+		r = ProcessTree(tree, repositoryPath, "", args);
 
 		return args->HandleResult(this, r);
 	}
