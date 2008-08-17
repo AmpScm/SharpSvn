@@ -1460,6 +1460,10 @@
 			RelativePath=".\SharpSvn.snk"
 			>
 		</File>
+		<File
+			RelativePath=".\SharpSvn.vcproj"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
