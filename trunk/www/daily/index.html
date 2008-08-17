@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5001.677</title>
+<title>SharpSvn-Daily Update - 1.5001.706</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5001.677</h1>
+<h1>SharpSvn-Daily Update - 1.5001.706</h1>
 
 
 <p>
@@ -12,20 +12,37 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/953/SSvn-1.5001.677.zip">SharpSvn 1.5001.677</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/956/SSvn-1.5001.706.zip">SharpSvn 1.5001.706</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=677">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=706">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-08-17</td></tr>
+<tr><td> </td><td class="r"><a id="697" href="http://ankhsvn.net/rev/?r=697">[r697]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnHookArguments.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SvnHookArguments.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnHookArguments class as helper class for parsing commandline
+(and StdIn) arguments passed to hook scripts.</td></tr>
+<tr><td> </td><td class="r"><a id="695" href="http://ankhsvn.net/rev/?r=695">[r695]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/LookCommands/SvnLookChangeInfo.cpp, src/SharpSvn/LookArgs/SvnLookPropertyArgs.h, src/SharpSvn/SharpSvnStrings.h, src/SharpSvn/LookCommands/LookChanged.cpp, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SvnClientEventArgs.h, src/SharpSvn/LookCommands/SvnLookChanged.cpp, src/SharpSvn/LookCommands/LookChangeInfo.cpp (and 5 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">SvnLookClient: Renamed Property commands to GetRevisionProperty to match
+the equivalent command on SvnClient.</td></tr>
+<tr><td> </td><td class="r"><a id="693" href="http://ankhsvn.net/rev/?r=693">[r693]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/LookCommands/SvnLookChangeInfo.cpp, src/SharpSvn/EventArgs/SvnChangeInfoEventArgs.h, src/SharpSvn.Tests/LookCommands/ChangeInfoTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://sharpsvn.net/rev/?r=691">r691</a>: Implemented support for the SvnLog style .ChangedPaths property for
+the SvnLookClient.ChangeInfo command.</td></tr>
+<tr><td> </td><td class="r"><a id="691" href="http://ankhsvn.net/rev/?r=691">[r691]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/LookCommands/SvnLookChangeInfo.cpp, src/SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn.Tests/LookCommands, src/SharpSvn/EventArgs/SvnChangeInfoEventArgs.h, src/SharpSvn/LookArgs/SvnChangeInfoArgs.h, src/SharpSvn/LookArgs/SvnLookClientArgs.h, src/SharpSvn.Tests/LookCommands/ChangeInfoTests.cs (and 2 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added (Get)ChangeInfo() command to the SvnLookClient that retrieves all standard
+log messages properties in a single call. FSFS and BDB do this internally on every
+revision property request and retrieving a few extra properties is neglectable on the
+cost of opening the filesystem.</td></tr>
 <tr class="d"><td colspan="4">2008-08-16</td></tr>
+<tr><td> </td><td class="r"><a id="686" href="http://ankhsvn.net/rev/?r=686">[r686]</a></td><td class="a">schizoidboy</td><td class="f">src/SharpSvn/SvnBase.cpp, src/SharpSvn/LookArgs/SvnLookPropertyArgs.h, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/SvnBase.h, src/SharpSvn/LookCommands/SvnLookChanged.cpp, src/SharpSvn/LookCommands/SvnLookProperties.cpp, src/SharpSvn/SvnLookClient.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Modified SvnLookClient to experimentally support svnlook author, svnlook date, svnlook propget, svnlook log</td></tr>
+<tr><td> </td><td class="r"><a id="682" href="http://ankhsvn.net/rev/?r=682">[r682]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/Blame.h, src/SharpSvn/Commands/Blame.cpp, src/SharpSvn/SharpSvnStrings.h, src/SharpSvn/SvnEnums.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/Args/FileVersions.h, src/SharpSvn/Commands/FileVersions.cpp, src/SharpSvn/SvnClientEventArgs.h (and 4 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Committed work in progress on a new FileVersions command that walks the history
+of a file like the Blame command; but allows access to the intermediate files 
+while walking.</td></tr>
+<tr><td> </td><td class="r"><a id="681" href="http://ankhsvn.net/rev/?r=681">[r681]</a></td><td class="a">schizoidboy</td><td class="f">src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/LookCommands/SvnLookChanged.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated SharpSvn.vcproj file</td></tr>
+<tr><td> </td><td class="r"><a id="680" href="http://ankhsvn.net/rev/?r=680">[r680]</a></td><td class="a">schizoidboy</td><td class="f">src/SharpSvn/LookArgs/SvnChangedArgs.h, src/SharpSvn/SharpSvnStrings.h, src/SharpPlink, src/SharpSvn/SvnClientEventArgs.h, src/SharpSvn/LookCommands/SvnLookChanged.cpp, src/SharpSvn.UI, src/SharpSvn/UnmanagedStructs.h, src/SharpSvn/SvnLookClient.h (and 12 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnLookClient class with experimental support for svnlook functionality. Initial functionality only includes 'changed' svnlook function, which works both on revisions and transactions (e.g. to query pre-commit)</td></tr>
 <tr><td> </td><td class="r"><a id="671" href="http://ankhsvn.net/rev/?r=671">[r671]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/Log.cpp, src/SharpSvn/SharpSvnStrings.h, src/SharpSvn.Tests/Commands/LogTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Handle a list containing no Uris with a nicer exception</td></tr>
 <tr><td> </td><td class="r"><a id="669" href="http://ankhsvn.net/rev/?r=669">[r669]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/GetProperty.cpp, src/SharpSvn/SvnException.cpp, src/SharpSvn/SvnException.h, src/SharpSvn.Tests/Commands/GetPropertyTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed index out of range exception on property not found from
 the GetProperty(path, name, out value) specialization.</td></tr>
