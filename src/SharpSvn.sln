@@ -5,13 +5,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.UI", "SharpSvn.UI\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn", "SharpSvn\SharpSvn.vcproj", "{A3166809-1484-4442-BF75-5FB0E8356381}"
 	ProjectSection(ProjectDependencies) = postProject
-		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {0CC79A1A-463D-40BB-91E0-3B1391B519C6}
 		{3B2682F1-0092-4422-8E12-588163AD9422} = {3B2682F1-0092-4422-8E12-588163AD9422}
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {0CC79A1A-463D-40BB-91E0-3B1391B519C6}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Console", "SharpSvn.Console\SharpSvn.Console.csproj", "{7C522F9F-6C65-405C-9A67-5F27FAAF970B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Tests", "SharpSvn.Tests\SharpSvn.Tests.csproj", "{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595} = {3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
@@ -32,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Po2Resx", "tools\Po2Resx\Po2Resx.csproj", "{0CC79A1A-463D-40BB-91E0-3B1391B519C6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabUpload", "tools\CollabUpload\CollabUpload.csproj", "{4EE15935-6CDA-48DD-9C5D-79FF130111CC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookNotifier", "tools\HookNotifier\HookNotifier.csproj", "{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -64,10 +67,6 @@ Global
 		{A3166809-1484-4442-BF75-5FB0E8356381}.Release|x64.Build.0 = Release|x64
 		{A3166809-1484-4442-BF75-5FB0E8356381}.Release|x86.ActiveCfg = Release|Win32
 		{A3166809-1484-4442-BF75-5FB0E8356381}.Release|x86.Build.0 = Release|Win32
-		{7C522F9F-6C65-405C-9A67-5F27FAAF970B}.Debug|x64.ActiveCfg = Debug|x64
-		{7C522F9F-6C65-405C-9A67-5F27FAAF970B}.Debug|x86.ActiveCfg = Debug|x86
-		{7C522F9F-6C65-405C-9A67-5F27FAAF970B}.Release|x64.ActiveCfg = Release|x64
-		{7C522F9F-6C65-405C-9A67-5F27FAAF970B}.Release|x86.ActiveCfg = Release|x86
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x64.ActiveCfg = Debug|x64
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x64.Build.0 = Debug|x64
 		{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}.Debug|x86.ActiveCfg = Debug|x86
@@ -100,6 +99,14 @@ Global
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC}.Release|x64.Build.0 = Release|Any CPU
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC}.Release|x86.ActiveCfg = Release|Any CPU
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC}.Release|x86.Build.0 = Release|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Debug|x64.Build.0 = Debug|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Debug|x86.Build.0 = Debug|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x64.ActiveCfg = Release|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x64.Build.0 = Release|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x86.ActiveCfg = Release|Any CPU
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,5 +114,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {7B4B080F-80E3-4907-87E4-8038F2470696}
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC} = {7B4B080F-80E3-4907-87E4-8038F2470696}
+		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595} = {7B4B080F-80E3-4907-87E4-8038F2470696}
 	EndGlobalSection
 EndGlobal
