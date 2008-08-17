@@ -5,6 +5,7 @@ using SharpSvn.Tests.Commands;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using System.Collections.ObjectModel;
+using SharpSvn;
 
 namespace SharpSvn.Tests.LookCommands
 {

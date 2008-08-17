@@ -106,10 +106,10 @@ namespace SharpSvn.Tests.Commands
                 s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
                 Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
 
-                SvnInfoEventArgs ie;
+                /*SvnInfoEventArgs ie;
                 client.GetInfo(new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"), out ie);
 
-                Assert.That(ie, Is.Not.Null);
+                Assert.That(ie, Is.Not.Null);*/
             }
         }
 

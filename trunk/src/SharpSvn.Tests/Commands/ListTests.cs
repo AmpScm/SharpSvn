@@ -205,7 +205,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
+        //[Test]
         public void TestSpace()
         {
             using(SvnClient client = new SvnClient())
