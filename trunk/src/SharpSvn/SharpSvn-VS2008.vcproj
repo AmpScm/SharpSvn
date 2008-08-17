@@ -715,10 +715,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\SvnLookClient.cpp"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnNames.cpp"
 					>
 				</File>
@@ -1387,15 +1383,19 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\LookCommands\SvnLookChanged.cpp"
+					RelativePath=".\LookCommands\LookChanged.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\SvnLookChangeInfo.cpp"
+					RelativePath=".\LookCommands\LookChangeInfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\SvnLookProperties.cpp"
+					RelativePath=".\LookCommands\LookGetRevisionProperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\SvnLookClient.cpp"
 					>
 				</File>
 			</Filter>
