@@ -110,14 +110,15 @@ namespace SharpSvn.Tests.LookCommands
 
             ThreadStopper stopper = new ThreadStopper();
 
+            Environment.SetEnvironmentVariable("SHARPSVNHOOK_FILE", args);
+            Environment.SetEnvironmentVariable("SHARPSVNHOOK_STDIN", stdin);
+            Environment.SetEnvironmentVariable("SHARPSVNHOOK_WAIT", wait);
+            Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDOUT", outTxt);
+            Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDERR", errTxt);
+
             stopper.Start(
             delegate
-            {
-                Environment.SetEnvironmentVariable("SHARPSVNHOOK_FILE", args);
-                Environment.SetEnvironmentVariable("SHARPSVNHOOK_STDIN", stdin);
-                Environment.SetEnvironmentVariable("SHARPSVNHOOK_WAIT", wait);
-                Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDOUT", outTxt);
-                Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDERR", errTxt);
+            {                
                 try
                 {
                     while (!stopper.Cancel)
