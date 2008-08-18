@@ -154,7 +154,7 @@
         <xsl:value-of select="' '"/>
       </td>
       <td class="r">
-        <a id="{@revision}" href="http://ankhsvn.net/rev/?r={@revision}">[r<xsl:value-of select="@revision"/>]</a>
+        <a id="{@revision}" href="http://sharpsvn.net/rev/?r={@revision}">[r<xsl:value-of select="@revision"/>]</a>
       </td>
       <td class="a">
         <xsl:value-of select="author"/>
