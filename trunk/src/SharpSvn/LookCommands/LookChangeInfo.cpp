@@ -108,7 +108,7 @@ bool SvnLookClient::ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, 
 		{
 			svn_fs_txn_t* txn = nullptr;
 
-			if (r = svn_fs_open_txn(&(txn), fs, pool.AllocString(args->Transaction), pool.Handle))
+			if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(args->Transaction), pool.Handle))
 				return args->HandleResult(this, r);
 
 			if (r = svn_fs_txn_proplist(&props, txn, pool.Handle))
