@@ -13,8 +13,6 @@ using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
 using namespace System::IO;
 
-
-
 bool SvnHookArguments::ParseHookArguments(array<String^>^ args, SvnHookType hookType, bool useConsole, [Out] SvnHookArguments^% data)
 {
 	if (!args)

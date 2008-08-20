@@ -4,7 +4,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
-#include "LookArgs/SvnLookPropertyArgs.h"
+#include "LookArgs/SvnLookRevisionPropertyArgs.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
@@ -20,7 +20,7 @@ bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ property
 	else if (!IsNotUri(repositoryPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
-	return GetRevisionProperty(repositoryPath, propertyName, gcnew SvnLookPropertyArgs(), value);
+	return GetRevisionProperty(repositoryPath, propertyName, gcnew SvnLookRevisionPropertyArgs(), value);
 }
 
 bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ propertyName, [Out] SvnPropertyValue^% value)
@@ -32,10 +32,10 @@ bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ property
 	else if (!IsNotUri(repositoryPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
-	return GetRevisionProperty(repositoryPath, propertyName, gcnew SvnLookPropertyArgs(), value);
+	return GetRevisionProperty(repositoryPath, propertyName, gcnew SvnLookRevisionPropertyArgs(), value);
 }
 
-bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] String^% result)
+bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] String^% result)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
@@ -60,7 +60,7 @@ bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ property
 	}
 }
 
-bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] SvnPropertyValue^% value)
+bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
@@ -91,7 +91,7 @@ bool SvnLookClient::GetRevisionProperty(String^ repositoryPath, String^ property
 	if (!String::IsNullOrEmpty(args->Transaction))
 	{
 		svn_fs_txn_t* txn = NULL;
-		if (r = svn_fs_open_txn(&(txn), fs, pool.AllocString(args->Transaction), pool.Handle))
+		if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(args->Transaction), pool.Handle))
 			return args->HandleResult(this, r);
 
 		if (r = svn_fs_txn_prop(&val, txn, pName, pool.Handle))

@@ -10,10 +10,10 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnLookClient" />'s Property method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnLookPropertyArgs : public SvnLookClientArgs
+	public ref class SvnLookRevisionPropertyArgs : public SvnLookClientArgs
 	{
 	public:
-		SvnLookPropertyArgs()
+		SvnLookRevisionPropertyArgs()
 		{
 		}
 

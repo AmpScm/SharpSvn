@@ -1369,7 +1369,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookPropertyArgs.h"
+					RelativePath=".\LookArgs\SvnLookRevisionPropertyArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\LookArgs\SvnLookWriteArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1398,6 +1402,10 @@
 				</File>
 				<File
 					RelativePath=".\LookCommands\LookGetRevisionProperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\LookWrite.cpp"
 					>
 				</File>
 				<File

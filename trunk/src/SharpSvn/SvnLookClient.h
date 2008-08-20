@@ -16,7 +16,8 @@ namespace SharpSvn {
 	ref class SvnChangeInfoArgs;
 	ref class SvnChangedArgs;
 
-	ref class SvnLookPropertyArgs;
+	ref class SvnLookRevisionPropertyArgs;
+	ref class SvnLookWriteArgs;
 
 	/// <summary>
 	/// Managed wrapper of some of the most common svnlook functions
@@ -75,11 +76,18 @@ namespace SharpSvn {
 		/// <summary>Gets the specified revision property directly from the repository</summary>
 		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
 		/// the args object to specify a specific version</remarks>
-		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] String^% value);
+		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] String^% value);
 		/// <summary>Gets the specified revision property directly from the repository</summary>
 		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
 		/// the args object to specify a specific version</remarks>
-		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookPropertyArgs^ args, [Out] SvnPropertyValue^% value);
+		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
+
+	public:
+		/// <overloads>Writes the content of the specified path to a stream directly from a repository</overloads>
+		/// <summary>Writes the content of the specified path to a stream directly from a repository</summary>
+		bool Write(String^ repositoryPath, String^ path, Stream^ toStream);
+		/// <summary>Writes the content of the specified path to a stream directly from a repository</summary>
+		bool Write(String^ repositoryPath, String^ path, Stream^ toStream, SvnLookWriteArgs^ args);
 
 	private:
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ path, String^ relativePath, SvnChangedArgs^ args);
