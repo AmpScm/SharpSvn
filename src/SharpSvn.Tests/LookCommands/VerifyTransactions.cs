@@ -27,6 +27,20 @@ namespace SharpSvn.Tests.LookCommands
 
                 Assert.That(i.Revision, Is.LessThan(0L));
                 Assert.That(i.Author, Is.EqualTo(Environment.UserName));
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    SvnLookWriteArgs wa = new SvnLookWriteArgs();
+                    wa.Transaction = e.HookArgs.TransactionName;
+
+                    cl.Write(e.HookArgs.RepositoryPath, "trunk/Pre.txt", ms, wa);
+                    ms.Position = 0;
+
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        Assert.That(sr.ReadToEnd(), Is.EqualTo("AllTheData"));
+                    }
+                }
             }
         }
 
@@ -40,7 +54,7 @@ namespace SharpSvn.Tests.LookCommands
                 string dir = GetTempDir();
                 Client.CheckOut(new Uri(uri, "trunk/"), dir);
 
-                TouchFile(Path.Combine(dir, "Pre.txt"));
+                File.WriteAllText(Path.Combine(dir, "Pre.txt"), "AllTheData");
                 Client.Add(Path.Combine(dir, "Pre.txt"));
                 SvnCommitArgs ca = new SvnCommitArgs();
                 ca.LogMessage = "Blaat!\nQWQQ\n";
