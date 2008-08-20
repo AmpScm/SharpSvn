@@ -55,7 +55,7 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 		// revision
 		if (!String::IsNullOrEmpty(args->Transaction))
 		{
-			if (r = svn_fs_open_txn(&(txn), fs, pool.AllocString(args->Transaction), pool.Handle))
+			if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(args->Transaction), pool.Handle))
 				return args->HandleResult(this, r);
 
 			base_rev = svn_fs_txn_base_revision(txn);
