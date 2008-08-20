@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5001.714</title>
+<title>SharpSvn-Daily Update - 1.5001.721</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5001.714</h1>
+<h1>SharpSvn-Daily Update - 1.5001.721</h1>
 
 
 <p>
@@ -12,19 +12,26 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/959/SSvn-1.5001.714.zip">SharpSvn 1.5001.714</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/978/SSvn-1.5001.721.zip">SharpSvn 1.5001.721</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=714">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=721">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-08-20</td></tr>
+<tr><td> </td><td class="r"><a id="718" href="http://sharpsvn.net/rev/?r=718">[r718]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/LookArgs/SvnLookRevisionPropertyArgs.h, src/SharpSvn/LookArgs/SvnLookPropertyArgs.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/SvnHookArguments.cpp, src/SharpSvn/LookCommands/LookGetRevisionProperty.cpp, src/SharpSvn/SvnLookClient.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed SvnLookPropertyArgs to SvnLookRevisionPropertyArgs to match
+method name and allow future SvnLookPropertyArgs class for reading non revision
+properties.<br>
+Added Write() method to SvnLookClient to allow reading uncommitted text from client
+hooks.</td></tr>
+<tr class="d"><td colspan="4">2008-08-18</td></tr>
 <tr class="d"><td colspan="4">2008-08-17</td></tr>
 <tr><td> </td><td class="r"><a id="709" href="http://sharpsvn.net/rev/?r=709">[r709]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/InfoTests.cs, src/SharpSvn.Tests/Commands/ListTests.cs, src/SharpSvn.Tests/Commands/AuthenticationTests.cs, src/SharpSvn.Tests/LookCommands/VerifyTransactions.cs, src/SharpSvn.Tests/SvnRemoteTests.cs, src/SharpSvn.Tests/LookCommands/ChangeInfoTests.cs, src/SharpSvn.Tests/Commands/TestBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated several testcases to remove dependencies on the googlecode repository.
 (The Google code site for SharpSvn is marked for deletion to make sure all users
