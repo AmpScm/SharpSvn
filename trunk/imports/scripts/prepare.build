@@ -3,7 +3,7 @@
   <property name="downloads" value="downloads/" overwrite="false" />
   <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
   <target name="download">
-    <mkdir dir="downloads" />
+    <mkdir dir="{downloads}" />
     <if test="${not file::exists(downloads + opensslFilename)}">
       <get src="http://www.openssl.org/source/${opensslFilename}" dest="${downloads}/${opensslFilename}" />
     </if>
