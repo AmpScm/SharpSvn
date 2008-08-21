@@ -79,10 +79,10 @@
     <!-- /Patch -->
     <copy
       file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
-      tofile="build/${platform}/openssl-${opensslVersion}/out32/libeay32.lib" if="${static != 'true'}" />
+      tofile="build/${platform}/openssl-${opensslVersion}/out32dll/libeay32.lib" if="${static != 'true'}" />
     <copy
       file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
-      tofile="build/${platform}/openssl-${opensslVersion}/out32/ssleay32.lib" if="${static != 'true'}" />
+      tofile="build/${platform}/openssl-${opensslVersion}/out32dll/ssleay32.lib" if="${static != 'true'}" />
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32/openssl-${opensslVersion}">
         <include name="out32/*.lib" />
