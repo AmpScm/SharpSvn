@@ -3,11 +3,30 @@
   <property name="aprDir" value="build/apr" />
   <property name="aprUtilDir" value="build/apr-util" />
 
-  <target name="upgrade-apr" depends="checkout">
-    <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
+	<target name="apr-merge" depends="checkout">
+    <OnceBlock file="build/apr-${aprVersion}.merged">
+      <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${aprMerges}" />
+        <arg value="http://svn.apache.org/repos/asf/apr/apr/trunk/" />
+        <arg value="${aprDir}" />
+      </Svn>
+    </OnceBlock>
+  </target>  
+  <target name="upgrade-apr" depends="checkout,apr-merge">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">		
       <exec program="perl.exe" workingdir="${aprDir}">
         <arg value="build/cvtdsp.pl" />
         <arg value="-2005" />
+        <arg value="-mt" />
+      </exec>
+      <copy file="${release}/lib/${libDb}.lib" tofile="${release}/lib/${libDb}d.lib" />
+      <exec program="perl.exe" workingdir="${aprUtilDir}">
+        <arg value="build/w32locatedb.pl" />
+        <arg value="dll" />
+        <arg value="../../release/include" />
+        <arg value="../../release/lib" />
       </exec>
       <foreach item="File" property="project">
         <in>
@@ -24,7 +43,7 @@
         </do>
       </foreach>
     </OnceBlock>
-  </target>
+  </target>  
   <target name="prepare-apr" depends="upgrade-apr">
     <OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
       <foreach item="File" property="vcproj">
@@ -52,7 +71,7 @@
             <filterchain>
               <replacestring from='PreprocessorDefinitions="WIN32' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;WIN32' />
               <replacestring from='PreprocessorDefinitions="NDEBUG' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;NDEBUG' />
-              <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib zlibstat.lib libeay32.lib ssleay32.lib' />
+              <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib ' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
               <replacestring from='Optimization="2"' to='Optimization="1"' />
               <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
@@ -77,7 +96,7 @@
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
               <!-- Import APR from APR-Util -->
-              <replacestring from='AdditionalDependencies="ws2_32.lib mswsock.lib"' to='AdditionalDependencies="libapr-1.lib xml.lib ws2_32.lib mswsock.lib"' />
+              <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
 
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
               <replacestring from='Optimization="2"' to='Optimization="1"' />
@@ -102,7 +121,7 @@
           <loadfile file="${winHeader}" property="headertext">
             <filterchain>
               <replacestring from='#define APU_HAVE_APR_ICONV' to='#define APU_HAVE_APR_ICONV     0 //' />
-              <replacestring from='#define APR_HAVE_IPV6' to='#define APR_HAVE_IPV6 1 //' />
+              <replacestring from='#define APR_HAVE_IPV6' to='#define APR_HAVE_IPV6 1 //' if="${enableIpv6 == 'true'}" />
               <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 //' />
             </filterchain>
           </loadfile>
@@ -120,7 +139,7 @@
       </loadfile>
       <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
       <!-- Add Windows 2000 ipv6 workarounds -->
-      <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" />
+      <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
     </OnceBlock>
   </target>
   <target name="build-apr" depends="download,extract,checkout, prepare-apr">
@@ -130,9 +149,9 @@
         <in>
           <items>
             <include name="${aprDir}/apr.vcproj" if="${static=='true'}"/>
-            <include name="${aprUtilDir}/aprutil.vcproj" if="${static=='true'}"/>
             <include name="${aprDir}/libapr.vcproj" if="${static!='true'}"/>
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
+            <include name="${aprUtilDir}/aprutil.vcproj" if="${static=='true'}"/>
             <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}"/>
           </items>
         </in>
