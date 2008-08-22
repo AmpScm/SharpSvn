@@ -29,10 +29,10 @@
               <!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
               <replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi " />
               <!-- Don't include apr and openssl in the intermediate libraries -->
-              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" />
-              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" />
-              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(OPEN' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(OPEN' />
-              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' />
+              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" if="${static=='true'}" />
+              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" if="${static=='true'}" />
+              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(OPEN' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(OPEN' if="${static=='true'}" />
+              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' if="${static=='true'}" />
               <!-- Only compile library, the testfiles don't like the small library -->
               <replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
               <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />

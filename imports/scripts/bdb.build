@@ -4,13 +4,13 @@
   <property name="dbDir" value="build/db-${dbVersion}.NC" />
   <regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
 
-
   <property name="dbWindowsDir" value="${dbDir}/build_win32" if="${dbVersion &lt; '4.5'}" />
   <property name="dbWindowsDir" value="${dbDir}/build_windows" if="${dbVersion &gt;= '4.5'}" />
 
   <property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
   <property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
-  <property name="fullDbDllName" value="${dbDllName}-${platform}.dll" />
+  <property name="fullDbDllName" value="${dbDllName}-${platform}.dll" if="${dllPrefix != ''}"/>
+  <property name="fullDbDllName" value="DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}.dll" if="${dllPrefix == ''}"/>
 
   <target name="prepare-bdb" depends="extract">
     <OnceBlock file="build/db-${dbVersion}.prepared">
@@ -39,8 +39,8 @@
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-              <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' />
-              <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' />
+              <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' if="${dllPrefix != ''}"/>
+              <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' if="${dllPrefix != ''}"/>
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
