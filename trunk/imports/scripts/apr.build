@@ -196,6 +196,24 @@
         <include name="${aprUtilDir}/xml/expat/lib/LibR/*.pdb" />
       </fileset>
     </copy>
+    <copy todir="build/win32/lib/release" flatten="true">
+		<fileset>
+			<include name="${aprDir}/LibR/*.lib" />
+			<include name="${aprDir}/Release/*.lib" />
+			<include name="${aprUtilDir}/LibR/*.lib" />
+			<include name="${aprUtilDir}/Release/*.lib" />
+			<include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+        </fileset>
+    </copy>
+    <copy todir="build/win32/lib/debug" flatten="true">
+		<fileset>
+			<include name="${aprDir}/LibR/*.lib" />
+			<include name="${aprDir}/Release/*.lib" />
+			<include name="${aprUtilDir}/LibR/*.lib" />
+			<include name="${aprUtilDir}/Release/*.lib" />
+			<include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+        </fileset>
+    </copy>
     <copy todir="${release}/lib-x64" flatten="true">
       <fileset>
         <include name="${aprDir}/x64/LibR/*.lib" />
@@ -208,6 +226,15 @@
         <include name="${aprUtilDir}/x64/Release/*.pdb" />
         <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" />
         <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="build/x64/lib/release" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/LibR/*.lib" />
+        <include name="${aprDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/x64/LibR/*.lib" />
+        <include name="${aprUtilDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" />
       </fileset>
     </copy>
     <copy todir="${release}/bin" flatten="true">

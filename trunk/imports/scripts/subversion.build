@@ -39,8 +39,9 @@
           <include name="build/zlib-${zlibVersion}/z*.h" />
           <include name="${release}/lib/zlib.lib" />
         </fileset>
-      </copy>
+      </copy>      
       <copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
+      <copy tofile="build/win32/lib/zlib/zlibstatD.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
     </if>
     <if test="${platform == 'x64'}">
       <copy todir="${release}/lib-x64">

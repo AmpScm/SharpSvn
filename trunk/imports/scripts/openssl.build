@@ -27,7 +27,7 @@
       <if test="${static != 'true'}">
         <loadfile file="${opensslDir}/ms/libeay32.def" property="def">
           <filterchain>
-            <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" />
+            <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
             <!-- Stupid bugs in openssl 0.9.8h :( -->
             <replacestring from="ENGINE_load_4758cca" to=";" />
             <replacestring from="ENGINE_load_aep" to=";" />
@@ -46,14 +46,14 @@
         <echo message="${def}" file="${opensslDir}/ms/libeay32.def" />
         <loadfile file="${opensslDir}/ms/ssleay32.def" property="def">
           <filterchain>
-            <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" />
+            <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="{dllPrefix != ''}" />
           </filterchain>
         </loadfile>
         <echo message="${def}" file="${opensslDir}/ms/ssleay32.def" />
         <loadfile file="${opensslDir}/ms/ntdll.mak" property="mk">
           <filterchain>
-            <replacestring from="$(LIB_D)\$(SSL)" to="$(LIB_D)\${dllPrefix}$(SSL)" />
-            <replacestring from="$(LIB_D)\$(CRYPTO)" to="$(LIB_D)\${dllPrefix}$(CRYPTO)" />
+            <replacestring from="$(LIB_D)\$(SSL)" to="$(LIB_D)\${dllPrefix}$(SSL)" if="{dllPrefix != ''}" />
+            <replacestring from="$(LIB_D)\$(CRYPTO)" to="$(LIB_D)\${dllPrefix}$(CRYPTO)" if="{dllPrefix != ''}" />
           </filterchain>
         </loadfile>
         <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />
@@ -77,12 +77,14 @@
       <echo message="${ossl_typ}" file="${opensslDir}/inc32/openssl/ossl_typ.h" />
     </OnceBlock>
     <!-- /Patch -->
-    <copy
-      file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
-      tofile="build/${platform}/openssl-${opensslVersion}/out32dll/libeay32.lib" if="${static != 'true'}" />
-    <copy
-      file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
-      tofile="build/${platform}/openssl-${opensslVersion}/out32dll/ssleay32.lib" if="${static != 'true'}" />
+    <if test="${dllPrefix != ''}">
+		<copy
+			file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
+			tofile="build/${platform}/openssl-${opensslVersion}/out32dll/libeay32.lib" if="${static != 'true'}" />
+		<copy
+			file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
+			tofile="build/${platform}/openssl-${opensslVersion}/out32dll/ssleay32.lib" if="${static != 'true'}" />
+	</if>
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32/openssl-${opensslVersion}">
         <include name="out32/*.lib" />
