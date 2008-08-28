@@ -56,97 +56,97 @@ namespace SharpSvn.UI.Authentication
 			((System.ComponentModel.ISupportInitialize)(this.caUnknownImage)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.serverMismatchImage)).BeginInit();
 			this.SuspendLayout();
-			//
+			// 
 			// label3
-			//
+			// 
 			this.label3.Location = new System.Drawing.Point(6, 164);
 			this.label3.Name = "label3";
 			this.label3.Size = new System.Drawing.Size(70, 16);
 			this.label3.TabIndex = 5;
 			this.label3.Text = "Hostname:";
-			//
+			// 
 			// label2
-			//
+			// 
 			this.label2.Location = new System.Drawing.Point(6, 184);
 			this.label2.Name = "label2";
 			this.label2.Size = new System.Drawing.Size(69, 16);
 			this.label2.TabIndex = 7;
 			this.label2.Text = "Fingerprint:";
-			//
+			// 
 			// label1
-			//
+			// 
 			this.label1.Location = new System.Drawing.Point(6, 204);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(70, 16);
 			this.label1.TabIndex = 9;
 			this.label1.Text = "Valid from:";
-			//
+			// 
 			// label4
-			//
+			// 
 			this.label4.Location = new System.Drawing.Point(6, 224);
 			this.label4.Name = "label4";
 			this.label4.Size = new System.Drawing.Size(70, 16);
 			this.label4.TabIndex = 11;
 			this.label4.Text = "Valid to:";
-			//
+			// 
 			// label5
-			//
+			// 
 			this.label5.Location = new System.Drawing.Point(6, 244);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(70, 16);
 			this.label5.TabIndex = 13;
 			this.label5.Text = "Issuer:";
-			//
+			// 
 			// label6
-			//
+			// 
 			this.label6.Location = new System.Drawing.Point(6, 287);
 			this.label6.Name = "label6";
 			this.label6.Size = new System.Drawing.Size(70, 23);
 			this.label6.TabIndex = 15;
 			this.label6.Text = "Certificate:";
-			//
+			// 
 			// issuer
-			//
+			// 
 			this.issuer.Location = new System.Drawing.Point(72, 244);
 			this.issuer.Name = "issuer";
 			this.issuer.Size = new System.Drawing.Size(371, 37);
 			this.issuer.TabIndex = 14;
 			this.issuer.Text = "issuerLabel";
-			//
+			// 
 			// fingerprint
-			//
+			// 
 			this.fingerprint.Location = new System.Drawing.Point(72, 184);
 			this.fingerprint.Name = "fingerprint";
 			this.fingerprint.Size = new System.Drawing.Size(371, 16);
 			this.fingerprint.TabIndex = 8;
 			this.fingerprint.Text = "fingerprintLabel";
-			//
+			// 
 			// validFrom
-			//
+			// 
 			this.validFrom.Location = new System.Drawing.Point(72, 204);
 			this.validFrom.Name = "validFrom";
 			this.validFrom.Size = new System.Drawing.Size(371, 16);
 			this.validFrom.TabIndex = 10;
 			this.validFrom.Text = "validFromLabel";
-			//
+			// 
 			// validTo
-			//
+			// 
 			this.validTo.Location = new System.Drawing.Point(72, 224);
 			this.validTo.Name = "validTo";
 			this.validTo.Size = new System.Drawing.Size(371, 16);
 			this.validTo.TabIndex = 12;
 			this.validTo.Text = "validToLabel";
-			//
+			// 
 			// hostname
-			//
+			// 
 			this.hostname.Location = new System.Drawing.Point(72, 164);
 			this.hostname.Name = "hostname";
 			this.hostname.Size = new System.Drawing.Size(371, 16);
 			this.hostname.TabIndex = 6;
 			this.hostname.Text = "hostnameLabel";
-			//
+			// 
 			// certificateBox
-			//
+			// 
 			this.certificateBox.BackColor = System.Drawing.SystemColors.Control;
 			this.certificateBox.Location = new System.Drawing.Point(75, 284);
 			this.certificateBox.Multiline = true;
@@ -156,25 +156,25 @@ namespace SharpSvn.UI.Authentication
 			this.certificateBox.Size = new System.Drawing.Size(368, 53);
 			this.certificateBox.TabIndex = 16;
 			this.certificateBox.Text = "certificateTextBox";
-			//
+			// 
 			// caUnknownLabel
-			//
+			// 
 			this.caUnknownLabel.Location = new System.Drawing.Point(62, 25);
 			this.caUnknownLabel.Name = "caUnknownLabel";
 			this.caUnknownLabel.Size = new System.Drawing.Size(304, 16);
 			this.caUnknownLabel.TabIndex = 0;
 			this.caUnknownLabel.Text = "The Certificate Authority(CA) is trusted";
-			//
+			// 
 			// serverMismatchLabel
-			//
+			// 
 			this.serverMismatchLabel.Location = new System.Drawing.Point(62, 65);
 			this.serverMismatchLabel.Name = "serverMismatchLabel";
 			this.serverMismatchLabel.Size = new System.Drawing.Size(304, 16);
 			this.serverMismatchLabel.TabIndex = 2;
 			this.serverMismatchLabel.Text = "The certificate\'s hostname matches the server\'s.";
-			//
+			// 
 			// errorsGroupBox
-			//
+			// 
 			this.errorsGroupBox.Controls.Add(this.serverMismatchLabel);
 			this.errorsGroupBox.Controls.Add(this.invalidDateImage);
 			this.errorsGroupBox.Controls.Add(this.caUnknownLabel);
@@ -187,43 +187,43 @@ namespace SharpSvn.UI.Authentication
 			this.errorsGroupBox.TabIndex = 4;
 			this.errorsGroupBox.TabStop = false;
 			this.errorsGroupBox.Text = "There are some problems with this server\'s certificate:";
-			//
+			// 
 			// invalidDateImage
-			//
+			// 
 			this.invalidDateImage.BackColor = System.Drawing.Color.Transparent;
 			this.invalidDateImage.Location = new System.Drawing.Point(40, 45);
 			this.invalidDateImage.Name = "invalidDateImage";
 			this.invalidDateImage.Size = new System.Drawing.Size(16, 16);
 			this.invalidDateImage.TabIndex = 3;
 			this.invalidDateImage.TabStop = false;
-			//
+			// 
 			// invalidDateLabel
-			//
+			// 
 			this.invalidDateLabel.Location = new System.Drawing.Point(63, 45);
 			this.invalidDateLabel.Name = "invalidDateLabel";
 			this.invalidDateLabel.Size = new System.Drawing.Size(304, 16);
 			this.invalidDateLabel.TabIndex = 1;
 			this.invalidDateLabel.Text = "The server certificate has a valid date";
-			//
+			// 
 			// caUnknownImage
-			//
+			// 
 			this.caUnknownImage.Location = new System.Drawing.Point(40, 25);
 			this.caUnknownImage.Name = "caUnknownImage";
 			this.caUnknownImage.Size = new System.Drawing.Size(16, 16);
 			this.caUnknownImage.TabIndex = 1;
 			this.caUnknownImage.TabStop = false;
-			//
+			// 
 			// serverMismatchImage
-			//
+			// 
 			this.serverMismatchImage.BackColor = System.Drawing.Color.Transparent;
 			this.serverMismatchImage.Location = new System.Drawing.Point(40, 65);
 			this.serverMismatchImage.Name = "serverMismatchImage";
 			this.serverMismatchImage.Size = new System.Drawing.Size(16, 16);
 			this.serverMismatchImage.TabIndex = 2;
 			this.serverMismatchImage.TabStop = false;
-			//
+			// 
 			// cancelButton
-			//
+			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.Location = new System.Drawing.Point(368, 352);
 			this.cancelButton.Name = "cancelButton";
@@ -231,9 +231,9 @@ namespace SharpSvn.UI.Authentication
 			this.cancelButton.TabIndex = 2;
 			this.cancelButton.Text = "&Reject";
 			this.cancelButton.UseVisualStyleBackColor = true;
-			//
+			// 
 			// okButton
-			//
+			// 
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.Location = new System.Drawing.Point(287, 352);
 			this.okButton.Name = "okButton";
@@ -241,9 +241,9 @@ namespace SharpSvn.UI.Authentication
 			this.okButton.TabIndex = 1;
 			this.okButton.Text = "&Accept";
 			this.okButton.UseVisualStyleBackColor = true;
-			//
+			// 
 			// rememberCheck
-			//
+			// 
 			this.rememberCheck.AutoSize = true;
 			this.rememberCheck.Location = new System.Drawing.Point(75, 356);
 			this.rememberCheck.Name = "rememberCheck";
@@ -251,9 +251,9 @@ namespace SharpSvn.UI.Authentication
 			this.rememberCheck.TabIndex = 0;
 			this.rememberCheck.Text = "&Save certificate";
 			this.rememberCheck.UseVisualStyleBackColor = true;
-			//
+			// 
 			// panel1
-			//
+			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
 			this.panel1.BackgroundImage = global::SharpSvn.UI.Properties.Resources.AuthenticationBanner;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -261,9 +261,9 @@ namespace SharpSvn.UI.Authentication
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(455, 56);
 			this.panel1.TabIndex = 8;
-			//
+			// 
 			// SslServerCertificateTrustDialog
-			//
+			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -287,8 +287,6 @@ namespace SharpSvn.UI.Authentication
 			this.Controls.Add(this.okButton);
 			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "SslServerCertificateTrustDialog";
 			this.Text = "Title";
 			this.errorsGroupBox.ResumeLayout(false);
