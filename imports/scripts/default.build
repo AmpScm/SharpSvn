@@ -47,6 +47,7 @@
   <include buildfile="serf.build" />
   <include buildfile="neon.build" />
   <include buildfile="apr.build" />
+  <include buildfile="gssapi.build" />
   <include buildfile="sasl.build" />
   <include buildfile="gettext.build" />
   <include buildfile="sharpintl.build" />

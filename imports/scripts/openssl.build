@@ -85,8 +85,8 @@
         file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
         tofile="build/${platform}/openssl-${opensslVersion}/out32dll/ssleay32.lib" if="${static != 'true'}" />
     </if>
-	  <copy todir="build/win32/openssl-${opensslVersion}/out32" if="${static != 'true'}">
-      <fileset basedir="build/win32/openssl-${opensslVersion}/out32dll">
+	  <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
+      <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
         <include name="*.lib" />
         <include name="*.exp" />
         <include name="*.pdb" />

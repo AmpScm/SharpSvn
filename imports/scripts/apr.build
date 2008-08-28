@@ -20,13 +20,15 @@
         <arg value="build/cvtdsp.pl" />
         <arg value="-2005" />
         <arg value="-mt" />
-      </exec>
+      </exec>    
       <copy file="${release}/lib/${libDb}.lib" tofile="${release}/lib/${libDb}d.lib" />
+      <copy file="${release}/lib-x64/${libDb}.lib" tofile="${release}/lib-x64/${libDb}d.lib" />
       <exec program="perl.exe" workingdir="${aprUtilDir}">
         <arg value="build/w32locatedb.pl" />
         <arg value="dll" />
         <arg value="../../release/include" />
-        <arg value="../../release/lib" />
+        <arg value="../../release/lib" if="${platform=='win32'}"/>
+        <arg value="../../release/lib-${platform}" if="${platform!='win32'}"/>
       </exec>
       <foreach item="File" property="project">
         <in>
