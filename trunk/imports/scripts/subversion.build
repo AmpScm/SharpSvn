@@ -147,7 +147,7 @@
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
-        <arg value="--disable-shared" if="${static=='true'}"/>
+        <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>
       <!-- The ZLib build has already completed -->
 
