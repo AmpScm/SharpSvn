@@ -25,7 +25,12 @@
 			<exclude name="**/*test*" />
 		</fileset>
 	</copy>
-	<get src="http://svnbook.red-bean.com/nightly/en/svn-book.pdf" dest="release/svn-book.pdf" />
+	<get src="http://svnbook.red-bean.com/nightly/en/svn-book.pdf" dest="dist-${platform}//svn-book.pdf" />
+	<property name="releasenotesFile" value="svn_${string::substring(subversionVersion, 0, 3)}_releasenotes.html" />
+	<Svn>
+    <arg line="export http://svn.collab.net/repos/svn/trunk/www/${releasenotesFile}" />
+    <arg value="${release}/ReleaseNotes.html" />
+	</Svn>
 	<copy todir="dist-${platform}/bin" flatten="true">
 		<fileset>
 			<include name="${opensslDir}/out32dll/*.dll" />
@@ -44,8 +49,11 @@
       <include name="**" />
     </fileset>
   </copy>
-	
-	
-	
+  <copy 
+    file="${svnBase}/CHANGES"
+    tofile="dist-${platform}/CHANGES.txt" />
+  <copy
+    file="${release}/ReleaseNotes.html"
+    tofile="dist-${platform}/ReleaseNotes.html" />
   </target>  
 </project>
