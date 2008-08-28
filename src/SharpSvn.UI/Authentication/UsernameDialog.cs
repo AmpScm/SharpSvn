@@ -16,7 +16,7 @@ namespace SharpSvn.UI.Authentication
 	/// <summary>
 	///
 	/// </summary>
-	public partial class UsernameDialog : Form
+	public partial class UsernameDialog : SvnUIForm
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UsernameDialog"/> class.

@@ -13,7 +13,7 @@ using System.Windows.Forms;
 
 namespace SharpSvn.UI.Authentication
 {
-	public partial class UsernamePasswordDialog : Form
+	public partial class UsernamePasswordDialog : SvnUIForm
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UsernamePasswordDialog"/> class.
@@ -22,8 +22,6 @@ namespace SharpSvn.UI.Authentication
 		{
 			InitializeComponent();
 		}
-
-
 
         internal void SetImage(Image image)
         {

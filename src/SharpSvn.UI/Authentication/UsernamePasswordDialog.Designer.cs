@@ -41,51 +41,51 @@ namespace SharpSvn.UI.Authentication
 			this.cancelButton = new System.Windows.Forms.Button();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.SuspendLayout();
-			//
+			// 
 			// descriptionBox
-			//
+			// 
 			this.descriptionBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.descriptionBox.Location = new System.Drawing.Point(12, 73);
 			this.descriptionBox.Name = "descriptionBox";
 			this.descriptionBox.Size = new System.Drawing.Size(311, 36);
 			this.descriptionBox.TabIndex = 1;
 			this.descriptionBox.Text = "Description";
-			//
+			// 
 			// usernameLabel
-			//
+			// 
 			this.usernameLabel.AutoSize = true;
 			this.usernameLabel.Location = new System.Drawing.Point(12, 116);
 			this.usernameLabel.Name = "usernameLabel";
 			this.usernameLabel.Size = new System.Drawing.Size(61, 13);
 			this.usernameLabel.TabIndex = 2;
 			this.usernameLabel.Text = "&User name:";
-			//
+			// 
 			// passwordLabel
-			//
+			// 
 			this.passwordLabel.AutoSize = true;
 			this.passwordLabel.Location = new System.Drawing.Point(12, 145);
 			this.passwordLabel.Name = "passwordLabel";
 			this.passwordLabel.Size = new System.Drawing.Size(56, 13);
 			this.passwordLabel.TabIndex = 4;
 			this.passwordLabel.Text = "&Password:";
-			//
+			// 
 			// usernameBox
-			//
+			// 
 			this.usernameBox.Location = new System.Drawing.Point(92, 113);
 			this.usernameBox.Name = "usernameBox";
 			this.usernameBox.Size = new System.Drawing.Size(231, 20);
 			this.usernameBox.TabIndex = 3;
-			//
+			// 
 			// passwordBox
-			//
+			// 
 			this.passwordBox.Location = new System.Drawing.Point(92, 142);
 			this.passwordBox.Name = "passwordBox";
 			this.passwordBox.PasswordChar = '*';
 			this.passwordBox.Size = new System.Drawing.Size(231, 20);
 			this.passwordBox.TabIndex = 5;
-			//
+			// 
 			// rememberCheck
-			//
+			// 
 			this.rememberCheck.AutoSize = true;
 			this.rememberCheck.Location = new System.Drawing.Point(92, 170);
 			this.rememberCheck.Name = "rememberCheck";
@@ -93,9 +93,9 @@ namespace SharpSvn.UI.Authentication
 			this.rememberCheck.TabIndex = 6;
 			this.rememberCheck.Text = "&Remember my password";
 			this.rememberCheck.UseVisualStyleBackColor = true;
-			//
+			// 
 			// okButton
-			//
+			// 
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.Location = new System.Drawing.Point(167, 234);
 			this.okButton.Name = "okButton";
@@ -103,9 +103,9 @@ namespace SharpSvn.UI.Authentication
 			this.okButton.TabIndex = 7;
 			this.okButton.Text = "&OK";
 			this.okButton.UseVisualStyleBackColor = true;
-			//
+			// 
 			// cancelButton
-			//
+			// 
 			this.cancelButton.DialogResult = System.Windows.Forms.DialogResult.Cancel;
 			this.cancelButton.Location = new System.Drawing.Point(248, 234);
 			this.cancelButton.Name = "cancelButton";
@@ -113,9 +113,9 @@ namespace SharpSvn.UI.Authentication
 			this.cancelButton.TabIndex = 8;
 			this.cancelButton.Text = "&Cancel";
 			this.cancelButton.UseVisualStyleBackColor = true;
-			//
+			// 
 			// panel1
-			//
+			// 
 			this.panel1.BackColor = System.Drawing.Color.White;
 			this.panel1.BackgroundImage = global::SharpSvn.UI.Properties.Resources.AuthenticationBanner;
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -123,9 +123,9 @@ namespace SharpSvn.UI.Authentication
 			this.panel1.Name = "panel1";
 			this.panel1.Size = new System.Drawing.Size(335, 56);
 			this.panel1.TabIndex = 0;
-			//
+			// 
 			// UsernamePasswordDialog
-			//
+			// 
 			this.AcceptButton = this.okButton;
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -141,8 +141,6 @@ namespace SharpSvn.UI.Authentication
 			this.Controls.Add(this.descriptionBox);
 			this.Controls.Add(this.panel1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-			this.MaximizeBox = false;
-			this.MinimizeBox = false;
 			this.Name = "UsernamePasswordDialog";
 			this.Text = "Title";
 			this.ResumeLayout(false);

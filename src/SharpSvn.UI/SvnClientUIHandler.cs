@@ -13,6 +13,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using SharpSvn.UI.Properties;
 using System.ComponentModel;
+using System.Windows.Forms.Design;
 
 namespace SharpSvn.UI
 {
@@ -47,8 +48,20 @@ namespace SharpSvn.UI
             set { _synchronizer = value; }
         }
 
-        internal void Bind(SvnClient svnClient)
+		IUIService _uiService;
+		public IUIService UIService
+		{
+			get { return _uiService; }
+			set { _uiService = value; }
+		}
+
+
+        internal void Bind(SvnClient svnClient, SvnUIBindArgs args)
         {
+			Image = args.HeaderImage;
+			UIService = args.UIService;
+			Synchronizer = args.Synchronizer;			
+
             svnClient.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
             svnClient.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
             svnClient.Authentication.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
@@ -56,13 +69,35 @@ namespace SharpSvn.UI
             svnClient.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
         }
 
+		bool Reinvoke<T>(object sender, T e, EventHandler<T> handler)
+			where T : EventArgs
+		{
+			if (Synchronizer != null && Synchronizer.InvokeRequired)
+			{
+				Synchronizer.Invoke(handler, new object[] { sender, e });
+				return true;
+			}
+
+			return false;
+		}
+
+		DialogResult RunDialog(Form dialog)
+		{
+			if (dialog == null)
+				throw new ArgumentNullException("dialog");
+
+			if (UIService != null)
+				return UIService.ShowDialog(dialog);
+			else if (_window != null)
+				return dialog.ShowDialog(dialog);
+			else
+				return dialog.ShowDialog();
+		}
+
         void DialogUserNameHandler(Object sender, SvnUserNameEventArgs e)
         {
-            if (Synchronizer != null && Synchronizer.InvokeRequired)
-            {
-                Synchronizer.Invoke(new EventHandler<SvnUserNameEventArgs>(DialogUserNameHandler), new object[] { sender, e });
-                return;
-            }
+			if (Reinvoke(sender, e, DialogUserNameHandler))
+				return;            
 
             using (UsernameDialog dlg = new UsernameDialog())
             {
@@ -74,7 +109,7 @@ namespace SharpSvn.UI
                 if (Image != null)
                     dlg.SetImage(Image);
 
-                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+                DialogResult r = RunDialog(dlg);
 
                 if (r != DialogResult.OK)
                 {
@@ -90,11 +125,8 @@ namespace SharpSvn.UI
 
         void DialogUserNamePasswordHandler(Object sender, SvnUserNamePasswordEventArgs e)
         {
-            if (Synchronizer != null && Synchronizer.InvokeRequired)
-            {
-                Synchronizer.Invoke(new EventHandler<SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler), new object[] { sender, e });
-                return;
-            }
+			if (Reinvoke(sender, e, DialogUserNamePasswordHandler))
+				return;            
 
             string description = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsernameAndPassword);
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(5, 1))
@@ -120,7 +152,7 @@ namespace SharpSvn.UI
                     dlg.passwordBox.Select();
                 }
 
-                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+				DialogResult r = RunDialog(dlg);
 
                 if (r != DialogResult.OK)
                 {
@@ -172,11 +204,8 @@ namespace SharpSvn.UI
 
         void DialogSslServerTrustHandler(Object sender, SvnSslServerTrustEventArgs e)
         {
-            if (Synchronizer != null && Synchronizer.InvokeRequired)
-            {
-                Synchronizer.Invoke(new EventHandler<SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler), new object[] { sender, e });
-                return;
-            }
+			if (Reinvoke(sender, e, DialogSslServerTrustHandler))
+				return;
 
             using (SslServerCertificateTrustDialog dlg = new SslServerCertificateTrustDialog())
             {
@@ -202,7 +231,7 @@ namespace SharpSvn.UI
                 dlg.invalidDateImage.Image = timeError ? Error : Ok;
                 dlg.serverMismatchImage.Image = invalidCommonName ? Error : Ok;
 
-                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+				DialogResult r = RunDialog(dlg);
 
                 if (r == DialogResult.OK)
                 {
@@ -217,11 +246,8 @@ namespace SharpSvn.UI
 
         void DialogSslClientCertificateHandler(Object sender, SvnSslClientCertificateEventArgs e)
         {
-            if (Synchronizer != null && Synchronizer.InvokeRequired)
-            {
-                Synchronizer.Invoke(new EventHandler<SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler), new object[] { sender, e });
-                return;
-            }
+			if (Reinvoke(sender, e, DialogSslClientCertificateHandler))
+				return;
 
             using (SslClientCertificateFileDialog dlg = new SslClientCertificateFileDialog())
             {
@@ -230,7 +256,7 @@ namespace SharpSvn.UI
                 dlg.descriptionBox.Visible = true;
                 dlg.rememberCheck.Enabled = e.MaySave;
 
-                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+				DialogResult r = RunDialog(dlg);
 
                 if (r != DialogResult.OK)
                 {
@@ -245,11 +271,8 @@ namespace SharpSvn.UI
 
         void DialogSslClientCertificatePasswordHandler(Object sender, SvnSslClientCertificatePasswordEventArgs e)
         {
-            if (Synchronizer != null && Synchronizer.InvokeRequired)
-            {
-                Synchronizer.Invoke(new EventHandler<SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler), new object[] { sender, e });
-                return;
-            }
+			if (Reinvoke(sender, e, DialogSslClientCertificatePasswordHandler))
+				return;
 
             using (SslClientCertificatePassPhraseDialog dlg = new SslClientCertificatePassPhraseDialog())
             {
@@ -258,7 +281,7 @@ namespace SharpSvn.UI
                 dlg.descriptionBox.Visible = true;
                 dlg.rememberCheck.Enabled = e.MaySave;
 
-                DialogResult r = (_window != null) ? dlg.ShowDialog(_window) : dlg.ShowDialog();
+				DialogResult r = RunDialog(dlg);
 
                 if (r != DialogResult.OK)
                 {
@@ -269,6 +292,6 @@ namespace SharpSvn.UI
                 e.Password = dlg.passPhraseBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
             }
-        }
-    }
+        }		
+	}
 }
