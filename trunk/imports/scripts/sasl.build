@@ -67,7 +67,8 @@
         <arg value="DB_INCLUDE=${path::get-full-path('release\include')}" />
         <!-- OpenSSL -->
         <arg value="OPENSSL_INCLUDE=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\inc32')}" />
-        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\out32')}" />
+        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\out32')}" if="${static=='true'}" />
+        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\out32dll')}" if="${static!='true'}" />
         <arg value="NTLM=1" />
         <arg value="NTLM_STATIC=1" />
       </exec>
