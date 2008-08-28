@@ -9,6 +9,9 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Net;
+using System.Collections.Generic;
+using System.Threading;
+using System.Diagnostics;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -102,6 +105,53 @@ namespace SharpSvn.Tests.Commands
                         Assert.That(e.BasePath, Is.EqualTo("/trunk"));
                     });
 
+            }
+        }
+
+        [Test, Ignore("Don't run this as normal test")]
+        public void ParallelList()
+        {
+            List<IAsyncResult> handlers = new List<IAsyncResult>();
+            for (int i = 0; i < 32; i++)
+            {
+                int n = i;
+                EventHandler eh = delegate
+                {
+                    Trace.WriteLine("Starting job" + n.ToString());
+                    new SvnClient().List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/src/SharpSvn"),
+                        delegate { });
+                };
+
+                handlers.Add(eh.BeginInvoke(null, EventArgs.Empty, null, eh));
+            }
+
+            foreach (IAsyncResult ar in handlers)
+            {
+                ((EventHandler)ar.AsyncState).EndInvoke(ar);
+            }
+        }
+
+        [Test]
+        public void ParallelLocalList()
+        {
+            Uri reposUri = new Uri(CollabReposUri, "trunk/");
+            List<IAsyncResult> handlers = new List<IAsyncResult>();
+            for (int i = 0; i < 128; i++)
+            {
+                int n = i;
+                EventHandler eh = delegate
+                {
+                    Trace.WriteLine("Starting job" + n.ToString());
+                    new SvnClient().List(reposUri,
+                        delegate { });
+                };
+
+                handlers.Add(eh.BeginInvoke(null, EventArgs.Empty, null, eh));
+            }
+
+            foreach (IAsyncResult ar in handlers)
+            {
+                ((EventHandler)ar.AsyncState).EndInvoke(ar);
             }
         }
 
