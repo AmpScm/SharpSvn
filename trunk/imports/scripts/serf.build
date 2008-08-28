@@ -25,7 +25,8 @@
           <loadfile file="${mak}" property="serfmak">
             <filterchain>
               <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
-              <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " />
+              <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${static=='true'}"/>
+              <replacestring from="= /D WIN32 " to="= /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${static!='true'}"/>
               <!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
               <replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi " />
               <!-- Don't include apr and openssl in the intermediate libraries -->
@@ -36,7 +37,7 @@
               <!-- Only compile library, the testfiles don't like the small library -->
               <replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
               <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
-              <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' />
+              <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' if="${enableIpv6=='true'}"/>
             </filterchain>
           </loadfile>
           <echo file="${mak}" message="${serfmak}" />

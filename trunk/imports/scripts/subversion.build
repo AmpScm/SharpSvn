@@ -188,7 +188,7 @@
               <replacestring from='InlineFunctionExpansion="2"' to='' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
-              <replacestring from='OutputFile="$(OutDir)\libsvn_' to='OutputFile="$(OutDir)\${dllPrefix}svn_' if="${static != 'true'}"/>
+              <replacestring from='OutputFile="$(OutDir)\libsvn_' to='OutputFile="$(OutDir)\${dllPrefix}svn_' if="${(static != 'true') and (dllPrefix != '')}"/>
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
