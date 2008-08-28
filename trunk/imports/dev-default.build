@@ -6,7 +6,8 @@
   <property name="dllPrefix" value="Svn-" />
   <property name="intl" value="none" />
   <property name="svnBuildName" value="SlikSvn" />
-  <property name="enableIpv6" value="false" />
+  <property name="enableIpv6" value="true" />
+  <property name="svnStatic" value="true" />
   
   <property name="wc" value="dev" overwrite="false" />
   <property name="branch" value="" overwrite="false" />
@@ -35,7 +36,7 @@
 			<include name="win32/**.vcproj" />			
 		</targetfiles>
 	</uptodate>
-	<if test="${not regenerate.done}">
+	<if test="${regenerate.done}">
 		<property name="pythonAvailable" value="0" />
 		<property name="impBase" value="../build/win32" />
 		<exec program="cmd.exe" workingdir="${wc}" verbose="true">
@@ -55,10 +56,10 @@
         <arg value="--with-serf=${impBase}/serf" />
         <arg value="--with-sasl=${impBase}/lib" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
-        <arg value="--disable-shared" if="${static=='true'}"/>
+        <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>
     </if>
-    <echo message="@echo off" file="${wc}/build/win32/build_zlib.bat" />
+    <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />
   
   </target>
 </project>
