@@ -21,8 +21,8 @@
         <arg value="-2005" />
         <arg value="-mt" />
       </exec>    
-      <copy file="${release}/lib/${libDb}.lib" tofile="${release}/lib/${libDb}d.lib" />
-      <copy file="${release}/lib-x64/${libDb}.lib" tofile="${release}/lib-x64/${libDb}d.lib" />
+      <copy file="${release}/lib/${libDb}.lib" tofile="${release}/lib/${libDb}d.lib" if="${platform=='win32'}"/>
+      <copy file="${release}/lib-${platform}/${libDb}.lib" tofile="${release}/lib-${platform}/${libDb}d.lib" if="${platform!='win32'}"/>
       <exec program="perl.exe" workingdir="${aprUtilDir}">
         <arg value="build/w32locatedb.pl" />
         <arg value="dll" />

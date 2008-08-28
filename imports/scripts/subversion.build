@@ -207,7 +207,6 @@
           <loadfile file="${sourceFile}" property="projtext">
             <filterchain>
               <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
-              <replacestring from='&lt;apu_want.h&gt;' to='&lt;db.h&gt; /* APU ${aprUtilVersion} fix */' if="${aprUtilVersion >= '1.2.11'}" />
               <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
 								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
             </filterchain>
