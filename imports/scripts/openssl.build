@@ -52,8 +52,10 @@
         <echo message="${def}" file="${opensslDir}/ms/ssleay32.def" />
         <loadfile file="${opensslDir}/ms/ntdll.mak" property="mk">
           <filterchain>
-            <replacestring from="$(LIB_D)\$(SSL)" to="$(LIB_D)\${dllPrefix}$(SSL)" if="${dllPrefix != ''}" />
-            <replacestring from="$(LIB_D)\$(CRYPTO)" to="$(LIB_D)\${dllPrefix}$(CRYPTO)" if="${dllPrefix != ''}" />
+            <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
+            <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
+            <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
+            <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
           </filterchain>
         </loadfile>
         <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />
@@ -77,15 +79,7 @@
       <echo message="${ossl_typ}" file="${opensslDir}/inc32/openssl/ossl_typ.h" />
     </OnceBlock>
     <!-- /Patch -->
-    <if test="${dllPrefix != ''}">
-      <copy
-        file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}libeay32.lib"
-        tofile="build/${platform}/openssl-${opensslVersion}/out32dll/libeay32.lib" if="${static != 'true'}" />
-      <copy
-        file="build/${platform}/openssl-${opensslVersion}/out32dll/${dllPrefix}ssleay32.lib"
-        tofile="build/${platform}/openssl-${opensslVersion}/out32dll/ssleay32.lib" if="${static != 'true'}" />
-    </if>
-	  <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
+	<copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
       <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
         <include name="*.lib" />
         <include name="*.exp" />
