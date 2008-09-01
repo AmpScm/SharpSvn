@@ -31,7 +31,7 @@ namespace SharpSvn.UI
 		/// Binds the specified client to the user interface defined by args
 		/// </summary>
 		/// <param name="client">The client to bind.</param>
-		/// <param name="args">The args.</param>
+        /// <param name="parentWindow">The parent window.</param>
 		public static void Bind(SvnClient client, IWin32Window parentWindow)
 		{
 			if (client == null)

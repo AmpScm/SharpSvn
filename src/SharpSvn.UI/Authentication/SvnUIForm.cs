@@ -10,9 +10,9 @@ namespace SharpSvn.UI.Authentication
 	/// 
 	/// </summary>
 	public class SvnUIForm : Form
-	{
+    {
 		/// <summary>
-		/// Initializes a new instance of the <see cref="SharpSvnUIForm"/> class.
+		/// Initializes a new instance of the <see cref="SvnUIForm"/> class.
 		/// </summary>
 		protected SvnUIForm()
 		{
@@ -77,5 +77,17 @@ namespace SharpSvn.UI.Authentication
 			get { return base.MaximizeBox; }
 			set { base.MaximizeBox = value; }
 		}
+
+        private void InitializeComponent()
+        {
+            this.SuspendLayout();
+            // 
+            // SvnUIForm
+            // 
+            this.ClientSize = new System.Drawing.Size(284, 264);
+            this.Name = "SvnUIForm";
+            this.ResumeLayout(false);
+
+        }
 	}
 }
