@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5001.721</title>
+<title>SharpSvn-Daily Update - 1.5002.738</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5001.721</h1>
+<h1>SharpSvn-Daily Update - 1.5002.738</h1>
 
 
 <p>
@@ -12,19 +12,24 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/978/SSvn-1.5001.721.zip">SharpSvn 1.5001.721</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1004/SSvn-1.5002.738.zip">SharpSvn 1.5002.738</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=721">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=738">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-08-28</td></tr>
+<tr><td> </td><td class="r"><a id="727" href="http://sharpsvn.net/rev/?r=727">[r727]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.UI/Authentication/SslClientCertificatePassPhraseDialog.Designer.cs, src/SharpSvn.UI/Authentication/SslServerCertificateTrustDialog.Designer.cs, src/SharpSvn.UI/Authentication/SslClientCertificatePassPhraseDialog.cs, src/SharpSvn.UI/Authentication/SslServerCertificateTrustDialog.cs, src/SharpSvn.UI/Authentication/UsernamePasswordDialog.Designer.cs, src/SharpSvn.UI/Authentication/SslClientCertificateFileDialog.Designer.cs, src/SharpSvn.UI/Authentication/UsernamePasswordDialog.cs, src/SharpSvn.UI/SvnClientUIHandler.cs (and 9 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Cleaned up UI binding code by introducing SvnUIBindArgs class with all optional
+parameters. Added support for handing over a IUIService instance for showing the dialog.
+(Allows conforming to the VS UI for AnkhSVN).<br>
+Please replace your calls to SharpSvnUI.Bind() with SvnUI.Bind()</td></tr>
 <tr class="d"><td colspan="4">2008-08-20</td></tr>
 <tr><td> </td><td class="r"><a id="718" href="http://sharpsvn.net/rev/?r=718">[r718]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/LookArgs/SvnLookRevisionPropertyArgs.h, src/SharpSvn/LookArgs/SvnLookPropertyArgs.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/SvnHookArguments.cpp, src/SharpSvn/LookCommands/LookGetRevisionProperty.cpp, src/SharpSvn/SvnLookClient.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed SvnLookPropertyArgs to SvnLookRevisionPropertyArgs to match
 method name and allow future SvnLookPropertyArgs class for reading non revision
@@ -88,34 +93,6 @@ UI handler. This allows multithreaded applications to synchronize
 the login UI back to the UI thread.</td></tr>
 <tr class="d"><td colspan="4">2008-07-28</td></tr>
 <tr><td> </td><td class="r"><a id="631" href="http://sharpsvn.net/rev/?r=631">[r631]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/Log.cpp, src/SharpSvn/SvnEnums.h, src/SharpSvn/EventArgs/SvnListEventArgs.h, src/SharpSvn/SvnClientArgs.h, src/SharpSvn/ReposCommands/LoadRepository.cpp, src/SharpSvn/SvnException.h, src/SharpSvn/EventArgs/SvnLogEventArgs.h, src/SharpSvn/SvnTools.h (and 41 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Whitespace trim at end of lines</td></tr>
-<tr><td> </td><td class="r"><a id="630" href="http://sharpsvn.net/rev/?r=630">[r630]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClientArgs.cpp, src/SharpSvn/SvnClient.cpp, src/SharpSvn/SvnClientArgs.h, src/SharpSvn/Args/Lock.h, src/SharpSvn/Commands/Lock.cpp, src/SharpSvn/SvnClient.h, src/SharpSvn/Args/Unlock.h, src/SharpSvn/Commands/Unlock.cpp (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed Lock and Unlock not returning errors on previously locked/unlocked resources.</td></tr>
-<tr><td> </td><td class="r"><a id="629" href="http://sharpsvn.net/rev/?r=629">[r629]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/LockTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added testcase on Lock command succeeding while the file is already locked.</td></tr>
-<tr class="d"><td colspan="4">2008-07-24</td></tr>
-<tr><td> </td><td class="r"><a id="628" href="http://sharpsvn.net/rev/?r=628">[r628]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/WorkingCopyEntries.h, src/SharpSvn.Tests/Commands/ListEntries.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed testcase for ShowHidden -&gt; RetrieveHidden and added xml documentation
-on this property.</td></tr>
-<tr><td> </td><td class="r"><a id="627" href="http://sharpsvn.net/rev/?r=627">[r627]</a></td><td class="a">rhuijben</td><td class="f">imports/Default.build, src/SharpSvn.UI/Properties/AssemblyInfo.cs, src/SharpSvn/AssemblyInfo.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated version numbers for Subversion 1.5.1</td></tr>
-<tr><td> </td><td class="r"><a id="626" href="http://sharpsvn.net/rev/?r=626">[r626]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/WorkingCopyEntries.h, src/SharpSvn/Commands/WorkingCopyEntries.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed new ShowHidden property to RetrieveHidden to match other similar
-properties</td></tr>
-<tr class="d"><td colspan="4">2008-07-23</td></tr>
-<tr><td> </td><td class="r"><a id="625" href="http://sharpsvn.net/rev/?r=625">[r625]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnNames.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved SvnPropertyNames out of the Implementation subnamespace</td></tr>
-<tr><td> </td><td class="r"><a id="624" href="http://sharpsvn.net/rev/?r=624">[r624]</a></td><td class="a">rhuijben</td><td class="f">src/SharpPlink/SharpPlink.cpp, src/SharpSvn/EventArgs/SvnEventArgs.h, src/tools/Po2Resx/Program.cs, src/SharpSvn.Tests/Commands/ListEntries.cs, src/SharpSvn.Tests/LocalizationTests.cs, src/SharpPlink/Resource.h, src/SharpSvn/SvnFileDiff.h, src/SharpSvn/SvnDiff.h (and 59 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Set svn:eol-style to native and svn:keywords to Id</td></tr>
-<tr><td> </td><td class="r"><a id="623" href="http://sharpsvn.net/rev/?r=623">[r623]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/Blame.cpp, src/SharpSvn/AprArray.cpp, src/SharpSvn/SvnClientEventArgs.cpp, src/SharpSvn/SvnStreamWrapper.h, src/SharpSvn/Commands/Commit.cpp, src/SharpSvn/Commands/Add.cpp, src/SharpSvn/Commands/DiffMerge.cpp, src/SharpSvn/EventArgs/SvnLogEventArgs.h (and 91 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Applied space before '(' on if, while and for</td></tr>
-<tr><td> </td><td class="r"><a id="622" href="http://sharpsvn.net/rev/?r=622">[r622]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/EventArgs/SvnWorkingCopyEntryEventArgs.h, src/SharpSvn/EventArgs/SvnStatusEventArgs.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added a lot of extra properties to SvnWorkingCopyEntryEventArgs.
-(It is now complete upto 1.5)</td></tr>
-<tr><td> </td><td class="r"><a id="621" href="http://sharpsvn.net/rev/?r=621">[r621]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClientArgs_Properties.h, src/SharpSvn.Tests/SharpSvn.Tests.csproj, src/SharpSvn/SharpSvn.vcproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Sync VS 2005 project with VS 2008</td></tr>
-<tr><td> </td><td class="r"><a id="620" href="http://sharpsvn.net/rev/?r=620">[r620]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnBase.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Shortcut creation of empty string to be always the static "" instance.</td></tr>
-<tr><td> </td><td class="r"><a id="619" href="http://sharpsvn.net/rev/?r=619">[r619]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/Args/WorkingCopyEntries.h, src/SharpSvn/Commands/WorkingCopyEntries.cpp, src/SharpSvn/EventArgs/SvnWorkingCopyEntryEventArgs.h, src/SharpSvn/SvnWorkingCopyClient.h, src/SharpSvn/EventArgs/SvnEventArgs.h, src/SharpSvn/SvnStreamWrapper.h (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added some missing files to project and implemented the initial batch of SvnWorkingCopyEntry
-properties.</td></tr>
-<tr><td> </td><td class="r"><a id="618" href="http://sharpsvn.net/rev/?r=618">[r618]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/PathTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated path tests to check for extremely long path behavior.</td></tr>
-<tr><td> </td><td class="r"><a id="617" href="http://sharpsvn.net/rev/?r=617">[r617]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnEnums.h, src/SharpSvn/SvnException.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://sharpsvn.net/rev/?r=616">r616</a>: Moved SvnErrorCode enum from SharpSvn.Implementation to SharpSvn
-and added missing GetWorkingCopyEntries enum value</td></tr>
-<tr><td> </td><td class="r"><a id="616" href="http://sharpsvn.net/rev/?r=616">[r616]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/GetWorkingCopyVersion.cpp, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SvnTools.cpp, src/SharpSvn/SvnClientArgs.h, src/SharpSvn/SvnClientEventArgs.h, src/SharpSvn.Tests/Commands/ZMiscTests.cs, src/SharpSvn/Commands/SvnWorkingCopyClient.cpp, src/SharpSvn.Tests/Commands/InfoTests.cs (and 16 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved all *WorkingCopy* commands from SvnClient to the new SvnWorkingCopyClient class.
-Added .ListEntries() method on SvnWorkingCopyClient to list the raw entries from a single
-workingcopy path (as required by AnkhSVN). Removing the feature of retrieving the untranslated
-base file (as that uses undocumented subversion behavior)</td></tr>
-<tr class="d"><td colspan="4">2008-07-21</td></tr>
-<tr class="d"><td colspan="4">2008-07-17</td></tr>
-<tr><td> </td><td class="r"><a id="614" href="http://sharpsvn.net/rev/?r=614">[r614]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.UI/SharpSvn.UI.csproj</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed project for VS2005</td></tr>
 
 </table>
 <!--/Recent changes-->
