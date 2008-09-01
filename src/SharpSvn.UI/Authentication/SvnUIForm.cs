@@ -19,6 +19,7 @@ namespace SharpSvn.UI.Authentication
 			ShowInTaskbar = false;
 			MinimizeBox = false;
 			MaximizeBox = false;
+            StartPosition = FormStartPosition.CenterParent;
 		}
 
 		/// <summary>
@@ -33,7 +34,7 @@ namespace SharpSvn.UI.Authentication
 		/// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
 		/// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
 		/// </PermissionSet>
-		[DefaultValue(false), Localizable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		[DefaultValue(false), Localizable(false)]
 		public new bool ShowInTaskbar
 		{
 			get { return base.ShowInTaskbar; }
@@ -52,7 +53,7 @@ namespace SharpSvn.UI.Authentication
 		/// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
 		/// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
 		/// </PermissionSet>
-		[DefaultValue(false), Localizable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		[DefaultValue(false), Localizable(false)]
 		public new bool MinimizeBox
 		{
 			get { return base.MinimizeBox; }
@@ -71,12 +72,29 @@ namespace SharpSvn.UI.Authentication
 		/// 	<IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode, ControlEvidence"/>
 		/// 	<IPermission class="System.Diagnostics.PerformanceCounterPermission, System, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Unrestricted="true"/>
 		/// </PermissionSet>
-		[DefaultValue(false), Localizable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+		[DefaultValue(false), Localizable(false)]
 		public new bool MaximizeBox
 		{
 			get { return base.MaximizeBox; }
 			set { base.MaximizeBox = value; }
 		}
+
+        /// <summary>
+        /// Gets or sets the starting position of the form at run time.
+        /// </summary>
+        /// <value></value>
+        /// <returns>
+        /// A <see cref="T:System.Windows.Forms.FormStartPosition"/> that represents the starting position of the form.
+        /// </returns>
+        /// <exception cref="T:System.ComponentModel.InvalidEnumArgumentException">
+        /// The value specified is outside the range of valid values.
+        /// </exception>
+        [DefaultValue(FormStartPosition.CenterParent), Localizable(false)]
+        public new FormStartPosition StartPosition
+        {
+            get { return base.StartPosition; }
+            set { base.StartPosition = value; }
+        }
 
         private void InitializeComponent()
         {
@@ -87,7 +105,6 @@ namespace SharpSvn.UI.Authentication
             this.ClientSize = new System.Drawing.Size(284, 264);
             this.Name = "SvnUIForm";
             this.ResumeLayout(false);
-
         }
 	}
 }
