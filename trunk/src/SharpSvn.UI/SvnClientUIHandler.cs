@@ -89,7 +89,7 @@ namespace SharpSvn.UI
 			if (UIService != null)
 				return UIService.ShowDialog(dialog);
 			else if (_window != null)
-				return dialog.ShowDialog(dialog);
+				return dialog.ShowDialog(_window);
 			else
 				return dialog.ShowDialog();
 		}
