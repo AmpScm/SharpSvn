@@ -35,7 +35,7 @@ namespace SharpSvn.UI.Authentication
 
                 ofd.ValidateNames = true;
                 ofd.CheckFileExists = true;
-                ofd.Filter = "Certificate Files (*)|*";
+                ofd.Filter = "Certificate Files|*.cer;*.pem;*.p12|All Files|*";
                 ofd.FilterIndex = 0;
 
                 if (ofd.ShowDialog(this) == DialogResult.OK)
