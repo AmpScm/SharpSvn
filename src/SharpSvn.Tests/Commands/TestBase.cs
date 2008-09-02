@@ -19,6 +19,7 @@ namespace SharpSvn.Tests.Commands
 	public enum TestReposType
 	{
 		Empty,
+        EmptyNoMerge,
 		AnkhRepos,
 		CollabRepos
 	}
@@ -82,11 +83,20 @@ namespace SharpSvn.Tests.Commands
 			switch (type)
 			{
 				case TestReposType.Empty:
-					{
-						SvnRepositoryClient rc= new SvnRepositoryClient();
-						rc.CreateRepository(path);
-						return path;
-					}
+                        using (SvnRepositoryClient rc = new SvnRepositoryClient())
+                        {
+                            rc.CreateRepository(path);
+                            return path;
+                        }
+                case TestReposType.EmptyNoMerge:
+                        using (SvnRepositoryClient rc = new SvnRepositoryClient())
+                        {
+                            SvnCreateRepositoryArgs rca = new SvnCreateRepositoryArgs();
+                            rca.RepositoryCompatibility = SvnRepositoryCompatibility.Subversion14;
+                            rc.CreateRepository(path, rca);
+
+                            return path;
+                        }
 				case TestReposType.CollabRepos:
 					{
 						SvnRepositoryClient rc = new SvnRepositoryClient();
@@ -235,6 +245,7 @@ namespace SharpSvn.Tests.Commands
 
 		protected static void UnzipToFolder(string zipFile, string toFolder)
 		{
+            Assert.That(File.Exists(zipFile));
 			FastZip fz = new FastZip();
 			fz.CreateEmptyDirectories = true;
 			fz.RestoreAttributesOnExtract = true;

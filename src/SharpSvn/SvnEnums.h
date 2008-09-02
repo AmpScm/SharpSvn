@@ -381,6 +381,16 @@ namespace SharpSvn {
 		IgnoreAll	= svn_diff_file_ignore_space_all
 	};
 
+	public enum class SvnCapability
+	{
+		None=0,
+		Depth,
+		MergeInfo,
+		LogRevisionProperties,
+		PartialReplay,
+		CommitRevisionProperties
+	};
+
 	namespace Implementation
 	{
 

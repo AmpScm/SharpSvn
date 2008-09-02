@@ -70,6 +70,7 @@
     <Compile Include="Commands\AddTests.cs" />
     <Compile Include="Commands\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
+    <Compile Include="Commands\GetCapabilities.cs" />
     <Compile Include="Commands\CheckOutTests.cs" />
     <Compile Include="Commands\CleanUpTests.cs" />
     <Compile Include="Commands\CommitTests.cs" />

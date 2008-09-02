@@ -931,6 +931,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\GetCapabilities.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\GetProperty.cpp"
 					>
 				</File>
@@ -1180,6 +1184,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\GetAppliedMergeInfo.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\GetCapabilities.h"
 					>
 				</File>
 				<File

@@ -74,6 +74,7 @@ namespace SharpSvn {
 	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
+	ref class SvnGetCapabilitiesArgs;
 
 	ref class SvnFileVersionsArgs;
 
@@ -1088,6 +1089,12 @@ namespace SharpSvn {
 		/// <summary>Retrieve the content of specified files or URLs with revision and author information per-line (<c>svn blame</c>)</summary>
 		bool GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list);
 
+	public:
+		/// <overloads>Checks whether the repository of the specified target has the specified capabilities</overloads>
+		/// <summary>Checks whether the repository of the specified target has the specified capabilities</summary>
+		bool GetCapabilities(SvnTarget^ target, IEnumerable<SvnCapability>^ retrieve, [Out]Collection<SvnCapability>^% capabilities);
+		/// <summary>Checks whether the repository of the specified target has the specified capabilities</summary>
+		bool GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args, [Out]Collection<SvnCapability>^% capabilities);
 
 	public:
 		/// <overloads>Lists the versions of the specified file</overloads>
