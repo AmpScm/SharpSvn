@@ -109,7 +109,6 @@ namespace SharpSvn.UI.Authentication
             // 
             // panel1
             // 
-            this.panel1.BackColor = System.Drawing.Color.White;
             this.panel1.BackgroundImage = global::SharpSvn.UI.Properties.Resources.AuthenticationBanner;
             this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
