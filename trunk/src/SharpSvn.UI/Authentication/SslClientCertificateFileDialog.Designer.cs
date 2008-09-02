@@ -62,7 +62,6 @@ namespace SharpSvn.UI.Authentication
                         | System.Windows.Forms.AnchorStyles.Right)));
             this.fileBox.Location = new System.Drawing.Point(94, 113);
             this.fileBox.Name = "fileBox";
-            this.fileBox.PasswordChar = '*';
             this.fileBox.Size = new System.Drawing.Size(236, 20);
             this.fileBox.TabIndex = 3;
             // 
