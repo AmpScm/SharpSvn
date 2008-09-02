@@ -8,8 +8,7 @@ namespace SharpSvn.Tests.Commands
     [TestFixture]
     public class FileVersions : TestBase
     {
-#if NOT
-        [Test]
+        [Test, Obsolete]
         public void ListIndex()
         {
             bool touched = false;
@@ -22,7 +21,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test]
+        [Test, Obsolete]
         public void ListIndexDir()
         {
             bool touched = false;
@@ -34,7 +33,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(touched);
         }
-#endif
+
     }
 }
 
