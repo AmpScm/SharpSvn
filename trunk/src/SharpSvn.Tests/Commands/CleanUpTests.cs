@@ -16,14 +16,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class CleanupTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Test that Client::Cleanup removes the lock file
 		/// </summary>

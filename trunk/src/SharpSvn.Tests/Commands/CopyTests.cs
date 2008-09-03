@@ -16,15 +16,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class CopyTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Tests copying a file in WC -> WC
 		/// </summary>

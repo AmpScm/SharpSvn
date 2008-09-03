@@ -25,7 +25,6 @@ namespace SharpSvn.Tests.Commands
         {
             base.SetUp();
 
-            this.ExtractRepos();
             this.logMessages.Clear();
         }
 

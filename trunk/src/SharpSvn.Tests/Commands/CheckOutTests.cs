@@ -20,7 +20,6 @@ namespace SharpSvn.Tests.Commands
 		public override void SetUp()
 		{
 			base.SetUp();
-			this.ExtractRepos();
 			this.newWc = this.FindDirName(Path.Combine(Path.GetTempPath(), "moo"));
 		}
 

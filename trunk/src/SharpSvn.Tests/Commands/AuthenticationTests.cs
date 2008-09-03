@@ -20,8 +20,6 @@ namespace SharpSvn.Tests.Commands
 		public override void SetUp()
 		{
 			base.SetUp();
-			this.ExtractRepos();
-
 			_serverTrustTicked = false;
 			_userNamePasswordTicked = false;
 			_userArgs = null;

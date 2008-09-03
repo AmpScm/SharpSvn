@@ -21,13 +21,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class ListTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractRepos();
-		}
-
 		/// <summary>
 		/// Compares the list from the command line client with that obtained
 		/// from Client::List

@@ -17,14 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class CommitTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Modifies a file in the working copy and commits the containing directory.
 		/// </summary>
