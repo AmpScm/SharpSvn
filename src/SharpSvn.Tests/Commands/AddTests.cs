@@ -16,13 +16,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class AddTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Attempts to add a file, checking that the file actually was added
 		/// </summary>

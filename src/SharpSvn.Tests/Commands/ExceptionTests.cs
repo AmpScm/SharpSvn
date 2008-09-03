@@ -15,15 +15,6 @@ namespace SharpSvn.Tests.Commands
 	/// </summary>
 	public class ExceptionTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractWorkingCopy();
-			this.ExtractRepos();
-		}
-
 		/// <summary>
 		/// Attempt to add a file that is not in a vc dir.
 		/// </summary>

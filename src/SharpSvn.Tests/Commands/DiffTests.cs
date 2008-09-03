@@ -17,15 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class DiffTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		[Test]
 		public void TestLocalDiff()
 		{

@@ -16,13 +16,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class GetPropertyTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractWorkingCopy();
-		}
-
 		[Test]
 		public void TestPropGetOnFile()
 		{

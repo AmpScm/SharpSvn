@@ -16,33 +16,18 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class ExportTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-			this.newWc = this.FindDirName(Path.Combine(Path.GetTempPath(), "moo"));
-		}
-
-		[TearDown]
-		public override void TearDown()
-		{
-			base.TearDown();
-			Directory.Delete(this.newWc, true);
-		}
-
 		/// <summary>
 		/// Test export operation from a repository
 		/// </summary>
 		[Test]
 		public void TestExportRepos()
 		{
-			this.Client.Export(new SvnUriTarget(ReposUrl, SvnRevision.Head), this.newWc);
+            string wc = Path.Combine(GetTempDir(), "wc");
+			this.Client.Export(new SvnUriTarget(ReposUrl, SvnRevision.Head), wc);
 
-			Assert.That(File.Exists(Path.Combine(this.newWc, "Form.cs")),
+			Assert.That(File.Exists(Path.Combine(wc, "Form.cs")),
 				"Exported file not there");
-			Assert.That(!Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
+			Assert.That(!Directory.Exists(Path.Combine(wc, SvnClient.AdministrativeDirectoryName)),
 				".svn directory found");
 		}
 		/// <summary>
@@ -51,25 +36,24 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestExportWc()
 		{
-			this.Client.Export(new SvnPathTarget(this.WcPath), this.newWc);
+            string wc = Path.Combine(GetTempDir(), "wc");
+			this.Client.Export(WcPath, wc);
 
-			Assert.That(File.Exists(Path.Combine(this.newWc, "Form.cs")),
+			Assert.That(File.Exists(Path.Combine(wc, "Form.cs")),
 				"Exported file not there");
-			Assert.That(!Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
+			Assert.That(!Directory.Exists(Path.Combine(wc, SvnClient.AdministrativeDirectoryName)),
 				".svn directory found");
 		}
 
 		[Test]
 		public void TestExportNonRecursive()
 		{
+            string wc = Path.Combine(GetTempDir(), "wc");
 			SvnExportArgs a = new SvnExportArgs();
 			a.Depth = SvnDepth.Empty;
 			SvnUpdateResult r;
-			this.Client.Export(this.WcPath, this.newWc, a, out r);
-			Assert.That(Directory.GetDirectories(this.newWc).Length, Is.EqualTo(0));
+			this.Client.Export(WcPath, wc, a, out r);
+			Assert.That(Directory.GetDirectories(wc).Length, Is.EqualTo(0));
 		}
-
-		private string newWc;
-
 	}
 }

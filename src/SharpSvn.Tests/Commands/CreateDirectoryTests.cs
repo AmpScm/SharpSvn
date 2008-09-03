@@ -16,15 +16,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class CreateDirectoryTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Tests creating a directory in the working copy
 		/// </summary>
