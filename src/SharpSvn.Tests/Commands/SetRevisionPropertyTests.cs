@@ -17,15 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class SetRevisionPropertyTests : TestBase
 	{
-
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractWorkingCopy();
-			this.ExtractRepos();
-		}
-
 		/// <summary>
 		///Attempts to Set Properties on a file in the repository represented by url. 
 		/// </summary>

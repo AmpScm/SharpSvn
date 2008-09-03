@@ -21,7 +21,6 @@ namespace SharpSvn.Tests.Commands
         public override void SetUp()
         {
             base.SetUp();
-            this.ExtractWorkingCopy();
         }
 
         /// <summary>

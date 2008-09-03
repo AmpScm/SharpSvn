@@ -16,14 +16,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class UnlockTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		[Test]
 		public void BasicUnlockTest()
 		{

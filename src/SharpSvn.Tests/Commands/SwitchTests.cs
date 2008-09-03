@@ -21,8 +21,6 @@ namespace SharpSvn.Tests.Commands
 		{
 			base.SetUp();
 			this.path = Path.GetTempPath();
-			base.ExtractRepos();
-			base.ExtractWorkingCopy();
 		}
 
 		[Test]

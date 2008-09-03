@@ -21,7 +21,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test, Obsolete]
+        [Test, Obsolete, ExpectedException(typeof(SvnFileSystemNodeTypeException))]
         public void ListIndexDir()
         {
             bool touched = false;

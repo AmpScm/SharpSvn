@@ -17,14 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class WriteTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Attemts to do a cat on a local working copy item
 		/// </summary>
