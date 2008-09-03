@@ -193,6 +193,7 @@ using System::ComponentModel::DescriptionAttribute;
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyLockException, SvnWorkingCopyException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemException, SvnException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemNodeTypeException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemLockException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemOutOfDateException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryException, SvnException);

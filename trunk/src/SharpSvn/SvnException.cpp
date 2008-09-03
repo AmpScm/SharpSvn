@@ -241,9 +241,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_TRANSACTION_NOT_MUTABLE:
 		case SVN_ERR_FS_NOT_FOUND:
 		case SVN_ERR_FS_ID_NOT_FOUND:
-		case SVN_ERR_FS_NOT_ID:
-		case SVN_ERR_FS_NOT_DIRECTORY:
-		case SVN_ERR_FS_NOT_FILE:
+		case SVN_ERR_FS_NOT_ID:		
 		case SVN_ERR_FS_NOT_SINGLE_PATH_COMPONENT:
 		case SVN_ERR_FS_NOT_MUTABLE:
 		case SVN_ERR_FS_ALREADY_EXISTS:
@@ -266,6 +264,9 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_NO_SUCH_NODE_ORIGIN:
 		case SVN_ERR_FS_UNSUPPORTED_UPGRADE:
 			return gcnew SvnFileSystemException(error);
+		case SVN_ERR_FS_NOT_DIRECTORY:
+		case SVN_ERR_FS_NOT_FILE:
+			return gcnew SvnFileSystemNodeTypeException(error);
 		case SVN_ERR_FS_OUT_OF_DATE:
 		case SVN_ERR_FS_TXN_OUT_OF_DATE:
 			return gcnew SvnFileSystemOutOfDateException(error);
