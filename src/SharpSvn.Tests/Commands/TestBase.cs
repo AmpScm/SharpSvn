@@ -474,10 +474,13 @@ namespace SharpSvn.Tests.Commands
 		/// <param name="path"></param>
 		protected void RenameAdminDirs(string path)
 		{
+            if (TRAD_WC_ADMIN_DIR == SvnClient.AdministrativeDirectoryName)
+                return;
+
 			string adminDir = Path.Combine(path, TRAD_WC_ADMIN_DIR);
 			string newDir = Path.Combine(path, SvnClient.AdministrativeDirectoryName);
-			if (Directory.Exists(adminDir) &&
-				TRAD_WC_ADMIN_DIR != SvnClient.AdministrativeDirectoryName)
+
+			if (Directory.Exists(adminDir))
 			{
 				Directory.Move(adminDir, newDir);
 			}
@@ -496,8 +499,9 @@ namespace SharpSvn.Tests.Commands
             ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svnserve.exe")),
 				String.Format("--daemon --root {0} --listen-host 127.0.0.1 --listen-port {1}", root,
 				PortNumber));
-			//psi.UseShellExecute = true;
+
             psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;            
 
 			return Process.Start(psi);
 		}
