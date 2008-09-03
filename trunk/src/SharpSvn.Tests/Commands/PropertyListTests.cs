@@ -17,14 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class PropListTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractWorkingCopy();
-		}
-
 		[Test]
 		public void TestBasic()
 		{

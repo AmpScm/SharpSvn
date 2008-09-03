@@ -17,14 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class RevertTests : TestBase
 	{
-
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		///Attempts to revert single file. 
 		/// </summary>

@@ -15,14 +15,6 @@ namespace SharpSvn.Tests.Commands
 	/// </summary>
 	public class RevPropListTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractRepos();
-		}
-
 		/// <summary>
 		/// Sets two properties on a repos and tries to retrieve them with Client::RevPropList
 		/// </summary>

@@ -17,14 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class ZMiscTests : TestBase
 	{
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-		}
-
 		/// <summary>
 		/// Tests the Client::UrlFromPath function.
 		/// </summary>

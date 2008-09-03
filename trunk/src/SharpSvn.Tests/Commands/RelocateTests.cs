@@ -19,14 +19,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class RelocateTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this.ExtractWorkingCopy();
-			this.ExtractRepos();
-		}
-
 		[Test]
 		public void Test()
 		{

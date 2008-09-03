@@ -203,27 +203,24 @@ namespace SharpSvn.Tests.Commands
 		/// <summary>
 		/// extract our test repository
 		/// </summary>
-		public void ExtractRepos()
+		void ExtractRepos()
 		{
-			if (_reposPath == null)
-				_reposPath = Path.GetFullPath(Path.Combine(BASEPATH, REPOS_NAME)); // \tmp\repos on current disk at this time
-
-			if (Directory.Exists(_reposPath))
-				RecursiveDelete(_reposPath);
+            if (_reposPath == null)
+                _reposPath = GetTempDir();
 
 			UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
 
-			_reposUri = new Uri("file:///" + _reposPath.Replace(Path.DirectorySeparatorChar, '/') + '/');
+			_reposUri = PathToUri(_reposPath);
 		}
 
-		public void ExtractWorkingCopy()
+		void ExtractWorkingCopy()
 		{
 			if (ReposUrl == null)
 				ExtractRepos();
 
 			System.Diagnostics.Debug.Assert(Directory.Exists(ReposPath));
 
-			this._wcPath = Path.GetFullPath(this.FindDirName(Path.Combine(BASEPATH, WC_NAME)));
+            this._wcPath = GetTempDir();
 
 			UnzipToFolder(Path.Combine(ProjectBase, "Zips/" + WC_FILE), _wcPath);
 
@@ -544,7 +541,6 @@ namespace SharpSvn.Tests.Commands
 
 		protected readonly string REPOS_FILE;
 		private const string REPOS_NAME = "repos";
-		protected const string BASEPATH = @"\tmp";
 		protected readonly string WC_FILE;
 		protected const string WC_NAME = "wc";
 		protected const string TRAD_WC_ADMIN_DIR = ".svn";

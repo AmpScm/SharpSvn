@@ -20,9 +20,8 @@ namespace SharpSvn.Tests.Commands
 		public override void SetUp()
 		{
 			base.SetUp();
-			this.ExtractRepos();
-			this.ExtractWorkingCopy();
-			this.wc2 = this.FindDirName(Path.Combine(TestBase.BASEPATH, TestBase.WC_NAME));
+
+            this.wc2 = GetTempDir();
 
 			UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), wc2);
 			this.RenameAdminDirs(this.wc2);

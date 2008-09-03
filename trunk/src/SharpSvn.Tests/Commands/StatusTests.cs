@@ -17,15 +17,6 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class StatusTests : TestBase
 	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-
-			this.ExtractWorkingCopy();
-			this.ExtractRepos();
-		}
-
 		/// <summary>Compares the status from Client::Status with the output from 
 		/// commandline client</summary>
 		[Test]
