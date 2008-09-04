@@ -669,10 +669,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnRepositoryClient.h"
-					>
-				</File>
-				<File
 					RelativePath=".\SvnRepositorySession.h"
 					>
 				</File>
@@ -1301,6 +1297,10 @@
 		<Filter
 			Name="SvnRepositoryClient"
 			>
+			<File
+				RelativePath=".\SvnRepositoryClient.h"
+				>
+			</File>
 			<Filter
 				Name="Args"
 				>
@@ -1322,6 +1322,10 @@
 				</File>
 				<File
 					RelativePath=".\ReposArgs\RecoverRepository.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposArgs\UpgradeRepository.h"
 					>
 				</File>
 			</Filter>
@@ -1350,6 +1354,10 @@
 				</File>
 				<File
 					RelativePath=".\ReposCommands\RecoverRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposCommands\UpgradeRepository.cpp"
 					>
 				</File>
 			</Filter>
