@@ -70,8 +70,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 		args->ImportParent ? pool.AllocCanonical(args->ImportParent) : nullptr,
 		args->RunPreCommitHook,
 		args->RunPostCommitHook,
-		nullptr,
-		nullptr,
+		CtxHandle->cancel_func,
+		CtxHandle->cancel_baton,
 		pool.Handle);
 
 	return args->HandleResult(this, r);
