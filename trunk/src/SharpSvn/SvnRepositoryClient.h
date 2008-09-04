@@ -17,6 +17,7 @@ namespace SharpSvn {
 	ref class SvnRecoverRepositoryArgs;
 	ref class SvnLoadRepositoryArgs;
 	ref class SvnDumpRepositoryArgs;
+	ref class SvnUpgradeRepositoryArgs;
 
 
 	/// <summary>
@@ -52,11 +53,41 @@ namespace SharpSvn {
 		/// <summary>Recovers the repository at the specified local path</summary>
 		bool RecoverRepository(String^ repositoryPath, SvnRecoverRepositoryArgs^ args);
 
+		/// <overloads>Loads a repository from a file (svnadmin load)</overloads>
+		/// <summary>Loads a repository from a file (svnadmin load)</summary>
 		bool LoadRepository(String^ repositoryPath, Stream^ from);
+		/// <summary>Loads a repository from a file (svnadmin load)</summary>
 		bool LoadRepository(String^ repositoryPath, Stream^ from, SvnLoadRepositoryArgs^ args);
 
+		/// <overloads>Dumps a repository to a file (svnadmin dump)</overloads>
+		/// <summary>Dumps a repository to a file (svnadmin dump)</summary>
 		bool DumpRepository(String^ repositoryPath, Stream^ to);
+		/// <summary>Dumps a repository to a file (svnadmin dump)</summary>
 		bool DumpRepository(String^ repositoryPath, Stream^ to, SvnDumpRepositoryArgs^ args);
+
+		/// <overloads>In-Place Upgrades a repository to a later version</overloads>
+		/// <summary>In-Place Upgrades a repository to a later version</summary>
+		/// <remarks>
+		///  NOTE: This functionality is provided as a convenience for
+		/// administrators wishing to make use of new Subversion functionality
+		/// without a potentially costly full repository dump/load.  As such,
+		/// the operation performs only the minimum amount of work needed to
+		/// accomplish this while maintaining the integrity of the repository.
+		/// It does *not* guarantee the most optimized repository state as a
+		/// dump and subsequent load would.
+		/// </remarks>
+		bool UpgradeRepository(String^ repositoryPath);
+		/// <summary>In-Place Upgrades a repository to a later version</summary>
+		/// <remarks>
+		///  NOTE: This functionality is provided as a convenience for
+		/// administrators wishing to make use of new Subversion functionality
+		/// without a potentially costly full repository dump/load.  As such,
+		/// the operation performs only the minimum amount of work needed to
+		/// accomplish this while maintaining the integrity of the repository.
+		/// It does *not* guarantee the most optimized repository state as a
+		/// dump and subsequent load would.
+		/// </remarks>
+		bool UpgradeRepository(String^ repositoryPath, SvnUpgradeRepositoryArgs^ args);
 
 	private:
 		~SvnRepositoryClient();

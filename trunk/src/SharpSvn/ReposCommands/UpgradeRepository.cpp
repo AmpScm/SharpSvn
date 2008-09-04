@@ -5,22 +5,22 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
-#include "ReposArgs/RecoverRepository.h"
+#include "ReposArgs/UpgradeRepository.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
-bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
+bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 
-	return RecoverRepository(repositoryPath, gcnew SvnRecoverRepositoryArgs());
+	return UpgradeRepository(repositoryPath, gcnew SvnUpgradeRepositoryArgs());
 }
 
-bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRepositoryArgs^ args)
+bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRepositoryArgs^ args)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
@@ -31,13 +31,11 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	svn_error_t* r = svn_repos_recover3(
+	svn_error_t* r = svn_repos_upgrade(
 		pool.AllocPath(repositoryPath),
 		args->NonBlocking,
 		nullptr,
 		nullptr,
-		CtxHandle->cancel_func,
-		CtxHandle->cancel_baton,
 		pool.Handle);
 
 	return args->HandleResult(this, r);
