@@ -151,6 +151,27 @@ namespace SharpSvn.Tests.Commands
             client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
         }
 
+        protected SvnClient NewSvnClient(bool expectCommit, bool expectConflict)
+        {
+            SvnClient client = new SvnClient();
+
+            client.Conflict += delegate(object sender, SvnConflictEventArgs e)
+            {
+                Assert.That(true, Is.EqualTo(expectConflict), "Conflict expected");
+            };
+
+            client.Committing += delegate(object sender, SvnCommittingEventArgs e)
+            {
+                Assert.That(true, Is.EqualTo(expectCommit), "Commit expected");
+                if (e.LogMessage == null)
+                    e.LogMessage = "";
+
+                GC.KeepAlive(e.Items);
+            };
+
+            return client;
+        }
+
         protected virtual void OnClientNotify(object sender, SvnNotifyEventArgs e)
         {
             bool found = File.Exists(e.FullPath) || Directory.Exists(e.FullPath) || Directory.Exists(Path.GetDirectoryName(e.FullPath));
