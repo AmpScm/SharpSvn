@@ -142,7 +142,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		Uri^ root;
 		Uri^ suffix;
 
-		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer, UriFormat::SafeUnescaped), UriKind::Absolute, root))
+		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped), UriKind::Absolute, root))
 			throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
 
 		String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
