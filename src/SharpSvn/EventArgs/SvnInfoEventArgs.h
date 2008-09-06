@@ -215,11 +215,20 @@ namespace SharpSvn {
 			}
 		}
 
-		property __int64 CopyFromRev
+		property __int64 CopyFromRevision
 		{
 			__int64 get()
 			{
 				return _copyFromRev;
+			}
+		}
+
+		[Obsolete("Please use .CopyFromRevision")]
+		property __int64 CopyFromRev
+		{
+			__int64 get()
+			{
+				return CopyFromRevision;
 			}
 		}
 

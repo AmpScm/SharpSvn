@@ -1078,7 +1078,7 @@ namespace SharpSvn.Tests
                     Assert.That(e.ConflictOld, Is.Null);
                     Assert.That(e.ConflictWork, Is.Null);
                     Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
-                    Assert.That(e.CopyFromRev, Is.EqualTo(-1L));
+                    Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
                     Assert.That(e.CopyFromUri, Is.Null);
                     Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
                     Assert.That(e.FullPath, Is.EqualTo(file));
@@ -1112,7 +1112,7 @@ namespace SharpSvn.Tests
                         Assert.That(e.ConflictOld, Is.Null);
                         Assert.That(e.ConflictWork, Is.Null);
                         Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-                        Assert.That(e.CopyFromRev, Is.EqualTo(-1L));
+                        Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
                         Assert.That(e.CopyFromUri, Is.Null);
                         Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
                         Assert.That(e.FullPath, Is.EqualTo(file));
@@ -1144,7 +1144,7 @@ namespace SharpSvn.Tests
                     Assert.That(e.ConflictOld, Is.Null);
                     Assert.That(e.ConflictWork, Is.Null);
                     Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
-                    Assert.That(e.CopyFromRev, Is.EqualTo(0L));
+                    Assert.That(e.CopyFromRevision, Is.EqualTo(0L));
                     Assert.That(e.CopyFromUri, Is.Null);
                     Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
                     Assert.That(e.FullPath, Is.Null);
