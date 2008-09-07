@@ -20,7 +20,7 @@ namespace SharpSvn {
 			{
 				if (String::IsNullOrEmpty(name))
 					throw gcnew ArgumentNullException("name");
-				else if (String::IsNullOrEmpty(version))
+				else if (!version)
 					throw gcnew ArgumentNullException("version");
 
 				_name = name;
@@ -62,6 +62,8 @@ namespace SharpSvn {
 			initonly String^ _name;
 			initonly String^ _version;
 			initonly bool _dynamicallyLinked;
+			initonly System::Version^ _versionData;
+			
 		internal:
 			SvnLibrary(SvnLibraryAttribute^ attribute)
 			{
@@ -71,6 +73,12 @@ namespace SharpSvn {
 				_name = attribute->Name;
 				_version = attribute->Version;
 				_dynamicallyLinked = attribute->DynamicallyLinked;
+
+				System::Text::RegularExpressions::Match^ m =
+					System::Text::RegularExpressions::Regex::Match(_version, "\\d+\\.(\\d+\\.)*\\d+");
+
+				if (m->Success)
+					_versionData = gcnew System::Version(m->Value);				
 			}
 
 		public:
@@ -82,11 +90,19 @@ namespace SharpSvn {
 				}
 			}
 
-			property String^ Version
+			property String^ VersionString
 			{
 				String^ get()
 				{
 					return _version;
+				}
+			}
+
+			property System::Version^ Version
+			{
+				System::Version^ get()
+				{
+					return _versionData;
 				}
 			}
 
