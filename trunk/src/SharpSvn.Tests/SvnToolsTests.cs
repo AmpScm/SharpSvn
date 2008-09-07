@@ -77,5 +77,20 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetFileName(new Uri("http://user@svn/r#")), Is.EqualTo("r"), "# is not part of the repository url");
             Assert.That(SvnTools.GetFileName(new Uri("http://svn/s")), Is.EqualTo("s"));
         }
+
+        [Test]
+        public void TestLibs()
+        {
+            foreach (SvnLibrary lib in SvnClient.SvnLibraries)
+            {
+                Assert.That(lib.Name, Is.Not.Null);
+                if (lib.Name != "SharpPlink")
+                {
+                    Assert.That(lib.VersionString, Is.Not.Null,"VersionString is null for {0}", lib.Name);
+                    Assert.That(lib.Version, Is.Not.Null, "Version is null for {0} ({1})", lib.Name, lib.VersionString);
+                    Assert.That(lib.Version, Is.GreaterThan(new Version(0, 1)));
+                }
+            }
+        }
     }
 }
