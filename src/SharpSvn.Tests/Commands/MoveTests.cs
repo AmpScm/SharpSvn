@@ -66,5 +66,104 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(cmd.IndexOf("Form.cs") == -1, "File wasn't moved");
 			Assert.That(cmd.IndexOf("renamedForm") >= 0, "Moved file doens't exist");
 		}
+
+        bool ItemExists(Uri target)
+        {
+            bool found = false;
+            using (SvnClient client = NewSvnClient(false, false))
+            {
+                SvnInfoArgs args = new SvnInfoArgs();
+                args.ThrowOnError = false;
+                args.Depth = SvnDepth.Empty;
+                return client.Info(target, args, delegate(object sender, SvnInfoEventArgs e)
+                {
+                    found = true;
+                }) && found;
+            }
+        }        
+
+        [Test]
+        public void MoveTest()
+        {
+            string TestPath = GetTempDir();
+
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+                string file = Path.Combine(WcPath, "LocalMoveBase");
+
+                TouchFile(file);
+                client.Add(file);
+
+                TouchFile(Path.Combine(TestPath, "MoveTestImport/RemoteMoveBase"), true);
+
+                client.RemoteImport(Path.Combine(TestPath, "MoveTestImport"), new Uri(ReposUrl, "RemoteMoveBase"));
+
+                client.Commit(WcPath);
+
+                Assert.That(ItemExists(new Uri(ReposUrl, "RemoteMoveBase")), Is.True, "Remote base does exist");
+                Assert.That(ItemExists(new Uri(ReposUrl, "LocalMoveBase")), Is.True, "Local base does exist");
+
+                client.RemoteMove(new Uri(ReposUrl, "RemoteMoveBase"), new Uri(ReposUrl, "RemoteMoveTarget"));
+                client.Move(file, Path.Combine(WcPath, "LocalMoveTarget"));
+
+                client.Commit(WcPath);
+
+                Assert.That(ItemExists(new Uri(ReposUrl, "RemoteMoveTarget")), Is.True, "Remote target exists");
+                Assert.That(ItemExists(new Uri(ReposUrl, "LocalMoveTarget")), Is.True, "Local target exists");
+                Assert.That(ItemExists(new Uri(ReposUrl, "RemoteMoveBase")), Is.False, "Remote base does not exist");
+                Assert.That(ItemExists(new Uri(ReposUrl, "LocalMoveBase")), Is.False, "Local base does not exist");
+            }
+        }
+
+        [Test]
+        public void MoveAndEditTest()
+        {
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+                string file = Path.Combine(WcPath, "LMB");
+
+                TouchFile(file);
+                client.Add(file);
+
+                File.AppendAllText(Path.Combine(WcPath, "LMB"), "Banana" + Environment.NewLine);
+
+                client.Move(file, Path.Combine(WcPath, "LMB2"));
+
+                File.AppendAllText(Path.Combine(WcPath, "LMB2"), "Banana" + Environment.NewLine);
+
+                client.Commit(WcPath);
+            }
+        }
+
+        [Test]
+        public void TestMultiMove()
+        {
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+                string ren1 = Path.Combine(WcPath, "ren-1");
+
+                using (StreamWriter sw = File.CreateText(ren1))
+                {
+                    sw.WriteLine("ToRename");
+                }
+                client.Add(ren1);
+                client.Commit(WcPath);
+                client.Update(WcPath);
+
+                using (StreamWriter sw = File.AppendText(ren1))
+                {
+                    sw.WriteLine("AddedLine");
+                }
+                client.Move(ren1, ren1 + ".ren1");
+
+                client.Commit(WcPath);
+
+                client.Move(ren1 + ".ren1", ren1 + ".ren2");
+                SvnMoveArgs ma = new SvnMoveArgs();
+                ma.Force = true;
+                client.Move(ren1 + ".ren2", ren1 + ".ren3", ma);
+                client.Commit(WcPath);
+            }
+        }
 	}
 }

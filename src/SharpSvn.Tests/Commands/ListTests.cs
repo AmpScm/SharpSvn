@@ -248,6 +248,19 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        [Test]
+        public void RemoteListTest()
+        {
+            using (SvnClient client = NewSvnClient(false, false))
+            {
+                Collection<SvnListEventArgs> items;
+                client.GetList(ReposUrl, out items);
+
+                Assert.That(items, Is.Not.Null, "Items retrieved");
+                Assert.That(items.Count, Is.GreaterThan(0), "More than 0 items");
+            }
+        }
+
         //[Test]
         public void TestSpace()
         {
