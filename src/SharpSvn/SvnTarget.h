@@ -275,7 +275,12 @@ namespace SharpSvn {
 
 		property String^ TargetName
 		{
-			virtual String^ get() = 0;
+			virtual String^ get() abstract;
+		}
+
+		property String^ FileName
+		{
+			virtual String^ get() abstract;
 		}
 
 	internal:

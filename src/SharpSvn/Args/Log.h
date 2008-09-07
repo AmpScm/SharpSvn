@@ -230,7 +230,7 @@ namespace SharpSvn {
 		/// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
 		/// <remarks>This list defaults to the author, date, logmessage properties. Clear the list to retrieve no properties, 
 		/// or set RetrieveAllProperties to true to retrieve all properties.
-		/// <remarks>
+		/// </remarks>
 		property SvnRevisionPropertyNameCollection^ RetrieveProperties
 		{
 			SvnRevisionPropertyNameCollection^ get();

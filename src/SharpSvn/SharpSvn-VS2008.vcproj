@@ -562,6 +562,10 @@
 					RelativePath=".\SvnBase.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnLibraryAttribute.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"

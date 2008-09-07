@@ -42,22 +42,6 @@ namespace SharpSvn.Tests
         }
 
         [Test]
-        public void SshUsernameTests()
-        {
-            Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("http://user@host.server/"), "/trunk")).AbsoluteUri, Is.EqualTo("http://user@host.server/trunk"));
-
-            SvnUriTarget target = new SvnUriTarget(new Uri("http://user@host.server/home/user/repos/"), 1234);
-
-            Assert.That(target.Revision.RevisionType, Is.EqualTo(SvnRevisionType.Number));
-            Assert.That(target.Uri.AbsoluteUri, Is.EqualTo("http://user@host.server/home/user/repos"));
-
-            SvnUriTarget target2 = new SvnUriTarget(new Uri("http://user@host.server:123/home/user/repos/"), SvnRevisionType.Head);
-
-            Assert.That(target2.Revision, Is.EqualTo(SvnRevision.Head));
-            Assert.That(target2.Uri.AbsoluteUri, Is.EqualTo("http://user@host.server:123/home/user/repos"));
-        }
-
-        [Test]
         public void TestPathToUri()
         {
             Uri root = new Uri("http://server/q/");
@@ -79,6 +63,19 @@ namespace SharpSvn.Tests
         {
             Assert.That(new Uri("svn://127.0.0.1:1234").ToString(), Is.EqualTo("svn://127.0.0.1:1234/"));
             Assert.That(new SvnUriTarget(new Uri("svn://127.0.0.1:1234")).TargetName, Is.EqualTo("svn://127.0.0.1:1234/"));
+
+            Assert.That(SvnTools.GetFileName(new Uri("http://svn/dir/File%23%25q/")), Is.EqualTo("File#%q"));
+            Assert.That(SvnTools.GetFileName(new Uri("http://svn/dir/File%23%25q?abc")), Is.EqualTo("File#%q"));
+
+            Assert.That(SvnTools.GetFileName(new Uri("http://svn/File%23%25q/")), Is.EqualTo("File#%q"));
+            Assert.That(SvnTools.GetFileName(new Uri("http://user@svn/File%23%25q?abc")), Is.EqualTo("File#%q"));
+
+            Assert.That(SvnTools.GetFileName(new Uri("http://svn/")), Is.EqualTo(""));
+            Assert.That(SvnTools.GetFileName(new Uri("http://user@svn")), Is.EqualTo(""));
+
+            Assert.That(SvnTools.GetFileName(new Uri("http://svn/q/")), Is.EqualTo("q"));
+            Assert.That(SvnTools.GetFileName(new Uri("http://user@svn/r#")), Is.EqualTo("r"), "# is not part of the repository url");
+            Assert.That(SvnTools.GetFileName(new Uri("http://svn/s")), Is.EqualTo("s"));
         }
     }
 }

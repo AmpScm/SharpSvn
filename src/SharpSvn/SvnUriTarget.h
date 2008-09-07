@@ -110,6 +110,14 @@ namespace SharpSvn {
 			}
 		}
 
+		property String^ FileName
+		{
+			virtual String^ get() override
+			{
+				return SvnTools::GetFileName(_uri);
+			}
+		}
+
 	internal:
 		property String^ SvnTargetName
 		{
