@@ -42,6 +42,7 @@ namespace SharpSvn {
 		bool _strictNodeHistory;
 		bool _includeMerged;
 		bool _ommitMessages;
+		bool _retrieveAllProperties;
 		Uri^ _baseUri;
 		SvnRevisionPropertyNameCollection^ _retrieveProperties;
 
@@ -227,9 +228,26 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
+		/// <remarks>This list defaults to the author, date, logmessage properties. Clear the list to retrieve no properties, 
+		/// or set RetrieveAllProperties to true to retrieve all properties.
+		/// <remarks>
 		property SvnRevisionPropertyNameCollection^ RetrieveProperties
 		{
 			SvnRevisionPropertyNameCollection^ get();
+		}
+
+		/// <summary>Gets or sets a boolean indication whether to retrieve all revision properties</summary>
+		/// <remarks>Default value: false</remarks>
+		property bool RetrieveAllProperties
+		{
+			bool get()
+			{ 
+				return _retrieveAllProperties; 
+			}
+			void set(bool value)
+			{
+				_retrieveAllProperties = value;
+			}
 		}
 
 	internal:
