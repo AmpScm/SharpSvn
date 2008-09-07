@@ -61,9 +61,10 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
-[assembly:SvnLibraryAttribute("pr", APR_VERSION_STRING)];
-[assembly:SvnLibrary("apr-util", APU_VERSION_STRING)];
-[assembly:SvnLibrary("neon", NEON_VERSION)];
+[assembly:SvnLibrary("Subversion", SVN_VER_NUMBER)];
+[assembly:SvnLibrary("Apr", APR_VERSION_STRING)];
+[assembly:SvnLibrary("Apr-util", APU_VERSION_STRING)];
+[assembly:SvnLibrary("Neon", NEON_VERSION)];
 [assembly:SvnLibrary("serf", SERF_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT)];
