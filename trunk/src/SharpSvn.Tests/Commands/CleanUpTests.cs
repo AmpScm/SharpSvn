@@ -34,5 +34,14 @@ namespace SharpSvn.Tests.Commands
 				"lock file still in place after running Client::Cleanup");
 		}
 
+        [Test]
+        public void TestCleanup()
+        {
+            using (SvnClient client = NewSvnClient(false, false))
+            {
+                client.CleanUp(WcPath);
+            }
+        }
+
 	}
 }

@@ -76,5 +76,52 @@ namespace SharpSvn.Tests.Commands
 				"String from wrapper not the same as string from client");
 
 		}
+
+        [Test]
+        public void WriteTest()
+        {
+            string data = Guid.NewGuid().ToString();
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+                string file = Path.Combine(WcPath, "WriteTest");
+                using (StreamWriter sw = File.CreateText(file))
+                {
+                    sw.WriteLine(data);
+                }
+
+                client.Add(file);
+                client.AddToChangeList(file, "WriteTest-Items");
+
+                SvnCommitArgs ca = new SvnCommitArgs();
+                ca.ChangeLists.Add("WriteTest-Items");
+                client.Commit(WcPath);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    client.Write(new SvnPathTarget(file), ms);
+
+                    ms.Position = 0;
+
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        Assert.That(sr.ReadLine(), Is.EqualTo(data));
+                        Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+                    }
+                }
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    client.Write(new Uri(ReposUrl, "WriteTest"), ms);
+
+                    ms.Position = 0;
+
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        Assert.That(sr.ReadLine(), Is.EqualTo(data));
+                        Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+                    }
+                }
+            }
+        }
 	}
 }
