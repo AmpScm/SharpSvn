@@ -88,6 +88,14 @@ namespace SharpSvn {
 				return _path;
 			}
 		}
+
+		property String^ FileName
+		{
+			virtual String^ get() override
+			{
+				return System::IO::Path::GetFileName(_path);
+			}
+		}
 	internal:
 		property String^ SvnTargetName
 		{

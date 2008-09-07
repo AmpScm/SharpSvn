@@ -33,6 +33,8 @@ namespace SharpSvn {
 		{
 			MimeTypesLoaded = 0x01,
 		};
+
+		ref class SvnLibrary;
 	}
 
 	ref class SvnErrorEventArgs;

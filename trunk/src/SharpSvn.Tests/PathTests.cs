@@ -160,5 +160,29 @@ namespace SharpSvn.Tests
                 Is.Null, "Should never complete");
         }
 
+        [Test]
+        public void TryParseShouldReturnFalse()
+        {
+            SvnPathTarget pt;
+            Assert.That(SvnPathTarget.TryParse("http://qqn.nl/2233234", out pt), Is.False);
+        }
+
+        [Test]
+        public void SshUsernameTests()
+        {
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("http://user@host.server/"), "/trunk")).AbsoluteUri, Is.EqualTo("http://user@host.server/trunk"));
+
+            SvnUriTarget target = new SvnUriTarget(new Uri("http://user@host.server/home/user/repos/"), 1234);
+
+            Assert.That(target.Revision.RevisionType, Is.EqualTo(SvnRevisionType.Number));
+            Assert.That(target.Uri.AbsoluteUri, Is.EqualTo("http://user@host.server/home/user/repos"));
+
+            SvnUriTarget target2 = new SvnUriTarget(new Uri("http://user@host.server:123/home/user/repos/"), SvnRevisionType.Head);
+
+            Assert.That(target2.Revision, Is.EqualTo(SvnRevision.Head));
+            Assert.That(target2.Uri.AbsoluteUri, Is.EqualTo("http://user@host.server:123/home/user/repos"));
+        }
+
+
 	}
 }

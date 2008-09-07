@@ -76,5 +76,8 @@ namespace SharpSvn {
 		/// Converts a local relative path to a valid relative Uri
 		/// </summary>
 		static Uri^ PathToRelativeUri(String^ path);
+
+		/// <summary>Gets the filename of the specified target</summary>
+		static String^ GetFileName(Uri^ target);
 	};
 }

@@ -516,3 +516,35 @@ Uri^ SvnTools::PathToRelativeUri(String^ path)
 
 	return SvnBase::PathToUri(path);
 }
+
+String^ SvnTools::GetFileName(Uri^ target)
+{
+	if (!target)
+		throw gcnew ArgumentNullException("target");
+
+	target = SvnBase::CanonicalizeUri(target);
+	
+	String^ path = target->AbsolutePath;
+
+	int nEnd = path->LastIndexOf('?');
+
+	if (nEnd < 0)
+		nEnd = path->Length-1;
+
+	if (path->Length && nEnd <= path->Length && path[nEnd] == '/')
+		nEnd--;
+
+	if (nEnd <= 0)
+		return "";
+
+	int nStart = path->LastIndexOf('/', nEnd);
+
+	if (nStart >= 0)
+		nStart++;
+	else
+		nStart = 0;
+
+	path = path->Substring(nStart, nEnd-nStart+1);
+
+	return UriPartToPath(path);
+}

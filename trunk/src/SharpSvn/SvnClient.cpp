@@ -6,10 +6,11 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
+#include "SvnLibraryAttribute.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
-
+using namespace System::Collections::Generic;
 using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetUuidFromUri(System.Uri,System.Guid&):System.Boolean", MessageId="1#")];
@@ -467,4 +468,23 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 	default:
 		throw gcnew ArgumentOutOfRangeException("style");
 	}
+}
+
+using SharpSvn::Implementation::SvnLibrary;
+using SharpSvn::Implementation::SvnLibraryAttribute;
+
+ICollection<SvnLibrary^>^ SvnClient::SvnLibraries::get()
+{
+	if (_svnLibraries)
+		return _svnLibraries;
+
+	System::Collections::Generic::List<SvnLibrary^>^ libs 
+		= gcnew System::Collections::Generic::List<SvnLibrary^>();
+
+	for each(SvnLibraryAttribute^ i in SvnClient::typeid->Assembly->GetCustomAttributes(SvnLibraryAttribute::typeid, false))
+	{
+		libs->Add(gcnew SvnLibrary(i));
+	}
+
+	return _svnLibraries = libs->AsReadOnly();
 }

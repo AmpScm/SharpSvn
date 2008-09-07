@@ -104,6 +104,7 @@ namespace SharpSvn {
 	public ref class SvnClient : public SvnClientContext
 	{
 		initonly AprBaton<SvnClient^>^ _clientBatton;
+		static ICollection<SvnLibrary^>^ _svnLibraries;
 		AprPool _pool;
 	internal:
 		bool _noLogMessageRequired;
@@ -127,6 +128,11 @@ namespace SharpSvn {
 		property static System::Version^ SharpSvnVersion
 		{
 			System::Version^ get();
+		}
+
+		property static ICollection<SvnLibrary^>^ SvnLibraries
+		{
+			ICollection<SvnLibrary^>^ get();
 		}
 
 		/// <summary>Adds the specified client name to web requests' UserAgent string</summary>
