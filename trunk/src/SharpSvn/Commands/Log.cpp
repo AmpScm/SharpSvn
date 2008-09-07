@@ -266,8 +266,10 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 	{
 		apr_array_header_t* retrieveProperties;
 
-		if (args->RetrievePropertiesUsed)
-			retrieveProperties = args->RetrieveProperties->Count ? AllocArray(args->RetrieveProperties, %pool) : nullptr;
+		if (args->RetrieveAllProperties)
+			retrieveProperties = nullptr;
+		else if (args->RetrievePropertiesUsed)
+			retrieveProperties = AllocArray(args->RetrieveProperties, %pool);
 		else
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
