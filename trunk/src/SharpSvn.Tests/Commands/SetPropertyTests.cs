@@ -90,6 +90,28 @@ namespace SharpSvn.Tests.Commands
                 "Binary property as retrieved is different to that set");
         }
 
+        [Test]
+        public void TestIgnore()
+        {
+            string dir = WcPath;
+
+            TouchFile(Path.Combine(WcPath,"NewFile.ignored"));
+            TouchFile(Path.Combine(WcPath, "NewFile"));            
+
+            string v;
+
+            Client.SetProperty(dir, SvnPropertyNames.SvnIgnore, "NewFile.ignored\r\n");
+            Client.GetProperty(dir, SvnPropertyNames.SvnIgnore, out v);
+            Assert.That(v, Is.EqualTo("NewFile.ignored\r\n"));
+
+            Client.SetProperty(dir, SvnPropertyNames.SvnIgnore, "NewFile.ignored");
+            Client.GetProperty(dir, SvnPropertyNames.SvnIgnore, out v);
+            Assert.That(v, Is.EqualTo("NewFile.ignored\r\n"));
+
+            Client.SetProperty(dir, SvnPropertyNames.SvnIgnore, "NewFile.ignored\n");
+            Client.GetProperty(dir, SvnPropertyNames.SvnIgnore, out v);
+            Assert.That(v, Is.EqualTo("NewFile.ignored\r\n"));
+        }
     }
 
 }
