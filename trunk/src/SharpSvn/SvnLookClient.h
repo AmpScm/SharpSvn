@@ -90,6 +90,6 @@ namespace SharpSvn {
 		bool Write(String^ repositoryPath, String^ path, Stream^ toStream, SvnLookWriteArgs^ args);
 
 	private:
-		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ path, String^ relativePath, SvnChangedArgs^ args);
+		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args);
 	};
 }
