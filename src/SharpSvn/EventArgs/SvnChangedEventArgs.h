@@ -6,9 +6,11 @@
 
 namespace SharpSvn {
 
+	[DebuggerDisplay("Path={Path}, Action={Action}")]
 	public ref class SvnChangedEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _name;
+		initonly String^ _path;
 		initonly SvnChangeAction _action;
 		initonly String^ _copyFromPath;
 		initonly __int64 _copyFromRevision;
@@ -17,9 +19,15 @@ namespace SharpSvn {
 		initonly bool _textualModifications;
 
 	internal:
-		SvnChangedEventArgs(String^ name, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision, SvnNodeKind kind, bool propertyModifications, bool textualModifications)
+		SvnChangedEventArgs(String^ path, String^ name, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision, SvnNodeKind kind, bool propertyModifications, bool textualModifications)
 		{
+			if (!path)
+				throw gcnew ArgumentNullException("path");
+			else if (!name)
+				throw gcnew ArgumentNullException("name");
+
 			_name = name;
+			_path = path;
 			_action = action;
 			_copyFromPath = copyFromPath;
 			_copyFromRevision = copyFromRevision;
@@ -27,7 +35,15 @@ namespace SharpSvn {
 			_propertyModifications = propertyModifications;
 			_textualModifications = textualModifications;
 		}
+
 	public:
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _path;
+			}
+		}
 		property String^ Name
 		{
 			String^ get()
@@ -60,7 +76,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnNodeKind Kind
+		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
 			{
@@ -68,7 +84,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool PropertyModifications
+		property bool PropertiesModified
 		{
 			bool get()
 			{
@@ -76,7 +92,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool TextualModifications
+		property bool ContentModified
 		{
 			bool get()
 			{
@@ -87,12 +103,12 @@ namespace SharpSvn {
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
-			return SafeGetHashCode(Name);
+			return SafeGetHashCode(Path);
 		}
 
 		virtual String^ ToString() override
 		{
-			return this->Name + "," + this->Action.ToString() + "," + this->Kind.ToString();
+			return Path + ", " + Action.ToString() + ", " + NodeKind.ToString();
 		}
 	};
 }

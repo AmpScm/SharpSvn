@@ -123,7 +123,7 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 			return args->HandleResult(this, r);
 
 		svn_repos_node_t* tree = svn_repos_node_from_baton(edit_baton);
-		r = ProcessTree(tree, repositoryPath, "", args);
+		r = ProcessTree(tree, nullptr, args);
 
 		return args->HandleResult(this, r);
 	}
@@ -134,29 +134,32 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 	}
 }
 
-svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ path, String^ relativePath, SvnChangedArgs^ args)
+svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args)
 {
-	if (node)
+	if (!node)
+		throw gcnew ArgumentNullException("node");
+
+	String^ name = SvnBase::Utf8_PtrToString(node->name);
+	String^ path = basePath ? (basePath + "/" + name) : name;
+	
+	if (node->action)
 	{
+		String^ fp = (((SvnNodeKind)node->kind) == SvnNodeKind::Directory) ? (path + "/") : path;
+
 		SvnChangedEventArgs^ e = gcnew SvnChangedEventArgs(
-			relativePath + SvnBase::Utf8_PtrToString(node->name),
+			fp,
+			name,
 			(SvnChangeAction)node->action,
 			SvnBase::Utf8_PtrToString(node->copyfrom_path),
 			node->copyfrom_rev,
 			(SvnNodeKind)node->kind,
 			node->prop_mod ? true : false,
 			node->text_mod ? true : false
-		);
-
-		if (e->Kind == SvnNodeKind::Directory && !String::IsNullOrEmpty(e->Name))
-		{
-			relativePath = e->Name + "/";
-		}
-
-		// Fire off the actual object
+		);		
+	
 		try
 		{
-			args->OnChanged(e);
+			args->OnChanged(e); // Send to receiver
 
 			if (e->Cancel)
 			{
@@ -171,27 +174,23 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ path, St
 		{
 			e->Detach(false);
 		}
+	}
 
-		node = node->child;
-		if (node)
-		{
-			AprPool subpool(%_pool);
-			String^ fullpath = SvnBase::SvnPathJoin(path, SvnBase::Utf8_PtrToString(node->name));
-			svn_error_t* r = ProcessTree(node, fullpath, relativePath, args);
+	svn_repos_node_t *child = node->child;
 
-			if (r)
-				return r;
+	if (!child)
+		return nullptr; // No children
+		
+	String^ fullpath = node->name[0] ? path : "";
 
-			while (node->sibling)
-			{
-				subpool.Clear();
-				node = node->sibling;
-				fullpath = SvnBase::SvnPathJoin(path, SvnBase::Utf8_PtrToString(node->name));
-				r = ProcessTree(node, fullpath, relativePath, args);
-				if (r)
-					return r;
-			}
-		}
+	while(child)
+	{
+		svn_error_t* r = ProcessTree(child, fullpath, args);
+
+		if (r)
+			return r;
+
+		child = child->sibling;
 	}
 
 	return nullptr;
