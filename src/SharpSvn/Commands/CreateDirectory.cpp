@@ -66,7 +66,7 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 	svn_error_t *r = svn_client_mkdir3(
 		&result,
 		aprPaths->Handle,
-		args->MakeParents,
+		args->CreateParents,
 		nullptr,
 		CtxHandle,
 		pool.Handle);
@@ -153,7 +153,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	svn_error_t *r = svn_client_mkdir3(
 		&commitInfoPtr,
 		aprPaths->Handle,
-		args->MakeParents,
+		args->CreateParents,
 		CreateRevPropList(args->LogProperties, %pool),
 		CtxHandle,
 		pool.Handle);
