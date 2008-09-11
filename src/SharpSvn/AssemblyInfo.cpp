@@ -53,8 +53,9 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 									   ", serf " SERF_VERSION
 									   ", zlib " ZLIB_VERSION
 									   " and " OPENSSL_VERSION_TEXT
-									   ". Dynamically linked to Berkeley DB" BDB_VERSION
-									   ", Cyrus Sasl " SASL_VERSION " and Putty's Plink)")];
+									   ". Dynamically linked to Cyrus Sasl " SASL_VERSION
+									   " and if available Berkeley DB " BDB_VERSION
+									   " and Putty's Plink)")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
