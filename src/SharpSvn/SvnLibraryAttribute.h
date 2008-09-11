@@ -16,6 +16,7 @@ namespace SharpSvn {
 			bool _dynamicallyLinked;
 			bool _skipPrefix;
 			bool _optional;
+			bool _useSharpSvnVersion;
 
 		public:
 			SvnLibraryAttribute(String^ name, String^ version)
@@ -81,6 +82,18 @@ namespace SharpSvn {
 					_optional = value;
 				}
 			}
+
+			property bool UseSharpSvnVersion
+			{
+				bool get()
+				{
+					return _useSharpSvnVersion;
+				}
+				void set(bool value)
+				{
+					_useSharpSvnVersion = value;
+				}
+			}
 		};
 
 		public ref class SvnLibrary sealed
@@ -99,6 +112,10 @@ namespace SharpSvn {
 
 				_name = attribute->Name;
 				_version = attribute->Version;
+
+				if(attribute->UseSharpSvnVersion)
+					_version = (gcnew System::Reflection::AssemblyName(SvnLibrary::typeid->Assembly->FullName))->Version->ToString();
+				
 				_dynamicallyLinked = attribute->DynamicallyLinked;
 
 				System::Text::RegularExpressions::Match^ m =
@@ -109,9 +126,9 @@ namespace SharpSvn {
 					_versionData = gcnew System::Version(m->Value);				
 
 					if (attribute->SkipPrefix)
-						_name = attribute->Name->Substring(m->Start);
+						_name = _version->Substring(m->Index);
 				}
-				_otional = attribute->Optional;
+				_optional = attribute->Optional;
 			}
 
 		public:
