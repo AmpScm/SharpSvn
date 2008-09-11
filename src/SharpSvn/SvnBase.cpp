@@ -60,6 +60,9 @@ void SvnBase::EnsureLoaded()
 		_admDir = svn_wc_get_adm_dir(pool);
 
 		InstallAbortHandler();
+
+		// There seems to be a race condition in loading and unloading this DLL
+		LoadLibraryA("Crypt32.dll"); // Never unload this dll
 	}
 }
 
