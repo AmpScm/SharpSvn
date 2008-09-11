@@ -15,6 +15,7 @@ namespace SharpSvn {
 			initonly String^ _version;
 			bool _dynamicallyLinked;
 			bool _skipPrefix;
+			bool _optional;
 
 		public:
 			SvnLibraryAttribute(String^ name, String^ version)
@@ -68,6 +69,18 @@ namespace SharpSvn {
 					_skipPrefix = value;
 				}
 			}
+
+			property bool Optional
+			{
+				bool get()
+				{
+					return _optional;
+				}
+				void set(bool value)
+				{
+					_optional = value;
+				}
+			}
 		};
 
 		public ref class SvnLibrary sealed
@@ -76,6 +89,7 @@ namespace SharpSvn {
 			initonly String^ _version;
 			initonly bool _dynamicallyLinked;
 			initonly System::Version^ _versionData;
+			initonly bool _optional;
 			
 		internal:
 			SvnLibrary(SvnLibraryAttribute^ attribute)
@@ -97,6 +111,7 @@ namespace SharpSvn {
 					if (attribute->SkipPrefix)
 						_name = attribute->Name->Substring(m->Start);
 				}
+				_otional = attribute->Optional;
 			}
 
 		public:
@@ -129,6 +144,14 @@ namespace SharpSvn {
 				bool get()
 				{
 					return _dynamicallyLinked;
+				}
+			}
+
+			property bool Optional
+			{
+				bool get()
+				{
+					return _optional;
 				}
 			}
 		};
