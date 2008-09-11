@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5002.764</title>
+<title>SharpSvn-Daily Update - 1.5002.767</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5002.764</h1>
+<h1>SharpSvn-Daily Update - 1.5002.767</h1>
 
 
 <p>
@@ -12,19 +12,22 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1030/SSvn-1.5002.764.zip">SharpSvn 1.5002.764</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1049/SSvn-1.5002.767.zip">SharpSvn 1.5002.767</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=764">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=767">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-09-10</td></tr>
+<tr><td> </td><td class="r"><a id="767" href="http://sharpsvn.net/rev/?r=767">[r767]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/SetProperty.cpp, src/SharpSvn.Tests/Commands/SetPropertyTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make SetProperty handle EOL conversion for svn:* properties if not handled by the
+caller.</td></tr>
 <tr class="d"><td colspan="4">2008-09-07</td></tr>
 <tr><td> </td><td class="r"><a id="763" href="http://sharpsvn.net/rev/?r=763">[r763]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/AssemblyInfo.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added Subversion itself to the list of linked libraries.</td></tr>
 <tr><td> </td><td class="r"><a id="762" href="http://sharpsvn.net/rev/?r=762">[r762]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnLibraryAttribute.h, src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed library list initialization for OpenSSL and SharpPlink</td></tr>
@@ -108,8 +111,6 @@ prefix before the 0 was valid UTF-8.</td></tr>
 <tr class="d"><td colspan="4">2008-08-07</td></tr>
 <tr><td> </td><td class="r"><a id="650" href="http://sharpsvn.net/rev/?r=650">[r650]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.UI/SharpSvnUI.cs, src/SharpSvn/Args/MergesMerged.h, src/SharpSvn/Commands/MergesMerged.cpp, src/SharpSvn/EventArgs/SvnMergesEligibleEventArgs.h, src/SharpSvn/SvnClient.h, src/SharpSvn/EventArgs/SvnMergesMergedEventArgs.h, src/SharpSvn/Args/MergesEligible.h, src/SharpSvn/Commands/MergesEligible.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Allow passing path sources to ListMergesEligible and ListMergesMerged.
 (Subversion extended its api definition to allow paths in 1.5.1).</td></tr>
-<tr class="d"><td colspan="4">2008-08-06</td></tr>
-<tr><td> </td><td class="r"><a id="649" href="http://sharpsvn.net/rev/?r=649">[r649]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClientContext.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added IsDisposed property to SvnClientContext class</td></tr>
 
 </table>
 <!--/Recent changes-->
