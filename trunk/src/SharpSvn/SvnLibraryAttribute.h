@@ -126,7 +126,7 @@ namespace SharpSvn {
 					_versionData = gcnew System::Version(m->Value);				
 
 					if (attribute->SkipPrefix)
-						_name = _version->Substring(m->Index);
+						_version = _version->Substring(m->Index);
 				}
 				_optional = attribute->Optional;
 			}
