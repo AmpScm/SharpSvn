@@ -14,6 +14,7 @@ namespace SharpSvn {
 			initonly String^ _name;
 			initonly String^ _version;
 			bool _dynamicallyLinked;
+			bool _skipPrefix;
 
 		public:
 			SvnLibraryAttribute(String^ name, String^ version)
@@ -55,6 +56,18 @@ namespace SharpSvn {
 					_dynamicallyLinked = value;
 				}
 			}
+
+			property bool SkipPrefix
+			{
+				bool get()
+				{
+					return _skipPrefix;
+				}
+				void set(bool value)
+				{
+					_skipPrefix = value;
+				}
+			}
 		};
 
 		public ref class SvnLibrary sealed
@@ -78,7 +91,12 @@ namespace SharpSvn {
 					System::Text::RegularExpressions::Regex::Match(_version, "\\d+\\.(\\d+\\.)*\\d+");
 
 				if (m->Success)
+				{
 					_versionData = gcnew System::Version(m->Value);				
+
+					if (attribute->SkipPrefix)
+						_name = attribute->Name->Substring(m->Start);
+				}
 			}
 
 		public:

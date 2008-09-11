@@ -68,7 +68,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Neon", NEON_VERSION)];
 [assembly:SvnLibrary("serf", SERF_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
-[assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT)];
+[assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipStart=true)];
 [assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked=true)];
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION, DynamicallyLinked=true)];
 [assembly:SvnLibrary("SharpPlink", "", DynamicallyLinked=true)];
