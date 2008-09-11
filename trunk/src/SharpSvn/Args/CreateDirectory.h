@@ -13,7 +13,7 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnCreateDirectoryArgs : public SvnClientArgsWithCommit
 	{
-		bool _makeParents;
+		bool _createParents;
 	public:
 		SvnCreateDirectoryArgs()
 		{}
@@ -26,16 +26,30 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool MakeParents
+		property bool CreateParents
 		{
 			bool get()
 			{
-				return _makeParents;
+				return _createParents;
 			}
 
 			void set(bool value)
 			{
-				_makeParents = value;
+				_createParents = value;
+			}
+		}
+
+		[Obsolete("Naming: Use CreateParents")]
+		property bool MakeParents
+		{
+			bool get()
+			{
+				return CreateParents;
+			}
+
+			void set(bool value)
+			{
+				CreateParents = value;
 			}
 		}
 	};
