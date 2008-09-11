@@ -70,9 +70,9 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("serf", SERF_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix=true)];
-[assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked=true)];
+[assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked=true, Optional=true)];
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION, DynamicallyLinked=true)];
-[assembly:SvnLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpSvnVersion=true)];
+[assembly:SvnLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpSvnVersion=true, Optional=true)];
 
 //
 // Version information for an assembly consists of the following four values:
