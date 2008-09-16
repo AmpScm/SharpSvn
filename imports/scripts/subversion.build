@@ -2,6 +2,8 @@
 <project basedir=".." default="build">
   <property name="intl" value="sharpsvn" overwrite="false" />
   <property name="svnBuildName" value="SharpSvn" overwrite="false" />
+  <property name="svnCheckUrl" value="" overwrite="false" />
+  <property name="svnCheckFs" value="fsfs" overwrite="false" />
 
   <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, sharpintl-build">
 
@@ -367,7 +369,7 @@
       </filterchain>
     </loadfile>
     <echo message="${gen_win}" file="${svnBase}/win-tests.py" />
-
+    
     <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
       <arg line="/c win-tests.py" if="${pythonAvailable != '0'}" />
       <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
@@ -375,6 +377,8 @@
       <arg value="-v" />
       <arg value="-c" />
       <arg value="-p" />
+      <arg line="-f ${svnCheckFs}" />
+      <arg line="-u ${svnCheckUrl}" if="${svnCheckUrl != ''}" />
       <arg value="--bin=${path::get-full-path('release/bin')}" />
     </exec>
   </target>
