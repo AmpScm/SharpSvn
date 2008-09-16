@@ -9,7 +9,7 @@
   <property name="subversionMerges" value="31121,31211,31733,31846,32497,32800,32836,32837" />
   <property name="aprMerges" value="" />
   <!-- -->
-  <property name="opensslVersion" value="0.9.8h" />
+  <property name="opensslVersion" value="0.9.8i" />
   <property name="neonVersion" value="0.28.3" />
 
   <property name="aprVersion" value="1.3.3" />
