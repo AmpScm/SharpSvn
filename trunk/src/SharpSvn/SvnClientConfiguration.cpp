@@ -38,3 +38,14 @@ void SvnClientConfiguration::EnableSharpPlink::set(bool value)
 {
 	_client->_dontEnablePlink = !value;
 }
+
+bool SvnClientConfiguration::UseSubversionDiff::get()
+{
+    return !_client->_useUserDiff;
+}
+
+void  SvnClientConfiguration::UseSubversionDiff::set(bool value)
+{
+    _client->_useUserDiff = !value;
+}
+
