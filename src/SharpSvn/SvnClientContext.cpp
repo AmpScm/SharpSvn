@@ -92,6 +92,8 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 	{
 		LoadConfigurationDefault();
 
+		ApplyUserDiffConfig();
+
 		System::Diagnostics::Debug::Assert(State == SvnContextState::ConfigLoaded);
 	}
 
@@ -191,10 +193,26 @@ void SvnClientContext::ApplyCustomRemoteConfig()
 	_contextState = SvnContextState::CustomRemoteConfigApplied;
 }
 
+void SvnClientContext::ApplyUserDiffConfig()
+{
+	if (_useUserDiff || !CtxHandle->config)
+		return;
+
+	svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
+
+	if (!cfg)
+		return;
+
+	svn_config_set(cfg, SVN_CONFIG_SECTION_HELPERS, SVN_CONFIG_OPTION_DIFF_CMD, nullptr);
+	svn_config_set(cfg, SVN_CONFIG_SECTION_HELPERS, SVN_CONFIG_OPTION_DIFF3_CMD, nullptr);
+}
 
 void SvnClientContext::ApplyCustomSsh()
 {
-	svn_config_t *cfg = CtxHandle->config ? (svn_config_t *)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING) : nullptr;
+	if (!CtxHandle->config)
+		return;
+
+	svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
 
 	if (!cfg)
 		return;

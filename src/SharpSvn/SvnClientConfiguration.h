@@ -45,11 +45,23 @@ namespace SharpSvn {
 		/// handler for svn+ssh:// is registered</summary>
 		/// <remarks>The default value of this property is true; this matches the behaviour of TortoiseSvn</remarks>
 		/// <value>true if enabling SharpPlink on the first repository request, otherwise false</value>
+        [System::ComponentModel::DefaultValue((System::Boolean)true)]
 		property bool EnableSharpPlink
 		{
 			bool get();
 			void set(bool value);
 		}
+
+        /// <summary>Gets or sets a boolean indicating whether to always use the subversion integrated diff library
+        /// instead of the user configured diff tools</summary>
+        /// <remarks>The default value of this property is true; to allow parsing the output of the diff library</remarks>
+        /// <value>true if subversions internal diff must be used, otherwise false</value>
+        [System::ComponentModel::DefaultValue((System::Boolean)true)]
+        property bool UseSubversionDiff
+        {
+            bool get();
+            void set(bool value);
+        }
 	};
 
 }

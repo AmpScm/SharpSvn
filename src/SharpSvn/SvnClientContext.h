@@ -71,6 +71,7 @@ namespace SharpSvn {
 	internal:
 		bool _dontLoadMimeFile;
 		bool _dontEnablePlink;
+        bool _useUserDiff;
 		SvnClientContext(AprPool^ pool);
 		virtual void HandleClientError(SvnErrorEventArgs^ e);
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e);
@@ -104,11 +105,12 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			svn_client_ctx_t *get();
 		}
-
-		virtual void ApplyCustomRemoteConfig();
+		
 	private:
+        void ApplyCustomRemoteConfig();
 		void ApplyCustomSsh();
 		void ApplyMimeTypes();
+        void ApplyUserDiffConfig();
 
 	public:
 		/// <summary>Loads the subversion configuration from the specified path</summary>
