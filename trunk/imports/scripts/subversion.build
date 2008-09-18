@@ -97,27 +97,7 @@
     </exec>
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
-      <!-- Patches for x64 builds; hopefully included in svn 1.5 -->
-      <copy todir="${svnBase}/build/generator/" overwrite="true">
-        <fileset basedir="scripts">
-          <include name="*.ezt" />
-        </fileset>
-      </copy>
-      <loadfile file="${svnBase}/build/generator/gen_win.py" property="gen_win">
-        <filterchain>
-          <replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
-        </filterchain>
-      </loadfile>
-      <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
-      <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
-        <filterchain>
-          <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
-          <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
-          <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
-        </filterchain>
-      </loadfile>
-      <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
-
+    
       <loadfile file="${svnBase}/build.conf" property="gen_win">
         <filterchain>
           <replacestring from='svn_repos_update()' to='svn_repos_up*ate()' />
@@ -251,6 +231,17 @@
         #define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
         #define SVN_VER_NUMTAG "-${svnBuildName}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
       </echo>
+      
+      <!-- And patch the test cases that depend on the version -->
+      <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
+        <filterchain>
+          <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
+          <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
+          <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
+        </filterchain>
+      </loadfile>
+      <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
+
     </OnceBlock>
   </target>
 

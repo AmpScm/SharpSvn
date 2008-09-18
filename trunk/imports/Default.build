@@ -6,7 +6,7 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.5.2" />
-  <property name="subversionMerges" value="31121,31211,31733,31846,32497,32800,32836,32837" />
+  <property name="subversionMerges" value="31121,31211,31733,31846,32497,32800,32836,32837,33156" />
   <property name="aprMerges" value="" />
   <!-- -->
   <property name="opensslVersion" value="0.9.8i" />
