@@ -164,22 +164,13 @@
           <echo message="${projtext}" file="${vcproj}" />
         </do>
       </foreach>
-      <foreach item="File" property="sourceFile">
-        <in>
-          <items basedir="${svnBase}/subversion">
-            <include name="libsvn_ra_serf/win32_auth_sspi.c" />
-            <include name="libsvn_fs_base/fs.c" />
-          </items>
-        </in>
-        <do>
-          <loadfile file="${sourceFile}" property="projtext">
-            <filterchain>
-              <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
-              <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${sourceFile}" />
+	  <loadfile file="${svnBase}/libsvn_fs_base/fs.c" property="fsc">
+		<filterchain>
+		  <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+						 to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+		</filterchain>
+      </loadfile>
+      <echo message="${fsc}" file="${svnBase}/libsvn_fs_base/fs.c" if="${applyMerges == 'true'}" />
         </do>
       </foreach>
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
