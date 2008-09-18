@@ -294,13 +294,7 @@ namespace SharpSvn.Tests.Commands
                 SvnInfoEventArgs info = items[0];
                 Assert.That(info.Uri.AbsoluteUri, Is.EqualTo(ReposUrl.AbsoluteUri), "Repository uri matches");
                 Assert.That(info.HasLocalInfo, Is.False, "No WC info");
-                Assert.That(info.Path, Is.EqualTo(""), "Path is empty");
-
-                client.GetInfo(new Uri(ReposUrl, "folder"), out info);
-
-                Assert.That(info.Uri.ToString(), Is.EqualTo(ReposUrl.ToString()), "Repository uri matches");
-                Assert.That(info.HasLocalInfo, Is.False, "No WC info");
-                Assert.That(info.Path, Is.EqualTo("folder"), "Path is empty");
+                Assert.That(info.Path, Is.EqualTo(Path.GetFileName(ReposPath)), "Path is end of folder name");
             }
         }
 	}
