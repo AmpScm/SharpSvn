@@ -138,18 +138,6 @@
       <!-- Replace shared library builds with static builds; to auto change dependencies -->
       <foreach item="File" property="vcproj">
         <in>
-          <items basedir="${svnBase}/build/win32">
-            <include name="svn_config.vcproj" />
-            <include name="svn_locale.vcproj" />
-            <include name="zlib.vcproj" />
-          </items>
-        </in>
-        <do>
-          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-        </do>
-      </foreach>
-      <foreach item="File" property="vcproj">
-        <in>
           <items basedir="${svnBase}">
             <include name="build/win32/**/*.vcproj" />
             <include name="../serf/serf.vcproj" />
@@ -159,9 +147,9 @@
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
               <replacestring from='PreprocessorDefinitions="WIN32'  if="${static=='true'}"
-                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
+                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32' />
               <replacestring from='PreprocessorDefinitions="WIN32'  if="${static!='true'}"
-                to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
+                to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32' />
               <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib zlibstat.lib' />
               <replacestring from='AdditionalDependencies="advapi32.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib advapi32.lib' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
@@ -180,8 +168,6 @@
         <in>
           <items basedir="${svnBase}/subversion">
             <include name="libsvn_ra_serf/win32_auth_sspi.c" />
-            <include name="libsvn_fs_base/bdb/*.h" if="${aprUtilVersion >= '1.2.11'}"/>
-            <include name="libsvn_fs_base/bdb/*.c" if="${aprUtilVersion >= '1.2.11'}"/>
             <include name="libsvn_fs_base/fs.c" />
           </items>
         </in>
