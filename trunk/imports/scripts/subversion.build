@@ -238,7 +238,7 @@
         <arg value="/t:svnlook" />
         <arg value="/t:svnauthz-validate" />
         <arg value="/t:svn-populate-node-origins-index" />
-        <arg value="/t:__ALL_TESTS__" if="${VSversion == '2005'}"/>
+        <arg value="/t:__ALL_TESTS__" />
       </exec>
     </OnceBlock>
   </target>
