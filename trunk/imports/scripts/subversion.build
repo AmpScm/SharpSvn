@@ -164,13 +164,13 @@
           <echo message="${projtext}" file="${vcproj}" />
         </do>
       </foreach>
-      <loadfile file="${svnBase}/libsvn_fs_base/fs.c" property="fsc">
+      <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="fsc">
         <filterchain>
           <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
 						             to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
           </filterchain>
       </loadfile>
-      <echo message="${fsc}" file="${svnBase}/libsvn_fs_base/fs.c" if="${applyMerges == 'true'}" />
+      <echo message="${fsc}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" if="${applyMerges == 'true'}" />
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
       <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
         <arg value="-n" />
