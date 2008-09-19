@@ -22,9 +22,6 @@
     <if test="${not file::exists(downloads + saslFilename)}">
       <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
     </if>
-    <if test="${not file::exists(downloads + gssapiFilename)}">
-      <get src="http://web.mit.edu/Kerberos/dist/kfw/${string::substring(gssapiVersion, 0,3)}/kfw-${gssapiVersion}/${gssapiFilename}" dest="${downloads}/${gssapiFilename}" />
-    </if>
     <if test="${intl == 'gettext'}">
       <if test="${not file::exists(downloads + gettextFilename)}">
         <get src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}" dest="${downloads}/${gettextFilename}" />
@@ -60,9 +57,6 @@
     </if>
     <if test="${not directory::exists(saslDir)}">
       <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
-    </if>
-    <if test="${not directory::exists(gssapiDir)}">
-      <unzip zipfile="${downloads + gssapiFilename}" todir="build/${platform}" />
     </if>
     <if test="${intl == 'gettext'}">
       <if test="${not directory::exists(gettextDir)}">
@@ -121,6 +115,7 @@
       </Svn>
     </if>
   </target>
+  
   <target name="copy-licenses">
     <copy
 			file="build/${platform}/subversion/subversion/LICENSE"
