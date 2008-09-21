@@ -473,6 +473,11 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 using SharpSvn::Implementation::SvnLibrary;
 using SharpSvn::Implementation::SvnLibraryAttribute;
 
+static int CompareLibrary(SvnLibrary^ x, SvnLibrary^ y)
+{
+	return StringComparer::OrdinalIgnoreCase->Compare(x->Name, y->Name);
+}
+
 ICollection<SvnLibrary^>^ SvnClient::SvnLibraries::get()
 {
 	if (_svnLibraries)
@@ -485,6 +490,8 @@ ICollection<SvnLibrary^>^ SvnClient::SvnLibraries::get()
 	{
 		libs->Add(gcnew SvnLibrary(i));
 	}
+
+	libs->Sort(gcnew Comparison<SvnLibrary^>(CompareLibrary));
 
 	return _svnLibraries = libs->AsReadOnly();
 }
