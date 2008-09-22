@@ -130,6 +130,20 @@ String^ SvnBase::RemoveDoubleSlashes(String^ input)
 
 	return input;
 }
+
+static bool ContainsUpper(String^ value)
+{
+	if (String::IsNullOrEmpty(value))
+		return false;
+
+	for (int i = 0; i < value->Length; i++)
+		if (Char::IsUpper(value, i))
+			return true;
+
+	return false;
+}
+
+
 Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
 	if (!uri)
@@ -139,29 +153,62 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 	String^ path = uri->GetComponents(UriComponents::Path, UriFormat::SafeUnescaped);
 
-	if (path->Length > 0 && (path[path->Length -1] == '/' || path->IndexOf('\\') >= 0))
+	bool schemeOk = !ContainsUpper(uri->Scheme) && !ContainsUpper(uri->Host);
+
+	if ((path->Length == 0 || (path[path->Length -1] != '/' && path->IndexOf('\\') < 0)) && schemeOk)
+		return uri;
+
+	String^ components = uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped);
+	if (!schemeOk)
 	{
-		// Create a new uri with all / and \ characters at the end removed
-		Uri^ root;
-		Uri^ suffix;
+		int nStart = components->IndexOf(':');
 
-		if (!Uri::TryCreate(uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped), UriKind::Absolute, root))
-			throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
+		if (nStart > 0)
+		{
+			// Subversion 1.6 will require scheme and hostname in lowercase
+			for (int i = 0; i < nStart; i++)
+				if (!Char::IsLower(components, i))
+				{
+					components = components->Substring(0, nStart)->ToLower() + components->Substring(nStart);
+					break;
+				}
 
-		String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
+				int nAt = components->IndexOf('@', nStart);
 
-		if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')
-			part += '/';
+				if (nAt < 0)
+					nAt = nStart + 2;
+				else
+					nAt++;
 
-		if (!Uri::TryCreate(part, UriKind::Relative, suffix))
-			throw gcnew ArgumentException("Invalid Uri value in path", "uri");
-
-		Uri^ result;
-		if (Uri::TryCreate(root, suffix, result))
-			return result;
+				for (int i = nAt; i < components->Length; i++)
+					if (!Char::IsLower(components, i))
+					{
+						components = components->Substring(0, nAt) + components->Substring(nAt)+1;
+						break;
+					}
+		}
 	}
 
-	return uri;
+	// Create a new uri with all / and \ characters at the end removed
+	Uri^ root;
+	Uri^ suffix;
+
+	if (!Uri::TryCreate(components, UriKind::Absolute, root))
+		throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
+
+	String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
+
+	if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')
+		part += '/';
+
+	if (!Uri::TryCreate(part, UriKind::Relative, suffix))
+		throw gcnew ArgumentException("Invalid Uri value in path", "uri");
+
+	Uri^ result;
+	if (Uri::TryCreate(root, suffix, result))
+		return result;
+	else
+		return uri;
 }
 
 Uri^ SvnBase::PathToUri(String^ path)
@@ -447,9 +494,9 @@ String^ SvnBase::UriToString(Uri^ value)
 
 	if (value->IsAbsoluteUri)
 		return value->GetComponents(
-				UriComponents::SchemeAndServer |
-				UriComponents::UserInfo |
-				UriComponents::Path, UriFormat::UriEscaped);
+		UriComponents::SchemeAndServer |
+		UriComponents::UserInfo |
+		UriComponents::Path, UriFormat::UriEscaped);
 	else
 		return Uri::EscapeUriString(value->ToString()); // Escape back to valid uri form
 }
