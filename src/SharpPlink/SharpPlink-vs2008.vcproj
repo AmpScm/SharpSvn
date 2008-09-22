@@ -69,7 +69,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).svnExe"
+				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -144,7 +144,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).svnExe"
+				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="2"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -219,7 +219,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).svnExe"
+				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
@@ -297,7 +297,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).svnExe"
+				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="1"
 				GenerateDebugInformation="true"
 				SubSystem="2"
