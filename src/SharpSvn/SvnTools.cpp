@@ -35,6 +35,126 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 	return nullptr;
 }
 
+static String^ LongGetFullPath(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	// Subversion does not have a problem with paths over MAX_PATH, as long as they are absolute
+	if (!path->StartsWith("\\\\?\\"))
+		path = "\\\\?\\" + path;
+
+	pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
+	wchar_t rPath[1024];
+
+	ZeroMemory(rPath, sizeof(rPath));
+	const int sz = (sizeof(rPath) / sizeof(rPath[0]))-1;
+
+	unsigned c = GetFullPathNameW((LPCWSTR)pPath, sz, rPath, nullptr);
+
+	if (c == 0 || c >= sz)
+		throw gcnew PathTooLongException("GetFullPath for long paths failed");
+
+	path = gcnew String(rPath, 0, c);
+
+	if (path->StartsWith("\\\\?\\"))
+		path = path->Substring(4);
+
+	return path;
+}
+
+static bool ContainsRelative(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	int nxt = 0;
+	int n;
+
+	while (0 <= (n = path->IndexOf("\\.", nxt)))
+	{
+		nxt+=2;
+
+		if (nxt >= path->Length || !Char::IsLetterOrDigit(path[nxt]))
+			return true;
+	}
+
+	return false;
+}
+
+static String^ GetPathRootPart(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	if (path->Length >= 3 && path[1] == ':' && path[2] == '\\')
+	{
+		if (path[0] >= 'a' && path[0] <= 'z')
+			return Char::ToUpper(path[0]) + ":\\";
+		else
+			return path->Substring(0, 3);
+	}
+	
+	if (!path->StartsWith("\\\\"))
+		return nullptr;
+
+	int nSlash = path->IndexOf('\\', 2);
+
+	if (nSlash <= 2)
+		return nullptr; // No hostname
+
+	int nEnd = path->IndexOf('\\', nSlash+1);
+
+	if (nEnd < 0)
+		nEnd = path->Length;
+
+	return "\\\\" + path->Substring(2, nSlash-2)->ToUpperInvariant() + path->Substring(nSlash, nEnd-nSlash);
+}
+
+static bool IsSeparator(String^ v, int index)
+{
+	if (index < 0 || (index >= v->Length))
+		return false;
+
+	wchar_t c = v[index];
+
+	return (c == Path::DirectorySeparatorChar) || (c == Path::AltDirectorySeparatorChar);
+}
+
+static bool IsDirSeparator(String^ v, int index)
+{
+	if (index < 0 || (index >= v->Length))
+		return false;
+
+	return (v[index] == Path::DirectorySeparatorChar);
+}
+
+static bool IsInvalid(String^ v, int index)
+{
+	if (index < 0 || (index >= v->Length))
+		return false;
+
+	array<Char>^ invalidChars = SvnBase::_invalidChars;
+
+	if (!invalidChars)
+		SvnBase::_invalidChars = invalidChars = Path::GetInvalidPathChars();
+
+	return 0 <= Array::IndexOf(invalidChars, v[index]);
+}
+
+bool SvnBase::PathContainsInvalidChars(String^ path)
+{
+	array<Char>^ invalidChars = _invalidChars;
+
+	if (!invalidChars)
+		_invalidChars = invalidChars = Path::GetInvalidPathChars();
+
+	if (0 <= path->IndexOfAny(invalidChars))
+		return true;
+
+	return false;
+}
+
 String^ SvnTools::GetTruePath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
@@ -45,39 +165,32 @@ String^ SvnTools::GetTruePath(String^ path)
 		path = path->Replace('/', '\\');
 
 	String^ root = nullptr;
+	bool normalized = false;;
 	wchar_t c = path[0];
 
 	if (c == '\\' && path->StartsWith("\\\\?\\", StringComparison::Ordinal))
 		path = path->Substring(4); // We use this trick ourselves
 
-	if (path->Length > 2 && (path[1] == ':') && ((c >= 'a') && (c <= 'z')) || ((c >= 'A') && (c <= 'Z')))
+    if (ContainsRelative(path))
 	{
-		if ((path[2] == '\\') && !path->Contains("\\."))
-			root = Path::GetPathRoot(path)->ToUpperInvariant(); // 'a:\' -> 'A:\'
+		normalized = true;
+        path = GetNormalizedFullPath(path);
 	}
-	else if (path->StartsWith("\\\\", StringComparison::Ordinal))
+
+	root = GetPathRootPart(path);
+
+	if (!root && !normalized)
 	{
-		int next = path->IndexOf('\\', 2);
+		normalized = true;
+        path = GetNormalizedFullPath(path);
 
-		if (next > 0)
-			next = path->IndexOf('\\', next+1);
-
-		if ((next > 0) && (0 > path->IndexOf("\\.", next+1, StringComparison::Ordinal)))
-			root = Path::GetPathRoot(path);
+		root = GetPathRootPart(path);
 	}
 
 	if (!root)
-	{
-		if (path[0] == '\\' || path->Contains("\\."))
-		{
-			path = Path::GetFullPath(path);
-			root = Path::GetPathRoot(path); // UNC paths are not case sensitive, but we keep the casing
-		}
-		else
-			root = "";
-	}
+		throw gcnew InvalidOperationException("Didn't get an absolute path after normalization");
 
-	if (root && path->Length > root->Length && path[path->Length-1] == '\\')
+	if (path->Length > root->Length && path[path->Length-1] == '\\')
 	{
 		path = path->TrimEnd('\\');
 
@@ -93,13 +206,8 @@ String^ SvnTools::GetFullTruePath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	path = Path::GetFullPath(path);
-	String^ root = Path::GetPathRoot(path);
-
-	if (root->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
-		root = root->ToLowerInvariant();
-	else if (wchar_t::IsLower(root, 0))
-		root = root->ToUpperInvariant();
+	path = GetNormalizedFullPath(path);
+	String^ root = GetPathRootPart(path);
 
 	return FindTruePath(path, root);
 }
@@ -157,6 +265,9 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 // Optimized version of Directory::Exists() with several security checks removed
 inline bool IsDirectory(String^ path)
 {
+	if (path->Length >= (MAX_PATH-4))
+		path = "\\\\?\\" + SvnTools::GetNormalizedFullPath(path);
+
 	pin_ptr<const wchar_t> p = PtrToStringChars(path);
 	DWORD r = ::GetFileAttributesW(p);
 
@@ -171,9 +282,12 @@ bool SvnTools::IsManagedPath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	path = Path::Combine(path, SvnClient::AdministrativeDirectoryName);
+	if (IsSeparator(path, path->Length-1))
+		path += SvnClient::AdministrativeDirectoryName;
+	else
+		path += "\\" + SvnClient::AdministrativeDirectoryName;
 
-	return IsDirectory(path);
+	return IsDirectory(path->Replace('/', '\\'));
 }
 
 bool SvnTools::IsBelowManagedPath(String^ path)
@@ -184,14 +298,19 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	// We search from the root, instead of the other way around to optimize the disk cache
 	// (We probably never need to access the disk when called a few times in a row)
 
-	path = Path::GetFullPath(path);
+	path = GetNormalizedFullPath(path);
 
-	int nStart = Path::GetPathRoot(path)->Length;
+	String^ root = GetPathRootPart(path);
+
+	if (!root)
+		return false;
+
+	int nStart = root->Length;
 	int i;
 
 	while (0 < (i = path->IndexOf('\\', nStart)))
 	{
-		if (IsDirectory(Path::Combine(path->Substring(0, i), SvnClient::AdministrativeDirectoryName)))
+		if (IsManagedPath(path->Substring(0, i)))
 			return true;
 
 		nStart = i+1;
@@ -200,35 +319,7 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	if (nStart >= (path->Length-1))
 		return false; // Path ends with a \, probably disk root
 
-	return IsDirectory(Path::Combine(path, SvnClient::AdministrativeDirectoryName));
-}
-
-static String^ LongGetFullPath(String^ path)
-{
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-
-	// Subversion does not have a problem with paths over MAX_PATH, as long as they are absolute
-	if (!path->StartsWith("\\\\?\\"))
-		path = "\\\\?\\" + path;
-
-	pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
-	wchar_t rPath[1024];
-
-	ZeroMemory(rPath, sizeof(rPath));
-	const int sz = (sizeof(rPath) / sizeof(rPath[0]))-1;
-
-	unsigned c = GetFullPathNameW((LPCWSTR)pPath, sz, rPath, nullptr);
-
-	if (c == 0 || c >= sz)
-		throw gcnew PathTooLongException("GetFullPath for long paths failed");
-
-	path = gcnew String(rPath, 0, c);
-
-	if (path->StartsWith("\\\\?\\"))
-		path = path->Substring(4);
-
-	return path;
+	return IsManagedPath(path);
 }
 
 String^ SvnTools::GetNormalizedFullPath(String^ path)
@@ -236,29 +327,32 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	try
-	{
-		path = Path::GetFullPath(path);
-	}
-	catch(PathTooLongException^)
-	{
-		// Path::GetFullPath() checked for strange characters for us!
-		// It would have throwed an ArgumentException for them
+	if (PathContainsInvalidChars(path))
+		throw gcnew ArgumentException("Path contains invalid characters", "path");
+	else if (IsNormalizedFullPath(path))
+		return path; // Just pass through; no allocations
 
-		if (IsNormalizedFullPath(path))
-			return path; // Just pass through
-
+	bool retry = true;
+	
+	if(path->Length < MAX_PATH)
+	{
 		try
-		{
-			path = LongGetFullPath(path);
+		{	
+			path = Path::GetFullPath(path);
+			retry = false;
 		}
-		catch(Exception^)
+		catch(PathTooLongException^) // Path grew by getting full path
 		{
-			path = nullptr;
+			// Use the retry
 		}
+	}
 
-		if (!path)
-			throw;
+	if (retry)
+	{
+		path = LongGetFullPath(path);
+
+		if (!GetPathRootPart(path))
+			throw gcnew PathTooLongException("Paths with a length above MAX_PATH must be rooted");
 	}
 
 	if (path->Length >= 2 && path[1] == ':')
@@ -277,41 +371,15 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	}
 	else if (path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
 	{
-		String^ root = Path::GetPathRoot(path)->ToLowerInvariant();
+		String^ root = GetPathRootPart(path);
 
-		if (!path->StartsWith(root, StringComparison::Ordinal))
+		if (root && !path->StartsWith(root, StringComparison::Ordinal))
 			path = root + path->Substring(root->Length)->TrimEnd('\\');
 	}
 	else
 		path = path->TrimEnd('\\');
 
 	return path;
-}
-
-static bool IsSeparator(String^ v, int index)
-{
-	if (index < 0 || (index >= v->Length))
-		return false;
-
-	wchar_t c = v[index];
-
-	return (c == Path::DirectorySeparatorChar) || (c == Path::AltDirectorySeparatorChar);
-}
-
-static bool IsDirSeparator(String^ v, int index)
-{
-	if (index < 0 || (index >= v->Length))
-		return false;
-
-	return (v[index] == Path::DirectorySeparatorChar);
-}
-
-static bool IsInvalid(String^ v, int index)
-{
-	if (index < 0 || (index >= v->Length))
-		return false;
-
-	return 0 <= Array::IndexOf(Path::InvalidPathChars, v[index]);
 }
 
 bool SvnTools::IsAbsolutePath(String^ path)
@@ -415,6 +483,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		for (i = 2; i < path->Length; i++)
 		{
+			// Check hostname rules
 			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
 		}
@@ -428,12 +497,19 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		for (; i < path->Length; i++)
 		{
+			// Check share name rules
 			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
 		}
 
-		if (i == n || !IsDirSeparator(path, i))
+		if (i == n)
+			return false; // "\\server\"
+		else if (i == c)
+			return true; // "\\server\path"
+		else if (c > i && !IsDirSeparator(path, i))
 			return false;
+		else if (c == i+1)
+			return false; // "\\server\path\"
 
 		i++;
 	}
@@ -547,4 +623,49 @@ String^ SvnTools::GetFileName(Uri^ target)
 	path = path->Substring(nStart, nEnd-nStart+1);
 
 	return UriPartToPath(path);
+}
+
+String^ SvnTools::PathCombine(String^ path1, String^ path2)
+{
+	if (!path1)
+		throw gcnew ArgumentNullException("path1");
+	else if (!path2)
+		throw gcnew ArgumentNullException("path2");
+	
+	try
+	{
+		return Path::Combine(path1, path2);
+	}
+	catch (PathTooLongException^)
+	{
+		if (GetPathRootPart(path2))
+		{
+			// Handle large absolute paths in path2
+			return path2;
+		}
+
+		// The next code is fall back code that is only really supported
+		// for appending simple relative filenames after a parent path
+
+		// This all to avoid exceptions when creating repository local paths that
+		// trip the MAX_PATH limit
+
+		path1 = SvnTools::GetNormalizedFullPath(path1);
+
+		if (IsSeparator(path2, 0)) // "\d\e\f"
+		{
+			// BH: This is what Path::Combine does in .Net 2.0!!!
+
+			String^ root = GetPathRootPart(Environment::CurrentDirectory); 
+
+			if(root)
+				path1 = root;
+		}
+
+		if (!IsSeparator(path1, path1->Length-1))
+			path1 += '\\';			
+
+		return SvnTools::GetNormalizedFullPath(path1 + 
+			path2->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar)->TrimStart(Path::DirectorySeparatorChar));
+	}
 }
