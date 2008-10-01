@@ -107,7 +107,7 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if (!_fullPath && Path)
-					_fullPath = (Path->Length > 0) ? System::IO::Path::Combine(_basePath, Path) : _basePath;
+					_fullPath = (Path->Length > 0) ? SvnTools::PathCombine(_basePath, Path) : _basePath;
 
 				return _fullPath;
 			}

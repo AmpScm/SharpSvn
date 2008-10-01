@@ -137,22 +137,19 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);
+	if (SvnTools::IsAbsolutePath(path))
+		return SvnTools::GetNormalizedFullPath(path);
 
+	path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);	
 	String^ dualSeparator = String::Concat(Path::DirectorySeparatorChar, Path::DirectorySeparatorChar);
-	String^ singleSeparator = Path::DirectorySeparatorChar.ToString();
-
-	int nRoot = 0;
-	if (System::IO::Path::IsPathRooted(path))
-		nRoot = System::IO::Path::GetPathRoot(path)->Length;
-
+	
 	int nNext;
 	// Remove double backslash
-	while ((nNext = path->IndexOf(dualSeparator, nRoot, StringComparison::Ordinal)) >= 0)
+	while ((nNext = path->IndexOf(dualSeparator, StringComparison::Ordinal)) >= 0)
 		path = path->Remove(nNext, 1);
 
 	// Remove '\.\'
-	while ((nNext = path->IndexOf("\\.\\", nRoot, StringComparison::Ordinal)) >= 0)
+	while ((nNext = path->IndexOf("\\.\\", StringComparison::Ordinal)) >= 0)
 		path = path->Remove(nNext, 2);
 
 	while (path->StartsWith(".\\", StringComparison::Ordinal))
@@ -161,12 +158,7 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	if (path->EndsWith("\\.", StringComparison::Ordinal))
 		path = path->Substring(0, path->Length-2);
 
-	if (path->Length > nRoot && path->EndsWith(singleSeparator, StringComparison::Ordinal))
-	{
-		path = path->TrimEnd(Path::DirectorySeparatorChar);
-		if (path->Length < nRoot)
-			path += singleSeparator;
-	}
+	path = path->TrimEnd(Path::DirectorySeparatorChar);
 
 	if (path->Length == 0)
 		path = ".";

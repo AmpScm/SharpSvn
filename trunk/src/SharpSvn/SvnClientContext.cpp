@@ -331,7 +331,7 @@ String^ SvnClientContext::PlinkPath::get()
 			{
 				String^ path = SvnTools::GetNormalizedFullPath(codeBase->LocalPath);
 
-				path = Path::Combine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
+				path = SvnTools::PathCombine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
 
 				if (System::IO::File::Exists(path))
 				{

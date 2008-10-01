@@ -79,5 +79,9 @@ namespace SharpSvn {
 
 		/// <summary>Gets the filename of the specified target</summary>
 		static String^ GetFileName(Uri^ target);
+
+	internal:
+		/// <summary>Long path capable version of <see cref="System::IO::Path::Combine" /></summary>
+		static String^ PathCombine(String^ path1, String^ path2);
 	};
 }

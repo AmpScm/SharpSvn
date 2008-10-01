@@ -83,7 +83,7 @@ String^ SvnHookArguments::GetHookFileName(String^ path, SvnHookType hookType)
 		throw gcnew ArgumentOutOfRangeException("hookType", hookType, "Invalid hooktype passed");
 	}
 
-	return System::IO::Path::Combine(path, "hooks\\" + name);
+	return SvnTools::PathCombine(path, "hooks\\" + name);
 }
 
 bool SvnHookArguments::ParsePostCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)

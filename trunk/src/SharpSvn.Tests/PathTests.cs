@@ -14,12 +14,17 @@ namespace SharpSvn.Tests
 	{
 		readonly string _casedFile;
 
-		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
 		static extern int GetLongPathName(
 			string lpszShortPath,
 			[Out] StringBuilder lpszLongPath,
 			int cchBuffer);
 
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern bool CreateDirectory(string path, IntPtr secdata);
+
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern bool RemoveDirectory(string path);
 
         public PathTests()
 		{
@@ -98,12 +103,18 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\.svn"), Is.True);
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\.svn\\"), Is.False);
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\\t.svn"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\.....svn"), Is.True);
 
 
             Assert.That(SvnTools.IsAbsolutePath("a:\\"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("A:\\"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("a:/sdfsdfsd"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("A:\\dfsdfds"), Is.True);
+
+            Assert.That(SvnTools.IsNormalizedFullPath(@"\\SERVER\path"), Is.True, @"\\SERVER\path");
+            Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\"), Is.False, @"\\server\path\");
+            Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\file"), Is.True);
+
         }
 
         [Test, ExpectedException(typeof(PathTooLongException))]
@@ -148,6 +159,17 @@ namespace SharpSvn.Tests
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"), "Shortcut route via IsNormalized");
         }
 
+        [Test, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
+        public void NormalizeUnrooted()
+        {
+            GC.KeepAlive(SvnTools.GetNormalizedFullPath("123456789012345678901234567890123456789012345678901234567890" +
+                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"));
+        }
+
         [Test, ExpectedException(typeof(ArgumentException))]
         public void NormalizePathSharpFail()
         {
@@ -158,6 +180,36 @@ namespace SharpSvn.Tests
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"),
                 Is.Null, "Should never complete");
+        }
+
+        [Test]
+        public void TestReallyLong()
+        {
+            string temp = Path.GetTempPath() + "\\" + Guid.NewGuid() + new String('a', 200);
+            temp = temp.Replace("\\\\", "\\");
+
+            if (temp.Length < 256)
+                temp += "bbbbbbbbbbbbbbbbbbbb";
+
+            Assert.That(CreateDirectory("\\\\?\\" + temp, IntPtr.Zero), Is.True, "Created directory {0}", temp);
+
+            try
+            {
+                Assert.That(SvnTools.GetNormalizedFullPath(temp), Is.Not.Null, "Normalized path valid for extremely long path");
+                Assert.That(SvnTools.GetTruePath(temp), Is.Not.Null, "True path valid for extremely long path");
+                Assert.That(SvnTools.GetFullTruePath(temp), Is.Not.Null, "Full true path valid for extremely long path");
+
+                string t2 = temp.Replace("\\", "\\.\\");
+
+                Assert.That(SvnTools.GetNormalizedFullPath(t2), Is.EqualTo(SvnTools.GetNormalizedFullPath(temp)), "True path completed");
+                Assert.That(SvnTools.GetTruePath(t2), Is.EqualTo(SvnTools.GetFullTruePath(temp)));
+                Assert.That(SvnTools.GetFullTruePath(t2), Is.EqualTo(SvnTools.GetFullTruePath(temp)));
+
+            }
+            finally
+            {
+                RemoveDirectory("\\\\?\\" + temp);
+            }
         }
 
         [Test]

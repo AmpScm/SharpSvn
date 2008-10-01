@@ -121,14 +121,12 @@ FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
 
 	::OutputDebugStringA("Automatic delay loading one of the SharpSvn helper DLLs failed; trying to work around\n");
 
-	AprPool pool(SvnBase::SmallThreadPool);
-
 	Uri^ codeBase;
 
 	if (!Uri::TryCreate(SvnBase::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase))
 		return nullptr; // We don't know where we were loaded from
 
-	String^ path = Path::Combine(Path::GetDirectoryName(Path::GetFullPath(codeBase->LocalPath)), gcnew String(pdli->szDll));
+	String^ path = SvnTools::PathCombine(Path::GetDirectoryName(SvnTools::GetNormalizedFullPath(codeBase->LocalPath)), gcnew String(pdli->szDll));
 
 	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
 
