@@ -43,11 +43,13 @@ namespace SharpSvn {
 		/// <summary>
 		/// Normalizes the path to a full path
 		/// </summary>
+		/// <summary>This normalizes drive letters to upper case and hostnames to lowercase to match Subversion 1.6 behavior</summary>
 		static String^ GetNormalizedFullPath(String^ path);
 
 		/// <summary>
 		/// Checks whether normalization is required
 		/// </summary>
+		/// <remarks>This method does not verify the casing of invariant parts</remarks>
 		static bool IsNormalizedFullPath(String^ path);
 
 		/// <summary>

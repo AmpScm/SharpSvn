@@ -155,7 +155,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 	bool schemeOk = !ContainsUpper(uri->Scheme) && !ContainsUpper(uri->Host);
 
-	if ((path->Length == 0 || (path[path->Length -1] != '/' && path->IndexOf('\\') < 0)) && schemeOk)
+	if (schemeOk && (path->Length == 0 || (path[path->Length -1] != '/' && path->IndexOf('\\') < 0) && !path->Contains("//")))
 		return uri;
 
 	String^ components = uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped);
@@ -198,8 +198,20 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 	String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
 
-	if (root->IsFile && part->Length == 2 && Char::IsLetter(part, 0) && part[1] == ':')
-		part += '/';
+	if (root->IsFile)
+	{
+		if(part->Length >= 2 && part[1] == ':' && part[0] >= 'a' && part[0] <= 'z')
+		{
+			part = Char::ToUpper(part[0]) + part->Substring(1);
+
+			if(part->Length == 2)
+				part += '/';
+		}
+		else if(uri->Host)
+		{
+			part = part->TrimStart('/');
+		}		
+	}
 
 	if (!Uri::TryCreate(part, UriKind::Relative, suffix))
 		throw gcnew ArgumentException("Invalid Uri value in path", "uri");

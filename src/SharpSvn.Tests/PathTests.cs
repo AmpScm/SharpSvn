@@ -117,6 +117,23 @@ namespace SharpSvn.Tests
 
         }
 
+        [Test]
+        public void TestUriNormalization()
+        {
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos")).AbsoluteUri, Is.EqualTo("file://server/repos"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos\\file")).AbsoluteUri, Is.EqualTo("file://server/repos/file"));            
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://host/")).AbsoluteUri, Is.EqualTo("http://host/"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://host/svn/")).AbsoluteUri, Is.EqualTo("http://host/svn"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://user@host/")).AbsoluteUri, Is.EqualTo("http://user@host/"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://user@host/svn/")).AbsoluteUri, Is.EqualTo("http://user@host/svn"));
+            
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file://server//repos//qqq")).AbsoluteUri, Is.EqualTo("file://server/repos/qqq"));
+
+            // TODO: Maybe ensure
+            //Assert.That(SvnTools.GetNormalizedUri(new Uri("f:\\repos")).AbsoluteUri, Is.EqualTo("file:///F:/repos"));
+        }
+
         [Test, ExpectedException(typeof(PathTooLongException))]
         public void NormalizePathNormal()
         {
