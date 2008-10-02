@@ -34,18 +34,20 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.GetNormalizedUri(new Uri("e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
 
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("E:\\")).AbsoluteUri, Is.EqualTo("file:///E:/"));
+
             Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share")).AbsoluteUri, Is.EqualTo("file://server/share"));
-            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\")).AbsoluteUri, Is.EqualTo("file://server//share")); // Should this case be fixed
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\")).AbsoluteUri, Is.EqualTo("file://server/share"));
 
             Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
-            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a\")).AbsoluteUri, Is.EqualTo("file://server//share/a"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a\")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
 
             Assert.That(SvnTools.GetNormalizedUri(new Uri("HTTP://localhost/test")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("hTTp://uSeR@localhost/test/")).AbsoluteUri, Is.EqualTo("http://uSeR@localhost/test"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("httP://localhost/test//")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
 
-            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\share\a\")).AbsoluteUri, Is.EqualTo("file://server//share/a"));
-            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\Share\a\")).AbsoluteUri, Is.EqualTo("file://server//Share/a"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\share\a\")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\Share\a\")).AbsoluteUri, Is.EqualTo("file://server/Share/a"));
 
         }
 

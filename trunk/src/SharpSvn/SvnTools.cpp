@@ -108,7 +108,7 @@ static String^ GetPathRootPart(String^ path)
 	if (nEnd < 0)
 		nEnd = path->Length;
 
-	return "\\\\" + path->Substring(2, nSlash-2)->ToUpperInvariant() + path->Substring(nSlash, nEnd-nSlash);
+	return "\\\\" + path->Substring(2, nSlash-2)->ToLowerInvariant() + path->Substring(nSlash, nEnd-nSlash);
 }
 
 static bool IsSeparator(String^ v, int index)
