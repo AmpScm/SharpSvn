@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="httpdDir" value="${buildRoot}/httpd" />
+
+  <target name="build-httpd" depends="build-apr" if="${buildHttpd=='true'}">
+    <if test="${platform != 'win32'}">
+      <fail message="Building apache is currently only supported for platform win32" />
+    </if>
+    <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
+      <copy todir="${httpdDir}" file="scripts/apache.sln" />
+
+      <exec program="msbuild.exe" workingdir="${httpdDir}">
+        <arg value="apache.sln" />
+        <arg value="/P:configuration=Release" />
+        <arg value="/P:platform=Win32" />
+        <arg value="/t:httpd" />
+        <arg value="/t:mod_dav" />
+      </exec>
+    </OnceBlock>
+  </target>
+</project>
