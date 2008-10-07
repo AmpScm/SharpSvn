@@ -80,8 +80,8 @@
     <copy tofile="build/${platform}/lib/release/libaprutil-1.lib" file="build/${platform}/lib/lib/aprutil-1.lib" if="${static=='true'}" />
   </target>
 
-  <target name="svn-merge" depends="checkout">
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged" if="${applyMerges == 'true'}">
+  <target name="svn-merge" depends="checkout" if="${applyMerges}">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
         <arg value="merge" />
         <arg value="-c" />
@@ -89,6 +89,26 @@
         <arg value="http://svn.collab.net/repos/svn/trunk/" />
         <arg value="${svnBase}" />
       </Svn>
+      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
+        /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+        apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+        {
+        if (!auth_baton)
+        return NULL;
+
+        return auth_baton->creds_cache;
+        }
+      </echo>
+
+	  <if test="${svnAddSharpSvn == 'true'}">
+		<loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
+		  <filterchain>
+			<replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+						   to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+		  </filterchain>
+	    </loadfile>
+	    <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
+	  </if>
     </OnceBlock>
   </target>
 
@@ -197,27 +217,7 @@
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
         </do>
-      </foreach>
-      <foreach item="File" property="sourceFile">
-        <in>
-          <items basedir="${svnBase}/subversion">
-            <include name="libsvn_ra_serf/win32_auth_sspi.c" />
-            <include name="libsvn_fs_base/bdb/*.h" if="${aprUtilVersion >= '1.2.11'}"/>
-            <include name="libsvn_fs_base/bdb/*.c" if="${aprUtilVersion >= '1.2.11'}"/>
-            <include name="libsvn_fs_base/fs.c" />
-          </items>
-        </in>
-        <do>
-          <loadfile file="${sourceFile}" property="projtext">
-            <filterchain>
-              <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
-              <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${sourceFile}" />
-        </do>
-      </foreach>
+      </foreach>      
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
       <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
         <arg value="-n" />
@@ -231,17 +231,7 @@
       </loadfile>
       <if test="${string::get-length(svnWcVersion) &gt; 20}">
         <property name="svnWcVersion" value="?" />
-      </if>
-      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${applyMerges == 'true'}">
-        /* Appended by sharpsvn/imports/scripts/build-subversion.build */
-        apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
-        {
-        if (!auth_baton)
-        return NULL;
-
-        return auth_baton->creds_cache;
-        }
-      </echo>
+      </if>      
 
       <!-- Trim whitespace (and the newline added by NAnt) -->
       <property name="svnWcVersion" value="${string::trim(svnWcVersion)}" />
