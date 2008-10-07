@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<project basedir=".." default="build">
+  <property name="platform" value="auto" overwrite="false" />
+  <property name="singlePlatform" value="false" overwrite="false" />
+  <property name="buildRoot" value="build" overwrite="false" />
+  <property name="downloads" value="downloads/" overwrite="false" />
+
+  <property name="buildRoot" value="${path::get-full-path(buildRoot)}" />
+
+  <property name="platform" value="x64" if="${platform=='auto' and string::contains(string::to-upper(LIB), 'LIB\AMD64')}" />
+  <property name="platform" value="ia64" if="${platform=='auto' and string::contains(string::to-upper(LIB), 'LIB\INTEL64')}" />
+  <property name="platform" value="win32" if="${platform=='auto'}" />
+
+  <if test="${platform != 'win32' and platform != 'x64' and platform != 'ia64'}">
+    <fail message="Platform must be win32, x64 or ia64 but is ${platform}" />
+  </if>
+
+  <property name="platformRoot" value="${buildRoot}" if="${singlePlatform=='true'}" />
+  <property name="platformRoot" value="${buildRoot}/${platform}" if="${singlePlatform!='true'}" />
+
+  <property name="intDir" value="${platformRoot}/release" />
+
+  <property name="release" value="${path::get-full-path(release)}" />
+  <property name="releaseLib" value="${release}/lib" if="${singlePlatform=='true' or platform=='win32'}" />
+  <property name="releaseLib" value="${release}/lib-{$platform}" if="${singlePlatform!='true' and platform!='win32'}" />
+  <property name="releaseBin" value="${release}/bin" if="${singlePlatform=='true' or platform=='win32'}" />
+  <property name="releaseBin" value="${release}/bin-{$platform}" if="${singlePlatform!='true' and platform!='win32'}" />
+  <property name="releaseInc" value="${release}/include" />
+
+  <target name="initialize-layout">
+    <mkdir dir="${downloads}" />
+    <mkdir dir="${platformRoot}" />
+    <mkdir dir="${intDir}" />
+    <mkdir dir="${releaseLib}" />
+    <mkdir dir="${releaseBin}" />
+    <mkdir dir="${releaseInc}" />
+  </target>
+</project>
