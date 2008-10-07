@@ -160,13 +160,15 @@
 			tofile="release/licenses/ZLib-License.txt" />
     <copy
 			file="${sharpSvnDir}/LICENSE.txt"
-			tofile="release/licenses/SharpSvn-License.txt" />
+			tofile="release/licenses/SharpSvn-License.txt" 
+			if="${file::exists(sharpSvnDir + '/LICENSE.txt')}"/>
     <copy
 			file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
-			tofile="release/licenses/Putty-License.txt" />
-		<copy
-      file="${gettextDir}/gettext-runtime/COPYING"
-      tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
+			tofile="release/licenses/Putty-License.txt" 
+			if="${file::exists(sharpSvnDir + '/src/SharpPlink/PuttySrc/LICENCE')}" />
+	<copy
+			file="${gettextDir}/gettext-runtime/COPYING"
+			tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
     <copy
 			file="${sharpSvnDir}/imports/scripts/SharpSvn-Licenses.wxs"
 			tofile="release/licenses/SharpSvn-Licenses.wxs" />    

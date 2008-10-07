@@ -7,6 +7,7 @@
   <property name="applyMerges" value="true" overwrite="false" />
   <property name="enableIpv6" value="true" overwrite="false" />
   <property name="svnStatic" value="false" overwrite="false" />
+  <property name="svnAddSharpSvn" value="false" overwrite="false" />
 
   <if test="${not property::exists('VSversion')}">
     <!-- Auto detect VS 2005 and VS 2008 -->
