@@ -55,26 +55,32 @@
       <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
       <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
     </VCBuild>
-    <copy todir="${release}/lib">
-      <fileset basedir="${dbWindowsDir}/${Configuration}">
+    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
+    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
+    
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${bdbResultDir}">
         <include name="*.lib" />
         <include name="*.pdb" />
         <include name="*.exp" />
       </fileset>
     </copy>
-    <copy todir="${release}/lib-x64">
-      <fileset basedir="${dbWindowsDir}/${Configuration}_AMD64">
-        <include name="*.lib" />
-        <include name="*.pdb" />
-        <include name="*.exp" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin" flatten="true">
+    <copy todir="${intDir}/include">
       <fileset basedir="${dbWindowsDir}">
-        <include name="${Configuration}/*.dll" />
-        <include name="${Configuration}/*.pdb" />
-        <include name="${Configuration}_AMD64/*.dll" />
-        <include name="${Configuration}_AMD64/*.pdb" />
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${bdbResultDir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+        <include name="*.exp" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseBin}">
+      <fileset basedir="${bdbResultDir}">
+        <include name="*.dll" />
+        <include name="*.pdb" />
       </fileset>
     </copy>
     <copy todir="${release}/include">

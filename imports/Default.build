@@ -19,8 +19,9 @@
   <property name="serfVersion" value="0.1.3" />
   <property name="saslVersion" value="2.1.22" />
 
+  <property name="httpdVersion" value="2.2.9" />
   <property name="gettextVersion" value="0.17" />
-  <property name="gssapiVersion" value="3.2.2" />
+  <property name="sqliteVersion" value="3.6.3" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.4.3" />

@@ -32,7 +32,7 @@
 
   <setenv>
     <variable name="OPENSSL_STATIC" value="1" />
-    <variable name="ENABLE_IPV6" value="1" />
+    <variable name="ENABLE_IPV6" value="1" if="${enableIpv6=='true'}"/>
   </setenv>
 
   <property name="Configuration" value="release" />
@@ -40,6 +40,7 @@
 
   <include buildfile="tasks.build" />
 
+  <include buildfile="layout.build" />
   <include buildfile="prepare.build" />
 
   <include buildfile="bdb.build" />
@@ -47,11 +48,13 @@
   <include buildfile="openssl.build" />
   <include buildfile="serf.build" />
   <include buildfile="neon.build" />
+  <include buildfile="httpd.build" />
   <include buildfile="apr.build" />
   <include buildfile="sasl.build" />
   <include buildfile="gettext.build" />
   <include buildfile="sharpintl.build" />
   <include buildfile="subversion.build" />
+  <include buildfile="sqlite.build" />
 
   <target name="clean">
     <delete>

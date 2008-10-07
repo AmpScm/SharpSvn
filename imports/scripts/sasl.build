@@ -5,7 +5,8 @@
 
   <regex pattern="^(?'SASL_MAJOR_VERSION'\d+)\.(?'SASL_MINOR_VERSION'\d+)\.(?'SASL_MICRO_VERSION'\d+)" input="${saslVersion}" />
 
-  <property name="saslDllName" value="${dllPrefix}Sasl${SASL_MAJOR_VERSION}${SASL_MINOR_VERSION}-${SASL_MICRO_VERSION}-${platform}.dll" />
+  <property name="saslDllName" value="libsasl.dll" if="${dllPrefix==''}" />
+  <property name="saslDllName" value="${dllPrefix}Sasl${SASL_MAJOR_VERSION}${SASL_MINOR_VERSION}-${SASL_MICRO_VERSION}-${platform}.dll" if="${dllPrefix!=''}"/>
 
   <target name="build-sasl" depends="checkout,build-bdb,build-openssl">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
@@ -49,7 +50,7 @@
           <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
           <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} '/>
-          <replacestring from='libsasl.dll' to='${saslDllName}' />
+          <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64" /D "_WIN64"' if="${platform=='x64'}" />
         </filterchain>
       </loadfile>
@@ -66,9 +67,9 @@
         <arg value="DB_LIBPATH=${path::get-full-path('release\lib-x64')}" if="${platform == 'x64'}"/>
         <arg value="DB_INCLUDE=${path::get-full-path('release\include')}" />
         <!-- OpenSSL -->
-        <arg value="OPENSSL_INCLUDE=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\inc32')}" />
-        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\out32')}" if="${static=='true'}" />
-        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformBase + '\openssl-' + opensslVersion + '\out32dll')}" if="${static!='true'}" />
+        <arg value="OPENSSL_INCLUDE=${path::get-full-path(platformRoot + '\openssl-' + opensslVersion + '\inc32')}" />
+        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformRoot + '\openssl-' + opensslVersion + '\out32')}" if="${static=='true'}" />
+        <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformRoot + '\openssl-' + opensslVersion + '\out32dll')}" if="${static!='true'}" />
         <arg value="NTLM=1" />
         <arg value="NTLM_STATIC=1" />
       </exec>

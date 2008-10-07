@@ -1,8 +1,10 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="aprDir" value="build/apr" />
-  <property name="aprUtilDir" value="build/apr-util" />
-
+  <property name="aprBase" value="${buildRoot}" if="${buildHttpd=='false'}" />
+  <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd!='false'}" />
+  <property name="aprDir" value="${aprBase}/apr" />
+  <property name="aprUtilDir" value="${aprBase}/apr-util" />
+  
 	<target name="apr-merge" depends="checkout">
     <OnceBlock file="build/apr-${aprVersion}.merged">
       <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
@@ -21,20 +23,19 @@
         <arg value="-2005" />
         <arg value="-mt" />
       </exec>    
-      <copy file="${release}/lib/${libDb}.lib" tofile="${release}/lib/${libDb}d.lib" if="${platform=='win32'}"/>
-      <copy file="${release}/lib-${platform}/${libDb}.lib" tofile="${release}/lib-${platform}/${libDb}d.lib" if="${platform!='win32'}"/>
+      <copy file="${intDir}/lib/${libDb}.lib" tofile="${intDir}/lib/${libDb}d.lib"/>
       <exec program="perl.exe" workingdir="${aprUtilDir}">
         <arg value="build/w32locatedb.pl" />
         <arg value="dll" />
-        <arg value="../../release/include" />
-        <arg value="../../release/lib" if="${platform=='win32'}"/>
-        <arg value="../../release/lib-${platform}" if="${platform!='win32'}"/>
+        <arg value="${intDir}/include" />
+        <arg value="${intDir}/lib" />
       </exec>
       <foreach item="File" property="project">
         <in>
           <items>
             <include name="${aprDir}/**/*.dsp" />
             <include name="${aprUtilDir}/**/*.dsp" />
+            <include name="${httpdDir}/**/*.dsp" if="${buildHttpd == 'true'}" />
           </items>
         </in>
         <do>
@@ -53,6 +54,7 @@
           <items>
             <include name="${aprDir}/**/*.vcproj" />
             <include name="${aprUtilDir}/**/*.vcproj" />
+            <include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
           </items>
         </in>
         <do>
