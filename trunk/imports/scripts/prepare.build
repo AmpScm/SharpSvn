@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="downloads" value="downloads/" overwrite="false" />
   <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
-  <target name="download">
+  
+  <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
     <if test="${not file::exists(downloads + opensslFilename)}">
       <get src="http://www.openssl.org/source/${opensslFilename}" dest="${downloads}/${opensslFilename}" />
@@ -69,10 +69,7 @@
       </if>
     </if>
   </target>
-  <target name="checkout">
-    <property name="platformBase" value="build/${platform}" />
-    <property name="svnBase" value="${platformBase}/subversion" />
-
+  <target name="checkout" depends="initialize-layout">
     <if test="${not directory::exists(svnBase)}">
       <Svn verbose="true">
         <arg value="co" />
@@ -82,14 +79,21 @@
         <arg value="${svnBase}" />
       </Svn>
     </if>
-    <if test="${not directory::exists(platformBase + '/neon')}">
+    <if test="${not directory::exists(platformRoot + '/neon')}">
       <Svn verbose="true">
         <arg value="co" />
         <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
         <arg value="build/${platform}/neon" />
       </Svn>
       <!-- Write version for subversion configure script -->
-      <echo message="${neonVersion}" file="${platformBase}/neon/.version" />
+      <echo message="${neonVersion}" file="${platformRoot}/neon/.version" />
+    </if>
+    <if test="${buildHttpd=='true' and not directory::exists(httpdDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" />
+        <arg value="${httpdDir}" />
+      </Svn>
     </if>
     <if test="${not directory::exists(aprDir)}">
       <Svn verbose="true">
@@ -105,15 +109,22 @@
         <arg value="${aprUtilDir}" />
       </Svn>
     </if>
-    <if test="${not directory::exists(platformBase + '/serf')}">
+    <if test="${not directory::exists(platformRoot + '/serf')}">
       <Svn verbose="true">
         <arg value="co" />
         <arg value="http://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
         <arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
         <arg value="http://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
-        <arg value="${platformBase}/serf" />
+        <arg value="${platformRoot}/serf" />
       </Svn>
     </if>
+    <if test="${buildSqlite and not directory::exists(sqliteDir)}">
+	  <Svn verbose="true">
+	    <arg value="co" />
+	    <arg value="http://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
+	    <arg value="${sqliteDir}" />
+	  </Svn>
+	</if>
   </target>
   
   <target name="copy-licenses">

@@ -2,10 +2,11 @@
 <project basedir=".." default="build">
   <property name="intl" value="sharpsvn" overwrite="false" />
   <property name="svnBuildName" value="SharpSvn" overwrite="false" />
+  <property name="svnBase" value="${platformRoot}/subversion" />
   <property name="svnCheckUrl" value="" overwrite="false" />
   <property name="svnCheckFs" value="fsfs" overwrite="false" />
 
-  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, sharpintl-build">
+  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, sharpintl-build">
 
     <!-- Fake direct result for subversion to hide platforms -->
     <copy todir="build/${platform}/lib/include">
@@ -97,7 +98,27 @@
     </exec>
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
-    
+      <!-- Patches for x64 builds; hopefully included in svn 1.5 -->
+      <copy todir="${svnBase}/build/generator/" overwrite="true">
+        <fileset basedir="scripts">
+          <include name="*.ezt" />
+        </fileset>
+      </copy>
+      <loadfile file="${svnBase}/build/generator/gen_win.py" property="gen_win">
+        <filterchain>
+          <replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
+        </filterchain>
+      </loadfile>
+      <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
+      <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
+        <filterchain>
+          <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
+          <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
+          <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
+        </filterchain>
+      </loadfile>
+      <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
+
       <loadfile file="${svnBase}/build.conf" property="gen_win">
         <filterchain>
           <replacestring from='svn_repos_update()' to='svn_repos_up*ate()' />
@@ -128,14 +149,27 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
+        <arg value="--with-sqlite=${intDir}" if="${buildSqlite}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>
       <!-- The ZLib build has already completed -->
 
-      <echo message="@echo off" file="${svnBase}/build/win32/build_zlib.bat" />
+      <echo message="@echo off" file="${svnBase}/build/${platform}/build_zlib.bat" />
 
       <!-- Replace shared library builds with static builds; to auto change dependencies -->
+      <foreach item="File" property="vcproj">
+        <in>
+          <items basedir="${svnBase}/build/win32">
+            <include name="svn_config.vcproj" />
+            <include name="svn_locale.vcproj" />
+            <include name="zlib.vcproj" />
+          </items>
+        </in>
+        <do>
+          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+        </do>
+      </foreach>
       <foreach item="File" property="vcproj">
         <in>
           <items basedir="${svnBase}">
@@ -147,9 +181,9 @@
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
               <replacestring from='PreprocessorDefinitions="WIN32'  if="${static=='true'}"
-                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32' />
+                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
               <replacestring from='PreprocessorDefinitions="WIN32'  if="${static!='true'}"
-                to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;WIN32' />
+                to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;_CRT_SECURE_NO_WARNINGS;APR_HAVE_IPV6;WIN32' />
               <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib zlibstat.lib' />
               <replacestring from='AdditionalDependencies="advapi32.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib advapi32.lib' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
@@ -164,13 +198,26 @@
           <echo message="${projtext}" file="${vcproj}" />
         </do>
       </foreach>
-      <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="fsc">
-        <filterchain>
-          <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-						             to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-          </filterchain>
-      </loadfile>
-      <echo message="${fsc}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" if="${applyMerges == 'true'}" />
+      <foreach item="File" property="sourceFile">
+        <in>
+          <items basedir="${svnBase}/subversion">
+            <include name="libsvn_ra_serf/win32_auth_sspi.c" />
+            <include name="libsvn_fs_base/bdb/*.h" if="${aprUtilVersion >= '1.2.11'}"/>
+            <include name="libsvn_fs_base/bdb/*.c" if="${aprUtilVersion >= '1.2.11'}"/>
+            <include name="libsvn_fs_base/fs.c" />
+          </items>
+        </in>
+        <do>
+          <loadfile file="${sourceFile}" property="projtext">
+            <filterchain>
+              <replacestring from='&lt;windows.h&gt;' to='&lt;winsock2.h&gt; /* IPv6 fix: winsock2.h includes windows.h */' />
+              <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+								to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${sourceFile}" />
+        </do>
+      </foreach>
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
       <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
         <arg value="-n" />
@@ -206,21 +253,10 @@
         #define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
         #define SVN_VER_NUMTAG "-${svnBuildName}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
       </echo>
-      
-      <!-- And patch the test cases that depend on the version -->
-      <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
-        <filterchain>
-          <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
-          <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
-          <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
-        </filterchain>
-      </loadfile>
-      <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
-
     </OnceBlock>
   </target>
 
-  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,prepare-neon,generate-svnfiles">
+  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
       <exec program="msbuild.exe" workingdir="${svnBase}">
@@ -238,7 +274,7 @@
         <arg value="/t:svnlook" />
         <arg value="/t:svnauthz-validate" />
         <arg value="/t:svn-populate-node-origins-index" />
-        <arg value="/t:__ALL_TESTS__" />
+        <arg value="/t:__ALL_TESTS__" if="${VSversion == '2005'}"/>
       </exec>
     </OnceBlock>
   </target>
@@ -295,22 +331,22 @@
       </fileset>
     </copy>
     <copy todir="${release}/include/serf">
-      <fileset basedir="${platformBase}\serf">
+      <fileset basedir="${platformRoot}\serf">
         <include name="**/*.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include/neon">
-      <fileset basedir="${platformBase}\neon\src">
+      <fileset basedir="${platformRoot}\neon\src">
         <include name="**/*.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include/apr-1">
-      <fileset basedir="${platformBase}\apr\include">
+      <fileset basedir="${platformRoot}\apr\include">
         <include name="**.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include/apr-1">
-      <fileset basedir="${platformBase}\apr-util\include">
+      <fileset basedir="${platformRoot}\apr-util\include">
         <include name="**.h" />
       </fileset>
     </copy>
@@ -320,7 +356,7 @@
 
     </echo>
     <copy todir="${release}/po" flatten="true">
-      <fileset basedir="${platformBase}\subversion\subversion">
+      <fileset basedir="${platformRoot}\subversion\subversion">
         <include name="**/*.po" />
       </fileset>
     </copy>
@@ -335,7 +371,7 @@
       </filterchain>
     </loadfile>
     <echo message="${gen_win}" file="${svnBase}/win-tests.py" />
-    
+
     <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
       <arg line="/c win-tests.py" if="${pythonAvailable != '0'}" />
       <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
@@ -343,8 +379,6 @@
       <arg value="-v" />
       <arg value="-c" />
       <arg value="-p" />
-      <arg line="-f ${svnCheckFs}" />
-      <arg line="-u ${svnCheckUrl}" if="${svnCheckUrl != ''}" />
       <arg value="--bin=${path::get-full-path('release/bin')}" />
     </exec>
   </target>
