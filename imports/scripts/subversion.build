@@ -169,7 +169,7 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
-        <arg value="--with-sqlite=${intDir}" if="${buildSqlite}" />
+        <arg value="--with-sqlite=${intDir}" if="${buildSqlite and (subversionVersion &gt; '1.6')}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>
