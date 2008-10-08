@@ -23,6 +23,13 @@
         <arg value="-2005" />
         <arg value="-mt" />
       </exec>    
+      <if test="${buildHttpd}">
+		<exec program="perl.exe" workingdir="${httpdDir}">
+			<arg value="${aprDir}/build/cvtdsp.pl" />
+			<arg value="-2005" />
+			<arg value="-mt" />
+		</exec>    
+      </if>
       <copy file="${intDir}/lib/${libDb}.lib" tofile="${intDir}/lib/${libDb}d.lib"/>
       <exec program="perl.exe" workingdir="${aprUtilDir}">
         <arg value="build/w32locatedb.pl" />
