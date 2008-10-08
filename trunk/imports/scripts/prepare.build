@@ -95,6 +95,13 @@
         <arg value="${httpdDir}" />
       </Svn>
     </if>
+    <if test="${buildHttpd=='true' and not directory::exists(aprIconvDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
+        <arg value="${aprIconvDir}" />
+      </Svn>
+    </if>
     <if test="${not directory::exists(aprDir)}">
       <Svn verbose="true">
         <arg value="co" />
