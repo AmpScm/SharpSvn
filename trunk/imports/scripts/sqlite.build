@@ -13,6 +13,9 @@
 		<arg value="/GF" /> <!-- String Pooling -->
 		<arg value="/EHa" /> <!-- C++ and SEH Exceptions -->
 		<arg value="/Zi" /> <!-- Write debug information -->
+		<defines>
+			<define name="NDEBUG" />
+		</defines>
 		<sources basedir="${sqliteDir}">
 			<include name="*.c" />
 		</sources>
@@ -30,6 +33,11 @@
 	<copy todir="${intDir}\lib">
 		<fileset basedir="${sqliteLibDir}">
 			<include name="sqlite3.lib" />
+		</fileset>
+	</copy>
+	<copy todir="${intDir}\inc">
+		<fileset basedir="${sqliteDir}">
+			<include name="*.h" />
 		</fileset>
 	</copy>
 	<copy todir="${releaseInc}">
