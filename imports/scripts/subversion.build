@@ -175,7 +175,7 @@
       </exec>
       <!-- The ZLib build has already completed -->
 
-      <echo message="@echo off" file="${svnBase}/build/${platform}/build_zlib.bat" />
+      <echo message="@echo off" file="${svnBase}/build/win32/build_zlib.bat" />
 
       <!-- Replace shared library builds with static builds; to auto change dependencies -->
       <foreach item="File" property="vcproj">
