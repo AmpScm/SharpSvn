@@ -22,9 +22,9 @@
 
   <property name="release" value="${path::get-full-path(release)}" />
   <property name="releaseLib" value="${release}/lib" if="${singlePlatform=='true' or platform=='win32'}" />
-  <property name="releaseLib" value="${release}/lib-{$platform}" if="${singlePlatform!='true' and platform!='win32'}" />
+  <property name="releaseLib" value="${release}/lib-${platform}" if="${singlePlatform!='true' and platform!='win32'}" />
   <property name="releaseBin" value="${release}/bin" if="${singlePlatform=='true' or platform=='win32'}" />
-  <property name="releaseBin" value="${release}/bin-{$platform}" if="${singlePlatform!='true' and platform!='win32'}" />
+  <property name="releaseBin" value="${release}/bin-${platform}" if="${singlePlatform!='true' and platform!='win32'}" />
   <property name="releaseInc" value="${release}/include" />
 
   <target name="initialize-layout">
