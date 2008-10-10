@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5002.816</title>
+<title>SharpSvn-Daily Update - 1.5003.833</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5002.816</h1>
+<h1>SharpSvn-Daily Update - 1.5003.833</h1>
 
 
 <p>
@@ -12,19 +12,21 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1108/SSvn-1.5002.816.zip">SharpSvn 1.5002.816</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1135/SSvn-1.5003.833.zip">SharpSvn 1.5003.833</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=816">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=833">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-10-10</td></tr>
+<tr><td> </td><td class="r"><a id="833" href="http://sharpsvn.net/rev/?r=833">[r833]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/AssemblyInfo.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated SharpSvn version to 1.5003.*</td></tr>
 <tr class="d"><td colspan="4">2008-10-02</td></tr>
 <tr><td> </td><td class="r"><a id="816" href="http://sharpsvn.net/rev/?r=816">[r816]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnBase.cpp, src/SharpSvn.Tests/PathTests.cs, src/SharpSvn/SvnTools.cpp, src/SharpSvn/SvnTools.h, src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated UNC Uri normalization format from file://host//share/ to file://host/share
 Before this commit you could get file://host//share/ and file://host/share from
@@ -59,35 +61,6 @@ obsoleted 'MakeParents'</td></tr>
 <tr class="d"><td colspan="4">2008-09-10</td></tr>
 <tr><td> </td><td class="r"><a id="767" href="http://sharpsvn.net/rev/?r=767">[r767]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/SetProperty.cpp, src/SharpSvn.Tests/Commands/SetPropertyTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make SetProperty handle EOL conversion for svn:* properties if not handled by the
 caller.</td></tr>
-<tr class="d"><td colspan="4">2008-09-07</td></tr>
-<tr><td> </td><td class="r"><a id="763" href="http://sharpsvn.net/rev/?r=763">[r763]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/AssemblyInfo.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added Subversion itself to the list of linked libraries.</td></tr>
-<tr><td> </td><td class="r"><a id="762" href="http://sharpsvn.net/rev/?r=762">[r762]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnLibraryAttribute.h, src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fixed library list initialization for OpenSSL and SharpPlink</td></tr>
-<tr><td> </td><td class="r"><a id="761" href="http://sharpsvn.net/rev/?r=761">[r761]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/WriteTests.cs, src/SharpSvn.Tests/Commands/InfoTests.cs, src/SharpSvn.Tests/Commands/ListTests.cs, src/SharpSvn.Tests/Commands/StatusTests.cs, src/SharpSvn.Tests/SvnClientTests.cs, src/SharpSvn.Tests/Commands/MoveTests.cs, src/SharpSvn.Tests/Commands/CleanUpTests.cs, src/SharpSvn.Tests/Commands/CreateDirectoryTests.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Moved more tests form the old SvnClientTests.cs to the per
-command tests.</td></tr>
-<tr><td> </td><td class="r"><a id="760" href="http://sharpsvn.net/rev/?r=760">[r760]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/Log.h, src/SharpSvn/SvnTarget.h, src/SharpSvn/SvnUriTarget.h, src/SharpSvn.Tests/PathTests.cs, src/SharpSvn/SvnLibraryAttribute.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SvnClient.cpp, src/SharpSvn/SvnTools.cpp (and 6 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added support for retrieving all linked in library versions (SvnClient.SvnLibraries)
-and getting the filename from an Uri (SvnTools.GetFileName)</td></tr>
-<tr><td> </td><td class="r"><a id="759" href="http://sharpsvn.net/rev/?r=759">[r759]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/Log.h, src/SharpSvn/Commands/Log.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added RetrieveAllProperties to SvnLogArgs to allow retrieving all properties at once. 
-Document the behavior of clearing .RetrieveProperties as doesn't retrieve properties.
-(Previously clearing the list retrieved all properties and it probably still does; 
- but this behavior was undocumented and will change in Subversion 1.6).</td></tr>
-<tr class="d"><td colspan="4">2008-09-06</td></tr>
-<tr><td> </td><td class="r"><a id="758" href="http://sharpsvn.net/rev/?r=758">[r758]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/EventArgs/SvnInfoEventArgs.h, src/SharpSvn.Tests/SvnClientTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed CopyFromRev property to CopyFromRevision to match class library
-design guidelines.</td></tr>
-<tr class="d"><td colspan="4">2008-09-05</td></tr>
-<tr><td> </td><td class="r"><a id="756" href="http://sharpsvn.net/rev/?r=756">[r756]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnBase.cpp, src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure CanonicalizeUri passes usernames transparently. 
-(Required for svn+ssh://user@host support)</td></tr>
-<tr class="d"><td colspan="4">2008-09-04</td></tr>
-<tr><td> </td><td class="r"><a id="753" href="http://sharpsvn.net/rev/?r=753">[r753]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/ReposArgs/UpgradeRepository.h, src/SharpSvn/ReposCommands/UpgradeRepository.cpp, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/ReposCommands/LoadRepository.cpp, src/SharpSvn/SvnRepositoryClient.h, src/SharpSvn/ReposCommands/DumpRepository.cpp, src/SharpSvn/ReposCommands/RecoverRepository.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added UpgradeRepository command to SvnRepositoryClient.</td></tr>
-<tr class="d"><td colspan="4">2008-09-03</td></tr>
-<tr><td> </td><td class="r"><a id="751" href="http://sharpsvn.net/rev/?r=751">[r751]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/CopyTests.cs, src/SharpSvn.Tests/Commands/ImportTests.cs, src/SharpSvn.Tests/Commands/ListTests.cs, src/SharpSvn.Tests/Commands/AuthenticationTests.cs, src/SharpSvn.Tests/Commands/BlameTests.cs, src/SharpSvn.Tests/Commands/LogTests.cs, src/SharpSvn.Tests/Commands/ExportTests.cs, src/SharpSvn.Tests/Commands/GetPropertyTests.cs (and 10 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Follow up to <a href="http://sharpsvn.net/rev/?r=750">r750</a>: More test cleanups.</td></tr>
-<tr><td> </td><td class="r"><a id="750" href="http://sharpsvn.net/rev/?r=750">[r750]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/SetRevisionPropertyTests.cs, src/SharpSvn.Tests/Commands/PropertyListTests.cs, src/SharpSvn.Tests/Commands/UpdateTests.cs, src/SharpSvn.Tests/Commands/StatusTests.cs, src/SharpSvn.Tests/Commands/FileVersions.cs, src/SharpSvn.Tests/Commands/ZMiscTests.cs, src/SharpSvn.Tests/Commands/TestBase.cs, src/SharpSvn.Tests/Commands/WriteTests.cs (and 8 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Run all tests in the tempdirectory now. 
-(Stop using \tmp on the current drive for the tests that originated in AnkhSVN's NSvn.)</td></tr>
-<tr><td> </td><td class="r"><a id="749" href="http://sharpsvn.net/rev/?r=749">[r749]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnException.cpp, src/SharpSvn/SvnException.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnFileSystemNodeTypeException for SVN_ERR_FS_NOT_DIRECTORY and SVN_ERR_FS_NOT_FILE.</td></tr>
-<tr class="d"><td colspan="4">2008-09-02</td></tr>
-<tr><td> </td><td class="r"><a id="746" href="http://sharpsvn.net/rev/?r=746">[r746]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.UI/Authentication/SslClientCertificateFileDialog.Designer.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Removed password definition for Certificate file editbox. The filename can be shown.</td></tr>
-<tr><td> </td><td class="r"><a id="745" href="http://sharpsvn.net/rev/?r=745">[r745]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnEnums.h, src/SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/Args/GetCapabilities.h, src/SharpSvn/Commands/GetCapabilities.cpp, src/SharpSvn/SvnClient.h, src/SharpSvn.Tests/Commands/FileVersions.cs, src/SharpSvn.Tests/Commands/GetCapabilities.cs (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnClient.GetCapabilities() command that allows retrieving whether a repository supports
-a specific feature (e.g. MergeInfo).</td></tr>
-<tr class="d"><td colspan="4">2008-09-01</td></tr>
 
 </table>
 <!--/Recent changes-->
