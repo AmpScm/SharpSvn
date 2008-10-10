@@ -102,7 +102,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\..."), Is.False);
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\.svn"), Is.True);
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\.svn\\"), Is.False);
-            Assert.That(SvnTools.IsNormalizedFullPath("A:\\\t.svn"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("A:\\\\t.svn"), Is.False);
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\.....svn"), Is.True);
 
 
@@ -110,6 +110,11 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsAbsolutePath("A:\\"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("a:/sdfsdfsd"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("A:\\dfsdfds"), Is.True);
+
+            Assert.That(SvnTools.IsAbsolutePath("a:"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath("A:file"), Is.False);
+            Assert.That(Path.IsPathRooted("a:"), Is.True);
+            Assert.That(Path.IsPathRooted("A:file"), Is.True);
 
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\SERVER\path"), Is.True, @"\\SERVER\path");
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\"), Is.False, @"\\server\path\");
@@ -252,6 +257,62 @@ namespace SharpSvn.Tests
             Assert.That(target2.Uri.AbsoluteUri, Is.EqualTo("http://user@host.server:123/home/user/repos"));
         }
 
+        [Test]
+        public void TestNormalizeUri()
+        {
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")).AbsoluteUri,
+                Is.EqualTo("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23"));
 
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://localhost/test")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://localhost/test/")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://localhost/test//")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
+
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("file:///c:/"), "a b")).AbsoluteUri, Is.EqualTo("file:///c:/a%20b"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("file:///c:/"), "a b/")).AbsoluteUri, Is.EqualTo("file:///c:/a%20b"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("file:///c:/"), "a%20b")).AbsoluteUri, Is.EqualTo("file:///c:/a%20b"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("file:///c:/"), "a%20b/")).AbsoluteUri, Is.EqualTo("file:///c:/a%20b"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file:///e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file://e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file:////e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("e:/")).AbsoluteUri, Is.EqualTo("file:///e:/"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("E:\\")).AbsoluteUri, Is.EqualTo("file:///E:/"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share")).AbsoluteUri, Is.EqualTo("file://server/share"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\")).AbsoluteUri, Is.EqualTo("file://server/share"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\server\share\a\")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("HTTP://localhost/test")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("hTTp://uSeR@localhost/test/")).AbsoluteUri, Is.EqualTo("http://uSeR@localhost/test"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("httP://localhost/test//")).AbsoluteUri, Is.EqualTo("http://localhost/test"));
+
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\share\a\")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\Share\a\")).AbsoluteUri, Is.EqualTo("file://server/Share/a"));
+
+        }
+
+        [Test]
+        public void TestPathToUri()
+        {
+            Uri root = new Uri("http://server/q/");
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("\\a b\\test")).AbsoluteUri, Is.EqualTo("http://server/a%20b/test"));
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("\\a b\\test\\")).AbsoluteUri, Is.EqualTo("http://server/a%20b/test/"));
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("\\c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/c%23/test/"));
+
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("a b\\test")).AbsoluteUri, Is.EqualTo("http://server/q/a%20b/test"));
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("a b\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/a%20b/test/"));
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/c%23/test/"));
+
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\a b\\test")).AbsoluteUri, Is.EqualTo("http://server/q/r/a%20b/test"));
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\a b\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/a%20b/test/"));
+            Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/c%23/test/"));
+        }
 	}
 }
