@@ -349,8 +349,8 @@
       <fileset basedir="${platformRoot}\subversion\subversion">
         <include name="**/*.po" />
       </fileset>
-    </copy>
-    <copy tofile="${release}/include/sharpsvn-imports.h" file="scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
+    </copy>    
+    <copy tofile="${release}/include/sharpsvn-imports.h" file="${downloads}/../scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
   </target>
 
   <target name="check" depends="build-svn, copy-result">
