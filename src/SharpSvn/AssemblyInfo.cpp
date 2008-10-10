@@ -85,7 +85,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.5002.0.1")];
+[assembly:AssemblyVersionAttribute("1.5003.0.1")];
 [assembly:NeutralResourcesLanguageAttribute("en")];
 
 [assembly:ComVisible(false)];
