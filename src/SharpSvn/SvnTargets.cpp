@@ -11,6 +11,7 @@
 
 using namespace SharpSvn;
 using System::IO::Path;
+using namespace System::Collections::Generic;
 
 SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 {
@@ -284,4 +285,34 @@ bool SvnUriTarget::TryParse(String^ targetString, bool allowPegRevision, [Out] S
 
 	target = nullptr;
 	return false;
+}
+
+ICollection<SvnPathTarget^>^ SvnPathTarget::Map(IEnumerable<String^>^ paths)
+{
+	if (!paths)
+		throw gcnew ArgumentNullException("paths");
+
+	List<SvnPathTarget^>^ targets = gcnew List<SvnPathTarget^>();
+
+	for each(String^ path in paths)
+	{
+		targets->Add(path);
+	}
+
+	return targets;
+}
+
+ICollection<SvnUriTarget^>^ SvnUriTarget::Map(IEnumerable<System::Uri^>^ uris)
+{
+	if (!uris)
+		throw gcnew ArgumentNullException("uris");
+
+	List<SvnUriTarget^>^ targets = gcnew List<SvnUriTarget^>();
+
+	for each(System::Uri^ uri in uris)
+	{
+		targets->Add(uri);
+	}
+
+	return targets;
 }
