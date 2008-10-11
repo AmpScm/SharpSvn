@@ -126,6 +126,9 @@ namespace SharpSvn {
 		static bool TryParse(String^ targetName, [Out] SvnPathTarget^% target);
 		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnPathTarget^% target);
 
+	public:
+		static ICollection<SvnPathTarget^>^ Map(System::Collections::Generic::IEnumerable<String^>^ paths);
+
 	internal:
 		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnPathTarget ^% target, AprPool^ pool)
 		{

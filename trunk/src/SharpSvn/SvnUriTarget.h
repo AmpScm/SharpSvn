@@ -150,6 +150,8 @@ namespace SharpSvn {
 			}
 		}
 
+		static ICollection<SvnUriTarget^>^ Map(System::Collections::Generic::IEnumerable<System::Uri^>^ uris);
+
 	internal:
 		static bool TryParse(String^ targetString, bool allowPegRevision, [Out] SvnUriTarget ^% target, AprPool^ pool);
 
