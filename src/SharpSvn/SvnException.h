@@ -222,6 +222,9 @@ using System::ComponentModel::DescriptionAttribute;
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientMissingLockTokenException, SvnClientException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientNotReadyToMergeException, SvnClientException);
 
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientNodeKindException, SvnClientException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnClientBinaryFileException, SvnClientException);
+
 	/// <summary>SharpSvn configuration loader exception</summary>
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientConfigurationException, SvnClientException);
 }

@@ -357,16 +357,19 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_CLIENT_RA_ACCESS_REQUIRED:
 		case SVN_ERR_CLIENT_BAD_REVISION:
 		case SVN_ERR_CLIENT_DUPLICATE_COMMIT_URL:
-		case SVN_ERR_CLIENT_IS_BINARY_FILE:
 		case SVN_ERR_CLIENT_INVALID_EXTERNALS_DESCRIPTION:
 		case SVN_ERR_CLIENT_MODIFIED:
-		case SVN_ERR_CLIENT_IS_DIRECTORY:
 		case SVN_ERR_CLIENT_REVISION_RANGE:
 		case SVN_ERR_CLIENT_INVALID_RELOCATION:
 		case SVN_ERR_CLIENT_REVISION_AUTHOR_CONTAINS_NEWLINE:
 		case SVN_ERR_CLIENT_PROPERTY_NAME:
 		case SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED:
 			return gcnew SvnClientApiException(error);
+
+		case SVN_ERR_CLIENT_IS_DIRECTORY:
+			return gcnew SvnClientNodeKindException(error);
+		case SVN_ERR_CLIENT_IS_BINARY_FILE:
+			return gcnew SvnClientBinaryFileException(error);
 
 		case SVN_ERR_CLIENT_VERSIONED_PATH_REQUIRED:
 			return gcnew SvnClientNoVersionedPathException(error);
