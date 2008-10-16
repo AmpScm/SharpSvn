@@ -32,9 +32,26 @@ namespace SharpSvn.Tests.Commands
             string filePath = Path.Combine(this.WcPath, "Form.cs");
 
             byte[] propval = Encoding.UTF8.GetBytes("baa");
-            this.Client.SetProperty(filePath, "moo", propval);
-            Assert.That(this.RunCommand("svn", "propget moo " + filePath).Trim(), Is.EqualTo("baa"),
-                "PropSet didn't work!");
+
+
+            using (SvnClient cl = new SvnClient())
+            {
+                bool first = true;
+                cl.Notify += delegate(object sender, SvnNotifyEventArgs e)
+                {
+                    Assert.That(first);
+                    Assert.That(e.FullPath, Is.EqualTo(filePath));
+                    first = false;
+                };
+#if SVN_16
+                Assert.That(!first);
+#else
+                Assert.That(first);
+#endif
+                cl.SetProperty(filePath, "moo", propval);
+                Assert.That(this.RunCommand("svn", "propget moo " + filePath).Trim(), Is.EqualTo("baa"),
+                    "PropSet didn't work!");
+            }
         }
 
         /// <summary>
