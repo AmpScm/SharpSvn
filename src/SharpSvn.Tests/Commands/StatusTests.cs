@@ -322,7 +322,7 @@ namespace SharpSvn.Tests.Commands
 
                 Guid reposGuid;
 
-                client.GetRepositoryIdFromUri(ReposUrl, out reposGuid);
+                client.TryGetRepositoryId(ReposUrl, out reposGuid);
 
                 for (int mode = 0; mode < 4; mode++)
                 {

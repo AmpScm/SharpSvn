@@ -358,7 +358,7 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 	return nullptr;
 }
 
-bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
+bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
@@ -386,6 +386,52 @@ bool SvnClient::GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
 		id = Guid(Utf8_PtrToString(uuidStr));
 		return true;
 	}
+}
+
+bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("uri");
+	else if (!SvnBase::IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+	id = Guid::Empty;
+
+	EnsureState(SvnContextState::AuthorizationInitialized);
+
+	AprPool pool(%_pool);
+
+	const char* pPath = pool.AllocPath(path);
+	const char* uuidStr = nullptr;
+
+	svn_wc_adm_access_t *adm = nullptr;
+	svn_error_t* err = svn_wc_adm_probe_open3(	&adm, 
+												nullptr, 
+												pPath, 
+												false,
+												0,
+												CtxHandle->cancel_func,
+												CtxHandle->cancel_baton,
+												pool.Handle);
+
+	if (err || !adm)
+	{
+		svn_error_clear(err);
+		return false;
+	}
+
+	err = svn_client_uuid_from_path(&uuidStr, pPath, adm, CtxHandle, pool.Handle);
+
+	svn_error_clear(svn_wc_adm_close(adm));
+
+	if (err || !uuidStr)
+	{
+		svn_error_clear(err);
+		return false;
+	}
+	
+	id = Guid(Utf8_PtrToString(uuidStr));
+	return true;
 }
 
 Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
