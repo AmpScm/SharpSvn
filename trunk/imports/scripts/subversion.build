@@ -320,6 +320,11 @@
         <include name="**/*.h" />
       </fileset>
     </copy>
+    <copy todir="${release}/include/svn-internal">
+		<fileset basedir="${svnBase}/subversion">
+			<include name="libsvn_client/client.h" />
+		</fileset>
+	</copy>
     <copy todir="${release}/include/serf">
       <fileset basedir="${platformRoot}\serf">
         <include name="**/*.h" />
