@@ -1142,8 +1142,17 @@ namespace SharpSvn {
 
 		/// <summary>Gets the Uuid of a Uri, or <see cref="Guid::Empty" /> if path is not versioned</summary>
 		/// <returns>true if successfull, otherwise false</returns>
-		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id);
+		bool TryGetRepositoryId(Uri^ uri, [Out] Guid% id);
 
+		/// <summary>Gets the Uuid of a Path, or <see cref="Guid::Empty" /> if path is not versioned</summary>
+		/// <returns>true if successfull, otherwise false</returns>
+		bool TryGetRepositoryId(String^ path, [Out] Guid% id);
+
+		[Obsolete("Use TryGetRepositoryId")]
+		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
+		{
+			return TryGetRepositoryId(uri, id);
+		}
 	private:
 		~SvnClient();
 	};

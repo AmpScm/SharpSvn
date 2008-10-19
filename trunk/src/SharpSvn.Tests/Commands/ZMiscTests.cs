@@ -52,9 +52,17 @@ namespace SharpSvn.Tests.Commands
 		public void TestUuidFromUrl()
 		{
 			Guid id;
-			Assert.That(this.Client.GetRepositoryIdFromUri(this.ReposUrl, out id));
+			Assert.That(this.Client.TryGetRepositoryId(this.ReposUrl, out id));
             Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
 		}
+
+        [Test]
+        public void TestUuidFromPath()
+        {
+            Guid id;
+            Assert.That(this.Client.TryGetRepositoryId(this.WcPath, out id));
+            Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
+        }
 
         /// <summary>
         /// Tests the cancel.

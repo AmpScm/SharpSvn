@@ -187,7 +187,7 @@ static svn_error_t *file_version_handler(
 *
 * (We already link staticly so it can't break on a user machine)
 */
-#include "../../../imports/build/win32/subversion/subversion/libsvn_client/client.h"
+#include "svn-internal/libsvn_client/client.h"
 
 #ifdef GetTempPath
 #undef GetTempPath

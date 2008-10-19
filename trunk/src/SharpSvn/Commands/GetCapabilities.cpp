@@ -42,7 +42,7 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, IEnumerable<SvnCapability>^ r
 *
 * (We already link staticly so it can't break on a user machine)
 */
-#include "../../../imports/build/win32/subversion/subversion/libsvn_client/client.h"
+#include "svn-internal/libsvn_client/client.h"
 
 bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args, [Out]Collection<SvnCapability>^% capabilities)
 {
