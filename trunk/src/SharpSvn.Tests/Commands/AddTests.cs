@@ -29,6 +29,10 @@ namespace SharpSvn.Tests.Commands
 			a.Depth = SvnDepth.Empty;
 			this.Client.Add(testFile, a);
 
+            Guid g;
+            Assert.That(Client.TryGetRepositoryId(testFile, out g));
+            Assert.That(g, Is.Not.EqualTo(Guid.Empty));
+
 			Assert.That(this.Notifications.Length > 0, "No notification callbacks received");
 
 			Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
@@ -59,6 +63,40 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(GetSvnStatus(testFile1), Is.Not.EqualTo('A'), "Recursive add");
 			Assert.That(GetSvnStatus(testFile2), Is.Not.EqualTo('A'), "Recursive add");
 		}
+
+        [Test]
+        public void TestAddWithParents()
+        {
+            string dir = WcPath;
+
+            string file = Path.Combine(dir, "a/b/d/e/f");
+
+            Directory.CreateDirectory(Path.Combine(dir, "a/b/d/e"));
+            TouchFile(file);
+
+            SvnAddArgs aa = new SvnAddArgs();
+            aa.ThrowOnError = false;
+            //aa.AddParents = true;
+            Assert.That(Client.Add(file, aa), Is.False);
+
+            aa.ThrowOnError = true;
+            aa.AddParents = true;
+
+            Assert.That(Client.Add(file, aa));
+
+            Client.Info(file, delegate(object sender, SvnInfoEventArgs e)
+            {
+                // This check verifies Subversion 1.5 behavior, but will probably
+                // give the real guid in 1.6+
+                Assert.That(e.RepositoryId, Is.EqualTo(Guid.Empty));
+            });
+
+            Guid gg;
+            Assert.That(Client.TryGetRepositoryId(file, out gg));
+
+            Assert.That(gg, Is.Not.EqualTo(Guid.Empty));
+
+        }
 
 		/// <summary>
 		/// Creates a subdirectory with some items in it. Attempts to add it recursively.
