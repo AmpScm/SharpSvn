@@ -64,7 +64,7 @@ namespace SharpSvn.PowerShell
         }
     }
 
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public sealed class CmdletHelpfileAttribute : Attribute
     {
         string _helpFileName;
