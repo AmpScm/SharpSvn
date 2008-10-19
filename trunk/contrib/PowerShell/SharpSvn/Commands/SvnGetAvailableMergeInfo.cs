@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Management.Automation;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, SvnNouns.SvnAvailableMerges)]
-    public sealed class SvnGetAvailableMergeInfo : SvnSingleTargetCommand<SvnGetAvailableMergeInfoArgs>
+    public sealed class SvnGetAvailableMergeInfo : SvnSingleTargetCommand<SvnMergesEligibleArgs>
     {
         Uri _sourceUri;
 
@@ -20,8 +21,8 @@ namespace SharpSvn.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            SvnAvailableMergeInfo info;
-            Client.GetAvailableMergeInfo(Target, SourceUri, SvnArguments, out info);
+            Collection<SvnMergesEligibleEventArgs> info;
+            Client.GetMergesEligible(Target, SourceUri, SvnArguments, out info);
             WriteObject(info);
         }
     }

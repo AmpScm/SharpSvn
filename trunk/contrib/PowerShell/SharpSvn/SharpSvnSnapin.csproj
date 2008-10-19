@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,6 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharpSvn.PowerShell</RootNamespace>
     <AssemblyName>SharpSvnPSSnapin</AssemblyName>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -71,10 +76,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <DependencyDownload Include="SharpSvn">
-      <Url>http://qqn.nl/~bert/builds/sharpsvn/SharpSvn-1.4999.349.29523.zip</Url>
+    <DependencyDownload Include="SSvn-1.5002.816.zip">
+      <Url>http://sharpsvn.open.collab.net/files/documents/180/1108/</Url>
       <TargetDir>..\autolib</TargetDir>
-      <Version>2</Version>
+      <Version>1</Version>
       <Visible>false</Visible>
     </DependencyDownload>
   </ItemGroup>
