@@ -21,7 +21,7 @@ namespace SharpSvn.PowerShell
         [Parameter(Position = 0, ValueFromPipeline = true, ValueFromPipelineByPropertyName = true)]
         public string Target
         {
-            get { return _target == null ? SessionState.Path.CurrentLocation.Path : _target; }
+            get { return _target ?? SessionState.Path.CurrentLocation.Path; }
             set { _target = value; }
         }
 
@@ -29,7 +29,9 @@ namespace SharpSvn.PowerShell
         {
             SvnTarget rslt;
             if (SvnTarget.TryParse(Target, out rslt))
+            {
                 return rslt as TTarget;
+            }
             return null;
         }
 
@@ -45,6 +47,7 @@ namespace SharpSvn.PowerShell
             return false;
         }
     }
+
     public abstract class SvnMultipleTargetCommand<TArgument> : 
         SvnCommandBase<TArgument> 
         where TArgument : SvnClientArgs, new()
@@ -60,9 +63,8 @@ namespace SharpSvn.PowerShell
         {
             get
             {
-                return _targets == null ?
-                  new string[] { SessionState.Path.CurrentLocation.Path } :
-                  _targets;
+                return _targets ??
+                  new string[] { SessionState.Path.CurrentLocation.Path };
             }
             set { _targets = value; }
         }

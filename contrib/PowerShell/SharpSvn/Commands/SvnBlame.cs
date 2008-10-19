@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 namespace SharpSvn.PowerShell.Commands
 {
     [Cmdlet(VerbsCommon.Get, SvnNouns.SvnBlame)]
-    public class SvnBlame:SvnSingleTargetCommand<SvnBlameArgs>
+    public class SvnBlame : SvnSingleTargetCommand<SvnBlameArgs>
     {
         [Parameter]
         public SvnRevision Start
@@ -15,24 +15,28 @@ namespace SharpSvn.PowerShell.Commands
             get { return SvnArguments.Start; }
             set { SvnArguments.Start = value; }
         }
+
         [Parameter]
         public SvnRevision End
         {
             get { return SvnArguments.End; }
             set { SvnArguments.End = value; }
         }
+
         [Parameter]
         public bool IncludeMergedRevisions
         {
             get { return SvnArguments.IncludeMergedRevisions; }
             set { SvnArguments.IncludeMergedRevisions = value; }
         }
+
         [Parameter]
         public bool IgnoreMimeType
         {
             get { return SvnArguments.IgnoreMimeType; }
             set { SvnArguments.IgnoreMimeType = value; }
         }
+
         [Parameter]
         public bool IgnoreLineEndings
         {
@@ -42,11 +46,10 @@ namespace SharpSvn.PowerShell.Commands
 
         protected override void ProcessRecord()
         {
-            Collection<SvnBlameEventArgs> blameResults;
-			Client.Blame(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnBlameEventArgs e)
-			{
-				WriteObject(e);
-			});
+            Client.Blame(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnBlameEventArgs e)
+            {
+                WriteObject(e);
+            });
         }
     }
 }

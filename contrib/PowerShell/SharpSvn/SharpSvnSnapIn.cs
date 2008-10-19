@@ -18,7 +18,9 @@ namespace SharpSvn.PowerShell
             {
                 CmdletConfigurationEntry entry = GetEntry(t);
                 if (entry != null)
+                {
                     Cmdlets.Add(entry);
+                }
             }
         }
 
@@ -26,19 +28,24 @@ namespace SharpSvn.PowerShell
         {
             CmdletHelpfileAttribute[] helpfileAttributes = t.GetCustomAttributes(typeof(CmdletHelpfileAttribute), false) as CmdletHelpfileAttribute[];
             CmdletAttribute[] cmdletAttributes = t.GetCustomAttributes(typeof(CmdletAttribute), false) as CmdletAttribute[];
-            if(cmdletAttributes == null || cmdletAttributes.Length == 0)
+            if (cmdletAttributes == null || cmdletAttributes.Length == 0)
+            {
                 return null;
-            
-            if(helpfileAttributes != null && helpfileAttributes.Length == 1 && cmdletAttributes.Length == 1)
+            }
+
+            if (helpfileAttributes != null && helpfileAttributes.Length == 1 && cmdletAttributes.Length == 1)
+            {
                 return new CmdletConfigurationEntry(cmdletAttributes[0].VerbName + "-" + cmdletAttributes[0].NounName,
                     t, helpfileAttributes[0].HelpFileName);
+            }
 
             if ((helpfileAttributes == null || helpfileAttributes.Length == 0) && cmdletAttributes.Length == 1)
+            {
                 return new CmdletConfigurationEntry(cmdletAttributes[0].VerbName + "-" + cmdletAttributes[0].NounName,
                     t, "SharpSvnPSSnapin.dll-Help.xml");
+            }
             
             throw new InvalidOperationException("Multiple attributes should not be possible");
-
         }
 
         public override string Description
@@ -47,7 +54,6 @@ namespace SharpSvn.PowerShell
         }
 
         public override string Name
-
         {
             get { return "SvnCommands"; }
         }

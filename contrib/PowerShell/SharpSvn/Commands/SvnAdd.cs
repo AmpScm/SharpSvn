@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using System.Management.Automation;
 
-namespace SharpSvn.PowerShell.PowerShell.Commands
+namespace SharpSvn.PowerShell.Commands
 {
     [Cmdlet(SvnVerbs.Add, SvnNouns.Items)]
-    public sealed class SvnAdd:SvnMultipleTargetCommand<SvnAddArgs>
+    public sealed class SvnAdd : SvnMultipleTargetCommand<SvnAddArgs>
     {
         [Parameter]
         public bool AddParents
@@ -39,7 +39,9 @@ namespace SharpSvn.PowerShell.PowerShell.Commands
         protected override void ProcessRecord()
         {
             foreach (string target in Targets)
+            {
                 Client.Add(target, SvnArguments);
+            }
         }
     }
 }

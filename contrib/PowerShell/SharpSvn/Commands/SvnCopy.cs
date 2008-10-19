@@ -9,7 +9,7 @@ namespace SharpSvn.PowerShell.Commands
     {
         string _toPath;
 
-        [Parameter(Position = 1, Mandatory=true)]
+        [Parameter(Position = 1, Mandatory = true)]
         public string ToPath
         {
             get { return _toPath; }
