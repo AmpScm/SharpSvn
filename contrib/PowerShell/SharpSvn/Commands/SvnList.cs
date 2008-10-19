@@ -16,10 +16,10 @@ namespace SharpSvn.PowerShell.Commands
 		}
 
 		[Parameter]
-		public bool IgnoreLocks
+        public bool RetrieveLocks
 		{
-			get { return !SvnArguments.FetchLocks; }
-			set { SvnArguments.FetchLocks = !value; }
+			get { return SvnArguments.RetrieveLocks; }
+            set { SvnArguments.RetrieveLocks = value; }
 		}
 
 		[Parameter]
@@ -31,7 +31,7 @@ namespace SharpSvn.PowerShell.Commands
 
 		protected override void ProcessRecord()
 		{
-			SvnArguments.EntryItems = SvnDirEntryItems.AllFieldsV15;
+			SvnArguments.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 			Client.List(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnListEventArgs e)
 			{
 				WriteObject(e);

@@ -16,10 +16,10 @@ namespace SharpSvn.PowerShell.Commands
         }
 
         [Parameter]
-        public bool KeepChangeList
+        public bool KeepChangeLists
         {
-            get { return SvnArguments.KeepChangeList; }
-            set { SvnArguments.KeepChangeList = value; }
+            get { return SvnArguments.KeepChangeLists; }
+            set { SvnArguments.KeepChangeLists = value; }
         }
 
         [Parameter]
