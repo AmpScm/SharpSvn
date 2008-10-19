@@ -15,12 +15,13 @@ namespace SharpSvn.PowerShell.Commands
             get { return SvnArguments.Depth; }
             set { SvnArguments.Depth = value; }
         }
+
         protected override void ProcessRecord()
         {
-			Client.Info(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnInfoEventArgs e)
-			{
-				WriteObject(e);
-			});
+            Client.Info(GetTarget<SvnTarget>(), SvnArguments, delegate(object sender, SvnInfoEventArgs e)
+            {
+                WriteObject(e);
+            });
         }
     }
 }

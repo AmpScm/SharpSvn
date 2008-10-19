@@ -6,7 +6,7 @@ using System.Net;
 
 namespace SharpSvn.PowerShell
 {
-    public abstract class SvnCommandBase<TArgument> 
+    public abstract class SvnCommandBase<TArgument>
         : PSCmdlet
         where TArgument : SvnClientArgs, new()
     {
@@ -14,12 +14,12 @@ namespace SharpSvn.PowerShell
             : base()
         { }
 
-		//[Parameter(HelpMessage="The default credential to use for authentication.")]
-		//public ICredentials Credential
-		//{
-		//    get { return Client.Authenticator.DefaultCredentials; }
-		//    set { Client.Authenticator.DefaultCredentials = value; }
-		//}
+        //[Parameter(HelpMessage="The default credential to use for authentication.")]
+        //public ICredentials Credential
+        //{
+        //    get { return Client.Authenticator.DefaultCredentials; }
+        //    set { Client.Authenticator.DefaultCredentials = value; }
+        //}
 
         SvnClient _client;
         protected SvnClient Client
@@ -39,7 +39,7 @@ namespace SharpSvn.PowerShell
                     };
                     _client.Progress += delegate(object sender, SvnProgressEventArgs e)
                     {
-                        
+
                     };
                     _client.Notify += delegate(object sender, SvnNotifyEventArgs e)
                     {

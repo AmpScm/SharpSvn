@@ -10,7 +10,7 @@ namespace SharpSvn.PowerShell.Commands
         string _source;
         SvnMergeRange[] _mergeRanges;
 
-        [Parameter(Position = 1, Mandatory=true)]
+        [Parameter(Position = 1, Mandatory = true)]
         [ValidateNotNullOrEmpty]
         public string Source
         {

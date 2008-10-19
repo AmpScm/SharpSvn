@@ -14,6 +14,6 @@ namespace SharpSvn.PowerShell
         public const string Item = "Item";
         public const string SvnAvailableMerges = "SvnAvailableMerges";
         public const string SvnAppliedMerges = "SvnAppliedMerges";
-		public const string SvnList = "SvnList";
+        public const string SvnList = "SvnList";
     }
 }
