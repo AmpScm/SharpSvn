@@ -56,6 +56,12 @@ namespace SharpSvn {
 				return _end;
 			}
 		}
+
+		/// <summary>Creates a SvnRevision from {revision-1:revision}</summary>
+		static SvnRevisionRange^ FromRevision(__int64 revision)
+		{
+			return gcnew SvnRevisionRange(revision-1, revision);
+		}
 	};
 
 	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
