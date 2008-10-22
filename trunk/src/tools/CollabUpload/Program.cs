@@ -144,7 +144,12 @@ namespace CollabUpload
             {
                 // Standard Collabnet login on secondary host..
                 XmlDocument doc = new XmlDocument();
-                doc.LoadXml(text);
+
+                XmlReaderSettings xs = new XmlReaderSettings();
+                xs.ValidationFlags = System.Xml.Schema.XmlSchemaValidationFlags.None;
+                xs.ValidationType = ValidationType.None;
+
+                doc.Load(XmlReader.Create(new StringReader(text), xs));
 
                 XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
                 nsmgr.AddNamespace("html", "http://www.w3.org/1999/xhtml");
