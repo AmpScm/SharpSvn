@@ -54,7 +54,8 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool MakeParents
+		/// <summary>Creates parent directories if required</summary>
+		property bool CreateParents
 		{
 			bool get()
 			{
@@ -63,6 +64,19 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_makeParents = value;
+			}
+		}
+
+		[Obsolete("Use .CreateParents")]
+		property bool MakeParents
+		{
+			bool get()
+			{
+				return CreateParents;
+			}
+			void set(bool value)
+			{
+				CreateParents = value;
 			}
 		}
 	};
