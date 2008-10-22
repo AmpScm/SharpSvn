@@ -148,6 +148,7 @@ namespace CollabUpload
                 XmlReaderSettings xs = new XmlReaderSettings();
                 xs.ValidationFlags = System.Xml.Schema.XmlSchemaValidationFlags.None;
                 xs.ValidationType = ValidationType.None;
+                xs.ProhibitDtd = false;
 
                 doc.Load(XmlReader.Create(new StringReader(text), xs));
 
