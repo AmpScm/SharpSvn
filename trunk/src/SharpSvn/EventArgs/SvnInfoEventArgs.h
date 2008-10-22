@@ -78,6 +78,8 @@ namespace SharpSvn {
 				_wcSize = info->working_size;
 		}
 	public:
+		/// <summary>Gets the path of the file. The local path if requisting WORKING version, otherwise the name of the file
+		// at the specified version</summary>
 		property String^ Path
 		{
 			String^ get()
@@ -99,6 +101,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the full Uri of the node</summary>
 		property Uri^ Uri
 		{
 			System::Uri^ get()
@@ -110,6 +113,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the queried revision</summary>
 		property __int64 Revision
 		{
 			__int64 get()
@@ -118,6 +122,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the node kind of the specified node</summary>
 		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
@@ -126,7 +131,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the repository root Uri; ending in a '/' at the end</summary>
+		/// <summary>Gets the repository root Uri; ending in a '/'</summary>
 		/// <remarks>The unmanaged api does not add the '/' at the end, but this makes using <see cref="System::Uri" /> hard</remarks>
 		property System::Uri^ RepositoryRoot
 		{
@@ -139,17 +144,28 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the uuid of the repository (if available). Otherwise Guid.Empty</summary>
 		property Guid RepositoryId
 		{
 			Guid get()
 			{
-				if (!_reposUuid && _info && _info->repos_UUID)
-					_reposUuid = SvnBase::Utf8_PtrToString(_info->repos_UUID);
-
-				return _reposUuid ? Guid(_reposUuid) : Guid::Empty;
+				return RepositoryIdValue ? Guid(RepositoryIdValue) : Guid::Empty;
 			}
 		}
 
+		/// <summary>Gets the repository uuid or <c>null</c> if not available</summary>
+		property String^ RepositoryIdValue
+		{
+			String^ get()
+			{
+				if (!_reposUuid && _info && _info->repos_UUID)
+					_reposUuid = SvnBase::Utf8_PtrToString(_info->repos_UUID);
+
+				return _reposUuid;
+			}
+		}
+
+		/// <summary>Gets the last revision in which node (or one of its descendants) changed</summary>
 		property __int64 LastChangeRevision
 		{
 			__int64 get()
@@ -158,6 +174,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the timestamp of the last revision in which node (or one of its descendants) changed</summary>
 		property DateTime LastChangeTime
 		{
 			DateTime get()
@@ -166,6 +183,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the author of the last revision in which node (or one of its descendants) changed</summary>
 		property String^ LastChangeAuthor
 		{
 			String^ get()
@@ -177,6 +195,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets information about the current lock on node</summary>
 		property SvnLockInfo^ Lock
 		{
 			SvnLockInfo^ get()
@@ -188,6 +207,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets a boolean indicating whether working copy information is available in this instance</summary>
 		property bool HasLocalInfo
 		{
 			bool get()
