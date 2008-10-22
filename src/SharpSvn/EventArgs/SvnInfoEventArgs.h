@@ -79,7 +79,7 @@ namespace SharpSvn {
 		}
 	public:
 		/// <summary>Gets the path of the file. The local path if requisting WORKING version, otherwise the name of the file
-		// at the specified version</summary>
+		/// at the specified version</summary>
 		property String^ Path
 		{
 			String^ get()
