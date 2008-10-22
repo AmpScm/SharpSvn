@@ -35,6 +35,7 @@
 		</fileset>
     </copy>
     <mkdir dir="${release}/httpd/conf" />
-    <echo message="" file="${release}/httpd/conf/httpd.conf" />
+    <mkdir dir="${release}/httpd/logs" />
+    <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />
   </target>
 </project>
