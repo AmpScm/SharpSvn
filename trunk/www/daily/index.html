@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5003.847</title>
+<title>SharpSvn-Daily Update - 1.5003.860</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5003.847</h1>
+<h1>SharpSvn-Daily Update - 1.5003.860</h1>
 
 
 <p>
@@ -12,20 +12,26 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1173/SSvn-1.5003.847.zip">SharpSvn 1.5003.847</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1185/SSvn-1.5003.860.zip">SharpSvn 1.5003.860</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=847">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=860">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-10-22</td></tr>
+<tr><td> </td><td class="r"><a id="854" href="http://sharpsvn.net/rev/?r=854">[r854]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/Move.h, src/SharpSvn/Commands/Move.cpp, src/SharpSvn/Args/Copy.h, src/SharpSvn/Commands/Copy.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed .MakeParents to .CreateParents on SvnCopyArgs and SvnMoveArgs for
+consistency. (Marked the old names obsolete)</td></tr>
+<tr class="d"><td colspan="4">2008-10-21</td></tr>
 <tr class="d"><td colspan="4">2008-10-19</td></tr>
+<tr><td> </td><td class="r"><a id="849" href="http://sharpsvn.net/rev/?r=849">[r849]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/AddTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added some extra tests on TryGetRepositoryId to check whether it works
+around missing Guids.</td></tr>
 <tr><td> </td><td class="r"><a id="847" href="http://sharpsvn.net/rev/?r=847">[r847]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClient.cpp, src/SharpSvn/Commands/FileVersions.cpp, src/SharpSvn/Commands/GetCapabilities.cpp, src/SharpSvn/SvnClient.h, src/SharpSvn.Tests/Commands/StatusTests.cs, src/SharpSvn.Tests/Commands/ZMiscTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed GetRepositoryIdFromUri to TryGetRepositoryId and added a local path
 version.</td></tr>
 <tr class="d"><td colspan="4">2008-10-16</td></tr>
@@ -47,12 +53,6 @@ SvnTools.GetNormalizedUri()</td></tr>
 <tr><td> </td><td class="r"><a id="797" href="http://sharpsvn.net/rev/?r=797">[r797]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added a server name normalization test</td></tr>
 <tr><td> </td><td class="r"><a id="796" href="http://sharpsvn.net/rev/?r=796">[r796]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnBase.cpp, src/SharpPlink/SharpPlink-vs2008.vcproj, src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make sure Uri's are already canocalized in their Subversion 1.6+ required format.
 (Scheme and hostnames lowercased).</td></tr>
-<tr class="d"><td colspan="4">2008-09-21</td></tr>
-<tr><td> </td><td class="r"><a id="793" href="http://sharpsvn.net/rev/?r=793">[r793]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClient.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Sort the result of SvnClient.SvnLibraries alpabetical
-(Keeps the order stable between versions).</td></tr>
-<tr><td> </td><td class="r"><a id="792" href="http://sharpsvn.net/rev/?r=792">[r792]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnNames.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Made the public readonly fields in SvnProperty names constants to
-allow them to be reused in other expressions. This might break
-some user code.</td></tr>
 
 </table>
 <!--/Recent changes-->
