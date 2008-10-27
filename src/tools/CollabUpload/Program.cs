@@ -153,7 +153,7 @@ namespace CollabUpload
                 int nS = text.IndexOf("<html");
 
                 if (nS > 0)
-                    text = text.Substring(nS);
+                    text = text.Substring(nS).Replace("&nbsp;","&#160;");
 
                 doc.Load(XmlReader.Create(new StringReader(text), xs));
 
