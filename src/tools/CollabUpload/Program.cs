@@ -150,6 +150,11 @@ namespace CollabUpload
                 xs.ValidationType = ValidationType.None;
                 xs.ProhibitDtd = false;
 
+                int nS = text.IndexOf("<html");
+
+                if (nS > 0)
+                    text = text.Substring(nS);
+
                 doc.Load(XmlReader.Create(new StringReader(text), xs));
 
                 XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
