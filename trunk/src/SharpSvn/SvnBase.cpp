@@ -14,10 +14,6 @@ using System::Text::StringBuilder;
 using System::IO::Path;
 using namespace SharpSvn;
 
-#pragma unmanaged
-static bool _aprInitialized = false;
-#pragma managed
-
 static SvnBase::SvnBase()
 {
 	System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
@@ -37,32 +33,49 @@ static SvnBase::SvnBase()
 
 void SvnBase::EnsureLoaded()
 {
-	if (!_aprInitialized)
+	static volatile LONG ensurer = 0;	
+
+	if (::InterlockedCompareExchange(&ensurer, 1, 0) < 2)
 	{
-		_aprInitialized = true;
-
-		if (apr_initialize()) // First
-			throw gcnew InvalidOperationException();
-
-		svn_dso_initialize(); // Before first pool
-
-		apr_pool_t* pool = svn_pool_create(nullptr);
-		svn_utf_initialize(pool);
-		svn_fs_initialize(pool);
-
-		if (getenv("SVN_ASP_DOT_NET_HACK"))
+		System::Threading::Monitor::Enter(_ensurerLock);
+		try
 		{
-			svn_wc_set_adm_dir("_svn", pool);
+			if (!_aprInitialized)
+			{
+				_aprInitialized = true;
+
+				if (apr_initialize()) // First
+					throw gcnew InvalidOperationException();
+
+				svn_dso_initialize(); // Before first pool
+
+				apr_pool_t* pool = svn_pool_create(nullptr);
+				svn_utf_initialize(pool);
+				svn_fs_initialize(pool);
+
+				if (getenv("SVN_ASP_DOT_NET_HACK"))
+				{
+					svn_wc_set_adm_dir("_svn", pool);
+				}
+
+				svn_ra_initialize(pool);
+
+				_admDir = svn_wc_get_adm_dir(pool);
+
+				InstallAbortHandler();
+
+				// There seems to be a race condition in loading and unloading this DLL
+				LoadLibraryA("Crypt32.dll"); // Never unload this dll
+
+				LONG v = ::InterlockedExchange(&ensurer, 2);
+
+				System::Diagnostics::Debug::Assert(v == 1);
+			}
 		}
-
-		svn_ra_initialize(pool);
-
-		_admDir = svn_wc_get_adm_dir(pool);
-
-		InstallAbortHandler();
-
-		// There seems to be a race condition in loading and unloading this DLL
-		LoadLibraryA("Crypt32.dll"); // Never unload this dll
+		finally
+		{
+			System::Threading::Monitor::Exit(_ensurerLock);
+		}
 	}
 }
 
