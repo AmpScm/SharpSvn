@@ -40,6 +40,8 @@ namespace SharpSvn {
 			static void InstallAbortHandler();
 			static const char* _admDir;
 			static String^ _clientName;
+			static bool _aprInitialized = false;
+			static Object^ _ensurerLock = gcnew Object();
 			initonly static System::Collections::Generic::List<String^>^ _clientNames = gcnew System::Collections::Generic::List<String^>();
 
 		internal:
@@ -119,6 +121,10 @@ namespace SharpSvn {
 		private:
 			// Initializes runtime
 			static SvnHandleBase();
+
+		internal:
+			// Make sure the .Net 4.0 beta optimizer doesn't optimize our unmanaged initialization away
+			static volatile apr_pool_t* _ultimateParentPool = nullptr;
 
 		protected:
 			SvnHandleBase();

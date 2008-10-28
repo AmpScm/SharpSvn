@@ -80,7 +80,7 @@ AprPool::AprPool(AprPool ^parentPool)
 AprPool::AprPool()
 {
 	_tag = gcnew AprPoolTag();
-	_handle = svn_pool_create(nullptr);
+	_handle = svn_pool_create(const_cast<apr_pool_t*>(_ultimateParentPool));
 	_destroyPool = true;
 	GC::AddMemoryPressure(AprPool::StandardMemoryPressure);
 }
