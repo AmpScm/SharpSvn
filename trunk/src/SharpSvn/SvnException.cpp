@@ -248,7 +248,6 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_ROOT_DIR:
 		case SVN_ERR_FS_NOT_TXN_ROOT:
 		case SVN_ERR_FS_NOT_REVISION_ROOT:
-		case SVN_ERR_FS_CONFLICT:
 		case SVN_ERR_FS_REP_CHANGED:
 		case SVN_ERR_FS_REP_NOT_MUTABLE:
 		case SVN_ERR_FS_MALFORMED_SKEL:
@@ -267,6 +266,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_NOT_DIRECTORY:
 		case SVN_ERR_FS_NOT_FILE:
 			return gcnew SvnFileSystemNodeTypeException(error);
+		case SVN_ERR_FS_CONFLICT:
 		case SVN_ERR_FS_OUT_OF_DATE:
 		case SVN_ERR_FS_TXN_OUT_OF_DATE:
 			return gcnew SvnFileSystemOutOfDateException(error);
