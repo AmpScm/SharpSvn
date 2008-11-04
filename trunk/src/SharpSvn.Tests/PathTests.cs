@@ -135,6 +135,10 @@ namespace SharpSvn.Tests
             
             Assert.That(SvnTools.GetNormalizedUri(new Uri("file://server//repos//qqq")).AbsoluteUri, Is.EqualTo("file://server/repos/qqq"));
 
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("http://sErVeR/")).AbsoluteUri, Is.EqualTo("http://server/"));
+            Assert.That((new Uri("http://sErVeR/")).AbsoluteUri, Is.EqualTo("http://server/"));
+            Assert.That((new Uri("http://sErVeR/")).ToString(), Is.EqualTo("http://server/"));
+
             // TODO: Maybe ensure
             //Assert.That(SvnTools.GetNormalizedUri(new Uri("f:\\repos")).AbsoluteUri, Is.EqualTo("file:///F:/repos"));
         }
