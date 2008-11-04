@@ -85,6 +85,15 @@ namespace SharpSvn.Tests.Commands
             Assert.That(Client.Commit(WcPath));
 		}
 
+        [Test]
+        public void CopyReposToWcWithParents()
+        {
+            Uri srcUri = new Uri(this.ReposUrl, "Form.cs");
+            SvnCopyArgs ca = new SvnCopyArgs();
+            ca.MakeParents = true;
+            Client.Copy(srcUri, Path.Combine(WcPath, "dir/sub/with/more/levels"), ca);
+        }
+
 		/// <summary>
 		/// Tests copying a file within a Repos: URL -> URL
 		/// </summary>
