@@ -145,7 +145,10 @@ namespace SharpSvn {
 			}
 			void set(String^ value)
 			{
-				_mergeResult = String::IsNullOrEmpty(value) ? nullptr : value;
+				if (String::IsNullOrEmpty(value) && (value != MergedFile))
+					throw gcnew InvalidOperationException("Only settable with valid filename");
+
+				_mergeResult = value;
 			}
 		}
 

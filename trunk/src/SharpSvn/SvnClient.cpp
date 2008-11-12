@@ -317,7 +317,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 		if (ea->Cancel)
 			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 
-		if (ea->Choice != SvnAccept::Postpone)
+		if (ea->Choice != SvnAccept::Postpone && ea->MergedFile)
 		{
 			(*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
 
