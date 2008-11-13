@@ -88,8 +88,8 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value,
 
 	return InternalSetProperty(
 		gcnew SvnPathTarget(target), 
-		propertyName, 
-		propertyName->StartsWith("svn:", StringComparison::Ordinal) ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
+		propertyName,
+		pool.AllocPropertyValue(value, propertyName),
 		args, 
 		%pool);
 }
@@ -110,7 +110,7 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value, Sv
 	return InternalSetProperty(
 		gcnew SvnUriTarget(target), 
 		propertyName, 
-		propertyName->StartsWith("svn:", StringComparison::Ordinal) ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
+		pool.AllocPropertyValue(value, propertyName),
 		args, 
 		%pool);
 }
