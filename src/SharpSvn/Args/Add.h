@@ -73,7 +73,9 @@ namespace SharpSvn {
 		}
 
 		/// <summary>
-		///
+		/// If TRUE, recurse up path's directory and look for
+		/// a versioned directory.  If found, add all intermediate paths between it
+		/// and path.  If not found, fail with SVN_ERR_CLIENT_NO_VERSIONED_PARENTS.
 		/// </summary>
 		property bool AddParents
 		{
