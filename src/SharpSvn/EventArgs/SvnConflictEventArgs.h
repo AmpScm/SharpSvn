@@ -44,7 +44,7 @@ namespace SharpSvn {
 			_pool = pool;
 			_result = SvnAccept::Postpone;
 
-			_isBinary = description->is_binary;
+			_isBinary = (description->is_binary != 0);
 			_nodeKind = (SvnNodeKind)description->node_kind;
 			_action = (SvnConflictAction)description->action;
 			_reason = (SvnConflictReason)description->reason;
