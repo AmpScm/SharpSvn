@@ -90,7 +90,7 @@ namespace SharpSvn.Tests.Commands
         {
             Uri srcUri = new Uri(this.ReposUrl, "Form.cs");
             SvnCopyArgs ca = new SvnCopyArgs();
-            ca.MakeParents = true;
+            ca.CreateParents = true;
             Client.Copy(srcUri, Path.Combine(WcPath, "dir/sub/with/more/levels"), ca);
         }
 
