@@ -11,14 +11,14 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
-bool SvnLookClient::ChangeInfo(String^ repositoryPath, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler)
+bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (!changeInfoHandler)
 		throw gcnew ArgumentNullException("changeInfoHandler");
 
-	return ChangeInfo(repositoryPath, gcnew SvnChangeInfoArgs(), changeInfoHandler);
+	return ChangeInfo(lookOrigin, gcnew SvnChangeInfoArgs(), changeInfoHandler);
 }
 
 static const char* create_name(svn_repos_node_t* node, apr_pool_t* pool)
@@ -66,14 +66,12 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, apr_pool
 		create_changes_hash(ht, node->sibling, pool, tmpPool);
 }
 
-bool SvnLookClient::ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler)
+bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ args, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
@@ -96,7 +94,7 @@ bool SvnLookClient::ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, 
 
 		if (r = svn_repos_open(
 			&repos,
-			pool.AllocCanonical(repositoryPath),
+			pool.AllocCanonical(lookOrigin->RepositoryPath),
 			pool.Handle))
 		{
 			return args->HandleResult(this, r);
@@ -104,11 +102,11 @@ bool SvnLookClient::ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, 
 
 		fs = svn_repos_fs(repos);
 
-		if (!String::IsNullOrEmpty(args->Transaction))
+		if (lookOrigin->HasTransaction)
 		{
 			svn_fs_txn_t* txn = nullptr;
 
-			if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(args->Transaction), pool.Handle))
+			if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(lookOrigin->Transaction), pool.Handle))
 				return args->HandleResult(this, r);
 
 			if (r = svn_fs_txn_proplist(&props, txn, pool.Handle))
@@ -127,13 +125,13 @@ bool SvnLookClient::ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, 
 		{
 			svn_revnum_t rev;
 
-			if (args->Revision < 0L)
+			if (!lookOrigin->HasRevision)
 			{
 				if (r = svn_fs_youngest_rev(&rev, fs, pool.Handle))
 					return args->HandleResult(this, r);
 			}
 			else
-				rev = (svn_revnum_t)args->Revision;
+				rev = (svn_revnum_t)lookOrigin->Revision;
 
 			if (r = svn_fs_revision_proplist(&props, fs, rev, pool.Handle))
 				return args->HandleResult(this, r);
@@ -220,28 +218,26 @@ bool SvnLookClient::ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, 
 	}
 }
 
-bool SvnLookClient::GetChangeInfo(String^ repositoryPath, [Out] SvnChangeInfoEventArgs^% changeInfo)
+bool SvnLookClient::GetChangeInfo(SvnLookOrigin^ lookOrigin, [Out] SvnChangeInfoEventArgs^% changeInfo)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 
-	return GetChangeInfo(repositoryPath, gcnew SvnChangeInfoArgs(), changeInfo);
+	return GetChangeInfo(lookOrigin, gcnew SvnChangeInfoArgs(), changeInfo);
 }
 
-bool SvnLookClient::GetChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, [Out] SvnChangeInfoEventArgs^% changeInfo)
+bool SvnLookClient::GetChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ args, [Out] SvnChangeInfoEventArgs^% changeInfo)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	SingleInfoItemReceiver<SvnChangeInfoEventArgs^>^ result = gcnew SingleInfoItemReceiver<SvnChangeInfoEventArgs^>();
 
 	try
 	{
-		return ChangeInfo(repositoryPath, args, result->Handler);
+		return ChangeInfo(lookOrigin, args, result->Handler);
 	}
 	finally
 	{

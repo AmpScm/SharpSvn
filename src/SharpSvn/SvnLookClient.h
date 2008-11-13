@@ -19,6 +19,48 @@ namespace SharpSvn {
 	ref class SvnLookRevisionPropertyArgs;
 	ref class SvnLookWriteArgs;
 
+	/// <summary>Container for the location to use with the <see cref="SvnLookClient" /> commands</summary>
+	public ref class SvnLookOrigin sealed : public SvnBase
+	{
+		initonly String^ _path;
+		initonly __int64 _revision;
+		initonly String^ _transactionName;
+	public:
+		/// <overloads>Initializes a new SvnLookOrigin</overloads>
+		/// <summary>Initializes a new SvnLookOrigin instance for the head revision of repositoryPath</summary>
+		SvnLookOrigin(String^ repositoryPath);
+		/// <summary>Initializes a new SvnLookOrigin instance for a specific revision of repositoryPath</summary>
+		SvnLookOrigin(String^ repositoryPath, __int64 revision);
+		/// <summary>Initializes a new SvnLookOrigin instance for a transaction in repositoryPath</summary>
+		SvnLookOrigin(String^ repositoryPath, String^ transactionName);
+
+	public:
+		property String^ RepositoryPath
+		{
+			String^ get() { return _path; }
+		}
+
+		property bool HasTransaction
+		{
+			bool get() { return (_transactionName != nullptr); }
+		}
+
+		property String^ Transaction
+		{
+			String^ get() { return _transactionName; }
+		}
+
+		property __int64 Revision
+		{
+			__int64 get() { return _revision; }
+		}
+
+		property bool HasRevision
+		{
+			bool get() { return _revision >= 0; }
+		}
+	};
+
 	/// <summary>
 	/// Managed wrapper of some of the most common svnlook functions
 	/// </summary>
@@ -37,57 +79,49 @@ namespace SharpSvn {
 	public:
 		/// <overloads>Gets the change information of a change directly from a repository</overloads>
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
-		bool ChangeInfo(String^ repositoryPath, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
+		bool ChangeInfo(SvnLookOrigin^ lookOrigin, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
 
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of a change in a repository</summary>
-		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
-		/// the args object to specify a specific version</remarks>
-		bool ChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
+		bool ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ args, EventHandler<SvnChangeInfoEventArgs^>^ changeInfoHandler);
 
 		/// <overloads>Gets the change information of a change directly from a repository</overloads>
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
-		bool GetChangeInfo(String^ repositoryPath, [Out] SvnChangeInfoEventArgs^% changeInfo);
+		bool GetChangeInfo(SvnLookOrigin^ lookOrigin, [Out] SvnChangeInfoEventArgs^% changeInfo);
 
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of a change in a repository</summary>
-		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
-		/// the args object to specify a specific version</remarks>
-		bool GetChangeInfo(String^ repositoryPath, SvnChangeInfoArgs^ args, [Out] SvnChangeInfoEventArgs^% changeInfo);
+		bool GetChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ args, [Out] SvnChangeInfoEventArgs^% changeInfo);
 
 	public:
 		/// <overloads>Gets the changed paths directly from a repository</overloads>
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
-		bool Changed(String^ repositoryPath, EventHandler<SvnChangedEventArgs^>^ changedHandler);
+		bool Changed(SvnLookOrigin^ lookOrigin, EventHandler<SvnChangedEventArgs^>^ changedHandler);
 
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
-		bool Changed(String^ repositoryPath, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler);
+		bool Changed(SvnLookOrigin^ lookOrigin, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler);
 
 		/// <overloads>Gets the changed paths directly from a repository</overloads>
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
-		bool GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
+		bool GetChanged(SvnLookOrigin^ lookOrigin, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 		///<summary>Equivalent to <c>svnlook changed</c></summary>
-		bool GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
+		bool GetChanged(SvnLookOrigin^ lookOrigin, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems);
 
 	public:
 		/// <overloads>Gets a revision property directly from a repository</overloads>
 		/// <summary>Gets the specified revision property directly from the repository</summary>
-		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, [Out] String^% value);
+		bool GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ propertyName, [Out] String^% value);
 		/// <summary>Gets the specified revision property directly from the repository</summary>
-		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, [Out] SvnPropertyValue^% value);
+		bool GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ propertyName, [Out] SvnPropertyValue^% value);
 		/// <summary>Gets the specified revision property directly from the repository</summary>
-		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
-		/// the args object to specify a specific version</remarks>
-		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] String^% value);
+		bool GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] String^% value);
 		/// <summary>Gets the specified revision property directly from the repository</summary>
-		/// <remarks>Use <see cref="SvnLookClientArgs::Transaction" /> or <see cref="SvnLookClientArgs::Revision" /> on
-		/// the args object to specify a specific version</remarks>
-		bool GetRevisionProperty(String^ repositoryPath, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
+		bool GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
 
 	public:
 		/// <overloads>Writes the content of the specified path to a stream directly from a repository</overloads>
 		/// <summary>Writes the content of the specified path to a stream directly from a repository</summary>
-		bool Write(String^ repositoryPath, String^ path, Stream^ toStream);
+		bool Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream);
 		/// <summary>Writes the content of the specified path to a stream directly from a repository</summary>
-		bool Write(String^ repositoryPath, String^ path, Stream^ toStream, SvnLookWriteArgs^ args);
+		bool Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream, SvnLookWriteArgs^ args);
 
 	private:
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args);

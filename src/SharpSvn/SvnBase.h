@@ -40,8 +40,8 @@ namespace SharpSvn {
 			static void InstallAbortHandler();
 			static const char* _admDir;
 			static String^ _clientName;
-			static bool _aprInitialized = false;
-			static Object^ _ensurerLock = gcnew Object();
+			static bool _aprInitialized;
+			initonly static Object^ _ensurerLock = gcnew Object();
 			initonly static System::Collections::Generic::List<String^>^ _clientNames = gcnew System::Collections::Generic::List<String^>();
 
 		internal:

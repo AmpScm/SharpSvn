@@ -11,6 +11,7 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
+using System::Globalization::CultureInfo;
 using namespace System::IO;
 
 bool SvnHookArguments::ParseHookArguments(array<String^>^ args, SvnHookType hookType, bool useConsole, [Out] SvnHookArguments^% data)
@@ -99,7 +100,7 @@ bool SvnHookArguments::ParsePostCommit(array<String^>^ args, bool useConsole, [O
 
 	data = gcnew SvnHookArguments();
 	data->RepositoryPath = args[0];
-	data->Revision = __int64::Parse(args[1]);
+	data->Revision = __int64::Parse(args[1], CultureInfo::InvariantCulture);
 	return true;
 }
 
@@ -133,7 +134,7 @@ bool SvnHookArguments::ParsePostRevPropChange(array<String^>^ args, bool useCons
 
 	data = gcnew SvnHookArguments();
 	data->RepositoryPath = args[0];
-	data->Revision = __int64::Parse(args[1]);
+	data->Revision = __int64::Parse(args[1], CultureInfo::InvariantCulture);
 	data->User = args[2];
 	data->PropertyName = args[3];
 	data->Action = args[4];
@@ -208,7 +209,7 @@ bool SvnHookArguments::ParsePreRevPropChange(array<String^>^ args, bool useConso
 
 	data = gcnew SvnHookArguments();
 	data->RepositoryPath = args[0];
-	data->Revision = __int64::Parse(args[1]);
+	data->Revision = __int64::Parse(args[1], CultureInfo::InvariantCulture);
 	data->User = args[2];
 	data->PropertyName = args[3];
 	data->Action = args[4];

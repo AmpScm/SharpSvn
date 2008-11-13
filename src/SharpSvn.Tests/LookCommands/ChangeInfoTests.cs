@@ -22,7 +22,7 @@ namespace SharpSvn.Tests.LookCommands
 
                 ia.RetrieveChangedPaths = false; // Will fail if true
 
-                Assert.That(cl.GetChangeInfo(GetRepos(TestReposType.CollabRepos), ia, out r));
+                Assert.That(cl.GetChangeInfo(new SvnLookOrigin(GetRepos(TestReposType.CollabRepos)), ia, out r));
 
                 Assert.That(r, Is.Not.Null);
                 Assert.That(r.Author, Is.EqualTo("merger"));
@@ -44,11 +44,11 @@ namespace SharpSvn.Tests.LookCommands
             {
                 SvnChangeInfoEventArgs r;
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
-                ia.Revision = 12;
 
+                SvnLookOrigin origin = new SvnLookOrigin(GetRepos(TestReposType.CollabRepos), 12);
                 //ia.RetrieveChangedPaths = false; // Will fail if true
 
-                Assert.That(cl.GetChangeInfo(GetRepos(TestReposType.CollabRepos), ia, out r));
+                Assert.That(cl.GetChangeInfo(origin, ia, out r));
 
                 Assert.That(r, Is.Not.Null);
                 Assert.That(r.Author, Is.EqualTo("merger"));
@@ -72,21 +72,21 @@ namespace SharpSvn.Tests.LookCommands
             string reposPath = GetRepos(TestReposType.CollabRepos);
             Uri reposUri = GetReposUri(TestReposType.CollabRepos);
 
-            for (long l = 1; l < 17; l++)
+            for (long ii = 1; ii < 17; ii++)
             {
                 using (SvnLookClient lcl = new SvnLookClient())
                 using (SvnClient cl = new SvnClient())
                 {
                     SvnChangeInfoEventArgs r;
                     SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
-                    ia.Revision = l;
+                    SvnLookOrigin origin = new SvnLookOrigin(reposPath, ii);
 
                     SvnLogArgs la = new SvnLogArgs();
-                    la.Start = la.End = l;
+                    la.Start = la.End = ii;
 
                     Collection<SvnLogEventArgs> lrc;
                     //ia.RetrieveChangedPaths = false; // Will fail if true
-                    Assert.That(lcl.GetChangeInfo(reposPath, ia, out r));
+                    Assert.That(lcl.GetChangeInfo(origin, ia, out r));
                     Assert.That(cl.GetLog(reposUri, la, out lrc));
 
                     Assert.That(r, Is.Not.Null);

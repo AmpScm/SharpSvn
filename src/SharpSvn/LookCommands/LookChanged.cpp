@@ -11,26 +11,22 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
-bool SvnLookClient::Changed(String^ repositoryPath, EventHandler<SvnChangedEventArgs^>^ changedHandler)
+bool SvnLookClient::Changed(SvnLookOrigin^ lookOrigin, EventHandler<SvnChangedEventArgs^>^ changedHandler)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if(!changedHandler)
 		throw gcnew ArgumentNullException("changedHandler");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
-	return Changed(repositoryPath, gcnew SvnChangedArgs(), changedHandler);
+	return Changed(lookOrigin, gcnew SvnChangedArgs(), changedHandler);
 }
 
-bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler)
+bool SvnLookClient::Changed(SvnLookOrigin^ lookOrigin, SvnChangedArgs^ args, EventHandler<SvnChangedEventArgs^>^ changedHandler)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
@@ -43,7 +39,7 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 	{
 		svn_error_t* r;
 		svn_repos_t* repos;
-		if (r = svn_repos_open(&repos, pool.AllocCanonical(repositoryPath), pool.Handle))
+		if (r = svn_repos_open(&repos, pool.AllocCanonical(lookOrigin->RepositoryPath), pool.Handle))
 			return args->HandleResult(this, r);
 
 		svn_fs_t* fs = svn_repos_fs(repos);
@@ -53,9 +49,9 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 
 		// Figure out whether they are asking for a specific transaction or
 		// revision
-		if (!String::IsNullOrEmpty(args->Transaction))
+		if (lookOrigin->HasTransaction)
 		{
-			if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(args->Transaction), pool.Handle))
+			if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(lookOrigin->Transaction), pool.Handle))
 				return args->HandleResult(this, r);
 
 			base_rev = svn_fs_txn_base_revision(txn);
@@ -67,15 +63,14 @@ bool SvnLookClient::Changed(String^ repositoryPath, SvnChangedArgs^ args, EventH
 		{
 			svn_revnum_t rev;
 
-			if (!SVN_IS_VALID_REVNUM(args->Revision->Revision) ||
-				(args->Revision->Revision == 0))
+			if (!lookOrigin->HasRevision)
 			{
 				if (r = svn_fs_youngest_rev(&rev, fs, pool.Handle))
 					return args->HandleResult(this, r);
 			}
 			else
 			{
-				rev = (svn_revnum_t)args->Revision->Revision;
+				rev = (svn_revnum_t)lookOrigin->Revision;
 			}
 
 			if (r = svn_fs_revision_root(&root, fs, rev, pool.Handle))
@@ -196,16 +191,16 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath
 	return nullptr;
 }
 
-bool SvnLookClient::GetChanged(String^ repositoryPath, [Out] Collection<SvnChangedEventArgs^>^% changedItems)
+bool SvnLookClient::GetChanged(SvnLookOrigin^ lookOrigin, [Out] Collection<SvnChangedEventArgs^>^% changedItems)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 
 	InfoItemCollection<SvnChangedEventArgs^>^ results = gcnew InfoItemCollection<SvnChangedEventArgs^>();
 
 	try
 	{
-		return Changed(repositoryPath, gcnew SvnChangedArgs(), results->Handler);
+		return Changed(lookOrigin, gcnew SvnChangedArgs(), results->Handler);
 	}
 	finally
 	{
@@ -213,10 +208,10 @@ bool SvnLookClient::GetChanged(String^ repositoryPath, [Out] Collection<SvnChang
 	}
 }
 
-bool SvnLookClient::GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems)
+bool SvnLookClient::GetChanged(SvnLookOrigin^ lookOrigin, SvnChangedArgs^ args, [Out] Collection<SvnChangedEventArgs^>^% changedItems)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -224,7 +219,7 @@ bool SvnLookClient::GetChanged(String^ repositoryPath, SvnChangedArgs^ args, [Ou
 
 	try
 	{
-		return Changed(repositoryPath, args, results->Handler);
+		return Changed(lookOrigin, args, results->Handler);
 	}
 	finally
 	{

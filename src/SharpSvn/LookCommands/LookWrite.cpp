@@ -13,35 +13,31 @@ using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
 
-bool SvnLookClient::Write(String^ repositoryPath, String^ path, Stream^ toStream)
+bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if (!toStream)
 		throw gcnew ArgumentNullException("toStream");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	return Write(repositoryPath, path, toStream, gcnew SvnLookWriteArgs());
+	return Write(lookOrigin, path, toStream, gcnew SvnLookWriteArgs());
 }
 
 
-bool SvnLookClient::Write(String^ repositoryPath, String^ path, Stream^ toStream, SvnLookWriteArgs^ args)
+bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream, SvnLookWriteArgs^ args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
 	else if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 	else if (!toStream)
 		throw gcnew ArgumentNullException("toStream");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
@@ -58,7 +54,7 @@ bool SvnLookClient::Write(String^ repositoryPath, String^ path, Stream^ toStream
 
 	if (r = svn_repos_open(
 		&repos,
-		pool.AllocCanonical(repositoryPath),
+		pool.AllocCanonical(lookOrigin->RepositoryPath),
 		pool.Handle))
 	{
 		return args->HandleResult(this, r);
@@ -66,11 +62,11 @@ bool SvnLookClient::Write(String^ repositoryPath, String^ path, Stream^ toStream
 
 	fs = svn_repos_fs(repos);
 
-	if (!String::IsNullOrEmpty(args->Transaction))
+	if (lookOrigin->HasTransaction)
 	{
 		svn_fs_txn_t* txn = nullptr;
 
-		if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(args->Transaction), pool.Handle))
+		if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(lookOrigin->Transaction), pool.Handle))
 			return args->HandleResult(this, r);
 
 		base_rev = svn_fs_txn_base_revision(txn);
@@ -82,13 +78,13 @@ bool SvnLookClient::Write(String^ repositoryPath, String^ path, Stream^ toStream
 	{
 		svn_revnum_t rev;
 
-		if (args->Revision < 0L)
+		if (!lookOrigin->HasRevision)
 		{
 			if (r = svn_fs_youngest_rev(&rev, fs, pool.Handle))
 				return args->HandleResult(this, r);
 		}
 		else
-			rev = (svn_revnum_t)args->Revision;
+			rev = (svn_revnum_t)lookOrigin->Revision;
 
 		if (r = svn_fs_revision_root(&root, fs, rev, pool.Handle))
 			return args->HandleResult(this, r);
