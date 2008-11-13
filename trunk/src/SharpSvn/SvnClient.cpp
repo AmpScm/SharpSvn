@@ -115,7 +115,7 @@ void SvnClient::OnProgress(SvnProgressEventArgs^ e)
 	Progress(this, e);
 }
 
-void SvnClient::HandleClientGetCommitLog(SvnCommittingEventArgs^ e)
+void SvnClient::HandleClientCommitting(SvnCommittingEventArgs^ e)
 {
 	if (e->Cancel)
 		return;
@@ -149,7 +149,7 @@ void SvnClient::OnNotify(SvnNotifyEventArgs^ e)
 	Notify(this, e);
 }
 
-void SvnClient::HandleClientConflictResolver(SvnConflictEventArgs^ e)
+void SvnClient::HandleClientConflict(SvnConflictEventArgs^ e)
 {
 	if (e->Cancel)
 		return;
@@ -213,7 +213,7 @@ svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 		client->HandleClientCancel(ea);
 
 		if (ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
 
 		return nullptr;
 	}
@@ -240,10 +240,10 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 	try
 	{
-		client->HandleClientGetCommitLog(ea);
+		client->HandleClientCommitting(ea);
 
 		if (ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCommitting");
 		else if (ea->LogMessage)
 			*log_msg = tmpPool->AllocUnixString(ea->LogMessage);
 		else if (!client->_noLogMessageRequired)
@@ -312,10 +312,10 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 
 	try
 	{
-		client->HandleClientConflictResolver(ea);
+		client->HandleClientConflict(ea);
 
 		if (ea->Cancel)
-			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnConflict");
 
 		if (ea->Choice != SvnAccept::Postpone && ea->MergedFile)
 		{
