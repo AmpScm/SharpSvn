@@ -44,10 +44,11 @@ namespace SharpSvn {
 			_pool = pool;
 			_result = SvnAccept::Postpone;
 
+			_isBinary = description->is_binary;
 			_nodeKind = (SvnNodeKind)description->node_kind;
 			_action = (SvnConflictAction)description->action;
 			_reason = (SvnConflictReason)description->reason;
-			_type = (SvnConflictType)description->kind;
+			_type = (SvnConflictType)description->kind;			
 			// We ignore the administrative baton for now
 		}
 
