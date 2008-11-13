@@ -73,6 +73,40 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(output, Is.EqualTo(String.Empty));
 		}
 
+        [Test]
+        public void TestSetCustomProps()
+        {
+            string fp = Path.Combine(WcPath, "NewFile.cs");
+            Touch2(fp);
+            Client.Add(fp);
+
+            SvnCommitArgs ca = new SvnCommitArgs();
+            ca.LogMessage = "Committed extra";
+            ca.LogProperties.Add("my:prop", "PropValue");
+
+            SvnCommitResult cr;
+            Client.Commit(WcPath, ca, out cr);
+
+            string value;
+            Client.GetRevisionProperty(new SvnUriTarget(ReposUrl, cr.Revision), "my:prop", out value);
+
+            Assert.That(value, Is.EqualTo("PropValue"));
+
+
+            SvnLogArgs la = new SvnLogArgs();
+            la.RetrieveProperties.Add("my:prop");
+            la.Start = la.End = cr.Revision;
+
+            Collection<SvnLogEventArgs> lc;
+            Client.GetLog(WcPath, la, out lc);
+
+            Assert.That(lc.Count, Is.EqualTo(1));
+            Assert.That(lc[0].CustomProperties.Contains("my:prop"));
+            SvnLogEventArgs l = lc[0];
+            Assert.That(l.CustomProperties["my:prop"].StringValue, Is.EqualTo("PropValue"));
+            Assert.That(l.Author, Is.EqualTo(Environment.UserName));
+        }
+
 		/// <summary>
 		/// Commits a single file
 		/// </summary>
