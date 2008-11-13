@@ -12,6 +12,7 @@
 
 using System::Text::StringBuilder;
 using System::IO::Path;
+using System::Globalization::CultureInfo;
 using namespace SharpSvn;
 
 static SvnBase::SvnBase()
@@ -182,7 +183,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 			for (int i = 0; i < nStart; i++)
 				if (!Char::IsLower(components, i))
 				{
-					components = components->Substring(0, nStart)->ToLower() + components->Substring(nStart);
+					components = components->Substring(0, nStart)->ToLowerInvariant() + components->Substring(nStart);
 					break;
 				}
 
@@ -215,7 +216,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 	{
 		if(part->Length >= 2 && part[1] == ':' && part[0] >= 'a' && part[0] <= 'z')
 		{
-			part = Char::ToUpper(part[0]) + part->Substring(1);
+			part = Char::ToUpperInvariant(part[0]) + part->Substring(1);
 
 			if(part->Length == 2)
 				part += '/';
@@ -259,7 +260,7 @@ Uri^ SvnBase::PathToUri(String^ path)
 	if (Uri::TryCreate(sb->ToString(), UriKind::Relative, result))
 		return result;
 
-	throw gcnew ArgumentOutOfRangeException();
+	throw gcnew ArgumentException("Path is not convertible to uri part", "path");
 }
 
 /*String^ SvnBase::CanonicalizePath(String^ path)

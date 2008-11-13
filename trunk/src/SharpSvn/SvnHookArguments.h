@@ -56,6 +56,7 @@ namespace SharpSvn {
 		ICollection<String^>^ _capabilities;
 		String^ _newValue;
 		String^ _previousValue;
+		SvnLookOrigin^ _lookOrigin;
 
 	protected:
 		SvnHookArguments()
@@ -100,6 +101,20 @@ namespace SharpSvn {
 			void set(__int64 value)
 			{
 				_revision = value;
+			}
+		}
+
+		/// <summary>Gets a <see cref="SvnLookOrigin" /> instance for the current hook request</summary>
+		property SvnLookOrigin^ LookOrigin
+		{
+			SvnLookOrigin^ get()
+			{
+				if (TransactionName)
+					return gcnew SvnLookOrigin(RepositoryPath, TransactionName);
+				else if(Revision >= 0)
+					return gcnew SvnLookOrigin(RepositoryPath, Revision);
+				else
+					throw gcnew InvalidOperationException();
 			}
 		}
 

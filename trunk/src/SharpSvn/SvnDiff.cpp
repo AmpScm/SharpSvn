@@ -59,7 +59,7 @@ SvnDiff<TToken>::SvnDiff(svn_diff_t* diff, AprPool^ pool)
 	: _pool(pool)
 {
 	if (!diff)
-		throw gcnew ArgumentException("diff");
+		throw gcnew ArgumentNullException("diff");
 
 	_diff = diff;
 }

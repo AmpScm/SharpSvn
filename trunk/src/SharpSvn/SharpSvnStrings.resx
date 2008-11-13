@@ -282,4 +282,7 @@
   <data name="RevisionTypeCantBeWorking" xml:space="preserve">
     <value>The Working revision type is not supported here</value>
   </data>
+  <data name="RevisionMustBeGreaterThanOrEqualToZero" xml:space="preserve">
+    <value>Revision must be &gt;= 0</value>
+  </data>
 </root>

@@ -210,7 +210,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 			isFirst = false;
 		}
 		else if (isLocal != (nullptr != dynamic_cast<SvnPathTarget^>(target)))
-			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath);
+			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sourceTargets");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);

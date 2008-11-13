@@ -45,7 +45,7 @@ namespace SharpSvn.Tests.LookCommands
                 ca.Transaction = e.HookArgs.TransactionName;
 
                 Collection<SvnChangedEventArgs> list;
-                Assert.That(lc.GetChanged(e.HookArgs.RepositoryPath, ca, out list));
+                Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
 
                 Assert.That(list.Count, Is.EqualTo(17)); // 16 + root directory
                 Assert.That(list[0].Name, Is.EqualTo(""));

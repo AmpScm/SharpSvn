@@ -19,7 +19,7 @@ namespace SharpSvn {
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
-			else if (String::IsNullOrEmpty(key))
+			else if (!value)
 				throw gcnew ArgumentNullException("value");
 
 			_key = key;
@@ -37,19 +37,17 @@ namespace SharpSvn {
 			_value = value;
 		}
 
-		SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
+	internal:
+		SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
-			else if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("value");
 			else if (!value)
 				throw gcnew ArgumentNullException("value");
 
 			_target = target;
 			_key = key;
-			_value = value;
-			_strValue = strValue;
+			_strValue = value;
 		}
 
 		SvnPropertyValue(String^ key, array<Byte>^ value, SvnTarget^ target)
@@ -65,7 +63,22 @@ namespace SharpSvn {
 		}
 
 	internal:
+		SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
+		{
+			if (String::IsNullOrEmpty(key))
+				throw gcnew ArgumentNullException("key");
+			else if (String::IsNullOrEmpty(key))
+				throw gcnew ArgumentNullException("value");
+			else if (!value)
+				throw gcnew ArgumentNullException("value");
 
+			_target = target;
+			_key = key;
+			_value = value;
+			_strValue = strValue;
+		}
+
+	internal:
 		static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target)
 		{
 			if (!propertyName)

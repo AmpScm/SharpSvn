@@ -20,10 +20,9 @@ namespace SharpSvn.Tests.LookCommands
             using (SvnLookClient cl = new SvnLookClient())
             {
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
-                ia.Transaction = e.HookArgs.TransactionName;
 
                 SvnChangeInfoEventArgs i;
-                Assert.That(cl.GetChangeInfo(e.HookArgs.RepositoryPath, ia, out i));
+                Assert.That(cl.GetChangeInfo(e.HookArgs.LookOrigin, ia, out i));
 
                 Assert.That(i.Revision, Is.LessThan(0L));
                 Assert.That(i.Author, Is.EqualTo(Environment.UserName));
@@ -31,9 +30,8 @@ namespace SharpSvn.Tests.LookCommands
                 using (MemoryStream ms = new MemoryStream())
                 {
                     SvnLookWriteArgs wa = new SvnLookWriteArgs();
-                    wa.Transaction = e.HookArgs.TransactionName;
 
-                    cl.Write(e.HookArgs.RepositoryPath, "trunk/Pre.txt", ms, wa);
+                    cl.Write(e.HookArgs.LookOrigin, "trunk/Pre.txt", ms, wa);
                     ms.Position = 0;
 
                     using (StreamReader sr = new StreamReader(ms))
@@ -66,10 +64,9 @@ namespace SharpSvn.Tests.LookCommands
             using (SvnLookClient cl = new SvnLookClient())
             {
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
-                ia.Revision = e.HookArgs.Revision;
 
                 SvnChangeInfoEventArgs i;
-                Assert.That(cl.GetChangeInfo(e.HookArgs.RepositoryPath, ia, out i));
+                Assert.That(cl.GetChangeInfo(e.HookArgs.LookOrigin, ia, out i));
 
                 GC.KeepAlive(i);
                 Assert.That(i.Revision, Is.GreaterThanOrEqualTo(0L));

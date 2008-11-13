@@ -364,6 +364,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Revision must be &gt;= 0.
+        /// </summary>
+        internal: static property System::String^  RevisionMustBeGreaterThanOrEqualToZero {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revision number must be at least 0.
         /// </summary>
         internal: static property System::String^  RevisionNumberMustBeAtLeast0 {
@@ -634,6 +641,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing::get() {
         return ResourceManager->GetString(L"PleaseRestartThisApplicationBeforeContinuing", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::RevisionMustBeGreaterThanOrEqualToZero::get() {
+        return ResourceManager->GetString(L"RevisionMustBeGreaterThanOrEqualToZero", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::RevisionNumberMustBeAtLeast0::get() {

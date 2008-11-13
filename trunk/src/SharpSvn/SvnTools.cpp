@@ -385,7 +385,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 bool SvnTools::IsAbsolutePath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentException("path");
+		throw gcnew ArgumentNullException("path");
 
 	int c = path->Length;
 
@@ -468,7 +468,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 bool SvnTools::IsNormalizedFullPath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentException("path");
+		throw gcnew ArgumentNullException("path");
 
 	int c = path->Length;
 
