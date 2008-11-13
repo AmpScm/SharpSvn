@@ -155,6 +155,27 @@ namespace SharpSvn.Tests.Commands
 		}
 
         [Test]
+        public void TestMultiLevel()
+        {
+            string tmp = GetTempDir();
+            SvnCheckOutArgs ca = new SvnCheckOutArgs();
+            ca.Depth = SvnDepth.Empty;
+            Client.CheckOut(CollabReposUri, tmp, ca); // Check out the root depth empty
+            Client.Update(Path.Combine(tmp, "trunk")); // Make sure everything under trunk is available
+
+            string subdir = Path.Combine(tmp, "trunk/a/b/c");
+            Directory.CreateDirectory(Path.Combine(tmp, "trunk/a/b/c"));
+
+            SvnAddArgs aa = new SvnAddArgs();
+            aa.Force = true; // Continue
+            aa.AddParents = true;
+
+            Client.Add(subdir, aa);
+
+            Client.Commit(tmp);
+        }
+
+        [Test]
         public void TestAddAndDelete()
         {
             string dir = GetTempDir();
