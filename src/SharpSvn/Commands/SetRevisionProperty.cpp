@@ -52,7 +52,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		propertyName,
 		// Subversion does no normalization on the property value; so we have to do this before sending it
 		// to the server
-		propertyName->StartsWith("svn:", StringComparison::Ordinal) ? pool.AllocUnixSvnString(value) : pool.AllocSvnString(value),
+		pool.AllocPropertyValue(value, propertyName),
 		args,
 		%pool);
 }

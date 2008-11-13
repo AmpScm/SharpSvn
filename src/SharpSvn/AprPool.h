@@ -135,6 +135,8 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			const svn_string_t* AllocPropertyValue(String^ value, String^ propertyName);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocUnixSvnString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(array<Byte>^ value);
