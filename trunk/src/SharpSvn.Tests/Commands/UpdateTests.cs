@@ -91,6 +91,32 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
 		}
 
+        [Test]
+        public void TestNotify()
+        {
+            int n = 0;;
+            SvnUpdateArgs ua = new SvnUpdateArgs();
+            ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
+            {
+                Assert.That(e.FullPath, Is.EqualTo(WcPath));
+                switch (n++)
+                {
+                    case 0:
+                        Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateUpdate));
+                        break;
+                    case 1:
+                        Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateCompleted));
+                        break;
+                }
+            };
+
+            Client.Update(WcPath, ua);
+
+            n = 0;
+
+            Client.Update(new string[] { WcPath }, ua);
+        }
+
 		[Test]
 		public void TestUpdateMultipleFiles()
 		{
