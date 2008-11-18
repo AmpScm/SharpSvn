@@ -112,7 +112,7 @@
       <loadfile file="${svnBase}/subversion/libsvn_wc/merge.c" property="projtext">
         <filterchain>
           <replacestring from="if (! is_binary)              /* this is a text file */"
-                         to="SVN_ERR(maybe_handle_conflict_as_binary(&is_binary, left, right, merge_target, copyfrom_text, dry_run, conflict_func, conflict_baton, pool)); if (!is_binary) /* this is a text file */" />
+                         to="SVN_ERR(maybe_handle_conflict_as_binary(&amp;is_binary, left, right, merge_target, copyfrom_text, dry_run, conflict_func, conflict_baton, pool)); if (!is_binary) /* this is a text file */" />
         </filterchain>
       </loadfile>
       <echo message="${projtext}" file="${svnBase}/subversion/libsvn_wc/merge.c" />
