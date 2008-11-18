@@ -72,6 +72,7 @@ namespace SharpSvn {
 		bool _dontLoadMimeFile;
 		bool _dontEnablePlink;
         bool _useUserDiff;
+		bool _neverAutomerge;
 		SvnClientContext(AprPool^ pool);
 		virtual void HandleClientError(SvnErrorEventArgs^ e);
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e);

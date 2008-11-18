@@ -560,6 +560,10 @@
 					RelativePath=".\SvnBase.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnLibraryAttribute.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
@@ -1044,6 +1048,10 @@
 			<Filter
 				Name="EventArgs"
 				>
+				<File
+					RelativePath=".\EventArgs\SvnBeforeAutomaticMerge.h"
+					>
+				</File>
 				<File
 					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
 					>

@@ -209,16 +209,40 @@ namespace SharpSvn {
 		/// </summary>
 		event EventHandler<SvnConflictEventArgs^>^ Conflict;
 
+		/// <summary>
+		/// Raised before automatically merging changes into a file. The event is
+		/// first raised on the <see cref="SvnClientArgsWithConflict" /> object and
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
+		event EventHandler<SvnBeforeAutomaticMergeEventArgs^>^ BeforeAutomaticMerge;
+
 	protected:
 		SvnClientArgsWithConflict()
 		{
 		}
 
-	protected public:
+	protected:
 		/// <summary>Raises the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e)
 		{
 			Conflict(this, e);
+		}
+
+		/// <summary>Raises the <see cref="BeforeAutomaticMerge" /> event</summary>
+		virtual void OnBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e)
+		{
+			BeforeAutomaticMerge(this, e);
+		}
+
+	internal:
+		void RaiseOnConflict(SvnConflictEventArgs^ e)
+		{
+			OnConflict(e);
+		}
+
+		void RaiseOnBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e)
+		{
+			OnBeforeAutomaticMerge(e);
 		}
 	};
 
