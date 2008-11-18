@@ -41,11 +41,20 @@ void SvnClientConfiguration::EnableSharpPlink::set(bool value)
 
 bool SvnClientConfiguration::UseSubversionDiff::get()
 {
-    return !_client->_useUserDiff;
+	return !_client->_useUserDiff;
 }
 
-void  SvnClientConfiguration::UseSubversionDiff::set(bool value)
+void SvnClientConfiguration::UseSubversionDiff::set(bool value)
 {
-    _client->_useUserDiff = !value;
+	_client->_useUserDiff = !value;
 }
 
+bool SvnClientConfiguration::UseSubversionAutomaticMerge::get()
+{
+	return !_client->_neverAutomerge;
+}
+
+void SvnClientConfiguration::UseSubversionAutomaticMerge::set(bool value)
+{
+	_client->_neverAutomerge = !value;
+}

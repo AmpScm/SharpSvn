@@ -117,6 +117,63 @@ namespace SharpSvn.Tests.Commands
             Client.Update(new string[] { WcPath }, ua);
         }
 
+        [Test]
+        public void TestUpdateAutoMerge()
+        {
+            TestUpdateAutoMerge(true);
+        }
+
+        [Test]
+        public void TestUpdateNoAutoMerge()
+        {
+            TestUpdateAutoMerge(false);
+        }
+
+        void TestUpdateAutoMerge(bool autoMerge)
+        {
+            using (SvnClient client1 = new SvnClient())
+            using (SvnClient client2 = new SvnClient())
+            {
+                client1.Configuration.LogMessageRequired = client2.Configuration.LogMessageRequired = false;
+                client1.Configuration.UseSubversionAutomerge = client2.Configuration.UseSubversionAutomerge = autoMerge;
+
+                client2.BeforeAutomaticMerge += new EventHandler<SvnBeforeAutomaticMergeEventArgs>(client2_BeforeAutomaticMerge);
+
+                string wc1 = GetTempDir();
+                string wc2 = GetTempDir();
+                client1.CheckOut(ReposUrl, wc1);
+                client2.CheckOut(ReposUrl, wc2);
+
+                string fileName = "TheFile";
+
+                TouchFile(Path.Combine(wc1, fileName));
+                File.AppendAllText(Path.Combine(wc1, fileName), "1\n2\n3\n4\n5\n6");
+                client1.Add(Path.Combine(wc1, fileName));
+                client1.Commit(wc1);
+                client1.Update(wc1);
+                client2.Update(wc2);
+
+                File.WriteAllText(Path.Combine(wc1, fileName), "1\n1b2\n3\n3b\n4\n5\n6");
+                File.AppendAllText(Path.Combine(wc2, fileName), "\n7");
+
+                client1.Commit(wc1);
+                client1.Update(wc1);
+                client2.Update(wc2);
+
+                client2.Status(Path.Combine(wc2, fileName),
+                    delegate(object sender, SvnStatusEventArgs e)
+                    {
+                        Assert.That(e.LocalContentStatus == SvnStatus.Conflicted, Is.EqualTo(!autoMerge));
+                    });
+            }
+        }
+
+        void client2_BeforeAutomaticMerge(object sender, SvnBeforeAutomaticMergeEventArgs e)
+        {
+            GC.KeepAlive(e);
+            //throw new NotImplementedException();
+        }
+
 		[Test]
 		public void TestUpdateMultipleFiles()
 		{

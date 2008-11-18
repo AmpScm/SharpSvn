@@ -158,7 +158,7 @@ void SvnClient::HandleClientConflict(SvnConflictEventArgs^ e)
 
 	if (conflictArgs)
 	{
-		conflictArgs->OnConflict(e);
+		conflictArgs->RaiseOnConflict(e);
 
 		if (e->Cancel)
 			return;
@@ -170,6 +170,32 @@ void SvnClient::HandleClientConflict(SvnConflictEventArgs^ e)
 void SvnClient::OnConflict(SvnConflictEventArgs^ e)
 {
 	Conflict(this, e);
+}
+
+void SvnClient::HandleClientBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e)
+{
+	if (e->Cancel)
+		return;
+
+	if (_neverAutomerge)
+		e->IsBinary = true;
+
+	SvnClientArgsWithConflict^ conflictArgs = dynamic_cast<SvnClientArgsWithConflict^>(CurrentCommandArgs); // C#: _currentArgs as SvnClientArgsWithConflict
+
+	if (conflictArgs)
+	{
+		conflictArgs->RaiseOnBeforeAutomaticMerge(e);
+
+		if (e->Cancel)
+			return;
+	}
+
+	OnBeforeAutomaticMerge(e);
+}
+
+void SvnClient::OnBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e)
+{
+	BeforeAutomaticMerge(this, e);
 }
 
 void SvnClient::HandleClientError(SvnErrorEventArgs^ e)

@@ -88,6 +88,8 @@ void __cdecl sharpsvn_abort_handler()
 }
 
 static bool s_loaded = false, s_checked = false;
+
+sharpsvn_sharpsvn_check_bdb_availability_t sharpsvn_check_bdb;
 svn_error_t* __cdecl sharpsvn_check_bdb()
 {
 	if (s_loaded)
@@ -112,6 +114,50 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 		return svn_error_create(SVN_ERR_FS_UNKNOWN_FS_TYPE, nullptr, "Subversion filesystem driver for Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) is not installed. Can't access this repository kind.");
 
 	return NULL;
+}
+
+sharpsvn_maybe_handle_conflict_as_binary_t sharpsvn_maybe_binary;
+svn_error_t* __cdecl sharpsvn_maybe_binary(int* is_binary,
+							    const char *left,
+								const char *right,
+								const char *merge_target,
+								const char *copyfrom_text,
+								int dry_run,
+								void* conflict_func,
+								void *conflict_baton,
+								struct apr_pool_t *pool)
+{
+	if (!conflict_func || !conflict_baton)
+		return nullptr;
+
+	UNUSED_ALWAYS(left);
+	UNUSED_ALWAYS(right);
+	UNUSED_ALWAYS(copyfrom_text);
+
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)conflict_baton);
+
+	AprPool myPool(pool, false);
+	SvnBeforeAutomaticMergeEventArgs^ ea = gcnew SvnBeforeAutomaticMergeEventArgs(*is_binary != 0, dry_run != 0, merge_target, %myPool);
+	try
+	{
+		client->HandleClientBeforeAutomaticMerge(ea);
+
+		if (ea->Cancel)
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnBeforeAutomaticMerge");
+
+		if (!*is_binary)
+			*is_binary = ea->IsBinary;
+
+		return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("BeforeAutomaticMerge function", e);
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
 }
 
 FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
@@ -143,6 +189,8 @@ static bool SetHandler()
 
 	InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
 	InterlockedExchangePointer((void**)&__pfnDliFailureHook2, (void*)SharpSvnDelayLoadFailure);
+
+	InterlockedExchangePointer((void**)&sharpsvn_maybe_handle_conflict_as_binary, (void*)sharpsvn_maybe_binary);
 
 	return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
 }

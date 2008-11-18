@@ -13,6 +13,7 @@
 
 #include "EventArgs/SvnCancelEventArgs.h"
 #include "EventArgs/SvnCommittingEventArgs.h"
+#include "EventArgs/SvnBeforeAutomaticMerge.h"
 #include "EventArgs/SvnConflictEventArgs.h"
 #include "EventArgs/SvnNotifyEventArgs.h"
 #include "EventArgs/SvnBlameEventArgs.h"

@@ -1051,6 +1051,10 @@
 				Name="EventArgs"
 				>
 				<File
+					RelativePath=".\EventArgs\SvnBeforeAutomaticMerge.h"
+					>
+				</File>
+				<File
 					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
 					>
 				</File>
