@@ -79,7 +79,7 @@
       <echo message="${ossl_typ}" file="${opensslDir}/inc32/openssl/ossl_typ.h" />
     </OnceBlock>
     <!-- /Patch -->
-	<copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
+    <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
       <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
         <include name="*.lib" />
         <include name="*.exp" />

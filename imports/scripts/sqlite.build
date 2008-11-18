@@ -4,46 +4,46 @@
   <property name="buildSqlite" value="${subversionVersion &gt; '1.6' or svnBuildType == 'trunk'}" overwrite="false" />
   <property name="sqliteIntDir" value="${sqliteDir}/obj/${platform}" />
   <property name="sqliteLibDir" value="${sqliteDir}/bin/${platform}" />
-  
+
   <target name="build-sqlite" depends="extract" if="${buildSqlite}">
-	<mkdir dir="${sqliteIntDir}" />
-	<mkdir dir="${sqliteLibDir}" />
-	<cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
-		<arg value="/O2" /> <!-- Maximize speed -->
-		<arg value="/GF" /> <!-- String Pooling -->
-		<arg value="/EHa" /> <!-- C++ and SEH Exceptions -->
-		<arg value="/Zi" /> <!-- Write debug information -->
-		<defines>
-			<define name="NDEBUG" />
-		</defines>
-		<sources basedir="${sqliteDir}">
-			<include name="*.c" />
-		</sources>
-	</cl>
-	<lib output="${sqliteLibDir}/sqlite3.lib">
-		<sources basedir="${sqliteIntDir}">
-			<include name="*.obj" />
-		</sources>
-	</lib>
-	<copy todir="${releaseLib}">
-		<fileset basedir="${sqliteLibDir}">
-			<include name="sqlite3.lib" />
-		</fileset>
-	</copy>
-	<copy todir="${intDir}\lib">
-		<fileset basedir="${sqliteLibDir}">
-			<include name="sqlite3.lib" />
-		</fileset>
-	</copy>
-	<copy todir="${intDir}\inc">
-		<fileset basedir="${sqliteDir}">
-			<include name="*.h" />
-		</fileset>
-	</copy>
-	<copy todir="${releaseInc}">
-		<fileset basedir="${sqliteDir}">
-			<include name="*.h" />
-		</fileset>
-	</copy>
+    <mkdir dir="${sqliteIntDir}" />
+    <mkdir dir="${sqliteLibDir}" />
+    <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
+      <arg value="/O2" />      <!-- Maximize speed -->
+      <arg value="/GF" />      <!-- String Pooling -->
+      <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
+      <arg value="/Zi" />      <!-- Write debug information -->
+      <defines>
+        <define name="NDEBUG" />
+      </defines>
+      <sources basedir="${sqliteDir}">
+        <include name="*.c" />
+      </sources>
+    </cl>
+    <lib output="${sqliteLibDir}/sqlite3.lib">
+      <sources basedir="${sqliteIntDir}">
+        <include name="*.obj" />
+      </sources>
+    </lib>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${sqliteLibDir}">
+        <include name="sqlite3.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}\lib">
+      <fileset basedir="${sqliteLibDir}">
+        <include name="sqlite3.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}\inc">
+      <fileset basedir="${sqliteDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseInc}">
+      <fileset basedir="${sqliteDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
