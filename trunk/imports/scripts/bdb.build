@@ -57,7 +57,7 @@
     </VCBuild>
     <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
     <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
-    
+
     <copy todir="${intDir}/lib">
       <fileset basedir="${bdbResultDir}">
         <include name="*.lib" />

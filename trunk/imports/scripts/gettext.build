@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
   <property name="gettextFilename" value="gettext-${gettextVersion}.tar.gz" />
-  <property name="gettextDir" value="build/gettext-${gettextVersion}" />  
-  
-  <property name="gettextToolsFilename" value="gettext-tools-0.13.1.bin.woe32.zip" />  
+  <property name="gettextDir" value="build/gettext-${gettextVersion}" />
+
+  <property name="gettextToolsFilename" value="gettext-tools-0.13.1.bin.woe32.zip" />
   <property name="gettextToolsRuntimeFilename" value="gettext-runtime-0.13.1.bin.woe32.zip" />
-  <property name="gettextToolsIconvFilename" value="libiconv-1.9.1.bin.woe32.zip" />  
-  
-  <property name="gettextToolsDir" value="build/gettext-tools" />  
-  
+  <property name="gettextToolsIconvFilename" value="libiconv-1.9.1.bin.woe32.zip" />
+
+  <property name="gettextToolsDir" value="build/gettext-tools" />
+
   <target name="prepare-gettext" depends="extract" if="${(intl != 'none') and (intl != 'sharpsvn')}">
     <OnceBlock file="build/gettext-${gettextVersion}.patched">
       <loadfile file="${gettextDir}/gettext-runtime/config.h.in" property="configh">
@@ -17,7 +17,7 @@
           <replacestring from="#undef HAVE_ALLOCAH" to="#define HAVE_ALLOCAH 1 //" />
           <replacestring from="#undef HAVE_ALLOCA" to="#define HAVE_ALLOCA 1 //" />
           <replacestring from="#undef HAVE_GETCWD" to="#define HAVE_GETCWD 1" />
-          <replacestring from="#undef inline" to="#define inline __inline" />        
+          <replacestring from="#undef inline" to="#define inline __inline" />
           <replacestring from="#undef HAVE_UINTMAX_T" to="#define HAVE_UINTMAX_T 1" />
           <replacestring from="#undef HAVE_INTMAX_T" to="#define HAVE_INTMAX_T 1" />
           <replacestring from="#undef uintmax_t" to="#define uintmax_t unsigned __int64" />
@@ -35,7 +35,7 @@
           <replacestring from="@HAVE_WPRINTF@" to="!SHARPSVN_GETTEXT" />
         </filterchain>
       </loadfile>
-      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />    
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
       <echo file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" append="true">
 #define nls_uint32 unsigned int
 #define LOCALEDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Locales"
@@ -66,16 +66,16 @@
 </echo>
       <loadfile file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" property="configh">
         <filterchain>
-          <replacestring 
-              from="__libc_lock_define_initialized_recursive (static, lock)" 
+          <replacestring
+              from="__libc_lock_define_initialized_recursive (static, lock)"
               to="static gl_recursive_lock_t lock = gl_recursive_lock_initializer;" />
         </filterchain>
       </loadfile>
-      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" />    
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" />
       <loadfile file="${gettextDir}/gettext-runtime/intl/gettextP.h" property="configh">
         <filterchain>
-          <replacestring 
-              from="# define gl_locale" 
+          <replacestring
+              from="# define gl_locale"
               to="# define _qnl_locale" />
           <replacestring
               from="_nl_locale"
@@ -85,22 +85,22 @@
               to="_nl_locale" />
         </filterchain>
       </loadfile>
-      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/gettextP.h" />    
+      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/gettextP.h" />
       <echo file="${gettextDir}/gettext-runtime/intl/gettext.def" verbose="true">
-      ;LIBRARY ${dllPrefix}libintl-${platform}
-  EXPORTS
-      gettext                 @401
-      dgettext                @402
-      dcgettext               @403
-      
-      libintl_gettext         @501
-      libintl_dgettext        @502
-      libintl_dcgettext       @503
-      libintl_printf          @504
-      libintl_fprintf         @505    
-      libintl_sprintf         @506
-      libintl_bindtextdomain  @507
-      </echo>    
+        ;LIBRARY ${dllPrefix}libintl-${platform}
+        EXPORTS
+        gettext                 @401
+        dgettext                @402
+        dcgettext               @403
+
+        libintl_gettext         @501
+        libintl_dgettext        @502
+        libintl_dcgettext       @503
+        libintl_printf          @504
+        libintl_fprintf         @505
+        libintl_sprintf         @506
+        libintl_bindtextdomain  @507
+      </echo>
     </OnceBlock>
   </target>
   <target name="build-gettext" depends="prepare-gettext" if="${(intl != 'none') and (intl != 'sharpsvn')}">
@@ -124,12 +124,12 @@
           <include name="${gettextDir}/gettext-runtime/intl" />
           <include name="${gettextDir}/gettext-tools/gnulib-lib" />
         </includedirs>
-        
+
         <sources basedir="${gettextDir}/gettext-runtime/intl">
           <include name="*.c" />
           <exclude name="intl-exports.c" />
           <exclude name="tsearch*.c" />
-          <exclude name="os2*.c" />              
+          <exclude name="os2*.c" />
         </sources>
       </cl>
       <link output="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll"
@@ -153,7 +153,7 @@
           <include name="*.lib" />
           <include name="*.exp" />
         </fileset>
-      </copy>    
+      </copy>
       <copy todir="${release}/lib-x64">
         <fileset basedir="${gettextDir}/bin/x64/release">
           <include name="*.lib" />
@@ -167,7 +167,7 @@
       </copy>
     </OnceBlock>
   </target>
-  
+
   <target name="gettext-translate" depends="build-gettext, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">
     <foreach item="File" property="po">
       <in>
@@ -175,7 +175,7 @@
           <include name="*.po" />
         </items>
       </in>
-      <do>        
+      <do>
         <property name="lang" value="${path::get-file-name-without-extension(po)}" />
         <echo message="Generating resources for ${lang}" />
         <mkdir dir="${release}/share/locale/${lang}/LC_MESSAGES" />
@@ -184,6 +184,6 @@
           <arg value="${po}" />
         </exec>
       </do>
-    </foreach>      
+    </foreach>
   </target>
 </project>

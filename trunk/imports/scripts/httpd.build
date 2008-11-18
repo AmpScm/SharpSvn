@@ -19,20 +19,20 @@
         <arg value="/t:BuildAll" />
       </exec>
     </OnceBlock>
-    
+
     <copy todir="${release}/httpd/bin" flatten="true">
-		<fileset basedir="${httpdDir}">
-			<include name="release/*.exe" />
-			<include name="release/*.dll" />
-			<include name="support/release/*.exe" />
-			<include name="support/release/*.dll" />
-		</fileset>
+      <fileset basedir="${httpdDir}">
+        <include name="release/*.exe" />
+        <include name="release/*.dll" />
+        <include name="support/release/*.exe" />
+        <include name="support/release/*.dll" />
+      </fileset>
     </copy>
     <copy todir="${release}/httpd/modules" flatten="true">
-		<fileset basedir="${httpdDir}">
-			<include name="**/*.so" />
-			<exclude name="srclib/**" />
-		</fileset>
+      <fileset basedir="${httpdDir}">
+        <include name="**/*.so" />
+        <exclude name="srclib/**" />
+      </fileset>
     </copy>
     <mkdir dir="${release}/httpd/conf" />
     <mkdir dir="${release}/httpd/logs" />

@@ -40,6 +40,7 @@ static __forceinline char* dcgettext(const char* domain, const char* msgid, int 
 }
 
 struct svn_error_t;
+struct apr_pool_t;
 
 typedef struct svn_error_t* sharpsvn_sharpsvn_check_bdb_availability_t();
 extern sharpsvn_sharpsvn_check_bdb_availability_t* sharpsvn_sharpsvn_check_bdb_availability;
@@ -48,6 +49,36 @@ static __forceinline struct svn_error_t* check_bdb_availability()
 	if (sharpsvn_sharpsvn_check_bdb_availability)
 		return (*sharpsvn_sharpsvn_check_bdb_availability)();
 		
+	return NULL;
+}
+
+typedef struct svn_error_t* sharpsvn_maybe_handle_conflict_as_binary_t
+                               (int* is_binary,
+							    const char *left,
+								const char *right,
+								const char *merge_target,
+								const char *copyfrom_text,
+								int dry_run,
+								void* conflict_func,
+								void *conflict_baton,
+								struct apr_pool_t *pool);
+extern sharpsvn_maybe_handle_conflict_as_binary_t* sharpsvn_maybe_handle_conflict_as_binary;
+static __forceinline struct svn_error_t* maybe_handle_conflict_as_binary
+											   (int* is_binary,
+												const char *left,
+												const char *right,
+												const char *merge_target,
+												const char *copyfrom_text,
+												int dry_run,
+												void* conflict_func,
+												void *conflict_baton,
+												struct apr_pool_t *pool)
+{
+	if (sharpsvn_maybe_handle_conflict_as_binary)
+		return (*sharpsvn_maybe_handle_conflict_as_binary)(is_binary, left, right, merge_target,
+		                                                   copyfrom_text, dry_run, 
+														   conflict_func, conflict_baton, pool);
+
 	return NULL;
 }
 
@@ -67,6 +98,8 @@ extern void sharpsvn_real_abort(void);
 # undef abort
 #endif
 
+#pragma warning(push)
+#pragma warning(disable: 4211)
 static __forceinline void __cdecl abort()
 {
 	if(sharpsvn_abort)
@@ -74,6 +107,9 @@ static __forceinline void __cdecl abort()
 
 	sharpsvn_real_abort(); // Raise the original abort method
 }
+
+#pragma warning(pop)
+
 #endif
 
 

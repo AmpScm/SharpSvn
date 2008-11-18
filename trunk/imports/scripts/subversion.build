@@ -42,7 +42,7 @@
           <include name="build/zlib-${zlibVersion}/z*.h" />
           <include name="${release}/lib/zlib.lib" />
         </fileset>
-      </copy>      
+      </copy>
       <copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
       <copy tofile="build/win32/lib/zlib/zlibstatD.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
     </if>
@@ -100,15 +100,22 @@
         }
       </echo>
 
-	  <if test="${svnAddSharpSvn == 'true'}">
-		<loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
-		  <filterchain>
-			<replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-						   to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-		  </filterchain>
-	    </loadfile>
-	    <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
-	  </if>
+      <if test="${svnAddSharpSvn == 'true'}">
+        <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
+          <filterchain>
+            <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+                     to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+          </filterchain>
+        </loadfile>
+        <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
+      </if>
+      <loadfile file="${svnBase}/subversion/libsvn_wc/wc.h" property="projtext">
+        <filterchain>
+          <replacestring from="if (! is_binary)              /* this is a text file */"
+                         to="SVN_ERR(maybe_handle_conflict_as_binary(is_binary, left, right, merge_target, copyfrom_text, dry_run, conflict_func, conflict_baton, pool)); if (!is_binary) /* this is a text file */" />
+        </filterchain>
+      </loadfile>
+      <echo message="${projtext}" file="${svnBase}/subversion/libsvn_wc/wc.h" />
     </OnceBlock>
   </target>
 
@@ -217,7 +224,7 @@
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
         </do>
-      </foreach>      
+      </foreach>
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
       <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
         <arg value="-n" />
@@ -231,7 +238,7 @@
       </loadfile>
       <if test="${string::get-length(svnWcVersion) &gt; 20}">
         <property name="svnWcVersion" value="?" />
-      </if>      
+      </if>
 
       <!-- Trim whitespace (and the newline added by NAnt) -->
       <property name="svnWcVersion" value="${string::trim(svnWcVersion)}" />
@@ -321,10 +328,10 @@
       </fileset>
     </copy>
     <copy todir="${release}/include/svn-internal">
-		<fileset basedir="${svnBase}/subversion">
-			<include name="libsvn_client/client.h" />
-		</fileset>
-	</copy>
+      <fileset basedir="${svnBase}/subversion">
+        <include name="libsvn_client/client.h" />
+      </fileset>
+    </copy>
     <copy todir="${release}/include/serf">
       <fileset basedir="${platformRoot}\serf">
         <include name="**/*.h" />
@@ -354,7 +361,7 @@
       <fileset basedir="${platformRoot}\subversion\subversion">
         <include name="**/*.po" />
       </fileset>
-    </copy>    
+    </copy>
     <copy tofile="${release}/include/sharpsvn-imports.h" file="${downloads}/../scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
   </target>
 
