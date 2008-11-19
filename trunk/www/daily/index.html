@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5004.893</title>
+<title>SharpSvn-Daily Update - 1.5004.901</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5004.893</h1>
+<h1>SharpSvn-Daily Update - 1.5004.901</h1>
 
 
 <p>
@@ -12,19 +12,27 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1250/SSvn-1.5004.893.zip">SharpSvn 1.5004.893</a></h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1268/SSvn-1.5004.901.zip">SharpSvn 1.5004.901</a></h2>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=893">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=901">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-11-19</td></tr>
+<tr class="d"><td colspan="4">2008-11-18</td></tr>
+<tr><td> </td><td class="r"><a id="900" href="http://sharpsvn.net/rev/?r=900">[r900]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClientConfiguration.h, src/SharpSvn/EventArgs/SvnBeforeAutomaticMerge.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/SvnClient.cpp, src/SharpSvn/SvnClientArgs.h, src/SharpSvn/SvnClientEventArgs.h, src/SharpSvn/SvnClient.h (and 4 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnClient.Configuration.UseSubversionAutomaticMerge property to allow
+disabling automatic merging of text files.
+Also handle this setting via a BeforeAutomaticMerge event on SvnClient 
+and SvnClientArgsWithConflict. Set IsBinary to true from this handler to
+disable automatic merging</td></tr>
+<tr class="d"><td colspan="4">2008-11-16</td></tr>
 <tr class="d"><td colspan="4">2008-11-13</td></tr>
 <tr><td> </td><td class="r"><a id="890" href="http://sharpsvn.net/rev/?r=890">[r890]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/AprPool.h, src/SharpSvn/Commands/SetProperty.cpp, src/SharpSvn/AprPool.cpp, src/SharpSvn/Commands/SetRevisionProperty.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use svn_prop_needs_translation to determine which properties need translation
 instead of depending on .StartsWith("svn:")</td></tr>
@@ -49,12 +57,6 @@ around missing Guids.</td></tr>
 <tr><td> </td><td class="r"><a id="847" href="http://sharpsvn.net/rev/?r=847">[r847]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClient.cpp, src/SharpSvn/Commands/FileVersions.cpp, src/SharpSvn/Commands/GetCapabilities.cpp, src/SharpSvn/SvnClient.h, src/SharpSvn.Tests/Commands/StatusTests.cs, src/SharpSvn.Tests/Commands/ZMiscTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed GetRepositoryIdFromUri to TryGetRepositoryId and added a local path
 version.</td></tr>
 <tr class="d"><td colspan="4">2008-10-16</td></tr>
-<tr class="d"><td colspan="4">2008-10-15</td></tr>
-<tr><td> </td><td class="r"><a id="839" href="http://sharpsvn.net/rev/?r=839">[r839]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnException.cpp, src/SharpSvn/SvnException.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnClientNodeKindException for SVN_ERR_CLIENT_IS_DIRECTORY
-and SvnClientBinaryFileException for SVN_ERR_CLIENT_IS_BINARY_FILE.</td></tr>
-<tr class="d"><td colspan="4">2008-10-11</td></tr>
-<tr><td> </td><td class="r"><a id="838" href="http://sharpsvn.net/rev/?r=838">[r838]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnUriTarget.h, src/SharpSvn/SvnPathTarget.h, src/SharpSvn/SvnTargets.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added SvnUriTarget.Map(IEnumerable&lt;Uri&gt;) and 
-SvnPathTarget.Map(IEnumerable&lt;String&gt;).</td></tr>
 
 </table>
 <!--/Recent changes-->
