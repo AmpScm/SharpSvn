@@ -135,7 +135,7 @@ namespace SharpSvn.Tests.Commands
             using (SvnClient client2 = new SvnClient())
             {
                 client1.Configuration.LogMessageRequired = client2.Configuration.LogMessageRequired = false;
-                client1.Configuration.UseSubversionAutomerge = client2.Configuration.UseSubversionAutomerge = autoMerge;
+                client1.Configuration.UseSubversionAutomaticMerge = client2.Configuration.UseSubversionAutomaticMerge = autoMerge;
 
                 client2.BeforeAutomaticMerge += new EventHandler<SvnBeforeAutomaticMergeEventArgs>(client2_BeforeAutomaticMerge);
 
