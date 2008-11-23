@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-	public ref class SvnBeforeAutomaticMergeEventArgs sealed : public SvnCancelEventArgs
+	public ref class SvnBeforeAutomaticMergeEventArgs sealed : public SvnEventArgs
 	{
 		initonly bool _wasBinary;
 		initonly bool _dryRun;

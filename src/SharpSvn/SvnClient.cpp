@@ -174,9 +174,6 @@ void SvnClient::OnConflict(SvnConflictEventArgs^ e)
 
 void SvnClient::HandleClientBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e)
 {
-	if (e->Cancel)
-		return;
-
 	if (_neverAutomerge)
 		e->IsBinary = true;
 
@@ -185,9 +182,6 @@ void SvnClient::HandleClientBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArg
 	if (conflictArgs)
 	{
 		conflictArgs->RaiseOnBeforeAutomaticMerge(e);
-
-		if (e->Cancel)
-			return;
 	}
 
 	OnBeforeAutomaticMerge(e);
