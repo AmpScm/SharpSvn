@@ -142,9 +142,6 @@ svn_error_t* __cdecl sharpsvn_maybe_binary(int* is_binary,
 	{
 		client->HandleClientBeforeAutomaticMerge(ea);
 
-		if (ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnBeforeAutomaticMerge");
-
 		if (!*is_binary)
 			*is_binary = ea->IsBinary;
 
