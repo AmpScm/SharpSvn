@@ -292,7 +292,12 @@ const svn_string_t* AprPool::AllocPropertyValue(String^ value, String^ propertyN
 {
 	const char* propName = AllocString(propertyName);
 
-	return svn_prop_needs_translation(propName) ? AllocUnixSvnString(value) : AllocSvnString(value);
+    if (svn_prop_is_boolean(propName))
+        return AllocSvnString(value ? SVN_PROP_BOOLEAN_TRUE : "");
+    else if (svn_prop_needs_translation(propName))
+        return AllocUnixSvnString(value);
+    else
+        return AllocSvnString(value);
 }
 
 const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
