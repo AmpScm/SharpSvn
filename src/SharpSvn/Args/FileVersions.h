@@ -17,6 +17,7 @@ namespace SharpSvn {
 		SvnRevision ^_end;
 		String^ _toDirectory;
 		bool _includeMergedRevisions;
+        bool _retrieveProperties;
 
 	internal:
 		// Only valid while processing
@@ -26,6 +27,7 @@ namespace SharpSvn {
 		AprPool ^_prevFilePool;
 		const char* _lastFile;
 		const char* _tempPath;
+        apr_hash_t* _properties;
 
 	public:
 		SvnFileVersionsArgs()
@@ -117,6 +119,18 @@ namespace SharpSvn {
 				_includeMergedRevisions = value;
 			}
 		}
+
+        property bool RetrieveProperties
+        {
+            bool get()
+            {
+                return _retrieveProperties;
+            }
+            void set(bool value)
+            {
+                _retrieveProperties = value;
+            }
+        }
 
 		/// <summary>Gets or sets a directory to receive all file versions</summary>
 		/// <value>The directory to place the versions in or <c>null</c> to only delegate the files to the event handler</value>

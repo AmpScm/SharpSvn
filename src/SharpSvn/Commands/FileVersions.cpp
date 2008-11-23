@@ -29,7 +29,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, EventHandler<SvnFileVersionEvent
 struct file_version_delta_baton_t
 {
 	void* clientBaton;
-	
+
 	svn_txdelta_window_handler_t wrapped_handler;
 	void *wrapped_baton;
 
@@ -69,7 +69,7 @@ static svn_error_t *file_version_window_handler(
 	// Clean up for the next round
 	args->_lastFile = dbaton->filename;
 	next->Clear();
-	
+
 	args->_prevPool = args->_curPool;
 	args->_curPool = next;
 
@@ -77,6 +77,59 @@ static svn_error_t *file_version_window_handler(
 }
 
 #pragma warning(disable: 4127) // conditional expression is constant on SVN_ERR
+
+/* Apply property changes on the current property state and copy everything to the new pool
+* to make sure the properties are still valid in the next round
+*/
+static svn_error_t*
+apply_property_changes(SvnFileVersionsArgs^ args, apr_array_header_t *props, AprPool^ allocPool, AprPool^ tmpPool)
+{
+	apr_hash_t* oldProps = args->_properties;
+	apr_hash_t* newProps = apr_hash_make(allocPool->Handle);
+
+	bool svnOnly = args->RetrieveProperties;
+
+	if (props && props->nelts)
+	{
+		// Set new properties and remove removed properties
+		for (int i = 0; i < props->nelts; i++)
+		{
+			svn_prop_t *prop = &APR_ARRAY_IDX(props, i, svn_prop_t);
+
+			if (svnOnly && !svn_prop_is_svn_prop(prop->name))
+				continue;
+
+			if (prop->value)
+				apr_hash_set(newProps, apr_pstrdup(allocPool->Handle, prop->name), APR_HASH_KEY_STRING, 
+				svn_string_dup(prop->value, allocPool->Handle));
+			else if(oldProps)
+				apr_hash_set(oldProps, prop->name, APR_HASH_KEY_STRING, nullptr); // Remove from old hash
+		}
+	}
+
+	if (oldProps)
+	{
+		// Copy old properties
+		for (apr_hash_index_t* hi = apr_hash_first(tmpPool->Handle, oldProps); hi; hi = apr_hash_next(hi))
+		{
+			svn_string_t *val;
+			const char* key;
+			apr_hash_this(hi, (const void**)&key, NULL, (void**)&val);
+
+			if (!apr_hash_get(newProps, key, APR_HASH_KEY_STRING))
+			{
+				apr_hash_set(newProps, 
+					apr_pstrdup(allocPool->Handle, key), APR_HASH_KEY_STRING, 
+					svn_string_dup(val, allocPool->Handle));
+			}
+		}
+	}
+
+	args->_properties = newProps;
+
+	return nullptr;
+}
+
 
 static svn_error_t *file_version_handler(
 	void *baton,
@@ -89,8 +142,6 @@ static svn_error_t *file_version_handler(
 	apr_array_header_t *prop_diffs,
 	apr_pool_t *pool)
 {
-	UNUSED_ALWAYS(prop_diffs);
-
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);	
 
 	AprPool thePool(pool, false);
@@ -99,29 +150,35 @@ static svn_error_t *file_version_handler(
 	if (!args)
 		return nullptr;
 
-	SvnFileVersionEventArgs^ e = gcnew SvnFileVersionEventArgs(nullptr, path, rev, rev_props, result_of_merge!=0, %thePool);
+	// <CancelChecking> // We replace the client layer here; we must check for cancel
+	SvnCancelEventArgs^ cA = gcnew SvnCancelEventArgs();
+
+	client->HandleClientCancel(cA);
+
+	if(cA->Cancel)
+		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+	// </CancelChecking>
+
+	// <Update Property List>
+	SVN_ERR(apply_property_changes(args, prop_diffs, args->_curPool, %thePool));
+	// </Update Property List>
+
+	SvnFileVersionEventArgs^ e = gcnew SvnFileVersionEventArgs(
+		nullptr, 
+		path, 
+		rev,
+		rev_props, 
+		args->RetrieveProperties ? args->_properties : nullptr,
+		result_of_merge!=0, %thePool);
+
 	try
 	{
-		// <CancelChecking> // We replace the client layer here; we must check for cancel
-		SvnCancelEventArgs^ cA = gcnew SvnCancelEventArgs();
-
-		client->HandleClientCancel(cA);
-
-		if(cA->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
-		// </CancelChecking>
-	
-		args->OnFileVersion(e);
-
-		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Version receiver canceled operation");
-
 		// <CancelChecking> 
 		client->HandleClientCancel(cA);
 
 		if(cA->Cancel)
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
-		// </CancelChecking>
+		// </CancelChecking>        
 
 		if(content_delta_handler && content_delta_baton)
 		{
@@ -133,7 +190,7 @@ static svn_error_t *file_version_handler(
 
 			if (args->_lastFile)
 				SVN_ERR(svn_io_file_open(&delta_baton->source_file, args->_lastFile,
-                             APR_READ, APR_OS_DEFAULT, _pool->Handle));
+				APR_READ, APR_OS_DEFAULT, _pool->Handle));
 			else
 				/* Means empty stream below. */
 				delta_baton->source_file = NULL;
@@ -147,21 +204,26 @@ static svn_error_t *file_version_handler(
 				filePool = args->_curPool;
 
 			SVN_ERR(svn_io_open_unique_file2(&delta_baton->file,
-                                   &delta_baton->filename,
-                                   args->_tempPath,
-                                   ".tmp", svn_io_file_del_on_pool_cleanup,
-                                   filePool->Handle));
+				&delta_baton->filename,
+				args->_tempPath,
+				".tmp", svn_io_file_del_on_pool_cleanup,
+				filePool->Handle));
 			svn_stream_t* cur_stream = svn_stream_from_aprfile(delta_baton->file, _pool->Handle);
 
 			/* Get window handler for applying delta. */
 			svn_txdelta_apply(last_stream, cur_stream, NULL, NULL,
-                    _pool->Handle,
-                    &delta_baton->wrapped_handler,
-                    &delta_baton->wrapped_baton);
+				_pool->Handle,
+				&delta_baton->wrapped_handler,
+				&delta_baton->wrapped_baton);
 
 			/* Wrap the window handler with our own. */
 			*content_delta_handler = file_version_window_handler;
 			*content_delta_baton = delta_baton;
+
+			args->OnFileVersion(e);
+
+			if (e->Cancel)
+				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Version receiver canceled operation");
 		}
 
 		return nullptr;
@@ -199,9 +261,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		throw gcnew ArgumentNullException("target");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
-	else if (args->Start == SvnRevision::Working)
-		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeCantBeWorking, "args");
-	else if (args->End == SvnRevision::Working)
+	else if (args->Start == SvnRevision::Working || args->End == SvnRevision::Working)
 		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeCantBeWorking, "args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -250,12 +310,14 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		args->_curFilePool = nullptr;
 		args->_prevFilePool = nullptr;
 		args->_tempPath = pool.AllocPath(System::IO::Path::GetTempPath());
+		args->_lastFile = nullptr;
+		args->_properties = nullptr;
+
 		if (args->RetrieveMergedRevisions)
 		{
 			args->_curFilePool = gcnew AprPool(%pool);
 			args->_prevFilePool = gcnew AprPool(%pool);
-		}
-		args->_lastFile = nullptr;
+		}		
 
 		r = svn_ra_get_file_revs2(
 			ra_session, 
@@ -277,6 +339,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		args->_prevFilePool = nullptr;
 
 		args->_lastFile = nullptr;
+		args->_properties = nullptr;
 
 		if (versionHandler)
 			args->FileVersion -= versionHandler;
