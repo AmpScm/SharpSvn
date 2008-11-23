@@ -26,7 +26,6 @@ namespace SharpSvn {
 		SvnMergeRange^ _mergeRange;
 		bool _pathIsUri;
 		bool _mimeTypeIsBinary;
-		bool _clearedErr;
 
 	internal:
 		SvnNotifyEventArgs(const svn_wc_notify_t *notify, SvnCommandType commandType)

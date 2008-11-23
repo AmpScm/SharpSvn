@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-public ref class SvnPropertyListEventArgs : public SvnCancelEventArgs
+    public ref class SvnPropertyListEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
 		apr_hash_t* _propHash;
