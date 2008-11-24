@@ -66,6 +66,25 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 		throw gcnew ArgumentNullException("args");
 	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+	else if (!sourceTargets->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "sourceTargets");
+
+	bool isFirst = true;
+	bool isLocal = false;
+
+	for each (SvnTarget^ target in sourceTargets)
+	{
+		if (!target)
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceTargets");
+		
+		if (isFirst)
+		{
+			isLocal = (nullptr != dynamic_cast<SvnPathTarget^>(target));
+			isFirst = false;
+		}
+		else if (isLocal != (nullptr != dynamic_cast<SvnPathTarget^>(target)))
+			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sourceTargets");
+	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
@@ -198,12 +217,17 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 		throw gcnew ArgumentNullException("args");
 	else if (!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
+	else if (!sourceTargets->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "sourceTargets");
 
 	bool isFirst = true;
 	bool isLocal = false;
 
 	for each (SvnTarget^ target in sourceTargets)
 	{
+		if (!target)
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceTargets");
+		
 		if (isFirst)
 		{
 			isLocal = (nullptr != dynamic_cast<SvnPathTarget^>(target));
