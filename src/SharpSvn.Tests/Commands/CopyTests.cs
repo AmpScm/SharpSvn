@@ -112,5 +112,33 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(cmd.IndexOf("Form.cs") >= 0, "File wasn't copied");
 			Assert.That(cmd.IndexOf("copyForm") >= 0, "Copied file doens't exist");
 		}
+
+        [Test]
+        public void TestSimpleBranch0()
+        {
+            Uri repos = GetReposUri(TestReposType.CollabRepos);
+            Uri trunk = new Uri(repos, "trunk/");
+
+            SvnCopyArgs ca = new SvnCopyArgs();
+            ca.CreateParents = true;
+
+            // Subversion 1.5.4 throws an AccessViolationException here
+            Client.RemoteCopy(trunk, new Uri(repos, "branch/"), ca);
+        }
+
+        [Test]
+        public void TestSimpleBranch1()
+        {
+            Uri repos = GetReposUri(TestReposType.CollabRepos);
+            Uri trunk = new Uri(repos, "trunk/");
+
+            Client.RemoteCopy(trunk, new Uri(repos, "branch/"));
+
+            SvnCopyArgs ca = new SvnCopyArgs();
+            ca.CreateParents = true;
+
+            // Subversion 1.5.4 throws an AccessViolationException here
+            Client.RemoteCopy(trunk, new Uri(repos, "branch/"), ca);
+        }
 	}
 }
