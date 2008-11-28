@@ -420,6 +420,7 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 
 	args->Prepare();
 	client->_currentArgs = args;
+	client->_workState = nullptr;
 	_client = client;
 	try
 	{
@@ -430,4 +431,13 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 		client->_currentArgs = nullptr;
 		throw;
 	}
+}
+
+SvnClientContext::ArgsStore::~ArgsStore()
+{
+	SvnClientArgs^ args = _client->_currentArgs;
+	if (args)
+		args->_hooked = true;
+
+	_client->_currentArgs = nullptr;
 }
