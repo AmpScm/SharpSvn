@@ -15,22 +15,22 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
 
-bool SvnClient::Write(SvnTarget^ target, Stream^ toStream)
+bool SvnClient::Write(SvnTarget^ target, Stream^ output)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if (!toStream)
-		throw gcnew ArgumentNullException("toStream");
+	else if (!output)
+		throw gcnew ArgumentNullException("output");
 
-	return Write(target, toStream, gcnew SvnWriteArgs());
+	return Write(target, output, gcnew SvnWriteArgs());
 }
 
-bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
+bool SvnClient::Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
-	else if (!toStream)
-		throw gcnew ArgumentNullException("toStream");
+	else if (!output)
+		throw gcnew ArgumentNullException("output");
 	else if (!args)
 		throw gcnew ObjectDisposedException("args");
 
@@ -38,7 +38,7 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args)
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	SvnStreamWrapper wrapper(toStream, false, true, %pool);
+	SvnStreamWrapper wrapper(output, false, true, %pool);
 
 	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 	svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();

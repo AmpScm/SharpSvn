@@ -472,9 +472,9 @@ namespace SharpSvn {
 #pragma region // Write Command
 		/// <overloads>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</overloads>
 		/// <summary>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</summary>
-		bool Write(SvnTarget^ target, Stream^ toStream);
+		bool Write(SvnTarget^ target, Stream^ output);
 		/// <summary>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</summary>
-		bool Write(SvnTarget^ target, Stream^ toStream, SvnWriteArgs^ args);
+		bool Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args);
 #pragma endregion
 
 	public:
