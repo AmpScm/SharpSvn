@@ -6,13 +6,16 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 #include "Args/FileVersions.h"
-#include <svn_ra.h>
+#include "SvnStreamWrapper.h"
 
+#include <svn_ra.h>
+#include <svn_subst.h>
 #include "UnmanagedStructs.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
+using System::IO::Stream;
 
 #pragma warning(disable: 4947) // Internal obsoletes
 
@@ -36,6 +39,8 @@ struct file_version_delta_baton_t
 	apr_file_t *source_file;  /* the delta source */
 	apr_file_t *file;  /* the result of the delta */
 	const char *filename;
+
+	void* eventBaton;
 };
 
 static svn_error_t *file_version_window_handler(
@@ -50,7 +55,7 @@ static svn_error_t *file_version_window_handler(
 		return r;
 
 	if (window)
-		return nullptr; // We are only interested after 
+		return nullptr; // We are only interested after the file is complete
 
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)dbaton->clientBaton);	
 
@@ -61,17 +66,36 @@ static svn_error_t *file_version_window_handler(
 	if (dbaton->source_file)
 		svn_io_file_close(dbaton->source_file, args->_curPool->Handle);
 
-	svn_io_file_close(dbaton->file, args->_curPool->Handle);
+	// This one gave some errors in testing; is the pool cleanup enough?
+	//svn_io_file_close(dbaton->file, args->_curPool->Handle);
 
 	AprPool^ next = args->_prevPool;
 
-
 	// Clean up for the next round
 	args->_lastFile = dbaton->filename;
-	next->Clear();
-
 	args->_prevPool = args->_curPool;
 	args->_curPool = next;
+
+	SvnFileVersionEventArgs^ e = args->_fv;	
+	try
+	{
+		args->_fv = nullptr;
+		if (args->RetrieveContents && e)
+		{
+			e->SetPool(next);
+			args->OnFileVersion(e);
+		}
+	}
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("List receiver", e);
+	}
+	finally
+	{
+		if (e)
+			e->Detach(false);
+	}
+	next->Clear();
 
 	return nullptr;
 }
@@ -163,14 +187,21 @@ static svn_error_t *file_version_handler(
 	SVN_ERR(apply_property_changes(args, prop_diffs, args->_curPool, %thePool));
 	// </Update Property List>
 
+	AprPool handlerPool(%thePool);
+
+
 	SvnFileVersionEventArgs^ e = gcnew SvnFileVersionEventArgs(
-		nullptr, 
 		path, 
 		rev,
 		rev_props, 
 		args->RetrieveProperties ? args->_properties : nullptr,
-		result_of_merge!=0, %thePool);
+		(content_delta_handler && content_delta_baton && args->RetrieveContents),
+		result_of_merge!=0, 
+		client, 							
+		%handlerPool);
 
+	bool detach = true;
+	bool nodetach = false;
 	try
 	{
 		// <CancelChecking> 
@@ -180,7 +211,7 @@ static svn_error_t *file_version_handler(
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 		// </CancelChecking>        
 
-		if(content_delta_handler && content_delta_baton)
+		if (e->HasContentDelta)
 		{
 			AprPool ^_pool = args->_curPool;
 
@@ -195,7 +226,7 @@ static svn_error_t *file_version_handler(
 				/* Means empty stream below. */
 				delta_baton->source_file = NULL;
 
-			svn_stream_t* last_stream = svn_stream_from_aprfile(delta_baton->source_file, _pool->Handle);
+			svn_stream_t* last_stream = svn_stream_from_aprfile2(delta_baton->source_file, false, _pool->Handle);
 			AprPool^ filePool;
 
 			if (args->_curFilePool && !result_of_merge)
@@ -206,9 +237,9 @@ static svn_error_t *file_version_handler(
 			SVN_ERR(svn_io_open_unique_file2(&delta_baton->file,
 				&delta_baton->filename,
 				args->_tempPath,
-				".tmp", svn_io_file_del_on_pool_cleanup,
+				"SvnFV", svn_io_file_del_on_pool_cleanup,
 				filePool->Handle));
-			svn_stream_t* cur_stream = svn_stream_from_aprfile(delta_baton->file, _pool->Handle);
+			svn_stream_t* cur_stream = svn_stream_from_aprfile2(delta_baton->file, false, _pool->Handle);
 
 			/* Get window handler for applying delta. */
 			svn_txdelta_apply(last_stream, cur_stream, NULL, NULL,
@@ -220,11 +251,25 @@ static svn_error_t *file_version_handler(
 			*content_delta_handler = file_version_window_handler;
 			*content_delta_baton = delta_baton;
 
-			args->OnFileVersion(e);
-
-			if (e->Cancel)
-				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Version receiver canceled operation");
+			e->Detach();
+			args->_fv = e;
+			nodetach = true;
 		}
+		else
+			args->OnFileVersion(e);		
+
+		if (e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Version receiver canceled operation");
+
+		// <CancelChecking> 
+		client->HandleClientCancel(cA);
+
+		if(cA->Cancel)
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+		// </CancelChecking>
+
+		if(nodetach)
+			detach = false;
 
 		return nullptr;
 	}
@@ -234,7 +279,8 @@ static svn_error_t *file_version_handler(
 	}
 	finally
 	{
-		e->Detach(false);
+		if(detach)
+			e->Detach(false);
 	}
 }
 
@@ -294,6 +340,14 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		if (r)
 			return args->HandleResult(this, r);
 
+		// <CancelChecking> // We replace the client layer here; we must check for cancel
+		SvnCancelEventArgs^ cA = gcnew SvnCancelEventArgs();
+
+		HandleClientCancel(cA);
+
+		if(cA->Cancel)
+			return args->HandleResult(this, gcnew SvnOperationCanceledException("Operation Canceled"));
+
 		r = svn_client__get_revision_number(
 			&start_rev,
 			nullptr,
@@ -309,7 +363,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		args->_prevPool = gcnew AprPool(%pool);
 		args->_curFilePool = nullptr;
 		args->_prevFilePool = nullptr;
-		args->_tempPath = pool.AllocPath(System::IO::Path::GetTempPath());
+		args->_tempPath = pool.AllocPath(System::IO::Path::Combine(System::IO::Path::GetTempPath(), "SvnFv"));
 		args->_lastFile = nullptr;
 		args->_properties = nullptr;
 
@@ -340,6 +394,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 
 		args->_lastFile = nullptr;
 		args->_properties = nullptr;
+		args->_fv = nullptr;
 
 		if (versionHandler)
 			args->FileVersion -= versionHandler;
@@ -383,4 +438,129 @@ bool SvnClient::GetFileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, [O
 	{
 		list = results;
 	}
+}
+
+void SvnFileVersionEventArgs::WriteTo(String^ outputFileName)
+{
+	if (String::IsNullOrEmpty(outputFileName))
+		throw gcnew ArgumentNullException("outputFileName");
+	else if (!SvnBase::IsNotUri(outputFileName))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "outputFileName");
+
+	WriteTo(outputFileName, gcnew SvnFileVersionWriteArgs());	
+}
+
+void SvnFileVersionEventArgs::WriteTo(System::IO::Stream^ output)
+{
+	if (!output)
+		throw gcnew ArgumentNullException("output");
+
+	WriteTo(output, gcnew SvnFileVersionWriteArgs());
+}
+
+void SvnFileVersionEventArgs::WriteTo(String^ outputFileName, SvnFileVersionWriteArgs^ args)
+{
+	if (String::IsNullOrEmpty(outputFileName))
+		throw gcnew ArgumentNullException("outputFileName");
+	else if (!SvnBase::IsNotUri(outputFileName))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "outputFileName");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	WriteTo(outputFileName, args);
+
+	bool error = false;
+	try
+	{
+		System::IO::FileStream to(outputFileName, System::IO::FileMode::Create);
+		error = true;
+
+		WriteTo(%to, args);
+
+		error = false;
+	}
+	finally
+	{
+		if (error)
+			System::IO::File::Delete(outputFileName);
+	}
+}
+
+void SvnFileVersionEventArgs::WriteTo(System::IO::Stream^ output, SvnFileVersionWriteArgs^ args)
+{
+	if (!output)
+		throw gcnew ArgumentNullException("output");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	SvnClient^ client = _client;
+
+	if (!client)
+		throw gcnew InvalidOperationException("This method can only be invoked from the eventhandler handling this eventargs instance");
+
+	SvnFileVersionsArgs^ fvArgs = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+
+	if (!fvArgs)
+		throw gcnew InvalidOperationException("This method can only be invoked when the client is still handling this request");
+
+
+	/*Svn
+	SvnStreamWrapper
+	svn_subst_stream_translated
+
+	SvnClientContextArgs
+	svn_subst_translate_stream3(*/
+}
+
+Stream^ SvnFileVersionEventArgs::GetContentStream()
+{
+	return GetContentStream(gcnew SvnFileVersionWriteArgs());
+}
+
+Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
+{
+	if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	SvnClient^ client = _client;
+
+	if (!client || !_pool)
+		throw gcnew InvalidOperationException("This method can only be invoked from the eventhandler handling this eventargs instance");
+
+	SvnFileVersionsArgs^ fvArgs = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+
+	if (!fvArgs)
+		throw gcnew InvalidOperationException("This method can only be invoked when the client is still handling this request");
+
+	apr_file_t* txt;
+	svn_error_t* err = svn_io_file_open(&txt, fvArgs->_lastFile, APR_READ, APR_OS_DEFAULT, _pool->Handle);
+
+	if (err)
+		throw SvnException::Create(err);
+
+	svn_stream_t* stream = svn_stream_from_aprfile2(txt, false, _pool->Handle);
+
+	switch (args->Translation)
+	{
+	case SvnStreamTranslation::Default:
+		// Look at properties!
+		//throw gcnew NotImplementedException();
+	case SvnStreamTranslation::ForceNormalized:
+		err = svn_subst_stream_translated_to_normal_form(&stream, stream, svn_subst_eol_style_fixed, 
+			"\n", args->RepairLineEndings, GetKeywords(fvArgs), _pool->Handle);
+		break;
+	case SvnStreamTranslation::ForceTranslate:
+		stream = svn_subst_stream_translated(stream, 
+			SvnClient::GetEolPtr(args->LineStyle), args->RepairLineEndings, GetKeywords(fvArgs), args->ExpandKeywords, _pool->Handle);
+		break;
+	default:
+		throw gcnew InvalidOperationException();
+	}
+
+	return gcnew Implementation::SvnWrappedStream(stream, _pool); // Inner stream is automatically closed on pool destruction
+}
+
+apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
+{
+	return nullptr;
 }

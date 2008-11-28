@@ -9,12 +9,16 @@
 
 namespace SharpSvn {
 
+	ref class SvnFileVersionWriteArgs;
+	ref class SvnFileVersionsArgs;
 
 	public ref class SvnFileVersionEventArgs : public SvnCancelEventArgs
 	{
 		initonly __int64 _revision;
+		initonly bool _hasContent;
 		initonly bool _resultOfMerge;
 		String^ _path;
+		String^ _versionFile;
 
 		initonly DateTime _date;
 		String^ _author;
@@ -24,38 +28,41 @@ namespace SharpSvn {
 		SvnPropertyCollection^ _properties;
 		AprPool^ _pool;
 
-		String^ _versionFile;
-
 		const char* _pPath;
 		const char* _pcAuthor;
 		const char* _pcMessage;
 		apr_hash_t* _revProps;
         apr_hash_t* _fileProps;
+		SvnClient^ _client;
 
 	internal:
 		SvnFileVersionEventArgs(
-            String^ versionFile, 
             const char *path, 
             svn_revnum_t rev, 
             apr_hash_t *rev_props, 
             apr_hash_t *file_props,
+			bool has_content,
             bool result_of_merge, 
+			SvnClient^ client,
             AprPool^ pool)
 		{
 			if (!path)
 				throw gcnew ArgumentNullException("path");
 			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
+			else if (!client)
+				throw gcnew ArgumentNullException("client");
 
 			_pool = pool;
 			_revision = rev;
 			_resultOfMerge = result_of_merge;
+			_hasContent = has_content;
 
-			_versionFile = versionFile;
 			_pPath = path;
 
             _revProps = rev_props;
             _fileProps = file_props;
+			_client = client;
 
 			const char* pcAuthor = nullptr;
 			const char* pcDate = nullptr;
@@ -79,6 +86,16 @@ namespace SharpSvn {
 
 			_pcAuthor = pcAuthor;
 			_pcMessage = pcMessage;
+		}
+
+		apr_hash_t* GetKeywords(SvnFileVersionsArgs^ args);
+
+		void SetPool(AprPool^ pool)
+		{
+			if (!pool)
+				throw gcnew ArgumentNullException("pool");
+
+			_pool = pool;
 		}
 
 	public:
@@ -139,6 +156,15 @@ namespace SharpSvn {
 			}
 		}
 
+		property bool HasContentDelta
+		{
+			bool get()
+			{
+				return _hasContent;
+			}
+		}
+
+
 		property bool ResultOfMerge
 		{
 			bool get()
@@ -184,6 +210,29 @@ namespace SharpSvn {
             }
         }
 
+		/// <overloads>Write the file contents to the specified file/stream (Only valid in EventHandler)</overloads>
+		/// <summary>Write the file contents to the specified file/stream (Only valid in EventHandler)</summary>
+		/// <exception cref="InvalidOperationException">Not in the EventHandler</exception>
+		void WriteTo(String^ outputFileName);
+		/// <summary>Write the file contents to the specified file/stream (Only valid in EventHandler)</summary>
+		/// <exception cref="InvalidOperationException">Not in the EventHandler</exception>
+		void WriteTo(System::IO::Stream^ output);
+		/// <summary>Write the file contents to the specified file/stream (Only valid in EventHandler)</summary>
+		/// <exception cref="InvalidOperationException">Not in the EventHandler</exception>
+		void WriteTo(String^ outputFileName, SvnFileVersionWriteArgs^ args);
+		/// <summary>Write the file contents to the specified file/stream (Only valid in EventHandler)</summary>
+		/// <exception cref="InvalidOperationException">Not in the EventHandler</exception>
+		void WriteTo(System::IO::Stream^ output, SvnFileVersionWriteArgs^ args);
+
+		/// <summary>Gets the file contents of the current version as readable stream (Only valid in EventHandler)</summary>
+		/// <exception cref="InvalidOperationException">Not in the EventHandler</exception>
+		/// <remarks>The stream will be closed when the eventhandler returns. It is not seekabel but you can reset the stream to position 0</remarks>
+		System::IO::Stream^ GetContentStream();
+
+		/// <summary>Gets the file contents of the current version as readable stream (Only valid in EventHandler)</summary>
+		/// <exception cref="InvalidOperationException">Not in the EventHandler</exception>
+		/// <remarks>The stream will be closed when the eventhandler returns. It is not seekabel but you can reset the stream to position 0</remarks>
+		System::IO::Stream^ GetContentStream(SvnFileVersionWriteArgs^ args);
 
 	protected public:
 		virtual void Detach(bool keepProperties) override
