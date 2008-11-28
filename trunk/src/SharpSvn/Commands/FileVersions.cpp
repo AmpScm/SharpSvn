@@ -39,8 +39,6 @@ struct file_version_delta_baton_t
 	apr_file_t *source_file;  /* the delta source */
 	apr_file_t *file;  /* the result of the delta */
 	const char *filename;
-
-	void* eventBaton;
 };
 
 static svn_error_t *file_version_window_handler(
@@ -61,15 +59,12 @@ static svn_error_t *file_version_window_handler(
 
 	SvnFileVersionsArgs^ args = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 	if (!args)
-		return nullptr;
-
-	if (dbaton->source_file)
-		svn_io_file_close(dbaton->source_file, args->_curPool->Handle);
-
-	// This one gave some errors in testing; is the pool cleanup enough?
-	//svn_io_file_close(dbaton->file, args->_curPool->Handle);
+		return nullptr;	
 
 	AprPool^ next = args->_prevPool;
+
+	if (dbaton->source_file)
+		svn_io_file_close(dbaton->source_file, next->Handle);
 
 	// Clean up for the next round
 	args->_lastFile = dbaton->filename;
@@ -221,12 +216,11 @@ static svn_error_t *file_version_handler(
 
 			if (args->_lastFile)
 				SVN_ERR(svn_io_file_open(&delta_baton->source_file, args->_lastFile,
-				APR_READ, APR_OS_DEFAULT, _pool->Handle));
+										 APR_READ, APR_OS_DEFAULT, _pool->Handle));
 			else
 				/* Means empty stream below. */
 				delta_baton->source_file = NULL;
-
-			svn_stream_t* last_stream = svn_stream_from_aprfile2(delta_baton->source_file, false, _pool->Handle);
+			
 			AprPool^ filePool;
 
 			if (args->_curFilePool && !result_of_merge)
@@ -239,6 +233,8 @@ static svn_error_t *file_version_handler(
 				args->_tempPath,
 				"SvnFV", svn_io_file_del_on_pool_cleanup,
 				filePool->Handle));
+
+			svn_stream_t* last_stream = svn_stream_from_aprfile2(delta_baton->source_file, false, _pool->Handle);
 			svn_stream_t* cur_stream = svn_stream_from_aprfile2(delta_baton->file, false, _pool->Handle);
 
 			/* Get window handler for applying delta. */
