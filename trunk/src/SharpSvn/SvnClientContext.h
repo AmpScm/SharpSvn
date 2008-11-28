@@ -58,6 +58,7 @@ namespace SharpSvn {
 	private:
 		// For SvnClient and SvnReposClient
 		SvnClientArgs^ _currentArgs;
+		Object^ _workState;
 
 	internal:
 		property SvnClientArgs^ CurrentCommandArgs
@@ -65,6 +66,18 @@ namespace SharpSvn {
 			SvnClientArgs^ get()
 			{
 				return _currentArgs;
+			}
+		}
+
+		property Object^ WorkState
+		{
+			Object^ get()
+			{
+				return _workState;
+			}
+			void set(Object^ value)
+			{
+				_workState = value;
 			}
 		}
 
@@ -158,11 +171,7 @@ namespace SharpSvn {
 			initonly SvnClientContext^ _client;
 		public:
 			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args);
-
-			~ArgsStore()
-			{
-				_client->_currentArgs = nullptr;
-			}
+			~ArgsStore();
 		};
 	internal:
 		generic<typename T>
