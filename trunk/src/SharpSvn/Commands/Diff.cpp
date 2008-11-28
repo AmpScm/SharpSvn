@@ -104,7 +104,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 	AprPool pool(%_pool);
 
 	AprStreamFile out(result, %pool);
-	AprStreamFile err(gcnew System::IO::MemoryStream(), %pool);
+	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
 
 	svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
 	svn_opt_revision_t fromRev = range->StartRevision->ToSvnRevision();
