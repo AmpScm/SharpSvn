@@ -489,23 +489,23 @@ void SvnFileVersionEventArgs::WriteTo(System::IO::Stream^ output, SvnFileVersion
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	SvnClient^ client = _client;
+	// The easy way out, just use the content stream
+	Stream^ from = GetContentStream(args);
+	try
+	{
+		array<Byte>^ buffer = gcnew array<Byte>(4096);
 
-	if (!client)
-		throw gcnew InvalidOperationException("This method can only be invoked from the eventhandler handling this eventargs instance");
+		int n;
 
-	SvnFileVersionsArgs^ fvArgs = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-
-	if (!fvArgs)
-		throw gcnew InvalidOperationException("This method can only be invoked when the client is still handling this request");
-
-
-	/*Svn
-	SvnStreamWrapper
-	svn_subst_stream_translated
-
-	SvnClientContextArgs
-	svn_subst_translate_stream3(*/
+		while (0 < (n = from->Read(buffer, 0, buffer->Length)))
+		{
+			output->Write(buffer, 0, n);
+		}
+	}
+	finally
+	{
+		from->Close();
+	}
 }
 
 Stream^ SvnFileVersionEventArgs::GetContentStream()
@@ -558,5 +558,6 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 
 apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
 {
+	
 	return nullptr;
 }
