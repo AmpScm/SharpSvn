@@ -13,9 +13,22 @@ namespace SharpSvn {
 	ref class SvnException;
 	using System::Collections::ObjectModel::Collection;
 
+	public ref class SvnClientContextArgs abstract
+	{
+		static SvnClientContextArgs()
+		{
+			SvnBase::EnsureLoaded();
+		}
+
+	private protected:
+		SvnClientContextArgs()
+		{
+		}
+	};
+
 	/// <summary>Base class of all <see cref="SvnClient" /> arguments</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnClientArgs abstract
+	public ref class SvnClientArgs abstract : SvnClientContextArgs
 	{
 		static SvnClientArgs()
 		{
@@ -36,11 +49,12 @@ namespace SharpSvn {
 		/// <summary>Raised to notify errors from an command</summary>
 		event EventHandler<SvnErrorEventArgs^>^		SvnError;
 
-	protected public:
+	private protected:
 		SvnClientArgs()
 		{
 		}
 
+	protected:
 		/// <summary>Raises the <see cref="Cancel" /> event</summary>
 		virtual void OnCancel(SvnCancelEventArgs^ e)
 		{
@@ -66,11 +80,26 @@ namespace SharpSvn {
 		}
 
 	internal:
+		bool _hooked;
 		virtual void RaiseOnNotify(SvnNotifyEventArgs^ e)
 		{
 			OnNotify(e);
 		}
 
+		void RaiseOnCancel(SvnCancelEventArgs^ e)
+		{
+			OnCancel(e);
+		}
+
+		void RaiseOnProgress(SvnProgressEventArgs^ e)
+		{
+			OnProgress(e);
+		}
+
+		void RaiseOnSvnError(SvnErrorEventArgs^ e)
+		{
+			OnSvnError(e);
+		}
 
 	public:
 		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>

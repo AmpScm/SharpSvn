@@ -64,6 +64,7 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ excepti
 void SvnClientArgs::Prepare()
 {
 	LastException = nullptr;
+	_hooked = true;
 }
 
 bool SvnClientArgs::IsLastInvocationCanceled::get()
