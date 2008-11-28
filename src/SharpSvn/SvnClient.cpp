@@ -89,7 +89,7 @@ System::Version^ SvnClient::SharpSvnVersion::get()
 void SvnClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
 	if (CurrentCommandArgs)
-		CurrentCommandArgs->OnCancel(e);
+		CurrentCommandArgs->RaiseOnCancel(e);
 
 	if (e->Cancel)
 		return;
@@ -105,7 +105,7 @@ void SvnClient::OnCancel(SvnCancelEventArgs^ e)
 void SvnClient::HandleClientProgress(SvnProgressEventArgs^ e)
 {
 	if (CurrentCommandArgs)
-		CurrentCommandArgs->OnProgress(e);
+		CurrentCommandArgs->RaiseOnProgress(e);
 
 	OnProgress(e);
 }
@@ -199,7 +199,7 @@ void SvnClient::HandleClientError(SvnErrorEventArgs^ e)
 
 	if (CurrentCommandArgs)
 	{
-		CurrentCommandArgs->OnSvnError(e);
+		CurrentCommandArgs->RaiseOnSvnError(e);
 
 		if (e->Cancel)
 			return;
