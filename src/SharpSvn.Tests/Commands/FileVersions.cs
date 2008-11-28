@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
+using System.IO;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -30,6 +31,14 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.Author, Is.Not.Null);
                     Assert.That(e.LogMessage, Is.Not.Null);
                     Assert.That(e.Time, Is.LessThan(DateTime.Now));
+
+                    using (StreamReader sr = new StreamReader(e.GetContentStream()))
+                    {
+                        string content = sr.ReadToEnd();
+
+                        Assert.That(content, Is.Not.Null);
+                        Assert.That(content.Length, Is.GreaterThan(10));
+                    }
                 });
 
             Assert.That(touched);

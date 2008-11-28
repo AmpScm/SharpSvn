@@ -18,6 +18,7 @@ namespace SharpSvn {
 		String^ _toDirectory;
 		bool _includeMergedRevisions;
         bool _retrieveProperties;
+		bool _noRetrieveContents;
 
 	internal:
 		// Only valid while processing
@@ -28,6 +29,7 @@ namespace SharpSvn {
 		const char* _lastFile;
 		const char* _tempPath;
         apr_hash_t* _properties;
+		SvnFileVersionEventArgs^ _fv;
 
 	public:
 		SvnFileVersionsArgs()
@@ -132,6 +134,18 @@ namespace SharpSvn {
             }
         }
 
+		property bool RetrieveContents
+        {
+            bool get()
+            {
+                return !_noRetrieveContents;
+            }
+            void set(bool value)
+            {
+                _noRetrieveContents = !value;
+            }
+        }
+
 		/// <summary>Gets or sets a directory to receive all file versions</summary>
 		/// <value>The directory to place the versions in or <c>null</c> to only delegate the files to the event handler</value>
 		property String^ ToDirectory
@@ -147,4 +161,67 @@ namespace SharpSvn {
 		}
 	};
 
+	public enum class SvnStreamTranslation
+	{
+		Default,
+		ForceTranslate,
+		ForceNormalized
+	};
+
+	public ref class SvnFileVersionWriteArgs : public SvnClientContextArgs
+	{
+		SvnStreamTranslation _translation;
+		SvnLineStyle _lineStyle;
+		bool _expand;
+		bool _repairEol;
+	public:
+
+		property SvnStreamTranslation Translation
+		{
+			SvnStreamTranslation get()
+			{
+				return _translation;
+			}
+			void set(SvnStreamTranslation value)
+			{
+				_translation = EnumVerifier::Verify(value);
+			}
+		}
+
+		property SvnLineStyle LineStyle
+		{
+			SvnLineStyle get()
+			{
+				return _lineStyle;
+			}
+			void set(SvnLineStyle value)
+			{
+				_lineStyle = EnumVerifier::Verify(value);
+			}
+		}
+
+		property bool ExpandKeywords
+		{
+			bool get()
+			{
+				return _expand;
+			}
+			void set(bool value)
+			{
+				_expand = value;
+			}
+		}
+
+		property bool RepairLineEndings
+		{
+			bool get()
+			{
+				return _repairEol;
+			}
+			void set(bool value)
+			{
+				_repairEol = value;
+			}
+		}
+	};
 }
