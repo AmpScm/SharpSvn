@@ -110,7 +110,7 @@ namespace SharpSvn.Tests.Commands
 
 			String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
 			Assert.That(cmd.IndexOf("Form.cs") >= 0, "File wasn't copied");
-			Assert.That(cmd.IndexOf("copyForm") >= 0, "Copied file doens't exist");
+			Assert.That(cmd.IndexOf("copyForm") >= 0, "Copied file doesn't exist");
 		}
 
         [Test]
