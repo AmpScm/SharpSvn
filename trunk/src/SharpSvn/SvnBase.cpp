@@ -382,7 +382,7 @@ DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 		return DateTime::MinValue;
 	else
 	{
-		__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+		__int64 aprTimeBase = DateTime(1970,1,1).Ticks;
 
 		return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Utc);
 	}
@@ -390,10 +390,10 @@ DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 
 apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)
 {
-	__int64 aprTimeBase = DateTime(1970,1,1).ToBinary();
+	__int64 aprTimeBase = DateTime(1970,1,1).Ticks;
 
 	if (time != DateTime::MinValue)
-		return (time.ToBinary() - aprTimeBase) / 10;
+		return (time.ToUniversalTime().Ticks - aprTimeBase) / 10L;
 	else
 		return 0;
 }
@@ -478,6 +478,11 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 	}
 
 	return _properties;
+}
+
+SvnPropertyCollection^ SvnBase::CreateEmptyPropertyDictionary()
+{
+	return gcnew SvnPropertyCollection();
 }
 
 apr_array_header_t *SvnBase::CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool)
