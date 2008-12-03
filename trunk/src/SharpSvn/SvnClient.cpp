@@ -58,6 +58,11 @@ struct SvnClientCallBacks
 	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
 };
 
+bool SvnClient::IsConflictHandler(void* conflict_func)
+{
+	return (conflict_func == (void*)&SvnClientCallBacks::svn_wc_conflict_resolver_func);
+}
+
 void SvnClient::Initialize()
 {
 	void* baton = (void*)_clientBatton->Handle;
@@ -532,6 +537,25 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 		return "LF";
 	case SvnLineStyle::CarriageReturn:
 		return "CR";
+	default:
+		throw gcnew ArgumentOutOfRangeException("style");
+	}
+}
+
+const char* SvnClient::GetEolValue(SvnLineStyle style)
+{
+	switch(style)
+	{
+	case SvnLineStyle::Default:
+		return nullptr;
+	case SvnLineStyle::Native:
+		return APR_EOL_STR;
+	case SvnLineStyle::CarriageReturnLinefeed:
+		return "\r\n";
+	case SvnLineStyle::Linefeed:
+		return "\n";
+	case SvnLineStyle::CarriageReturn:
+		return "\r";
 	default:
 		throw gcnew ArgumentOutOfRangeException("style");
 	}
