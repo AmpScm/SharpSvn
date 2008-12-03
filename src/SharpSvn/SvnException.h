@@ -153,8 +153,6 @@ public enum class SvnErrorCategory
 					return SharpSvn::SvnErrorCategory::OperatingSystem;
 				else
 					return SharpSvn::SvnErrorCategory::None;
-
-				svn_err_best_message(
 			}
 		}
 
