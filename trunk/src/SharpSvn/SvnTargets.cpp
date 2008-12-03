@@ -51,7 +51,6 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 	memset(&r, 0, sizeof(r));
 	r.kind = (svn_opt_revision_kind)_type; // Values are identical by design
 
-
 	switch(_type)
 	{
 	case SvnRevisionType::Number:
@@ -59,7 +58,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 		break;
 	case SvnRevisionType::Time:
 		{
-			r.value.date = SvnBase::AprTimeFromDateTime(DateTime::FromBinary(_value));
+			r.value.date = SvnBase::AprTimeFromDateTime(new DateTime(_value, DateTimeKind::Utc));
 		}
 		break;
 	}
