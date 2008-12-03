@@ -77,7 +77,7 @@
         <include name="*.exp" />
       </fileset>
     </copy>
-    <copy todir="${releaseBin}">
+    <copy todir="${release}/bin">
       <fileset basedir="${bdbResultDir}">
         <include name="*.dll" />
         <include name="*.pdb" />
