@@ -567,12 +567,12 @@ Uri^ SvnTools::AppendPathSuffix(Uri^ uri, String^ pathSuffix)
 	return gcnew Uri(uri, suffixUri);
 }
 
-String^ SvnTools::UriPartToPath(String^ stringToUnescape)
+String^ SvnTools::UriPartToPath(String^ uriPath)
 {
-	if (!stringToUnescape)
-		throw gcnew ArgumentNullException("stringToUnescape");
+	if (!uriPath)
+		throw gcnew ArgumentNullException("uriPath");
 
-	return Uri::UnescapeDataString(stringToUnescape)->Replace('/', Path::DirectorySeparatorChar);
+	return Uri::UnescapeDataString(uriPath)->Replace('/', Path::DirectorySeparatorChar);
 }
 
 Uri^ SvnTools::GetNormalizedUri(Uri^ uri)

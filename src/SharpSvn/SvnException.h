@@ -16,7 +16,7 @@ using System::ComponentModel::DescriptionAttribute;
 #pragma warning(disable: 4634)
 
 #define DOXYGEN_SHOULD_SKIP_THIS
-#define SVN_ERROR_START [CLSCompliant(false)] public enum class SvnErrorCode { None=0,
+#define SVN_ERROR_START public enum class SvnErrorCode { None=0,
 #define SVN_ERROR_END };
 
 #include "svn_error_codes.h"
@@ -26,6 +26,35 @@ using System::ComponentModel::DescriptionAttribute;
 #undef DOXYGEN_SHOULD_SKIP_THIS
 #undef SVN_ERROR_START
 #undef SVN_ERROR_END
+
+/// <summary>Gets the error category of the SvnException</summary>
+public enum class SvnErrorCategory
+{
+	OperatingSystem=-1,
+	None=0,
+	Bad,
+	Xml,
+	Io,
+	Stream,
+	Node,
+	Entry,
+	Wc,
+	Fs,
+	Repository,
+	RepositoryAccess,
+	RepositoryAccessDav,
+	RepositoryAccessLocal,
+	SvnDiff,
+	ApacheModule,
+	Client,
+	Misc,
+	CommandLine,
+	RepositoryAccessSvn,
+	Authentication,
+	Authorization,
+	Diff,
+	RepositoryAccessSerf,
+};
 
 	[Serializable]
 	public ref class SvnException : public System::Exception
@@ -91,13 +120,41 @@ using System::ComponentModel::DescriptionAttribute;
 			}
 		}
 
+		/// <summary>Gets the operating system error code when there is one 
+		/// (Only valid if SvnErrorCategory returns <See cref="SharpSvn::SvnErrorCategory::OperatingSystem" />)
+		/// </summary>
+		property int OperatingSystemErrorCode
+		{
+			int get()
+			{
+				if (_errorCode >= APR_OS_START_STATUS && _errorCode < (APR_OS_START_STATUS + APR_OS_ERRSPACE_SIZE))
+					return APR_TO_OS_ERROR(_errorCode);
+				else
+					return -1;
+			}
+		}
+
 		/// <summary>Gets the raw subversion error code casted to a <see cref="SharpSvn::SvnErrorCode" /></summary>
-		[CLSCompliant(false)]
 		property SharpSvn::SvnErrorCode SvnErrorCode
 		{
 			SharpSvn::SvnErrorCode get()
 			{
 				return (SharpSvn::SvnErrorCode)SubversionErrorCode;
+			}
+		}
+
+		property SharpSvn::SvnErrorCategory SvnErrorCategory
+		{
+			SharpSvn::SvnErrorCategory get()
+			{
+				if (_errorCode >= SVN_ERR_BAD_CATEGORY_START && _errorCode < SVN_ERR_RA_SERF_CATEGORY_START + SVN_ERR_CATEGORY_SIZE)
+					return (SharpSvn::SvnErrorCategory)(_errorCode / SVN_ERR_CATEGORY_SIZE);
+				else if (_errorCode >= APR_OS_START_STATUS && _errorCode < (APR_OS_START_STATUS + APR_OS_ERRSPACE_SIZE))
+					return SharpSvn::SvnErrorCategory::OperatingSystem;
+				else
+					return SharpSvn::SvnErrorCategory::None;
+
+				svn_err_best_message(
 			}
 		}
 
