@@ -9,6 +9,13 @@
 
 namespace SharpSvn {
 
+	public enum class SvnKeywordExpansion
+	{
+		Default=0,
+		SameValues,
+		None
+	};
+
 	/// <summary>Extended Parameter container of <see cref="SvnClient::FileVersions(SvnTarget^, SvnFileVersionsArgs^, EventHandler{SvnFileVersionEventArgs^}^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnFileVersionsArgs : public SvnClientArgs
@@ -20,15 +27,23 @@ namespace SharpSvn {
         bool _retrieveProperties;
 		bool _noRetrieveContents;
 
+		SvnLineStyle _lineStyle;
+		SvnKeywordExpansion _keywordExpansion;
+		bool _expand;
+		bool _repairEol;
+
 	internal:
 		// Only valid while processing
+		AprPool ^_keepPool;
 		AprPool ^_curPool;
 		AprPool ^_prevPool;
 		AprPool ^_curFilePool;
 		AprPool ^_prevFilePool;
 		const char* _lastFile;
 		const char* _tempPath;
+		const char* _reposRoot;
         apr_hash_t* _properties;
+		apr_hash_t* _curKwProps;
 		SvnFileVersionEventArgs^ _fv;
 
 	public:
@@ -159,35 +174,21 @@ namespace SharpSvn {
 				_toDirectory = value;
 			}
 		}
-	};
 
-	public enum class SvnStreamTranslation
-	{
-		Default,
-		ForceTranslate,
-		ForceNormalized
-	};
-
-	public ref class SvnFileVersionWriteArgs : public SvnClientContextArgs
-	{
-		SvnStreamTranslation _translation;
-		SvnLineStyle _lineStyle;
-		bool _expand;
-		bool _repairEol;
 	public:
-
-		property SvnStreamTranslation Translation
+		property SvnKeywordExpansion KeywordExpansion
 		{
-			SvnStreamTranslation get()
+			SvnKeywordExpansion get()
 			{
-				return _translation;
+				return _keywordExpansion;
 			}
-			void set(SvnStreamTranslation value)
+			void set(SvnKeywordExpansion value)
 			{
-				_translation = EnumVerifier::Verify(value);
+				_keywordExpansion = EnumVerifier::Verify(value);
 			}
 		}
 
+		/// <summary>Gets or sets a value indicating how to translate line endings (<see cref="SharpSvn::SvnLineStyle::Default" /> = no translation</summary>
 		property SvnLineStyle LineStyle
 		{
 			SvnLineStyle get()
@@ -197,18 +198,6 @@ namespace SharpSvn {
 			void set(SvnLineStyle value)
 			{
 				_lineStyle = EnumVerifier::Verify(value);
-			}
-		}
-
-		property bool ExpandKeywords
-		{
-			bool get()
-			{
-				return _expand;
-			}
-			void set(bool value)
-			{
-				_expand = value;
 			}
 		}
 
@@ -223,5 +212,12 @@ namespace SharpSvn {
 				_repairEol = value;
 			}
 		}
+	};	
+
+	public ref class SvnFileVersionWriteArgs : public SvnClientContextArgs
+	{
+		public:
+
+		
 	};
 }

@@ -23,12 +23,16 @@ namespace SharpSvn {
 		initonly DateTime _date;
 		String^ _author;
 		String^ _message;
+		System::Uri^ _uri;
+		System::Uri^ _repositoryRoot;
 
         SvnPropertyCollection^ _revisionProperties;
 		SvnPropertyCollection^ _properties;
 		AprPool^ _pool;
 
+		const char* _pReposRoot;
 		const char* _pPath;
+		const char* _pUrl;
 		const char* _pcAuthor;
 		const char* _pcMessage;
 		apr_hash_t* _revProps;
@@ -37,6 +41,7 @@ namespace SharpSvn {
 
 	internal:
 		SvnFileVersionEventArgs(
+			const char *repos_root,
             const char *path, 
             svn_revnum_t rev, 
             apr_hash_t *rev_props, 
@@ -46,7 +51,9 @@ namespace SharpSvn {
 			SvnClient^ client,
             AprPool^ pool)
 		{
-			if (!path)
+			if (!repos_root)
+				throw gcnew ArgumentNullException("repos_root");
+			else if (!path)
 				throw gcnew ArgumentNullException("path");
 			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
@@ -58,6 +65,7 @@ namespace SharpSvn {
 			_resultOfMerge = result_of_merge;
 			_hasContent = has_content;
 
+			_pReposRoot = repos_root;
 			_pPath = path;
 
             _revProps = rev_props;
@@ -96,6 +104,17 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("pool");
 
 			_pool = pool;
+		}
+
+		property const char* ItemUrl
+		{
+			const char* get()
+			{
+				if (!_pUrl && _pReposRoot && _pPath && _pool)
+					_pUrl = svn_path_url_add_component(_pReposRoot, _pPath+1, _pool->Handle);
+
+				return _pUrl;
+			}
 		}
 
 	public:
@@ -142,6 +161,28 @@ namespace SharpSvn {
 				}
 
 				return _message;
+			}
+		}
+
+		property System::Uri^ RepositoryRoot
+		{
+			System::Uri^ get()
+			{
+				if (!_repositoryRoot && _pReposRoot)
+					_repositoryRoot = SvnBase::Utf8_PtrToUri(_pReposRoot, SvnNodeKind::Directory);
+
+				return _repositoryRoot;
+			}
+		}
+
+		property System::Uri^ Uri
+		{
+			System::Uri^ get()
+			{
+				if (!_uri && ItemUrl)
+					_uri = SvnBase::Utf8_PtrToUri(ItemUrl, SvnNodeKind::File);
+
+				return _uri;
 			}
 		}
 
@@ -244,6 +285,8 @@ namespace SharpSvn {
 					GC::KeepAlive(Author);
 					GC::KeepAlive(LogMessage);
 					GC::KeepAlive(Path);
+					GC::KeepAlive(Uri);
+					GC::KeepAlive(RepositoryRoot);
                     GC::KeepAlive(RevisionProperties);
                     GC::KeepAlive(Properties);
 				}
@@ -251,7 +294,9 @@ namespace SharpSvn {
 			finally
 			{
 				_pool = nullptr;
+				_pReposRoot = nullptr;
 				_pPath = nullptr;
+				_pUrl = nullptr;
 				_pcAuthor = nullptr;
 				_pcMessage = nullptr;
 				_revProps = nullptr;
@@ -259,6 +304,28 @@ namespace SharpSvn {
 
 				__super::Detach(keepProperties);
 			}
+		}
+
+	internal:
+		void DetachBeforeFileData(AprPool^ toPool)
+		{
+			_pool = toPool;
+			
+			apr_pool_t* h = toPool->Handle;
+
+			if (_pReposRoot)
+				_pReposRoot = apr_pstrdup(h, _pReposRoot);
+			if (_pPath)
+				_pPath = apr_pstrdup(h, _pPath);
+			if (_pUrl)
+				_pUrl = apr_pstrdup(h, _pUrl);
+			if (_pcAuthor)
+				_pcAuthor = apr_pstrdup(h, _pcAuthor);
+			if (_pcMessage)
+				_pcMessage = apr_pstrdup(h, _pcMessage);
+			
+			// Keep revProps
+			// Keep fileProps
 		}
 	};
 }
