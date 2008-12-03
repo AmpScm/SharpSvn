@@ -11,7 +11,6 @@ namespace SharpSvn {
 
 	public ref class SvnWorkingCopyStateArgs : public SvnClientArgs
 	{
-		bool _getBaseFile;
 		bool _getFileData;
 
 	public:
