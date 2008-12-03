@@ -58,7 +58,7 @@ svn_opt_revision_t SvnRevision::ToSvnRevision()
 		break;
 	case SvnRevisionType::Time:
 		{
-			r.value.date = SvnBase::AprTimeFromDateTime(new DateTime(_value, DateTimeKind::Utc));
+			r.value.date = SvnBase::AprTimeFromDateTime(DateTime(_value, DateTimeKind::Utc));
 		}
 		break;
 	}
