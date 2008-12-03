@@ -79,6 +79,8 @@
     ]]>
   </msxsl:script>
   <xsl:param name="latestUrl">http://sharpsvn.net/daily/</xsl:param>
+  <xsl:param name="latestx64Url">http://sharpsvn.net/daily/</xsl:param>
+  <xsl:param name="latestExUrl">http://sharpsvn.net/daily/</xsl:param>
   <xsl:param name="latestVersion">2.0.0000.0</xsl:param>
   <xsl:param name="latestName">Sharpsvn-Daily-2.0.0000.0.msi</xsl:param>
   <xsl:param name="buildRev">4567</xsl:param>
@@ -107,7 +109,11 @@
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h2>The latest daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a></h2>
+        <h2>The latest daily build is <a href="{$latestUrl}"><xsl:value-of select="$latestName"/></a>.</h2>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <p>The build script also supplies an <a href="{$latestx64Url}">x64 version</a> of this Win32 build and a
+        <a href="{$latestExUrl}">package of all binaries</a> with some extras.</p>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
