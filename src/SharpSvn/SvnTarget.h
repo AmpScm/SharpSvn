@@ -223,7 +223,7 @@ namespace SharpSvn {
 			if (RevisionType != SvnRevisionType::None)
 				return this;
 			else
-				return alternate ? alternate : SvnRevisionType::None;
+				return alternate ? alternate : SvnRevision::None;
 		}
 
 	internal:
