@@ -127,7 +127,7 @@ svn_error_t* __cdecl sharpsvn_maybe_binary(int* is_binary,
 								void *conflict_baton,
 								struct apr_pool_t *pool)
 {
-	if (!conflict_func || !conflict_baton)
+	if (!conflict_func || !conflict_baton || !SvnClient::IsConflictHandler(conflict_func))
 		return nullptr;
 
 	UNUSED_ALWAYS(left);

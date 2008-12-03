@@ -264,6 +264,8 @@ namespace SharpSvn {
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
 
 		static const char* GetEolPtr(SvnLineStyle style);
+		static const char* GetEolValue(SvnLineStyle style);
+		static bool IsConflictHandler(void* conflict_func);
 #pragma endregion
 
 	public:
@@ -464,7 +466,7 @@ namespace SharpSvn {
 		bool GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out] Collection<SvnLogEventArgs^>^% logItems);
 
 	private:
-		bool InternalLog(ICollection<String^>^ targets, Uri^ logRoot, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
+		bool InternalLog(ICollection<String^>^ targets, Uri^ logRoot, SvnRevision^ altPegRev, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 #pragma endregion
 
 	public:
@@ -1117,22 +1119,18 @@ namespace SharpSvn {
 		/// <overloads>Lists the versions of the specified file</overloads>
 		/// <summary>Lists the versions of the specified file</summary>
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
-		[Obsolete("Please don't use this command until it is fully implemented")]
 		bool FileVersions(SvnTarget^ target, EventHandler<SvnFileVersionEventArgs^>^ versionHandler);
 		/// <summary>Lists the versions of the specified file</summary>
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
-		[Obsolete("Please don't use this command until it is fully implemented")]
 		bool FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, EventHandler<SvnFileVersionEventArgs^>^ versionHandler);
 
 		/// <overloads>Gets a lists of versions of the specified file</overloads>
 		/// <summary>Gets a list of versions of the specified file</summary>
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
-		[Obsolete("Please don't use this command until it is fully implemented")]
 		bool GetFileVersions(SvnTarget^ target, [Out] Collection<SvnFileVersionEventArgs^>^% list);
 
 		/// <summary>Gets a list of versions of the specified file</summary>
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
-		[Obsolete("Please don't use this command until it is fully implemented")]
 		bool GetFileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, [Out] Collection<SvnFileVersionEventArgs^>^% list);
 
 	public:

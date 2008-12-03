@@ -43,7 +43,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	return InternalLog(NewSingleItemCollection(UriToString(target)), nullptr, args, logHandler);
+	return InternalLog(NewSingleItemCollection(UriToString(target)), nullptr, SvnRevision::Head, args, logHandler);
 }
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -55,7 +55,7 @@ bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEve
 
 	return InternalLog(NewSingleItemCollection(
 		SvnPathTarget::GetTargetPath(targetPath)->Replace(System::IO::Path::DirectorySeparatorChar, '/')),
-		nullptr, args, logHandler);
+		nullptr, SvnRevision::Base, args, logHandler);
 }
 
 bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -154,7 +154,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 		rawTargets->Add(UriToString(first));
 	}
 
-	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, args, logHandler);
+	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, SvnRevision::Head, args, logHandler);
 }
 
 bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -247,7 +247,7 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 	}
 }
 
-bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
+bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnRevision^ altPegRev, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if (!targets)
 		throw gcnew ArgumentNullException("targets");
@@ -273,7 +273,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnL
 		else
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
-		svn_opt_revision_t pegRev = args->OriginRevision->ToSvnRevision();
+		svn_opt_revision_t pegRev = args->OriginRevision->Or(altPegRev)->ToSvnRevision();
 		svn_opt_revision_t start = args->Start->Or(args->OriginRevision)->Or(SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
 
