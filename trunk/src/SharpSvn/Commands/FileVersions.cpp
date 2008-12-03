@@ -558,6 +558,6 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 
 apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
 {
-	
+	UNUSED_ALWAYS(args);
 	return nullptr;
 }

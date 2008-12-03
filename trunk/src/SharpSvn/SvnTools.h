@@ -71,7 +71,7 @@ namespace SharpSvn {
 		/// <summary>
 		/// Converts a string from a Uri path to a local path name; unescaping when necessary
 		/// </summary>
-		static String^ UriPartToPath(String^ stringToUnescape);
+		static String^ UriPartToPath(String^ uriPath);
 
 
 		/// <summary>
