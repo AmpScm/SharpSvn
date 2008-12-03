@@ -309,10 +309,11 @@ namespace SharpSvn {
 
 	public enum class SvnLineStyle
 	{
-		Native=0,
+		Default=0,		
 		CarriageReturnLinefeed,
 		Linefeed,
 		CarriageReturn,
+		Native,
 		Windows = CarriageReturnLinefeed,
 		Unix = Linefeed
 	};

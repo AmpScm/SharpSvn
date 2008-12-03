@@ -523,6 +523,7 @@ const char* SvnClient::GetEolPtr(SvnLineStyle style)
 {
 	switch(style)
 	{
+	case SvnLineStyle::Default:
 	case SvnLineStyle::Native:
 		return nullptr;
 	case SvnLineStyle::CarriageReturnLinefeed:
