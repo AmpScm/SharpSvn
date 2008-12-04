@@ -480,8 +480,6 @@ void SvnFileVersionEventArgs::WriteTo(String^ outputFileName, SvnFileVersionWrit
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	WriteTo(outputFileName, args);
-
 	bool error = false;
 	try
 	{
@@ -558,7 +556,10 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 	const char* eol = nullptr;
 	if (ls == SvnLineStyle::Default)
 	{
-		svn_string_t* val = (svn_string_t*)apr_hash_get(_fileProps, SVN_PROP_EOL_STYLE, APR_HASH_KEY_STRING);
+		svn_string_t* val = nullptr;
+		
+		if (_fileProps)
+			val = (svn_string_t*)apr_hash_get(_fileProps, SVN_PROP_EOL_STYLE, APR_HASH_KEY_STRING);
 
 		if(val)
 		{
