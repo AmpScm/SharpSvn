@@ -31,7 +31,7 @@ namespace SharpSvn.Tests.Commands
 			Blame[] cmdline = this.ParseCommandLineBlame(blame);
 
 			SvnBlameArgs a = new SvnBlameArgs();
-			Assert.That(this.Client.Blame(path, a, new EventHandler<SvnBlameEventArgs>(this.Receiver)));
+			Assert.That(this.Client.Blame(path, a, this.Receiver));
 
 			Assert.That(this.blames.Count, Is.EqualTo(cmdline.Length));
 			for (int i = 0; i < cmdline.Length; i++)
@@ -49,15 +49,38 @@ namespace SharpSvn.Tests.Commands
 			a.Start = SvnRevision.Head;
 			a.End = SvnRevision.Head;
 			// this won't give any results - verify that there are no exceptions
-			Assert.That(this.Client.Blame(path, a, new EventHandler<SvnBlameEventArgs>(this.Receiver)));
+			Assert.That(this.Client.Blame(path, a, this.Receiver));
 
 			Blame[] b = (Blame[])this.blames.ToArray(typeof(Blame));
 
 			Assert.That(b[0].Revision, Is.EqualTo(-1));
 			Assert.That(b[0].Author, Is.EqualTo(null));
 			Assert.That(b[0].Date, Is.EqualTo(DateTime.MinValue));
-
 		}
+
+        [Test]
+        public void TestMore()
+        {
+            Uri uri = new Uri(GetReposUri(TestReposType.CollabRepos), "trunk/index.html");
+
+            int n = 0;
+            SvnBlameArgs ba = new SvnBlameArgs();
+            ba.Notify += delegate(object sender, SvnNotifyEventArgs e)
+                {
+                    Assert.That(e.Path, Is.EqualTo("\\trunk\\index.html"));
+                    n++;
+                };
+
+            int lines = 0;
+            Client.Blame(uri, ba,
+                delegate(object sender, SvnBlameEventArgs e)
+                {
+                    lines++;
+                });
+
+            Assert.That(n, Is.EqualTo(3));
+            Assert.That(lines, Is.EqualTo(32));
+        }
 
 		private void Receiver(object sender, SvnBlameEventArgs e)
 		{
