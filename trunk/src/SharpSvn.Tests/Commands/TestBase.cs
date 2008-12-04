@@ -176,9 +176,12 @@ namespace SharpSvn.Tests.Commands
         {
             bool found = File.Exists(e.FullPath) || Directory.Exists(e.FullPath) || Directory.Exists(Path.GetDirectoryName(e.FullPath));
 
-            Assert.That(found,
-                "{0} is not a valid path and it's directory does not exist\n (Raw value = {1}, Current Directory = {2}, Action = {3}, CommandType = {4})", 
-                e.FullPath, e.Path, Environment.CurrentDirectory, e.Action, e.CommandType);
+            if (e.CommandType != SvnCommandType.Blame)
+            {
+                Assert.That(found,
+                    "{0} is not a valid path and it's directory does not exist\n (Raw value = {1}, Current Directory = {2}, Action = {3}, CommandType = {4})",
+                    e.FullPath, e.Path, Environment.CurrentDirectory, e.Action, e.CommandType);
+            }
         }
 
 		protected static void RecursiveDelete(string path)
