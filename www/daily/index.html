@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5004.931</title>
+<title>SharpSvn-Daily Update - 1.5004.935</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5004.931</h1>
+<h1>SharpSvn-Daily Update - 1.5004.935</h1>
 
 
 <p>
@@ -12,22 +12,28 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1307/SSvn-1.5004.931.zip">SharpSvn 1.5004.931</a>.</h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1312/SSvn-1.5004.935.zip">SharpSvn 1.5004.935</a>.</h2>
 
-<p>The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1308/SSvn-1.5004.931-x64.zip">x64 version</a> of this Win32 build and a
-        <a href="http://sharpsvn.open.collab.net/files/documents/180/1309/SSvnEx-1.5004.931.zip">package of all binaries</a> with some extras.</p>
+<p>The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1313/SSvn-1.5004.935-x64.zip">x64 version</a> of this Win32 build and a
+        <a href="http://sharpsvn.open.collab.net/files/documents/180/1314/SSvnEx-1.5004.935.zip">package of all binaries</a> with some extras.</p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=931">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=935">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-12-04</td></tr>
+<tr><td> </td><td class="r"><a id="934" href="http://sharpsvn.net/rev/?r=934">[r934]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/FileVersions.cpp, src/SharpSvn.Tests/Commands/FileVersions.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Resolve stackoverflow from one of the overloads of the 
+SvnFileVersionEventArgs.Write overloads. And added test on remote repository.</td></tr>
+<tr><td> </td><td class="r"><a id="933" href="http://sharpsvn.net/rev/?r=933">[r933]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnUriTarget.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add two overrides to SvnUriTarget that automatically convert passed strings
+to Uris. Remove constructor with SvnRevisionType argument.
+(Use SvnRevision conversion operator for this, as it can throw an error)</td></tr>
 <tr class="d"><td colspan="4">2008-12-03</td></tr>
 <tr><td> </td><td class="r"><a id="928" href="http://sharpsvn.net/rev/?r=928">[r928]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnBase.cpp, src/SharpSvn/SvnBase.h, src/SharpSvn/Args/FileVersions.h, src/SharpSvn/Commands/FileVersions.cpp, src/SharpSvn.Tests/Commands/FileVersions.cs, src/SharpSvn/EventArgs/SvnFileVersionEventArgs.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Enable the new SvnClient.FileVersions command that uses the RA api designed
 for blame to quickly retrieve a subset of revisions of a specific file by
