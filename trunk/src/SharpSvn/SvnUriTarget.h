@@ -41,6 +41,39 @@ namespace SharpSvn {
 			_uri = CanonicalizeUri(uri);
 		}
 
+		SvnUriTarget (String^ uriString, SvnRevision^ revision)
+			: SvnTarget(revision)
+		{
+			if (String::IsNullOrEmpty(uriString))
+				throw gcnew ArgumentNullException("uri");
+
+			System::Uri^ uri = gcnew System::Uri(uriString);
+
+			if (!uri->IsAbsoluteUri)
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uriString");
+			else if (!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uriString");
+
+			_uri = CanonicalizeUri(uri);
+		}
+
+		SvnUriTarget (String^ uriString)
+			: SvnTarget(SvnRevision::None)
+		{
+			if (String::IsNullOrEmpty(uriString))
+				throw gcnew ArgumentNullException("uri");
+
+			System::Uri^ uri = gcnew System::Uri(uriString);
+
+			if (!uri->IsAbsoluteUri)
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uriString");
+			else if (!SvnBase::IsValidReposUri(uri))
+				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uriString");
+
+			_uri = CanonicalizeUri(uri);
+		}
+
+
 		SvnUriTarget (Uri^ uri, __int64 revision)
 			: SvnTarget(gcnew SvnRevision(revision))
 		{
@@ -56,19 +89,6 @@ namespace SharpSvn {
 
 		SvnUriTarget (Uri^ uri, DateTime date)
 			: SvnTarget(gcnew SvnRevision(date))
-		{
-			if (!uri)
-				throw gcnew ArgumentNullException("uri");
-			else if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
-
-			_uri = CanonicalizeUri(uri);
-		}
-
-		SvnUriTarget (Uri^ uri, SvnRevisionType type)
-			: SvnTarget(gcnew SvnRevision(type))
 		{
 			if (!uri)
 				throw gcnew ArgumentNullException("uri");
