@@ -147,6 +147,46 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        [Test]
+        public void WalkMe()
+        {
+            SvnFileVersionsArgs a = new SvnFileVersionsArgs();
+            SvnUriTarget me = new SvnUriTarget(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
+            a.End = 931;
+
+            int n = 0;
+
+            Client.FileVersions(me, a,
+                delegate(object sender, SvnFileVersionEventArgs e)
+                {
+                    GC.KeepAlive(e);
+                    e.WriteTo(GetTempFile());
+                    n++;
+                });
+
+            Assert.That(n, Is.EqualTo(7));
+        }
+       
+        [Test]
+        public void WalkChange()
+        {
+            SvnFileVersionsArgs a = new SvnFileVersionsArgs();
+            SvnUriTarget me = new SvnUriTarget(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
+            a.Start = 927;
+            a.End = 928;
+            int n = 0;
+
+            Client.FileVersions(me, a,
+                delegate(object sender, SvnFileVersionEventArgs e)
+                {
+                    GC.KeepAlive(e);
+                    e.WriteTo(GetTempFile());
+                    n++;
+                });
+
+            Assert.That(n, Is.EqualTo(2));
+        }
+
     }
 }
 
