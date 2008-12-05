@@ -90,6 +90,12 @@ namespace SharpSvn {
 			TortoiseSvnAutoProps
 		}));
 		// /TortoiseSvn
+
+	public:
+		/// <summary>Tries to parse a Svn property into a <see cref="DateTime" /> value</summary>
+		static bool TryParseDate(String^ date, [Out] DateTime% value);
+		/// <summary>Formats a DateTime in Subversions string format</summary>
+		static String^ FormatDate(DateTime value);
 	};
 
 

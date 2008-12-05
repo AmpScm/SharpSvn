@@ -829,6 +829,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnPropertyNames.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnTargets.cpp"
 					>
 				</File>
