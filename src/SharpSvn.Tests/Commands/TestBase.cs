@@ -565,6 +565,12 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        protected void InstallRevpropHook(string reposPath)
+        {
+            string bat = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, SvnHookType.PreRevPropChange), ".bat");
+
+            File.WriteAllText(bat, "exit 0");
+        }
 
 
 		protected readonly string REPOS_FILE;
