@@ -246,7 +246,7 @@
       <!-- Add more version information to the subversion binaries and functions -->
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
         #undef SVN_VER_TAG
-        #undef SVN_VER_NUMTAG        
+        #undef SVN_VER_NUMTAG
         #define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
         #ifndef SHARPSVN_INFO
         #define SVN_VER_NUMTAG "-${svnBuildName}-${svnBuildType}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
