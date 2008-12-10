@@ -1050,6 +1050,10 @@
 					RelativePath=".\Commands\Write.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\Commands\WriteRelated.cpp"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="EventArgs"
@@ -1304,6 +1308,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\Write.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\WriteRelated.h"
 					>
 				</File>
 			</Filter>

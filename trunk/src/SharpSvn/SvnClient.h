@@ -19,6 +19,8 @@
 
 #include "SvnTools.h"
 
+using System::Collections::Generic::IDictionary;
+
 namespace SharpSvn {
 
 	ref class SvnCommittingEventArgs;
@@ -77,6 +79,7 @@ namespace SharpSvn {
 	ref class SvnGetCapabilitiesArgs;
 
 	ref class SvnFileVersionsArgs;
+	ref class SvnWriteRelatedArgs;
 
 	ref class SvnCreateRepositoryArgs;
 	ref class SvnDeleteRepositoryArgs;
@@ -1133,6 +1136,13 @@ namespace SharpSvn {
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
 		bool GetFileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, [Out] Collection<SvnFileVersionEventArgs^>^% list);
 
+#ifdef _DEBUG
+	public:
+		/// <overloads>Writes the content of specified targets to the specified streams, transferring deltas where possible. (Optimized <c>svn cat</c>)</overloads>
+		bool WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<System::IO::Stream^>^ to);
+		bool WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<System::IO::Stream^>^ to, SvnWriteRelatedArgs^ args);
+
+#endif
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
 		/// <remarks>See also <see cref="SvnTools::GetUriFromWorkingCopy" /></remarks>
