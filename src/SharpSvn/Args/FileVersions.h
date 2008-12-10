@@ -216,8 +216,18 @@ namespace SharpSvn {
 
 	public ref class SvnFileVersionWriteArgs : public SvnClientContextArgs
 	{
-		public:
-
-		
+		bool _retrieveUntranslated;
+	public:
+		property bool WriteUntranslated
+		{
+			bool get()
+			{
+				return _retrieveUntranslated;
+			}
+			void set(bool value)
+			{
+				_retrieveUntranslated = value;
+			}
+		}		
 	};
 }

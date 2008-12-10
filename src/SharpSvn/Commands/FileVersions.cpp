@@ -563,33 +563,36 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 
 	svn_stream_t* stream = svn_stream_from_aprfile2(txt, false, _pool->Handle);
 
-	SvnLineStyle ls = fvArgs->LineStyle;
-
-	const char* eol = nullptr;
-	if (ls == SvnLineStyle::Default)
+	if (!args->WriteUntranslated)
 	{
-		svn_string_t* val = nullptr;
-		
-		if (_fileProps)
-			val = (svn_string_t*)apr_hash_get(_fileProps, SVN_PROP_EOL_STYLE, APR_HASH_KEY_STRING);
+		SvnLineStyle ls = fvArgs->LineStyle;
 
-		if(val)
+		const char* eol = nullptr;
+		if (ls == SvnLineStyle::Default)
 		{
-			svn_subst_eol_style style = svn_subst_eol_style_native;
+			svn_string_t* val = nullptr;
+			
+			if (_fileProps)
+				val = (svn_string_t*)apr_hash_get(_fileProps, SVN_PROP_EOL_STYLE, APR_HASH_KEY_STRING);
 
-			svn_subst_eol_style_from_value(&style, &eol, val->data);
+			if(val)
+			{
+				svn_subst_eol_style style = svn_subst_eol_style_native;
+
+				svn_subst_eol_style_from_value(&style, &eol, val->data);
+			}
 		}
-	}
-	else
-		eol = SvnClient::GetEolValue(ls);
+		else
+			eol = SvnClient::GetEolValue(ls);
 
-	stream = svn_subst_stream_translated(
-					stream,
-					eol,
-					fvArgs->RepairLineEndings,
-					GetKeywords(fvArgs),
-					fvArgs->KeywordExpansion != SvnKeywordExpansion::None,
-					_pool->Handle);	
+		stream = svn_subst_stream_translated(
+						stream,
+						eol,
+						fvArgs->RepairLineEndings,
+						GetKeywords(fvArgs),
+						fvArgs->KeywordExpansion != SvnKeywordExpansion::None,
+						_pool->Handle);	
+	}
 
 	return gcnew Implementation::SvnWrappedStream(stream, _pool); // Inner stream is automatically closed on pool destruction
 }
