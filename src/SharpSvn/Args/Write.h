@@ -9,7 +9,7 @@
 
 namespace SharpSvn {
 
-/// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnWriteArgs : public SvnClientArgs
 	{

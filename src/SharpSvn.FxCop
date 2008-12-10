@@ -2,7 +2,7 @@
 <FxCopProject Version="1.36" Name="SharpSvn">
  <ProjectOptions>
   <SharedProject>True</SharedProject>
-  <Stylesheet Apply="False">http://www.gotdotnet.com/team/fxcop//xsl/1.35/FxCopReport.xsl</Stylesheet>
+  <Stylesheet Apply="False">c:\program files (x86)\microsoft fxcop 1.36\Xml\FxCopReport.xsl</Stylesheet>
   <SaveMessages>
    <Project Status="Active, Excluded" NewOnly="False" />
    <Report Status="Active" NewOnly="False" />
@@ -25,40 +25,7 @@
   <AssemblyReferenceDirectories>
    <Directory>$(ProjectDir)/SharpSvn/bin/debug/</Directory>
   </AssemblyReferenceDirectories>
-  <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll" Analyze="True" AnalyzeAllChildren="False">
-   <Modules AnalyzeAllChildren="False">
-    <Module Name="sharpsvn.dll" Analyze="True" AnalyzeAllChildren="False">
-     <Namespaces AnalyzeAllChildren="False">
-      <Namespace Name="" Analyze="True" AnalyzeAllChildren="True" />
-      <Namespace Name="&lt;CppImplementationDetails&gt;" Analyze="True" AnalyzeAllChildren="True" />
-      <Namespace Name="&lt;CrtImplementationDetails&gt;" Analyze="True" AnalyzeAllChildren="True" />
-      <Namespace Name="SharpSvn" Analyze="True" AnalyzeAllChildren="True" />
-      <Namespace Name="SharpSvn.Implementation" Analyze="True" AnalyzeAllChildren="False">
-       <Types AnalyzeAllChildren="False">
-        <Type Name="AprArray`2" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprBaton`1" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprCanonicalMarshaller" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprCStrMarshaller" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprCStrPathMarshaller" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprPool" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprPool+AprPoolTag" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprStreamFile" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="AprSvnRevNumMarshaller" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="IItemMarshaller`1" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="SvnBase" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="SvnChangeItemCollection" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="SvnCommitItemCollection" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="SvnHandleBase" Analyze="True" AnalyzeAllChildren="True" />
-        <Type Name="SvnStreamWrapper" Analyze="True" AnalyzeAllChildren="True" />
-       </Types>
-      </Namespace>
-      <Namespace Name="SharpSvn.Security" Analyze="True" AnalyzeAllChildren="True" />
-      <Namespace Name="vc_attributes" Analyze="True" AnalyzeAllChildren="True" />
-     </Namespaces>
-     <Resources AnalyzeAllChildren="True" />
-    </Module>
-   </Modules>
-  </Target>
+  <Target Name="$(ProjectDir)/SharpSvn/bin_2008/Win32/Release/SharpSvn.dll" Analyze="True" AnalyzeAllChildren="True" />
  </Targets>
  <Rules>
   <RuleFiles>

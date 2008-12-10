@@ -187,6 +187,32 @@ namespace SharpSvn.Tests.Commands
             Assert.That(n, Is.EqualTo(2));
         }
 
+#if DEBUG
+        [Test]
+        public void WriteRelated()
+        {
+            Uri reposUri = GetReposUri(TestReposType.CollabRepos);
+            Dictionary<SvnUriTarget, Stream> targets = new Dictionary<SvnUriTarget,Stream>();
+            Uri fileUri = new Uri(reposUri, "trunk/index.html");
+
+            targets.Add(new SvnUriTarget(fileUri, 5), File.Create(GetTempFile()));
+            targets.Add(new SvnUriTarget(fileUri, 7), File.Create(GetTempFile()));
+
+            using(Stream file1 = File.Create(GetTempFile()))
+            using(Stream file2 = File.Create(GetTempFile()))
+            Client.WriteRelated(
+                new SvnUriTarget[]
+                {
+                    new SvnUriTarget(fileUri, 5),
+                    new SvnUriTarget(fileUri, 9)
+                },
+                new Stream[]
+                {
+                    file1,
+                    file2,
+                });
+        }
+#endif
     }
 }
 

@@ -61,6 +61,16 @@ namespace SharpSvn {
 				return safe_cast<ICollection<T>^>(NewSingleItemArray(value));
 			}
 
+			generic<typename T> static __forceinline T FirstOf(System::Collections::Generic::IEnumerable<T>^ list)
+			{
+				for each (T i in list)
+				{
+					return i;
+				}
+
+				throw gcnew InvalidOperationException();
+			}
+
 			[ThreadStatic]
 			static AprPool^ _threadPool;
 
