@@ -52,45 +52,57 @@ static svn_error_t *file_version_window_handler(
 	if(r)
 		return r;
 
-	if (window)
-		return nullptr; // We are only interested after the file is complete
-
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)dbaton->clientBaton);	
-
-	SvnFileVersionsArgs^ args = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if (!args)
-		return nullptr;	
-
-	AprPool^ next = args->_prevPool;
-
-	if (dbaton->source_file)
-		svn_io_file_close(dbaton->source_file, next->Handle);
-
-	// Clean up for the next round
-	args->_lastFile = dbaton->filename;
-	args->_prevPool = args->_curPool;
-	args->_curPool = next;
-
-	SvnFileVersionEventArgs^ e = args->_fv;	
+	SvnFileVersionEventArgs^ e = nullptr;
 	try
 	{
+		SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)dbaton->clientBaton);	
+		if (window)
+		{
+			SvnCancelEventArgs^ ca = gcnew SvnCancelEventArgs();
+
+			client->HandleClientCancel(ca);
+
+			if (ca->Cancel)
+				return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+
+
+			return nullptr; // We are only interested after the file is complete
+		}
+
+		SvnFileVersionsArgs^ args = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+		if (!args)
+			return nullptr;	
+
+		AprPool^ next = args->_prevPool;
+
+		if (dbaton->source_file)
+			svn_io_file_close(dbaton->source_file, next->Handle);
+
+		// Clean up for the next round
+		args->_lastFile = dbaton->filename;
+		args->_prevPool = args->_curPool;
+		args->_curPool = next;
+
+		e = args->_fv;	
+	
 		args->_fv = nullptr;
 		if (args->RetrieveContents && e)
 		{
 			e->SetPool(next);
 			args->OnFileVersion(e);
 		}
+
+		next->Clear();
 	}
 	catch(Exception^ e)
 	{
-		return SvnException::CreateExceptionSvnError("List receiver", e);
+		return SvnException::CreateExceptionSvnError("FileVersions delta window receiver", e);
 	}
 	finally
 	{
 		if (e)
 			e->Detach(false);
-	}
-	next->Clear();
+	}	
 
 	return nullptr;
 }
@@ -271,7 +283,7 @@ static svn_error_t *file_version_handler(
 	}
 	catch(Exception^ e)
 	{
-		return SvnException::CreateExceptionSvnError("List receiver", e);
+		return SvnException::CreateExceptionSvnError("FileVersions receiver", e);
 	}
 	finally
 	{
