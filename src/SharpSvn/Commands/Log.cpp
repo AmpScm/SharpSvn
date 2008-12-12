@@ -300,6 +300,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 			args->Log -= logHandler;
 
 		args->_searchRoot = nullptr;
+		args->_mergeLogLevel = 0;
 	}
 }
 
