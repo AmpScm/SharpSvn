@@ -27,13 +27,33 @@ namespace SharpSvn.Tests.Commands
 		{
 			string filepath = Path.Combine(this.WcPath, "Form.cs");
 
+            Client.Status(filepath, delegate(object sender, SvnStatusEventArgs e)
+            {
+                Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);
+            });
+
+            bool gotIn = false;
 			SvnLockArgs la = new SvnLockArgs();
 			la.Comment = "Moo ";
-			la.Notify += new EventHandler<SvnNotifyEventArgs>(OnLockNotify);
-			this.Client.Lock(new string[] { filepath }, la);
+			la.Notify += 
+                delegate(object sender, SvnNotifyEventArgs e)
+                {
+                    Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.LockLocked));
+                    gotIn = true;
+                };
+			Client.Lock(new string[] { filepath }, la);
+            Assert.That(gotIn);
 
-			char lockStatus = this.RunCommand("svn", "status " + filepath)[5];
-			Assert.That(lockStatus, Is.EqualTo('K'), "File not locked");
+            gotIn = false;
+
+            Client.Status(filepath, delegate(object sender, SvnStatusEventArgs e)
+            {
+                Assert.That(e.WorkingCopyInfo.LockOwner, Is.EqualTo(Environment.UserName));
+                Assert.That(e.WorkingCopyInfo.LockToken, Is.Not.Null);
+                gotIn = true;
+            });
+
+            Assert.That(gotIn);
 		}
 
 		void OnLockNotify(object sender, SvnNotifyEventArgs e)
@@ -45,6 +65,7 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void DualLockTest()
         {
+            // Checks that sharpsvn sees a failed lock as an error (unlike the subversion c api)
             string wc1 = GetTempDir();
             string wc2 = GetTempDir();
             Uri repos = new Uri(CollabReposUri, "trunk/");
