@@ -47,6 +47,30 @@ namespace SharpSvn.Tests.Commands
                 clientLogs[i].CheckMatch(this.logMessages[i]);
         }
 
+		[Test]
+		public void StrangeLog()
+		{
+            // With Subversion 1.5.4 this gives thousands of result values
+			SvnLogArgs la = new SvnLogArgs();
+			la.Start = 34669;
+			la.End = 0;
+            la.Limit = 10;
+			la.OriginRevision = 34669;
+			la.RetrieveMergedRevisions = true;
+            la.ThrowOnCancel = false;
+            int n = 0;
+			Client.Log(new Uri("http://svn.collab.net/repos/svn/branches/1.5.x-reintegrate-improvements/"), la,
+				delegate(object sender, SvnLogEventArgs le)
+				{
+                    n++;
+
+                    if (n > 100)
+                        le.Cancel = true;
+				});
+
+            Assert.That(la.IsLastInvocationCanceled, Is.False, "More than 100 items returned");
+		}
+
         [Test]
         public void TestLogNonAsciiChars()
         {
