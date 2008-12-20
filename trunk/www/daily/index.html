@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5004.935</title>
+<title>SharpSvn-Daily Update - 1.5005.947</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5004.935</h1>
+<h1>SharpSvn-Daily Update - 1.5005.947</h1>
 
 
 <p>
@@ -12,22 +12,37 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1312/SSvn-1.5004.935.zip">SharpSvn 1.5004.935</a>.</h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1340/SSvn-1.5005.947.zip">SharpSvn 1.5005.947</a>.</h2>
 
-<p>The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1313/SSvn-1.5004.935-x64.zip">x64 version</a> of this Win32 build and a
-        <a href="http://sharpsvn.open.collab.net/files/documents/180/1314/SSvnEx-1.5004.935.zip">package of all binaries</a> with some extras.</p>
+<p>The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1341/SSvn-1.5005.947-x64.zip">x64 version</a> of this Win32 build and a
+        <a href="http://sharpsvn.open.collab.net/files/documents/180/1342/SSvnEx-1.5005.947.zip">package of all binaries</a> with some extras.</p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=935">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=947">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2008-12-16</td></tr>
+<tr><td> </td><td class="r"><a id="946" href="http://sharpsvn.net/rev/?r=946">[r946]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/LogTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added testcase on 
+svn log -g http://svn.collab.net/repos/svn/branches/1.5.x-reintegrate-improvements@34669 --limit=10 -r 34669:0
+that gives a gigantic number of revisions in Subversion 1.5.4</td></tr>
+<tr class="d"><td colspan="4">2008-12-12</td></tr>
+<tr><td> </td><td class="r"><a id="944" href="http://sharpsvn.net/rev/?r=944">[r944]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/LookArgs/SvnLookRevisionPropertyArgs.h, src/SharpSvn/EventArgs/SvnBeforeAutomaticMerge.h, src/SharpSvn/ReposArgs/LoadRepository.h, src/SharpSvn/EventArgs/SvnLogEventArgs.h, src/SharpSvn/Args/ReintegrationMerge.h, src/SharpSvn/SvnTools.h, src/SharpSvn/Stdafx.h, src/SharpSvn/SvnNames.h (and 142 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Applied standard Apache license header to all .h files (and several .cpp files)
+of SharpSvn.dll</td></tr>
+<tr class="d"><td colspan="4">2008-12-10</td></tr>
+<tr><td> </td><td class="r"><a id="942" href="http://sharpsvn.net/rev/?r=942">[r942]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/FileVersions.h, src/SharpSvn/Commands/FileVersions.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added WriteUntranslated property to SvnFileVersionWriteArgs.</td></tr>
+<tr><td> </td><td class="r"><a id="941" href="http://sharpsvn.net/rev/?r=941">[r941]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/FileVersions.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">While processing FileVersions command, check for user cancelation in more
+places.</td></tr>
+<tr><td> </td><td class="r"><a id="940" href="http://sharpsvn.net/rev/?r=940">[r940]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnEnums.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SvnBase.h, src/SharpSvn/SvnClient.h, src/SharpSvn/Args/Write.h, src/SharpSvn/Args/WriteRelated.h, src/SharpSvn/Commands/WriteRelated.cpp, src/SharpSvn.FxCop (and 1 other path)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated some helper code for researching a new client level command.</td></tr>
+<tr class="d"><td colspan="4">2008-12-05</td></tr>
+<tr><td> </td><td class="r"><a id="937" href="http://sharpsvn.net/rev/?r=937">[r937]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn.Tests/Commands/SetRevisionPropertyTests.cs, src/SharpSvn/SvnNames.h, src/SharpSvn/SvnPropertyNames.cpp, src/SharpSvn.Tests/Commands/TestBase.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add SvnPropertyNames.FormatDate and TryParseDate to make it easier to update
+svn:date properties.</td></tr>
 <tr class="d"><td colspan="4">2008-12-04</td></tr>
 <tr><td> </td><td class="r"><a id="934" href="http://sharpsvn.net/rev/?r=934">[r934]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Commands/FileVersions.cpp, src/SharpSvn.Tests/Commands/FileVersions.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Resolve stackoverflow from one of the overloads of the 
 SvnFileVersionEventArgs.Write overloads. And added test on remote repository.</td></tr>
@@ -65,17 +80,6 @@ disabling automatic merging of text files.
 Also handle this setting via a BeforeAutomaticMerge event on SvnClient 
 and SvnClientArgsWithConflict. Set IsBinary to true from this handler to
 disable automatic merging</td></tr>
-<tr class="d"><td colspan="4">2008-11-16</td></tr>
-<tr class="d"><td colspan="4">2008-11-13</td></tr>
-<tr><td> </td><td class="r"><a id="890" href="http://sharpsvn.net/rev/?r=890">[r890]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/AprPool.h, src/SharpSvn/Commands/SetProperty.cpp, src/SharpSvn/AprPool.cpp, src/SharpSvn/Commands/SetRevisionProperty.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Use svn_prop_needs_translation to determine which properties need translation
-instead of depending on .StartsWith("svn:")</td></tr>
-<tr><td> </td><td class="r"><a id="889" href="http://sharpsvn.net/rev/?r=889">[r889]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnHookArguments.h, src/SharpSvn/SharpSvnStrings.h, src/SharpSvn/SvnTools.cpp, src/SharpSvn/LookArgs/SvnLookClientArgs.h, src/SharpSvn.Tests/LookCommands/ChangeInfoTests.cs, src/SharpSvn/SvnDiff.cpp, src/SharpSvn/SvnLookClient.h, src/SharpSvn/SvnBase.cpp (and 12 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated all SvnLookClient commands to take a SvnLookOrigin (a container containing a path
-and either a revision or a transaction). SvnHookArguments provides a SvnLookOrigin now.<br>
-Further various FxCop cleanups.</td></tr>
-<tr><td> </td><td class="r"><a id="886" href="http://sharpsvn.net/rev/?r=886">[r886]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/EventArgs/SvnConflictEventArgs.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Initialize SvnConflictEventArgs.IsBinary correctly</td></tr>
-<tr><td> </td><td class="r"><a id="885" href="http://sharpsvn.net/rev/?r=885">[r885]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/Commands/CommitTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added custom commit property test</td></tr>
-<tr class="d"><td colspan="4">2008-11-12</td></tr>
-<tr class="d"><td colspan="4">2008-11-04</td></tr>
 
 </table>
 <!--/Recent changes-->
