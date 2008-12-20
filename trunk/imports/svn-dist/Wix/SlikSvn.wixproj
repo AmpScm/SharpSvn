@@ -12,7 +12,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=1.5.3;platform=Win32</DefineConstants>
+    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=1.5.5;platform=Win32</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressValidation>False</SuppressValidation>
@@ -21,11 +21,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-win32;SvnVersion=1.5.4;platform=Win32</DefineConstants>
+    <DefineConstants>distDir=../dist-win32;SvnVersion=1.5.5;platform=Win32</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=1.5.3;platform=x64</DefineConstants>
+    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=1.5.5;platform=x64</DefineConstants>
     <WixVariables>
     </WixVariables>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
@@ -35,7 +35,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-x64;SvnVersion=1.5.4;platform=x64</DefineConstants>
+    <DefineConstants>distDir=../dist-x64;SvnVersion=1.5.5;platform=x64</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57</SuppressIces>
