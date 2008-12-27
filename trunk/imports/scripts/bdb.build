@@ -88,5 +88,10 @@
         <include name="*.h" />
       </fileset>
     </copy>
+    <copy todir="build/${platform}/lib/bin">
+		<fileset basedir="${bdbResultDir}">
+			<include name="*.dll" />
+		</fileset>		
+    </copy>
   </target>
 </project>

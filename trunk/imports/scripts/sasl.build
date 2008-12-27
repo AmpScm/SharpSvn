@@ -113,5 +113,10 @@
         <include name="*.h" />
       </fileset>
     </copy>
+    <copy todir="build/${platform}/lib/lib">
+		<fileset basedir="${saslDir}/lib">
+			<include name="*.dll" />
+		</fileset>
+	</copy>
   </target>
 </project>
