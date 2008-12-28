@@ -416,8 +416,6 @@ namespace CollabUpload
 
         private static void DeleteFile(Args args, CookieContainer cookBox, int fileId)
         {
-            string responseUri;
-            string text;
             string requestUri = string.Format("http://{0}/servlets/ProjectDocumentDelete", args.Site);
 
 
@@ -433,8 +431,6 @@ namespace CollabUpload
 
             using (WebResponse response = wr.GetResponse())
             {
-                responseUri = response.ResponseUri.ToString();
-
                 if (!response.ResponseUri.AbsolutePath.EndsWith("/ProjectDocumentList", StringComparison.OrdinalIgnoreCase))
                     throw new InvalidOperationException("Delete failed");
             }
