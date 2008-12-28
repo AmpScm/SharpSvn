@@ -1504,6 +1504,38 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="SvnDeltaEditor"
+			>
+			<File
+				RelativePath=".\Delta\SvnDeltaEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Delta\SvnDeltaEditor.h"
+				>
+			</File>
+			<Filter
+				Name="EventArgs"
+				>
+				<File
+					RelativePath=".\Delta\DeltaDirectoryEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\DeltaFileEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\DeltaGlobalEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\SvnDeltaNode.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath=".\AssemblyInfo.cpp"
 			>
