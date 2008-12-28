@@ -113,7 +113,7 @@ static svn_error_t *file_version_window_handler(
 * to make sure the properties are still valid in the next round
 */
 static svn_error_t*
-apply_property_changes(SvnFileVersionsArgs^ args, apr_array_header_t *props, AprPool^ allocPool, AprPool^ tmpPool)
+apply_property_changes(SvnFileVersionsArgs^ args, apr_array_header_t *props, AprPool^ allocPool, bool *property_changes, AprPool^ tmpPool)
 {
 	apr_hash_t* oldProps = args->_properties;
 	apr_hash_t* newProps = apr_hash_make(allocPool->Handle);
@@ -129,6 +129,8 @@ apply_property_changes(SvnFileVersionsArgs^ args, apr_array_header_t *props, Apr
 
 			if (svnOnly && !svn_prop_is_svn_prop(prop->name))
 				continue;
+
+			*property_changes = true;
 
 			if (prop->value)
 				apr_hash_set(newProps, apr_pstrdup(allocPool->Handle, prop->name), APR_HASH_KEY_STRING, 
@@ -190,8 +192,9 @@ static svn_error_t *file_version_handler(
 		return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 	// </CancelChecking>
 
+	bool property_changes = false;
 	// <Update Property List>
-	SVN_ERR(apply_property_changes(args, prop_diffs, args->_curPool, %thePool));
+	SVN_ERR(apply_property_changes(args, prop_diffs, args->_curPool, &property_changes, %thePool));
 	// </Update Property List>
 
 	AprPool handlerPool(%thePool);
@@ -204,6 +207,7 @@ static svn_error_t *file_version_handler(
 		rev_props, 
 		args->RetrieveProperties ? args->_properties : nullptr,
 		(content_delta_handler && content_delta_baton && args->RetrieveContents),
+		property_changes,
 		result_of_merge!=0, 
 		client, 							
 		%handlerPool);
@@ -219,7 +223,7 @@ static svn_error_t *file_version_handler(
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 		// </CancelChecking>        
 
-		if (e->HasContentDelta)
+		if (e->HasContentChanges)
 		{
 			AprPool ^_pool = args->_curPool;
 

@@ -27,6 +27,7 @@ namespace SharpSvn {
 	{
 		initonly __int64 _revision;
 		initonly bool _hasContent;
+		initonly bool _hasProperties;
 		initonly bool _resultOfMerge;
 		String^ _path;
 		String^ _versionFile;
@@ -58,7 +59,8 @@ namespace SharpSvn {
             apr_hash_t *rev_props, 
             apr_hash_t *file_props,
 			bool has_content,
-            bool result_of_merge, 
+			bool has_properties,
+            bool result_of_merge, 			
 			SvnClient^ client,
             AprPool^ pool)
 		{
@@ -75,6 +77,7 @@ namespace SharpSvn {
 			_revision = rev;
 			_resultOfMerge = result_of_merge;
 			_hasContent = has_content;
+			_hasProperties = has_properties;
 
 			_pReposRoot = repos_root;
 			_pPath = path;
@@ -208,7 +211,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool HasContentDelta
+		property bool HasContentChanges
 		{
 			bool get()
 			{
@@ -216,6 +219,13 @@ namespace SharpSvn {
 			}
 		}
 
+		property bool HasPropertyChanges
+		{
+			bool get()
+			{
+				return _hasProperties;
+			}
+		}
 
 		property bool ResultOfMerge
 		{
