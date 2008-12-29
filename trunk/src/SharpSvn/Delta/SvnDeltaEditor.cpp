@@ -19,9 +19,10 @@ struct root_baton
 	gcroot<SvnDeltaEditor^> _editor;
 
 public:
-	root_baton()
+	root_baton(SvnDeltaEditor^ editor)
 	{
 		_firstDir = nullptr;
+		_editor = editor;
 	}
 
 	~root_baton();
@@ -41,6 +42,11 @@ struct directory_baton
 public:
 	directory_baton(root_baton* root, directory_baton* parent_dir, SvnDeltaDirectoryNode^ dir)
 	{
+		if (!root)
+			throw gcnew ArgumentNullException("root");
+		else if (!dir)
+			throw gcnew ArgumentNullException("dir");
+
 		_root = root;
 		_parentDir = parent_dir;
 
@@ -50,7 +56,7 @@ public:
 		if (parent_dir)
 		{
 			_nextDir = parent_dir->_firstDir;
-			parent_dir->_nextDir = this;
+			parent_dir->_firstDir = this;
 		}
 		else
 		{
@@ -73,6 +79,11 @@ struct file_baton
 public:
 	file_baton(root_baton* root, directory_baton* parent_dir, SvnDeltaFileNode^ file)
 	{
+		if (!root)
+			throw gcnew ArgumentNullException("root");
+		else if (!file)
+			throw gcnew ArgumentNullException("file");
+
 		_root = root;
 		_parentDir = parent_dir;
 		_node = file;
@@ -83,8 +94,6 @@ public:
 
 	~file_baton()
 	{
-		_root = nullptr;
-
 		file_baton** nextRef = &_parentDir->_firstFile;
 
 		while(nextRef && *nextRef && *nextRef != this)
@@ -92,6 +101,8 @@ public:
 
 		if(nextRef && *nextRef == this)
 			*nextRef = _nextFile;
+		else
+			throw gcnew InvalidOperationException();
 
 		_nextFile = nullptr;
 	}
@@ -110,7 +121,6 @@ root_baton::~root_baton()
 
 directory_baton::~directory_baton()
 {
-	_root = nullptr;
 	while(_firstDir)
 		delete _firstDir;
 	while(_firstFile)
@@ -124,6 +134,8 @@ directory_baton::~directory_baton()
 
 	if(nextRef && *nextRef == this)
 		*nextRef = _nextDir;
+	else
+		throw gcnew InvalidOperationException();
 
 	_nextDir = nullptr;
 }
@@ -676,7 +688,7 @@ svn_delta_editor_t* SvnDeltaEditor::AllocEditor(void** baton, AprPool^ pool)
 
 	apr_pool_cleanup_register(pool->Handle, bt, delta_editor_cleanup, delta_editor_cleanup);
 
-	bt->root = new root_baton();
+	bt->root = new root_baton(this);
 
 	return editor;
 }

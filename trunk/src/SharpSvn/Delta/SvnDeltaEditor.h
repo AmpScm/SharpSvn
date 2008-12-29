@@ -58,6 +58,9 @@ namespace SharpSvn {
 namespace SharpSvn {
 	namespace Delta {
 
+		/// <summary>The SvnDeltaEditor is a generic receiver of Subversion changes. 
+		/// Hook events on this class or override methods on descendants of this class to
+		/// receive changes</summary>
 		public ref class SvnDeltaEditor : public SvnBase
 		{
 		public:
