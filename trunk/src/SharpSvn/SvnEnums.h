@@ -74,6 +74,7 @@ namespace SharpSvn {
 
 		// Custom commands
 		FileVersions = 0x2001,
+		Replay,
 		WriteRelated
 	};
 

@@ -1007,6 +1007,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\Replay.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Resolve.cpp"
 					>
 				</File>
@@ -1128,6 +1132,10 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnReplayEventArgs.h"
 					>
 				</File>
 				<File
@@ -1268,6 +1276,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\RemoveFromChangeList.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Replay.h"
 					>
 				</File>
 				<File
