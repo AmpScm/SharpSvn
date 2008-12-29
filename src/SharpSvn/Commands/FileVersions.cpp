@@ -17,8 +17,6 @@ using namespace SharpSvn;
 using namespace System::Collections::Generic;
 using System::IO::Stream;
 
-#pragma warning(disable: 4947) // Internal obsoletes
-
 bool SvnClient::FileVersions(SvnTarget^ target, EventHandler<SvnFileVersionEventArgs^>^ versionHandler)
 {
 	if (!target)
