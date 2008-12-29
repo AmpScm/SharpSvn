@@ -33,7 +33,6 @@
 using System::Collections::Generic::IDictionary;
 
 namespace SharpSvn {
-
 	ref class SvnCommittingEventArgs;
 	ref class SvnCancelEventArgs;
 	ref class SvnProgressEventArgs;
@@ -90,6 +89,7 @@ namespace SharpSvn {
 	ref class SvnGetCapabilitiesArgs;
 
 	ref class SvnFileVersionsArgs;
+	ref class SvnReplayArgs;
 	ref class SvnWriteRelatedArgs;
 
 	ref class SvnCreateRepositoryArgs;
@@ -105,6 +105,10 @@ namespace SharpSvn {
 	ref class SvnClientReporter;
 	ref class SvnWorkingCopyState;
 	ref class SvnWorkingCopyVersion;
+
+	namespace Delta {
+		ref class SvnDeltaEditor;
+	};
 
 	using System::Runtime::InteropServices::GCHandle;
 	using System::Collections::Generic::IDictionary;
@@ -1146,6 +1150,12 @@ namespace SharpSvn {
 		/// <summary>Gets a list of versions of the specified file</summary>
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
 		bool GetFileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, [Out] Collection<SvnFileVersionEventArgs^>^% list);
+
+		/// <overloads>Replays the specified revisions on the specified target to the editory</overloads>
+		/// <summary>Replays the specified revisions on the specified target to the editor</summary>
+		bool Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor);
+		/// <summary>Replays the specified revisions on the specified target to the editory</summary>
+		bool Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor, SvnReplayArgs^ args);
 
 #ifdef _DEBUG
 	public:

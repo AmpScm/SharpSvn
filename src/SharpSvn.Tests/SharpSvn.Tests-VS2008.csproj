@@ -95,6 +95,7 @@
     <Compile Include="Commands\LogTests.cs" />
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
+    <Compile Include="Commands\ReplayTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
     <Compile Include="LookCommands\GetChangesTests.cs" />
     <Compile Include="LookCommands\HookTestBase.cs" />
