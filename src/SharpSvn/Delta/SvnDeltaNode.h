@@ -29,7 +29,7 @@ namespace SharpSvn {
 		private protected:
 			SvnDeltaNode(String^ name, SvnDeltaDirectoryNode^ parent)
 			{
-				if (String::IsNullOrEmpty(name))
+				if (parent && !name)
 					throw gcnew ArgumentNullException("name");
 
 				_name = name;
