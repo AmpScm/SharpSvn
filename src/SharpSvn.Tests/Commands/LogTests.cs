@@ -315,8 +315,8 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(e.Cancel, Is.False);
                 Assert.That(e.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
                 Assert.That(e.HasChildren, Is.False);
-                Assert.That(e.CustomProperties, Is.Not.Null);
-                Assert.That(e.CustomProperties.Count, Is.GreaterThanOrEqualTo(3));
+                Assert.That(e.RevisionProperties, Is.Not.Null);
+                Assert.That(e.RevisionProperties.Count, Is.GreaterThanOrEqualTo(3));
                 switch (n)
                 {
                     case 0:

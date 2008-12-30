@@ -32,7 +32,7 @@ namespace SharpSvn {
 					return System::IO::Path::GetFileName(Path);
 				}
 			}
-			
+
 			property __int64 Revision
 			{
 				__int64 get()
@@ -94,12 +94,63 @@ namespace SharpSvn {
 
 		public ref class SvnDeltaDirectoryPropertyChangeEventArgs : SvnDeltaNodeEventArgs
 		{
+			const char* _pName;
+			const svn_string_t *_pValue;
+			String^ _name;
+			SvnPropertyValue^ _value;
+
 		internal:
 			SvnDeltaDirectoryPropertyChangeEventArgs(SvnDeltaNode^ directoryNode, const char* name, const svn_string_t* value)
 				: SvnDeltaNodeEventArgs(directoryNode)
 			{
-				UNUSED_ALWAYS(name);
-				UNUSED_ALWAYS(value);
+				if (!name)
+					throw gcnew ArgumentNullException("name");
+				// value = null  -> Property delete
+				_pName = name;
+				_pValue = value;
+			}
+
+		public:
+			property SvnPropertyValue^ Value
+			{
+				SvnPropertyValue^ get()
+				{
+					if (!_value && _pValue && _pName && PropertyName)
+						_value = SvnPropertyValue::Create(_pName, _pValue, nullptr, PropertyName);
+
+					return _value;
+				}
+			}
+
+			property String^ PropertyName
+			{
+				String^ get()
+				{
+					if (!_name && _pName)
+						_name = SvnBase::Utf8_PtrToString(_pName);
+
+					return _name;
+				}
+			}
+
+		protected public:
+			virtual void Detach(bool keepProperties) override
+			{
+				try
+				{
+					if (keepProperties)
+					{
+						GC::KeepAlive(Name);
+						GC::KeepAlive(Value);
+					}
+				}
+				finally
+				{
+					_name = nullptr;
+					_value = nullptr;
+
+					__super::Detach(keepProperties);
+				}
 			}
 		};
 
