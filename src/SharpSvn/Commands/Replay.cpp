@@ -41,7 +41,7 @@ sharpsvn_replay_rev_start(svn_revnum_t revision, void *replay_baton, const svn_d
 	if (!args)
 		return nullptr;
 
-	SvnReplayRevisionStartEventArgs^ a = gcnew SvnReplayRevisionStartEventArgs(revision, args->_deltaEditor, rev_props);
+	SvnReplayRevisionStartEventArgs^ a = gcnew SvnReplayRevisionStartEventArgs(revision, args->_deltaEditor, rev_props, %thePool);
 
 	try
 	{
@@ -94,7 +94,7 @@ sharpsvn_replay_rev_finish(svn_revnum_t revision, void *replay_baton, const svn_
 	if (!args)
 		return nullptr;
 	
-	SvnReplayRevisionEndEventArgs^ a = gcnew SvnReplayRevisionEndEventArgs(revision, rev_props);
+	SvnReplayRevisionEndEventArgs^ a = gcnew SvnReplayRevisionEndEventArgs(revision, rev_props, %thePool);
 
 	try
 	{

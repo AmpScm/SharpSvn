@@ -18,6 +18,7 @@
 
 namespace SharpSvn {
 
+	[System::Diagnostics::DebuggerDisplay("{Key}={StringValue}")]
 	public ref class SvnPropertyValue sealed
 	{
 		initonly String^ _key;

@@ -25,12 +25,17 @@ namespace SharpSvn {
 	{
 		initonly __int64 _revision;
 		Delta::SvnDeltaEditor^ _editor;
+		apr_hash_t* _revProps;
+		AprPool^ _pool;
+		SvnPropertyCollection^ _revisionProperties;
+
 	internal:
-		SvnReplayRevisionStartEventArgs(__int64 revision, Delta::SvnDeltaEditor^ editor, apr_hash_t* revprops)
+		SvnReplayRevisionStartEventArgs(__int64 revision, Delta::SvnDeltaEditor^ editor, apr_hash_t* revProps, AprPool^ pool)
 		{
-			UNUSED_ALWAYS(revprops);
 			_revision = revision;
 			_editor = editor;
+			_revProps = revProps;
+			_pool = pool;
 		}
 
 	public:
@@ -53,18 +58,50 @@ namespace SharpSvn {
 			}
 		}
 
-		// TODO: Add revision property support
+		property SvnPropertyCollection^ RevisionProperties
+        {
+            SvnPropertyCollection^ get()
+            {
+                if (!_revisionProperties && _revProps && _pool)
+                    _revisionProperties = SvnBase::CreatePropertyDictionary(_revProps, _pool);
+
+                return _revisionProperties;
+            }
+        }
+
+	protected public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if (keepProperties)
+				{
+					GC::KeepAlive(RevisionProperties);
+				}
+			}
+			finally
+			{
+				_revProps = nullptr;
+				_pool = nullptr;
+
+				__super::Detach(keepProperties);
+			}
+		}
 	};
 
 	public ref class SvnReplayRevisionEndEventArgs : public SvnCancelEventArgs
 	{
 		initonly __int64 _revision;
+		apr_hash_t* _revProps;
+		AprPool^ _pool;
+		SvnPropertyCollection^ _revisionProperties;
 	internal:
-		SvnReplayRevisionEndEventArgs(__int64 revision, apr_hash_t *revprops)
-		{
-			UNUSED_ALWAYS(revprops);
+		SvnReplayRevisionEndEventArgs(__int64 revision, apr_hash_t *revProps, AprPool^ pool)
+		{			
 			_revision = revision;
-		}
+			_revProps = revProps;
+			_pool = pool;
+		}		
 
 	public:
 		property __int64 Revision
@@ -72,6 +109,36 @@ namespace SharpSvn {
 			__int64 get()
 			{
 				return _revision;
+			}
+		}
+
+		property SvnPropertyCollection^ RevisionProperties
+        {
+            SvnPropertyCollection^ get()
+            {
+                if (!_revisionProperties && _revProps && _pool)
+                    _revisionProperties = SvnBase::CreatePropertyDictionary(_revProps, _pool);
+
+                return _revisionProperties;
+            }
+        }
+
+	protected public:
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if (keepProperties)
+				{
+					GC::KeepAlive(RevisionProperties);
+				}
+			}
+			finally
+			{
+				_revProps = nullptr;
+				_pool = nullptr;
+
+				__super::Detach(keepProperties);
 			}
 		}
 	};
