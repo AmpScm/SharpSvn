@@ -19,35 +19,47 @@
 namespace SharpSvn {
 	namespace Delta {
 
-		ref class SvnDeltaDirectoryNode;
+		ref class SvnDeltaEventArgs;
 
-		public ref class SvnDeltaNode abstract
+		public ref class SvnDeltaNode
 		{
-			initonly SvnDeltaDirectoryNode^ _parent;
-			initonly String^ _name;
+			initonly SvnDeltaNode^ _parent;
+			initonly String^ _path;
+			String^ _name;
 
-		private protected:
-			SvnDeltaNode(String^ name, SvnDeltaDirectoryNode^ parent)
+		public:
+			SvnDeltaNode(String^ path, SvnDeltaNode^ parent)
 			{
-				if (parent && !name)
-					throw gcnew ArgumentNullException("name");
+				if (parent && !path)
+					throw gcnew ArgumentNullException("path");
 
-				_name = name;
+				_path = path;
 				_parent = parent;
 			}
 
 		public:
+			property String^ Path
+			{
+				String^ get()
+				{
+					return _path;
+				}
+			}
+
 			property String^ Name
 			{
 				String^ get()
 				{
+					if (!_name)
+						_name = System::IO::Path::GetFileName(Path);
+
 					return _name;
 				}
 			}
 
-			property SvnDeltaDirectoryNode^ ParentDirectory
+			property SvnDeltaNode^ ParentDirectory
 			{
-				SvnDeltaDirectoryNode^ get()
+				SvnDeltaNode^ get()
 				{
 					return _parent;
 				}
@@ -56,28 +68,8 @@ namespace SharpSvn {
 		protected public:
 			virtual void OnClose(SvnDeltaEventArgs^ e)
 			{
-				GC::KeepAlive(e);
+				UNUSED_ALWAYS(e);
 			}
 		};
-
-		public ref class SvnDeltaDirectoryNode : SvnDeltaNode
-		{
-		public:
-			SvnDeltaDirectoryNode(String^ name, SvnDeltaDirectoryNode^ parent)
-				: SvnDeltaNode(name, parent)
-			{
-			}
-		};
-
-		public ref class SvnDeltaFileNode : SvnDeltaNode
-		{
-		public:
-			SvnDeltaFileNode(String^ name, SvnDeltaDirectoryNode^ parent)
-				: SvnDeltaNode(name, parent)
-			{
-			}
-		};
-
-
 	};
 };

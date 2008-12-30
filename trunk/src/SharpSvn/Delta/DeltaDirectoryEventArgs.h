@@ -3,25 +3,25 @@
 namespace SharpSvn {
 	namespace Delta
 	{
-		public ref class SvnDeltaDeleteEntryEventArgs : SvnDeltaEventArgs
+		public ref class SvnDeltaDeleteEntryEventArgs : SvnDeltaDirectoryItemEventArgs
 		{
-			initonly SvnDeltaDirectoryNode^ _parentDirectory;
-			initonly String^ _name;
+			initonly String^ _path;
 			initonly __int64 _revision;
 		internal:
-			SvnDeltaDeleteEntryEventArgs(SvnDeltaDirectoryNode^ parentDirectory, String^ name, __int64 revision)
+			SvnDeltaDeleteEntryEventArgs(SvnDeltaNode^ parentDirectory, String^ path, __int64 revision)
+				: SvnDeltaDirectoryItemEventArgs(parentDirectory)
 			{
-				_parentDirectory = parentDirectory;
-				_name = name;
+				_path = path;
 				_revision = revision;
 			}
 
 		public:
-			property SvnDeltaDirectoryNode^ ParentDirectory
+
+			property String^ Path
 			{
-				SvnDeltaDirectoryNode^ get()
+				String^ get()
 				{
-					return _parentDirectory;
+					return _path;
 				}
 			}
 
@@ -29,7 +29,7 @@ namespace SharpSvn {
 			{
 				String^ get()
 				{
-					return _name;
+					return System::IO::Path::GetFileName(Path);
 				}
 			}
 			
@@ -42,52 +42,13 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnDeltaDirectoryEventArgs : SvnDeltaEventArgs
-		{
-		internal:
-			initonly SvnDeltaDirectoryNode^ _directoryNode;
-		private protected:
-			SvnDeltaDirectoryEventArgs(SvnDeltaDirectoryNode^ directoryNode)
-			{
-				if (!directoryNode)
-					throw gcnew ArgumentNullException("directoryNode");
-
-				_directoryNode = directoryNode;
-			}
-
-		public:
-			property SvnDeltaDirectoryNode^ DirectoryNode
-			{
-				SvnDeltaDirectoryNode^ get()
-				{
-					return _directoryNode;
-				}
-			}
-
-			property String^ Name
-			{
-				String^ get()
-				{
-					return DirectoryNode->Name;
-				}
-			}
-
-			property SvnDeltaDirectoryNode^ ParentDirectory
-			{
-				SvnDeltaDirectoryNode^ get()
-				{
-					return DirectoryNode->ParentDirectory;
-				}
-			}
-		};
-
-		public ref class SvnDeltaDirectoryAddEventArgs : SvnDeltaDirectoryEventArgs
+		public ref class SvnDeltaDirectoryAddEventArgs : SvnDeltaNodeEventArgs
 		{
 			initonly String^ _copyFromPath;
 			initonly __int64 _copyFromRev;
 		internal:
-			SvnDeltaDirectoryAddEventArgs(SvnDeltaDirectoryNode^ directoryNode, String^ copy_from_path, __int64 copy_from_rev)
-				: SvnDeltaDirectoryEventArgs(directoryNode)
+			SvnDeltaDirectoryAddEventArgs(SvnDeltaNode^ directoryNode, String^ copy_from_path, __int64 copy_from_rev)
+				: SvnDeltaNodeEventArgs(directoryNode)
 			{
 				_copyFromPath = copy_from_path;
 				_copyFromRev = copy_from_rev;
@@ -111,12 +72,12 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnDeltaDirectoryOpenEventArgs : SvnDeltaDirectoryEventArgs
+		public ref class SvnDeltaDirectoryOpenEventArgs : SvnDeltaNodeEventArgs
 		{
 			initonly __int64 _baseRevision;
 		internal:
-			SvnDeltaDirectoryOpenEventArgs(SvnDeltaDirectoryNode^ directoryNode, __int64 baseRevision)
-				: SvnDeltaDirectoryEventArgs(directoryNode)
+			SvnDeltaDirectoryOpenEventArgs(SvnDeltaNode^ directoryNode, __int64 baseRevision)
+				: SvnDeltaNodeEventArgs(directoryNode)
 			{
 				_baseRevision = baseRevision;
 			}
@@ -131,73 +92,31 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnDeltaDirectoryPropertyChangeEventArgs : SvnDeltaDirectoryEventArgs
+		public ref class SvnDeltaDirectoryPropertyChangeEventArgs : SvnDeltaNodeEventArgs
 		{
 		internal:
-			SvnDeltaDirectoryPropertyChangeEventArgs(SvnDeltaDirectoryNode^ directoryNode, const char* name, const svn_string_t* value)
-				: SvnDeltaDirectoryEventArgs(directoryNode)
+			SvnDeltaDirectoryPropertyChangeEventArgs(SvnDeltaNode^ directoryNode, const char* name, const svn_string_t* value)
+				: SvnDeltaNodeEventArgs(directoryNode)
 			{
 				UNUSED_ALWAYS(name);
 				UNUSED_ALWAYS(value);
 			}
 		};
 
-		public ref class SvnDeltaDirectoryAbsentEventArgs : SvnDeltaEventArgs
+		public ref class SvnDeltaDirectoryAbsentEventArgs : SvnDeltaNodeEventArgs
 		{
-			initonly SvnDeltaDirectoryNode^ _parentDirectory;
-			String^ _name;
-
-			const char* _pName;
 		internal:
-			SvnDeltaDirectoryAbsentEventArgs(SvnDeltaDirectoryNode^ parentDirectory, const char* name)
+			SvnDeltaDirectoryAbsentEventArgs(SvnDeltaNode^ directoryNode)
+				: SvnDeltaNodeEventArgs(directoryNode)
 			{
-				_parentDirectory = parentDirectory;
-				_pName = name;
 			}
-
-		public:
-			property SvnDeltaDirectoryNode^ ParentDirectory
-			{
-				SvnDeltaDirectoryNode^ get()
-				{
-					return _parentDirectory;
-				}
-			}
-
-			property String^ Name
-			{
-				String^ get()
-				{
-					if (!_name && _pName)
-						_name = SvnBase::Utf8_PtrToString(_pName);
-
-					return _name;
-				}
-			}
-
-		internal:
-			virtual void Detach(bool keepProperties) override
-			{
-				try
-				{
-					if (keepProperties)
-					{
-						GC::KeepAlive(Name);
-					}
-				}
-				finally
-				{
-					_pName = nullptr;
-					__super::Detach(keepProperties);
-				}
-			}			
 		};
 
-		public ref class SvnDeltaDirectoryCloseEventArgs : SvnDeltaDirectoryEventArgs
+		public ref class SvnDeltaDirectoryCloseEventArgs : SvnDeltaNodeEventArgs
 		{
 		internal:
-			SvnDeltaDirectoryCloseEventArgs(SvnDeltaDirectoryNode^ directoryNode)
-				: SvnDeltaDirectoryEventArgs(directoryNode)
+			SvnDeltaDirectoryCloseEventArgs(SvnDeltaNode^ directoryNode)
+				: SvnDeltaNodeEventArgs(directoryNode)
 			{
 			}
 		};

@@ -3,51 +3,13 @@
 namespace SharpSvn {
 	namespace Delta
 	{
-		public ref class SvnDeltaFileEventArgs abstract : SvnDeltaEventArgs
-		{
-			initonly SvnDeltaFileNode^ _fileNode;
-		private protected:
-			SvnDeltaFileEventArgs(SvnDeltaFileNode^ fileNode)
-			{
-				if (!fileNode)
-					throw gcnew ArgumentNullException("fileNode");
-
-				_fileNode = fileNode;
-			}
-
-		public:
-			property SvnDeltaFileNode^ FileNode
-			{
-				SvnDeltaFileNode^ get()
-				{
-					return _fileNode;
-				}
-			}
-
-			property String^ Name
-			{
-				String^ get()
-				{
-					return FileNode->Name;
-				}
-			}
-
-			property SvnDeltaDirectoryNode^ ParentDirectory
-			{
-				SvnDeltaDirectoryNode^ get()
-				{
-					return FileNode->ParentDirectory;
-				}
-			}
-		};
-
-		public ref class SvnDeltaFileAddEventArgs : SvnDeltaFileEventArgs
+		public ref class SvnDeltaFileAddEventArgs : SvnDeltaNodeEventArgs
 		{
 			initonly String^ _copyFromPath;
 			initonly __int64 _copyFromRev;
 		internal:
-			SvnDeltaFileAddEventArgs(SvnDeltaFileNode^ fileNode, String^ copy_from_path, __int64 copy_from_rev)
-				: SvnDeltaFileEventArgs(fileNode)
+			SvnDeltaFileAddEventArgs(SvnDeltaNode^ fileNode, String^ copy_from_path, __int64 copy_from_rev)
+				: SvnDeltaNodeEventArgs(fileNode)
 			{
 				_copyFromPath = copy_from_path;
 				_copyFromRev = copy_from_rev;
@@ -71,12 +33,12 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnDeltaFileOpenEventArgs : SvnDeltaFileEventArgs
+		public ref class SvnDeltaFileOpenEventArgs : SvnDeltaNodeEventArgs
 		{
 			initonly __int64 _baseRevision;
 		internal:
-			SvnDeltaFileOpenEventArgs(SvnDeltaFileNode^ fileNode, __int64 baseRevision)
-				: SvnDeltaFileEventArgs(fileNode)
+			SvnDeltaFileOpenEventArgs(SvnDeltaNode^ fileNode, __int64 baseRevision)
+				: SvnDeltaNodeEventArgs(fileNode)
 			{
 				_baseRevision = baseRevision;
 			}
@@ -91,83 +53,41 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnDeltaFilePropertyChangeEventArgs : SvnDeltaFileEventArgs
+		public ref class SvnDeltaFilePropertyChangeEventArgs : SvnDeltaNodeEventArgs
 		{
 		internal:
-			SvnDeltaFilePropertyChangeEventArgs(SvnDeltaFileNode^ fileNode, const char* name, const svn_string_t* value)
-				: SvnDeltaFileEventArgs(fileNode)
+			SvnDeltaFilePropertyChangeEventArgs(SvnDeltaNode^ fileNode, const char* name, const svn_string_t* value)
+				: SvnDeltaNodeEventArgs(fileNode)
 			{
 				UNUSED_ALWAYS(name);
 				UNUSED_ALWAYS(value);
 			}
 		};
 
-		public ref class SvnDeltaFileAbsentEventArgs : SvnDeltaEventArgs
+		public ref class SvnDeltaFileAbsentEventArgs : SvnDeltaNodeEventArgs
 		{
-			initonly SvnDeltaDirectoryNode^ _parentDirectory;
-			String^ _name;
-
-			const char* _pName;
 		internal:
-			SvnDeltaFileAbsentEventArgs(SvnDeltaDirectoryNode^ parentDirectory, const char* name)
+			SvnDeltaFileAbsentEventArgs(SvnDeltaNode^ fileNode)
+				: SvnDeltaNodeEventArgs(fileNode)
 			{
-				_parentDirectory = parentDirectory;
-				_pName = name;
 			}
-
-		public:
-			property SvnDeltaDirectoryNode^ ParentDirectory
-			{
-				SvnDeltaDirectoryNode^ get()
-				{
-					return _parentDirectory;
-				}
-			}
-
-			property String^ Name
-			{
-				String^ get()
-				{
-					if (!_name && _pName)
-						_name = SvnBase::Utf8_PtrToString(_pName);
-
-					return _name;
-				}
-			}
-
-		internal:
-			virtual void Detach(bool keepProperties) override
-			{
-				try
-				{
-					if (keepProperties)
-					{
-						GC::KeepAlive(Name);
-					}
-				}
-				finally
-				{
-					_pName = nullptr;
-					__super::Detach(keepProperties);
-				}
-			}	
 		};
 
-		public ref class SvnDeltaFileCloseEventArgs : SvnDeltaFileEventArgs
+		public ref class SvnDeltaFileCloseEventArgs : SvnDeltaNodeEventArgs
 		{
 		internal:
-			SvnDeltaFileCloseEventArgs(SvnDeltaFileNode^ fileNode, const char* checksum)
-				: SvnDeltaFileEventArgs(fileNode)
+			SvnDeltaFileCloseEventArgs(SvnDeltaNode^ fileNode, const char* checksum)
+				: SvnDeltaNodeEventArgs(fileNode)
 			{
 				UNUSED_ALWAYS(checksum);
 			}
 		};
 
-		public ref class SvnDeltaBeforeFileDeltaEventArgs : SvnDeltaFileEventArgs
+		public ref class SvnDeltaBeforeFileDeltaEventArgs : SvnDeltaNodeEventArgs
 		{
 		internal:
-			SvnDeltaBeforeFileDeltaEventArgs(SvnDeltaFileNode^ fileNode, const char* base_checksum)
-				: SvnDeltaFileEventArgs(fileNode)
+			SvnDeltaBeforeFileDeltaEventArgs(SvnDeltaNode^ fileNode, const char* base_checksum)
+				: SvnDeltaNodeEventArgs(fileNode)
 			{
 				UNUSED_ALWAYS(base_checksum);
 			}

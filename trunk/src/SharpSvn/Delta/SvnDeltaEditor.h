@@ -16,8 +16,12 @@
 
 #pragma once
 
+#include "SvnDeltaNode.h"
+
 namespace SharpSvn {
 	namespace Delta {
+
+		ref class SvnDeltaNode;
 
 		public ref class SvnDeltaEventArgs abstract : EventArgs
 		{	
@@ -47,10 +51,67 @@ namespace SharpSvn {
 				Detach(true);
 			}
 		};
+
+		public ref class SvnDeltaDirectoryItemEventArgs abstract : SvnDeltaEventArgs
+		{
+			initonly SvnDeltaNode^ _parentNode;
+
+		internal:
+			SvnDeltaDirectoryItemEventArgs(SvnDeltaNode^ parentNode)
+			{
+				_parentNode = parentNode;
+			}
+
+		public:
+			property SvnDeltaNode^ ParentDirectoryNode
+			{
+				SvnDeltaNode^ get()
+				{
+					return _parentNode;
+				}
+			}
+		};
+
+		public ref class SvnDeltaNodeEventArgs abstract : SvnDeltaDirectoryItemEventArgs
+		{
+			initonly SvnDeltaNode^ _node;
+
+		internal:
+			SvnDeltaNodeEventArgs(SvnDeltaNode^ node)
+				: SvnDeltaDirectoryItemEventArgs(node ? node->ParentDirectory : nullptr)
+			{
+				_node = node;
+			}
+
+		public:
+			property SvnDeltaNode^ Node
+			{
+				SvnDeltaNode^ get()
+				{
+					return _node;
+				}
+			}
+
+		public:
+			property String^ Path
+			{
+				String^ get()
+				{
+					return Node->Path;
+				}
+			}
+
+			property String^ Name
+			{
+				String^ get()
+				{
+					return Node->Name;
+				}
+			}
+		};
 	};
 };
 
-#include "SvnDeltaNode.h"
 #include "DeltaGlobalEventArgs.h"
 #include "DeltaDirectoryEventArgs.h"
 #include "DeltaFileEventArgs.h"
@@ -120,7 +181,7 @@ namespace SharpSvn {
 			{
 				DirectoryClose(this, e);
 
-				e->DirectoryNode->OnClose(e);
+				e->Node->OnClose(e);
 			}
 			
 			event EventHandler<SvnDeltaDirectoryAbsentEventArgs^>^ DirectoryAbsent;
@@ -164,7 +225,7 @@ namespace SharpSvn {
 			{
 				FileClose(this, e);
 
-				e->FileNode->OnClose(e);
+				e->Node->OnClose(e);
 			}
 
 			event EventHandler<SvnDeltaFileAbsentEventArgs^>^ FileAbsent;
@@ -189,10 +250,10 @@ namespace SharpSvn {
 			}
 
 		protected public:
-			/// <summary>Factory function to creates a new SvnDeltaDirectoryNode instance</summary>
-			virtual SvnDeltaDirectoryNode^ CreateDirectoryNode(SvnDeltaDirectoryNode^ parent, String^ name);
-			/// <summary>Factory function to create a new SvnDeltaFileNode instance</summary>
-			virtual SvnDeltaFileNode^ CreateFileNode(SvnDeltaDirectoryNode^ parent, String^ name);
+			/// <summary>Factory function to creates a new SvnDeltaNode instance for the specified directory</summary>
+			virtual SvnDeltaNode^ CreateDirectoryNode(SvnDeltaNode^ parent, String^ path);
+			/// <summary>Factory function to create a new SvnDeltaNode instance for the specified file</summary>
+			virtual SvnDeltaNode^ CreateFileNode(SvnDeltaNode^ parent, String^ path);
 
 		internal:
 			svn_delta_editor_t* AllocEditor(void** baton, AprPool^ pool);

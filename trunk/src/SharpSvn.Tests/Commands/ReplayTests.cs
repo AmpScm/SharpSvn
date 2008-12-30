@@ -8,16 +8,6 @@ namespace SharpSvn.Tests.Commands
 {
     class MyEditor : SvnDeltaEditor
     {
-        protected override SvnDeltaDirectoryNode CreateDirectoryNode(SvnDeltaDirectoryNode parent, string name)
-        {
-            return base.CreateDirectoryNode(parent, name);
-        }
-
-        protected override SvnDeltaFileNode CreateFileNode(SvnDeltaDirectoryNode parent, string name)
-        {
-            return base.CreateFileNode(parent, name);
-        }
-
         public override void OnOpen(SvnDeltaOpenEventArgs e)
         {
             base.OnOpen(e);
@@ -83,6 +73,14 @@ namespace SharpSvn.Tests.Commands
             MyEditor edit = new MyEditor();
             SvnReplayArgs ra = new SvnReplayArgs();
             Client.Replay(CollabReposUri, new SvnRevisionRange(0, 10), edit, ra);
+        }
+
+        [Test]
+        public void ReplayCollabTrunk()
+        {
+            MyEditor edit = new MyEditor();
+            SvnReplayArgs ra = new SvnReplayArgs();
+            Client.Replay(new Uri(CollabReposUri, "trunk/"), new SvnRevisionRange(0, 10), edit, ra);
         }
     }
 }
