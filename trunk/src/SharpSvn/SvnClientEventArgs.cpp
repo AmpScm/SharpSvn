@@ -124,25 +124,3 @@ SvnMergeRange^ SvnNotifyEventArgs::MergeRange::get()
 
 	return _mergeRange;
 }
-
-SvnPropertyCollection^ SvnLogEventArgs::CustomProperties::get()
-{
-	if (!_customProperties && _entry && _entry->revprops)
-	{
-		_customProperties = gcnew SvnPropertyCollection();
-
-		for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->revprops); hi; hi = apr_hash_next(hi))
-		{
-			const char* pKey;
-			apr_ssize_t keyLen;
-			svn_string_t *pValue;
-
-			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pValue);
-
-			SvnPropertyValue^ pv = SvnPropertyValue::Create(pKey, pValue, nullptr);
-
-			_customProperties->Add(pv);
-		}
-	}
-	return _customProperties;
-}
