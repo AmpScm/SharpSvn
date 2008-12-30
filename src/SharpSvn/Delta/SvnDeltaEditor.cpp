@@ -37,10 +37,10 @@ struct directory_baton
 	directory_baton* _firstDir;
 
 	directory_baton* _nextDir;
-	gcroot<SvnDeltaDirectoryNode^> _node;
+	gcroot<SvnDeltaNode^> _node;
 
 public:
-	directory_baton(root_baton* root, directory_baton* parent_dir, SvnDeltaDirectoryNode^ dir)
+	directory_baton(root_baton* root, directory_baton* parent_dir, SvnDeltaNode^ dir)
 	{
 		if (!root)
 			throw gcnew ArgumentNullException("root");
@@ -74,10 +74,10 @@ struct file_baton
 	directory_baton* _parentDir;
 
 	file_baton* _nextFile;
-	gcroot<SvnDeltaFileNode^> _node;
+	gcroot<SvnDeltaNode^> _node;
 
 public:
-	file_baton(root_baton* root, directory_baton* parent_dir, SvnDeltaFileNode^ file)
+	file_baton(root_baton* root, directory_baton* parent_dir, SvnDeltaNode^ file)
 	{
 		if (!root)
 			throw gcnew ArgumentNullException("root");
@@ -184,7 +184,7 @@ sharpsvn_wrap_open_root(void *edit_baton, svn_revnum_t base_revision, apr_pool_t
 	UNUSED_ALWAYS(dir_pool);
 	base_baton* bt = (base_baton*)edit_baton;
 	root_baton* root = bt->root;
-	SvnDeltaDirectoryNode^ dirNode;
+	SvnDeltaNode^ dirNode;
 
 	try
 	{
@@ -217,7 +217,7 @@ static svn_error_t* __cdecl
 sharpsvn_wrap_delete_entry(const char *path, svn_revnum_t revision, void *parent_baton, apr_pool_t *pool)
 {
 	UNUSED_ALWAYS(pool);
-	directory_baton* bt = (directory_baton*)parent_baton;	
+	directory_baton* bt = (directory_baton*)parent_baton;
 
 	SvnDeltaDeleteEntryEventArgs^ args = gcnew SvnDeltaDeleteEntryEventArgs(bt->_node, SvnBase::Utf8_PtrToString(path), revision);
 	try
@@ -244,7 +244,7 @@ sharpsvn_wrap_add_directory(const char *path, void *parent_baton, const char *co
 	directory_baton* parent = (directory_baton*)parent_baton;
 	directory_baton* child = nullptr;
 
-	SvnDeltaDirectoryNode^ dirNode;
+	SvnDeltaNode^ dirNode;
 	SvnDeltaEditor^ editor = parent->_root->_editor;
 
 	try
@@ -286,7 +286,7 @@ sharpsvn_wrap_open_directory(const char *path, void *parent_baton, svn_revnum_t 
 	directory_baton* parent = (directory_baton*)parent_baton;
 	directory_baton* child = nullptr;
 
-	SvnDeltaDirectoryNode^ dirNode;
+	SvnDeltaNode^ dirNode;
 	SvnDeltaEditor^ editor = parent->_root->_editor;
 
 	try
@@ -380,10 +380,13 @@ sharpsvn_wrap_absent_directory(const char *path, void *parent_baton, apr_pool_t 
 	UNUSED_ALWAYS(pool);
 	directory_baton* dir = (directory_baton*)parent_baton;
 	SvnDeltaEditor^ editor = dir->_root->_editor;
-
-	SvnDeltaDirectoryAbsentEventArgs^ args = gcnew SvnDeltaDirectoryAbsentEventArgs(dir->_node, path);
+	
+	SvnDeltaDirectoryAbsentEventArgs^ args = nullptr;
 	try
 	{
+		args = gcnew SvnDeltaDirectoryAbsentEventArgs(
+			editor->CreateDirectoryNode(dir->_node, SvnBase::Utf8_PtrToString(path)));
+
 		editor->OnDirectoryAbsent(args);
 
 		return nullptr;
@@ -394,7 +397,8 @@ sharpsvn_wrap_absent_directory(const char *path, void *parent_baton, apr_pool_t 
 	}
 	finally
 	{
-		args->Detach(false);
+		if (args)
+			args->Detach(false);
 
 		delete dir;
 	}
@@ -408,7 +412,7 @@ sharpsvn_wrap_add_file(const char *path, void *parent_baton, const char *copyfro
 	directory_baton* dir = (directory_baton*)parent_baton;
 	SvnDeltaEditor^ editor = dir->_root->_editor;
 
-	SvnDeltaFileNode^ fileNode;
+	SvnDeltaNode^ fileNode;
 	file_baton* child;
 
 	try
@@ -450,7 +454,7 @@ sharpsvn_wrap_open_file(const char *path, void *parent_baton, svn_revnum_t base_
 	directory_baton* dir = (directory_baton*)parent_baton;
 	SvnDeltaEditor^ editor = dir->_root->_editor;
 
-	SvnDeltaFileNode^ fileNode;
+	SvnDeltaNode^ fileNode;
 	file_baton* child;
 
 	try
@@ -575,10 +579,13 @@ sharpsvn_wrap_absent_file(const char *path, void *parent_baton, apr_pool_t *pool
 	UNUSED_ALWAYS(pool);
 	directory_baton* dir = (directory_baton*)parent_baton;
 	SvnDeltaEditor^ editor = dir->_root->_editor;
-
-	SvnDeltaFileAbsentEventArgs^ args = gcnew SvnDeltaFileAbsentEventArgs(dir->_node, path);
+	
+	SvnDeltaFileAbsentEventArgs^ args = nullptr;
 	try
 	{
+		 args = gcnew SvnDeltaFileAbsentEventArgs(
+			 editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path)));
+
 		editor->OnFileAbsent(args);
 
 		return nullptr;
@@ -693,12 +700,12 @@ svn_delta_editor_t* SvnDeltaEditor::AllocEditor(void** baton, AprPool^ pool)
 	return editor;
 }
 
-SvnDeltaDirectoryNode^ SvnDeltaEditor::CreateDirectoryNode(SvnDeltaDirectoryNode^ parent, String^ name)
+SvnDeltaNode^ SvnDeltaEditor::CreateDirectoryNode(SvnDeltaNode^ parent, String^ name)
 {
-	return gcnew SvnDeltaDirectoryNode(name, parent);
+	return gcnew SvnDeltaNode(name, parent);
 }
 
-SvnDeltaFileNode^ SvnDeltaEditor::CreateFileNode(SvnDeltaDirectoryNode^ parent, String^ name)
+SvnDeltaNode^ SvnDeltaEditor::CreateFileNode(SvnDeltaNode^ parent, String^ name)
 {
-	return gcnew SvnDeltaFileNode(name, parent);
+	return gcnew SvnDeltaNode(name, parent);
 }
