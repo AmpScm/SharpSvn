@@ -43,6 +43,8 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets the maximum version the client knows about. Deltas will be
+		/// based on this version</summary>
 		property SvnRevision^ LowWaterMarkRevision
 		{
 			SvnRevision^ get()
@@ -55,6 +57,9 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets or sets a boolean indicating whether to retrieve real property 
+		/// and content changes. If set to false only marker changes are sent. (Changes on "" 
+		/// property and empty file deltas</summary>
 		property bool RetrieveContent
 		{
 			bool get()

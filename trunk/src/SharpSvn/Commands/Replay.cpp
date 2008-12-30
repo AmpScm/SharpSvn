@@ -135,7 +135,6 @@ bool SvnClient::Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDel
 		svn_ra_session_t* ra_session = nullptr;
 		const char* pTarget = pool.AllocString(target->SvnTargetName);
 		const char* pUrl = nullptr;
-		const char* repos_root = nullptr;
 		svn_revnum_t end_rev = 0;
 		svn_revnum_t start_rev = 0;
 		svn_revnum_t watermark_rev = 0;
@@ -186,11 +185,14 @@ bool SvnClient::Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDel
 		if (r)
 			return args->HandleResult(this, r);
 
-		
-		r = svn_ra_get_repos_root2(ra_session, &repos_root, pool.Handle);
+		if (start_rev == 0 && end_rev > start_rev)
+		{
+			// Replaying revision 0 (which contains nothing per definition)
+			// Breaks the watermark handling in subversion. This is currently
+			// only visible with RetrieveContent set
 
-		if (r)
-			return args->HandleResult(this, r);
+			start_rev = 1; 
+		}
 
 		args->_deltaEditor = editor;
 
