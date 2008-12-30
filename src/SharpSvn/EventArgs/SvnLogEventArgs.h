@@ -180,9 +180,25 @@ namespace SharpSvn {
 
 		/// <summary>Gets the list of custom properties retrieved with the log</summary>
 		/// <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
+		property SvnPropertyCollection^ RevisionProperties
+		{
+			SvnPropertyCollection^ get()
+			{
+				if (!_customProperties && _entry && _entry->revprops && _pool)
+				{
+					_customProperties = SvnBase::CreatePropertyDictionary(_entry->revprops, _pool);
+				}
+				return _customProperties;
+			}
+		}
+
+		[Obsolete("Use .RevisionProperties")]
 		property SvnPropertyCollection^ CustomProperties
 		{
-			SvnPropertyCollection^ get();
+			SvnPropertyCollection^ get()
+			{
+				return RevisionProperties;
+			}
 		}
 
 		property __int64 Revision
@@ -249,7 +265,7 @@ namespace SharpSvn {
 					GC::KeepAlive(ChangedPaths);
 					GC::KeepAlive(Author);
 					GC::KeepAlive(LogMessage);
-					GC::KeepAlive(CustomProperties);
+					GC::KeepAlive(RevisionProperties);
 				}
 			}
 			finally
