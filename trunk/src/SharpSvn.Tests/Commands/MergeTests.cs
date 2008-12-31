@@ -131,5 +131,14 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(applied.Target, Is.Not.Null);
             }
         }
+
+        [Test]
+        public void DiffMergeTest()
+        {
+            string wc = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk/"), wc);
+
+            Client.DiffMerge(Path.Combine(wc, "index.html"), new Uri(CollabReposUri, "trunk/index.html"), new Uri(CollabReposUri, "trunk/index.html"));
+        }
 	}
 }
