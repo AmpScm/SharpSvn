@@ -406,6 +406,13 @@ namespace SharpSvn {
 		CommitRevisionProperties
 	};
 
+	public enum class SvnPropertyKind
+	{
+		Entry=0,
+		SvnInternal,
+		Regular
+	};
+
 	namespace Implementation
 	{
 
