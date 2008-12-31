@@ -3,6 +3,7 @@
     <references>
       <lib>
         <include name="${nant::get-base-directory() + '/lib'}" asis="true" />
+        <include name="${nant::get-base-directory() + '/lib/common/neutral'}" asis="true" />
       </lib>
       <include name="ICSharpCode.SharpZipLib.dll"/>
     </references>
