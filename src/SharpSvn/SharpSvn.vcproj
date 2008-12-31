@@ -1005,6 +1005,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\Replay.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Resolve.cpp"
 					>
 				</File>
@@ -1046,6 +1050,10 @@
 				</File>
 				<File
 					RelativePath=".\Commands\Write.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\WriteRelated.cpp"
 					>
 				</File>
 			</Filter>
@@ -1122,6 +1130,10 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnReplayEventArgs.h"
 					>
 				</File>
 				<File
@@ -1265,6 +1277,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Args\Replay.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Args\Resolve.h"
 					>
 				</File>
@@ -1302,6 +1318,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\Write.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\WriteRelated.h"
 					>
 				</File>
 			</Filter>
@@ -1490,6 +1510,38 @@
 				>
 				<File
 					RelativePath=".\EventArgs\SvnWorkingCopyEntryEventArgs.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="SvnDeltaEditor"
+			>
+			<File
+				RelativePath=".\Delta\SvnDeltaEditor.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\Delta\SvnDeltaEditor.h"
+				>
+			</File>
+			<Filter
+				Name="EventArgs"
+				>
+				<File
+					RelativePath=".\Delta\DeltaDirectoryEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\DeltaFileEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\DeltaGlobalEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\SvnDeltaNode.h"
 					>
 				</File>
 			</Filter>
