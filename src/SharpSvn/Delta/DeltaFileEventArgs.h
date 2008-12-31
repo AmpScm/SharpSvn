@@ -59,6 +59,7 @@ namespace SharpSvn {
 			const svn_string_t *_pValue;
 			String^ _name;
 			SvnPropertyValue^ _value;
+			initonly SvnPropertyKind _propKind;
 
 		internal:
 			SvnDeltaFilePropertyChangeEventArgs(SvnDeltaNode^ fileNode, const char* name, const svn_string_t* value)
@@ -69,6 +70,9 @@ namespace SharpSvn {
 				// value = null  -> Property delete
 				_pName = name;
 				_pValue = value;
+
+				if(name && *name)
+					_propKind = (SvnPropertyKind)svn_property_kind(nullptr, name);
 			}
 
 		public:
@@ -91,6 +95,14 @@ namespace SharpSvn {
 						_name = SvnBase::Utf8_PtrToString(_pName);
 
 					return _name;
+				}
+			}
+
+			property SvnPropertyKind PropertyKind
+			{
+				SvnPropertyKind get()
+				{
+					return _propKind;
 				}
 			}
 
