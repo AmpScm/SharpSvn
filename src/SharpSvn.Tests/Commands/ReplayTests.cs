@@ -91,27 +91,27 @@ namespace SharpSvn.Tests.Commands
         public void ReplayCollab()
         {            
             MyEditor edit = new MyEditor(true);
-            SvnReplayArgs ra = new SvnReplayArgs();
+            SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             ra.RetrieveContent = true;
-            Client.Replay(CollabReposUri, new SvnRevisionRange(0, 10), edit, ra);
+            Client.ReplayRevisions(CollabReposUri, new SvnRevisionRange(0, 10), edit, ra);
         }
 
         [Test]
         public void ReplayCollabTrunk()
         {
             MyEditor edit = new MyEditor(false);
-            SvnReplayArgs ra = new SvnReplayArgs();
-            Client.Replay(new Uri(CollabReposUri, "trunk/"), new SvnRevisionRange(0, 10), edit, ra);
+            SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
+            Client.ReplayRevisions(new Uri(CollabReposUri, "trunk/"), new SvnRevisionRange(0, 10), edit, ra);
         }
 
         [Test]
         public void ReplaySingleRev()
         {
             MyEditor edit = new MyEditor(false);
-            SvnReplayArgs ra = new SvnReplayArgs();
+            SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             ra.RevisionStart += new EventHandler<SvnReplayRevisionStartEventArgs>(ra_RevisionStart);
             ra.RevisionEnd += new EventHandler<SvnReplayRevisionEndEventArgs>(ra_RevisionEnd);
-            Client.Replay(CollabReposUri, new SvnRevisionRange(10, 10), edit, ra);
+            Client.ReplayRevisions(CollabReposUri, new SvnRevisionRange(10, 10), edit, ra);
         }
 
         void ra_RevisionEnd(object sender, SvnReplayRevisionEndEventArgs e)
