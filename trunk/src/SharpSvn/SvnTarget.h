@@ -187,6 +187,17 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets a boolean whether the revision specifies an explicit repository revision</summary>
+		/// <remarks>Explicit: Is set, doesn't require a workingcopy and is repository wide applyable</remarks>
+		property bool IsExplicit
+		{
+			bool get()
+			{				
+				return (RevisionType != SvnRevisionType::None) && 
+					!RequiresWorkingCopy;
+			}
+		}
+
 		static bool operator == (SvnRevision^ rev1, SvnRevision^ rev2)
 		{
 			if (!rev1)

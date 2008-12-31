@@ -34,14 +34,19 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
+	if (!mergeFrom->Revision->IsExplicit && !dynamic_cast<SvnUriTarget^>(mergeFrom))
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeFrom");
+	else if (!mergeTo->Revision->IsExplicit && !dynamic_cast<SvnUriTarget^>(mergeTo))
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeTo");
+
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
 	apr_array_header_t *merge_options = nullptr;
 
-	svn_opt_revision_t mergeFromRev = mergeFrom->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->ToSvnRevision();
-	svn_opt_revision_t mergeToRev = mergeTo->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->ToSvnRevision();
+	svn_opt_revision_t mergeFromRev = mergeFrom->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
+	svn_opt_revision_t mergeToRev = mergeTo->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 
 	svn_error_t *r = svn_client_merge3(
 		pool.AllocString(mergeFrom->SvnTargetName),

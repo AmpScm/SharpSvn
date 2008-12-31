@@ -285,4 +285,7 @@
   <data name="RevisionMustBeGreaterThanOrEqualToZero" xml:space="preserve">
     <value>Revision must be &gt;= 0</value>
   </data>
+  <data name="TargetMustContainExplicitRevision" xml:space="preserve">
+    <value>The passed target must contain an explicit revision</value>
+  </data>
 </root>
