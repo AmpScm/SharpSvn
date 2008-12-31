@@ -406,6 +406,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The passed target must contain an explicit revision.
+        /// </summary>
+        internal: static property System::String^  TargetMustContainExplicitRevision {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The specified target is not a valid Path target.
         /// </summary>
         internal: static property System::String^  TheTargetIsNotAValidPathTarget {
@@ -665,6 +672,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::SvnClientOperationInProgress::get() {
         return ResourceManager->GetString(L"SvnClientOperationInProgress", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::TargetMustContainExplicitRevision::get() {
+        return ResourceManager->GetString(L"TargetMustContainExplicitRevision", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::TheTargetIsNotAValidPathTarget::get() {

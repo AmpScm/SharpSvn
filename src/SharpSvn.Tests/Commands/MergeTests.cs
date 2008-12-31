@@ -140,5 +140,16 @@ namespace SharpSvn.Tests.Commands
 
             Client.DiffMerge(Path.Combine(wc, "index.html"), new Uri(CollabReposUri, "trunk/index.html"), new Uri(CollabReposUri, "trunk/index.html"));
         }
+
+        [Test, ExpectedException(typeof(ArgumentException), MatchType=MessageMatch.Contains, ExpectedMessage="explicit revision")]
+        public void DiffMergeLocalTest()
+        {
+            string wc = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk/"), wc);
+
+            string path = Path.Combine(wc, "index.html");
+
+            Client.DiffMerge(path, path, path);
+        }
 	}
 }
