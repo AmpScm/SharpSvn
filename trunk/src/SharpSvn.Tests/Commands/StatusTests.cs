@@ -375,7 +375,7 @@ namespace SharpSvn.Tests.Commands
                                 break;
                             case 2:
                                 Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Normal));
-                                Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.Normal));
+                                Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
                                 break;
                             case 3:
                                 Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Normal));
@@ -457,7 +457,11 @@ namespace SharpSvn.Tests.Commands
                         /*if(a.ContactRepository)
                             Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(reposGuid));
                         else*/
-                        Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(Guid.Empty));
+
+                        if(nn == 1 || nn == 2 || nn == 3 || nn == 5 || nn == 6)
+                            Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.EqualTo(Guid.Empty), "Expected set guid for {0} / nn={1}", e.Path, nn);
+                        else if (nn >= 0)
+                            Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(Guid.Empty), "Expected empty guid for {0} / nn={1}", e.Path, nn);
 
                         Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
                         Assert.That(e.WorkingCopyInfo.IsDeleted, Is.False);
@@ -484,8 +488,8 @@ namespace SharpSvn.Tests.Commands
                         }
 
                         Assert.That(e.WorkingCopyInfo.Depth, Is.EqualTo(SvnDepth.Infinity));
-                        Assert.That(e.WorkingCopyInfo.HasProperties, Is.EqualTo(nn >= 0));
-                        Assert.That(e.WorkingCopyInfo.HasPropertyChanges, Is.EqualTo((nn == 1) || (nn == 4)));
+                        Assert.That(e.WorkingCopyInfo.HasProperties, Is.EqualTo(nn >= 0 && nn != 2));
+                        Assert.That(e.WorkingCopyInfo.HasPropertyChanges, Is.EqualTo(nn == 1), "Expected property changes (nn={0})", nn);
                         Assert.That(e.WorkingCopyInfo.KeepLocal, Is.False);
 
                         if (nn == 4)

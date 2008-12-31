@@ -81,9 +81,9 @@ namespace SharpSvn.Tests.Commands
                 SvnAppliedMergeInfo applied;
                 client.GetAppliedMergeInfo(new SvnPathTarget(merge2), out applied);
 
-                Assert.That(applied, Is.Not.Null);
-                Assert.That(applied.AppliedMerges.Count, Is.EqualTo(0));
-                Assert.That(applied.Target, Is.Not.Null);
+                Assert.That(applied, Is.Null);
+                //Assert.That(applied.AppliedMerges.Count, Is.EqualTo(0));
+                //Assert.That(applied.Target, Is.Not.Null);
 
                 Collection<SvnMergesEligibleEventArgs> available;
                 client.GetMergesEligible(new SvnPathTarget(merge2), fromUri, out available);

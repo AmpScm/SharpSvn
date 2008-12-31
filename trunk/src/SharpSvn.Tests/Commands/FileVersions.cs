@@ -123,7 +123,7 @@ namespace SharpSvn.Tests.Commands
                             if (i == 5)
                             {
                                 Assert.That(e.RevisionProperties.Contains("extra"), "Contains extra property");
-                                Assert.That(e.Properties.Contains(SvnPropertyNames.SvnMergeInfo), Is.True, "Contains merge info in revision 5");
+                                //Assert.That(e.Properties.Contains(SvnPropertyNames.SvnMergeInfo), Is.True, "Contains merge info in revision 5");
                             }
                             else
                                 Assert.That(e.Properties.Contains(SvnPropertyNames.SvnMergeInfo), Is.False, "No mergeinfo");

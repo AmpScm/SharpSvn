@@ -113,7 +113,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(cmd.IndexOf("copyForm") >= 0, "Copied file doesn't exist");
 		}
 
-        [Test]
+        [Test, ExpectedException(typeof(SvnFileSystemException))]
         public void TestSimpleBranch0()
         {
             Uri repos = GetReposUri(TestReposType.CollabRepos);
@@ -126,7 +126,7 @@ namespace SharpSvn.Tests.Commands
             Client.RemoteCopy(trunk, new Uri(repos, "branch/"), ca);
         }
 
-        [Test]
+        [Test, ExpectedException(typeof(SvnFileSystemException))]
         public void TestSimpleBranch1()
         {
             Uri repos = GetReposUri(TestReposType.CollabRepos);
