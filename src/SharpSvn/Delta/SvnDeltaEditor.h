@@ -256,7 +256,8 @@ namespace SharpSvn {
 			virtual SvnDeltaNode^ CreateFileNode(SvnDeltaNode^ parent, String^ path);
 
 		internal:
-			svn_delta_editor_t* AllocEditor(void** baton, AprPool^ pool);
+			bool AllocEditor(const svn_delta_editor_t** editor, void** baton, AprPool^ pool);
+			bool AllocEditor(SvnClient^ client, const svn_delta_editor_t** editor, void** baton, AprPool^ pool);
 		};
 	}
 }

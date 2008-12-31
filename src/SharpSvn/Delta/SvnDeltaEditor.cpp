@@ -25,7 +25,12 @@ public:
 		_editor = editor;
 	}
 
-	~root_baton();
+	void Close();
+
+	~root_baton()
+	{
+		Close();
+	}
 };
 
 struct directory_baton
@@ -113,7 +118,7 @@ struct base_baton
 	root_baton* root;
 };
 
-root_baton::~root_baton()
+void root_baton::Close()
 {
 	while (_firstDir)
 		delete _firstDir;
@@ -160,6 +165,9 @@ sharpsvn_wrap_set_target_revision(void *edit_baton, svn_revnum_t target_revision
 {
 	UNUSED_ALWAYS(pool);
 	base_baton* bt = (base_baton*)edit_baton;
+
+	if (!bt->root)
+		return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Root of delta editor already disposed");
 
 	SvnDeltaSetTargetEventArgs^ args = gcnew SvnDeltaSetTargetEventArgs(target_revision);
 	try
@@ -610,12 +618,11 @@ sharpsvn_wrap_close_edit(void *edit_baton, apr_pool_t *pool)
 	SvnDeltaEditor^ editor = nullptr;
 
 	root_baton* r= bt->root;
-	bt->root = nullptr;
 
 	if (r)
 	{
+		r->Close();
 		editor = r->_editor;
-		delete r;
 	}
 
 	try
@@ -642,12 +649,11 @@ sharpsvn_wrap_abort_edit(void *edit_baton, apr_pool_t *pool)
 	SvnDeltaEditor^ editor = nullptr;
 
 	root_baton* r= bt->root;
-	bt->root = nullptr;
 
 	if (r)
 	{
+		r->Close();
 		editor = r->_editor;
-		delete r;
 	}
 
 	try
@@ -666,29 +672,31 @@ sharpsvn_wrap_abort_edit(void *edit_baton, apr_pool_t *pool)
 	}
 }
 
-svn_delta_editor_t* SvnDeltaEditor::AllocEditor(void** baton, AprPool^ pool)
+bool SvnDeltaEditor::AllocEditor(const svn_delta_editor_t** editor, void** baton, AprPool^ pool)
 {
-	if (!pool)
+	if (!baton)
+		throw gcnew ArgumentNullException("baton");
+	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	svn_delta_editor_t *editor = svn_delta_default_editor(pool->Handle);
+	svn_delta_editor_t *e = svn_delta_default_editor(pool->Handle);
 
-	editor->set_target_revision = sharpsvn_wrap_set_target_revision;
-	editor->open_root = sharpsvn_wrap_open_root;
-	editor->delete_entry = sharpsvn_wrap_delete_entry;
-	editor->add_directory = sharpsvn_wrap_add_directory;
-	editor->open_directory = sharpsvn_wrap_open_directory;
-	editor->change_dir_prop = sharpsvn_wrap_change_dir_prop;
-	editor->close_directory = sharpsvn_wrap_close_directory;
-	editor->absent_directory = sharpsvn_wrap_absent_directory;
-	editor->add_file = sharpsvn_wrap_add_file;
-	editor->open_file = sharpsvn_wrap_open_file;
-	editor->apply_textdelta = sharpsvn_wrap_apply_textdelta;
-	editor->change_file_prop = sharpsvn_wrap_change_file_prop;
-	editor->close_file = sharpsvn_wrap_close_file;
-	editor->absent_file = sharpsvn_wrap_absent_file;
-	editor->close_edit = sharpsvn_wrap_close_edit;
-	editor->abort_edit = sharpsvn_wrap_abort_edit;
+	e->set_target_revision = sharpsvn_wrap_set_target_revision;
+	e->open_root = sharpsvn_wrap_open_root;
+	e->delete_entry = sharpsvn_wrap_delete_entry;
+	e->add_directory = sharpsvn_wrap_add_directory;
+	e->open_directory = sharpsvn_wrap_open_directory;
+	e->change_dir_prop = sharpsvn_wrap_change_dir_prop;
+	e->close_directory = sharpsvn_wrap_close_directory;
+	e->absent_directory = sharpsvn_wrap_absent_directory;
+	e->add_file = sharpsvn_wrap_add_file;
+	e->open_file = sharpsvn_wrap_open_file;
+	e->apply_textdelta = sharpsvn_wrap_apply_textdelta;
+	e->change_file_prop = sharpsvn_wrap_change_file_prop;
+	e->close_file = sharpsvn_wrap_close_file;
+	e->absent_file = sharpsvn_wrap_absent_file;
+	e->close_edit = sharpsvn_wrap_close_edit;
+	e->abort_edit = sharpsvn_wrap_abort_edit;
 
 	base_baton* bt = (base_baton*)pool->AllocCleared(sizeof(base_baton));
 	*baton = bt;
@@ -697,7 +705,36 @@ svn_delta_editor_t* SvnDeltaEditor::AllocEditor(void** baton, AprPool^ pool)
 
 	bt->root = new root_baton(this);
 
-	return editor;
+	*editor = e;
+	return true;
+}
+
+bool SvnDeltaEditor::AllocEditor(SvnClient^ client, const svn_delta_editor_t** editor,void** baton, AprPool^ pool)
+{
+	if (!baton)
+		throw gcnew ArgumentNullException("baton");
+	else if (!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	void* inner_baton;
+	const svn_delta_editor_t* inner_editor;
+		
+	if(!AllocEditor(&inner_editor, &inner_baton, pool))
+		return false;
+
+	svn_error_t* r = svn_delta_get_cancellation_editor(
+		client->CtxHandle->cancel_func,
+		client->CtxHandle->cancel_baton,
+		inner_editor,
+		inner_baton,
+		editor,
+		baton,
+		pool->Handle);
+
+	if (r)
+		throw SvnException::Create(r);
+
+	return true;
 }
 
 SvnDeltaNode^ SvnDeltaEditor::CreateDirectoryNode(SvnDeltaNode^ parent, String^ name)
