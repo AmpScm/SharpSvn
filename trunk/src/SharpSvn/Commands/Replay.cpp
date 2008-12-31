@@ -54,21 +54,23 @@ sharpsvn_replay_rev_start(svn_revnum_t revision, void *replay_baton, const svn_d
 		void* innerBaton = nullptr;
 		if (a->Editor)
 		{
-			innerEditor = a->Editor->AllocEditor(&innerBaton, %thePool);
+			a->Editor->AllocEditor(client, editor, edit_baton, %thePool);
+
+			return nullptr;
 		}
 		else
 		{
 			innerEditor = svn_delta_default_editor(pool);
+		
+			return svn_delta_get_cancellation_editor(
+				client->CtxHandle->cancel_func,
+				client->CtxHandle->cancel_baton,
+				innerEditor,
+				innerBaton,
+				editor,
+				edit_baton,
+				pool);
 		}
-
-		return svn_delta_get_cancellation_editor(
-			client->CtxHandle->cancel_func,
-			client->CtxHandle->cancel_baton,
-			innerEditor,
-			innerBaton,
-			editor,
-			edit_baton,
-			pool);
 	}
 	catch (Exception^ e)
 	{
