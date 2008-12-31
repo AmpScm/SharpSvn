@@ -89,7 +89,7 @@ namespace SharpSvn {
 	ref class SvnGetCapabilitiesArgs;
 
 	ref class SvnFileVersionsArgs;
-	ref class SvnReplayArgs;
+	ref class SvnReplayRevisionArgs;
 	ref class SvnWriteRelatedArgs;
 
 	ref class SvnCreateRepositoryArgs;
@@ -876,7 +876,7 @@ namespace SharpSvn {
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 
-	internal:
+	private:
 		bool InternalSetProperty(SvnTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
 
 #pragma endregion
@@ -939,7 +939,7 @@ namespace SharpSvn {
 		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
 		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args);
 
-	internal:
+	private:
 		bool InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool);
 
 #pragma endregion
@@ -1151,11 +1151,11 @@ namespace SharpSvn {
 		/// <remarks>This function allows access to the raw data used to create a Blame report</remarks>
 		bool GetFileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, [Out] Collection<SvnFileVersionEventArgs^>^% list);
 
-		/// <overloads>Replays the specified revisions on the specified target to the editory</overloads>
+		/// <overloads>Replays the specified revisions on the specified target to the editor</overloads>
 		/// <summary>Replays the specified revisions on the specified target to the editor</summary>
-		bool Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor);
+		bool ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor);
 		/// <summary>Replays the specified revisions on the specified target to the editory</summary>
-		bool Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor, SvnReplayArgs^ args);
+		bool ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor, SvnReplayRevisionArgs^ args);
 
 #ifdef _DEBUG
 	public:

@@ -16,13 +16,13 @@
 
 #pragma once
 
-#include "EventArgs/SvnReplayEventArgs.h"
+#include "EventArgs/SvnReplayRevisionEventArgs.h"
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient" />.Replay</summary>
+	/// <summary>Extended Parameter container of <see cref="SvnClient" />.ReplayRevision</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnReplayArgs : public SvnClientArgs
+	public ref class SvnReplayRevisionArgs : public SvnClientArgs
 	{
 		bool _retrieveContent;
 		SvnRevision^ _lowWaterMarkRevision;
@@ -31,7 +31,7 @@ namespace SharpSvn {
 		Delta::SvnDeltaEditor^ _deltaEditor;
 
 	public:
-		SvnReplayArgs()
+		SvnReplayRevisionArgs()
 		{
 		}
 
@@ -39,7 +39,7 @@ namespace SharpSvn {
 		{
 			virtual SvnCommandType get() override sealed
 			{
-				return SvnCommandType::Replay;
+				return SvnCommandType::ReplayRevision;
 			}
 		}
 

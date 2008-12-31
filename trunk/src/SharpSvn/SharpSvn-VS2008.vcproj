@@ -1007,7 +1007,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Replay.cpp"
+					RelativePath=".\Commands\ReplayRevisions.cpp"
 					>
 				</File>
 				<File
@@ -1135,7 +1135,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnReplayEventArgs.h"
+					RelativePath=".\EventArgs\SvnReplayRevisionEventArgs.h"
 					>
 				</File>
 				<File
@@ -1279,7 +1279,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Replay.h"
+					RelativePath=".\Args\ReplayRevision.h"
 					>
 				</File>
 				<File

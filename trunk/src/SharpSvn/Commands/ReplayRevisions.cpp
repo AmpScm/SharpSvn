@@ -6,7 +6,7 @@
 #include "stdafx.h"
 #include "SvnAll.h"
 #include "Delta/SvnDeltaEditor.h"
-#include "Args/Replay.h"
+#include "Args/ReplayRevision.h"
 
 #include "svn_ra.h"
 #include "svn-internal/libsvn_client/client.h"
@@ -17,7 +17,7 @@ using namespace SharpSvn::Delta;
 using namespace System::Collections::Generic;
 
 
-bool SvnClient::Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor)
+bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -26,7 +26,7 @@ bool SvnClient::Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDel
 	else if (!editor)
 		throw gcnew ArgumentNullException("editor");
 
-	return Replay(target, range, editor, gcnew SvnReplayArgs());
+	return ReplayRevisions(target, range, editor, gcnew SvnReplayRevisionArgs());
 }
 
 static svn_error_t* __cdecl
@@ -37,7 +37,7 @@ sharpsvn_replay_rev_start(svn_revnum_t revision, void *replay_baton, const svn_d
 
 	AprPool thePool(pool, false);
 
-	SvnReplayArgs^ args = dynamic_cast<SvnReplayArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnReplayArgs
+	SvnReplayRevisionArgs^ args = dynamic_cast<SvnReplayRevisionArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnReplayRevisionArgs
 	if (!args)
 		return nullptr;
 
@@ -92,7 +92,7 @@ sharpsvn_replay_rev_finish(svn_revnum_t revision, void *replay_baton, const svn_
 
 	AprPool thePool(pool, false);
 
-	SvnReplayArgs^ args = dynamic_cast<SvnReplayArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnReplayArgs
+	SvnReplayRevisionArgs^ args = dynamic_cast<SvnReplayRevisionArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnReplayRevisionArgs
 	if (!args)
 		return nullptr;
 	
@@ -117,7 +117,7 @@ sharpsvn_replay_rev_finish(svn_revnum_t revision, void *replay_baton, const svn_
 	}
 }
 
-bool SvnClient::Replay(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor, SvnReplayArgs^ args)
+bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor, SvnReplayRevisionArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
