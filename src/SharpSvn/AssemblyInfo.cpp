@@ -60,7 +60,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2008")];
+[assembly:AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2009")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -86,7 +86,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.5003.0.1")];
+[assembly:AssemblyVersionAttribute("1.5005.0.1")];
 [assembly:NeutralResourcesLanguageAttribute("en")];
 
 [assembly:ComVisible(false)];
