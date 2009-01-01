@@ -10,13 +10,13 @@ using System.Resources;
 [assembly: AssemblyTitle("SharpSvn.UI")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("SharpSvn Project - http://sharpsvn.net/")]
 [assembly: AssemblyProduct("SharpSvn.UI")]
-[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2008")]
+[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
-// Setting ComVisible to false makee35trr the types in this assembly not visible
+// Setting ComVisible to false make the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
 [assembly: CLSCompliant(true)]
@@ -34,5 +34,5 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: AssemblyVersion("1.5002.0.*")]
+[assembly: AssemblyVersion("1.5005.0.*")]
 [assembly: NeutralResourcesLanguageAttribute("en")]
