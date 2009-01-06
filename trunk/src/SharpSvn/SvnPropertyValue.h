@@ -19,7 +19,7 @@
 namespace SharpSvn {
 
 	[System::Diagnostics::DebuggerDisplay("{Key}={StringValue}")]
-	public ref class SvnPropertyValue sealed
+	public ref class SvnPropertyValue sealed : System::IEquatable<SvnPropertyValue^>
 	{
 		initonly String^ _key;
 		initonly String^ _strValue;
@@ -49,6 +49,18 @@ namespace SharpSvn {
 			_value = value;
 		}
 
+		SvnPropertyValue(String^ key, SvnPropertyValue^ value)
+		{
+			if (String::IsNullOrEmpty(key))
+				throw gcnew ArgumentNullException("key");
+			else if (!value)
+				throw gcnew ArgumentNullException("value");
+
+			_key = key;
+			_strValue = value->_strValue;
+			_value = value->_value;
+		}
+
 	internal:
 		SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
 		{
@@ -73,7 +85,7 @@ namespace SharpSvn {
 			_key = key;
 			_value = value;
 		}
-
+		
 	internal:
 		SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
 		{
@@ -162,12 +174,65 @@ namespace SharpSvn {
 			}
 		}
 
+		array<Byte>^ ToByteArray()
+		{
+			ICollection<Byte>^ v = RawValue;
+
+			array<Byte>^ list = gcnew array<Byte>(v->Count);
+			v->CopyTo(list, 0);
+
+			return list;
+		}
+
 		virtual String^ ToString() override
 		{
 			if (StringValue)
 				return StringValue;
 			else
 				return "<raw>";
+		}
+
+		virtual int GetHashCode() override
+		{
+			return Key->GetHashCode();
+		}
+
+		virtual bool Equals(Object^ other) override
+		{
+			SvnPropertyValue^ ob = dynamic_cast<SvnPropertyValue^>(other);
+
+			return Equals(ob);
+		}
+
+		virtual bool Equals(SvnPropertyValue^ other)
+		{
+			if (!other)
+				return false;
+
+			if (!Target == !other->Target)
+				return false;
+			else if (Target && !Target->Equals(other->Target))
+				return false;
+
+			if (!String::Equals(Key, other->Key, StringComparison::Ordinal))
+				return false;
+
+			if (StringValue && other->StringValue)
+				return String::Equals(StringValue, other->StringValue);
+
+			if (RawValue->Count != other->RawValue->Count)
+				return false;
+
+			System::Collections::Generic::IEnumerator<Byte>^ vMe = RawValue->GetEnumerator();
+			System::Collections::Generic::IEnumerator<Byte>^ vHe = other->RawValue->GetEnumerator();
+
+			while(vMe->MoveNext() && vHe->MoveNext())
+			{
+				if(vMe->Current != vHe->Current)
+					return false;
+			}
+
+			return true;
 		}
 	};
 
