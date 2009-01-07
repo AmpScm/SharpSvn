@@ -99,7 +99,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the revision in which the Url's are evaluated (Aka peg revision)</summary>
-		property SvnRevision^ OriginRevision
+		property SvnRevision^ OperationalRevision
 		{
 			SvnRevision^ get()
 			{
@@ -114,6 +114,18 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use .OperationalRevision")]
+		property SvnRevision^ OriginRevision
+		{
+			SvnRevision^ get()
+			{
+				return OperationalRevision;
+			}
+			void set(SvnRevision^ value)
+			{
+				OperationalRevision = value;
+			}
+		}
 
 		/// <summary>Gets or sets the log range as <see cref="SvnRevisionRange" /></summary>
 		property SvnRevisionRange^ Range

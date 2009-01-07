@@ -751,6 +751,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnExternalItem.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnFileDiff.h"
 					>
 				</File>
@@ -812,6 +816,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnException.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnExternalItem.cpp"
 					>
 				</File>
 				<File

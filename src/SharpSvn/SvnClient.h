@@ -456,7 +456,6 @@ namespace SharpSvn {
 		bool Log(Uri^ target, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <summary>Gets log messages of the specified target</summary>
-		/// <remarks>A pegrevision applied on the target overrides one set on the args object</remarks>
 		bool Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler);
 
 		/// <summary>Gets log messages of the specified target</summary>

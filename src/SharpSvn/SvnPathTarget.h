@@ -135,13 +135,13 @@ namespace SharpSvn {
 
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnPathTarget^% target);
-		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnPathTarget^% target);
+		static bool TryParse(String^ targetName, bool allowOperationalRevisions, [Out] SvnPathTarget^% target);
 
 	public:
 		static ICollection<SvnPathTarget^>^ Map(System::Collections::Generic::IEnumerable<String^>^ paths);
 
 	internal:
-		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnPathTarget ^% target, AprPool^ pool)
+		static bool TryParse(String^ targetName, bool allowOperationalRevisions, [Out] SvnPathTarget ^% target, AprPool^ pool)
 		{
 			if (String::IsNullOrEmpty(targetName))
 				throw gcnew ArgumentNullException("targetName");
@@ -151,7 +151,7 @@ namespace SharpSvn {
 			if (!SvnBase::IsNotUri(targetName))
 				return false;
 
-			if (allowPegRevisions)
+			if (allowOperationalRevisions)
 			{
 				svn_opt_revision_t rev;
 				svn_error_t* r;
@@ -186,7 +186,7 @@ namespace SharpSvn {
 
 	public:
 		static SvnPathTarget^ FromString(String^ value);
-		static SvnPathTarget^ FromString(String^ value, bool allowPegRevision);
+		static SvnPathTarget^ FromString(String^ value, bool allowOperationalRevision);
 
 		static operator SvnPathTarget^(String^ value) { return value ? gcnew SvnPathTarget(value) : nullptr; }
 

@@ -55,7 +55,7 @@ namespace SharpSvn.Tests.Commands
 			la.Start = 34669;
 			la.End = 0;
             la.Limit = 10;
-			la.OriginRevision = 34669;
+			la.OperationalRevision = 34669;
 			la.RetrieveMergedRevisions = true;
             la.ThrowOnCancel = false;
             int n = 0;
@@ -255,7 +255,7 @@ namespace SharpSvn.Tests.Commands
             args.Start = 23000;
             args.End = 19000;
             args.Limit = 100;
-            args.OriginRevision = 23000;
+            args.OperationalRevision = 23000;
             touched = false;
             Client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
             {
