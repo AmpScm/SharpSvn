@@ -28,7 +28,7 @@ namespace SharpSvn {
 		initonly __int64 _value;
 
 	internal:
-		static SvnRevision^ Load(svn_opt_revision_t* revData);
+		static SvnRevision^ Load(const svn_opt_revision_t* revData);
 	public:
 		SvnRevision()
 		{
@@ -215,7 +215,12 @@ namespace SharpSvn {
 
 		static operator SvnRevision^(__int64 value)
 		{
-			return value ? gcnew SvnRevision(value) : Zero;
+			if (value == 0)
+				return Zero;
+			else if(value == 1)
+				return One;
+			else
+				return gcnew SvnRevision(value);
 		}
 
 		static operator SvnRevision^(SvnRevisionType value)
@@ -261,6 +266,7 @@ namespace SharpSvn {
 		static initonly SvnRevision^ _previous	= gcnew SvnRevision(SvnRevisionType::Previous);
 		static initonly SvnRevision^ _committed	= gcnew SvnRevision(SvnRevisionType::Committed);
 		static initonly SvnRevision^ _zero		= gcnew SvnRevision((__int64)0);
+		static initonly SvnRevision^ _one		= gcnew SvnRevision((__int64)1);
 	public:
 		static property SvnRevision^ None		{ SvnRevision^ get() { return _none; } }
 		static property SvnRevision^ Head		{ SvnRevision^ get() { return _head; } }
@@ -269,6 +275,7 @@ namespace SharpSvn {
 		static property SvnRevision^ Previous	{ SvnRevision^ get() { return _previous; } }
 		static property SvnRevision^ Committed	{ SvnRevision^ get() { return _committed; } }
 		static property SvnRevision^ Zero		{ SvnRevision^ get() { return _zero; } }
+		static property SvnRevision^ One		{ SvnRevision^ get() { return _one; } }
 	};
 
 	ref class SvnUriTarget;
@@ -287,6 +294,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets the operational revision</summary>
 		property SvnRevision^ Revision
 		{
 			SvnRevision^ get()
@@ -295,6 +303,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the target name in normalized format</summary>
 		property String^ TargetName
 		{
 			virtual String^ get() abstract;
@@ -315,6 +324,7 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets the SvnTarget as string</summary>
 		virtual String^ ToString() override
 		{
 			if (Revision->RevisionType == SvnRevisionType::None)
@@ -325,7 +335,7 @@ namespace SharpSvn {
 
 		static SvnTarget^ FromUri(Uri^ value);
 		static SvnTarget^ FromString(String^ value);
-		static SvnTarget^ FromString(String^ value, bool allowPegRevisions);
+		static SvnTarget^ FromString(String^ value, bool allowOperationalRevision);
 
 		static operator SvnTarget^(Uri^ value)			{ return value ? FromUri(value) : nullptr; }
 		static operator SvnTarget^(String^ value)		{ return value ? FromString(value, false) : nullptr; }
@@ -356,7 +366,7 @@ namespace SharpSvn {
 
 	public:
 		static bool TryParse(String^ targetName, [Out] SvnTarget^% target);
-		static bool TryParse(String^ targetName, bool allowPegRevisions, [Out] SvnTarget^% target);
+		static bool TryParse(String^ targetName, bool allowOperationalRevision, [Out] SvnTarget^% target);
 	internal:
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
 	};

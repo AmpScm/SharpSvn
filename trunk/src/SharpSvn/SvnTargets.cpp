@@ -24,7 +24,7 @@ using namespace SharpSvn;
 using System::IO::Path;
 using namespace System::Collections::Generic;
 
-SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
+SvnRevision^ SvnRevision::Load(const svn_opt_revision_t *revData)
 {
 	if (!revData)
 		throw gcnew ArgumentNullException("revData");
@@ -47,7 +47,12 @@ SvnRevision^ SvnRevision::Load(svn_opt_revision_t *revData)
 	case SvnRevisionType::Head:
 		return Head;
 	case SvnRevisionType::Number:
-		return gcnew SvnRevision(revData->value.number);
+		if (revData->value.number == 0)
+			return Zero;
+		else if (revData->value.number == 1)
+			return _one;
+		else
+			return gcnew SvnRevision(revData->value.number);
 	case SvnRevisionType::Time:
 		// apr_time_t is in microseconds since 1-1-1970 UTC; filetime is in 100 nanoseconds
 		return gcnew SvnRevision(SvnBase::DateTimeFromAprTime(revData->value.date));
@@ -93,7 +98,7 @@ bool SvnTarget::TryParse(String^ targetName, [Out] SvnTarget^% target)
 	return TryParse(targetName, false, target);
 }
 
-bool SvnTarget::TryParse(String^ targetName, bool allowPegRevision, [Out] SvnTarget^% target)
+bool SvnTarget::TryParse(String^ targetName, bool allowOperationalRevision, [Out] SvnTarget^% target)
 {
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
@@ -101,12 +106,12 @@ bool SvnTarget::TryParse(String^ targetName, bool allowPegRevision, [Out] SvnTar
 	SvnUriTarget^ uriTarget = nullptr;
 	SvnPathTarget^ pathTarget = nullptr;
 
-	if (targetName->Contains("://") && SvnUriTarget::TryParse(targetName, allowPegRevision, uriTarget))
+	if (targetName->Contains("://") && SvnUriTarget::TryParse(targetName, allowOperationalRevision, uriTarget))
 	{
 		target = uriTarget;
 		return true;
 	}
-	else if (SvnPathTarget::TryParse(targetName, allowPegRevision, pathTarget))
+	else if (SvnPathTarget::TryParse(targetName, allowOperationalRevision, pathTarget))
 	{
 		target = pathTarget;
 		return true;
@@ -197,14 +202,14 @@ SvnTarget^ SvnTarget::FromString(String^ value)
 	return FromString(value, false);
 }
 
-SvnTarget^ SvnTarget::FromString(String^ value, bool allowPegRevision)
+SvnTarget^ SvnTarget::FromString(String^ value, bool allowOperationalRevision)
 {
 	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnTarget^ result;
 
-	if (SvnTarget::TryParse(value, allowPegRevision, result))
+	if (SvnTarget::TryParse(value, allowOperationalRevision, result))
 	{
 		return result;
 	}
@@ -217,14 +222,14 @@ SvnPathTarget^ SvnPathTarget::FromString(String^ value)
 	return FromString(value, false);
 }
 
-SvnPathTarget^ SvnPathTarget::FromString(String^ value, bool allowPegRevision)
+SvnPathTarget^ SvnPathTarget::FromString(String^ value, bool allowOperationalRevision)
 {
 	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnPathTarget^ result;
 
-	if (SvnPathTarget::TryParse(value, allowPegRevision, result))
+	if (SvnPathTarget::TryParse(value, allowOperationalRevision, result))
 	{
 		return result;
 	}
@@ -237,14 +242,14 @@ SvnUriTarget^ SvnUriTarget::FromString(String^ value)
 	return FromString(value, false);
 }
 
-SvnUriTarget^ SvnUriTarget::FromString(String^ value, bool allowPegRevision)
+SvnUriTarget^ SvnUriTarget::FromString(String^ value, bool allowOperationalRevision)
 {
 	if (!value)
 		throw gcnew ArgumentNullException("value");
 
 	SvnUriTarget^ result;
 
-	if (SvnUriTarget::TryParse(value, allowPegRevision, result))
+	if (SvnUriTarget::TryParse(value, allowOperationalRevision, result))
 	{
 		return result;
 	}
@@ -252,14 +257,14 @@ SvnUriTarget^ SvnUriTarget::FromString(String^ value, bool allowPegRevision)
 		throw gcnew System::ArgumentException(SharpSvnStrings::TheTargetIsNotAValidUriTarget, "value");
 }
 
-bool SvnUriTarget::TryParse(String^ targetString, bool allowPegRevision, [Out] SvnUriTarget ^% target, AprPool^ pool)
+bool SvnUriTarget::TryParse(String^ targetString, bool allowOperationalRevision, [Out] SvnUriTarget ^% target, AprPool^ pool)
 {
 	if (String::IsNullOrEmpty(targetString))
 		throw gcnew ArgumentNullException("targetString");
 	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
-	if (allowPegRevision)
+	if (allowOperationalRevision)
 	{
 		svn_opt_revision_t rev;
 		svn_error_t* r;
