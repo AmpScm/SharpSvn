@@ -40,8 +40,18 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 
 	bool hasPegRevision = (OperationalRevision != SvnRevision::None);
 	bool hasNonNumberRevision = (Revision != SvnRevision::None) && (Revision->RevisionType != SvnRevisionType::Number);
+	bool urlIsRelative = false;
 
-	if (useCompatibleFormat && !hasPegRevision && !hasNonNumberRevision)
+	System::Uri^ v;
+
+	if (Url->StartsWith("^/", StringComparison::Ordinal) ||
+		Url->StartsWith("/", StringComparison::Ordinal) ||
+		Uri::TryCreate(Url, UriKind::Relative, v))
+	{
+		urlIsRelative = true;
+	}
+
+	if (useCompatibleFormat && !hasPegRevision && !hasNonNumberRevision && !urlIsRelative)
 	{	// Use 1.0-1.4 format
 
 		sb->Append(Target);
