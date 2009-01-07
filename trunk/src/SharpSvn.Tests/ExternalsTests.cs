@@ -44,6 +44,7 @@ namespace SharpSvn.Tests
             Assert.That(item.ToString(false), Is.EqualTo("-r 1 http://sharpsvn.net/qqn@124 dir"));
         }
 
+        [Test]
         public void ParseFail()
         {
             SvnExternalItem[] items;
@@ -66,5 +67,16 @@ namespace SharpSvn.Tests
             Assert.That(items.Length, Is.EqualTo(2));            
         }
 
+        [Test]
+        public void ParseFlat()
+        {
+            SvnExternalItem item;
+            Assert.That(SvnExternalItem.TryParse("a b", out item), Is.True);
+            Assert.That(item.Target, Is.EqualTo("b"));
+            Assert.That(item.Url, Is.EqualTo("a"));
+            Assert.That(SvnExternalItem.TryParse(item.ToString(), out item), Is.True);
+            Assert.That(item.Target, Is.EqualTo("b"));
+            Assert.That(item.Url, Is.EqualTo("a"));
+        }
     }
 }
