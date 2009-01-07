@@ -10,7 +10,7 @@
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
   <!-- -->
-  <property name="opensslVersion" value="0.9.8i" />
+  <property name="opensslVersion" value="0.9.8j" />
   <property name="neonVersion" value="0.28.3" />
 
   <property name="aprVersion" value="1.3.3" />
