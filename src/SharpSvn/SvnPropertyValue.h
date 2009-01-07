@@ -209,12 +209,20 @@ namespace SharpSvn {
 			if (!other)
 				return false;
 
-			if (!Target == !other->Target)
+			if (!Target != !other->Target)
 				return false;
 			else if (Target && !Target->Equals(other->Target))
 				return false;
 
 			if (!String::Equals(Key, other->Key, StringComparison::Ordinal))
+				return false;
+
+			return ValueEquals(other);
+		}
+
+		bool ValueEquals(SvnPropertyValue^ other)
+		{
+			if (!other)
 				return false;
 
 			if (StringValue && other->StringValue)
