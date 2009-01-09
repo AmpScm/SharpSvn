@@ -94,7 +94,7 @@ void SvnClientArgs::AddExpectedError(SvnErrorCode errorCode)
 	List<SvnErrorCode>^ items = gcnew List<SvnErrorCode>();
 
 	if(_expectedErrors)
-		items->AddRange(_expectedErrors);
+		items->AddRange(static_cast<IEnumerable<SvnErrorCode>^>(_expectedErrors));
 
 	items->Add(errorCode);
 
@@ -109,9 +109,9 @@ void SvnClientArgs::AddExpectedError(... array<SvnErrorCode>^ errorCodes)
 	List<SvnErrorCode>^ items = gcnew List<SvnErrorCode>();
 
 	if(_expectedErrors)
-		items->AddRange(_expectedErrors);
+		items->AddRange(static_cast<IEnumerable<SvnErrorCode>^>(_expectedErrors));
 
-	items->AddRange(errorCodes);
+	items->AddRange(static_cast<IEnumerable<SvnErrorCode>^>(errorCodes));
 
 	_expectedErrors = items->ToArray();
 }
@@ -136,9 +136,9 @@ void SvnClientArgs::AddExpectedError(... array<SvnErrorCategory>^ errorCategorie
 	List<SvnErrorCategory>^ items = gcnew List<SvnErrorCategory>();
 
 	if(_expectedErrorCategories)
-		items->AddRange(_expectedErrorCategories);
+		items->AddRange(static_cast<IEnumerable<SvnErrorCategory>^>(_expectedErrorCategories));
 
-	items->AddRange(errorCategories);
+	items->AddRange(static_cast<IEnumerable<SvnErrorCategory>^>(errorCategories));
 
 	_expectedErrorCategories = items->ToArray();
 }
