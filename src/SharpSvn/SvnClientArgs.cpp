@@ -21,6 +21,7 @@
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
+using System::Collections::Generic::List;
 
 bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 {
@@ -54,6 +55,7 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ excepti
 	SvnClient^ svnClient = dynamic_cast<SvnClient^>(client);
 
 	SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
+
 	if (svnClient)
 	{
 		svnClient->HandleClientError(ea);
@@ -64,6 +66,10 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ excepti
 	if (ea->Cancel)
 		return false;
 
+	if (_expectedErrors && 0 <= Array::IndexOf(_expectedErrors, _exception->SvnErrorCode))
+		return false;
+	else if (_expectedErrorCategories && 0 <= Array::IndexOf(_expectedErrorCategories, _exception->SvnErrorCategory))
+		return false;
 	if (!ThrowOnCancel && _exception->SubversionErrorCode == SVN_ERR_CANCELLED)
 		return false;
 	else if (ThrowOnError)
@@ -81,4 +87,58 @@ void SvnClientArgs::Prepare()
 bool SvnClientArgs::IsLastInvocationCanceled::get()
 {
 	return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
+}
+
+void SvnClientArgs::AddExpectedError(SvnErrorCode errorCode)
+{
+	List<SvnErrorCode>^ items = gcnew List<SvnErrorCode>();
+
+	if(_expectedErrors)
+		items->AddRange(_expectedErrors);
+
+	items->Add(errorCode);
+
+	_expectedErrors = items->ToArray();
+}
+
+void SvnClientArgs::AddExpectedError(... array<SvnErrorCode>^ errorCodes)
+{
+	if (!errorCodes || !errorCodes->Length)
+		return;
+
+	List<SvnErrorCode>^ items = gcnew List<SvnErrorCode>();
+
+	if(_expectedErrors)
+		items->AddRange(_expectedErrors);
+
+	items->AddRange(errorCodes);
+
+	_expectedErrors = items->ToArray();
+}
+
+void SvnClientArgs::AddExpectedError(SvnErrorCategory errorCategory)
+{
+	List<SvnErrorCategory>^ items = gcnew List<SvnErrorCategory>();
+
+	if(_expectedErrorCategories)
+		items->AddRange(_expectedErrorCategories);
+
+	items->Add(errorCategory);
+
+	_expectedErrorCategories = items->ToArray();
+}
+
+void SvnClientArgs::AddExpectedError(... array<SvnErrorCategory>^ errorCategories)
+{
+	if (!errorCategories || !errorCategories->Length)
+		return;
+
+	List<SvnErrorCategory>^ items = gcnew List<SvnErrorCategory>();
+
+	if(_expectedErrorCategories)
+		items->AddRange(_expectedErrorCategories);
+
+	items->AddRange(errorCategories);
+
+	_expectedErrorCategories = items->ToArray();
 }

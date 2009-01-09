@@ -19,6 +19,7 @@
 #include "SvnEnums.h"
 #include "SvnChangeList.h"
 #include "SvnCommandLineArgumentCollection.h"
+#include "SvnErrorCodes.h"
 
 namespace SharpSvn {
 	ref class SvnException;
@@ -49,6 +50,8 @@ namespace SharpSvn {
 		bool _noThrowOnError;
 		bool _noThrowOnCancel;
 		SvnException^ _exception;
+		array<SvnErrorCode>^ _expectedErrors;
+		array<SvnErrorCategory>^ _expectedErrorCategories;
 
 	public:
 		/// <summary>Raised to allow canceling an in-progress command</summary>
@@ -174,6 +177,15 @@ namespace SharpSvn {
 		{
 			bool get();
 		}
+
+		/// <summary>Adds an error code to the list of errors not to throw exceptions for</summary>
+		void AddExpectedError(SvnErrorCode errorCode);
+		/// <summary>Adds error codes to the list of errors not to throw exceptions for</summary>
+		void AddExpectedError(... array<SvnErrorCode>^ errorCodes);
+		/// <summary>Adds an error category to the list of errors not to throw exceptions for</summary>
+		void AddExpectedError(SvnErrorCategory errorCategory);
+		/// <summary>Adds error categories to the list of errors not to throw exceptions for</summary>
+		void AddExpectedError(... array<SvnErrorCategory>^ errorCategories);
 
 	internal:
 		bool HandleResult(SvnClientContext^ client, svn_error_t *error);

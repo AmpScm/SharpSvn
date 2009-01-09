@@ -5,6 +5,10 @@
 	Name="SharpSvn"
 	ProjectGUID="{A3166809-1484-4442-BF75-5FB0E8356381}"
 	RootNamespace="SharpSvn"
+	SccProjectName="Svn"
+	SccAuxPath="Svn"
+	SccLocalPath="Svn"
+	SccProvider="SubversionScc"
 	Keyword="ManagedCProj"
 	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib-AnyCPU&quot;"
 	>
@@ -742,6 +746,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnEnums.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnErrorCodes.h"
 					>
 				</File>
 				<File

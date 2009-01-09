@@ -747,6 +747,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnErrorCodes.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnException.h"
 					>
 				</File>
