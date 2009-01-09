@@ -64,7 +64,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnExternalItem.TryParse("q http://q\r\nr http://r", out items), Is.True);
             Assert.That(items.Length, Is.EqualTo(2));
             Assert.That(SvnExternalItem.TryParse("http://q q\nr http://r", out items), Is.True);
-            Assert.That(items.Length, Is.EqualTo(2));            
+            Assert.That(items.Length, Is.EqualTo(2));
         }
 
         [Test]

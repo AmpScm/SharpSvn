@@ -18,54 +18,9 @@
 
 using namespace System;
 
+#include "SvnErrorCodes.h"
+
 namespace SharpSvn {
-
-using System::ComponentModel::DescriptionAttribute;
-
-#define SVN_ERRDEF(x,y,z) [DescriptionAttribute(z)] x = x,
-#define SVN_ERROR_BUILD_ARRAY
-#pragma warning(disable: 4634)
-
-#define DOXYGEN_SHOULD_SKIP_THIS
-#define SVN_ERROR_START public enum class SvnErrorCode { None=0,
-#define SVN_ERROR_END };
-
-#include "svn_error_codes.h"
-
-#undef SVN_ERRDEF
-#undef SVN_ERROR_BUILD_ARRAY
-#undef DOXYGEN_SHOULD_SKIP_THIS
-#undef SVN_ERROR_START
-#undef SVN_ERROR_END
-
-/// <summary>Gets the error category of the SvnException</summary>
-public enum class SvnErrorCategory
-{
-	OperatingSystem=-1,
-	None=0,
-	Bad,
-	Xml,
-	Io,
-	Stream,
-	Node,
-	Entry,
-	Wc,
-	Fs,
-	Repository,
-	RepositoryAccess,
-	RepositoryAccessDav,
-	RepositoryAccessLocal,
-	SvnDiff,
-	ApacheModule,
-	Client,
-	Misc,
-	CommandLine,
-	RepositoryAccessSvn,
-	Authentication,
-	Authorization,
-	Diff,
-	RepositoryAccessSerf,
-};
 
 	[Serializable]
 	public ref class SvnException : public System::Exception
