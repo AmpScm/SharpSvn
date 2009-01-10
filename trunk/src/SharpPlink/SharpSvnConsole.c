@@ -113,7 +113,7 @@ HWND GetOwnerHwnd()
 			DWORD thrFg = GetWindowThreadProcessId(hFg, &pidFg);
 			
 			if ((pidFg == parentPid) && (thrOwner != 0) && (thrFg == thrOwner))
-				return hFg; // Return the active window instead
+				return ownerHwnd = hFg; // Return the active window instead
 		}
 	}
 
