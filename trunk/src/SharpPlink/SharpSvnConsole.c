@@ -94,6 +94,28 @@ HWND GetOwnerHwnd()
 
 	EnumWindows(sPFindOwnerWalker, 0);
 
+	if (!IsWindow(ownerHwnd))
+		return ownerHwnd;
+
+	if (!IsWindowEnabled(ownerHwnd))
+	{	
+		// Parent window is disabled; it probably has a dialog open
+		// TODO: Find the active owned popup window
+
+		// HACK: Check if the foreground window is the right window
+		HWND hFg = GetForegroundWindow();
+
+		if (IsWindow(hFg) && hFg != ownerHwnd)
+		{
+			// Check if the foreground window is of the right process
+			DWORD thrOwner = GetWindowThreadProcessId(ownerHwnd, NULL);
+			DWORD pidFg;
+			DWORD thrFg = GetWindowThreadProcessId(hFg, &pidFg);
+			
+			if ((pidFg == parentPid) && (thrOwner != 0) && (thrFg == thrOwner))
+				return hFg; // Return the active window instead
+		}
+	}
 
 	return ownerHwnd;
 }
