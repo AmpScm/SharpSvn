@@ -81,6 +81,18 @@ namespace SharpSvn {
 		}
 	};
 
+	[Flags]
+	public enum class SvnCommitType
+	{
+		None = 0,
+		Added = SVN_CLIENT_COMMIT_ITEM_ADD,
+		Deleted = SVN_CLIENT_COMMIT_ITEM_DELETE,
+		ContentModified = SVN_CLIENT_COMMIT_ITEM_TEXT_MODS,
+		PropertiesModified = SVN_CLIENT_COMMIT_ITEM_PROP_MODS,
+		Copied = SVN_CLIENT_COMMIT_ITEM_IS_COPY,
+		HasLockToken = SVN_CLIENT_COMMIT_ITEM_LOCK_TOKEN,
+	}
+
 	public ref class SvnCommitItem sealed
 	{
 		const svn_client_commit_item3_t *_info;
@@ -91,6 +103,7 @@ namespace SharpSvn {
 		initonly __int64 _revision;
 		Uri^ _copyFromUri;
 		initonly __int64 _copyFromRevision;
+		initonly SvnCommitType _commitType;
 
 	internal:
 		SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo);
@@ -160,6 +173,14 @@ namespace SharpSvn {
 			__int64 get()
 			{
 				return _copyFromRevision;
+			}
+		}
+
+		property SvnCommitType CommitType
+		{
+			SvnCommitType get()
+			{
+				return _commitType;
 			}
 		}
 
