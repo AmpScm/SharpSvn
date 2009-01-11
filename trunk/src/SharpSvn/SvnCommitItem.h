@@ -91,7 +91,7 @@ namespace SharpSvn {
 		PropertiesModified = SVN_CLIENT_COMMIT_ITEM_PROP_MODS,
 		Copied = SVN_CLIENT_COMMIT_ITEM_IS_COPY,
 		HasLockToken = SVN_CLIENT_COMMIT_ITEM_LOCK_TOKEN,
-	}
+	};
 
 	public ref class SvnCommitItem sealed
 	{

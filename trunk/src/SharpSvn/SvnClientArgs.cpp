@@ -92,14 +92,10 @@ bool SvnClientArgs::IsLastInvocationCanceled::get()
 
 void SvnClientArgs::AddExpectedError(SvnErrorCode errorCode)
 {
-	List<SvnErrorCode>^ items = gcnew List<SvnErrorCode>();
-
-	if(_expectedErrors)
-		items->AddRange(safe_cast<IEnumerable<SvnErrorCode>^>(_expectedErrors));
-
-	items->Add(errorCode);
-
-	_expectedErrors = items->ToArray();
+	if (errorCode == SvnErrorCode::None)
+		throw gcnew ArgumentOutOfRangeException("errorCode");
+	
+	_expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCode);
 }
 
 void SvnClientArgs::AddExpectedError(... array<SvnErrorCode>^ errorCodes)
@@ -107,26 +103,15 @@ void SvnClientArgs::AddExpectedError(... array<SvnErrorCode>^ errorCodes)
 	if (!errorCodes || !errorCodes->Length)
 		return;
 
-	List<SvnErrorCode>^ items = gcnew List<SvnErrorCode>();
-
-	if(_expectedErrors)
-		items->AddRange(safe_cast<IEnumerable<SvnErrorCode>^>(_expectedErrors));
-
-	items->AddRange(safe_cast<IEnumerable<SvnErrorCode>^>(errorCodes));
-
-	_expectedErrors = items->ToArray();
+	_expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCodes);
 }
 
 void SvnClientArgs::AddExpectedError(SvnErrorCategory errorCategory)
 {
-	List<SvnErrorCategory>^ items = gcnew List<SvnErrorCategory>();
+	if (errorCategory == SvnErrorCategory::None)
+		throw gcnew ArgumentOutOfRangeException("errorCategory");
 
-	if(_expectedErrorCategories)
-		items->AddRange(safe_cast<IEnumerable<SvnErrorCategory>^>(_expectedErrorCategories));
-
-	items->Add(errorCategory);
-
-	_expectedErrorCategories = items->ToArray();
+	_expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategory);
 }
 
 void SvnClientArgs::AddExpectedError(... array<SvnErrorCategory>^ errorCategories)
@@ -134,12 +119,5 @@ void SvnClientArgs::AddExpectedError(... array<SvnErrorCategory>^ errorCategorie
 	if (!errorCategories || !errorCategories->Length)
 		return;
 
-	List<SvnErrorCategory>^ items = gcnew List<SvnErrorCategory>();
-
-	if(_expectedErrorCategories)
-		items->AddRange(safe_cast<IEnumerable<SvnErrorCategory>^>(_expectedErrorCategories));
-
-	items->AddRange(safe_cast<IEnumerable<SvnErrorCategory>^>(errorCategories));
-
-	_expectedErrorCategories = items->ToArray();
+	_expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategories);
 }

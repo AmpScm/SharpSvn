@@ -120,6 +120,15 @@ namespace SharpSvn {
 			generic<typename TSvnTarget> where TSvnTarget : SvnTarget
 			static apr_array_header_t *AllocCopyArray(ICollection<TSvnTarget>^ targets, AprPool^ pool);
 
+			generic<typename T>
+			static array<T>^ ExtendArray(array<T>^ from, T value);
+
+			generic<typename T>
+			static array<T>^ ExtendArray(array<T>^ from, array<T>^ values);
+
+			generic<typename T>
+			static array<T>^ ExtendArray(array<T>^ from, ICollection<T>^ values);
+
 			[DebuggerStepThrough]
 			static apr_array_header_t *CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool);
 

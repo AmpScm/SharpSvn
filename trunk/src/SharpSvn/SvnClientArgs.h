@@ -51,6 +51,8 @@ namespace SharpSvn {
 		bool _noThrowOnCancel;
 		bool _noThrowOnWarning;
 		SvnException^ _exception;
+
+		// On +- 90% of the SvnClientArgs instances none of these is used
 		array<SvnException^>^ _warnings;
 		array<SvnErrorCode>^ _expectedErrors;
 		array<SvnErrorCategory>^ _expectedErrorCategories;
@@ -105,11 +107,7 @@ namespace SharpSvn {
 			case SvnNotifyAction::LockFailedUnlock:
 				if (e->Error)
 				{
-					array<SvnException^>^ lst = gcnew array<SvnException^>(_warnings ? _warnings->Count+1 : 1);
-					if(_warnings)
-						_warnings->CopyTo(lst, 0);
-
-					_warnings[_warnings->Length-1] = e->Error;
+					_warnings = SvnBase::ExtendArray(_warnings, e->Error);
 				}
 				break;
 			}
