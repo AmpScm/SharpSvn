@@ -82,6 +82,7 @@ void SvnClientArgs::Prepare()
 {
 	LastException = nullptr;
 	_hooked = true;
+	_warnings = nullptr;
 }
 
 bool SvnClientArgs::IsLastInvocationCanceled::get()

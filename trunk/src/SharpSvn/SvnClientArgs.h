@@ -49,7 +49,9 @@ namespace SharpSvn {
 
 		bool _noThrowOnError;
 		bool _noThrowOnCancel;
+		bool _noThrowOnWarning;
 		SvnException^ _exception;
+		array<SvnException^>^ _warnings;
 		array<SvnErrorCode>^ _expectedErrors;
 		array<SvnErrorCategory>^ _expectedErrorCategories;
 
@@ -97,6 +99,20 @@ namespace SharpSvn {
 		bool _hooked;
 		virtual void RaiseOnNotify(SvnNotifyEventArgs^ e)
 		{
+			switch(e->Action)
+			{
+			case SvnNotifyAction::LockFailedLock:
+			case SvnNotifyAction::LockFailedUnlock:
+				if (e->Error)
+				{
+					array<SvnException^>^ lst = gcnew array<SvnException^>(_warnings ? _warnings->Count+1 : 1);
+					if(_warnings)
+						_warnings->CopyTo(lst, 0);
+
+					_warnings[_warnings->Length-1] = e->Error;
+				}
+				break;
+			}
 			OnNotify(e);
 		}
 
@@ -123,7 +139,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>
-		/// Gets or sets a boolean indicating whether the call must throw an error if an exception occurs.
+		/// Gets or sets a boolean indicating whether the call must throw an error if an error occurs.
 		/// If an exception would occur, the method returns false and the <see cref="LastException" /> property
 		/// is set to the exception which would have been throw.
 		/// </summary>
@@ -136,6 +152,22 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noThrowOnError = !value;
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets a boolean indicating whether the call must throw an error if a non fatal error occurs.
+		/// (E.g. locking or updating an external failed)
+		/// </summary>
+		property bool ThrowOnWarning
+		{
+			bool get()
+			{
+				return !_noThrowOnWarning;
+			}
+			void set(bool value)
+			{
+				_noThrowOnWarning = !value;
 			}
 		}
 
