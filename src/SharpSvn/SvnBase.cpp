@@ -468,6 +468,45 @@ apr_array_header_t *SvnBase::AllocCopyArray(ICollection<TSvnTarget>^ targets, Ap
 	return aprTargets->Handle;
 }
 
+generic<typename T>
+array<T>^ SvnBase::ExtendArray(array<T>^ from, T value)
+{
+	array<T>^ to = gcnew array<T>(from ? from->Length + 1 : 1);
+
+	if(from)
+		from->CopyTo(to, 0);
+
+	to[to->Length-1] = value;
+
+	return to;
+}
+
+generic<typename T>
+array<T>^ SvnBase::ExtendArray(array<T>^ from, array<T>^ values)
+{
+	return ExtendArray(from, safe_cast<ICollection<T>^>(values));
+}
+
+generic<typename T>
+array<T>^ SvnBase::ExtendArray(array<T>^ from, ICollection<T>^ values)
+{
+	int n = 0;
+	int c = 0;
+	if (from)
+		n += from->Length;
+	if (values)
+		n += (c = values->Count);
+
+	array<T>^ to = gcnew array<T>(n);
+	if (from)
+		from->CopyTo(to, 0);
+	if (values)
+		values->CopyTo(to, to->Length-c);
+
+	return to;
+}
+
+
 SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool)
 {
 	if (!propHash)
