@@ -181,7 +181,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 		&bSave,
 		CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
 		| CREDUI_FLAGS_ALWAYS_SHOW_UI
-		| bAskUserName ? 0 : CREDUI_FLAGS_KEEP_USERNAME)
+		| (bAskUserName ? 0 : CREDUI_FLAGS_KEEP_USERNAME)
 		| (nextIsPwError ? CREDUI_FLAGS_INCORRECT_PASSWORD : 0));
 
 	if(p->prompts[0]->echo)
