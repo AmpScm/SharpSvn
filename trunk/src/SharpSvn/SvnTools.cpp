@@ -317,7 +317,11 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 		return false;
 
 	int nStart = root->Length;
-	int i;
+
+	// If the path is below .svn, start looking at that position
+	int i = path->LastIndexOf(SvnClient::InPathAdministrativeDirectoryName, nStart, StringComparison::OrdinalIgnoreCase);
+	if (i >= 0)
+		nStart = i + SvnClient::InPathAdministrativeDirectoryName->Length;
 
 	while (0 < (i = path->IndexOf('\\', nStart)))
 	{

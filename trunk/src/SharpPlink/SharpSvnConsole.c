@@ -22,8 +22,11 @@
 extern Config* sPlinkCurrentConfig ;
 static char userName[CREDUI_MAX_USERNAME_LENGTH+1] = "";
 static char password[CREDUI_MAX_PASSWORD_LENGTH+1] = "";
+static char sTarget[CREDUI_MAX_GENERIC_TARGET_LENGTH+1] = "";
 static BOOL keptForNext = FALSE;
 static BOOL sPlinkShouldConfirm = FALSE;
+static BOOL nextIsPwError = FALSE;
+static BOOL sHasConfiguredUser = FALSE;
 static DWORD parentPid = 0;
 static HWND ownerHwnd = NULL;
 
@@ -48,21 +51,16 @@ BOOL CALLBACK sPFindOwnerWalker(HWND hwnd, LPARAM lParam)
 	return TRUE;
 }
 
-
 HWND GetOwnerHwnd()
 {
 	HANDLE hSnap;
 	PROCESSENTRY32 pe32;
 	DWORD myPid;
-	static BOOL calculatedOwner = FALSE;
 
 	if(ownerHwnd && IsWindow(ownerHwnd))
 		return ownerHwnd;
-	else if(calculatedOwner)
-		return NULL; // Just use desktop
 
 	ownerHwnd = NULL;
-	calculatedOwner = TRUE;
 	hSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 
 	if(hSnap == INVALID_HANDLE_VALUE)
@@ -105,13 +103,13 @@ HWND GetOwnerHwnd()
 		// HACK: Check if the foreground window is the right window
 		HWND hFg = GetForegroundWindow();
 
-		if (IsWindow(hFg) && hFg != ownerHwnd)
+		if (hFg != ownerHwnd && IsWindow(hFg) && IsWindowVisible(hFg) && IsWindowEnabled(hFg))
 		{
 			// Check if the foreground window is of the right process
 			DWORD thrOwner = GetWindowThreadProcessId(ownerHwnd, NULL);
 			DWORD pidFg;
 			DWORD thrFg = GetWindowThreadProcessId(hFg, &pidFg);
-			
+
 			if ((pidFg == parentPid) && (thrOwner != 0) && (thrFg == thrOwner))
 				return ownerHwnd = hFg; // Return the active window instead
 		}
@@ -124,14 +122,11 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 {
 	CREDUI_INFO info;
 	BOOL bSave = 0;
+	BOOL bAskUserName = 0;
 	DWORD dwResult;
 	char captionBuffer[256];
 	char messageBuffer[256];
 	const char* host = sPlinkCurrentConfig ? sPlinkCurrentConfig->host : NULL;
-	static int nRun;
-
-	if(!host)
-		host = "localhost";
 
 	if(keptForNext && !p->prompts[0]->echo)
 	{
@@ -139,10 +134,26 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->result_len, CREDUI_MAX_PASSWORD_LENGTH), password);
 
 		memset(password, 0, sizeof(password));
+		nextIsPwError = TRUE;
 		return 1;
 	}
 
-	nRun++;
+	if(!host)
+		host = "localhost";
+
+	if (!sTarget[0])
+	{
+		strncat(sTarget, "ssh://", CREDUI_MAX_GENERIC_TARGET_LENGTH);
+
+		if (sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
+		{
+			sHasConfiguredUser = TRUE;
+			strncat(sTarget, sPlinkCurrentConfig->username, CREDUI_MAX_GENERIC_TARGET_LENGTH);
+			strncat(sTarget, "@", CREDUI_MAX_GENERIC_TARGET_LENGTH);
+		}
+		strncat(sTarget, host, CREDUI_MAX_GENERIC_TARGET_LENGTH);
+	}
+
 	sPlinkShouldConfirm = FALSE;	
 
 	if(!userName[0] && sPlinkCurrentConfig && sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
@@ -158,17 +169,20 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	info.pszCaptionText = captionBuffer;
 	info.pszMessageText = messageBuffer;
 
+	bAskUserName = p->prompts[0]->echo && !sHasConfiguredUser;
+
 	dwResult = CredUIPromptForCredentials(
 		&info, 
-		host, 
+		sTarget, 
 		NULL, 
-		nRun > 1 ? ERROR_LOGON_FAILURE : 0, 
+		nextIsPwError ? ERROR_LOGON_FAILURE : 0, 
 		userName, CREDUI_MAX_USERNAME_LENGTH, 
-		password, CREDUI_MAX_PASSWORD_LENGTH, 
+		password, CREDUI_MAX_PASSWORD_LENGTH,
 		&bSave,
 		CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
 		| CREDUI_FLAGS_ALWAYS_SHOW_UI
-		| (p->prompts[0]->echo ? 0 : CREDUI_FLAGS_KEEP_USERNAME));
+		| bAskUserName ? 0 : CREDUI_FLAGS_KEEP_USERNAME)
+		| (nextIsPwError ? CREDUI_FLAGS_INCORRECT_PASSWORD : 0));
 
 	if(p->prompts[0]->echo)
 	{
@@ -179,6 +193,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	{
 		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->result_len, CREDUI_MAX_PASSWORD_LENGTH), password);
 		memset(password, 0, sizeof(password));
+		nextIsPwError = TRUE;
 	}
 
 	if(!dwResult)
@@ -187,7 +202,15 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 		return 1;
 	}
 	else
+	{
+		sPlinkShouldConfirm = FALSE;
+		if (dwResult == ERROR_CANCELLED)
+		{
+			dwResult = CredUIConfirmCredentials(sTarget, FALSE);
+		}
+
 		return 0;
+	}
 }
 
 int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
@@ -263,9 +286,9 @@ int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
 
 void cleanup_exit(int code)
 {
-	if(sPlinkCurrentConfig && sPlinkCurrentConfig->host)
+	if(sTarget[0])
 	{		
-		CredUIConfirmCredentials(sPlinkCurrentConfig->host, sPlinkShouldConfirm);
+		CredUIConfirmCredentials(sTarget, sPlinkShouldConfirm);
 	}
 	putty_cleanup_exit(code);
 }

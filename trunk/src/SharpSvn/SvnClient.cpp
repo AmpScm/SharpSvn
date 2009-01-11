@@ -45,6 +45,7 @@ void SvnClient::AdministrativeDirectoryName::set(String^ value)
 	{
 		_admDir = svn_wc_get_adm_dir(pool.Handle);
 		_administrativeDirName = Utf8_PtrToString(_admDir);
+		_inPathAdministrativeDirName = System::IO::Path::DirectorySeparatorChar + _administrativeDirName + System::IO::Path::DirectorySeparatorChar;
 	}
 }
 
