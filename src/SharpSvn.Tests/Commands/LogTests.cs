@@ -1,4 +1,20 @@
 // $Id$
+//
+// Copyright 2008-2009 The SharpSvn Project
+//
+//  Licensed under the Apache License, Version 2.0 (the "License");
+//  you may not use this file except in compliance with the License.
+//  You may obtain a copy of the License at
+//
+//    http://www.apache.org/licenses/LICENSE-2.0
+//
+//  Unless required by applicable law or agreed to in writing, software
+//  distributed under the License is distributed on an "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//  See the License for the specific language governing permissions and
+//  limitations under the License.
+
+// $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
@@ -74,7 +90,7 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void TestLogNonAsciiChars()
         {
-            this.RunCommand("svn", "propset svn:log --revprop -r 1  \"Æ e i a æ å, sjø\" " +
+            this.RunCommand("svn", "propset svn:log --revprop -r 1  \" e i a  , sj\" " +
                 this.ReposUrl);
 
             SvnLogArgs a = new SvnLogArgs();
@@ -82,7 +98,7 @@ namespace SharpSvn.Tests.Commands
 
             this.Client.Log(this.ReposUrl, a, LogCallback);
             Assert.That(this.logMessages.Count, Is.EqualTo(1));
-            Assert.That(this.logMessages[0].LogMessage, Is.EqualTo("Æ e i a æ å, sjø"));
+            Assert.That(this.logMessages[0].LogMessage, Is.EqualTo(" e i a  , sj"));
         }
 
         [Test]
