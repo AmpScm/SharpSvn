@@ -65,6 +65,9 @@ public:
 
 	static Exception^ Fetch(const SvnExceptionContainer* container)
 	{
+		if (!container)
+			throw gcnew ArgumentNullException("container");
+
 		System::Diagnostics::Debug::Assert(container && container->_id == _idValue);
 
 		if (container->_id == _idValue)

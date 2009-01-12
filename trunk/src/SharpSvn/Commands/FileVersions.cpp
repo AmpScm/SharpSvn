@@ -103,9 +103,9 @@ static svn_error_t *file_version_window_handler(
 
 		next->Clear();
 	}
-	catch(Exception^ e)
+	catch(Exception^ ex)
 	{
-		return SvnException::CreateExceptionSvnError("FileVersions delta window receiver", e);
+		return SvnException::CreateExceptionSvnError("FileVersions delta window receiver", ex);
 	}
 	finally
 	{
@@ -270,8 +270,11 @@ static svn_error_t *file_version_handler(
 				&delta_baton->wrapped_baton);
 
 			/* Wrap the window handler with our own. */
-			*content_delta_handler = file_version_window_handler;
-			*content_delta_baton = delta_baton;
+			if (content_delta_handler && content_delta_baton)
+			{
+				*content_delta_handler = file_version_window_handler;
+				*content_delta_baton = delta_baton;
+			}
 
 			args->_fv = e;
 			nodetach = true;
@@ -294,9 +297,9 @@ static svn_error_t *file_version_handler(
 
 		return nullptr;
 	}
-	catch(Exception^ e)
+	catch(Exception^ ex)
 	{
-		return SvnException::CreateExceptionSvnError("FileVersions receiver", e);
+		return SvnException::CreateExceptionSvnError("FileVersions receiver", ex);
 	}
 	finally
 	{

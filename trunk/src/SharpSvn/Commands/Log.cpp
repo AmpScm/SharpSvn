@@ -248,9 +248,9 @@ static svn_error_t *svnclient_log_handler(void *baton, svn_log_entry_t *log_entr
 		else
 			return nullptr;
 	}
-	catch(Exception^ e)
+	catch(Exception^ ex)
 	{
-		return SvnException::CreateExceptionSvnError("Log receiver", e);
+		return SvnException::CreateExceptionSvnError("Log receiver", ex);
 	}
 	finally
 	{
