@@ -229,8 +229,8 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 	StringBuilder^ result = gcnew StringBuilder(root, path->Length + 16);
 
 	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
-	size_t len = sizeof(wchar_t)* (path->Length+1+4);
-	wchar_t* pSec = (wchar_t*)_alloca(len);
+	size_t len = (path->Length+1+4);
+	wchar_t* pSec = (wchar_t*)_malloca(len*sizeof(wchar_t));
 
 	if (wcscpy_s(pSec, len, L"\\\\?\\") || wcscat_s(pSec, len, pChars))
 		return nullptr;
@@ -451,13 +451,13 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 		if (i < c && path[i] == '.')
 		{
-			int n = i;
-			n++;
+			int j = i;
+			j++;
 
-			if (n < c && path[n] == '.')
-				n++;
+			if (j < c && path[j] == '.')
+				j++;
 
-			if (IsSeparator(path, n))
+			if (IsSeparator(path, j))
 				return false; // '\'-s behind each other
 		}
 
@@ -542,12 +542,12 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		if (i < c && path[i] == '.')
 		{
-			int n = i;
+			int j = i;
 
-			while (n < c && path[n] == '.')
-				n++;
+			while (j < c && path[j] == '.')
+				j++;
 
-			if (IsSeparator(path, n) || n >= c)
+			if (IsSeparator(path, j) || j >= c)
 				return false; // Relative path
 		}
 

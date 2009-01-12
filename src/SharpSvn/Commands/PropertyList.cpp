@@ -54,9 +54,9 @@ static svn_error_t *svnclient_property_list_handler(void *baton, const char *pat
 		else
 			return nullptr;
 	}
-	catch(Exception^ e)
+	catch(Exception^ ex)
 	{
-		return SvnException::CreateExceptionSvnError("Property list receiver", e);
+		return SvnException::CreateExceptionSvnError("Property list receiver", ex);
 	}
 	finally
 	{

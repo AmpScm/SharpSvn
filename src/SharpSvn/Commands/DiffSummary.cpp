@@ -57,9 +57,9 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 		else
 			return nullptr;
 	}
-	catch(Exception^ e)
+	catch(Exception^ ex)
 	{
-		return SvnException:: CreateExceptionSvnError("Diff summary receiver", e);
+		return SvnException:: CreateExceptionSvnError("Diff summary receiver", ex);
 	}
 	finally
 	{

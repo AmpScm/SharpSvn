@@ -173,9 +173,9 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath
 				return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Changed receiver canceled operation");
 			}
 		}
-		catch (Exception^ e)
+		catch (Exception^ ex)
 		{
-			return SvnException::CreateExceptionSvnError("Changed receiver", e);
+			return SvnException::CreateExceptionSvnError("Changed receiver", ex);
 		}
 		finally
 		{

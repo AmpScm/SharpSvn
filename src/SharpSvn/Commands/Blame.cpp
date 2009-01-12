@@ -57,9 +57,9 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 		else
 			return nullptr;
 	}
-	catch(Exception^ e)
+	catch(Exception^ ex)
 	{
-		return SvnException::CreateExceptionSvnError("Diff summary receiver", e);
+		return SvnException::CreateExceptionSvnError("Diff summary receiver", ex);
 	}
 	finally
 	{
