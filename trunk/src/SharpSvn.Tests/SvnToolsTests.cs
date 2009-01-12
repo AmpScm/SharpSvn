@@ -20,11 +20,13 @@ using System.Text;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn.Implementation;
+using SharpSvn.Tests.Commands;
+using System.IO;
 
 namespace SharpSvn.Tests
 {
     [TestFixture]
-    public class SvnToolsTests
+    public class SvnToolsTests : TestBase
     {
         [Test]
         public void TestUriCanonicalization()
@@ -57,6 +59,39 @@ namespace SharpSvn.Tests
                 Assert.That(lib.Version, Is.Not.Null, "Version is null for {0} ({1})", lib.Name, lib.VersionString);
                 Assert.That(lib.Version, Is.GreaterThan(new Version(0, 1)));
             }
+        }
+
+        [Test]
+        public void IsBelowAdmin()
+        {
+            string dir = GetTempDir();
+
+            Assert.That(!SvnTools.IsBelowManagedPath(dir), "Temp is not managed");
+
+            string sd = Path.Combine(dir, "w");
+            Directory.CreateDirectory(sd);
+
+            Assert.That(!SvnTools.IsBelowManagedPath(sd), "sd not managed");
+
+            string sdsvn = Path.Combine(sd, ".svn");
+            Directory.CreateDirectory(sdsvn);
+
+            Assert.That(SvnTools.IsBelowManagedPath(sd), "sd managed");
+            Assert.That(!SvnTools.IsBelowManagedPath(sdsvn), "sdsvn not managed");
+
+            string format = Path.Combine(sdsvn, "format");
+            File.WriteAllText(format, "-1");
+            Assert.That(!SvnTools.IsBelowManagedPath(format), "format not managed");
+
+            string sdsvnsvn = Path.Combine(sd, ".svn");
+            Directory.CreateDirectory(sdsvnsvn);
+            Assert.That(!SvnTools.IsBelowManagedPath(format), "format not managed");
+
+            string sdsvnd = Path.Combine(sdsvn, "d");
+            Directory.CreateDirectory(sdsvnd);
+            Assert.That(!SvnTools.IsBelowManagedPath(sdsvnd), "d not managed");
+            Directory.CreateDirectory(Path.Combine(sdsvnd, ".svn"));
+            Assert.That(SvnTools.IsBelowManagedPath(sdsvnd), "d managed");
         }
     }
 }

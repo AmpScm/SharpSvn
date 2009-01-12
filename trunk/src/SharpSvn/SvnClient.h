@@ -133,8 +133,6 @@ namespace SharpSvn {
 
 	private:
 		static String^ _administrativeDirName = Utf8_PtrToString(_admDir);
-		static String^ _inPathAdministrativeDirName = 
-			System::IO::Path::DirectorySeparatorChar + _administrativeDirName + System::IO::Path::DirectorySeparatorChar;
 		void Initialize();
 
 	public:
@@ -182,15 +180,6 @@ namespace SharpSvn {
 			}
 		internal:
 			void set(String^ value);
-		}
-
-	internal:
-		property static String^ InPathAdministrativeDirectoryName
-		{
-			String^ get()
-			{
-				return _inPathAdministrativeDirName;
-			}
 		}
 
 	private:

@@ -52,7 +52,7 @@ namespace SharpSvn.Tests
 		public void DeleteTemp()
 		{
 			if(File.Exists(_casedFile))
-				File.Decrypt(_casedFile);
+				File.Delete(_casedFile);
 		}
 
 		[Test]
