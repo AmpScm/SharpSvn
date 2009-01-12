@@ -316,25 +316,42 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	if (!root)
 		return false;
 
+	String^ admDir = SvnClient::AdministrativeDirectoryName;
 	int nStart = root->Length;
+	int nEnd = path->Length - 1;
+	int i;
 
-	// If the path is below .svn, start looking at that position
-	int i = path->LastIndexOf(SvnClient::InPathAdministrativeDirectoryName, nStart, StringComparison::OrdinalIgnoreCase);
-	if (i >= 0)
-		nStart = i + SvnClient::InPathAdministrativeDirectoryName->Length;
+	while (nStart <= (i = path->LastIndexOf('\\', nEnd)))
+	{
+		int len = nEnd - i;
 
-	while (0 < (i = path->IndexOf('\\', nStart)))
+		if (len == admDir->Length && 
+			(0 == String::Compare(path, i+1, admDir, 0, len, StringComparison::OrdinalIgnoreCase)))
+		{
+			// The .svn directory can't contain a working copy..			
+			nStart = nEnd+1;
+			if (nStart >= path->Length)
+				return false;
+
+			nStart++; // start looking one level below .svn
+			break;
+		}
+		
+		nEnd = i - 1;
+	}
+
+	while (0 <= (i = path->IndexOf('\\', nStart)))
 	{
 		if (IsManagedPath(path->Substring(0, i)))
 			return true;
 
 		nStart = i+1;
 	}
-
-	if (nStart >= (path->Length-1))
-		return false; // Path ends with a \, probably disk root
-
-	return IsManagedPath(path);
+	
+	if (nStart >= path->Length)
+		return false;
+	else
+		return IsManagedPath(path);
 }
 
 String^ SvnTools::GetNormalizedFullPath(String^ path)
