@@ -105,7 +105,7 @@ static String^ GetPathRootPart(String^ path)
 		else
 			return path->Substring(0, 3);
 	}
-	
+
 	if (!path->StartsWith("\\\\"))
 		return nullptr;
 
@@ -182,10 +182,10 @@ String^ SvnTools::GetTruePath(String^ path)
 	if (c == '\\' && path->StartsWith("\\\\?\\", StringComparison::Ordinal))
 		path = path->Substring(4); // We use this trick ourselves
 
-    if (ContainsRelative(path))
+	if (ContainsRelative(path))
 	{
 		normalized = true;
-        path = GetNormalizedFullPath(path);
+		path = GetNormalizedFullPath(path);
 	}
 
 	root = GetPathRootPart(path);
@@ -193,7 +193,7 @@ String^ SvnTools::GetTruePath(String^ path)
 	if (!root && !normalized)
 	{
 		normalized = true;
-        path = GetNormalizedFullPath(path);
+		path = GetNormalizedFullPath(path);
 
 		root = GetPathRootPart(path);
 	}
@@ -328,15 +328,16 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 		if (len == admDir->Length && 
 			(0 == String::Compare(path, i+1, admDir, 0, len, StringComparison::OrdinalIgnoreCase)))
 		{
-			// The .svn directory can't contain a working copy..			
-			nStart = nEnd+1;
+			// The .svn directory can't contain a working copy..	
+
+			nStart = nEnd+2; // start looking one character after the '\' if there is one.
+
 			if (nStart >= path->Length)
 				return false;
 
-			nStart++; // start looking one level below .svn
 			break;
 		}
-		
+
 		nEnd = i - 1;
 	}
 
@@ -347,7 +348,7 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 
 		nStart = i+1;
 	}
-	
+
 	if (nStart >= path->Length)
 		return false;
 	else
@@ -365,7 +366,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 		return path; // Just pass through; no allocations
 
 	bool retry = true;
-	
+
 	if(path->Length < MAX_PATH)
 	{
 		try
@@ -631,7 +632,7 @@ String^ SvnTools::GetFileName(Uri^ target)
 		throw gcnew ArgumentNullException("target");
 
 	target = SvnBase::CanonicalizeUri(target);
-	
+
 	String^ path = target->AbsolutePath;
 
 	int nEnd = path->LastIndexOf('?');
@@ -663,7 +664,7 @@ String^ SvnTools::PathCombine(String^ path1, String^ path2)
 		throw gcnew ArgumentNullException("path1");
 	else if (!path2)
 		throw gcnew ArgumentNullException("path2");
-	
+
 	try
 	{
 		return Path::Combine(path1, path2);
