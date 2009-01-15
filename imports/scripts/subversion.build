@@ -329,11 +329,13 @@
     <copy todir="${release}/include">
       <fileset basedir="${svnBase}\subversion\include">
         <include name="**/*.h" />
+        <include name="${svnBase}\subversion\svn_private_config.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include/svn-internal">
       <fileset basedir="${svnBase}/subversion">
         <include name="libsvn_client/client.h" />
+        <include name="libsvn_subr/config_impl.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include/serf">
