@@ -130,6 +130,7 @@
     </Compile>
     <Compile Include="DiffTests.cs" />
     <Compile Include="LocalizationTests.cs" />
+    <Compile Include="SvnAuthTests.cs" />
     <Compile Include="SvnBdbTest.cs" />
     <Compile Include="SvnClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
