@@ -68,8 +68,12 @@ namespace SharpSvn {
 
 	private:
 		// For SvnClient and SvnReposClient
-		SvnClientArgs^ _currentArgs;
+		SvnClientArgs^ _currentArgs;		
 		Object^ _workState;
+
+	internal:
+		// Used config path; used for the authentication cache
+		String^ _configPath;
 
 	internal:
 		property SvnClientArgs^ CurrentCommandArgs

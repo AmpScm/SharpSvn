@@ -31,15 +31,75 @@ namespace SharpSvn {
 
 		ref class SvnAuthentication;
 
+		public enum class SvnAuthenticationCacheType
+		{
+			None,
+			UserName,
+			UserNamePassword,
+			SslServerTrust,
+			SslClientCertificate,
+			SslClientCertificatePassword,
+		};
+
+		public ref class SvnAuthenticationCacheItem sealed : public SvnBase
+		{
+			initonly String^ _filename;
+			initonly SvnAuthenticationCacheType^ _type;
+			initonly String^ _realm;
+			Uri^ _realmUri;
+		internal:
+			SvnAuthenticationCacheItem(String^ filename, SvnAuthenticationCacheType type, String^ realm);
+
+		public:
+			/// <summary>Gets the type of the cached item</summary>
+			property SvnAuthenticationCacheType^ CacheType
+			{
+				SvnAuthenticationCacheType^ get()
+				{
+					return _type;
+				}
+			}
+
+			/// <summary>Gets the realm of the cached item</summary>
+			property String^ Realm
+			{
+				String^ get()
+				{
+					return _realm;
+				}
+			}
+
+			/// <summary>Gets the Uri part of the Realm string</summary>
+			property Uri^ RealmUri
+			{
+				Uri^ get();
+			}
+
+			/// <summary>Gets a boolean indicating whether the credentials were deleted since creating this instance</summary>
+			property bool IsDeleted
+			{
+				bool get()
+				{
+					return !System::IO::File::Exists(_filename);
+				}
+			}
+
+			/// <summary>Deletes the externally cached credentials</summary>
+			/// <remarks>Does /not/ delete in memory credentials. You should call ClearAuthenticationCache() to clear the in memory cache</remarks>
+			void Delete();
+		};
+
 		public ref class SvnAuthenticationEventArgs abstract: public SvnEventArgs
 		{
 			initonly bool _maySave;
-			initonly String^ _realm;
-			static initonly Regex^ _reRealmUri = gcnew Regex("^\\<(?<server>[a-z]+://[^ >]+)\\> (?<realm>.*)$", RegexOptions::ExplicitCapture | RegexOptions::Singleline);
+			initonly String^ _realm;			
 			bool _save;
 			bool _cancel;
 			bool _break;
 			Uri^ _realmUri;
+
+		internal:
+			static initonly Regex^ _reRealmUri = gcnew Regex("^\\<(?<server>[a-z]+://[^ >]+)\\> (?<realm>.*)$", RegexOptions::ExplicitCapture | RegexOptions::Singleline);
 
 		protected:
 			SvnAuthenticationEventArgs(String^ realm, bool maySave)
@@ -829,6 +889,12 @@ namespace SharpSvn {
 
 			/// <summary>Adds all default console handlers</summary>
 			void AddConsoleHandlers();
+
+		public:
+			/// <summary>Gets a list of subversion cached credentials of the specified type</summary>
+			/// <param name="type">The type of credentials to retrieve</param>
+			/// <remarks>This list only contains credentials cached by Subversion; not by external authentication stores</remarks>
+			Collection<SvnAuthenticationCacheItem^>^ GetCachedItems(SvnAuthenticationCacheType type);
 
 		public:
 			/// <summary>Simple credential handler to provide a static credential</summary>

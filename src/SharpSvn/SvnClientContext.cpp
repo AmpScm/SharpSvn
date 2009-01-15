@@ -392,6 +392,9 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 	CtxHandle->config = cfg;
 
 	_contextState = SvnContextState::ConfigLoaded;
+
+	if (!_configPath)
+		_configPath = path;
 }
 
 void SvnClientContext::LoadConfiguration(String ^path)

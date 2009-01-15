@@ -20,14 +20,25 @@
 #include "SvnClientContext.h"
 #include "SvnAuthentication.h"
 
+#include <svn_io.h>
+#include <svn_hash.h>
+
+using System::Text::RegularExpressions::Match;
+using System::Collections::ObjectModel::Collection;
+using System::IO::DirectoryInfo;
+using System::IO::FileInfo;
+
 //////////////////////////////////////////////////////////////////////////////////////
 // All this depends on intimate knowledge of implementation within
 // subversion/libsvn_subr/auth.c. The sharpsvn_svn_auth_get_credentials_cache
 // method is patched into that method to make it possible to copy credentials
-// between different clients
+// between different SvnClient
 //
 // We can do this as we are static compiled against a specific version of subversion
-//
+// But we can't guarantee this will be compatible with future subversion releases
+// (or even patch releases)
+
+#include "svn-internal/libsvn_subr/config_impl.h"
 
 extern "C" {
 	apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton);
@@ -64,7 +75,9 @@ void SvnAuthentication::CopyAuthenticationCache(SharpSvn::SvnClientContext ^clie
 
 void SvnAuthentication::ClearAuthenticationCache()
 {
-	if (!_currentBaton)
+	if (_clientContext->CurrentCommandArgs)
+		throw gcnew InvalidOperationException(); // Busy in request
+	else if (!_currentBaton)
 		return;
 
 	apr_hash_t *hash = get_cache(_currentBaton);
@@ -183,4 +196,149 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 	}
 
 	return hash_to;
+}
+
+SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(String^ filename, SvnAuthenticationCacheType type, String^ realm)
+{
+	if (String::IsNullOrEmpty(filename))
+		throw gcnew ArgumentNullException("filename");
+	else if (String::IsNullOrEmpty(realm))
+		throw gcnew ArgumentNullException("realm");
+
+	_filename = filename;
+	_type = type;
+	_realm = realm;
+}
+
+System::Uri^ SvnAuthenticationCacheItem::RealmUri::get()
+{
+	if (_realmUri || !Realm)
+		return _realmUri;
+
+	Match^ m = SvnAuthenticationEventArgs::_reRealmUri->Match(Realm);
+
+	Uri^ uri;
+
+	if (m->Success)
+	{
+		String^ uriValue = m->Groups[1]->Value;
+
+		if (uriValue && !uriValue->EndsWith("/", StringComparison::Ordinal))
+			uriValue += "/";
+
+		if (Uri::TryCreate(uriValue, UriKind::Absolute, uri))
+			_realmUri = uri;
+	}
+
+	return _realmUri;
+}
+
+void SvnAuthenticationCacheItem::Delete()
+{
+	if (System::IO::File::Exists(_filename))
+		System::IO::File::Delete(_filename);		
+}
+
+
+Collection<SvnAuthenticationCacheItem^>^ 
+	SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
+{
+	_clientContext->EnsureState(SharpSvn::Implementation::SvnContextState::AuthorizationInitialized);
+
+	AprPool pool(SvnBase::SmallThreadPool);
+
+	const char* cfg = nullptr;
+	svn_error_t* r = svn_config__user_config_path(
+		_clientContext->_configPath ? pool.AllocPath(_clientContext->_configPath) : nullptr,
+		&cfg,
+		SVN_CONFIG__AUTH_SUBDIR,
+		pool.Handle);
+
+	if (r)
+		throw SvnException::Create(r);
+
+	const char* append = nullptr;;
+	switch (type)
+	{
+	case SvnAuthenticationCacheType::UserName:
+		append = SVN_AUTH_CRED_USERNAME;
+		break;
+	case SvnAuthenticationCacheType::UserNamePassword:
+		append = SVN_AUTH_CRED_SIMPLE;
+		break;
+	case SvnAuthenticationCacheType::SslServerTrust:
+		append = SVN_AUTH_CRED_SSL_SERVER_TRUST;
+		break;
+	case SvnAuthenticationCacheType::SslClientCertificate:
+		append = SVN_AUTH_CRED_SSL_CLIENT_CERT;
+		break;
+	case SvnAuthenticationCacheType::SslClientCertificatePassword:
+		append = SVN_AUTH_CRED_SSL_CLIENT_CERT_PW;
+		break;
+	}
+
+	if (!cfg || !append)
+		return gcnew Collection<SvnAuthenticationCacheItem^>();
+
+	cfg = svn_path_join(cfg, append, pool.Handle);
+
+	DirectoryInfo^ dir = gcnew DirectoryInfo(Utf8_PtrToString(cfg));
+
+	if (!dir->Exists)
+		return gcnew Collection<SvnAuthenticationCacheItem^>();
+
+	List<SvnAuthenticationCacheItem^>^ items = gcnew List<SvnAuthenticationCacheItem^>();
+	AprPool pl(%pool);
+	for each(FileInfo^ file in dir->GetFiles("*"))
+	{
+		if (file->Name->Length != 32)
+			continue;
+
+		bool ok = true;
+		for(int i = 0; i < 32; i++)
+		{
+			if (0 > ((String^)"0123456789abcdef")->IndexOf(file->Name[i]))
+			{
+				ok = false;
+				break;
+			}
+		}
+		if (!ok)
+			continue;
+
+		pl.Clear(); // Clear before running to clear old state
+
+		apr_file_t* h = nullptr;
+		r = svn_io_file_open(&h, pool.AllocPath(file->FullName), 
+			                APR_READ | APR_BUFFERED, APR_OS_DEFAULT, pl.Handle);
+
+		apr_hash_t* hash = nullptr;
+		if (!r)
+		{
+			hash = apr_hash_make(pl.Handle);
+
+			r = svn_hash_read(hash, h, pl.Handle);
+		}         
+
+		if (r)
+		{
+			svn_error_clear(r);
+			continue;
+		}
+		else if (!hash)
+			continue;	
+
+		svn_string_t* pRealm = (svn_string_t*)apr_hash_get(hash, SVN_CONFIG_REALMSTRING_KEY, APR_HASH_KEY_STRING);
+
+		if(!pRealm)
+			continue;
+
+		String^ realm = Utf8_PtrToString(pRealm->data, pRealm->len);
+		if (realm)
+		{
+			items->Add(gcnew SvnAuthenticationCacheItem(file->FullName, type, realm));
+		}
+	}
+	
+	return gcnew Collection<SvnAuthenticationCacheItem^>(items->AsReadOnly());
 }
