@@ -52,9 +52,9 @@ namespace SharpSvn {
 
 		public:
 			/// <summary>Gets the type of the cached item</summary>
-			property SvnAuthenticationCacheType^ CacheType
+			property SvnAuthenticationCacheType CacheType
 			{
-				SvnAuthenticationCacheType^ get()
+				SvnAuthenticationCacheType get()
 				{
 					return _type;
 				}
