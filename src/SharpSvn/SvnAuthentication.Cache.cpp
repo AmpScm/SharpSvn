@@ -230,6 +230,9 @@ System::Uri^ SvnAuthenticationCacheItem::RealmUri::get()
 			_realmUri = uri;
 	}
 
+	if (Realm->Contains("://") && (0 > Realm->IndexOf(' ')))
+		Uri::TryCreate(Realm, UriKind::Absolute, _realmUri);
+
 	return _realmUri;
 }
 
