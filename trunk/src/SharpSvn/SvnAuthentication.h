@@ -44,7 +44,7 @@ namespace SharpSvn {
 		public ref class SvnAuthenticationCacheItem sealed : public SvnBase
 		{
 			initonly String^ _filename;
-			initonly SvnAuthenticationCacheType^ _type;
+			initonly SvnAuthenticationCacheType _type;
 			initonly String^ _realm;
 			Uri^ _realmUri;
 		internal:
