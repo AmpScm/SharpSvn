@@ -390,7 +390,7 @@ namespace CollabUpload
                 "\\<td[^>]*>" + body + "\\<\\/td>\\s*" +
                 "\\<td[^>]*>\\s*[^<]*(\\<a[^>]*href=\"(?<reserveUrl>[^\"]*)\"[^>]*>\\s*Reserve[^<]*\\<\\/a>)?" + body + "\\<\\/td>\\s*" +
                 "\\<td[^>]*>\\s*(?<desc>[^<]*)\\<\\/td>\\s*" +
-                "\\<td[^>]*>\\s*\\<a[^>]*href=\"(?<editUrl>[^\"]*)\"[^>]*>\\s*Edit\\s*\\<\\/a>\\s*<\\/td>\\s*" +                
+                "\\<td[^>]*>\\s*(\\<a[^>]*href=\"(?<editUrl>[^\"]*)\"[^>]*>\\s*[a-zA-Z ]+\\s*\\<\\/a>)?" + body + "\\s*<\\/td>\\s*" +                
                 "\\<\\/tr\\>"
                 , RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
@@ -416,7 +416,8 @@ namespace CollabUpload
                 d.ReserveUri = string.IsNullOrEmpty(reserveUrl) ? null : new Uri(baseUri, reserveUrl);
                 d.Description = desc;
                 d.EditUri = new Uri(baseUri, editUrl);
-                d.FileId = int.Parse(editUrl.Substring(editUrl.IndexOf("documentID=") + 11));
+                if (!int.TryParse(editUrl.Substring(editUrl.IndexOf("documentID=") + 11), out d.FileId))
+                    continue;
 
                 DateTime when;
                 if (!string.IsNullOrEmpty(date) && DateTime.TryParse(date.Replace(" at "," "), out when))
