@@ -468,6 +468,13 @@ namespace CollabUpload
                     text = text.Remove(nS, nE-nS+9);
                 }
 
+                while (0 <= (nS = text.IndexOf("<!--", StringComparison.OrdinalIgnoreCase))
+                    && (0 <= (nE = text.IndexOf("-->", nS + 4, StringComparison.OrdinalIgnoreCase))))
+                {
+                    string del = text.Substring(nS, nE - nS + 3);
+                    text = text.Remove(nS, nE - nS + 3);
+                }
+
                 return text;
             }
         }
