@@ -457,7 +457,18 @@ namespace CollabUpload
         {
             using (StreamReader sr = new StreamReader(response.GetResponseStream()))
             {
-                return sr.ReadToEnd();
+                string text = sr.ReadToEnd();
+
+                int nS;
+                int nE;
+                while (0 <= (nS = text.IndexOf("<script", StringComparison.OrdinalIgnoreCase))
+                    && (0 <= (nE = text.IndexOf("</script>", nS+1,StringComparison.OrdinalIgnoreCase))))
+                {
+                    string del = text.Substring(nS, nE-nS+9);
+                    text = text.Remove(nS, nE-nS+9);
+                }
+
+                return text;
             }
         }
     }
