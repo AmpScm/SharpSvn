@@ -1,0 +1,28 @@
+#summary Why the api has boolean return values and throws exceptions.
+
+= Introduction =
+
+The SharpSvn library has a design that looks like any other library but has a few different design decissions. By default all Subversion errors are thrown as wrapped .Net Exceptions. This works great if you are building commandline programs but is very problematic if you are embedding the api within a larger application.
+
+In some situations throwing exceptions and handling yourself makes it nearly impossible to work. Inside the Visual Studio environment we have such a situation. Throwing an unhandled exception at the wrong time might crash the whole environment and catching them correctly can make it impossible to debug other add-ins.
+(Using SharpSvn within visual studio was one of the design goals). To handle this kind of application's two other modes are used.
+
+
+= Details =
+So we have three scenario's:
+ * Applications which allow exceptions as debug helpers (build systems, etc.)
+ * Applications which handle errors locally
+ * Applications which handle errors globally
+
+== Allowing Exceptions ==
+If the program does not enable one of the exception modes all Subversion errors (except canceling loops) will throw managed exceptions.
+
+== Handling Exceptions locally ==
+All Args objects used by the SvnClient object have a property ThrowOnError which by default is set to true. If this property is set to false and an SvnException would be raised, the exception is set to the Exception property of the args object and false is returned.
+
+== Handling Exceptions globally ==
+Just before the exception is thrown the SvnError event on the SvnClient and args object is raised. If a handler sets Cancel on the EventArgs object to false, the exception is not raised and false is returned from the command instead.
+
+Please note: All this is only for the Subversion exceptions. E.g. Passing invalid arguments which are found in the managed api before passing it to subversion will just throw an ArgumentException. This Exception handling only makes sure your application will never crash on network/disk/locking exceptions found internally in subversion.
+
+(Please note: At this time the subversion library contains a lot of abort() statements in very unusual code paths, especially in the serf code. When one of them is reached your application will crash directly. (Serf is disabled by default in the current release))
