@@ -24,6 +24,8 @@
 #include <apr-1/apr_strings.h>
 #include <apr-1/apr_file_io.h>
 
+#define SVN_DEPRECATED __declspec(deprecated)
+
 #include <svn_client.h>
 #include <svn_io.h>
 #include <svn_path.h>
@@ -41,7 +43,7 @@
 #include <crtdbg.h>
 
 #pragma warning(disable: 4706) // assignment within conditional expression
-
+#pragma warning(error: 4996) // Deprecated warnings
 using System::Runtime::InteropServices::OutAttribute;
 using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 using System::Diagnostics::DebuggerStepThroughAttribute;

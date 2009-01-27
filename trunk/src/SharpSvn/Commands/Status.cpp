@@ -37,23 +37,35 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 	return Status(path, gcnew SvnStatusArgs(), statusHandler);
 }
 
-static void svnclient_status_handler(void *baton, const char *path, svn_wc_status2_t *status)
+svn_error_t* svnclient_status_handler(void *baton, const char *path, svn_wc_status2_t *status, apr_pool_t *pool)
 {
+	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	SvnStatusArgs^ args = dynamic_cast<SvnStatusArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if (args)
+	if (!args)
+		return nullptr;
+
+	SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status);
+
+	try
 	{
-		SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(SvnBase::Utf8_PtrToString(path), status);
-		try
-		{
-			args->OnStatus(e);
-		}
-		finally
-		{
-			e->Detach(false);
-		}
+		args->OnStatus(e);
+
+		if (e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Log receiver canceled operation");
+		else
+			return nullptr;
 	}
+	catch(Exception^ ex)
+	{
+		return SvnException::CreateExceptionSvnError("Log receiver", ex);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
+
 }
 
 bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatusEventArgs^>^ statusHandler)
@@ -79,7 +91,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 
 		svn_opt_revision_t pegRev = args->Revision->ToSvnRevision();
 
-		svn_error_t* r = svn_client_status3(&version,
+		svn_error_t* r = svn_client_status4(&version,
 			pool.AllocPath(path),
 			&pegRev,
 			svnclient_status_handler,

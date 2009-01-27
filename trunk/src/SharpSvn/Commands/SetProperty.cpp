@@ -249,7 +249,7 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 	const char* pcPropertyName = pool->AllocString(propertyName);
 
 	if (!svn_prop_name_is_valid(pcPropertyName))
-		throw gcnew ArgumentException("Property name is not valid", "propertyName");
+		throw gcnew ArgumentException(SharpSvnStrings::PropertyNameIsNotValid, "propertyName");
 
 	svn_error_t *r = svn_client_propset3(
 		&pInfo,

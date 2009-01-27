@@ -64,6 +64,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		// Subversion does no normalization on the property value; so we have to do this before sending it
 		// to the server
 		pool.AllocPropertyValue(value, propertyName),
+		nullptr,
 		args,
 		%pool);
 }
@@ -93,6 +94,7 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 	return InternalSetRevisionProperty(target,
 		propertyName,
 		pool.AllocSvnString(byteArray),
+		nullptr,
 		args,
 		%pool);
 }
@@ -121,11 +123,12 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 	return InternalSetRevisionProperty(target,
 		propertyName,
 		nullptr,
+		nullptr,
 		args,
 		%pool);
 }
 
-bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
+bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -137,11 +140,17 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
 	ArgsStore store(this, args);
 
+	const char* pName = pool->AllocString(propertyName);
+
+	if (!svn_prop_name_is_valid(pName))
+		throw gcnew ArgumentException(SharpSvnStrings::PropertyNameIsNotValid, "propertyName");
+
 	svn_revnum_t set_rev = 0;
 
-	svn_error_t *r = svn_client_revprop_set(
-		pool->AllocString(propertyName),
+	svn_error_t *r = svn_client_revprop_set2(
+		pName,
 		value,
+		original_value,
 		pool->AllocString(target->SvnTargetName),
 		target->Revision->AllocSvnRevision(pool),
 		&set_rev,

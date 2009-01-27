@@ -288,16 +288,35 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 		svn_opt_revision_t start = args->Start->Or(args->OriginRevision)->Or(SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
 
-		svn_error_t *r = svn_client_log4(
+		svn_client_log_args_t* logargs = svn_client_log_args_create(pool.Handle);
+
+		logargs->limit = args->Limit;
+		logargs->discover_changed_paths = args->RetrieveChangedPaths;
+		logargs->strict_node_history = args->StrictNodeHistory;
+		logargs->include_merged_revisions = args->RetrieveMergedRevisions;
+		/*			&start,
+		&end,*/
+
+		apr_array_header_t *revision_ranges;
+		{
+			svn_opt_revision_range_t *range;
+
+			range = (svn_opt_revision_range_t*)pool.Alloc(sizeof(svn_opt_revision_range_t));
+			range->start = start;
+			range->end = end;
+
+			revision_ranges = apr_array_make(pool.Handle, 1,
+                                   sizeof(svn_opt_revision_range_t *));
+
+			APR_ARRAY_PUSH(revision_ranges, svn_opt_revision_range_t *) = range;
+		}
+
+		svn_error_t *r = svn_client_log5(
 			AllocCanonicalArray(targets, %pool),
 			&pegRev,
-			&start,
-			&end,
-			args->Limit,
-			args->RetrieveChangedPaths,
-			args->StrictNodeHistory,
-			args->RetrieveMergedRevisions,
+			revision_ranges,
 			retrieveProperties,
+			logargs,
 			svnclient_log_handler,
 			(void*)_clientBatton->Handle,
 			CtxHandle,
@@ -427,7 +446,7 @@ bool SvnClient::GetLog(ICollection<String^>^ targetPaths, SvnLogArgs^ args, [Out
 }
 
 SvnRevisionPropertyNameCollection::SvnRevisionPropertyNameCollection(bool initialEmpty)
-	: KeyedCollection<String^,String^>(StringComparer::Ordinal, 10) // Start using hashtable at 10 items
+: KeyedCollection<String^,String^>(StringComparer::Ordinal, 10) // Start using hashtable at 10 items
 {
 	if (!initialEmpty)
 	{
