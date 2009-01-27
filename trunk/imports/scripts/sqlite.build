@@ -13,6 +13,7 @@
       <arg value="/GF" />      <!-- String Pooling -->
       <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
       <arg value="/Zi" />      <!-- Write debug information -->
+      <arg value="/Zl" />      <!-- Ommit default library name -->
       <defines>
         <define name="NDEBUG" />
       </defines>
