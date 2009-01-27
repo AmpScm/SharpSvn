@@ -148,6 +148,9 @@ namespace Po2Resx
 
 							msgid = null;
 							break;
+                        case "msgid_plural":
+                        case "msgstr_plural":
+                            break;
 						default:
 							throw new InvalidOperationException("Unexpected token: " + token.Key);
 					}
