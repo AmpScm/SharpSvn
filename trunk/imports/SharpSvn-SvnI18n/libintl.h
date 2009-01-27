@@ -55,6 +55,12 @@ static __forceinline char* dcgettext(const char* domain, const char* msgid, int 
 	return (char*)msgid;
 }
 
+static __forceinline char* dngettext(const char* domain, const char* msgid, const char* msgid_plural,
+  unsigned long int n)
+{
+    return dgettext(domain, (n == 1) ? msgid : msgid_plural);
+}
+
 struct svn_error_t;
 struct apr_pool_t;
 
