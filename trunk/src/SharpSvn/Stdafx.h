@@ -23,11 +23,13 @@
 #include <apr-1/apr.h>
 #include <apr-1/apr_strings.h>
 #include <apr-1/apr_file_io.h>
+
 #include <svn_client.h>
-#include <svn_path.h>
-#include <svn_time.h>
-#include <svn_repos.h>
 #include <svn_io.h>
+#include <svn_path.h>
+#include <svn_props.h>
+#include <svn_repos.h>
+#include <svn_time.h>
 
 #ifndef UNUSED_ALWAYS
 #define UNUSED_ALWAYS(x) (x)
