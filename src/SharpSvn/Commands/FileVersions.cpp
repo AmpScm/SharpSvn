@@ -254,11 +254,11 @@ static svn_error_t *file_version_handler(
 			else
 				filePool = args->_curPool;
 
-			SVN_ERR(svn_io_open_unique_file2(&delta_baton->file,
+			SVN_ERR(svn_io_open_unique_file3(&delta_baton->file,
 				&delta_baton->filename,
-				args->_tempPath,
-				"SvnFV", svn_io_file_del_on_pool_cleanup,
-				filePool->Handle));
+				nullptr,
+				svn_io_file_del_on_pool_cleanup,
+				filePool->Handle, filePool->Handle));
 
 			svn_stream_t* last_stream = svn_stream_from_aprfile2(delta_baton->source_file, false, _pool->Handle);
 			svn_stream_t* cur_stream = svn_stream_from_aprfile2(delta_baton->file, false, _pool->Handle);

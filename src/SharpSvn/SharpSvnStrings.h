@@ -364,6 +364,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property name is not valid.
+        /// </summary>
+        internal: static property System::String^  PropertyNameIsNotValid {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revision must be &gt;= 0.
         /// </summary>
         internal: static property System::String^  RevisionMustBeGreaterThanOrEqualToZero {
@@ -648,6 +655,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing::get() {
         return ResourceManager->GetString(L"PleaseRestartThisApplicationBeforeContinuing", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::PropertyNameIsNotValid::get() {
+        return ResourceManager->GetString(L"PropertyNameIsNotValid", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::RevisionMustBeGreaterThanOrEqualToZero::get() {

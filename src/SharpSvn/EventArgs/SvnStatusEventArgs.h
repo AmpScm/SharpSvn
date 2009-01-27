@@ -503,7 +503,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnStatusEventArgs : public SvnEventArgs
+	public ref class SvnStatusEventArgs : public SvnCancelEventArgs
 	{
 		initonly String^ _path;
 		const svn_wc_status2_t *_status;

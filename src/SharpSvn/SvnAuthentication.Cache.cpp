@@ -251,9 +251,9 @@ Collection<SvnAuthenticationCacheItem^>^
 	AprPool pool(SvnBase::SmallThreadPool);
 
 	const char* cfg = nullptr;
-	svn_error_t* r = svn_config__user_config_path(
-		_clientContext->_configPath ? pool.AllocPath(_clientContext->_configPath) : nullptr,
+	svn_error_t* r = svn_config_get_user_config_path(
 		&cfg,
+		_clientContext->_configPath ? pool.AllocPath(_clientContext->_configPath) : nullptr,
 		SVN_CONFIG__AUTH_SUBDIR,
 		pool.Handle);
 
