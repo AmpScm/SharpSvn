@@ -115,6 +115,12 @@
           </filterchain>
         </loadfile>
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_wc/merge.c" />
+        
+        <delete if="${(static=='true') or (svnStatic=='true')}">
+          <fileset basedir="${svnBase}/subversion">
+            <include name="**/deprecated.c" />
+          </fileset>
+        </delete>
       </if>
     </OnceBlock>
   </target>
@@ -266,16 +272,15 @@
         <arg value="subversion_vcnet.sln" />
         <arg value="/p:Configuration=Release" />
         <arg value="/p:Platform=${platform}" />
-        <arg value="/t:svn" />
-        <arg value="/t:svnadmin" />
-        <arg value="/t:svnmucc" />
-        <arg value="/t:svnversion" />
-        <arg value="/t:svnserve" />
-        <arg value="/t:svnsync" />
-        <arg value="/t:svnlook" />
-        <arg value="/t:svnauthz-validate" />
-        <arg value="/t:svn-populate-node-origins-index" />
-        <arg value="/t:__ALL_TESTS__" if="${VSversion == '2005'}"/>
+        <arg value="/t:Programs\svn" />
+        <arg value="/t:Programs\svnadmin" />        
+        <arg value="/t:Programs\svnversion" />
+        <arg value="/t:Programs\svnserve" />
+        <arg value="/t:Programs\svnsync" />
+        <arg value="/t:Programs\svnlook" />
+        <arg value="/t:Programs\svnmucc" if="${svnAddSharpSvn != 'true'}" />
+        <arg value="/t:Programs\svnauthz-validate" if="${svnAddSharpSvn != 'true'}" />
+        <arg value="/t:Programs\svn-populate-node-origins-index" if="${svnAddSharpSvn != 'true'}" />
       </exec>
     </OnceBlock>
   </target>
