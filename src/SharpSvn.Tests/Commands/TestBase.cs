@@ -127,7 +127,7 @@ namespace SharpSvn.Tests.Commands
 					}
 				case TestReposType.AnkhRepos:
 					{
-						UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
+						UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), path);
 						return path;
 					}
 				default:

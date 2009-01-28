@@ -63,29 +63,30 @@ namespace SharpSvn.Tests.Commands
                 clientLogs[i].CheckMatch(this.logMessages[i]);
         }
 
-		[Test]
-		public void StrangeLog()
-		{
+        [Test]
+        public void StrangeLog()
+        {
             // With Subversion 1.5.4 this gives thousands of result values
-			SvnLogArgs la = new SvnLogArgs();
-			la.Start = 34669;
-			la.End = 0;
+            SvnLogArgs la = new SvnLogArgs();
+            la.Start = 34669;
+            la.End = 0;
             la.Limit = 10;
-			la.OperationalRevision = 34669;
-			la.RetrieveMergedRevisions = true;
+            la.OperationalRevision = 34669;
+            la.RetrieveMergedRevisions = true;
+            la.RetrieveChangedPaths = false;
             la.ThrowOnCancel = false;
             int n = 0;
-			Client.Log(new Uri("http://svn.collab.net/repos/svn/branches/1.5.x-reintegrate-improvements/"), la,
-				delegate(object sender, SvnLogEventArgs le)
-				{
+            Client.Log(new Uri("http://svn.collab.net/repos/svn/branches/1.5.x-reintegrate-improvements/"), la,
+                delegate(object sender, SvnLogEventArgs le)
+                {
                     n++;
 
                     if (n > 100)
                         le.Cancel = true;
-				});
+                });
 
             Assert.That(la.IsLastInvocationCanceled, Is.False, "More than 100 items returned");
-		}
+        }
 
         [Test]
         public void TestLogNonAsciiChars()
@@ -282,13 +283,37 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-		[Test, ExpectedException(typeof(ArgumentException))]
-		public void TestNoMultiUris()
-		{
-			Collection<SvnLogEventArgs> result;
-			SvnLogArgs la = new SvnLogArgs();
-			Client.GetLog(new Uri[0], la, out result);
-		}
+        [Test, ExpectedException(typeof(ArgumentException))]
+        public void TestNoMultiUris()
+        {
+            Collection<SvnLogEventArgs> result;
+            SvnLogArgs la = new SvnLogArgs();
+            Client.GetLog(new Uri[0], la, out result);
+        }
+
+        [Test]
+        public void OldLog()
+        {
+            Uri repos = GetReposUri(TestReposType.AnkhRepos);
+
+            string dir = GetTempDir();
+
+            Client.CheckOut(repos, dir);
+            string file;
+            File.WriteAllText(file = Path.Combine(dir, "qwqwqw"),"fds gsdfgsfdgdsf");
+            Client.Add(file);
+            Client.Commit(file);
+
+            Client.Log(repos,
+                delegate(object sender, SvnLogEventArgs e)
+                {
+                    if(e.Revision != 0)
+                        foreach (SvnChangeItem ci in e.ChangedPaths)
+                        {
+                            Assert.That(ci.NodeKind, Is.EqualTo(SvnNodeKind.Unknown));
+                        }
+                });
+        }
 
         [Test]
         public void TestLogCreate()
@@ -417,10 +442,10 @@ namespace SharpSvn.Tests.Commands
         {
             e.Detach();
             this.logMessages.Add(e);
-		}
+        }
 
-		#region SVN Client verifier 
-		private ClientLogMessage[] ClientLog(string path)
+        #region SVN Client verifier
+        private ClientLogMessage[] ClientLog(string path)
         {
             string output = this.RunCommand("svn", "log --xml " + path);
             XmlDocument doc = new XmlDocument();
@@ -495,9 +520,9 @@ namespace SharpSvn.Tests.Commands
             private string author;
             private string message;
             private int revision;
-		}
-		#endregion
+        }
+        #endregion
 
-		private List<SvnLogEventArgs> logMessages = new List<SvnLogEventArgs>();
+        private List<SvnLogEventArgs> logMessages = new List<SvnLogEventArgs>();
     }
 }

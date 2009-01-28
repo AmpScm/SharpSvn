@@ -22,20 +22,26 @@ namespace SharpSvn {
 
 	public ref class SvnChangeItem sealed
 	{
+		const svn_log_changed_path2_t* _changed_path;
 		initonly String^ _path;
 		initonly SvnChangeAction _action;
-		initonly String^ _copyFromPath;
+		String^ _copyFromPath;
 		initonly __int64 _copyFromRevision;
+		initonly SvnNodeKind _nodeKind;
 	internal:
-		SvnChangeItem(String^ path, SvnChangeAction action, String^ copyFromPath, __int64 copyFromRevision)
+		SvnChangeItem(String^ path, const svn_log_changed_path2_t* changed_path)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
+			else if (!changed_path)
+				throw gcnew ArgumentNullException("changed_path");
 
+			_changed_path = changed_path;
 			_path = path;
-			_action = action;
-			_copyFromPath = copyFromPath;
-			_copyFromRevision = copyFromPath ? copyFromRevision : -1;
+			_action = (SvnChangeAction)changed_path->action;
+			_copyFromPath = SvnBase::Utf8_PtrToString(changed_path->copyfrom_path);
+			_copyFromRevision = changed_path->copyfrom_path ? changed_path->copyfrom_rev : -1;
+			_nodeKind = (SvnNodeKind)changed_path->node_kind;
 		}
 
 	public:
@@ -59,6 +65,9 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+				if (!_copyFromPath && _changed_path && _changed_path->copyfrom_path)
+					_copyFromPath = SvnBase::Utf8_PtrToString(_changed_path->copyfrom_path);
+
 				return _copyFromPath;
 			}
 		}
@@ -71,10 +80,40 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the node kind of the changed path (Only available when committed to a 1.6+ repository)</summary>
+		property SvnNodeKind NodeKind
+		{
+			SvnNodeKind get()
+			{
+				return _nodeKind;
+			}
+		}
+
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
 			return CopyFromRevision.GetHashCode() ^ Path->GetHashCode();
+		}
+
+		void Detach()
+		{
+			Detach(true);
+		}
+
+	protected public:
+		virtual void Detach(bool keepProperties)
+		{
+			try
+			{
+				if (keepProperties)
+				{
+					GC::KeepAlive(CopyFromPath);
+				}
+			}
+			finally
+			{
+				_changed_path = nullptr;
+			}
 		}
 	};
 
@@ -91,6 +130,21 @@ namespace SharpSvn {
 					throw gcnew ArgumentNullException("item");
 
 				return item->Path;
+			}
+
+		public:
+			void Detach()
+			{
+				Detach(true);
+			}
+
+		protected public:
+			void Detach(bool keepProperties)
+			{
+				for each (SvnChangeItem^ i in this)
+				{
+					i->Detach(keepProperties);
+				}
 			}
 		};
 	}
@@ -153,22 +207,21 @@ namespace SharpSvn {
 		{
 			SvnChangeItemCollection^  get()
 			{
-				if (!_changedPaths && _entry && _entry->changed_paths && _pool)
+				if (!_changedPaths && _entry && _entry->changed_paths2 && _pool)
 				{
 					_changedPaths = gcnew SvnChangeItemCollection();
 
-					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths); hi; hi = apr_hash_next(hi))
+					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths2); hi; hi = apr_hash_next(hi))
 					{
 						const char* pKey;
 						apr_ssize_t keyLen;
-						svn_log_changed_path_t *pChangeInfo;
+						const svn_log_changed_path2_t *pChangeInfo;
 
 						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
 
-						SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(pKey, (int)keyLen),
-							(SvnChangeAction)pChangeInfo->action,
-							SvnBase::Utf8_PtrToString(pChangeInfo->copyfrom_path),
-							pChangeInfo->copyfrom_rev);
+						SvnChangeItem^ ci = gcnew SvnChangeItem(
+							SvnBase::Utf8_PtrToString(pKey, (int)keyLen),
+							pChangeInfo);
 
 						_changedPaths->Add(ci);
 					}
@@ -267,6 +320,9 @@ namespace SharpSvn {
 					GC::KeepAlive(LogMessage);
 					GC::KeepAlive(RevisionProperties);
 				}
+
+				if (_changedPaths)
+					_changedPaths->Detach(keepProperties);
 			}
 			finally
 			{

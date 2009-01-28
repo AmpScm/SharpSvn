@@ -130,6 +130,7 @@ static svn_error_t* __cdecl sharpsvn_check_bdb()
 static svn_error_t* __cdecl
 sharpsvn_malfunction_handler(svn_boolean_t can_return, const char *file, int line, const char *expr)
 {
+	UNUSED_ALWAYS(can_return);
 	throw gcnew SvnMalfunctionException(SvnBase::Utf8_PtrToString(expr), SvnBase::Utf8_PtrToString(file), line);
 }
 
