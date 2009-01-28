@@ -225,14 +225,6 @@ namespace SharpSvn {
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		event EventHandler<SvnCommittingEventArgs^>^ Committing;
-
-		/// <summary>
-		/// Raised before automatically merging changes into a file. The event is
-		/// first raised on the <see cref="SvnClientArgsWithConflict" /> object and
-		/// then on the <see cref="SvnClient" />
-		/// </summary>
-		event EventHandler<SvnBeforeAutomaticMergeEventArgs^>^ BeforeAutomaticMerge;
-
 		/// <summary>
 		/// Raised on conflict. The event is first
 		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
@@ -262,8 +254,6 @@ namespace SharpSvn {
 		virtual void OnCommitting(SvnCommittingEventArgs^ e);
 		/// <summary>Raises the <see cref="Notify" /> event.</summary>
 		virtual void OnNotify(SvnNotifyEventArgs^ e);
-		/// <summary>Raises the <see cref="BeforeAutomaticMerge" /> event.</summary>
-		virtual void OnBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e);
 		/// <summary>Raises the <see cref="Conflict" /> event.</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e);
 		/// <summary>Raises the <see cref="Exception" /> event.</summary>
@@ -276,8 +266,7 @@ namespace SharpSvn {
 		void HandleClientProgress(SvnProgressEventArgs^ e);
 		void HandleClientCommitting(SvnCommittingEventArgs^ e);
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
-		void HandleClientBeforeAutomaticMerge(SvnBeforeAutomaticMergeEventArgs^ e);
-		void HandleClientConflict(SvnConflictEventArgs^ e);		
+		void HandleClientConflict(SvnConflictEventArgs^ e);
 		virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
 

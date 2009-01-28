@@ -73,17 +73,6 @@ namespace SharpSvn {
             bool get();
             void set(bool value);
         }
-
-		/// <summary>Gets or sets a boolean indicating whether to use automerging of changes on text files. Disabling
-		/// this makes subversion handle all files as binary when handling content merging</summary>
-		/// <remarks>The default value of this property is true; Set it to false to disable automerging</remarks>
-		/// <value>true if subversion must do an attempt to automerge text files, otherwise false</value>
-		[System::ComponentModel::DefaultValue((System::Boolean)true)]
-		property bool UseSubversionAutomaticMerge
-		{
-			bool get();
-			void set(bool value);
-		}
 	};
 
 }
