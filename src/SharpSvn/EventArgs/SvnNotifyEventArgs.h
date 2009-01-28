@@ -25,6 +25,9 @@ namespace SharpSvn {
 	public ref class SvnNotifyEventArgs sealed : public SvnEventArgs
 	{
 		const svn_wc_notify_t *_notify;
+		AprPool^ _pool;
+
+
 		initonly SvnNotifyAction _action;
 		initonly SvnNodeKind _nodeKind;
 		initonly SvnNotifyState _contentState;
@@ -37,12 +40,16 @@ namespace SharpSvn {
 		SvnMergeRange^ _mergeRange;
 		bool _pathIsUri;
 		bool _mimeTypeIsBinary;
+		String^ _propertyName;
+		SvnPropertyCollection^ _revProps;
 
 	internal:
-		SvnNotifyEventArgs(const svn_wc_notify_t *notify, SvnCommandType commandType)
+		SvnNotifyEventArgs(const svn_wc_notify_t *notify, SvnCommandType commandType, AprPool^ pool)
 		{
 			if (!notify)
 				throw gcnew ArgumentNullException("notify");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
 
 			_notify = notify;
 			_action = (SvnNotifyAction)notify->action;
@@ -57,6 +64,7 @@ namespace SharpSvn {
 	private:
 		String^ _fullPath;
 		String^ _path;
+		System::Uri^ _uri;
 		String^ _mimeType;
 		SvnException^ _exception;
 
@@ -67,16 +75,27 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_path && _notify && _notify->path)
+				if (!_path && !_uri && _notify && _pool && _notify->path && !_notify->url)
 				{
-					_pathIsUri = (0 != svn_path_is_url(_notify->path));
-					_path = SvnBase::Utf8_PtrToString(_notify->path);
-
-					if (!_pathIsUri && _path)
-						_path = _path->Replace('/', System::IO::Path::DirectorySeparatorChar);
+					if (svn_path_is_url(_notify->path))
+						_uri = SvnBase::Utf8_PtrToUri(_notify->path, SvnNodeKind::None);
+					else
+						_path = SvnBase::Utf8_PathPtrToString(_notify->path, _pool);
 				}
 
 				return _path;
+			}
+		}
+
+		/// <summary>Gets the (relative or absolute uri) Uri the notification is about</summary>
+		property System::Uri^ Uri
+		{
+			System::Uri^ get()
+			{
+				if (!_uri && _notify && _notify->url)
+					System::Uri::TryCreate(SvnBase::Utf8_PtrToString(_notify->url), UriKind::RelativeOrAbsolute, _uri);
+
+				return _uri;
 			}
 		}
 
@@ -94,12 +113,13 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether the path is a Uri</summary>
+		[Obsolete("Check .Uri and (Path == null)")]
 		property bool PathIsUri
 		{
 			bool get()
 			{
 				GC::KeepAlive(Path);
-				return _pathIsUri;
+				return Uri || _pathIsUri;
 			}
 		}
 
@@ -112,6 +132,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Action that describes what happened to path/url</summary>
 		property SvnNotifyAction Action
 		{
 			SvnNotifyAction get()
@@ -120,6 +141,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Node kind of path/url</summary>
 		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
@@ -128,6 +150,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>If non-NULL, indicates the mime-type of @c path. It is always @c NULL for directories.</summary>
 		property String^ MimeType
 		{
 			String^ get()
@@ -142,6 +165,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>If MimeType is not null, a boolean indicating whether this mime type is interpreted as binary</summary>
 		property bool MimeTypeIsBinary
 		{
 			bool get()
@@ -151,11 +175,15 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Points to an error describing the reason for the failure when
+		/// action is one of the following: @c svn_wc_notify_failed_lock, svn_wc_notify_failed_unlock, 
+		/// svn_wc_notify_failed_external. Is @c NULL otherwise.</summary>
 		property SvnException^ Error
 		{
 			SvnException^ get();
 		}
 
+		/// <summary>The type of notification that is occurring about node content.</summary>
 		property SvnNotifyState ContentState
 		{
 			SvnNotifyState get()
@@ -164,6 +192,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>The type of notification that is occurring about node properties.</summary>
 		property SvnNotifyState PropertyState
 		{
 			SvnNotifyState get()
@@ -172,6 +201,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Reflects the addition or removal of a lock token in the working copy.</summary>
 		property SvnLockState LockState
 		{
 			SvnLockState get()
@@ -180,6 +210,10 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>When action is svn_wc_notify_update_completed, target revision
+		/// of the update, or @c SVN_INVALID_REVNUM if not available; when action is 
+		/// c svn_wc_notify_blame_revision, processed revision. In all other cases, 
+		/// it is @c SVN_INVALID_REVNUM.</summary>
 		property __int64 Revision
 		{
 			__int64 get()
@@ -188,6 +222,9 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Points to the lock structure received from the repository when
+		/// action is @c svn_wc_notify_locked.  For other actions, it is
+		/// NULL.</summary>
 		property SvnLockInfo^ Lock
 		{
 			SvnLockInfo^ get()
@@ -199,6 +236,8 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>When action is svn_wc_notify_changelist_add or name.  In all other
+		/// cases, it is NULL</summary>
 		property String^ ChangeListName
 		{
 			String^ get()
@@ -210,9 +249,35 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>When @c action is @c svn_wc_notify_merge_begin, and both the left and right sides 
+		/// of the merge are from the same URL.  In all other cases, it is NULL</summary>
 		property SvnMergeRange^ MergeRange
 		{
 			SvnMergeRange^ get();
+		}
+
+		/// <summary>If action relates to properties, specifies the name of the property.</summary>
+		property String^ PropertyName
+		{
+			String^ get()
+			{
+				if (!_propertyName && _notify && _notify->prop_name)
+					_propertyName = SvnBase::Utf8_PtrToString(_notify->prop_name);
+
+				return _propertyName;
+			}
+		}
+
+		/// <summary>If action is svn_wc_notify_blame_revision, contains a list of revision properties for the specified revision</summary>
+		property SvnPropertyCollection^ RevisionProperties
+		{
+			SvnPropertyCollection^ get()
+			{
+				if(!_revProps && _notify && _notify->rev_props && _pool)
+					_revProps = SvnBase::CreatePropertyDictionary(_notify->rev_props, _pool);
+
+				return _revProps;
+			}
 		}
 
 		/// <summary>Serves as a hashcode for the specified type</summary>
@@ -232,11 +297,14 @@ namespace SharpSvn {
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Path);
+					GC::KeepAlive(Uri);
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(Error);
 					GC::KeepAlive(Lock);
 					GC::KeepAlive(ChangeListName);
 					GC::KeepAlive(MergeRange);
+					GC::KeepAlive(PropertyName);
+					GC::KeepAlive(RevisionProperties);
 				}
 
 				if (_lock)
@@ -245,6 +313,7 @@ namespace SharpSvn {
 			finally
 			{
 				_notify = nullptr;
+				_pool = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}
