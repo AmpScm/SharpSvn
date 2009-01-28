@@ -17,33 +17,22 @@
 #pragma once
 
 // Included from SvnClientEventArgs.h
+#include "SvnConflictData.h"
 
 namespace SharpSvn {
 
 	public ref class SvnConflictEventArgs sealed : public SvnCancelEventArgs
 	{
 		const svn_wc_conflict_description_t* _description;
+		AprPool^ _pool;
 		SvnAccept _result;
 
-		initonly SvnNodeKind _nodeKind;
-		initonly bool _isBinary;
-		initonly SvnConflictAction _action;
-		initonly SvnConflictReason _reason;
-		initonly SvnConflictType _type;
-
-		AprPool^ _pool;
-		String^ _propertyName;
-		String^ _path;
-		String^ _mimeType;
-
-		String^ _baseFile;
-		String^ _theirFile;
-		String^ _myFile;
-		String^ _mergedFile;
-
+		SvnConflictData^ _data;
 		String^ _mergeResult;
 
 	internal:
+		// BH: Note svn_wc_conflict_description_t is also mapped by SvnConflictData
+		// for the non-event case
 		SvnConflictEventArgs(const svn_wc_conflict_description_t *description, AprPool^ pool)
 		{
 			if (!description)
@@ -54,16 +43,20 @@ namespace SharpSvn {
 			_description = description;
 			_pool = pool;
 			_result = SvnAccept::Postpone;
-
-			_isBinary = (description->is_binary != 0);
-			_nodeKind = (SvnNodeKind)description->node_kind;
-			_action = (SvnConflictAction)description->action;
-			_reason = (SvnConflictReason)description->reason;
-			_type = (SvnConflictType)description->kind;			
-			// We ignore the administrative baton for now
 		}
 
 	public:
+		property SvnConflictData^ Conflict
+		{
+			SvnConflictData^ get()
+			{
+				if (!_data && _description && _pool)
+					_data = gcnew SvnConflictData(_description, _pool);
+
+				return _data;
+			}
+		}
+
 		property SvnAccept Choice
 		{
 			SvnAccept get()
@@ -77,36 +70,30 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary><see cref="SvnConflictData::Name" /></summary>
 		property String^ Path
 		{
 			String^ get()
 			{
-				if (!_path && _description && _description->path && _pool)
-					_path = SvnBase::Utf8_PathPtrToString(_description->path, _pool);
-
-				return _path;
+				return Conflict ? Conflict->Name : nullptr;
 			}
 		}
 
+		/// <summary><see cref="SvnConflictData::PropertyName" /></summary>
 		property String^ PropertyName
 		{
 			String^ get()
 			{
-				if (!_propertyName && _description && _description->property_name)
-					_propertyName = SvnBase::Utf8_PtrToString(_description->property_name);
-
-				return _propertyName;
+				return Conflict ? Conflict->PropertyName : nullptr;
 			}
 		}
 
+		/// <summary><see cref="SvnConflictData::MimeType" /></summary>
 		property String^ MimeType
 		{
 			String^ get()
 			{
-				if (!_mimeType && _description && _description->mime_type)
-					_mimeType = SvnBase::Utf8_PtrToString(_description->mime_type);
-
-				return _mimeType;
+				return Conflict ? Conflict->MimeType : nullptr;
 			}
 		}
 
@@ -114,10 +101,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_baseFile && _description && _description->base_file && _pool)
-					_baseFile = SvnBase::Utf8_PathPtrToString(_description->base_file, _pool);
-
-				return _baseFile;
+				return Conflict ? Conflict->BaseFile : nullptr;
 			}
 		}
 
@@ -125,10 +109,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_theirFile && _description && _description->their_file && _pool)
-					_theirFile = SvnBase::Utf8_PathPtrToString(_description->their_file, _pool);
-
-				return _theirFile;
+				return Conflict ? Conflict->TheirFile : nullptr;
 			}
 		}
 
@@ -136,10 +117,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_myFile && _description && _description->my_file && _pool)
-					_myFile = SvnBase::Utf8_PathPtrToString(_description->my_file, _pool);
-
-				return _myFile;
+				return Conflict ? Conflict->MyFile : nullptr;
 			}
 		}
 
@@ -150,10 +128,7 @@ namespace SharpSvn {
 				if (_mergeResult)
 					return _mergeResult;
 
-				if (!_mergedFile && _description && _description->merged_file && _pool)
-					_mergedFile  = SvnBase::Utf8_PathPtrToString(_description->merged_file, _pool);
-
-				return _mergedFile;
+				return Conflict ? Conflict->MergedFile : nullptr;
 			}
 			void set(String^ value)
 			{
@@ -168,7 +143,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-				return _isBinary;
+				return Conflict && Conflict->IsBinary;
 			}
 		}
 
@@ -176,7 +151,7 @@ namespace SharpSvn {
 		{
 			SvnConflictAction get()
 			{
-				return _action;
+				return Conflict ? Conflict->ConflictAction : (SvnConflictAction)0;
 			}
 		}
 
@@ -184,7 +159,7 @@ namespace SharpSvn {
 		{
 			SvnConflictReason get()
 			{
-				return _reason;
+				return Conflict ? Conflict->ConflictReason : (SvnConflictReason)0;
 			}
 		}
 
@@ -192,7 +167,7 @@ namespace SharpSvn {
 		{
 			SvnConflictType get()
 			{
-				return _type;
+				return Conflict ? Conflict->ConflictType : (SvnConflictType)0;
 			}
 		}
 
@@ -200,7 +175,7 @@ namespace SharpSvn {
 		{
 			SvnNodeKind get()
 			{
-				return _nodeKind;
+				return Conflict ? Conflict->NodeKind : SvnNodeKind::None;
 			}
 		}
 
@@ -211,14 +186,11 @@ namespace SharpSvn {
 			{
 				if (keepProperties)
 				{
-					GC::KeepAlive(Path);
-					GC::KeepAlive(PropertyName);
-					GC::KeepAlive(MimeType);
-					GC::KeepAlive(BaseFile);
-					GC::KeepAlive(TheirFile);
-					GC::KeepAlive(MyFile);
-					GC::KeepAlive(MergedFile);
+					GC::KeepAlive(Conflict);
 				}
+
+				if (_data)
+					_data->Detach(keepProperties);
 			}
 			finally
 			{
