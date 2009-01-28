@@ -60,12 +60,3 @@ void SvnClientConfiguration::UseSubversionDiff::set(bool value)
 	_client->_useUserDiff = !value;
 }
 
-bool SvnClientConfiguration::UseSubversionAutomaticMerge::get()
-{
-	return !_client->_neverAutomerge;
-}
-
-void SvnClientConfiguration::UseSubversionAutomaticMerge::set(bool value)
-{
-	_client->_neverAutomerge = !value;
-}
