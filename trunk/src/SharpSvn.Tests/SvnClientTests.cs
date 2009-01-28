@@ -283,8 +283,9 @@ namespace SharpSvn.Tests
                         {
                             Assert.That(i.Path.EndsWith("folder/RemoteCopyBase"), "Path ends with folder/RemoteCopyBase");
                             Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
+                            Assert.That(i.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ends with folder/CopyBase");
                             Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
+                            Assert.That(i.NodeKind, Is.EqualTo(SvnNodeKind.File));
                         }
                     }
                     else
@@ -293,6 +294,7 @@ namespace SharpSvn.Tests
                         {
                             Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
                             Assert.That(i.Path.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
+                            Assert.That(i.NodeKind, Is.EqualTo(SvnNodeKind.File));
                             visited = true;
                         }
                     }
