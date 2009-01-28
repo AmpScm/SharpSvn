@@ -45,7 +45,7 @@ static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_i
 	if (!args)
 		return nullptr;
 
-	SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PtrToString(path), info);
+	SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PathPtrToString(path, %thePool), info, %thePool);
 	try
 	{
 		args->OnInfo(e);

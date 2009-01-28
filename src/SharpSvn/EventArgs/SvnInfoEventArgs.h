@@ -18,11 +18,15 @@
 
 // Included from SvnClientArgs.h
 
+#include "SvnConflictData.h"
+
 namespace SharpSvn {
 
 	public ref class SvnInfoEventArgs : public SvnCancelEventArgs
 	{
 		const svn_info_t* _info;
+		AprPool^ _pool;
+
 		initonly String^ _path;
 		String^ _fullPath;
 		Uri^ _uri;
@@ -49,16 +53,21 @@ namespace SharpSvn {
 		initonly SvnDepth _depth;
 		initonly __int64 _wcSize;
 		initonly __int64 _size;
+		SvnConflictData^ _treeConflict;
 
 	internal:
-		SvnInfoEventArgs(String^ path, const svn_info_t* info)
+		SvnInfoEventArgs(String^ path, const svn_info_t* info, AprPool^ pool)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if (!info)
 				throw gcnew ArgumentNullException("info");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
 
 			_info = info;
+			_pool = pool;
+
 			_path = path;
 			_rev = info->rev;
 			_nodeKind = (SvnNodeKind)info->kind;
@@ -78,15 +87,15 @@ namespace SharpSvn {
 
 			_depth = (SvnDepth)info->depth;
 
-			if (info->size == SVN_INFO_SIZE_UNKNOWN)
+			if (info->size64 == SVN_INVALID_FILESIZE)
 				_size = -1;
 			else
-				_size = info->size;
+				_size = info->size64;
 
-			if (info->working_size == (apr_size_t)-1)
+			if (info->working_size64 == SVN_INVALID_FILESIZE)
 				_wcSize = -1;
 			else
-				_wcSize = info->working_size;
+				_wcSize = info->working_size64;
 		}
 	public:
 		/// <summary>Gets the path of the file. The local path if requisting WORKING version, otherwise the name of the file
@@ -369,10 +378,21 @@ namespace SharpSvn {
 			}
 		}
 
+		property SvnConflictData^ TreeConflict
+		{
+			SvnConflictData^ get()
+			{
+				if (!_treeConflict && _info && _info->tree_conflict && _pool)
+					_treeConflict = gcnew SvnConflictData(_info->tree_conflict, _pool);
+
+				return _treeConflict;
+			}
+		}
+
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
-			return SafeGetHashCode(Path) ^ SafeGetHashCode(Uri) ^ Revision.GetHashCode();
+			return SafeGetHashCode(Path) ^ SafeGetHashCode(Uri);
 		}
 
 	protected public:
@@ -396,14 +416,18 @@ namespace SharpSvn {
 					GC::KeepAlive(ConflictWork);
 					GC::KeepAlive(PropertyEditFile);
 					GC::KeepAlive(ChangeList);
+					GC::KeepAlive(TreeConflict);
 				}
 
 				if (_lock)
 					_lock->Detach(keepProperties);
+				if (_treeConflict)
+					_treeConflict->Detach(keepProperties);
 			}
 			finally
 			{
 				_info = nullptr;
+				_pool = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}

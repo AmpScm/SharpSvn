@@ -17,6 +17,7 @@
 #pragma once
 
 #include "SvnLockInfo.h"
+#include "SvnConflictData.h"
 // Included from SvnClientArgs.h
 
 namespace SharpSvn {
@@ -28,6 +29,7 @@ namespace SharpSvn {
 		// I don't use them as the same to keep both open for future extensions
 		// in different directions
 		svn_wc_entry_t* _entry;
+		AprPool^ _pool;
 
 		String^ _name;
 		initonly __int64 _revision;
@@ -47,7 +49,6 @@ namespace SharpSvn {
 		String^ _conflictNew;
 		String^ _conflictWork;
 		String^ _prejfile;
-		initonly DateTime _propertyTime;
 		initonly DateTime _textTime;
 		String^ _checksum;
 		initonly __int64 _lastChangeRev;
@@ -65,14 +66,20 @@ namespace SharpSvn {
 		initonly __int64 _wcSize;
 		initonly bool _keepLocal;
 		initonly SvnDepth _depth;
+		String^ _fileExternalPath;
+		SvnRevision^ _fileExternalRevision;
+		SvnRevision^ _fileExternalPegRevision;
 
 	internal:
-		SvnWorkingCopyInfo(svn_wc_entry_t *entry)
+		SvnWorkingCopyInfo(svn_wc_entry_t *entry, AprPool^ pool)
 		{
 			if (!entry)
 				throw gcnew ArgumentNullException("entry");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
 
 			_entry = entry;
+			_pool = pool;
 
 			_revision = entry->revision;
 			_nodeKind = (SvnNodeKind)entry->kind;
@@ -82,7 +89,6 @@ namespace SharpSvn {
 			_absent = (entry->absent != 0);
 			_incomplete = (entry->incomplete != 0);
 			_copyFromRev = entry->copyfrom_rev;
-			_propertyTime = SvnBase::DateTimeFromAprTime(entry->prop_time);
 			_textTime = SvnBase::DateTimeFromAprTime(entry->text_time);
 			_lastChangeRev = entry->cmt_rev;
 			_lastChangeTime = SvnBase::DateTimeFromAprTime(entry->cmt_date);
@@ -100,8 +106,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_name && _entry && _entry->name)
-					_name = SvnBase::Utf8_PtrToString(_entry->name)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+				if (!_name && _entry && _entry->name && _pool)
+					_name = SvnBase::Utf8_PathPtrToString(_entry->name, _pool);
 
 				return _name;
 			}
@@ -278,11 +284,12 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Not used since Subversion 1.4")]
 		property DateTime PropertyChangeTime
 		{
 			DateTime get()
 			{
-				return _propertyTime;
+				return DateTime::MinValue;
 			}
 		}
 
@@ -464,10 +471,52 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>The entry is a intra-repository file external and this is the
+		/// repository root relative path to the file specified in the
+		/// externals definition, otherwise NULL if the entry is not a file
+		/// external.</summary>
+		property String^ FileExternalPath
+		{
+			String^ get()
+			{
+				if (!_fileExternalPath && _entry && _entry->file_external_path)
+					_fileExternalPath = SvnBase::Utf8_PtrToString(_entry->file_external_path);
+
+				return _fileExternalPath;
+			}
+		}
+
+		property SvnRevision^ FileExternalRevision
+		{
+			SvnRevision^ get()
+			{
+				if (!_fileExternalRevision && _entry && _entry->file_external_path)
+					_fileExternalRevision = SvnRevision::Load(&_entry->file_external_rev);
+
+				return _fileExternalRevision;
+			}
+		}
+
+		property SvnRevision^ FileExternalOperationalRevision
+		{
+			SvnRevision^ get()
+			{
+				if (!_fileExternalPegRevision && _entry && _entry->file_external_path)
+					_fileExternalPegRevision = SvnRevision::Load(&_entry->file_external_peg_rev);
+
+				return _fileExternalPegRevision;
+			}
+		}
+
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
-			return Depth.GetHashCode() ^ SvnEventArgs::SafeGetHashCode(Name) ^ SvnEventArgs::SafeGetHashCode(Uri) ^ Revision.GetHashCode();
+			return SvnEventArgs::SafeGetHashCode(Name) ^ SvnEventArgs::SafeGetHashCode(Uri);
+		}
+
+		void Detach()
+		{
+			Detach(true);
 		}
 
 	protected public:
@@ -494,19 +543,27 @@ namespace SharpSvn {
 					GC::KeepAlive(CacheableProperties);
 					GC::KeepAlive(AvailableProperties);
 					GC::KeepAlive(ChangeList);
+					GC::KeepAlive(FileExternalPath);
+					GC::KeepAlive(FileExternalRevision);
+					GC::KeepAlive(FileExternalOperationalRevision);
 				}
 			}
 			finally
 			{
 				_entry = nullptr;
+				_pool = nullptr;
 			}
 		}
 	};
 
+	;
+
 	public ref class SvnStatusEventArgs : public SvnCancelEventArgs
 	{
-		initonly String^ _path;
 		const svn_wc_status2_t *_status;
+		AprPool^ _pool;
+
+		initonly String^ _path;		
 		String^ _fullPath;
 		initonly SvnStatus _wcContentStatus;
 		initonly SvnStatus _wcPropertyStatus;
@@ -523,17 +580,24 @@ namespace SharpSvn {
 		initonly SvnNodeKind _oodLastCommitNodeKind;
 		String^ _oodLastCommitAuthor;
 		initonly SvnNodeKind _nodeKind;
+		SvnConflictData^ _treeConflict;
+		initonly bool _fileExternal;
+		initonly SvnStatus _prsTextStatus;
+		initonly SvnStatus _prsPropertyStatus;
 
 	internal:
-		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status)
+		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status, AprPool^ pool)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
 			else if (!status)
 				throw gcnew ArgumentNullException("status");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
 
-			_path = path->Replace('/', System::IO::Path::DirectorySeparatorChar);
+			_path = path;
 			_status = status;
+			_pool = pool;
 
 			_wcContentStatus = (SvnStatus)status->text_status;
 			_wcPropertyStatus = (SvnStatus)status->prop_status;
@@ -552,6 +616,10 @@ namespace SharpSvn {
 				_oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_last_cmt_date);
 				_oodLastCommitNodeKind = (SvnNodeKind)status->ood_kind;
 			}
+
+			_fileExternal = status->file_external != 0;
+			_prsTextStatus = (SvnStatus)status->pristine_text_status;
+			_prsPropertyStatus = (SvnStatus)status->pristine_prop_status;
 		}
 
 	public:
@@ -721,8 +789,8 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnWorkingCopyInfo^ get()
 			{
-				if (!_wcInfo && _status && _status->entry)
-					_wcInfo = gcnew SvnWorkingCopyInfo(_status->entry);
+				if (!_wcInfo && _status && _status->entry && _pool)
+					_wcInfo = gcnew SvnWorkingCopyInfo(_status->entry, _pool);
 
 				return _wcInfo;
 			}
@@ -736,6 +804,19 @@ namespace SharpSvn {
 			}
 		}
 
+		property SvnConflictData^ TreeConflict
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnConflictData^ get()
+			{
+				if (!_treeConflict && _status && _status->tree_conflict && _pool)
+					_treeConflict = gcnew SvnConflictData(_status->tree_conflict, _pool);
+
+				return _treeConflict;
+			}
+		}
+
+
 	protected public:
 		virtual void Detach(bool keepProperties) override
 		{
@@ -748,19 +829,22 @@ namespace SharpSvn {
 					GC::KeepAlive(RemoteLock);
 					GC::KeepAlive(RemoteUpdateCommitAuthor);
 					GC::KeepAlive(WorkingCopyInfo);
+					GC::KeepAlive(TreeConflict);
 				}
 
 				if (_reposLock)
 					_reposLock->Detach(keepProperties);
 				if (_wcInfo)
 					_wcInfo->Detach(keepProperties);
+				if (_treeConflict)
+					_treeConflict->Detach(keepProperties);
 			}
 			finally
 			{
 				_status = nullptr;
+				_pool = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}
 	};
-
 }

@@ -1091,6 +1091,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\EventArgs\SvnConflictData.h"
+					>
+				</File>
+				<File
 					RelativePath=".\EventArgs\SvnConflictEventArgs.h"
 					>
 				</File>
