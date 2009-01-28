@@ -286,8 +286,9 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
 {
 	UNUSED_ALWAYS(pool);
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+	AprPool aprPool(pool, false);
 
-	SvnNotifyEventArgs^ ea = gcnew SvnNotifyEventArgs(notify, client->CurrentCommandArgs->CommandType);
+	SvnNotifyEventArgs^ ea = gcnew SvnNotifyEventArgs(notify, client->CurrentCommandArgs->CommandType, %aprPool);
 
 	try
 	{
