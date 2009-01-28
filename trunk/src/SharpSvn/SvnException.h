@@ -173,6 +173,60 @@ namespace SharpSvn {
 		}
 	};
 
+	public ref class SvnMalfunctionException sealed : SvnException
+	{
+		initonly String^ _file;
+		initonly int _line;
+	public:
+		SvnMalfunctionException()
+		{
+		}
+
+		SvnMalfunctionException(String^ message, String^ file, int line)
+			: SvnException(String::Format(SharpSvnStrings::SvnMalfunctionPrefix, message, file, line))
+		{
+			_file = file;
+			_line = line;
+		}
+
+	protected:
+		SvnMalfunctionException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+			: SvnException(info, context)
+		{
+			_file = info->GetString("SvnFile");
+			_line = info->GetInt32("SvnLine");
+		}
+
+	public:
+		property String^ File
+		{
+			String^ get()
+			{
+				return _file;
+			}
+		}
+
+		property int Line
+		{
+			int get()
+			{
+				return _line;
+			}
+		}
+
+	public:
+		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
+		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
+		{
+			if (!info)
+				throw gcnew ArgumentNullException("info");
+			Exception::GetObjectData(info, context);
+
+			info->AddValue("SvnFile", _file);
+			info->AddValue("SvnLine", _line);
+		}
+	};
+
 	//////////// Generic Subversion exception wrappers
 
 #define DECLARE_SVN_EXCEPTION_TYPE(type, parentType)					\

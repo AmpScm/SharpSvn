@@ -413,6 +413,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Subversion reported a malfunction &apos;{0}&apos; on line {2} of &apos;{1}&apos;..
+        /// </summary>
+        internal: static property System::String^  SvnMalfunctionPrefix {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The passed target must contain an explicit revision.
         /// </summary>
         internal: static property System::String^  TargetMustContainExplicitRevision {
@@ -683,6 +690,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::SvnClientOperationInProgress::get() {
         return ResourceManager->GetString(L"SvnClientOperationInProgress", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::SvnMalfunctionPrefix::get() {
+        return ResourceManager->GetString(L"SvnMalfunctionPrefix", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::TargetMustContainExplicitRevision::get() {

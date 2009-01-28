@@ -291,4 +291,7 @@
   <data name="PropertyNameIsNotValid" xml:space="preserve">
     <value>Property name is not valid</value>
   </data>
+  <data name="SvnMalfunctionPrefix" xml:space="preserve">
+    <value>Subversion reported a malfunction '{0}' on line {2} of '{1}'.</value>
+  </data>
 </root>
