@@ -100,8 +100,8 @@ void __cdecl sharpsvn_abort_handler()
 
 static bool s_loaded = false, s_checked = false;
 
-sharpsvn_sharpsvn_check_bdb_availability_t sharpsvn_check_bdb;
-svn_error_t* __cdecl sharpsvn_check_bdb()
+static sharpsvn_sharpsvn_check_bdb_availability_t sharpsvn_check_bdb;
+static svn_error_t* __cdecl sharpsvn_check_bdb()
 {
 	if (s_loaded)
 		return NULL;
@@ -125,6 +125,12 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 		return svn_error_create(SVN_ERR_FS_UNKNOWN_FS_TYPE, nullptr, "Subversion filesystem driver for Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) is not installed. Can't access this repository kind.");
 
 	return NULL;
+}
+
+static svn_error_t* __cdecl
+sharpsvn_malfunction_handler(svn_boolean_t can_return, const char *file, int line, const char *expr)
+{
+	throw gcnew SvnMalfunctionException(SvnBase::Utf8_PtrToString(expr), SvnBase::Utf8_PtrToString(file), line);
 }
 
 FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
@@ -156,6 +162,8 @@ static bool SetHandler()
 
 	InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
 	InterlockedExchangePointer((void**)&__pfnDliFailureHook2, (void*)SharpSvnDelayLoadFailure);
+
+	svn_error_set_malfunction_handler(sharpsvn_malfunction_handler);
 
 	return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
 }
