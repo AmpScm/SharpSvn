@@ -74,36 +74,6 @@ static __forceinline struct svn_error_t* check_bdb_availability()
 	return NULL;
 }
 
-typedef struct svn_error_t* sharpsvn_maybe_handle_conflict_as_binary_t
-                               (int* is_binary,
-							    const char *left,
-								const char *right,
-								const char *merge_target,
-								const char *copyfrom_text,
-								int dry_run,
-								void* conflict_func,
-								void *conflict_baton,
-								struct apr_pool_t *pool);
-extern sharpsvn_maybe_handle_conflict_as_binary_t* sharpsvn_maybe_handle_conflict_as_binary;
-static __forceinline struct svn_error_t* maybe_handle_conflict_as_binary
-											   (int* is_binary,
-												const char *left,
-												const char *right,
-												const char *merge_target,
-												const char *copyfrom_text,
-												int dry_run,
-												void* conflict_func,
-												void *conflict_baton,
-												struct apr_pool_t *pool)
-{
-	if (sharpsvn_maybe_handle_conflict_as_binary)
-		return (*sharpsvn_maybe_handle_conflict_as_binary)(is_binary, left, right, merge_target,
-		                                                   copyfrom_text, dry_run, 
-														   conflict_func, conflict_baton, pool);
-
-	return NULL;
-}
-
 char * bindtextdomain (const char * domainname, const char * dirname);
 
 typedef void sharpsvn_abort_t(void);
