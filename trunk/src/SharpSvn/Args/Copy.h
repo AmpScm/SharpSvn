@@ -25,6 +25,7 @@ namespace SharpSvn {
 	{
 		bool _makeParents;
 		bool _alwaysCopyBelow;
+		bool _ignoreExternals;
 		SvnRevision^ _revision;
 
 	public:
@@ -77,6 +78,20 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_alwaysCopyBelow = value;
+			}
+		}
+
+		/// <summary>Gets or sets a boolean that if set to true tells copy not to process 
+		/// externals definitions as part of this operation.</summary>
+		property bool IgnoreExternals
+		{
+			bool get()
+			{
+				return _ignoreExternals;
+			}
+			void set(bool value)
+			{
+				_ignoreExternals = value;
 			}
 		}
 
