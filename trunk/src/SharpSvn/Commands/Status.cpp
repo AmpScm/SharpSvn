@@ -92,20 +92,16 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 
 		svn_opt_revision_t pegRev = args->Revision->ToSvnRevision();
 
-		svn_client_status_args_t *status_args = svn_client_status_args_create(pool.Handle);
-
-		status_args->get_all = args->RetrieveAllEntries;
-		status_args->no_ignore = args->RetrieveIgnoredEntries;
-		status_args->ignore_externals = args->IgnoreExternals;
-
 		svn_error_t* r = svn_client_status4(&version,
 			pool.AllocPath(path),
 			&pegRev,
 			svnclient_status_handler,
 			(void*)_clientBatton->Handle,
 			(svn_depth_t)args->Depth,
+			args->RetrieveAllEntries,
 			args->ContactRepository,
-			status_args,
+			args->RetrieveIgnoredEntries,
+			args->IgnoreExternals,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,
 			pool.Handle);
