@@ -271,9 +271,9 @@
         <arg value="/t:Programs\svnserve" />
         <arg value="/t:Programs\svnsync" />
         <arg value="/t:Programs\svnlook" />
-        <arg value="/t:Programs\svnmucc" if="${svnAddSharpSvn != 'true'}" />
-        <arg value="/t:Programs\svnauthz-validate" if="${svnAddSharpSvn != 'true'}" />
-        <arg value="/t:Programs\svn-populate-node-origins-index" if="${svnAddSharpSvn != 'true'}" />
+        <arg value="/t:Programs\svnmucc"/>
+        <arg value="/t:Programs\svnauthz-validate" />
+        <arg value="/t:Programs\svn-populate-node-origins-index" />
       </exec>
     </OnceBlock>
   </target>
