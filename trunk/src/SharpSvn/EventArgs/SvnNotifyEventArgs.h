@@ -52,6 +52,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("pool");
 
 			_notify = notify;
+			_pool = pool;
+
 			_action = (SvnNotifyAction)notify->action;
 			_nodeKind = (SvnNodeKind)notify->kind;
 			_contentState = (SvnNotifyState)notify->content_state;
