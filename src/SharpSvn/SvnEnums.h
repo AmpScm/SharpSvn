@@ -84,8 +84,8 @@ namespace SharpSvn {
 		Unknown			= svn_depth_unknown,
 
 		// Not supported in 1.5 client api
-		/*/// <summary>Exclude (remove, whatever) directory D</summary>
-		Exclude			= svn_depth_exclude,*/
+		/// <summary>Exclude (remove, whatever) directory D (Currently unused on the client layer)</summary>
+		Exclude			= svn_depth_exclude,
 
 		/// <summary>
 		/// Just the named directory D, no entries. Updates will not pull in any
@@ -129,40 +129,52 @@ namespace SharpSvn {
 
 	public enum class SvnNotifyAction
 	{
-		Add				= svn_wc_notify_add, // =0
-		Copy			= svn_wc_notify_copy,
-		Delete			= svn_wc_notify_delete,
-		Restore			= svn_wc_notify_restore,
-		Revert			= svn_wc_notify_revert,
-		RevertFailed	= svn_wc_notify_failed_revert,
-		Resolved		= svn_wc_notify_resolved,
-		Skip			= svn_wc_notify_skip,
-		UpdateDelete	= svn_wc_notify_update_delete,
-		UpdateAdd		= svn_wc_notify_update_add,
-		UpdateUpdate	= svn_wc_notify_update_update,
-		UpdateCompleted = svn_wc_notify_update_completed,
-		UpdateExternal  = svn_wc_notify_update_external,
-		StatusCompleted = svn_wc_notify_status_completed,
-		StatusExternal	= svn_wc_notify_status_external,
-		CommitModified	= svn_wc_notify_commit_modified,
-		CommitAdded		= svn_wc_notify_commit_added,
-		CommitDeleted	= svn_wc_notify_commit_deleted,
-		CommitReplaced	= svn_wc_notify_commit_replaced,
-		CommitSendData	= svn_wc_notify_commit_postfix_txdelta,
-		BlameRevision	= svn_wc_notify_blame_revision,
+		Add							= svn_wc_notify_add, // =0
+		Copy						= svn_wc_notify_copy,
+		Delete						= svn_wc_notify_delete,
+		Restore						= svn_wc_notify_restore,
+		Revert						= svn_wc_notify_revert,
+		RevertFailed				= svn_wc_notify_failed_revert,
+		Resolved					= svn_wc_notify_resolved,
+		Skip						= svn_wc_notify_skip,
+		UpdateDelete				= svn_wc_notify_update_delete,
+		UpdateAdd					= svn_wc_notify_update_add,
+		UpdateUpdate				= svn_wc_notify_update_update,
+		UpdateCompleted 			= svn_wc_notify_update_completed,
+		UpdateExternal  			= svn_wc_notify_update_external,
+		StatusCompleted 			= svn_wc_notify_status_completed,
+		StatusExternal				= svn_wc_notify_status_external,
+		CommitModified				= svn_wc_notify_commit_modified,
+		CommitAdded					= svn_wc_notify_commit_added,
+		CommitDeleted				= svn_wc_notify_commit_deleted,
+		CommitReplaced				= svn_wc_notify_commit_replaced,
+		CommitSendData				= svn_wc_notify_commit_postfix_txdelta,
+		BlameRevision				= svn_wc_notify_blame_revision,
 		// 1.2+
-		LockLocked		= svn_wc_notify_locked,
-		LockUnlocked	= svn_wc_notify_unlocked,
-		LockFailedLock	= svn_wc_notify_failed_lock,
-		LockFailedUnlock=svn_wc_notify_failed_unlock,
+		LockLocked					= svn_wc_notify_locked,
+		LockUnlocked				= svn_wc_notify_unlocked,
+		LockFailedLock				= svn_wc_notify_failed_lock,
+		LockFailedUnlock			= svn_wc_notify_failed_unlock,
 
 		// 1.5+
-		Exists			= svn_wc_notify_exists,
-		ChangeListSet	= svn_wc_notify_changelist_set,
-		ChangeListClear = svn_wc_notify_changelist_clear,
-		ChangeListMoved	= svn_wc_notify_changelist_moved,
-		MergeBegin		= svn_wc_notify_merge_begin,
-		UpdateReplace	= svn_wc_notify_update_replace,
+		Exists						= svn_wc_notify_exists,
+		ChangeListSet				= svn_wc_notify_changelist_set,
+		ChangeListClear 			= svn_wc_notify_changelist_clear,
+		ChangeListMoved				= svn_wc_notify_changelist_moved,
+		MergeBegin					= svn_wc_notify_merge_begin,
+		MergeBeginForeign			= svn_wc_notify_foreign_merge_begin
+		UpdateReplace				= svn_wc_notify_update_replace,
+
+		// 1.6+
+		PropertyAdded				= svn_wc_notify_property_added,
+		PropertyModified			= svn_wc_notify_property_modified,
+		PropertyDeleted				= svn_wc_notify_property_deleted,
+		PropertyDeletedNonExistent	= svn_wc_notify_property_deleted_nonexistent,
+		RevisionPropertySet			= svn_wc_notify_revprop_set,
+		RevisionPropertyDeleted		= svn_wc_notify_revprop_deleted,
+		MergeCompleted				= svn_wc_notify_merge_completed,
+		TreeConflict				= svn_wc_notify_tree_conflict,
+		ExternalFailed				= svn_wc_notify_failed_external
 	};
 
 	public enum class SvnNotifyState
@@ -362,6 +374,8 @@ namespace SharpSvn {
 		Content			= svn_wc_conflict_kind_text,
 		/// <summary>property conflict (on a file or dir)</summary>
 		Property		= svn_wc_conflict_kind_property,
+		/// <summary>tree conflict (on a dir)</summary>
+		TreeConflict    = svn_wc_conflict_kind_tree,
 	};
 
 	public enum class SvnConflictReason
@@ -390,9 +404,12 @@ namespace SharpSvn {
 
 	public enum class SvnIgnoreSpacing
 	{
-		// Default the none value to zero
+		/// <summary>Ignore no whitespace</summary>
 		None		= svn_diff_file_ignore_space_none,
+		/// <summary>Ignore changes in sequences of whitespace characters, treating each
+		/// sequence of whitespace characters as a single space</summary>
 		IgnoreSpace = svn_diff_file_ignore_space_change,
+		/// <summary>Ignore all whitespace characters</summary>
 		IgnoreAll	= svn_diff_file_ignore_space_all
 	};
 
