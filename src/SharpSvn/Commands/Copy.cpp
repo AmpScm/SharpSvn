@@ -117,12 +117,13 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 		}
 	}
 
-	svn_error_t *r = svn_client_copy4(
+	svn_error_t *r = svn_client_copy5(
 		&pInfo,
 		copies,
 		pool.AllocPath(toPath),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->CreateParents,
+		args->IgnoreExternals,
 		nullptr,
 		CtxHandle,
 		pool.Handle);
@@ -268,12 +269,13 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 
 	svn_commit_info_t* commitInfoPtr = nullptr;
 
-	svn_error_t *r = svn_client_copy4(
+	svn_error_t *r = svn_client_copy5(
 		&commitInfoPtr,
 		copies,
 		pool.AllocCanonical(toUri),
 		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
 		args->CreateParents,
+		args->IgnoreExternals,
 		CreateRevPropList(args->LogProperties, %pool),
 		CtxHandle,
 		pool.Handle);
