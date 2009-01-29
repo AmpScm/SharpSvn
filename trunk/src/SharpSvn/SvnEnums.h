@@ -64,7 +64,7 @@ namespace SharpSvn {
 		Switch,
 		Unlock,
 		Update,
-		Write,		
+		Write,
 
 		// Wc library helper
 		GetWorkingCopyInfo = 0x1001,
@@ -162,7 +162,7 @@ namespace SharpSvn {
 		ChangeListClear 			= svn_wc_notify_changelist_clear,
 		ChangeListMoved				= svn_wc_notify_changelist_moved,
 		MergeBegin					= svn_wc_notify_merge_begin,
-		MergeBeginForeign			= svn_wc_notify_foreign_merge_begin
+		MergeBeginForeign			= svn_wc_notify_foreign_merge_begin,
 		UpdateReplace				= svn_wc_notify_update_replace,
 
 		// 1.6+
@@ -386,6 +386,8 @@ namespace SharpSvn {
 		Obstructed = svn_wc_conflict_reason_obstructed,
 		/// <summary>object is already schedule-delete</summary>
 		Deleted = svn_wc_conflict_reason_deleted,
+		/// <summary>object is already added or schedule-add</summary>
+		Added = svn_wc_conflict_reason_added,
 		/// <summary>object is unknown or missing</summary>
 		Missing = svn_wc_conflict_reason_missing,
 		/// <summary>object is unversioned</summary>
