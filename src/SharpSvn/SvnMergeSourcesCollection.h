@@ -18,7 +18,7 @@
 
 namespace SharpSvn {
 
-	public ref class SvnMergeSource
+	public ref class SvnMergeSource sealed
 	{
 		initonly System::Uri^ _uri;
 	internal:
