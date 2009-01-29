@@ -288,15 +288,6 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 		svn_opt_revision_t start = args->Start->Or(args->OriginRevision)->Or(SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
 
-		svn_client_log_args_t* logargs = svn_client_log_args_create(pool.Handle);
-
-		logargs->limit = args->Limit;
-		logargs->discover_changed_paths = args->RetrieveChangedPaths;
-		logargs->strict_node_history = args->StrictNodeHistory;
-		logargs->include_merged_revisions = args->RetrieveMergedRevisions;
-		/*			&start,
-		&end,*/
-
 		apr_array_header_t *revision_ranges;
 		{
 			svn_opt_revision_range_t *range;
@@ -315,8 +306,11 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 			AllocCanonicalArray(targets, %pool),
 			&pegRev,
 			revision_ranges,
+			args->Limit,
+			args->RetrieveChangedPaths,
+			args->StrictNodeHistory,
+			args->RetrieveMergedRevisions,
 			retrieveProperties,
-			logargs,
 			svnclient_log_handler,
 			(void*)_clientBatton->Handle,
 			CtxHandle,
