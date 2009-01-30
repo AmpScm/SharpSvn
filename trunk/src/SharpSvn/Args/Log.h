@@ -52,8 +52,10 @@ namespace SharpSvn {
 		bool _includeMerged;
 		bool _ommitMessages;
 		bool _retrieveAllProperties;
+		bool _hasRanges;
 		Uri^ _baseUri;
 		SvnRevisionPropertyNameCollection^ _retrieveProperties;
+		Collection<SvnRevisionRange^>^ _ranges;
 
 	internal:
 		int _mergeLogLevel; // Used by log handler to provide mergeLogLevel
@@ -127,7 +129,8 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets the log range as <see cref="SvnRevisionRange" /></summary>
+		/// <summary>Gets or sets the range specified by <see cref="Start" />-<see cref="End" /> wrapped as a <see cref="SvnRevisionRange" /></summary>
+		/// <remarks>New code should either use <see cref="Start" /> and <see cref="End" /> or <see cref="Ranges" /></remarks>
 		property SvnRevisionRange^ Range
 		{
 			SvnRevisionRange^ get()
@@ -154,29 +157,64 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
-				return _start;
+				if (_ranges)
+					return (_ranges->Count == 1) ? _ranges[0]->StartRevision : SvnRevision::None;
+				else
+					return _start ? _start : SvnRevision::None;
 			}
+
 			void set(SvnRevision^ value)
 			{
-				if (value)
-					_start = value;
-				else
-					_start = SvnRevision::None;
-			}
+				_start = value;
+				
+				if (_ranges)
+				{
+					_end = End;
+					_ranges->Clear();
+					_ranges->Add(gcnew SvnRevisionRange(Start, End));
+				}
+			}	
 		}
 
 		property SvnRevision^ End
 		{
 			SvnRevision^ get()
 			{
-				return _end;
+				if (_ranges)
+					return (_ranges->Count == 1) ? _ranges[0]->EndRevision : SvnRevision::None;
+				else
+					return _end ? _end : SvnRevision::None;
 			}
+
 			void set(SvnRevision^ value)
 			{
-				if (value)
-					_end = value;
-				else
-					_end = SvnRevision::None;
+				_end = value;
+
+				if (_ranges)
+				{
+					_start = Start;
+					_ranges->Clear();
+					_ranges->Add(gcnew SvnRevisionRange(Start, End));
+				}
+			}
+		}
+
+		property Collection<SvnRevisionRange^>^ Ranges
+		{
+			Collection<SvnRevisionRange^>^ get()
+			{
+				if (!_ranges)
+				{
+					SvnRevision^ start = Start;
+					SvnRevision^ end = End;
+
+					_ranges = gcnew Collection<SvnRevisionRange^>();
+
+					if (start != SvnRevision::None || end != SvnRevision::None)
+						_ranges->Add(gcnew SvnRevisionRange(start, end));
+				}
+
+				return _ranges;
 			}
 		}
 
@@ -269,7 +307,7 @@ namespace SharpSvn {
 			{
 				_retrieveAllProperties = value;
 			}
-		}
+		}		
 
 	internal:
 		property bool RetrievePropertiesUsed
@@ -277,6 +315,14 @@ namespace SharpSvn {
 			bool get()
 			{
 				return _retrieveProperties != nullptr;
+			}
+		}
+
+		property bool RangesUsed
+		{
+			bool get()
+			{
+				return _ranges != nullptr;
 			}
 		}
 	};

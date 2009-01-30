@@ -284,22 +284,34 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 		else
 			retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
-		svn_opt_revision_t pegRev = args->OriginRevision->Or(altPegRev)->ToSvnRevision();
-		svn_opt_revision_t start = args->Start->Or(args->OriginRevision)->Or(SvnRevision::Head)->ToSvnRevision();
-		svn_opt_revision_t end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
+		svn_opt_revision_t pegRev = args->OriginRevision->Or(altPegRev)->ToSvnRevision();		
 
 		apr_array_header_t *revision_ranges;
 		{
-			svn_opt_revision_range_t *range;
+			int count = args->RangesUsed ? args->Ranges->Count : 1;
+			revision_ranges = apr_array_make(pool.Handle, count, sizeof(svn_opt_revision_range_t *));			
+		
+			if (count > 0)
+				for each(SvnRevisionRange ^ r in args->Ranges)
+				{
+					svn_opt_revision_range_t *range = 
+						(svn_opt_revision_range_t*)pool.Alloc(sizeof(svn_opt_revision_range_t));
 
-			range = (svn_opt_revision_range_t*)pool.Alloc(sizeof(svn_opt_revision_range_t));
-			range->start = start;
-			range->end = end;
+					range->start = r->StartRevision->Or(SvnRevision::Head)->ToSvnRevision();
+					range->end = r->EndRevision->Or(SvnRevision::Zero)->ToSvnRevision();
 
-			revision_ranges = apr_array_make(pool.Handle, 1,
-                                   sizeof(svn_opt_revision_range_t *));
+					APR_ARRAY_PUSH(revision_ranges, svn_opt_revision_range_t *) = range;
+				}
+			else
+			{
+				svn_opt_revision_range_t *range = 
+					(svn_opt_revision_range_t*)pool.Alloc(sizeof(svn_opt_revision_range_t));
 
-			APR_ARRAY_PUSH(revision_ranges, svn_opt_revision_range_t *) = range;
+				range->start = args->Start->Or(args->OriginRevision)->Or(SvnRevision::Head)->ToSvnRevision();
+				range->end = args->End->Or(SvnRevision::Zero)->ToSvnRevision();
+
+				APR_ARRAY_PUSH(revision_ranges, svn_opt_revision_range_t *) = range;
+			}					
 		}
 
 		svn_error_t *r = svn_client_log5(
