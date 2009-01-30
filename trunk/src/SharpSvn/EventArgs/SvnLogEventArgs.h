@@ -28,6 +28,7 @@ namespace SharpSvn {
 		String^ _copyFromPath;
 		initonly __int64 _copyFromRevision;
 		initonly SvnNodeKind _nodeKind;
+		Uri^ _repositoryPath;
 	internal:
 		SvnChangeItem(String^ path, const svn_log_changed_path2_t* changed_path)
 		{
@@ -45,11 +46,25 @@ namespace SharpSvn {
 		}
 
 	public:
+		/// <summary>Gets the path inside rooted at the repository root (including initial '/')</summary>
 		property String^ Path
 		{
 			String^ get()
 			{
 				return _path;
+			}
+		}
+
+		/// <summary>Gets the relative uri of the path inside the repository</summary>
+		/// <remarks>Does not include an initial '/'. Ends with a '/' if <see cref="NodeKind" /> is <see cref="SvnNodeKind::Directory" />.</remarks>
+		property Uri^ RepositoryPath
+		{
+			Uri^ get()
+			{
+				if (!_repositoryPath && _path)
+					Uri::TryCreate(_path->Substring(1) + ((NodeKind == SvnNodeKind::Directory) ? "/" : ""), UriKind::Relative, _repositoryPath);
+
+				return _repositoryPath;
 			}
 		}
 
@@ -131,21 +146,6 @@ namespace SharpSvn {
 
 				return item->Path;
 			}
-
-		public:
-			void Detach()
-			{
-				Detach(true);
-			}
-
-		protected public:
-			void Detach(bool keepProperties)
-			{
-				for each (SvnChangeItem^ i in this)
-				{
-					i->Detach(keepProperties);
-				}
-			}
 		};
 	}
 
@@ -162,6 +162,9 @@ namespace SharpSvn {
 		const char* _pcAuthor;
 		const char* _pcMessage;
 		SvnPropertyCollection^ _customProperties;
+
+		SvnChangeItemCollection^ _changedPaths;
+		array<SvnChangeItem^>^ _changeItemsToDetach;
 
 	internal:
 		SvnLoggingEventArgs(svn_log_entry_t *entry, AprPool ^pool)
@@ -199,8 +202,6 @@ namespace SharpSvn {
 			_pcMessage = pcMessage;
 		}
 
-	private:
-		SvnChangeItemCollection^ _changedPaths;
 	public:
 
 		property SvnChangeItemCollection^ ChangedPaths
@@ -224,6 +225,12 @@ namespace SharpSvn {
 							pChangeInfo);
 
 						_changedPaths->Add(ci);
+					}
+
+					if (_changedPaths->Count)
+					{
+						_changeItemsToDetach = gcnew array<SvnChangeItem^>(_changedPaths->Count);
+						_changedPaths->CopyTo(_changeItemsToDetach, 0);
 					}
 				}
 
@@ -321,8 +328,13 @@ namespace SharpSvn {
 					GC::KeepAlive(RevisionProperties);
 				}
 
-				if (_changedPaths)
-					_changedPaths->Detach(keepProperties);
+				if (_changeItemsToDetach)
+				{
+					for each (SvnChangeItem^ i in _changeItemsToDetach)
+					{
+						i->Detach(keepProperties);
+					}
+				}
 			}
 			finally
 			{
@@ -330,6 +342,7 @@ namespace SharpSvn {
 				_pool = nullptr;
 				_pcMessage = nullptr;
 				_pcAuthor = nullptr;
+				_changeItemsToDetach = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}
