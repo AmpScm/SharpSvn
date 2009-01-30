@@ -404,6 +404,14 @@ namespace SharpSvn {
 		Delete = svn_wc_conflict_action_delete
 	};
 
+	public enum class SvnOperation
+	{
+		None = svn_wc_operation_none,
+		Update = svn_wc_operation_update,
+		Switch = svn_wc_operation_switch,
+		Merge = svn_wc_operation_merge
+	};
+
 	public enum class SvnIgnoreSpacing
 	{
 		/// <summary>Ignore no whitespace</summary>
