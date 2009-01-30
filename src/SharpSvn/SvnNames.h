@@ -20,6 +20,65 @@
 #include "svn_config.h"
 namespace SharpSvn {
 
+	public ref class SvnKeywords sealed
+	{
+		SvnKeywords()
+		{}
+
+	public:
+		/// <summary>The maximum size of an expanded or un-expanded keyword.</summary>
+		literal int MaxLength = SVN_KEYWORD_MAX_LEN;
+
+		/// <summary>The most recent revision in which this file was changed</summary>
+		literal String^ LastChangedRevision = SVN_KEYWORD_REVISION_LONG;
+
+		/// <summary>Short version of LastChangedRevision</summary>
+		literal String^ Rev = SVN_KEYWORD_REVISION_SHORT;
+
+		/// <summary>Medium version of LastChangedRevision, matching the one CVS uses</summary>
+		literal String^ Revision = SVN_KEYWORD_REVISION_MEDIUM;
+
+		/// <summary>The most recent date (repository time) when this file was changed.</summary>
+		literal String^ LastChangedDate = SVN_KEYWORD_DATE_LONG;
+
+		/// <summary>Short version of LastChangedDate</summary>
+		literal String^ Date = SVN_KEYWORD_DATE_SHORT;
+
+		/// <summary>Who most recently committed to this file.</summary>
+		literal String^ LastChangedBy = SVN_KEYWORD_AUTHOR_LONG;
+
+		/// <summary>Short version of LastChangedBy</summary>
+		literal String^ Author = SVN_KEYWORD_AUTHOR_SHORT;
+
+		/// <summary>The URL for the head revision of this file.</summary>
+		literal String^ HeadURL = SVN_KEYWORD_URL_LONG;
+
+		/// <summary>Short version of HeadURL</summary>
+		literal String^ URL = SVN_KEYWORD_URL_SHORT;
+
+		/// <summary>A compressed combination of the other four keywords.</summary>
+		literal String^ Id = SVN_KEYWORD_ID;
+
+		/// <summary>A full combination of the first four keywords.</summary>
+		literal String^ Header = SVN_KEYWORD_HEADER;
+
+		/// <summary>Gets a list of TortoiseSvn defined directory properties, which are applied recursively on all directories below the set root</summary>
+		static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ PredefinedKeywords = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^>
+		{
+			LastChangedRevision,
+			Rev,
+			Revision,
+			LastChangedDate,
+			Date,
+			LastChangedBy,
+			Author,
+			HeadURL,
+			URL,
+			Id,
+			Header
+		}));
+	};
+
 	public ref class SvnPropertyNames sealed
 	{
 		SvnPropertyNames()
@@ -89,22 +148,22 @@ namespace SharpSvn {
 		static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ TortoiseSvnDirectoryProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^>
 		{
 			BugTrackLabel,
-			BugTrackMessage,
-			BugTrackNumber,
-			BugTrackLogRegex,
-			BugTrackUrl,
-			BugTrackWarnIfNoIssue,
-			BugTrackAppend,
+				BugTrackMessage,
+				BugTrackNumber,
+				BugTrackLogRegex,
+				BugTrackUrl,
+				BugTrackWarnIfNoIssue,
+				BugTrackAppend,
 
-			TortoiseSvnLogTemplate,
-			TortoiseSvnLogWidthLine,
-			TortoiseSvnLogMinSize,
-			TortoiseSvnLogFileListLang,
-			TortoiseSvnLogSummary,
-			TortoiseSvnProjectLanguage,
-			TortoiseSvnUserFileProperty,
-			TortoiseSvnUserDirProperty,
-			TortoiseSvnAutoProps
+				TortoiseSvnLogTemplate,
+				TortoiseSvnLogWidthLine,
+				TortoiseSvnLogMinSize,
+				TortoiseSvnLogFileListLang,
+				TortoiseSvnLogSummary,
+				TortoiseSvnProjectLanguage,
+				TortoiseSvnUserFileProperty,
+				TortoiseSvnUserDirProperty,
+				TortoiseSvnAutoProps
 		}));
 		// /TortoiseSvn
 
