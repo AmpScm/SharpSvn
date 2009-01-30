@@ -280,6 +280,36 @@ namespace SharpSvn {
 
 	ref class SvnUriTarget;
 	ref class SvnPathTarget;
+	ref class SvnTarget;
+
+	/// <summary>Generic encapsulation of a specific revision of a node in subversion</summary>
+	public interface struct ISvnOrigin
+	{
+		/// <summary>(Required) The Uri of <see cref="Target" />. Only differs from target if <see cref="Target" />
+		/// specifies a <see cref="SvnPathTarget" /></summary>
+		property System::Uri^ Uri
+		{
+			System::Uri^ get() abstract;
+		}
+
+		/// <summary>The target specified</summary>
+		property SvnTarget^ Target
+		{
+			SvnTarget^ get() abstract;
+		}
+
+		/// <summary>(Required) The repository root of <see cref="Target" /></summary>
+		property System::Uri^ RepositoryRoot
+		{
+			System::Uri^ get() abstract;
+		}
+
+		/// <summary>(Optional) The node kind of <see cref="Target" /></summary>
+		property SvnNodeKind NodeKind
+		{
+			SvnNodeKind get() abstract;
+		}
+	};
 
 	public ref class SvnTarget abstract : public SvnBase, public IEquatable<SvnTarget^>
 	{
@@ -339,6 +369,7 @@ namespace SharpSvn {
 
 		static operator SvnTarget^(Uri^ value)			{ return value ? FromUri(value) : nullptr; }
 		static operator SvnTarget^(String^ value)		{ return value ? FromString(value, false) : nullptr; }
+		static operator SvnTarget^(ISvnOrigin^ origin)  { return origin ? origin->Target : nullptr; }
 
 		virtual bool Equals(Object^ obj) override
 		{
@@ -369,5 +400,5 @@ namespace SharpSvn {
 		static bool TryParse(String^ targetName, bool allowOperationalRevision, [Out] SvnTarget^% target);
 	internal:
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
-	};
+	};	
 }

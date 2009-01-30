@@ -124,6 +124,7 @@ namespace SharpSvn {
 
 		static operator SvnUriTarget^(Uri^ value)				{ return value ? FromUri(value) : nullptr; }
 		static explicit operator SvnUriTarget^(String^ value)	{ return value ? FromString(value) : nullptr; }
+		static operator SvnUriTarget^(ISvnOrigin^ origin)		{ return origin ? gcnew SvnUriTarget(origin->Uri, origin->Target->Revision) : nullptr; }
 
 		property Uri^ Uri
 		{
@@ -187,5 +188,78 @@ namespace SharpSvn {
 		static bool TryParse(String^ targetString, bool allowOperationalRevision, [Out] SvnUriTarget ^% target, AprPool^ pool);
 
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
+	};
+
+	public ref class SvnUriOrigin sealed : ISvnOrigin
+	{
+		initonly SvnUriTarget^ _target;
+		initonly System::Uri^ _repositoryRoot;
+		initonly SvnNodeKind _nodeKind;
+
+	public:
+		SvnUriOrigin(SvnUriTarget^ target, Uri^ repositoryRoot)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			else if (!repositoryRoot)
+				throw gcnew ArgumentNullException("repositoryRoot");
+
+			_target = target;
+			_repositoryRoot = repositoryRoot;
+			_nodeKind = SvnNodeKind::Unknown;
+		}
+
+		SvnUriOrigin(SvnUriTarget^ target, Uri^ repositoryRoot, SvnNodeKind nodeKind)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			else if (!repositoryRoot)
+				throw gcnew ArgumentNullException("repositoryRoot");
+
+			_target = target;
+			_repositoryRoot = repositoryRoot;
+			_nodeKind = nodeKind;
+		}
+
+	public:
+		property SvnUriTarget^ Target
+		{
+			SvnUriTarget^ get()
+			{
+				return _target;
+			}
+		}
+
+		property System::Uri^ Uri
+		{
+			virtual System::Uri^ get() sealed
+			{
+				return _target->Uri;
+			}
+		}
+
+		property System::Uri^ RepositoryRoot
+		{
+			virtual System::Uri^ get() sealed
+			{
+				return _repositoryRoot;
+			}
+		}
+		
+		property SvnNodeKind NodeKind
+		{
+			virtual SvnNodeKind get() sealed
+			{
+				return _nodeKind;
+			}
+		}
+	private:
+		property SvnTarget^ RawTarget
+		{
+			virtual SvnTarget^ get() sealed = ISvnOrigin::Target::get
+			{
+				return _target;
+			}
+		}
 	};
 }
