@@ -148,9 +148,6 @@
 			file="${dbDir}/LICENSE"
 			tofile="release/licenses/BerkeleyDB-License.txt" />
     <copy
-			file="${aprUtilDir}/xml/expat/COPYING"
-			tofile="release/licenses/Expat-License.txt" />
-    <copy
 			file="${saslDir}/COPYING"
 			tofile="release/licenses/Cyrus-Sasl-License.txt" />
     <copy
