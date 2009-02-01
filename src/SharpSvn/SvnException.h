@@ -25,8 +25,11 @@ namespace SharpSvn {
 	[Serializable]
 	public ref class SvnException : public System::Exception
 	{
-	private:
 		initonly int _errorCode;
+		[NonSerialized]
+		const char* _pFile;
+		String^ _file;
+		initonly int _line;
 
 		static String^ GetErrorText(svn_error_t *error);
 
@@ -41,14 +44,25 @@ namespace SharpSvn {
 	internal:
 		static SvnException^ Create(svn_error_t *error);
 		static Exception^ Create(svn_error_t *error, bool clearError);
-		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);
+		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);		
 
 	private protected:
 		SvnException(svn_error_t *error)
 			: Exception(GetErrorText(error), GetInnerException(error))
 		{
 			if (error)
+			{
 				_errorCode = error->apr_err;
+				_line = error->line;
+				_pFile = error->file;
+			}
+		}
+
+		SvnException(String^ message, String^ file, int line)
+			: Exception(message)
+		{
+			_file = file;
+			_line = line;
 		}
 
 	protected:
@@ -60,6 +74,8 @@ namespace SharpSvn {
 			UNUSED_ALWAYS(context);
 
 			_errorCode = info->GetInt32("SvnErrorValue");
+			_file = info->GetString("_file");
+			_line = info->GetInt32("_line");
 		}
 
 	public:
@@ -162,46 +178,23 @@ namespace SharpSvn {
 		}
 
 	public:
-		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
-		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
-		{
-			if (!info)
-				throw gcnew ArgumentNullException("info");
-			Exception::GetObjectData(info, context);
-
-			info->AddValue("SvnErrorValue", _errorCode);
-		}
-	};
-
-	public ref class SvnMalfunctionException sealed : SvnException
-	{
-		initonly String^ _file;
-		initonly int _line;
-	public:
-		SvnMalfunctionException()
-		{
-		}
-
-		SvnMalfunctionException(String^ message, String^ file, int line)
-			: SvnException(String::Format(SharpSvnStrings::SvnMalfunctionPrefix, message, file, line))
-		{
-			_file = file;
-			_line = line;
-		}
-
-	protected:
-		SvnMalfunctionException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
-			: SvnException(info, context)
-		{
-			_file = info->GetString("SvnFile");
-			_line = info->GetInt32("SvnLine");
-		}
-
-	public:
 		property String^ File
 		{
 			String^ get()
 			{
+				if (!_file && _pFile)
+				{
+					const char* pf = _pFile;
+					_pFile = nullptr;
+					try
+					{
+						/* Subversion will always set file via __FILE__ which comes from 
+						   a readonly resource memory segment so this should not crash */
+						_file = gcnew String(pf);
+					}
+					catch(...)
+					{}
+				}
 				return _file;
 			}
 		}
@@ -222,8 +215,28 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("info");
 			Exception::GetObjectData(info, context);
 
-			info->AddValue("SvnFile", _file);
-			info->AddValue("SvnLine", _line);
+			info->AddValue("SvnErrorValue", _errorCode);
+			info->AddValue("_file", File);
+			info->AddValue("_line", Line);
+		}
+	};
+
+	public ref class SvnMalfunctionException sealed : SvnException
+	{		
+	public:
+		SvnMalfunctionException()
+		{
+		}
+
+		SvnMalfunctionException(String^ message, String^ file, int line)
+			: SvnException(String::Format(SharpSvnStrings::SvnMalfunctionPrefix, message, file, line), file, line)
+		{
+		}
+
+	protected:
+		SvnMalfunctionException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+			: SvnException(info, context)
+		{
 		}
 	};
 
