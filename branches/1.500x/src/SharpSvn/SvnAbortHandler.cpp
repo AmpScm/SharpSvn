@@ -127,47 +127,6 @@ svn_error_t* __cdecl sharpsvn_check_bdb()
 	return NULL;
 }
 
-sharpsvn_maybe_handle_conflict_as_binary_t sharpsvn_maybe_binary;
-svn_error_t* __cdecl sharpsvn_maybe_binary(int* is_binary,
-							    const char *left,
-								const char *right,
-								const char *merge_target,
-								const char *copyfrom_text,
-								int dry_run,
-								void* conflict_func,
-								void *conflict_baton,
-								struct apr_pool_t *pool)
-{
-	if (!conflict_func || !conflict_baton || !SvnClient::IsConflictHandler(conflict_func))
-		return nullptr;
-
-	UNUSED_ALWAYS(left);
-	UNUSED_ALWAYS(right);
-	UNUSED_ALWAYS(copyfrom_text);
-
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)conflict_baton);
-
-	AprPool myPool(pool, false);
-	SvnBeforeAutomaticMergeEventArgs^ ea = gcnew SvnBeforeAutomaticMergeEventArgs(*is_binary != 0, dry_run != 0, merge_target, %myPool);
-	try
-	{
-		client->HandleClientBeforeAutomaticMerge(ea);
-
-		if (!*is_binary)
-			*is_binary = ea->IsBinary;
-
-		return nullptr;
-	}
-	catch(Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("BeforeAutomaticMerge function", e);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
-}
-
 FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
 {
 	if (dliNotify != dliFailLoadLib)
@@ -197,8 +156,6 @@ static bool SetHandler()
 
 	InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
 	InterlockedExchangePointer((void**)&__pfnDliFailureHook2, (void*)SharpSvnDelayLoadFailure);
-
-	InterlockedExchangePointer((void**)&sharpsvn_maybe_handle_conflict_as_binary, (void*)sharpsvn_maybe_binary);
 
 	return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
 }

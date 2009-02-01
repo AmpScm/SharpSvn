@@ -25,8 +25,11 @@ namespace SharpSvn {
 	[Serializable]
 	public ref class SvnException : public System::Exception
 	{
-	private:
 		initonly int _errorCode;
+		[NonSerialized]
+		const char* _pFile;
+		String^ _file;
+		initonly int _line;
 
 		static String^ GetErrorText(svn_error_t *error);
 
@@ -48,7 +51,18 @@ namespace SharpSvn {
 			: Exception(GetErrorText(error), GetInnerException(error))
 		{
 			if (error)
+			{
 				_errorCode = error->apr_err;
+				_line = error->line;
+				_pFile = error->file;
+			}
+		}
+
+		SvnException(String^ message, String^ file, int line)
+			: Exception(message)
+		{
+			_file = file;
+			_line = line;
 		}
 
 	protected:
@@ -60,6 +74,8 @@ namespace SharpSvn {
 			UNUSED_ALWAYS(context);
 
 			_errorCode = info->GetInt32("SvnErrorValue");
+			_file = info->GetString("_file");
+			_line = info->GetInt32("_line");
 		}
 
 	public:
@@ -162,6 +178,36 @@ namespace SharpSvn {
 		}
 
 	public:
+		property String^ File
+		{
+			String^ get()
+			{
+				if (!_file && _pFile)
+				{
+					const char* pf = _pFile;
+					_pFile = nullptr;
+					try
+					{
+						/* Subversion will always set file via __FILE__ which comes from 
+						   a readonly resource memory segment so this should not crash */
+						_file = gcnew String(pf);
+					}
+					catch(...)
+					{}
+				}
+				return _file;
+			}
+		}
+
+		property int Line
+		{
+			int get()
+			{
+				return _line;
+			}
+		}
+
+	public:
 		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
 		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
 		{
@@ -170,8 +216,11 @@ namespace SharpSvn {
 			Exception::GetObjectData(info, context);
 
 			info->AddValue("SvnErrorValue", _errorCode);
+			info->AddValue("_file", File);
+			info->AddValue("_line", Line);
 		}
 	};
+
 
 	//////////// Generic Subversion exception wrappers
 
