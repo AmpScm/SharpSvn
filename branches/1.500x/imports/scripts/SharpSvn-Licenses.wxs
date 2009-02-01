@@ -7,7 +7,6 @@
       <ComponentRef Id="C_SSVNLICENSE_Apr" />
       <ComponentRef Id="C_SSVNLICENSE_BerkeleyDB" />
       <ComponentRef Id="C_SSVNLICENSE_Cyrus_Sasl"/>
-      <ComponentRef Id="C_SSVNLICENSE_Expat" />
       <ComponentRef Id="C_SSVNLICENSE_Neon" />
       <ComponentRef Id="C_SSVNLICENSE_OpenSsl" />
       <ComponentRef Id="C_SSVNLICENSE_Serf" />
@@ -39,9 +38,6 @@
       </Component>
       <Component Id="C_SSVNLICENSE_Cyrus_Sasl" Guid="A14954AB-3D8E-499A-80A9-D74407844058">
         <File Id="CF_SSVNLICENSE_Cyrus_Sasl" Name="Cyrus-Sasl-License.txt" Vital="yes" KeyPath="yes"/>
-      </Component>
-      <Component Id="C_SSVNLICENSE_Expat" Guid="D7F4D2ED-F428-4030-918C-3B1109A8F44E">
-        <File Id="CF_SSVNLICENSE_Expat" Name="Expat-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_Neon" Guid="EF33BA74-B1AF-4B14-A3AB-245CC0AEC39F">
         <File Id="CF_SSVNLICENSE_Neon" Name="Neon-License.txt" Vital="yes" KeyPath="yes"/>
