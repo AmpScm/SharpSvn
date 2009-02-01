@@ -210,7 +210,7 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
 
 	if (_handler->Equals(SvnAuthentication::SubversionFileUserNamePasswordHandler))
 	{
-		svn_auth_get_simple_provider(&provider, pool->Handle);
+		svn_auth_get_simple_provider2(&provider, nullptr, nullptr, pool->Handle);
 	}
 	else if (_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
 	{
@@ -380,7 +380,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
 
 	if (_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificatePasswordHandler))
 	{
-		svn_auth_get_ssl_client_cert_pw_file_provider(&provider, pool->Handle);
+		svn_auth_get_ssl_client_cert_pw_file_provider2(&provider, nullptr, nullptr, pool->Handle);
 	}
 	else
 		svn_auth_get_ssl_client_cert_pw_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func, (void*)_baton->Handle, RetryLimit, pool->Handle);

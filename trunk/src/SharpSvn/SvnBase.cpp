@@ -59,7 +59,7 @@ void SvnBase::EnsureLoaded()
 				if (apr_initialize()) // First
 					throw gcnew InvalidOperationException();
 
-				svn_dso_initialize(); // Before first pool
+				svn_dso_initialize2(); // Before first pool
 
 				apr_pool_t* pool = svn_pool_create(nullptr);
 				svn_utf_initialize(pool);
