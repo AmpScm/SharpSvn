@@ -64,7 +64,7 @@ namespace SharpSvn {
 		Switch,
 		Unlock,
 		Update,
-		Write,		
+		Write,
 
 		// Wc library helper
 		GetWorkingCopyInfo = 0x1001,
@@ -157,12 +157,14 @@ namespace SharpSvn {
 		LockFailedUnlock=svn_wc_notify_failed_unlock,
 
 		// 1.5+
-		Exists			= svn_wc_notify_exists,
-		ChangeListSet	= svn_wc_notify_changelist_set,
-		ChangeListClear = svn_wc_notify_changelist_clear,
-		ChangeListMoved	= svn_wc_notify_changelist_moved,
-		MergeBegin		= svn_wc_notify_merge_begin,
-		UpdateReplace	= svn_wc_notify_update_replace,
+		Exists						= svn_wc_notify_exists,
+		ChangeListSet				= svn_wc_notify_changelist_set,
+		ChangeListClear 			= svn_wc_notify_changelist_clear,
+		ChangeListMoved				= svn_wc_notify_changelist_moved,
+		MergeBegin					= svn_wc_notify_merge_begin,
+		MergeBeginForeign			= svn_wc_notify_foreign_merge_begin,
+		UpdateReplace				= svn_wc_notify_update_replace,
+
 	};
 
 	public enum class SvnNotifyState
