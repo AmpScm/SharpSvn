@@ -92,54 +92,65 @@ namespace Po2Resx
 
 		private static void GenerateResxFiles(string prefix, string toDir, List<FileInfo> files, bool force)
 		{
-			foreach (FileInfo file in files)
-			{
-				FileInfo toFile = new FileInfo(Path.Combine(toDir, prefix + "." + Path.GetFileNameWithoutExtension(file.Name).Replace('_', '-').ToLowerInvariant() + ".resx"));
+            foreach (FileInfo file in files)
+            {
+                FileInfo toFile = new FileInfo(Path.Combine(toDir, prefix + "." + Path.GetFileNameWithoutExtension(file.Name).Replace('_', '-').ToLowerInvariant() + ".resx"));
 
-				if (!force && toFile.Exists && toFile.LastWriteTime > file.LastWriteTime)
-					continue; // File up2date
+                if (!force && toFile.Exists && toFile.LastWriteTime > file.LastWriteTime)
+                    continue; // File up2date
 
-				XmlWriterSettings xws = new XmlWriterSettings();
-				xws.Indent = true;
-				using (XmlWriter xw = XmlWriter.Create(toFile.FullName, xws))
-				{
-					xw.WriteStartDocument();
-					xw.WriteStartElement("root");
+                XmlWriterSettings xws = new XmlWriterSettings();
+                xws.Indent = true;
+                using (XmlWriter xw = XmlWriter.Create(toFile.FullName, xws))
+                {
+                    xw.WriteStartDocument();
+                    xw.WriteStartElement("root");
 
-					WriteHeader(xw, "resmimetype", "text/microsoft-resx");
-					WriteHeader(xw, "version", "2.0");
-					WriteHeader(xw, "reader", "System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
-					WriteHeader(xw, "writer", "System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
-					SortedDictionary<string, Msg> preDefined = new SortedDictionary<string, Msg>(StringComparer.OrdinalIgnoreCase);
+                    WriteHeader(xw, "resmimetype", "text/microsoft-resx");
+                    WriteHeader(xw, "version", "2.0");
+                    WriteHeader(xw, "reader", "System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+                    WriteHeader(xw, "writer", "System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089");
+                    SortedDictionary<string, Msg> preDefined = new SortedDictionary<string, Msg>(StringComparer.OrdinalIgnoreCase);
 
-					foreach (Msg msg in PoParser.ReadMessages(file))
-					{
-						Msg alt;
-						if (preDefined.TryGetValue(msg.Key, out alt))
-						{
-							if(!alt.Value.Equals(msg.Value, StringComparison.InvariantCultureIgnoreCase))
-							{
-								Console.Error.WriteLine("Warning: Duplicate key found with different translation in '{0}'", file.FullName);
-								Console.Error.WriteLine(" 1st key:   {0}", alt.Key);
-								Console.Error.WriteLine(" 1st value: {0}", alt.Value);
-								Console.Error.WriteLine(" 2nd key:   {0}", msg.Key);
-								Console.Error.WriteLine(" 2nd value: {0}", msg.Value);
-								Console.Error.WriteLine("Ignored the 2nd entry");
-							}
-							continue;
-						}
+                    try
+                    {
+                        foreach (Msg msg in PoParser.ReadMessages(file))
+                        {
+                            Msg alt;
 
-						preDefined.Add(msg.Key, msg);
+                            if (!string.IsNullOrEmpty(msg.Comment) && msg.Comment.StartsWith("../svn"))
+                                continue; // Not for translation
 
-						if(!string.IsNullOrEmpty(msg.Comment))
-							xw.WriteComment(msg.Comment);
+                            if (preDefined.TryGetValue(msg.Key, out alt))
+                            {
+                                if (!string.Equals(msg.Value, alt.Value, StringComparison.InvariantCultureIgnoreCase))
+                                {
+                                    Console.Error.WriteLine("{0}({1}): Warning: Duplicate key found with different translation", file.FullName, msg.Line);
+                                    Console.Error.WriteLine(" 1st key:   {0}", alt.Key);
+                                    Console.Error.WriteLine(" 1st value: {0}", alt.Value);
+                                    Console.Error.WriteLine(" 2nd key:   {0}", msg.Key);
+                                    Console.Error.WriteLine(" 2nd value: {0}", msg.Value);
+                                    Console.Error.WriteLine("Ignored the 2nd entry");
+                                }
+                                continue;
+                            }
 
-						WriteData(xw, msg.Key, msg.Value);
-					}
-					xw.WriteEndElement();
+                            preDefined.Add(msg.Key, msg);
 
-				}
-			}
+                            if (!string.IsNullOrEmpty(msg.Comment))
+                                xw.WriteComment(msg.Comment);
+
+                            WriteData(xw, msg.Key, msg.Value);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new InvalidOperationException(string.Format("While reading {0}", file.FullName), e);
+                    }
+
+                    xw.WriteEndElement();
+                }
+            }
 		}
 
 		static void WriteHeader(XmlWriter xw, string key, string value)
