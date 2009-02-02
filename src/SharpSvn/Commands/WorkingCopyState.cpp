@@ -71,7 +71,7 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 	}
 	finally
 	{
-		svn_wc_adm_close(acc);
+		svn_wc_adm_close2(acc, pool.Handle);
 	}
 
 	return true;

@@ -27,6 +27,7 @@
 #define SVN_DEPRECATED __declspec(deprecated)
 
 #include <svn_client.h>
+#include <svn_compat.h>
 #include <svn_dirent_uri.h>
 #include <svn_io.h>
 #include <svn_path.h>

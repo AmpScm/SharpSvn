@@ -16,7 +16,6 @@
 
 #pragma once
 
-#include "svn_props.h"
 #include "svn_config.h"
 namespace SharpSvn {
 

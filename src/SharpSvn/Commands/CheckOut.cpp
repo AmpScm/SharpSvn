@@ -16,6 +16,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
+#include "SvnUpdateResult.h"
 #include "Args/CheckOut.h"
 
 using namespace SharpSvn::Implementation;

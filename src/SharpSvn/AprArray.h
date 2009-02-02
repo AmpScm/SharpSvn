@@ -18,9 +18,6 @@
 
 using namespace System;
 
-#include "SvnBase.h"
-#include "AprPool.h"
-
 namespace SharpSvn {
 	namespace Implementation {
 
