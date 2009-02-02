@@ -23,6 +23,30 @@ namespace SharpSvn {
 	namespace Diff {
 		using namespace SharpSvn;
 
+		public enum class SvnDiffDisplay
+		{
+			/// <summary>Display modified and latest, with conflict markers</summary>
+			ModifiedLatest = svn_diff_conflict_display_modified_latest,
+
+			/// <summary>Like svn_diff_conflict_display_modified_latest, but with an
+			/// extra effort to identify common sequences between modified and
+			/// latest.</summary>
+			ResolvedModifiedLatest = svn_diff_conflict_display_resolved_modified_latest,
+
+			/// <summary>Display modified, original, and latest, with conflict markers.</summary>
+			ModifiedOridingalLatest = svn_diff_conflict_display_modified_original_latest,
+
+			/// <summary>Just display modified, with no markers.</summary>
+			Modified = svn_diff_conflict_display_modified,
+
+			/// <summary>Just display latest, with no markers.</summary>
+			Latest = svn_diff_conflict_display_latest,
+
+			/// <summary>Like svn_diff_conflict_display_modified_original_latest, but
+			/// *only* showing conflicts.</summary>
+			OnlyConflicts = svn_diff_conflict_display_only_conflicts
+		};
+
 		public ref class SvnFileDiffArgs : SvnClientArgs
 		{
 			SvnIgnoreSpacing _ignoreSpacing;
@@ -86,8 +110,7 @@ namespace SharpSvn {
 			String^ _conflictModified;
 			String^ _conflictLatest;
 			String^ _conflictSeparator;
-			bool _showOriginalInConflict;
-			bool _showResolvedConflicts;
+			SvnDiffDisplay _display;
 
 		public:
 			/// <summary>Gets or sets a replacement for the Original Path (null is use original)</summary>
@@ -181,27 +204,15 @@ namespace SharpSvn {
 				}
 			}
 
-			property bool ShowOriginalInConflict
+			property SvnDiffDisplay Display
 			{
-				bool get()
+				SvnDiffDisplay get()
 				{
-					return _showOriginalInConflict;
+					return _display;
 				}
-				void set(bool value)
+				void set(SvnDiffDisplay value)
 				{
-					_showOriginalInConflict = value;
-				}
-			}
-
-			property bool ShowResolvedConflicts
-			{
-				bool get()
-				{
-					return _showResolvedConflicts;
-				}
-				void set(bool value)
-				{
-					_showResolvedConflicts = value;
+					_display = value;
 				}
 			}
 
@@ -277,7 +288,6 @@ namespace SharpSvn {
 						_relativeFrom = value;
 				}
 			}
-
 
 			property bool ShowCFunction
 			{
