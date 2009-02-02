@@ -50,9 +50,7 @@ namespace SharpSvn {
 		bool _noLogChangedPaths;
 		bool _strictNodeHistory;
 		bool _includeMerged;
-		bool _ommitMessages;
 		bool _retrieveAllProperties;
-		bool _hasRanges;
 		Uri^ _baseUri;
 		SvnRevisionPropertyNameCollection^ _retrieveProperties;
 		Collection<SvnRevisionRange^>^ _ranges;

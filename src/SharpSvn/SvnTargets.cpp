@@ -19,6 +19,7 @@
 #include "SvnAll.h"
 
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnTarget.op_Implicit(System.String):SharpSvn.SvnTarget")];
+[module: SuppressMessage("Microsoft.Naming", "CA1720:IdentifiersShouldNotContainTypeNames", Scope="member", Target="SharpSvn.SvnUriTarget.#.ctor(System.String,SharpSvn.SvnRevision)", MessageId="string")];
 
 using namespace SharpSvn;
 using System::IO::Path;

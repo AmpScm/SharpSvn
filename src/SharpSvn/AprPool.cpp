@@ -223,7 +223,7 @@ const char* AprPool::AllocPath(String^ value)
 		char* pData = (char*)Alloc(len+1);
 
 		if (!pData)
-			throw gcnew OutOfMemoryException();
+			throw gcnew InvalidOperationException();
 
 		pin_ptr<unsigned char> pBytes = &bytes[0];
 

@@ -19,6 +19,15 @@
 #include "SvnAll.h"
 #include "SvnHookArguments.h"
 
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePreLock(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParseStartCommit(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePreUnlock(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePostLock(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePostCommit(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePreCommit(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePostUnlock(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParseHookArguments(System.String[],SharpSvn.SvnHookType,System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="3#")];
+
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
@@ -262,7 +271,7 @@ bool SvnHookArguments::ParseStartCommit(array<String^>^ args, bool useConsole, [
 	data = gcnew SvnHookArguments();
 	data->RepositoryPath = args[0];
 	data->User = args[1];
-	data->Capabilities = array<String^>::AsReadOnly(args[2]->Split(','));
+	data->Capabilities = gcnew Collection<String^>(array<String^>::AsReadOnly(args[2]->Split(',')));
 	return true;
 }
 

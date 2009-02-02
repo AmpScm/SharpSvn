@@ -451,7 +451,7 @@ SvnClientContext::ArgsStore::~ArgsStore()
 {
 	SvnClientArgs^ args = _client->_currentArgs;
 	if (args)
-		args->_hooked = true;
+		args->_hooked = false;
 
 	_client->_currentArgs = nullptr;
 }

@@ -50,7 +50,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 	SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff);
 	try
 	{
-		args->OnSummaryHandler(e);
+		args->RaiseDiffSummary(e);
 
 		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
@@ -83,7 +83,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	AprPool pool(%_pool);
 
 	if (summaryHandler)
-		args->SummaryHandler += summaryHandler;
+		args->DiffSummary += summaryHandler;
 	try
 	{
 		svn_error_t *r = svn_client_diff_summarize2(
@@ -104,7 +104,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	finally
 	{
 		if (summaryHandler)
-			args->SummaryHandler -= summaryHandler;
+			args->DiffSummary -= summaryHandler;
 	}
 }
 

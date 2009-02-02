@@ -25,7 +25,7 @@ namespace SharpSvn {
 	public ref class SvnReplayRevisionArgs : public SvnClientArgs
 	{
 		bool _retrieveContent;
-		SvnRevision^ _lowWaterMarkRevision;
+		SvnRevision^ _lowWatermarkRevision;
 
 	internal:
 		Delta::SvnDeltaEditor^ _deltaEditor;
@@ -45,15 +45,15 @@ namespace SharpSvn {
 
 		/// <summary>Gets or sets the maximum version the client knows about. Deltas will be
 		/// based on this version</summary>
-		property SvnRevision^ LowWaterMarkRevision
+		property SvnRevision^ LowWatermarkRevision
 		{
 			SvnRevision^ get()
 			{
-				return _lowWaterMarkRevision ? _lowWaterMarkRevision : SvnRevision::Zero;
+				return _lowWatermarkRevision ? _lowWatermarkRevision : SvnRevision::Zero;
 			}
 			void set(SvnRevision^ value)
 			{
-				_lowWaterMarkRevision = value;
+				_lowWatermarkRevision = value;
 			}
 		}
 

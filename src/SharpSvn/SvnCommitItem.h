@@ -82,7 +82,7 @@ namespace SharpSvn {
 	};
 
 	[Flags]
-	public enum class SvnCommitType
+	public enum class SvnCommitTypes
 	{
 		None = 0,
 		Added = SVN_CLIENT_COMMIT_ITEM_ADD,
@@ -103,7 +103,7 @@ namespace SharpSvn {
 		initonly __int64 _revision;
 		Uri^ _copyFromUri;
 		initonly __int64 _copyFromRevision;
-		initonly SvnCommitType _commitType;
+		initonly SvnCommitTypes _commitType;
 
 	internal:
 		SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo);
@@ -176,9 +176,9 @@ namespace SharpSvn {
 			}
 		}
 
-		property SvnCommitType CommitType
+		property SvnCommitTypes CommitType
 		{
-			SvnCommitType get()
+			SvnCommitTypes get()
 			{
 				return _commitType;
 			}

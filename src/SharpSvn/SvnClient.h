@@ -272,7 +272,6 @@ namespace SharpSvn {
 
 		static const char* GetEolPtr(SvnLineStyle style);
 		static const char* GetEolValue(SvnLineStyle style);
-		static bool IsConflictHandler(void* conflict_func);
 #pragma endregion
 
 	public:

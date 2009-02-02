@@ -88,12 +88,13 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 		if (!target)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceTargets");
 		
+		SvnPathTarget^ pt = dynamic_cast<SvnPathTarget^>(target);
 		if (isFirst)
 		{
-			isLocal = (nullptr != dynamic_cast<SvnPathTarget^>(target));
+			isLocal = (nullptr != pt);
 			isFirst = false;
 		}
-		else if (isLocal != (nullptr != dynamic_cast<SvnPathTarget^>(target)))
+		else if (isLocal != (nullptr != pt))
 			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sourceTargets");
 	}
 
@@ -240,12 +241,13 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 		if (!target)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceTargets");
 		
+		SvnPathTarget^ pt = dynamic_cast<SvnPathTarget^>(target);
 		if (isFirst)
 		{
-			isLocal = (nullptr != dynamic_cast<SvnPathTarget^>(target));
+			isLocal = (nullptr != pt);
 			isFirst = false;
 		}
-		else if (isLocal != (nullptr != dynamic_cast<SvnPathTarget^>(target)))
+		else if (isLocal != (nullptr != pt))
 			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sourceTargets");
 	}
 

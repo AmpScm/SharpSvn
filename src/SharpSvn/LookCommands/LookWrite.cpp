@@ -21,9 +21,11 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnLookClient.#Write(SharpSvn.SvnLookOrigin,System.String,System.IO.Stream,SharpSvn.SvnLookWriteArgs)")];
+
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
-
 
 bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream)
 {
@@ -61,7 +63,6 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 	svn_fs_t* fs = nullptr;
 	svn_error_t* r;
 
-	svn_revnum_t base_rev = 0;
 	svn_fs_root_t* root = nullptr;
 
 	if (r = svn_repos_open(
@@ -80,8 +81,6 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 
 		if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(lookOrigin->Transaction), pool.Handle))
 			return args->HandleResult(this, r);
-
-		base_rev = svn_fs_txn_base_revision(txn);
 
 		if (r = svn_fs_txn_root(&root, txn, pool.Handle))
 			return args->HandleResult(this, r);				

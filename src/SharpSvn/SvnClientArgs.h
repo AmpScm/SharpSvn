@@ -49,7 +49,7 @@ namespace SharpSvn {
 
 		bool _noThrowOnError;
 		bool _noThrowOnCancel;
-		bool _noThrowOnWarning;
+		bool _throwOnWarning;
 		SvnException^ _exception;
 
 		// On +- 90% of the SvnClientArgs instances none of these is used
@@ -105,6 +105,8 @@ namespace SharpSvn {
 			{
 			case SvnNotifyAction::LockFailedLock:
 			case SvnNotifyAction::LockFailedUnlock:
+			case SvnNotifyAction::PropertyDeletedNonExistent:
+			case SvnNotifyAction::ExternalFailed:
 				if (e->Error)
 				{
 					_warnings = SvnBase::ExtendArray(_warnings, e->Error);
@@ -139,7 +141,7 @@ namespace SharpSvn {
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the call must throw an error if an error occurs.
 		/// If an exception would occur, the method returns false and the <see cref="LastException" /> property
-		/// is set to the exception which would have been throw.
+		/// is set to the exception which would have been throw. Defaults to true.
 		/// </summary>
 		property bool ThrowOnError
 		{
@@ -155,24 +157,24 @@ namespace SharpSvn {
 
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the call must throw an error if a non fatal error occurs.
-		/// (E.g. locking or updating an external failed)
+		/// (E.g. locking or updating an external failed). Defaults to false
 		/// </summary>
 		property bool ThrowOnWarning
 		{
 			bool get()
 			{
-				return !_noThrowOnWarning;
+				return _throwOnWarning;
 			}
 			void set(bool value)
 			{
-				_noThrowOnWarning = !value;
+				_throwOnWarning = value;
 			}
 		}
 
 		/// <summary>
 		/// Gets or sets a boolean indicating whether the call must throw an error if the operation is cancelled
 		/// <see cref="IsLastInvocationCanceled" /> is true and the returnvalue <c>false</c> if the operation was canceled.
-		/// (The <see cref="LastException" /> property is set to the cancel exception)
+		/// (The <see cref="LastException" /> property is set to the cancel exception). Defaults to true
 		/// </summary>
 		property bool ThrowOnCancel
 		{
@@ -200,6 +202,23 @@ namespace SharpSvn {
 			void set(SvnException^ value)
 			{
 				_exception = value;
+			}
+		}
+
+		/// <summary>Gets a collection of warnings issued by the last command invocation</summary>
+		property ICollection<SvnException^>^ Warnings
+		{
+			ICollection<SvnException^>^ get()
+			{
+				ReadOnlyCollection<SvnException^>^ rc = nullptr;
+
+				if (_warnings && _warnings->Length)
+				{
+					IList<SvnException^>^ warnings = safe_cast<IList<SvnException^>^>(_warnings);
+					rc = gcnew ReadOnlyCollection<SvnException^>(warnings);
+				}
+
+				return rc;
 			}
 		}
 
@@ -239,7 +258,7 @@ namespace SharpSvn {
 		/// <summary>Raised just before committing to allow modifying the log message</summary>
 		event EventHandler<SvnCommittingEventArgs^>^ Committing;
 
-	protected public:
+	protected:
 		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>
 		virtual void OnCommitting(SvnCommittingEventArgs^ e)
 		{
@@ -247,6 +266,12 @@ namespace SharpSvn {
 				e->LogMessage = LogMessage;
 
 			Committing(this, e);
+		}
+
+	internal:
+		void RaiseCommitting(SvnCommittingEventArgs^ e)
+		{
+			OnCommitting(e);
 		}
 
 	public:
@@ -296,11 +321,17 @@ namespace SharpSvn {
 		{
 		}
 
-	protected public:
+	protected:
 		/// <summary>Raises the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e)
 		{
 			Conflict(this, e);
+		}
+
+	internal:
+		void RaiseConflict(SvnConflictEventArgs^ e)
+		{
+			OnConflict(e);
 		}
 	};
 

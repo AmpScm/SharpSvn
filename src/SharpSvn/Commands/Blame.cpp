@@ -50,7 +50,7 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 		merged_path, line, %thePool);
 	try
 	{
-		args->OnBlameHandler(e);
+		args->RaiseBlame(e);
 
 		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
@@ -80,7 +80,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	AprPool pool(%_pool);
 
 	if (blameHandler)
-		args->BlameHandler += blameHandler;
+		args->Blame += blameHandler;
 	try
 	{
 		svn_diff_file_options_t *options = svn_diff_file_options_create(pool.Handle);
@@ -106,7 +106,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 	finally
 	{
 		if (blameHandler)
-			args->BlameHandler -= blameHandler;
+			args->Blame -= blameHandler;
 	}
 }
 

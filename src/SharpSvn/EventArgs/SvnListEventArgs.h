@@ -20,7 +20,7 @@
 
 namespace SharpSvn {
 
-	public ref class SvnDirEntry
+	public ref class SvnDirEntry sealed
 	{
 		const svn_dirent_t *_entry;
 		initonly SvnNodeKind _nodeKind;
@@ -29,7 +29,6 @@ namespace SharpSvn {
 		initonly __int64 _rev;
 		initonly DateTime _time;
 		String^ _author;
-		Uri^ _repositoryRoot;
 
 	internal:
 		SvnDirEntry(const svn_dirent_t *entry)
@@ -105,6 +104,11 @@ namespace SharpSvn {
 		virtual int GetHashCode() override
 		{
 			return Time.GetHashCode() ^ SvnEventArgs::SafeGetHashCode(Author);
+		}
+
+		void Detach()
+		{
+			Detach(true);
 		}
 
 	protected public:

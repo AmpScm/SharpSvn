@@ -62,7 +62,7 @@ namespace SharpSvn {
 		}
 
 	internal:
-		SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
+		/*SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
 		{
 			if (String::IsNullOrEmpty(key))
 				throw gcnew ArgumentNullException("key");
@@ -72,7 +72,7 @@ namespace SharpSvn {
 			_target = target;
 			_key = key;
 			_strValue = value;
-		}
+		}*/
 
 		SvnPropertyValue(String^ key, array<Byte>^ value, SvnTarget^ target)
 		{
@@ -197,9 +197,9 @@ namespace SharpSvn {
 			return Key->GetHashCode();
 		}
 
-		virtual bool Equals(Object^ other) override
+		virtual bool Equals(Object^ obj) override
 		{
-			SvnPropertyValue^ ob = dynamic_cast<SvnPropertyValue^>(other);
+			SvnPropertyValue^ ob = dynamic_cast<SvnPropertyValue^>(obj);
 
 			return Equals(ob);
 		}

@@ -20,6 +20,12 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,SharpSvn.SvnPropertyValue&)", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,System.String&)", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnPropertyValue&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,System.String&)", MessageId="2#")];
+
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetRevisionProperty(SharpSvn.SvnLookOrigin,System.String,SharpSvn.SvnLookRevisionPropertyArgs,SharpSvn.SvnPropertyValue&)")];
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 

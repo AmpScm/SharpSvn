@@ -21,6 +21,10 @@
 
 #include "UnmanagedStructs.h"
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetCapabilities(SharpSvn.SvnTarget,SharpSvn.SvnGetCapabilitiesArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnCapability>&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetCapabilities(SharpSvn.SvnTarget,System.Collections.Generic.IEnumerable`1<SharpSvn.SvnCapability>,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnCapability>&)", MessageId="2#")];
+
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
@@ -90,7 +94,7 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 	AprPool^ tmp = gcnew AprPool(%pool);
 	for each(SvnCapability c in args->RetrieveAllCapabilities ? static_cast<System::Collections::IEnumerable^>(Enum::GetValues(SvnCapability::typeid)) : args->Capabilities)
 	{
-		const char* cap = nullptr;
+		const char* cap;
 		switch(c)
 		{
 		case SvnCapability::Depth:

@@ -136,7 +136,6 @@ namespace SharpSvn {
 			static apr_hash_t *CreateRevPropList(SvnRevisionPropertyCollection^ revProps, AprPool^ pool);
 
 			static SvnPropertyCollection^ CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool);
-			static SvnPropertyCollection^ CreateEmptyPropertyDictionary();
 
 			static String^ UriToString(Uri^ value);
 			static String^ UriToCanonicalString(Uri^ value);

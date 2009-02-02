@@ -28,8 +28,6 @@ namespace SharpSvn {
 		SvnTools()
 		{} // Static class
 
-		static initonly array<wchar_t>^ g_DirSeparators = gcnew array<wchar_t>{ System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar };
-
 		static String^ FindTruePath(String^ path, String^ root);
 
 	public:

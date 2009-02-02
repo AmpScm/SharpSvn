@@ -150,7 +150,7 @@ String^ SvnBase::RemoveDoubleSlashes(String^ input)
 {
 	int n;
 
-	while (0 <= (n = input->IndexOf("//")))
+	while (0 <= (n = input->IndexOf("//", StringComparison::Ordinal)))
 		input = input->Remove(n, 1);
 
 	return input;
@@ -168,6 +168,7 @@ static bool ContainsUpper(String^ value)
 	return false;
 }
 
+[module: SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Scope="member", Target="SharpSvn.Implementation.SvnBase.#CanonicalizeUri(System.Uri)")];
 
 Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
@@ -528,11 +529,6 @@ SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, A
 	}
 
 	return _properties;
-}
-
-SvnPropertyCollection^ SvnBase::CreateEmptyPropertyDictionary()
-{
-	return gcnew SvnPropertyCollection();
 }
 
 apr_array_header_t *SvnBase::CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool)

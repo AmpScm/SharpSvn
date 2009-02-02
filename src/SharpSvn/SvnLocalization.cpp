@@ -33,6 +33,9 @@ using namespace System::Resources;
 static char* _untranslatableMarker = "*!*!*!* - Untranslatable marker - *!*!*!*!";
 static char* svn_gettext(const char* domain, const char* msgid, int category);
 
+[module: SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope="type", Target="SharpSvn.Implementation.SvnLocalizerData")];
+[module: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="SharpSvn.Implementation.SvnLocalizer.#gettext({modopt(System.Runtime.CompilerServices.IsConst),modopt(System.Runtime.CompilerServices.IsSignUnspecifiedByte)}System.SByte*)")];
+
 namespace SharpSvn {
 	namespace Implementation
 	{
@@ -121,11 +124,12 @@ namespace SharpSvn {
 
 		ref class SvnLocalizer sealed
 		{
+			SvnLocalizer()
+			{}
 		internal:
 			static ReaderWriterLock^ _rwLock;
 			static ResourceManager^ _resManager;
 			static AprPool^ _pool;
-			static apr_hash_t *_resHash;
 			static Dictionary<String^,SvnLocalizerData^>^ _langMap;
 
 

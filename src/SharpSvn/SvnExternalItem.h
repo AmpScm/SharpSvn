@@ -37,6 +37,25 @@ namespace SharpSvn {
 			_revision = _pegRevision = SvnRevision::None;
 		}
 
+		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision)
+		{
+			if (String::IsNullOrEmpty(targetName))
+				throw gcnew ArgumentNullException("targetName");
+			else if (!uri)
+				throw gcnew ArgumentNullException("uri");
+			else if (!uri->IsAbsoluteUri)
+				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+			else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
+				throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
+			else if(pegRevision && pegRevision != SvnRevision::None && !pegRevision->IsExplicit)
+				throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "pegRevision");
+
+			_target = targetName;
+			_url = uri->AbsoluteUri;
+			_revision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
+			_pegRevision = (pegRevision && pegRevision != SvnRevision::Head) ? pegRevision : SvnRevision::None;
+		}
+
 		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision, SvnRevision^ pegRevision)
 		{
 			if (String::IsNullOrEmpty(targetName))
@@ -55,7 +74,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		/// <summary>Gets the target path of the external</summary>
+		/// <summary>Gets the target path of the external (Where to place the external)</summary>
 		property String^ Target
 		{
 			String^ get()
@@ -64,8 +83,8 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the absolute or relative url of the external</summary>
-		property String^ Url
+		/// <summary>Gets the absolute or relative url of the external (What to insert)</summary>
+		property String^ Reference
 		{
 			String^ get()
 			{
