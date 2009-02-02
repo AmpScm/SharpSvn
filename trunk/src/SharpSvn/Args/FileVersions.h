@@ -38,7 +38,6 @@ namespace SharpSvn {
 
 		SvnLineStyle _lineStyle;
 		SvnKeywordExpansion _keywordExpansion;
-		bool _expand;
 		bool _repairEol;
 
 	internal:
@@ -49,7 +48,6 @@ namespace SharpSvn {
 		AprPool ^_curFilePool;
 		AprPool ^_prevFilePool;
 		const char* _lastFile;
-		const char* _tempPath;
 		const char* _reposRoot;
         apr_hash_t* _properties;
 		apr_hash_t* _curKwProps;
@@ -227,7 +225,7 @@ namespace SharpSvn {
 	{
 		bool _retrieveUntranslated;
 	public:
-		property bool WriteUntranslated
+		property bool WriteInRepositoryFormat
 		{
 			bool get()
 			{

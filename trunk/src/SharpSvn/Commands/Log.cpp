@@ -22,11 +22,14 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
+
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(SharpSvn.SvnTarget,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.String,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.Uri,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.String,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.Uri,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")]
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.Collections.Generic.ICollection`1<System.String>,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)", MessageId="2#")]
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#Log(System.String,SharpSvn.SvnLogArgs,System.EventHandler`1<SharpSvn.SvnLogEventArgs>)")];
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.String,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)")];
 [module: SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Scope="member", Target="SharpSvn.SvnClient.#Log(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.EventHandler`1<SharpSvn.SvnLogEventArgs>)")];
@@ -291,7 +294,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 			int count = args->RangesUsed ? args->Ranges->Count : 1;
 			revision_ranges = apr_array_make(pool.Handle, count, sizeof(svn_opt_revision_range_t *));			
 		
-			if (count > 0)
+			if (args->RangesUsed)
 				for each(SvnRevisionRange ^ r in args->Ranges)
 				{
 					svn_opt_revision_range_t *range = 
