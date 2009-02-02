@@ -135,6 +135,7 @@
               <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
 #include &lt;wspiapi.h&gt; //' />
+              <replacestring from='#pragma' to='// #disabled-pragma' />              
             </filterchain>
           </loadfile>
           <echo message="${headertext}" file="${winHeader2}" />
