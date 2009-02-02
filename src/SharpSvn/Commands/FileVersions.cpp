@@ -23,6 +23,10 @@
 #include <svn_subst.h>
 #include "UnmanagedStructs.h"
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetFileVersions(SharpSvn.SvnTarget,SharpSvn.SvnFileVersionsArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnFileVersionEventArgs>&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetFileVersions(SharpSvn.SvnTarget,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnFileVersionEventArgs>&)", MessageId="1#")];
+
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
@@ -399,7 +403,6 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		args->_prevPool = gcnew AprPool(%pool);
 		args->_curFilePool = nullptr;
 		args->_prevFilePool = nullptr;
-		args->_tempPath = pool.AllocPath(System::IO::Path::Combine(System::IO::Path::GetTempPath(), "SvnFv"));
 		args->_lastFile = nullptr;
 		args->_properties = nullptr;
 		args->_reposRoot = repos_root;
@@ -431,7 +434,6 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		args->_prevFilePool = nullptr;
 
 		args->_lastFile = nullptr;
-		args->_tempPath = nullptr;
 		args->_reposRoot = nullptr;
 		args->_properties = nullptr;
 		args->_curKwProps = nullptr;
@@ -579,7 +581,7 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 
 	svn_stream_t* stream = svn_stream_from_aprfile2(txt, false, _pool->Handle);
 
-	if (!args->WriteUntranslated)
+	if (!args->WriteInRepositoryFormat)
 	{
 		SvnLineStyle ls = fvArgs->LineStyle;
 

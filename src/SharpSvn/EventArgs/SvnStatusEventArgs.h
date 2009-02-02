@@ -784,6 +784,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets an object containing detailed workingcopy information of this node</summary>
 		property SvnWorkingCopyInfo^ WorkingCopyInfo
 		{
 			[System::Diagnostics::DebuggerStepThrough]
@@ -796,6 +797,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the recorded node type of this node</summary>
 		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
@@ -804,6 +806,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the tree conflict data of this node or <c>null</c> if this node doesn't have a tree conflict</summary>
 		property SvnConflictData^ TreeConflict
 		{
 			[System::Diagnostics::DebuggerStepThrough]
@@ -816,6 +819,26 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets a boolean indicating whether the node is a file external</summary>
+		property bool IsFileExternal
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			bool get() { return _fileExternal; }
+		}
+
+		/// <summary>Gets the raw content status of the node when available</summary>
+		property SvnStatus PristineContentStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnStatus get() { return _prsTextStatus; }
+		}
+
+		/// <summary>Gets the raw property status of the node when available</summary>
+		property SvnStatus PristinePropertyStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnStatus get() { return _prsPropertyStatus; }
+		}
 
 	protected public:
 		virtual void Detach(bool keepProperties) override

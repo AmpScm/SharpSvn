@@ -420,7 +420,6 @@ namespace SharpSvn.Tests
                     Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);
                     Assert.That(e.WorkingCopyInfo.Name, Is.EqualTo("LocalDeleteBase"));
                     Assert.That(e.WorkingCopyInfo.NodeKind, Is.EqualTo(SvnNodeKind.File));
-                    Assert.That(e.WorkingCopyInfo.PropertyChangeTime, Is.EqualTo(DateTime.MinValue));
                     Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
                     Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.Null);
                     Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.EqualTo(Guid.Empty));
