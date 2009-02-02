@@ -9,7 +9,7 @@
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
-      <arg value="/O2" />      <!-- Maximize speed -->
+      <arg value="/O1" />      <!-- Minimize size -->
       <arg value="/GF" />      <!-- String Pooling -->
       <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
       <arg value="/Zi" />      <!-- Write debug information -->
