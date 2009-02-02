@@ -120,7 +120,7 @@ bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
 	AprPool pool(Pool);
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
-	svn_error_t * err = svn_diff_file_output_merge(
+	svn_error_t * err = svn_diff_file_output_merge2(
 		wrapper.Handle,
 		DiffHandle,
 		_originalPath,
@@ -130,9 +130,7 @@ bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
 		args->ConflictModified ? pool.AllocString(args->ConflictModified) : nullptr,
 		args->ConflictLatest ? pool.AllocString(args->ConflictLatest) : nullptr,
 		args->ConflictSeparator ? pool.AllocString(args->ConflictSeparator) : nullptr,
-		args->ShowOriginalInConflict,
-		args->ShowResolvedConflicts,
-		pool.Handle);
+		(svn_diff_conflict_display_style_t)args->Display, pool.Handle);
 
 	return args->HandleResult(nullptr, err);
 }
