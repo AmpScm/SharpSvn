@@ -64,7 +64,9 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 									   ", apr-util " APU_VERSION_STRING
 									   ", neon " NEON_VERSION
 									   ", serf " SERF_VERSION
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 6)
 									   ", sqlite" SQLITE_VERSION
+#endif
 									   ", zlib " ZLIB_VERSION
 									   " and " OPENSSL_VERSION_TEXT
 									   ". Dynamically linked to Cyrus Sasl " SASL_VERSION
@@ -73,7 +75,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright  SharpSvn Project 2007-2009")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) SharpSvn Project 2007-2009")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
@@ -82,7 +84,9 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Apr-util", APU_VERSION_STRING)];
 [assembly:SvnLibrary("Neon", NEON_VERSION)];
 [assembly:SvnLibrary("serf", SERF_VERSION)];
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 6)
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
+#endif
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix=true)];
 [assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked=true, Optional=true)];

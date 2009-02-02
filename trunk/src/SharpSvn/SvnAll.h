@@ -16,13 +16,16 @@
 
 #pragma once
 
-#pragma once
+#include <apr.h>
 
 #include "SharpSvnStrings.h"
 
 #include "AprPool.h"
 #include "AprArray.h"
 #include "SvnBase.h"
+
+#include "SvnEnums.h"
+#include "SvnErrorCodes.h"
 
 #include "SvnTools.h"
 
@@ -37,7 +40,5 @@
 #include "SvnUriTarget.h"
 
 #include "SvnException.h"
-
 #include "SvnAuthentication.h"
-#include "SvnUpdateResult.h"
-
+#pragma warning(error: 4996)

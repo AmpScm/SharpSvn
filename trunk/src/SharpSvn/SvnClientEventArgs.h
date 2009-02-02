@@ -18,8 +18,6 @@
 
 #include "SvnEnums.h"
 #include "SvnCommitItem.h"
-#include "svn_compat.h"
-
 #include "EventArgs/SvnEventArgs.h"
 
 #include "EventArgs/SvnCancelEventArgs.h"

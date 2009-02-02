@@ -16,10 +16,8 @@
 
 #pragma once
 
-#include "SvnEnums.h"
 #include "SvnChangeList.h"
 #include "SvnCommandLineArgumentCollection.h"
-#include "SvnErrorCodes.h"
 
 namespace SharpSvn {
 	ref class SvnException;
