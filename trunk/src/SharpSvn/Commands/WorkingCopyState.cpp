@@ -24,9 +24,9 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnWorkingCopyClient.#GetWorkingCopyState(System.String,SharpSvn.SvnWorkingCopyState&)", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnWorkingCopyClient.#GetWorkingCopyState(System.String,SharpSvn.SvnGetWorkingCopyStateArgs,SharpSvn.SvnWorkingCopyState&)")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnWorkingCopyClient.#GetWorkingCopyState(System.String,SharpSvn.SvnGetWorkingCopyStateArgs,SharpSvn.SvnWorkingCopyState&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnWorkingCopyClient.#GetState(System.String,SharpSvn.SvnWorkingCopyState&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnWorkingCopyClient.#GetState(System.String,SharpSvn.SvnWorkingCopyStateArgs,SharpSvn.SvnWorkingCopyState&)")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnWorkingCopyClient.#GetState(System.String,SharpSvn.SvnWorkingCopyStateArgs,SharpSvn.SvnWorkingCopyState&)", MessageId="2#")];
 
 bool SvnWorkingCopyClient::GetState(String^ targetPath, [Out] SvnWorkingCopyState^% result)
 {

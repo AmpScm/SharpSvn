@@ -56,7 +56,7 @@ namespace SharpSvn {
 			: SvnTarget(revision)
 		{
 			if (String::IsNullOrEmpty(uriString))
-				throw gcnew ArgumentNullException("uri");
+				throw gcnew ArgumentNullException("uriString");
 
 			System::Uri^ uri = gcnew System::Uri(uriString);
 
@@ -72,7 +72,7 @@ namespace SharpSvn {
 			: SvnTarget(SvnRevision::None)
 		{
 			if (String::IsNullOrEmpty(uriString))
-				throw gcnew ArgumentNullException("uri");
+				throw gcnew ArgumentNullException("uriString");
 
 			System::Uri^ uri = gcnew System::Uri(uriString);
 

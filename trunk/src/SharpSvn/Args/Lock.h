@@ -78,8 +78,6 @@ namespace SharpSvn {
 				case SvnNotifyAction::LockFailedLock:
 					if(e->Error)
 						_result = e->Error;
-					else
-						_result = gcnew SvnFileSystemLockException(String::Format("Locking failed on {0}", e->Path));
 					break;
 			}
 

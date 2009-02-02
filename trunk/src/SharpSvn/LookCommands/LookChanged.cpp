@@ -23,6 +23,10 @@
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetChanged(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangedArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnChangedEventArgs>&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetChanged(SharpSvn.SvnLookOrigin,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnChangedEventArgs>&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes", Scope="member", Target="SharpSvn.SvnLookClient.#ProcessTree(svn_repos_node_t*,System.String,SharpSvn.SvnChangedArgs)")];
+
 bool SvnLookClient::Changed(SvnLookOrigin^ lookOrigin, EventHandler<SvnChangedEventArgs^>^ changedHandler)
 {
 	if (!lookOrigin)

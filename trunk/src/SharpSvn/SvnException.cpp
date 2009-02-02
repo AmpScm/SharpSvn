@@ -26,6 +26,11 @@ using namespace SharpSvn::Implementation;
 [module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SharpSvn.SvnClientConfigurationException.#.ctor(svn_error_t*)")];
 [module: SuppressMessage("Microsoft.Design", "CA1004:GenericMethodsShouldProvideTypeParameter", Scope="member", Target="SharpSvn.SvnException.#GetCause`1()")];
 
+
+[module: SuppressMessage("Microsoft.Naming", "CA1700:DoNotNameEnumValuesReserved", Scope="member", Target="SharpSvn.SvnErrorCode.#SVN_ERR_RESERVED_FILENAME_SPECIFIED")];
+[module: SuppressMessage("Microsoft.Naming", "CA1700:DoNotNameEnumValuesReserved", Scope="member", Target="SharpSvn.SvnErrorCode.#SVN_ERR_CL_ADM_DIR_RESERVED")];
+[module: SuppressMessage("Microsoft.Naming", "CA1726:UsePreferredTerms", Scope="member", Target="SharpSvn.SvnErrorCode.#SVN_ERR_CANCELLED", MessageId="CANCELLED")];
+
 #define MANAGED_EXCEPTION_PREFIX "Forwarded Managed Inner Exception/SharpSvn/Handle="
 
 static const int _abusedErrorCode = SVN_ERR_TEST_FAILED; // Used for plugging in managed exceptions; this ID is an implementation detail

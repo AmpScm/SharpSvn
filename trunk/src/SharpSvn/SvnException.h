@@ -188,12 +188,13 @@ namespace SharpSvn {
 					_pFile = nullptr;
 					try
 					{
-						/* Subversion will always set file via __FILE__ which comes from 
-						   a readonly resource memory segment so this should not crash */
 						_file = gcnew String(pf);
 					}
-					catch(...)
-					{}
+					catch(AccessViolationException^)
+					{
+						/* Subversion will always set file via __FILE__ which comes from 
+						   a readonly memory segment so this should never crash, but just in case... */
+					}
 				}
 				return _file;
 			}
@@ -221,10 +222,21 @@ namespace SharpSvn {
 		}
 	};
 
+	[Serializable]
 	public ref class SvnMalfunctionException sealed : SvnException
 	{		
 	public:
 		SvnMalfunctionException()
+		{
+		}
+
+		SvnMalfunctionException(String^ message)
+			: SvnException(message)
+		{
+		}
+
+		SvnMalfunctionException(String^ message, Exception^ inner)
+			: SvnException(message, inner)
 		{
 		}
 

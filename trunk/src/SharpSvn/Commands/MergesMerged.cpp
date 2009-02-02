@@ -22,20 +22,20 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetEligableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetEligableMergeInfoArgs,SharpSvn.SvnEligableMergeInfo&)", MessageId="3#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetEligableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnEligableMergeInfo&)", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetEligableMergeInfo(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnGetEligableMergeInfoArgs,SharpSvn.SvnEligableMergeInfo&)")];
 
-bool SvnClient::ListMergesMerged(SvnTarget ^target, SvnTarget^ source, EventHandler<SvnMergesMergedEventArgs^>^ logHandler)
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetMergesMerged(SharpSvn.SvnTarget,SharpSvn.SvnTarget,SharpSvn.SvnMergesMergedArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnMergesMergedEventArgs>&)", MessageId="3#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetMergesMerged(SharpSvn.SvnTarget,SharpSvn.SvnTarget,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnMergesMergedEventArgs>&)", MessageId="2#")];
+
+bool SvnClient::ListMergesMerged(SvnTarget ^target, SvnTarget^ source, EventHandler<SvnMergesMergedEventArgs^>^ handler)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if (!logHandler)
-		throw gcnew ArgumentNullException("logHandler");
+	else if (!handler)
+		throw gcnew ArgumentNullException("handler");
 
-	return ListMergesMerged(target, source, gcnew SvnMergesMergedArgs(), logHandler);
+	return ListMergesMerged(target, source, gcnew SvnMergesMergedArgs(), handler);
 }
 
 static svn_error_t *svnclient_eligible_log_handler(void *baton, svn_log_entry_t *log_entry, apr_pool_t *pool)

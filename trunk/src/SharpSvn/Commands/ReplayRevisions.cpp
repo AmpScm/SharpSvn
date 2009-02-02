@@ -191,7 +191,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			&watermark_rev,
 			nullptr,
 			ra_session,
-			args->LowWaterMarkRevision->AllocSvnRevision(%pool),
+			args->LowWatermarkRevision->AllocSvnRevision(%pool),
 			pTarget, 
 			pool.Handle);
 

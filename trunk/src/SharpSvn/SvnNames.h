@@ -174,66 +174,61 @@ namespace SharpSvn {
 		static String^ FormatDate(DateTime value);
 	};
 
+	public ref class SvnConfigNames sealed
+	{
+		SvnConfigNames()
+		{}
 
-	namespace Implementation {
+	public:
+		literal String^ ServersCategory					= SVN_CONFIG_CATEGORY_SERVERS;
+		literal String^		GroupsSection				= SVN_CONFIG_SECTION_GROUPS;
+		literal String^		GlobalSection				= SVN_CONFIG_SECTION_GLOBAL;
+		literal String^		HttpProxyHost				= SVN_CONFIG_OPTION_HTTP_PROXY_HOST;
+		literal String^		HttpProxyPort				= SVN_CONFIG_OPTION_HTTP_PROXY_PORT;
+		literal String^		HttpProxyUserName			= SVN_CONFIG_OPTION_HTTP_PROXY_USERNAME;
+		literal String^		HttpProxyPassword			= SVN_CONFIG_OPTION_HTTP_PROXY_PASSWORD;
+		literal String^		HttpProxyExceptions			= SVN_CONFIG_OPTION_HTTP_PROXY_EXCEPTIONS;
+		literal String^		HttpTimeout					= SVN_CONFIG_OPTION_HTTP_TIMEOUT;
+		literal String^		HttpCompression				= SVN_CONFIG_OPTION_HTTP_COMPRESSION;
+		/* SVN_CONFIG_OPTION_NEON_DEBUG_MASK: only available in debug builds of svn itself */
+		literal String^		HttpAuthTypes				= SVN_CONFIG_OPTION_HTTP_AUTH_TYPES;
+		literal String^		HttpLibrary					= SVN_CONFIG_OPTION_HTTP_LIBRARY;
 
-		public ref class SvnConfigNames sealed
-		{
-			SvnConfigNames()
-			{}
+		literal String^		SslAuthorityFiles			= SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
+		literal String^		SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
+		literal String^		SslClientCertificateFile	= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
+		literal String^		SslClientCertificatePassword= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_PASSWORD;
 
-		public:
-			literal String^ ServersCategory					= SVN_CONFIG_CATEGORY_SERVERS;
-			literal String^		GroupsSection				= SVN_CONFIG_SECTION_GROUPS;
-			literal String^		GlobalSection				= SVN_CONFIG_SECTION_GLOBAL;
-			literal String^		HttpProxyHost				= SVN_CONFIG_OPTION_HTTP_PROXY_HOST;
-			literal String^		HttpProxyPort				= SVN_CONFIG_OPTION_HTTP_PROXY_PORT;
-			literal String^		HttpProxyUserName			= SVN_CONFIG_OPTION_HTTP_PROXY_USERNAME;
-			literal String^		HttpProxyPassword			= SVN_CONFIG_OPTION_HTTP_PROXY_PASSWORD;
-			literal String^		HttpProxyExceptions			= SVN_CONFIG_OPTION_HTTP_PROXY_EXCEPTIONS;
-			literal String^		HttpTimeout					= SVN_CONFIG_OPTION_HTTP_TIMEOUT;
-			literal String^		HttpCompression				= SVN_CONFIG_OPTION_HTTP_COMPRESSION;
-			/* SVN_CONFIG_OPTION_NEON_DEBUG_MASK: only available in debug builds of svn itself */
-			literal String^		HttpAuthTypes				= SVN_CONFIG_OPTION_HTTP_AUTH_TYPES;
-			literal String^		HttpLibrary					= SVN_CONFIG_OPTION_HTTP_LIBRARY;
+	public:
+		literal String^ ConfigCategory					= SVN_CONFIG_CATEGORY_CONFIG;
+		literal String^		AuthSection					= SVN_CONFIG_SECTION_AUTH;
+		literal String^			StorePasswords			= SVN_CONFIG_OPTION_STORE_PASSWORDS;
+		literal String^			StoreAuthCredentials	= SVN_CONFIG_OPTION_STORE_AUTH_CREDS;
 
-			literal String^		SslAuthorityFiles			= SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
-			literal String^		SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
-			literal String^		SslClientCertificateFile	= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
-			literal String^		SslClientCertificatePassword= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_PASSWORD;
+		literal String^		HelpersSection				= SVN_CONFIG_SECTION_HELPERS;
+		literal String^			EditorCommand			= SVN_CONFIG_OPTION_EDITOR_CMD;
+		literal String^			DiffCommand				= SVN_CONFIG_OPTION_DIFF_CMD;
+		literal String^			Diff3Command			= SVN_CONFIG_OPTION_DIFF3_CMD;
+		literal String^			Diff3HasProgramArguments= SVN_CONFIG_OPTION_DIFF3_HAS_PROGRAM_ARG;
+		literal String^			MergeToolCommand		= SVN_CONFIG_OPTION_MERGE_TOOL_CMD;
 
-		public:
-			literal String^ ConfigCategory					= SVN_CONFIG_CATEGORY_CONFIG;
-			literal String^		AuthSection					= SVN_CONFIG_SECTION_AUTH;
-			literal String^			StorePasswords			= SVN_CONFIG_OPTION_STORE_PASSWORDS;
-			literal String^			StoreAuthCredentials	= SVN_CONFIG_OPTION_STORE_AUTH_CREDS;
+		literal String^		MiscellanySection			= SVN_CONFIG_SECTION_MISCELLANY;
+		literal String^			GlobalIgnores			= SVN_CONFIG_OPTION_GLOBAL_IGNORES;
+		literal String^			LogEncoding				= SVN_CONFIG_OPTION_LOG_ENCODING;
+		literal String^			UseCommitTimes			= SVN_CONFIG_OPTION_USE_COMMIT_TIMES;
+		literal String^			TemplateRoot			= SVN_CONFIG_OPTION_TEMPLATE_ROOT;
+		literal String^			EnableAutoProps			= SVN_CONFIG_OPTION_ENABLE_AUTO_PROPS;
+		literal String^			NoUnlock				= SVN_CONFIG_OPTION_NO_UNLOCK;
+		literal String^			MimeTypesFile			= SVN_CONFIG_OPTION_MIMETYPES_FILE;
+		literal String^			PreservedConflictFileExtensions	= SVN_CONFIG_OPTION_PRESERVED_CF_EXTS;
+		literal String^			InteractiveConflicts	= SVN_CONFIG_OPTION_INTERACTIVE_CONFLICTS;
 
-			literal String^		HelpersSection				= SVN_CONFIG_SECTION_HELPERS;
-			literal String^			EditorCommand			= SVN_CONFIG_OPTION_EDITOR_CMD;
-			literal String^			DiffCommand				= SVN_CONFIG_OPTION_DIFF_CMD;
-			literal String^			Diff3Command			= SVN_CONFIG_OPTION_DIFF3_CMD;
-			literal String^			Diff3HasProgramArguments= SVN_CONFIG_OPTION_DIFF3_HAS_PROGRAM_ARG;
-			literal String^			MergeToolCommand		= SVN_CONFIG_OPTION_MERGE_TOOL_CMD;
+		literal String^		TunnelsSection				= SVN_CONFIG_SECTION_TUNNELS;
 
-			literal String^		MiscellanySection			= SVN_CONFIG_SECTION_MISCELLANY;
-			literal String^			GlobalIgnores			= SVN_CONFIG_OPTION_GLOBAL_IGNORES;
-			literal String^			LogEncoding				= SVN_CONFIG_OPTION_LOG_ENCODING;
-			literal String^			UseCommitTimes			= SVN_CONFIG_OPTION_USE_COMMIT_TIMES;
-			literal String^			TemplateRoot			= SVN_CONFIG_OPTION_TEMPLATE_ROOT;
-			literal String^			EnableAutoProps			= SVN_CONFIG_OPTION_ENABLE_AUTO_PROPS;
-			literal String^			NoUnlock				= SVN_CONFIG_OPTION_NO_UNLOCK;
-			literal String^			MimeTypesFile			= SVN_CONFIG_OPTION_MIMETYPES_FILE;
-			literal String^			PreservedConflictFileExtensions	= SVN_CONFIG_OPTION_PRESERVED_CF_EXTS;
-			literal String^			InteractiveConflicts	= SVN_CONFIG_OPTION_INTERACTIVE_CONFLICTS;
+		literal String^		AutoPropsSection			= SVN_CONFIG_SECTION_AUTO_PROPS;
 
-			literal String^		TunnelsSection				= SVN_CONFIG_SECTION_TUNNELS;
-
-			literal String^		AutoPropsSection			= SVN_CONFIG_SECTION_AUTO_PROPS;
-
-
-			static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores
-				= gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
-				dynamic_cast<IList<String^>^>(static_cast<String^>(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES)->Split(' ')));
-		};
-	}
+		static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores
+			= gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
+			dynamic_cast<IList<String^>^>(static_cast<String^>(SVN_CONFIG_DEFAULT_GLOBAL_IGNORES)->Split(' ')));
+	};
 }

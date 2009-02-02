@@ -27,6 +27,7 @@ using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.GetUuidFromUri(System.Uri,System.Guid&):System.Boolean", MessageId="1#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRepositoryIdFromUri(System.Uri,System.Guid&)", MessageId="1#")];
 
+[module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#TryGetRepositoryId(System.String,System.Guid&)")];
 [module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SharpSvn.SvnClient.#set_AdministrativeDirectoryName(System.String)")];
 
 SvnClient::SvnClient()
@@ -68,11 +69,6 @@ struct SvnClientCallBacks
 
 	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
 };
-
-bool SvnClient::IsConflictHandler(void* conflict_func)
-{
-	return (conflict_func == (void*)&SvnClientCallBacks::svn_wc_conflict_resolver_func);
-}
 
 void SvnClient::Initialize()
 {
@@ -139,7 +135,7 @@ void SvnClient::HandleClientCommitting(SvnCommittingEventArgs^ e)
 	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 
 	if (commitArgs)
-		commitArgs->OnCommitting(e);
+		commitArgs->RaiseCommitting(e);
 
 	if (e->Cancel)
 		return;
@@ -174,7 +170,7 @@ void SvnClient::HandleClientConflict(SvnConflictEventArgs^ e)
 
 	if (conflictArgs)
 	{
-		conflictArgs->OnConflict(e);
+		conflictArgs->RaiseConflict(e);
 
 		if (e->Cancel)
 			return;
@@ -408,7 +404,7 @@ bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
 bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 {
 	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("uri");
+		throw gcnew ArgumentNullException("path");
 	else if (!SvnBase::IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 

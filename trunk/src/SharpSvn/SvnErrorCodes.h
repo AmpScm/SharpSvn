@@ -22,7 +22,13 @@ namespace SharpSvn {
 
 using System::ComponentModel::DescriptionAttribute;
 
-#define SVN_ERRDEF(x,y,z) [DescriptionAttribute(z)] x = x,
+#define SVN_ERRDEF(x,y,z)                                                                          \
+            [DescriptionAttribute(z)]                                                              \
+            [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]    \
+            [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")] \
+            [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly")]      \
+            x = x,
+
 #define SVN_ERROR_BUILD_ARRAY
 #pragma warning(disable: 4634)
 
@@ -45,12 +51,12 @@ public enum class SvnErrorCategory
 	None=0,
 	Bad,
 	Xml,
-	Io,
+	IO,
 	Stream,
 	Node,
 	Entry,
-	Wc,
-	Fs,
+	WorkingCopy,
+	FileSystem,
 	Repository,
 	RepositoryAccess,
 	RepositoryAccessDav,

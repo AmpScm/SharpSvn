@@ -69,7 +69,7 @@ SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo)
 	_nodeKind = (SvnNodeKind)commitItemInfo->kind;
 	_revision = commitItemInfo->revision;
 	_copyFromRevision = commitItemInfo->copyfrom_rev;
-	_commitType = (SvnCommitType)commitItemInfo->state_flags;
+	_commitType = (SvnCommitTypes)commitItemInfo->state_flags;
 }
 
 void SvnCommitItem::Detach(bool keepProperties)

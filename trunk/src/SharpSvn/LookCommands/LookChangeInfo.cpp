@@ -20,6 +20,10 @@
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
+
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetChangeInfo(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangeInfoArgs,SharpSvn.SvnChangeInfoEventArgs&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnLookClient.#GetChangeInfo(SharpSvn.SvnLookOrigin,SharpSvn.SvnChangeInfoEventArgs&)", MessageId="1#")];
+
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
@@ -97,11 +101,11 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 		svn_log_entry_t* entry = svn_log_entry_create(pool.Handle);
 
 		svn_repos_t* repos = nullptr;
-		svn_fs_t* fs = nullptr;
+		svn_fs_t* fs;
 		svn_error_t* r;
 		apr_hash_t* props = nullptr;
 
-		svn_revnum_t base_rev = 0;
+		svn_revnum_t base_rev;
 		svn_fs_root_t* root = nullptr;
 
 		if (r = svn_repos_open(
@@ -164,7 +168,7 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 		{
 			System::Diagnostics::Debug::Assert(root != nullptr);
 			
-			svn_repos_node_t* tree = nullptr;
+			svn_repos_node_t* tree;
 			{
 				AprPool tmpPool(%pool);
 				void *edit_baton;

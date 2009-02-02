@@ -21,6 +21,7 @@
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCanonicalMarshaller")];
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprSvnRevNumMarshaller")];
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCStrMarshaller")];
+[module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.SvnMergeRangeMarshaller")];
 
 using namespace SharpSvn::Implementation;
 

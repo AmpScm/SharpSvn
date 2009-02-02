@@ -45,12 +45,32 @@ namespace SharpSvn {
 		}
 
 	public:
-		event EventHandler<SvnBlameEventArgs^>^ BlameHandler;
+		event EventHandler<SvnBlameEventArgs^>^ Blame;
 
-	protected public:
-		virtual void OnBlameHandler(SvnBlameEventArgs^ e)
+	public:
+		[Obsolete("Use .Blame")]
+		event EventHandler<SvnBlameEventArgs^>^ BlameHandler
 		{
-			BlameHandler(this, e);
+			void add(EventHandler<SvnBlameEventArgs^>^ value)
+			{
+				Blame += value;
+			}
+			void remove(EventHandler<SvnBlameEventArgs^>^ value)
+			{
+				Blame -= value;
+			}
+		}
+
+	protected:
+		virtual void OnBlame(SvnBlameEventArgs^ e)
+		{
+			Blame(this, e);
+		}
+
+	internal:
+		void RaiseBlame(SvnBlameEventArgs^ e)
+		{
+			OnBlame(e);
 		}
 
 	public:

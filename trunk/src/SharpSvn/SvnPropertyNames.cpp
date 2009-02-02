@@ -23,6 +23,15 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope="member", Target="SharpSvn.SvnPropertyNames.#SvnEolStyle", MessageId="Eol")];
+[module: SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", Scope="member", Target="SharpSvn.SvnPropertyNames.#SvnSyncFromUuid", MessageId="Uuid")];
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope="member", Target="SharpSvn.SvnKeywords.#HeadURL", MessageId="URL")];
+[module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope="member", Target="SharpSvn.SvnKeywords.#URL", MessageId="URL")];
+
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.SvnPropertyNames.#AllSvnRevisionProperties")]
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.SvnPropertyNames.#TortoiseSvnDirectoryProperties")]
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.SvnKeywords.#PredefinedKeywords")]
+[module: SuppressMessage("Microsoft.Security", "CA2104:DoNotDeclareReadOnlyMutableReferenceTypes", Scope="member", Target="SharpSvn.SvnConfigNames.#SvnDefaultGlobalIgnores")];
 
 bool SvnPropertyNames::TryParseDate(String^ date, [Out] DateTime% value)
 {

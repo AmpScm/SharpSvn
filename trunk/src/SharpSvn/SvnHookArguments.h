@@ -61,9 +61,8 @@ namespace SharpSvn {
 		String^ _user;
 		String^ _path;
 		String^ _propertyName;
-		String^ _propertyValue;
 		String^ _action;
-		ICollection<String^>^ _capabilities;
+		Collection<String^>^ _capabilities;
 		String^ _newValue;
 		String^ _previousValue;
 		SvnLookOrigin^ _lookOrigin;
@@ -119,12 +118,16 @@ namespace SharpSvn {
 		{
 			SvnLookOrigin^ get()
 			{
-				if (TransactionName)
-					return gcnew SvnLookOrigin(RepositoryPath, TransactionName);
-				else if(Revision >= 0)
-					return gcnew SvnLookOrigin(RepositoryPath, Revision);
-				else
-					throw gcnew InvalidOperationException();
+				if (!_lookOrigin)
+				{
+					if (TransactionName)
+						_lookOrigin = gcnew SvnLookOrigin(RepositoryPath, TransactionName);
+					else if(Revision >= 0)
+						_lookOrigin = gcnew SvnLookOrigin(RepositoryPath, Revision);
+					else
+						throw gcnew InvalidOperationException();
+				}
+				return _lookOrigin;
 			}
 		}
 
@@ -180,14 +183,14 @@ namespace SharpSvn {
 			}
 		}
 
-		property ICollection<String^>^ Capabilities
+		property Collection<String^>^ Capabilities
 		{
-			ICollection<String^>^ get()
+			Collection<String^>^ get()
 			{
 				return _capabilities;
 			}
-		protected:
-			void set(ICollection<String^>^ value)
+		internal:
+			void set(Collection<String^>^ value)
 			{
 				_capabilities = value;
 			}
