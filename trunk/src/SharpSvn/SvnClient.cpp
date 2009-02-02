@@ -435,7 +435,7 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 
 	err = svn_client_uuid_from_path(&uuidStr, pPath, adm, CtxHandle, pool.Handle);
 
-	svn_error_clear(svn_wc_adm_close(adm));
+	svn_error_clear(svn_wc_adm_close2(adm, pool.Handle));
 
 	if (err || !uuidStr)
 	{

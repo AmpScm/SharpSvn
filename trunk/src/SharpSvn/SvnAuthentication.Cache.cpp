@@ -20,7 +20,6 @@
 #include "SvnClientContext.h"
 #include "SvnAuthentication.h"
 
-#include <svn_io.h>
 #include <svn_hash.h>
 
 using System::Text::RegularExpressions::Match;
@@ -244,7 +243,7 @@ void SvnAuthenticationCacheItem::Delete()
 
 
 Collection<SvnAuthenticationCacheItem^>^ 
-	SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
+SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 {
 	_clientContext->EnsureState(SharpSvn::Implementation::SvnContextState::AuthorizationInitialized);
 
@@ -311,17 +310,18 @@ Collection<SvnAuthenticationCacheItem^>^
 
 		pl.Clear(); // Clear before running to clear old state
 
-		apr_file_t* h = nullptr;
-		r = svn_io_file_open(&h, pool.AllocPath(file->FullName), 
-			                APR_READ | APR_BUFFERED, APR_OS_DEFAULT, pl.Handle);
+		svn_stream_t* stream = nullptr;
+		r = svn_stream_open_readonly(&stream, pool.AllocPath(file->FullName), pl.Handle, pl.Handle);
 
 		apr_hash_t* hash = nullptr;
 		if (!r)
 		{
 			hash = apr_hash_make(pl.Handle);
 
-			r = svn_hash_read(hash, h, pl.Handle);
-		}         
+			r = svn_hash_read2(hash, stream, SVN_HASH_TERMINATOR, pl.Handle);
+
+			svn_error_clear(svn_stream_close(stream));
+		}
 
 		if (r)
 		{
@@ -342,6 +342,6 @@ Collection<SvnAuthenticationCacheItem^>^
 			items->Add(gcnew SvnAuthenticationCacheItem(file->FullName, type, realm));
 		}
 	}
-	
+
 	return gcnew Collection<SvnAuthenticationCacheItem^>(items->AsReadOnly());
 }
