@@ -23,22 +23,37 @@ namespace SharpSvn {
 	public ref class SvnDiffSummaryEventArgs : public SvnCancelEventArgs
 	{
 		const svn_client_diff_summarize_t *_diffSummary;
+		const char* _pFromUri;
+		const char* _pToUri;
+		AprPool^ _pool;
+
+		Uri^ _fromUri;
+		Uri^ _toUri;
 		String^ _path;
 		initonly bool _propertiesChanged;
 		initonly SvnNodeKind _nodeKind;
 		initonly SvnDiffKind _diffKind;
 	internal:
-		SvnDiffSummaryEventArgs(const svn_client_diff_summarize_t *diffSummary)
+		SvnDiffSummaryEventArgs(const svn_client_diff_summarize_t *diffSummary, const char* fromUri, const char* toUri, AprPool^ pool)
 		{
 			if (!diffSummary)
 				throw gcnew ArgumentNullException("diffSummary");
+			else if (!fromUri)
+				throw gcnew ArgumentNullException("fromUri");
+			else if (!toUri)
+				throw gcnew ArgumentNullException("toUri");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
 
 			_diffSummary = diffSummary;
+			_pFromUri = fromUri;
+			_pToUri = toUri;
+			_pool = pool;
+
 			_propertiesChanged = (0 != diffSummary->prop_changed);
 			_nodeKind = (SvnNodeKind)diffSummary->node_kind;
 			_diffKind = (SvnDiffKind)diffSummary->summarize_kind;
 		}
-
 
 	public:
 		property String^ Path
@@ -49,6 +64,29 @@ namespace SharpSvn {
 					_path = SvnBase::Utf8_PtrToString(_diffSummary->path);
 
 				return _path;
+			}
+		}
+
+	public:
+		property Uri^ FromUri
+		{
+			Uri^ get()
+			{
+				if (!_fromUri && _pFromUri && _diffSummary && _pool)
+					_fromUri = SvnBase::Utf8_PtrToUri(svn_path_join(_pFromUri, _diffSummary->path, _pool->Handle), NodeKind);
+
+				return _fromUri;
+			}
+		}
+
+		property Uri^ ToUri
+		{
+			Uri^ get()
+			{
+				if (!_toUri && _pToUri && _diffSummary && _pool)
+					_toUri = SvnBase::Utf8_PtrToUri(svn_path_join(_pToUri, _diffSummary->path, _pool->Handle), NodeKind);
+
+				return _toUri;
 			}
 		}
 
@@ -91,11 +129,17 @@ namespace SharpSvn {
 				if (keepProperties)
 				{
 					GC::KeepAlive(Path);
+					GC::KeepAlive(FromUri);
+					GC::KeepAlive(ToUri);
 				}
 			}
 			finally
 			{
 				_diffSummary = nullptr;
+				_pFromUri = nullptr;
+				_pToUri = nullptr;
+				_pool = nullptr;
+
 				__super::Detach(keepProperties);
 			}
 		}
