@@ -47,7 +47,7 @@ static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff
 	if (!args)
 		return nullptr;
 
-	SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff);
+	SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff, args->_fromUri, args->_toUri, %thePool);
 	try
 	{
 		args->RaiseDiffSummary(e);
@@ -86,10 +86,13 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 		args->DiffSummary += summaryHandler;
 	try
 	{
+		args->_fromUri = pool.AllocString(from->SvnTargetName);
+		args->_toUri = pool.AllocString(to->SvnTargetName);
+
 		svn_error_t *r = svn_client_diff_summarize2(
-			pool.AllocString(from->SvnTargetName),
+			args->_fromUri,
 			from->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
-			pool.AllocString(to->SvnTargetName),
+			args->_toUri,
 			to->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
 			(svn_depth_t)args->Depth,
 			args->IgnoreAncestry,
@@ -105,6 +108,8 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 	{
 		if (summaryHandler)
 			args->DiffSummary -= summaryHandler;
+
+		args->_fromUri = args->_toUri = nullptr;
 	}
 }
 

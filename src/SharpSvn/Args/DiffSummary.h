@@ -102,6 +102,10 @@ namespace SharpSvn {
 				return _changelists;
 			}
 		}
+
+	internal:
+		const char* _fromUri;
+		const char* _toUri;
 	};
 
 
