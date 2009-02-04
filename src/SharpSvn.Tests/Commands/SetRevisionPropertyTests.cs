@@ -41,7 +41,7 @@ namespace SharpSvn.Tests.Commands
         {
             byte[] propval = Encoding.UTF8.GetBytes("moo");
 
-            this.Client.SetRevisionProperty(new SvnUriTarget(ReposUrl, SvnRevision.Head), "cow", propval);
+            this.Client.SetRevisionProperty(ReposUrl, SvnRevision.Head, "cow", propval);
 
             Assert.That(this.RunCommand("svn", "propget cow --revprop -r head " + this.ReposUrl).Trim(), Is.EqualTo("moo"),
                 "Couldn't set prop on selected Repos!");
@@ -54,11 +54,12 @@ namespace SharpSvn.Tests.Commands
 
             InstallRevpropHook(reposPath);
 
-            SvnUriTarget target = new SvnUriTarget(PathToUri(reposPath), 2);
+            Uri target = PathToUri(reposPath);
+            SvnRevision rev = 2;
 
-            Client.SetRevisionProperty(target, SvnPropertyNames.SvnDate, DateTime.UtcNow.ToString("o"));
+            Client.SetRevisionProperty(target, rev, SvnPropertyNames.SvnDate, DateTime.UtcNow.ToString("o"));
 
-            Client.SetRevisionProperty(target, SvnPropertyNames.SvnDate, SvnPropertyNames.FormatDate(DateTime.UtcNow));
+            Client.SetRevisionProperty(target, rev, SvnPropertyNames.SvnDate, SvnPropertyNames.FormatDate(DateTime.UtcNow));
         }
     }
 }
