@@ -336,7 +336,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 		if(!pRealm)
 			continue;
 
-		String^ realm = Utf8_PtrToString(pRealm->data, pRealm->len);
+		String^ realm = Utf8_PtrToString(pRealm->data, (int)pRealm->len);
 		if (realm)
 		{
 			items->Add(gcnew SvnAuthenticationCacheItem(file->FullName, type, realm));
