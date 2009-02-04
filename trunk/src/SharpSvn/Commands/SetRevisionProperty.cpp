@@ -22,44 +22,64 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value)
+bool SvnClient::SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, String^ value)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (!value)
 		throw gcnew ArgumentNullException("value");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
-	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), value);
+	return SetRevisionProperty(target, revision, propertyName, value, gcnew SvnSetRevisionPropertyArgs());
 }
 
-bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, ICollection<Byte>^ bytes)
+bool SvnClient::SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
-	return SetRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs(), bytes);
+	return SetRevisionProperty(target, revision, propertyName, bytes, gcnew SvnSetRevisionPropertyArgs());
 }
 
-bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value)
+bool SvnClient::SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, String^ value, SvnSetRevisionPropertyArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (!value)
 		throw gcnew ArgumentNullException("value");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
 	AprPool pool(%_pool);
 
-	return InternalSetRevisionProperty(target,
+	return InternalSetRevisionProperty(
+		target,
+		revision,
 		propertyName,
 		// Subversion does no normalization on the property value; so we have to do this before sending it
 		// to the server
@@ -69,16 +89,22 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		%pool);
 }
 
-bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, ICollection<Byte>^ bytes)
+bool SvnClient::SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes, SvnSetRevisionPropertyArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
 	AprPool pool(%_pool);
 
@@ -91,7 +117,9 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		bytes->CopyTo(byteArray, 0);
 	}
 
-	return InternalSetRevisionProperty(target,
+	return InternalSetRevisionProperty(
+		target,
+		revision,
 		propertyName,
 		pool.AllocSvnString(byteArray),
 		nullptr,
@@ -99,28 +127,42 @@ bool SvnClient::SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, 
 		%pool);
 }
 
-bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
+bool SvnClient::DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
-	return DeleteRevisionProperty(target, propertyName, gcnew SvnSetRevisionPropertyArgs());
+	return DeleteRevisionProperty(target, revision, propertyName, gcnew SvnSetRevisionPropertyArgs());
 }
 
-bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args)
+bool SvnClient::DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
 	AprPool pool(%_pool);
 
-	return InternalSetRevisionProperty(target,
+	return InternalSetRevisionProperty(
+		target,
+		revision,
 		propertyName,
 		nullptr,
 		nullptr,
@@ -128,10 +170,12 @@ bool SvnClient::DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyNam
 		%pool);
 }
 
-bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
+bool SvnClient::InternalSetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 	else if (!args)
@@ -151,8 +195,8 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 		pName,
 		value,
 		original_value,
-		pool->AllocString(target->SvnTargetName),
-		target->Revision->AllocSvnRevision(pool),
+		pool->AllocCanonical(target),
+		revision->AllocSvnRevision(pool),
 		&set_rev,
 		args->Force,
 		CtxHandle,

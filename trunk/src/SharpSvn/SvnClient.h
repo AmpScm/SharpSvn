@@ -912,22 +912,22 @@ namespace SharpSvn {
 #pragma region // SetRevisionProperty Client Command
 		/// <overloads>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</overloads>
 		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
-		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value);
+		bool SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, String^ value);
 		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
-		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, ICollection<Byte>^ bytes);
+		bool SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes);
 		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
-		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value);
+		bool SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, String^ value, SvnSetRevisionPropertyArgs^ args);
 		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
-		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, ICollection<Byte>^ bytes);
+		bool SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes, SvnSetRevisionPropertyArgs^ args);
 
 		/// <overloads>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</overloads>
 		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
-		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName);
+		bool DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName);
 		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
-		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args);
+		bool DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyArgs^ args);		
 
 	private:
-		bool InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool);
+		bool InternalSetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool);
 
 #pragma endregion
 
@@ -1175,11 +1175,66 @@ namespace SharpSvn {
 		/// <returns>true if successfull, otherwise false</returns>
 		bool TryGetRepositoryId(String^ path, [Out] Guid% id);
 
+#pragma region // Obsolete
 		[Obsolete("Use TryGetRepositoryId")]
 		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)
 		{
 			return TryGetRepositoryId(uri, id);
 		}
+		/// <overloads>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</overloads>
+		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
+		[Obsolete("Use .SetRevisionProperty(Uri, SvnRevision, String, String) instead")]
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, String^ value)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			return SetRevisionProperty(target->Uri, target->Revision, propertyName, value);
+		}
+
+		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
+		[Obsolete("Use .SetRevisionProperty(Uri, SvnRevision, String, ICollection<Byte>) instead")]
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, ICollection<Byte>^ bytes)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			return SetRevisionProperty(target->Uri, target->Revision, propertyName, bytes);
+		}
+		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
+		[Obsolete("Use .SetRevisionProperty(Uri, SvnRevision, String, SvnSetRevisionPropertyArgs, String) instead")]
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, String^ value)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			return SetRevisionProperty(target->Uri, target->Revision, propertyName, value, args);
+		}
+		/// <summary>Sets the value of a revision property on files, dirs in a specific revision (<c>svn propset --revision</c>)</summary>
+		[Obsolete("Use .SetRevisionProperty(Uri, SvnRevision, String, ICollection<Byte>, SvnSetRevisionPropertyArgs) instead")]
+		bool SetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args, ICollection<Byte>^ bytes)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return SetRevisionProperty(target->Uri, target->Revision, propertyName, bytes, args);
+		}
+
+		/// <overloads>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</overloads>
+		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
+		[Obsolete("Use .DeleteRevisionProperty(Uri, SvnRevision, String) instead")]
+		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			return DeleteRevisionProperty(target->Uri, target->Revision, propertyName);
+		}
+		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
+		[Obsolete("Use .DeleteRevisionProperty(Uri, SvnRevision, String, SvnSetRevisionPropertyArgs) instead")]
+		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnSetRevisionPropertyArgs^ args)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+			return DeleteRevisionProperty(target->Uri, target->Revision, propertyName, args);
+		}
+#pragma endregion
 	private:
 		~SvnClient();
 	};
