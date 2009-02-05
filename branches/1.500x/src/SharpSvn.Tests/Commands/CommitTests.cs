@@ -104,7 +104,7 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(WcPath, ca, out cr);
 
             string value;
-            Client.GetRevisionProperty(new SvnUriTarget(ReposUrl, cr.Revision), "my:prop", out value);
+            Client.GetRevisionProperty(ReposUrl, cr.Revision, "my:prop", out value);
 
             Assert.That(value, Is.EqualTo("PropValue"));
 
@@ -254,6 +254,23 @@ namespace SharpSvn.Tests.Commands
 				this.Client.Commit(this.WcPath, a);
 			}
 		}
+
+        [Test]
+        public void NonRecursiveDirDelete()
+        {
+            string dir = GetTempDir();
+            Client.CheckOut(GetReposUri(TestReposType.Empty), dir);
+
+            string name = Path.Combine(dir, "sd");
+
+            Client.CreateDirectory(name);
+            Client.Commit(name);
+
+            Client.Delete(name);
+            SvnCommitArgs ca = new SvnCommitArgs();
+            ca.Depth = SvnDepth.Empty;
+            Client.Commit(name, ca);
+        }
 
 		private void LogMessageCallback(object sender, SvnCommittingEventArgs e)
 		{

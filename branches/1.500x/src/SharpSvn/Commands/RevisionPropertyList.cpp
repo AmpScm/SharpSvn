@@ -22,26 +22,36 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnPropertyCollection&)", MessageId="1#")];
-[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)", MessageId="2#")];
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(SharpSvn.SvnUriTarget,SharpSvn.SvnRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(System.Uri,SharpSvn.SvnRevision,SharpSvn.SvnPropertyCollection&)", MessageId="1#")];
+[module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(System.Uri,SharpSvn.SvnRevision,SharpSvn.SvnRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)", MessageId="2#")];
+[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.#GetRevisionPropertyList(System.Uri,SharpSvn.SvnRevision,SharpSvn.SvnRevisionPropertyListArgs,SharpSvn.SvnPropertyCollection&)")];
 
-bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list)
+bool SvnClient::GetRevisionPropertyList(Uri^ target, SvnRevision^ revision, [Out] SvnPropertyCollection^% list)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
-	return GetRevisionPropertyList(target, gcnew SvnRevisionPropertyListArgs(), list);
+	return GetRevisionPropertyList(target, revision, gcnew SvnRevisionPropertyListArgs(), list);
 }
 
-bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] SvnPropertyCollection^% list)
+bool SvnClient::GetRevisionPropertyList(Uri^ target, SvnRevision^ revision, SvnRevisionPropertyListArgs^ args, [Out] SvnPropertyCollection^% list)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!revision)
+		throw gcnew ArgumentNullException("revision");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
-
-	// We allow a null listHandler; the args object might just handle it itself
+	else if (!SvnBase::IsValidReposUri(target))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+	else if (!revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
@@ -52,8 +62,8 @@ bool SvnClient::GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropert
 
 	svn_error_t* r = svn_client_revprop_list(
 		&props,
-		pool.AllocString(target->SvnTargetName),
-		target->Revision->AllocSvnRevision(%pool),
+		pool.AllocCanonical(target),
+		revision->AllocSvnRevision(%pool),
 		&set_rev,
 		CtxHandle,
 		pool.Handle);
