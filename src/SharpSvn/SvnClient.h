@@ -936,13 +936,13 @@ namespace SharpSvn {
 #pragma region // GetRevisionProperty Client Command
 		/// <overloads>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</overloads>
 		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
-		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value);
+		bool GetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, [Out] String^% value);
 		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
-		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] SvnPropertyValue^% value);
+		bool GetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, [Out] SvnPropertyValue^% value);
 		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
-		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value);
+		bool GetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value);
 		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
-		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
+		bool GetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
 #pragma endregion
 
 	public:
@@ -950,9 +950,9 @@ namespace SharpSvn {
 #pragma region // Properties List Client Command
 		/// <overloads>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</overloads>
 		/// <summary>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</summary>
-		bool GetRevisionPropertyList(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list);
+		bool GetRevisionPropertyList(Uri^ target, SvnRevision^ revision, [Out] SvnPropertyCollection^% list);
 		/// <summary>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</summary>
-		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] SvnPropertyCollection^% list);
+		bool GetRevisionPropertyList(Uri^ target, SvnRevision^ revision, SvnRevisionPropertyListArgs^ args, [Out] SvnPropertyCollection^% list);
 #pragma endregion
 
 	public:
@@ -1217,7 +1217,6 @@ namespace SharpSvn {
 			return SetRevisionProperty(target->Uri, target->Revision, propertyName, bytes, args);
 		}
 
-		/// <overloads>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</overloads>
 		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
 		[Obsolete("Use .DeleteRevisionProperty(Uri, SvnRevision, String) instead")]
 		bool DeleteRevisionProperty(SvnUriTarget^ target, String^ propertyName)
@@ -1233,6 +1232,64 @@ namespace SharpSvn {
 			if (!target)
 				throw gcnew ArgumentNullException("target");
 			return DeleteRevisionProperty(target->Uri, target->Revision, propertyName, args);
+		}
+		
+		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
+		[Obsolete("Use .GetRevisionProperty(Uri, SvnRevision, String, String&) instead")]
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return GetRevisionProperty(target->Uri, target->Revision, propertyName, value);
+		}
+
+		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
+		[Obsolete("Use .GetRevisionProperty(Uri, SvnRevision, String, SvnPropertyValue&) instead")]
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] SvnPropertyValue^% value)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return GetRevisionProperty(target->Uri, target->Revision, propertyName, value);
+		}
+		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
+		[Obsolete("Use .GetRevisionProperty(Uri, SvnRevision, String, SvnGetRevisionPropertyArgs, String&) instead")]
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] String^% value)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return GetRevisionProperty(target->Uri, target->Revision, propertyName, args, value);
+		}
+		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
+		[Obsolete("Use .GetRevisionProperty(Uri, SvnRevision, String, SvnGetRevisionPropertyArgs, SvnPropertyValue&) instead")]
+		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, SvnGetRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return GetRevisionProperty(target->Uri, target->Revision, propertyName, args, value);
+		}
+
+		/// <overloads>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</overloads>
+		/// <summary>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</summary>
+		[Obsolete("Use .GetRevisionPropertyList(Uri, SvnRevision, String, SvnPropertyCollection&) instead")]
+		bool GetRevisionPropertyList(SvnUriTarget^ target, [Out] SvnPropertyCollection^% list)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return GetRevisionPropertyList(target->Uri, target->Revision, list);
+		}
+		/// <summary>Gets all revision properties on a a specific revision (<c>svn proplist --revision</c>)</summary>
+		[Obsolete("Use .GetRevisionPropertyList(Uri, SvnRevision, String, SvnRevisionPropertyListArgs, SvnPropertyCollection&) instead")]
+		bool GetRevisionPropertyList(SvnUriTarget^ target, SvnRevisionPropertyListArgs^ args, [Out] SvnPropertyCollection^% list)
+		{
+			if (!target)
+				throw gcnew ArgumentNullException("target");
+
+			return GetRevisionPropertyList(target->Uri, target->Revision, args, list);
 		}
 #pragma endregion
 	private:

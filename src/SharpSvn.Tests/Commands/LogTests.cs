@@ -27,6 +27,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -218,6 +219,33 @@ namespace SharpSvn.Tests.Commands
             });
 
             Assert.That(touched);
+        }
+
+        [Test, Ignore]
+        public void Test14Server()
+        {
+            SvnLogArgs la = new SvnLogArgs();
+            la.Limit = 1;
+
+            DateTime now = DateTime.UtcNow;
+
+            for(int i = 0; i < 20; i++)
+            Assert.That(Client.Log(new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn"), la,
+                delegate(object sender, SvnLogEventArgs e)
+                {
+                    e.Cancel = true;
+                    Assert.That(e.MergeLogNestingLevel, Is.EqualTo(0));
+                    Assert.That(e.Revision, Is.GreaterThan(3000L));
+                    Assert.That(e.LogMessage, Is.Not.Null);
+                    Assert.That(e.Time, Is.GreaterThan(new DateTime(2008, 01, 01)));
+                    Assert.That(e.Author, Is.Not.Null);
+                    Assert.That(e.ChangedPaths, Is.Not.Null);
+                    Assert.That(e.LogOrigin, Is.Null);
+                }), Is.False);
+
+            DateTime end = DateTime.UtcNow;
+
+            Debug.WriteLine(string.Format("Time spend: {0}", end - now));
         }
 
         [Test]
