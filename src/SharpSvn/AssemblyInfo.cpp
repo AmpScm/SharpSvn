@@ -97,7 +97,6 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 // You can specify all the value or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 
-[assembly:AssemblyVersionAttribute("1.5005.0.1")];
 [assembly:NeutralResourcesLanguageAttribute("en")];
 
 [assembly:ComVisible(false)];
@@ -112,3 +111,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 #pragma comment(lib, "User32.lib")
 
 #include "../../imports/release/include/sharpsvn-imports.h"
+[assembly:AssemblyVersionAttribute("1.5005.1058.35625")]; 
