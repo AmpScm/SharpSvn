@@ -69,11 +69,6 @@ struct SvnClientCallBacks
 	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
 };
 
-bool SvnClient::IsConflictHandler(void* conflict_func)
-{
-	return (conflict_func == (void*)&SvnClientCallBacks::svn_wc_conflict_resolver_func);
-}
-
 void SvnClient::Initialize()
 {
 	void* baton = (void*)_clientBatton->Handle;
