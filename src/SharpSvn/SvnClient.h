@@ -864,7 +864,7 @@ namespace SharpSvn {
 		bool DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 
 	private:
-		bool InternalSetProperty(SvnTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+		bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool);
 
 #pragma endregion
 
