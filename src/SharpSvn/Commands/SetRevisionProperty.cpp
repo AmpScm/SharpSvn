@@ -167,7 +167,7 @@ bool SvnClient::DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, Strin
 		%pool);
 }
 
-bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
+bool SvnClient::InternalSetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -191,8 +191,8 @@ bool SvnClient::InternalSetRevisionProperty(SvnUriTarget^ target, String^ proper
 	svn_error_t *r = svn_client_revprop_set(
 		pName,
 		value,
-		pool->AllocString(target->SvnTargetName),
-		target->Revision->AllocSvnRevision(pool),
+		pool->AllocCanonical(target),
+		revision->AllocSvnRevision(pool),
 		&set_rev,
 		args->Force,
 		CtxHandle,
