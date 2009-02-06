@@ -16,6 +16,10 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>SharpSvn.Tests.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +70,7 @@
     <Compile Include="Commands\AddTests.cs" />
     <Compile Include="Commands\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
+    <Compile Include="Commands\GetCapabilities.cs" />
     <Compile Include="Commands\CheckOutTests.cs" />
     <Compile Include="Commands\CleanUpTests.cs" />
     <Compile Include="Commands\CommitTests.cs" />
@@ -84,14 +89,16 @@
     <Compile Include="Commands\GetSuggestedMergeSourcesTests.cs" />
     <Compile Include="Commands\ImportTests.cs" />
     <Compile Include="Commands\InfoTests.cs" />
-    <Compile Include="Commands\ListEntries.cs">
-    </Compile>
+    <Compile Include="Commands\ListEntries.cs" />
     <Compile Include="Commands\ListTests.cs" />
     <Compile Include="Commands\LockTests.cs" />
     <Compile Include="Commands\LogTests.cs" />
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
+    <Compile Include="Commands\ReplayTests.cs" />
+    <Compile Include="ExternalsTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
+    <Compile Include="LookCommands\GetChangesTests.cs" />
     <Compile Include="LookCommands\HookTestBase.cs" />
     <Compile Include="LookCommands\VerifyTransactions.cs" />
     <Compile Include="PathTests.cs" />
@@ -131,13 +138,13 @@
     <Compile Include="SvnToolsTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
       <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
       <Name>SharpSvn</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
