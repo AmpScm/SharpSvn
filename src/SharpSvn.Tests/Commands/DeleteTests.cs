@@ -26,46 +26,80 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Tests for the Client::Checkout method
-	/// </summary>
-	[TestFixture]
-	public class DeleteTests : TestBase
-	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-		}
+    /// <summary>
+    /// Tests for the Client::Checkout method
+    /// </summary>
+    [TestFixture]
+    public class DeleteTests : TestBase
+    {
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+        }
 
-		[TearDown]
-		public override void TearDown()
-		{
-			base.TearDown();
-		}
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
+        }
+
+        [Test]
+        public void DeleteAllFiles()
+        {
+            Uri uri = ReposUrl;
+            string wc = GetTempDir();
+
+            Client.CheckOut(uri, wc);
+
+            for (int i = 0; i < 10; i++)
+            {
+                string file = Path.Combine(wc, string.Format("file{0}.txt", i));
+
+                File.WriteAllText(file, "");
+
+                Client.Add(file);
+            }
+            SvnCommitArgs ca = new SvnCommitArgs();
+            ca.LogMessage = "Message";
+            Client.Commit(wc, ca);
+
+            foreach (FileInfo f in new DirectoryInfo(wc).GetFiles())
+            {
+                Client.Delete(f.FullName);
+            }
+
+            Client.Commit(wc, ca);
+            Client.Update(wc);
+
+            foreach (FileInfo f in new DirectoryInfo(wc).GetFiles())
+            {
+                Assert.That(false, "No files should exist at this point");
+            }
+        }
 
 
-		/// <summary>
-		/// Tests deleting files in a working copy
-		/// </summary>
-		[Test]
-		public void TestDeleteWCFiles()
-		{
-			string path1 = Path.Combine(this.WcPath, "Form.cs");
-			string path2 = Path.Combine(this.WcPath, "AssemblyInfo.cs");
+        /// <summary>
+        /// Tests deleting files in a working copy
+        /// </summary>
+        [Test]
+        public void TestDeleteWCFiles()
+        {
+            string path1 = Path.Combine(this.WcPath, "Form.cs");
+            string path2 = Path.Combine(this.WcPath, "AssemblyInfo.cs");
 
-			SvnDeleteArgs a = new SvnDeleteArgs();
+            SvnDeleteArgs a = new SvnDeleteArgs();
 
-			Assert.That(Client.Delete(new string[] { path1, path2 }, a));
+            Assert.That(Client.Delete(new string[] { path1, path2 }, a));
 
-			Assert.That(!File.Exists(path1), "File not deleted");
-			Assert.That(!File.Exists(path2), "File not deleted");
+            Assert.That(!File.Exists(path1), "File not deleted");
+            Assert.That(!File.Exists(path2), "File not deleted");
 
-			Assert.That(this.GetSvnStatus(path1), Is.EqualTo('D'), "File not deleted");
-			Assert.That(this.GetSvnStatus(path2), Is.EqualTo('D'), "File not deleted");
+            Assert.That(this.GetSvnStatus(path1), Is.EqualTo('D'), "File not deleted");
+            Assert.That(this.GetSvnStatus(path2), Is.EqualTo('D'), "File not deleted");
 
             Assert.That(Client.Commit(WcPath));
-		}
+        }
 
         [Test]
         public void TestReplacedStatus()
@@ -90,50 +124,50 @@ namespace SharpSvn.Tests.Commands
             Assert.That(Client.Commit(WcPath));
         }
 
-		/// <summary>
-		/// Tests deleting a directory in the repository
-		/// </summary>
-		//TODO: Implement the variable admAccessBaton
-		[Test]
-		public void TestDeleteFromRepos()
-		{
-			Uri path1 = new Uri(this.ReposUrl, "doc");
-			Uri path2 = new Uri(this.ReposUrl, "Form.cs");
+        /// <summary>
+        /// Tests deleting a directory in the repository
+        /// </summary>
+        //TODO: Implement the variable admAccessBaton
+        [Test]
+        public void TestDeleteFromRepos()
+        {
+            Uri path1 = new Uri(this.ReposUrl, "doc");
+            Uri path2 = new Uri(this.ReposUrl, "Form.cs");
 
-			SvnCommitResult ci;
-			SvnDeleteArgs a = new SvnDeleteArgs();
+            SvnCommitResult ci;
+            SvnDeleteArgs a = new SvnDeleteArgs();
 
-			Assert.That(Client.RemoteDelete(new Uri[] { path1, path2 }, a, out ci));
+            Assert.That(Client.RemoteDelete(new Uri[] { path1, path2 }, a, out ci));
 
-			String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
-			Assert.That(cmd.IndexOf("doc") == -1, "Directory wasn't deleted ");
-			Assert.That(cmd.IndexOf("Form.cs") == -1, "Directory wasn't deleted");
+            String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
+            Assert.That(cmd.IndexOf("doc") == -1, "Directory wasn't deleted ");
+            Assert.That(cmd.IndexOf("Form.cs") == -1, "Directory wasn't deleted");
 
-			Assert.That(ci, Is.Not.Null, "CommitInfo is invalid");
-		}
+            Assert.That(ci, Is.Not.Null, "CommitInfo is invalid");
+        }
 
-		[Test]
-		public void TestForceDelete()
-		{
-			string path = Path.Combine(this.WcPath, "Form.cs");
+        [Test]
+        public void TestForceDelete()
+        {
+            string path = Path.Combine(this.WcPath, "Form.cs");
 
-			// modify the file
-			using (StreamWriter writer = new StreamWriter(path, true))
-			{
-				writer.WriteLine("Hi ho");
-			}
+            // modify the file
+            using (StreamWriter writer = new StreamWriter(path, true))
+            {
+                writer.WriteLine("Hi ho");
+            }
 
-			// this will throw if force doesn't work
-			SvnDeleteArgs a = new SvnDeleteArgs();
-			a.ThrowOnError = false;
+            // this will throw if force doesn't work
+            SvnDeleteArgs a = new SvnDeleteArgs();
+            a.ThrowOnError = false;
 
-			Assert.That(Client.Delete(path, a), Is.False);
+            Assert.That(Client.Delete(path, a), Is.False);
 
-			a.ThrowOnError = true;
-			a.Force = true;
+            a.ThrowOnError = true;
+            a.Force = true;
 
-			Assert.That(Client.Delete(path, a), Is.True, "Delete failed");
-		}
+            Assert.That(Client.Delete(path, a), Is.True, "Delete failed");
+        }
 
-	}
+    }
 }
