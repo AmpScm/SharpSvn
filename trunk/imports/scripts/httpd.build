@@ -10,7 +10,7 @@
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
       <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
 
-      <exec program="msbuild.exe" workingdir="${httpdDir}">
+      <exec program="${MSBuildExe}" workingdir="${httpdDir}">
         <arg value="apache.sln" />
         <arg value="/P:configuration=Release" />
         <arg value="/P:platform=Win32" />
