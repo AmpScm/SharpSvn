@@ -23,8 +23,10 @@
     </if>
     <echo message="Using Visual Studio ${VSversion} for building" />
   </if>
+  
+  <property name="MSBuild" value="MSBuild.exe" />
+  <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
-  <property name="VS" value="2005" overwrite="false" />
   <property name="buildHttpd" value="false" overwrite="false" />
 
   <if test="${platform != 'win32' and platform != 'x64'}">
