@@ -86,7 +86,7 @@ namespace SharpSvn.Tests.Commands
                         le.Cancel = true;
                 });
 
-            Assert.That(la.IsLastInvocationCanceled, Is.False, "More than 100 items returned");
+            Assert.That(la.IsLastInvocationCanceled, "More than 100 items returned");
         }
 
         [Test]

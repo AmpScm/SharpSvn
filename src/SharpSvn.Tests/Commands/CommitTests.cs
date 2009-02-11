@@ -255,7 +255,7 @@ namespace SharpSvn.Tests.Commands
 			}
 		}
 
-        [Test]
+        [Test, ExpectedException(typeof(SvnUnsupportedFeatureException))]
         public void NonRecursiveDirDelete()
         {
             string dir = GetTempDir();
