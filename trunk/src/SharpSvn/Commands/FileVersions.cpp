@@ -76,7 +76,7 @@ static svn_error_t *file_version_window_handler(
 			client->HandleClientCancel(ca);
 
 			if (ca->Cancel)
-				return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
+				return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled");
 
 
 			return nullptr; // We are only interested after the file is complete
@@ -119,8 +119,6 @@ static svn_error_t *file_version_window_handler(
 
 	return nullptr;
 }
-
-#pragma warning(disable: 4127) // conditional expression is constant on SVN_ERR
 
 /* Apply property changes on the current property state and copy everything to the new pool
 * to make sure the properties are still valid in the next round
@@ -574,10 +572,7 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 		throw gcnew InvalidOperationException("This method can only be invoked when the client is still handling this request");
 
 	apr_file_t* txt;
-	svn_error_t* err = svn_io_file_open(&txt, fvArgs->_lastFile, APR_READ, APR_OS_DEFAULT, _pool->Handle);
-
-	if (err)
-		throw SvnException::Create(err);
+	SVN_THROW(svn_io_file_open(&txt, fvArgs->_lastFile, APR_READ, APR_OS_DEFAULT, _pool->Handle));
 
 	svn_stream_t* stream = svn_stream_from_aprfile2(txt, false, _pool->Handle);
 
@@ -655,17 +650,14 @@ apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
 
 	apr_hash_t* kw = nullptr;
 
-	svn_error_t* r = svn_subst_build_keywords2(
+	SVN_THROW(svn_subst_build_keywords2(
 						&kw, 
 						kwProp->data, 
 						apr_psprintf(pool->Handle, "%ld", (svn_revnum_t)Revision),
 						ItemUrl,
 						SvnBase::AprTimeFromDateTime(Time),
 						apr_pstrdup(pool->Handle, _pcAuthor),
-						pool->Handle);
-
-	if (r)
-		throw SvnException::Create(r);
+						pool->Handle));
 
 	if (keepValues)
 		args->_curKwProps = kw;
