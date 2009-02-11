@@ -116,8 +116,8 @@ namespace SharpSvn.Tests.LookCommands
                     Assert.That(r.LogMessage, Is.EqualTo(lr.LogMessage));
                     Assert.That(r.Time, Is.EqualTo(lr.Time));
 
-                    Assert.That(r.ChangedPaths, Is.Not.Null);
-                    Assert.That(lr.ChangedPaths, Is.Not.Null);
+                    Assert.That(r.ChangedPaths, Is.Not.Null, "r.ChangedPaths({0})", ii);
+                    Assert.That(lr.ChangedPaths, Is.Not.Null, "lr.ChangedPaths({0})", ii);
 
                     Assert.That(r.ChangedPaths.Count, Is.EqualTo(lr.ChangedPaths.Count));
 
