@@ -109,7 +109,7 @@
         </loadfile>
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
         
-        <delete if="${(static=='true') or (svnStatic=='true')}">
+        <delete if="${((static=='true') or (svnStatic=='true')) and not(property::exists('withSwig'))}">
           <fileset basedir="${svnBase}/subversion">
             <include name="**/deprecated.c" />
           </fileset>
@@ -175,6 +175,7 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
+        <arg value="--with-swig=${path::get-full-path(swigDir)}" />
         <arg value="--with-sqlite=${intDir}" if="${buildSqlite and (subversionVersion &gt; '1.6')}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
@@ -244,6 +245,7 @@
 
       <!-- Add more version information to the subversion binaries and functions -->
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
+        #pragma once
         #undef SVN_VER_TAG
         #undef SVN_VER_NUMTAG
         #define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
@@ -256,7 +258,7 @@
     </OnceBlock>
   </target>
 
-  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,prepare-neon,generate-svnfiles,build-httpd">
+  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,build-swig,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
       <exec program="msbuild.exe" workingdir="${svnBase}">
@@ -274,6 +276,8 @@
         <arg value="/t:Programs\svnmucc"/>
         <arg value="/t:Programs\svnauthz-validate" />
         <arg value="/t:Programs\svn-populate-node-origins-index" />
+        <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
+        <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
       </exec>
     </OnceBlock>
   </target>

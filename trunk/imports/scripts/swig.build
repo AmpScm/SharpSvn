@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="swigFilename" value="swigwin-${swigVersion}.zip" />
+  <property name="swigDir" value="build/swigwin-${swigVersion}" />
+  
+  
+  <target name="build-swig" if="${property::exists('withSwig')}">
+    <exec program="where.exe" output="build/perl.where" failonerror="false">
+      <arg value="perl" />
+    </exec>
+    <exec program="where.exe" output="build/python.where" failonerror="false">
+      <arg value="python" />
+    </exec>
+    <loadfile file="build/perl.where" property="perl.location" />
+    <loadfile file="build/python.where" property="python.location" />
+    <property name="perl.location" value="${path::get-directory-name(string::trim(perl.location))}" />
+    <property name="python.location" value="${path::get-directory-name(string::trim(python.location))}" />
+    
+    <copy todir="${swigDir}/lib/perl">
+      <fileset basedir="${swigDir}/lib/perl5">
+        <include name="**" />
+      </fileset>
+    </copy>
+    <copy todir="${swigDir}/lib/perl">
+      <fileset basedir="${path::get-full-path(perl.location + '/../lib/CORE')}">
+        <include name="**/*.h" />
+      </fileset>
+    </copy>
+    <loadfile file="${path::get-full-path(perl.location + '/../lib/CORE')}/perl.h" property="perl.h" />
+    <attrib normal="true" file="${swigDir}/lib/perl/perl.h" />
+    <echo file="${swigDir}/lib/perl/perl.h">
+/* --- SharpSVN Patched --- */
+#include &lt;apr.h&gt;
+/* --- /SharpSVN Patch --- */
+${perl.h}
+</echo>   
+    <copy todir="build/${platform}/lib/lib"> 
+      <fileset basedir="${path::get-full-path(perl.location + '/../lib/CORE')}">
+        <include name="**/*.lib" />
+      </fileset>
+    </copy>
+  </target>
+</project>
