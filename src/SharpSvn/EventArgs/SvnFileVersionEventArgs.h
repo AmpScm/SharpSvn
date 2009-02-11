@@ -125,7 +125,7 @@ namespace SharpSvn {
 			const char* get()
 			{
 				if (!_pUrl && _pReposRoot && _pPath && _pool)
-					_pUrl = svn_path_url_add_component(_pReposRoot, _pPath+1, _pool->Handle);
+					_pUrl = svn_path_url_add_component2(_pReposRoot, _pPath+1, _pool->Handle);
 
 				return _pUrl;
 			}
