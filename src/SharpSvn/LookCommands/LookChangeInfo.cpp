@@ -37,19 +37,19 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, EventHandler<SvnChange
 	return ChangeInfo(lookOrigin, gcnew SvnChangeInfoArgs(), changeInfoHandler);
 }
 
-static const char* create_name(svn_repos_node_t* node, apr_pool_t* pool)
+static const char* create_name(svn_repos_node_t *node, AprPool ^pool)
 {
 	if(!node)
 		return "";
 	else if(!node->parent)
 		return "/";
 	else if(!node->parent->name || !node->parent->name[0])
-		return apr_pstrcat(pool, "/", node->name, (const char*)nullptr);
+		return apr_pstrcat(pool->Handle, "/", node->name, (const char*)nullptr);
 	else
-		return apr_pstrcat(pool, create_name(node->parent, pool), "/", node->name, (const char*)nullptr);
+		return apr_pstrcat(pool->Handle, create_name(node->parent, pool), "/", node->name, (const char*)nullptr);
 }
 
-static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, apr_pool_t* pool, apr_pool_t* tmpPool)
+static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, AprPool^ pool, AprPool^ tmpPool)
 {
 	if (!ht)
 		throw gcnew ArgumentNullException("ht");
@@ -60,7 +60,7 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, apr_pool
 
 	if(node->action != 'R' || node->text_mod || node->prop_mod || node->copyfrom_path)
 	{
-		svn_log_changed_path_t* chg = (svn_log_changed_path_t*)apr_pcalloc(pool, sizeof(svn_log_changed_path_t));
+		svn_log_changed_path2_t* chg = (svn_log_changed_path2_t*)svn_log_changed_path2_create(pool->Handle);
 
 		if(node->action == 'R' && !node->copyfrom_path)
 			chg->action = 'M';
@@ -70,9 +70,11 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, apr_pool
 		chg->copyfrom_path = node->copyfrom_path;
 		chg->copyfrom_rev = node->copyfrom_rev;		
 
-		const char* name = node->parent ? apr_pstrdup(pool, create_name(node, tmpPool)) : node->name;
+		const char* name = node->parent ? apr_pstrdup(pool->Handle, create_name(node, tmpPool)) : node->name;
 
 		apr_hash_set(ht, name, APR_HASH_KEY_STRING, chg); // TODO: Check if name is valid! (maybe use parents names as suffix!)
+
+		chg->node_kind = node->kind;
 	}
 
 	if(node->child)
@@ -209,9 +211,9 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 
 				apr_hash_t* changes = apr_hash_make(pool.Handle);
 
-				create_changes_hash(changes, tree, pool.Handle, tmpPool.Handle);
+				create_changes_hash(changes, tree, %pool, %tmpPool);
 
-				entry->changed_paths = changes;
+				entry->changed_paths2 = entry->changed_paths = changes;
 			}
 		}
 
