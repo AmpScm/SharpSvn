@@ -33,10 +33,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 	_pool = pool;
 	svn_client_ctx_t *ctx;
 
-	svn_error_t *r = svn_client_create_context(&ctx, pool->Handle);
-
-	if (r)
-		throw SvnException::Create(r);
+	SVN_THROW(svn_client_create_context(&ctx, pool->Handle));
 
 	ctx->client_name = pool->AllocString(SvnBase::_clientName);
 
@@ -54,10 +51,7 @@ SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
 
 	svn_client_ctx_t *ctx;
 
-	svn_error_t *r = svn_client_create_context(&ctx, _pool->Handle);
-
-	if (r)
-		throw SvnException::Create(r);
+	SVN_THROW(svn_client_create_context(&ctx, _pool->Handle));
 
 	_ctx = ctx;
 	_authentication = gcnew SharpSvn::Security::SvnAuthentication(this, _pool);
@@ -373,21 +367,11 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 	AprPool tmpPool(_pool);
 	const char* szPath = path ? tmpPool.AllocString(path) : nullptr;
 
-	svn_error_t* err = nullptr;
-
 	if (ensurePath)
-	{
-		err = svn_config_ensure(szPath, tmpPool.Handle);
-
-		if (err)
-			throw SvnException::Create(err);
-	}
+		SVN_THROW(svn_config_ensure(szPath, tmpPool.Handle));
 
 	apr_hash_t* cfg = nullptr;
-	err = svn_config_get_config(&cfg, szPath, _pool->Handle);
-
-	if (err)
-		throw SvnException::Create(err);
+	SVN_THROW(svn_config_get_config(&cfg, szPath, _pool->Handle));
 
 	CtxHandle->config = cfg;
 
@@ -419,10 +403,7 @@ void SvnClientContext::MergeConfiguration(String^ path)
 
 	const char* szPath = tmpPool.AllocString(path);
 
-	svn_error_t* err = svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle);
-
-	if (err)
-		throw SvnException::Create(err);
+	SVN_THROW(svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle));
 }
 
 SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ args)

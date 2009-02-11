@@ -51,3 +51,12 @@ using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 using System::Diagnostics::DebuggerStepThroughAttribute;
 using System::Diagnostics::DebuggerDisplayAttribute;
 #include "SharpSvnStrings.h"
+
+#define SVN_THROW(expr)                         \
+  do {                                          \
+    svn_error_t *svn_err__temp = (expr);        \
+    if (svn_err__temp)                          \
+	  throw SvnException::Create(expr);         \
+  } while (0)
+
+#pragma warning(disable: 4127) // warning C4127: conditional expression is constant

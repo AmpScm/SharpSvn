@@ -50,14 +50,10 @@ void SvnClient::AdministrativeDirectoryName::set(String^ value)
 
 	AprPool pool(SmallThreadPool);
 
-	svn_error_t* err = svn_wc_set_adm_dir(pool.AllocString(value), pool.Handle);
-	if (err)
-		throw SvnException::Create(err); // Property setters should not throw argument exceptions
-	else
-	{
-		_admDir = svn_wc_get_adm_dir(pool.Handle);
-		_administrativeDirName = Utf8_PtrToString(_admDir);
-	}
+	SVN_THROW(svn_wc_set_adm_dir(pool.AllocString(value), pool.Handle));
+
+	_admDir = svn_wc_get_adm_dir(pool.Handle);
+	_administrativeDirName = Utf8_PtrToString(_admDir);
 }
 
 struct SvnClientCallBacks
