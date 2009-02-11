@@ -53,6 +53,11 @@ namespace SharpSvn {
 				return (T)GCHandle::FromIntPtr(value).Target;
 			}
 
+			static T Get(void* ptr)
+			{
+				return (T)GCHandle::FromIntPtr((IntPtr)ptr).Target;
+			}
+
 
 			property IntPtr Handle
 			{
