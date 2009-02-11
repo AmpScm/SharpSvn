@@ -249,6 +249,11 @@ static char* svn_gettext(const char* domain, const char* msgid, int category)
 	if (!svn_gettext_enabled)
 		return const_cast<char*>(msgid);
 
-	return SvnLocalizer::gettext(msgid);
+	char* value = SvnLocalizer::gettext(msgid);
+
+	if (value)
+		return value;
+	else
+		return const_cast<char*>(msgid);
 }
 
