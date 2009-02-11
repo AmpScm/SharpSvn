@@ -151,6 +151,15 @@
         </filterchain>
       </loadfile>
       <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
+      <if test="${applyMerges}">
+        <loadfile file="${aprDir}\file_io\win32\open.c" property="open.c">
+	      <filterchain>
+            <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
+                           to='DWORD sharemode = FILE_SHARE_READ;' />
+          </filterchain>
+        </loadfile>
+        <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
+      </if>
       <!-- Add Windows 2000 ipv6 workarounds -->
       <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
     </OnceBlock>
