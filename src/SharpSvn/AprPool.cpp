@@ -331,18 +331,72 @@ const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
 	return pStr;
 }
 
-/* Loosly from apr 1.3/trunk: This function is not available in apr 1.2 as used 2008-02-26 */
-void sharpsvn_apr_hash_clear(apr_hash_t *ht)
+class PoolAliveRef
 {
-	const void* key;
-	apr_ssize_t len;
+private:
+	int _magic;
+	gcroot<Object^> _ref;
+	bool _dispose;
 
-	AprPool tmpPool(SvnBase::SmallThreadPool);
-
-    apr_hash_index_t *hi;
-	for (hi = apr_hash_first(tmpPool.Handle, ht); hi; hi = apr_hash_next(hi))
+public:
+	PoolAliveRef(Object^ r, bool disposeOnCleanup)
 	{
-		apr_hash_this(hi, &key, &len, nullptr);
-        apr_hash_set(ht, key, len, nullptr);
+		_magic = 0xCACABA;
+		_ref = r;
+		_dispose = disposeOnCleanup;
 	}
+
+	static apr_status_t Cleanup(void* r)
+	{
+		PoolAliveRef* pr = reinterpret_cast<PoolAliveRef*>(r);
+
+		if (pr && pr->_magic == 0xCACABA)
+		{
+			pr->_magic = 0;
+
+			if (pr->_dispose)
+			{
+				IDisposable^ d = dynamic_cast<IDisposable^>((Object^)pr->_ref);
+
+				delete pr;
+
+				if (d)
+				{
+					try
+					{
+						delete d; // Call Dispose();
+					}
+					catch(Exception^)
+					{}
+				}
+			}
+			else
+				delete pr;
+		}
+		return 0;
+	}
+};
+
+void AprPool::KeepAlive(Object^ obj)
+{
+	if (!obj)
+		throw gcnew ArgumentNullException("obj");
+
+	Ensure();		
+
+	PoolAliveRef* r = new PoolAliveRef(obj, false);
+
+	apr_pool_cleanup_register(Handle, reinterpret_cast<const void*>(r), PoolAliveRef::Cleanup, PoolAliveRef::Cleanup);
+}
+
+void AprPool::KeepAlive(IDisposable^ obj, bool disposeOnCleanup)
+{
+	if (!obj)
+		throw gcnew ArgumentNullException("obj");
+
+	Ensure();		
+
+	PoolAliveRef* r = new PoolAliveRef(obj, disposeOnCleanup);
+
+	apr_pool_cleanup_register(Handle, reinterpret_cast<const void*>(r), PoolAliveRef::Cleanup, PoolAliveRef::Cleanup);
 }
