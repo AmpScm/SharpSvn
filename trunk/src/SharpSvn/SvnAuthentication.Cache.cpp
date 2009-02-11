@@ -250,14 +250,11 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 	AprPool pool(SvnBase::SmallThreadPool);
 
 	const char* cfg = nullptr;
-	svn_error_t* r = svn_config_get_user_config_path(
+	SVN_THROW(svn_config_get_user_config_path(
 		&cfg,
 		_clientContext->_configPath ? pool.AllocPath(_clientContext->_configPath) : nullptr,
 		SVN_CONFIG__AUTH_SUBDIR,
-		pool.Handle);
-
-	if (r)
-		throw SvnException::Create(r);
+		pool.Handle));
 
 	const char* append = nullptr;;
 	switch (type)
@@ -311,7 +308,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 		pl.Clear(); // Clear before running to clear old state
 
 		svn_stream_t* stream = nullptr;
-		r = svn_stream_open_readonly(&stream, pool.AllocPath(file->FullName), pl.Handle, pl.Handle);
+		svn_error_t* r = svn_stream_open_readonly(&stream, pool.AllocPath(file->FullName), pl.Handle, pl.Handle);
 
 		apr_hash_t* hash = nullptr;
 		if (!r)
