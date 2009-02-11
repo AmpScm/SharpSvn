@@ -58,6 +58,7 @@
   <include buildfile="sharpintl.build" />
   <include buildfile="subversion.build" />
   <include buildfile="sqlite.build" />
+  <include buildfile="swig.build" />
 
   <target name="clean">
     <delete>
