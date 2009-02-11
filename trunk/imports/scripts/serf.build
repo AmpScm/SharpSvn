@@ -28,7 +28,7 @@
               <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${static=='true'}"/>
               <replacestring from="= /D WIN32 " to="= /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${static!='true'}"/>
               <!-- Optimize for size over speed; we are IO bound, don't duplicate code for nothing -->
-              <replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi " />
+              <replacestring from=" /O2 " to=" /O1 /W3 /GS /Zi /Zl " />
               <!-- Don't include apr and openssl in the intermediate libraries -->
               <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(OPEN" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(OPEN" if="${static=='true'}" />
               <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" if="${static=='true'}" />

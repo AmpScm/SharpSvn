@@ -109,11 +109,11 @@
         </loadfile>
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
         
-        <delete if="${((static=='true') or (svnStatic=='true')) and not(property::exists('withSwig'))}">
+        <!--delete if="${((static=='true') or (svnStatic=='true')) and not(property::exists('withSwig'))}">
           <fileset basedir="${svnBase}/subversion">
             <include name="**/deprecated.c" />
           </fileset>
-        </delete>
+        </delete-->
       </if>
     </OnceBlock>
   </target>
