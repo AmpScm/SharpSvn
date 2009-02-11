@@ -82,7 +82,7 @@ void SvnAuthentication::ClearAuthenticationCache()
 	apr_hash_t *hash = get_cache(_currentBaton);
 
 	if (hash)
-		sharpsvn_apr_hash_clear(hash);
+		apr_hash_clear(hash);
 }
 
 
