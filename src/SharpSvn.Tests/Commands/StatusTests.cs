@@ -537,12 +537,13 @@ namespace SharpSvn.Tests.Commands
                             if (nn >= 0)
                             {
                                 Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
-                                Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(36L));
+                                Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(36L), "WCSize = 36");
                             }
                             else
                             {
+                                Assert.That(e.WorkingCopyInfo.NodeKind, Is.EqualTo(SvnNodeKind.Directory));
                                 Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.EqualTo(DateTime.MinValue));
-                                Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(0L));
+                                Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(-1L), "WCSize = -1");
                             }
                         }
                         Assert.That(e.WorkingCopyInfo.LockComment, Is.Null);
