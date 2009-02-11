@@ -17,6 +17,7 @@
 #include "StdAfx.h"
 #include "SvnAll.h"
 #include "SvnDeltaEditor.h"
+#include "SvnDeltaTransform.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Delta;
@@ -161,532 +162,537 @@ directory_baton::~directory_baton()
 	_nextDir = nullptr;
 }
 
-
-static apr_status_t __cdecl delta_editor_cleanup(void *baton)
+class sharpsvn_delta
 {
-	base_baton* root = (base_baton*)baton;
+public:
 
-	if (root && root->root)
+	static apr_status_t __cdecl delta_editor_cleanup(void *baton)
 	{
-		root_baton* rt = root->root;
-		root->root = nullptr;
-		delete rt;
+		base_baton* root = (base_baton*)baton;
+
+		if (root && root->root)
+		{
+			root_baton* rt = root->root;
+			root->root = nullptr;
+			delete rt;
+		}
+
+		return 0;
 	}
 
-	return 0;
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_set_target_revision(void *edit_baton, svn_revnum_t target_revision, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	base_baton* bt = (base_baton*)edit_baton;
-
-	if (!bt->root)
-		return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Root of delta editor already disposed");
-
-	SvnDeltaSetTargetEventArgs^ args = gcnew SvnDeltaSetTargetEventArgs(target_revision);
-	try
+	static svn_error_t* __cdecl 
+		wrap_set_target_revision(void *edit_baton, svn_revnum_t target_revision, apr_pool_t *pool)
 	{
-		bt->root->_editor->OnSetTarget(args);
+		UNUSED_ALWAYS(pool);
+		base_baton* bt = (base_baton*)edit_baton;
+
+		if (!bt->root)
+			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Root of delta editor already disposed");
+
+		SvnDeltaSetTargetEventArgs^ args = gcnew SvnDeltaSetTargetEventArgs(target_revision);
+		try
+		{
+			bt->root->_editor->OnSetTarget(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("set_target_revision", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_open_root(void *edit_baton, svn_revnum_t base_revision, apr_pool_t *dir_pool, void **root_bbt)
+	{
+		UNUSED_ALWAYS(dir_pool);
+		base_baton* bt = (base_baton*)edit_baton;
+		root_baton* root = bt->root;
+		SvnDeltaNode^ dirNode;
+
+		try
+		{
+			dirNode = root->_editor->CreateDirectoryNode(nullptr, nullptr);
+			*root_bbt = new directory_baton(root, nullptr, dirNode);
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_root/CreateDirectoryNode", e);
+		}
+
+		SvnDeltaOpenEventArgs^ args = gcnew SvnDeltaOpenEventArgs(base_revision);
+		try
+		{
+			bt->root->_editor->OnOpen(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_root", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_delete_entry(const char *path, svn_revnum_t revision, void *parent_baton, apr_pool_t *pool)
+	{
+		UNUSED_ALWAYS(pool);
+		directory_baton* bt = (directory_baton*)parent_baton;
+
+		SvnDeltaDeleteEntryEventArgs^ args = gcnew SvnDeltaDeleteEntryEventArgs(bt->_node, SvnBase::Utf8_PtrToString(path), revision);
+		try
+		{
+			bt->_root->_editor->OnDeleteEntry(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_root", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_add_directory(const char *path, void *parent_baton, const char *copyfrom_path, 
+		svn_revnum_t copyfrom_revision, apr_pool_t *dir_pool, void **child_baton)
+	{
+		UNUSED_ALWAYS(dir_pool);
+		directory_baton* parent = (directory_baton*)parent_baton;
+		directory_baton* child = nullptr;
+
+		SvnDeltaNode^ dirNode;
+		SvnDeltaEditor^ editor = parent->_root->_editor;
+
+		try
+		{
+			dirNode = editor->CreateDirectoryNode(parent->_node, SvnBase::Utf8_PtrToString(path));
+			*child_baton = child = new directory_baton(parent->_root, parent, dirNode);
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("add_directory/CreateDirectoryNode", e);
+		}
+
+		SvnDeltaDirectoryAddEventArgs^ args = gcnew SvnDeltaDirectoryAddEventArgs(
+			dirNode, 
+			SvnBase::Utf8_PtrToString(copyfrom_path), 
+			copyfrom_revision);
+
+		try
+		{
+			editor->OnDirectoryAdd(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("add_directory", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_open_directory(const char *path, void *parent_baton, svn_revnum_t base_revision,
+		apr_pool_t *dir_pool, void **child_baton)
+	{
+		UNUSED_ALWAYS(dir_pool);
+		directory_baton* parent = (directory_baton*)parent_baton;
+		directory_baton* child = nullptr;
+
+		SvnDeltaNode^ dirNode;
+		SvnDeltaEditor^ editor = parent->_root->_editor;
+
+		try
+		{
+			dirNode = editor->CreateDirectoryNode(parent->_node, SvnBase::Utf8_PtrToString(path));
+			*child_baton = child = new directory_baton(parent->_root, parent, dirNode);
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_directory/CreateDirectoryNode", e);
+		}
+
+		SvnDeltaDirectoryOpenEventArgs^ args = gcnew SvnDeltaDirectoryOpenEventArgs(
+			dirNode, 
+			base_revision);
+
+		try
+		{
+			editor->OnDirectoryOpen(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_directory", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_change_dir_prop(void *dir_baton, const char *name, 
+		const svn_string_t *value, apr_pool_t *pool)
+	{
+		UNUSED_ALWAYS(pool);
+
+		directory_baton* dir = (directory_baton*)dir_baton;
+		SvnDeltaEditor^ editor = dir->_root->_editor;
+
+		SvnDeltaDirectoryPropertyChangeEventArgs^ args = gcnew SvnDeltaDirectoryPropertyChangeEventArgs(dir->_node, name, value);
+
+		try
+		{
+			editor->OnDirectoryPropertyChange(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("change_dir_prop", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
 
 		return nullptr;
 	}
-	catch (Exception^ e)
+
+	static svn_error_t* __cdecl 
+		wrap_close_directory(void *dir_baton, apr_pool_t *pool)
 	{
-		return SvnException::CreateExceptionSvnError("set_target_revision", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
+		UNUSED_ALWAYS(pool);
+		directory_baton* dir = (directory_baton*)dir_baton;
+		SvnDeltaEditor^ editor = dir->_root->_editor;
 
-static svn_error_t* __cdecl 
-sharpsvn_wrap_open_root(void *edit_baton, svn_revnum_t base_revision, apr_pool_t *dir_pool, void **root_bbt)
-{
-	UNUSED_ALWAYS(dir_pool);
-	base_baton* bt = (base_baton*)edit_baton;
-	root_baton* root = bt->root;
-	SvnDeltaNode^ dirNode;
+		SvnDeltaDirectoryCloseEventArgs^ args = gcnew SvnDeltaDirectoryCloseEventArgs(dir->_node);
+		try
+		{
+			editor->OnDirectoryClose(args);
 
-	try
-	{
-		dirNode = root->_editor->CreateDirectoryNode(nullptr, nullptr);
-		*root_bbt = new directory_baton(root, nullptr, dirNode);
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_root/CreateDirectoryNode", e);
-	}
-
-	SvnDeltaOpenEventArgs^ args = gcnew SvnDeltaOpenEventArgs(base_revision);
-	try
-	{
-		bt->root->_editor->OnOpen(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_root", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_delete_entry(const char *path, svn_revnum_t revision, void *parent_baton, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	directory_baton* bt = (directory_baton*)parent_baton;
-
-	SvnDeltaDeleteEntryEventArgs^ args = gcnew SvnDeltaDeleteEntryEventArgs(bt->_node, SvnBase::Utf8_PtrToString(path), revision);
-	try
-	{
-		bt->_root->_editor->OnDeleteEntry(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_root", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_add_directory(const char *path, void *parent_baton, const char *copyfrom_path, 
-							svn_revnum_t copyfrom_revision, apr_pool_t *dir_pool, void **child_baton)
-{
-	UNUSED_ALWAYS(dir_pool);
-	directory_baton* parent = (directory_baton*)parent_baton;
-	directory_baton* child = nullptr;
-
-	SvnDeltaNode^ dirNode;
-	SvnDeltaEditor^ editor = parent->_root->_editor;
-
-	try
-	{
-		dirNode = editor->CreateDirectoryNode(parent->_node, SvnBase::Utf8_PtrToString(path));
-		*child_baton = child = new directory_baton(parent->_root, parent, dirNode);
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("add_directory/CreateDirectoryNode", e);
-	}
-
-	SvnDeltaDirectoryAddEventArgs^ args = gcnew SvnDeltaDirectoryAddEventArgs(
-		dirNode, 
-		SvnBase::Utf8_PtrToString(copyfrom_path), 
-		copyfrom_revision);
-
-	try
-	{
-		editor->OnDirectoryAdd(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("add_directory", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_open_directory(const char *path, void *parent_baton, svn_revnum_t base_revision,
-							 apr_pool_t *dir_pool, void **child_baton)
-{
-	UNUSED_ALWAYS(dir_pool);
-	directory_baton* parent = (directory_baton*)parent_baton;
-	directory_baton* child = nullptr;
-
-	SvnDeltaNode^ dirNode;
-	SvnDeltaEditor^ editor = parent->_root->_editor;
-
-	try
-	{
-		dirNode = editor->CreateDirectoryNode(parent->_node, SvnBase::Utf8_PtrToString(path));
-		*child_baton = child = new directory_baton(parent->_root, parent, dirNode);
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_directory/CreateDirectoryNode", e);
-	}
-
-	SvnDeltaDirectoryOpenEventArgs^ args = gcnew SvnDeltaDirectoryOpenEventArgs(
-		dirNode, 
-		base_revision);
-
-	try
-	{
-		editor->OnDirectoryOpen(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_directory", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_change_dir_prop(void *dir_baton, const char *name, 
-							  const svn_string_t *value, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-
-	directory_baton* dir = (directory_baton*)dir_baton;
-	SvnDeltaEditor^ editor = dir->_root->_editor;
-
-	SvnDeltaDirectoryPropertyChangeEventArgs^ args = gcnew SvnDeltaDirectoryPropertyChangeEventArgs(dir->_node, name, value);
-
-	try
-	{
-		editor->OnDirectoryPropertyChange(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("change_dir_prop", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-
-	return nullptr;
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_close_directory(void *dir_baton, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	directory_baton* dir = (directory_baton*)dir_baton;
-	SvnDeltaEditor^ editor = dir->_root->_editor;
-
-	SvnDeltaDirectoryCloseEventArgs^ args = gcnew SvnDeltaDirectoryCloseEventArgs(dir->_node);
-	try
-	{
-		editor->OnDirectoryClose(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("add_directory", e);
-	}
-	finally
-	{
-		args->Detach(false);
-
-		delete dir;
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_absent_directory(const char *path, void *parent_baton, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	directory_baton* dir = (directory_baton*)parent_baton;
-	SvnDeltaEditor^ editor = dir->_root->_editor;
-	
-	SvnDeltaDirectoryAbsentEventArgs^ args = nullptr;
-	try
-	{
-		args = gcnew SvnDeltaDirectoryAbsentEventArgs(
-			editor->CreateDirectoryNode(dir->_node, SvnBase::Utf8_PtrToString(path)));
-
-		editor->OnDirectoryAbsent(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("absent_directory", e);
-	}
-	finally
-	{
-		if (args)
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("add_directory", e);
+		}
+		finally
+		{
 			args->Detach(false);
 
-		delete dir;
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_add_file(const char *path, void *parent_baton, const char *copyfrom_path,
-					   svn_revnum_t copyfrom_revision, apr_pool_t *file_pool, void **file_bt)
-{
-	UNUSED_ALWAYS(file_pool);
-	directory_baton* dir = (directory_baton*)parent_baton;
-	SvnDeltaEditor^ editor = dir->_root->_editor;
-
-	SvnDeltaNode^ fileNode;
-	file_baton* child;
-
-	try
-	{
-		fileNode = editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path));
-		*file_bt = child = new file_baton(dir->_root, dir, fileNode);
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("add_file/CreateFileNode", e);
+			delete dir;
+		}
 	}
 
-	SvnDeltaFileAddEventArgs^ args = gcnew SvnDeltaFileAddEventArgs(
-		fileNode, 
-		SvnBase::Utf8_PtrToString(copyfrom_path), 
-		copyfrom_revision);
-
-	try
+	static svn_error_t* __cdecl 
+		wrap_absent_directory(const char *path, void *parent_baton, apr_pool_t *pool)
 	{
-		editor->OnFileAdd(args);
+		UNUSED_ALWAYS(pool);
+		directory_baton* dir = (directory_baton*)parent_baton;
+		SvnDeltaEditor^ editor = dir->_root->_editor;
+
+		SvnDeltaDirectoryAbsentEventArgs^ args = nullptr;
+		try
+		{
+			args = gcnew SvnDeltaDirectoryAbsentEventArgs(
+				editor->CreateDirectoryNode(dir->_node, SvnBase::Utf8_PtrToString(path)));
+
+			editor->OnDirectoryAbsent(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("absent_directory", e);
+		}
+		finally
+		{
+			if (args)
+				args->Detach(false);
+
+			delete dir;
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_add_file(const char *path, void *parent_baton, const char *copyfrom_path,
+		svn_revnum_t copyfrom_revision, apr_pool_t *file_pool, void **file_bt)
+	{
+		UNUSED_ALWAYS(file_pool);
+		directory_baton* dir = (directory_baton*)parent_baton;
+		SvnDeltaEditor^ editor = dir->_root->_editor;
+
+		SvnDeltaNode^ fileNode;
+		file_baton* child;
+
+		try
+		{
+			fileNode = editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path));
+			*file_bt = child = new file_baton(dir->_root, dir, fileNode);
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("add_file/CreateFileNode", e);
+		}
+
+		SvnDeltaFileAddEventArgs^ args = gcnew SvnDeltaFileAddEventArgs(
+			fileNode, 
+			SvnBase::Utf8_PtrToString(copyfrom_path), 
+			copyfrom_revision);
+
+		try
+		{
+			editor->OnFileAdd(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("add_file", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_open_file(const char *path, void *parent_baton, svn_revnum_t base_revision, apr_pool_t *file_pool, void **file_bt)
+	{
+		UNUSED_ALWAYS(file_pool);
+		directory_baton* dir = (directory_baton*)parent_baton;
+		SvnDeltaEditor^ editor = dir->_root->_editor;
+
+		SvnDeltaNode^ fileNode;
+		file_baton* child;
+
+		try
+		{
+			fileNode = editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path));
+			*file_bt = child = new file_baton(dir->_root, dir, fileNode);
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_file/CreateFileNode", e);
+		}
+
+		SvnDeltaFileOpenEventArgs^ args = gcnew SvnDeltaFileOpenEventArgs(
+			fileNode, 
+			base_revision);
+
+		try
+		{
+			editor->OnFileOpen(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("open_file", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
+	}
+
+	static svn_error_t* __cdecl 
+		wrap_apply_textdelta(void *file_bt, const char *base_checksum, apr_pool_t *pool, svn_txdelta_window_handler_t *handler, void **handler_baton)
+	{
+		UNUSED_ALWAYS(pool);
+		file_baton* file = (file_baton*)file_bt;
+		SvnDeltaEditor^ editor = file->_root->_editor;
+
+		AprPool^ txPool = gcnew AprPool(pool, false); // Make a pool reference that is valid as long as the pool is
+		txPool->KeepAlive(txPool, true);
+
+		*handler = svn_delta_noop_window_handler;
+		*handler_baton = nullptr;
+
+		SvnDeltaBeforeFileDeltaEventArgs^ args = gcnew SvnDeltaBeforeFileDeltaEventArgs(file->_node, base_checksum, txPool);
+
+		try
+		{
+			editor->OnBeforeFileDelta(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("apply_textdelta", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
 
 		return nullptr;
 	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("add_file", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
 
-static svn_error_t* __cdecl 
-sharpsvn_wrap_open_file(const char *path, void *parent_baton, svn_revnum_t base_revision,
-						apr_pool_t *file_pool, void **file_bt)
-{
-	UNUSED_ALWAYS(file_pool);
-	directory_baton* dir = (directory_baton*)parent_baton;
-	SvnDeltaEditor^ editor = dir->_root->_editor;
-
-	SvnDeltaNode^ fileNode;
-	file_baton* child;
-
-	try
+	static svn_error_t* __cdecl 
+		wrap_change_file_prop(void *file_bt, const char *name, 
+		const svn_string_t *value, apr_pool_t *pool)
 	{
-		fileNode = editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path));
-		*file_bt = child = new file_baton(dir->_root, dir, fileNode);
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_file/CreateFileNode", e);
-	}
+		UNUSED_ALWAYS(pool);
+		file_baton* file = (file_baton*)file_bt;
+		SvnDeltaEditor^ editor = file->_root->_editor;
 
-	SvnDeltaFileOpenEventArgs^ args = gcnew SvnDeltaFileOpenEventArgs(
-		fileNode, 
-		base_revision);
+		SvnDeltaFilePropertyChangeEventArgs^ args = gcnew SvnDeltaFilePropertyChangeEventArgs(file->_node, name, value);
 
-	try
-	{
-		editor->OnFileOpen(args);
+		try
+		{
+			editor->OnFilePropertyChange(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("change_file_prop", e);
+		}
+		finally
+		{
+			args->Detach(false);
+		}
 
 		return nullptr;
 	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("open_file", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
-}
 
-static svn_error_t* __cdecl 
-sharpsvn_wrap_apply_textdelta(void *file_bt, const char *base_checksum, apr_pool_t *pool,
-							  svn_txdelta_window_handler_t *handler, void **handler_baton)
-{
-	UNUSED_ALWAYS(pool);
-	file_baton* file = (file_baton*)file_bt;
-	SvnDeltaEditor^ editor = file->_root->_editor;
-
-	*handler = svn_delta_noop_window_handler;
-	*handler_baton = nullptr;
-
-	SvnDeltaBeforeFileDeltaEventArgs^ args = gcnew SvnDeltaBeforeFileDeltaEventArgs(file->_node, base_checksum);
-
-	try
+	static svn_error_t* __cdecl 
+		wrap_close_file(void *file_bt, const char *text_checksum,
+		apr_pool_t *pool)
 	{
-		editor->OnBeforeFileDelta(args);
+		UNUSED_ALWAYS(pool);
+		file_baton* file = (file_baton*)file_bt;
+		SvnDeltaEditor^ editor = file->_root->_editor;
 
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("apply_textdelta", e);
-	}
-	finally
-	{
-		args->Detach(false);
+		SvnDeltaFileCloseEventArgs^ args = gcnew SvnDeltaFileCloseEventArgs(file->_node, text_checksum);
+		try
+		{
+			editor->OnFileClose(args);
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("add_directory", e);
+		}
+		finally
+		{
+			args->Detach(false);
+
+			delete file;
+		}
 	}
 
-	return nullptr;
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_change_file_prop(void *file_bt, const char *name, 
-							   const svn_string_t *value, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	file_baton* file = (file_baton*)file_bt;
-	SvnDeltaEditor^ editor = file->_root->_editor;
-
-	SvnDeltaFilePropertyChangeEventArgs^ args = gcnew SvnDeltaFilePropertyChangeEventArgs(file->_node, name, value);
-
-	try
+	static svn_error_t* __cdecl 
+		wrap_absent_file(const char *path, void *parent_baton, apr_pool_t *pool)
 	{
-		editor->OnFilePropertyChange(args);
+		UNUSED_ALWAYS(pool);
+		directory_baton* dir = (directory_baton*)parent_baton;
+		SvnDeltaEditor^ editor = dir->_root->_editor;
 
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("change_file_prop", e);
-	}
-	finally
-	{
-		args->Detach(false);
-	}
+		SvnDeltaFileAbsentEventArgs^ args = nullptr;
+		try
+		{
+			args = gcnew SvnDeltaFileAbsentEventArgs(
+				editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path)));
 
-	return nullptr;
-}
+			editor->OnFileAbsent(args);
 
-static svn_error_t* __cdecl 
-sharpsvn_wrap_close_file(void *file_bt, const char *text_checksum,
-						 apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	file_baton* file = (file_baton*)file_bt;
-	SvnDeltaEditor^ editor = file->_root->_editor;
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("absent_directory", e);
+		}
+		finally
+		{
+			args->Detach(false);
 
-	SvnDeltaFileCloseEventArgs^ args = gcnew SvnDeltaFileCloseEventArgs(file->_node, text_checksum);
-	try
-	{
-		editor->OnFileClose(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("add_directory", e);
-	}
-	finally
-	{
-		args->Detach(false);
-
-		delete file;
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_absent_file(const char *path, void *parent_baton, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	directory_baton* dir = (directory_baton*)parent_baton;
-	SvnDeltaEditor^ editor = dir->_root->_editor;
-	
-	SvnDeltaFileAbsentEventArgs^ args = nullptr;
-	try
-	{
-		 args = gcnew SvnDeltaFileAbsentEventArgs(
-			 editor->CreateFileNode(dir->_node, SvnBase::Utf8_PtrToString(path)));
-
-		editor->OnFileAbsent(args);
-
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("absent_directory", e);
-	}
-	finally
-	{
-		args->Detach(false);
-
-		delete dir;
-	}
-}
-
-static svn_error_t* __cdecl 
-sharpsvn_wrap_close_edit(void *edit_baton, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	base_baton* bt = (base_baton*)edit_baton;
-	SvnDeltaEditor^ editor = nullptr;
-
-	root_baton* r= bt->root;
-
-	if (r)
-	{
-		r->Close();
-		editor = r->_editor;
+			delete dir;
+		}
 	}
 
-	try
+	static svn_error_t* __cdecl 
+		wrap_close_edit(void *edit_baton, apr_pool_t *pool)
 	{
-		if (editor)
-			editor->OnClose(gcnew SvnDeltaCloseEventArgs());
+		UNUSED_ALWAYS(pool);
+		base_baton* bt = (base_baton*)edit_baton;
+		SvnDeltaEditor^ editor = nullptr;
 
-		return nullptr;
-	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("close_edit", e);
-	}
-	finally
-	{
-	}
-}
+		root_baton* r= bt->root;
 
-static svn_error_t* __cdecl 
-sharpsvn_wrap_abort_edit(void *edit_baton, apr_pool_t *pool)
-{
-	UNUSED_ALWAYS(pool);
-	base_baton* bt = (base_baton*)edit_baton;
-	SvnDeltaEditor^ editor = nullptr;
+		if (r)
+		{
+			r->Close();
+			editor = r->_editor;
+		}
 
-	root_baton* r= bt->root;
+		try
+		{
+			if (editor)
+				editor->OnClose(gcnew SvnDeltaCloseEventArgs());
 
-	if (r)
-	{
-		r->Close();
-		editor = r->_editor;
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("close_edit", e);
+		}
+		finally
+		{
+		}
 	}
 
-	try
+	static svn_error_t* __cdecl 
+		wrap_abort_edit(void *edit_baton, apr_pool_t *pool)
 	{
-		if (editor)
-			editor->OnAbort(gcnew SvnDeltaAbortEventArgs());
+		UNUSED_ALWAYS(pool);
+		base_baton* bt = (base_baton*)edit_baton;
+		SvnDeltaEditor^ editor = nullptr;
 
-		return nullptr;
+		root_baton* r= bt->root;
+
+		if (r)
+		{
+			r->Close();
+			editor = r->_editor;
+		}
+
+		try
+		{
+			if (editor)
+				editor->OnAbort(gcnew SvnDeltaAbortEventArgs());
+
+			return nullptr;
+		}
+		catch (Exception^ e)
+		{
+			return SvnException::CreateExceptionSvnError("abort_edit", e);
+		}
+		finally
+		{
+		}
 	}
-	catch (Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("abort_edit", e);
-	}
-	finally
-	{
-	}
-}
+};
 
 bool SvnDeltaEditor::AllocEditor(const svn_delta_editor_t** editor, void** baton, AprPool^ pool)
 {
@@ -697,27 +703,27 @@ bool SvnDeltaEditor::AllocEditor(const svn_delta_editor_t** editor, void** baton
 
 	svn_delta_editor_t *e = svn_delta_default_editor(pool->Handle);
 
-	e->set_target_revision = sharpsvn_wrap_set_target_revision;
-	e->open_root = sharpsvn_wrap_open_root;
-	e->delete_entry = sharpsvn_wrap_delete_entry;
-	e->add_directory = sharpsvn_wrap_add_directory;
-	e->open_directory = sharpsvn_wrap_open_directory;
-	e->change_dir_prop = sharpsvn_wrap_change_dir_prop;
-	e->close_directory = sharpsvn_wrap_close_directory;
-	e->absent_directory = sharpsvn_wrap_absent_directory;
-	e->add_file = sharpsvn_wrap_add_file;
-	e->open_file = sharpsvn_wrap_open_file;
-	e->apply_textdelta = sharpsvn_wrap_apply_textdelta;
-	e->change_file_prop = sharpsvn_wrap_change_file_prop;
-	e->close_file = sharpsvn_wrap_close_file;
-	e->absent_file = sharpsvn_wrap_absent_file;
-	e->close_edit = sharpsvn_wrap_close_edit;
-	e->abort_edit = sharpsvn_wrap_abort_edit;
+	e->set_target_revision = sharpsvn_delta::wrap_set_target_revision;
+	e->open_root = sharpsvn_delta::wrap_open_root;
+	e->delete_entry = sharpsvn_delta::wrap_delete_entry;
+	e->add_directory = sharpsvn_delta::wrap_add_directory;
+	e->open_directory = sharpsvn_delta::wrap_open_directory;
+	e->change_dir_prop = sharpsvn_delta::wrap_change_dir_prop;
+	e->close_directory = sharpsvn_delta::wrap_close_directory;
+	e->absent_directory = sharpsvn_delta::wrap_absent_directory;
+	e->add_file = sharpsvn_delta::wrap_add_file;
+	e->open_file = sharpsvn_delta::wrap_open_file;
+	e->apply_textdelta = sharpsvn_delta::wrap_apply_textdelta;
+	e->change_file_prop = sharpsvn_delta::wrap_change_file_prop;
+	e->close_file = sharpsvn_delta::wrap_close_file;
+	e->absent_file = sharpsvn_delta::wrap_absent_file;
+	e->close_edit = sharpsvn_delta::wrap_close_edit;
+	e->abort_edit = sharpsvn_delta::wrap_abort_edit;
 
 	base_baton* bt = (base_baton*)pool->AllocCleared(sizeof(base_baton));
 	*baton = bt;
 
-	apr_pool_cleanup_register(pool->Handle, bt, delta_editor_cleanup, delta_editor_cleanup);
+	apr_pool_cleanup_register(pool->Handle, bt, sharpsvn_delta::delta_editor_cleanup, sharpsvn_delta::delta_editor_cleanup);
 
 	bt->root = new root_baton(this);
 
@@ -734,21 +740,18 @@ bool SvnDeltaEditor::AllocEditor(SvnClient^ client, const svn_delta_editor_t** e
 
 	void* inner_baton;
 	const svn_delta_editor_t* inner_editor;
-		
+
 	if(!AllocEditor(&inner_editor, &inner_baton, pool))
 		return false;
 
-	svn_error_t* r = svn_delta_get_cancellation_editor(
+	SVN_THROW(svn_delta_get_cancellation_editor(
 		client->CtxHandle->cancel_func,
 		client->CtxHandle->cancel_baton,
 		inner_editor,
 		inner_baton,
 		editor,
 		baton,
-		pool->Handle);
-
-	if (r)
-		throw SvnException::Create(r);
+		pool->Handle));
 
 	return true;
 }

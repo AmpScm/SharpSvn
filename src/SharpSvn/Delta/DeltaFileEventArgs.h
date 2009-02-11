@@ -164,11 +164,57 @@ namespace SharpSvn {
 
 		public ref class SvnDeltaBeforeFileDeltaEventArgs : SvnDeltaNodeEventArgs
 		{
+			AprPool^ _pool;
+			const char* _pBaseChecksum;
+			String^ _baseMd5Checksum;
 		internal:
-			SvnDeltaBeforeFileDeltaEventArgs(SvnDeltaNode^ fileNode, const char* base_checksum)
+			SvnDeltaBeforeFileDeltaEventArgs(SvnDeltaNode^ fileNode, const char* base_checksum, AprPool^ pool)
 				: SvnDeltaNodeEventArgs(fileNode)
 			{
-				UNUSED_ALWAYS(base_checksum);
+				if (!pool)
+					throw gcnew ArgumentNullException("pool");
+
+				_pool = pool;
+				_pBaseChecksum = base_checksum;
+			}
+
+		internal:
+			property AprPool^ Pool
+			{
+				AprPool^ get()
+				{
+					return _pool;
+				}
+			}
+
+			property String^ BaseMD5
+			{
+				String^ get()
+				{
+					if (!_baseMd5Checksum && _pBaseChecksum)
+						_baseMd5Checksum = SvnBase::Utf8_PtrToString(_pBaseChecksum);
+
+					return _baseMd5Checksum;
+				}
+			}
+
+		protected public:
+			virtual void Detach(bool keepProperties) override
+			{
+				try
+				{
+					if (keepProperties)
+					{
+						GC::KeepAlive(BaseMD5Checksum);
+					}
+				}
+				finally
+				{
+					_pool = nullptr;
+					_pBaseChecksum = nullptr;
+
+					__super::Detach(keepProperties);
+				}
 			}
 		};
 	};
