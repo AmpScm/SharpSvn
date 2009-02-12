@@ -20,84 +20,77 @@ using System.Text;
 using NUnit.Framework;
 using SharpSvn.Delta;
 using NUnit.Framework.SyntaxHelpers;
+using System.IO;
 
 namespace SharpSvn.Tests.Commands
 {
     class MyEditor : SvnDeltaEditor
     {
         readonly bool _contentAvailable;
-        public MyEditor(bool contentAvailable)
+        readonly string _tmpdir;
+        public MyEditor(bool contentAvailable, string tmpDir)
         {
             _contentAvailable = contentAvailable;
-        }
-        public override void OnOpen(SvnDeltaOpenEventArgs e)
-        {
-            base.OnOpen(e);
+            _tmpdir = tmpDir;
         }
 
-        public override void OnClose(SvnDeltaCloseEventArgs e)
-        {
-            base.OnClose(e);
-        }
-
-        public override void OnAbort(SvnDeltaAbortEventArgs e)
-        {
-            base.OnAbort(e);
-        }
-
-        public override void OnBeforeFileDelta(SvnDeltaBeforeFileDeltaEventArgs e)
-        {
-            base.OnBeforeFileDelta(e);
-        }
-
-        public override void OnDeleteEntry(SvnDeltaDeleteEntryEventArgs e)
-        {
-            base.OnDeleteEntry(e);
-        }
-
-        public override void OnDirectoryAdd(SvnDeltaDirectoryAddEventArgs e)
-        {
-            base.OnDirectoryAdd(e);
-        }
-
-        public override void OnDirectoryOpen(SvnDeltaDirectoryOpenEventArgs e)
-        {
-            base.OnDirectoryOpen(e);
-        }
-
-        public override void OnDirectoryClose(SvnDeltaDirectoryCloseEventArgs e)
-        {
-            base.OnDirectoryClose(e);
-        }
-
-        public override void OnDirectoryPropertyChange(SvnDeltaDirectoryPropertyChangeEventArgs e)
+        protected override void OnDirectoryPropertyChange(SvnDeltaDirectoryPropertyChangeEventArgs e)
         {
             base.OnDirectoryPropertyChange(e);
             Assert.That(e.PropertyName, Is.Not.Null); // real property or "" when receiving placeholders
             Assert.That(string.IsNullOrEmpty(e.PropertyName), Is.Not.EqualTo(_contentAvailable));
         }
 
-        public override void OnFileAdd(SvnDeltaFileAddEventArgs e)
+        bool _inAdd;
+        protected override void OnFileAdd(SvnDeltaFileAddEventArgs e)
         {
             base.OnFileAdd(e);
+            _inAdd = true;
         }
 
-        public override void OnFileOpen(SvnDeltaFileOpenEventArgs e)
+        protected override void OnFileOpen(SvnDeltaFileOpenEventArgs e)
         {
             base.OnFileOpen(e);
+            _inAdd = false;
         }
 
-        public override void OnFileClose(SvnDeltaFileCloseEventArgs e)
+        protected override void OnFileClose(SvnDeltaFileCloseEventArgs e)
         {
             base.OnFileClose(e);
+            _inAdd = false;
         }
 
-        public override void OnFilePropertyChange(SvnDeltaFilePropertyChangeEventArgs e)
+        protected override void OnFilePropertyChange(SvnDeltaFilePropertyChangeEventArgs e)
         {
             base.OnFilePropertyChange(e);
             Assert.That(e.PropertyName, Is.Not.Null); // real property or "" when receiving placeholders
 
             Assert.That(string.IsNullOrEmpty(e.PropertyName), Is.Not.EqualTo(_contentAvailable));
+        }
+
+        protected override void OnFileChange(SvnDeltaFileChangeEventArgs e)
+        {
+            base.OnFileChange(e);
+
+            if (_inAdd && _contentAvailable)
+            {
+                string empty = Path.Combine(_tmpdir, "empty");
+
+                if(!File.Exists(empty))
+                    File.WriteAllBytes(empty, new byte[0]);
+
+                string name = Path.Combine(_tmpdir, Guid.NewGuid().ToString());
+
+                e.Target = new SvnDeltaFileTransform(empty, name);
+                e.DeltaComplete += delegate
+                {
+                    Assert.That(File.Exists(name));
+
+                    string txt = File.ReadAllText(name);
+
+                    GC.KeepAlive(txt);
+                };
+            }
         }
     }
     [TestFixture]
@@ -105,8 +98,8 @@ namespace SharpSvn.Tests.Commands
     {
         [Test]
         public void ReplayCollab()
-        {            
-            MyEditor edit = new MyEditor(true);
+        {
+            MyEditor edit = new MyEditor(true, GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             ra.RetrieveContent = true;
             Client.ReplayRevisions(CollabReposUri, new SvnRevisionRange(0, 10), edit, ra);
@@ -115,7 +108,7 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void ReplayCollabTrunk()
         {
-            MyEditor edit = new MyEditor(false);
+            MyEditor edit = new MyEditor(false, GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             Client.ReplayRevisions(new Uri(CollabReposUri, "trunk/"), new SvnRevisionRange(0, 10), edit, ra);
         }
@@ -123,7 +116,7 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void ReplaySingleRev()
         {
-            MyEditor edit = new MyEditor(false);
+            MyEditor edit = new MyEditor(false, GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             ra.RevisionStart += new EventHandler<SvnReplayRevisionStartEventArgs>(ra_RevisionStart);
             ra.RevisionEnd += new EventHandler<SvnReplayRevisionEndEventArgs>(ra_RevisionEnd);

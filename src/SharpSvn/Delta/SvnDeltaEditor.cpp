@@ -522,16 +522,25 @@ public:
 		SvnDeltaEditor^ editor = file->_root->_editor;
 
 		AprPool^ txPool = gcnew AprPool(pool, false); // Make a pool reference that is valid as long as the pool is
-		txPool->KeepAlive(txPool, true);
 
 		*handler = svn_delta_noop_window_handler;
 		*handler_baton = nullptr;
 
-		SvnDeltaBeforeFileDeltaEventArgs^ args = gcnew SvnDeltaBeforeFileDeltaEventArgs(file->_node, base_checksum, txPool);
-
+		SvnDeltaFileChangeEventArgs^ args = gcnew SvnDeltaFileChangeEventArgs(file->_node, base_checksum, txPool);
+		SvnDeltaTarget^ target = nullptr;
 		try
 		{
-			editor->OnBeforeFileDelta(args);
+			editor->OnFileChange(args);
+
+			target = args->Target;
+
+			if (target)
+			{
+				txPool->KeepAlive(txPool, true);
+				target->AllocHandler(*handler, *handler_baton, txPool);
+
+				args->PrepareForDelta(target);
+			}
 
 			return nullptr;
 		}
@@ -541,6 +550,9 @@ public:
 		}
 		finally
 		{
+			if (!args->Target)
+				delete txPool;
+
 			args->Detach(false);
 		}
 
