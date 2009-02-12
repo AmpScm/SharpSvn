@@ -59,4 +59,38 @@ using System::Diagnostics::DebuggerDisplayAttribute;
 	  throw SvnException::Create(expr);         \
   } while (0)
 
+#define DECLARE_EVENT_X(type, name, scope)			\
+	scope:											\
+		event EventHandler<type>^ name				\
+		{											\
+		scope:										\
+[System::Runtime::CompilerServices::MethodImpl(		\
+	System::Runtime::CompilerServices::				\
+		MethodImplOptions::Synchronized)]			\
+			void add(EventHandler<type>^ value)		\
+			{										\
+				event_##name += value;				\
+			}										\
+[System::Runtime::CompilerServices::MethodImpl(		\
+	System::Runtime::CompilerServices::				\
+		MethodImplOptions::Synchronized)]			\
+			void remove(EventHandler<type>^ value)	\
+			{										\
+				event_##name -= value;				\
+			}										\
+		private:									\
+			void raise(Object^ sender, type e)		\
+			{										\
+				EventHandler<type>^ ev_handler =	\
+					event_##name;					\
+				if (ev_handler)						\
+					ev_handler(sender, e);			\
+			}										\
+		}											\
+	private:										\
+		EventHandler<type>^ event_##name;			
+
+
+#define DECLARE_EVENT(type, name) DECLARE_EVENT_X(type, name, public)
+
 #pragma warning(disable: 4127) // warning C4127: conditional expression is constant

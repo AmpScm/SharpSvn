@@ -42,7 +42,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		event EventHandler<SvnPropertyListEventArgs^>^ PropertyList;
+		DECLARE_EVENT(SvnPropertyListEventArgs^, PropertyList);
 
 	protected public:
 		virtual void OnPropertyList(SvnPropertyListEventArgs^ e)

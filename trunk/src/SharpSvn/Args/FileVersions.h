@@ -61,7 +61,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		event EventHandler<SvnFileVersionEventArgs^>^ FileVersion;
+		DECLARE_EVENT(SvnFileVersionEventArgs^, FileVersion);
 
 	protected public:
 		virtual void OnFileVersion(SvnFileVersionEventArgs^ e)

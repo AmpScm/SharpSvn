@@ -60,7 +60,7 @@ namespace SharpSvn {
 		Uri^ _searchRoot;
 
 	public:
-		event EventHandler<SvnLogEventArgs^>^ Log;
+		DECLARE_EVENT(SvnLogEventArgs^, Log);
 
 	protected public:
 		virtual void OnLog(SvnLogEventArgs^ e)

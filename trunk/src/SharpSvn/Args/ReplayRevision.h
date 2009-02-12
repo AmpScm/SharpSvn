@@ -73,8 +73,8 @@ namespace SharpSvn {
 		}
 
 	public:
-		event EventHandler<SvnReplayRevisionStartEventArgs^>^ RevisionStart;
-		event EventHandler<SvnReplayRevisionEndEventArgs^>^ RevisionEnd;
+		DECLARE_EVENT(SvnReplayRevisionStartEventArgs^, RevisionStart);
+		DECLARE_EVENT(SvnReplayRevisionEndEventArgs^, RevisionEnd);
 		
 	protected:
 		virtual void OnRevisionStart(SvnReplayRevisionStartEventArgs^ e)

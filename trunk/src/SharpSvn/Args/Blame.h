@@ -45,7 +45,7 @@ namespace SharpSvn {
 		}
 
 	public:
-		event EventHandler<SvnBlameEventArgs^>^ Blame;
+		DECLARE_EVENT(SvnBlameEventArgs^, Blame);
 
 	public:
 		[Obsolete("Use .Blame")]

@@ -30,7 +30,7 @@ namespace SharpSvn {
 		{
 		}
 
-		event EventHandler<SvnChangeInfoEventArgs^>^ ChangeInfo;
+		DECLARE_EVENT(SvnChangeInfoEventArgs^, ChangeInfo)
 	protected public:
 		void OnChangeInfo(SvnChangeInfoEventArgs^ e)
 		{

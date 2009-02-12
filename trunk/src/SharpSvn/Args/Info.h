@@ -27,7 +27,7 @@ namespace SharpSvn {
 		SvnChangeListCollection^ _changelists;
 
 	public:
-		event EventHandler<SvnInfoEventArgs^>^ Info;
+		DECLARE_EVENT(SvnInfoEventArgs^, Info);
 
 	protected public:
 		virtual void OnInfo(SvnInfoEventArgs^ e)
