@@ -212,7 +212,7 @@ namespace SharpSvn {
 		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		DECLARE_EVENT(SvnProgressEventArgs^, Progress);
+		DECLARE_EVENT(SvnProgressEventArgs^, Progress)
 		/// <summary>
 		/// Raised on notifications. The event is first
 		/// raised on the <see cref="SvnClientArgs" /> object and
@@ -224,26 +224,26 @@ namespace SharpSvn {
 		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		DECLARE_EVENT(SvnCommittingEventArgs^, Committing);
+		DECLARE_EVENT(SvnCommittingEventArgs^, Committing)
 		/// <summary>
 		/// Raised on conflict. The event is first
 		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		DECLARE_EVENT(SvnConflictEventArgs^, Conflict);
+		DECLARE_EVENT(SvnConflictEventArgs^, Conflict)
 
 		/// <summary>
 		/// Raised when a subversion exception occurs.
 		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel
 		/// throwing the exception
 		/// </summary>
-		DECLARE_EVENT(SvnErrorEventArgs^, SvnError);
+		DECLARE_EVENT(SvnErrorEventArgs^, SvnError)
 
 		/// <summary>
 		/// Raised just before a command is executed. This allows a listener
 		/// to cleanup before a new command is started
 		/// </summary>
-		DECLARE_EVENT(SvnProcessingEventArgs^, Processing);
+		DECLARE_EVENT(SvnProcessingEventArgs^, Processing)
 
 	protected:
 		/// <summary>Raises the <see cref="Cancel" /> event.</summary>

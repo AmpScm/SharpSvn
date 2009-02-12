@@ -30,6 +30,9 @@ namespace SharpSvn {
 	public:
 		SvnWorkingCopyClient();
 
+	private:
+		~SvnWorkingCopyClient();
+
 	public:
 		/// <summary>Gets the text file status of a working copy path</summary>
 		bool GetState(String^ targetPath, [Out] SvnWorkingCopyState^% result);
