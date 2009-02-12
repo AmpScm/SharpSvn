@@ -137,8 +137,11 @@ void SvnDeltaFileTransform::OnFileChange(SvnDeltaFileChangeEventArgs^ e)
 
 	if(_verify)
 	{
-		svn_checksum_t **checkSums = (svn_checksum_t**)_pool->AllocCleared(sizeof(svn_checksum_t*) * 2);
+		svn_checksum_t **checkSums = (svn_checksum_t**)_pool->Alloc(sizeof(svn_checksum_t*) * 2);
 		_checkSums = checkSums;
+
+		checkSums[0] = svn_checksum_create(svn_checksum_md5, _pool->Handle);
+		checkSums[1] = svn_checksum_create(svn_checksum_md5, _pool->Handle);
 
 		inStream = svn_stream_checksummed2(inStream, &checkSums[0], nullptr, svn_checksum_md5, true, _pool->Handle);
 		outStream = svn_stream_checksummed2(outStream, nullptr, &checkSums[1], svn_checksum_md5, false, _pool->Handle);
@@ -169,8 +172,8 @@ svn_error_t* SvnDeltaFileTransform::apply_window(svn_txdelta_window_t *window, S
 		svn_stream_t* outStream = _outStream;
 
 		_inStream = _outStream = nullptr;
-		//SVN_THROW(svn_stream_close(inStream));
-		//SVN_THROW(svn_stream_close(outStream));
+		SVN_THROW(svn_stream_close(inStream));
+		SVN_THROW(svn_stream_close(outStream));
 
 		if(_checkSums)
 		{

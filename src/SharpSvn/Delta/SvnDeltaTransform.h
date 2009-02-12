@@ -93,7 +93,7 @@ namespace SharpSvn {
 					if (!_outMd5 && _sums && _sums[1])
 					{
 						AprPool tmp(SvnBase::SmallThreadPool);
-						const char* c = svn_checksum_to_cstring(_sums[0], tmp.Handle);
+						const char* c = svn_checksum_to_cstring(_sums[1], tmp.Handle);
 
 						_outMd5 = SvnBase::Utf8_PtrToString(c);
 
