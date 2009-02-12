@@ -50,7 +50,7 @@ static svn_error_t *svnclient_eligible_log_handler(void *baton, svn_log_entry_t 
 
 	try
 	{
-		args->OnList(e);
+		args->OnMergesEligible(e);
 
 		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Log receiver canceled operation");

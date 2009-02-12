@@ -206,44 +206,44 @@ namespace SharpSvn {
 		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnCancelEventArgs^>^ Cancel;
+		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
 		/// <summary>
 		/// Raised on progress. The event is first
 		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnProgressEventArgs^>^ Progress;
+		DECLARE_EVENT(SvnProgressEventArgs^, Progress);
 		/// <summary>
 		/// Raised on notifications. The event is first
 		/// raised on the <see cref="SvnClientArgs" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnNotifyEventArgs^>^ Notify;
+		DECLARE_EVENT(SvnNotifyEventArgs^, Notify);
 		/// <summary>
 		/// Raised on progress. The event is first
 		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnCommittingEventArgs^>^ Committing;
+		DECLARE_EVENT(SvnCommittingEventArgs^, Committing);
 		/// <summary>
 		/// Raised on conflict. The event is first
 		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnConflictEventArgs^>^ Conflict;
+		DECLARE_EVENT(SvnConflictEventArgs^, Conflict);
 
 		/// <summary>
 		/// Raised when a subversion exception occurs.
 		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel
 		/// throwing the exception
 		/// </summary>
-		event EventHandler<SvnErrorEventArgs^>^ SvnError;
+		DECLARE_EVENT(SvnErrorEventArgs^, SvnError);
 
 		/// <summary>
 		/// Raised just before a command is executed. This allows a listener
 		/// to cleanup before a new command is started
 		/// </summary>
-		event EventHandler<SvnProcessingEventArgs^>^	Processing;
+		DECLARE_EVENT(SvnProcessingEventArgs^, Processing);
 
 	protected:
 		/// <summary>Raises the <see cref="Cancel" /> event.</summary>

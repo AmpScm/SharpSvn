@@ -57,13 +57,13 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Raised to allow canceling an in-progress command</summary>
-		event EventHandler<SvnCancelEventArgs^>^	Cancel;
+		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
 		/// <summary>Raised to notify of progress by an in-progress command</summary>
-		event EventHandler<SvnProgressEventArgs^>^	Progress;
+		DECLARE_EVENT(SvnProgressEventArgs^, Progress);
 		/// <summary>Raised to notify changes by an in-progress command</summary>
-		event EventHandler<SvnNotifyEventArgs^>^	Notify;
+		DECLARE_EVENT(SvnNotifyEventArgs^, Notify);
 		/// <summary>Raised to notify errors from an command</summary>
-		event EventHandler<SvnErrorEventArgs^>^		SvnError;
+		DECLARE_EVENT(SvnErrorEventArgs^, SvnError);
 
 	private protected:
 		SvnClientArgs()
@@ -254,7 +254,7 @@ namespace SharpSvn {
 
 	public:
 		/// <summary>Raised just before committing to allow modifying the log message</summary>
-		event EventHandler<SvnCommittingEventArgs^>^ Committing;
+		DECLARE_EVENT(SvnCommittingEventArgs^, Committing)
 
 	protected:
 		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>
@@ -306,19 +306,18 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClientArgsWithConflict abstract : public SvnClientArgs
 	{
+	protected:
+		SvnClientArgsWithConflict()
+		{
+		}
+
 	public:
 		/// <summary>
 		/// Raised on conflict. The event is first
 		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
-		event EventHandler<SvnConflictEventArgs^>^ Conflict;
-
-	protected:
-		SvnClientArgsWithConflict()
-		{
-		}
-
+		DECLARE_EVENT(SvnConflictEventArgs^, Conflict)
 	protected:
 		/// <summary>Raises the <see cref="Conflict" /> event</summary>
 		virtual void OnConflict(SvnConflictEventArgs^ e)

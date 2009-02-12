@@ -31,8 +31,13 @@ namespace SharpSvn {
 			_revision = SvnRevision::None;
 		}
 
-		event EventHandler<SvnChangedEventArgs^>^ Changed;
-
+		DECLARE_EVENT(SvnChangedEventArgs^, Changed)
+	protected public:
+		virtual void OnChanged(SvnChangedEventArgs^ e)
+		{
+			Changed(this, e);
+		}
+	public:
 		property SvnRevision^ Revision
 		{
 			SvnRevision^ get()
@@ -66,12 +71,6 @@ namespace SharpSvn {
 			{
 				return SvnCommandType::Unknown;
 			}
-		}
-
-	protected public:
-		virtual void OnChanged(SvnChangedEventArgs^ e)
-		{
-			Changed(this, e);
-		}
+		}	
 	};
 }

@@ -28,7 +28,7 @@ namespace SharpSvn {
 		bool _fetchLocks;
 
 	public:
-		event EventHandler<SvnListEventArgs^>^ List;
+		DECLARE_EVENT(SvnListEventArgs^, List)
 
 	protected public:
 		virtual void OnList(SvnListEventArgs^ e)

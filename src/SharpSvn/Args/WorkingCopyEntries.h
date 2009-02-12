@@ -22,8 +22,9 @@ namespace SharpSvn {
 	public ref class SvnWorkingCopyEntriesArgs : public SvnClientArgs
 	{
 		bool _hideSome;
+
 	public:
-		event EventHandler<SvnWorkingCopyEntryEventArgs^>^ Entry;
+		DECLARE_EVENT(SvnWorkingCopyEntryEventArgs^, Entry)
 
 	protected public:
 		virtual void OnEntry(SvnWorkingCopyEntryEventArgs^ e)
