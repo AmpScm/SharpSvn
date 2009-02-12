@@ -46,6 +46,13 @@ namespace SharpSvn.Tests.Commands
         {
             base.OnFileAdd(e);
             _inAdd = true;
+
+            if (e.CopyFromPath != null)
+            {
+                // Ok, here we miss the information to fix our copy
+
+                // Luckily in our testcase we can ignore this file as it never changes later
+            }
         }
 
         protected override void OnFileOpen(SvnDeltaFileOpenEventArgs e)
@@ -72,25 +79,49 @@ namespace SharpSvn.Tests.Commands
         {
             base.OnFileChange(e);
 
-            if (_inAdd && _contentAvailable)
+            if (!_contentAvailable || !e.Path.StartsWith("trunk/"))
+                return;
+
+            string empty = Path.Combine(_tmpdir, "empty");
+
+            if (!File.Exists(empty))
+                File.WriteAllBytes(empty, new byte[0]);
+
+            string name = Path.Combine(_tmpdir, e.Path);
+            string dir = Path.GetDirectoryName(name);
+
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+
+            string tmpName = name + "." + Guid.NewGuid().ToString("N");
+
+            if (_inAdd)
+                e.Target = new SvnDeltaFileTransform(empty, tmpName);
+            else
+                e.Target = new SvnDeltaFileTransform(name, tmpName);
+
+
+            e.DeltaComplete += delegate(object sender, SvnDeltaCompleteEventArgs ee)
             {
-                string empty = Path.Combine(_tmpdir, "empty");
+                if (File.Exists(name))
+                    File.Delete(name);                
 
-                if(!File.Exists(empty))
-                    File.WriteAllBytes(empty, new byte[0]);
+                File.Move(tmpName, name);
+                Console.WriteLine(string.Format("Wrote '{0}'", e.Path));
 
-                string name = Path.Combine(_tmpdir, Guid.NewGuid().ToString());
+                if (!_inAdd)
+                    Assert.That(ee.BaseMD5, Is.EqualTo(e.BaseMD5));
+                else
+                    Assert.That(e.BaseMD5, Is.Null, "No MD5 for empty base");
 
-                e.Target = new SvnDeltaFileTransform(empty, name);
-                e.DeltaComplete += delegate
-                {
-                    Assert.That(File.Exists(name));
+                Assert.That(File.Exists(name));
+                Assert.That(ee.BaseMD5, Is.Not.Null, "BaseMD5 available");
+                Assert.That(ee.ResultMD5, Is.Not.Null, "ResultMD5 available");
 
-                    string txt = File.ReadAllText(name);
 
-                    GC.KeepAlive(txt);
-                };
-            }
+                Assert.That(File.ReadAllText(name), Is.Not.EqualTo(""));
+            };
+
         }
     }
     [TestFixture]
