@@ -3,7 +3,7 @@
 namespace SharpSvn {
 	namespace Delta {
 
-		ref class SvnDeltaBeforeFileDeltaEventArgs;
+		ref class SvnDeltaFileChangeEventArgs;
 
 		public ref class SvnDeltaWindowEventArgs sealed : SvnEventArgs
 		{
@@ -137,23 +137,29 @@ namespace SharpSvn {
 
 			void AllocHandler(svn_txdelta_window_handler_t& handler, void*& handlerBaton, AprPool^ pool);
 
+		public:
+			DECLARE_EVENT(SvnDeltaCompleteEventArgs^, DeltaComplete)
+
 		protected:
-			virtual void OnBeforeFileDeltas(SvnDeltaBeforeFileDeltaEventArgs^ e)
+			/// <summary>Called before the first <see cref="OnDeltaWindow" /> invocation to allow initializing</summary>
+			virtual void OnFileChange(SvnDeltaFileChangeEventArgs^ e)
 			{
 				UNUSED_ALWAYS(e);
 			}
 
-			/// <summary>Called when a delta window is ready for processing</summary>
+			/// <summary>Called when a new delta window is ready for processing</summary>
 			virtual void OnDeltaWindow(SvnDeltaWindowEventArgs^ e)
 			{
 				UNUSED_ALWAYS(e);
 			}
 
+			/// <summary>Called after the last delta window was successfully received</summary>
 			virtual void OnDeltaComplete(SvnDeltaCompleteEventArgs^ e)
 			{
-				UNUSED_ALWAYS(e);
+				DeltaComplete(this, e);
 			}
 
+		protected public:
 			property bool IsDisposed
 			{
 				bool get()
@@ -163,9 +169,9 @@ namespace SharpSvn {
 			}
 
 		internal:
-			virtual void InvokeOnBeforeFileDeltas(SvnDeltaBeforeFileDeltaEventArgs^ e)
+			void InvokeFileChange(SvnDeltaFileChangeEventArgs^ e)
 			{
-				OnBeforeFileDeltas(e);
+				OnFileChange(e);
 			}
 		};
 
@@ -199,7 +205,7 @@ namespace SharpSvn {
 			void* _handler_baton;
 
 		protected:
-			virtual void OnBeforeFileDeltas(SvnDeltaBeforeFileDeltaEventArgs^ e) override;
+			virtual void OnFileChange(SvnDeltaFileChangeEventArgs^ e) override sealed;
 			/// <summary>Called when a delta window is ready for processing</summary>
 			virtual void OnDeltaWindow(SvnDeltaWindowEventArgs^ e) override sealed
 			{

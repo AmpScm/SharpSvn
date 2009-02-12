@@ -127,55 +127,61 @@ namespace SharpSvn {
 		public:
 			SvnDeltaEditor(void);
 
-		public:
-			event EventHandler<SvnDeltaSetTargetEventArgs^>^ SetTarget;
 
+			DECLARE_EVENT(SvnDeltaSetTargetEventArgs^, SetTarget)		
+
+		protected public:
 			/// <summary>Called before open root to specify the target settings</summary>
 			virtual void OnSetTarget(SvnDeltaSetTargetEventArgs^ e)
 			{
 				SetTarget(this, e);
 			}
 
-			event EventHandler<SvnDeltaOpenEventArgs^>^ Open;
+		public:
+			DECLARE_EVENT(SvnDeltaOpenEventArgs^, Open)
 
+		protected public:
 			/// <summary>Called before the first directory operations</summary>
 			virtual void OnOpen(SvnDeltaOpenEventArgs^ e)
 			{
 				Open(this, e);
 			}
 
-			event EventHandler<SvnDeltaDeleteEntryEventArgs^>^ DeleteEntry;
-
+			DECLARE_EVENT(SvnDeltaDeleteEntryEventArgs^, DeleteEntry)
+		protected public:
 			/// <summary>Called when an entry (directory or file) is removed from a directory</summary>
 			virtual void OnDeleteEntry(SvnDeltaDeleteEntryEventArgs^ e)
 			{
 				DeleteEntry(this, e);
 			}
 
-			event EventHandler<SvnDeltaDirectoryAddEventArgs^>^ DirectoryAdd;
-
+			DECLARE_EVENT(SvnDeltaDirectoryAddEventArgs^, DirectoryAdd)
+		protected public:
 			/// <summary>Called instead of OnDirectoryOpen when a new directory is added</summary>
 			virtual void OnDirectoryAdd(SvnDeltaDirectoryAddEventArgs^ e)
 			{
 				DirectoryAdd(this, e);
 			}
 
-			event EventHandler<SvnDeltaDirectoryOpenEventArgs^>^ DirectoryOpen;
+			DECLARE_EVENT(SvnDeltaDirectoryOpenEventArgs^, DirectoryOpen)
 
+		protected public:
 			/// <summary>Called to open a directory receiving changes</summary>
 			virtual void OnDirectoryOpen(SvnDeltaDirectoryOpenEventArgs^ e)
 			{
 				DirectoryOpen(this, e);
 			}
 
-			event EventHandler<SvnDeltaDirectoryPropertyChangeEventArgs^>^ DirectoryPropertyChange;
+			DECLARE_EVENT(SvnDeltaDirectoryPropertyChangeEventArgs^, DirectoryPropertyChange)
+		protected public:
 			/// <summary>Called to change a property on a directory</summary>
 			virtual void OnDirectoryPropertyChange(SvnDeltaDirectoryPropertyChangeEventArgs^ e)
 			{
 				DirectoryPropertyChange(this, e);
 			}
 
-			event EventHandler<SvnDeltaDirectoryCloseEventArgs^>^ DirectoryClose;
+			DECLARE_EVENT(SvnDeltaDirectoryCloseEventArgs^, DirectoryClose)
+		protected public:
 			/// <summary>Called to close a directory opened with <see cref="DirectoryOpen" /> or <see cref="DirectoryAdd" /></summary>
 			virtual void OnDirectoryClose(SvnDeltaDirectoryCloseEventArgs^ e)
 			{
@@ -184,42 +190,53 @@ namespace SharpSvn {
 				e->Node->OnClose(e);
 			}
 			
-			event EventHandler<SvnDeltaDirectoryAbsentEventArgs^>^ DirectoryAbsent;
+			DECLARE_EVENT(SvnDeltaDirectoryAbsentEventArgs^, DirectoryAbsent)
+		protected public:
 			/// <summary>Called to specify that information on a directory won't be provided (e.g. Authorization)</summary>
 			virtual void OnDirectoryAbsent(SvnDeltaDirectoryAbsentEventArgs^ e)
 			{
 				DirectoryAbsent(this, e);
 			}
 
-			event EventHandler<SvnDeltaFileAddEventArgs^>^ FileAdd;
+			DECLARE_EVENT(SvnDeltaFileAddEventArgs^, FileAdd)
+		protected public:
 			/// <summary>Called instead of <see cref="OnFileAdd" /> when a new file is added to a directory</summary>
 			virtual void OnFileAdd(SvnDeltaFileAddEventArgs^ e)
 			{
 				FileAdd(this, e);
 			}
 
-			event EventHandler<SvnDeltaFileOpenEventArgs^>^ FileOpen;
+			DECLARE_EVENT(SvnDeltaFileOpenEventArgs^, FileOpen)
+		protected public:
 			/// <summary>Called to open a file receiving changes</summary>
 			virtual void OnFileOpen(SvnDeltaFileOpenEventArgs^ e)
 			{
 				FileOpen(this, e);
 			}
 
-			event EventHandler<SvnDeltaBeforeFileDeltaEventArgs^>^ BeforeFileDelta;
+			/// <summary>Raised when a file is about to receive content changes</summary>
+			/// <remarks>The actual changes are not passed to this event, but are streamed to the target
+			/// specified by the <see cref="SvnDeltaFileChangeEventArgs::Target" /> property of the <see cref="SvnDeltaFileChangeEventArgs" /></remarks>
+			DECLARE_EVENT(SvnDeltaFileChangeEventArgs^, FileDelta)
+		protected public:
 			/// <summary>Called when a file is about to receive content changes</summary>
-			virtual void OnBeforeFileDelta(SvnDeltaBeforeFileDeltaEventArgs^ e)
+			/// <remarks>The actual changes are not passed to this function, but are streamed to the target
+			/// specified by the <see cref="SvnDeltaFileChangeEventArgs::Target" /> property of the <see cref="SvnDeltaFileChangeEventArgs" /></remarks>
+			virtual void OnFileChange(SvnDeltaFileChangeEventArgs^ e)
 			{
-				BeforeFileDelta(this, e);
+				FileDelta(this, e);
 			}
 
-			event EventHandler<SvnDeltaFilePropertyChangeEventArgs^>^ FilePropertyChange;
+			DECLARE_EVENT(SvnDeltaFilePropertyChangeEventArgs^, FilePropertyChange)
+		protected public:
 			/// <summary>Called to change a property on a file</summary>
 			virtual void OnFilePropertyChange(SvnDeltaFilePropertyChangeEventArgs^ e)
 			{
 				FilePropertyChange(this, e);
 			}
 
-			event EventHandler<SvnDeltaFileCloseEventArgs^>^ FileClose;
+			DECLARE_EVENT(SvnDeltaFileCloseEventArgs^, FileClose)
+		protected public:
 			/// <summary>Called to close a directory opened with <see cref="FileOpen" /> or <see cref="FileAdd" /></summary>
 			virtual void OnFileClose(SvnDeltaFileCloseEventArgs^ e)
 			{
@@ -228,21 +245,24 @@ namespace SharpSvn {
 				e->Node->OnClose(e);
 			}
 
-			event EventHandler<SvnDeltaFileAbsentEventArgs^>^ FileAbsent;
+			DECLARE_EVENT(SvnDeltaFileAbsentEventArgs^, FileAbsent)
+		protected public:
 			/// <summary>Called to specify that information on a file won't be provided (e.g. Authorization)</summary>
 			virtual void OnFileAbsent(SvnDeltaFileAbsentEventArgs^ e)
 			{
 				FileAbsent(this, e);
 			}
 
-			event EventHandler<SvnDeltaCloseEventArgs^>^ Close;
+			DECLARE_EVENT(SvnDeltaCloseEventArgs^, Close)
+		protected public:
 			/// <summary>Called when a delta run is complete</summary>
 			virtual void OnClose(SvnDeltaCloseEventArgs^ e)
 			{
 				Close(this, e);
 			}
 
-			event EventHandler<SvnDeltaAbortEventArgs^>^ Abort;
+			DECLARE_EVENT(SvnDeltaAbortEventArgs^, Abort)
+		protected public:
 			/// <summary>Called when a delta run is aborted</summary>
 			virtual void OnAbort(SvnDeltaAbortEventArgs^ e)
 			{

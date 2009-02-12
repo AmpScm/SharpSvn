@@ -119,7 +119,7 @@ SvnDeltaFileTransform::~SvnDeltaFileTransform()
 	_checkSums = nullptr;
 }
 
-void SvnDeltaFileTransform::OnBeforeFileDeltas(SvnDeltaBeforeFileDeltaEventArgs^ e)
+void SvnDeltaFileTransform::OnFileChange(SvnDeltaFileChangeEventArgs^ e)
 {
 	if (!e)
 		throw gcnew ArgumentNullException("e");
@@ -169,8 +169,8 @@ svn_error_t* SvnDeltaFileTransform::apply_window(svn_txdelta_window_t *window, S
 		svn_stream_t* outStream = _outStream;
 
 		_inStream = _outStream = nullptr;
-		SVN_THROW(svn_stream_close(inStream));
-		SVN_THROW(svn_stream_close(outStream));
+		//SVN_THROW(svn_stream_close(inStream));
+		//SVN_THROW(svn_stream_close(outStream));
 
 		if(_checkSums)
 		{

@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "SvnDeltaTransform.h"
+
 namespace SharpSvn {
 	namespace Delta
 	{
@@ -162,13 +164,14 @@ namespace SharpSvn {
 			}
 		};
 
-		public ref class SvnDeltaBeforeFileDeltaEventArgs : SvnDeltaNodeEventArgs
+		public ref class SvnDeltaFileChangeEventArgs : SvnDeltaNodeEventArgs
 		{
 			AprPool^ _pool;
 			const char* _pBaseChecksum;
 			String^ _baseMd5Checksum;
+			SvnDeltaTarget^ _target;
 		internal:
-			SvnDeltaBeforeFileDeltaEventArgs(SvnDeltaNode^ fileNode, const char* base_checksum, AprPool^ pool)
+			SvnDeltaFileChangeEventArgs(SvnDeltaNode^ fileNode, const char* base_checksum, AprPool^ pool)
 				: SvnDeltaNodeEventArgs(fileNode)
 			{
 				if (!pool)
@@ -187,6 +190,7 @@ namespace SharpSvn {
 				}
 			}
 
+		public:
 			property String^ BaseMD5
 			{
 				String^ get()
@@ -198,6 +202,56 @@ namespace SharpSvn {
 				}
 			}
 
+			/// <summary>Gets or sets the <see cref="SvnDeltaTarget" /> that receives the actual differences
+			/// after this event returns</summary>
+			property SvnDeltaTarget^ Target
+			{
+				SvnDeltaTarget^ get()
+				{
+					return _target;
+				}
+				void set(SvnDeltaTarget^ value)
+				{
+					if (value && value->IsDisposed)
+						throw gcnew ObjectDisposedException("value");
+
+					_target = value;
+				}
+			}
+
+		public:
+			/// <summary>Raised when <see cref="Target" /> is not null and completes its processing</summary>
+			DECLARE_EVENT(SvnDeltaCompleteEventArgs^, DeltaComplete);
+			
+		protected:
+			void OnDeltaComplete(SvnDeltaCompleteEventArgs^ e)
+			{
+				DeltaComplete(this, e);
+			}
+
+		internal:
+			void InvokeDeltaComplete(System::Object ^sender,SharpSvn::Delta::SvnDeltaCompleteEventArgs^ e)
+			{
+				UNUSED_ALWAYS(sender);
+				OnDeltaComplete(e);
+			}
+
+			void PrepareForDelta(SvnDeltaTarget^ target)
+			{
+				if (!target)
+					throw gcnew ArgumentNullException("target");
+
+				target->InvokeFileChange(this);
+
+				if (event_DeltaComplete)
+				{
+					Detach();
+
+					target->DeltaComplete += gcnew EventHandler<SvnDeltaCompleteEventArgs^>(
+							this, &SvnDeltaFileChangeEventArgs::InvokeDeltaComplete);					
+				}
+			}
+
 		protected public:
 			virtual void Detach(bool keepProperties) override
 			{
@@ -205,12 +259,14 @@ namespace SharpSvn {
 				{
 					if (keepProperties)
 					{
-						GC::KeepAlive(BaseMD5Checksum);
+						GC::KeepAlive(BaseMD5);
 					}
 				}
 				finally
 				{
-					_pool = nullptr;
+					if(!keepProperties)
+						_pool = nullptr; // Don't lose the pool when a user asks for detach!
+
 					_pBaseChecksum = nullptr;
 
 					__super::Detach(keepProperties);
