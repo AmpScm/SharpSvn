@@ -88,6 +88,10 @@ namespace SharpSvn {
 		///<summary>Initializes a new <see cref="SvnLookClient" /> instance with default properties</summary>
 		SvnLookClient();
 
+	private:
+		~SvnLookClient()
+		{}
+
 	public:
 		/// <overloads>Gets the change information of a change directly from a repository</overloads>
 		/// <summary>Gets the change information (author, date, log, paths, etc.) of the last change in a repository</summary>
