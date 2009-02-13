@@ -393,9 +393,6 @@ namespace SharpSvn.Tests
                     Assert.That(e.Switched, Is.EqualTo(false));
 
                     Assert.That(e.WorkingCopyInfo, Is.Not.Null);
-                    Assert.That(e.WorkingCopyInfo.AvailableProperties, Is.Null);
-                    Assert.That(e.WorkingCopyInfo.CacheableProperties, Is.Not.Null);
-                    Assert.That(e.WorkingCopyInfo.CacheableProperties.Contains("svn:externals"));
                     Assert.That(e.WorkingCopyInfo.ChangeList, Is.Null);
                     Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
                     Assert.That(e.WorkingCopyInfo.ConflictNewFile, Is.Null);

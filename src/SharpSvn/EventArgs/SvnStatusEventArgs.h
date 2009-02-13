@@ -60,8 +60,6 @@ namespace SharpSvn {
 		initonly DateTime _lockTime;
 		initonly bool _hasProperties;
 		initonly bool _hasPropertyChanges;
-		Collection<String^>^ _cachableProperties;
-		Collection<String^>^ _availableProperties;
 		String^ _changelist;
 		initonly __int64 _wcSize;
 		initonly bool _keepLocal;
@@ -394,47 +392,7 @@ namespace SharpSvn {
 			{
 				return _hasPropertyChanges;
 			}
-		}
-
-		property Collection<String^>^ CacheableProperties
-		{
-			Collection<String^>^ get()
-			{
-				if (!_cachableProperties && _entry && _entry->cachable_props)
-				{
-					Collection<String^>^ items = gcnew Collection<String^>();
-
-					for each (String^ i in SvnBase::Utf8_PtrToString(_entry->cachable_props)->Split(' '))
-					{
-						if (!String::IsNullOrEmpty(i))
-							items->Add(i);
-					}
-
-					_cachableProperties = items;
-				}
-				return _cachableProperties;
-			}
-		}
-
-		property Collection<String^>^ AvailableProperties
-		{
-			Collection<String^>^ get()
-			{
-				if (!_availableProperties && _entry && _entry->present_props)
-				{
-					Collection<String^>^ items = gcnew Collection<String^>();
-
-					for each (String^ i in SvnBase::Utf8_PtrToString(_entry->present_props)->Split(' '))
-					{
-						if (!String::IsNullOrEmpty(i))
-							items->Add(i);
-					}
-
-					_availableProperties = items;
-				}
-				return _availableProperties;
-			}
-		}
+		}		
 
 		property String^ ChangeList
 		{
@@ -540,8 +498,6 @@ namespace SharpSvn {
 					GC::KeepAlive(LockToken);
 					GC::KeepAlive(LockOwner);
 					GC::KeepAlive(LockComment);
-					GC::KeepAlive(CacheableProperties);
-					GC::KeepAlive(AvailableProperties);
 					GC::KeepAlive(ChangeList);
 					GC::KeepAlive(FileExternalPath);
 					GC::KeepAlive(FileExternalRevision);
