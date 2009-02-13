@@ -665,7 +665,7 @@ namespace SharpSvn {
 			static apr_hash_t* get_cache(svn_auth_baton_t* baton);
 			static apr_hash_t* clone_credentials(apr_hash_t *from, apr_hash_t *to, AprPool^ pool);
 
-		/*internal:
+			/*internal:
 			apr_hash_t *CloneCredentials();*/
 
 		public:
@@ -937,9 +937,11 @@ namespace SharpSvn {
 			static void ImpSubversionFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
 			static void ImpSubversionWindowsFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
 			static void ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
+			static void ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
 			static void ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
 			static void ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
-			static void ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
+			static void ImpSubversionWindowsSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
+
 
 		private:
 			static initonly EventHandler<SvnUserNameEventArgs^>^						_subversionFileUserNameHandler
@@ -950,12 +952,14 @@ namespace SharpSvn {
 				= gcnew EventHandler<SvnUserNamePasswordEventArgs^>(ImpSubversionWindowsFileUserNamePasswordHandler);
 			static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionFileSslServerTrustHandler
 				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionFileSslServerTrustHandler);
+			static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionWindowsSslServerTrustHandler
+				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionWindowsSslServerTrustHandler);
 			static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			_subversionFileSslClientCertificateHandler
 				= gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpSubversionFileSslClientCertificateHandler);
 			static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^	_subversionFileSslClientCertificatePasswordHandler
 				= gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpSubversionFileSslClientCertificatePasswordHandler);
-			static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionWindowsSslServerTrustHandler
-				= gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionWindowsSslServerTrustHandler);
+			static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^	_subversionWindowsSslClientCertificatePasswordHandler
+				= gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpSubversionWindowsSslClientCertificatePasswordHandler);
 
 
 		public:
@@ -994,6 +998,12 @@ namespace SharpSvn {
 			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ SubversionFileSslClientCertificatePasswordHandler
 			{
 				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return _subversionFileSslClientCertificatePasswordHandler; }
+			}
+
+			/// <summary>Subversion SslClientCertificatePassword file backend using Windows CryptoStore (managed representation)</summary>
+			static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ SubversionWindowsSslClientCertificatePasswordHandler
+			{
+				EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return _subversionWindowsSslClientCertificatePasswordHandler; }
 			}
 
 			/// <summary>Subversion CryptoApi Ssl Trust handler</summary>

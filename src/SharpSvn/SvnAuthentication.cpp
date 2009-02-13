@@ -28,11 +28,21 @@ using namespace System::Text::RegularExpressions;
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
 [module: SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope="type", Target="SharpSvn.Security.SvnAuthentication")];
 
+static svn_error_t *
+sharpsvn_auth_plaintext_prompt(svn_boolean_t *may_save_plaintext, const char *realmstring, void *baton, apr_pool_t *pool)
+{
+	UNUSED_ALWAYS(realmstring);
+	UNUSED_ALWAYS(baton);
+	UNUSED_ALWAYS(pool);
+	*may_save_plaintext = true;
+
+	return SVN_NO_ERROR;
+}
+
 SvnAuthentication::SvnAuthentication(SvnClientContext^ context, AprPool^ parentPool)
 {
 	if (!context)
 		throw gcnew ArgumentNullException("context");
-	else
 
 	_wrappers = gcnew Dictionary<Delegate^, ISvnAuthWrapper^>();
 	_handlers = gcnew List<ISvnAuthWrapper^>();
@@ -61,6 +71,7 @@ void SvnAuthentication::AddSubversionFileHandlers()
 	SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
 	SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
 	SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
+	SslClientCertificatePasswordHandlers	+= SubversionWindowsSslClientCertificatePasswordHandler;
 }
 
 void SvnAuthentication::AddConsoleHandlers()
@@ -210,7 +221,7 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
 
 	if (_handler->Equals(SvnAuthentication::SubversionFileUserNamePasswordHandler))
 	{
-		svn_auth_get_simple_provider2(&provider, nullptr, nullptr, pool->Handle);
+		svn_auth_get_simple_provider2(&provider, sharpsvn_auth_plaintext_prompt, nullptr, pool->Handle);
 	}
 	else if (_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
 	{
@@ -380,7 +391,11 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
 
 	if (_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificatePasswordHandler))
 	{
-		svn_auth_get_ssl_client_cert_pw_file_provider2(&provider, nullptr, nullptr, pool->Handle);
+		svn_auth_get_ssl_client_cert_pw_file_provider2(&provider, sharpsvn_auth_plaintext_prompt, nullptr, pool->Handle);
+	}
+	else if (_handler->Equals(SvnAuthentication::SubversionWindowsSslClientCertificatePasswordHandler))
+	{
+		svn_auth_get_windows_ssl_client_cert_pw_provider(&provider, pool->Handle);
 	}
 	else
 		svn_auth_get_ssl_client_cert_pw_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func, (void*)_baton->Handle, RetryLimit, pool->Handle);
@@ -589,6 +604,13 @@ void SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sen
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
+{
+	UNUSED_ALWAYS(sender);
+	UNUSED_ALWAYS(e);
+	throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+}
+
+void SvnAuthentication::ImpSubversionWindowsSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
 	UNUSED_ALWAYS(sender);
 	UNUSED_ALWAYS(e);
