@@ -462,8 +462,6 @@ namespace SharpSvn.Tests.Commands
                         else
                             Assert.That(e.WorkingCopyInfo.Name, Is.EqualTo(""));
 
-                        Assert.That(e.WorkingCopyInfo.AvailableProperties, Is.Null);
-                        Assert.That(e.WorkingCopyInfo.CacheableProperties, Is.All.Not.EqualTo(""));
                         Assert.That(e.WorkingCopyInfo.ChangeList, Is.EqualTo((nn == 6) ? "MyList" : null));
                         if (nn >= 0)
                             Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
