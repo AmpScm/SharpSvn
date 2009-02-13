@@ -84,6 +84,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You can only crop a node to a depth between empty and files..
+        /// </summary>
+        internal: static property System::String^  CropToValidDepth {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Depth must be Empty, Files or Infinity in 1.4 compatible compilation.
         /// </summary>
         internal: static property System::String^  DepthMustBeRecursiveValue {
@@ -502,6 +509,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::CollectionMustContainAtLeastOneItem::get() {
         return ResourceManager->GetString(L"CollectionMustContainAtLeastOneItem", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::CropToValidDepth::get() {
+        return ResourceManager->GetString(L"CropToValidDepth", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {

@@ -86,6 +86,8 @@ namespace SharpSvn {
 	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
+
+	ref class SvnCropWorkingCopyArgs;
 	ref class SvnGetCapabilitiesArgs;
 
 	ref class SvnFileVersionsArgs;
@@ -1143,6 +1145,10 @@ namespace SharpSvn {
 		bool ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor);
 		/// <summary>Replays the specified revisions on the specified target to the editory</summary>
 		bool ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delta::SvnDeltaEditor^ editor, SvnReplayRevisionArgs^ args);
+
+	public:
+		bool CropWorkingCopy(String^ path, SvnDepth toDepth);
+		bool CropWorkingCopy(String^ path, SvnDepth toDepth, SvnCropWorkingCopyArgs^ args);
 
 #ifdef _DEBUG
 	public:

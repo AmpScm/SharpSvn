@@ -294,4 +294,7 @@
   <data name="SvnMalfunctionPrefix" xml:space="preserve">
     <value>Subversion reported a malfunction '{0}' on line {2} of '{1}'.</value>
   </data>
+  <data name="CropToValidDepth" xml:space="preserve">
+    <value>You can only crop a node to a depth between empty and files.</value>
+  </data>
 </root>

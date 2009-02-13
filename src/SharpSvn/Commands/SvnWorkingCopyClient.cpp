@@ -26,3 +26,7 @@ SvnWorkingCopyClient::SvnWorkingCopyClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
 }
+
+SvnWorkingCopyClient::~SvnWorkingCopyClient()
+{
+}
