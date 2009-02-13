@@ -923,6 +923,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\CropWorkingCopy.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Delete.cpp"
 					>
 				</File>
@@ -1192,6 +1196,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\CreateDirectory.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\CropWorkingCopy.h"
 					>
 				</File>
 				<File
