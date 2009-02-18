@@ -156,5 +156,26 @@ namespace SharpSvn.Tests.Commands
             // Subversion 1.5.4 throws an AccessViolationException here
             Client.RemoteCopy(trunk, new Uri(repos, "branch/"), ca);
         }
+
+        [Test]
+        public void ReposReposCopy()
+        {
+            Uri trunk = new Uri(CollabReposUri, "trunk/");
+            Uri branch = new Uri(CollabReposUri, "branches/new-branch");
+
+            SvnCopyArgs ca = new SvnCopyArgs();
+            ca.LogMessage = "Message";
+            ca.CreateParents = true;
+            Client.RemoteCopy(trunk, branch, ca);
+
+            int n = 0;
+            Client.List(branch, delegate(object sender, SvnListEventArgs e)
+            {
+                if(e.Entry.NodeKind == SvnNodeKind.File)
+                    n++;
+            });
+
+            Assert.That(n, Is.GreaterThan(0), "Copied files");
+        }
 	}
 }
