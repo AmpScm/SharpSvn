@@ -24,7 +24,7 @@
 
   <property name="httpdVersion" value="2.2.9" />
   <property name="gettextVersion" value="0.17" />
-  <property name="sqliteVersion" value="3.6.10" />
+  <property name="sqliteVersion" value="3.6.11" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.4.3" />
