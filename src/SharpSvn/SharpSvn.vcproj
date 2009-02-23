@@ -921,6 +921,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\CropWorkingCopy.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Delete.cpp"
 					>
 				</File>
@@ -1190,6 +1194,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\CreateDirectory.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\CropWorkingCopy.h"
 					>
 				</File>
 				<File
@@ -1538,11 +1546,11 @@
 				>
 			</File>
 			<File
-				RelativePath=".\Delta\SvnDeltaEditor.h"
+				RelativePath=".\Delta\SvnDeltaTransform.cpp"
 				>
 			</File>
 			<Filter
-				Name="EventArgs"
+				Name="Headers"
 				>
 				<File
 					RelativePath=".\Delta\DeltaDirectoryEventArgs.h"
@@ -1557,7 +1565,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Delta\SvnDeltaEditor.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Delta\SvnDeltaNode.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Delta\SvnDeltaTransform.h"
 					>
 				</File>
 			</Filter>
