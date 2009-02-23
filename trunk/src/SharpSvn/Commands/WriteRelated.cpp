@@ -56,7 +56,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 
 ref class WriteRelatedEditor : Delta::SvnDeltaEditor
 {
-public:
+protected public:
 	virtual void OnSetTarget(SvnDeltaSetTargetEventArgs^ e) override
 	{
 		__super::OnSetTarget(e);
@@ -67,9 +67,9 @@ public:
 		__super::OnFilePropertyChange(e);
 	}
 
-	virtual void OnBeforeFileDelta(SvnDeltaBeforeFileDeltaEventArgs^ e) override
+	virtual void OnFileChange(SvnDeltaFileChangeEventArgs^ e) override
 	{
-		__super::OnBeforeFileDelta(e);
+		__super::OnFileChange(e);
 	}
 };
 
@@ -136,7 +136,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 				&ra_session, 
 				&end_rev,
 				&pUrl,
-				pTarget,			
+				pTarget,
 				nullptr, 
 				first->Revision->AllocSvnRevision(%pool),
 				first->Revision->AllocSvnRevision(%pool), 

@@ -22,6 +22,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using System.Collections.ObjectModel;
 using SharpSvn;
+using System.IO;
 
 namespace SharpSvn.Tests.LookCommands
 {
@@ -36,9 +37,8 @@ namespace SharpSvn.Tests.LookCommands
                 SvnChangeInfoEventArgs r;
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
 
-                ia.RetrieveChangedPaths = false; // Will fail if true
-
-                Assert.That(cl.GetChangeInfo(new SvnLookOrigin(GetRepos(TestReposType.CollabRepos)), ia, out r));
+                SvnLookOrigin lo = new SvnLookOrigin(GetRepos(TestReposType.CollabRepos));
+                Assert.That(cl.GetChangeInfo(lo, ia, out r));
 
                 Assert.That(r, Is.Not.Null);
                 Assert.That(r.Author, Is.EqualTo("merger"));
@@ -50,6 +50,50 @@ namespace SharpSvn.Tests.LookCommands
                 DateTime shouldBe = new DateTime(2008, 1, 27, 15, 7, 57, 9, DateTimeKind.Utc).AddTicks(4750);
 
                 Assert.That(r.Time, Is.EqualTo(shouldBe));
+
+                foreach (SvnChangeItem i in r.ChangedPaths)
+                {
+                    if (i.NodeKind != SvnNodeKind.File)
+                        continue;
+                    using(MemoryStream ms = new MemoryStream())
+                    {
+                        cl.Write(lo, i.Path, ms);
+                    }
+                }
+            }
+        }
+
+        void WriteBigFile(string path)
+        {
+            using (StreamWriter fs = File.CreateText(path))
+            {
+                for (int i = 0; i < 10000; i++)
+                    fs.WriteLine("A short Line that might look a bit longer if you see it multiple times");
+            }
+        }
+
+        [Test]
+        public void BigWrite()
+        {
+            Uri uri = GetReposUri(TestReposType.Empty);
+            string dir = GetTempDir();
+            Client.CheckOut(uri, dir);
+
+            string file = Path.Combine(dir, "bigfile");
+            WriteBigFile(file);
+            Client.Add(file);
+            Client.Commit(dir);
+
+            using (SvnLookClient cl = new SvnLookClient())
+            {
+                SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
+
+                SvnLookOrigin lo = new SvnLookOrigin(GetRepos(TestReposType.Empty));
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    cl.Write(lo, "/bigfile", ms);
+                }
             }
         }
 
