@@ -275,6 +275,7 @@
         <arg value="/t:Programs\svnlook" />
         <arg value="/t:Programs\svnmucc"/>
         <arg value="/t:Programs\svnauthz-validate" />
+        <arg value="/t:Programs\svndumpfilter" />
         <arg value="/t:Programs\svn-populate-node-origins-index" />
         <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
         <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
