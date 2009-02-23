@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="." default="build-svn-dist">
-  <property name="subversionMerges" value="31733,32800,32836,32837,33156,33178" />
+  <property name="subversionMerges" value="" />
   <property name="static" value="false" />
   <property name="downloads" value="../downloads/" />
   <property name="dllPrefix" value="SlikSvn-" />
@@ -26,7 +26,7 @@
 			<exclude name="**/*test*" />
 		</fileset>
 	</copy>
-	<get src="http://svnbook.red-bean.com/en/1.5/svn-book.pdf" dest="dist-${platform}/svn-book.pdf" />
+	<get src="http://svnbook.red-bean.com/nightly/en/svn-book.pdf" dest="dist-${platform}/svn-book.pdf" />
 	<property name="releasenotesFile" value="svn_${string::substring(subversionVersion, 0, 3)}_releasenotes.html" />
 	<Svn>
     <arg line="export http://svn.collab.net/repos/svn/trunk/www/${releasenotesFile}" />
