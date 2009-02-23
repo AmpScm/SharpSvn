@@ -44,9 +44,9 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 
 	System::Uri^ v;
 
-	if (Url->StartsWith("^/", StringComparison::Ordinal) ||
-		Url->StartsWith("/", StringComparison::Ordinal) ||
-		Uri::TryCreate(Url, UriKind::Relative, v))
+	if (Reference->StartsWith("^/", StringComparison::Ordinal) ||
+		Reference->StartsWith("/", StringComparison::Ordinal) ||
+		Uri::TryCreate(Reference, UriKind::Relative, v))
 	{
 		urlIsRelative = true;
 	}
@@ -60,7 +60,7 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 		{
 			sb->AppendFormat(System::Globalization::CultureInfo::InvariantCulture, "-r {0} ", Revision->Revision);
 		}
-		sb->Append(Url);
+		sb->Append(Reference);
 	}
 	else
 	{	// Use 1.5+ format
@@ -72,7 +72,7 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 			sb->Append(" ");
 		}
 
-		sb->Append(Url);
+		sb->Append(Reference);
 		if (OperationalRevision != SvnRevision::None)
 		{
 			sb->Append("@");
