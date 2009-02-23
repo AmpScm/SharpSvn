@@ -1,11 +1,11 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
-  <property name="svnBuildType" value="trunk" overwrite="false" />
+  <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="trunk" />
   <property name="platform" value="win32" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.6.0" overwrite="false" />
+  <property name="subversionVersion" value="1.6.0-rc2" overwrite="false" />
   <property name="subversionMerges" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
