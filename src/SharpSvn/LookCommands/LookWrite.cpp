@@ -113,6 +113,8 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 
 	do
 	{
+		len = SVN__STREAM_CHUNK_SIZE;
+		
 		if (r = svn_stream_read(fstream, buf, &len))
 			return args->HandleResult(this, r);
 		if (r = svn_stream_write(wrapper.Handle, buf, &len))
