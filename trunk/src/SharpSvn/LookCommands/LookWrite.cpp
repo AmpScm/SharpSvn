@@ -58,7 +58,7 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
-	
+
 	svn_repos_t* repos = nullptr;
 	svn_fs_t* fs = nullptr;
 	svn_error_t* r;
@@ -106,17 +106,15 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 	if (r = svn_fs_file_contents(&fstream, root, pool.AllocCanonical(path), pool.Handle))
 		return args->HandleResult(this, r);
 
-	{
-		SvnStreamWrapper wrapper(toStream, false, true, %pool);
+	SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
-		r = svn_stream_copy3(
-			fstream,
-			wrapper.Handle,
-			CtxHandle->cancel_func,
-			CtxHandle->cancel_baton,
-			pool.Handle);
+	r = svn_stream_copy3(
+		fstream,
+		wrapper.Handle,
+		CtxHandle->cancel_func,
+		CtxHandle->cancel_baton,
+		pool.Handle);
 
-		return args->HandleResult(this, r);
-	}
+	return args->HandleResult(this, r);
 }
 
