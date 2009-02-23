@@ -50,14 +50,14 @@
         if ((g = m.Groups["issue"]).Success && !string.IsNullOrEmpty(g.Value))
         {
           XmlElement a = doc.CreateElement("a", html);
-          a.SetAttribute("href", "http://ankhsvn.net/issues/?id=" + g.Value);
+          a.SetAttribute("href", "http://sharpsvn.net/issues/?id=" + g.Value);
           a.InnerText = m.Value;
           el.AppendChild(a);
         }
         else if ((g = m.Groups["rev"]).Success && !string.IsNullOrEmpty(g.Value))
         {
           XmlElement a = doc.CreateElement("a", html);
-          a.SetAttribute("href", "http://ankhsvn.net/rev/?r=" + g.Value);
+          a.SetAttribute("href", "http://sharpsvn.net/rev/?r=" + g.Value);
           a.InnerText = m.Value;
           el.AppendChild(a);
         }
@@ -85,9 +85,11 @@
     }
     ]]>
   </msxsl:script>
-  <xsl:param name="latestUrl">http://ankhsvn.net/daily/</xsl:param>
+  <xsl:param name="latestUrl">http://sharpsvn.net/daily/</xsl:param>
+  <xsl:param name="latestx64Url">http://sharpsvn.net/daily/</xsl:param>
+  <xsl:param name="latestExUrl">http://sharpsvn.net/daily/</xsl:param>
   <xsl:param name="latestVersion">2.0.0000.0</xsl:param>
-  <xsl:param name="latestName">AnkhSVN-Daily-2.0.0000.0.msi</xsl:param>
+  <xsl:param name="latestName">Sharpsvn-Daily-2.0.0000.0.msi</xsl:param>
   <xsl:param name="buildRev">4567</xsl:param>
 
   <xsl:output media-type="text/html" method="html" indent="no"/>
@@ -96,22 +98,24 @@
       <head>
         <xsl:text>&#13;&#10;</xsl:text>
         <title>
-          AnkhSVN-Daily Update - <xsl:value-of select="$latestVersion"/>
+          SharpSvn-Daily Update - <xsl:value-of select="$latestVersion"/>
         </title>
         <xsl:text>&#13;&#10;</xsl:text>
         <link rel="Stylesheet" type="text/css" href="daily.css" />
       </head>
       <body>
         <xsl:text>&#13;&#10;</xsl:text>
-        <h1>AnkhSVN-Daily Update</h1>
+        <h1>
+          SharpSvn-Daily Update - <xsl:value-of select="$latestVersion"/>
+        </h1>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
-          The AnkhSVN project provides Daily builds of the current development tree. These versions
-          are not tested before uploading, but may contain bugfixes (and new bugs) that are not in
-          released versions. If you are testing our daily builds (Thanks!) and find issues in them,
-          please report those issues with the exact version (See the Visual Studio about box).
+          The SharpSvn project provides frequent builds of the current development tree. These versions
+          are not fully tested, but may contain bugfixes (and new bugs) that are not in released versions. If
+          you are testing these daily builds (Thanks!) and find issues in it, please report those issues
+          with the exact version.
         </p>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
@@ -123,13 +127,19 @@
         </h2>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
+        <p>
+          The build script also supplies an <a href="{$latestx64Url}">x64 version</a> of this Win32 build and a
+          <a href="{$latestExUrl}">package of all binaries</a> with some extras.
+        </p>
+        <xsl:text>&#13;&#10;</xsl:text>
+        <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <p>
-          You can find older daily releases in the <a href="http://ankhsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://ankhsvn.net/daily/?id={$buildRev}">Subversion Repository</a>.
+          You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id={$buildRev}">Subversion Repository</a>.
         </p>
-        <p>Published daily builds will be available for at least a week after they are build.</p>
+        <p>Published daily builds will be available for at least a month after they are build.</p>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
         <xsl:text>&#13;&#10;</xsl:text>
@@ -167,7 +177,7 @@
           <xsl:value-of select="' '"/>
         </td>
         <td class="r">
-          <a id="{@revision}" href="http://ankhsvn.net/rev/?r={@revision}">
+          <a id="{@revision}" href="http://sharpsvn.net/rev/?r={@revision}">
             [r<xsl:value-of select="@revision"/>]
           </a>
         </td>
