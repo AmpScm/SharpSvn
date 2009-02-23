@@ -1,7 +1,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>SharpSvn-Daily Update - 1.5005.1077</title>
+<title>SharpSvn-Daily Update - 1.5005.1112</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
-<h1>SharpSvn-Daily Update - 1.5005.1077</h1>
+<h1>SharpSvn-Daily Update - 1.5005.1112</h1>
 
 
 <p>
@@ -12,22 +12,25 @@
         </p>
 
 
-<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1520/SSvn-1.5005.1077.zip">SharpSvn 1.5005.1077</a>.</h2>
+<h2>The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1560/SSvn-1.5005.1112.zip">SharpSvn 1.5005.1112</a>.</h2>
 
-<p>The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1521/SSvn-1.5005.1077-x64.zip">x64 version</a> of this Win32 build and a
-        <a href="http://sharpsvn.open.collab.net/files/documents/180/1523/SSvnEx-1.5005.1077.zip">package of all binaries</a> with some extras.</p>
+<p>The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1561/SSvn-1.5005.1112-x64.zip">x64 version</a> of this Win32 build and a
+        <a href="http://sharpsvn.open.collab.net/files/documents/180/1562/SSvnEx-1.5005.1112.zip">package of all binaries</a> with some extras.</p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1077">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1112">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a week after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-02-23</td></tr>
+<tr><td> </td><td class="r"><a id="1112" href="http://sharpsvn.net/rev/?r=1112">[r1112]</a></td><td class="a">rhuijben</td><td class="f"></td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Initialize the number of bytes to write in SvnLookClient.Write on every
+iteration</td></tr>
 <tr class="d"><td colspan="4">2009-02-05</td></tr>
 <tr><td> </td><td class="r"><a id="1077" href="http://sharpsvn.net/rev/?r=1077">[r1077]</a></td><td class="a">rhuijben</td><td class="f">, , , , , , ,  (and 3 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Merge *RevisionPropert((SvnUriTarget,... ) (old; now deprecated)
    -&gt; *RevisionPropert*(Uri, SvnRevision,...) (new)<br>
@@ -42,48 +45,6 @@ support, file and line support on SvnException)</td></tr>
 <tr><td> </td><td class="r"><a id="1021" href="http://sharpsvn.net/rev/?r=1021">[r1021]</a></td><td class="a">rhuijben</td><td class="f"></td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Create Subversion 1.5.x follow branch. 
 Trunk will upgrade towards Subversion 1.6.</td></tr>
 <tr class="d"><td colspan="4">2009-01-22</td></tr>
-<tr class="d"><td colspan="4">2009-01-20</td></tr>
-<tr class="d"><td colspan="4">2009-01-18</td></tr>
-<tr class="d"><td colspan="4">2009-01-15</td></tr>
-<tr><td> </td><td class="r"><a id="1011" href="http://sharpsvn.net/rev/?r=1011">[r1011]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SharpSvnStrings.h, src/SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, src/SharpSvn/SvnAuthentication.cpp, src/SharpSvn/SvnAuthentication.Cache.cpp, src/SharpSvn/SvnClientContext.cpp, src/SharpSvn/SvnAuthentication.h, src/SharpSvn/SvnClientContext.h, src/SharpSvn.Tests/SvnAuthTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Added an api for retrieving which authentication settings are cached on disk
-and optionally deleting these settings. Also make sure when settings are loaded
-via LoadConfiguration() the authentication is also used from that directory</td></tr>
-<tr class="d"><td colspan="4">2009-01-14</td></tr>
-<tr><td> </td><td class="r"><a id="1009" href="http://sharpsvn.net/rev/?r=1009">[r1009]</a></td><td class="a">sander</td><td class="f">src/SharpSvn/AprArray.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Fix the reversed check introduced in <a href="http://sharpsvn.net/rev/?r=1004">r1004</a> that causes an ArgumentException
-to be thrown when the list of items passed to the AprArray contains 
-non-null items.</td></tr>
-<tr class="d"><td colspan="4">2009-01-12</td></tr>
-<tr><td> </td><td class="r"><a id="1006" href="http://sharpsvn.net/rev/?r=1006">[r1006]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.Tests/PathTests.cs, src/SharpSvn/SvnClient.cpp, src/SharpSvn/SvnTools.cpp, src/SharpSvn/SvnClient.h, src/SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Rewrote <a href="http://sharpsvn.net/rev/?r=1000">r1000</a> to shortcut several cases and handle the .svn directory itself
-correctly.</td></tr>
-<tr><td> </td><td class="r"><a id="1004" href="http://sharpsvn.net/rev/?r=1004">[r1004]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/AprArray.cpp, src/SharpSvn/Commands/Blame.cpp, src/SharpSvn/Commands/PropertyList.cpp, src/SharpSvn/Commands/Log.cpp, src/SharpSvn/LookCommands/LookChanged.cpp, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SvnException.cpp, src/SharpSvn/Commands/DiffSummary.cpp (and 7 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Resolved several issue found by Visual C++ PreFast static analyzer.</td></tr>
-<tr class="d"><td colspan="4">2009-01-11</td></tr>
-<tr><td> </td><td class="r"><a id="1000" href="http://sharpsvn.net/rev/?r=1000">[r1000]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClient.cpp, src/SharpSvn/SvnTools.cpp, src/SharpSvn/SvnClient.h, src/SharpPlink/SharpSvnConsole.c</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Make SvnTools.IsBelowManagedPath start looking below the last '.svn' when such
-a directory exists in the specified path</td></tr>
-<tr><td> </td><td class="r"><a id="999" href="http://sharpsvn.net/rev/?r=999">[r999]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnBase.cpp, src/SharpSvn/SvnClientArgs.cpp, src/SharpSvn/SvnCommitItem.h, src/SharpSvn/SvnBase.h, src/SharpSvn/SvnClientArgs.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Following up on <a href="http://sharpsvn.net/rev/?r=998">r998</a>: Fix compilation and refactor array extension code.</td></tr>
-<tr><td> </td><td class="r"><a id="998" href="http://sharpsvn.net/rev/?r=998">[r998]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClientArgs.cpp, src/SharpSvn/SvnCommitItem.h, src/SharpSvn/SvnClientArgs.h, src/SharpSvn/SvnCommitItem.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add ThrowOnWarning property to SvnClientArgs command, to generize the 1.6
-behavior of providing intermediate result warnings via the notification handler.
-(SharpSvns default behavior will be to complete the command and finally throw 
- an exception when .ThrowOnWarning is not set to false).<br>
-Fill some properties of SvnCommitItem that previously always contained a default
-value.</td></tr>
-<tr class="d"><td colspan="4">2009-01-10</td></tr>
-<tr class="d"><td colspan="4">2009-01-09</td></tr>
-<tr><td> </td><td class="r"><a id="989" href="http://sharpsvn.net/rev/?r=989">[r989]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnClientArgs.cpp, src/SharpSvn/SvnErrorCodes.h, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/SvnClientArgs.h, src/SharpSvn/SvnException.h, src/SharpSvn/SvnAuthentication.h, src/SharpSvn.Tests/ExternalsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Add AddExpectedError to SvnClientArgs to allow adding error codes and
-categories to the list not to throw exceptions for. (The method will return
-false when getting such error and you can look at LastException to get the
-details)</td></tr>
-<tr class="d"><td colspan="4">2009-01-07</td></tr>
-<tr><td> </td><td class="r"><a id="982" href="http://sharpsvn.net/rev/?r=982">[r982]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnExternalItem.cpp, src/SharpSvn.Tests/ExternalsTests.cs</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Resolve invalid roundtrip issues for externals consisting of two relative paths.</td></tr>
-<tr><td> </td><td class="r"><a id="980" href="http://sharpsvn.net/rev/?r=980">[r980]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/Args/Log.h, src/SharpSvn/SvnTarget.h, src/SharpSvn/SvnUriTarget.h, src/SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, src/SharpSvn/SvnExternalItem.cpp, src/SharpSvn.Tests/Commands/LogTests.cs (and 5 other paths)</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Renamed OriginRevision property on SvnLogArgs to OperationalRevision; added
-SvnExternalItem class that provides a generic svn:externals parser 
-(to be used by AnkhSVN).</td></tr>
-<tr class="d"><td colspan="4">2009-01-06</td></tr>
-<tr><td> </td><td class="r"><a id="975" href="http://sharpsvn.net/rev/?r=975">[r975]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/SvnPropertyValue.h</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Extended SvnPropertyValue with a constructor that allows another SvnProperty
-as value and implement IEquatable&lt;SvnPropertyValue&gt; to make it easier to compare
-SvnPropertyValue objects.</td></tr>
-<tr class="d"><td colspan="4">2009-01-01</td></tr>
-<tr><td> </td><td class="r"><a id="974" href="http://sharpsvn.net/rev/?r=974">[r974]</a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn.UI/Properties/AssemblyInfo.cs, src/tools/CollabUpload/Properties/AssemblyInfo.cs, src/SharpSvn/AssemblyInfo.cpp</td></tr><tr><td colspan="2"> </td><td class="l" colspan="2">Updated global Copyright to 2009 and removed some strange characters
-from comments</td></tr>
 
 </table>
 <!--/Recent changes-->
