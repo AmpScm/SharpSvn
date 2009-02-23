@@ -106,19 +106,17 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 	if (r = svn_fs_file_contents(&fstream, root, pool.AllocCanonical(path), pool.Handle))
 		return args->HandleResult(this, r);
 
-	SvnStreamWrapper wrapper(toStream, false, true, %pool);
-	char *buf = (char*)pool.Alloc(SVN__STREAM_CHUNK_SIZE);
-	apr_size_t len;
-
-	do
 	{
-		if (r = svn_stream_read(fstream, buf, &len))
-			return args->HandleResult(this, r);
-		if (r = svn_stream_write(wrapper.Handle, buf, &len))
-			return args->HandleResult(this, r);
-	}
-	while (len == SVN__STREAM_CHUNK_SIZE);
+		SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
-	return SVN_NO_ERROR;
+		r = svn_stream_copy3(
+			fstream,
+			wrapper.Handle,
+			CtxHandle->cancel_func,
+			CtxHandle->cancel_baton,
+			pool.Handle);
+
+		return args->HandleResult(this, r);
+	}
 }
 
