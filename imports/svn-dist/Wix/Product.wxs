@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <Product Id="*" Name="Slik Subversion $(var.SvnVersion) ($(var.Platform))"
+  <Product Id="*" Name="Slik Subversion $(var.SvnVersion)$(var.SvnSuffix) ($(var.Platform))"
            Language="1033" Version="$(var.SvnVersion).0"
            Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
     <?if $(var.Platform) = x86 ?>
