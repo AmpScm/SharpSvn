@@ -50,5 +50,11 @@
       <arg value="${serfDir}/serf.vcproj" />
       <arg value="${Configuration}|${platform}" />
     </VCBuild>
+    <copy todir="${serfDir}/Debug">
+      <fileset basedir="${serfDir}/Release">
+		<include name="*.lib" />
+		<include name="*.pdb" />
+      </fileset>
+    </copy>
   </target>
 </project>
