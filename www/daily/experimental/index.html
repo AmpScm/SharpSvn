@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.5999.1121</title>
+          SharpSvn-Daily Update - 1.5999.1132</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.5999.1121</h1>
+          SharpSvn-Daily Update - 1.5999.1132</h1>
 
 
 <p>
@@ -15,19 +15,19 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1566/SSvn-1.5999.1121.zip">SharpSvn 1.5999.1121</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1615/SSvn-1.5999.1132.zip">SharpSvn 1.5999.1132</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1567/SSvn-1.5999.1121-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/1568/SSvnEx-1.5999.1121.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1616/SSvn-1.5999.1132-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/1618/SSvnEx-1.5999.1132.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1121">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1132">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
@@ -117,39 +117,6 @@ providing all standard subversion (svn:) keywords.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/Log.h, Commands/Log.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make it possible to provide multiple ranges to SvnClient.Log via
 a new Ranges property. (.Start/.End and .Range now map to a single range
 collection in .Ranges)</td></tr>
-<tr class="d"><td colspan="4">2009-01-29</td></tr>
-<tr><td> </td><td class="r"><a id="1035" href="http://sharpsvn.net/rev/?r=1035">
-            [r1035]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/StaticVerifications.cs, SharpSvn/SvnEnums.h, SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Added test to staticly try to locate missing enum values and added missing
-SvnConflictReason that was found by this test.</td></tr>
-<tr><td> </td><td class="r"><a id="1034" href="http://sharpsvn.net/rev/?r=1034">
-            [r1034]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnEnums.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add enum values introduced in 1.6</td></tr>
-<tr class="d"><td colspan="4">2009-01-28</td></tr>
-<tr><td> </td><td class="r"><a id="1033" href="http://sharpsvn.net/rev/?r=1033">
-            [r1033]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> EventArgs/SvnNotifyEventArgs.h, SvnClient.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add Uri, PropertyName and RevisionProperties properties
-to SvnNotifyEventArgs</td></tr>
-<tr><td> </td><td class="r"><a id="1032" href="http://sharpsvn.net/rev/?r=1032">
-            [r1032]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/LogTests.cs, SharpSvn/EventArgs/SvnLogEventArgs.h, SharpSvn/SvnAbortHandler.cpp, SharpSvn.Tests/SvnClientTests.cs, SharpSvn.Tests/Commands/TestBase.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add some tests on log node kind behavior (ok on dump/load, unknown
-on old version)</td></tr>
-<tr><td> </td><td class="r"><a id="1031" href="http://sharpsvn.net/rev/?r=1031">
-            [r1031]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvnStrings.h, SvnException.h, SvnAbortHandler.cpp, SharpSvnStrings.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Register a svn malfunction handler as a nicer version of the original
-abort() code.</td></tr>
-<tr><td> </td><td class="r"><a id="1028" href="http://sharpsvn.net/rev/?r=1028">
-            [r1028]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnClientConfiguration.h, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/SharpSvn.vcproj, SharpSvn/SvnClient.cpp, SharpSvn/SvnClientArgs.h, SharpSvn/SvnClientEventArgs.h, SharpSvn/SvnClient.h, SharpSvn.Tests/Commands/UpdateTests.cs, SharpSvn/SvnAbortHandler.cpp, SharpSvn/SvnClientConfiguration.cpp, SharpSvn/SvnClientContext.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Revert <a href="http://sharpsvn.net/rev/?r=900">r900</a>: The before automatic merge support. This code failed in too many
-cases and will be even harder to support in future versions. Subversion wraps
-these handlers internally whenever it can.</td></tr>
-<tr><td> </td><td class="r"><a id="1027" href="http://sharpsvn.net/rev/?r=1027">
-            [r1027]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/CopyTests.cs, SharpSvn/Commands/Status.cpp, SharpSvn/EventArgs/SvnInfoEventArgs.h, SharpSvn/EventArgs/SvnConflictData.h, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/EventArgs/SvnConflictEventArgs.h, SharpSvn/Commands/Info.cpp, SharpSvn/EventArgs/SvnStatusEventArgs.h, SharpSvn.Tests/Commands/CheckOutTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Learn SvnClient.Info() and SvnClient.Status() a few 1.6 tricks.</td></tr>
-<tr class="d"><td colspan="4">2009-01-27</td></tr>
-<tr><td> </td><td class="r"><a id="1024" href="http://sharpsvn.net/rev/?r=1024">
-            [r1024]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Commands/SetProperty.cpp, Commands/Log.cpp, SharpSvnStrings.h, Commands/Status.cpp, SvnAuthentication.Cache.cpp, Commands/FileVersions.cpp, SvnClient.h, EventArgs/SvnStatusEventArgs.h, SharpSvnStrings.resx, Stdafx.h, Commands/SetRevisionProperty.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Upgrade all deprecated api calls to their current Subversion 1.6 equivalents.</td></tr>
 
 </table>
 <!--/Recent changes-->
