@@ -203,7 +203,16 @@
         </delete>
       </if>
     </OnceBlock>
-
+    <copy todir="${aprDir}/Debug">
+      <fileset basedir="${aprDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${aprUtilDir}/Debug">
+      <fileset basedir="${aprUtilDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
     <copy todir="${release}/lib" flatten="true">
       <fileset>
         <include name="${aprDir}/LibR/*.lib" />
@@ -287,5 +296,17 @@
         <include name="expat.h" />
       </fileset>
     </copy>
+    <if test="true">
+      <copy todir="${aprDir}/Debug">
+         <fileset basedir="${aprDir}/Release">
+			<include name="**/*.dll" />
+	     </fileset>
+      </copy>
+      <copy todir="${aprUtilDir}/Debug">
+         <fileset basedir="${aprUtilDir}/Release">
+			<include name="**/*.dll" />
+	     </fileset>
+      </copy>
+    </if>
   </target>
 </project>
