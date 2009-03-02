@@ -5,7 +5,7 @@
   <property name="platform" value="win32" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.6.0-rc2" overwrite="false" />
+  <property name="subversionVersion" value="1.6.0-rc3" overwrite="false" />
   <property name="subversionMerges" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
