@@ -171,9 +171,9 @@ String^ SvnTools::GetTruePath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	int n = path->IndexOf('/');
+	int n = path->IndexOf(Path::AltDirectorySeparatorChar);
 	if (n >= 0)
-		path = path->Replace('/', '\\');
+		path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);
 
 	String^ root = nullptr;
 	bool normalized = false;;
@@ -201,9 +201,9 @@ String^ SvnTools::GetTruePath(String^ path)
 	if (!root)
 		throw gcnew InvalidOperationException("Didn't get an absolute path after normalization");
 
-	if (path->Length > root->Length && path[path->Length-1] == '\\')
+	if (path->Length > root->Length && path[path->Length-1] == Path::DirectorySeparatorChar)
 	{
-		path = path->TrimEnd('\\');
+		path = path->TrimEnd(Path::DirectorySeparatorChar);
 
 		if (path->Length <= root->Length)
 			return root;
@@ -298,7 +298,7 @@ bool SvnTools::IsManagedPath(String^ path)
 	else
 		path += "\\" + SvnClient::AdministrativeDirectoryName;
 
-	return IsDirectory(path->Replace('/', '\\'));
+	return IsDirectory(path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar));
 }
 
 bool SvnTools::IsBelowManagedPath(String^ path)
@@ -696,9 +696,28 @@ String^ SvnTools::PathCombine(String^ path1, String^ path2)
 		}
 
 		if (!IsSeparator(path1, path1->Length-1))
-			path1 += '\\';			
+			path1 += Path::DirectorySeparatorChar;			
 
 		return SvnTools::GetNormalizedFullPath(path1 + 
 			path2->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar)->TrimStart(Path::DirectorySeparatorChar));
 	}
+}
+
+String^ SvnTools::GetNormalizedDirectoryName(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	path = GetNormalizedFullPath(path);
+
+	String^ root = GetPathRootPart(path);
+
+	int nLs = path->LastIndexOf(Path::DirectorySeparatorChar);
+
+	if (nLs > root->Length)
+		return path->Substring(0, nLs);
+	else if (nLs == root->Length)
+		return root;
+	else
+		return nullptr;
 }
