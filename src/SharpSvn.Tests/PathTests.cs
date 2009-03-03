@@ -199,6 +199,17 @@ namespace SharpSvn.Tests
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"), "Shortcut route via IsNormalized");
+
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\asdasdashdadhjadjahjdhasjhajhfasdjsdf\\sdsdfsdfsdfgsdjhfsda hjsdsdf sdaf\\sad sad sad f\\"),
+                Is.EqualTo("C:\\asdasdashdadhjadjahjdhasjhajhfasdjsdf\\sdsdfsdfsdfgsdjhfsda hjsdsdf sdaf"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
         }
 
         [Test, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
