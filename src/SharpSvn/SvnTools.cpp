@@ -716,7 +716,7 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 
 	if (nLs > root->Length)
 		return path->Substring(0, nLs);
-	else if (nLs == root->Length)
+	else if (nLs == root->Length || (nLs < root->Length && path->Length > root->Length))
 		return root;
 	else
 		return nullptr;
