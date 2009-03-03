@@ -40,7 +40,7 @@ namespace SharpSvn {
 		/// <summary>Gets the pathname exactly like it is on disk</summary>
 		static String^ GetFullTruePath(String^ path);
 
-		/// <summary>Gets a boolean indicating whether the path contains a subversion Working Copy</summary>
+		/// <summary>Gets a boolean indicating whether the path could contain a Subversion Working Copy</summary>
 		/// <remarks>Assumes path is a directory</remarks>
 		static bool IsManagedPath(String^ path);
 
@@ -90,6 +90,9 @@ namespace SharpSvn {
 
 		/// <summary>Gets the filename of the specified target</summary>
 		static String^ GetFileName(Uri^ target);
+
+		/// <summary>Gets the normalized directory name of path (Long path enabled version of <see cref="System::IO::Path::GetDirectoryName" />, always returning full paths)</summary>
+		static String^ GetNormalizedDirectoryName(String^ path);
 
 	internal:
 		/// <summary>Long path capable version of <see cref="System::IO::Path::Combine" /></summary>
