@@ -52,28 +52,33 @@ AprPool::!AprPool()
 
 void AprPool::Destroy()
 {
-	if (_handle)
+	if (!_handle)
+		return;
+	
+	if (_tag->IsValid()) // Don't crash the finalizer; dont Destroy if parent is deleted
 	{
-		if (_tag->IsValid()) // Don't crash the finalizer; dont Destroy if parent is deleted
+		delete _tag; // Dispose
+
+		apr_pool_t* handle = _handle;
+		if (handle)
 		{
-			delete _tag; // Dispose
+			_handle = nullptr;
 
-			apr_pool_t* handle = _handle;
-			if (handle)
+			if (_destroyPool)
 			{
-				_handle = nullptr;
-
-				if (_destroyPool)
+				try
 				{
 					svn_pool_destroy(handle);
-
+				}
+				finally
+				{
 					GC::RemoveMemoryPressure(AprPool::StandardMemoryPressure);
 				}
 			}
 		}
-		else
-			_handle = nullptr;
 	}
+	else
+		_handle = nullptr;
 }
 
 AprPool::AprPool(AprPool ^parentPool)
