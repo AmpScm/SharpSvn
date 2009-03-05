@@ -99,6 +99,30 @@ namespace SharpSvn.Tests.Commands
         }
 
         [Test]
+        public void ReadDash()
+        {
+            string dir = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk"), dir);
+
+            string file = Path.Combine(dir, "File#Dash");
+            File.WriteAllText(file, "######");
+            Client.Add(file);
+            Client.Commit(dir);
+
+            bool touched = false;
+            Client.List(file,
+                delegate(object sender, SvnListEventArgs e)
+                {
+                    touched = true;
+                    Assert.That(e.RepositoryRoot, Is.Null);
+                    Assert.That(e.BasePath.EndsWith("/File#Dash"));
+                    Assert.That(e.Name, Is.EqualTo("File#Dash"));
+                });
+
+            Assert.That(touched);
+        }
+
+        [Test]
         public void ListSharp()
         {
             using (SvnClient client = new SvnClient())
