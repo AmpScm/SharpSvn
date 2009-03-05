@@ -26,22 +26,22 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Summary description for LockTest.
-	/// </summary>
-	[TestFixture]
-	public class LockTests : TestBase
-	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-		}
+    /// <summary>
+    /// Summary description for LockTest.
+    /// </summary>
+    [TestFixture]
+    public class LockTests : TestBase
+    {
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+        }
 
-		[Test]
-		public void TestBasicLock()
-		{
-			string filepath = Path.Combine(this.WcPath, "Form.cs");
+        [Test]
+        public void TestBasicLock()
+        {
+            string filepath = Path.Combine(this.WcPath, "Form.cs");
 
             Client.Status(filepath, delegate(object sender, SvnStatusEventArgs e)
             {
@@ -49,15 +49,15 @@ namespace SharpSvn.Tests.Commands
             });
 
             bool gotIn = false;
-			SvnLockArgs la = new SvnLockArgs();
-			la.Comment = "Moo ";
-			la.Notify += 
+            SvnLockArgs la = new SvnLockArgs();
+            la.Comment = "Moo ";
+            la.Notify +=
                 delegate(object sender, SvnNotifyEventArgs e)
                 {
                     Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.LockLocked));
                     gotIn = true;
                 };
-			Client.Lock(new string[] { filepath }, la);
+            Client.Lock(new string[] { filepath }, la);
             Assert.That(gotIn);
 
             gotIn = false;
@@ -70,13 +70,13 @@ namespace SharpSvn.Tests.Commands
             });
 
             Assert.That(gotIn);
-		}
+        }
 
-		void OnLockNotify(object sender, SvnNotifyEventArgs e)
-		{
-			GC.KeepAlive(e);
-			//throw new NotImplementedException();
-		}
+        void OnLockNotify(object sender, SvnNotifyEventArgs e)
+        {
+            GC.KeepAlive(e);
+            //throw new NotImplementedException();
+        }
 
         [Test]
         public void DualLockTest()
@@ -113,5 +113,31 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(ex.Message.Contains("index.html"));
             }
         }
-	}
+
+        [Test, ExpectedException(typeof(SvnFileSystemLockException))]
+        public void LockCommitTest()
+        {
+            string wc1 = GetTempDir();
+            string wc2 = GetTempDir();
+            Uri repos = new Uri(CollabReposUri, "trunk/");
+
+            Client.CheckOut(repos, wc1);
+            Client.CheckOut(repos, wc2);
+
+            string index1 = Path.Combine(wc1, "index.html");
+            string index2 = Path.Combine(wc2, "index.html");
+
+            Client.Lock(index1, "q!");
+            File.WriteAllText(index2, "QQQQQ");
+
+            try
+            {
+                Client.Commit(index2);
+            }
+            catch (SvnFileSystemException)
+            {
+                throw;
+            }
+        }
+    }
 }
