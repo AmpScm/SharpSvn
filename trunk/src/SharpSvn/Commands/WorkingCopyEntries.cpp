@@ -40,6 +40,62 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, EventHandler<SvnWorkin
 	return ListEntries(directory, gcnew SvnWorkingCopyEntriesArgs(), entryHandler);
 }
 
+/** An @a entry was found at @a path. */
+static svn_error_t *
+sharpsvn_found_entry(const char *path, const svn_wc_entry_t *entry, void *walk_baton, apr_pool_t *pool)
+{
+	SvnWorkingCopyClient^ client = AprBaton<SvnWorkingCopyClient^>::Get((IntPtr)walk_baton);
+
+	AprPool thePool(pool, false);
+
+	SvnWorkingCopyEntriesArgs^ args = dynamic_cast<SvnWorkingCopyEntriesArgs^>(client->CurrentCommandArgs);
+	if (!args)
+		return nullptr;
+
+	if (entry->kind == svn_node_dir && 
+		args->Depth > SvnDepth::Unknown && 
+		svn_path_is_empty(entry->name))
+	{
+		/* Skip directories in the parent to get some sane behavior for future versions */
+		return nullptr; 
+	}
+
+	SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(args->_dir, path, entry, %thePool);
+	try
+	{
+		args->OnEntry(e);
+
+		if (e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
+		else
+			return nullptr;
+	}
+	catch(Exception^ ex)
+	{
+		return SvnException::CreateExceptionSvnError("List receiver", ex);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
+
+	return SVN_NO_ERROR;
+}
+
+static svn_error_t *
+sharpsvn_handle_error(const char *path, svn_error_t *err, void *walk_baton, apr_pool_t *pool)
+{
+	//SvnWorkingCopyClient^ client = AprBaton<SvnWorkingCopyClient^>::Get((IntPtr)walk_baton);
+	UNUSED_ALWAYS(path);
+	UNUSED_ALWAYS(err);
+	UNUSED_ALWAYS(walk_baton);
+	UNUSED_ALWAYS(pool);
+
+	svn_error_clear(err);
+
+	return SVN_NO_ERROR; /* Continue walking */
+}
+
 bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesArgs^ args, EventHandler<SvnWorkingCopyEntryEventArgs^>^ entryHandler)
 {
 	if (String::IsNullOrEmpty(directory))
@@ -51,8 +107,13 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 
 	directory = SvnTools::GetNormalizedFullPath(directory);
 
+	static const svn_wc_entry_callbacks2_t walk_callbacks =
+	{ sharpsvn_found_entry, sharpsvn_handle_error };
+
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+
+	args->_dir = directory;
 
 	if (entryHandler)
 		args->Entry += entryHandler;
@@ -60,33 +121,58 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 	try
 	{
 		const char* pPath = pool.AllocPath(directory);
-		svn_wc_adm_access_t* acc = nullptr;
+		svn_wc_adm_access_t* adm_access = nullptr;
 
-		svn_error_t* r = svn_wc_adm_open3(&acc, nullptr, pPath, false, 0, CtxHandle->cancel_func, CtxHandle->cancel_baton, pool.Handle);
+		svn_error_t* r = svn_wc_adm_open3(
+			&adm_access, 
+			nullptr, 
+			pPath, 
+			false, 
+			args->Depth >= SvnDepth::Children ? -1 : 0, 
+			CtxHandle->cancel_func,
+			CtxHandle->cancel_baton,
+			pool.Handle);
 
 		if (r)
 			return args->HandleResult(this, r);
 
-		apr_hash_t* rslt = nullptr;
-
-		r = svn_wc_entries_read(&rslt, acc, args->RetrieveHidden, pool.Handle);
-
-		if (!r)
+		if (args->Depth != SvnDepth::Unknown)
 		{
-			apr_hash_index_t *hi;
-			const char* key;
-			svn_wc_entry_t *val;
+			r = svn_wc_walk_entries3(
+				pPath, 
+				adm_access, 
+				&walk_callbacks, 
+				(void*)_clientBatton->Handle,
+				(svn_depth_t)args->Depth,
+				args->RetrieveHidden, 
+				nullptr,
+				nullptr,
+				pool.Handle);
+		}
+		else
+		{
+			apr_hash_t* rslt = nullptr;
 
-			for (hi = apr_hash_first(pool.Handle, rslt); hi; hi = apr_hash_next(hi))
+			r = svn_wc_entries_read(&rslt, adm_access, args->RetrieveHidden, pool.Handle);
+
+			if (!r)
 			{
-				apr_hash_this(hi, (const void**)&key, nullptr, (void**)&val);
+				apr_hash_index_t *hi;
+				const char* key;
+				svn_wc_entry_t *val;
 
-				SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(directory, key, val);
+				for (hi = apr_hash_first(pool.Handle, rslt); hi; hi = apr_hash_next(hi))
+				{
+					apr_hash_this(hi, (const void**)&key, nullptr, (void**)&val);
 
-				args->OnEntry(e);
+					SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(directory, key, val, %pool);
 
-				e->Detach(false);
+					args->OnEntry(e);
+
+					e->Detach(false);
+				}
 			}
+
 		}
 
 		return args->HandleResult(this, r);
@@ -95,6 +181,8 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 	{
 		if (entryHandler)
 			args->Entry -= entryHandler;
+
+		args->_dir = nullptr;
 	}
 }
 

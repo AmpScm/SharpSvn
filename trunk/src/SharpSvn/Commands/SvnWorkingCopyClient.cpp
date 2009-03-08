@@ -25,8 +25,10 @@ using namespace SharpSvn::Implementation;
 SvnWorkingCopyClient::SvnWorkingCopyClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
+	_clientBaton = gcnew AprBaton<SvnWorkingCopyClient^>(this);
 }
 
 SvnWorkingCopyClient::~SvnWorkingCopyClient()
 {
+	delete _clientBaton;
 }

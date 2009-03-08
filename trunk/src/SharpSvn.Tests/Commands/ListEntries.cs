@@ -28,13 +28,16 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void WalkEntries()
         {
+            string tmpDir = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk/"), tmpDir);
             using (SvnWorkingCopyClient wcc = new SvnWorkingCopyClient())
             {
                 SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
                 a.RetrieveHidden = true;
+                a.Depth = SvnDepth.Infinity;
 
                 bool touched = false;
-                Assert.That(wcc.ListEntries(WcPath, a,
+                Assert.That(wcc.ListEntries(tmpDir, a,
                     delegate(object sender, SvnWorkingCopyEntryEventArgs e)
                     {
                         touched = true;

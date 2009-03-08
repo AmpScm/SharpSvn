@@ -21,7 +21,7 @@
 
 namespace SharpSvn {
 
-	public ref class SvnWorkingCopyEntryEventArgs sealed : public SvnEventArgs
+	public ref class SvnWorkingCopyEntryEventArgs sealed : public SvnCancelEventArgs
 	{
 		// This class looks remarkibly simalar to SvnWorkingCopyInfo
 		// I don't use them as the same to keep both open for future extensions
@@ -30,6 +30,7 @@ namespace SharpSvn {
 		initonly String^ _basePath;
 		const char* _pPath;
 		const svn_wc_entry_t* _entry;
+		AprPool^ _pool;
 
 		String^ _path;
 		String^ _fullPath;
@@ -49,7 +50,6 @@ namespace SharpSvn {
 		String^ _conflictNew;
 		String^ _conflictWork;
 		String^ _prejfile;
-		initonly DateTime _propertyTime;
 		initonly DateTime _textTime;
 		String^ _checksum;
 		initonly __int64 _lastChangeRev;
@@ -69,7 +69,7 @@ namespace SharpSvn {
 		initonly SvnDepth _depth;
 
 	internal:
-		SvnWorkingCopyEntryEventArgs(String^ basePath, const char* path, const svn_wc_entry_t* entry)
+		SvnWorkingCopyEntryEventArgs(String^ basePath, const char* path, const svn_wc_entry_t* entry, AprPool^ pool)
 		{
 			if (String::IsNullOrEmpty(basePath))
 				throw gcnew ArgumentNullException("basePath");
@@ -77,10 +77,14 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("path");
 			else if (!entry)
 				throw gcnew ArgumentNullException("entry");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
 
 			_basePath = basePath;
 			_pPath = path;
 			_entry = entry;
+			_pool = pool;
+
 			_rev = entry->revision;
 			_kind = (SvnNodeKind)entry->kind;
 			_schedule = (SvnSchedule)entry->schedule;
@@ -89,7 +93,6 @@ namespace SharpSvn {
 			_absent = (entry->absent != 0);
 			_incomplete = (entry->incomplete != 0);
 			_copyFromRev = entry->copyfrom_rev;
-			_propertyTime = SvnBase::DateTimeFromAprTime(entry->prop_time);
 			_textTime = SvnBase::DateTimeFromAprTime(entry->text_time);
 			_lastChangeRev = entry->cmt_rev;
 			_lastChangeTime = SvnBase::DateTimeFromAprTime(entry->cmt_date);
@@ -106,8 +109,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_path && _pPath)
-					_path = SvnBase::Utf8_PtrToString(_pPath);
+				if (!_path && _pPath && _pool)
+					_path = SvnBase::Utf8_PathPtrToString(_pPath, _pool);
 
 				return _path;
 			}
@@ -131,7 +134,7 @@ namespace SharpSvn {
 				if (!_name && _entry)
 					_name = SvnBase::Utf8_PtrToString(_entry->name);
 
-				return _fullPath;
+				return _name;
 			}
 		}
 
@@ -299,11 +302,12 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Not used since Subversion 1.4")]
 		property DateTime PropertyChangeTime
 		{
 			DateTime get()
 			{
-				return _propertyTime;
+				return DateTime::MinValue;
 			}
 		}
 
@@ -516,6 +520,7 @@ namespace SharpSvn {
 			}
 			finally
 			{
+				_pool = nullptr;
 				_pPath = nullptr;
 				_entry = nullptr;
 				__super::Detach(keepProperties);

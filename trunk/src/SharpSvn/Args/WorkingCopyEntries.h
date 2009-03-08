@@ -22,6 +22,16 @@ namespace SharpSvn {
 	public ref class SvnWorkingCopyEntriesArgs : public SvnClientArgs
 	{
 		bool _hideSome;
+		SvnDepth _depth;
+
+	internal:
+		String^ _dir;
+		
+	public:
+		SvnWorkingCopyEntriesArgs()
+		{
+			_depth = SvnDepth::Unknown;
+		}
 
 	public:
 		DECLARE_EVENT(SvnWorkingCopyEntryEventArgs^, Entry)
@@ -43,6 +53,20 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_hideSome = !value;
+			}
+		}
+
+	internal:
+		/// <summary>The depth to walk for entries; reeds all entries in path when depth is unknown (default)</summary>
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 
