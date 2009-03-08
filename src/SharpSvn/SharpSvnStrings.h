@@ -364,6 +364,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path &apos;{0}&apos; contains invalid characters.
+        /// </summary>
+        internal: static property System::String^  PathXContainsInvalidCharacters {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please restart this application before continuing.\n\nStack trace:\n{0}.
         /// </summary>
         internal: static property System::String^  PleaseRestartThisApplicationBeforeContinuing {
@@ -669,6 +676,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::PathCountDoesNotMatchRevisions::get() {
         return ResourceManager->GetString(L"PathCountDoesNotMatchRevisions", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::PathXContainsInvalidCharacters::get() {
+        return ResourceManager->GetString(L"PathXContainsInvalidCharacters", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing::get() {

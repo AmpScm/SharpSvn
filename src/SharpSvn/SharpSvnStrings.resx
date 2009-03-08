@@ -297,4 +297,7 @@
   <data name="CropToValidDepth" xml:space="preserve">
     <value>You can only crop a node to a depth between empty and files.</value>
   </data>
+  <data name="PathXContainsInvalidCharacters" xml:space="preserve">
+    <value>Path '{0}' contains invalid characters</value>
+  </data>
 </root>
