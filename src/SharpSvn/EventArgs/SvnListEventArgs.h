@@ -144,6 +144,7 @@ namespace SharpSvn {
 		Uri^ _repositoryRoot;
 		Uri^ _baseUri;
 		Uri^ _entryUri;
+		String^ _name;
 
 	internal:
 		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot)
@@ -180,6 +181,24 @@ namespace SharpSvn {
 					_absPath = SvnBase::Utf8_PtrToString(_pAbsPath);
 
 				return _absPath;
+			}
+		}
+
+		/// <summary>Gets the filename of the item</summary>
+		property String^ Name
+		{
+			String^ get()
+			{
+				if (!_name)
+				{
+					if (!String::IsNullOrEmpty(Path))
+						_name = System::IO::Path::GetFileName(Path);
+					else if (!String::IsNullOrEmpty(BasePath))
+						_name = System::IO::Path::GetFileName(BasePath);
+					else
+						_name = "";
+				}
+				return _name;
 			}
 		}
 
