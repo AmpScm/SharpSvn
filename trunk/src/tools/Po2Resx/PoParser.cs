@@ -63,13 +63,15 @@ namespace Po2Resx
         readonly string _value;
         readonly string _comment;
         readonly int _line;
+        readonly int _percent;
 
-        public Token(string key, string value, string comment, int line)
+        public Token(string key, string value, string comment, int line, int percent)
         {
             _key = key;
             _value = value;
             _comment = comment;
             _line = line;
+            _percent = percent;
         }
 
         public string Key
@@ -90,6 +92,11 @@ namespace Po2Resx
         public int Line
         {
             get { return _line; }
+        }
+
+        public int Percent
+        {
+            get { return _percent; }
         }
     }
 
@@ -156,6 +163,8 @@ namespace Po2Resx
                                     }
                                 }
                             }
+                            else if (msgid.Percent != token.Percent)
+                                Console.Error.WriteLine(string.Format("{0}({1}):warning: Percent mismathc in token: {2}", file.FullName, token.Line, token.Key));
                             else
                                 yield return new Msg(msgid.Value, token.Value, msgid.Comment ?? token.Comment, msgid.Line);
 
@@ -197,6 +206,7 @@ namespace Po2Resx
                 string comment = null;
                 bool inString = false;
                 bool inToken = false;
+                int percent = 0;
 
                 while (null != (line = sr.ReadLine()))
                 {
@@ -271,6 +281,9 @@ namespace Po2Resx
                                 case '"':
                                     inString = false;
                                     break;
+                                case '%':
+                                    percent++;
+                                    goto default;
                                 default:
                                     sbTextBuilding.Append(line[i]);
                                     break;
@@ -289,7 +302,8 @@ namespace Po2Resx
                         {
                             if (!inToken && sbToken.Length > 0)
                             {
-                                yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, lineNumber);
+                                yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, lineNumber, percent);
+                                percent = 0;
                                 comment = null;
 
                                 sbToken.Length = 0;
@@ -305,7 +319,7 @@ namespace Po2Resx
                 }
 
                 if (!inToken && sbToken.Length > 0)
-                    yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, lineNumber);
+                    yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, lineNumber, percent);
             }
         }
     }
