@@ -25,6 +25,7 @@ namespace SharpSvn {
 
 	public ref class SvnWorkingCopyClient : public SvnClientContext
 	{
+		initonly AprBaton<SvnWorkingCopyClient^>^ _clientBaton;
 		AprPool _pool;
 
 	public:
