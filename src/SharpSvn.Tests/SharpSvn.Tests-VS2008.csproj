@@ -97,6 +97,7 @@
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
     <Compile Include="Commands\ReplayTests.cs" />
+    <Compile Include="ExceptionTests.cs" />
     <Compile Include="StaticVerifications.cs" />
     <Compile Include="ExternalsTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
