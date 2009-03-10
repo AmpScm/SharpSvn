@@ -360,10 +360,13 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	if (PathContainsInvalidChars(path))
-		throw gcnew ArgumentException("Path contains invalid characters", "path");
+	if (path->StartsWith("\\\\?\\", StringComparison::Ordinal))
+		path = GetNormalizedFullPath(path->Substring(4));
+
+	if (PathContainsInvalidChars(path) || path->LastIndexOf(':') >= 2)
+		throw gcnew ArgumentException(String::Format(SharpSvnStrings::PathXContainsInvalidCharacters, path), "path");
 	else if (IsNormalizedFullPath(path))
-		return path; // Just pass through; no allocations
+		return path; // Just pass through; no allocations	
 
 	bool retry = true;
 
@@ -378,6 +381,10 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 		{
 			// Use the retry
 		}
+		catch(NotSupportedException^) // Something fishy is gowing on
+		{
+			// Use the retry
+		}
 	}
 
 	if (retry)
@@ -385,7 +392,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 		path = LongGetFullPath(path);
 
 		if (!GetPathRootPart(path))
-			throw gcnew PathTooLongException("Paths with a length above MAX_PATH must be rooted");
+			throw gcnew PathTooLongException(String::Format(PathXTooLongAndNotRooted, path));
 	}
 
 	if (path->Length >= 2 && path[1] == ':')
