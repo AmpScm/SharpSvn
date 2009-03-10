@@ -357,6 +357,20 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Path &apos;{0}&apos; contains invalid characters.
+        /// </summary>
+        internal: static property System::String^  PathXContainsInvalidCharacters {
+            System::String^  get();
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Paths with a length above MAX_PATH (like &apos;{0}&apos;) must be rooted..
+        /// </summary>
+        internal: static property System::String^  PathXTooLongAndNotRooted {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please restart this application before continuing.\n\nStack trace:\n{0}.
         /// </summary>
         internal: static property System::String^  PleaseRestartThisApplicationBeforeContinuing {
@@ -651,6 +665,14 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::PathCountDoesNotMatchRevisions::get() {
         return ResourceManager->GetString(L"PathCountDoesNotMatchRevisions", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::PathXContainsInvalidCharacters::get() {
+        return ResourceManager->GetString(L"PathXContainsInvalidCharacters", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::PathXTooLongAndNotRooted::get() {
+        return ResourceManager->GetString(L"PathXTooLongAndNotRooted", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing::get() {
