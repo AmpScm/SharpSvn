@@ -142,7 +142,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 				pPath, 
 				adm_access, 
 				&walk_callbacks, 
-				(void*)_clientBatton->Handle,
+				(void*)_clientBaton->Handle,
 				(svn_depth_t)args->Depth,
 				args->RetrieveHidden, 
 				nullptr,
