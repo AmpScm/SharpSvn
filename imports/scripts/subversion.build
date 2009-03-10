@@ -5,6 +5,7 @@
   <property name="svnBase" value="${platformRoot}/subversion" />
   <property name="svnCheckUrl" value="" overwrite="false" />
   <property name="svnCheckFs" value="fsfs" overwrite="false" />
+  <property name ="subversionMergeBranches" value="" overwrite="false" />
 
   <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, sharpintl-build">
 
@@ -89,6 +90,14 @@
         <arg value="http://svn.collab.net/repos/svn/trunk/" />
         <arg value="${svnBase}" />
       </Svn>
+      <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
+         if="${string::get-length(subversionMergeBranches) &gt; 0}">
+        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+          <arg value="merge" />
+          <arg line="${branch}" />
+          <arg value="${svnBase}" />
+        </Svn>
+      </foreach>
       <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
         /* Appended by sharpsvn/imports/scripts/build-subversion.build */
         apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
