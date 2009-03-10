@@ -34,7 +34,7 @@ namespace SharpSvn.Tests.Commands
             {
                 SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
                 a.RetrieveHidden = true;
-                a.Depth = SvnDepth.Infinity;
+                //a.Depth = SvnDepth.Infinity;
 
                 bool touched = false;
                 Assert.That(wcc.ListEntries(tmpDir, a,
