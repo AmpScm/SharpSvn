@@ -94,7 +94,7 @@
 		</fileset>		
     </copy>
     <if test="true">
-      <copy tofile="build/${platform}/lib/bin/${libDb}d.dll" file="build/${platform}/lib/bin/${libDb}.dll" />
+      <copy tofile="build/${platform}/lib/bin/${libDb}d.dll" file="${bdbResultDir}/${fullDbDllName}" />
     </if>
   </target>
 </project>
