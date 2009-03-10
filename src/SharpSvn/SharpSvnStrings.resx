@@ -300,4 +300,7 @@
   <data name="PathXContainsInvalidCharacters" xml:space="preserve">
     <value>Path '{0}' contains invalid characters</value>
   </data>
+  <data name="PathXTooLongAndNotRooted" xml:space="preserve">
+    <value>Paths with a length above MAX_PATH (like '{0}') must be rooted.</value>
+  </data>
 </root>

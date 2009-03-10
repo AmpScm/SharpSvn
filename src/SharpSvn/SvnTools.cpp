@@ -392,7 +392,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 		path = LongGetFullPath(path);
 
 		if (!GetPathRootPart(path))
-			throw gcnew PathTooLongException("Paths with a length above MAX_PATH must be rooted");
+			throw gcnew PathTooLongException(String::Format(PathXTooLongAndNotRooted, path));
 	}
 
 	if (path->Length >= 2 && path[1] == ':')
