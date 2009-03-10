@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.5999.1136</title>
+          SharpSvn-Daily Update - 1.5999.1157</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.5999.1136</h1>
+          SharpSvn-Daily Update - 1.5999.1157</h1>
 
 
 <p>
@@ -15,25 +15,37 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1623/SSvn-1.5999.1136.zip">SharpSvn 1.5999.1136</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/1685/SSvn-1.5999.1157.zip">SharpSvn 1.5999.1157</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1624/SSvn-1.5999.1136-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/1625/SSvnEx-1.5999.1136.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/1686/SSvn-1.5999.1157-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/1687/SSvnEx-1.5999.1157.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1136">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1157">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2009-03-08</td></tr>
+<tr><td> </td><td class="r"><a id="1147" href="http://sharpsvn.net/rev/?r=1147">
+            [r1147]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvnStrings.h, SvnTools.cpp, SharpSvnStrings.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">SvnTools.GetNormalizedFullPath(): Automatically convert \\?\ style paths
+to normal style and check for paths containing ':' after position 1.</td></tr>
+<tr><td> </td><td class="r"><a id="1146" href="http://sharpsvn.net/rev/?r=1146">
+            [r1146]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/SvnWorkingCopyClient.cpp, SharpSvn/Args/WorkingCopyEntries.h, SharpSvn/Commands/WorkingCopyEntries.cpp, SharpSvn/EventArgs/SvnWorkingCopyEntryEventArgs.h, SharpSvn/SvnWorkingCopyClient.h, SharpSvn.Tests/Commands/ListEntries.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow itterating working copy files recursively with SvnWorkingCopyClient.
+ListEntries. Keeping Depth=SvnDepth.Unknown keeps the old behavior.</td></tr>
+<tr><td> </td><td class="r"><a id="1145" href="http://sharpsvn.net/rev/?r=1145">
+            [r1145]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/EventArgs:</strong> SvnListEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add Name property to SvnListEventArgs.</td></tr>
 <tr class="d"><td colspan="4">2009-03-03</td></tr>
 <tr><td> </td><td class="r"><a id="1134" href="http://sharpsvn.net/rev/?r=1134">
             [r1134]
@@ -75,39 +87,6 @@ SvnException instead of returning an error.</td></tr>
 <tr><td> </td><td class="r"><a id="1082" href="http://sharpsvn.net/rev/?r=1082">
             [r1082]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests/Commands:</strong> DeleteTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add testcase used for explaining something to a SharpSvn user.</td></tr>
-<tr class="d"><td colspan="4">2009-02-06</td></tr>
-<tr><td> </td><td class="r"><a id="1079" href="http://sharpsvn.net/rev/?r=1079">
-            [r1079]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnEnums.h, ReposCommands/CreateRepository.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow creating Subversion 1.5 repositories with the 1.6
-libraries.</td></tr>
-<tr class="d"><td colspan="4">2009-02-05</td></tr>
-<tr><td> </td><td class="r"><a id="1076" href="http://sharpsvn.net/rev/?r=1076">
-            [r1076]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/GetRevisionProperty.cpp, SharpSvn.Tests/Commands/RevisionPropertyListTests.cs, SharpSvn.Tests/Commands/LogTests.cs, SharpSvn/SvnClient.h, SharpSvn.Tests/Commands/GetRevisionPropertyTests.cs, SharpSvn/Commands/RevisionPropertyList.cpp, SharpSvn.Tests/Commands/CommitTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Following up on <a href="http://sharpsvn.net/rev/?r=1070">r1070</a>, deprecate SvnUriTarget variants of GetRevisionProperty()
-and GetRevisionPropertyList().</td></tr>
-<tr class="d"><td colspan="4">2009-02-04</td></tr>
-<tr><td> </td><td class="r"><a id="1071" href="http://sharpsvn.net/rev/?r=1071">
-            [r1071]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvn-VS2008.vcproj, SvnAuthentication.Cache.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Kill warning and delayload some DLLs that are not needed for WC only actions.</td></tr>
-<tr><td> </td><td class="r"><a id="1070" href="http://sharpsvn.net/rev/?r=1070">
-            [r1070]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/SetRevisionPropertyTests.cs, SharpSvn/SvnClient.h, SharpSvn.Tests/Commands/TestBase.cs, SharpSvn/Commands/SetRevisionProperty.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Introduce SetRevisionProperty(Uri, SvnRevision, ...) and deprecate
-SetRevisionProperty(SvnUriTarget, ...). SvnTargets should specify operational
-revisions and in this case they don't</td></tr>
-<tr class="d"><td colspan="4">2009-02-03</td></tr>
-<tr><td> </td><td class="r"><a id="1069" href="http://sharpsvn.net/rev/?r=1069">
-            [r1069]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, SharpSvn/Args/DiffSummary.h, SharpSvn/Commands/DiffSummary.cpp, SharpSvn.Tests/Commands/DiffSummaryTests.cs, SharpSvn/EventArgs/SvnDiffSummaryEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add .FromUri and .ToUri properties to SvnDiffSummaryEventArgs.</td></tr>
-<tr class="d"><td colspan="4">2009-02-02</td></tr>
-<tr><td> </td><td class="r"><a id="1066" href="http://sharpsvn.net/rev/?r=1066">
-            [r1066]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Commands/Export.cpp, Commands/Switch.cpp, Commands/Update.cpp, SvnAll.h, AprArray.h, Commands/CheckOut.cpp, SvnClientArgs.h, SvnClientEventArgs.h, AssemblyInfo.cpp, Commands/WorkingCopyState.cpp, Stdafx.h, SvnNames.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Cleanup #includes to finally enable warning 4996 (deprecation warnings).</td></tr>
-<tr><td> </td><td class="r"><a id="1062" href="http://sharpsvn.net/rev/?r=1062">
-            [r1062]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/Log.cpp, SharpSvn/Args/FileVersions.h, SharpSvn/Commands/FileVersions.cpp, SharpSvn/EventArgs/SvnStatusEventArgs.h, SharpSvn.Tests/SvnClientTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Missing properties (via FxCop), the part that is 1.6 specific.</td></tr>
-<tr><td> </td><td class="r"><a id="1061" href="http://sharpsvn.net/rev/?r=1061">
-            [r1061]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> AprArray.cpp, Commands/Blame.cpp, EventArgs/SvnListEventArgs.h, Commands/DiffSummary.cpp, SvnClientArgs.h, SvnExternalItem.cpp, SvnException.h, Commands/GetCapabilities.cpp, SvnTools.h, SvnCommitItem.cpp, SvnNames.h, Commands/ReplayRevisions.cpp, SvnTargets.cpp, SvnBase.cpp (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">FxCop cleanup part 1. (For backport to 1.5)</td></tr>
 
 </table>
 <!--/Recent changes-->
