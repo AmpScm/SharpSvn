@@ -20,6 +20,8 @@
 #include "SvnAll.h"
 #include "SvnTools.h"
 
+#pragma warning(disable: 6255) // warning C6255: _alloca indicates failure by raising a stack overflow exception. Consider using _malloca instead
+
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
@@ -51,22 +53,29 @@ static String^ LongGetFullPath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	// Subversion does not have a problem with paths over MAX_PATH, as long as they are absolute
-	if (!path->StartsWith("\\\\?\\"))
-		path = "\\\\?\\" + path;
+	if (path->StartsWith("\\\\?\\", StringComparison::Ordinal))
+		path = path->Substring(4);
 
 	pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
 	wchar_t rPath[1024];
+	wchar_t *pPathBuf;
 
 	ZeroMemory(rPath, sizeof(rPath));
 	const int sz = (sizeof(rPath) / sizeof(rPath[0]))-1;
 
 	unsigned c = GetFullPathNameW((LPCWSTR)pPath, sz, rPath, nullptr);
 
-	if (c == 0 || c >= sz)
+	if (c == 0)
 		throw gcnew PathTooLongException("GetFullPath for long paths failed");
+	else if (c > sz)
+	{
+		pPathBuf = (wchar_t*)_alloca(sizeof(wchar_t)* (sz + 1));
+		c = GetFullPathNameW((LPCWSTR)pPath, sz, pPathBuf, nullptr);
+	}
+	else
+		pPathBuf = rPath;
 
-	path = gcnew String(rPath, 0, c);
+	path = gcnew String(pPath, 0, c);
 
 	if (path->StartsWith("\\\\?\\"))
 		path = path->Substring(4);
