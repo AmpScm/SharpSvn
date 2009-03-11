@@ -62,6 +62,14 @@ void SvnBase::EnsureLoaded()
 				svn_dso_initialize2(); // Before first pool
 
 				apr_pool_t* pool = svn_pool_create(nullptr);
+
+				apr_allocator_t* allocator = apr_pool_allocator_get(pool);
+
+				if (allocator)
+				{
+					apr_allocator_max_free_set(allocator, 1); // Keep a maximum of 1 free block
+				}
+
 				svn_utf_initialize(pool);
 				svn_fs_initialize(pool);
 
