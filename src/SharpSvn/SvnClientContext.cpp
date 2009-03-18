@@ -212,6 +212,40 @@ void SvnClientContext::ApplyUserDiffConfig()
 	svn_config_set(cfg, SVN_CONFIG_SECTION_HELPERS, SVN_CONFIG_OPTION_DIFF3_CMD, nullptr);
 }
 
+static String^ ReadRegKey(RegistryKey^ key, String^ path, String^ name)
+{
+    if (!key)
+        throw gcnew ArgumentNullException("key");
+    else if(String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    
+    RegistryKey^ rk = nullptr;
+    try
+    {
+        rk = key->OpenSubKey(path, false);
+
+        if (!rk)
+            return nullptr;
+
+        String^ v = dynamic_cast<String^>(rk->GetValue(name, nullptr));
+
+        if (!String::IsNullOrEmpty(v) && !String::IsNullOrEmpty(v->Trim()))
+            return v;
+    }
+    catch (System::Security::SecurityException^)
+    {}
+    catch (UnauthorizedAccessException^)
+    {}
+    finally
+    {
+        if (rk)
+            delete rk;
+    }
+
+    return nullptr;
+}
+
+
 void SvnClientContext::ApplyCustomSsh()
 {
 	if (!CtxHandle->config)
@@ -222,34 +256,16 @@ void SvnClientContext::ApplyCustomSsh()
 	if (!cfg)
 		return;
 
-	String^ customSshConfig;
+	String^ customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
-	try
-	{
-		// Allow overriding the TortoiseSVN setting at our own level.
-		// Probably never used, but allow overriding Tortoise settings anyway
-		customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
+    if (!customSshConfig)
+        customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
-		if (!customSshConfig)
-			customSshConfig = dynamic_cast<String^>(Registry::LocalMachine->GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers\\SSH", nullptr));
-	}
-	catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
-	{ customSshConfig = nullptr; }
-	catch (UnauthorizedAccessException^)
-	{ customSshConfig = nullptr; }
+    if (!customSshConfig)
+        customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\TortoiseSVN", "SSH");
 
-	if (!customSshConfig)
-	{
-		try
-		{
-			// Use the TortoiseSVN setting
-			customSshConfig = dynamic_cast<String^>(Registry::CurrentUser->GetValue("Software\\TortoiseSVN\\SSH", nullptr));
-		}
-		catch (System::Security::SecurityException^) // Exceptions should never happen. CurrentUser is written by Current User
-		{ customSshConfig = nullptr; }
-		catch (UnauthorizedAccessException^)
-		{ customSshConfig = nullptr; }
-	}
+    if (!customSshConfig)
+        customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");	
 
 	if (customSshConfig)
 	{
@@ -285,30 +301,21 @@ void SvnClientContext::ApplyCustomSsh()
 
 		if (!cmd)
 			val += len;
+        else
+            val = apr_pstrdup(pool.Handle, cmd);
 	}
 
-	if (!cmd && val)
-	{
-		char** argv = nullptr;
-		if (!apr_tokenize_to_argv(val, &argv, pool.Handle) && argv && argv[0])
-			cmd = argv[0];
-	}
+	if (val && *val)
+    {
+        wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
+        LPWSTR pFile = nullptr;
 
-	if (cmd)
-	{
-		String^ sCmd = Utf8_PtrToString(cmd); // We have an utf8 encoded string and like to use the unicode windows api
-		wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
-		wchar_t* app = (wchar_t*)pool.Alloc((sCmd->Length+1) * sizeof(wchar_t));
-		wchar_t* pFile = nullptr;
-
-		for (int i = 0; i < sCmd->Length; i++)
-			app[i] = sCmd[i];
-
-		app[sCmd->Length] = 0;
-
-		if (SearchPathW(nullptr, app, L".exe", 1000, buffer, &pFile) && pFile)
+        if (strcmp(val, "ssh"))
+            return; // Something was configured, use it!
+	
+        if (SearchPathW(nullptr, L"ssh", L".exe", 1000, buffer, &pFile) && pFile)
 		{
-			return; // The specified executable exists. Use it!
+			return; // ssh.exe exists. Use it!
 		}
 	}
 	// Ok: registry unset, setting invalid. Let's set our own plink handler
