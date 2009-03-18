@@ -16,6 +16,7 @@
 
 #pragma once
 
+#define SHARPSVN_INFO 1
 #define _WIN32_WINNT 0x0500 // 2000 and higher
 #pragma warning(push)
 #pragma warning(disable: 4635)
