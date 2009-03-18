@@ -7,7 +7,7 @@
   <!-- -->
   <property name="subversionVersion" value="1.6.0-rc4" overwrite="false" />
   <property name="subversionMerges" value="36337,36440,36441,36442,36443" overwrite="false" />
-  <property name="subversionMergeBranches" value="http://svn.collab.net/repos/svn/branches/1.6.x-UNC-paths" overwrite="false" />
+  <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
   <!-- -->
