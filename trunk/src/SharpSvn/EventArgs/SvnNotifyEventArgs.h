@@ -34,7 +34,9 @@ namespace SharpSvn {
 		initonly SvnNotifyState _propertyState;
 		initonly SvnLockState _lockState;
 		initonly __int64 _revision;
+        initonly __int64 _oldRevision;
 		initonly SvnCommandType _commandType;
+
 		SvnLockInfo^ _lock;
 		String^ _changelistName;
 		SvnMergeRange^ _mergeRange;
@@ -60,6 +62,7 @@ namespace SharpSvn {
 			_propertyState = (SvnNotifyState)notify->prop_state;
 			_lockState = (SvnLockState)notify->lock_state;
 			_revision = notify->revision;
+            _oldRevision = notify->old_revision;
 			_commandType = commandType;
 		}
 
@@ -221,6 +224,15 @@ namespace SharpSvn {
 			__int64 get()
 			{
 				return _revision;
+			}
+		}
+
+        /// <summary>[[[ The base revision before updating (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		property __int64 OldRevision
+		{
+			__int64 get()
+			{
+				return _oldRevision;
 			}
 		}
 
