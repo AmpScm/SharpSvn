@@ -163,8 +163,10 @@ namespace Po2Resx
                                     }
                                 }
                             }
+                            else if (string.IsNullOrEmpty(token.Value))
+                            { /* Skip: No translation available */ }
                             else if (msgid.Percent != token.Percent)
-                                Console.Error.WriteLine(string.Format("{0}({1}):warning: Percent mismathc in token: {2}", file.FullName, token.Line, token.Key));
+                                Console.Error.WriteLine(string.Format("{0}({1}):warning: Percent mismatch in token: {2} vs {3}", file.FullName, msgid.Line, msgid.Value, token.Value));
                             else
                                 yield return new Msg(msgid.Value, token.Value, msgid.Comment ?? token.Comment, msgid.Line);
 
