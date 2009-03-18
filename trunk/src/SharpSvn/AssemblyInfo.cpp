@@ -25,7 +25,6 @@
 #if (APU_HAVE_APR_ICONV != 0)
 #include <apr-1/api_version.h>
 #endif
-#define SHARPSVN_INFO 1
 #include <svn_version.h>
 #include <serf/serf.h>
 #include <openssl/opensslv.h>
