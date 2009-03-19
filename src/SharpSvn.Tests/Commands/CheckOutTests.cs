@@ -32,20 +32,6 @@ namespace SharpSvn.Tests.Commands
     [TestFixture]
     public class CheckOutTests : TestBase
     {
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-            this.newWc = this.FindDirName(Path.Combine(Path.GetTempPath(), "moo"));
-        }
-
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-            RecursiveDelete(this.newWc);
-        }
-
         [Test]
         public void TestPegCheckOuts()
         {
@@ -77,24 +63,26 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void TestBasicCheckout()
         {
+            string newWc = GetTempDir();
             SvnCheckOutArgs a = new SvnCheckOutArgs();
-            this.Client.CheckOut(this.ReposUrl, this.newWc, a);
+            this.Client.CheckOut(this.ReposUrl, newWc, a);
 
-            Assert.That(File.Exists(Path.Combine(this.newWc, "Form.cs")),
+            Assert.That(File.Exists(Path.Combine(newWc, "Form.cs")),
                 "Checked out file not there");
-            Assert.That(Directory.Exists(Path.Combine(this.newWc, SvnClient.AdministrativeDirectoryName)),
+            Assert.That(Directory.Exists(Path.Combine(newWc, SvnClient.AdministrativeDirectoryName)),
                 "No admin directory found");
-            Assert.That(this.RunCommand("svn", "st \"" + this.newWc + "\"").Trim(), Is.EqualTo(""),
+            Assert.That(this.RunCommand("svn", "st \"" + newWc + "\"").Trim(), Is.EqualTo(""),
                 "Wrong status");
         }
 
         [Test]
         public void TestProgressEvent()
         {
+            string newWc = GetTempDir();
             SvnCheckOutArgs a = new SvnCheckOutArgs();
             a.Progress += new EventHandler<SvnProgressEventArgs>(Client_Progress);
             a.Depth = SvnDepth.Empty;
-            this.Client.CheckOut(new Uri("http://svn.collab.net/repos/svn/"), this.newWc, a);
+            this.Client.CheckOut(new Uri("http://svn.collab.net/repos/svn/"), newWc, a);
 
             Assert.That(progressCalled, "Progress delegate not called");
         }
@@ -105,6 +93,5 @@ namespace SharpSvn.Tests.Commands
         }
 
         private bool progressCalled = false;
-        private string newWc;
     }
 }
