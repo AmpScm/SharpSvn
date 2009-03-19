@@ -157,7 +157,7 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 				break;
 			}
 
-			WriteLine(" " + e->Path);
+			WriteLine("  " + e->Path);
 		}
 		break;
 	case SvnNotifyAction::UpdateExternal:
