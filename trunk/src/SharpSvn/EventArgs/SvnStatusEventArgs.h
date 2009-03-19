@@ -28,7 +28,7 @@ namespace SharpSvn {
 		// This class looks remarkibly simalar to SvnWorkingCopyEntryEventArgs
 		// I don't use them as the same to keep both open for future extensions
 		// in different directions
-		svn_wc_entry_t* _entry;
+		const svn_wc_entry_t* _entry;
 		AprPool^ _pool;
 
 		String^ _name;
@@ -69,7 +69,7 @@ namespace SharpSvn {
 		SvnRevision^ _fileExternalPegRevision;
 
 	internal:
-		SvnWorkingCopyInfo(svn_wc_entry_t *entry, AprPool^ pool)
+		SvnWorkingCopyInfo(const svn_wc_entry_t *entry, AprPool^ pool)
 		{
 			if (!entry)
 				throw gcnew ArgumentNullException("entry");
