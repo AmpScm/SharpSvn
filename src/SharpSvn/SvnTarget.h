@@ -38,7 +38,7 @@ namespace SharpSvn {
 		SvnRevision(int revision)
 		{
 			if (revision < 0)
-				throw gcnew ArgumentOutOfRangeException("revision");
+				throw gcnew ArgumentOutOfRangeException("revision", revision, SharpSvnStrings::RevisionMustBeGreaterThanOrEqualToZero);
 
 			_type = SvnRevisionType::Number;
 			_value = revision;
@@ -47,7 +47,7 @@ namespace SharpSvn {
 		SvnRevision(__int64 revision)
 		{
 			if (revision < 0)
-				throw gcnew ArgumentOutOfRangeException("revision");
+				throw gcnew ArgumentOutOfRangeException("revision", revision, SharpSvnStrings::RevisionMustBeGreaterThanOrEqualToZero);
 
 			_type = SvnRevisionType::Number;
 			_value = revision;
