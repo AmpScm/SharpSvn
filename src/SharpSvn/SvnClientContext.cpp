@@ -214,35 +214,35 @@ void SvnClientContext::ApplyUserDiffConfig()
 
 static String^ ReadRegKey(RegistryKey^ key, String^ path, String^ name)
 {
-    if (!key)
-        throw gcnew ArgumentNullException("key");
-    else if(String::IsNullOrEmpty(path))
-        throw gcnew ArgumentNullException("path");
-    
-    RegistryKey^ rk = nullptr;
-    try
-    {
-        rk = key->OpenSubKey(path, false);
+	if (!key)
+		throw gcnew ArgumentNullException("key");
+	else if(String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
 
-        if (!rk)
-            return nullptr;
+	RegistryKey^ rk = nullptr;
+	try
+	{
+		rk = key->OpenSubKey(path, false);
 
-        String^ v = dynamic_cast<String^>(rk->GetValue(name, nullptr));
+		if (!rk)
+			return nullptr;
 
-        if (!String::IsNullOrEmpty(v) && !String::IsNullOrEmpty(v->Trim()))
-            return v;
-    }
-    catch (System::Security::SecurityException^)
-    {}
-    catch (UnauthorizedAccessException^)
-    {}
-    finally
-    {
-        if (rk)
-            delete rk;
-    }
+		String^ v = dynamic_cast<String^>(rk->GetValue(name, nullptr));
 
-    return nullptr;
+		if (!String::IsNullOrEmpty(v) && !String::IsNullOrEmpty(v->Trim()))
+			return v;
+	}
+	catch (System::Security::SecurityException^)
+	{}
+	catch (UnauthorizedAccessException^)
+	{}
+	finally
+	{
+		if (rk)
+			delete rk;
+	}
+
+	return nullptr;
 }
 
 
@@ -258,14 +258,14 @@ void SvnClientContext::ApplyCustomSsh()
 
 	String^ customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
-    if (!customSshConfig)
-        customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
+	if (!customSshConfig)
+		customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
-    if (!customSshConfig)
-        customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\TortoiseSVN", "SSH");
+	if (!customSshConfig)
+		customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\TortoiseSVN", "SSH");
 
-    if (!customSshConfig)
-        customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");	
+	if (!customSshConfig)
+		customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");	
 
 	if (customSshConfig)
 	{
@@ -300,9 +300,14 @@ void SvnClientContext::ApplyCustomSsh()
 		cmd = getenv(var);
 
 		if (!cmd)
+		{
 			val += len;
-        else
-            val = apr_pstrdup(pool.Handle, cmd);
+
+			while (*val && isspace(*val))
+				val++;
+		}
+		else
+			val = apr_pstrdup(pool.Handle, cmd);
 	}
 
 	if (val && *val)
