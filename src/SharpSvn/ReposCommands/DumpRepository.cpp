@@ -105,17 +105,17 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	svn_fs_set_warning_func(svn_repos_fs(repos), warning_func, nullptr);
 
 	r = svn_fs_youngest_rev(&youngest, fs, pool.Handle);
-	if (!r)
+	if (r)
 		return args->HandleResult(this, r);
 
 	svn_revnum_t start;
 	svn_revnum_t end;
 
 	r = get_revnum(&start, args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
-	if (!r)
+	if (r)
 		return args->HandleResult(this, r);
 	r = get_revnum(&end, args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool), youngest, repos, pool.Handle);
-	if (!r)
+	if (r)
 		return args->HandleResult(this, r);
 
 	if (start < end)
