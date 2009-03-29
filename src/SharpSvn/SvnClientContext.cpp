@@ -311,14 +311,14 @@ void SvnClientContext::ApplyCustomSsh()
 	}
 
 	if (val && *val)
-    {
-        wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
-        LPWSTR pFile = nullptr;
+	{
+		wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
+		LPWSTR pFile = nullptr;
 
-        if (strcmp(val, "ssh"))
-            return; // Something was configured, use it!
-	
-        if (SearchPathW(nullptr, L"ssh", L".exe", 1000, buffer, &pFile) && pFile)
+		if (strcmp(val, "ssh"))
+			return; // Something was configured, use it!
+
+		if (SearchPathW(nullptr, L"ssh", L".exe", 1000, buffer, &pFile) && pFile)
 		{
 			return; // ssh.exe exists. Use it!
 		}
