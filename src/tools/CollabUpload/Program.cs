@@ -318,6 +318,16 @@ namespace CollabUpload
                 if (nS > 0)
                     text = text.Substring(nS).Replace("&nbsp;", "&#160;").Replace("&copy;", "&#169;");
 
+                int lastForm = text.LastIndexOf("<form ", StringComparison.OrdinalIgnoreCase);
+
+                if (lastForm >= 0)
+                {
+                    int formClose = text.IndexOf("</form", lastForm, StringComparison.OrdinalIgnoreCase);
+
+                    if (formClose >= 0)
+                        text = text.Substring(lastForm, text.IndexOf('>', formClose) - lastForm+1);
+                }
+
                 doc.Load(XmlReader.Create(new StringReader(text), xs));
 
                 XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
