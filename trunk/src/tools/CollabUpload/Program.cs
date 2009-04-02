@@ -333,6 +333,10 @@ namespace CollabUpload
                 XmlNamespaceManager nsmgr = new XmlNamespaceManager(doc.NameTable);
                 nsmgr.AddNamespace("html", "http://www.w3.org/1999/xhtml");
                 XmlElement form = (XmlElement)doc.SelectSingleNode("//html:form[@id='loginform']", nsmgr);
+
+                if(form == null)
+                    form = (XmlElement)doc.SelectSingleNode("//form[@id='loginform']", nsmgr);
+
                 StringBuilder sb = new StringBuilder();
 
                 wr = (HttpWebRequest)WebRequest.Create(new Uri(new Uri(responseUri), new Uri(form.GetAttribute("action"))));
