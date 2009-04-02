@@ -85,6 +85,9 @@
       <Component Id="svn_wc_1.dll" Guid="11D6D089-0065-41DC-976B-E260EFFE4BFE">
         <File Id="svn_wc_1.dll" Name="SlikSvn-svn_wc-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
+      <Component Id="libsvnjavahl_1.dll" Guid="05D69B6B-4DCE-4286-AD4B-95988D0DC8BE">
+        <File Id="libsvnjavahl_1.dll" Name="libsvnjavahl-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
     </DirectoryRef>
   </Fragment>
   <?endif?>
