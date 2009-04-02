@@ -79,6 +79,12 @@
     </copy>
     <copy tofile="build/${platform}/lib/release/libapr-1.lib" file="build/${platform}/lib/lib/apr-1.lib" if="${static=='true'}" />
     <copy tofile="build/${platform}/lib/release/libaprutil-1.lib" file="build/${platform}/lib/lib/aprutil-1.lib" if="${static=='true'}" />
+    <copy todir="build/${platform}/lib/include" flatten="true" if="${javaHome != ''}">
+      <fileset basedir="${javaHome}/include">
+        <include name="*.h" />
+        <include name="win32/*.h" />
+      </fileset>
+    </copy>      
   </target>
 
   <target name="svn-merge" depends="checkout" if="${applyMerges}">
@@ -288,6 +294,7 @@
         <arg value="/t:Programs\svn-populate-node-origins-index" />
         <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
         <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
+        <arg value="/t:__JAVAHL__" if="${javaHome != ''}" />
       </exec>
     </OnceBlock>
   </target>

@@ -134,7 +134,11 @@
               <replacestring from='#define APR_HAVE_IPV6' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
-#include &lt;wspiapi.h&gt; //' />
+/* SharpSvn extension */
+APR_END_DECLS
+#include &lt;wspiapi.h&gt;
+APR_BEGIN_DECLS
+/* /SharpSvn extension */' />
               <replacestring from='#pragma' to='// #disabled-pragma' />              
             </filterchain>
           </loadfile>

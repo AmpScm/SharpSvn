@@ -8,6 +8,7 @@
   <property name="enableIpv6" value="true" overwrite="false" />
   <property name="svnStatic" value="false" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
+  <property name="javaHome" value="" overwrite="false" />
 
   <if test="${not property::exists('VSversion')}">
     <!-- Auto detect VS 2005 and VS 2008 -->
@@ -35,7 +36,8 @@
 
   <setenv>
     <variable name="OPENSSL_STATIC" value="1" />
-    <variable name="ENABLE_IPV6" value="1" if="${enableIpv6=='true'}"/>
+    <variable name="ENABLE_IPV6" value="1" if="${enableIpv6=='true'}" />
+    <variable name="PATH" value="${environment::get-variable('PATH')};${javaHome}\bin" if="${javaHome!=''}" />
   </setenv>
 
   <property name="Configuration" value="release" />
