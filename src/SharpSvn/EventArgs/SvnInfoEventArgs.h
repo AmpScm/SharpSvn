@@ -71,11 +71,8 @@ namespace SharpSvn {
 			_path = path;
 			_rev = info->rev;
 			_nodeKind = (SvnNodeKind)info->kind;
-			if (info->last_changed_author)
-			{
-				_lastChangeRev = info->last_changed_rev;
-				_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
-			}
+			_lastChangeRev = info->last_changed_rev;
+			_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
 			_hasWcInfo = info->has_wc_info != 0;
 			_wcSchedule = (SvnSchedule)info->schedule;
 			_copyFromRev = info->copyfrom_rev;
