@@ -344,7 +344,7 @@ namespace CollabUpload
                 wr.CookieContainer = cookBox;
                 using (WebFormWriter wfw = new WebFormWriter(wr, WebRequestPostDataEncoding.WwwFormUrlEncoded, "POST"))
                 {
-                    foreach (XmlElement el in form.SelectNodes(".//html:input[@name]", nsmgr))
+                    foreach (XmlElement el in form.SelectNodes(".//html:input[@name] | .//input[@name]", nsmgr))
                     {
                         string name = el.GetAttribute("name");
 
