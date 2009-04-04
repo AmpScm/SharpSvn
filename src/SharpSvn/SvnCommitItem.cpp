@@ -60,7 +60,7 @@ SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ p
 	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;
 }
 
-SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo)
+SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, AprPool^ pool)
 {
 	if (!commitItemInfo)
 		throw gcnew ArgumentNullException("commitItemInfo");
@@ -86,6 +86,7 @@ void SvnCommitItem::Detach(bool keepProperties)
 	finally
 	{
 		_info = nullptr;
+		_pool = nullptr;
 	}
 }
 
