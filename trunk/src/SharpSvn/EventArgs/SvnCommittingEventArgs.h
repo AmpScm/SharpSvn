@@ -27,8 +27,20 @@ namespace SharpSvn {
 		bool _cancel;
 		String^ _logMessage;
 		SvnCommitItemCollection^ _items;
+		initonly SvnCommandType _commandType;
+
 	internal:
-		SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool);
+		SvnCommittingEventArgs(const apr_array_header_t *commitItems, SvnCommandType commandType, AprPool^ pool)
+		{
+			if (!commitItems)
+				throw gcnew ArgumentNullException("commitItems");
+			else if (!pool)
+				throw gcnew ArgumentNullException("pool");
+
+			_commitItems = commitItems;
+			_pool = pool;
+			_commandType = commandType;
+		}
 
 	public:
 		property bool Cancel
@@ -60,8 +72,34 @@ namespace SharpSvn {
 			SvnCommitItemCollection^ get();
 		}
 
+		property SvnCommandType CurrentCommandType
+		{
+			SvnCommandType get()
+			{
+				return _commandType;
+			}
+		}
+
 	protected public:
-		virtual void Detach(bool keepProperties) override;
+		virtual void Detach(bool keepProperties) override
+		{
+			try
+			{
+				if (keepProperties)
+				{
+					if (Items)
+						for each (SvnCommitItem^ item in Items)
+						{
+							item->Detach(true);
+						}
+				}
+			}
+			finally
+			{
+				_commitItems = nullptr;
+				_pool = nullptr;
+			}
+		}
 	};
 
 }
