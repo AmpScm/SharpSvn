@@ -31,40 +31,6 @@ SvnException^ SvnNotifyEventArgs::Error::get()
 	return _exception;
 }
 
-SvnCommittingEventArgs::SvnCommittingEventArgs(const apr_array_header_t *commitItems, AprPool^ pool)
-{
-	if (!commitItems)
-		throw gcnew ArgumentNullException("commitItems");
-	else if (!pool)
-		throw gcnew ArgumentNullException("pool");
-
-	this->_commitItems = commitItems;
-	this->_pool = pool;
-}
-
-void SvnCommittingEventArgs::Detach(bool keepProperties)
-{
-	if (!_commitItems)
-		return;
-
-	try
-	{
-		if (keepProperties)
-		{
-			if (Items)
-				for each (SvnCommitItem^ item in Items)
-				{
-					item->Detach(true);
-				}
-		}
-	}
-	finally
-	{
-		_commitItems = nullptr;
-		_pool = nullptr;
-	}
-}
-
 //Fxcop bug:
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.SvnCommitItemMarshaller")];
 

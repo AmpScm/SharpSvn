@@ -241,7 +241,7 @@ svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg
 
 	AprPool^ tmpPool = gcnew AprPool(pool, false);
 
-	SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, tmpPool);
+	SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, client->CurrentCommandArgs->CommandType, tmpPool);
 
 	*log_msg = nullptr;
 	*tmp_file = nullptr;

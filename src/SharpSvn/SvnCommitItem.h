@@ -114,7 +114,7 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if (!_path && _info)
-					_path = SvnBase::Utf8_PtrToString(_info->path);
+					_path = SvnBase::Utf8_PathPtrToString(_info->path);
 				return _path;
 			}
 		}
