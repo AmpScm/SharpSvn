@@ -61,7 +61,7 @@ public:
 		UNUSED_ALWAYS(pool);
 		const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
 
-		return gcnew SvnCommitItem(*ppcCommitItem);
+		return gcnew SvnCommitItem(*ppcCommitItem, pool);
 	}
 };
 

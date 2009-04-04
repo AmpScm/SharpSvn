@@ -96,6 +96,7 @@ namespace SharpSvn {
 	public ref class SvnCommitItem sealed
 	{
 		const svn_client_commit_item3_t *_info;
+		AprPool^ _pool;
 		String^ _path;
 		String^ _fullPath;
 		initonly SvnNodeKind _nodeKind;
@@ -106,7 +107,7 @@ namespace SharpSvn {
 		initonly SvnCommitTypes _commitType;
 
 	internal:
-		SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo);
+		SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, AprPool^ pool);
 
 	public:
 		property String^ Path
@@ -114,7 +115,7 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if (!_path && _info)
-					_path = SvnBase::Utf8_PathPtrToString(_info->path);
+					_path = SvnBase::Utf8_PathPtrToString(_info->path, _pool);
 				return _path;
 			}
 		}
