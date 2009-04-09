@@ -5,8 +5,8 @@
   <property name="platform" value="win32" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.6.0" overwrite="false" />
-  <property name="subversionMerges" value="36337,36389,36390,36412,36421,36422,36423,36440,36441,36442,36443" overwrite="false" />
+  <property name="subversionVersion" value="1.6.1" overwrite="false" />
+  <property name="subversionMerges" value="36337,36389,36390,36412,36421,36422,36423,36440,36441,36442,36443,37117" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
