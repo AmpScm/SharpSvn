@@ -52,6 +52,27 @@ namespace SharpSvn.SourceIndexer.Tools
             get { return _srcToolPath ?? (_srcToolPath = CalculateToolPath("srctool.exe")); }
         }
 
+        static string _assemblyDir;
+        static string AssemblyDir
+        {
+            get
+            {
+                if (_assemblyDir != null)
+                    return string.IsNullOrEmpty(_assemblyDir) ? null : _assemblyDir;
+
+                Uri codeBase;
+                if (!Uri.TryCreate(typeof(SourceServerTools).Assembly.CodeBase, UriKind.Absolute, out codeBase)
+                    || !codeBase.IsFile)
+                {
+                    _assemblyDir = "";
+                    return null;
+                }
+
+                return _assemblyDir = SvnTools.GetNormalizedDirectoryName(codeBase.LocalPath);
+
+            }
+        }
+
         /// <summary>
         /// Tries to find the tool with the specified name using the path and knowledge about the Debugging SDK
         /// </summary>
@@ -60,16 +81,20 @@ namespace SharpSvn.SourceIndexer.Tools
         private static string CalculateToolPath(string toolName)
         {
             string path;
+
+            if (AssemblyDir != null && File.Exists(path = Path.Combine(AssemblyDir, toolName)))
+                return path;
+
             try
             {
-                path = Registry.CurrentUser.GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\ToolPaths", toolName) as string;
+                path = Registry.CurrentUser.GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\ToolPaths", null) as string;
 
-                if (!string.IsNullOrEmpty(path) && File.Exists(path))
+                if (!string.IsNullOrEmpty(path) && File.Exists(path=Path.Combine(path, toolName)))
                     return path;
 
-                path = Registry.LocalMachine.GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\ToolPaths", toolName) as string;
+                path = Registry.LocalMachine.GetValue("Software\\QQn\\SharpSvn\\CurrentVersion\\ToolPaths", null) as string;
 
-                if (!string.IsNullOrEmpty(path) && File.Exists(path))
+                if (!string.IsNullOrEmpty(path) && File.Exists(path=Path.Combine(path, toolName)))
                     return path;
             }
             catch { /* Eat all security exceptions */ }
@@ -124,6 +149,11 @@ namespace SharpSvn.SourceIndexer.Tools
                 foreach (DirectoryInfo subDir in dir.GetDirectories("Debugging Tools for Windows*"))
                 {
                     path = Path.Combine(Path.Combine(subDir.FullName, "sdk\\srcsrv"), toolName);
+
+                    if (File.Exists(path))
+                        return path;
+
+                    path = Path.Combine(Path.Combine(subDir.FullName, "srcsrv"), toolName);
 
                     if (File.Exists(path))
                         return path;
