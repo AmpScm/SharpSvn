@@ -70,6 +70,7 @@ SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, Ap
 	_revision = commitItemInfo->revision;
 	_copyFromRevision = commitItemInfo->copyfrom_rev;
 	_commitType = (SvnCommitTypes)commitItemInfo->state_flags;
+	_pool = pool;
 }
 
 void SvnCommitItem::Detach(bool keepProperties)
