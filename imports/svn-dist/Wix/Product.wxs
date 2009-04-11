@@ -80,10 +80,11 @@
 
     <UIRef Id="MyMondo"/>
     <Property Id="WIXUI_INSTALLDIR" Value="INSTALLLOCATION" />
-    <Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn and svnversion">
+    <Feature Id="SvnClient" Title="Subversion Client" Level="1" Description="Install svn, svnversion and svnmucc">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svn.exe" />
       <ComponentGroupRef Id="svnversion.exe" />
+      <ComponentGroupRef Id="svnmucc.exe"/>
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
@@ -103,7 +104,7 @@
       <ComponentRef Id="SvnChanges"/>
       <ComponentRef Id="SvnReleaseNotes"/>
     </Feature>
-    <Feature Id="JavaHL" Title="JavaHL Support" Level="5" Description="Installs the JavaHL support library (Required by Subclipse and other Java applications)">
+    <Feature Id="JavaHL" Title="JavaHL Support" Level="3" Description="Installs the JavaHL support library (Required by Subclipse and other Java applications)">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="libsvnjavahl_1.dll"/>
       <MergeRef Id="VC_CRT"/>
@@ -117,9 +118,8 @@
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
-    <Feature Id="ExtraTools" Title="Extra Tools" Level="300" Description="Install svnmucc, svnauthz_validate, svn_populate_node_origins_index">
-      <ComponentRef Id="AddToPath"/>
-      <ComponentGroupRef Id="svnmucc.exe"/>
+    <Feature Id="ExtraTools" Title="Extra Tools" Level="300" Description="Install, svnauthz_validate, svn_populate_node_origins_index">
+      <ComponentRef Id="AddToPath"/>      
       <ComponentGroupRef Id="svnauthz_validate.exe"/>
       <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
       <MergeRef Id="VC_CRT"/>
