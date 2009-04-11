@@ -23,5 +23,20 @@ namespace SharpSvn.Tests
             }
         }
 
+
+        public void ListSsh()
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                bool foundOne = false;
+                client.List(new Uri("svn+ssh://vip.alh.net.qqn.nl/home/bert/repos/"), delegate(object sender, SvnListEventArgs e)
+                {
+                    foundOne = true;
+                });
+
+                Assert.That(foundOne);
+            }
+        }
+
     }
 }

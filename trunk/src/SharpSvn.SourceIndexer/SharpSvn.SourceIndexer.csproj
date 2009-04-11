@@ -49,6 +49,23 @@
     <Compile Include="Tools\SourceServerToolException.cs" />
     <Compile Include="Tools\SourceServerTools.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="dbghelp.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="pdbstr.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="srctool.exe">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
+      <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+      <Name>SharpSvn</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
