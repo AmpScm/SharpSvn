@@ -303,7 +303,7 @@ void SvnClientContext::ApplyCustomSsh()
 		{
 			val += len;
 
-			while (*val && isspace(*val))
+			while (*val && isspace((int)*val))
 				val++;
 		}
 		else
