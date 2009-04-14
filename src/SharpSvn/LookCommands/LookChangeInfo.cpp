@@ -68,6 +68,9 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, apr_pool
 
 		const char* name = node->parent ? apr_pstrdup(pool, create_name(node, tmpPool)) : node->name;
 
+        if (!*name)
+            name = "/"; // Static char* "/" for the repository root
+
 		apr_hash_set(ht, name, APR_HASH_KEY_STRING, chg); // TODO: Check if name is valid! (maybe use parents names as suffix!)
 	}
 
