@@ -167,9 +167,15 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 
 					SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(directory, key, val, %pool);
 
-					args->OnEntry(e);
+					args->OnEntry(e);                    
 
 					e->Detach(false);
+
+					if(e->Cancel)
+					{
+						r = svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
+						break;
+					}
 				}
 			}
 
