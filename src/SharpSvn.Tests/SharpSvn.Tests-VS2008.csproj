@@ -67,6 +67,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminCommands\DumpTest.cs" />
     <Compile Include="Commands\AddTests.cs" />
     <Compile Include="Commands\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />

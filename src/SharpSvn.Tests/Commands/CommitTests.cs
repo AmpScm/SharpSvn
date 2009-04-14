@@ -272,6 +272,43 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(name, ca);
         }
 
+        [Test]
+        public void NonRecursiveDepthEmpty()
+        {
+            string dir = GetTempDir();
+            Client.CheckOut(GetReposUri(TestReposType.Empty), dir);
+
+            string name = Path.Combine(dir, "sd");
+            string f = Path.Combine(name, "f");
+
+            Client.CreateDirectory(name);
+            File.WriteAllText(f, "qq");
+            Client.Add(f);
+
+            Client.Commit(name);
+
+            Collection<SvnStatusEventArgs> st;
+            
+            Client.CropWorkingCopy(name, SvnDepth.Empty);
+            Client.Delete(name);
+
+            Client.GetStatus(name, out st);
+            Assert.That(st.Count, Is.EqualTo(1));
+
+            using (SvnWorkingCopyClient wcc = new SvnWorkingCopyClient())
+            {
+                Collection<SvnWorkingCopyEntryEventArgs> lst;
+                wcc.GetEntries(name, out lst);
+
+                Assert.That(lst.Count, Is.EqualTo(1));
+            }
+
+
+            SvnCommitArgs ca = new SvnCommitArgs();
+            ca.Depth = SvnDepth.Empty;
+            Client.Commit(name, ca);
+        }
+
 		private void LogMessageCallback(object sender, SvnCommittingEventArgs e)
 		{
 			Assert.That(e.Items.Count, Is.EqualTo(1), "Wrong number of commit items");
