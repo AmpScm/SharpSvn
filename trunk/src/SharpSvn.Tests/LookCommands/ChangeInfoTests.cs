@@ -132,7 +132,15 @@ namespace SharpSvn.Tests.LookCommands
             string reposPath = GetRepos(TestReposType.CollabRepos);
             Uri reposUri = GetReposUri(TestReposType.CollabRepos);
 
-            for (long ii = 1; ii < 17; ii++)
+            using (SvnClient cl = new SvnClient())
+            {
+                SvnSetPropertyArgs sa = new SvnSetPropertyArgs();
+                sa.BaseRevision = 17;
+                sa.LogMessage = "Message";
+                cl.SetProperty(reposUri, "MyProp", "Value", sa);
+            }
+
+            for (long ii = 1; ii < 19; ii++)
             {
                 using (SvnLookClient lcl = new SvnLookClient())
                 using (SvnClient cl = new SvnClient())
