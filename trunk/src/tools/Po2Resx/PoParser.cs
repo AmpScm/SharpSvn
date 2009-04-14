@@ -152,7 +152,7 @@ namespace Po2Resx
                                                     }
                                                     catch
                                                     {
-                                                        Console.Error.WriteLine("warning: Ignoring unknown encoding '{0}'", cc);
+                                                        Console.Error.WriteLine(string.Format("{0}(1): Warning: Ignoring unknown encoding '{1}'", file.FullName, cc));
                                                         continue;
                                                     }
 
@@ -166,7 +166,7 @@ namespace Po2Resx
                             else if (string.IsNullOrEmpty(token.Value))
                             { /* Skip: No translation available */ }
                             else if (msgid.Percent != token.Percent)
-                                Console.Error.WriteLine(string.Format("{0}({1}):warning: Percent mismatch in token: {2} vs {3}", file.FullName, msgid.Line, CEscape(msgid.Value), CEscape(token.Value)));
+                                Console.Error.WriteLine(string.Format("{0}({1}): Warning: Percent mismatch in token: {2} vs {3}", file.FullName, msgid.Line, CEscape(msgid.Value), CEscape(token.Value)));
                             else
                                 yield return new Msg(msgid.Value, token.Value, msgid.Comment ?? token.Comment, msgid.Line);
 
@@ -180,7 +180,7 @@ namespace Po2Resx
                         case "msgstr[2]":
                             break;
                         default:
-                            Console.Error.WriteLine(string.Format("{0}({1}):Warning: Ignoring unexpected token: {2}", file.FullName, token.Line, token.Key));
+                            Console.Error.WriteLine(string.Format("{0}({1}): Warning: Ignoring unexpected token: {2}", file.FullName, token.Line, token.Key));
                             Console.Error.Flush();
                             throw new InvalidOperationException();
                     }
@@ -197,10 +197,10 @@ namespace Po2Resx
 
         }
 
-		private static string CEscape(string p)
-		{
-			return p.Replace("\n", "\\n").Replace("\r", "\\r");
-		}
+        private static string CEscape(string p)
+        {
+            return p.Replace("\n", "\\n").Replace("\r", "\\r");
+        }
 
         private static IEnumerable<Token> ReadTokens(FileInfo file, Encoding encoding)
         {
