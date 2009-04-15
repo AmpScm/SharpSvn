@@ -175,7 +175,11 @@ namespace SharpSvn {
 		RevisionPropertyDeleted		= svn_wc_notify_revprop_deleted,
 		MergeCompleted				= svn_wc_notify_merge_completed,
 		TreeConflict				= svn_wc_notify_tree_conflict,
-		ExternalFailed				= svn_wc_notify_failed_external
+		ExternalFailed				= svn_wc_notify_failed_external,
+
+		// 1.7+
+		/// <summary>[[[ Unversioned obstruction error (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		UpdateObstruction			= svn_wc_notify_update_obstruction
 	};
 
 	public enum class SvnNotifyState

@@ -108,6 +108,27 @@ namespace SharpSvn.Tests.Commands
 		}
 
         [Test]
+        public void TestObstruction()
+        {
+            string tmp = GetTempDir();
+            Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk/"), 2), tmp);
+            File.WriteAllText(Path.Combine(tmp, "products/medium.html"), "q");
+            SvnUpdateArgs ua = new SvnUpdateArgs();
+            bool obstructionFound = false;
+            ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
+            {
+                if (e.Action == SvnNotifyAction.UpdateObstruction)
+                    obstructionFound = true;
+
+            };
+            ua.AddExpectedError(SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
+            Client.Update(tmp, ua);
+
+            Assert.That(ua.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
+            Assert.That(obstructionFound, "Obstruction found");
+        }
+
+        [Test]
         public void TestNotify()
         {
             int n = 0;;
