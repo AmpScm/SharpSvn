@@ -91,6 +91,7 @@
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
         <arg value="merge" />
+        <arg line="--accept theirs-conflict" />
         <arg value="-c" />
         <arg value="${subversionMerges}" />
         <arg value="http://svn.collab.net/repos/svn/trunk/" />
