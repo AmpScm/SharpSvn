@@ -15,6 +15,18 @@
   <property name="wc" value="dev" overwrite="false" />
   <property name="branch" value="" overwrite="false" />
   <property name="tag" value="" overwrite="false" />
+  <property name="javaHome" value="" overwrite="false" />
+  
+  <foreach item="Folder" property="jh">
+    <in>
+      <items basedir="C:\Program Files\Java">
+        <include name="jdk1.*" />
+      </items>
+    </in>
+    <do>
+      <property name="javaHome" value="${jh}" if="${javaHome == ''}" />
+    </do>
+  </foreach>
   
   <include buildfile="imports/Default.build" />
 
@@ -50,6 +62,7 @@
 		<arg value="--with-sasl=${impBase}/lib" />
 		<arg value="--with-sqlite=${intDir}" />
 		<arg value="--enable-nls" if="${intl != 'none'}"/>
+		<arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
 	</exec>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />
   
