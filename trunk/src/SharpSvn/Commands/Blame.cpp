@@ -97,7 +97,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 			args->IgnoreMimeType,
 			args->RetrieveMergedRevisions,
 			svn_client_blame_receiver_handler2,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);
 

@@ -26,7 +26,7 @@ using System::Runtime::InteropServices::Marshal;
 
 SvnStreamWrapper::~SvnStreamWrapper()
 {
-	delete _streamBatton;
+	delete _streamBaton;
 }
 
 static svn_error_t *svnStreamRead(void *baton, char *buffer, apr_size_t *len)
@@ -80,7 +80,7 @@ static svn_error_t *svnStreamClose(void *baton)
 
 void SvnStreamWrapper::Init(bool enableRead, bool enableWrite)
 {
-	_svnStream = svn_stream_create((void*)_streamBatton->Handle, _pool->Handle);
+	_svnStream = svn_stream_create((void*)_streamBaton->Handle, _pool->Handle);
 
 	if (!_svnStream)
 		throw gcnew InvalidOperationException("Can't create svn stream");

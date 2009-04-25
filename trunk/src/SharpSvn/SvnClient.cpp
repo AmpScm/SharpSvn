@@ -33,13 +33,13 @@ using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 SvnClient::SvnClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-	_clientBatton = gcnew AprBaton<SvnClient^>(this);
+	_clientBaton = gcnew AprBaton<SvnClient^>(this);
 	Initialize();
 }
 
 SvnClient::~SvnClient()
 {
-	delete _clientBatton;
+	delete _clientBaton;
 }
 
 // Allow changing the AdministrativeDirectory for users willing to take the risks involved.
@@ -68,7 +68,7 @@ struct SvnClientCallBacks
 
 void SvnClient::Initialize()
 {
-	void* baton = (void*)_clientBatton->Handle;
+	void* baton = (void*)_clientBaton->Handle;
 
 	CtxHandle->cancel_baton = baton;
 	CtxHandle->cancel_func = &SvnClientCallBacks::svn_cancel_func;

@@ -327,7 +327,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 			args->RetrieveMergedRevisions,
 			retrieveProperties,
 			svnclient_log_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);
 

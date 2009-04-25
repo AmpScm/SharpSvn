@@ -123,7 +123,7 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnClient : public SvnClientContext
 	{
-		initonly AprBaton<SvnClient^>^ _clientBatton;
+		initonly AprBaton<SvnClient^>^ _clientBaton;
 		static ICollection<SvnLibrary^>^ _svnLibraries;
 		AprPool _pool;
 	internal:

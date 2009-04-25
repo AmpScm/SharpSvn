@@ -418,7 +418,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 			end_rev, 
 			args->RetrieveMergedRevisions,
 			file_version_handler,
-			(void*)_clientBatton->Handle, 
+			(void*)_clientBaton->Handle, 
 			pool.Handle);
 
 		return args->HandleResult(this, r);

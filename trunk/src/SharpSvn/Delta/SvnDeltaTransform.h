@@ -127,7 +127,7 @@ namespace SharpSvn {
 
 		public ref class SvnDeltaTarget abstract : SvnBase
 		{
-			initonly AprBaton<SvnDeltaTarget^>^ _targetBatton;
+			initonly AprBaton<SvnDeltaTarget^>^ _targetBaton;
 			bool _disposed;
 		internal:
 			SvnDeltaTarget();

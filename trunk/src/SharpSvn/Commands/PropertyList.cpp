@@ -91,7 +91,7 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 			(svn_depth_t)args->Depth,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			svnclient_property_list_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);
 

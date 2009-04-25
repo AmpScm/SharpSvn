@@ -217,7 +217,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			args->RetrieveContent,
 			sharpsvn_replay_rev_start,
 			sharpsvn_replay_rev_finish,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			pool.Handle);
 
 		return args->HandleResult(this, r);

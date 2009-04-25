@@ -90,7 +90,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 			&pegRev,
 			&rev,
 			svn_info_receiver,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			(svn_depth_t)args->Depth,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,
