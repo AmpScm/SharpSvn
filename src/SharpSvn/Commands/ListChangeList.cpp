@@ -86,7 +86,7 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			(svn_depth_t)args->Depth,
 			svnclient_changelist_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);
 

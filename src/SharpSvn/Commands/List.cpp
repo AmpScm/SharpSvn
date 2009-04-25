@@ -95,7 +95,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 			(apr_uint32_t)args->RetrieveEntries,
 			args->RetrieveLocks,
 			svnclient_list_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);
 

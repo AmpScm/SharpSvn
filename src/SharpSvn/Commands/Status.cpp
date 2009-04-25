@@ -96,7 +96,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			pool.AllocPath(path),
 			&pegRev,
 			svnclient_status_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			(svn_depth_t)args->Depth,
 			args->RetrieveAllEntries,
 			args->ContactRepository,

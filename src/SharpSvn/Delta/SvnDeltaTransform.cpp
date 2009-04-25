@@ -10,12 +10,12 @@ using namespace SharpSvn::Implementation;
 
 SvnDeltaTarget::SvnDeltaTarget()
 {
-	_targetBatton = gcnew AprBaton<SvnDeltaTarget^>(this);
+	_targetBaton = gcnew AprBaton<SvnDeltaTarget^>(this);
 }
 
 SvnDeltaTarget::~SvnDeltaTarget()
 {
-	delete _targetBatton;
+	delete _targetBaton;
 }
 
 static svn_error_t* __cdecl 
@@ -58,7 +58,7 @@ void SvnDeltaTarget::AllocHandler(svn_txdelta_window_handler_t& handler, void*& 
 	pool->Ensure();
 
 	handler = svndeltatarget_window_handler;
-	handlerBaton = (void*)_targetBatton->Handle;
+	handlerBaton = (void*)_targetBaton->Handle;
 }
 
 svn_error_t* SvnDeltaTarget::apply_window(svn_txdelta_window_t *window, SvnDeltaWindowEventArgs^% e)

@@ -28,7 +28,7 @@ namespace SharpSvn {
 
 		ref class SvnStreamWrapper : public IDisposable
 		{
-			initonly AprBaton<SvnStreamWrapper^>^ _streamBatton;
+			initonly AprBaton<SvnStreamWrapper^>^ _streamBaton;
 			initonly Stream^ _stream;
 			svn_stream_t* _svnStream;
 			AprPool^ _pool;
@@ -43,7 +43,7 @@ namespace SharpSvn {
 					throw gcnew ArgumentException("enableRead or enableWrite must be set to true");
 
 				_stream = stream;
-				_streamBatton = gcnew AprBaton<SvnStreamWrapper^>(this);
+				_streamBaton = gcnew AprBaton<SvnStreamWrapper^>(this);
 				_pool = pool;
 
 				if (enableRead && !_stream->CanRead)

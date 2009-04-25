@@ -100,7 +100,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 			pool.AllocString(source->SvnTargetName),
 			source->Revision->AllocSvnRevision(%pool),
 			svnclient_eligible_log_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			args->RetrieveChangedPaths,
 			retrieveProperties,
 			CtxHandle,

@@ -24,7 +24,7 @@ namespace SharpSvn {
 
 	ref class SvnRepositorySession : public SvnClientContext
 	{
-		initonly AprBaton<SvnRepositorySession^>^ _clientBatton;
+		initonly AprBaton<SvnRepositorySession^>^ _clientBaton;
 		AprPool _pool;
 
 	private:

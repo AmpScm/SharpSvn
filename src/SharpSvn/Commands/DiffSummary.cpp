@@ -98,7 +98,7 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 			args->IgnoreAncestry,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			svn_client_diff_summarize_func_handler,
-			(void*)_clientBatton->Handle,
+			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);
 

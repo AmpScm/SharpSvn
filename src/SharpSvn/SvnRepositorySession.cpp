@@ -28,14 +28,14 @@ using namespace SharpSvn;
 SvnRepositorySession::SvnRepositorySession()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-	_clientBatton = gcnew AprBaton<SvnRepositorySession^>(this);
+	_clientBaton = gcnew AprBaton<SvnRepositorySession^>(this);
 
 	Initialize();
 }
 
 SvnRepositorySession::~SvnRepositorySession()
 {
-	delete _clientBatton;
+	delete _clientBaton;
 }
 
 static svn_error_t *open_tmp_file(apr_file_t **fp, void *callback_baton, apr_pool_t *pool);
