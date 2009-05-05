@@ -24,6 +24,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -270,6 +271,40 @@ namespace SharpSvn.Tests.Commands
             SvnCommitArgs ca = new SvnCommitArgs();
             ca.Depth = SvnDepth.Empty;
             Client.Commit(name, ca);
+        }
+
+        [Test]
+        public void WithAlternateUser()
+        {
+            string user = Guid.NewGuid().ToString();
+
+            string dir = GetTempDir();
+            using (SvnClient client = new SvnClient())
+            {
+                client.CheckOut(GetReposUri(TestReposType.Empty), dir);
+
+                client.Authentication.Clear();
+                client.Configuration.LogMessageRequired = false;
+
+                client.Authentication.UserNameHandlers +=
+                    delegate(object sender, SvnUserNameEventArgs e)
+                    {
+                        e.UserName = user;
+                    };
+
+                client.SetProperty(dir, "a", "b");
+
+                SvnCommitResult cr;
+                client.Commit(dir, out cr);
+
+                Collection<SvnLogEventArgs> la;
+                client.GetLog(dir, out la);
+
+                Assert.That(la.Count, Is.EqualTo(2));
+                Assert.That(la[0].Revision, Is.EqualTo(cr.Revision));
+                Assert.That(la[0].Author, Is.EqualTo(user));
+                Assert.That(la[0].LogMessage, Is.EqualTo(""));
+            }
         }
 
         [Test]
