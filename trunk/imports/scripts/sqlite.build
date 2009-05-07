@@ -20,6 +20,7 @@
         <define name="NDEBUG" />
         <!-- Ommit some parts of SQLite not used by Subversion -->
         <define name="SQLITE_OMIT_AUTOINIT" /><!-- Subversion initializes properly -->
+        <define name="SQLITE_OMIT_DEPRECATED" /><!-- Removes deprecated APIs -->
         <define name="SQLITE_OMIT_EXPLAIN" /><!-- Use other tools for this -->
         <define name="SQLITE_OMIT_LOAD_EXTENSION" /><!-- No dynamic extensions please -->
         <define name="SQLITE_OMIT_PROGRESS_CALLBACK" /><!-- Progress is not mapped by SVN -->

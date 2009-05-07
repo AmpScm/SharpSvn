@@ -20,6 +20,13 @@
       </exec>
     </OnceBlock>
 
+    <!-- Enable compiling subversion in debug mode -->    
+    <copy todir="${httpdDir}/Debug" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="**/Release/*.lib" />
+        <include name="Release/*.lib" />
+      </fileset>
+    </copy>
     <copy todir="${release}/httpd/bin" flatten="true">
       <fileset basedir="${httpdDir}">
         <include name="release/*.exe" />
@@ -33,7 +40,7 @@
         <include name="**/*.so" />
         <exclude name="srclib/**" />
       </fileset>
-    </copy>
+    </copy>    
     <mkdir dir="${release}/httpd/conf" />
     <mkdir dir="${release}/httpd/logs" />
     <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />
