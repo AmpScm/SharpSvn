@@ -33,7 +33,13 @@
   <if test="${platform != 'win32' and platform != 'x64'}">
     <fail message="Platform must be win32 or x64 at this time" />
   </if>
-
+  <foreach item="Folder" in="${path::combine(path::get-path-root(environment::get-variable('ProgramFiles')),'program files/java')}"
+           property="jh" if="${javaHome==''}">
+    <do>
+      <property name="javaHome" value="${jh}" />
+    </do>
+  </foreach>
+  <echo message="Found Java support in: ${javaHome}" if="${javaHome!=''}" />
   <setenv>
     <variable name="OPENSSL_STATIC" value="1" />
     <variable name="ENABLE_IPV6" value="1" if="${enableIpv6=='true'}" />
