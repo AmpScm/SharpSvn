@@ -36,7 +36,7 @@
   <foreach item="Folder" in="${path::combine(path::get-path-root(environment::get-variable('ProgramFiles')),'program files/java')}"
            property="jh" if="${javaHome==''}">
     <do>
-      <property name="javaHome" value="${jh}" />
+      <property name="javaHome" value="${jh}" if="${file::exists(path::combine(jh,'bin/javah.exe'))}" />
     </do>
   </foreach>
   <echo message="Found Java support in: ${javaHome}" if="${javaHome!=''}" />
