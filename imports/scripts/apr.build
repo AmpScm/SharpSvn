@@ -139,6 +139,11 @@ APR_END_DECLS
 #include &lt;wspiapi.h&gt;
 APR_BEGIN_DECLS
 /* /SharpSvn extension */' />
+              <replacestring from='#include &lt;windows.h&gt;' to='
+#if APR_HAVE_IPV6
+#include &lt;wspiapi.h&gt;
+#endif
+#include  &lt;windows.h&gt;' />
               <replacestring from='#pragma' to='// #disabled-pragma' />              
             </filterchain>
           </loadfile>
@@ -303,13 +308,13 @@ APR_BEGIN_DECLS
     <if test="true">
       <copy todir="${aprDir}/Debug">
          <fileset basedir="${aprDir}/Release">
-			<include name="**/*.dll" />
-	     </fileset>
+           <include name="**/*.dll" />
+         </fileset>
       </copy>
       <copy todir="${aprUtilDir}/Debug">
          <fileset basedir="${aprUtilDir}/Release">
-			<include name="**/*.dll" />
-	     </fileset>
+           <include name="**/*.dll" />
+         </fileset>
       </copy>
     </if>
   </target>
