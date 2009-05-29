@@ -133,18 +133,8 @@
               <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
-              <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
-/* SharpSvn extension */
-APR_END_DECLS
-#include &lt;wspiapi.h&gt;
-APR_BEGIN_DECLS
-/* /SharpSvn extension */' />
-              <replacestring from='#include &lt;windows.h&gt;' to='
-#if APR_HAVE_IPV6
-#include &lt;wspiapi.h&gt;
-#endif
-#include  &lt;windows.h&gt;' />
-              <replacestring from='#pragma' to='// #disabled-pragma' />              
+              <replacestring from='#define _WIN32_WINNT ' to='#define _WIN32_WINNT 0x500 //' />
+              <replacestring from='#pragma' to='// #disabled-pragma' />
             </filterchain>
           </loadfile>
           <echo message="${headertext}" file="${winHeader2}" />
