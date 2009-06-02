@@ -209,7 +209,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.HasLocalInfo, Is.True);
                     Assert.That(e.LastChangeAuthor, Is.Null);
                     Assert.That(e.LastChangeTime, Is.EqualTo(DateTime.MinValue));
-                    Assert.That(e.LastChangeRevision, Is.EqualTo(0)); // Not committed yet
+                    Assert.That(e.LastChangeRevision, Is.EqualTo(-1L), "Not committed yet; LastChangeRevision = -1"); // Not committed yet
                     Assert.That(e.Lock, Is.Null);
                     Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
                     Assert.That(e.Path, Is.Not.Null);
@@ -217,7 +217,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime));
                     Assert.That(e.RepositorySize, Is.EqualTo(-1L));
                     Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri), "Repository valid");
-                    Assert.That(e.Revision, Is.EqualTo(0L)); // Not committed yet
+                    Assert.That(e.Revision, Is.EqualTo(0L), "Revision=0, not committed yet"); // Not committed yet
                     Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Add));
                     Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
                     Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));

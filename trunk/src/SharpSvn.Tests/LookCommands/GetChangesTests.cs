@@ -74,5 +74,36 @@ namespace SharpSvn.Tests.LookCommands
                 Assert.That(list[3].Path, Is.EqualTo("/a/b/c/"));
             }
         }
+
+		[Test]
+		public void PostCommitErrorTest()
+		{
+			string dir = CreateRepos(TestReposType.Empty);
+			Uri uri = PathToUri(dir);
+			using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
+			{				
+				using (SvnClient cl = new SvnClient())
+				{
+					SvnCommitResult cr;
+					SvnCreateDirectoryArgs da = new SvnCreateDirectoryArgs();
+					da.CreateParents = true;
+					da.LogMessage = "Created!";
+					cl.RemoteCreateDirectory(new Uri(uri, "a/b/c/d/e/f"), da, out cr);
+
+					Assert.That(cr, Is.Not.Null);
+					Assert.That(cr.PostCommitError.Contains(Environment.NewLine));
+					Assert.That(cr.PostCommitError.Substring(
+									cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase) 
+									+ Environment.NewLine.Length),
+								Is.EqualTo("The Post Commit Warning"));
+				}
+			}
+		}
+
+		private void OnPostCommit(object sender, ReposHookEventArgs e)
+		{
+			e.ErrorText = "The Post Commit Warning";
+			e.ExitCode = 1;
+		}
     }
 }
