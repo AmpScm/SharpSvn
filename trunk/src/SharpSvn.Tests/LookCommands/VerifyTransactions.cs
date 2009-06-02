@@ -42,6 +42,7 @@ namespace SharpSvn.Tests.LookCommands
 
                 Assert.That(i.Revision, Is.LessThan(0L));
                 Assert.That(i.Author, Is.EqualTo(Environment.UserName));
+                Assert.That(i.LogMessage, Is.EqualTo("Blaat!\r\nQWQQ\r\n"));
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -54,6 +55,17 @@ namespace SharpSvn.Tests.LookCommands
                     {
                         Assert.That(sr.ReadToEnd(), Is.EqualTo("AllTheData"));
                     }
+
+                    string v;
+                    cl.GetProperty(e.HookArgs.LookOrigin, "trunk/Pre.txt", "boe", out v);
+
+                    Assert.That(v, Is.EqualTo("blaat"));
+
+                    SvnPropertyCollection props;
+                    cl.GetPropertyList(e.HookArgs.LookOrigin, "trunk/Pre.txt", out props);
+
+                    Assert.That(props, Is.Not.Null);
+                    Assert.That(props.Count, Is.EqualTo(1));
                 }
             }
         }
@@ -68,8 +80,12 @@ namespace SharpSvn.Tests.LookCommands
                 string dir = GetTempDir();
                 Client.CheckOut(new Uri(uri, "trunk/"), dir);
 
-                File.WriteAllText(Path.Combine(dir, "Pre.txt"), "AllTheData");
-                Client.Add(Path.Combine(dir, "Pre.txt"));
+                string pre = Path.Combine(dir, "Pre.txt");
+
+                File.WriteAllText(pre, "AllTheData");
+                
+                Client.Add(pre);
+                Client.SetProperty(pre, "boe", "blaat");
                 SvnCommitArgs ca = new SvnCommitArgs();
                 ca.LogMessage = "Blaat!\nQWQQ\n";
                 Client.Commit(dir, ca);
