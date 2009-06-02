@@ -57,7 +57,11 @@ SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ p
 	}
 
 	_author = SvnBase::Utf8_PtrToString(commitInfo->author);
-	_postCommitError = commitInfo->post_commit_err ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err) : nullptr;
+
+	_postCommitError = commitInfo->post_commit_err
+			? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err)->Replace("\n", Environment::NewLine)
+				->Replace("\r\r", "\r")
+			: nullptr;
 }
 
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, AprPool^ pool)

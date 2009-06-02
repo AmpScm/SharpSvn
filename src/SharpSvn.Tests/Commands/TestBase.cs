@@ -244,6 +244,7 @@ namespace SharpSvn.Tests.Commands
                 _reposPath = null;
                 _reposUri = null;
                 _wcPath = null;
+				_reposs.Clear();
             }
         }
         /// <summary>

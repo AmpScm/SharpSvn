@@ -32,19 +32,21 @@ namespace SharpSvn.Tests.LookCommands
             int _exitCode;
             string[] _args;
             string _stdinText;
+            string _errorText;
+            string _outputText;
 
             SvnHookArguments _ha;
-                
 
-            public ReposHookEventArgs(string[] args, string stdinText)
+
+            public ReposHookEventArgs(SvnHookType ht, string[] args, string stdinText)
             {
                 _args = args;
                 _stdinText = stdinText;
 
                 SvnHookArguments ha;
-                if (SvnHookArguments.ParseHookArguments(args, SvnHookType.PreCommit, false, out ha))
+                if (SvnHookArguments.ParseHookArguments(args, ht, false, out ha))
                     _ha = ha;
-                
+
             }
 
             public string[] Args
@@ -61,6 +63,19 @@ namespace SharpSvn.Tests.LookCommands
             {
                 get { return _stdinText; }
             }
+
+            public string ErrorText
+            {
+                get { return _errorText; }
+                set { _errorText = value; }
+            }
+
+            public string OutputText
+            {
+                get { return _outputText; }
+                set { _outputText = value; }
+            }
+
             public int ExitCode
             {
                 get { return _exitCode; }
@@ -134,7 +149,7 @@ namespace SharpSvn.Tests.LookCommands
 
             stopper.Start(
             delegate
-            {                
+            {
                 try
                 {
                     while (!stopper.Cancel)
@@ -153,7 +168,7 @@ namespace SharpSvn.Tests.LookCommands
                             File.Delete(args);
                             File.Delete(stdin);
 
-                            ReposHookEventArgs ra = new ReposHookEventArgs(argCollection.ToArray(), stdin);
+                            ReposHookEventArgs ra = new ReposHookEventArgs(type, argCollection.ToArray(), stdin);
 
                             try
                             {
@@ -165,6 +180,14 @@ namespace SharpSvn.Tests.LookCommands
                             }
                             finally
                             {
+
+                                if (ra.ErrorText != null)
+                                    File.WriteAllText(errTxt, ra.ErrorText);
+
+                                if (ra.OutputText != null)
+                                    File.WriteAllText(outTxt, ra.OutputText);
+
+
                                 File.WriteAllText(wait, ra.ExitCode.ToString());
                             }
 
@@ -189,7 +212,7 @@ namespace SharpSvn.Tests.LookCommands
 
             string file = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, type), ".exe");
 
-            File.Copy(Path.Combine(ProjectBase,"..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
+            File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
 
             return stopper;
         }
