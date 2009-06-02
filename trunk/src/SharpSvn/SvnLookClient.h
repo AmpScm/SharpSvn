@@ -29,6 +29,8 @@ namespace SharpSvn {
 	ref class SvnChangedArgs;
 
 	ref class SvnLookRevisionPropertyArgs;
+	ref class SvnLookGetPropertyArgs;
+	ref class SvnLookPropertyListArgs;
 	ref class SvnLookWriteArgs;
 
 	/// <summary>Container for the location to use with the <see cref="SvnLookClient" /> commands</summary>
@@ -133,6 +135,24 @@ namespace SharpSvn {
 		bool GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ propertyName, SvnLookRevisionPropertyArgs^ args, [Out] SvnPropertyValue^% value);
 
 	public:
+		/// <overloads>Gets the property value of the specified path directly from a repository</overloads>
+		/// <summary>Gets the property value of the specified path directly from a repository</summary>
+		bool GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^ propertyName, [Out] String^% value);
+		/// <summary>Gets the property value of the specified path directly from a repository</summary>
+		bool GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^ propertyName, [Out] SvnPropertyValue^% value);
+		/// <summary>Gets the property value of the specified path directly from a repository</summary>
+		bool GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^ propertyName, SvnLookGetPropertyArgs^ args, [Out] String^% value);
+		/// <summary>Gets the property value of the specified path directly from a repository</summary>
+		bool GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^ propertyName, SvnLookGetPropertyArgs^ args, [Out] SvnPropertyValue^% value);
+
+	public:
+		/// <overloads>Gets all properties on files or dirs (<c>svn proplist</c>)</overloads>
+		/// <summary>Gets all properties on files or dirs (<c>svn proplist</c>)</summary>
+		bool GetPropertyList(SvnLookOrigin^ lookOrigin, String^ path, [Out] SvnPropertyCollection^% properties);
+		/// <summary>Gets all properties on files or dirs (<c>svn proplist</c>)</summary>
+		bool GetPropertyList(SvnLookOrigin^ lookOrigin, String^ path, SvnLookPropertyListArgs^ args, [Out] SvnPropertyCollection^% properties);
+
+	public:
 		/// <overloads>Writes the content of the specified path to a stream directly from a repository</overloads>
 		/// <summary>Writes the content of the specified path to a stream directly from a repository</summary>
 		bool Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream);
@@ -141,5 +161,7 @@ namespace SharpSvn {
 
 	private:
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args);
+
+		svn_error_t* open_origin(SvnLookOrigin^ lookOrigin, svn_fs_root_t **root, svn_fs_t **fs, svn_repos_t **repos, AprPool^ pool);
 	};
 }
