@@ -66,3 +66,56 @@ SvnLookClient::SvnLookClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
 }
+
+
+svn_error_t* SvnLookClient::open_origin(SvnLookOrigin^ lookOrigin, svn_fs_root_t **root, svn_fs_t **fs, svn_repos_t **repos, AprPool^ pool)
+{
+	if (!lookOrigin)
+		throw gcnew ArgumentNullException("lookOrigin");
+	else if (!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	svn_fs_root_t* pRoot = nullptr;
+	svn_repos_t* pRepos = nullptr;
+	svn_fs_t* pFs = nullptr;
+
+	if (root)
+		*root = nullptr;
+	if (fs)
+		*fs = nullptr;
+	if (repos)
+		*repos = nullptr;
+
+	SVN_ERR(svn_repos_open(&pRepos, pool->AllocCanonical(lookOrigin->RepositoryPath), pool->Handle));
+
+	pFs = svn_repos_fs(pRepos);
+
+	if (lookOrigin->HasTransaction)
+	{
+		svn_fs_txn_t* txn = nullptr;
+
+		SVN_ERR(svn_fs_open_txn(&txn, pFs, pool->AllocString(lookOrigin->Transaction), pool->Handle));
+
+		SVN_ERR(svn_fs_txn_root(&pRoot, txn, pool->Handle));
+	}
+	else
+	{
+		svn_revnum_t rev;
+
+		if (!lookOrigin->HasRevision)
+			SVN_ERR(svn_fs_youngest_rev(&rev, pFs, pool->Handle));
+		else
+			rev = (svn_revnum_t)lookOrigin->Revision;
+
+		SVN_ERR(svn_fs_revision_root(&pRoot, pFs, rev, pool->Handle));
+	}
+
+	if (root)
+		*root = pRoot;
+	if (fs)
+		*fs = pFs;
+	if (repos)
+		*repos = pRepos;
+
+	return SVN_NO_ERROR;
+}
