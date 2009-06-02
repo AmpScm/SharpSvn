@@ -1441,6 +1441,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\LookArgs\SvnLookGetPropertyArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\LookArgs\SvnLookPropertyListArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\LookArgs\SvnLookRevisionPropertyArgs.h"
 					>
 				</File>
@@ -1473,7 +1481,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\LookCommands\LookGetProperty.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\LookCommands\LookGetRevisionProperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\LookPropertyList.cpp"
 					>
 				</File>
 				<File
