@@ -212,7 +212,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
         }
 
-        [Test, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
+        [Test]//, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
         public void NormalizeUnrooted()
         {
             GC.KeepAlive(SvnTools.GetNormalizedFullPath("123456789012345678901234567890123456789012345678901234567890" +

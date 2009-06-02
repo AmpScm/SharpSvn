@@ -75,7 +75,7 @@ static String^ LongGetFullPath(String^ path)
 	else
 		pPathBuf = rPath;
 
-	path = gcnew String(pPath, 0, c);
+	path = gcnew String(pPathBuf, 0, c);
 
 	if (path->StartsWith("\\\\?\\"))
 		path = path->Substring(4);
