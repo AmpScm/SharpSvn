@@ -53,7 +53,7 @@ namespace SharpSvn.Tests.Commands
                 ca.RetrieveAllCapabilities = true;
                 Assert.That(client.GetCapabilities(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/"), ca, out caps));
 
-                Assert.That(!caps.Contains(SvnCapability.MergeInfo));
+                Assert.That(caps.Contains(SvnCapability.MergeInfo));
             }
         }
     }
