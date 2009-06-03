@@ -57,50 +57,12 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 	
-	svn_repos_t* repos = nullptr;
-	svn_fs_t* fs = nullptr;
-	svn_error_t* r;
-
 	svn_revnum_t base_rev = 0;
 	svn_fs_root_t* root = nullptr;
+	svn_error_t* r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool);
 
-	if (r = svn_repos_open(
-		&repos,
-		pool.AllocCanonical(lookOrigin->RepositoryPath),
-		pool.Handle))
-	{
+	if (r)
 		return args->HandleResult(this, r);
-	}
-
-	fs = svn_repos_fs(repos);
-
-	if (lookOrigin->HasTransaction)
-	{
-		svn_fs_txn_t* txn = nullptr;
-
-		if (r = svn_fs_open_txn(&txn, fs, pool.AllocString(lookOrigin->Transaction), pool.Handle))
-			return args->HandleResult(this, r);
-
-		base_rev = svn_fs_txn_base_revision(txn);
-
-		if (r = svn_fs_txn_root(&root, txn, pool.Handle))
-			return args->HandleResult(this, r);				
-	}
-	else
-	{
-		svn_revnum_t rev;
-
-		if (!lookOrigin->HasRevision)
-		{
-			if (r = svn_fs_youngest_rev(&rev, fs, pool.Handle))
-				return args->HandleResult(this, r);
-		}
-		else
-			rev = (svn_revnum_t)lookOrigin->Revision;
-
-		if (r = svn_fs_revision_root(&root, fs, rev, pool.Handle))
-			return args->HandleResult(this, r);
-	}
 
 	svn_stream_t* fstream;
 
