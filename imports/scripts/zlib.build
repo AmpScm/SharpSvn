@@ -55,8 +55,8 @@
     </copy>
     <copy todir="${release}/include">
       <fileset basedir="${zlibDir}">
-        <include name="*.h" />
-        <exclude name="*.in.h" />
+        <include name="zlib.h" />
+        <include name="zconf.h" />
       </fileset>
     </copy>
   </target>
