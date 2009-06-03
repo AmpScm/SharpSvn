@@ -80,7 +80,7 @@
           <echo message="Patching ${vcproj}" />
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05000000;_WIN32_WINNT=0x0500;WIN32;WINNT;' />
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' />
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib ' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
               <replacestring from='Optimization="2"' to='Optimization="1"' />
@@ -133,7 +133,13 @@
               <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
-              <replacestring from='#define _WIN32_WINNT ' to='#define _WIN32_WINNT 0x500 //' />
+              <replacestring from='#define _WIN32_WINNT ' to='
+#ifdef _M_X64
+#  define _WIN32_WINNT 0x0501
+#else
+#  define _WIN32_WINNT 0x0500
+#endif
+//#define  _WIN32_WINNT ' />
               <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
 /* SharpSvn extension */
 APR_END_DECLS
