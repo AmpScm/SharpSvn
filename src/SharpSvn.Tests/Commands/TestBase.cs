@@ -595,6 +595,16 @@ namespace SharpSvn.Tests.Commands
             File.WriteAllText(bat, "exit 0");
         }
 
+        public static void ForcedDeleteDirectory(string dir)
+        {
+            foreach (FileInfo fif in new DirectoryInfo(dir).GetFiles("*", SearchOption.AllDirectories))
+            {
+                if ((int)(fif.Attributes & FileAttributes.ReadOnly) != 0)
+                    fif.Attributes = FileAttributes.Normal;
+            }
+            Directory.Delete(dir, true);
+        }
+
 
         protected readonly string REPOS_FILE;
         private const string REPOS_NAME = "repos";

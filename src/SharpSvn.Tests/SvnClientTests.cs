@@ -25,8 +25,25 @@ using System.Collections.ObjectModel;
 namespace SharpSvn.Tests
 {
     [TestFixture]
-    public class SvnClientTests : SvnTestBase
+    public class SvnClientTests : Commands.TestBase
     {
+
+		string _testPath;
+		public string TestPath
+		{
+			get
+			{
+				if (_testPath == null)
+				{
+					_testPath = Path.Combine(Path.GetTempPath(), "SvnTest\\" + GetType().FullName);
+
+					if (!Directory.Exists(_testPath))
+						Directory.CreateDirectory(_testPath);
+				}
+				return _testPath;
+			}
+		}    
+
         string _repos;
         string _wc;
         string RepositoryPath
@@ -60,7 +77,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        string WcPath
+        new string WcPath
         {
             get
             {
@@ -69,30 +86,8 @@ namespace SharpSvn.Tests
 
                 return _wc;
             }
-        }
-
-        static void TouchFile(string filename)
-        {
-            TouchFile(filename, false);
-        }
-
-        static void Touch2(string filename)
-        {
-            File.WriteAllText(filename, Guid.NewGuid().ToString());
-        }
-
-        static void TouchFile(string filename, bool createDir)
-        {
-            string dir = Path.GetDirectoryName(filename);
-            if (createDir && !Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-
-            using (FileStream fs = File.Create(filename))
-            {
-                fs.Write(new byte[0], 0, 0);
-            }
-        }
-
+        }        
+ 
         [TestFixtureSetUp]
         public void SetupRepository()
         {
@@ -132,29 +127,7 @@ namespace SharpSvn.Tests
 				reposClient.DeleteRepository(RepositoryPath);
 			}
 #endif
-        }
-
-        SvnClient NewSvnClient(bool expectCommit, bool expectConflict)
-        {
-            SvnClient client = new SvnClient();
-
-            client.Conflict += delegate(object sender, SvnConflictEventArgs e)
-            {
-                Assert.That(true, Is.EqualTo(expectConflict), "Conflict expected");
-            };
-
-            client.Committing += delegate(object sender, SvnCommittingEventArgs e)
-            {
-                Assert.That(true, Is.EqualTo(expectCommit), "Commit expected");
-                if (e.LogMessage == null)
-                    e.LogMessage = "";
-
-                GC.KeepAlive(e.Items);
-            };
-
-            return client;
-        }
-        
+        }  
 
         [Test]
         public void SomeGlobalTests()

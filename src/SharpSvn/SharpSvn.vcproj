@@ -1373,11 +1373,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\ReposArgs\HotCopyRepository.h"
+					>
+				</File>
+				<File
 					RelativePath=".\ReposArgs\LoadRepository.h"
 					>
 				</File>
 				<File
 					RelativePath=".\ReposArgs\RecoverRepository.h"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposArgs\SetRevisionPropertyRepository.h"
 					>
 				</File>
 				<File
@@ -1405,11 +1413,19 @@
 					>
 				</File>
 				<File
+					RelativePath=".\ReposCommands\HotCopyRepository.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\ReposCommands\LoadRepository.cpp"
 					>
 				</File>
 				<File
 					RelativePath=".\ReposCommands\RecoverRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\ReposCommands\SetRevisionPropertyRepository.cpp"
 					>
 				</File>
 				<File
