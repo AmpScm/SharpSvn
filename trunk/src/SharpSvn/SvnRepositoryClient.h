@@ -29,7 +29,8 @@ namespace SharpSvn {
 	ref class SvnLoadRepositoryArgs;
 	ref class SvnDumpRepositoryArgs;
 	ref class SvnUpgradeRepositoryArgs;
-
+	ref class SvnSetRevisionPropertyRepositoryArgs;
+	ref class SvnHotCopyRepositoryArgs;
 
 	/// <summary>
 	/// Managed wrapper of some of the most common repository management functions.
@@ -99,6 +100,32 @@ namespace SharpSvn {
 		/// dump and subsequent load would.
 		/// </remarks>
 		bool UpgradeRepository(String^ repositoryPath, SvnUpgradeRepositoryArgs^ args);
+
+	public:
+		/// <overloads>Set the property NAME on revision REVISION</overloads>
+		/// <summary>Set the property NAME on revision REVISION</summary>
+		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, String^ value);
+		/// <summary>Set the property NAME on revision REVISION</summary>
+		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes);
+		/// <summary>Set the property NAME on revision REVISION</summary>
+		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, String^ value, SvnSetRevisionPropertyRepositoryArgs^ args);
+		/// <summary>Set the property NAME on revision REVISION</summary>
+		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes, SvnSetRevisionPropertyRepositoryArgs^ args);		
+
+	public:
+		/// <overloads>Delete the property NAME on revision REVISION</overloads>
+		bool DeleteRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName);
+		/// <summary>Set the property NAME on revision REVISION</summary>
+		bool DeleteRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyRepositoryArgs^ args);		
+
+	private:
+		bool InternalSetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyRepositoryArgs^ args, AprPool^ pool);
+
+	public:
+		/// <overloads>Makes a hot copy of a repository</overloads>
+		/// <summary>Makes a hot copy of a repository</summary>
+		bool HotCopy(String^ fromRepository, String^ toRepository);
+		bool HotCopy(String^ fromRepository, String^ toRepository, SvnHotCopyRepositoryArgs^ args);
 
 	private:
 		~SvnRepositoryClient();

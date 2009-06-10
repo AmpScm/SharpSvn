@@ -26,16 +26,13 @@ using System.Reflection;
 namespace SharpSvn.Tests
 {
     [TestFixture]
-    public class SvnBdbTest : SvnTestBase
+    public class SvnBdbTest : Commands.TestBase
     {
 
         [Test]
         public void CreateBdbRepos()
         {
-            string path = Path.Combine(TestPath, "BdbRepos");
-
-            if(Directory.Exists(path))
-                ForcedDeleteDirectory(path);
+			string path = GetTempDir();
 
             SvnRepositoryClient reposClient = new SvnRepositoryClient();
 
@@ -44,7 +41,10 @@ namespace SharpSvn.Tests
             reposClient.CreateRepository(path, ra);
 
             Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
-            Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
+
+			reposClient.HotCopy(path, GetTempDir());
+
+			reposClient.SetRevisionProperty(path, 0, SvnPropertyNames.SvnLog, "Hahaha");
         }
 
 		[Test]
