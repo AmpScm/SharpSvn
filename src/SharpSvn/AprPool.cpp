@@ -243,6 +243,20 @@ const char* AprPool::AllocPath(String^ value)
 		}
 
 		pData[len] = 0;
+		
+		if ((len && pData[len-1] == '/') || strstr(pData+1, "//"))
+			return svn_dirent_canonicalize(pData, Handle);
+		else
+		{
+			char *pd = pData;
+			while (pd = strstr(pd, "/."))
+			{
+				if (*(pd+2) == '/' || !*(pd+2))
+					return svn_dirent_canonicalize(pData, Handle);
+				else
+					pd++;
+			}
+		}
 
 		return pData;
 	}
@@ -266,6 +280,10 @@ const char* AprPool::AllocCanonical(String^ value)
 	if (value->Length >= 1)
 	{
 		cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
+
+		for (int i = 0; i < bytes->Length; i++)
+			if (bytes[i] == '\\')
+				bytes[i] = '/';
 
 		pin_ptr<unsigned char> pBytes = &bytes[0];
 		const char* pcBytes = (const char*)static_cast<const unsigned char*>(pBytes);
