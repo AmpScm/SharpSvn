@@ -130,6 +130,25 @@ namespace SharpSvn.Tests.Commands
 
         }
 
+		[Test]
+		public void TestAddStupid()
+		{
+			string wc = GetTempDir();
+			Client.CheckOut(ReposUrl, wc);
+
+			string dir = Path.Combine(wc, "1");
+			Directory.CreateDirectory(dir);
+			Client.Add(dir + "\\.");
+
+			dir = Path.Combine(wc, "2");
+			Directory.CreateDirectory(dir);
+			Client.Add(dir + "\\");
+
+			dir = Path.Combine(wc, "3");
+			Directory.CreateDirectory(dir);
+			Client.Add(dir + "\\\\");
+		}
+
         /// <summary>
         /// Creates a subdirectory with some items in it. Attempts to add it recursively.
         /// </summary>
