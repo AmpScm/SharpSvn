@@ -94,6 +94,18 @@ namespace SharpSvn.Tests.LookCommands
                 {
                     cl.Write(lo, "/bigfile", ms);
                 }
+
+				Collection<SvnLookListEventArgs> lst;
+				cl.GetList(lo, "", out lst);
+
+				Assert.That(lst, Is.Not.Null);
+				Assert.That(lst.Count, Is.EqualTo(1));
+				SvnLookListEventArgs r = lst[0];
+
+				Assert.That(r, Is.Not.Null);
+				Assert.That(r.Name, Is.EqualTo("bigfile"));
+				Assert.That(r.NodeKind, Is.EqualTo(SvnNodeKind.File));
+				Assert.That(r.Path, Is.EqualTo("bigfile"));
             }
         }
 
