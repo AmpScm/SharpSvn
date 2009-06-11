@@ -1463,6 +1463,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\LookArgs\SvnLookListArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\LookArgs\SvnLookPropertyListArgs.h"
 					>
 				</File>
@@ -1486,6 +1490,10 @@
 					RelativePath=".\EventArgs\SvnChangeInfoEventArgs.h"
 					>
 				</File>
+				<File
+					RelativePath=".\EventArgs\SvnLookListEventArgs.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
@@ -1504,6 +1512,10 @@
 				</File>
 				<File
 					RelativePath=".\LookCommands\LookGetRevisionProperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\LookCommands\LookList.cpp"
 					>
 				</File>
 				<File

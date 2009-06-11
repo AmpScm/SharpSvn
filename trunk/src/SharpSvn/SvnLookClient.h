@@ -20,6 +20,7 @@
 #include "SvnClientEventArgs.h"
 #include "SvnClientArgs.h"
 #include "LookArgs/SvnLookClientArgs.h"
+#
 
 #include "AprBaton.h"
 
@@ -32,6 +33,7 @@ namespace SharpSvn {
 	ref class SvnLookGetPropertyArgs;
 	ref class SvnLookPropertyListArgs;
 	ref class SvnLookWriteArgs;
+	ref class SvnLookListArgs;
 
 	/// <summary>Container for the location to use with the <see cref="SvnLookClient" /> commands</summary>
 	public ref class SvnLookOrigin sealed : public SvnBase
@@ -158,6 +160,20 @@ namespace SharpSvn {
 		bool Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream);
 		/// <summary>Writes the content of the specified path to a stream directly from a repository</summary>
 		bool Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream, SvnLookWriteArgs^ args);
+
+	public:
+		/// <overloads>Lists the content of a path directly from a repository</overloads>
+		/// <summary>Lists the content of a path directly from a repository</summary>
+		bool List(SvnLookOrigin^ origin, String^ path, EventHandler<SvnLookListEventArgs^>^ listHandler);
+
+		/// <summary>Lists the content of a path directly from a repository</summary>
+		bool List(SvnLookOrigin^ origin, String^ path, SvnLookListArgs^ args, EventHandler<SvnLookListEventArgs^>^ listHandler);
+
+		/// <overloads>Gets the content of a path directly from a repository</overloads>
+		/// <summary>Gets the content of a path directly from a repository</summary>
+		bool GetList(SvnLookOrigin^ origin, String^ path, [Out] Collection<SvnLookListEventArgs^>^% list);
+		/// <summary>Gets the content of a path directly from a repository</summary>
+		bool GetList(SvnLookOrigin^ origin, String^ path, SvnLookListArgs^ args, [Out] Collection<SvnLookListEventArgs^>^% list);
 
 	private:
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args);
