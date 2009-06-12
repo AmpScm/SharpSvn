@@ -67,9 +67,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdminCommands\DumpTest.cs" />
     <Compile Include="Commands\AddTests.cs" />
     <Compile Include="Commands\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
+    <Compile Include="Commands\DiffSummaryTests.cs" />
     <Compile Include="Commands\GetCapabilities.cs" />
     <Compile Include="Commands\CheckOutTests.cs" />
     <Compile Include="Commands\CleanUpTests.cs" />
@@ -96,6 +98,8 @@
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
     <Compile Include="Commands\ReplayTests.cs" />
+    <Compile Include="ExceptionTests.cs" />
+    <Compile Include="StaticVerifications.cs" />
     <Compile Include="ExternalsTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
     <Compile Include="LookCommands\GetChangesTests.cs" />
@@ -130,11 +134,11 @@
     </Compile>
     <Compile Include="DiffTests.cs" />
     <Compile Include="LocalizationTests.cs" />
+    <Compile Include="SvnAuthTests.cs" />
     <Compile Include="SvnBdbTest.cs" />
     <Compile Include="SvnClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SvnRemoteTests.cs" />
-    <Compile Include="SvnTestBase.cs" />
     <Compile Include="SvnToolsTests.cs" />
   </ItemGroup>
   <ItemGroup>
