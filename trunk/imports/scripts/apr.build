@@ -16,7 +16,7 @@
       </Svn>
     </OnceBlock>
   </target>  
-  <target name="upgrade-apr" depends="checkout,apr-merge">
+  <target name="upgrade-apr" depends="checkout,apr-merge,build-bdb">
     <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">		
       <exec program="perl.exe" workingdir="${aprDir}">
         <arg value="build/cvtdsp.pl" />
@@ -134,11 +134,14 @@
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#define _WIN32_WINNT ' to='
-#ifdef _M_X64
+/* SharpSvn */
+#ifndef _WIN32_WINNT
 #  define _WIN32_WINNT 0x0501
-#else
-#  define _WIN32_WINNT 0x0500
 #endif
+#ifndef NTDDI_VERSION
+#  define NTDDI_VERSION 0x05000000
+#endif
+/* /SharpSvn */
 //#define  _WIN32_WINNT ' />
               <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
 /* SharpSvn extension */
