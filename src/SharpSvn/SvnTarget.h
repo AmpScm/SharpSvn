@@ -223,6 +223,11 @@ namespace SharpSvn {
 				return gcnew SvnRevision(value);
 		}
 
+		static operator SvnRevision^(DateTime value)
+		{
+			return gcnew SvnRevision(value);
+		}
+
 		static operator SvnRevision^(SvnRevisionType value)
 		{
 			switch(value)
