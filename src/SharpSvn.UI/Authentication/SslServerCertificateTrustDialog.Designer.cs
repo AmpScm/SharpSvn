@@ -182,7 +182,6 @@ namespace SharpSvn.UI.Authentication
             this.certificateBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
                         | System.Windows.Forms.AnchorStyles.Left)
                         | System.Windows.Forms.AnchorStyles.Right)));
-            this.certificateBox.BackColor = System.Drawing.SystemColors.Control;
             this.certificateBox.Location = new System.Drawing.Point(75, 284);
             this.certificateBox.Multiline = true;
             this.certificateBox.Name = "certificateBox";
