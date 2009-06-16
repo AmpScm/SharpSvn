@@ -85,6 +85,7 @@ namespace SharpSvn {
 	/// </remarks>
 	public ref class SvnLookClient : public SvnClientContext
 	{
+		initonly AprBaton<SvnLookClient^>^ _clientBaton;
 		AprPool _pool;
 
 	public:
@@ -92,8 +93,7 @@ namespace SharpSvn {
 		SvnLookClient();
 
 	private:
-		~SvnLookClient()
-		{}
+		~SvnLookClient();
 
 	public:
 		/// <overloads>Gets the change information of a change directly from a repository</overloads>
@@ -173,6 +173,20 @@ namespace SharpSvn {
 		bool GetList(SvnLookOrigin^ origin, String^ path, [Out] Collection<SvnLookListEventArgs^>^% list);
 		/// <summary>Gets the content of a path directly from a repository</summary>
 		bool GetList(SvnLookOrigin^ origin, String^ path, SvnLookListArgs^ args, [Out] Collection<SvnLookListEventArgs^>^% list);
+
+	public:
+		/// <summary>
+		/// Raised to allow canceling operations. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
+		/// then on the <see cref="SvnLookClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
+
+	protected:
+		virtual void OnCancel(SvnCancelEventArgs^ e);
+
+	internal:
+		void HandleClientCancel(SvnCancelEventArgs^ e);
 
 	private:
 		svn_error_t* ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args);

@@ -28,13 +28,47 @@ using namespace SharpSvn::Implementation;
 
 [module: SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", Scope="member", Target="SharpSvn.SvnRepositoryFileSystem.#FsFs", MessageId="Fs")];
 
+
+
+static svn_error_t *
+svnrepository_cancel_func(void *cancel_baton)
+{
+	SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get((IntPtr)cancel_baton);
+
+	SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
+	try
+	{
+		client->HandleClientCancel(ea);
+
+		if (ea->Cancel)
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
+
+		return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("Cancel function", e);
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
+}
+
+
+
 SvnRepositoryClient::SvnRepositoryClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
+	_clientBaton = gcnew AprBaton<SvnRepositoryClient^>(this);
+
+	CtxHandle->cancel_func = svnrepository_cancel_func;
+	CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
 }
 
 SvnRepositoryClient::~SvnRepositoryClient()
 {
+	delete _clientBaton;
 }
 
 String^ SvnRepositoryClient::FindRepositoryRoot(Uri^ repositoryUri)
@@ -53,4 +87,18 @@ String^ SvnRepositoryClient::FindRepositoryRoot(Uri^ repositoryUri)
 	return root ? Utf8_PtrToString(root) : nullptr;
 }
 
+void SvnRepositoryClient::HandleClientCancel(SvnCancelEventArgs^ e)
+{
+	if (CurrentCommandArgs)
+		CurrentCommandArgs->RaiseOnCancel(e);
 
+	if (e->Cancel)
+		return;
+
+	OnCancel(e);
+}
+
+void SvnRepositoryClient::OnCancel(SvnCancelEventArgs^ e)
+{
+	Cancel(this, e);
+}
