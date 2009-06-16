@@ -35,6 +35,7 @@
 #include "SvnRepositoryClient.h"
 #include "SvnWorkingCopyClient.h"
 #include "SvnLookClient.h"
+#include "SvnRemoteSession.h"
 
 #include "SvnPathTarget.h"
 #include "SvnUriTarget.h"

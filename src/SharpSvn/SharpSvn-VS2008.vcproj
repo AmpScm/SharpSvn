@@ -679,10 +679,6 @@
 					>
 				</File>
 				<File
-					RelativePath=".\SvnRepositorySession.h"
-					>
-				</File>
-				<File
 					RelativePath=".\UnmanagedStructs.h"
 					>
 				</File>
@@ -720,14 +716,6 @@
 				</File>
 				<File
 					RelativePath=".\SvnNames.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnRepositoryClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnRepositorySession.cpp"
 					>
 				</File>
 			</Filter>
@@ -1431,6 +1419,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnRepositoryClient.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\ReposCommands\UpgradeRepository.cpp"
 					>
 				</File>
@@ -1620,6 +1612,50 @@
 				</File>
 				<File
 					RelativePath=".\Delta\SvnDeltaTransform.h"
+					>
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="SvnRemoteSession"
+			>
+			<File
+				RelativePath=".\SvnRemoteSession.h"
+				>
+			</File>
+			<Filter
+				Name="Args"
+				>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteSessionArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteSessionOpenArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteSessionReparentArgs.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="EventArgs"
+				>
+			</Filter>
+			<Filter
+				Name="Sources"
+				>
+				<File
+					RelativePath=".\RemoteCommands\RemoteOpen.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteReparent.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\SvnRemoteSession.cpp"
 					>
 				</File>
 			</Filter>

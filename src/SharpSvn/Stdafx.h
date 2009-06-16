@@ -60,6 +60,14 @@ using System::Diagnostics::DebuggerDisplayAttribute;
 	  throw SvnException::Create(expr);         \
   } while (0)
 
+#define SVN_HANDLE(expr)                                                  \
+  do {                                                                    \
+    svn_error_t *svn_err__temp = (expr);                                  \
+	if (svn_err__temp)                                                    \
+	  return this->CurrentCommandArgs->HandleResult(this, svn_err__temp); \
+  } while (0)
+
+
 #define DECLARE_EVENT_X(type, name, scope)			\
 	scope:											\
 		event EventHandler<type>^ name				\
