@@ -105,9 +105,6 @@ namespace SharpSvn {
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e);
 
 	public:
-		SvnClientContext(SvnClientContext ^fromContext);
-
-	public:
 		property bool IsCommandRunning
 		{
 			bool get()

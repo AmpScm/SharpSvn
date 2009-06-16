@@ -41,22 +41,6 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 	_authentication = gcnew SharpSvn::Security::SvnAuthentication(this, pool);
 }
 
-SvnClientContext::SvnClientContext(SvnClientContext ^fromContext)
-{
-	if (!fromContext)
-		throw gcnew ArgumentNullException("fromContext");
-
-	fromContext->_pool->Ensure();
-	_pool = fromContext->_pool;
-
-	svn_client_ctx_t *ctx;
-
-	SVN_THROW(svn_client_create_context(&ctx, _pool->Handle));
-
-	_ctx = ctx;
-	_authentication = gcnew SharpSvn::Security::SvnAuthentication(this, _pool);
-}
-
 SvnClientContext::~SvnClientContext()
 {
 	_ctx = nullptr;
