@@ -42,6 +42,7 @@ namespace SharpSvn {
 	public ref class SvnRepositoryClient : public SvnClientContext
 	{
 		AprPool _pool;
+		AprBaton<SvnRepositoryClient^>^ _clientBaton;
 
 	public:
 		///<summary>Initializes a new <see cref="SvnRepositoryClient" /> instance with default properties</summary>
@@ -126,6 +127,20 @@ namespace SharpSvn {
 		/// <summary>Makes a hot copy of a repository</summary>
 		bool HotCopy(String^ fromRepository, String^ toRepository);
 		bool HotCopy(String^ fromRepository, String^ toRepository, SvnHotCopyRepositoryArgs^ args);
+
+	public:
+		/// <summary>
+		/// Raised to allow canceling operations. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
+		/// then on the <see cref="SvnRepositoryClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
+
+	protected:
+		virtual void OnCancel(SvnCancelEventArgs^ e);
+
+	internal:
+		void HandleClientCancel(SvnCancelEventArgs^ e);
 
 	private:
 		~SvnRepositoryClient();
