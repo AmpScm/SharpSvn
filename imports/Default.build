@@ -5,8 +5,8 @@
   <property name="platform" value="win32" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.6.2" overwrite="false" />
-  <property name="subversionMerges" value="36337,36440,36441,37270,37890" overwrite="false" />
+  <property name="subversionVersion" value="1.6.3" overwrite="false" />
+  <property name="subversionMerges" value="36337,36440,36441,37270,37890,38053,38055,38057,38068,38101,38102" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
@@ -20,7 +20,7 @@
   <property name="dbVersion" value="4.4.20" />
   <property name="zlibVersion" value="1.2.3" />
   <property name="serfVersion" value="0.3.1" />
-  <property name="saslVersion" value="2.1.22" />
+  <property name="saslVersion" value="2.1.23" />
   <property name="swigVersion" value="1.3.38" />
 
   <property name="httpdVersion" value="2.2.9" />
