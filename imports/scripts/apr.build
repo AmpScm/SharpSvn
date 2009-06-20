@@ -138,11 +138,11 @@
 #ifndef _WIN32_WINNT
 #  define _WIN32_WINNT 0x0501
 #endif
-#ifndef NTDDI_VERSION
+#if !defined(NTDDI_VERSION) &amp;&amp; defined(_M_IX86)
 #  define NTDDI_VERSION 0x05000000
 #endif
 /* /SharpSvn */
-//#define  _WIN32_WINNT ' if="${VSversion == '2005'}" />
+//#define  _WIN32_WINNT ' if="${(VSversion == '2005')}" />
               <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
 /* SharpSvn extension */
 APR_END_DECLS
