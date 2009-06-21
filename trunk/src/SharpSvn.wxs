@@ -51,7 +51,7 @@
         <File Id="CF_LOCAL_SharpSvn.dll" Name="SharpSvn.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
       <Component Id="C_LOCAL_SharpSvn_Sasl21_23_win32.dll" Guid="CE42CB05-C393-4876-8F1A-10711D68ACF1">
-        <File Id="CF_LOCAL_SharpSvn_Sasl21_23_win32.dll" Name="SharpSvn-Sasl21-22-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
+        <File Id="CF_LOCAL_SharpSvn_Sasl21_23_win32.dll" Name="SharpSvn-Sasl21-23-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
       <Component Id="C_LOCAL_SharpPlink_Win32.svnExe" Guid="34F616E9-637E-44F0-9416-F79325560FDE">
         <File Id="CF_LOCAL_SharpPlink_Win32.svnExe" Name="SharpPlink-Win32.svnExe" Vital="yes" KeyPath="yes" Checksum="yes" />
