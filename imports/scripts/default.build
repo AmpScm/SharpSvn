@@ -33,8 +33,9 @@
   <if test="${platform != 'win32' and platform != 'x64'}">
     <fail message="Platform must be win32 or x64 at this time" />
   </if>
-  <foreach item="Folder" in="${path::combine(path::get-path-root(environment::get-variable('ProgramFiles')),'program files/java')}"
-           property="jh" if="${javaHome==''}">
+  <property name="javaBase" value="${path::combine(path::get-path-root(environment::get-variable('ProgramFiles')),'program files/java')}" />
+  <foreach item="Folder" in="${javaBase}"
+           property="jh" if="${javaHome=='' and directory::exists(javaBase)}">
     <do>
       <property name="javaHome" value="${jh}" if="${file::exists(path::combine(jh,'bin/javah.exe'))}" />
     </do>
