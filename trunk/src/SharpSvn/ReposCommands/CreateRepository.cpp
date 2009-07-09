@@ -27,6 +27,8 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	return CreateRepository(repositoryPath, gcnew SvnCreateRepositoryArgs());
 }
@@ -35,8 +37,10 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 	else if (!args)
-		throw gcnew ArgumentNullException("args");
+		throw gcnew ArgumentNullException("args");	
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);

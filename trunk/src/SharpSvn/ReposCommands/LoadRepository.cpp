@@ -30,6 +30,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 	else if (!from)
 		throw gcnew ArgumentNullException("from");
 
@@ -49,6 +51,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 	else if (!from)
 		throw gcnew ArgumentNullException("from");
 	else if (!args)
