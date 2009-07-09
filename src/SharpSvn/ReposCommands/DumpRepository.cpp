@@ -51,21 +51,20 @@ static svn_error_t *
 get_revnum(svn_revnum_t *revnum, const svn_opt_revision_t *revision,
 		   svn_revnum_t youngest, svn_repos_t *repos, apr_pool_t *pool)
 {
-	if (revision->kind == svn_opt_revision_number)
-		*revnum = revision->value.number;
-	else if (revision->kind == svn_opt_revision_head)
-		*revnum = youngest;
-	else if (revision->kind == svn_opt_revision_date)
+	switch(revision->kind)
 	{
-		svn_error_t* r = svn_repos_dated_revision(revnum, repos, revision->value.date, pool);
-
-		if (r)
-			return r;
-	}
-	else if (revision->kind == svn_opt_revision_unspecified)
-		*revnum = SVN_INVALID_REVNUM;
-	else
+	case svn_opt_revision_number:
+		*revnum = revision->value.number;
+		break;
+	case svn_opt_revision_head:
+		*revnum = youngest;
+		break;
+	case svn_opt_revision_date:
+		SVN_ERR(svn_repos_dated_revision(revnum, repos, revision->value.date, pool));
+		break;
+	default:
 		return svn_error_create(SVN_ERR_CL_ARG_PARSING_ERROR, NULL, "Invalid revision specifier");
+	}
 
 	if (*revnum > youngest)
 		return svn_error_createf

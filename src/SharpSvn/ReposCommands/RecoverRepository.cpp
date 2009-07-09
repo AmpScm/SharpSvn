@@ -27,6 +27,8 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
 	return RecoverRepository(repositoryPath, gcnew SvnRecoverRepositoryArgs());
 }
@@ -35,6 +37,8 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
+	else if (!IsNotUri(repositoryPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
