@@ -117,7 +117,7 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	if (r)
 		return args->HandleResult(this, r);
 
-	if (start < end)
+	if (start > end)
 		return args->HandleResult(this, svn_error_create(SVN_ERR_CL_ARG_PARSING_ERROR, NULL, "First revision cannot be higher than second"));
 
 	MemoryStream^ strResult = gcnew MemoryStream();
