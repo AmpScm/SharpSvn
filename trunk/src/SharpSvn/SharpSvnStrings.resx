@@ -303,4 +303,7 @@
   <data name="PathXTooLongAndNotRooted" xml:space="preserve">
     <value>Paths with a length above MAX_PATH (like '{0}') must be rooted.</value>
   </data>
+  <data name="RemoteSessionMustBeOpenToPerformCommand" xml:space="preserve">
+    <value>The remote session must be open before it can perform commands</value>
+  </data>
 </root>

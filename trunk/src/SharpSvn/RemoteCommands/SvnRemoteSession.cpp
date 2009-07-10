@@ -47,5 +47,5 @@ svn_error_t * SvnRemoteSession::Init()
 void SvnRemoteSession::Ensure()
 {
 	if (!_session)
-		throw gcnew InvalidOperationException();
+		throw gcnew InvalidOperationException(SharpSvnStrings::RemoteSessionMustBeOpenToPerformCommand);
 }

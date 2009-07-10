@@ -28,7 +28,10 @@ namespace SharpSvn.Tests.AdminCommands
                 string file = GetTempFile();
                 using(FileStream s = File.Create(file))
                 {
-                    cl.DumpRepository(repos, s);
+                    SvnDumpRepositoryArgs da = new SvnDumpRepositoryArgs();
+                    da.Start = new SvnRevision(0);
+                    da.End = new SvnRevision(SvnRevisionType.Head);
+                    cl.DumpRepository(repos, s, da);
                 }
 
                 Assert.That(new FileInfo(file).Length, Is.GreaterThan(12));

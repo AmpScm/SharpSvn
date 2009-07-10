@@ -23,89 +23,84 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using System.Diagnostics;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Tests Client::Update
-	/// </summary>
-	[TestFixture]
-	public class UpdateTests : TestBase
-	{
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
+    /// <summary>
+    /// Tests Client::Update
+    /// </summary>
+    [TestFixture]
+    public class UpdateTests : TestBase
+    {
+        private string _wc;
 
-            this.wc2 = GetTempDir();
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
 
-			UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), wc2);
-			this.RenameAdminDirs(this.wc2);
+            _wc = GetTempDir();
 
-			SvnClient cl = new SvnClient(); // Fix working copy to real location
-			cl.Relocate(wc2, new Uri("file:///tmp/repos/"), ReposUrl);
-		}
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wc);
+            this.RenameAdminDirs(_wc);
 
-		public override void TearDown()
-		{
-			base.TearDown();
-			RecursiveDelete(this.wc2);
-		}
+            SvnClient cl = new SvnClient(); // Fix working copy to real location
+            cl.Relocate(_wc, new Uri("file:///tmp/repos/"), ReposUrl);
+        }
 
-		[Test]
-		public void RevTests()
-		{
-			string dir = GetTempDir();
+        [Test]
+        public void RevTests()
+        {
+            string dir = GetTempDir();
 
-			SvnUpdateResult result;
-			Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk")), dir, out result));
+            SvnUpdateResult result;
+            Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk")), dir, out result));
 
-			long head = result.Revision;
+            long head = result.Revision;
 
-			Assert.That(Client.Update(dir, out result));
-			Assert.That(result.Revision, Is.EqualTo(head));
+            Assert.That(Client.Update(dir, out result));
+            Assert.That(result.Revision, Is.EqualTo(head));
 
-			SvnUpdateArgs ua = new SvnUpdateArgs();
+            SvnUpdateArgs ua = new SvnUpdateArgs();
 
-			ua.Revision = head - 5;
+            ua.Revision = head - 5;
 
-			Assert.That(Client.Update(dir, ua, out result));
-			Assert.That(result.Revision, Is.EqualTo(head-5));
-		}
+            Assert.That(Client.Update(dir, ua, out result));
+            Assert.That(result.Revision, Is.EqualTo(head - 5));
+        }
 
-		/// <summary>
-		/// Deletes a file, then calls update on the working copy to restore it 
-		/// from the text-base
-		/// </summary>
-		[Test]
-		public void TestDeletedFile()
-		{
-			string filePath = Path.Combine(this.WcPath, "Form.cs");
-			File.Delete(filePath);
-			this.Client.Update(this.WcPath);
+        /// <summary>
+        /// Deletes a file, then calls update on the working copy to restore it 
+        /// from the text-base
+        /// </summary>
+        [Test]
+        public void TestDeletedFile()
+        {
+            string filePath = Path.Combine(this.WcPath, "Form.cs");
+            File.Delete(filePath);
+            this.Client.Update(this.WcPath);
 
-			Assert.That(File.Exists(filePath), "File not restored after update");
-		}
+            Assert.That(File.Exists(filePath), "File not restored after update");
+        }
 
-		/// <summary>
-		/// Changes a file in a secondary working copy and commits. Updates the 
-		/// primary wc and compares
-		/// </summary>
-		[Test]
-		public void TestChangedFile()
-		{
-			using (StreamWriter w = new StreamWriter(Path.Combine(this.wc2, "Form.cs")))
-				w.Write("Moo");
-			this.RunCommand("svn", "ci -m \"\" " + this.wc2);
+        /// <summary>
+        /// Changes a file in a secondary working copy and commits. Updates the 
+        /// primary wc and compares
+        /// </summary>
+        [Test]
+        public void TestChangedFile()
+        {
+            using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
+                w.Write("Moo");
+            this.RunCommand("svn", "ci -m \"\" " + _wc);
 
-			this.Client.Update(this.WcPath);
+            this.Client.Update(this.WcPath);
 
-			string s;
-			using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "Form.cs")))
-				s = r.ReadToEnd();
+            string s = File.ReadAllText(Path.Combine(this.WcPath, "Form.cs"));
 
-			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
-		}
+            Assert.That(s, Is.EqualTo("Moo"), "File not updated");
+        }
 
         [Test]
         public void TestObstruction()
@@ -131,7 +126,7 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void TestNotify()
         {
-            int n = 0;;
+            int n = 0; ;
             SvnUpdateArgs ua = new SvnUpdateArgs();
             ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
             {
@@ -154,36 +149,73 @@ namespace SharpSvn.Tests.Commands
             Client.Update(new string[] { WcPath }, ua);
         }
 
-		[Test]
-		public void TestUpdateMultipleFiles()
-		{
-			using (StreamWriter w = new StreamWriter(Path.Combine(this.wc2, "Form.cs")))
-				w.Write("Moo");
-			using (StreamWriter w = new StreamWriter(Path.Combine(this.wc2, "AssemblyInfo.cs")))
-				w.Write("Moo");
-			this.RunCommand("svn", "ci -m \"\" " + this.wc2);
+        [Test]
+        public void TestUpdateMultipleFiles()
+        {
+            using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
+                w.Write("Moo");
+            using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "AssemblyInfo.cs")))
+                w.Write("Moo");
+            this.RunCommand("svn", "ci -m \"\" " + _wc);
 
-			SvnUpdateArgs a = new SvnUpdateArgs();
-			a.Depth = SvnDepth.Empty;
+            SvnUpdateArgs a = new SvnUpdateArgs();
+            a.Depth = SvnDepth.Empty;
 
-			SvnUpdateResult result;
+            SvnUpdateResult result;
 
-			Assert.That(Client.Update(new string[]{ 
+            Assert.That(Client.Update(new string[]{ 
                                                              Path.Combine( this.WcPath, "Form.cs" ),
                                                              Path.Combine( this.WcPath, "AssemblyInfo.cs" )
                                                          }, a, out result));
-			Assert.That(result.ResultMap.Count, Is.EqualTo(2));
+            Assert.That(result.ResultMap.Count, Is.EqualTo(2));
 
-			string s;
-			using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "Form.cs")))
-				s = r.ReadToEnd();
-			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
+            string s;
+            using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "Form.cs")))
+                s = r.ReadToEnd();
+            Assert.That(s, Is.EqualTo("Moo"), "File not updated");
 
-			using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "AssemblyInfo.cs")))
-				s = r.ReadToEnd();
-			Assert.That(s, Is.EqualTo("Moo"), "File not updated");
-		}
+            using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "AssemblyInfo.cs")))
+                s = r.ReadToEnd();
+            Assert.That(s, Is.EqualTo("Moo"), "File not updated");
+        }
 
-		private string wc2;
-	}
+        [Test]
+        public void TestDirObstruction()
+        {
+            string dir = GetTempDir();
+            string sd = Path.Combine(dir, "NewDir");
+            SvnUpdateResult ur;
+            Client.CheckOut(GetReposUri(TestReposType.Empty), dir, out ur);
+
+            Client.CreateDirectory(sd);
+            Client.Commit(dir);
+            SvnUpdateArgs ua = new SvnUpdateArgs();
+            ua.Revision = ur.Revision;
+            Client.Update(dir, ua);
+            Directory.CreateDirectory(sd);
+
+            ua = new SvnUpdateArgs();
+            bool gotIt = false;
+            bool noTreeConflict = true;
+            ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
+            {
+                if (e.FullPath != sd)
+                    return;
+                
+                gotIt = true;
+                Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateObstruction));
+                Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.Directory));
+            };
+            ua.ThrowOnError = false;
+            ua.AddExpectedError(SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
+            ua.Conflict += delegate(object sender, SvnConflictEventArgs e)
+            {
+                noTreeConflict = false;
+            };
+
+            Assert.That(Client.Update(dir, ua), Is.False, "Update failed");
+            Assert.That(gotIt, "Got obstruction notification");
+            Assert.That(noTreeConflict, "No tree conflict");
+        }
+    }
 }
