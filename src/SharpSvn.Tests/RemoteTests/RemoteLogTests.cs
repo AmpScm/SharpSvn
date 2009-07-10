@@ -15,6 +15,8 @@ namespace SharpSvn.Tests.RemoteTests
             using (SvnRemoteSession r = new SvnRemoteSession(CollabReposUri))
             {
                 r.Reparent(CollabReposUri);
+                long rev;
+                r.GetLatestRevision(out rev);
             }
         }
 

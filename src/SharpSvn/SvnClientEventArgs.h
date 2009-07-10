@@ -44,4 +44,6 @@
 
 #include "Args/SvnWorkingCopyState.h"
 #include "EventArgs/SvnWorkingCopyEntryEventArgs.h"
+#include "EventArgs/SvnRemoteSessionLogEventArgs.h"
+
 

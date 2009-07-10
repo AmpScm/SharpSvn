@@ -392,6 +392,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The remote session must be open before it can perform commands.
+        /// </summary>
+        internal: static property System::String^  RemoteSessionMustBeOpenToPerformCommand {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revision must be &gt;= 0.
         /// </summary>
         internal: static property System::String^  RevisionMustBeGreaterThanOrEqualToZero {
@@ -699,6 +706,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::PropertyNameIsNotValid::get() {
         return ResourceManager->GetString(L"PropertyNameIsNotValid", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::RemoteSessionMustBeOpenToPerformCommand::get() {
+        return ResourceManager->GetString(L"RemoteSessionMustBeOpenToPerformCommand", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::RevisionMustBeGreaterThanOrEqualToZero::get() {
