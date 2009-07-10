@@ -82,8 +82,8 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll"
-				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-23-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
+				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-22-$(PlatformName).dll"
+				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-22-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
 				TargetMachine="1"
@@ -172,7 +172,7 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll;crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-23-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				TargetMachine="1"
@@ -263,7 +263,7 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll;crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-23-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -354,7 +354,7 @@
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll;crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-23-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				TargetMachine="17"
@@ -674,6 +674,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnNames.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnRepositorySession.h"
 					>
 				</File>
 				<File
@@ -1629,6 +1633,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteSessionLatestRevisionArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteSessionLog.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteSessionOpenArgs.h"
 					>
 				</File>
@@ -1640,10 +1652,22 @@
 			<Filter
 				Name="EventArgs"
 				>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteSessionLogEventArgs.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\RemoteCommands\RemoteLatestRevision.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteLog.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteOpen.cpp"
 					>
