@@ -110,7 +110,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 
 [assembly:CLSCompliantAttribute(true)];
 
-[assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true, SkipVerification=true)];
+[assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 #pragma comment(lib, "ole32.lib")
