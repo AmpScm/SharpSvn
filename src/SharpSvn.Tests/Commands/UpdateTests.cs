@@ -24,6 +24,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -216,6 +217,39 @@ namespace SharpSvn.Tests.Commands
             Assert.That(Client.Update(dir, ua), Is.False, "Update failed");
             Assert.That(gotIt, "Got obstruction notification");
             Assert.That(noTreeConflict, "No tree conflict");
+        }
+
+        [Test]
+        public void TestUpdateExternal()
+        {
+            Uri root = GetReposUri(TestReposType.Empty);
+            Uri trunk = new Uri(root, "trunk/");
+            Uri alt = new Uri(root, "alt/");
+            Client.RemoteCreateDirectory(trunk);
+            Client.RemoteCreateDirectory(alt);
+
+            string dir = GetTempDir();
+            Client.CheckOut(trunk, dir);
+            Client.SetProperty(dir, SvnPropertyNames.SvnExternals,
+                                string.Format(  "alt1 {0}\r\n" +
+                                "alt2 {0}\n" +
+                                "alt3 {0}", alt));
+
+            SvnUpdateArgs ua = new SvnUpdateArgs();
+
+            SortedList<string, string> paths = new SortedList<string, string>(StringComparer.OrdinalIgnoreCase);
+            ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
+            {
+                if (e.Action != SvnNotifyAction.UpdateExternal)
+                    return;
+
+                paths.Add(e.FullPath, e.FullPath);
+            };
+            Client.Update(dir, ua);
+
+            Assert.That(paths.Count, Is.EqualTo(3));
+
+            Assert.That(paths.ContainsKey(Path.Combine(dir,"alt2")));
         }
     }
 }
