@@ -15,6 +15,28 @@
         <arg value="${aprDir}" />
       </Svn>
     </OnceBlock>
+    <OnceBlock file="build/apr-${aprVersion}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/apr">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${aprDir}" />
+        </do>
+      </foreach>
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/apr-util">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${aprUtilDir}" />
+        </do>
+      </foreach>
+    </OnceBlock>
   </target>  
   <target name="upgrade-apr" depends="checkout,apr-merge,build-bdb">
     <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">		
