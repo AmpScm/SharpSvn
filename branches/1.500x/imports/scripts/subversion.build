@@ -110,6 +110,18 @@
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
       </if>
     </OnceBlock>
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/subversion">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${svnBase}" />
+        </do>
+      </foreach>
+    </OnceBlock>
   </target>
 
   <target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
