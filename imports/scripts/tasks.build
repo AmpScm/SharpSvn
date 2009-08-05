@@ -272,6 +272,53 @@ public class VCProjAddPlatform : NAnt.Core.Task
 		doc.Save(ProjectFile.FullName);
     }
 }
+
+[TaskName("ApplyPatch")]
+public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
+{
+	FileInfo _patchFile;
+	DirectoryInfo _toDir;
+	int _strip;
+
+	[TaskAttribute("patchFile", Required=true)]
+	public FileInfo PatchFile
+	{
+		get { return _patchFile; }
+		set { _patchFile = value; }
+	}
+
+	public override string ProgramFileName
+	{
+		get
+		{
+			string app = Path.GetFullPath(Path.Combine(Properties["downloads"], "../scripts/patch.exe"));
+
+			if (!File.Exists(app))
+				app = base.ProgramFileName.Replace("ApplyPatch", "patch");
+
+			return app;
+		}
+	}
+	
+	[TaskAttribute("toDir", Required=true)]
+		public DirectoryInfo ToDir
+		{
+			get
+			{
+			  return _toDir;
+			}
+			set
+			{
+				_toDir = value;
+			}
+		}
+
+	public override string ProgramArguments
+	{
+		get { return string.Format("-f --unified \"--input={0}\" --strip={1} -d \"{2}\"", _patchFile.FullName, _strip, _toDir.FullName); }
+	}
+}
+
 ]]>
     </code>
   </script>
