@@ -10,6 +10,10 @@
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
   <property name="javaHome" value="" overwrite="false" />
 
+  <if test="${platform != 'win32' and platform != 'x64'}">
+    <fail message="Platform must be win32 or x64 at this time" />
+  </if>
+  
   <if test="${not property::exists('VSversion')}">
     <!-- Auto detect VS 2005 and VS 2008 -->
     <if test="${environment::variable-exists('VCINSTALLDIR')}">
@@ -22,7 +26,7 @@
     <if test="${not property::exists('VSversion')}">
       <fail message="VSversion variable not defined and autodetect failed" />
     </if>
-    <echo message="Using Visual Studio ${VSversion} for building" />
+    <echo message="Using Visual Studio ${VSversion} ${platform} for building" />
   </if>
   
   <property name="MSBuildExe" value="MSBuild.exe" />
@@ -30,9 +34,6 @@
 
   <property name="buildHttpd" value="false" overwrite="false" />
 
-  <if test="${platform != 'win32' and platform != 'x64'}">
-    <fail message="Platform must be win32 or x64 at this time" />
-  </if>
   <property name="javaBase" value="${path::combine(path::get-path-root(environment::get-variable('ProgramFiles')),'program files/java')}" />
   <foreach item="Folder" in="${javaBase}"
            property="jh" if="${javaHome=='' and directory::exists(javaBase)}">
