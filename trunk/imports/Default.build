@@ -9,7 +9,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.6.3" overwrite="false" />
+  <property name="subversionVersion" value="1.6.4" overwrite="false" />
   <property name="subversionMerges" value="36337,36440,36441,37270,37890,38053,38055,38057,38068,38101,38102" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
