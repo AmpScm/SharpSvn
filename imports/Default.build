@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
   <property name="svnBuildType" value="tag" overwrite="false" />
-  <property name="serfBuildType" value="trunk" />
+  <property name="serfBuildType" value="tag" />
   <property name="platform" value="win32" if="${not property::exists('platform')}" />
 
   <!-- -->
@@ -14,12 +14,12 @@
   <property name="opensslVersion" value="0.9.8k" />
   <property name="neonVersion" value="0.28.5" />
 
-  <property name="aprVersion" value="1.3.7" />
-  <property name="aprUtilVersion" value="1.3.8" />
+  <property name="aprVersion" value="1.3.8" />
+  <property name="aprUtilVersion" value="1.3.9" />
   <property name="aprIconvVersion" value="1.2.1" />
   <property name="dbVersion" value="4.4.20" />
   <property name="zlibVersion" value="1.2.3" />
-  <property name="serfVersion" value="0.3.1" />
+  <property name="serfVersion" value="0.3.0" />
   <property name="saslVersion" value="2.1.23" />
   <property name="swigVersion" value="1.3.38" />
 
