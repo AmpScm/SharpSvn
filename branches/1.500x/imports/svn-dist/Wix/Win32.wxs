@@ -52,8 +52,8 @@
       <Component Id="libeay32.dll" Guid="17719BC2-6FBC-4E26-AC0B-D25FE5A3869D">
         <File Id="libeay32.dll" Name="SlikSvn-libeay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="Sasl.dll" Guid="1D46A26C-35A8-4651-AD9C-96922A3CE17C">
-        <File Id="Sasl21_22.dll" Name="SlikSvn-Sasl21-22-win32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="Sasl.dll" Guid="514DC673-78E7-41A0-8D41-1501470610E6">
+        <File Id="Sasl21_23.dll" Name="SlikSvn-Sasl21-23-win32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
       <Component Id="ssleay32.dll" Guid="638286E1-57C6-4DA8-98BD-5637A3AB021C">
         <File Id="ssleay32.dll" Name="SlikSvn-ssleay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
