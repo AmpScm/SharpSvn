@@ -24,6 +24,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using System.Text;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -580,6 +581,78 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
                 });
 
+            }
+        }
+
+        [Test]
+        public void StatusDelayTest()
+        {
+            string tmp1Dir = GetTempDir();
+            string tmp2Dir = GetTempDir();
+            string tmp3Dir = GetTempDir();
+
+            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp1Dir);
+            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp2Dir);
+            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp3Dir);
+
+            StringBuilder lotOfData = new StringBuilder();
+            lotOfData.Append('Y', 1024 * 1024);
+
+            string file1 = Path.Combine(tmp1Dir, "File-1");
+            string file2 = Path.Combine(tmp2Dir, "File-2");
+            string file3 = Path.Combine(tmp3Dir, "File-3");
+
+            File.WriteAllText(file1, lotOfData.ToString());
+            File.WriteAllText(file2, lotOfData.ToString());
+            File.WriteAllText(file3, lotOfData.ToString());
+
+            Client.Add(file1);
+            Client.Add(file2);
+            Client.Add(file3);
+
+            Client.Configuration.LogMessageRequired = false;
+            Client.Commit(file1);
+            Client.Commit(file2);
+            Client.Commit(file3);
+
+            lotOfData = new StringBuilder();
+            lotOfData.Append('Y', 512 * 1024);
+            lotOfData.Append('Z', 512 * 1024);
+
+            File.WriteAllText(file1, lotOfData.ToString());
+            File.WriteAllText(file2, lotOfData.ToString());
+            File.WriteAllText(file3, lotOfData.ToString());
+
+            using (FileStream fs2 = new FileStream(file2, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            using (FileStream fs3 = new FileStream(file3, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+            {
+                SvnStatusArgs sa = new SvnStatusArgs();
+                sa.ThrowOnError = false;
+
+                TimeSpan t1, t2, t3;
+
+                DateTime start = DateTime.Now;
+                Client.Status(file1, sa, null);
+                t1 = DateTime.Now - start;
+                Assert.That(sa.LastException, Is.Null);
+
+                
+                using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
+                {
+                    start = DateTime.Now;
+                    Client.Status(file2, sa, null);
+                    t2 = DateTime.Now - start;
+                    //Assert.That(sa.LastException, Is.Not.Null); // Fails in 1.5-1.6.4
+                }
+
+                start = DateTime.Now;
+                Client.Status(file3, sa, null);
+                t3 = DateTime.Now - start;
+                //Assert.That(sa.LastException, Is.Not.Null); // Fails in 1.5-1.6.4
+
+                Assert.That(t3, Is.GreaterThan(t2 + new TimeSpan(0, 0, 2)));
+
+                System.Diagnostics.Trace.WriteLine(string.Format("t1={0}, t2={1}, t3={2}", t1, t2, t3));
             }
         }
 

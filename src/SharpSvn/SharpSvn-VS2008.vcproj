@@ -567,6 +567,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\SvnFsOperationRetryOverride.h"
+					>
+				</File>
+				<File
 					RelativePath=".\SvnLibraryAttribute.h"
 					>
 				</File>
@@ -624,6 +628,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnBase.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnFsOperationRetryOverride.cpp"
 					>
 				</File>
 				<File
