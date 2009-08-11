@@ -80,6 +80,17 @@ typedef void sharpsvn_abort_t(void);
 extern sharpsvn_abort_t* sharpsvn_abort;
 extern void sharpsvn_real_abort(void);
 
+typedef int sharpsvn_retry_loop_t(int n, int err, int os_err, const char *expr);
+extern sharpsvn_retry_loop_t* do_sharpsvn_retry;
+
+static __forceinline int __cdecl sharpsvn_retry(int n, int err, int os_err, const char *expr)
+{
+	if (do_sharpsvn_retry)
+		return (*do_sharpsvn_retry)(n, err, os_err, expr);
+
+	return 1;
+}
+
 #ifndef SHARPSVN_NO_ABORT
 /*// The header containing abort() */
 #include <stdlib.h> 
@@ -101,6 +112,7 @@ static __forceinline void __cdecl abort()
 }
 
 #pragma warning(pop)
+
 
 #endif
 
