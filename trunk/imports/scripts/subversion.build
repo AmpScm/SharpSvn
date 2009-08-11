@@ -125,11 +125,13 @@
         </loadfile>
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
         
-        <!--delete if="${((static=='true') or (svnStatic=='true')) and not(property::exists('withSwig'))}">
-          <fileset basedir="${svnBase}/subversion">
-            <include name="**/deprecated.c" />
-          </fileset>
-        </delete-->
+        <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
+          <filterchain>
+            <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY);'
+                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, ##expr);' />
+          </filterchain>
+        </loadfile>
+        <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
       </if>
     </OnceBlock>
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched">
