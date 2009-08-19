@@ -39,5 +39,10 @@ ${perl.h}
         <include name="**/*.lib" />
       </fileset>
     </copy>
+    <copy todir="build/${platform}/lib/include"> 
+      <fileset basedir="${path::get-full-path(perl.location + '/../lib/CORE')}">
+        <include name="**/*.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
