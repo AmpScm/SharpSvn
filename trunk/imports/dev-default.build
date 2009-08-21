@@ -33,9 +33,9 @@
   <target name="prepare-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd">
 	<if test="${not directory::exists(wc)}">
 		<Svn>
-			<arg line="co http://svn.collab.net/repos/svn/trunk ${wc}" if="${branch == '' and tag == ''}" />
-			<arg line="co http://svn.collab.net/repos/svn/branches/${branch} ${wc}" if="${branch != ''}" />
-			<arg line="co http://svn.collab.net/repos/svn/tags/${tag} ${wc}" if="${tag != ''}" />
+			<arg line="co https://svn.collab.net/repos/svn/trunk ${wc}" if="${branch == '' and tag == ''}" />
+			<arg line="co https://svn.collab.net/repos/svn/branches/${branch} ${wc}" if="${branch != ''}" />
+			<arg line="co https://svn.collab.net/repos/svn/tags/${tag} ${wc}" if="${tag != ''}" />
 		</Svn>
 	</if>
 	<Svn>
