@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9.00"
 	Name="SharpSvn-SvnI18n"
 	ProjectGUID="{8F72E4A3-EBA5-4DFD-A64F-FA16FF9F293B}"
 	RootNamespace="SharpSvnSvnI18n"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -309,6 +310,4 @@
 			>
 		</File>
 	</Files>
-	<Globals>
-	</Globals>
 </VisualStudioProject>
