@@ -34,7 +34,7 @@ namespace SharpSvn.Tests
             Assert.That(items, Is.Not.Null);
             Assert.That(items.Length, Is.EqualTo(1));
             Assert.That(items[0].Target, Is.EqualTo("dir"));
-            Assert.That(items[0].Url, Is.EqualTo("http://sharpsvn.net/qqn"));
+            Assert.That(items[0].Reference, Is.EqualTo("http://sharpsvn.net/qqn"));
             Assert.That(items[0].Revision, Is.EqualTo(SvnRevision.None));
             Assert.That(items[0].OperationalRevision, Is.EqualTo(SvnRevision.None));
 
@@ -50,7 +50,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnExternalItem.TryParse("-r 1 http://sharpsvn.net/qqn@124 dir", out item));
             Assert.That(item, Is.Not.Null);
             Assert.That(item.Target, Is.EqualTo("dir"));
-            Assert.That(item.Url, Is.EqualTo("http://sharpsvn.net/qqn"));
+            Assert.That(item.Reference, Is.EqualTo("http://sharpsvn.net/qqn"));
 
             // Blanks returns head -> We create blanks
             Assert.That(item.Revision.Revision, Is.EqualTo(1));
@@ -89,10 +89,10 @@ namespace SharpSvn.Tests
             SvnExternalItem item;
             Assert.That(SvnExternalItem.TryParse("a b", out item), Is.True);
             Assert.That(item.Target, Is.EqualTo("b"));
-            Assert.That(item.Url, Is.EqualTo("a"));
+            Assert.That(item.Reference, Is.EqualTo("a"));
             Assert.That(SvnExternalItem.TryParse(item.ToString(), out item), Is.True);
             Assert.That(item.Target, Is.EqualTo("b"));
-            Assert.That(item.Url, Is.EqualTo("a"));
+            Assert.That(item.Reference, Is.EqualTo("a"));
         }
     }
 }

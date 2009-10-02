@@ -550,7 +550,6 @@ namespace SharpSvn.Tests.Commands
                         Assert.That(e.WorkingCopyInfo.LockTime, Is.EqualTo(DateTime.MinValue));
                         Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);
                         Assert.That(e.WorkingCopyInfo.NodeKind, Is.EqualTo(nn >= 0 ? SvnNodeKind.File : SvnNodeKind.Directory));
-                        Assert.That(e.WorkingCopyInfo.PropertyChangeTime, Is.EqualTo(DateTime.MinValue));
                         Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
                     });
 
