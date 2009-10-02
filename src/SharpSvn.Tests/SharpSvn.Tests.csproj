@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -16,6 +16,10 @@
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>SharpSvn.Tests.snk</AssemblyOriginatorKeyFile>
+    <SccProjectName>Svn</SccProjectName>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccProvider>SubversionScc</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
@@ -66,6 +70,7 @@
     <Compile Include="Commands\AddTests.cs" />
     <Compile Include="Commands\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
+    <Compile Include="Commands\GetCapabilities.cs" />
     <Compile Include="Commands\CheckOutTests.cs" />
     <Compile Include="Commands\CleanUpTests.cs" />
     <Compile Include="Commands\CommitTests.cs" />
@@ -85,13 +90,16 @@
     <Compile Include="Commands\ImportTests.cs" />
     <Compile Include="Commands\InfoTests.cs" />
     <Compile Include="Commands\ListEntries.cs">
-    </Compile>
     <Compile Include="Commands\ListTests.cs" />
     <Compile Include="Commands\LockTests.cs" />
     <Compile Include="Commands\LogTests.cs" />
     <Compile Include="Commands\MergeTests.cs" />
     <Compile Include="Commands\MoveTests.cs" />
+    <Compile Include="Commands\ReplayTests.cs" />
+    <Compile Include="StaticVerifications.cs" />
+    <Compile Include="ExternalsTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
+    <Compile Include="LookCommands\GetChangesTests.cs" />
     <Compile Include="LookCommands\HookTestBase.cs" />
     <Compile Include="LookCommands\VerifyTransactions.cs" />
     <Compile Include="PathTests.cs" />
@@ -123,6 +131,7 @@
     </Compile>
     <Compile Include="DiffTests.cs" />
     <Compile Include="LocalizationTests.cs" />
+    <Compile Include="SvnAuthTests.cs" />
     <Compile Include="SvnBdbTest.cs" />
     <Compile Include="SvnClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
