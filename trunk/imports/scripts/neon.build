@@ -15,8 +15,26 @@
         </filterchain>
       </loadfile>
       <echo file="${neonDir}/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
-      <echo file="${neonDir}/config.h" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.h')}" />
       <echo file="${neonDir}/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
+      <echo file="${neonDir}/config.hw" message='
+/* SharpSvn */
+#include &lt;windows.h&gt;
+#include &lt;winsock2.h&gt;
+#include &lt;Ws2tcpip.h&gt;
+#include &lt;wspiapi.h&gt;
+/* /SharpSvn */
+' append="true" />     
+     <echo message='
+          
+/* SharpSvn */
+#ifndef freeaddrinfo
+#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
+#endif
+/* /SharpSvn */
+
+' append="true" file="${neonDir}/src/ne_socket.c" if="${platform=='win32'}" />
+
+  
     </OnceBlock>
   </target>
 </project>
