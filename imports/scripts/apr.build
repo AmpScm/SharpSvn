@@ -189,6 +189,16 @@ APR_BEGIN_DECLS
 ' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
         </do>
       </foreach>
+
+      <echo message='
+          
+/* SharpSvn */
+#ifndef freeaddrinfo
+#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
+#endif
+/* /SharpSvn */
+
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
       
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
