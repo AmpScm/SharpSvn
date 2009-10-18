@@ -5,6 +5,7 @@
   <property name="svnBase" value="${platformRoot}/subversion" />
   <property name="svnCheckUrl" value="" overwrite="false" />
   <property name="svnCheckFs" value="fsfs" overwrite="false" />
+  <property name ="subversionMergeBranches" value="" overwrite="false" />
 
   <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, sharpintl-build">
 
@@ -78,17 +79,32 @@
     </copy>
     <copy tofile="build/${platform}/lib/release/libapr-1.lib" file="build/${platform}/lib/lib/apr-1.lib" if="${static=='true'}" />
     <copy tofile="build/${platform}/lib/release/libaprutil-1.lib" file="build/${platform}/lib/lib/aprutil-1.lib" if="${static=='true'}" />
+    <copy todir="build/${platform}/lib/include" flatten="true" if="${javaHome != ''}">
+      <fileset basedir="${javaHome}/include">
+        <include name="*.h" />
+        <include name="win32/*.h" />
+      </fileset>
+    </copy>      
   </target>
 
   <target name="svn-merge" depends="checkout" if="${applyMerges}">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
         <arg value="merge" />
+        <arg line="--accept theirs-conflict" />
         <arg value="-c" />
         <arg value="${subversionMerges}" />
         <arg value="http://svn.collab.net/repos/svn/trunk/" />
         <arg value="${svnBase}" />
       </Svn>
+      <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
+         if="${string::get-length(subversionMergeBranches) &gt; 0}">
+        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+          <arg value="merge" />
+          <arg line="${branch}" />
+          <arg value="${svnBase}" />
+        </Svn>
+      </foreach>
       <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
         /* Appended by sharpsvn/imports/scripts/build-subversion.build */
         apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
@@ -108,6 +124,14 @@
           </filterchain>
         </loadfile>
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
+        
+        <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
+          <filterchain>
+            <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY);'
+                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, ##expr);' />
+          </filterchain>
+        </loadfile>
+        <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
       </if>
     </OnceBlock>
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched">
@@ -181,6 +205,7 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
+        <arg value="--with-swig=${path::get-full-path(swigDir)}" />
         <arg value="--with-sqlite=${intDir}" if="${buildSqlite and (subversionVersion &gt; '1.6')}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
@@ -250,6 +275,7 @@
 
       <!-- Add more version information to the subversion binaries and functions -->
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
+        #pragma once
         #undef SVN_VER_TAG
         #undef SVN_VER_NUMTAG
         #define SVN_VER_TAG  " (${svnBuildName}:${svnBuildType}/${subversionVersion}@${svnWcVersion}) ${string::to-upper(platform)}"
@@ -262,7 +288,7 @@
     </OnceBlock>
   </target>
 
-  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,prepare-neon,generate-svnfiles,build-httpd">
+  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,build-swig,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
       <exec program="msbuild.exe" workingdir="${svnBase}">
@@ -271,16 +297,19 @@
         <arg value="subversion_vcnet.sln" />
         <arg value="/p:Configuration=Release" />
         <arg value="/p:Platform=${platform}" />
-        <arg value="/t:svn" />
-        <arg value="/t:svnadmin" />
-        <arg value="/t:svnmucc" />
-        <arg value="/t:svnversion" />
-        <arg value="/t:svnserve" />
-        <arg value="/t:svnsync" />
-        <arg value="/t:svnlook" />
-        <arg value="/t:svnauthz-validate" />
-        <arg value="/t:svn-populate-node-origins-index" />
-        <arg value="/t:__ALL_TESTS__" if="${VSversion == '2005'}"/>
+        <arg value="/t:Programs\svn" />
+        <arg value="/t:Programs\svnadmin" />        
+        <arg value="/t:Programs\svnversion" />
+        <arg value="/t:Programs\svnserve" />
+        <arg value="/t:Programs\svnsync" />
+        <arg value="/t:Programs\svnlook" />
+        <arg value="/t:Programs\svnmucc"/>
+        <arg value="/t:Programs\svnauthz-validate" />
+        <arg value="/t:Programs\svndumpfilter" />
+        <arg value="/t:Programs\svn-populate-node-origins-index" />
+        <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
+        <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
+        <arg value="/t:__JAVAHL__" if="${javaHome != ''}" />
       </exec>
     </OnceBlock>
   </target>

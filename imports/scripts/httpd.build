@@ -10,7 +10,7 @@
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
       <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
 
-      <exec program="msbuild.exe" workingdir="${httpdDir}">
+      <exec program="${MSBuildExe}" workingdir="${httpdDir}">
         <arg value="apache.sln" />
         <arg value="/P:configuration=Release" />
         <arg value="/P:platform=Win32" />
@@ -20,6 +20,13 @@
       </exec>
     </OnceBlock>
 
+    <!-- Enable compiling subversion in debug mode -->    
+    <copy todir="${httpdDir}/Debug" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="**/Release/*.lib" />
+        <include name="Release/*.lib" />
+      </fileset>
+    </copy>
     <copy todir="${release}/httpd/bin" flatten="true">
       <fileset basedir="${httpdDir}">
         <include name="release/*.exe" />
@@ -33,7 +40,7 @@
         <include name="**/*.so" />
         <exclude name="srclib/**" />
       </fileset>
-    </copy>
+    </copy>    
     <mkdir dir="${release}/httpd/conf" />
     <mkdir dir="${release}/httpd/logs" />
     <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />

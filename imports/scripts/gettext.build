@@ -100,6 +100,7 @@
         libintl_fprintf         @505
         libintl_sprintf         @506
         libintl_bindtextdomain  @507
+        libintl_dngettext       @508
       </echo>
     </OnceBlock>
   </target>
