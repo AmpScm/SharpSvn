@@ -10,7 +10,7 @@
   <property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
   <property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
   <property name="fullDbDllName" value="${dbDllName}-${platform}.dll" if="${dllPrefix != ''}"/>
-  <property name="fullDbDllName" value="DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}.dll" if="${dllPrefix == ''}"/>
+  <property name="fullDbDllName" value="${libDb}.dll" if="${dllPrefix == ''}"/>
 
   <target name="prepare-bdb" depends="extract">
     <OnceBlock file="build/db-${dbVersion}.prepared">
@@ -41,6 +41,7 @@
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
               <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' if="${dllPrefix != ''}"/>
               <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' if="${dllPrefix != ''}"/>
+              <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
@@ -93,5 +94,8 @@
 			<include name="*.dll" />
 		</fileset>		
     </copy>
+    <if test="true">
+      <copy tofile="build/${platform}/lib/bin/${libDb}d.dll" file="${bdbResultDir}/${fullDbDllName}" />
+    </if>
   </target>
 </project>

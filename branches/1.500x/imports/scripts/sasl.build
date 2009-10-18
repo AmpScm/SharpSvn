@@ -45,7 +45,7 @@
         <filterchain>
           <replacestring
 						from='CPPFLAGS = /D NEED_GETOPT'
-						to='CPPFLAGS = /Gy /Zi /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
+						to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
           <replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
           <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />

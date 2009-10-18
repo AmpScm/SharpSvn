@@ -38,7 +38,7 @@
       </foreach>
     </OnceBlock>
   </target>  
-  <target name="upgrade-apr" depends="checkout,apr-merge">
+  <target name="upgrade-apr" depends="checkout,apr-merge,build-bdb">
     <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">		
       <exec program="perl.exe" workingdir="${aprDir}">
         <arg value="build/cvtdsp.pl" />
@@ -102,7 +102,7 @@
           <echo message="Patching ${vcproj}" />
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;NTDDI_VERSION=0x05010000;_WIN32_WINNT=0x0501;WIN32;WINNT;' />
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' />
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib ' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
               <replacestring from='Optimization="2"' to='Optimization="1"' />
@@ -152,16 +152,53 @@
           <property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
           <loadfile file="${winHeader}" property="headertext">
             <filterchain>
-              <replacestring from='#define APU_HAVE_APR_ICONV' to='#define APU_HAVE_APR_ICONV     0 //' />
-              <replacestring from='#define APR_HAVE_IPV6' to='#define APR_HAVE_IPV6 1 //' if="${enableIpv6 == 'true'}" />
-              <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 //' />
+              <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
+              <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
+              <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
+              <replacestring from='#define _WIN32_WINNT ' to='
+/* SharpSvn */
+#ifndef WINNT
+#  define WINNT
+#endif
+#ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0501
+#endif
+#if !defined(NTDDI_VERSION) &amp;&amp; defined(_M_IX86)
+#  define NTDDI_VERSION 0x05000000
+#endif
+/* /SharpSvn */
+//#define  _WIN32_WINNT ' if="${(VSversion == '2005')}" />
               <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
-#include &lt;wspiapi.h&gt; //' />
+/* SharpSvn extension */
+APR_END_DECLS
+#include &lt;wspiapi.h&gt;
+APR_BEGIN_DECLS
+/* /SharpSvn extension */' />
+              <replacestring from='#pragma' to='// #disabled-pragma' />
             </filterchain>
           </loadfile>
           <echo message="${headertext}" file="${winHeader2}" />
+          <echo message='
+          
+/* SharpSvn */
+#ifndef freeaddrinfo
+#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
+#endif
+/* /SharpSvn */
+
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
         </do>
       </foreach>
+
+      <echo message='
+          
+/* SharpSvn */
+#ifndef freeaddrinfo
+#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
+#endif
+/* /SharpSvn */
+
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
       
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
@@ -172,6 +209,15 @@
         </filterchain>
       </loadfile>
       <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
+      <if test="${applyMerges}">
+        <loadfile file="${aprDir}\file_io\win32\open.c" property="open.c">
+	      <filterchain>
+            <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
+                           to='DWORD sharemode = FILE_SHARE_READ;' />
+          </filterchain>
+        </loadfile>
+        <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
+      </if>
       <!-- Add Windows 2000 ipv6 workarounds -->
       <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
     </OnceBlock>
@@ -215,7 +261,16 @@
         </delete>
       </if>
     </OnceBlock>
-
+    <copy todir="${aprDir}/Debug">
+      <fileset basedir="${aprDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${aprUtilDir}/Debug">
+      <fileset basedir="${aprUtilDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
     <copy todir="${release}/lib" flatten="true">
       <fileset>
         <include name="${aprDir}/LibR/*.lib" />
@@ -299,5 +354,17 @@
         <include name="expat.h" />
       </fileset>
     </copy>
+    <if test="true">
+      <copy todir="${aprDir}/Debug">
+         <fileset basedir="${aprDir}/Release">
+           <include name="**/*.dll" />
+         </fileset>
+      </copy>
+      <copy todir="${aprUtilDir}/Debug">
+         <fileset basedir="${aprUtilDir}/Release">
+           <include name="**/*.dll" />
+         </fileset>
+      </copy>
+    </if>
   </target>
 </project>

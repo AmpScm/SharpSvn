@@ -91,6 +91,17 @@
       <ComponentGroupRef Id="svn_subr_1.dll"/>
       <ComponentGroupRef Id="libintl.dll" />
     </ComponentGroup>
+    <ComponentGroup Id="libsvnjavahl_1.dll">
+      <ComponentRef Id="libsvnjavahl_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_client_1.dll"/>
+      <ComponentGroupRef Id="svn_diff_1.dll"/>
+      <ComponentGroupRef Id="svn_fs_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="svn_wc_1.dll"/>
+    </ComponentGroup>
     <!-- Shared libraries -->
     <ComponentGroup Id="libapr_1.dll">
       <ComponentRef Id="libapr_1.dll"/>
