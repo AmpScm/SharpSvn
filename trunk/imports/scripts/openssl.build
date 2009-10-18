@@ -56,10 +56,17 @@
             <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
             <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
             <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
+            <replacestring from="bufferoverflowu.lib" to="" if="${VSversion != '2005'}" />
           </filterchain>
         </loadfile>
-        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />
+        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />        
       </if>
+      <loadfile file="${opensslDir}/ms/nt.mak" property="mk">
+        <filterchain>
+          <replacestring from="bufferoverflowu.lib" to="" if="${VSversion != '2005'}" />
+        </filterchain>
+      </loadfile>
+      <echo message="${mk}" file="${opensslDir}/ms/nt.mak" />
     </OnceBlock>
   </target>
   <target name="build-openssl" depends="prepare-openssl">
