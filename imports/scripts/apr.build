@@ -157,6 +157,9 @@
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#define _WIN32_WINNT ' to='
 /* SharpSvn */
+#ifndef WINNT
+#  define WINNT
+#endif
 #ifndef _WIN32_WINNT
 #  define _WIN32_WINNT 0x0501
 #endif
@@ -175,6 +178,15 @@ APR_BEGIN_DECLS
             </filterchain>
           </loadfile>
           <echo message="${headertext}" file="${winHeader2}" />
+          <echo message='
+          
+/* SharpSvn */
+#ifndef freeaddrinfo
+#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
+#endif
+/* /SharpSvn */
+
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
         </do>
       </foreach>
       
