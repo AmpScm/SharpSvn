@@ -41,6 +41,7 @@
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
               <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.dll' if="${dllPrefix != ''}"/>
               <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.dll' if="${dllPrefix != ''}"/>
+              <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
