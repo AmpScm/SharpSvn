@@ -178,18 +178,8 @@ APR_BEGIN_DECLS
             </filterchain>
           </loadfile>
           <echo message="${headertext}" file="${winHeader2}" />
-          <echo message='
-          
-/* SharpSvn */
-#ifndef freeaddrinfo
-#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
-#endif
-/* /SharpSvn */
-
-' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
         </do>
       </foreach>
-
       <echo message='
           
 /* SharpSvn */
@@ -198,7 +188,7 @@ APR_BEGIN_DECLS
 #endif
 /* /SharpSvn */
 
-' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
       
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
