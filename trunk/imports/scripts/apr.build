@@ -186,7 +186,7 @@ APR_BEGIN_DECLS
 #endif
 /* /SharpSvn */
 
-' append="true" file="${aprDir}/network_io\unix\sockaddr.c" />
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
         </do>
       </foreach>
 
