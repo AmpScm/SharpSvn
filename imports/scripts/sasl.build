@@ -20,6 +20,17 @@
         </filterchain>
       </loadfile>
       <echo message="${propText}" file="${saslDir}/win32/include/config.h" />
+      <echo message='
+
+/* SharpSvn */
+/* SharpSvn */
+#include &lt;windows.h&gt;
+#include &lt;winsock2.h&gt;
+#include &lt;Ws2tcpip.h&gt;
+#include &lt;wspiapi.h&gt;
+/* /SharpSvn */
+
+' file="${saslDir}/win32/include/config.h" append="true" />
       <loadfile file="${saslDir}/NTMakefile" property="propText">
         <filterchain>
           <replacestring
