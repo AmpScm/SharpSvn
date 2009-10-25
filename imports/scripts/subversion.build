@@ -297,16 +297,16 @@
         <arg value="subversion_vcnet.sln" />
         <arg value="/p:Configuration=Release" />
         <arg value="/p:Platform=${platform}" />
-        <arg value="/t:Programs\svn" />
-        <arg value="/t:Programs\svnadmin" />        
-        <arg value="/t:Programs\svnversion" />
-        <arg value="/t:Programs\svnserve" />
-        <arg value="/t:Programs\svnsync" />
-        <arg value="/t:Programs\svnlook" />
-        <arg value="/t:Programs\svnmucc"/>
-        <arg value="/t:Programs\svnauthz-validate" />
-        <arg value="/t:Programs\svndumpfilter" />
-        <arg value="/t:Programs\svn-populate-node-origins-index" />
+        <arg value="/t:svn" />
+        <arg value="/t:svnadmin" />        
+        <arg value="/t:svnversion" />
+        <arg value="/t:svnserve" />
+        <arg value="/t:svnsync" />
+        <arg value="/t:svnlook" />
+        <arg value="/t:svnmucc"/>
+        <arg value="/t:svnauthz-validate" />
+        <arg value="/t:svndumpfilter" />
+        <arg value="/t:svn-populate-node-origins-index" />
         <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
         <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
         <arg value="/t:__JAVAHL__" if="${javaHome != ''}" />
