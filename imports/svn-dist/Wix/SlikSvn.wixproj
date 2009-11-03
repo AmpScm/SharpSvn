@@ -16,13 +16,13 @@
     <WixVariables>
     </WixVariables>
     <SuppressValidation>False</SuppressValidation>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57</SuppressIces>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=1.6.6;SvnSuffix=</DefineConstants>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57</SuppressIces>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=1.6.6;platform=x64</DefineConstants>
@@ -30,7 +30,7 @@
     </WixVariables>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57</SuppressIces>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
@@ -38,7 +38,7 @@
     <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=1.6.6;SvnSuffix=</DefineConstants>
     <WixVariables>
     </WixVariables>
-    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57</SuppressIces>
+    <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Localization.wxs" />
