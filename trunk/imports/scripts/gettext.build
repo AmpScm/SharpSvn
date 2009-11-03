@@ -40,7 +40,8 @@
 #define nls_uint32 unsigned int
 #define LOCALEDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Locales"
 #define LOCALE_ALIAS_PATH "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\LocaleAliases"
-#define LIBDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Libs"
+#undef SUBLANG_SINDHI_PAKISTAN
+#undef SUBLANG_SINDHI_AFGHANISTAN
 </echo>
 <echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
 #define uintmax_t unsigned __int64
