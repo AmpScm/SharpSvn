@@ -79,9 +79,9 @@
     <if test="${not directory::exists(svnBase)}">
       <Svn verbose="true">
         <arg value="co" />
-        <arg value="http://svn.collab.net/repos/svn/trunk/" if="${svnBuildType == 'trunk'}" />
-        <arg value="http://svn.collab.net/repos/svn/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
-        <arg value="http://svn.collab.net/repos/svn/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
         <arg value="${svnBase}" />
       </Svn>
     </if>
