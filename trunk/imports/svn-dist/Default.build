@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="." default="build-svn-dist">
-  <property name="subversionMerges" value="37890,38068,38101,38102" />
+  <property name="subversionMerges" value="877964,878142,878175,878176" />
   <property name="static" value="false" />
   <property name="downloads" value="../downloads/" />
   <property name="dllPrefix" value="SlikSvn-" />

@@ -94,7 +94,7 @@
         <arg line="--accept theirs-conflict" />
         <arg value="-c" />
         <arg value="${subversionMerges}" />
-        <arg value="http://svn.collab.net/repos/svn/trunk/" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
         <arg value="${svnBase}" />
       </Svn>
       <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
