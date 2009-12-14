@@ -21,6 +21,7 @@
 
       <property name="VSversion" value="2005" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 8')}" />
       <property name="VSversion" value="2008" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 9.0')}" />
+      <property name="VSversion" value="2010" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 10.0')}" />
     </if>
 
     <if test="${not property::exists('VSversion')}">

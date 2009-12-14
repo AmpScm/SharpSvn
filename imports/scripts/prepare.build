@@ -49,8 +49,8 @@
     <if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
       <UnTar tarfile="${downloads + dbFilename}" todir="build" compresstype="gzip" />
     </if>
-    <if test="${not directory::exists('build/zlib-' + zlibVersion)}">
-      <UnTar tarfile="${downloads + zlibFilename}" todir="build" compresstype="gzip" />
+    <if test="${not directory::exists(zlibDir)}">
+      <UnTar tarfile="${downloads + zlibFilename}" todir="build/${platform}" compresstype="gzip" />
     </if>
     <if test="${not directory::exists(nunitDir)}">
       <unzip zipfile="${downloads + nunitFilename}" todir="${nunitDir}"  />

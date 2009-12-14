@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
-  <property name="zlibDir" value="build/zlib-${zlibVersion}" />
+  <property name="zlibDir" value="${buildRoot}/${platform}/zlib-${zlibVersion}" />
 
   <target name="prepare-zlib" depends="extract">
-    <OnceBlock file="build/zlib-${zlibVersion}.prepared">
+    <OnceBlock file="build/zlib-${zlibVersion}-${platform}.prepared">
       <foreach item="File" property="dsp">
         <in>
           <items basedir="${zlibDir}">
@@ -33,31 +33,41 @@
     </OnceBlock>
   </target>
   <target name="build-zlib" depends="prepare-zlib, extract">
-    <VCBuild>
-      <arg value="${zlibDir}/projects/visualc6/zlib.vcproj" />
-      <arg value="LIB ${Configuration}|${platform}" />
-    </VCBuild>
-    <copy todir="${release}/lib">
-      <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
-        <include name="*.dll" />
-        <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib-x64">
-      <fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
-        <include name="*.dll" />
-        <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/include">
-      <fileset basedir="${zlibDir}">
-        <include name="zlib.h" />
-        <include name="zconf.h" />
-      </fileset>
-    </copy>
+    <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
+      <VCBuild>
+        <arg value="${zlibDir}/projects/visualc6/zlib.vcproj" />
+        <arg value="LIB ${Configuration}|${platform}" />
+      </VCBuild>
+      <copy todir="${release}/lib">
+        <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
+          <include name="*.dll" />
+          <include name="*.lib" />
+          <include name="*.exp" />
+          <include name="*.pdb" />
+        </fileset>
+      </copy>
+      <copy todir="${release}/lib-x64">
+        <fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
+          <include name="*.dll" />
+          <include name="*.lib" />
+          <include name="*.exp" />
+          <include name="*.pdb" />
+        </fileset>
+      </copy>
+      <copy todir="${release}/include">
+        <fileset basedir="${zlibDir}">
+          <include name="zlib.h" />
+          <include name="zconf.h" />
+        </fileset>
+      </copy>
+      <if test="${platform=='win32'}">
+        <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib/zlib.lib" />
+        <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib/zlib.lib" />
+      </if>
+      <if test="${platform!='win32'}">
+        <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib-${platform}/zlib.lib" />
+        <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib-${platform}/zlib.lib" />
+      </if>
+    </OnceBlock>
   </target>
 </project>
