@@ -108,7 +108,7 @@
     <Compile Include="PathTests.cs" />
     <Compile Include="Commands\PropertyListTests.cs" />
     <Compile Include="Commands\RelocateTests.cs" />
-    <Compile Include="Commands\ResolvedTests.cs" />
+    <Compile Include="Commands\ResolveTests.cs" />
     <Compile Include="Commands\RevertTests.cs" />
     <Compile Include="Commands\RevisionPropertyListTests.cs" />
     <Compile Include="Commands\RevisionTests.cs" />
