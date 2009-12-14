@@ -191,7 +191,12 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 		/* else: Unknown -> Don't copy */
 
 		if (pNewValue)
-			apr_hash_set(hash_to, pKey, len, pNewValue);
+		{
+			// Create a 0 terminated copy of key
+			char *pNewKey = (char*)apr_pcalloc(pool->Handle, len+1);
+			memcpy(pNewKey, pKey, len); 
+			apr_hash_set(hash_to, pNewKey, len, pNewValue);
+		}
 	}
 
 	return hash_to;
