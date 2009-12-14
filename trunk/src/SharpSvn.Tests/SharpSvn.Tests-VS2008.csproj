@@ -109,7 +109,7 @@
     <Compile Include="PathTests.cs" />
     <Compile Include="Commands\PropertyListTests.cs" />
     <Compile Include="Commands\RelocateTests.cs" />
-    <Compile Include="Commands\ResolvedTests.cs" />
+    <Compile Include="Commands\ResolveTests.cs" />
     <Compile Include="Commands\RevertTests.cs" />
     <Compile Include="Commands\RevisionPropertyListTests.cs" />
     <Compile Include="Commands\RevisionTests.cs" />
@@ -150,6 +150,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="SharpSvn.Tests.csproj" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
