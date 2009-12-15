@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -85,6 +86,42 @@ namespace SharpSvn.Tests.Commands
             this.Client.CheckOut(new Uri("http://svn.collab.net/repos/svn/"), newWc, a);
 
             Assert.That(progressCalled, "Progress delegate not called");
+        }
+
+        [Test]
+        public void SerfCheckout()
+        {
+            string cfgDir = GetTempDir();
+            using (SvnClient client = new SvnClient())
+                client.LoadConfiguration(cfgDir, true);
+
+            string serversFile = Path.Combine(cfgDir, "servers");
+            string serversData = File.ReadAllText(serversFile);
+
+            foreach (string httpLibrary in new string[] { "", "serf", "neon" })
+            {
+                string servers = serversData;
+                if (!string.IsNullOrEmpty(httpLibrary))
+                    servers += Environment.NewLine + "http-library=" + httpLibrary + Environment.NewLine;
+
+                File.WriteAllText(serversFile, servers);
+                bool once = false;
+
+                using (SvnClient cl = new SvnClient())
+                {
+                    cl.LoadConfiguration(cfgDir, false);
+                    cl.Authentication.UserNamePasswordHandlers +=
+                        delegate(object sender, SvnUserNamePasswordEventArgs e)
+                        {
+                            Assert.That(!once);
+                            once = true;
+                            e.UserName = "guest";
+                        };
+
+                    cl.CheckOut(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/imports/scripts"), GetTempDir());
+                    Assert.That(once, "Asked for password");
+                }
+            }
         }
 
         void Client_Progress(object sender, SvnProgressEventArgs args)
