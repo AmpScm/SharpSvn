@@ -88,7 +88,7 @@ namespace SharpSvn.Tests.Commands
 
 			using (var svnClient = new SvnClient())
 			{
-				for (int i = 0; i < 99; i++)
+				for (int i = 0; i < 3; i++)
 				{
 					string workingcopy = GetTempDir();
 					Directory.CreateDirectory(workingcopy);
