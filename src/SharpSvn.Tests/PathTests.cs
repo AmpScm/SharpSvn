@@ -345,5 +345,18 @@ namespace SharpSvn.Tests
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\a b\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/a%20b/test/"));
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/c%23/test/"));
         }
+
+		[Test]
+		public void UriStrangeness()
+		{
+			Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
+			Assert.That(new Uri("http://server/dir./file.").AbsoluteUri, Is.EqualTo("http://server/dir/file"));
+			Assert.That(new Uri("http://server/file.").OriginalString, Is.EqualTo("http://server/file."));
+			Assert.That(new Uri("http://server/dir./file.").OriginalString, Is.EqualTo("http://server/dir./file."));
+			Assert.That(new Uri("http://server/").AbsoluteUri, Is.EqualTo("http://server/"));
+			Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
+			Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
+			Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
+		}
 	}
 }
