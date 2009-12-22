@@ -116,7 +116,7 @@ namespace SharpSvn.Tests.Commands
 				Assert.That(SvnClient.AdministrativeDirectoryName, Is.EqualTo(newAdminDir),
 					"Admin directory name should now be " + newAdminDir);
 
-				string newwc = this.FindDirName(Path.Combine(Path.GetTempPath(), "moo"));
+				string newwc = GetTempDir();
 				this.Client.CheckOut(this.ReposUrl, newwc);
 
 				Assert.That(Directory.Exists(Path.Combine(newwc, newAdminDir)),

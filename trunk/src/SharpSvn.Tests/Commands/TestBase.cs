@@ -486,24 +486,6 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        /// <summary>
-        /// generate a unique directory name
-        /// </summary>
-        /// <param name="baseName"></param>
-        /// <returns></returns>
-        protected string FindDirName(string baseName)
-        {
-            string dir = baseName;
-            int i = 1;
-            while (Directory.Exists(dir))
-            {
-                dir = string.Format("{0}-{1}", baseName, i);
-                ++i;
-            }
-
-            return Path.GetFullPath(dir);
-        }
-
         protected string GetTempFile()
         {
             // ensure we get a long path
