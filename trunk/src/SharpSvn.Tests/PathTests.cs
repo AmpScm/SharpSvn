@@ -357,6 +357,8 @@ namespace SharpSvn.Tests
 			Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
 			Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
 			Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
+
+			Assert.That(new Uri("http://server/file%2E").AbsoluteUri, Is.EqualTo("http://server/file"));
 		}
 	}
 }
