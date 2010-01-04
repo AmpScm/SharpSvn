@@ -5,7 +5,7 @@
   <property name="sqliteIntDir" value="${sqliteDir}/obj/${platform}" />
   <property name="sqliteLibDir" value="${sqliteDir}/bin/${platform}" />
 
-  <target name="build-sqlite" depends="extract" if="${buildSqlite}">
+  <target name="build-sqlite" depends="checkout" if="${buildSqlite}">
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
@@ -15,7 +15,8 @@
       <arg value="/Zi" />      <!-- Write debug information -->
       <arg value="/Zl" />      <!-- Ommit default library name -->
       <arg value="/Gy" />      <!-- Function level linking -->
-      <arg value="/GL" />      <!-- Whole Program Optimization -->
+      <arg value="/link" />
+      <arg value="/NODEFAULTLIB" />
       <defines>
         <define name="NDEBUG" />
         <!-- Ommit some parts of SQLite not used by Subversion -->
