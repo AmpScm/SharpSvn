@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.6006.1397</title>
+          SharpSvn-Daily Update - 1.6006.1412</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.6006.1397</h1>
+          SharpSvn-Daily Update - 1.6006.1412</h1>
 
 
 <p>
@@ -15,25 +15,48 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/2894/SSvn-1.6006.1397.zip">SharpSvn 1.6006.1397</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/2943/SSvn-1.6006.1412.zip">SharpSvn 1.6006.1412</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/2895/SSvn-1.6006.1397-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/2896/SSvnEx-1.6006.1397.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/2944/SSvn-1.6006.1412-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/2945/SSvnEx-1.6006.1412.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1397">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1412">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-01-04</td></tr>
+<tr><td> </td><td class="r"><a id="1407" href="http://sharpsvn.net/rev/?r=1407">
+            [r1407]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnBase.h, SharpSvn/SvnTools.cpp, SharpSvn/SvnExternalItem.cpp, SharpSvn.Tests/ExternalsTests.cs, SharpSvn/SvnExternalItem.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make SvnExternalItem handle the apr argv parsing rules when turning the
+specification into a string. This resolves some obscure AnkhSVN issues.<br>
+As added bones implemented IEquatable and .Equals() on SvnExternalItem
+and added a few extra testcases.</td></tr>
+<tr><td> </td><td class="r"><a id="1406" href="http://sharpsvn.net/rev/?r=1406">
+            [r1406]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/Args:</strong> Status.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fixed typo in xml documentation</td></tr>
+<tr class="d"><td colspan="4">2009-12-22</td></tr>
+<tr><td> </td><td class="r"><a id="1404" href="http://sharpsvn.net/rev/?r=1404">
+            [r1404]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests/Commands:</strong> ZMiscTests.cs, TestBase.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use automatically cleaned temp directories in the last places where we didn't</td></tr>
+<tr><td> </td><td class="r"><a id="1402" href="http://sharpsvn.net/rev/?r=1402">
+            [r1402]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests:</strong> PathTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a few tests on System.Uri behavior</td></tr>
+<tr class="d"><td colspan="4">2009-12-15</td></tr>
+<tr><td> </td><td class="r"><a id="1400" href="http://sharpsvn.net/rev/?r=1400">
+            [r1400]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests/Commands:</strong> CheckOutTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a simple testcase for checking out with the default HTTP library,
+serf and neon.<br>
+For some strange reason this shows a serf bug.</td></tr>
 <tr class="d"><td colspan="4">2009-12-14</td></tr>
 <tr><td> </td><td class="r"><a id="1397" href="http://sharpsvn.net/rev/?r=1397">
             [r1397]
