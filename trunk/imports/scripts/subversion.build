@@ -38,12 +38,6 @@
           <include name="*aprutil-1.lib" />
         </fileset>
       </copy>
-      <copy todir="build/win32/lib/zlib" flatten="true">
-        <fileset>
-          <include name="build/zlib-${zlibVersion}/z*.h" />
-          <include name="${release}/lib/zlib.lib" />
-        </fileset>
-      </copy>
     </if>
     <if test="${platform == 'x64'}">
       <copy todir="${release}/lib-x64">
@@ -60,12 +54,6 @@
           <include name="*aprutil-1.lib" />
           <include name="intl3_svn.lib" />
           <include name="libdb*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="build/x64/lib/zlib" flatten="true">
-        <fileset>
-          <include name="build/zlib-${zlibVersion}/z*.h" />
-          <include name="${release}/lib-x64/zlib.lib" />
         </fileset>
       </copy>
     </if>
@@ -198,7 +186,7 @@
         <arg value="--with-apr-util=../lib" />
         <arg value="--with-berkeley-db=../lib" />
         <arg value="--with-openssl=../openssl-${opensslVersion}" />
-        <arg value="--with-zlib=../lib/zlib" />
+        <arg value="--with-zlib=${zlibDir}" />
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
