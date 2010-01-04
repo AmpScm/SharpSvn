@@ -109,6 +109,7 @@
               <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+              <replacestring from='Name="VCLibrarianTool"' to='Name="VCLibrarianTool" IgnoreAllDefaultLibraries="true"' />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
