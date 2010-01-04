@@ -140,7 +140,9 @@ namespace SharpSvn {
 			static String^ UriToString(Uri^ value);
 			static String^ UriToCanonicalString(Uri^ value);
 
-			static bool PathContainsInvalidChars(String^ path);			
+			static bool PathContainsInvalidChars(String^ path);
+
+			static String^ EnsureSafeAprArgument(String^ argument, bool preferQuotes);
 
 			static array<Char>^ _invalidChars;
 		};

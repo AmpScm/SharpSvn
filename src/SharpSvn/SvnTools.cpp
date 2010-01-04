@@ -175,6 +175,61 @@ bool SvnBase::PathContainsInvalidChars(String^ path)
 	return false;
 }
 
+String^ SvnBase::EnsureSafeAprArgument(String^ argument, bool preferQuotes)
+{
+	if (!argument)
+		throw gcnew ArgumentNullException("argument");
+	else if (argument->Length == 0)
+		return "\"\"";
+
+	bool isSafe = true;
+	wchar_t quote = '\"';
+
+	for (int i = 0; i < argument->Length && isSafe; i++)
+		switch (argument[i])
+		{
+			case L' ':
+			case L'\t':
+			case L'\r':
+			case L'\n':
+			case L'\\':
+				isSafe = false;
+				break;
+			case L'\'':
+				isSafe = false;
+				quote = '\"';
+				break;
+			case L'\"':
+				isSafe = false;
+				quote = '\'';
+				break;
+		}
+
+	if (isSafe)
+		return argument;
+
+	StringBuilder^ sb = gcnew StringBuilder(argument->Length + 8);
+	if (preferQuotes)
+		sb->Append(quote);
+
+	for (int i = 0; i < argument->Length; i++)
+	{
+		wchar_t c = argument[i];
+
+		if (c == L'\\' || (!preferQuotes && wchar_t::IsWhiteSpace(c)))
+			sb->Append(L'\\');
+		else if ((c == '\"' || c == '\'') && (!preferQuotes || (c == quote)))
+			sb->Append(L'\\');
+
+		sb->Append(c);
+	}
+
+	if (preferQuotes)
+		sb->Append(quote);
+
+	return sb->ToString();
+}
+
 String^ SvnTools::GetTruePath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))

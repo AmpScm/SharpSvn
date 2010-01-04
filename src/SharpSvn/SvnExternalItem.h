@@ -17,7 +17,7 @@
 #pragma once
 
 namespace SharpSvn {
-	public ref class SvnExternalItem sealed : SvnBase
+	public ref class SvnExternalItem sealed : SvnBase, IEquatable<SvnExternalItem^>
 	{
 		initonly String^ _target;
 		initonly String^ _url;
@@ -25,53 +25,10 @@ namespace SharpSvn {
 		initonly SvnRevision^ _pegRevision;
 
 	public:
-		SvnExternalItem(String^ targetName, String^ url)
-		{	
-			if (String::IsNullOrEmpty(targetName))
-				throw gcnew ArgumentNullException("targetName");
-			else if (String::IsNullOrEmpty(url))
-				throw gcnew ArgumentNullException("url");
-			
-			_target = targetName;
-			_url = url;
-			_revision = _pegRevision = SvnRevision::None;
-		}
-
-		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision)
-		{
-			if (String::IsNullOrEmpty(targetName))
-				throw gcnew ArgumentNullException("targetName");
-			else if (!uri)
-				throw gcnew ArgumentNullException("uri");
-			else if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
-				throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
-			else if(pegRevision && pegRevision != SvnRevision::None && !pegRevision->IsExplicit)
-				throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "pegRevision");
-
-			_target = targetName;
-			_url = uri->AbsoluteUri;
-			_revision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
-			_pegRevision = (pegRevision && pegRevision != SvnRevision::Head) ? pegRevision : SvnRevision::None;
-		}
-
-		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision, SvnRevision^ pegRevision)
-		{
-			if (String::IsNullOrEmpty(targetName))
-				throw gcnew ArgumentNullException("targetName");
-			else if (String::IsNullOrEmpty(url))
-				throw gcnew ArgumentNullException("url");
-			else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
-				throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
-			else if(pegRevision && pegRevision != SvnRevision::None && !pegRevision->IsExplicit)
-				throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "pegRevision");
-
-			_target = targetName;
-			_url = url;
-			_revision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
-			_pegRevision = (pegRevision && pegRevision != SvnRevision::Head) ? pegRevision : SvnRevision::None;
-		}
+		SvnExternalItem(String^ targetName, String^ url);
+		SvnExternalItem(String^ targetName, Uri^ uri);
+		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision);
+		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision, SvnRevision^ pegRevision);
 
 	public:
 		/// <summary>Gets the target path of the external (Where to place the external)</summary>
@@ -121,5 +78,10 @@ namespace SharpSvn {
 		static bool TryParse(String^ value, [Out]SvnExternalItem^% item);
 		/// <summary>Tries to parse a single SvnExternalItem</summary>
 		static bool TryParse(String^ value, [Out]array<SvnExternalItem^>^% items);
+
+	public:
+		virtual bool Equals(Object^ other) override;
+		virtual bool Equals(SvnExternalItem^ other);
+		virtual int GetHashCode() override;
 	};
 }
