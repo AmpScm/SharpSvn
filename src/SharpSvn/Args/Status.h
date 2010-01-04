@@ -99,7 +99,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets a boolean indicating whether the repository should be contacted to retrieve aut of date information</summary>
+		/// <summary>Gets or sets a boolean indicating whether the repository should be contacted to retrieve out of date information</summary>
 		/// <remarks>
 		/// If Update is set, contact the repository and augment the
 		/// status structures with information about out-of-dateness (with
