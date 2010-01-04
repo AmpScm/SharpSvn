@@ -94,5 +94,20 @@ namespace SharpSvn.Tests
             Assert.That(item.Target, Is.EqualTo("b"));
             Assert.That(item.Reference, Is.EqualTo("a"));
         }
+
+        [Test]
+        public void ParseReturn()
+        {
+            SvnExternalItem item;
+            string txt = new SvnExternalItem("a b c", "http://host/path with space/").ToString();
+            Assert.That(SvnExternalItem.TryParse(txt, out item));
+            Assert.That(item.Target, Is.EqualTo("a b c"));
+            Assert.That(item.Reference, Is.EqualTo("http://host/path with space/"));
+
+            txt = new SvnExternalItem("'a b c\"", "http://host/path with \"\'/").ToString();
+            Assert.That(SvnExternalItem.TryParse(txt, out item));
+            Assert.That(item.Target, Is.EqualTo("'a b c\""));
+            Assert.That(item.Reference, Is.EqualTo("http://host/path with \"\'/"));
+        }
     }
 }
