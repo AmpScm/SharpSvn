@@ -69,7 +69,7 @@ static String^ LongGetFullPath(String^ path)
 		throw gcnew PathTooLongException("GetFullPath for long paths failed");
 	else if (c > sz)
 	{
-		pPathBuf = (wchar_t*)_alloca(sizeof(wchar_t)* (sz + 1));
+		pPathBuf = (wchar_t*)_alloca(sizeof(wchar_t) * (sz + 1));
 		c = GetFullPathNameW((LPCWSTR)pPath, sz, pPathBuf, nullptr);
 	}
 	else
@@ -240,7 +240,7 @@ String^ SvnTools::GetTruePath(String^ path)
 		path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);
 
 	String^ root = nullptr;
-	bool normalized = false;;
+	bool normalized = false;
 	wchar_t c = path[0];
 
 	if (c == '\\' && path->StartsWith("\\\\?\\", StringComparison::Ordinal))
@@ -294,7 +294,7 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 
 	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
 	size_t len = (path->Length+1+4);
-	wchar_t* pSec = (wchar_t*)_malloca(len*sizeof(wchar_t));
+	wchar_t* pSec = (wchar_t*)_malloca(len * sizeof(wchar_t));
 
 	if (wcscpy_s(pSec, len, L"\\\\?\\") || wcscat_s(pSec, len, pChars))
 		return nullptr;
@@ -319,7 +319,7 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 			return nullptr;
 
 		if (!isFirst)
-			result->Append((wchar_t)'\\');
+			result->Append(L'\\');
 
 		result->Append(gcnew String(filedata.cFileName));
 
