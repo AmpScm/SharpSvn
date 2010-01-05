@@ -3,13 +3,15 @@
 namespace SharpSvn {
 	namespace Implementation {
 
+		using System::Collections::Generic::Stack;
+
 		public ref class SvnFsOperationRetryOverride : public SvnBase
 		{
 			initonly int _maxRetries;
 			initonly bool _intOnly;
 			[ThreadStatic]
-			static SvnFsOperationRetryOverride^ _handler;
-			SvnFsOperationRetryOverride^ _oldHandler;
+			static Stack<SvnFsOperationRetryOverride^>^ _handlers;
+			Stack<SvnFsOperationRetryOverride^>^ _onStack;
 
 		private:
 			static SvnFsOperationRetryOverride();

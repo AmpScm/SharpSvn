@@ -23,16 +23,22 @@ SvnFsOperationRetryOverride::SvnFsOperationRetryOverride(int maxRetries)
 
 	_maxRetries = maxRetries;
 	_intOnly = GetType() == SvnFsOperationRetryOverride::typeid;
-	_oldHandler = _handler;
-	_handler = this;
+
+	if (_handlers == nullptr)
+		_handlers = gcnew Stack<SvnFsOperationRetryOverride^>();
+
+	_onStack = _handlers;
+	_onStack->Push(this);
 }
 
 SvnFsOperationRetryOverride::~SvnFsOperationRetryOverride()
 {
-	if (_handler == this)
+	// Release on the thread where we were allocated
+	if (_onStack != nullptr)
 	{
-		_handler = _oldHandler;
-		_oldHandler = nullptr;
+		if (_onStack->Count > 0)
+			_onStack->Pop();
+		_onStack = nullptr;
 	}
 }
 
@@ -60,8 +66,14 @@ bool SvnFsOperationRetryOverride::OnRetryLoopInvocation(int nr, SvnErrorCode err
 
 int SvnFsOperationRetryOverride::RetryLoopHandler(int n, int err, int os_err, const char *expr)
 {
-	if (_handler)
-		return _handler->OnRetryLoopInvocation(n, err, os_err, expr);
+	// Look at the per-thread handlers
+	if (_handlers && _handlers->Count > 0)
+	{
+		SvnFsOperationRetryOverride^ p = _handlers->Peek();
+
+		if (p)
+			return p->OnRetryLoopInvocation(n, err, os_err, expr);
+	}
 
 	return true;
 }
