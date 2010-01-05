@@ -58,7 +58,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(arrived);
 
 			arrived = false;
-			Assert.That(Client.Info(new Uri("http://svn.collab.net/repos/svn/trunk/"),
+			Assert.That(Client.Info(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/"),
 				delegate(object sender, SvnInfoEventArgs e)
 				{
 					arrived = true;
@@ -86,31 +86,34 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void TestSimpleSslCert()
 		{
-			Client.Authentication.Clear();
-			Client.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(Authenticator_SslServerTrustHandlers);
-			Client.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(Authenticator_UserNamePasswordHandlers);
-			bool arrived = false;
-			SvnInfoArgs a = new SvnInfoArgs();
-			a.ThrowOnCancel = false;
-			a.ThrowOnError = false;
+			using (SvnClient client = new SvnClient())
+			{
+				client.Authentication.Clear();
+				client.Authentication.SslServerTrustHandlers += Authenticator_SslServerTrustHandlers;
+				client.Authentication.UserNamePasswordHandlers += Authenticator_UserNamePasswordHandlers;
+				bool arrived = false;
+				SvnInfoArgs a = new SvnInfoArgs();
+				a.ThrowOnCancel = false;
+				a.ThrowOnError = false;
 
-			Assert.That(Client.Info(new Uri("https://sharpsvn.googlecode.com/svn/trunk/"), a,
-				delegate(object sender, SvnInfoEventArgs e)
-				{
-					arrived = true;
-				}), Is.False);
+				Assert.That(client.Info(new Uri("https://svn.apache.org/repos/private/committers"), a,
+					delegate(object sender, SvnInfoEventArgs e)
+					{
+						arrived = true;
+					}), Is.False);
 
-			Assert.That(a.LastException, Is.Not.Null);
-			Assert.That(a.LastException, Is.InstanceOfType(typeof(SvnException)));
-			Assert.That(a.LastException.GetCause<SvnAuthorizationException>(), Is.Not.Null);
-			Assert.That(arrived, Is.False);
-			Assert.That(_serverTrustTicked);
-			Assert.That(_userNamePasswordTicked);
+				Assert.That(a.LastException, Is.Not.Null);
+				Assert.That(a.LastException, Is.InstanceOfType(typeof(SvnException)));
+				Assert.That(a.LastException.GetCause<SvnAuthorizationException>(), Is.Not.Null);
+				Assert.That(arrived, Is.False);
+				Assert.That(_serverTrustTicked);
+				Assert.That(_userNamePasswordTicked);
 
-			Assert.That(_userArgs, Is.Not.Null);
-			Assert.That(_userArgs.InitialUserName, Is.Not.Null);
-			Assert.That(_userArgs.Realm.Contains("Google Code Subversion"));
-			Assert.That(_userArgs.RealmUri, Is.EqualTo(new Uri("https://sharpsvn.googlecode.com/")));
+				Assert.That(_userArgs, Is.Not.Null);
+				Assert.That(_userArgs.InitialUserName, Is.Not.Null);
+				Assert.That(_userArgs.Realm, Is.EqualTo("<https://svn.apache.org:443> ASF Members"));
+				Assert.That(_userArgs.RealmUri, Is.EqualTo(new Uri("https://svn.apache.org/")));
+			}
 		}
 
 		void Authenticator_UserNamePasswordHandlers(object sender, SharpSvn.Security.SvnUserNamePasswordEventArgs e)
@@ -127,7 +130,7 @@ namespace SharpSvn.Tests.Commands
 		{
 			Assert.That(e.Break, Is.False);
 			Assert.That(e.Cancel, Is.False);
-			Assert.That(e.CommonName, Is.EqualTo("googlecode.com"));
+			Assert.That(e.CommonName, Is.EqualTo("svn.apache.org"));
 			Assert.That(DateTime.Parse(e.ValidFrom), Is.LessThan(DateTime.Now));
 			Assert.That(DateTime.Parse(e.ValidUntil), Is.GreaterThan(DateTime.Now));
 			_serverTrustTicked = true;
