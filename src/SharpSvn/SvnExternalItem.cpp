@@ -98,7 +98,7 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 	if (!sb)
 		throw gcnew ArgumentNullException("sb");
 
-	bool hasPegRevision = (OperationalRevision != SvnRevision::None);
+	bool hasPegRevision = (OperationalRevision != SvnRevision::None) && (OperationalRevision != Revision);
 	bool hasNonNumberRevision = (Revision != SvnRevision::None) && (Revision->RevisionType != SvnRevisionType::Number);
 	bool urlIsRelative = false;
 
@@ -125,7 +125,7 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 	else
 	{	// Use 1.5+ format
 
-		if (Revision != SvnRevision::None)
+		if (Revision != SvnRevision::None && Revision != OperationalRevision)
 		{
 			sb->Append("-r ");
 			sb->Append(Revision);
