@@ -27,6 +27,8 @@ namespace SharpSvn {
 	public:
 		SvnExternalItem(String^ targetName, String^ url);
 		SvnExternalItem(String^ targetName, Uri^ uri);
+		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ pegRevision);
+		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ pegRevision);
 		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision);
 		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision, SvnRevision^ pegRevision);
 

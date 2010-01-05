@@ -46,6 +46,34 @@ SvnExternalItem::SvnExternalItem(String^ targetName, Uri^ uri)
 	_revision = _pegRevision = SvnRevision::None;
 }
 
+SvnExternalItem::SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision)
+{	
+	if (String::IsNullOrEmpty(targetName))
+		throw gcnew ArgumentNullException("targetName");
+	else if (String::IsNullOrEmpty(url))
+		throw gcnew ArgumentNullException("url");
+	else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
+	
+	_target = targetName;
+	_url = url;
+	_revision = _pegRevision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
+}
+
+SvnExternalItem::SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision)
+{	
+	if (String::IsNullOrEmpty(targetName))
+		throw gcnew ArgumentNullException("targetName");
+	else if (!uri)
+		throw gcnew ArgumentNullException("uri");
+	else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
+		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
+	
+	_target = targetName;
+	_url = uri->AbsoluteUri;
+	_revision = _pegRevision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
+}
+
 SvnExternalItem::SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision)
 {
 	if (String::IsNullOrEmpty(targetName))
