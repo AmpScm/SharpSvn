@@ -73,7 +73,37 @@ namespace SharpSvn.Tests
             Assert.That(SvnExternalItem.TryParse("q r", out items), Is.True); // But junk
             Assert.That(SvnExternalItem.TryParse("q r q", out items), Is.False);
             Assert.That(SvnExternalItem.TryParse("-r q r", out items), Is.False);
-            Assert.That(SvnExternalItem.TryParse("-r 12 q r", out items), Is.True);
+
+            SvnExternalItem item;
+            Assert.That(SvnExternalItem.TryParse("-r 12 q r", out item), Is.True);
+            Assert.That(item.Reference, Is.EqualTo("q"));
+            Assert.That(item.Target, Is.EqualTo("r"));
+            Assert.That(item.OperationalRevision, Is.EqualTo(SvnRevision.None));
+            Assert.That(item.Revision, Is.EqualTo((SvnRevision)12L));
+
+            Assert.That(SvnExternalItem.TryParse("q -r 12 r", out item), Is.True);
+            Assert.That(item.Reference, Is.EqualTo("r"));
+            Assert.That(item.Target, Is.EqualTo("q"));
+            Assert.That(item.OperationalRevision, Is.EqualTo((SvnRevision)12));
+            Assert.That(item.Revision, Is.EqualTo((SvnRevision)12L));
+
+            Assert.That(SvnExternalItem.TryParse("/q@12 r", out item), Is.True);
+            Assert.That(item.Reference, Is.EqualTo("/q"));
+            Assert.That(item.Target, Is.EqualTo("r"));
+            Assert.That(item.OperationalRevision, Is.EqualTo((SvnRevision)12));
+            Assert.That(item.Revision, Is.EqualTo((SvnRevision)12L));
+
+            Assert.That(SvnExternalItem.TryParse(item.ToString(), out items));
+            Assert.That(item.Equals(items[0]));
+
+            Assert.That(SvnExternalItem.TryParse("-r 1 http://host@1 'tg q'", out item));
+            Assert.That(item.Reference, Is.EqualTo("http://host"));
+            Assert.That(item.Target, Is.EqualTo("tg q"));
+            Assert.That(item.Revision, Is.EqualTo((SvnRevision)1));
+            Assert.That(item.OperationalRevision, Is.EqualTo((SvnRevision)1));
+
+            Assert.That(item.ToString(false), Is.EqualTo("http://host@1 \"tg q\""));
+            Assert.That(item.ToString(true), Is.EqualTo("\"tg q\" -r 1 http://host"));
 
             Assert.That(SvnExternalItem.TryParse("q http://q", out items), Is.True);
             Assert.That(SvnExternalItem.TryParse("http://q q", out items), Is.True);
