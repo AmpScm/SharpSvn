@@ -48,13 +48,25 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 	return nullptr;
 }
 
+static String^ StripLongPrefix(String ^path)
+{
+	if (path->StartsWith("\\\\?\\", StringComparison::Ordinal))
+	{
+		if (path->StartsWith("\\\\?\\UNC\\", StringComparison::Ordinal))
+			path = L'\\' + path->Substring(7);
+		else
+			path = path->Substring(4);
+	}
+
+	return path;
+}
+
 static String^ LongGetFullPath(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	if (path->StartsWith("\\\\?\\", StringComparison::Ordinal))
-		path = path->Substring(4);
+	path = StripLongPrefix(path);
 
 	pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
 	wchar_t rPath[1024];
@@ -77,10 +89,7 @@ static String^ LongGetFullPath(String^ path)
 
 	path = gcnew String(pPathBuf, 0, c);
 
-	if (path->StartsWith("\\\\?\\"))
-		path = path->Substring(4);
-
-	return path;
+	return StripLongPrefix(path);
 }
 
 static bool ContainsRelative(String^ path)
@@ -243,8 +252,8 @@ String^ SvnTools::GetTruePath(String^ path)
 	bool normalized = false;
 	wchar_t c = path[0];
 
-	if (c == '\\' && path->StartsWith("\\\\?\\", StringComparison::Ordinal))
-		path = path->Substring(4); // We use this trick ourselves
+	if (c == '\\')
+		path = StripLongPrefix(path);
 
 	if (ContainsRelative(path))
 	{
@@ -290,28 +299,53 @@ String^ SvnTools::GetFullTruePath(String^ path)
 String^ SvnTools::FindTruePath(String^ path, String^ root)
 {
 	// Okay, now we have a normalized path and it's root in normal form. Now we need to find the exact casing of the next parts
-	StringBuilder^ result = gcnew StringBuilder(root, path->Length + 16);
+	StringBuilder^ result = gcnew StringBuilder(root, path->Length + root->Length + 4);
 
 	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
-	size_t len = (path->Length+1+4);
+	size_t len = (path->Length+1+(4+4)); // 4+4 is long + UNC prefix 
 	wchar_t* pSec = (wchar_t*)_malloca(len * sizeof(wchar_t));
+	int nMax;
+	int nStart = 0;
 
-	if (wcscpy_s(pSec, len, L"\\\\?\\") || wcscat_s(pSec, len, pChars))
-		return nullptr;
+	wchar_t *pTxt;
+	if (!path->StartsWith("\\\\", StringComparison::OrdinalIgnoreCase))
+	{
+		if (wcscpy_s(pSec, len, L"\\\\?\\"))
+			return nullptr;
+		if (wcscat_s(pSec, len, pChars))
+			return nullptr;
 
-	wchar_t *pTxt = &pSec[4]; // The point after '\\?\'
+		pTxt = &pSec[4]; // strlen(@"\\?\") = 4
+		nMax = path->Length;
+		nStart = root->Length;
+	}
+	else
+	{
+		if (wcscpy_s(pSec, len, L"\\\\?\\UNC"))
+			return nullptr;
+		if (wcscat_s(pSec, len, pChars+1))
+			return nullptr;
 
-	int nStart = root->Length;
+		pTxt = &pSec[root->Length + 7 + 1]; // strlen('\\?\UNC')=7 + 1 for '\'
+		nMax = path->Length - root->Length - 2; 
+		result->Append(L'\\');
+	}
+	
 	bool isFirst = true;
 
-	while (nStart < path->Length)
+	//assert(wcslen(pTxt) == nMax);
+
+	while (nStart < nMax)
 	{
 		WIN32_FIND_DATAW filedata;
 
-		int nNext = path->IndexOf('\\', nStart);
+		wchar_t *pNext = wcschr(&pTxt[nStart], '\\');
 
-		if (nNext > 0)
-			pTxt[nNext] = 0; // Temporarily replace '\' with 0
+		if (pNext)
+		{
+			nStart = (int)(((INT_PTR)pNext - (INT_PTR)pTxt) / sizeof(wchar_t))+1;
+			*pNext = 0; // Temporarily replace '\' with 0
+		}
 
 		HANDLE hSearch = FindFirstFileW(pSec, &filedata);
 
@@ -323,14 +357,13 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 
 		result->Append(gcnew String(filedata.cFileName));
 
-		GC::KeepAlive(::FindClose(hSearch)); // Close search request
+		::FindClose(hSearch); // Close search request
 
-		if (nNext < 0)
+		if (!pNext)
 			break;
 		else
-			pTxt[nNext] = '\\'; // Revert 0 to '\'
+			*pNext = '\\'; // Revert 0 to '\'
 
-		nStart = nNext+1;
 		isFirst= false;
 	}
 
@@ -424,8 +457,8 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	if (path->StartsWith("\\\\?\\", StringComparison::Ordinal))
-		path = GetNormalizedFullPath(path->Substring(4));
+	if (path[0] == L'\\')
+		path = StripLongPrefix(path);
 
 	if (PathContainsInvalidChars(path) || path->LastIndexOf(':') >= 2)
 		throw gcnew ArgumentException(String::Format(SharpSvnStrings::PathXContainsInvalidCharacters, path), "path");

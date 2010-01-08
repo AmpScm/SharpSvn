@@ -235,6 +235,13 @@ namespace SharpSvn.Tests
                 Is.Null, "Should never complete");
         }
 
+		[Test]
+		public void NormalizePrefixesArway()
+		{
+			Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\C:\Windows\Q"), Is.EqualTo(@"C:\Windows\Q"));
+			Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\UNC\server\Share\Windows\Q"), Is.EqualTo(@"\\server\Share\Windows\Q"));
+		}
+
         [Test]
         public void TestReallyLong()
         {
