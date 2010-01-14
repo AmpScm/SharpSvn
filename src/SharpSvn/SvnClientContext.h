@@ -34,6 +34,7 @@ namespace SharpSvn {
 		enum class SvnContextState
 		{
 			Initial,
+			ConfigPrepared,
 			ConfigLoaded,
 			CustomRemoteConfigApplied,
 			AuthorizationInitialized,

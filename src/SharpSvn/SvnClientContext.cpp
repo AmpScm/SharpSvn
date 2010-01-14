@@ -77,13 +77,18 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 	if (requiredState < State)
 		return;
 
-	if (State < SvnContextState::ConfigLoaded && requiredState >= SvnContextState::ConfigLoaded)
+	if (State < SvnContextState::ConfigPrepared && requiredState >= SvnContextState::ConfigPrepared)
 	{
 		LoadConfigurationDefault();
 
+		System::Diagnostics::Debug::Assert(State == SvnContextState::ConfigPrepared);
+	}
+
+	if (State < SvnContextState::ConfigLoaded && requiredState >= SvnContextState::ConfigLoaded)
+	{
 		ApplyUserDiffConfig();
 
-		System::Diagnostics::Debug::Assert(State == SvnContextState::ConfigLoaded);
+		_contextState = SvnContextState::ConfigPrepared;
 	}
 
 	if (requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
@@ -354,14 +359,14 @@ String^ SvnClientContext::PlinkPath::get()
 
 void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 {
-	if (State >= SvnContextState::ConfigLoaded)
+	if (State >= SvnContextState::ConfigPrepared)
 		throw gcnew InvalidOperationException("Configuration already loaded");
 
 	if (String::IsNullOrEmpty(path))
 		path = nullptr;
 
 	AprPool tmpPool(_pool);
-	const char* szPath = path ? tmpPool.AllocString(path) : nullptr;
+	const char* szPath = path ? tmpPool.AllocPath(path) : nullptr;
 
 	if (ensurePath)
 		SVN_THROW(svn_config_ensure(szPath, tmpPool.Handle));
@@ -371,7 +376,7 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 
 	CtxHandle->config = cfg;
 
-	_contextState = SvnContextState::ConfigLoaded;
+	_contextState = SvnContextState::ConfigPrepared;
 
 	if (!_configPath)
 		_configPath = path;
