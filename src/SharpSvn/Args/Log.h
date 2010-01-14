@@ -164,14 +164,14 @@ namespace SharpSvn {
 			void set(SvnRevision^ value)
 			{
 				_start = value;
-				
+
 				if (_ranges)
 				{
 					_end = End;
 					_ranges->Clear();
 					_ranges->Add(gcnew SvnRevisionRange(Start, End));
 				}
-			}	
+			}
 		}
 
 		property SvnRevision^ End
@@ -285,7 +285,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
-		/// <remarks>This list defaults to the author, date, logmessage properties. Clear the list to retrieve no properties, 
+		/// <remarks>This list defaults to the author, date, logmessage properties. Clear the list to retrieve no properties,
 		/// or set RetrieveAllProperties to true to retrieve all properties.
 		/// </remarks>
 		property SvnRevisionPropertyNameCollection^ RetrieveProperties
@@ -298,14 +298,14 @@ namespace SharpSvn {
 		property bool RetrieveAllProperties
 		{
 			bool get()
-			{ 
-				return _retrieveAllProperties; 
+			{
+				return _retrieveAllProperties;
 			}
 			void set(bool value)
 			{
 				_retrieveAllProperties = value;
 			}
-		}		
+		}
 
 	internal:
 		property bool RetrievePropertiesUsed

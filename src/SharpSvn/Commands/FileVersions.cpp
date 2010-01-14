@@ -55,7 +55,7 @@ struct file_version_delta_baton_t
 };
 
 static svn_error_t *file_version_window_handler(
-	svn_txdelta_window_t *window, 
+	svn_txdelta_window_t *window,
 	void *baton)
 {
 	file_version_delta_baton_t *dbaton = (file_version_delta_baton_t*)baton;
@@ -68,7 +68,7 @@ static svn_error_t *file_version_window_handler(
 	SvnFileVersionEventArgs^ e = nullptr;
 	try
 	{
-		SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)dbaton->clientBaton);	
+		SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)dbaton->clientBaton);
 		if (window)
 		{
 			SvnCancelEventArgs^ ca = gcnew SvnCancelEventArgs();
@@ -84,7 +84,7 @@ static svn_error_t *file_version_window_handler(
 
 		SvnFileVersionsArgs^ args = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 		if (!args)
-			return nullptr;	
+			return nullptr;
 
 		AprPool^ next = args->_prevPool;
 
@@ -96,8 +96,8 @@ static svn_error_t *file_version_window_handler(
 		args->_prevPool = args->_curPool;
 		args->_curPool = next;
 
-		e = args->_fv;	
-	
+		e = args->_fv;
+
 		args->_fv = nullptr;
 		if (args->RetrieveContents && e)
 		{
@@ -115,7 +115,7 @@ static svn_error_t *file_version_window_handler(
 	{
 		if (e)
 			e->Detach(false);
-	}	
+	}
 
 	return nullptr;
 }
@@ -144,7 +144,7 @@ apply_property_changes(SvnFileVersionsArgs^ args, apr_array_header_t *props, Apr
 			*property_changes = true;
 
 			if (prop->value)
-				apr_hash_set(newProps, apr_pstrdup(allocPool->Handle, prop->name), APR_HASH_KEY_STRING, 
+				apr_hash_set(newProps, apr_pstrdup(allocPool->Handle, prop->name), APR_HASH_KEY_STRING,
 				svn_string_dup(prop->value, allocPool->Handle));
 			else if(oldProps)
 				apr_hash_set(oldProps, prop->name, APR_HASH_KEY_STRING, nullptr); // Remove from old hash
@@ -162,8 +162,8 @@ apply_property_changes(SvnFileVersionsArgs^ args, apr_array_header_t *props, Apr
 
 			if (!apr_hash_get(newProps, key, APR_HASH_KEY_STRING))
 			{
-				apr_hash_set(newProps, 
-					apr_pstrdup(allocPool->Handle, key), APR_HASH_KEY_STRING, 
+				apr_hash_set(newProps,
+					apr_pstrdup(allocPool->Handle, key), APR_HASH_KEY_STRING,
 					svn_string_dup(val, allocPool->Handle));
 			}
 		}
@@ -186,7 +186,7 @@ static svn_error_t *file_version_handler(
 	apr_array_header_t *prop_diffs,
 	apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);	
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	AprPool thePool(pool, false);
 
@@ -213,26 +213,26 @@ static svn_error_t *file_version_handler(
 
 	SvnFileVersionEventArgs^ e = gcnew SvnFileVersionEventArgs(
 		args->_reposRoot,
-		path, 
+		path,
 		rev,
-		rev_props, 
+		rev_props,
 		args->RetrieveProperties ? args->_properties : nullptr,
 		(content_delta_handler && content_delta_baton && args->RetrieveContents),
 		property_changes,
-		result_of_merge!=0, 
-		client, 							
+		result_of_merge!=0,
+		client,
 		%handlerPool);
 
 	bool detach = true;
 	bool nodetach = false;
 	try
 	{
-		// <CancelChecking> 
+		// <CancelChecking>
 		client->HandleClientCancel(cA);
 
 		if(cA->Cancel)
 			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled");
-		// </CancelChecking>        
+		// </CancelChecking>
 
 		if (e->HasContentChanges)
 		{
@@ -248,7 +248,7 @@ static svn_error_t *file_version_handler(
 			else
 				/* Means empty stream below. */
 				delta_baton->source_file = NULL;
-			
+
 			AprPool^ filePool;
 
 			if (args->_curFilePool && !result_of_merge)
@@ -282,12 +282,12 @@ static svn_error_t *file_version_handler(
 			nodetach = true;
 		}
 		else
-			args->OnFileVersion(e);		
+			args->OnFileVersion(e);
 
 		if (e->Cancel)
 			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Version receiver canceled operation");
 
-		// <CancelChecking> 
+		// <CancelChecking>
 		client->HandleClientCancel(cA);
 
 		if(cA->Cancel)
@@ -310,7 +310,7 @@ static svn_error_t *file_version_handler(
 		else
 		{
 			// Clone to prevpool, as that is the first to be disposed
-			e->DetachBeforeFileData(args->_prevPool); 
+			e->DetachBeforeFileData(args->_prevPool);
 		}
 	}
 }
@@ -359,14 +359,14 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		svn_error_t* r;
 
 		r = svn_client__ra_session_from_path(
-			&ra_session, 
+			&ra_session,
 			&end_rev,
 			&pUrl,
-			pTarget,			
-			nullptr, 
+			pTarget,
+			nullptr,
 			target->Revision->AllocSvnRevision(%pool),
-			args->End->AllocSvnRevision(%pool), 
-			CtxHandle, 
+			args->End->AllocSvnRevision(%pool),
+			CtxHandle,
 			pool.Handle);
 
 		if (r)
@@ -385,12 +385,12 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 			nullptr,
 			ra_session,
 			args->Start->AllocSvnRevision(%pool),
-			pTarget, 
+			pTarget,
 			pool.Handle);
 
 		if (r)
 			return args->HandleResult(this, r, target);
-		
+
 		r = svn_ra_get_repos_root2(ra_session, &repos_root, pool.Handle);
 
 		if (r)
@@ -409,16 +409,16 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		{
 			args->_curFilePool = gcnew AprPool(%pool);
 			args->_prevFilePool = gcnew AprPool(%pool);
-		}		
+		}
 
 		r = svn_ra_get_file_revs2(
-			ra_session, 
+			ra_session,
 			"", // We opened the repository at the right spot
 			start_rev,
-			end_rev, 
+			end_rev,
 			args->RetrieveMergedRevisions,
 			file_version_handler,
-			(void*)_clientBaton->Handle, 
+			(void*)_clientBaton->Handle,
 			pool.Handle);
 
 		return args->HandleResult(this, r, target);
@@ -488,7 +488,7 @@ void SvnFileVersionEventArgs::WriteTo(String^ outputFileName)
 	else if (!SvnBase::IsNotUri(outputFileName))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "outputFileName");
 
-	WriteTo(outputFileName, gcnew SvnFileVersionWriteArgs());	
+	WriteTo(outputFileName, gcnew SvnFileVersionWriteArgs());
 }
 
 void SvnFileVersionEventArgs::WriteTo(System::IO::Stream^ output)
@@ -584,7 +584,7 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 		if (ls == SvnLineStyle::Default)
 		{
 			svn_string_t* val = nullptr;
-			
+
 			if (_fileProps)
 				val = (svn_string_t*)apr_hash_get(_fileProps, SVN_PROP_EOL_STYLE, APR_HASH_KEY_STRING);
 
@@ -604,7 +604,7 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 						fvArgs->RepairLineEndings,
 						GetKeywords(fvArgs),
 						fvArgs->KeywordExpansion != SvnKeywordExpansion::None,
-						_pool->Handle);	
+						_pool->Handle);
 	}
 
 	return gcnew Implementation::SvnWrappedStream(stream, _pool); // Inner stream is automatically closed on pool destruction
@@ -634,7 +634,7 @@ apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
 	}
 
 	svn_string_t* kwProp = nullptr;
-	
+
 	if (args->_properties)
 		kwProp = (svn_string_t*)apr_hash_get(args->_properties, SVN_PROP_KEYWORDS, APR_HASH_KEY_STRING);
 
@@ -651,8 +651,8 @@ apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
 	apr_hash_t* kw = nullptr;
 
 	SVN_THROW(svn_subst_build_keywords2(
-						&kw, 
-						kwProp->data, 
+						&kw,
+						kwProp->data,
 						apr_psprintf(pool->Handle, "%ld", (svn_revnum_t)Revision),
 						ItemUrl,
 						SvnBase::AprTimeFromDateTime(Time),

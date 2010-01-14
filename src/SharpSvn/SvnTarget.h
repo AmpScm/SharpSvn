@@ -192,8 +192,8 @@ namespace SharpSvn {
 		property bool IsExplicit
 		{
 			bool get()
-			{				
-				return (RevisionType != SvnRevisionType::None) && 
+			{
+				return (RevisionType != SvnRevisionType::None) &&
 					!RequiresWorkingCopy;
 			}
 		}
@@ -405,5 +405,5 @@ namespace SharpSvn {
 		static bool TryParse(String^ targetName, bool allowOperationalRevision, [Out] SvnTarget^% target);
 	internal:
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) abstract;
-	};	
+	};
 }

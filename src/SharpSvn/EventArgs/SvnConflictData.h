@@ -17,7 +17,7 @@
 #pragma once
 
 namespace SharpSvn {
-	using namespace System::Collections::ObjectModel;	
+	using namespace System::Collections::ObjectModel;
 
 	public ref class SvnConflictSource sealed : ISvnOrigin
 	{
@@ -63,7 +63,7 @@ namespace SharpSvn {
 				if (!_uri && _version && _version->repos_url && _version->path_in_repos && _pool)
 					_uri = SvnBase::Utf8_PtrToUri(_version->repos_url, SvnNodeKind::Directory);
 
-				return _repositoryRoot; 
+				return _repositoryRoot;
 			}
 		}
 
@@ -108,7 +108,7 @@ namespace SharpSvn {
 
 		static operator SvnUriTarget^(SvnConflictSource^ value)
 		{
-			return ((Object^)value != nullptr) ? value->Target : nullptr; 
+			return ((Object^)value != nullptr) ? value->Target : nullptr;
 		}
 
 	private:

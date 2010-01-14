@@ -23,52 +23,52 @@ using namespace SharpSvn;
 using System::Text::StringBuilder;
 
 SvnExternalItem::SvnExternalItem(String^ targetName, String^ url)
-{	
+{
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 	else if (String::IsNullOrEmpty(url))
 		throw gcnew ArgumentNullException("url");
-	
+
 	_target = targetName;
 	_url = url;
 	_revision = _pegRevision = SvnRevision::None;
 }
 
 SvnExternalItem::SvnExternalItem(String^ targetName, Uri^ uri)
-{	
+{
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 	else if (!uri)
 		throw gcnew ArgumentNullException("uri");
-	
+
 	_target = targetName;
 	_url = uri->AbsoluteUri;
 	_revision = _pegRevision = SvnRevision::None;
 }
 
 SvnExternalItem::SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision)
-{	
+{
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 	else if (String::IsNullOrEmpty(url))
 		throw gcnew ArgumentNullException("url");
 	else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
 		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
-	
+
 	_target = targetName;
 	_url = url;
 	_revision = _pegRevision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
 }
 
 SvnExternalItem::SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision)
-{	
+{
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
 	else if (!uri)
 		throw gcnew ArgumentNullException("uri");
 	else if(revision && revision != SvnRevision::None && !revision->IsExplicit)
 		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
-	
+
 	_target = targetName;
 	_url = uri->AbsoluteUri;
 	_revision = _pegRevision = (revision && revision != SvnRevision::Head) ? revision : SvnRevision::None;
@@ -166,7 +166,7 @@ void SvnExternalItem::WriteTo(System::Text::StringBuilder ^sb, bool useCompatibl
 			sb->Append("@");
 			sb->Append(OperationalRevision);
 		}
-		sb->Append(" ");		
+		sb->Append(" ");
 		sb->Append(EnsureSafeAprArgument(Target, true));
 	}
 }
@@ -188,7 +188,7 @@ bool SvnExternalItem::TryParse(String^ value, [Out]array<SvnExternalItem^>^% ite
 	AprPool pool(SmallThreadPool);
 
 	apr_array_header_t* result = nullptr;
-	
+
 	svn_error_t* r = svn_wc_parse_externals_description3(&result, "c:/windows", pool.AllocUnixString(value), false, pool.Handle);
 
 	if (r)
@@ -213,7 +213,7 @@ bool SvnExternalItem::TryParse(String^ value, [Out]array<SvnExternalItem^>^% ite
 
 	return true;
 }
-	
+
 bool SvnExternalItem::TryParse(String^ value, [Out]SvnExternalItem^% item)
 {
 	if (!value)
@@ -245,7 +245,7 @@ bool SvnExternalItem::Equals(SvnExternalItem^ other)
 	if (!other)
 		return false;
 
-	return	other->Target              == this->Target && 
+	return	other->Target              == this->Target &&
 			other->Reference           == this->Reference &&
 			other->Revision            == this->Revision &&
 			other->OperationalRevision == this->OperationalRevision;

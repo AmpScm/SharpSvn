@@ -181,7 +181,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Points to an error describing the reason for the failure when
-		/// action is one of the following: @c svn_wc_notify_failed_lock, svn_wc_notify_failed_unlock, 
+		/// action is one of the following: @c svn_wc_notify_failed_lock, svn_wc_notify_failed_unlock,
 		/// svn_wc_notify_failed_external. Is @c NULL otherwise.</summary>
 		property SvnException^ Error
 		{
@@ -216,8 +216,8 @@ namespace SharpSvn {
 		}
 
 		/// <summary>When action is svn_wc_notify_update_completed, target revision
-		/// of the update, or @c SVN_INVALID_REVNUM if not available; when action is 
-		/// c svn_wc_notify_blame_revision, processed revision. In all other cases, 
+		/// of the update, or @c SVN_INVALID_REVNUM if not available; when action is
+		/// c svn_wc_notify_blame_revision, processed revision. In all other cases,
 		/// it is @c SVN_INVALID_REVNUM.</summary>
 		property __int64 Revision
 		{
@@ -263,7 +263,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>When @c action is @c svn_wc_notify_merge_begin, and both the left and right sides 
+		/// <summary>When @c action is @c svn_wc_notify_merge_begin, and both the left and right sides
 		/// of the merge are from the same URL.  In all other cases, it is NULL</summary>
 		property SvnMergeRange^ MergeRange
 		{

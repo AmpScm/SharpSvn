@@ -57,8 +57,8 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets a boolean indicating whether to retrieve real property 
-		/// and content changes. If set to false only marker changes are sent. (Changes on "" 
+		/// <summary>Gets or sets a boolean indicating whether to retrieve real property
+		/// and content changes. If set to false only marker changes are sent. (Changes on ""
 		/// property and empty file deltas</summary>
 		property bool RetrieveContent
 		{
@@ -75,7 +75,7 @@ namespace SharpSvn {
 	public:
 		DECLARE_EVENT(SvnReplayRevisionStartEventArgs^, RevisionStart);
 		DECLARE_EVENT(SvnReplayRevisionEndEventArgs^, RevisionEnd);
-		
+
 	protected:
 		virtual void OnRevisionStart(SvnReplayRevisionStartEventArgs^ e)
 		{

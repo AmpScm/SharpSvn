@@ -27,14 +27,14 @@ using SharpSvn;
 namespace SharpSvn.Tests.Commands
 {
 	/// <summary>
-	/// Tests Client::Revert 
+	/// Tests Client::Revert
 	/// </summary>
 
 	[TestFixture]
 	public class RevertTests : TestBase
 	{
 		/// <summary>
-		///Attempts to revert single file. 
+		///Attempts to revert single file.
 		/// </summary>
 		[Test]
 		public void TestRevertFile()
@@ -51,7 +51,7 @@ namespace SharpSvn.Tests.Commands
 		}
 
 		/// <summary>
-		///Attempts to revert the whole working copy 
+		///Attempts to revert the whole working copy
 		/// </summary>
 		[Test]
 		public void TestRevertDirectory()

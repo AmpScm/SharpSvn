@@ -245,7 +245,7 @@ namespace SharpSvn {
 				return _repositoryRoot;
 			}
 		}
-		
+
 		property SvnNodeKind NodeKind
 		{
 			virtual SvnNodeKind get() sealed

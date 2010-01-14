@@ -42,7 +42,7 @@ namespace SharpSvn.Tests.Commands
 
 				Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
 				Assert.That(info, Is.Not.Null);
-				
+
 				if (ms.Uri == new Uri(CollabReposUri, "trunk"))
 				{
 					Assert.That(info.Count, Is.EqualTo(1));

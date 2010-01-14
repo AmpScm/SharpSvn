@@ -414,9 +414,9 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 	const char* uuidStr = nullptr;
 
 	svn_wc_adm_access_t *adm = nullptr;
-	svn_error_t* err = svn_wc_adm_probe_open3(	&adm, 
-												nullptr, 
-												pPath, 
+	svn_error_t* err = svn_wc_adm_probe_open3(	&adm,
+												nullptr,
+												pPath,
 												false,
 												0,
 												CtxHandle->cancel_func,
@@ -438,7 +438,7 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 		svn_error_clear(err);
 		return false;
 	}
-	
+
 	id = Guid(Utf8_PtrToString(uuidStr));
 	return true;
 }
@@ -558,7 +558,7 @@ ICollection<SvnLibrary^>^ SvnClient::SvnLibraries::get()
 	if (_svnLibraries)
 		return _svnLibraries;
 
-	System::Collections::Generic::List<SvnLibrary^>^ libs 
+	System::Collections::Generic::List<SvnLibrary^>^ libs
 		= gcnew System::Collections::Generic::List<SvnLibrary^>();
 
 	for each(SvnLibraryAttribute^ i in SvnClient::typeid->Assembly->GetCustomAttributes(SvnLibraryAttribute::typeid, false))

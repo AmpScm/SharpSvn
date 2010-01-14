@@ -54,7 +54,7 @@ void AprPool::Destroy()
 {
 	if (!_handle)
 		return;
-	
+
 	if (_tag->IsValid()) // Don't crash the finalizer; dont Destroy if parent is deleted
 	{
 		delete _tag; // Dispose
@@ -243,7 +243,7 @@ const char* AprPool::AllocPath(String^ value)
 		}
 
 		pData[len] = 0;
-		
+
 		if ((len && pData[len-1] == '/') || strstr(pData+1, "//"))
 			return svn_dirent_canonicalize(pData, Handle);
 		else
@@ -405,7 +405,7 @@ void AprPool::KeepAlive(Object^ obj)
 	if (!obj)
 		throw gcnew ArgumentNullException("obj");
 
-	Ensure();		
+	Ensure();
 
 	PoolAliveRef* r = new PoolAliveRef(obj, false);
 
@@ -417,7 +417,7 @@ void AprPool::KeepAlive(IDisposable^ obj, bool disposeOnCleanup)
 	if (!obj)
 		throw gcnew ArgumentNullException("obj");
 
-	Ensure();		
+	Ensure();
 
 	PoolAliveRef* r = new PoolAliveRef(obj, disposeOnCleanup);
 

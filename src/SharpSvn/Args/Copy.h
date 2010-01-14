@@ -81,7 +81,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets or sets a boolean that if set to true tells copy not to process 
+		/// <summary>Gets or sets a boolean that if set to true tells copy not to process
 		/// externals definitions as part of this operation.</summary>
 		property bool IgnoreExternals
 		{

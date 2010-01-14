@@ -125,7 +125,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-				return RetrieveRemoteStatus; 
+				return RetrieveRemoteStatus;
 			}
 			void set(bool value)
 			{

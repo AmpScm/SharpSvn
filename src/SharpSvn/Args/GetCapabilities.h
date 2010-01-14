@@ -17,7 +17,7 @@
 #pragma once
 
 namespace SharpSvn {
-	
+
 	/// <summary>Extended Parameter container for SvnClient.Blame</summary>
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnGetCapabilitiesArgs : public SvnClientArgs
@@ -28,7 +28,7 @@ namespace SharpSvn {
 	public:
 		SvnGetCapabilitiesArgs()
 		{
-			_capabilities = gcnew Collection<SvnCapability>();			
+			_capabilities = gcnew Collection<SvnCapability>();
 		}
 
 		virtual property SvnCommandType CommandType

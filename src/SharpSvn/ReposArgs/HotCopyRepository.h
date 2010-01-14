@@ -32,6 +32,6 @@ namespace SharpSvn {
 			{
 				_dontCleanLogFiles = !value;
 			}
-		}		
+		}
 	};
 }

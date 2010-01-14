@@ -275,7 +275,7 @@ String^ SvnTools::FindTruePath(String^ path, String^ root, bool bestEffort)
 	StringBuilder^ result = gcnew StringBuilder(root, path->Length + root->Length + 4);
 
 	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
-	size_t len = (path->Length+1+(4+4)); // 4+4 is long + UNC prefix 
+	size_t len = (path->Length+1+(4+4)); // 4+4 is long + UNC prefix
 	wchar_t* pSec = (wchar_t*)_malloca(len * sizeof(wchar_t));
 	int nMax;
 	int nStart = 0;
@@ -300,10 +300,10 @@ String^ SvnTools::FindTruePath(String^ path, String^ root, bool bestEffort)
 			return nullptr;
 
 		pTxt = &pSec[root->Length + 7 + 1]; // strlen('\\?\UNC')=7 + 1 for '\'
-		nMax = path->Length - root->Length - 2; 
+		nMax = path->Length - root->Length - 2;
 		result->Append(L'\\');
 	}
-	
+
 	bool isFirst = true;
 
 	//assert(wcslen(pTxt) == nMax);
@@ -336,9 +336,9 @@ String^ SvnTools::FindTruePath(String^ path, String^ root, bool bestEffort)
 			{
 				// Should be impossible to reach for valid paths as we
 				// only search for paths, not for roots
-				return nullptr; 
+				return nullptr;
 			}
-			
+
 			result->Append(gcnew String(pFileName+1));
 
 			if (pNext)
@@ -420,10 +420,10 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 	{
 		int len = nEnd - i;
 
-		if (len == admDir->Length && 
+		if (len == admDir->Length &&
 			(0 == String::Compare(path, i+1, admDir, 0, len, StringComparison::OrdinalIgnoreCase)))
 		{
-			// The .svn directory can't contain a working copy..	
+			// The .svn directory can't contain a working copy..
 
 			nStart = nEnd+2; // start looking one character after the '\' if there is one.
 
@@ -468,7 +468,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	if(path->Length < MAX_PATH)
 	{
 		try
-		{	
+		{
 			path = Path::GetFullPath(path);
 			retry = false;
 		}
@@ -792,16 +792,16 @@ String^ SvnTools::PathCombine(String^ path1, String^ path2)
 		{
 			// BH: This is what Path::Combine does in .Net 2.0!!!
 
-			String^ root = GetPathRootPart(Environment::CurrentDirectory); 
+			String^ root = GetPathRootPart(Environment::CurrentDirectory);
 
 			if(root)
 				path1 = root;
 		}
 
 		if (!IsSeparator(path1, path1->Length-1))
-			path1 += Path::DirectorySeparatorChar;			
+			path1 += Path::DirectorySeparatorChar;
 
-		return SvnTools::GetNormalizedFullPath(path1 + 
+		return SvnTools::GetNormalizedFullPath(path1 +
 			path2->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar)->TrimStart(Path::DirectorySeparatorChar));
 	}
 }

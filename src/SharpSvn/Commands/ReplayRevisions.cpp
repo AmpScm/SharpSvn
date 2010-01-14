@@ -44,7 +44,7 @@ static svn_error_t* __cdecl
 sharpsvn_replay_rev_start(svn_revnum_t revision, void *replay_baton, const svn_delta_editor_t **editor,
 						  void **edit_baton, apr_hash_t *rev_props, apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)replay_baton);	
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)replay_baton);
 
 	AprPool thePool(pool, false);
 
@@ -72,7 +72,7 @@ sharpsvn_replay_rev_start(svn_revnum_t revision, void *replay_baton, const svn_d
 		else
 		{
 			innerEditor = svn_delta_default_editor(pool);
-		
+
 			return svn_delta_get_cancellation_editor(
 				client->CtxHandle->cancel_func,
 				client->CtxHandle->cancel_baton,
@@ -99,14 +99,14 @@ sharpsvn_replay_rev_finish(svn_revnum_t revision, void *replay_baton, const svn_
 {
 	UNUSED_ALWAYS(editor);
 	UNUSED_ALWAYS(edit_baton);
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)replay_baton);	
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)replay_baton);
 
 	AprPool thePool(pool, false);
 
 	SvnReplayRevisionArgs^ args = dynamic_cast<SvnReplayRevisionArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnReplayRevisionArgs
 	if (!args)
 		return nullptr;
-	
+
 	SvnReplayRevisionEndEventArgs^ a = gcnew SvnReplayRevisionEndEventArgs(revision, rev_props, %thePool);
 
 	try
@@ -155,14 +155,14 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 		svn_error_t* r;
 
 		r = svn_client__ra_session_from_path(
-			&ra_session, 
+			&ra_session,
 			&end_rev,
 			&pUrl,
-			pTarget,			
-			nullptr, 
+			pTarget,
+			nullptr,
 			target->Revision->AllocSvnRevision(%pool),
-			range->EndRevision->AllocSvnRevision(%pool), 
-			CtxHandle, 
+			range->EndRevision->AllocSvnRevision(%pool),
+			CtxHandle,
 			pool.Handle);
 
 		if (r)
@@ -181,7 +181,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			nullptr,
 			ra_session,
 			range->StartRevision->AllocSvnRevision(%pool),
-			pTarget, 
+			pTarget,
 			pool.Handle);
 
 		if (r)
@@ -192,7 +192,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			nullptr,
 			ra_session,
 			args->LowWatermarkRevision->AllocSvnRevision(%pool),
-			pTarget, 
+			pTarget,
 			pool.Handle);
 
 		if (r)
@@ -204,7 +204,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			// Breaks the watermark handling in subversion. This is currently
 			// only visible with RetrieveContent set
 
-			start_rev = 1; 
+			start_rev = 1;
 		}
 
 		args->_deltaEditor = editor;

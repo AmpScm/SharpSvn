@@ -71,6 +71,6 @@ namespace SharpSvn {
 			{
 				return SvnCommandType::Unknown;
 			}
-		}	
+		}
 	};
 }

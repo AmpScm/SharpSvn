@@ -39,7 +39,7 @@ namespace SharpSvn.Tests.Commands
 		{
 			string dir = GetTempDir();
 			Assert.That(Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir));
-			
+
 			int nChanges = 0;
 			Client.Notify += delegate(object sender, SvnNotifyEventArgs e)
 			{

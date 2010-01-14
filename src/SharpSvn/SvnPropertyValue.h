@@ -85,7 +85,7 @@ namespace SharpSvn {
 			_key = key;
 			_value = value;
 		}
-		
+
 	internal:
 		SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
 		{

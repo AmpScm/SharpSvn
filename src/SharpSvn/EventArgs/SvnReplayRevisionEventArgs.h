@@ -97,11 +97,11 @@ namespace SharpSvn {
 		SvnPropertyCollection^ _revisionProperties;
 	internal:
 		SvnReplayRevisionEndEventArgs(__int64 revision, apr_hash_t *revProps, AprPool^ pool)
-		{			
+		{
 			_revision = revision;
 			_revProps = revProps;
 			_pool = pool;
-		}		
+		}
 
 	public:
 		property __int64 Revision

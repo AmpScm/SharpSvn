@@ -62,8 +62,8 @@ namespace SharpSvn.Tests.Commands
 			pa.ThrowOnError = false;
 
 			string value;
-			Assert.That(Client.GetProperty(Path.Combine(wc, "index.html"), 
-				"new-prop", out value), Is.True, 
+			Assert.That(Client.GetProperty(Path.Combine(wc, "index.html"),
+				"new-prop", out value), Is.True,
 				"GetProperty succeeds on non existent property");
 
 			Assert.That(value, Is.Null, "No value available");
@@ -83,7 +83,7 @@ namespace SharpSvn.Tests.Commands
 			Client.GetProperty(Path.Combine(wc, "no-index.html"), "new-prop", out value);
 		}
 
-		[Test, ExpectedException(typeof(SvnInvalidNodeKindException), 
+		[Test, ExpectedException(typeof(SvnInvalidNodeKindException),
 			ExpectedMessage="{632382A5-F992-4ab8-8D37-47977B190819}", MatchType=MessageMatch.Contains)]
 		public void TestNoWcProperty()
 		{

@@ -87,7 +87,7 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyAr
 	{
 		if (!target)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sources");
-		
+
 		SvnPathTarget^ pt = dynamic_cast<SvnPathTarget^>(target);
 		if (isFirst)
 		{
@@ -240,7 +240,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopy
 	{
 		if (!target)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sources");
-		
+
 		SvnPathTarget^ pt = dynamic_cast<SvnPathTarget^>(target);
 		if (isFirst)
 		{

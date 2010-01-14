@@ -69,7 +69,7 @@ namespace SharpSvn {
 
 	private:
 		// For SvnClient and SvnReposClient
-		SvnClientArgs^ _currentArgs;		
+		SvnClientArgs^ _currentArgs;
 		Object^ _workState;
 
 	internal:
@@ -131,7 +131,7 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			svn_client_ctx_t *get();
 		}
-		
+
 	private:
         void ApplyCustomRemoteConfig();
 		void ApplyCustomSsh();

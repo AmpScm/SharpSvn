@@ -157,9 +157,9 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	if (SvnTools::IsAbsolutePath(path))
 		return SvnTools::GetNormalizedFullPath(path);
 
-	path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);	
+	path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);
 	String^ dualSeparator = String::Concat(Path::DirectorySeparatorChar, Path::DirectorySeparatorChar);
-	
+
 	int nNext;
 	// Remove double backslash
 	while ((nNext = path->IndexOf(dualSeparator, StringComparison::Ordinal)) >= 0)

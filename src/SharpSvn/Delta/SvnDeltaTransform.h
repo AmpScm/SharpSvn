@@ -183,7 +183,7 @@ namespace SharpSvn {
 			initonly bool _verify;
 			initonly bool _moveBack;
 		public:
-			/// <summary>Creates a new <see cref="SvnDeltaFileTransform" /> instance to transform 
+			/// <summary>Creates a new <see cref="SvnDeltaFileTransform" /> instance to transform
 			/// <paramref name="baseFile" />, into <paramref name="toFile" /> while optionally verifying
 			/// <paramref name="baseFile" /> if <paramref name="verifyBase" /> is <c>true</c> and
 			/// verification data is available.</summary>

@@ -83,13 +83,13 @@ namespace SharpSvn.Tests.LookCommands
                 string pre = Path.Combine(dir, "Pre.txt");
 
                 File.WriteAllText(pre, "AllTheData");
-                
+
                 Client.Add(pre);
                 Client.SetProperty(pre, "boe", "blaat");
                 SvnCommitArgs ca = new SvnCommitArgs();
                 ca.LogMessage = "Blaat!\nQWQQ\n";
                 Client.Commit(dir, ca);
-            }            
+            }
         }
         void OnPostCommit(object sender, ReposHookEventArgs e)
         {

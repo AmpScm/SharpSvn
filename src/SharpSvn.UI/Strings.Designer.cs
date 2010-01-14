@@ -10,8 +10,8 @@
 
 namespace SharpSvn.UI {
     using System;
-    
-    
+
+
     /// <summary>
     ///   A strongly-typed resource class, for looking up localized strings, etc.
     /// </summary>
@@ -23,15 +23,15 @@ namespace SharpSvn.UI {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Strings {
-        
+
         private static global::System.Resources.ResourceManager resourceMan;
-        
+
         private static global::System.Globalization.CultureInfo resourceCulture;
-        
+
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
         internal Strings() {
         }
-        
+
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
@@ -45,7 +45,7 @@ namespace SharpSvn.UI {
                 return resourceMan;
             }
         }
-        
+
         /// <summary>
         ///   Overrides the current thread's CurrentUICulture property for all
         ///   resource lookups using this strongly typed resource class.
@@ -59,7 +59,7 @@ namespace SharpSvn.UI {
                 resourceCulture = value;
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to A client certificate is required for accessing server {0} at {1}..
         /// </summary>
@@ -68,7 +68,7 @@ namespace SharpSvn.UI {
                 return ResourceManager.GetString("ACertificateFileIsRequiredForAccessingServerXatY", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Connect to Subversion.
         /// </summary>
@@ -77,7 +77,7 @@ namespace SharpSvn.UI {
                 return ResourceManager.GetString("ConnectToSubversion", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The certificate for server {0} at {1} requires a passphrase..
         /// </summary>
@@ -86,7 +86,7 @@ namespace SharpSvn.UI {
                 return ResourceManager.GetString("ThePassPhraseForTheClientCertificateForXIsRequired", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The server {0} at {1} requires a username..
         /// </summary>
@@ -95,7 +95,7 @@ namespace SharpSvn.UI {
                 return ResourceManager.GetString("TheServerXatYRequiresAUsername", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to The server {0} at {1} requires a username and password..
         /// </summary>

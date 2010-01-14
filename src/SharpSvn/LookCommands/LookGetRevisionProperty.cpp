@@ -97,7 +97,7 @@ bool SvnLookClient::GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ prope
 	svn_string_t* val;
 
 	const char* pName = pool.AllocString(propertyName);
-	
+
 	if (lookOrigin->HasTransaction)
 	{
 		svn_fs_txn_t* txn = NULL;

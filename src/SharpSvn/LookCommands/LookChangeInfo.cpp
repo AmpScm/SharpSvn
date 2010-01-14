@@ -68,7 +68,7 @@ static void create_changes_hash(apr_hash_t* ht, svn_repos_node_t* node, AprPool^
 			chg->action = node->action;
 
 		chg->copyfrom_path = node->copyfrom_path;
-		chg->copyfrom_rev = node->copyfrom_rev;		
+		chg->copyfrom_rev = node->copyfrom_rev;
 
 		const char* name = node->parent ? apr_pstrdup(pool->Handle, create_name(node, tmpPool)) : node->name;
 
@@ -139,7 +139,7 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 			if (args->RetrieveChangedPaths)
 			{
 				if (r = svn_fs_txn_root(&root, txn, pool.Handle))
-					return args->HandleResult(this, r);				
+					return args->HandleResult(this, r);
 			}
 		}
 		else
@@ -182,7 +182,7 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 				if (r = svn_fs_revision_root(&base_root, fs, base_rev, tmpPool.Handle))
 					return args->HandleResult(this, r);
 
-				const svn_delta_editor_t *editor;				
+				const svn_delta_editor_t *editor;
 
 				if (r = svn_repos_node_editor(
 					&editor,
@@ -223,7 +223,7 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 		SvnChangeInfoEventArgs^ e = gcnew SvnChangeInfoEventArgs(entry, base_rev, %pool);
 		try
 		{
-			args->OnChangeInfo(e);	
+			args->OnChangeInfo(e);
 		}
 		finally
 		{

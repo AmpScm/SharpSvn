@@ -96,7 +96,7 @@ namespace SharpSvn.Tests.Commands
                     found = true;
                 }) && found;
             }
-        }        
+        }
 
         [Test]
         public void MoveTest()

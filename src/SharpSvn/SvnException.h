@@ -46,7 +46,7 @@ namespace SharpSvn {
 	internal:
 		static SvnException^ Create(svn_error_t *error);
 		static Exception^ Create(svn_error_t *error, bool clearError);
-		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);		
+		static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);
 
 	private protected:
 		SvnException(svn_error_t *error)
@@ -104,7 +104,7 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets the operating system error code when there is one 
+		/// <summary>Gets the operating system error code when there is one
 		/// (Only valid if SvnErrorCategory returns <See cref="SharpSvn::SvnErrorCategory::OperatingSystem" />)
 		/// </summary>
 		property int OperatingSystemErrorCode
@@ -194,7 +194,7 @@ namespace SharpSvn {
 					}
 					catch(AccessViolationException^)
 					{
-						/* Subversion will always set file via __FILE__ which comes from 
+						/* Subversion will always set file via __FILE__ which comes from
 						   a readonly memory segment so this should never crash, but just in case... */
 					}
 				}
@@ -242,7 +242,7 @@ namespace SharpSvn {
 
 	[Serializable]
 	public ref class SvnMalfunctionException sealed : SvnException
-	{		
+	{
 	public:
 		SvnMalfunctionException()
 		{

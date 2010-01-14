@@ -40,7 +40,7 @@ namespace SharpSvn.UI.Authentication
         private void fileBrowseButton_Click(object sender, EventArgs e)
         {
             using (OpenFileDialog ofd = new OpenFileDialog())
-            {                
+            {
                 if (!string.IsNullOrEmpty(fileBox.Text))
                     ofd.FileName = fileBox.Text;
 

@@ -25,7 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 /// <summary>
-/// Tests the Client::RevPropGet	
+/// Tests the Client::RevPropGet
 /// </summary>
 namespace SharpSvn.Tests.Commands
 {
@@ -33,7 +33,7 @@ namespace SharpSvn.Tests.Commands
 	public class GetRevisionPropertyTests : TestBase
 	{
 		/// <summary>
-		///Attempts to Get Properties on a directory in the repository represented by url. 
+		///Attempts to Get Properties on a directory in the repository represented by url.
 		/// </summary>
 		[Test]
 		public void TestRevPropGetDir()

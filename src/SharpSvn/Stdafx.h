@@ -97,7 +97,7 @@ using System::Diagnostics::DebuggerDisplayAttribute;
 			}										\
 		}											\
 	private:										\
-		EventHandler<type>^ event_##name;			
+		EventHandler<type>^ event_##name;
 
 
 #define DECLARE_EVENT(type, name) DECLARE_EVENT_X(type, name, public)

@@ -50,7 +50,7 @@ namespace SharpSvn.Tests.Commands
 		/// <summary>
 		/// Tests importing an unverioned file into the repository with the new entry :
 		/// testfile2.txt.
-		/// </summary>	
+		/// </summary>
 		[Test]
 		public void TestImportFile()
 		{

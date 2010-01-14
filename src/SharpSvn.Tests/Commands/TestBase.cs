@@ -237,7 +237,7 @@ namespace SharpSvn.Tests.Commands
             }
             catch (Exception)
             {
-                // swallow 
+                // swallow
             }
             finally
             {

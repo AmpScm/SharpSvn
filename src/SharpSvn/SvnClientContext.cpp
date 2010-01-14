@@ -254,7 +254,7 @@ void SvnClientContext::ApplyCustomSsh()
 		customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\TortoiseSVN", "SSH");
 
 	if (!customSshConfig)
-		customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");	
+		customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");
 
 	if (customSshConfig)
 	{

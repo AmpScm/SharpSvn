@@ -46,7 +46,7 @@ namespace SharpSvn.Tests.Commands
 
 			SvnCommitResult info;
 
-            
+
 
 			Assert.That(this.Client.Commit(this.WcPath, out info));
 
@@ -323,7 +323,7 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(name);
 
             Collection<SvnStatusEventArgs> st;
-            
+
             Client.CropWorkingCopy(name, SvnDepth.Empty);
             Client.Delete(name);
 

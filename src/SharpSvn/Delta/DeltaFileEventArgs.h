@@ -222,7 +222,7 @@ namespace SharpSvn {
 		public:
 			/// <summary>Raised when <see cref="Target" /> is not null and completes its processing</summary>
 			DECLARE_EVENT(SvnDeltaCompleteEventArgs^, DeltaComplete);
-			
+
 		protected:
 			void OnDeltaComplete(SvnDeltaCompleteEventArgs^ e)
 			{
@@ -248,7 +248,7 @@ namespace SharpSvn {
 					Detach();
 
 					target->DeltaComplete += gcnew EventHandler<SvnDeltaCompleteEventArgs^>(
-							this, &SvnDeltaFileChangeEventArgs::InvokeDeltaComplete);					
+							this, &SvnDeltaFileChangeEventArgs::InvokeDeltaComplete);
 				}
 			}
 

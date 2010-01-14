@@ -78,14 +78,14 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 	svn_error_t* r;
 
 	r = svn_client__ra_session_from_path(
-		&ra_session, 
+		&ra_session,
 		&end_rev,
 		&pUrl,
-		pTarget,			
-		nullptr, 
+		pTarget,
+		nullptr,
 		target->Revision->AllocSvnRevision(%pool),
-		target->Revision->AllocSvnRevision(%pool), 
-		CtxHandle, 
+		target->Revision->AllocSvnRevision(%pool),
+		CtxHandle,
 		pool.Handle);
 
 	if (r)
@@ -128,14 +128,14 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 
 		if (r && r->apr_err == SVN_ERR_UNKNOWN_CAPABILITY)
 		{
-			// Some RA layers leave it to the server what they support or not. 
+			// Some RA layers leave it to the server what they support or not.
 			// Just eat this error to have some compatibility over different versions
 			svn_error_clear(r);
 			r = nullptr;
 		}
 		else if (r)
 			return args->HandleResult(this, r, target);
-		else 
+		else
 
 		if(has)
 		{

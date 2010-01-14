@@ -104,7 +104,7 @@ namespace SharpSvn.Tests.Commands
             e.DeltaComplete += delegate(object sender, SvnDeltaCompleteEventArgs ee)
             {
                 if (File.Exists(name))
-                    File.Delete(name);                
+                    File.Delete(name);
 
                 File.Move(tmpName, name);
                 Console.WriteLine(string.Format("Wrote '{0}'", e.Path));
