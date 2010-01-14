@@ -86,7 +86,7 @@ namespace Po2Resx
 			toDir = Path.GetFullPath(toDir);
 			if (!Directory.Exists(toDir))
 				Directory.CreateDirectory(toDir);
-			
+
 			GenerateResxFiles(prefix, toDir, files, force);
 		}
 
@@ -154,7 +154,7 @@ namespace Po2Resx
 		}
 
 		static void WriteHeader(XmlWriter xw, string key, string value)
-		{			
+		{
 			xw.WriteStartElement("resheader");
 			xw.WriteAttributeString("name", key);
 			xw.WriteElementString("value", value);
@@ -163,7 +163,7 @@ namespace Po2Resx
 
 		static string XmlXmlNs = "http://www.w3.org/XML/1998/namespace";
 		private static void WriteData(XmlWriter xw, string key, string value)
-		{			
+		{
 			xw.WriteStartElement("data");
 			xw.WriteAttributeString("name", key);
 			xw.WriteAttributeString("xml", "space", XmlXmlNs, "preserve");
@@ -171,6 +171,6 @@ namespace Po2Resx
 			xw.WriteEndElement();
 		}
 
-		
+
 	}
 }

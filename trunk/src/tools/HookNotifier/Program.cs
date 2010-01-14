@@ -86,7 +86,7 @@ namespace HookNotifier
                     File.Delete(errText);
                 }
 
-                
+
                 File.Delete(file);
                 Environment.Exit(result);
             }
