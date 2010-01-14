@@ -199,7 +199,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 			ArgsStore store(this, args);
 
 			// We must provide some kind of svn error, to eventually replace this method with real svn client code
-			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_NOT_DIRECTORY, nullptr, nullptr));
+			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_NOT_DIRECTORY, nullptr, nullptr), targetPaths);
 		}
 
 		if (!first)
@@ -209,7 +209,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 			ArgsStore store(this, args);
 
 			// We must provide some kind of svn error, to eventually replace this method with real svn client code
-			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_BAD_PATH, nullptr, "Working copy paths must be in the same repository"));
+			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_BAD_PATH, nullptr, "Working copy paths must be in the same repository"), targetPaths);
 
 			// TODO: Give some kind of meaningfull error. We just ignore other repository paths in logging now
 			continue;
@@ -331,7 +331,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, targets);
 	}
 	finally
 	{

@@ -64,5 +64,5 @@ bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersi
 	else
 		version = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, targetPath);
 }

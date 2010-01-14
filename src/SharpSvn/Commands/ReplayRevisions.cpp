@@ -166,7 +166,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 
 		// <CancelChecking> // We replace the client layer here; we must check for cancel
 		SvnCancelEventArgs^ cA = gcnew SvnCancelEventArgs();
@@ -174,7 +174,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 		HandleClientCancel(cA);
 
 		if(cA->Cancel)
-			return args->HandleResult(this, gcnew SvnOperationCanceledException("Operation Canceled"));
+			return args->HandleResult(this, gcnew SvnOperationCanceledException("Operation Canceled"), target);
 
 		r = svn_client__get_revision_number(
 			&start_rev,
@@ -185,7 +185,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 
 		r = svn_client__get_revision_number(
 			&watermark_rev,
@@ -196,7 +196,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 
 		if (start_rev == 0 && end_rev > start_rev)
 		{
@@ -220,7 +220,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 			(void*)_clientBaton->Handle,
 			pool.Handle);
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, target);
 	}
 	finally
 	{

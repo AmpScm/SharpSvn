@@ -134,7 +134,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 			pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, directory);
 
 		if (args->Depth != SvnDepth::Unknown)
 		{
@@ -181,7 +181,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 
 		}
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, directory);
 	}
 	finally
 	{

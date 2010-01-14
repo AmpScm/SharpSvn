@@ -164,5 +164,5 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	else
 		result = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, path);
 }

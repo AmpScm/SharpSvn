@@ -68,5 +68,5 @@ bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMerge
 		mergeSources = sourceList;
 	}
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }

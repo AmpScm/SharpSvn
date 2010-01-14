@@ -106,7 +106,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 			CtxHandle,
 			pool.Handle);
 
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 	}
 	finally
 	{

@@ -30,6 +30,8 @@ namespace SharpSvn {
 		const char* _pFile;
 		String^ _file;
 		initonly int _line;
+		[NonSerialized]
+		Object ^_targets;
 
 		static String^ GetErrorText(svn_error_t *error);
 
@@ -205,6 +207,22 @@ namespace SharpSvn {
 			int get()
 			{
 				return _line;
+			}
+		}
+
+		/// <summary>When not NULL, contains a String, Uri or SvnTarget, or an IEnumberable of one of these,
+		/// containing (some of) the targets of the command executed. This to help debugging issues from just
+		/// handling the exceptions</summary>
+		property Object^ Targets
+		{
+			Object^ get()
+			{
+				return _targets;
+			}
+		internal:
+			void set(Object ^value)
+			{
+				_targets = value;
 			}
 		}
 

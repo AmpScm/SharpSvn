@@ -96,7 +96,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, target);
 	}
 	finally
 	{

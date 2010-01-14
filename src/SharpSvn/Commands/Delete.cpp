@@ -85,7 +85,7 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, paths);
 }
 
 bool SvnClient::RemoteDelete(Uri^ uri)
@@ -189,5 +189,5 @@ bool SvnClient::RemoteDelete(ICollection<Uri^>^ uris, SvnDeleteArgs^ args, [Out]
 	else
 		result = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, uris);
 }

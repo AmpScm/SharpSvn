@@ -202,5 +202,5 @@ bool SvnClient::InternalSetRevisionProperty(Uri^ target, SvnRevision^ revision, 
 		CtxHandle,
 		pool->Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }

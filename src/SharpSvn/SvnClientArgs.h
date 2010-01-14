@@ -235,8 +235,12 @@ namespace SharpSvn {
 		void AddExpectedError(... array<SvnErrorCategory>^ errorCategories);
 
 	internal:
-		bool HandleResult(SvnClientContext^ client, svn_error_t *error);
-		bool HandleResult(SvnClientContext^ client, SvnException^ error);
+		bool HandleResult(SvnClientContext^ client, svn_error_t *error) 
+		{	return HandleResult(client, error, nullptr); }
+		bool HandleResult(SvnClientContext^ client, SvnException^ error)
+		{	return HandleResult(client, error, nullptr); }
+		bool HandleResult(SvnClientContext^ client, svn_error_t *error, Object^ targets);
+		bool HandleResult(SvnClientContext^ client, SvnException^ error, Object^ targets);
 		void Prepare();
 	};
 

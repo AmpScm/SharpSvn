@@ -144,13 +144,13 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 				pool.Handle);
 
 			if (r)
-				return args->HandleResult(this, r);
+				return args->HandleResult(this, r, targets);
 
 			// Get the single revision to use as head for the next calls
 			r = svn_ra_get_latest_revnum(ra_session, &rev_head, pool.Handle);
 
 			if (r)
-				return args->HandleResult(this, r);
+				return args->HandleResult(this, r, targets);
 
 			baseUrl = pUrl;
 			baseRev = 0; // Nothing exists
@@ -178,7 +178,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 			r = svn_ra_reparent(ra_session, baseUrlDir, cur->Handle);
 
 			if (r)
-				return args->HandleResult(this, r);
+				return args->HandleResult(this, r, targets);
 
 			const svn_ra_reporter3_t* reporter = nullptr;
 			void* report_baton = nullptr;			
@@ -193,7 +193,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 				cur->Handle);
 
 			if (r)
-				return args->HandleResult(this, r);
+				return args->HandleResult(this, r, targets);
 
 			r = reporter->set_path(
 					report_baton,
@@ -205,13 +205,13 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 					cur->Handle);
 
 			if (r)
-				return args->HandleResult(this, r);
+				return args->HandleResult(this, r, targets);
 
 			// Close the reporter, this will start the editor walk
 			r = reporter->finish_report(report_baton, cur->Handle);
 
 			if (r)
-				return args->HandleResult(this, r);
+				return args->HandleResult(this, r, targets);
 
 			baseUrl = switchUrl;
 			baseRev = switchToRevision;

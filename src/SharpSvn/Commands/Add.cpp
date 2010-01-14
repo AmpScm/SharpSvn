@@ -61,5 +61,5 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, path);
 }

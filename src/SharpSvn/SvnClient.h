@@ -682,57 +682,57 @@ namespace SharpSvn {
 #pragma region // Copy Client Command
 		/// <overloads>Duplicate something in working copy, remembering history (<c>svn copy</c>)</overloads>
 		/// <summary>Duplicate something in working copy, remembering history (<c>svn copy</c>)</summary>
-		bool Copy(SvnTarget^ sourceTarget, String^ toPath);
+		bool Copy(SvnTarget^ source, String^ toPath);
 
 		/// <summary>Duplicate something in working copy, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
 		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-		bool Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath);
+		bool Copy(ICollection<TSvnTarget>^ sources, String^ toPath);
 
 		/// <summary>Duplicate something in working copy, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
-		bool Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args);
+		bool Copy(SvnTarget^ source, String^ toPath, SvnCopyArgs^ args);
 
 		/// <summary>Duplicate something in working copy, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
 		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-		bool Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, SvnCopyArgs^ args);
+		bool Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyArgs^ args);
 
 		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
-		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri);
+		bool RemoteCopy(SvnTarget^ source, Uri^ toUri);
 		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
 		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri);
+		bool RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri);
 		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
-		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitResult^% result);
-
-		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
-		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
-		/// All members must be of the same type.</remarks>
-		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, [Out] SvnCommitResult^% result);
-
-		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
-		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args);
+		bool RemoteCopy(SvnTarget^ source, Uri^ toUri, [Out] SvnCommitResult^% result);
 
 		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
 		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args);
+		bool RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, [Out] SvnCommitResult^% result);
+
 		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
-		bool RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
+		bool RemoteCopy(SvnTarget^ source, Uri^ toUri, SvnCopyArgs^ args);
 
 		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
 		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
 		/// All members must be of the same type.</remarks>
 		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-		bool RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
+		bool RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopyArgs^ args);
+		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
+		bool RemoteCopy(SvnTarget^ source, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
+
+		/// <summary>Duplicate something in repository, remembering history (<c>svn copy</c>)</summary>
+		/// <remarks>Can be called with either a list of <see cref="SvnTarget" />, <see cref="SvnUriTarget" /> or <see cref="SvnPathTarget" />.
+		/// All members must be of the same type.</remarks>
+		generic<typename TSvnTarget> where TSvnTarget : SvnTarget
+		bool RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result);
 #pragma endregion
 
 	public:

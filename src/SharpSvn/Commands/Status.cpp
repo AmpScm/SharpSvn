@@ -106,7 +106,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, path);
 	}
 	finally
 	{

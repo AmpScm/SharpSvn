@@ -67,5 +67,5 @@ bool SvnClient::Resolve(String^ path, SvnAccept choice, SvnResolveArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, path);
 }

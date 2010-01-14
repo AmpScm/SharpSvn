@@ -48,5 +48,5 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, path);
 }

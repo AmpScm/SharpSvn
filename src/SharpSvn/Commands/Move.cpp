@@ -93,7 +93,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, sourcePaths);
 }
 
 
@@ -234,5 +234,5 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	else
 		result = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, sourceUris);
 }

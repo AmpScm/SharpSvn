@@ -90,7 +90,7 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 			CtxHandle,
 			pool.Handle);
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, rootPath);
 	}
 	finally
 	{

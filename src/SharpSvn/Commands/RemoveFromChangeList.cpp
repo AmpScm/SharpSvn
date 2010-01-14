@@ -70,5 +70,5 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFro
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, targets);
 }

@@ -57,7 +57,7 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 	svn_error_t* r = svn_wc_adm_probe_open3(&acc, nullptr, pPath, false, 1, CtxHandle->cancel_func, CtxHandle->cancel_baton, pool.Handle);
 
 	if (r)
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, targetPath);
 
 	try
 	{
@@ -65,7 +65,7 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 
 		r = svn_wc_has_binary_prop(&pIsBinary, pPath, acc, pool.Handle);
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, targetPath);
 
 		result = gcnew SvnWorkingCopyState(!pIsBinary);
 	}

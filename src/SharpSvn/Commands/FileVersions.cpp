@@ -370,7 +370,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 			pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 
 		// <CancelChecking> // We replace the client layer here; we must check for cancel
 		SvnCancelEventArgs^ cA = gcnew SvnCancelEventArgs();
@@ -378,7 +378,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		HandleClientCancel(cA);
 
 		if(cA->Cancel)
-			return args->HandleResult(this, gcnew SvnOperationCanceledException("Operation Canceled"));
+			return args->HandleResult(this, gcnew SvnOperationCanceledException("Operation Canceled"), target);
 
 		r = svn_client__get_revision_number(
 			&start_rev,
@@ -389,12 +389,12 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 			pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 		
 		r = svn_ra_get_repos_root2(ra_session, &repos_root, pool.Handle);
 
 		if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 
 		args->_keepPool = gcnew AprPool(%pool);
 		args->_curPool = gcnew AprPool(%pool);
@@ -421,7 +421,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 			(void*)_clientBaton->Handle, 
 			pool.Handle);
 
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, target);
 	}
 	finally
 	{

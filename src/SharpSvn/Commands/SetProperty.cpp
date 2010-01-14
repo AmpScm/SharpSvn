@@ -264,5 +264,5 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 		CtxHandle,
 		pool->Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }

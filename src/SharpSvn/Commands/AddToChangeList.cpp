@@ -76,5 +76,5 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeLis
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, targets);
 }

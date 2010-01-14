@@ -97,5 +97,5 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 
 	result = SvnUpdateResult::Create(this, args, version);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, url);
 }
