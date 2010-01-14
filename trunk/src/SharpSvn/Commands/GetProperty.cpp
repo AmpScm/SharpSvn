@@ -118,7 +118,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 		properties = rd;
 	}
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }
 
 bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^% value)

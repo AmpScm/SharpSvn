@@ -62,5 +62,5 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }

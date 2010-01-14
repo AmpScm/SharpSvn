@@ -81,5 +81,5 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, paths);
 }

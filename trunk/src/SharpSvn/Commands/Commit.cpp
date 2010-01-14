@@ -133,5 +133,5 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	else
 		result = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, paths);
 }

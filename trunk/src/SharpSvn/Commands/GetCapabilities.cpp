@@ -89,7 +89,7 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 		pool.Handle);
 
 	if (r)
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, target);
 	capabilities = gcnew Collection<SvnCapability>();
 	AprPool^ tmp = gcnew AprPool(%pool);
 	for each(SvnCapability c in args->RetrieveAllCapabilities ? static_cast<System::Collections::IEnumerable^>(Enum::GetValues(SvnCapability::typeid)) : args->Capabilities)
@@ -134,7 +134,7 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 			r = nullptr;
 		}
 		else if (r)
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 		else 
 
 		if(has)
@@ -143,6 +143,6 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 		}
 	}
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }
 

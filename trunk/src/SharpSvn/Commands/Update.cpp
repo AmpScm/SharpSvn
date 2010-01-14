@@ -144,7 +144,7 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 		CtxHandle,
 		pool.Handle);
 
-	if (args->HandleResult(this, r))
+	if (args->HandleResult(this, r, paths))
 	{
 		AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 

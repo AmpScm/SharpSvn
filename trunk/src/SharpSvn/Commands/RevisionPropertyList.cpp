@@ -73,5 +73,5 @@ bool SvnClient::GetRevisionPropertyList(Uri^ target, SvnRevision^ revision, SvnR
 		list = CreatePropertyDictionary(props, %pool);
 	}
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }

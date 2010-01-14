@@ -127,5 +127,5 @@ bool SvnClient::GetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ 
 		value = SvnPropertyValue::Create(pName, result, nullptr);
 	}
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, target);
 }

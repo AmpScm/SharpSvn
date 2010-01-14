@@ -27,35 +27,35 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#RemoteCopy`1(System.Collections.Generic.ICollection`1<!!0>,System.Uri,SharpSvn.SvnCommitResult&)", MessageId="2#")];
 [module: SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", Scope="member", Target="SharpSvn.SvnClient.#RemoteCopy(SharpSvn.SvnTarget,System.Uri,SharpSvn.SvnCopyArgs,SharpSvn.SvnCommitResult&)", MessageId="3#")];
 
-bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath)
+bool SvnClient::Copy(SvnTarget^ source, String^ toPath)
 {
-	if (!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if (!source)
+		throw gcnew ArgumentNullException("source");
 	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return Copy(NewSingleItemCollection(sourceTarget), toPath, gcnew SvnCopyArgs());
+	return Copy(NewSingleItemCollection(source), toPath, gcnew SvnCopyArgs());
 }
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath)
+bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath)
 {
-	if (!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTargets");
+	if (!sources)
+		throw gcnew ArgumentNullException("sources");
 	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return Copy<TSvnTarget>(sourceTargets, toPath, gcnew SvnCopyArgs());
+	return Copy<TSvnTarget>(sources, toPath, gcnew SvnCopyArgs());
 }
 
-bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
+bool SvnClient::Copy(SvnTarget^ source, String^ toPath, SvnCopyArgs^ args)
 {
-	if (!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if (!source)
+		throw gcnew ArgumentNullException("source");
 	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if (!args)
@@ -63,30 +63,30 @@ bool SvnClient::Copy(SvnTarget^ sourceTarget, String^ toPath, SvnCopyArgs^ args)
 	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return Copy(NewSingleItemCollection(sourceTarget), toPath, args);
+	return Copy(NewSingleItemCollection(source), toPath, args);
 }
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, SvnCopyArgs^ args)
+bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyArgs^ args)
 {
-	if (!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTargets");
+	if (!sources)
+		throw gcnew ArgumentNullException("sources");
 	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 	else if (!IsNotUri(toPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
-	else if (!sourceTargets->Count)
-		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "sourceTargets");
+	else if (!sources->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "sources");
 
 	bool isFirst = true;
 	bool isLocal = false;
 
-	for each (SvnTarget^ target in sourceTargets)
+	for each (SvnTarget^ target in sources)
 	{
 		if (!target)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceTargets");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sources");
 		
 		SvnPathTarget^ pt = dynamic_cast<SvnPathTarget^>(target);
 		if (isFirst)
@@ -95,7 +95,7 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 			isFirst = false;
 		}
 		else if (isLocal != (nullptr != pt))
-			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sourceTargets");
+			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sources");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
@@ -104,7 +104,7 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 
 	svn_commit_info_t* pInfo = nullptr;
 
-	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sourceTargets, %pool);
+	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sources, %pool);
 
 	if(copies && args->Revision->RevisionType != SvnRevisionType::None)
 	{
@@ -122,20 +122,20 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sourceTargets, String^ toPath, Svn
 		&pInfo,
 		copies,
 		pool.AllocPath(toPath),
-		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
+		args->AlwaysCopyAsChild || (sources->Count > 1),
 		args->CreateParents,
 		args->IgnoreExternals,
 		nullptr,
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, sources);
 }
 
-bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri)
+bool SvnClient::RemoteCopy(SvnTarget^ source, Uri^ toUri)
 {
-	if (!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if (!source)
+		throw gcnew ArgumentNullException("source");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if (!SvnBase::IsValidReposUri(toUri))
@@ -143,103 +143,103 @@ bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri)
 
 	SvnCommitResult^ result = nullptr;
 
-	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, gcnew SvnCopyArgs(), result);
+	return RemoteCopy(NewSingleItemCollection(source), toUri, gcnew SvnCopyArgs(), result);
 }
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri)
+bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri)
 {
-	if (!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTargets");
+	if (!sources)
+		throw gcnew ArgumentNullException("sources");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
 	SvnCommitResult^ result = nullptr;
 
-	return RemoteCopy<TSvnTarget>(sourceTargets, toUri, gcnew SvnCopyArgs(), result);
+	return RemoteCopy<TSvnTarget>(sources, toUri, gcnew SvnCopyArgs(), result);
 }
 
-bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, [Out] SvnCommitResult^% result)
+bool SvnClient::RemoteCopy(SvnTarget^ source, Uri^ toUri, [Out] SvnCommitResult^% result)
 {
-	if (!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if (!source)
+		throw gcnew ArgumentNullException("source");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
-	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, gcnew SvnCopyArgs(), result);
+	return RemoteCopy(NewSingleItemCollection(source), toUri, gcnew SvnCopyArgs(), result);
 }
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, [Out] SvnCommitResult^% result)
+bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, [Out] SvnCommitResult^% result)
 {
-	if (!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTargets");
+	if (!sources)
+		throw gcnew ArgumentNullException("sources");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 
-	return RemoteCopy<TSvnTarget>(sourceTargets, toUri, gcnew SvnCopyArgs(), result);
+	return RemoteCopy<TSvnTarget>(sources, toUri, gcnew SvnCopyArgs(), result);
 }
 
-bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args)
+bool SvnClient::RemoteCopy(SvnTarget^ source, Uri^ toUri, SvnCopyArgs^ args)
 {
-	if (!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if (!source)
+		throw gcnew ArgumentNullException("source");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result = nullptr;
-	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, args, result);
+	return RemoteCopy(NewSingleItemCollection(source), toUri, args, result);
 }
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args)
+bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopyArgs^ args)
 {
-	if (!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTargets");
+	if (!sources)
+		throw gcnew ArgumentNullException("sources");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
 	SvnCommitResult^ result = nullptr;
-	return RemoteCopy<TSvnTarget>(sourceTargets, toUri, args, result);
+	return RemoteCopy<TSvnTarget>(sources, toUri, args, result);
 }
 
-bool SvnClient::RemoteCopy(SvnTarget^ sourceTarget, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result)
+bool SvnClient::RemoteCopy(SvnTarget^ source, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result)
 {
-	if (!sourceTarget)
-		throw gcnew ArgumentNullException("sourceTarget");
+	if (!source)
+		throw gcnew ArgumentNullException("source");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	return RemoteCopy(NewSingleItemCollection(sourceTarget), toUri, args, result);
+	return RemoteCopy(NewSingleItemCollection(source), toUri, args, result);
 }
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
-bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result)
+bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopyArgs^ args, [Out] SvnCommitResult^% result)
 {
-	if (!sourceTargets)
-		throw gcnew ArgumentNullException("sourceTargets");
+	if (!sources)
+		throw gcnew ArgumentNullException("sources");
 	else if (!toUri)
 		throw gcnew ArgumentNullException("toUri");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 	else if (!SvnBase::IsValidReposUri(toUri))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
-	else if (!sourceTargets->Count)
-		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "sourceTargets");
+	else if (!sources->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "sources");
 
 	bool isFirst = true;
 	bool isLocal = false;
 
-	for each (SvnTarget^ target in sourceTargets)
+	for each (SvnTarget^ target in sources)
 	{
 		if (!target)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceTargets");
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sources");
 		
 		SvnPathTarget^ pt = dynamic_cast<SvnPathTarget^>(target);
 		if (isFirst)
@@ -248,14 +248,14 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 			isFirst = false;
 		}
 		else if (isLocal != (nullptr != pt))
-			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sourceTargets");
+			throw gcnew ArgumentException(SharpSvnStrings::AllTargetsMustBeUriOrPath, "sources");
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sourceTargets, %pool);
+	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sources, %pool);
 
 	if(copies && args->Revision->RevisionType != SvnRevisionType::None)
 	{
@@ -275,7 +275,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 		&commitInfoPtr,
 		copies,
 		pool.AllocCanonical(toUri),
-		args->AlwaysCopyAsChild || (sourceTargets->Count > 1),
+		args->AlwaysCopyAsChild || (sources->Count > 1),
 		args->CreateParents,
 		args->IgnoreExternals,
 		CreateRevPropList(args->LogProperties, %pool),
@@ -287,6 +287,6 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sourceTargets, Uri^ toUri, S
 	else
 		result = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, sources);
 }
 

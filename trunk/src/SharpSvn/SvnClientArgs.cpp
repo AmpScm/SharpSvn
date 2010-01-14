@@ -23,7 +23,7 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using System::Collections::Generic::List;
 
-bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
+bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error, Object^ targets)
 {
 	// Note: client can be null if called from a not SvnClient command
 	if (!error)
@@ -34,15 +34,15 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error)
 
 	apr_status_t err = error->apr_err;
 
-	_exception = SvnException::Create(error);
+	_exception = SvnException::Create(error); // Releases error
 
 	if (err == SVN_ERR_CEASE_INVOCATION)
 		return false;
 
-	return HandleResult(client, _exception); // Releases error
+	return HandleResult(client, _exception, targets);
 }
 
-bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ exception)
+bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ exception, Object ^targets)
 {
 	_exception = exception;
 
@@ -51,6 +51,8 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ excepti
 
 	if (_exception->SubversionErrorCode == SVN_ERR_CEASE_INVOCATION)
 		return false;
+
+	_exception->Targets = targets;
 
 	SvnClient^ svnClient = dynamic_cast<SvnClient^>(client);
 

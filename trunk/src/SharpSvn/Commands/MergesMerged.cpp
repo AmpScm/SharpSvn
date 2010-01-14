@@ -107,7 +107,7 @@ bool SvnClient::ListMergesMerged(SvnTarget ^target, SvnTarget^ source, SvnMerges
 			CtxHandle,
 			pool.Handle);
 
-			return args->HandleResult(this, r);
+			return args->HandleResult(this, r, target);
 	}
 	finally
 	{

@@ -105,5 +105,5 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 
 	result = SvnUpdateResult::Create(this, args, rev);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, path);
 }

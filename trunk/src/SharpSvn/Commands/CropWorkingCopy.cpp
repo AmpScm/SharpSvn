@@ -49,12 +49,12 @@ bool SvnClient::CropWorkingCopy(System::String ^path, SvnDepth toDepth, SvnCropW
 							pool.Handle);
 
 	if (r)
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, path);
 
 	r = svn_wc_entry(&entry, pPath, adm_access, FALSE, pool.Handle);
 
 	if (r)
-		return args->HandleResult(this, r);
+		return args->HandleResult(this, r, path);
 
 	r = svn_wc_crop_tree(
 			adm_access,
@@ -66,5 +66,5 @@ bool SvnClient::CropWorkingCopy(System::String ^path, SvnDepth toDepth, SvnCropW
 			ctx->cancel_baton,
 			pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, path);
 }

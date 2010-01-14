@@ -82,7 +82,7 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 		CtxHandle,
 		pool.Handle);
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, paths);
 }
 
 bool SvnClient::RemoteCreateDirectory(Uri^ uri)
@@ -174,5 +174,5 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	else
 		result = nullptr;
 
-	return args->HandleResult(this, r);
+	return args->HandleResult(this, r, uris);
 }
