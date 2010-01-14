@@ -260,7 +260,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_TRANSACTION_NOT_MUTABLE:
 		case SVN_ERR_FS_NOT_FOUND:
 		case SVN_ERR_FS_ID_NOT_FOUND:
-		case SVN_ERR_FS_NOT_ID:		
+		case SVN_ERR_FS_NOT_ID:
 		case SVN_ERR_FS_NOT_SINGLE_PATH_COMPONENT:
 		case SVN_ERR_FS_NOT_MUTABLE:
 		case SVN_ERR_FS_ALREADY_EXISTS:

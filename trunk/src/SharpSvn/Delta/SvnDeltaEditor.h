@@ -24,7 +24,7 @@ namespace SharpSvn {
 		ref class SvnDeltaNode;
 
 		public ref class SvnDeltaEventArgs abstract : EventArgs
-		{	
+		{
 		public:
 			property SvnDeltaEventArgs^ Parent
 			{
@@ -119,7 +119,7 @@ namespace SharpSvn {
 namespace SharpSvn {
 	namespace Delta {
 
-		/// <summary>The SvnDeltaEditor is a generic receiver of Subversion changes. 
+		/// <summary>The SvnDeltaEditor is a generic receiver of Subversion changes.
 		/// Hook events on this class or override methods on descendants of this class to
 		/// receive changes</summary>
 		public ref class SvnDeltaEditor : public SvnBase
@@ -128,7 +128,7 @@ namespace SharpSvn {
 			SvnDeltaEditor(void);
 
 
-			DECLARE_EVENT(SvnDeltaSetTargetEventArgs^, SetTarget)		
+			DECLARE_EVENT(SvnDeltaSetTargetEventArgs^, SetTarget)
 
 		protected public:
 			/// <summary>Called before open root to specify the target settings</summary>
@@ -189,7 +189,7 @@ namespace SharpSvn {
 
 				e->Node->OnClose(e);
 			}
-			
+
 			DECLARE_EVENT(SvnDeltaDirectoryAbsentEventArgs^, DirectoryAbsent)
 		protected public:
 			/// <summary>Called to specify that information on a directory won't be provided (e.g. Authorization)</summary>

@@ -71,7 +71,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         /// <summary>
-        ///Attempts to set Properties on a directory recursively. 
+        ///Attempts to set Properties on a directory recursively.
         /// </summary>
         [Test]
         public void TestSetPropRecursivly()
@@ -101,12 +101,12 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-        //Test case to show up a bug in binary property retrieval.  
+        //Test case to show up a bug in binary property retrieval.
         [Test]
         public void TestPropSetGet()
         {
             Byte[] valueToSet = { 0, 77, 73, 65, 79, 87, 0 };
-            //In ASCII looks like \0MIAOW\0 where \0 is a null/zero value 
+            //In ASCII looks like \0MIAOW\0 where \0 is a null/zero value
             // as used for terminating c style strings
 
             string path = Path.Combine(this.WcPath, "Form.cs");
@@ -129,7 +129,7 @@ namespace SharpSvn.Tests.Commands
             string dir = WcPath;
 
             TouchFile(Path.Combine(WcPath,"NewFile.ignored"));
-            TouchFile(Path.Combine(WcPath, "NewFile"));            
+            TouchFile(Path.Combine(WcPath, "NewFile"));
 
             string v;
 

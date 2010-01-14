@@ -18,7 +18,7 @@ SvnDeltaTarget::~SvnDeltaTarget()
 	delete _targetBaton;
 }
 
-static svn_error_t* __cdecl 
+static svn_error_t* __cdecl
 svndeltatarget_window_handler(svn_txdelta_window_t *window, void *baton)
 {
 	SvnDeltaTarget^ target = AprBaton<SvnDeltaTarget^>::Get((IntPtr)baton);
@@ -65,7 +65,7 @@ svn_error_t* SvnDeltaTarget::apply_window(svn_txdelta_window_t *window, SvnDelta
 {
 	if (window && !e)
 		e = gcnew SvnDeltaWindowEventArgs(window);
-	
+
 	if (window)
 		OnDeltaWindow(e);
 
@@ -165,7 +165,7 @@ svn_error_t* SvnDeltaFileTransform::apply_window(svn_txdelta_window_t *window, S
 		return SVN_NO_ERROR;
 
 	SVN_ERR(_handler(window, _handler_baton));
-	
+
 	if (!window)
 	{
 		svn_stream_t* inStream = _inStream;

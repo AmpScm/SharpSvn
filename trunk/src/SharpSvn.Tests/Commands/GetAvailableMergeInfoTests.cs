@@ -51,7 +51,7 @@ namespace SharpSvn.Tests.Commands
 
 				if (ms.Uri == new Uri(CollabReposUri, "trunk"))
 				{
-                    
+
 					Assert.That(info.Count, Is.EqualTo(1));
 					Assert.That(info[0].Revision, Is.EqualTo(17L));
 				}

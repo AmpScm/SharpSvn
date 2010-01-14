@@ -54,13 +54,13 @@ namespace SharpSvn {
 	internal:
 		SvnFileVersionEventArgs(
 			const char *repos_root,
-            const char *path, 
-            svn_revnum_t rev, 
-            apr_hash_t *rev_props, 
+            const char *path,
+            svn_revnum_t rev,
+            apr_hash_t *rev_props,
             apr_hash_t *file_props,
 			bool has_content,
 			bool has_properties,
-            bool result_of_merge, 			
+            bool result_of_merge,
 			SvnClient^ client,
             AprPool^ pool)
 		{
@@ -231,7 +231,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-				return _resultOfMerge; 
+				return _resultOfMerge;
 			}
 		}
 
@@ -331,7 +331,7 @@ namespace SharpSvn {
 		void DetachBeforeFileData(AprPool^ toPool)
 		{
 			_pool = toPool;
-			
+
 			apr_pool_t* h = toPool->Handle;
 
 			if (_pReposRoot)
@@ -344,7 +344,7 @@ namespace SharpSvn {
 				_pcAuthor = apr_pstrdup(h, _pcAuthor);
 			if (_pcMessage)
 				_pcMessage = apr_pstrdup(h, _pcMessage);
-			
+
 			// Keep revProps
 			// Keep fileProps
 		}

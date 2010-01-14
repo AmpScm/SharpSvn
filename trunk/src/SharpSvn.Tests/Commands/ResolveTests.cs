@@ -51,7 +51,7 @@ namespace SharpSvn.Tests.Commands
 		}
 
 		/// <summary>
-		///Attempts to resolve a conflicted file. 
+		///Attempts to resolve a conflicted file.
 		/// </summary>
 		[Test]
 		public void TestResolveFile()
@@ -65,7 +65,7 @@ namespace SharpSvn.Tests.Commands
 		}
 
 		/// <summary>
-		///Attempts to resolve a conflicted directory recursively. 
+		///Attempts to resolve a conflicted directory recursively.
 		/// </summary>
 		[Test]
 		public void TestResolveDirectory()

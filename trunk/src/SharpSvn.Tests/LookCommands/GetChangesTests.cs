@@ -81,7 +81,7 @@ namespace SharpSvn.Tests.LookCommands
 			string dir = CreateRepos(TestReposType.Empty);
 			Uri uri = PathToUri(dir);
 			using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
-			{				
+			{
 				using (SvnClient cl = new SvnClient())
 				{
 					SvnCommitResult cr;
@@ -93,7 +93,7 @@ namespace SharpSvn.Tests.LookCommands
 					Assert.That(cr, Is.Not.Null);
 					Assert.That(cr.PostCommitError.Contains(Environment.NewLine));
 					Assert.That(cr.PostCommitError.Substring(
-									cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase) 
+									cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase)
 									+ Environment.NewLine.Length),
 								Is.EqualTo("The Post Commit Warning"));
 				}

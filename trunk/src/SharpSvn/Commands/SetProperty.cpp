@@ -98,10 +98,10 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value,
 	AprPool pool(%_pool);
 
 	return InternalSetProperty(
-		gcnew SvnPathTarget(target), 
+		gcnew SvnPathTarget(target),
 		propertyName,
 		pool.AllocPropertyValue(value, propertyName),
-		args, 
+		args,
 		%pool);
 }
 
@@ -119,10 +119,10 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value, Sv
 	AprPool pool(%_pool);
 
 	return InternalSetProperty(
-		gcnew SvnUriTarget(target), 
-		propertyName, 
+		gcnew SvnUriTarget(target),
+		propertyName,
 		pool.AllocPropertyValue(value, propertyName),
-		args, 
+		args,
 		%pool);
 }
 

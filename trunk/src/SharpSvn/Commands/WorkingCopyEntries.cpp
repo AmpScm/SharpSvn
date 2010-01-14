@@ -52,12 +52,12 @@ sharpsvn_found_entry(const char *path, const svn_wc_entry_t *entry, void *walk_b
 	if (!args)
 		return nullptr;
 
-	if (entry->kind == svn_node_dir && 
-		args->Depth > SvnDepth::Unknown && 
+	if (entry->kind == svn_node_dir &&
+		args->Depth > SvnDepth::Unknown &&
 		svn_path_is_empty(entry->name))
 	{
 		/* Skip directories in the parent to get some sane behavior for future versions */
-		return nullptr; 
+		return nullptr;
 	}
 
 	SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(args->_dir, path, entry, %thePool);
@@ -124,11 +124,11 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 		svn_wc_adm_access_t* adm_access = nullptr;
 
 		svn_error_t* r = svn_wc_adm_open3(
-			&adm_access, 
-			nullptr, 
-			pPath, 
-			false, 
-			args->Depth >= SvnDepth::Children ? -1 : 0, 
+			&adm_access,
+			nullptr,
+			pPath,
+			false,
+			args->Depth >= SvnDepth::Children ? -1 : 0,
 			CtxHandle->cancel_func,
 			CtxHandle->cancel_baton,
 			pool.Handle);
@@ -139,12 +139,12 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 		if (args->Depth != SvnDepth::Unknown)
 		{
 			r = svn_wc_walk_entries3(
-				pPath, 
-				adm_access, 
-				&walk_callbacks, 
+				pPath,
+				adm_access,
+				&walk_callbacks,
 				(void*)_clientBaton->Handle,
 				(svn_depth_t)args->Depth,
-				args->RetrieveHidden, 
+				args->RetrieveHidden,
 				nullptr,
 				nullptr,
 				pool.Handle);
@@ -167,7 +167,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 
 					SvnWorkingCopyEntryEventArgs^ e = gcnew SvnWorkingCopyEntryEventArgs(directory, key, val, %pool);
 
-					args->OnEntry(e);                    
+					args->OnEntry(e);
 
 					e->Detach(false);
 

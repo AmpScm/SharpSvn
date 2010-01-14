@@ -114,7 +114,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 	//	args->FileVersion += versionHandler;
 	try
 	{
-		svn_ra_session_t* ra_session = nullptr;		
+		svn_ra_session_t* ra_session = nullptr;
 
 		const char* baseUrl = nullptr;
 		svn_revnum_t baseRev;
@@ -133,14 +133,14 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 			const char* pTarget = pool.AllocString(first->SvnTargetName);
 
 			r = svn_client__ra_session_from_path(
-				&ra_session, 
+				&ra_session,
 				&end_rev,
 				&pUrl,
 				pTarget,
-				nullptr, 
+				nullptr,
 				first->Revision->AllocSvnRevision(%pool),
-				first->Revision->AllocSvnRevision(%pool), 
-				CtxHandle, 
+				first->Revision->AllocSvnRevision(%pool),
+				CtxHandle,
 				pool.Handle);
 
 			if (r)
@@ -181,15 +181,15 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 				return args->HandleResult(this, r, targets);
 
 			const svn_ra_reporter3_t* reporter = nullptr;
-			void* report_baton = nullptr;			
-			
+			void* report_baton = nullptr;
+
 			r = svn_ra_do_switch2(ra_session, &reporter, &report_baton,
 				switchToRevision,
 				baseUrlFile,
 				svn_depth_empty,
 				switchUrl,
 				editor,
-				editor_baton, 
+				editor_baton,
 				cur->Handle);
 
 			if (r)
@@ -220,7 +220,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 				// Swap pools for next action
 				AprPool^ tmp = next;
 				next = cur;
-				cur = tmp;			
+				cur = tmp;
 			}
 		}
 

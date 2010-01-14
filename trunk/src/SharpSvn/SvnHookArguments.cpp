@@ -56,7 +56,7 @@ bool SvnHookArguments::ParseHookArguments(array<String^>^ args, SvnHookType hook
 	case SvnHookType::PreRevPropChange:
 		return ParsePreRevPropChange(args, useConsole, data);
 	case SvnHookType::PreUnlock:
-		return ParsePreUnlock(args, useConsole, data);	
+		return ParsePreUnlock(args, useConsole, data);
 	case SvnHookType::StartCommit:
 		return ParseStartCommit(args, useConsole, data);
 	default:

@@ -35,7 +35,7 @@ namespace SharpSvn {
 			{
 				return SvnCommandType::Unknown;
 			}
-		}	
+		}
 
 	public:
 		property SvnDepth Depth

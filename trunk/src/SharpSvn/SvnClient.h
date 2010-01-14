@@ -926,7 +926,7 @@ namespace SharpSvn {
 		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
 		bool DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName);
 		/// <summary>Deletes the value of a revision property on files, dirs in a specific revision(<c>svn propdel --revision</c>)</summary>
-		bool DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyArgs^ args);		
+		bool DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyArgs^ args);
 
 	private:
 		bool InternalSetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, const svn_string_t* original_value, SvnSetRevisionPropertyArgs^ args, AprPool^ pool);
@@ -1239,7 +1239,7 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("target");
 			return DeleteRevisionProperty(target->Uri, target->Revision, propertyName, args);
 		}
-		
+
 		/// <summary>Gets the value of a revision property on files or dirs in a specific revision (<c>svn propget --revision</c>)</summary>
 		[Obsolete("Use .GetRevisionProperty(Uri, SvnRevision, String, String&) instead")]
 		bool GetRevisionProperty(SvnUriTarget^ target, String^ propertyName, [Out] String^% value)

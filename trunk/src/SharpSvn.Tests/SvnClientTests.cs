@@ -42,7 +42,7 @@ namespace SharpSvn.Tests
 				}
 				return _testPath;
 			}
-		}    
+		}
 
         string _repos;
         string _wc;
@@ -86,8 +86,8 @@ namespace SharpSvn.Tests
 
                 return _wc;
             }
-        }        
- 
+        }
+
         [TestFixtureSetUp]
         public void SetupRepository()
         {
@@ -127,7 +127,7 @@ namespace SharpSvn.Tests
 				reposClient.DeleteRepository(RepositoryPath);
 			}
 #endif
-        }  
+        }
 
         [Test]
         public void SomeGlobalTests()
@@ -140,7 +140,7 @@ namespace SharpSvn.Tests
                 Assert.That(client.GetRepositoryRoot(ReposUri), Is.EqualTo(ReposUri));
                 Assert.That(client.GetRepositoryRoot(WcPath), Is.EqualTo(ReposUri));
             }
-        }                                
+        }
 
         [Test]
         public void TestChangeLists()
@@ -230,7 +230,7 @@ namespace SharpSvn.Tests
                 Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile3"), ia, out ee), Is.True);
                 Assert.That(client.GetInfo(new Uri(WcUri, "ChangeListFile4"), ia, out ee), Is.True);
             }
-        }        
+        }
 
         [Test]
         public void CopyTest()
@@ -317,7 +317,7 @@ namespace SharpSvn.Tests
                     found = true;
                 }) && found;
             }
-        }        
+        }
 
         [Test]
         public void DeleteTest()
@@ -409,7 +409,7 @@ namespace SharpSvn.Tests
                 Assert.That(ItemExists(new Uri(WcUri, "LocalDeleteBase")), Is.False, "Remote base does not exist");
                 Assert.That(ItemExists(new Uri(WcUri, "RemoteDeleteBase")), Is.False, "Local base does not exist");
             }
-        }               
+        }
 
         [Test]
         public void TestExport()
@@ -445,7 +445,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        
+
         [Test]
         public void TestList()
         {
@@ -523,7 +523,7 @@ namespace SharpSvn.Tests
                 Assert.That(state, Is.Not.Null);
                 Assert.That(state.IsTextFile, Is.False);
             }
-        }             
+        }
 
         [Test]
         public void DontCanonicalizeToDotSlash()
@@ -558,6 +558,6 @@ namespace SharpSvn.Tests
             {
                 Assert.That(file.FullName.StartsWith("C:\\"));
             }
-        }        
+        }
     }
 }

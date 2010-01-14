@@ -111,13 +111,13 @@ namespace SharpSvn {
 		/// <summary>Set the property NAME on revision REVISION</summary>
 		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, String^ value, SvnSetRevisionPropertyRepositoryArgs^ args);
 		/// <summary>Set the property NAME on revision REVISION</summary>
-		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes, SvnSetRevisionPropertyRepositoryArgs^ args);		
+		bool SetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, ICollection<Byte>^ bytes, SvnSetRevisionPropertyRepositoryArgs^ args);
 
 	public:
 		/// <overloads>Delete the property NAME on revision REVISION</overloads>
 		bool DeleteRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName);
 		/// <summary>Set the property NAME on revision REVISION</summary>
-		bool DeleteRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyRepositoryArgs^ args);		
+		bool DeleteRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyRepositoryArgs^ args);
 
 	private:
 		bool InternalSetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyRepositoryArgs^ args, AprPool^ pool);

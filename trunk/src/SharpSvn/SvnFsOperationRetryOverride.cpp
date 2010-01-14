@@ -51,7 +51,7 @@ bool SvnFsOperationRetryOverride::OnRetryLoopInvocation(int nr, int error, int o
 		else
 			return OnRetryLoopInvocation(nr, (SvnErrorCode)error, osError, gcnew String(expr));
 	}
-	
+
 	return true;
 }
 

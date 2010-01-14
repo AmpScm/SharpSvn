@@ -23,7 +23,7 @@ using System.ComponentModel;
 namespace SharpSvn.UI.Authentication
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public class SvnUIForm : Form
     {
@@ -112,9 +112,9 @@ namespace SharpSvn.UI.Authentication
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            // 
+            //
             // SvnUIForm
-            // 
+            //
             this.ClientSize = new System.Drawing.Size(284, 264);
             this.MaximizeBox = false;
             this.MinimizeBox = false;

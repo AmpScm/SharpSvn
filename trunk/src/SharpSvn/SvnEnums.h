@@ -342,7 +342,7 @@ namespace SharpSvn {
 
 	public enum class SvnLineStyle
 	{
-		Default=0,		
+		Default=0,
 		CarriageReturnLinefeed,
 		Linefeed,
 		CarriageReturn,

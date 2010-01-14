@@ -75,7 +75,7 @@ namespace SharpSvn.UI
         /// <summary>
         /// Gets or sets the UI service.
         /// </summary>
-        /// <remarks>The UI service allows redirecting dialog processing to the specific UI service. 
+        /// <remarks>The UI service allows redirecting dialog processing to the specific UI service.
         /// (You should use this within .Net development environments (Like MS Visual Studio) implementing this interface)</remarks>
         /// <value>The UI service.</value>
         public IUIService UIService

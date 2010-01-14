@@ -22,7 +22,7 @@ using System.Drawing;
 using System.ComponentModel;
 
 namespace SharpSvn.UI
-{	
+{
 	/// <summary>
 	/// Helper methods to bind a user interface to an <see cref="SvnClient"/>
 	/// </summary>
@@ -70,6 +70,6 @@ namespace SharpSvn.UI
 
 			SvnClientUIHandler handler = new SvnClientUIHandler(args.ParentWindow);
             handler.Bind(client, args);
-        }		
+        }
 	}
 }

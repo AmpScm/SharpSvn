@@ -40,7 +40,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 	else if (!IsNotUri(repositoryPath))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 	else if (!args)
-		throw gcnew ArgumentNullException("args");	
+		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);

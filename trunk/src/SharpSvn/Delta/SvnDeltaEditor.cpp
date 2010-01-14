@@ -180,7 +180,7 @@ public:
 		return 0;
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_set_target_revision(void *edit_baton, svn_revnum_t target_revision, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -206,7 +206,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_open_root(void *edit_baton, svn_revnum_t base_revision, apr_pool_t *dir_pool, void **root_bbt)
 	{
 		UNUSED_ALWAYS(dir_pool);
@@ -241,7 +241,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_delete_entry(const char *path, svn_revnum_t revision, void *parent_baton, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -264,8 +264,8 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
-		wrap_add_directory(const char *path, void *parent_baton, const char *copyfrom_path, 
+	static svn_error_t* __cdecl
+		wrap_add_directory(const char *path, void *parent_baton, const char *copyfrom_path,
 		svn_revnum_t copyfrom_revision, apr_pool_t *dir_pool, void **child_baton)
 	{
 		UNUSED_ALWAYS(dir_pool);
@@ -286,8 +286,8 @@ public:
 		}
 
 		SvnDeltaDirectoryAddEventArgs^ args = gcnew SvnDeltaDirectoryAddEventArgs(
-			dirNode, 
-			SvnBase::Utf8_PtrToString(copyfrom_path), 
+			dirNode,
+			SvnBase::Utf8_PtrToString(copyfrom_path),
 			copyfrom_revision);
 
 		try
@@ -306,7 +306,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_open_directory(const char *path, void *parent_baton, svn_revnum_t base_revision,
 		apr_pool_t *dir_pool, void **child_baton)
 	{
@@ -328,7 +328,7 @@ public:
 		}
 
 		SvnDeltaDirectoryOpenEventArgs^ args = gcnew SvnDeltaDirectoryOpenEventArgs(
-			dirNode, 
+			dirNode,
 			base_revision);
 
 		try
@@ -347,8 +347,8 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
-		wrap_change_dir_prop(void *dir_baton, const char *name, 
+	static svn_error_t* __cdecl
+		wrap_change_dir_prop(void *dir_baton, const char *name,
 		const svn_string_t *value, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -376,7 +376,7 @@ public:
 		return nullptr;
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_close_directory(void *dir_baton, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -402,7 +402,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_absent_directory(const char *path, void *parent_baton, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -432,7 +432,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_add_file(const char *path, void *parent_baton, const char *copyfrom_path,
 		svn_revnum_t copyfrom_revision, apr_pool_t *file_pool, void **file_bt)
 	{
@@ -454,8 +454,8 @@ public:
 		}
 
 		SvnDeltaFileAddEventArgs^ args = gcnew SvnDeltaFileAddEventArgs(
-			fileNode, 
-			SvnBase::Utf8_PtrToString(copyfrom_path), 
+			fileNode,
+			SvnBase::Utf8_PtrToString(copyfrom_path),
 			copyfrom_revision);
 
 		try
@@ -474,7 +474,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_open_file(const char *path, void *parent_baton, svn_revnum_t base_revision, apr_pool_t *file_pool, void **file_bt)
 	{
 		UNUSED_ALWAYS(file_pool);
@@ -495,7 +495,7 @@ public:
 		}
 
 		SvnDeltaFileOpenEventArgs^ args = gcnew SvnDeltaFileOpenEventArgs(
-			fileNode, 
+			fileNode,
 			base_revision);
 
 		try
@@ -514,7 +514,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_apply_textdelta(void *file_bt, const char *base_checksum, apr_pool_t *pool, svn_txdelta_window_handler_t *handler, void **handler_baton)
 	{
 		UNUSED_ALWAYS(pool);
@@ -559,8 +559,8 @@ public:
 		return nullptr;
 	}
 
-	static svn_error_t* __cdecl 
-		wrap_change_file_prop(void *file_bt, const char *name, 
+	static svn_error_t* __cdecl
+		wrap_change_file_prop(void *file_bt, const char *name,
 		const svn_string_t *value, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -587,7 +587,7 @@ public:
 		return nullptr;
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_close_file(void *file_bt, const char *text_checksum,
 		apr_pool_t *pool)
 	{
@@ -614,7 +614,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_absent_file(const char *path, void *parent_baton, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -643,7 +643,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_close_edit(void *edit_baton, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);
@@ -674,7 +674,7 @@ public:
 		}
 	}
 
-	static svn_error_t* __cdecl 
+	static svn_error_t* __cdecl
 		wrap_abort_edit(void *edit_baton, apr_pool_t *pool)
 	{
 		UNUSED_ALWAYS(pool);

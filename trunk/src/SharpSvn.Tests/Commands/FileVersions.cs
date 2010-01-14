@@ -152,7 +152,7 @@ namespace SharpSvn.Tests.Commands
 
                             string s1 = Encoding.UTF8.GetString(ms1.ToArray());
                             string s2 = Encoding.UTF8.GetString(ms2.ToArray());
-                            
+
                             //Assert.That(ms1.Length, Is.EqualTo(ms2.Length), "Export lengths equal");
                             Assert.That(s1, Is.EqualTo(s2));
                             i++;
@@ -182,7 +182,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(n, Is.EqualTo(7));
         }
-       
+
         [Test]
         public void WalkChange()
         {

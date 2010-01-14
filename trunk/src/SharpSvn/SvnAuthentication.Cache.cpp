@@ -194,7 +194,7 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 		{
 			// Create a 0 terminated copy of key
 			char *pNewKey = (char*)apr_pcalloc(pool->Handle, len+1);
-			memcpy(pNewKey, pKey, len); 
+			memcpy(pNewKey, pKey, len);
 			apr_hash_set(hash_to, pNewKey, len, pNewValue);
 		}
 	}
@@ -243,11 +243,11 @@ System::Uri^ SvnAuthenticationCacheItem::RealmUri::get()
 void SvnAuthenticationCacheItem::Delete()
 {
 	if (System::IO::File::Exists(_filename))
-		System::IO::File::Delete(_filename);		
+		System::IO::File::Delete(_filename);
 }
 
 
-Collection<SvnAuthenticationCacheItem^>^ 
+Collection<SvnAuthenticationCacheItem^>^
 SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 {
 	_clientContext->EnsureState(SharpSvn::Implementation::SvnContextState::AuthorizationInitialized);
@@ -331,7 +331,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 			continue;
 		}
 		else if (!hash)
-			continue;	
+			continue;
 
 		svn_string_t* pRealm = (svn_string_t*)apr_hash_get(hash, SVN_CONFIG_REALMSTRING_KEY, APR_HASH_KEY_STRING);
 

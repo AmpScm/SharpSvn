@@ -170,7 +170,7 @@ namespace SharpSvn.Tests.Commands
 
 
             touched = false;
-            Client.Log(new string[] 
+            Client.Log(new string[]
             {
                 dir,
                 Path.Combine(dir, "index.html")
@@ -208,7 +208,7 @@ namespace SharpSvn.Tests.Commands
             string dir = GetTempDir();
             Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
             touched = false;
-            Client.Log(new string[] 
+            Client.Log(new string[]
             {
                 Path.Combine(dir, "products/big.html"),
                 Path.Combine(dir, "news/index.html"),

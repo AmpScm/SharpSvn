@@ -188,7 +188,7 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
 
 	return args->HandleResult(this,
 							  svn_repos_fs_change_rev_prop3(
-										repos, 
+										repos,
 										rev,
 										args->Author ? subpool.AllocString(args->Author) : nullptr,
 										subpool.AllocString(propertyName),

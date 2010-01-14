@@ -22,7 +22,7 @@ using System.Windows.Forms;
 namespace SharpSvn.UI
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public static class SvnUI
 	{

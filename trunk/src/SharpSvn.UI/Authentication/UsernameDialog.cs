@@ -39,7 +39,7 @@ namespace SharpSvn.UI.Authentication
 
         internal void SetImage(Image image)
         {
-            panel1.BackgroundImage = image;            
+            panel1.BackgroundImage = image;
         }
     }
 }

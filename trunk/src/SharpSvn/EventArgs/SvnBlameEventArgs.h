@@ -81,7 +81,7 @@ namespace SharpSvn {
 				if (!err)
 					_mergedDate = SvnBase::DateTimeFromAprTime(when);
 				else
-				{					
+				{
 					svn_error_clear(err);
 					_mergedDate = DateTime::MinValue;
 				}

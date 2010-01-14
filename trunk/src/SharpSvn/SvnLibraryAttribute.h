@@ -114,7 +114,7 @@ namespace SharpSvn {
 			initonly bool _dynamicallyLinked;
 			initonly System::Version^ _versionData;
 			initonly bool _optional;
-			
+
 		internal:
 			SvnLibrary(SvnLibraryAttribute^ attribute)
 			{
@@ -126,7 +126,7 @@ namespace SharpSvn {
 
 				if(attribute->UseSharpSvnVersion)
 					_version = (gcnew System::Reflection::AssemblyName(SvnLibrary::typeid->Assembly->FullName))->Version->ToString();
-				
+
 				_dynamicallyLinked = attribute->DynamicallyLinked;
 
 				System::Text::RegularExpressions::Match^ m =
@@ -134,7 +134,7 @@ namespace SharpSvn {
 
 				if (m->Success)
 				{
-					_versionData = gcnew System::Version(m->Value);				
+					_versionData = gcnew System::Version(m->Value);
 
 					if (attribute->SkipPrefix)
 						_version = _version->Substring(m->Index);

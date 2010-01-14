@@ -45,7 +45,7 @@ static SvnBase::SvnBase()
 
 void SvnBase::EnsureLoaded()
 {
-	static volatile LONG ensurer = 0;	
+	static volatile LONG ensurer = 0;
 
 	if (::InterlockedCompareExchange(&ensurer, 1, 0) < 2)
 	{
@@ -244,7 +244,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		else if(uri->Host)
 		{
 			part = part->TrimStart('/');
-		}		
+		}
 	}
 
 	if (!Uri::TryCreate(part, UriKind::Relative, suffix))

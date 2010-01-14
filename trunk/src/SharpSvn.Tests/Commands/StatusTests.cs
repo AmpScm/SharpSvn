@@ -34,7 +34,7 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class StatusTests : TestBase
 	{
-		/// <summary>Compares the status from Client::Status with the output from 
+		/// <summary>Compares the status from Client::Status with the output from
 		/// commandline client</summary>
 		[Test]
 		public void TestLocalStatus()
@@ -636,7 +636,7 @@ namespace SharpSvn.Tests.Commands
                 t1 = DateTime.Now - start;
                 Assert.That(sa.LastException, Is.Null);
 
-                
+
                 using (new SharpSvn.Implementation.SvnFsOperationRetryOverride(0))
                 {
                     start = DateTime.Now;

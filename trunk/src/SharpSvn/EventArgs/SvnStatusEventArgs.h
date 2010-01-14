@@ -392,7 +392,7 @@ namespace SharpSvn {
 			{
 				return _hasPropertyChanges;
 			}
-		}		
+		}
 
 		property String^ ChangeList
 		{
@@ -519,7 +519,7 @@ namespace SharpSvn {
 		const svn_wc_status2_t *_status;
 		AprPool^ _pool;
 
-		initonly String^ _path;		
+		initonly String^ _path;
 		String^ _fullPath;
 		initonly SvnStatus _wcContentStatus;
 		initonly SvnStatus _wcPropertyStatus;

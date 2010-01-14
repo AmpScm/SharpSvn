@@ -96,7 +96,7 @@ void SvnClientArgs::AddExpectedError(SvnErrorCode errorCode)
 {
 	if (errorCode == SvnErrorCode::None)
 		throw gcnew ArgumentOutOfRangeException("errorCode");
-	
+
 	_expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCode);
 }
 

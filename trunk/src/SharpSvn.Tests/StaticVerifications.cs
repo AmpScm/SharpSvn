@@ -22,7 +22,7 @@ namespace SharpSvn.Tests
                 if (tp.GetCustomAttributes(typeof(FlagsAttribute), false).Length == 1 || Enum.GetUnderlyingType(tp) != typeof(int))
                     continue;
 
-                Assert.That(Enum.IsDefined(tp, 0), "0 value is defined in {0}", tp);                
+                Assert.That(Enum.IsDefined(tp, 0), "0 value is defined in {0}", tp);
 
                 int min = 0;
                 int max = 0;

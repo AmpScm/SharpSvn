@@ -27,6 +27,6 @@ namespace SharpSvn {
 			: SvnLoggingEventArgs(entry, pool)
 		{
 		}
-	
+
 	};
 }

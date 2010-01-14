@@ -124,7 +124,7 @@ namespace SharpSvn {
 				virtual __int64 get() override
 				{
 					return -1; // Length unknown
-				}		
+				}
 			}
 
 			property __int64 Position
@@ -171,7 +171,7 @@ namespace SharpSvn {
 				else if (!_pool->IsValid())
 					throw gcnew InvalidOperationException();
 				else if (offset < 0 || offset >= data->Length)
-					throw gcnew ArgumentOutOfRangeException("offset", offset, "Offset out of range");				
+					throw gcnew ArgumentOutOfRangeException("offset", offset, "Offset out of range");
 				else if (length < 0 || length > data->Length || length + offset > data->Length)
 					throw gcnew ArgumentOutOfRangeException("length", length, "Length out of range");
 

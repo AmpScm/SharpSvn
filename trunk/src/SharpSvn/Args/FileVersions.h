@@ -219,7 +219,7 @@ namespace SharpSvn {
 				_repairEol = value;
 			}
 		}
-	};	
+	};
 
 	public ref class SvnFileVersionWriteArgs : public SvnClientContextArgs
 	{
@@ -235,6 +235,6 @@ namespace SharpSvn {
 			{
 				_retrieveUntranslated = value;
 			}
-		}		
+		}
 	};
 }

@@ -26,7 +26,7 @@ namespace SharpSvn {
 
 	internal:
 		String^ _dir;
-		
+
 	public:
 		SvnWorkingCopyEntriesArgs()
 		{

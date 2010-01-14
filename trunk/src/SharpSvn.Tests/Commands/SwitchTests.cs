@@ -49,7 +49,7 @@ namespace SharpSvn.Tests.Commands
 
 			long head = result.Revision;
 
-			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/a")), out result));			
+			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/a")), out result));
 			Assert.That(result.Revision, Is.EqualTo(head));
 
 			Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/c"), head-3), out result));

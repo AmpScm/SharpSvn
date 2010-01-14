@@ -92,7 +92,7 @@ namespace SharpSvn {
 		public ref class SvnAuthenticationEventArgs abstract: public SvnEventArgs
 		{
 			initonly bool _maySave;
-			initonly String^ _realm;			
+			initonly String^ _realm;
 			bool _save;
 			bool _cancel;
 			bool _break;

@@ -152,7 +152,7 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath
 
 	String^ name = SvnBase::Utf8_PtrToString(node->name);
 	String^ path = basePath ? (basePath + "/" + name) : name;
-	
+
 	if (node->action)
 	{
 		String^ fp = (((SvnNodeKind)node->kind) == SvnNodeKind::Directory) ? (path + "/") : path;
@@ -166,8 +166,8 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath
 			(SvnNodeKind)node->kind,
 			node->prop_mod ? true : false,
 			node->text_mod ? true : false
-		);		
-	
+		);
+
 		try
 		{
 			args->OnChanged(e); // Send to receiver
@@ -191,7 +191,7 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath
 
 	if (!child)
 		return nullptr; // No children
-		
+
 	String^ fullpath = node->name[0] ? path : "";
 
 	while(child)

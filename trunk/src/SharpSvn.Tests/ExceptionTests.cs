@@ -6,7 +6,7 @@ using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests
-{ 
+{
     [TestFixture]
     public class ExceptionTests :TestBase
     {
@@ -26,6 +26,6 @@ namespace SharpSvn.Tests
                 }), Is.False);
 
             Assert.That(sa.LastException.RootCause, Is.InstanceOfType(typeof(InvalidOperationException)));
-        }   
+        }
     }
 }

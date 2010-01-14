@@ -52,6 +52,6 @@ namespace SharpSvn.Tests
 		{
 			Assert.That(SvnPropertyNames.AllSvnRevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
 			Assert.That(SvnPropertyNames.TortoiseSvnDirectoryProperties.Contains(SvnPropertyNames.TortoiseSvnLogMinSize));
-		}		
+		}
     }
 }

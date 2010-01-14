@@ -72,7 +72,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         /// <summary>
-        /// Deletes a file, then calls update on the working copy to restore it 
+        /// Deletes a file, then calls update on the working copy to restore it
         /// from the text-base
         /// </summary>
         [Test]
@@ -86,7 +86,7 @@ namespace SharpSvn.Tests.Commands
         }
 
         /// <summary>
-        /// Changes a file in a secondary working copy and commits. Updates the 
+        /// Changes a file in a secondary working copy and commits. Updates the
         /// primary wc and compares
         /// </summary>
         [Test]
@@ -164,7 +164,7 @@ namespace SharpSvn.Tests.Commands
 
             SvnUpdateResult result;
 
-            Assert.That(Client.Update(new string[]{ 
+            Assert.That(Client.Update(new string[]{
                                                              Path.Combine( this.WcPath, "Form.cs" ),
                                                              Path.Combine( this.WcPath, "AssemblyInfo.cs" )
                                                          }, a, out result));
@@ -202,7 +202,7 @@ namespace SharpSvn.Tests.Commands
             {
                 if (e.FullPath != sd)
                     return;
-                
+
                 gotIt = true;
                 Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateObstruction));
                 Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.Directory));
