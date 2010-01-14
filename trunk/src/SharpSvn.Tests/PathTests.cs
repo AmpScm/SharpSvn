@@ -25,16 +25,16 @@ using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests
 {
-	[TestFixture]
-	public class PathTests
-	{
-		readonly string _casedFile;
+    [TestFixture]
+    public class PathTests
+    {
+        readonly string _casedFile;
 
-		[DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
-		static extern int GetLongPathName(
-			string lpszShortPath,
-			[Out] StringBuilder lpszLongPath,
-			int cchBuffer);
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern int GetLongPathName(
+            string lpszShortPath,
+            [Out] StringBuilder lpszLongPath,
+            int cchBuffer);
 
         [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
         static extern bool CreateDirectory(string path, IntPtr secdata);
@@ -43,68 +43,68 @@ namespace SharpSvn.Tests
         static extern bool RemoveDirectory(string path);
 
         public PathTests()
-		{
-			_casedFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + "-CaSeD.TxT");
-			File.WriteAllText(_casedFile, "hi!");
-		}
+        {
+            _casedFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid() + "-CaSeD.TxT");
+            File.WriteAllText(_casedFile, "hi!");
+        }
 
-		[TestFixtureTearDown]
-		public void DeleteTemp()
-		{
-			if(File.Exists(_casedFile))
-				File.Delete(_casedFile);
-		}
+        [TestFixtureTearDown]
+        public void DeleteTemp()
+        {
+            if (File.Exists(_casedFile))
+                File.Delete(_casedFile);
+        }
 
-		[Test]
-		public void FileExists()
-		{
-			Assert.That(File.Exists(_casedFile), "File exists");
-			Assert.That(File.Exists(_casedFile.ToUpperInvariant()), "File exists in uppercase");
-			Assert.That(File.Exists(_casedFile.ToLowerInvariant()), "File exists in lowercase");
-		}
+        [Test]
+        public void FileExists()
+        {
+            Assert.That(File.Exists(_casedFile), "File exists");
+            Assert.That(File.Exists(_casedFile.ToUpperInvariant()), "File exists in uppercase");
+            Assert.That(File.Exists(_casedFile.ToLowerInvariant()), "File exists in lowercase");
+        }
 
-		string MakeLong(string path)
-		{
-			StringBuilder sb = new StringBuilder(512);
-			int len = GetLongPathName(path, sb, sb.Capacity);
+        string MakeLong(string path)
+        {
+            StringBuilder sb = new StringBuilder(512);
+            int len = GetLongPathName(path, sb, sb.Capacity);
 
-			if (len <= 0)
-				return null;
-			else if(len >= sb.Capacity-1)
-			{
-				sb = new StringBuilder(len+16);
-				len = GetLongPathName(path, sb, sb.Capacity-1);
+            if (len <= 0)
+                return null;
+            else if (len >= sb.Capacity - 1)
+            {
+                sb = new StringBuilder(len + 16);
+                len = GetLongPathName(path, sb, sb.Capacity - 1);
 
-				if(len >= sb.Capacity-1)
-					return null;
-			}
+                if (len >= sb.Capacity - 1)
+                    return null;
+            }
 
-			return sb.ToString(0, len);
-		}
+            return sb.ToString(0, len);
+        }
 
 
-		[Test]
-		public void FixCasing()
-		{
-			string path = MakeLong(_casedFile.ToUpperInvariant());
+        [Test]
+        public void FixCasing()
+        {
+            string path = MakeLong(_casedFile.ToUpperInvariant());
 
-			Assert.That(File.Exists(path), "Fixed path exists");
+            Assert.That(File.Exists(path), "Fixed path exists");
 
-			Assert.That(Path.GetFullPath(path), Is.Not.EqualTo(Path.GetFileName(_casedFile)));
+            Assert.That(Path.GetFullPath(path), Is.Not.EqualTo(Path.GetFileName(_casedFile)));
 
-			FileInfo fif = new FileInfo(path);
-			Assert.That(fif.Name, Is.Not.EqualTo(Path.GetFileName(_casedFile)));
+            FileInfo fif = new FileInfo(path);
+            Assert.That(fif.Name, Is.Not.EqualTo(Path.GetFileName(_casedFile)));
 
-			Assert.That(Path.GetFileName(SvnTools.GetTruePath(path)), Is.EqualTo(Path.GetFileName(_casedFile)));
+            Assert.That(Path.GetFileName(SvnTools.GetTruePath(path)), Is.EqualTo(Path.GetFileName(_casedFile)));
 
-			string dir = SvnTools.GetTruePath(Path.GetDirectoryName(_casedFile));
+            string dir = SvnTools.GetTruePath(Path.GetDirectoryName(_casedFile));
 
-			Assert.That(SvnTools.GetTruePath(_casedFile.ToUpperInvariant()), Is.EqualTo(Path.Combine(dir, Path.GetFileName(_casedFile))));
+            Assert.That(SvnTools.GetTruePath(_casedFile.ToUpperInvariant()), Is.EqualTo(Path.Combine(dir, Path.GetFileName(_casedFile))));
 
             Assert.That(SvnTools.GetTruePath("c:\\"), Is.EqualTo(SvnTools.GetTruePath("C:\\")));
 
             Assert.That(Path.GetFullPath("C:\\"), Is.Not.EqualTo(Path.GetFullPath("c:\\")));
-		}
+        }
 
         [Test]
         public void TestNormalizationTesters()
@@ -132,8 +132,10 @@ namespace SharpSvn.Tests
             Assert.That(Path.IsPathRooted("a:"), Is.True);
             Assert.That(Path.IsPathRooted("A:file"), Is.True);
 
-            Assert.That(SvnTools.IsNormalizedFullPath(@"\\SERVER\path"), Is.True, @"\\SERVER\path");
+            Assert.That(SvnTools.IsNormalizedFullPath(@"\\SERVER\path"), Is.False, @"\\SERVER\path");
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\"), Is.False, @"\\server\path\");
+            Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path"), Is.True, @"\\server\path");
+            Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\Path"), Is.True, @"\\server\Path");
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\file"), Is.True);
 
         }
@@ -142,13 +144,13 @@ namespace SharpSvn.Tests
         public void TestUriNormalization()
         {
             Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos")).AbsoluteUri, Is.EqualTo("file://server/repos"));
-            Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos\\file")).AbsoluteUri, Is.EqualTo("file://server/repos/file"));            
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos\\file")).AbsoluteUri, Is.EqualTo("file://server/repos/file"));
 
             Assert.That(SvnTools.GetNormalizedUri(new Uri("http://host/")).AbsoluteUri, Is.EqualTo("http://host/"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("http://host/svn/")).AbsoluteUri, Is.EqualTo("http://host/svn"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("http://user@host/")).AbsoluteUri, Is.EqualTo("http://user@host/"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("http://user@host/svn/")).AbsoluteUri, Is.EqualTo("http://user@host/svn"));
-            
+
             Assert.That(SvnTools.GetNormalizedUri(new Uri("file://server//repos//qqq")).AbsoluteUri, Is.EqualTo("file://server/repos/qqq"));
 
             Assert.That(SvnTools.GetNormalizedUri(new Uri("http://sErVeR/")).AbsoluteUri, Is.EqualTo("http://server/"));
@@ -235,12 +237,12 @@ namespace SharpSvn.Tests
                 Is.Null, "Should never complete");
         }
 
-		[Test]
-		public void NormalizePrefixesArway()
-		{
-			Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\C:\Windows\Q"), Is.EqualTo(@"C:\Windows\Q"));
-			Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\UNC\server\Share\Windows\Q"), Is.EqualTo(@"\\server\Share\Windows\Q"));
-		}
+        [Test]
+        public void NormalizePrefixesArway()
+        {
+            Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\C:\Windows\Q"), Is.EqualTo(@"C:\Windows\Q"));
+            Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\UNC\server\Share\Windows\Q"), Is.EqualTo(@"\\server\Share\Windows\Q"));
+        }
 
         [Test]
         public void TestReallyLong()
@@ -265,6 +267,22 @@ namespace SharpSvn.Tests
                 Assert.That(SvnTools.GetTruePath(t2), Is.EqualTo(SvnTools.GetFullTruePath(temp)));
                 Assert.That(SvnTools.GetFullTruePath(t2), Is.EqualTo(SvnTools.GetFullTruePath(temp)));
 
+
+                string sd = Guid.NewGuid().ToString() + ".tMp";
+
+                string notExisting = Path.Combine(temp, sd);
+                string notExistingUpper = Path.Combine(temp.ToUpperInvariant(), sd);
+
+                Assert.That(SvnTools.GetTruePath(notExistingUpper), Is.Null);
+                Assert.That(SvnTools.GetTruePath(notExistingUpper, false), Is.Null);
+                Assert.That(SvnTools.GetTruePath(notExistingUpper, true), Is.EqualTo(notExisting));
+
+                notExisting = Path.Combine(notExisting, "a\\b.tmp");
+                notExistingUpper = Path.Combine(notExistingUpper, "a\\b.tmp");
+
+                Assert.That(SvnTools.GetTruePath(notExistingUpper), Is.Null);
+                Assert.That(SvnTools.GetTruePath(notExistingUpper, false), Is.Null);
+                Assert.That(SvnTools.GetTruePath(notExistingUpper, true), Is.EqualTo(notExisting));
             }
             finally
             {
@@ -353,19 +371,19 @@ namespace SharpSvn.Tests
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/c%23/test/"));
         }
 
-		[Test]
-		public void UriStrangeness()
-		{
-			Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
-			Assert.That(new Uri("http://server/dir./file.").AbsoluteUri, Is.EqualTo("http://server/dir/file"));
-			Assert.That(new Uri("http://server/file.").OriginalString, Is.EqualTo("http://server/file."));
-			Assert.That(new Uri("http://server/dir./file.").OriginalString, Is.EqualTo("http://server/dir./file."));
-			Assert.That(new Uri("http://server/").AbsoluteUri, Is.EqualTo("http://server/"));
-			Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
-			Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
-			Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
+        [Test]
+        public void UriStrangeness()
+        {
+            Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
+            Assert.That(new Uri("http://server/dir./file.").AbsoluteUri, Is.EqualTo("http://server/dir/file"));
+            Assert.That(new Uri("http://server/file.").OriginalString, Is.EqualTo("http://server/file."));
+            Assert.That(new Uri("http://server/dir./file.").OriginalString, Is.EqualTo("http://server/dir./file."));
+            Assert.That(new Uri("http://server/").AbsoluteUri, Is.EqualTo("http://server/"));
+            Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
+            Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
+            Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
 
-			Assert.That(new Uri("http://server/file%2E").AbsoluteUri, Is.EqualTo("http://server/file"));
-		}
-	}
+            Assert.That(new Uri("http://server/file%2E").AbsoluteUri, Is.EqualTo("http://server/file"));
+        }
+    }
 }

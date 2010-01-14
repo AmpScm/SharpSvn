@@ -92,7 +92,7 @@ static String^ LongGetFullPath(String^ path)
 	return StripLongPrefix(path);
 }
 
-static bool ContainsRelative(String^ path)
+/*static bool ContainsRelative(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
@@ -109,7 +109,7 @@ static bool ContainsRelative(String^ path)
 	}
 
 	return false;
-}
+}*/
 
 static String^ GetPathRootPart(String^ path)
 {
@@ -244,45 +244,8 @@ String^ SvnTools::GetTruePath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	int n = path->IndexOf(Path::AltDirectorySeparatorChar);
-	if (n >= 0)
-		path = path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar);
-
-	String^ root = nullptr;
-	bool normalized = false;
-	wchar_t c = path[0];
-
-	if (c == '\\')
-		path = StripLongPrefix(path);
-
-	if (ContainsRelative(path))
-	{
-		normalized = true;
-		path = GetNormalizedFullPath(path);
-	}
-
-	root = GetPathRootPart(path);
-
-	if (!root && !normalized)
-	{
-		normalized = true;
-		path = GetNormalizedFullPath(path);
-
-		root = GetPathRootPart(path);
-	}
-
-	if (!root)
-		throw gcnew InvalidOperationException("Didn't get an absolute path after normalization");
-
-	if (path->Length > root->Length && path[path->Length-1] == Path::DirectorySeparatorChar)
-	{
-		path = path->TrimEnd(Path::DirectorySeparatorChar);
-
-		if (path->Length <= root->Length)
-			return root;
-	}
-
-	return FindTruePath(path, root);
+	// Keep original behavior as default
+	return GetTruePath(path, false);
 }
 
 String^ SvnTools::GetFullTruePath(String^ path)
@@ -290,13 +253,23 @@ String^ SvnTools::GetFullTruePath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
+	// Keep original behavior as default
+	return GetTruePath(path, false);
+}
+
+String^ SvnTools::GetTruePath(String^ path, bool bestEffort)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
 	path = GetNormalizedFullPath(path);
 	String^ root = GetPathRootPart(path);
 
-	return FindTruePath(path, root);
+	return FindTruePath(path, root, bestEffort);
 }
 
-String^ SvnTools::FindTruePath(String^ path, String^ root)
+
+String^ SvnTools::FindTruePath(String^ path, String^ root, bool bestEffort)
 {
 	// Okay, now we have a normalized path and it's root in normal form. Now we need to find the exact casing of the next parts
 	StringBuilder^ result = gcnew StringBuilder(root, path->Length + root->Length + 4);
@@ -350,7 +323,32 @@ String^ SvnTools::FindTruePath(String^ path, String^ root)
 		HANDLE hSearch = FindFirstFileW(pSec, &filedata);
 
 		if (hSearch == INVALID_HANDLE_VALUE)
-			return nullptr;
+		{
+			if (!bestEffort)
+				return nullptr;
+
+			if (!isFirst)
+				result->Append(L'\\');
+
+			const wchar_t *pFileName = wcsrchr(pSec, L'\\');
+
+			if (!pFileName)
+			{
+				// Should be impossible to reach for valid paths as we
+				// only search for paths, not for roots
+				return nullptr; 
+			}
+			
+			result->Append(gcnew String(pFileName+1));
+
+			if (pNext)
+			{
+				*pNext = L'\\';
+				result->Append(gcnew String(pNext));
+			}
+
+			return result->ToString();
+		}
 
 		if (!isFirst)
 			result->Append(L'\\');
@@ -463,7 +461,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	if (PathContainsInvalidChars(path) || path->LastIndexOf(':') >= 2)
 		throw gcnew ArgumentException(String::Format(SharpSvnStrings::PathXContainsInvalidCharacters, path), "path");
 	else if (IsNormalizedFullPath(path))
-		return path; // Just pass through; no allocations	
+		return path; // Just pass through; no allocations
 
 	bool retry = true;
 
@@ -620,8 +618,9 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		for (i = 2; i < path->Length; i++)
 		{
+			wchar_t cc = path[i];
 			// Check hostname rules
-			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+			if ((cc < 'a' || cc > 'z') && static_cast<String^>("._-")->IndexOf(path[i]))
 				break;
 		}
 

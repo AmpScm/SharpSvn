@@ -28,16 +28,21 @@ namespace SharpSvn {
 		SvnTools()
 		{} // Static class
 
-		static String^ FindTruePath(String^ path, String^ root);
+		static String^ FindTruePath(String^ path, String^ root, bool bestEffort);
 
 	public:
 		/// <summary>Gets the repository Uri of a path, or <c>null</c> if path is not versioned</summary>
 		static Uri^ GetUriFromWorkingCopy(String^ path);
 
-		/// <summary>Gets the pathname exactly like it is on disk</summary>
+		/// <summary>Gets the absolute pathname exactly like it is on disk (fixing casing); returns NULL for non existing paths</summary>
 		static String^ GetTruePath(String^ path);
 
+		/// <summary>Gets the absolute pathname exactly like it is on disk (fixing casing).
+		/// For not existing paths, if bestEffort is TRUE, returns a path based on existing parents. Otherwise return NULL for not existing paths</summary>
+		static String^ GetTruePath(String^ path, bool bestEffort);
+
 		/// <summary>Gets the pathname exactly like it is on disk</summary>
+		[Obsolete("Please use .GetTruePath(path, false)")]
 		static String^ GetFullTruePath(String^ path);
 
 		/// <summary>Gets a boolean indicating whether the path could contain a Subversion Working Copy</summary>
