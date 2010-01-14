@@ -197,16 +197,16 @@ namespace CollabUpload
                 wr = (HttpWebRequest)WebRequest.Create(requestUri + "&action=Add%20document");
                 wr.UserAgent = UserAgentName;
                 wr.CookieContainer = cookBox;
-                wr.Timeout = 1800 * 1000; // Half an hour should be enough 
+                wr.Timeout = 1800 * 1000; // Half an hour should be enough
                 using (WebFormWriter wfw = new WebFormWriter(wr, WebRequestPostDataEncoding.MultipartFormData, "POST"))
                 {
                     wfw.AddValue("name", args.Name ?? Path.GetFileName(file));
                     wfw.AddValue("status", args.Status ?? "Draft");
                     wfw.AddValue("description", args.Description ?? "Description");
                     wfw.AddValue("initiallylocked", "");
-                    wfw.AddValue("type", "file");                    
+                    wfw.AddValue("type", "file");
                     wfw.AddValue("textFormat", "pre");
-                    wfw.AddFile("file", file);                    
+                    wfw.AddFile("file", file);
                     wfw.AddValue("docUrl", "");
                     wfw.AddValue("submit", "submit");
                     wfw.AddValue("maxDepth", "");
@@ -252,7 +252,7 @@ namespace CollabUpload
                 if (args.Keep > TimeSpan.Zero)
                 {
                     FilterOnDate(docs, DateTime.Now.Date - args.Keep);
-                }                
+                }
 
                 GC.KeepAlive(docs);
                 foreach (Document doc in docs)
@@ -271,12 +271,12 @@ namespace CollabUpload
             docs.RemoveAll(delegate(Document d)
             {
                 if (d.ReserveUri == null)
-                    return true; // Document is reserved                    
+                    return true; // Document is reserved
                 else if (!string.Equals(filterStatus, d.Status, StringComparison.OrdinalIgnoreCase))
                     return true; // Status doesn't match
 
                 return false;
-            });                
+            });
         }
 
         private static void SortDocs(List<Document> docs)
@@ -404,7 +404,7 @@ namespace CollabUpload
                 "\\<td[^>]*>" + body + "\\<\\/td>\\s*" +
                 "\\<td[^>]*>\\s*[^<]*(\\<a[^>]*href=\"(?<reserveUrl>[^\"]*)\"[^>]*>\\s*Reserve[^<]*\\<\\/a>)?" + body + "\\<\\/td>\\s*" +
                 "\\<td[^>]*>\\s*(?<desc>[^<]*)\\<\\/td>\\s*" +
-                "\\<td[^>]*>\\s*(\\<a[^>]*href=\"(?<editUrl>[^\"]*)\"[^>]*>\\s*[a-zA-Z ]+\\s*\\<\\/a>)?" + body + "\\s*<\\/td>\\s*" +                
+                "\\<td[^>]*>\\s*(\\<a[^>]*href=\"(?<editUrl>[^\"]*)\"[^>]*>\\s*[a-zA-Z ]+\\s*\\<\\/a>)?" + body + "\\s*<\\/td>\\s*" +
                 "\\<\\/tr\\>"
                 , RegexOptions.Singleline | RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase);
 
