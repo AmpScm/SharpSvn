@@ -20,10 +20,10 @@
 
 namespace SharpSvn {
 
-	public ref class SvnRemoteSessionLogEventArgs : public SvnLoggingEventArgs
+	public ref class SvnRemoteLogEventArgs : public SvnLoggingEventArgs
 	{
 	internal:
-		SvnRemoteSessionLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
+		SvnRemoteLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
 			: SvnLoggingEventArgs(entry, pool)
 		{
 		}

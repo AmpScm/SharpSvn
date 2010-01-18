@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "RemoteArgs/SvnRemoteSessionLatestRevisionArgs.h"
+#include "RemoteArgs/SvnRemoteCommonArgs.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -9,10 +9,10 @@ using namespace System::Collections::Generic;
 
 bool SvnRemoteSession::GetLatestRevision([Out] __int64% revision)
 {
-	return GetLatestRevision(gcnew SvnRemoteSessionLatestRevisionArgs(), revision);
+	return GetLatestRevision(gcnew SvnRemoteCommonArgs(), revision);
 }
 
-bool SvnRemoteSession::GetLatestRevision(SvnRemoteSessionLatestRevisionArgs^ args, [Out] __int64% revision)
+bool SvnRemoteSession::GetLatestRevision(SvnRemoteCommonArgs^ args, [Out] __int64% revision)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
