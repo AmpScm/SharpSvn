@@ -102,8 +102,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetTruePath(_casedFile.ToUpperInvariant()), Is.EqualTo(Path.Combine(dir, Path.GetFileName(_casedFile))));
 
             Assert.That(SvnTools.GetTruePath("c:\\"), Is.EqualTo(SvnTools.GetTruePath("C:\\")));
-
-            Assert.That(Path.GetFullPath("C:\\"), Is.Not.EqualTo(Path.GetFullPath("c:\\")));
+            Assert.That(SvnTools.GetTruePath("c:\\-never-exists-"), Is.EqualTo(SvnTools.GetTruePath("C:\\-never-exists-")));
         }
 
         [Test]
@@ -121,6 +120,9 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\\\t.svn"), Is.False);
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\.....svn"), Is.True);
 
+            Assert.That(SvnTools.GetTruePath("c:\\"), Is.EqualTo("C:\\"));
+            Assert.That(SvnTools.GetTruePath("c:\\" + Guid.NewGuid()), Is.Null);
+            Assert.That(SvnTools.GetTruePath("c:\\-never-exists-", true), Is.Not.Null);
 
             Assert.That(SvnTools.IsAbsolutePath("a:\\"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("A:\\"), Is.True);
