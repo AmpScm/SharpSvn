@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "RemoteArgs/SvnRemoteSessionReparentArgs.h"
+#include "RemoteArgs/SvnRemoteCommonArgs.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -12,10 +12,10 @@ bool SvnRemoteSession::Reparent(Uri^ sessionUri)
 	if (!sessionUri)
 		throw gcnew ArgumentNullException("sessionUri");
 
-	return Reparent(sessionUri, gcnew SvnRemoteSessionReparentArgs());
+	return Reparent(sessionUri, gcnew SvnRemoteCommonArgs());
 }
 
-bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteSessionReparentArgs^ args)
+bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteCommonArgs^ args)
 {
 	if (!sessionUri)
 		throw gcnew ArgumentNullException("sessionUri");
@@ -24,5 +24,11 @@ bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteSessionReparentArgs^ a
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	return args->HandleResult(this, svn_ra_reparent(_session, pool.AllocCanonical(sessionUri), pool.Handle));
+	if (args->HandleResult(this, svn_ra_reparent(_session, pool.AllocCanonical(sessionUri), pool.Handle)))
+	{
+		_root = sessionUri;
+		return true;
+	}
+
+	return false;
 }

@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
-#include "RemoteArgs/SvnRemoteSessionOpenArgs.h"
+#include "RemoteArgs/SvnRemoteOpenArgs.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -13,10 +13,10 @@ bool SvnRemoteSession::Open(Uri^ sessionUri)
 	if (!sessionUri)
 		throw gcnew ArgumentNullException("sessionUri");
 
-	return Open(sessionUri, gcnew SvnRemoteSessionOpenArgs());
+	return Open(sessionUri, gcnew SvnRemoteOpenArgs());
 }
 
-bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteSessionOpenArgs^ args)
+bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteOpenArgs^ args)
 {
 	if (!sessionUri)
 		throw gcnew ArgumentNullException("sessionUri");
@@ -36,5 +36,6 @@ bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteSessionOpenArgs^ args)
 										  ));
 
 	_session = session;
+	_root = sessionUri;
 	return true;
 }

@@ -5,7 +5,7 @@
 
 namespace SharpSvn {
 
-	public ref class SvnRemoteSessionLogArgs : public SvnRemoteSessionArgs
+	public ref class SvnRemoteLogArgs : public SvnRemoteSessionArgs
 	{
 	};
 }
