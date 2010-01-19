@@ -185,6 +185,13 @@ namespace SharpSvn {
 		static ICollection<SvnUriTarget^>^ Map(System::Collections::Generic::IEnumerable<System::Uri^>^ uris);
 
 	internal:
+		void VerifyBelowRoot(System::Uri^ repositoryRoot)
+		{
+			// TODO: Throw exception if the current value is not below the repository root
+			UNUSED_ALWAYS(repositoryRoot);
+		}
+
+	internal:
 		static bool TryParse(String^ targetString, bool allowOperationalRevision, [Out] SvnUriTarget ^% target, AprPool^ pool);
 
 		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
@@ -204,6 +211,8 @@ namespace SharpSvn {
 			else if (!repositoryRoot)
 				throw gcnew ArgumentNullException("repositoryRoot");
 
+			_target->VerifyBelowRoot(repositoryRoot);
+
 			_target = target;
 			_repositoryRoot = repositoryRoot;
 			_nodeKind = SvnNodeKind::Unknown;
@@ -215,6 +224,8 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("target");
 			else if (!repositoryRoot)
 				throw gcnew ArgumentNullException("repositoryRoot");
+
+			_target->VerifyBelowRoot(repositoryRoot);
 
 			_target = target;
 			_repositoryRoot = repositoryRoot;
@@ -253,6 +264,7 @@ namespace SharpSvn {
 				return _nodeKind;
 			}
 		}
+
 	private:
 		property SvnTarget^ RawTarget
 		{

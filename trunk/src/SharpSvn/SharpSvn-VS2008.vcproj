@@ -1547,6 +1547,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\InstallConflict.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
 					>
 				</File>
@@ -1568,6 +1572,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\WorkingCopyEntries.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\WorkingCopyInstallConflictArgs.h"
 					>
 				</File>
 				<File
