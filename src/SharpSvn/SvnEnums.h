@@ -373,6 +373,9 @@ namespace SharpSvn {
 		Mine			= svn_wc_conflict_choose_mine_conflict,
 		/// <summary>Choose the 'merged file'. The result file of the automatic merging; possibly with local edits</summary>
 		Merged			= svn_wc_conflict_choose_merged,
+
+		/// <summary>Aliad for Merged</summary>
+		Working			= Merged,
 	};
 
 	public enum class SvnConflictType
