@@ -22,6 +22,7 @@ namespace SharpSvn {
 	ref class SvnWorkingCopyEntriesArgs;
 	ref class SvnWorkingCopyEntryEventArgs;
 	ref class SvnWorkingCopyEntryCollection;
+	ref class SvnWorkingCopyInstallConflictArgs;
 
 	public ref class SvnWorkingCopyClient : public SvnClientContext
 	{
@@ -76,5 +77,7 @@ namespace SharpSvn {
 		/// <summary>Gets the working copy version (<c>svnversion</c>)</summary>
 		bool GetVersion(String^ targetPath, SvnGetWorkingCopyVersionArgs^ args, [Out] SvnWorkingCopyVersion^% version);
 
+	public:
+		bool InstallConflict(String^ targetPath, SvnUriOrigin^ leftSource, SvnUriOrigin^ rightSource, SvnWorkingCopyInstallConflictArgs^ args);
 	};
 };
