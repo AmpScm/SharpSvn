@@ -66,6 +66,7 @@ namespace SharpSvn.Tests.Commands
                 RecursiveDelete(path);
             }
             pathsToDelete.Clear();
+            _wcPath = null;
         }
 
         protected string GetTempDir()
