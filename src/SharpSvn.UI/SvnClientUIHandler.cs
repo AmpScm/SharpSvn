@@ -73,7 +73,7 @@ namespace SharpSvn.UI
             set { _autoScaleBase = value; }
         }
 
-        internal void Bind(SvnClient svnClient, SvnUIBindArgs args)
+        internal void Bind(SvnClientContext svnClient, SvnUIBindArgs args)
         {
             Image = args.HeaderImage;
             UIService = args.UIService;
