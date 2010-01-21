@@ -78,6 +78,51 @@ namespace SharpSvn {
 		bool Log(ICollection<String^>^ paths, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
 		bool Log(ICollection<String^>^ paths, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+
+	public:
+		/// <summary>
+		/// Raised to allow canceling operations. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
+		/// then on the <see cref="SvnLookClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
+
+		/// <summary>
+		/// Raised when a subversion exception occurs.
+		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel
+		/// throwing the exception
+		/// </summary>
+		DECLARE_EVENT(SvnErrorEventArgs^, SvnError)
+
+		/// <summary>
+		/// Raised on progress. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnProgressEventArgs^, Progress)
+
+		/// <summary>
+		/// Raised just before a command is executed. This allows a listener
+		/// to cleanup before a new command is started
+		/// </summary>
+		DECLARE_EVENT(SvnProcessingEventArgs^, Processing)
+	protected:
+		/// <summary>Raises the <see cref="Cancel" /> event.</summary>
+		virtual void OnCancel(SvnCancelEventArgs^ e);
+		/// <summary>Raises the <see cref="Progress" /> event.</summary>
+		virtual void OnProgress(SvnProgressEventArgs^ e);
+		/// <summary>Raises the <see cref="Exception" /> event.</summary>
+		virtual void OnSvnError(SvnErrorEventArgs^ e);
+		/// <summary>Raises the <see cref="Processing" /> event.</summary>
+		virtual void OnProcessing(SvnProcessingEventArgs^ e);
+
+	internal:
+		void HandleClientCancel(SvnCancelEventArgs^ e);
+		void HandleClientProgress(SvnProgressEventArgs^ e);
+
+		virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
+		virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
+
 	};
 
 }
