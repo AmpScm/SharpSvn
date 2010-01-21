@@ -49,6 +49,7 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
 	if (dirent)
 	{
 		result = gcnew SvnRemoteStatEventArgs(dirent);
+		result->Detach();
 		return true;
 	}
 
