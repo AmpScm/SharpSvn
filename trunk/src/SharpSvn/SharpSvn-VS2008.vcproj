@@ -1647,6 +1647,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteListArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteLogArgs.h"
 					>
 				</File>
@@ -1666,6 +1670,10 @@
 			<Filter
 				Name="EventArgs"
 				>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteListEventArgs.h"
+					>
+				</File>
 				<File
 					RelativePath=".\EventArgs\SvnRemoteLogEventArgs.h"
 					>
@@ -1691,6 +1699,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteCommands\RemoteList.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteCommands\RemoteLog.cpp"
 					>
 				</File>
@@ -1704,6 +1716,10 @@
 				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteStat.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\ResolveRevision.cpp"
 					>
 				</File>
 				<File

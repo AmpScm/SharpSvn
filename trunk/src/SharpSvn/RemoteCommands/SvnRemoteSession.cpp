@@ -9,28 +9,28 @@ using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 
 SvnRemoteSession::SvnRemoteSession()
-    : _pool(gcnew AprPool()), SvnClientContext(%_pool)
+	: _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-    _clientBaton = gcnew AprBaton<SvnRemoteSession^>(this);
-    SVN_THROW(Init());
+	_clientBaton = gcnew AprBaton<SvnRemoteSession^>(this);
+	SVN_THROW(Init());
 }
 
 SvnRemoteSession::SvnRemoteSession(Uri^ sessionUri)
-    : _pool(gcnew AprPool()), SvnClientContext(%_pool)
+	: _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-    _clientBaton = gcnew AprBaton<SvnRemoteSession^>(this);
-    SVN_THROW(Init());
-    if (!Open(sessionUri))
-    {
-        // Should never happen, unless somebody suppresses the error in Open
-        throw gcnew InvalidOperationException();
-    }
+	_clientBaton = gcnew AprBaton<SvnRemoteSession^>(this);
+	SVN_THROW(Init());
+	if (!Open(sessionUri))
+	{
+		// Should never happen, unless somebody suppresses the error in Open
+		throw gcnew InvalidOperationException();
+	}
 }
 
 SvnRemoteSession::~SvnRemoteSession()
 {
-    _session = nullptr;
-    delete _clientBaton;
+	_session = nullptr;
+	delete _clientBaton;
 }
 
 static svn_error_t *
@@ -83,13 +83,13 @@ svn_error_t * SvnRemoteSession::Init()
     CtxHandle->progress_func = svnremoteclient_progress_notify_func;
     CtxHandle->progress_baton = (void*)_clientBaton->Handle;
 
-    return nullptr;
+	return nullptr;
 }
 
 void SvnRemoteSession::Ensure()
 {
-    if (!_session)
-        throw gcnew InvalidOperationException(SharpSvnStrings::RemoteSessionMustBeOpenToPerformCommand);
+	if (!_session)
+		throw gcnew InvalidOperationException(SharpSvnStrings::RemoteSessionMustBeOpenToPerformCommand);
 }
 
 void SvnRemoteSession::HandleClientCancel(SvnCancelEventArgs^ e)
@@ -151,3 +151,34 @@ void SvnRemoteSession::OnProcessing(SvnProcessingEventArgs^ e)
 {
 	Processing(this, e);
 }
+
+bool SvnRemoteSession::IsConnectionlessRepository(Uri^ uri)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
+	else if (!uri->IsAbsoluteUri)
+		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+
+	String^ scheme = uri->Scheme->ToUpperInvariant();
+
+	if (scheme == "FILE" || scheme == "HTTP" || scheme == "HTTPS")
+		return true;
+
+	return false;
+}
+
+bool SvnRemoteSession::RequiresExternalAuthorization(Uri^ uri)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
+	else if (!uri->IsAbsoluteUri)
+		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+
+	String^ scheme = uri->Scheme->ToUpperInvariant();
+
+	if (scheme == "FILE" || scheme == "HTTP" || scheme == "HTTPS" || scheme == "SVN")
+		return false;
+
+	return true;
+}
+
