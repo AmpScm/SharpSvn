@@ -26,7 +26,7 @@ bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteCommonArgs^ args)
 
 	if (args->HandleResult(this, svn_ra_reparent(_session, pool.AllocCanonical(sessionUri), pool.Handle)))
 	{
-		_root = sessionUri;
+		_root = nullptr;
 		return true;
 	}
 

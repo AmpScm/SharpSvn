@@ -36,6 +36,22 @@ bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteOpenArgs^ args)
 										  ));
 
 	_session = session;
-	_root = sessionUri;
+	_root = nullptr;
 	return true;
+}
+
+Uri^ SvnRemoteSession::SessionUri::get()
+{
+	if (_root)
+		return _root;
+	else if (!_session)
+		return nullptr;
+
+	AprPool pool(%_pool);
+	const char *url;
+	SVN_THROW(svn_ra_get_session_url(_session, &url, pool.Handle));
+
+	_root = Utf8_PtrToUri(url, SvnNodeKind::Directory);
+
+	return _root;
 }

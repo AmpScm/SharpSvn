@@ -306,4 +306,7 @@
   <data name="RemoteSessionMustBeOpenToPerformCommand" xml:space="preserve">
     <value>The remote session must be open before it can perform commands</value>
   </data>
+  <data name="CanOnlyResolveHeadDateandExplicitRevisions" xml:space="preserve">
+    <value>Can only resolve head, number and date revisions</value>
+  </data>
 </root>

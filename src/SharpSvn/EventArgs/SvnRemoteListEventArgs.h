@@ -21,16 +21,26 @@
 
 namespace SharpSvn {
 
-	public ref class SvnRemoteStatEventArgs : public SvnEventArgs
+	public ref class SvnRemoteListEventArgs : public SvnEventArgs
 	{
+		initonly String^ _name;
 		initonly SvnDirEntry^ _entry;
 	internal:
-		SvnRemoteStatEventArgs(const svn_dirent_t *dirent)
+		SvnRemoteListEventArgs(String^ name, const svn_dirent_t *dirent)
 		{
+			_name = name;
 			_entry = gcnew SvnDirEntry(dirent);
 		}
 
 	public:
+		property String^ Name
+		{
+			String^ get()
+			{
+				return _name;
+			}
+		}
+
 		property SvnDirEntry^ Entry
 		{
 			SvnDirEntry^ get()
