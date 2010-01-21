@@ -271,7 +271,7 @@ bool SvnUriTarget::TryParse(String^ targetString, bool allowOperationalRevision,
 		svn_error_t* r;
 		const char* truePath;
 
-		const char* path = pool->AllocPath(targetString);
+		const char* path = pool->AllocString(targetString);
 
 		if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
 		{
