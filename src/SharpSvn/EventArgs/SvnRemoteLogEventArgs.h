@@ -19,6 +19,7 @@
 #include "SvnLogEventArgs.h"
 
 namespace SharpSvn {
+	namespace Remote {
 
 	public ref class SvnRemoteLogEventArgs : public SvnLoggingEventArgs
 	{
@@ -29,4 +30,5 @@ namespace SharpSvn {
 		}
 
 	};
+}
 }

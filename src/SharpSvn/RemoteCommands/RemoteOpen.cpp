@@ -5,8 +5,8 @@
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
+using namespace SharpSvn::Remote;
 using namespace System::Collections::Generic;
-
 
 bool SvnRemoteSession::Open(Uri^ sessionUri)
 {

@@ -4,8 +4,10 @@
 
 
 namespace SharpSvn {
+	namespace Remote {
 
 	public ref class SvnRemoteOpenArgs : public SvnRemoteSessionArgs
 	{
 	};
+}
 }

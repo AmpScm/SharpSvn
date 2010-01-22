@@ -20,6 +20,7 @@
 #include "EventArgs/SvnListEventArgs.h"
 
 namespace SharpSvn {
+	namespace Remote {
 
 	public ref class SvnRemoteStatEventArgs : public SvnEventArgs
 	{
@@ -44,7 +45,15 @@ namespace SharpSvn {
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
 		virtual void Detach(bool keepProperties) override
 		{
-			_entry->Detach(keepProperties);
+			try
+			{
+			}
+			finally
+			{
+				_entry->Detach(keepProperties);
+				__super::Detach(keepProperties);
+			}
 		}
 	};
+}
 }

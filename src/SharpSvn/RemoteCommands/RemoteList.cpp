@@ -6,17 +6,18 @@
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
+using namespace SharpSvn::Remote;
 using namespace System::Collections::Generic;
 
-bool SvnRemoteSession::List(String^ relPath,  __int64 revision, EventHandler<SvnRemoteListEventArgs^>^ listHandler)
+bool SvnRemoteSession::List(String^ relPath, EventHandler<SvnRemoteListEventArgs^>^ listHandler)
 {
 	if (!listHandler)
 		throw gcnew ArgumentNullException("listHandler");
 
-	return List(relPath, revision, gcnew SvnRemoteListArgs(), listHandler);
+	return List(relPath, gcnew SvnRemoteListArgs(), listHandler);
 }
 
-bool SvnRemoteSession::List(String^ relPath,  __int64 revision, SvnRemoteListArgs^ args, EventHandler<SvnRemoteListEventArgs^>^ listHandler)
+bool SvnRemoteSession::List(String^ relPath, SvnRemoteListArgs^ args, EventHandler<SvnRemoteListEventArgs^>^ listHandler)
 {
     Uri^ uri;
     if (!args)
@@ -36,8 +37,13 @@ bool SvnRemoteSession::List(String^ relPath,  __int64 revision, SvnRemoteListArg
 	try
 	{
 		apr_hash_t *dirents;
+		svn_revnum_t gotRev;
 
-		SVN_HANDLE(svn_ra_get_dir2(_session, &dirents, NULL, NULL, pool.AllocCanonical(relPath), (svn_revnum_t)revision, (apr_uint32_t)args->RetrieveEntries, pool.Handle));
+		SVN_HANDLE(svn_ra_get_dir2(_session, &dirents, &gotRev, NULL, pool.AllocCanonical(relPath),
+								   (svn_revnum_t)args->Revision, (apr_uint32_t)args->RetrieveEntries, pool.Handle));
+
+		if (!String::IsNullOrEmpty(relPath) && !relPath->EndsWith("/"))
+			relPath += "/";
 
 		for (apr_hash_index_t *hi = apr_hash_first(pool.Handle, dirents); hi; hi = apr_hash_next(hi))
 		{
@@ -46,7 +52,7 @@ bool SvnRemoteSession::List(String^ relPath,  __int64 revision, SvnRemoteListArg
 			const svn_dirent_t *dirent;
 
 			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&dirent);
-			SvnRemoteListEventArgs^ ea = gcnew SvnRemoteListEventArgs(Utf8_PtrToString(pKey, keyLen), dirent);
+			SvnRemoteListEventArgs^ ea = gcnew SvnRemoteListEventArgs(Utf8_PtrToString(pKey, keyLen), dirent, gotRev, SessionUri, relPath);
 			try
 			{
 				args->OnList(ea);
