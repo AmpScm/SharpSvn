@@ -221,7 +221,7 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnFileVersionWriteArgs : public SvnClientContextArgs
+	public ref class SvnFileVersionWriteArgs : public SvnClientArgs
 	{
 		bool _retrieveUntranslated;
 	public:
@@ -234,6 +234,14 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_retrieveUntranslated = value;
+			}
+		}
+
+		virtual property SvnCommandType CommandType
+		{
+			virtual SvnCommandType get() override sealed
+			{
+				return SvnCommandType::Unknown;
 			}
 		}
 	};
