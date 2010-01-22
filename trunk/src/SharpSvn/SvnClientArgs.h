@@ -23,22 +23,9 @@ namespace SharpSvn {
 	ref class SvnException;
 	using System::Collections::ObjectModel::Collection;
 
-	public ref class SvnClientContextArgs abstract
-	{
-		static SvnClientContextArgs()
-		{
-			SvnBase::EnsureLoaded();
-		}
-
-	private protected:
-		SvnClientContextArgs()
-		{
-		}
-	};
-
 	/// <summary>Base class of all <see cref="SvnClient" /> arguments</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnClientArgs abstract : SvnClientContextArgs
+	public ref class SvnClientArgs abstract
 	{
 		static SvnClientArgs()
 		{
