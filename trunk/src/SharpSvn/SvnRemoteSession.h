@@ -8,6 +8,7 @@
 #include "AprBaton.h"
 
 namespace SharpSvn {
+	namespace Remote {
 
 	ref class SvnRemoteCommonArgs;
 
@@ -88,8 +89,8 @@ namespace SharpSvn {
 		bool GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] SvnRemoteStatEventArgs^% result);
 
 	public:
-		bool List(String^ relPath, __int64 revision, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
-		bool List(String^ relPath, __int64 revision, SvnRemoteListArgs^ args, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
+		bool List(String^ relPath, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
+		bool List(String^ relPath, SvnRemoteListArgs^ args, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
 
 	public:
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s)</overloads>
@@ -149,5 +150,5 @@ namespace SharpSvn {
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
 
 	};
-
+}
 }

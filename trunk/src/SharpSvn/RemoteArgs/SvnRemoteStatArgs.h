@@ -2,8 +2,8 @@
 
 #include "SvnRemoteSessionArgs.h"
 
-
 namespace SharpSvn {
+	namespace Remote {
 
 	public ref class SvnRemoteStatArgs : public SvnRemoteSessionArgs
 	{
@@ -31,4 +31,5 @@ namespace SharpSvn {
 			}
 		}
 	};
+}
 }

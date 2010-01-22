@@ -2,6 +2,7 @@
 #pragma once
 
 namespace SharpSvn {
+	namespace Remote {
 
 	public ref class SvnRemoteSessionArgs abstract : public SvnClientArgs
 	{
@@ -19,4 +20,5 @@ namespace SharpSvn {
 			}
 		}
 	};
+}
 }

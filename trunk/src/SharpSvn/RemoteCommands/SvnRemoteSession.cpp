@@ -7,6 +7,7 @@
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
+using namespace SharpSvn::Remote;
 
 SvnRemoteSession::SvnRemoteSession()
 	: _pool(gcnew AprPool()), SvnClientContext(%_pool)

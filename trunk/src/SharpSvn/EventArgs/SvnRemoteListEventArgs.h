@@ -20,16 +20,26 @@
 #include "EventArgs/SvnListEventArgs.h"
 
 namespace SharpSvn {
+	namespace Remote {
+	ref class SvnRemoteSession;
 
 	public ref class SvnRemoteListEventArgs : public SvnEventArgs
 	{
 		initonly String^ _name;
 		initonly SvnDirEntry^ _entry;
+		initonly __int64 _revision;
+		String^ _relPath;
+		System::Uri^ _sessionUri;
+		System::Uri^ _uri;
+		
 	internal:
-		SvnRemoteListEventArgs(String^ name, const svn_dirent_t *dirent)
+		SvnRemoteListEventArgs(String^ name, const svn_dirent_t *dirent, svn_revnum_t revno, Uri^ sessionUri, String^ relPath)
 		{
 			_name = name;
 			_entry = gcnew SvnDirEntry(dirent);
+			_revision = revno;
+			_relPath = relPath;
+			_sessionUri = sessionUri;
 		}
 
 	public:
@@ -38,6 +48,33 @@ namespace SharpSvn {
 			String^ get()
 			{
 				return _name;
+			}
+		}
+
+		property __int64 RetrievedRevision
+		{
+			__int64 get()
+			{
+				return _revision;
+			}
+		}
+
+		property String^ Path
+		{
+			String^ get()
+			{
+				return _relPath + Name;
+			}
+		}
+
+		property System::Uri^ Uri
+		{
+			System::Uri^ get()
+			{
+				if (!_uri)
+					_uri = SvnTools::AppendPathSuffix(_sessionUri, Path + (Entry->NodeKind == SvnNodeKind::Directory) ? "/" : "");
+
+				return _uri;
 			}
 		}
 
@@ -54,7 +91,18 @@ namespace SharpSvn {
 		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
 		virtual void Detach(bool keepProperties) override
 		{
-			_entry->Detach(keepProperties);
+			try
+			{
+				if (keepProperties)
+				{
+				}
+			}
+			finally
+			{
+				_entry->Detach(keepProperties);
+				__super::Detach(keepProperties);
+			}
 		}
 	};
+}
 }

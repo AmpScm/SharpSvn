@@ -5,11 +5,7 @@
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
-using namespace System::Collections::Generic;
-
-
-using namespace SharpSvn;
-using namespace SharpSvn::Implementation;
+using namespace SharpSvn::Remote;
 using namespace System::Collections::Generic;
 
 
