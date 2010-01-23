@@ -72,6 +72,9 @@ namespace SharpSvn.Tests.RemoteTests
 				int n = 0;
 				bool foundTrunk = false;
 				List<Uri> uris = new List<Uri>();
+				SvnNodeKind dir;
+				rc.GetNodeKind("", out dir);
+				Assert.That(dir, Is.EqualTo(SvnNodeKind.Directory));
 				rc.List("",
 					delegate(object sender, SvnRemoteListEventArgs e)
 					{

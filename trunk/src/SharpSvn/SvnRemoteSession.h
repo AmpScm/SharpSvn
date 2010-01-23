@@ -89,6 +89,10 @@ namespace SharpSvn {
 		bool GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] SvnRemoteStatEventArgs^% result);
 
 	public:
+		bool GetNodeKind(String^ relPath, [Out] SvnNodeKind% result);
+		bool GetNodeKind(String^ relPath, SvnRemoteCommonArgs^ args, [Out] SvnNodeKind% result);
+
+	public:
 		bool List(String^ relPath, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
 		bool List(String^ relPath, SvnRemoteListArgs^ args, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
 
