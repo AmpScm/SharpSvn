@@ -261,14 +261,11 @@ namespace SharpSvn.Tests
             {
                 Assert.That(SvnTools.GetNormalizedFullPath(temp), Is.Not.Null, "Normalized path valid for extremely long path");
                 Assert.That(SvnTools.GetTruePath(temp), Is.Not.Null, "True path valid for extremely long path");
-                Assert.That(SvnTools.GetFullTruePath(temp), Is.Not.Null, "Full true path valid for extremely long path");
 
                 string t2 = temp.Replace("\\", "\\.\\");
 
                 Assert.That(SvnTools.GetNormalizedFullPath(t2), Is.EqualTo(SvnTools.GetNormalizedFullPath(temp)), "True path completed");
-                Assert.That(SvnTools.GetTruePath(t2), Is.EqualTo(SvnTools.GetFullTruePath(temp)));
-                Assert.That(SvnTools.GetFullTruePath(t2), Is.EqualTo(SvnTools.GetFullTruePath(temp)));
-
+                Assert.That(SvnTools.GetTruePath(t2), Is.EqualTo(SvnTools.GetTruePath(temp)));
 
                 string sd = Guid.NewGuid().ToString() + ".tMp";
 
