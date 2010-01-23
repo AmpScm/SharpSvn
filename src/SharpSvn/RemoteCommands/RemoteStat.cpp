@@ -59,7 +59,7 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
         {
             // We can't get the directory above the repository root,
             // but we can get the required details
-            dirent = (svn_dirent_t*)pool.Alloc(sizeof(*dirent));
+            dirent = (svn_dirent_t*)pool.AllocCleared(sizeof(*dirent));
 
             dirent->created_rev = latest; // Per definition
 
