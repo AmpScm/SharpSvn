@@ -18,9 +18,15 @@ namespace SharpSvn {
 	ref class SvnRemoteLogArgs;
 	ref class SvnRemoteStatArgs;
 	ref class SvnRemoteListArgs;
+	ref class SvnRemoteListLocksArgs;
+	ref class SvnRemoteLocationSegmentsArgs;
 
 	ref class SvnRemoteStatEventArgs;
 
+    /// <summary>This class gives access to the Subversion network protocol. Make sure all
+    /// passed paths use '/' as path separator. Refer to svn_ra.h for details about the
+    /// functions on this class, or use the more polished wrappers on the SvnClient class
+    /// </summary>
 	public ref class SvnRemoteSession : public SvnClientContext
 	{
 		initonly AprBaton<SvnRemoteSession^>^ _clientBaton;
@@ -52,7 +58,6 @@ namespace SharpSvn {
 		property Uri^ SessionUri
 		{
 			Uri^ get();
-			
 		}
 
 	public:
@@ -97,10 +102,19 @@ namespace SharpSvn {
 		bool List(String^ relPath, SvnRemoteListArgs^ args, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
 
 	public:
+		bool ListLocks(String^ relPath, EventHandler<SvnRemoteListLockEventArgs^>^ listHandler);
+		bool ListLocks(String^ relPath, SvnRemoteListLocksArgs^ args, EventHandler<SvnRemoteListLockEventArgs^>^ listHandler);
+
+    public:
+        bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+        bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+	public:
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s)</overloads>
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
+        [Obsolete("Not implemented yet")]
 		bool Log(ICollection<String^>^ paths, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
+        [Obsolete("Not implemented yet")]
 		bool Log(ICollection<String^>^ paths, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 
 	public:
@@ -154,5 +168,5 @@ namespace SharpSvn {
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
 
 	};
-}
+	}
 }

@@ -23,66 +23,65 @@ namespace SharpSvn {
 	namespace Remote {
 	ref class SvnRemoteSession;
 
-	public ref class SvnRemoteListEventArgs : public SvnEventArgs
+	public ref class SvnRemoteListLockEventArgs : public SvnEventArgs
 	{
-		initonly String^ _name;
-		initonly SvnDirEntry^ _entry;
-		initonly __int64 _revision;
-		initonly String^ _relPath;
-		initonly System::Uri^ _sessionUri;
-		System::Uri^ _uri;
+		initonly String^ _reposRelpath;
+        initonly int _nOffset;
+        initonly Uri^ _sessionUri;
+        SvnLockInfo^ _lock;
+        const svn_lock_t *_lockInfo;
+        String^ _path;
+        Uri^ _uri;
 		
 	internal:
-		SvnRemoteListEventArgs(String^ name, const svn_dirent_t *dirent, svn_revnum_t revno, Uri^ sessionUri, String^ relPath)
+		SvnRemoteListLockEventArgs(String^ reposRelpath, const svn_lock_t *lock_info, Uri^ sessionUri, int nOffset)
 		{
-			_name = name;
-			_entry = gcnew SvnDirEntry(dirent);
-			_revision = revno;
-			_relPath = relPath;
-			_sessionUri = sessionUri;
+			_reposRelpath = reposRelpath;
+            _sessionUri = sessionUri;
+            _nOffset = nOffset;
+
+            _lockInfo = lock_info;
 		}
 
 	public:
-		property String^ Name
-		{
-			String^ get()
-			{
-				return _name;
-			}
-		}
-
-		property __int64 RetrievedRevision
-		{
-			__int64 get()
-			{
-				return _revision;
-			}
-		}
-
 		property String^ Path
 		{
 			String^ get()
 			{
-				return _relPath + Name;
+                if (!_path)
+                    _path = _reposRelpath->Substring(_nOffset);
+
+				return _path;
 			}
 		}
 
-		property System::Uri^ Uri
-		{
-			System::Uri^ get()
-			{
-				if (!_uri)
-					_uri = SvnTools::AppendPathSuffix(_sessionUri, Path + (Entry->NodeKind == SvnNodeKind::Directory) ? "/" : "");
+        property String^ RepositoryPath
+        {
+            String^ get()
+            {
+                return _reposRelpath;
+            }
+        }
 
-				return _uri;
-			}
-		}
+        property System::Uri^ Uri
+        {
+            System::Uri^ get()
+            {
+                if (!_uri && _sessionUri && Path)
+                    _uri = SvnTools::AppendPathSuffix(_sessionUri, Path);
 
-		property SvnDirEntry^ Entry
+                return _uri;
+            }
+        }
+
+		property SvnLockInfo^ Lock
 		{
-			SvnDirEntry^ get()
+			SvnLockInfo^ get()
 			{
-				return _entry;
+				if (!_lock && _lockInfo)
+                    _lock = gcnew SvnLockInfo(_lockInfo, false);
+
+                return _lock;
 			}
 		}
 
@@ -95,13 +94,13 @@ namespace SharpSvn {
 			{
 				if (keepProperties)
 				{
-                    GC::KeepAlive(Entry);
+                    GC::KeepAlive(Lock);
 				}
 			}
 			finally
 			{
-                if (_entry != nullptr)
-				    _entry->Detach(keepProperties);
+                if (_lock != nullptr)
+                    _lock->Detach(keepProperties);
 
 				__super::Detach(keepProperties);
 			}

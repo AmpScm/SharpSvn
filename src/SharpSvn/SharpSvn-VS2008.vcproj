@@ -1651,6 +1651,14 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteListLocksArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteLogArgs.h"
 					>
 				</File>
@@ -1672,6 +1680,14 @@
 				>
 				<File
 					RelativePath=".\EventArgs\SvnRemoteListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteListLockEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteLocationSegmentEventArgs.h"
 					>
 				</File>
 				<File
@@ -1704,6 +1720,14 @@
 				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteListLocks.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteLocationSegments.cpp"
 					>
 				</File>
 				<File

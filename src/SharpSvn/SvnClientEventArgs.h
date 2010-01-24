@@ -47,5 +47,7 @@
 #include "EventArgs/SvnRemoteLogEventArgs.h"
 #include "EventArgs/SvnRemoteStatEventArgs.h"
 #include "EventArgs/SvnRemoteListEventArgs.h"
+#include "EventArgs/SvnRemoteListLockEventArgs.h"
+#include "EventArgs/SvnRemoteLocationSegmentEventArgs.h"
 
 

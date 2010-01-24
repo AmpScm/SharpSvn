@@ -100,7 +100,7 @@
     <Compile Include="Commands\ReplayTests.cs" />
     <Compile Include="ConflictTest.cs" />
     <Compile Include="ExceptionTests.cs" />
-    <Compile Include="RemoteTests\RemoteLogTests.cs" />
+    <Compile Include="RemoteTests\RemoteTests.cs" />
     <Compile Include="StaticVerifications.cs" />
     <Compile Include="ExternalsTests.cs" />
     <Compile Include="LookCommands\ChangeInfoTests.cs" />
