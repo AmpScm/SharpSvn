@@ -131,7 +131,23 @@ namespace SharpSvn {
 		}
 	};
 
-	public ref class SvnListEventArgs : public SvnCancelEventArgs
+    namespace Remote {
+        public interface struct ISvnRepositoryListItem
+        {
+            property System::Uri^ Uri
+            {
+                System::Uri^ get() = 0;
+            }
+
+            property SvnDirEntry^ Entry
+            {
+                SvnDirEntry^ get() = 0;
+            }
+
+        };
+    };
+
+    public ref class SvnListEventArgs : public SvnCancelEventArgs, public Remote::ISvnRepositoryListItem
 	{
 		initonly String^ _path;
 		const char* _pAbsPath;
@@ -236,7 +252,7 @@ namespace SharpSvn {
 								isFile = true;
 						}
 
-						_baseUri = gcnew Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
+                        _baseUri = gcnew System::Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
 					}
 				}
 
@@ -244,21 +260,30 @@ namespace SharpSvn {
 			}
 		}
 
-		property Uri^ EntryUri
+		property System::Uri^ Uri
 		{
-			Uri^ get()
+			virtual System::Uri^ get() sealed
 			{
 				if (!_entryUri && BaseUri && Path && Entry)
 				{
 					if (Path->Length == 0)
 						_entryUri = BaseUri;
 					else if (Entry->NodeKind == SvnNodeKind::Directory)
-						_entryUri = gcnew Uri(BaseUri, SvnBase::PathToUri(Path + "/"));
+						_entryUri = gcnew System::Uri(BaseUri, SvnBase::PathToUri(Path + "/"));
 					else
-						_entryUri = gcnew Uri(BaseUri, SvnBase::PathToUri(Path));
+						_entryUri = gcnew System::Uri(BaseUri, SvnBase::PathToUri(Path));
 				}
 
 				return _entryUri;
+			}
+		}
+
+		[Obsolete("Use .Uri")]
+		property System::Uri^ EntryUri
+		{
+			System::Uri^ get()
+			{
+				return this->Uri;
 			}
 		}
 
@@ -277,7 +302,7 @@ namespace SharpSvn {
 		/// <summary>Gets the information specified in RetrieveEntries on the args object</summary>
 		property SvnDirEntry^ Entry
 		{
-			SvnDirEntry^ get()
+			virtual SvnDirEntry^ get() sealed
 			{
 				if (!_entry && _pDirEnt)
 					_entry = gcnew SvnDirEntry(_pDirEnt);

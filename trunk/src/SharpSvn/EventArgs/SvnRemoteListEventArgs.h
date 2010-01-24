@@ -23,7 +23,7 @@ namespace SharpSvn {
 	namespace Remote {
 	ref class SvnRemoteSession;
 
-	public ref class SvnRemoteListEventArgs : public SvnEventArgs
+	public ref class SvnRemoteListEventArgs : public SvnEventArgs, public ISvnRepositoryListItem
 	{
 		initonly String^ _name;
 		initonly SvnDirEntry^ _entry;
@@ -69,18 +69,33 @@ namespace SharpSvn {
 
 		property System::Uri^ Uri
 		{
-			System::Uri^ get()
+			virtual System::Uri^ get() sealed
 			{
 				if (!_uri && Entry)
-					_uri = SvnTools::AppendPathSuffix(_sessionUri, Path + (Entry->NodeKind == SvnNodeKind::Directory) ? "/" : "");
+				{
+					if (Path->Length == 0)
+						_uri = _sessionUri;
+					else if (Entry->NodeKind == SvnNodeKind::Directory)
+						_uri = gcnew System::Uri(_sessionUri, SvnBase::PathToUri(Path + "/"));
+					else
+						_uri = gcnew System::Uri(_sessionUri, SvnBase::PathToUri(Path));
+				}
 
 				return _uri;
 			}
 		}
 
+		property System::Uri^ BaseUri
+		{
+			System::Uri^ get()
+			{
+				return _sessionUri;
+			}
+		}
+
 		property SvnDirEntry^ Entry
 		{
-			SvnDirEntry^ get()
+			virtual SvnDirEntry^ get() sealed
 			{
 				return _entry;
 			}

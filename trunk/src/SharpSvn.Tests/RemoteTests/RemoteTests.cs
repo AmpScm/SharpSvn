@@ -119,54 +119,57 @@ namespace SharpSvn.Tests.RemoteTests
             }
         }
 
-		[Test]
-		public void RemoteList()
-		{
-			DateTime start = DateTime.Now;
-			using (SvnRemoteSession rc = new SvnRemoteSession())
-			{
-				rc.Open(new Uri("http://svn.apache.org/repos/asf/subversion/"));
+        [Test]
+        public void RemoteList()
+        {
+            DateTime start = DateTime.Now;
+            using (SvnRemoteSession rc = new SvnRemoteSession())
+            {
+                rc.Open(new Uri("http://svn.apache.org/repos/asf/subversion/"));
 
-				int n = 0;
-				bool foundTrunk = false;
-				List<Uri> uris = new List<Uri>();
-				SvnNodeKind dir;
-				rc.GetNodeKind("", out dir);
-				Assert.That(dir, Is.EqualTo(SvnNodeKind.Directory));
-				rc.List("",
-					delegate(object sender, SvnRemoteListEventArgs e)
-					{
-						n++;
-						if (e.Name == "trunk")
-							foundTrunk = true;
-						uris.Add(e.Uri);
-					});
+                int n = 0;
+                bool foundTrunk = false;
+                List<Uri> uris = new List<Uri>();
+                SvnNodeKind dir;
+                rc.GetNodeKind("", out dir);
+                Assert.That(dir, Is.EqualTo(SvnNodeKind.Directory));
+                rc.List("",
+                    delegate(object sender, SvnRemoteListEventArgs e)
+                    {
+                        n++;
+                        if (e.Name == "trunk")
+                        {
+                            foundTrunk = true;
+                            Assert.That(e.Uri, Is.EqualTo(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/")));
+                        }
+                        uris.Add(e.Uri);
+                    });
 
-				Assert.That(foundTrunk);
-				Assert.That(n, Is.GreaterThan(4));
+                Assert.That(foundTrunk);
+                Assert.That(n, Is.GreaterThan(4));
 
-				Uri reposRoot;
-				rc.GetRepositoryRoot(out reposRoot);
-				rc.Reparent(reposRoot);
+                Uri reposRoot;
+                rc.GetRepositoryRoot(out reposRoot);
+                rc.Reparent(reposRoot);
 
-				int n2 = 0;
-				rc.List("subversion/",
-					delegate(object sender, SvnRemoteListEventArgs e)
-					{
-						n2++;
-						Assert.That(uris.Contains(e.Uri), "Same Uri");
-					});
+                int n2 = 0;
+                rc.List("subversion/",
+                    delegate(object sender, SvnRemoteListEventArgs e)
+                    {
+                        n2++;
+                        Assert.That(uris.Contains(e.Uri), "Same Uri");
+                    });
 
-				Assert.That(n2, Is.EqualTo(n));
-			}
-			DateTime between = DateTime.Now;
-			Collection<SvnListEventArgs> items;
-			Client.GetList(new Uri("http://svn.apache.org/repos/asf/subversion/"), out items);
-			DateTime after = DateTime.Now;
+                Assert.That(n2, Is.EqualTo(n));
+            }
+            DateTime between = DateTime.Now;
+            Collection<SvnListEventArgs> items;
+            Client.GetList(new Uri("http://svn.apache.org/repos/asf/subversion/"), out items);
+            DateTime after = DateTime.Now;
 
-			Console.WriteLine(between - start);
-			Console.WriteLine(after - between);
-		}
+            Console.WriteLine(between - start);
+            Console.WriteLine(after - between);
+        }
 
         [Test]
         public void TestLock()
@@ -244,6 +247,29 @@ namespace SharpSvn.Tests.RemoteTests
 
             Assert.That(!rs.IsCommandRunning);
             Assert.That(rs.IsDisposed);
+        }
+
+        [Test]
+        public void ListFile()
+        {
+            using (SvnRemoteSession rc = new SvnRemoteSession())
+            {
+                rc.Open(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/COMMITTERS"));
+
+                SvnRemoteStatEventArgs st;
+                rc.GetStat("", out st);
+
+                Assert.That(st, Is.Not.Null);
+                Assert.That(st.Entry.Time, Is.GreaterThan(new DateTime(2006, 1, 1)));
+
+                SvnNodeKind kind;
+                rc.GetNodeKind("", out kind);
+                Assert.That(kind, Is.EqualTo(SvnNodeKind.File));
+
+                rc.GetNodeKind("QQQ", out kind);
+
+                Assert.That(kind, Is.EqualTo(SvnNodeKind.None));
+            }
         }
     }
 }
