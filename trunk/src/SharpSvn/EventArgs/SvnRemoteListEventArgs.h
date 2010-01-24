@@ -71,7 +71,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if (!_uri)
+				if (!_uri && Entry)
 					_uri = SvnTools::AppendPathSuffix(_sessionUri, Path + (Entry->NodeKind == SvnNodeKind::Directory) ? "/" : "");
 
 				return _uri;
