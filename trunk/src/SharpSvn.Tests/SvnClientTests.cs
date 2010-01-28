@@ -525,6 +525,17 @@ namespace SharpSvn.Tests
             }
         }
 
+		[Test]
+		public void HasIgnorePatterns()
+		{
+			SvnClient cl = new SvnClient();
+			cl.LoadConfigurationDefault();
+
+			List<string> items = new List<string>(cl.Configuration.GlobalIgnorePattern);
+
+			Assert.That(new string[] {"*.a", ".DS_Store", "*.lo"}, Is.SubsetOf(items));
+		}
+
         [Test]
         public void DontCanonicalizeToDotSlash()
         {
