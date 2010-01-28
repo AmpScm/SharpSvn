@@ -60,3 +60,22 @@ void SvnClientConfiguration::UseSubversionDiff::set(bool value)
 	_client->_useUserDiff = !value;
 }
 
+System::Collections::Generic::IEnumerable<String^>^ SvnClientConfiguration::GlobalIgnorePattern::get()
+{
+	_client->EnsureState(SvnContextState::ConfigLoaded);
+	AprPool pool(SmallThreadPool);
+
+	apr_array_header_t *ignores;
+
+	svn_wc_get_default_ignores(&ignores, _client->CtxHandle->config, pool.Handle);
+	List<String^>^ ignList = gcnew List<String^>();
+
+	for (int i = 0; i < ignores->nelts; i++)
+	{
+		const char *ign = APR_ARRAY_IDX(ignores, i, const char*);
+
+		ignList->Add(Utf8_PtrToString(ign));
+	}
+
+	return ignList->AsReadOnly();
+}
