@@ -34,7 +34,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -124,7 +124,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -216,7 +216,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -306,7 +306,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -796,6 +796,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnWindowsError.h"
 					>
 				</File>
 				<File

@@ -73,3 +73,5 @@ public enum class SvnErrorCategory
 	RepositoryAccessSerf,
 };
 }
+
+#include "SvnWindowsError.h"
