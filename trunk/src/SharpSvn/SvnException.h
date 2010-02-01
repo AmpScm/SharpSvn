@@ -118,6 +118,20 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the operating system error code when there is one
+		/// (Only valid if SvnErrorCategory returns <See cref="SharpSvn::SvnErrorCategory::OperatingSystem" />)
+		/// </summary>
+		property SvnWindowsErrorCode WindowsErrorCode
+		{
+			SvnWindowsErrorCode get()
+			{
+				if (_errorCode >= APR_OS_START_STATUS && _errorCode < (APR_OS_START_STATUS + APR_OS_ERRSPACE_SIZE))
+					return (SvnWindowsErrorCode)APR_TO_OS_ERROR(_errorCode);
+				else
+					return (SvnWindowsErrorCode)0;
+			}
+		}
+
 		/// <summary>Gets the raw subversion error code casted to a <see cref="SharpSvn::SvnErrorCode" /></summary>
 		property SharpSvn::SvnErrorCode SvnErrorCode
 		{

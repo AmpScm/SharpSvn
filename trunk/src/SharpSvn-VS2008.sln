@@ -43,6 +43,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShSvn", "ShSvn\ShSvn.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HookNotifier", "tools\HookNotifier\HookNotifier.csproj", "{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Errors2Enum", "tools\Errors2Enum\Errors2Enum.csproj", "{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -127,6 +129,13 @@ Global
 		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x64.Build.0 = Release|Any CPU
 		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x86.ActiveCfg = Release|Any CPU
 		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595}.Release|x86.Build.0 = Release|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Debug|x86.Build.0 = Debug|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Release|x64.ActiveCfg = Release|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Release|x64.Build.0 = Release|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Release|x86.ActiveCfg = Release|Any CPU
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -134,6 +143,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {AC721CF6-D782-442E-81AF-035F737908E6}
 		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595} = {AC721CF6-D782-442E-81AF-035F737908E6}
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0} = {AC721CF6-D782-442E-81AF-035F737908E6}
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC} = {1072518C-0971-4951-B623-D32FB83831AD}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
