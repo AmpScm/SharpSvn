@@ -40,7 +40,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	_set_printf_count_output(true); // Required for disconnect message and HTTP Proxy of plink
 
 	// Subversion 1.7+ will pass -q to ssh.. just ignore this
-	pNwArgv = (char**)malloc(sizeof(char**) * __argc);
+	pNwArgv = (char**)calloc(__argc+1, sizeof(char**));
 
 	pNwArgv[nNwArgv++] = __argv[0];
 
