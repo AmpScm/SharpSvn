@@ -281,7 +281,7 @@ namespace SharpSvn.Tests.Commands
                             return;
                         }
 
-                        Assert.That(e.EntryUri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")));
+                        Assert.That(e.Uri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")));
                     });
 
                 client.List(new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/"), 656380),
