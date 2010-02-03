@@ -171,6 +171,13 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 
 	bAskUserName = p->prompts[0]->echo && !sHasConfiguredUser;
 
+	if (nextIsPwError)
+	{
+		// Delete invalid settings from store to allow changing
+		// password on next request
+		CredDelete(sTarget, CRED_TYPE_GENERIC, 0);
+	}
+
 	dwResult = CredUIPromptForCredentials(
 		&info, 
 		sTarget, 
@@ -180,7 +187,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 		password, CREDUI_MAX_PASSWORD_LENGTH,
 		&bSave,
 		CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
-		| CREDUI_FLAGS_ALWAYS_SHOW_UI
+		| (nextIsPwError ? CREDUI_FLAGS_ALWAYS_SHOW_UI : 0)
 		| (bAskUserName ? 0 : CREDUI_FLAGS_KEEP_USERNAME)
 		| (nextIsPwError ? CREDUI_FLAGS_INCORRECT_PASSWORD : 0));
 
