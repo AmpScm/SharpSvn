@@ -23,6 +23,17 @@ namespace SharpSvn.Tests
             }
         }
 
+		[Test]
+		public void ListSshCredentials()
+		{
+			using (SvnClient client = new SvnClient())
+			{
+				foreach (SvnAuthenticationCacheItem i in client.Authentication.GetCachedItems(SvnAuthenticationCacheType.WindowsSshCredentials))
+				{
+					GC.KeepAlive(i);
+				}
+			}
+		}
 
         public void ListSsh()
         {

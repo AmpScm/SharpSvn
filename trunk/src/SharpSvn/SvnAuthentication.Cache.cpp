@@ -20,6 +20,7 @@
 #include "SvnClientContext.h"
 #include "SvnAuthentication.h"
 
+#include <wincred.h>
 #include <svn_hash.h>
 
 using System::Text::RegularExpressions::Match;
@@ -202,7 +203,7 @@ apr_hash_t* SvnAuthentication::clone_credentials(apr_hash_t *from, apr_hash_t *t
 	return hash_to;
 }
 
-SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(String^ filename, SvnAuthenticationCacheType type, String^ realm)
+SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, String^ realm, String^ filename)
 {
 	if (String::IsNullOrEmpty(filename))
 		throw gcnew ArgumentNullException("filename");
@@ -212,6 +213,17 @@ SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(String^ filename, SvnAuth
 	_filename = filename;
 	_type = type;
 	_realm = realm;
+}
+
+SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, Uri^ realmUri)
+{
+	if (!realmUri)
+		throw gcnew ArgumentNullException("realmUri");
+	
+	// _filename = nullptr;
+	_type = type;
+	_realm = realmUri->ToString();
+	_realmUri = realmUri;
 }
 
 System::Uri^ SvnAuthenticationCacheItem::RealmUri::get()
@@ -242,8 +254,26 @@ System::Uri^ SvnAuthenticationCacheItem::RealmUri::get()
 
 void SvnAuthenticationCacheItem::Delete()
 {
-	if (System::IO::File::Exists(_filename))
-		System::IO::File::Delete(_filename);
+	if (!String::IsNullOrEmpty(_filename))
+	{
+		if (System::IO::File::Exists(_filename))
+			System::IO::File::Delete(_filename);
+	}
+	else
+	{
+		String^ target = RealmUri->AbsoluteUri;
+		pin_ptr<const wchar_t> pTarget = PtrToStringChars(target);
+
+		CredDeleteW(pTarget, CRED_TYPE_GENERIC, 0);
+	}
+}
+
+bool SvnAuthenticationCacheItem::IsDeleted::get()
+{
+	if (!String::IsNullOrEmpty(_filename))
+		return System::IO::File::Exists(_filename);
+
+	return false;
 }
 
 
@@ -279,6 +309,8 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 	case SvnAuthenticationCacheType::SslClientCertificatePassword:
 		append = SVN_AUTH_CRED_SSL_CLIENT_CERT_PW;
 		break;
+	case SvnAuthenticationCacheType::WindowsSshCredentials:
+		return GetSshCredentials();
 	}
 
 	if (!cfg || !append)
@@ -341,9 +373,45 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 		String^ realm = Utf8_PtrToString(pRealm->data, (int)pRealm->len);
 		if (realm)
 		{
-			items->Add(gcnew SvnAuthenticationCacheItem(file->FullName, type, realm));
+			items->Add(gcnew SvnAuthenticationCacheItem(type, realm, file->FullName));
 		}
 	}
 
 	return gcnew Collection<SvnAuthenticationCacheItem^>(items->AsReadOnly());
+}
+
+Collection<SvnAuthenticationCacheItem^>^ SvnAuthentication::GetSshCredentials()
+{
+	PCREDENTIALW* pCredentials;
+	DWORD nCredentials;
+
+	Collection<SvnAuthenticationCacheItem^>^ result = gcnew Collection<SvnAuthenticationCacheItem^>();
+
+	if (System::Environment::OSVersion->Version < gcnew Version(5, 1))
+		return result; // Not supported on Windows 2000
+
+	if (!CredEnumerateW(NULL, 0, &nCredentials, &pCredentials))
+		return result; // No cache available
+	
+	try
+	{
+		for (DWORD i = 0; i < nCredentials; i++)
+		{
+			if (pCredentials[i]->Type != CRED_TYPE_GENERIC)
+				continue;
+
+			String^ target = gcnew String(pCredentials[i]->TargetName);
+			Uri^ targetUri;
+
+			if (!System::Uri::TryCreate(target, UriKind::Absolute, targetUri) || targetUri->Scheme != "ssh")
+				continue;
+
+			result->Add(gcnew SvnAuthenticationCacheItem(SvnAuthenticationCacheType::WindowsSshCredentials, targetUri));
+		}
+		return nullptr;
+	}
+	finally
+	{
+		CredFree(pCredentials);
+	}
 }

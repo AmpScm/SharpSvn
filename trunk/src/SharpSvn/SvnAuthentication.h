@@ -39,6 +39,7 @@ namespace SharpSvn {
 			SslServerTrust,
 			SslClientCertificate,
 			SslClientCertificatePassword,
+			WindowsSshCredentials,
 		};
 
 		public ref class SvnAuthenticationCacheItem sealed : public SvnBase
@@ -48,7 +49,8 @@ namespace SharpSvn {
 			initonly String^ _realm;
 			Uri^ _realmUri;
 		internal:
-			SvnAuthenticationCacheItem(String^ filename, SvnAuthenticationCacheType type, String^ realm);
+			SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, String^ realm, String^ filename);
+			SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, Uri^ realmUri);
 
 		public:
 			/// <summary>Gets the type of the cached item</summary>
@@ -78,10 +80,7 @@ namespace SharpSvn {
 			/// <summary>Gets a boolean indicating whether the credentials were deleted since creating this instance</summary>
 			property bool IsDeleted
 			{
-				bool get()
-				{
-					return !System::IO::File::Exists(_filename);
-				}
+				bool get();
 			}
 
 			/// <summary>Deletes the externally cached credentials</summary>
@@ -895,6 +894,9 @@ namespace SharpSvn {
 			/// <param name="type">The type of credentials to retrieve</param>
 			/// <remarks>This list only contains credentials cached by Subversion; not by external authentication stores</remarks>
 			Collection<SvnAuthenticationCacheItem^>^ GetCachedItems(SvnAuthenticationCacheType type);
+
+		private:
+			Collection<SvnAuthenticationCacheItem^>^ GetSshCredentials();
 
 		public:
 			/// <summary>Simple credential handler to provide a static credential</summary>
