@@ -47,10 +47,11 @@ namespace SharpSvn {
 			initonly String^ _filename;
 			initonly SvnAuthenticationCacheType _type;
 			initonly String^ _realm;
+			initonly String^ _targetName;
 			Uri^ _realmUri;
 		internal:
 			SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, String^ realm, String^ filename);
-			SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, Uri^ realmUri);
+			SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, Uri^ realmUri, String^ targetName);
 
 		public:
 			/// <summary>Gets the type of the cached item</summary>

@@ -215,7 +215,7 @@ SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(SvnAuthenticationCacheTyp
 	_realm = realm;
 }
 
-SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, Uri^ realmUri)
+SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(SvnAuthenticationCacheType type, Uri^ realmUri, String^ targetName)
 {
 	if (!realmUri)
 		throw gcnew ArgumentNullException("realmUri");
@@ -224,6 +224,7 @@ SvnAuthenticationCacheItem::SvnAuthenticationCacheItem(SvnAuthenticationCacheTyp
 	_type = type;
 	_realm = realmUri->ToString();
 	_realmUri = realmUri;
+	_targetName = targetName;
 }
 
 System::Uri^ SvnAuthenticationCacheItem::RealmUri::get()
@@ -261,8 +262,7 @@ void SvnAuthenticationCacheItem::Delete()
 	}
 	else
 	{
-		String^ target = RealmUri->AbsoluteUri;
-		pin_ptr<const wchar_t> pTarget = PtrToStringChars(target);
+		pin_ptr<const wchar_t> pTarget = PtrToStringChars(_targetName);
 
 		CredDeleteW(pTarget, CRED_TYPE_GENERIC, 0);
 	}
@@ -406,7 +406,7 @@ Collection<SvnAuthenticationCacheItem^>^ SvnAuthentication::GetSshCredentials()
 			if (!System::Uri::TryCreate(target, UriKind::Absolute, targetUri) || targetUri->Scheme != "ssh")
 				continue;
 
-			result->Add(gcnew SvnAuthenticationCacheItem(SvnAuthenticationCacheType::WindowsSshCredentials, targetUri));
+			result->Add(gcnew SvnAuthenticationCacheItem(SvnAuthenticationCacheType::WindowsSshCredentials, targetUri, target));
 		}
 		return result;
 	}
