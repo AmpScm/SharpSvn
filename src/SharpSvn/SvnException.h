@@ -111,10 +111,10 @@ namespace SharpSvn {
 		{
 			int get()
 			{
-				if (_errorCode >= APR_OS_START_STATUS && _errorCode < (APR_OS_START_STATUS + APR_OS_ERRSPACE_SIZE))
+				if (_errorCode >= APR_OS_START_SYSERR)
 					return APR_TO_OS_ERROR(_errorCode);
 				else
-					return -1;
+					return 0;
 			}
 		}
 
