@@ -451,9 +451,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			return gcnew SvnReservedNameUsedException(error);
 
 		default:
-			if (APR_STATUS_IS_EACCES(error->apr_err))
-				return gcnew SvnAuthorizationException(error);
-			else if (APR_STATUS_IS_ENOSPC(error->apr_err))
+			if (APR_STATUS_IS_ENOSPC(error->apr_err))
 				return gcnew SvnDiskFullException(error);
 			else
 				return gcnew SvnException(error);
