@@ -408,7 +408,7 @@ Collection<SvnAuthenticationCacheItem^>^ SvnAuthentication::GetSshCredentials()
 
 			result->Add(gcnew SvnAuthenticationCacheItem(SvnAuthenticationCacheType::WindowsSshCredentials, targetUri));
 		}
-		return nullptr;
+		return result;
 	}
 	finally
 	{
