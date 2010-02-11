@@ -125,7 +125,7 @@ namespace SharpSvn {
 		{
 			SvnWindowsErrorCode get()
 			{
-				if (_errorCode >= APR_OS_START_STATUS && _errorCode < (APR_OS_START_STATUS + APR_OS_ERRSPACE_SIZE))
+				if (_errorCode >= APR_OS_START_SYSERR))
 					return (SvnWindowsErrorCode)APR_TO_OS_ERROR(_errorCode);
 				else
 					return (SvnWindowsErrorCode)0;
@@ -147,7 +147,7 @@ namespace SharpSvn {
 			{
 				if (_errorCode >= SVN_ERR_BAD_CATEGORY_START && _errorCode < SVN_ERR_RA_SERF_CATEGORY_START + SVN_ERR_CATEGORY_SIZE)
 					return (SharpSvn::SvnErrorCategory)(_errorCode / SVN_ERR_CATEGORY_SIZE);
-				else if (_errorCode >= APR_OS_START_STATUS && _errorCode < (APR_OS_START_STATUS + APR_OS_ERRSPACE_SIZE))
+				else if (_errorCode >= APR_OS_START_SYSERR)
 					return SharpSvn::SvnErrorCategory::OperatingSystem;
 				else
 					return SharpSvn::SvnErrorCategory::None;
