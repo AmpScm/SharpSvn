@@ -125,7 +125,7 @@ namespace SharpSvn {
 		{
 			SvnWindowsErrorCode get()
 			{
-				if (_errorCode >= APR_OS_START_SYSERR))
+				if (_errorCode >= APR_OS_START_SYSERR)
 					return (SvnWindowsErrorCode)APR_TO_OS_ERROR(_errorCode);
 				else
 					return (SvnWindowsErrorCode)0;
