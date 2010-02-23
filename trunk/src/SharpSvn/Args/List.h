@@ -107,12 +107,12 @@ namespace SharpSvn {
 	internal:
 		String^ _queryRoot;
 		Uri^ _repositoryRoot;
-		void Prepare(SvnTarget^ target)
+		void Prepare(SvnTarget^ target, bool hasRevision)
 		{
 			_repositoryRoot = nullptr;
 
 			SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);
-			if (uriTarget)
+			if (uriTarget && !hasRevision)
 				_queryRoot = uriTarget->SvnTargetName;
 			else
 				_queryRoot = nullptr;
