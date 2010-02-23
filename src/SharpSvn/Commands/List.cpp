@@ -78,7 +78,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	ArgsStore store(this, args);
 	AprPool pool(%_pool);
 
-	args->Prepare(target);
+	args->Prepare(target, args->Revision->RevisionType != SvnRevisionType::None);
 
 	if (listHandler)
 		args->List += listHandler;
