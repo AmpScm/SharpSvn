@@ -8,15 +8,19 @@
       <fail message="Building apache is currently only supported for platform win32" />
     </if>
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
-      <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
+      <!--copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" /-->
 
       <exec program="${MSBuildExe}" workingdir="${httpdDir}">
         <arg value="apache.sln" />
         <arg value="/P:configuration=Release" />
         <arg value="/P:platform=Win32" />
         <arg value="/t:httpd" />
+        <arg value="/t:htpasswd" />
         <arg value="/t:mod_dav" />
-        <arg value="/t:BuildAll" />
+        <arg value="/t:mod_auth_basic" />
+        <arg value="/t:mod_authn_file" />
+        <arg value="/t:mod_mime" />
+        <arg value="/t:mod_log_config" />
       </exec>
     </OnceBlock>
 

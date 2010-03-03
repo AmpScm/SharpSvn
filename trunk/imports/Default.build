@@ -28,7 +28,7 @@
   <property name="saslVersion" value="2.1.23" />
   <property name="swigVersion" value="1.3.38" />
 
-  <property name="httpdVersion" value="2.2.9" />
+  <property name="httpdVersion" value="2.2.14" />
   <property name="gettextVersion" value="0.17" />
   <property name="sqliteVersion" value="3.6.22" />
   
