@@ -463,12 +463,12 @@ namespace SharpSvn.Tests
             SvnUriTarget ut;
             SvnPathTarget pt;
             SvnTarget st;
-            Assert.That(SvnUriTarget.TryParse("http://svn.collab.net/repos/svn/", out ut));
+            Assert.That(SvnUriTarget.TryParse("http://svn.apache.org/repos/asf/subversion/", out ut));
             Assert.That(ut.Revision, Is.EqualTo(SvnRevision.None));
-            Assert.That(SvnUriTarget.TryParse("http://svn.collab.net/repos/svn/@123", out ut));
+            Assert.That(SvnUriTarget.TryParse("http://svn.apache.org/repos/asf/subversion/@123", out ut));
             Assert.That(ut.Revision, Is.EqualTo(SvnRevision.None));
             Assert.That(ut.TargetName.Contains("@"));
-            Assert.That(SvnUriTarget.TryParse("http://svn.collab.net/repos/svn/@123", true, out ut));
+            Assert.That(SvnUriTarget.TryParse("http://svn.apache.org/repos/asf/subversion/@123", true, out ut));
             Assert.That(ut.Revision, Is.EqualTo((SvnRevision)123L));
 
             Assert.That(SvnPathTarget.TryParse("C:\\A", out pt));
@@ -479,11 +479,11 @@ namespace SharpSvn.Tests
             Assert.That(SvnPathTarget.TryParse("C:\\@123", true, out pt));
             Assert.That(pt.Revision, Is.EqualTo((SvnRevision)123L));
 
-            Assert.That(SvnTarget.TryParse("http://svn.collab.net/repos/svn/", out st));
+            Assert.That(SvnTarget.TryParse("http://svn.apache.org/repos/asf/subversion/", out st));
             Assert.That(st, Is.InstanceOfType(typeof(SvnUriTarget)));
-            Assert.That(SvnTarget.TryParse("http://svn.collab.net/repos/svn/@123", out st));
+            Assert.That(SvnTarget.TryParse("http://svn.apache.org/repos/asf/subversion/@123", out st));
             Assert.That(st, Is.InstanceOfType(typeof(SvnUriTarget)));
-            Assert.That(SvnTarget.TryParse("http://svn.collab.net/repos/svn/@123", true, out st));
+            Assert.That(SvnTarget.TryParse("http://svn.apache.org/repos/asf/subversion/@123", true, out st));
             Assert.That(st, Is.InstanceOfType(typeof(SvnUriTarget)));
 
             Assert.That(SvnTarget.TryParse("C:\\A", out st));

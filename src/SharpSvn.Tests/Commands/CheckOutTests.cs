@@ -83,7 +83,7 @@ namespace SharpSvn.Tests.Commands
             SvnCheckOutArgs a = new SvnCheckOutArgs();
             a.Progress += new EventHandler<SvnProgressEventArgs>(Client_Progress);
             a.Depth = SvnDepth.Empty;
-            this.Client.CheckOut(new Uri("http://svn.collab.net/repos/svn/"), newWc, a);
+            this.Client.CheckOut(new Uri("http://svn.apache.org/repos/asf/subversion/"), newWc, a);
 
             Assert.That(progressCalled, "Progress delegate not called");
         }
