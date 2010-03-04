@@ -299,8 +299,11 @@ String^ SvnTools::FindTruePath(String^ path, String^ root, bool bestEffort)
 		if (wcscat_s(pSec, len, pChars+1))
 			return nullptr;
 
-		pTxt = &pSec[root->Length + 7 + 1]; // strlen('\\?\UNC')=7 + 1 for '\'
-		nMax = path->Length - root->Length - 2;
+		pTxt = &pSec[root->Length + 6 + 1]; // strlen('?\UNC\')=6 + 1 for '\'
+		nMax = path->Length - root->Length - 1;
+
+		if (nMax <= 0) // "\\PC\C$" -> nMax = -1
+			return result->ToString();
 		result->Append(L'\\');
 	}
 
