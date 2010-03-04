@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using System.Reflection;
+using System.Collections;
 
 namespace SharpSvn.Tests
 {
@@ -13,10 +14,14 @@ namespace SharpSvn.Tests
         public void VerifyEnums()
         {
             Assembly asm = typeof(SvnClient).Assembly;
+            Hashtable ignoreTypes = new Hashtable();
+            ignoreTypes.Add(typeof(SvnErrorCode), asm);
+            ignoreTypes.Add(typeof(SvnWindowsErrorCode), asm);
+            ignoreTypes.Add(typeof(SvnChangeAction), asm);
 
             foreach (Type tp in asm.GetTypes())
             {
-                if (!tp.IsEnum || !tp.IsPublic)
+                if (!tp.IsEnum || !tp.IsPublic || ignoreTypes.Contains(tp))
                     continue;
 
                 if (tp.GetCustomAttributes(typeof(FlagsAttribute), false).Length == 1 || Enum.GetUnderlyingType(tp) != typeof(int))
@@ -38,10 +43,6 @@ namespace SharpSvn.Tests
 
                 if (tp == typeof(SvnCommandType))
                     max = (int)SvnCommandType.Write;
-                else if (tp == typeof(SvnChangeAction))
-                    continue;
-                else if (tp == typeof(SvnErrorCode))
-                    continue;
 
                 for (int i = min; i <= max; i++)
                 {
