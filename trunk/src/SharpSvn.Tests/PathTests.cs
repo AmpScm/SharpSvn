@@ -214,6 +214,33 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
+
+            Assert.That(Path.GetDirectoryName(@"\\Server\Share\Path"), Is.EqualTo(@"\\Server\Share"));
+            Assert.That(Path.GetDirectoryName(@"\\Server\Share"), Is.Null);
+
+            Assert.That(Path.GetDirectoryName(@"C:\Dir\Sub\"), Is.EqualTo(@"C:\Dir\Sub"));
+            Assert.That(Path.GetDirectoryName(@"C:\Dir\Sub"), Is.EqualTo(@"C:\Dir"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\Server\Share\Path"), Is.EqualTo(@"\\server\Share"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\Server\Share"), Is.Null);
+
+            Assert.That(Path.GetDirectoryName(@"\\server\c$"), Is.Null);
+            Assert.That(Path.GetDirectoryName(@"\\server\c$\\"), Is.EqualTo(@"\\server\c$"));
+
+            Assert.That(SvnTools.GetNormalizedFullPath(@"\\server\c$"), Is.EqualTo(@"\\server\c$"));
+            Assert.That(SvnTools.GetNormalizedFullPath(@"\\seRver\c$\"), Is.EqualTo(@"\\server\c$"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\server\c$"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\server\c$\\"), Is.EqualTo(@"\\server\c$"));
+            //Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\seRver\c$\\"), Is.EqualTo(@"\\server\c$"));
+
+            string share = @"\\" + Environment.MachineName.ToLowerInvariant() + @"\C$";
+            Assert.That(SvnTools.GetTruePath(share + "\\A\\B", true), Is.EqualTo(share + "\\A\\B"));
+            Assert.That(SvnTools.GetTruePath(share + "\\A", true), Is.EqualTo(share + "\\A"));
+            Assert.That(SvnTools.GetTruePath(share, true), Is.EqualTo(share));
+            Assert.That(SvnTools.GetTruePath(share + "\\", true), Is.EqualTo(share));
+
+            Assert.That(SvnTools.GetTruePath("C:\\A", true), Is.EqualTo("C:\\A"));
         }
 
         [Test]//, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
