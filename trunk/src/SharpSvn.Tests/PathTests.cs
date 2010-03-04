@@ -231,16 +231,61 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedFullPath(@"\\seRver\c$\"), Is.EqualTo(@"\\server\c$"));
 
             Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\server\c$"), Is.Null);
-            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\server\c$\\"), Is.EqualTo(@"\\server\c$"));
-            //Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\seRver\c$\\"), Is.EqualTo(@"\\server\c$"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\server\c$\\"), Is.Null);
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"\\seRver\c$\\"), Is.Null);
 
             string share = @"\\" + Environment.MachineName.ToLowerInvariant() + @"\C$";
+            string shaUC = @"\\" + Environment.MachineName.ToUpperInvariant() + @"\C$";
+
+            Assert.That(SvnTools.IsNormalizedFullPath(share));
+            Assert.That(!SvnTools.IsNormalizedFullPath(shaUC));
+            Assert.That(!SvnTools.IsNormalizedFullPath(share + "\\"));
+            Assert.That(!SvnTools.IsNormalizedFullPath(shaUC + "\\"));
+
             Assert.That(SvnTools.GetTruePath(share + "\\A\\B", true), Is.EqualTo(share + "\\A\\B"));
             Assert.That(SvnTools.GetTruePath(share + "\\A", true), Is.EqualTo(share + "\\A"));
             Assert.That(SvnTools.GetTruePath(share, true), Is.EqualTo(share));
             Assert.That(SvnTools.GetTruePath(share + "\\", true), Is.EqualTo(share));
 
             Assert.That(SvnTools.GetTruePath("C:\\A", true), Is.EqualTo("C:\\A"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\dir"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\dir"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\dir\\"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\dir\\"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\sub\dir"), Is.EqualTo(@"C:\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\sub\dir"), Is.EqualTo(@"C:\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\sub\dir\\"), Is.EqualTo(@"C:\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\sub\dir\\"), Is.EqualTo(@"C:\sub"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\dir"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\dir"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\dir\\"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\dir\\"), Is.EqualTo(@"C:\"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\sub\dir"), Is.EqualTo(@"C:\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\sub\dir"), Is.EqualTo(@"C:\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"C:\sub\dir\\"), Is.EqualTo(@"C:\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(@"c:\sub\dir\\"), Is.EqualTo(@"C:\sub"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\dir"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\dir"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\dir\\"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\dir\\"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\sub\dir"), Is.EqualTo(share + @"\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\sub\dir"), Is.EqualTo(share + @"\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\sub\dir\\"), Is.EqualTo(share + @"\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\sub\dir\\"), Is.EqualTo(share + @"\sub"));
+
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\dir"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\dir"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\dir\\"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\dir\\"), Is.EqualTo(share));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\sub\dir"), Is.EqualTo(share + @"\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\sub\dir"), Is.EqualTo(share + @"\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\sub\dir\\"), Is.EqualTo(share + @"\sub"));
+            Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\sub\dir\\"), Is.EqualTo(share + @"\sub"));
+
+
         }
 
         [Test]//, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]

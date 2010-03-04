@@ -513,6 +513,8 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 
 		if (root && !path->StartsWith(root, StringComparison::Ordinal))
 			path = root + path->Substring(root->Length)->TrimEnd('\\');
+		else
+			path = path->TrimEnd('\\');
 	}
 	else
 		path = path->TrimEnd('\\');
@@ -623,7 +625,10 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 		{
 			wchar_t cc = path[i];
 			// Check hostname rules
-			if ((cc < 'a' || cc > 'z') && static_cast<String^>("._-")->IndexOf(path[i]))
+
+			if (! ((cc >= 'a' && cc <= 'z') ||
+				   (cc >= '0' && cc <= '9') ||
+				   0 <= static_cast<String^>("._-")->IndexOf(cc)))
 				break;
 		}
 
@@ -637,7 +642,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 		for (; i < path->Length; i++)
 		{
 			// Check share name rules
-			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+			if (!Char::IsLetterOrDigit(path, i) && (0 > static_cast<String^>("._-$ ")->IndexOf(path[i])))
 				break;
 		}
 
