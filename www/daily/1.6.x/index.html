@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.6009.1480</title>
+          SharpSvn-Daily Update - 1.6009.1489</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.6009.1480</h1>
+          SharpSvn-Daily Update - 1.6009.1489</h1>
 
 
 <p>
@@ -15,25 +15,36 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/3100/SSvn-1.6009.1480.zip">SharpSvn 1.6009.1480</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/3132/SSvn-1.6009.1489.zip">SharpSvn 1.6009.1489</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/3101/SSvn-1.6009.1480-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/3102/SSvnEx-1.6009.1480.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/3133/SSvn-1.6009.1489-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/3134/SSvnEx-1.6009.1489.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1480">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1489">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2010-03-04</td></tr>
+<tr><td> </td><td class="r"><a id="1489" href="http://sharpsvn.net/rev/?r=1489">
+            [r1489]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/PathTests.cs, SharpSvn/SvnTools.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make GetNormalizedFullPath() return UNC paths with '\'-s at the end trimmed.
+Also make IsNormalizedFullPath() a bit less picky about which UNC paths need
+normalization.</td></tr>
+<tr><td> </td><td class="r"><a id="1487" href="http://sharpsvn.net/rev/?r=1487">
+            [r1487]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/PathTests.cs, SharpSvn/SvnTools.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Catch an of by one case in FindTruePath() which triggered wrong results
+for "\\pc\c$" ("\\pc\c$\") and "\\pc\c$\A" ("\\pc\c$\"). Also return the
+normalized root for UNC roots.</td></tr>
 <tr class="d"><td colspan="4">2010-02-23</td></tr>
 <tr><td> </td><td class="r"><a id="1480" href="http://sharpsvn.net/rev/?r=1480">
             [r1480]
@@ -74,33 +85,6 @@ for automatic processing.</td></tr>
             [r1460]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnClientConfiguration.h, SharpSvn.Tests/SvnClientTests.cs, SharpSvn/SvnClientConfiguration.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow retrieving the current global ignore pattern of a SvnClient via
 SvnClient.Configuration.GlobalIgnorePattern.</td></tr>
-<tr class="d"><td colspan="4">2010-01-24</td></tr>
-<tr><td> </td><td class="r"><a id="1458" href="http://sharpsvn.net/rev/?r=1458">
-            [r1458]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/EventArgs/SvnListEventArgs.h, SharpSvn/EventArgs/SvnRemoteListEventArgs.h, SharpSvn.Tests/RemoteTests/RemoteTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix the definition of the .Uri property on SvnRemoteListEventArgs
-to return the correct uri for the root. Also make SvnRemoteListEventArgs
-and SvnListEventArgs implement a single interface to help users in
-switching to the remote sessions.</td></tr>
-<tr><td> </td><td class="r"><a id="1455" href="http://sharpsvn.net/rev/?r=1455">
-            [r1455]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/RemoteTests/RemoteLogTests.cs, SharpSvn/RemoteArgs/SvnRemoteListLocksArgs.h, SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/RemoteCommands/RemoteLocationSegments.cpp, SharpSvn/EventArgs/SvnRemoteListLockEventArgs.h, SharpSvn/SvnClientEventArgs.h, SharpSvn/RemoteArgs/SvnRemoteLocationSegmentsArgs.h, SharpSvn/SvnRemoteSession.h, SharpSvn/RemoteArgs/SvnRemoteOpenArgs.h, SharpSvn.Tests/RemoteTests/RemoteTests.cs, SharpSvn/EventArgs/SvnRemoteListEventArgs.h, SharpSvn/EventArgs/SvnRemoteLocationSegmentEventArgs.h, SharpSvn/RemoteCommands/RemoteListLocks.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">More RemoteSession support: Retrieving locks and location segments. The support
-should now be enough to create a fully functional repository browser with
-reusable sessions.</td></tr>
-<tr class="d"><td colspan="4">2010-01-23</td></tr>
-<tr><td> </td><td class="r"><a id="1454" href="http://sharpsvn.net/rev/?r=1454">
-            [r1454]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpPlink:</strong> SharpPlink.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add support for -q argument that will be passed by future Subversion releases</td></tr>
-<tr><td> </td><td class="r"><a id="1453" href="http://sharpsvn.net/rev/?r=1453">
-            [r1453]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/RemoteTests/RemoteLogTests.cs, SharpSvn/RemoteCommands/RemoteGetNodeKind.cpp, SharpSvn/RemoteCommands/RemoteStat.cpp, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/SvnRemoteSession.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add GetNodeKind() function to the SvnRemoteSession class.</td></tr>
-<tr><td> </td><td class="r"><a id="1452" href="http://sharpsvn.net/rev/?r=1452">
-            [r1452]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests:</strong> PathTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Resolve some obsolete warnings</td></tr>
-<tr class="d"><td colspan="4">2010-01-22</td></tr>
-<tr><td> </td><td class="r"><a id="1451" href="http://sharpsvn.net/rev/?r=1451">
-            [r1451]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnClientArgs.h, Args/FileVersions.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Removed abstract SvnClientContextArgs class from the SharpSvn hierarchy.
-Made last implementation implement SvnClientArgs.</td></tr>
 
 </table>
 <!--/Recent changes-->
