@@ -69,15 +69,15 @@ namespace SharpSvn.Tests.Commands
         {
             // With Subversion 1.5.4 this gives thousands of result values
             SvnLogArgs la = new SvnLogArgs();
-            la.Start = 34669;
+            la.Start = 874743;
             la.End = 0;
             la.Limit = 10;
-            la.OperationalRevision = 34669;
+            la.OperationalRevision = 874743;
             la.RetrieveMergedRevisions = true;
             la.RetrieveChangedPaths = false;
             la.ThrowOnCancel = false;
             int n = 0;
-            Client.Log(new Uri("http://svn.collab.net/repos/svn/branches/1.5.x-reintegrate-improvements/"), la,
+            Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/branches/1.5.x-reintegrate-improvements/"), la,
                 delegate(object sender, SvnLogEventArgs le)
                 {
                     n++;
@@ -252,7 +252,7 @@ namespace SharpSvn.Tests.Commands
         public void TestMultiLogs()
         {
             bool touched = false;
-            Assert.That(Client.Log(new Uri("http://svn.collab.net/repos/svn/trunk/"),
+            Assert.That(Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/"),
                 delegate(object sender, SvnLogEventArgs e)
                 {
                     touched = true;
@@ -271,12 +271,12 @@ namespace SharpSvn.Tests.Commands
             List<Uri> uris = new List<Uri>();
             long rev = 0;
 
-            Assert.That(Client.Log(new Uri("http://svn.collab.net/repos/svn/trunk/"),
+            Assert.That(Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/"),
                 delegate(object sender, SvnLogEventArgs e)
                 {
                     foreach (SvnChangeItem item in e.ChangedPaths)
                     {
-                        Uri uri = new Uri(new Uri("http://svn.collab.net/repos/"), item.Path.TrimStart('/'));
+                        Uri uri = new Uri(new Uri("http://svn.collab.net/repos/asf/"), item.Path.TrimStart('/'));
 
                         if (item.Action == SvnChangeAction.Delete)
                             uris.Remove(uri);
@@ -294,13 +294,13 @@ namespace SharpSvn.Tests.Commands
             Assert.That(uris.Count, Is.GreaterThan(10));
 
             uris.Clear();
-            uris.Add(new Uri("http://svn.collab.net/repos/svn/trunk/README"));
-            uris.Add(new Uri("http://svn.collab.net/repos/svn/trunk/INSTALL"));
+            uris.Add(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/README"));
+            uris.Add(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/INSTALL"));
             SvnLogArgs args = new SvnLogArgs();
-            args.Start = 23000;
-            args.End = 19000;
+            args.Start = 863074;
+            args.End = 859074;
             args.Limit = 100;
-            args.OperationalRevision = 23000;
+            args.OperationalRevision = 863074;
             touched = false;
             Client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
             {
@@ -458,8 +458,8 @@ namespace SharpSvn.Tests.Commands
                 // Throws an SvnRepositoryIOException in 1.5.x@29330
 
                 List<Uri> uris = new List<Uri>();
-                uris.Add(new Uri("http://svn.collab.net/repos/svn/README"));
-                uris.Add(new Uri("http://svn.collab.net/repos/svn/INSTALL"));
+                uris.Add(new Uri("http://svn.apache.org/repos/asf/subversion/README"));
+                uris.Add(new Uri("http://svn.apache.org/repos/asf/subversion/INSTALL"));
                 SvnLogArgs args = new SvnLogArgs();
                 client.Log(uris, args, delegate(object sender, SvnLogEventArgs e)
                 { });
