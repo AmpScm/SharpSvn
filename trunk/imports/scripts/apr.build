@@ -205,6 +205,7 @@ APR_BEGIN_DECLS
 	      <filterchain>
             <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
                            to='DWORD sharemode = FILE_SHARE_READ;' />
+            <replacestring from='sharemode |= FILE_SHARE_DELETE;' to= '{}' />
           </filterchain>
         </loadfile>
         <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
