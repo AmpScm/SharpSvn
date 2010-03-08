@@ -202,10 +202,10 @@ APR_BEGIN_DECLS
       <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
       <if test="${applyMerges}">
         <loadfile file="${aprDir}\file_io\win32\open.c" property="open.c">
-	      <filterchain>
+          <filterchain>
             <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
                            to='DWORD sharemode = FILE_SHARE_READ;' />
-            <replacestring from='sharemode |= FILE_SHARE_DELETE;' to= '{}' />
+            <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' />
           </filterchain>
         </loadfile>
         <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
