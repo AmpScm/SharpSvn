@@ -121,6 +121,8 @@ namespace SharpSvn {
 		static bool IsConnectionlessRepository(Uri^ uri);
 		static bool RequiresExternalAuthorization(Uri^ uri);
 
+	public:
+		String^ MakeRelativePath(Uri^ uri);
 
 	public:
 		/// <summary>
