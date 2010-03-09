@@ -104,7 +104,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 // by using the '*' as shown below:
 
 [assembly:AssemblyVersionAttribute("1.5005.0.1")];
-[assembly:NeutralResourcesLanguageAttribute("en")];
+[assembly:NeutralResourcesLanguageAttribute("en-US")];
 
 [assembly:ComVisible(false)];
 

@@ -183,3 +183,24 @@ bool SvnRemoteSession::RequiresExternalAuthorization(Uri^ uri)
 	return true;
 }
 
+String^ SvnRemoteSession::MakeRelativePath(Uri^ uri)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
+
+	Uri^ relativeUri = SessionUri->MakeRelativeUri(uri);
+
+	if (relativeUri->IsAbsoluteUri)
+		throw gcnew ArgumentException(
+			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
+			"uri");
+
+	String^ txt = relativeUri->ToString();
+
+	if (txt->StartsWith("/", StringComparison::Ordinal) || text->StartsWith("../", StringComparison::Ordinal))
+		throw gcnew ArgumentException(
+			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
+			"uri");
+
+	return Uri::UnescapeDataString(text);
+}
