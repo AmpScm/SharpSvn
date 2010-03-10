@@ -141,6 +141,14 @@ namespace SharpSvn {
 			}
 		}
 
+		property SharpSvn::SvnAprErrorCode AprErrorCode
+		{
+			SharpSvn::SvnAprErrorCode get()
+			{
+				return (SharpSvn::SvnAprErrorCode)SubversionErrorCode;
+			}
+		}
+
 		property SharpSvn::SvnErrorCategory SvnErrorCategory
 		{
 			SharpSvn::SvnErrorCategory get()
