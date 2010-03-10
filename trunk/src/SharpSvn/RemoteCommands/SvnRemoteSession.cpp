@@ -197,10 +197,10 @@ String^ SvnRemoteSession::MakeRelativePath(Uri^ uri)
 
 	String^ txt = relativeUri->ToString();
 
-	if (txt->StartsWith("/", StringComparison::Ordinal) || text->StartsWith("../", StringComparison::Ordinal))
+	if (txt->StartsWith("/", StringComparison::Ordinal) || txt->StartsWith("../", StringComparison::Ordinal))
 		throw gcnew ArgumentException(
 			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
 			"uri");
 
-	return Uri::UnescapeDataString(text);
+	return Uri::UnescapeDataString(txt);
 }
