@@ -34,7 +34,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -76,7 +76,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -124,7 +124,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -167,7 +167,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -216,7 +216,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -257,7 +257,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -306,7 +306,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(WindowsSdkDir)Include\winerror.h&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -348,7 +348,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; _2008"
 			/>
 			<Tool
 				Name="VCLinkerTool"
