@@ -33,7 +33,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -75,14 +75,14 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll"
+				DelayLoadDLLs="SharpSvn-DB44-20-$(PlatformName).dll;SharpSvn-SASL21-23-$(PlatformName).dll;crypt32.dll;mswsock.dll;secur32.dll;user32.dll;ole32.dll;advapi32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpSvn-DB44-20-$(PlatformName).dll;$(TargetDir)SharpSvn-SASL21-23-$(PlatformName).dll;$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -125,7 +125,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -165,7 +165,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -213,7 +213,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -306,7 +306,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -347,7 +347,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -794,6 +794,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnUriTarget.h"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnWindowsError.h"
 					>
 				</File>
 				<File
@@ -1545,6 +1549,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\InstallConflict.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
 					>
 				</File>
@@ -1566,6 +1574,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\WorkingCopyEntries.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\WorkingCopyInstallConflictArgs.h"
 					>
 				</File>
 				<File
@@ -1633,23 +1645,35 @@
 				Name="Args"
 				>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteCommonArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteListArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteListLocksArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteLogArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteOpenArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteSessionArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteSessionLatestRevisionArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteSessionLog.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteSessionOpenArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteSessionReparentArgs.h"
+					RelativePath=".\RemoteArgs\SvnRemoteStatArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1657,7 +1681,23 @@
 				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\EventArgs\SvnRemoteSessionLogEventArgs.h"
+					RelativePath=".\EventArgs\SvnRemoteListEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteListLockEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteLocationSegmentEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteLogEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnRemoteStatEventArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1665,7 +1705,31 @@
 				Name="Sources"
 				>
 				<File
+					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetRepositoryId.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetRepositoryRoot.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteCommands\RemoteLatestRevision.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteList.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteListLocks.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteLocationSegments.cpp"
 					>
 				</File>
 				<File
@@ -1678,6 +1742,14 @@
 				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteReparent.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteStat.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\ResolveRevision.cpp"
 					>
 				</File>
 				<File
