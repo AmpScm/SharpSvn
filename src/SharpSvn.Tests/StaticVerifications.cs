@@ -18,6 +18,7 @@ namespace SharpSvn.Tests
             ignoreTypes.Add(typeof(SvnErrorCode), asm);
             ignoreTypes.Add(typeof(SvnWindowsErrorCode), asm);
             ignoreTypes.Add(typeof(SvnChangeAction), asm);
+            ignoreTypes.Add(typeof(SvnAprErrorCode), asm);
 
             foreach (Type tp in asm.GetTypes())
             {

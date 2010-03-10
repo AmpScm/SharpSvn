@@ -44,33 +44,35 @@ using System::ComponentModel::DescriptionAttribute;
 #undef SVN_ERROR_START
 #undef SVN_ERROR_END
 
+#define CatValue(x) (((SVN_ERR_ ## x ## _CATEGORY_START)-APR_OS_START_USERERR) / SVN_ERR_CATEGORY_SIZE)
 /// <summary>Gets the error category of the SvnException</summary>
 public enum class SvnErrorCategory
 {
 	OperatingSystem=-1,
 	None=0,
-	Bad,
-	Xml,
-	IO,
-	Stream,
-	Node,
-	Entry,
-	WorkingCopy,
-	FileSystem,
-	Repository,
-	RepositoryAccess,
-	RepositoryAccessDav,
-	RepositoryAccessLocal,
-	SvnDiff,
-	ApacheModule,
-	Client,
-	Misc,
-	CommandLine,
-	RepositoryAccessSvn,
-	Authentication,
-	Authorization,
-	Diff,
-	RepositoryAccessSerf,
+	Bad = CatValue(BAD),
+	Xml =CatValue(XML),
+	IO = CatValue(IO),
+	Stream = CatValue(STREAM),
+	Node = CatValue(NODE),
+	Entry = CatValue(ENTRY),
+	WorkingCopy = CatValue(WC),
+	FileSystem = CatValue(FS),
+	Repository = CatValue(REPOS),
+	RepositoryAccess = CatValue(RA),
+	RepositoryAccessDav = CatValue(RA_DAV),
+	RepositoryAccessLocal = CatValue(RA_LOCAL),
+	SvnDiff = CatValue(SVNDIFF),
+	ApacheModule = CatValue(APMOD),
+	Client = CatValue(CLIENT),
+	Misc = CatValue(MISC),
+	CommandLine = CatValue(CL),
+	RepositoryAccessSvn = CatValue(RA_SVN),
+	Authentication = CatValue(AUTHN),
+	Authorization = CatValue(AUTHZ),
+	Diff = CatValue(DIFF),
+	RepositoryAccessSerf = CatValue(RA_SERF),
+	Malfunction = CatValue(MALFUNC),
 };
 }
 
