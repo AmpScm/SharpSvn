@@ -11,7 +11,7 @@
   <!-- -->
   <property name="subversionVersion" value="1.6.9" overwrite="false" />
   <property name="subversionMerges" value="876411,876514,876515,877344,877588,877964,878127,878129,878131,878142,878175,878176,879801,896915,898048,908980,908981,923737" overwrite="false" />
-  <property name="subversionMergeBranches" value="branches/1.6.x-issue3605 -c 923674,923679" overwrite="false" />
+  <property name="subversionMergeBranches" value="branches/1.6.x-issue3605@923889 -c 923674,923679" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" />
   <property name="neonMerges" value="" overwrite="false" />
@@ -30,7 +30,7 @@
 
   <property name="httpdVersion" value="2.2.14" />
   <property name="gettextVersion" value="0.17" />
-  <property name="sqliteVersion" value="3.6.22" />
+  <property name="sqliteVersion" value="3.6.23" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.4.3" />
