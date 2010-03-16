@@ -113,7 +113,7 @@
         <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
           <filterchain>
             <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY);'
-                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, ##expr);' />
+                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr);' />
           </filterchain>
         </loadfile>
         <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
@@ -190,7 +190,7 @@
         <arg value="--with-neon=../neon" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
-        <arg value="--with-swig=${path::get-full-path(swigDir)}" />
+        <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
         <arg value="--with-sqlite=${intDir}" if="${buildSqlite and (subversionVersion &gt; '1.6')}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
