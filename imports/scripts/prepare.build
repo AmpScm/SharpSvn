@@ -1,6 +1,10 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
+  
+  <property name="junitFilename" value="junit${junitVersion}.zip" />
+  <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
+  <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
@@ -39,6 +43,11 @@
         <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}" dest="${downloads}/${gettextToolsIconvFilename}" />
       </if>
     </if>
+    <if test="${javaHome != ''}">
+      <if test="${not file::exists(downloads + junitFilename)}">
+        <get src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}" dest="${downloads}/${junitFilename}" />
+      </if>
+    </if>
   </target>
 
   <target name="extract" depends="download">
@@ -72,6 +81,11 @@
         <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
         <unzip zipfile="${downloads + gettextToolsRuntimeFilename}" todir="${gettextToolsDir}" />
         <unzip zipfile="${downloads + gettextToolsIconvFilename}" todir="${gettextToolsDir}" />
+      </if>
+    </if>
+    <if test="${javaHome != ''}">
+      <if test="${not directory::exists(junitDir)}">
+        <unzip zipfile="${downloads + junitFilename}" todir="build" />
       </if>
     </if>
   </target>

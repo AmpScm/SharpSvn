@@ -35,6 +35,7 @@
   <!-- For testcase -->
   <property name="nunitVersion" value="2.4.3" />
   <property name="sharpZipVersion" value="0854" />
+  <property name="junitVersion" value="4.8.1" />
 
   <!-- Prefer http or https -->
   <property name="httpOrHttps" value="http" />
