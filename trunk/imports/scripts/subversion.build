@@ -192,6 +192,7 @@
         <arg value="--with-sasl=../lib" />
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
         <arg value="--with-sqlite=${intDir}" if="${buildSqlite and (subversionVersion &gt; '1.6')}" />
+        <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>

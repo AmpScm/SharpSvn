@@ -54,6 +54,8 @@
 		<arg value="--with-sasl=${impBase}/lib" />
 		<arg value="--with-sqlite=${intDir}" />
 		<arg value="--enable-nls" if="${intl != 'none'}"/>
+		<arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
+		<arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
 		<arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
 	</exec>
 	<echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
