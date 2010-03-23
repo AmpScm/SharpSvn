@@ -28,6 +28,14 @@
         </in>
         <do>
           <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+          <loadfile file="${vcproj}" property="projtext">
+            <filterchain>
+              <!-- Increase security a little little bit in some cases -->
+              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+              <replacestring from='Name="VCLibrarianTool"' to='Name="VCLibrarianTool" IgnoreAllDefaultLibraries="true"' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${vcproj}" />
         </do>
       </foreach>
     </OnceBlock>
@@ -38,36 +46,36 @@
         <arg value="${zlibDir}/projects/visualc6/zlib.vcproj" />
         <arg value="LIB ${Configuration}|${platform}" />
       </VCBuild>
-      <copy todir="${release}/lib">
-        <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
-          <include name="*.dll" />
-          <include name="*.lib" />
-          <include name="*.exp" />
-          <include name="*.pdb" />
-        </fileset>
-      </copy>
-      <copy todir="${release}/lib-x64">
-        <fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
-          <include name="*.dll" />
-          <include name="*.lib" />
-          <include name="*.exp" />
-          <include name="*.pdb" />
-        </fileset>
-      </copy>
-      <copy todir="${release}/include">
-        <fileset basedir="${zlibDir}">
-          <include name="zlib.h" />
-          <include name="zconf.h" />
-        </fileset>
-      </copy>
-      <if test="${platform=='win32'}">
-        <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib/zlib.lib" />
-        <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib/zlib.lib" />
-      </if>
-      <if test="${platform!='win32'}">
-        <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib-${platform}/zlib.lib" />
-        <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib-${platform}/zlib.lib" />
-      </if>
     </OnceBlock>
+    <copy todir="${release}/lib">
+      <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
+        <include name="*.dll" />
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64">
+      <fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
+        <include name="*.dll" />
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${zlibDir}">
+        <include name="zlib.h" />
+        <include name="zconf.h" />
+      </fileset>
+    </copy>
+    <if test="${platform=='win32'}">
+      <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib/zlib.lib" />
+      <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib/zlib.lib" />
+    </if>
+    <if test="${platform!='win32'}">
+      <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib-${platform}/zlib.lib" />
+      <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib-${platform}/zlib.lib" />
+    </if>
   </target>
-</project>
+</project> 
