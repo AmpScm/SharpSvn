@@ -16,7 +16,7 @@
   <property name="aprMerges" value="" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
-  <property name="opensslVersion" value="0.9.8m" />
+  <property name="opensslVersion" value="0.9.8n" />
   <property name="neonVersion" value="0.29.3" />
 
   <property name="aprVersion" value="1.3.12" />
