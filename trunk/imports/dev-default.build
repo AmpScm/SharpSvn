@@ -29,12 +29,9 @@
 			<arg line="co https://svn.apache.org/repos/asf/subversion/tags/${tag} ${wc}" if="${tag != ''}" />
 		</Svn>
 	</if>
-	<Svn>
-		<arg line="up ${wc}" />
-	</Svn>
 
 	<property name="pythonAvailable" value="0" />
-	<property name="impBase" value="../build/win32" />
+	<property name="impBase" value="../build/win32" overwrite="false" />
 	<exec program="cmd.exe" workingdir="${wc}" verbose="true">
 		<arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
 		<arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
