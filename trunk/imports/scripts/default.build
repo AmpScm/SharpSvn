@@ -35,11 +35,21 @@
 
   <property name="buildHttpd" value="false" overwrite="false" />
 
-  <property name="javaBase" value="${path::combine(path::get-path-root(environment::get-variable('ProgramFiles')),'program files/java')}" />
-  <foreach item="Folder" in="${javaBase}"
-           property="jh" if="${javaHome=='' and directory::exists(javaBase)}">
+  <foreach item="Folder" property="jhbp">
+    <in>
+     <items basedir="${path::get-full-path(path::combine(environment::get-variable('ProgramFiles'), '..'))}">
+       <include name="${environment::get-variable('ProgramFiles')}" />
+       <include name="Program Files (x86)" />
+       <include name="Program Files" />
+     </items>
+    </in>
     <do>
-      <property name="javaHome" value="${jh}" if="${file::exists(path::combine(jh,'bin/javah.exe'))}" />
+      <property name="jhb" value="${path::combine(jhbp, 'Java')}" />
+      <foreach item="Folder" property="jh" in="${jhb}" if="${directory::exists(jhbp)}">
+        <do>
+          <property name="javaHome" value="${jh}" if="${javaHome=='' and file::exists(path::combine(jh,'bin/javah.exe'))}" />
+        </do>
+      </foreach>
     </do>
   </foreach>
   <echo message="Found Java support in: ${javaHome}" if="${javaHome!=''}" />
