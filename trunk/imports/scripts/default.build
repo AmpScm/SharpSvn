@@ -45,7 +45,7 @@
     </in>
     <do>
       <property name="jhb" value="${path::combine(jhbp, 'Java')}" />
-      <foreach item="Folder" property="jh" in="${jhb}" if="${directory::exists(jhbp)}">
+      <foreach item="Folder" property="jh" in="${jhb}" if="${directory::exists(jhb)}">
         <do>
           <property name="javaHome" value="${jh}" if="${javaHome=='' and file::exists(path::combine(jh,'bin/javah.exe'))}" />
         </do>
