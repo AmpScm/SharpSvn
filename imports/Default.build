@@ -4,8 +4,10 @@
   <property name="serfBuildType" value="tag" />
   
   <property name="guessedPlatform" value="win32" />
-  <property name="guessedPlatform" value="x64" if="${string::contains(string::to-upper(environment::get-variable('LIB')),'LIB\AMD64')}" />
-  
+  <if test="${environment::variable-exists('LIB')}">
+    <property name="guessedPlatform" value="x64" if="${string::contains(string::to-upper(environment::get-variable('LIB')),'LIB\AMD64')}" />
+  </if>
+
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
