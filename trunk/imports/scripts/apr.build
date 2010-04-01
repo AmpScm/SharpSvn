@@ -104,9 +104,6 @@
             <filterchain>
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' />
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib ' />
-              <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->
-              <replacestring from='Optimization="2"' to='Optimization="1"' />
-              <replacestring from='FavorSizeOrSpeed="1"' to='FavorSizeOrSpeed="0"' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
               <replacestring from='Name="VCLibrarianTool"' to='Name="VCLibrarianTool" IgnoreAllDefaultLibraries="true"' />
