@@ -271,7 +271,7 @@ void SvnAuthenticationCacheItem::Delete()
 bool SvnAuthenticationCacheItem::IsDeleted::get()
 {
 	if (!String::IsNullOrEmpty(_filename))
-		return System::IO::File::Exists(_filename);
+		return !System::IO::File::Exists(_filename);
 
 	return false;
 }
