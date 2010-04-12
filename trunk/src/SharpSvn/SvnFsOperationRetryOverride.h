@@ -24,7 +24,7 @@ namespace SharpSvn {
 			bool OnRetryLoopInvocation(int nr, int error, int osError, const char *expr);
 
 		protected:
-			virtual bool OnRetryLoopInvocation(int nr, SharpSvn::SvnErrorCode error, int osError, String ^expr);
+			virtual bool OnRetryLoopInvocation(int nr, SharpSvn::SvnAprErrorCode aprError, SharpSvn::SvnWindowsErrorCode windowsError, String ^expr);
 
 		internal:
 			static int RetryLoopHandler(int n, int err, int os_err, const char *expr);

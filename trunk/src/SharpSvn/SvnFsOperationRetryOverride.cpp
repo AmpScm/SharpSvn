@@ -49,17 +49,17 @@ bool SvnFsOperationRetryOverride::OnRetryLoopInvocation(int nr, int error, int o
 		if (_intOnly)
 			return false;
 		else
-			return OnRetryLoopInvocation(nr, (SvnErrorCode)error, osError, gcnew String(expr));
+			return OnRetryLoopInvocation(nr, (SvnAprErrorCode)error, (SvnWindowsErrorCode)osError, gcnew String(expr));
 	}
 
 	return true;
 }
 
-bool SvnFsOperationRetryOverride::OnRetryLoopInvocation(int nr, SvnErrorCode error, int osError, String ^expr)
+bool SvnFsOperationRetryOverride::OnRetryLoopInvocation(int nr, SvnAprErrorCode aprError, SvnWindowsErrorCode windowsError, String ^expr)
 {
 	UNUSED_ALWAYS(nr);
-	UNUSED_ALWAYS(error);
-	UNUSED_ALWAYS(osError);
+	UNUSED_ALWAYS(aprError);
+	UNUSED_ALWAYS(windowsError);
 	UNUSED_ALWAYS(expr);
 	return false;
 }
