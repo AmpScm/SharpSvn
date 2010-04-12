@@ -656,6 +656,66 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+		class MyFsOverride : SharpSvn.Implementation.SvnFsOperationRetryOverride
+		{
+			public MyFsOverride()
+				: base(2)
+			{
+			}
+			protected override bool OnRetryLoopInvocation(int nr, SvnAprErrorCode error, SvnWindowsErrorCode osError, string expr)
+			{
+				Assert.That(osError, Is.Not.EqualTo(0));
+				Assert.That(expr, Is.Not.Null);
+				Assert.That(expr.Contains("apr_"), "'{0}' contains apr_");
+				Assert.That(nr, Is.GreaterThan(1));
+
+				return base.OnRetryLoopInvocation(nr, error, osError, expr);
+			}
+		}
+
+		[Test]
+		public void CheckOverrideWorking()
+		{
+			string tmp2Dir = GetTempDir();
+
+			Client.CheckOut(GetReposUri(TestReposType.Empty), tmp2Dir);
+
+			StringBuilder lotOfData = new StringBuilder();
+			lotOfData.Append('Y', 1024 * 1024);
+
+			string file2 = Path.Combine(tmp2Dir, "File-2");
+
+			File.WriteAllText(file2, lotOfData.ToString());
+
+			Client.Add(file2);
+
+			Client.Configuration.LogMessageRequired = false;
+			Client.Commit(file2);
+
+			lotOfData = new StringBuilder();
+			lotOfData.Append('Y', 512 * 1024);
+			lotOfData.Append('Z', 512 * 1024);
+
+			File.WriteAllText(file2, lotOfData.ToString());
+
+			using (FileStream fs2 = new FileStream(file2, FileMode.Open, FileAccess.ReadWrite, FileShare.None))
+			{
+				SvnStatusArgs sa = new SvnStatusArgs();
+				sa.ThrowOnError = false;
+
+				TimeSpan t2;
+				DateTime start;
+
+				using (new MyFsOverride())
+				{
+					start = DateTime.Now;
+					Client.Status(file2, sa, null);
+					t2 = DateTime.Now - start;
+					//Assert.That(sa.LastException, Is.Not.Null); // Fails in 1.5-1.6.4
+				}
+			}
+		}
+
 		/*[Test]
 		public void RepositoryLockStatus()
 		{
