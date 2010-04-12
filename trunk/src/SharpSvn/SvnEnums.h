@@ -179,7 +179,18 @@ namespace SharpSvn {
 
 		// 1.7+
 		/// <summary>[[[ Unversioned obstruction error (Not guaranteed compatible with future Subversion versions!)]]]</summary>
-		UpdateObstruction			= svn_wc_notify_update_obstruction
+		UpdateObstruction			= svn_wc_notify_update_obstruction,
+		/// <summary>[[[ External removed (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		ExternalRemoved				= svn_wc_notify_update_external_removed,
+
+		/// <summary>[[[ A node below a deleted and tree conflicted directory was added (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		UpdateAddDeleted			= svn_wc_notify_update_add_deleted,
+
+		/// <summary>[[[ A node below a deleted and tree conflicted directory was updated (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		UpdateDeleted				= svn_wc_notify_update_update_deleted,
+
+		/// <summary>[[[The mergeinfo on path was updated (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		RecordMergeInfo				= svn_wc_notify_merge_record_info
 	};
 
 	public enum class SvnNotifyState
