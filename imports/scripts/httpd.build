@@ -10,8 +10,8 @@
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
       <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
 
-      <exec program="${MSBuildExe}" workingdir="${httpdDir}">
-        <arg value="apache.sln" />
+      <MSBuild>
+        <arg value="${httpdDir}/apache.sln" />
         <arg value="/P:configuration=Release" />
         <arg value="/P:platform=Win32" />
         <arg value="/t:httpd" />
@@ -21,7 +21,7 @@
         <arg value="/t:mod_authn_file" />
         <arg value="/t:mod_mime" />
         <arg value="/t:mod_log_config" />
-      </exec>
+      </MSBuild>
     </OnceBlock>
 
     <!-- Enable compiling subversion in debug mode -->    

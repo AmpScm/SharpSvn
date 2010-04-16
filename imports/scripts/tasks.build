@@ -143,6 +143,23 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 	}
 }
 
+[TaskName("MSBuild")]
+public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
+{
+  bool _showLogo;
+	public override string ProgramArguments
+	{
+	   get { return _showLogo ? "" : "/nologo"; }
+	}	
+	
+	[TaskAttribute("noLogo")]
+	public bool NonInteractive
+	{
+	    get { return !_showLogo; }
+      set { _showLogo = !value; }
+	}
+}
+
 [TaskName("OnceBlock")]
 public class OnceBlock : NAnt.Core.TaskContainer
 {

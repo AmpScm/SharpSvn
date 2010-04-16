@@ -1,0 +1,22 @@
+Index: subversion/libsvn_client/merge.c
+===================================================================
+--- subversion/libsvn_client/merge.c	(revision 935094)
++++ subversion/libsvn_client/merge.c	(working copy)
+@@ -6708,7 +6710,7 @@
+       if (child->indirect_mergeinfo)
+         SVN_ERR(svn_client__record_wc_mergeinfo(child->path,
+                                                 child->pre_merge_mergeinfo,
+-                                                adm_access,
++                                                adm_access, merge_b->ctx,
+                                                 iterpool));
+       if (merge_b->implicit_src_gap)
+         {
+@@ -6898,7 +6900,7 @@
+                                             iterpool));
+               SVN_ERR(svn_client__record_wc_mergeinfo(added_path,
+                                                       merge_mergeinfo,
+-                                                      adm_access,
++                                                      adm_access, merge_b->ctx,
+                                                       iterpool));
+             }
+         }

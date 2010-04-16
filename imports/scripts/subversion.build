@@ -74,14 +74,23 @@
 
   <target name="svn-merge" depends="checkout" if="${applyMerges}">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
-      <Svn verbose="true" if="${string::get-length(subversionMerges) &gt; 0}">
-        <arg value="merge" />
-        <arg line="--accept theirs-conflict" />
-        <arg value="-c" />
-        <arg value="${subversionMerges}" />
-        <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
-        <arg value="${svnBase}" />
-      </Svn>
+      <foreach item="String" property="range" in="${subversionMerges}" delim=";"
+        if="${string::get-length(subversionMerges) &gt; 0}">
+        <property name="accept" value="" />
+        <if test="${string::to-upper(range) != string::to-lower(range)}">
+          <property name="accept" value="theirs-conflict" if="${string::starts-with(range, 'T')}" />
+          <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />          
+          <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
+        </if>
+        <Svn verbose="true">
+          <arg value="merge" />
+          <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
+          <arg value="-c" />
+          <arg value="${range}" />
+          <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
+          <arg value="${svnBase}" />
+        </Svn>
+      </foreach>
       <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
          if="${string::get-length(subversionMergeBranches) &gt; 0}">
         <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
@@ -275,10 +284,9 @@
   <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,build-swig,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
-      <exec program="msbuild.exe" workingdir="${svnBase}">
-        <arg value="/nologo" />
+      <MSBuild>
+        <arg value="${svnBase}/subversion_vcnet.sln" />
         <!--arg value="/verbosity:quiet" /-->
-        <arg value="subversion_vcnet.sln" />
         <arg value="/p:Configuration=Release" />
         <arg value="/p:Platform=${platform}" />
         <arg value="/t:Programs\svn" />
@@ -294,7 +302,7 @@
         <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
         <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
         <arg value="/t:__JAVAHL__" if="${javaHome != ''}" />
-      </exec>
+      </MSBuild>
     </OnceBlock>
   </target>
   <target name="copy-result" depends="build-svn,misc-copy,copy-licenses,gettext-translate">
