@@ -17,8 +17,7 @@
         <arg value="no-hw"/>
         <arg value="zlib" />
         <arg value="enable-tlsext" />
-        <arg value="--with-zlib-lib=${release}/lib/zlib.lib" if="${platform=='win32'}" />
-        <arg value="--with-zlib-lib=${release}/lib-${platform}/zlib.lib" if="${platform!='win32'}" />
+        <arg value="--with-zlib-lib=${releaseLib}/zlib.lib" />
         <arg value="--with-zlib-include=${string::replace(release,'\','/')}/include" />
       </exec>
     </OnceBlock>
@@ -68,16 +67,6 @@
         <arg line="-f ms\ntdll.mak" if="${static != 'true'}" />
       </exec>
     </OnceBlock>
-    <!-- OpenSL 0.9.8h and 0.9.8i on VS2008 patch -->
-    <OnceBlock file="build/openssl-patch-OCSP_RESPONSE.tick">
-      <loadfile file="${opensslDir}/inc32/openssl/ossl_typ.h" property="ossl_typ">
-        <filterchain>
-          <replacestring from="#undef PKCS7_ISSUER_AND_SERIAL" to="#undef PKCS7_ISSUER_AND_SERIAL&#13;&#10;#undef OCSP_RESPONSE" />
-        </filterchain>
-      </loadfile>
-      <echo message="${ossl_typ}" file="${opensslDir}/inc32/openssl/ossl_typ.h" />
-    </OnceBlock>
-    <!-- /Patch -->
     <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
       <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
         <include name="*.lib" />

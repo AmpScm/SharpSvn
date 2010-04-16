@@ -18,8 +18,6 @@
           </VCBuild>
         </do>
       </foreach>
-    </OnceBlock>
-    <OnceBlock file="${zlibDir}_${platform}.prepared">
       <foreach item="File" property="vcproj">
         <in>
           <items basedir="${zlibDir}">
