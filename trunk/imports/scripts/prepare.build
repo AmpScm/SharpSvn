@@ -26,7 +26,7 @@
     <if test="${not file::exists(downloads + saslFilename)}">
       <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
     </if>
-    <if test="${not file::exists(downloads + swigFilename)}">
+    <if test="${property::exists('withSwig') and not file::exists(downloads + swigFilename)}">
       <get src="http://prdownloads.sourceforge.net/swig/${swigFilename}" dest="${downloads}/${swigFilename}" />
     </if>
     <if test="${intl == 'gettext'}">
@@ -70,7 +70,7 @@
     <if test="${not directory::exists(saslDir)}">
       <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
     </if>
-    <if test="${not directory::exists(swigDir)}">
+    <if test="${property::exists('withSwig') and not directory::exists(swigDir)}">
       <unzip zipfile="${downloads + swigFilename}" todir="build" />
     </if>
     <if test="${intl == 'gettext'}">
