@@ -148,8 +148,7 @@
   <target name="clean-svn" depends="update-svn">
     <delete>
       <fileset basedir="${release}">
-        <include name="lib/**" if="${platform == 'win32'}" />
-        <include name="lib-${platform}/**" if="${platform != 'win32'}" />
+        <include name="${releaseLib}/**" />
         <include name="bin/*-${platform}.exe" />
         <include name="bin/*-${platform}.dll" />
       </fileset>
