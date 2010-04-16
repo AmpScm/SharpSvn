@@ -3,7 +3,7 @@
   <property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
   <property name="opensslDir" value="build/${platform}/openssl-${opensslVersion}" />
 
-  <target name="prepare-openssl" depends="extract">
+  <target name="prepare-openssl" depends="extract, build-zlib">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
       <exec program="perl.exe" workingdir="${opensslDir}">
         <arg value="Configure" />
@@ -12,9 +12,14 @@
         <arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
         <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
         <arg value="no-dso"/>
+        <arg value="no-shared" />
         <arg value="no-krb5"/>
         <arg value="no-hw"/>
+        <arg value="zlib" />
         <arg value="enable-tlsext" />
+        <arg value="--with-zlib-lib=${release}/lib/zlib.lib" if="${platform=='win32'}" />
+        <arg value="--with-zlib-lib=${release}/lib-${platform}/zlib.lib" if="${platform!='win32'}" />
+        <arg value="--with-zlib-include=${string::replace(release,'\','/')}/include" />
       </exec>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
@@ -28,19 +33,6 @@
         <loadfile file="${opensslDir}/ms/libeay32.def" property="def">
           <filterchain>
             <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
-            <!-- Stupid bugs in openssl 0.9.8h and 0.9.8i -->
-            <replacestring from="ENGINE_load_4758cca" to=";" />
-            <replacestring from="ENGINE_load_aep" to=";" />
-            <replacestring from="ENGINE_load_atalla" to=";" />
-            <replacestring from="ENGINE_load_cswift" to=";" />
-            <replacestring from="ENGINE_load_chil" to=";" />
-            <replacestring from="ENGINE_load_nuron" to=";" />
-            <replacestring from="ENGINE_load_sureware" to=";" />
-            <replacestring from="ENGINE_load_ubsec" to=";" />
-            <replacestring from="ENGINE_load_gmp" to=";" />
-            <replacestring from="ENGINE_load_cryptodev" to=";" />
-            <replacestring from="ENGINE_load_padlock" to=";" />
-            <!-- / -->
           </filterchain>
         </loadfile>
         <echo message="${def}" file="${opensslDir}/ms/libeay32.def" />
@@ -56,14 +48,14 @@
             <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
             <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
             <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
-            <replacestring from="bufferoverflowu.lib" to="" if="${VSversion != '2005'}" />
+            <replacestring from=" /MT " to=" /MD " />
           </filterchain>
         </loadfile>
-        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />        
+        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />
       </if>
       <loadfile file="${opensslDir}/ms/nt.mak" property="mk">
         <filterchain>
-          <replacestring from="bufferoverflowu.lib" to="" if="${VSversion != '2005'}" />
+          <replacestring from=" /MT " to=" /MD " />
         </filterchain>
       </loadfile>
       <echo message="${mk}" file="${opensslDir}/ms/nt.mak" />
