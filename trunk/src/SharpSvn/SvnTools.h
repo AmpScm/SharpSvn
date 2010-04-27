@@ -100,7 +100,7 @@ namespace SharpSvn {
 		static String^ GetNormalizedDirectoryName(String^ path);
 
 	internal:
-		/// <summary>Long path capable version of <see cref="System::IO::Path::Combine" /></summary>
+		/// <summary>Long path capable version of <see cref="System::IO::Path::Combine(String^, String^)" /></summary>
 		static String^ PathCombine(String^ path1, String^ path2);
 	};
 }

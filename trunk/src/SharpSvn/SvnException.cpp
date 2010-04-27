@@ -189,6 +189,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_BAD_VERSION_FILE_FORMAT:
 		case SVN_ERR_BAD_RELATIVE_PATH:
 		case SVN_ERR_BAD_UUID:
+		case SVN_ERR_BAD_CONFIG_VALUE:
 			return gcnew SvnFormatException(error);
 		case SVN_ERR_XML_ATTRIB_NOT_FOUND:
 		case SVN_ERR_XML_MISSING_ANCESTRY:
@@ -221,7 +222,6 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_WC_NOT_FILE:
 			return gcnew SvnInvalidNodeKindException(error);
 		case SVN_ERR_WC_BAD_ADM_LOG:
-		case SVN_ERR_WC_PATH_NOT_FOUND:
 		case SVN_ERR_WC_NOT_UP_TO_DATE:
 		case SVN_ERR_WC_LEFT_LOCAL_MOD:
 		case SVN_ERR_WC_SCHEDULE_CONFLICT:
@@ -241,7 +241,11 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_WC_CONFLICT_RESOLVER_FAILURE:
 		case SVN_ERR_WC_COPYFROM_PATH_NOT_FOUND:
 		case SVN_ERR_WC_CHANGELIST_MOVE:
+		case SVN_ERR_WC_CANNOT_DELETE_FILE_EXTERNAL:
+		case SVN_ERR_WC_CANNOT_MOVE_FILE_EXTERNAL:
 			return gcnew SvnWorkingCopyException(error);
+		case SVN_ERR_WC_PATH_NOT_FOUND:
+			return gcnew SvnWorkingCopyPathNotFoundException(error);
 		case SVN_ERR_WC_LOCKED:
 		case SVN_ERR_WC_NOT_LOCKED:
 			return gcnew SvnWorkingCopyLockException(error);
@@ -281,6 +285,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_FS_TXN_NAME_TOO_LONG:
 		case SVN_ERR_FS_NO_SUCH_NODE_ORIGIN:
 		case SVN_ERR_FS_UNSUPPORTED_UPGRADE:
+		case SVN_ERR_FS_NO_SUCH_CHECKSUM_REP:
 			return gcnew SvnFileSystemException(error);
 		case SVN_ERR_FS_NOT_DIRECTORY:
 		case SVN_ERR_FS_NOT_FILE:
@@ -318,6 +323,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_UNSUPPORTED_ABI_VERSION:
 		case SVN_ERR_RA_NOT_LOCKED:
 		case SVN_ERR_RA_PARTIAL_REPLAY_NOT_SUPPORTED:
+		case SVN_ERR_RA_REPOS_ROOT_URL_MISMATCH:
 			return gcnew SvnRepositoryIOException(error);
 
 		case SVN_ERR_RA_NOT_AUTHORIZED:
@@ -336,6 +342,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_RA_DAV_RESPONSE_HEADER_BADNESS:
 		case SVN_ERR_RA_DAV_RELOCATED:
 			return gcnew SvnRepositoryIOException(error);
+		case SVN_ERR_RA_DAV_FORBIDDEN:
+			return gcnew SvnRepositoryIOForbiddenException(error);
 		case SVN_ERR_RA_LOCAL_REPOS_NOT_FOUND:
 		case SVN_ERR_RA_LOCAL_REPOS_OPEN_FAILED:
 			return gcnew SvnRepositoryIOException(error);
@@ -383,6 +391,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_CLIENT_REVISION_AUTHOR_CONTAINS_NEWLINE:
 		case SVN_ERR_CLIENT_PROPERTY_NAME:
 		case SVN_ERR_CLIENT_MULTIPLE_SOURCES_DISALLOWED:
+		case SVN_ERR_CLIENT_FILE_EXTERNAL_OVERWRITE_VERSIONED:
 			return gcnew SvnClientApiException(error);
 
 		case SVN_ERR_CLIENT_IS_DIRECTORY:
@@ -453,6 +462,8 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		default:
 			if (APR_STATUS_IS_ENOSPC(error->apr_err))
 				return gcnew SvnDiskFullException(error);
+			if (_errorCode >= APR_OS_START_SYSERR || _errorCode < APR_OS_START_ERROR)
+				return gcnew SvnSystemException(error);
 			else
 				return gcnew SvnException(error);
 		}
