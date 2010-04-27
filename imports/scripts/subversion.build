@@ -270,7 +270,7 @@
       <property name="vDesc" value=":${svnBuildType}/${subversionVersion}@${svnWcVersion}" if="${svnBuildType!='tag'}" />
       <property name="vDesc" value="/${subversionVersion}" if="${svnBuildType=='tag'}" />
       <property name="vPlatform" value="${platform}" />
-      <property name="vPlatform" value="win64-x64" if="${platform='x64'}" />
+      <property name="vPlatform" value="win64-x64" if="${platform=='x64'}" />
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
         #pragma once
         #undef SVN_VER_TAG
