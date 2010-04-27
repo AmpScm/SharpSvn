@@ -329,15 +329,17 @@ namespace SharpSvn {
 	DECLARE_SVN_EXCEPTION_TYPE(SvnStreamException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnNodeException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryException, SvnException);
-	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryNotFoundException, SvnEntryException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyLockException, SvnWorkingCopyException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnWorkingCopyPathNotFoundException, SvnWorkingCopyException);
+	DECLARE_SVN_EXCEPTION_TYPE(SvnEntryNotFoundException, SvnWorkingCopyPathNotFoundException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemNodeTypeException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemLockException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnFileSystemOutOfDateException, SvnFileSystemException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryIOException, SvnException); // Does not extent Repository Exception (= RA library exception)
+	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryIOForbiddenException, SvnRepositoryIOException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnRepositoryHookException, SvnRepositoryException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthenticationException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnAuthorizationException, SvnException);
@@ -367,4 +369,6 @@ namespace SharpSvn {
 
 	/// <summary>SharpSvn configuration loader exception</summary>
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientConfigurationException, SvnClientException);
+
+	DECLARE_SVN_EXCEPTION_TYPE(SvnSystemException, SvnException);
 }
