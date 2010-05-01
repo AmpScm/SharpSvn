@@ -37,26 +37,26 @@ SvnRemoteSession::~SvnRemoteSession()
 static svn_error_t *
 svnremoteclient_cancel_func(void *cancel_baton)
 {
-    SvnRemoteSession^ client = AprBaton<SvnRemoteSession^>::Get((IntPtr)cancel_baton);
+	SvnRemoteSession^ client = AprBaton<SvnRemoteSession^>::Get((IntPtr)cancel_baton);
 
-    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
-    try
-    {
-        client->HandleClientCancel(ea);
+	SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
+	try
+	{
+		client->HandleClientCancel(ea);
 
-        if (ea->Cancel)
-            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
+		if (ea->Cancel)
+			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
 
-        return nullptr;
-    }
-    catch(Exception^ e)
-    {
-        return SvnException::CreateExceptionSvnError("Cancel function", e);
-    }
-    finally
-    {
-        ea->Detach(false);
-    }
+		return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("Cancel function", e);
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
 }
 
 void
@@ -79,10 +79,10 @@ svnremoteclient_progress_notify_func(apr_off_t progress, apr_off_t total, void *
 
 svn_error_t * SvnRemoteSession::Init()
 {
-    CtxHandle->cancel_func = svnremoteclient_cancel_func;
-    CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
-    CtxHandle->progress_func = svnremoteclient_progress_notify_func;
-    CtxHandle->progress_baton = (void*)_clientBaton->Handle;
+	CtxHandle->cancel_func = svnremoteclient_cancel_func;
+	CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
+	CtxHandle->progress_func = svnremoteclient_progress_notify_func;
+	CtxHandle->progress_baton = (void*)_clientBaton->Handle;
 
 	return nullptr;
 }
@@ -197,7 +197,15 @@ String^ SvnRemoteSession::MakeRelativePath(Uri^ uri)
 
 	String^ txt = relativeUri->ToString();
 
-	if (txt->StartsWith("/", StringComparison::Ordinal) || txt->StartsWith("../", StringComparison::Ordinal))
+	if (txt->StartsWith("../", StringComparison::Ordinal))
+	{
+		if (txt->Substring(3)->Equals(SvnTools::GetFileName(uri), StringComparison::Ordinal))
+			return "";
+		else
+			txt = "/"; // Fall in next error case
+	}
+
+	if (txt->StartsWith("/", StringComparison::Ordinal))
 		throw gcnew ArgumentException(
 			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
 			"uri");
