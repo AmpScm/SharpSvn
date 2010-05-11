@@ -167,7 +167,7 @@ namespace CollabUpload
 
         const string UserAgentName = "Mozilla/8.0 (compatible; Collab Uploader C#)";
 
-        static Args Run(Args args)
+        static bool Run(Args args)
         {
             CookieContainer cookBox = new CookieContainer();
 
@@ -218,8 +218,8 @@ namespace CollabUpload
 
                     if (text.Contains("\"error"))
                     {
-                        Console.WriteLine("Upload failed");
-                        return null;
+                        Console.Error.WriteLine("Upload failed");
+                        return false;
                     }
 
                     // This page is currently not valid Xml; use regular expressions instead
@@ -232,6 +232,14 @@ namespace CollabUpload
                     {
                         if (!string.IsNullOrEmpty(args.Result))
                             File.AppendAllText(args.Result, new Uri(new Uri(requestUri), m.Groups["url"].Value).AbsoluteUri + Environment.NewLine);
+                    }
+                    else
+                    {
+                        Console.Error.WriteLine("Failed to retrieve url from upload output");
+                        Console.Error.WriteLine();
+                        Console.Error.WriteLine("=====================");
+                        Console.Error.WriteLine(text);
+                        Console.Error.WriteLine("=====================");
                     }
                 }
             }
@@ -262,7 +270,7 @@ namespace CollabUpload
                     DeleteFile(args, cookBox, doc.FileId);
                 }
             }
-            return null;
+            return true;
         }
 
         private static void RemoveOnStatus(Args args, List<Document> docs)
