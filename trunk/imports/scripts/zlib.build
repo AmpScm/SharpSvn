@@ -12,29 +12,15 @@
         <arg line='AS=ml64 LOC="-DASMV -DASMINF" OBJA="inffasx64.obj gvmat64.obj inffas8664.c"' if="${platform == 'x64'}" />
       </NMake>
     </OnceBlock>
-    <copy todir="${release}/lib">
-      <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
-        <include name="*.dll" />
-        <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib-x64">
-      <fileset basedir="${zlibDir}/projects/visualc6/x64/Win32_Lib_Release">
-        <include name="*.dll" />
-        <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
     <copy todir="${release}/include">
       <fileset basedir="${zlibDir}">
         <include name="zlib.h" />
         <include name="zconf.h" />
       </fileset>
     </copy>
-    <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib/zlib.lib" />
-    <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib/zlib.lib" />
+    <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstat.lib" />
+    <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstatD.lib" />
+    <copy todir="${releaseLib}" file="${zlibDir}/zlibstat.lib" />
+    <copy todir="${releaseLib}" file="${zlibDir}/zlibstatD.lib" />
   </target>
 </project> 
