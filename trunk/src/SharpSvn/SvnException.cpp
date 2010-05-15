@@ -462,7 +462,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		default:
 			if (APR_STATUS_IS_ENOSPC(error->apr_err))
 				return gcnew SvnDiskFullException(error);
-			if (_errorCode >= APR_OS_START_SYSERR || _errorCode < APR_OS_START_ERROR)
+			if (error->apr_err >= APR_OS_START_SYSERR || error->apr_err < APR_OS_START_ERROR)
 				return gcnew SvnSystemException(error);
 			else
 				return gcnew SvnException(error);
