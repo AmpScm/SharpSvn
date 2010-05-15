@@ -31,7 +31,7 @@
         <define name="SQLITE_OMIT_FLOATING_POINT" /><!-- Floating point ops in a version management system? -->
       </defines>
       <sources basedir="${sqliteDir}">
-        <include name="*.c" />
+        <include name="sqlite3.c" />
       </sources>
     </cl>
     <lib output="${sqliteLibDir}/sqlite3.lib">
