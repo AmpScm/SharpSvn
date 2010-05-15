@@ -14,9 +14,40 @@
       <import namespace="ICSharpCode.SharpZipLib.BZip2"/>
       <import namespace="System.Xml"/>
       <import namespace="System.Xml.XPath"/>
+      <import namespace="System.Diagnostics"/>
     </imports>
     <code>
       <![CDATA[			
+
+public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
+{
+  DirectoryInfo _workingDirectory;
+
+  protected override void PrepareProcess(Process process)
+  {
+    base.PrepareProcess(process);
+    
+    process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
+  }
+
+  [TaskAttribute("workingdir")]
+  public DirectoryInfo WorkingDirectory
+  {
+      get
+      {
+          if (this._workingDirectory == null)
+          {
+              return base.BaseDirectory;
+          }
+          return this._workingDirectory;
+      }
+      set
+      {
+          this._workingDirectory = value;
+      }
+  }
+}
+      
 [TaskName("UnTar")]
 public class UnTar : Task 
 {
@@ -159,6 +190,24 @@ public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
       set { _showLogo = !value; }
 	}
 }
+
+[TaskName("NMake")]
+public class NMake : ExternalAppTask
+{
+  FileInfo _makeFile;
+  [TaskAttribute("makeFile", Required=true)]
+  public FileInfo MakeFile
+  {
+    get { return _makeFile; }
+    set { _makeFile = value; }
+  }
+   
+  public override string ProgramArguments
+	{
+	   get { return string.Format("/f \"{0}\"", MakeFile.FullName); }
+	}	
+}
+
 
 [TaskName("OnceBlock")]
 public class OnceBlock : NAnt.Core.TaskContainer

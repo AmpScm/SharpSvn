@@ -62,11 +62,13 @@
     </OnceBlock>
   </target>
   <target name="build-openssl" depends="prepare-openssl">
-    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
-      <exec program="nmake.exe" workingdir="${opensslDir}">
-        <arg line="-f ms\nt.mak" if="${static == 'true'}" />
-        <arg line="-f ms\ntdll.mak" if="${static != 'true'}" />
-      </exec>
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">    
+      <if test="${static == 'true'}">
+        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" />
+      </if>
+      <if test="${static != 'true'}">
+        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" />
+      </if>
     </OnceBlock>
     <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
       <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
