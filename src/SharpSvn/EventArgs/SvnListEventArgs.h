@@ -234,7 +234,7 @@ namespace SharpSvn {
 		{
 			Uri^ get()
 			{
-				if (!_baseUri && (RepositoryRoot && (_absPath || _pAbsPath)))
+				if (!_baseUri && (RepositoryRoot && BasePath))
 				{
 					if (String::IsNullOrEmpty(BasePath) ||
 						(BasePath->Length == 1 && BasePath[0] == '/'))
@@ -252,7 +252,7 @@ namespace SharpSvn {
 								isFile = true;
 						}
 
-                        _baseUri = gcnew System::Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
+						_baseUri = gcnew System::Uri(RepositoryRoot, SvnBase::PathToUri(BasePath->Substring(1) + (isFile ? "" : "/")));
 					}
 				}
 
