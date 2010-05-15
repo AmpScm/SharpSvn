@@ -4,46 +4,13 @@
   <property name="zlibDir" value="${buildRoot}/${platform}/zlib-${zlibVersion}" />
 
   <target name="prepare-zlib" depends="extract">
-    <OnceBlock file="build/zlib-${zlibVersion}-${platform}.prepared">
-      <foreach item="File" property="dsp">
-        <in>
-          <items basedir="${zlibDir}">
-            <include name="projects/visualc6/zlib.dsp" />
-          </items>
-        </in>
-        <do>
-          <VCBuild>
-            <arg line="/upgrade" />
-            <arg value="${dsp}" />
-          </VCBuild>
-        </do>
-      </foreach>
-      <foreach item="File" property="vcproj">
-        <in>
-          <items basedir="${zlibDir}">
-            <include name="projects/visualc6/zlib.vcproj" />
-          </items>
-        </in>
-        <do>
-          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-          <loadfile file="${vcproj}" property="projtext">
-            <filterchain>
-              <!-- Increase security a little little bit in some cases -->
-              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
-              <replacestring from='Name="VCLibrarianTool"' to='Name="VCLibrarianTool" IgnoreAllDefaultLibraries="true"' />
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${vcproj}" />
-        </do>
-      </foreach>
-    </OnceBlock>
   </target>
   <target name="build-zlib" depends="prepare-zlib, extract">
     <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
-      <VCBuild>
-        <arg value="${zlibDir}/projects/visualc6/zlib.vcproj" />
-        <arg value="LIB ${Configuration}|${platform}" />
-      </VCBuild>
+      <NMake workingdir="${zlibDir}" makeFile="${zlibDir}/win32/Makefile.msc">
+        <arg line='LOC="-DASMV -DASMINF" OBJA="inffas32.obj match686.obj"' if="${platform == 'win32'}" />
+        <arg line='AS=ml64 LOC="-DASMV -DASMINF" OBJA="inffasx64.obj gvmat64.obj inffas8664.c"' if="${platform == 'x64'}" />
+      </NMake>
     </OnceBlock>
     <copy todir="${release}/lib">
       <fileset basedir="${zlibDir}/projects/visualc6/win32_Lib_Release">
@@ -67,13 +34,7 @@
         <include name="zconf.h" />
       </fileset>
     </copy>
-    <if test="${platform=='win32'}">
-      <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib/zlib.lib" />
-      <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib/zlib.lib" />
-    </if>
-    <if test="${platform!='win32'}">
-      <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib-${platform}/zlib.lib" />
-      <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib-${platform}/zlib.lib" />
-    </if>
+    <copy tofile="${zlibDir}/zlibstat.lib" file="${release}/lib/zlib.lib" />
+    <copy tofile="${zlibDir}/zlibstatD.lib" file="${release}/lib/zlib.lib" />
   </target>
 </project> 

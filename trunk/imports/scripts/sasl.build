@@ -76,8 +76,7 @@
   </target>
   <target name="build-sasl" depends="prepare-sasl">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.build">
-      <exec program="nmake.exe" workingdir="${saslDir}">
-        <arg line="/f NTMakefile" />
+      <NMake workingdir="${saslDir}" makeFile="${saslDir}/NTMakefile">
         <arg value="TARGET_WIN_SYSTEM=50" />
         <!-- Win 2000+ -->
         <!-- BDB -->
@@ -91,7 +90,7 @@
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(platformRoot + '\openssl-' + opensslVersion + '\out32dll')}" if="${static!='true'}" />
         <arg value="NTLM=1" />
         <arg value="NTLM_STATIC=1" />
-      </exec>
+      </NMake>
       <exec program="mt.exe" workingdir="${saslDir}/lib">
         <arg value="-manifest" />
         <arg value="${saslDllName}.manifest" />
