@@ -21,368 +21,376 @@
 
 public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
 {
-  DirectoryInfo _workingDirectory;
+    DirectoryInfo _workingDirectory;
 
-  protected override void PrepareProcess(Process process)
-  {
-    base.PrepareProcess(process);
-    
-    process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
-  }
+    protected override void PrepareProcess(Process process)
+    {
+        base.PrepareProcess(process);
 
-  [TaskAttribute("workingdir")]
-  public DirectoryInfo WorkingDirectory
-  {
-      get
-      {
-          if (this._workingDirectory == null)
-          {
-              return base.BaseDirectory;
-          }
-          return this._workingDirectory;
-      }
-      set
-      {
-          this._workingDirectory = value;
-      }
-  }
+        process.StartInfo.WorkingDirectory = this.WorkingDirectory.FullName;
+    }
+
+    [TaskAttribute("workingdir")]
+    public DirectoryInfo WorkingDirectory
+    {
+        get
+        {
+            if (this._workingDirectory == null)
+            {
+                return base.BaseDirectory;
+            }
+            return this._workingDirectory;
+        }
+        set
+        {
+            this._workingDirectory = value;
+        }
+    }
 }
-      
+
 [TaskName("UnTar")]
-public class UnTar : Task 
+public class UnTar : Task
 {
-	string _tarfile;
-	string _todir;
-	string _compresstype;
+    string _tarfile;
+    string _todir;
+    string _compresstype;
 
-	[TaskAttribute("tarfile", Required=true)]
-	public string tarfile 
-	{
-		get { return _tarfile; }
-		set { _tarfile = value; }
-	}
+    [TaskAttribute("tarfile", Required = true)]
+    public string tarfile
+    {
+        get { return _tarfile; }
+        set { _tarfile = value; }
+    }
 
-	[TaskAttribute("todir", Required=true)]
-	public string todir 
-	{
-		get { return _todir; }
-		set { _todir = value; }
-	}
+    [TaskAttribute("todir", Required = true)]
+    public string todir
+    {
+        get { return _todir; }
+        set { _todir = value; }
+    }
 
-	[TaskAttribute("compresstype", Required=false)]
-	public string compresstype
-	{
-		get { return _compresstype; }
-		set { _compresstype = value; }
-	}
+    [TaskAttribute("compresstype", Required = false)]
+    public string compresstype
+    {
+        get { return _compresstype; }
+        set { _compresstype = value; }
+    }
 
-	protected override void ExecuteTask() 
-	{
-		Log(Level.Info, String.Format("Extracting '{0}' to '{1}'", _tarfile, _todir));
+    protected override void ExecuteTask()
+    {
+        Log(Level.Info, String.Format("Extracting '{0}' to '{1}'", _tarfile, _todir));
 
-		Stream inStream = File.OpenRead(_tarfile);
+        Stream inStream = File.OpenRead(_tarfile);
 
-		switch(_compresstype) 
-		{
-		case "gzip":
-			inStream = new GZipInputStream(inStream);
-			break;
+        switch (_compresstype)
+        {
+            case "gzip":
+                inStream = new GZipInputStream(inStream);
+                break;
 
-		case "bzip2":
-			inStream = new BZip2InputStream(inStream);
-			break;
-		}
+            case "bzip2":
+                inStream = new BZip2InputStream(inStream);
+                break;
+        }
 
-		TarArchive archive = TarArchive.CreateInputTarArchive(inStream);
-		archive.ExtractContents(_todir);
-	}
+        TarArchive archive = TarArchive.CreateInputTarArchive(inStream);
+        archive.ExtractContents(_todir);
+    }
 }
 
 [TaskName("VCBuild")]
 public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
 {
-	bool _showLogo;
-	string _platform;
-	string _configuration;
-	   
-	[TaskAttribute("nologo", Required=false), BooleanValidator]
-	public bool NoLogo
-	{
-		get { return !_showLogo; }
-		set { _showLogo = !value; }
-	}
+    bool _showLogo;
+    string _platform;
+    string _configuration;
 
-	public override string ProgramFileName
-	{
-		get { return "vcbuild.exe"; }
-	}
-	 
-	[TaskAttribute("platform")]
-	public string Platform
-	{
-	    get { return _platform; }
-		set { _platform = value; }
-	}
-	 
-	[TaskAttribute("configuration")]
-	public string Configuration
-	{
-	    get { return _configuration; }
-		set { _configuration = value; }
-	}
+    [TaskAttribute("nologo", Required = false), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
 
-	public override string ProgramArguments
-	{
-		get 
-	    {
-			StringBuilder sb = new StringBuilder();
-					 
-			if(NoLogo)
-				sb.Append(" /nologo");
-							
-			if(Platform != null)
-				sb.AppendFormat(" /platform:{0}", Platform);
-							
-			return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
-		}
-	}	
-		
+    public override string ProgramFileName
+    {
+        get { return "vcbuild.exe"; }
+    }
+
+    [TaskAttribute("platform")]
+    public string Platform
+    {
+        get { return _platform; }
+        set { _platform = value; }
+    }
+
+    [TaskAttribute("configuration")]
+    public string Configuration
+    {
+        get { return _configuration; }
+        set { _configuration = value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (NoLogo)
+                sb.Append(" /nologo");
+
+            if (Platform != null)
+                sb.AppendFormat(" /platform:{0}", Platform);
+
+            return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
+        }
+    }
+
     protected override void ExecuteTask()
-	{
-	   if(Configuration != null)
-		  Arguments.Add(new NAnt.Core.Types.Argument(Configuration));
-				
-	   base.ExecuteTask();
-	}
+    {
+        if (Configuration != null)
+            Arguments.Add(new NAnt.Core.Types.Argument(Configuration));
+
+        base.ExecuteTask();
+    }
 }
 
 [TaskName("Svn")]
 public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 {
-  bool _interactive;
-	public override string ProgramArguments
-	{
-	   get { return _interactive ? "" : "--non-interactive"; }
-	}
-	
-	
-	[TaskAttribute("nonInteractive")]
-	public bool NonInteractive
-	{
-	    get { return !_interactive; }
-      set { _interactive = !value; }
-	}
+    bool _interactive;
+    public override string ProgramArguments
+    {
+        get { return _interactive ? "" : "--non-interactive"; }
+    }
+
+
+    [TaskAttribute("nonInteractive")]
+    public bool NonInteractive
+    {
+        get { return !_interactive; }
+        set { _interactive = !value; }
+    }
 }
 
 [TaskName("MSBuild")]
 public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
 {
-  bool _showLogo;
-	public override string ProgramArguments
-	{
-	   get { return _showLogo ? "" : "/nologo"; }
-	}	
-	
-	[TaskAttribute("noLogo")]
-	public bool NonInteractive
-	{
-	    get { return !_showLogo; }
-      set { _showLogo = !value; }
-	}
+    bool _showLogo;
+    public override string ProgramArguments
+    {
+        get { return _showLogo ? "" : "/nologo"; }
+    }
+
+    [TaskAttribute("noLogo")]
+    public bool NonInteractive
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
 }
 
 [TaskName("NMake")]
 public class NMake : ExternalAppTask
 {
-  FileInfo _makeFile;
-  [TaskAttribute("makeFile", Required=true)]
-  public FileInfo MakeFile
-  {
-    get { return _makeFile; }
-    set { _makeFile = value; }
-  }
-   
-  public override string ProgramArguments
-	{
-	   get { return string.Format("/f \"{0}\"", MakeFile.FullName); }
-	}	
+    FileInfo _makeFile;
+    bool _showLogo;
+    [TaskAttribute("makeFile", Required = true)]
+    public FileInfo MakeFile
+    {
+        get { return _makeFile; }
+        set { _makeFile = value; }
+    }
+
+    [TaskAttribute("nologo", Required = false), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get { return string.Format("{1}/f \"{0}\"", MakeFile.FullName, NoLogo ? "/NOLOGO " : ""); }
+    }
 }
 
 
 [TaskName("OnceBlock")]
 public class OnceBlock : NAnt.Core.TaskContainer
 {
-	FileInfo _touchFile;
+    FileInfo _touchFile;
 
-    [TaskAttribute("file", Required=true)]
-	public FileInfo TouchFile
-	{
-		get { return _touchFile; }
-		set { _touchFile = value; }	  	 
-	}
-	 
-	protected override void ExecuteTask()
-	{
-	   if(!_touchFile.Exists)
-	   {
-		   base.ExecuteTask();
-				 
-		   using(_touchFile.Create())
-		   {
-			  // Create NOP file if execute succeeded
-		   }
-	   }
+    [TaskAttribute("file", Required = true)]
+    public FileInfo TouchFile
+    {
+        get { return _touchFile; }
+        set { _touchFile = value; }
+    }
+
+    protected override void ExecuteTask()
+    {
+        if (!_touchFile.Exists)
+        {
+            base.ExecuteTask();
+
+            using (_touchFile.Create())
+            {
+                // Create NOP file if execute succeeded
+            }
+        }
     }
 }
 
 [TaskName("VCProjAddPlatform")]
 public class VCProjAddPlatform : NAnt.Core.Task
 {
-	FileInfo _project;
-	string _platform;
-	string _fromPlatform;
+    FileInfo _project;
+    string _platform;
+    string _fromPlatform;
 
-    [TaskAttribute("project", Required=true)]
-	public FileInfo ProjectFile
-	{
-		get { return _project; }
-		set { _project = value; }	  	 
-	}
-	 
-	[TaskAttribute("platform", Required=true)]
-	public string Platform
-	{
-	    get { return _platform; }
-		set { _platform = value; }
-	}
-	 
-	[TaskAttribute("fromPlatform", Required=true)]
-	public string FromPlatform
-	{
-	    get { return _fromPlatform; }
-		set { _fromPlatform = value; }
-	}	  
-	 
-	protected override void ExecuteTask()
-	{
-		XmlDocument doc = new XmlDocument();
-		doc.Load(ProjectFile.FullName);
-	
-		bool oldFound = false;
-		
-		foreach(XmlNode n in doc.SelectNodes("/VisualStudioProject/Platforms/Platform/@Name"))
-		{
-			if(0 == string.Compare(n.Value, Platform, true))
-				return; // Already completed
-			else if(0 == string.Compare(n.Value, FromPlatform, true))
-			{
-				FromPlatform = n.Value;
-				oldFound = true;
-			}
-		}
-		 
-		if(!oldFound)
-			throw new Exception("FromPlatform not found");
-					 
-		XmlElement el = doc.CreateElement("Platform");
-		el.SetAttribute("Name", Platform);
-		doc.SelectSingleNode("/VisualStudioProject/Platforms").AppendChild(el);
-			  			  
-		foreach(XmlElement n in doc.SelectNodes("/VisualStudioProject/Configurations/Configuration"))
-		{
-			string name = n.GetAttribute("Name");
-			if(!name.EndsWith("|" + FromPlatform))
-				continue;
-						 
-						 
-			XmlElement nn = (XmlElement)n.CloneNode(true);
-			nn.SetAttribute("Name", name.Substring(0, name.Length-FromPlatform.Length) + Platform);
-					 
-			foreach(XmlNode i in nn.SelectNodes("Tool/@TargetMachine"))
-			{
-				switch(Platform.ToUpper())
-				{
-					case "X64":
-						i.Value = "17";
-						break;
-					case "IA64":
-						i.Value = "error";
-						break;
-				}
-			}
-			 
-			foreach(XmlNode i in nn.SelectNodes("@OutputDirectory | @IntermediateDirectory | .//@OutputFile | .//@TypeLibraryName | .//@PrecompiledHeaderFile | .//@ObjectFile | .//@ProgramDataBaseFileName | .//@ImportLibrary"))
-			{
-				if (i.Value.StartsWith(".\\"))
-					i.Value = Platform + '\\' + i.Value.Substring(2);
-				else if (char.IsLetterOrDigit(i.Value, 0))
-					i.Value = Platform + '\\' + i.Value;
-			}
-					 
-			n.ParentNode.AppendChild(nn);
-		} 
-		  
-		foreach(XmlElement n in doc.SelectNodes("/VisualStudioProject/Files//FileConfiguration"))
-		{
-			string name = n.GetAttribute("Name");
-			if(!name.EndsWith("|" + FromPlatform))
-				continue;						 
-						 
-			XmlElement nn = (XmlElement)n.CloneNode(true);
-			nn.SetAttribute("Name", name.Substring(0, name.Length-FromPlatform.Length) + Platform);
-					 
-			n.ParentNode.AppendChild(nn);
-		} 
-			  
-			  
-		doc.Save(ProjectFile.FullName);
+    [TaskAttribute("project", Required = true)]
+    public FileInfo ProjectFile
+    {
+        get { return _project; }
+        set { _project = value; }
+    }
+
+    [TaskAttribute("platform", Required = true)]
+    public string Platform
+    {
+        get { return _platform; }
+        set { _platform = value; }
+    }
+
+    [TaskAttribute("fromPlatform", Required = true)]
+    public string FromPlatform
+    {
+        get { return _fromPlatform; }
+        set { _fromPlatform = value; }
+    }
+
+    protected override void ExecuteTask()
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.Load(ProjectFile.FullName);
+
+        bool oldFound = false;
+
+        foreach (XmlNode n in doc.SelectNodes("/VisualStudioProject/Platforms/Platform/@Name"))
+        {
+            if (0 == string.Compare(n.Value, Platform, true))
+                return; // Already completed
+            else if (0 == string.Compare(n.Value, FromPlatform, true))
+            {
+                FromPlatform = n.Value;
+                oldFound = true;
+            }
+        }
+
+        if (!oldFound)
+            throw new Exception("FromPlatform not found");
+
+        XmlElement el = doc.CreateElement("Platform");
+        el.SetAttribute("Name", Platform);
+        doc.SelectSingleNode("/VisualStudioProject/Platforms").AppendChild(el);
+
+        foreach (XmlElement n in doc.SelectNodes("/VisualStudioProject/Configurations/Configuration"))
+        {
+            string name = n.GetAttribute("Name");
+            if (!name.EndsWith("|" + FromPlatform))
+                continue;
+
+
+            XmlElement nn = (XmlElement)n.CloneNode(true);
+            nn.SetAttribute("Name", name.Substring(0, name.Length - FromPlatform.Length) + Platform);
+
+            foreach (XmlNode i in nn.SelectNodes("Tool/@TargetMachine"))
+            {
+                switch (Platform.ToUpper())
+                {
+                    case "X64":
+                        i.Value = "17";
+                        break;
+                    case "IA64":
+                        i.Value = "error";
+                        break;
+                }
+            }
+
+            foreach (XmlNode i in nn.SelectNodes("@OutputDirectory | @IntermediateDirectory | .//@OutputFile | .//@TypeLibraryName | .//@PrecompiledHeaderFile | .//@ObjectFile | .//@ProgramDataBaseFileName | .//@ImportLibrary"))
+            {
+                if (i.Value.StartsWith(".\\"))
+                    i.Value = Platform + '\\' + i.Value.Substring(2);
+                else if (char.IsLetterOrDigit(i.Value, 0))
+                    i.Value = Platform + '\\' + i.Value;
+            }
+
+            n.ParentNode.AppendChild(nn);
+        }
+
+        foreach (XmlElement n in doc.SelectNodes("/VisualStudioProject/Files//FileConfiguration"))
+        {
+            string name = n.GetAttribute("Name");
+            if (!name.EndsWith("|" + FromPlatform))
+                continue;
+
+            XmlElement nn = (XmlElement)n.CloneNode(true);
+            nn.SetAttribute("Name", name.Substring(0, name.Length - FromPlatform.Length) + Platform);
+
+            n.ParentNode.AppendChild(nn);
+        }
+
+
+        doc.Save(ProjectFile.FullName);
     }
 }
 
 [TaskName("ApplyPatch")]
 public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
 {
-	FileInfo _patchFile;
-	DirectoryInfo _toDir;
-	int _strip;
+    FileInfo _patchFile;
+    DirectoryInfo _toDir;
+    int _strip;
 
-	[TaskAttribute("patchFile", Required=true)]
-	public FileInfo PatchFile
-	{
-		get { return _patchFile; }
-		set { _patchFile = value; }
-	}
+    [TaskAttribute("patchFile", Required = true)]
+    public FileInfo PatchFile
+    {
+        get { return _patchFile; }
+        set { _patchFile = value; }
+    }
 
-	public override string ProgramFileName
-	{
-		get
-		{
-			string app = Path.GetFullPath(Path.Combine(Properties["downloads"], "../scripts/patch.exe"));
+    public override string ProgramFileName
+    {
+        get
+        {
+            string app = Path.GetFullPath(Path.Combine(Properties["downloads"], "../scripts/patch.exe"));
 
-			if (!File.Exists(app))
-				app = base.ProgramFileName.Replace("ApplyPatch", "patch");
+            if (!File.Exists(app))
+                app = base.ProgramFileName.Replace("ApplyPatch", "patch");
 
-			return app;
-		}
-	}
-	
-	[TaskAttribute("toDir", Required=true)]
-		public DirectoryInfo ToDir
-		{
-			get
-			{
-			  return _toDir;
-			}
-			set
-			{
-				_toDir = value;
-			}
-		}
+            return app;
+        }
+    }
 
-	public override string ProgramArguments
-	{
-		get { return string.Format("-f --unified \"--input={0}\" --strip={1} -d \"{2}\"", _patchFile.FullName, _strip, _toDir.FullName); }
-	}
+    [TaskAttribute("toDir", Required = true)]
+    public DirectoryInfo ToDir
+    {
+        get
+        {
+            return _toDir;
+        }
+        set
+        {
+            _toDir = value;
+        }
+    }
+
+    public override string ProgramArguments
+    {
+        get { return string.Format("-f --unified \"--input={0}\" --strip={1} -d \"{2}\"", _patchFile.FullName, _strip, _toDir.FullName); }
+    }
 }
 
 ]]>
