@@ -9,7 +9,7 @@
     <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
       <NMake workingdir="${zlibDir}" makeFile="${zlibDir}/win32/Makefile.msc">
         <arg line='LOC="-DASMV -DASMINF" OBJA="inffas32.obj match686.obj"' if="${platform == 'win32'}" />
-        <arg line='AS=ml64 LOC="-DASMV -DASMINF" OBJA="inffasx64.obj gvmat64.obj inffas8664.c"' if="${platform == 'x64'}" />
+        <arg line='AS=ml64 LOC="-DASMV -DASMINF -I${zlibDir}" OBJA="inffasx64.obj gvmat64.obj inffas8664.obj"' if="${platform == 'x64'}" />
       </NMake>
     </OnceBlock>
     <copy todir="${release}/include">
