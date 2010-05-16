@@ -72,7 +72,7 @@
     </copy>      
   </target>
 
-  <target name="svn-merge" depends="checkout" if="${applyMerges}">
+  <target name="svn-merge" depends="checkout">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
       <foreach item="String" property="range" in="${subversionMerges}" delim=";"
         if="${string::get-length(subversionMerges) &gt; 0}">
@@ -99,33 +99,35 @@
           <arg value="${svnBase}" />
         </Svn>
       </foreach>
-      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
-        /* Appended by sharpsvn/imports/scripts/build-subversion.build */
-        apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
-        {
-        if (!auth_baton)
-        return NULL;
+      <if test="${applyMerges}">
+        <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
+          /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+          apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+          {
+          if (!auth_baton)
+          return NULL;
 
-        return auth_baton->creds_cache;
-        }
-      </echo>
+          return auth_baton->creds_cache;
+          }
+        </echo>
 
-      <if test="${svnAddSharpSvn == 'true'}">
-        <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
-          <filterchain>
-            <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-                     to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
-        
-        <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
-          <filterchain>
-            <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY);'
-                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr);' />
-          </filterchain>
-        </loadfile>
-        <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
+        <if test="${svnAddSharpSvn == 'true'}">
+          <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
+            <filterchain>
+              <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+                       to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
+          
+          <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
+            <filterchain>
+              <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY);'
+                               to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr);' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
+        </if>
       </if>
     </OnceBlock>
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched">
