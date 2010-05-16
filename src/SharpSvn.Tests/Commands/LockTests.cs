@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -138,6 +139,59 @@ namespace SharpSvn.Tests.Commands
             {
                 throw;
             }
+        }
+
+        [Test]
+        public void ListLocks()
+        {
+            Uri trunk = new Uri(CollabReposUri, "trunk/");
+            Uri about = new Uri(trunk, "about/");
+            Uri aboutIndex = new Uri(about, "index.html");
+
+            Client.RemoteLock(aboutIndex, "Mine!");
+
+            Collection<SvnInfoEventArgs> lst;
+            SvnInfoArgs ia = new SvnInfoArgs();
+            ia.Depth = SvnDepth.Unknown;
+            
+            Assert.That(Client.GetInfo(aboutIndex, ia, out lst));
+            Assert.That(lst.Count == 1);
+            Assert.That(lst[0].Lock, Is.Not.Null, "Is locked - Unknown");
+
+            ia.Depth = SvnDepth.Empty;
+            Assert.That(Client.GetInfo(aboutIndex, ia, out lst));
+            Assert.That(lst.Count == 1);
+            Assert.That(lst[0].Lock, Is.Not.Null, "Is locked - Empty");
+
+            ia.Depth = SvnDepth.Infinity;
+            Assert.That(Client.GetInfo(aboutIndex, ia, out lst));
+            Assert.That(lst.Count == 1);
+            Assert.That(lst[0].Lock, Is.Not.Null, "Is locked - Infinity");
+
+            ia.Depth = SvnDepth.Unknown;
+            Assert.That(Client.GetInfo(about, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(1)); // Just the dir
+
+            // And the next cases where failing because .Info() didn't pass
+            // an explicit operational revision to svn_client_info2().
+
+            ia.Depth = SvnDepth.Files;
+            Assert.That(Client.GetInfo(about, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(2));
+            Assert.That(lst[1].Path.EndsWith("index.html"));
+            Assert.That(lst[1].Lock, Is.Not.Null, "Is locked - Dir - Files");
+
+            ia.Depth = SvnDepth.Children;
+            Assert.That(Client.GetInfo(about, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(2));
+            Assert.That(lst[1].Path.EndsWith("index.html"));
+            Assert.That(lst[1].Lock, Is.Not.Null, "Is locked - Dir - Children");
+
+            ia.Depth = SvnDepth.Infinity;
+            Assert.That(Client.GetInfo(about, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(2));
+            Assert.That(lst[1].Path.EndsWith("index.html"));
+            Assert.That(lst[1].Lock, Is.Not.Null, "Is locked - Dir - Infinity");
         }
     }
 }

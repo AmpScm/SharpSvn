@@ -82,7 +82,7 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 		args->Info += infoHandler;
 	try
 	{
-		svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->Or(target->GetSvnRevision(SvnRevision::None, SvnRevision::Head))->ToSvnRevision();
 
 		svn_error_t* r = svn_client_info2(
