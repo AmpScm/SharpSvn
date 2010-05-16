@@ -212,7 +212,9 @@ public class NMake : ExternalAppTask
 
     public override string ProgramArguments
     {
-        get { return string.Format("{1}/f \"{0}\"", MakeFile.FullName, NoLogo ? "/NOLOGO " : ""); }
+        get { return string.Format("/f \"{0}\"{1}{2}", MakeFile.FullName, 
+                                                       NoLogo ? " /NOLOGO" : "",
+                                                       Verbose ? "" : " /S"); }
     }
 }
 
