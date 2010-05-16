@@ -1,6 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir="." default="prepare-dev">
   <property name="applyMerges" value="false" />
+  <property name="subversionMerges" value="944635" overwrite="false" />
   <property name="static" value="false" />
   <property name="downloads" value="imports/downloads/" />
   <property name="dllPrefix" value="" />
