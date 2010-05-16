@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.6009.1517</title>
+          SharpSvn-Daily Update - 1.6011.1566</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.6009.1517</h1>
+          SharpSvn-Daily Update - 1.6011.1566</h1>
 
 
 <p>
@@ -15,66 +15,49 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/3216/SSvn-1.6009.1517.zip">SharpSvn 1.6009.1517</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/3423/SSvn-1.6011.1566.zip">SharpSvn 1.6011.1566</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/3217/SSvn-1.6009.1517-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/3218/SSvnEx-1.6009.1517.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/3424/SSvn-1.6011.1566-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/3425/SSvnEx-1.6011.1566.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1517">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1566">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
-<tr class="d"><td colspan="4">2010-03-16</td></tr>
-<tr><td> </td><td class="r"><a id="1512" href="http://sharpsvn.net/rev/?r=1512">
-            [r1512]
-          </a></td><td class="a">rhuijben</td><td class="f">imports/Default.build, src/SharpSvn.UI/Properties/AssemblyInfo.cs, src/SharpSvn/AssemblyInfo.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add peg rev to backport branch and update Sqlite reference</td></tr>
-<tr class="d"><td colspan="4">2010-03-10</td></tr>
-<tr><td> </td><td class="r"><a id="1502" href="http://sharpsvn.net/rev/?r=1502">
-            [r1502]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/StaticVerifications.cs, SharpSvn/SvnErrorCodes.h, SharpSvn/SharpSvn-VS2008.vcproj, tools/Errors2Enum/Program.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a few more error codes to SvnAprErrorCode by importing the not
-overridden values from errno.h.</td></tr>
-<tr><td> </td><td class="r"><a id="1500" href="http://sharpsvn.net/rev/?r=1500">
-            [r1500]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnException.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add .AprErrorCode property to SvnException to allow retrieving a SvnAprErrorCode
-value.</td></tr>
-<tr><td> </td><td class="r"><a id="1499" href="http://sharpsvn.net/rev/?r=1499">
-            [r1499]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SharpSvn-VS2008.vcproj, tools/Errors2Enum/Program.cs, tools/Errors2Enum/Properties/AssemblyInfo.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Apply a few more tricks when generating Windows and Apr enums to allow
-using the real #define'd names in the enum.</td></tr>
-<tr class="d"><td colspan="4">2010-03-09</td></tr>
-<tr><td> </td><td class="r"><a id="1498" href="http://sharpsvn.net/rev/?r=1498">
-            [r1498]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> RemoteCommands/SvnRemoteSession.cpp, AssemblyInfo.cpp, SvnRemoteSession.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add MakeRelativePath helper to SvnRemoteSession()</td></tr>
-<tr class="d"><td colspan="4">2010-03-04</td></tr>
-<tr><td> </td><td class="r"><a id="1491" href="http://sharpsvn.net/rev/?r=1491">
-            [r1491]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests:</strong> PathTests.cs, Commands/LogTests.cs, Commands/CheckOutTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update references to the subversion repository to their new asf home
-to fix tests. And for more likely examples</td></tr>
-<tr><td> </td><td class="r"><a id="1489" href="http://sharpsvn.net/rev/?r=1489">
-            [r1489]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/PathTests.cs, SharpSvn/SvnTools.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make GetNormalizedFullPath() return UNC paths with '\'-s at the end trimmed.
-Also make IsNormalizedFullPath() a bit less picky about which UNC paths need
-normalization.</td></tr>
-<tr><td> </td><td class="r"><a id="1487" href="http://sharpsvn.net/rev/?r=1487">
-            [r1487]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/PathTests.cs, SharpSvn/SvnTools.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Catch an of by one case in FindTruePath() which triggered wrong results
-for "\\pc\c$" ("\\pc\c$\") and "\\pc\c$\A" ("\\pc\c$\"). Also return the
-normalized root for UNC roots.</td></tr>
-<tr class="d"><td colspan="4">2010-02-23</td></tr>
-<tr><td> </td><td class="r"><a id="1480" href="http://sharpsvn.net/rev/?r=1480">
-            [r1480]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/List.h, Commands/List.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">If an explicit revision is passed via SvnListArgs, make sure we don't try
-to calculate a repository root as this will return the wrong path.</td></tr>
+<tr class="d"><td colspan="4">2010-05-16</td></tr>
+<tr><td> </td><td class="r"><a id="1563" href="http://sharpsvn.net/rev/?r=1563">
+            [r1563]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/Info.cpp, SharpSvn.Tests/Commands/LockTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Test lock retrieval via SvnClient.GetInfo() and fix the invalid peg revision
+passed to svn_client_info2() when SvnRevision.None was passed on the target.</td></tr>
+<tr class="d"><td colspan="4">2010-05-11</td></tr>
+<tr><td> </td><td class="r"><a id="1551" href="http://sharpsvn.net/rev/?r=1551">
+            [r1551]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/tools/CollabUpload:</strong> Program.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a bit more error output to the CollabUpload tool</td></tr>
+<tr class="d"><td colspan="4">2010-05-01</td></tr>
+<tr><td> </td><td class="r"><a id="1543" href="http://sharpsvn.net/rev/?r=1543">
+            [r1543]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/RemoteCommands:</strong> SvnRemoteSession.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Fix a case where getting the relative path from "<a href="http://server/path/&quot;">http://server/path/"</a> to
+"<a href="http://server/path&quot;">http://server/path"</a> throws an exception in the remote session support.</td></tr>
+<tr class="d"><td colspan="4">2010-04-27</td></tr>
+<tr><td> </td><td class="r"><a id="1542" href="http://sharpsvn.net/rev/?r=1542">
+            [r1542]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnException.cpp, SvnException.h, SvnTools.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a few more generic exception classes. Make SvnEntryNotFoundException
+inherit the new SvnWorkingCopyPathNotFoundException instead of SvnEntryException
+as that error class is going to disappear in future Subversion versions.<br>
+Operating system errors will now be thrown as SvnSystemException instead of
+a plain SvnException to allow distinguising them from Subversion errors.<br>
+Also convert a few more 1.6 new errors to their appropriate
+exception types.</td></tr>
 
 </table>
 <!--/Recent changes-->
