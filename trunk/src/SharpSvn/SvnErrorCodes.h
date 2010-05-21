@@ -76,4 +76,6 @@ public enum class SvnErrorCategory
 };
 }
 
+#undef WSABASEERR // Enable including winsock errors
 #include "SvnWindowsError.h"
+
