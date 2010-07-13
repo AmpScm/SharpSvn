@@ -15,13 +15,13 @@
   <property name="subversionMerges" value="876514,876515,877344;M877588;877964,878127,878129,878131,878142,878175,878176,878836;T879801;896915,898048,908980,908981,923737,935992,935996,944635" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
-  <property name="aprMerges" value="" overwrite="false" />
+  <property name="aprMerges" value="960665,960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.0a" overwrite="false" />
   <property name="neonVersion" value="0.29.3" overwrite="false" />
 
-  <property name="aprVersion" value="1.3.12" overwrite="false" />
+  <property name="aprVersion" value="1.4.2" overwrite="false" />
   <property name="aprUtilVersion" value="1.3.9" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
