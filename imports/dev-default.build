@@ -22,7 +22,10 @@
   
   <include buildfile="imports/Default.build" />
 
-  <target name="prepare-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd, gen-dev">
+  <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd">
+  </target>
+
+  <target name="prepare-dev" depends="prep-dev, gen-dev">
   </target>
   
 <target name="gen-dev">
@@ -56,6 +59,7 @@
 		<arg value="--with-sqlite=${intDir}" />
 		<arg value="--enable-nls" if="${intl != 'none'}"/>
 		<arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
+		<arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
 		<arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
 		<arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
 	</exec>

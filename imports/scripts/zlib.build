@@ -22,6 +22,7 @@
     <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstatD.lib" />
     
     <copy todir="${releaseLib}" file="${zlibDir}/zlib.lib" />
+    <copy todir="${releaseLib}" file="${zlibDir}/zlib.pdb" />
     <copy todir="${releaseLib}" file="${zlibDir}/zlibstat.lib" />
     <copy todir="${releaseLib}" file="${zlibDir}/zlibstatD.lib" />
   </target>
