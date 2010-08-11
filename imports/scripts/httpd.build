@@ -20,6 +20,7 @@
         <arg value="/t:mod_auth_basic" />
         <arg value="/t:mod_authn_file" />
         <arg value="/t:mod_mime" />
+        <arg value="/t:mod_alias" />
         <arg value="/t:mod_log_config" />
       </MSBuild>
     </OnceBlock>
