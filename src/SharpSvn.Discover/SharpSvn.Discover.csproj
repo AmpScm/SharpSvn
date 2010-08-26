@@ -40,7 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dns\DnsbaseQ.cs" />
+    <Compile Include="Dns\DnsBase.cs" />
     <Compile Include="Dns\DnsRecord.cs" />
     <Compile Include="Dns\DnsConstants.cs" />
     <Compile Include="Dns\DnsEntry.cs" />
