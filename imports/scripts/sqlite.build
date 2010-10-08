@@ -9,7 +9,7 @@
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
-      <arg value="/O1" />      <!-- Minimize size -->
+      <arg value="/O2" />      <!-- Maximize speed -->
       <arg value="/GF" />      <!-- String Pooling -->
       <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
       <arg value="/Zi" />      <!-- Write debug information -->
@@ -19,6 +19,10 @@
       <arg value="/NODEFAULTLIB" />
       <defines>
         <define name="NDEBUG" />
+        
+        <!-- Store temporary tables in RAM, unless requested otherwise -->
+        <define name="SQLITE_TEMP_STORE" value="2" />
+        
         <!-- Ommit some parts of SQLite not used by Subversion -->
         <define name="SQLITE_OMIT_AUTOINIT" /><!-- Subversion initializes properly -->
         <define name="SQLITE_OMIT_DEPRECATED" /><!-- Removes deprecated APIs -->
@@ -29,6 +33,8 @@
         <define name="SQLITE_OMIT_TRACE" /><!-- No debug tracing -->
         <define name="SQLITE_OMIT_UTF16" /><!-- Subversion uses utf-8 everywhere -->
         <define name="SQLITE_OMIT_FLOATING_POINT" /><!-- Floating point ops in a version management system? -->
+        
+        <define name="SQLITE_OMIT_AUTHORIZATION" />
       </defines>
       <sources basedir="${sqliteDir}">
         <include name="sqlite3.c" />
