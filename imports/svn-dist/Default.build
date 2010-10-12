@@ -7,6 +7,8 @@
   <property name="intl" value="gettext" />
   <property name="svnBuildName" value="SlikSvn" />
   <property name="svnAddSharpSvn" value="false" />
+  <property name="applyMerges" value="false" />
+  <property name="applyPatches" value="false" />
   
   <include buildfile="../Default.build" />
   
