@@ -130,8 +130,8 @@
         </if>
       </if>
     </OnceBlock>
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched">
-      <foreach item="File" property="patch" if="${applyPatches=='true'}">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${applyPatches=='true'}">
+      <foreach item="File" property="patch">
         <in>
           <items basedir="${downloads}/../patches/subversion">
             <include name="*.patch" />
