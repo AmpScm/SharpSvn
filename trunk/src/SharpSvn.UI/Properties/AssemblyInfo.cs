@@ -51,4 +51,4 @@ using System.Resources;
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
 [assembly: NeutralResourcesLanguageAttribute("en")]
-[assembly:AssemblyVersionAttribute("1.6009.1510.9238")] 
+[assembly:AssemblyVersionAttribute("1.6012.1576.9657")] 
