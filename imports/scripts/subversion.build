@@ -235,7 +235,7 @@
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
               <replacestring from='PreprocessorDefinitions="WIN32'  if="${static=='true'}"
-                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;WIN32' />
+                to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;API_DECLARE_STATIC;XML_STATIC;WIN32' />
               <replacestring from='AdditionalDependencies="zlibstat.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib zlibstat.lib' />
               <replacestring from='AdditionalDependencies="advapi32.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib advapi32.lib' />
               <!-- Favor size over speed. Subversion is IO bound, not cpu bound -->

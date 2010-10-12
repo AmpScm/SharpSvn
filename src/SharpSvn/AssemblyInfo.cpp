@@ -117,4 +117,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 #pragma comment(lib, "User32.lib")
 
 #include "../../imports/release/include/sharpsvn-imports.h"
-[assembly:AssemblyVersionAttribute("1.6009.1510.9238")]; 
+[assembly:AssemblyVersionAttribute("1.6012.1576.9657")]; 
