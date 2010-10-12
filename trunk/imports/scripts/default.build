@@ -5,6 +5,7 @@
   <property name="dbDllName" value="${dllPrefix}-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
   <property name="static" value="true" overwrite="false" />
   <property name="applyMerges" value="true" overwrite="false" />
+  <property name="applyPatches" value="true" overwrite="false" />
   <property name="enableIpv6" value="true" overwrite="false" />
   <property name="svnStatic" value="false" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
