@@ -18,6 +18,8 @@
         <arg value="no-hw"/>
         <arg value="zlib" />
         <arg value="enable-tlsext" />
+        <arg value="enable-capieng" />
+        <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="--with-zlib-lib=${releaseLib}/zlib.lib" />
         <arg value="--with-zlib-include=${string::replace(release,'\','/')}/include" />
       </exec>
