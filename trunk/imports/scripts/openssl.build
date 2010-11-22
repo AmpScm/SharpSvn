@@ -20,6 +20,7 @@
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
+        <arg value="-DOPENSSL_CAPIENG_DIALOG" />
         <arg value="--with-zlib-lib=${releaseLib}/zlib.lib" />
         <arg value="--with-zlib-include=${string::replace(release,'\','/')}/include" />
       </exec>
@@ -61,6 +62,20 @@
         </filterchain>
       </loadfile>
       <echo message="${mk}" file="${opensslDir}/ms/nt.mak" />
+      <if test="${svnAddSharpSvn == 'true'}">
+        <loadfile file="${opensslDir}/engines/e_capi.c" property="mk">
+          <filterchain>
+            <replacestring from="static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" to="
+            
+typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
+extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
+sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler = NULL;
+static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
+            <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL;" />
+          </filterchain>
+        </loadfile>
+        <echo message="${mk}" file="${opensslDir}/engines/e_capi.c" />
+      </if>
     </OnceBlock>
   </target>
   <target name="build-openssl" depends="prepare-openssl">
