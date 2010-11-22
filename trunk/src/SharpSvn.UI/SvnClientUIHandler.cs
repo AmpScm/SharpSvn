@@ -87,6 +87,7 @@ namespace SharpSvn.UI
             svnClient.Authentication.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
             svnClient.Authentication.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
             svnClient.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
+            svnClient.Authentication.BeforeEngineDialog += new EventHandler<SharpSvn.Security.SvnBeforeEngineDialogEventArgs>(BeforeEngineDialog);
         }
 
         bool Reinvoke<T>(object sender, T e, EventHandler<T> handler)
@@ -315,6 +316,21 @@ namespace SharpSvn.UI
                 e.Password = dlg.passPhraseBox.Text;
                 e.Save = e.MaySave && dlg.rememberCheck.Checked;
             }
+        }
+
+        void BeforeEngineDialog(Object sender, SvnBeforeEngineDialogEventArgs e)
+        {
+            if (Reinvoke(sender, e, BeforeEngineDialog))
+                return;
+
+            IWin32Window wnd = null;
+            if (UIService != null)
+                wnd = UIService.GetDialogOwnerWindow();
+            else
+                wnd = _window;
+
+            if (wnd != null)
+                e.Handle = wnd.Handle;
         }
     }
 }

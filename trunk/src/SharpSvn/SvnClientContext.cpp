@@ -418,6 +418,9 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 	client->_currentArgs = args;
 	client->_workState = nullptr;
 	_client = client;
+	_lastContext = SvnClientContext::_activeContext;
+	SvnClientContext::_activeContext = _client;
+
 	try
 	{
 		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->CommandType));
@@ -425,6 +428,7 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 	catch(Exception^)
 	{
 		client->_currentArgs = nullptr;
+		SvnClientContext::_activeContext = _lastContext;
 		throw;
 	}
 }
@@ -436,4 +440,35 @@ SvnClientContext::ArgsStore::~ArgsStore()
 		args->_hooked = false;
 
 	_client->_currentArgs = nullptr;
+	SvnClientContext::_activeContext = _lastContext;
+}
+
+HWND __cdecl sharpsvn_get_ui_parent()
+{
+	SvnClientContext^ ctx = SvnClientContext::_activeContext;
+
+	if (ctx != nullptr)
+		try
+		{
+			SvnBeforeEngineDialogEventArgs ^ea = gcnew SvnBeforeEngineDialogEventArgs();
+
+			ctx->Authentication->InvokeOnBeforeEngineDialog(ea);
+			return (HWND)(__int32)ea->Handle;
+		}
+		catch(...)
+		{
+			return NULL;
+		}
+	else
+		return NULL;
+}
+
+extern "C" {
+typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
+extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
+};
+
+void SvnBase::InstallSslDialogHandler()
+{
+    sharpsvn_get_ui_parent_handler = sharpsvn_get_ui_parent;
 }

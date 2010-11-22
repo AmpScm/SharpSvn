@@ -176,11 +176,16 @@ namespace SharpSvn {
 			}
 		}
 
+	internal:
+		[ThreadStatic]
+		static SvnClientContext ^_activeContext;
+
 	private protected:
 		// Used as auto-dispose class for setting the _currentArgs property
 		ref class ArgsStore sealed
 		{
 			initonly SvnClientContext^ _client;
+			initonly SvnClientContext^ _lastContext;
 		public:
 			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args);
 			~ArgsStore();

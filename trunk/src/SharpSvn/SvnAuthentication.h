@@ -591,6 +591,26 @@ namespace SharpSvn {
 				virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
 			};
 		};
+
+		public ref class SvnBeforeEngineDialogEventArgs : public SvnEventArgs
+		{
+			IntPtr _handle;
+
+		public:
+			/// <summary>The Window handle (HWND) of the owner Window</summary>
+			property IntPtr Handle
+			{
+				IntPtr get()
+				{
+					return _handle;
+				}
+
+				void set(IntPtr value)
+				{
+					_handle = value;
+				}
+			}
+		};
 	}
 
 	namespace Implementation {
@@ -878,6 +898,20 @@ namespace SharpSvn {
 						_handlers->Remove(wrapper);
 					}
 				}
+			}
+
+			DECLARE_EVENT(SvnBeforeEngineDialogEventArgs^, BeforeEngineDialog)
+
+		protected:
+			virtual void OnBeforeEngineDialog(SvnBeforeEngineDialogEventArgs^ e)
+			{
+				BeforeEngineDialog(this, e);
+			}
+
+		internal:
+			void InvokeOnBeforeEngineDialog(SvnBeforeEngineDialogEventArgs^ e)
+			{
+				OnBeforeEngineDialog(e);
 			}
 
 		public:

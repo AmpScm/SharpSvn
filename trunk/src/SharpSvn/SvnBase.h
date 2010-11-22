@@ -49,6 +49,7 @@ namespace SharpSvn {
 		internal:
 			static void EnsureLoaded();
 			static void InstallAbortHandler();
+			static void InstallSslDialogHandler();
 			static const char* _admDir;
 			static String^ _clientName;
 			static bool _aprInitialized;
