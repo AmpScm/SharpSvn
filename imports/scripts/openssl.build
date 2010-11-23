@@ -71,7 +71,8 @@ typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
 extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
 sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler = NULL;
 static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
-            <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL;" />
+            <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL; 
+            if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
           </filterchain>
         </loadfile>
         <echo message="${mk}" file="${opensslDir}/engines/e_capi.c" />
