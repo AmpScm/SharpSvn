@@ -8,7 +8,7 @@
   <property name="saslDllName" value="libsasl.dll" if="${dllPrefix==''}" />
   <property name="saslPrefix" value="${dllPrefix}Sasl${SASL_MAJOR_VERSION}${SASL_MINOR_VERSION}-${SASL_MICRO_VERSION}-${platform}" if="${dllPrefix!=''}"/>
   <property name="saslPdb" value="sasl.pdb" if="${dllPrefix==''}"/>
-  <property name="saslPdb" value="{saslPrefix}.pdb" if="${dllPrefix!=''}"/>
+  <property name="saslPdb" value="${saslPrefix}.pdb" if="${dllPrefix!=''}"/>
   <property name="saslDllName" value="${saslPrefix}.dll" if="${dllPrefix!=''}"/>
 
   <target name="prepare-sasl" depends="checkout,build-bdb,build-openssl">
