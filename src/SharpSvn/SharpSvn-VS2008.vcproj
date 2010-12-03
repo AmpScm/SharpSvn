@@ -152,7 +152,7 @@
 				PreprocessorDefinitions="WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
@@ -333,7 +333,7 @@
 				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="2"
+				UsePrecompiledHeader="0"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
@@ -602,7 +602,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
+							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -618,7 +618,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
+							UsePrecompiledHeader="0"
 						/>
 					</FileConfiguration>
 				</File>
