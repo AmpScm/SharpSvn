@@ -16,10 +16,7 @@
   <property name="wc" value="dev" overwrite="false" />
   <property name="branch" value="" overwrite="false" />
   <property name="tag" value="" overwrite="false" />
-  
-  <!-- Serf prefers 0.6.1 -->
-  <property name="serfVersion" value="0.6.1" />
-  
+    
   <include buildfile="imports/Default.build" />
 
   <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd">
