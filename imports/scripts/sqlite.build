@@ -33,6 +33,7 @@
         <define name="SQLITE_OMIT_TRACE" /><!-- No debug tracing -->
         <define name="SQLITE_OMIT_UTF16" /><!-- Subversion uses utf-8 everywhere -->
         <define name="SQLITE_OMIT_FLOATING_POINT" /><!-- Floating point ops in a version management system? -->
+        <define name="SQLITE_OMIT_AUTORESET" /><!-- Make forgetting a reset an error -->
         
         <define name="SQLITE_OMIT_AUTHORIZATION" />
       </defines>
