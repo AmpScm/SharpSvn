@@ -7,12 +7,12 @@
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>SlikSvn</OutputName>
     <OutputType>Package</OutputType>
-    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.0\Wix.targets</WixTargetsPath>
+    <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=1.6.13;platform=Win32</DefineConstants>
+    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=1.6.16;platform=Win32</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressValidation>False</SuppressValidation>
@@ -21,11 +21,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=1.6.13;SvnSuffix=</DefineConstants>
+    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=1.6.16;SvnSuffix=</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=1.6.13;platform=x64</DefineConstants>
+    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=1.6.16;platform=x64</DefineConstants>
     <WixVariables>
     </WixVariables>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
@@ -35,7 +35,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=1.6.13;SvnSuffix=</DefineConstants>
+    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=1.6.16;SvnSuffix=</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
@@ -54,6 +54,7 @@
   <ItemGroup>
     <WixExtension Include="WixUIExtension">
       <HintPath>$(WixExtDir)\WixUIExtension.dll</HintPath>
+      <Name>WixUIExtension</Name>
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
