@@ -12,9 +12,7 @@
       <get src="http://www.openssl.org/source/${opensslFilename}" dest="${downloads}/${opensslFilename}" />
     </if>
     <if test="${not file::exists(downloads + dbFilename)}">
-      <!--get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="${downloads}/${dbFilename}" /-->
-      <!-- Use local mirror until Oracle fixed their download site -->
-      <get src="http://sharpsvn.open.collab.net/files/documents/180/3524/db-4.4.20.NC.tar.gz" dest="${downloads}/${dbFilename}" />
+      <get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="${downloads}/${dbFilename}" />
     </if>
     <if test="${not file::exists(downloads + zlibFilename)}">
       <get src="http://www.zlib.net/${zlibFilename}" dest="${downloads}/${zlibFilename}" />
