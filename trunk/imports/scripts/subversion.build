@@ -311,7 +311,7 @@
       </MSBuild>
     </OnceBlock>
   </target>
-  <target name="copy-result" depends="build-svn,misc-copy,copy-licenses,gettext-translate">
+  <target name="copy-result" depends="build-svn,misc-copy,copy-licenses,gettext-translate,copy-serf">
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32">
         <include name="subversion/${Configuration}/**/*.lib" />
