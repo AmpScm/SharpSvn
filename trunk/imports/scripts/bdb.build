@@ -66,6 +66,7 @@
         <include name="*.exp" />
       </fileset>
     </copy>
+    <copy file="${intDir}/lib/${libDb}.lib" tofile="${intDir}/lib/${libDb}d.lib"/>   
     <copy todir="${intDir}/include">
       <fileset basedir="${dbWindowsDir}">
         <include name="*.h" />

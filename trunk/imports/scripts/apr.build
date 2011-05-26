@@ -52,7 +52,6 @@
           <arg value="-mt" />
         </exec>
       </if>
-      <copy file="${intDir}/lib/${libDb}.lib" tofile="${intDir}/lib/${libDb}d.lib"/>
       <exec program="perl.exe" workingdir="${aprUtilDir}">
         <arg value="build/w32locatedb.pl" />
         <arg value="dll" />
