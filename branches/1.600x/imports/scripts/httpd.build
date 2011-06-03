@@ -1,0 +1,53 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="httpdDir" value="${buildRoot}/httpd" />
+  <property name="aprIconvDir" value="${httpdDir}/srclib/apr-iconv" />
+
+  <target name="build-httpd" depends="build-apr" if="${buildHttpd=='true'}">
+    <if test="${platform != 'win32'}">
+      <fail message="Building apache is currently only supported for platform win32" />
+    </if>
+    <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
+      <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
+
+      <MSBuild>
+        <arg value="${httpdDir}/apache.sln" />
+        <arg value="/P:configuration=Release" />
+        <arg value="/P:platform=Win32" />
+        <arg value="/t:httpd" />
+        <arg value="/t:htpasswd" />
+        <arg value="/t:mod_dav" />
+        <arg value="/t:mod_auth_basic" />
+        <arg value="/t:mod_authn_file" />
+        <arg value="/t:mod_mime" />
+        <arg value="/t:mod_alias" />
+        <arg value="/t:mod_log_config" />
+      </MSBuild>
+    </OnceBlock>
+
+    <!-- Enable compiling subversion in debug mode -->    
+    <copy todir="${httpdDir}/Debug" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="**/Release/*.lib" />
+        <include name="Release/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/httpd/bin" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="release/*.exe" />
+        <include name="release/*.dll" />
+        <include name="support/release/*.exe" />
+        <include name="support/release/*.dll" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/httpd/modules" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="**/*.so" />
+        <exclude name="srclib/**" />
+      </fileset>
+    </copy>    
+    <mkdir dir="${release}/httpd/conf" />
+    <mkdir dir="${release}/httpd/logs" />
+    <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />
+  </target>
+</project>

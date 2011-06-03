@@ -1,0 +1,373 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="aprBase" value="${buildRoot}" if="${buildHttpd=='false'}" />
+  <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd!='false'}" />
+  <property name="aprDir" value="${aprBase}/apr" />
+  <property name="aprUtilDir" value="${aprBase}/apr-util" />
+
+  <target name="apr-merge" depends="checkout">
+    <OnceBlock file="build/apr-${aprVersion}.merged">
+      <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${aprMerges}" />
+        <arg value="http://svn.apache.org/repos/asf/apr/apr/trunk/" />
+        <arg value="${aprDir}" />
+      </Svn>
+    </OnceBlock>
+    <OnceBlock file="build/apr-${aprVersion}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/apr">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${aprDir}" />
+        </do>
+      </foreach>
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/apr-util">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${aprUtilDir}" />
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="upgrade-apr" depends="checkout,apr-merge,build-bdb">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
+      <exec program="perl.exe" workingdir="${aprDir}">
+        <arg value="build/cvtdsp.pl" />
+        <arg value="-2005" />
+        <arg value="-mt" />
+      </exec>
+      <if test="${buildHttpd}">
+        <exec program="perl.exe" workingdir="${httpdDir}">
+          <arg value="${aprDir}/build/cvtdsp.pl" />
+          <arg value="-2005" />
+          <arg value="-mt" />
+        </exec>
+      </if>
+      <exec program="perl.exe" workingdir="${aprUtilDir}">
+        <arg value="build/w32locatedb.pl" />
+        <arg value="dll" />
+        <arg value="${intDir}/include" />
+        <arg value="${intDir}/lib" />
+      </exec>
+      <foreach item="File" property="project">
+        <in>
+          <items>
+            <include name="${aprDir}/**/*.dsp" />
+            <include name="${aprUtilDir}/**/*.dsp" />
+            <include name="${httpdDir}/**/*.dsp" if="${buildHttpd == 'true'}" />
+          </items>
+        </in>
+        <do>
+          <VCBuild platform="${platform}">
+            <arg line="/upgrade" />
+            <arg line="${project}" />
+          </VCBuild>
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="prepare-apr" depends="upgrade-apr">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
+      <foreach item="File" property="vcproj">
+        <in>
+          <items>
+            <include name="${aprDir}/**/*.vcproj" />
+            <include name="${aprUtilDir}/**/*.vcproj" />
+            <include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
+          </items>
+        </in>
+        <do>
+          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
+        </do>
+      </foreach>
+      <foreach item="File" property="vcproj">
+        <in>
+          <items>
+            <include name="${aprDir}/apr.vcproj" />
+            <include name="${aprUtilDir}/aprutil.vcproj" />
+            <include name="${aprUtilDir}/xml/expat/lib/*.vcproj" />
+          </items>
+        </in>
+        <do>
+          <echo message="Patching ${vcproj}" />
+          <loadfile file="${vcproj}" property="projtext">
+            <filterchain>
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static=='true'}" />
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static!='true'}" />
+              <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib ' if="${static!='true'}" />
+              <!-- Increase security a little little bit in some cases -->
+              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+              <replacestring from='XML_STATIC' to='XML_BUILDING_EXPAT;XML_USE_MSC_EXTENSIONS;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
+              <replacestring from='EXPAT_EXPORTS' to='EXPAT_EXPORTS;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${vcproj}" />
+        </do>
+      </foreach>
+      <foreach item="File" property="vcproj">
+        <in>
+          <items>
+            <include name="${aprDir}/libapr.vcproj" />
+            <include name="${aprUtilDir}/libaprutil.vcproj" />
+          </items>
+        </in>
+        <do>
+          <echo message="Patching ${vcproj}" />
+          <loadfile file="${vcproj}" property="projtext">
+            <filterchain>
+              <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
+              <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
+              <!-- Import APR from APR-Util -->
+              <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
+              <!-- Increase security a little little bit in some cases -->
+              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+            </filterchain>
+          </loadfile>
+          <echo message="${projtext}" file="${vcproj}" />
+        </do>
+      </foreach>
+      <foreach item="File" property="winHeader">
+        <in>
+          <items>
+            <include name="${aprDir}/**/*.hw" />
+            <include name="${aprUtilDir}/**/*.hw" />
+            <include name="${aprUtilDir}/**/expat.h.in" />
+          </items>
+        </in>
+        <do>
+          <property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
+          <loadfile file="${winHeader}" property="headertext">
+            <filterchain>
+              <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
+              <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
+              <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
+              <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
+#ifndef WIN64
+#  define WIN64
+#endif' />
+              <replacestring from='#define _WIN32_WINNT ' to='
+/* SharpSvn */
+#ifndef WINNT
+#  define WINNT
+#endif
+#ifndef _WIN32_WINNT
+#  define _WIN32_WINNT 0x0501
+#endif
+#if !defined(NTDDI_VERSION) &amp;&amp; defined(_M_IX86)
+#  define NTDDI_VERSION 0x05000000
+#endif
+/* /SharpSvn */
+//#define  _WIN32_WINNT ' if="${(VSversion == '2005')}" />
+              <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
+/* SharpSvn extension */
+APR_END_DECLS
+#include &lt;wspiapi.h&gt;
+APR_BEGIN_DECLS
+/* /SharpSvn extension */' />
+              <replacestring from='#pragma' to='// #disabled-pragma' />
+            </filterchain>
+          </loadfile>
+          <echo message="${headertext}" file="${winHeader2}" />
+        </do>
+      </foreach>
+      <echo message='
+          
+/* SharpSvn */
+#ifndef freeaddrinfo
+#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
+#endif
+/* /SharpSvn */
+
+' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
+
+      <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
+        <filterchain>
+          <replacestring from='(apr_atomic_win32_ptr_val_fn)' to='' />
+          <replacestring from='(apr_atomic_win32_ptr_fn)' to='' />
+          <replacestring from='(apr_atomic_win32_ptr_val_val_fn)' to='' />
+          <replacestring from='(apr_atomic_win32_ptr_ptr_ptr_fn)' to='' />
+        </filterchain>
+      </loadfile>
+      <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
+      <if test="${applyMerges}">
+        <loadfile file="${aprDir}\file_io\win32\open.c" property="open.c">
+          <filterchain>
+            <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
+                           to='DWORD sharemode = FILE_SHARE_READ;' />
+            <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' />
+          </filterchain>
+        </loadfile>
+        <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
+      </if>
+      <!-- Add Windows 2000 ipv6 workarounds -->
+      <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
+    </OnceBlock>
+  </target>
+  <target name="build-apr" depends="download,extract,checkout, prepare-apr">
+    <OnceBlock file="build/apr-${aprVersion}_${platform}.build">
+      <!-- Prepare static builds (requires changed build order) -->
+      <foreach item="File" property="project">
+        <in>
+          <items>
+            <include name="${aprDir}/apr.vcproj" />
+            <include name="${aprDir}/libapr.vcproj" if="${static!='true'}" />
+            <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
+            <include name="${aprUtilDir}/aprutil.vcproj" />
+            <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
+          </items>
+        </in>
+        <do>
+          <VCBuild platform="${platform}">
+            <arg value="${project}" />
+            <arg value="${Configuration}|${platform}" />
+          </VCBuild>
+          <if test="${static != 'true'}">
+            <copy todir="${aprUtilDir}" flatten="true">
+              <fileset>
+                <include name="${aprDir}/release/*.lib" if="${platform=='win32'}" />
+                <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" if="${platform=='win32'}" />
+                <include name="${aprDir}/x64/release/*.lib" if="${platform=='x64'}" />
+                <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" if="${platform=='x64'}" />
+              </fileset>
+            </copy>
+          </if>
+        </do>
+      </foreach>
+      <if test="${static != 'true'}">
+        <!-- Delete xml and apr intermediates used for building apr-util -->
+        <delete>
+          <fileset basedir="${aprUtilDir}">
+            <include name="apr*.lib" />
+            <include name="libapr*.lib" />
+            <include name="xml*.lib" />
+            <include name="libxml*.lib" />
+          </fileset>
+        </delete>
+      </if>
+    </OnceBlock>
+    <copy todir="${aprDir}/Debug">
+      <fileset basedir="${aprDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${aprUtilDir}/Debug">
+      <fileset basedir="${aprUtilDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${aprDir}/LibD">
+      <fileset basedir="${aprDir}/LibR">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${aprUtilDir}/LibD">
+      <fileset basedir="${aprUtilDir}/LibR">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib" flatten="true">
+      <fileset>
+        <include name="${aprDir}/LibR/*.lib" />
+        <include name="${aprDir}/LibR/*.pdb" />
+        <include name="${aprDir}/Release/*.lib" />
+        <include name="${aprDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/LibR/*.lib" />
+        <include name="${aprUtilDir}/LibR/*.pdb" />
+        <include name="${aprUtilDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="build/win32/lib/release" flatten="true">
+      <fileset>
+        <include name="${aprDir}/LibR/*.lib" />
+        <include name="${aprDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/LibR/*.lib" />
+        <include name="${aprUtilDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="build/win32/lib/debug" flatten="true">
+      <fileset>
+        <include name="${aprDir}/LibR/*.lib" />
+        <include name="${aprDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/LibR/*.lib" />
+        <include name="${aprUtilDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-x64" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/LibR/*.lib" />
+        <include name="${aprDir}/x64/LibR/*.pdb" />
+        <include name="${aprDir}/x64/Release/*.lib" />
+        <include name="${aprDir}/x64/Release/*.pdb" />
+        <include name="${aprUtilDir}/x64/LibR/*.lib" />
+        <include name="${aprUtilDir}/x64/LibR/*.pdb" />
+        <include name="${aprUtilDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/x64/Release/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="build/x64/lib/release" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/LibR/*.lib" />
+        <include name="${aprDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/x64/LibR/*.lib" />
+        <include name="${aprUtilDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin" flatten="true">
+      <fileset>
+        <include name="${aprDir}/Release/*.dll" />
+        <include name="${aprUtilDir}/Release/*.dll" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin/x64" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/Release/*.dll" />
+        <include name="${aprUtilDir}/x64/Release/*.dll" />
+      </fileset>
+    </copy>
+    <property name="aprIncludeDir" value="${release}/include/apr-1" />
+    <copy todir="${aprIncludeDir}">
+      <fileset basedir="${aprDir}/include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${aprIncludeDir}">
+      <fileset basedir="${aprUtilDir}/include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${aprIncludeDir}">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib">
+        <include name="expat.h" />
+      </fileset>
+    </copy>
+    <if test="true">
+      <copy todir="${aprDir}/Debug">
+        <fileset basedir="${aprDir}/Release">
+          <include name="**/*.dll" />
+        </fileset>
+      </copy>
+      <copy todir="${aprUtilDir}/Debug">
+        <fileset basedir="${aprUtilDir}/Release">
+          <include name="**/*.dll" />
+        </fileset>
+      </copy>
+    </if>
+  </target>
+</project>

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
+  <property name="zlibDir" value="${buildRoot}/${platform}/zlib-${zlibVersion}" />
+
+  <target name="prepare-zlib" depends="extract">
+  </target>
+  <target name="build-zlib" depends="prepare-zlib, extract">
+    <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
+      <NMake workingdir="${zlibDir}" makeFile="${zlibDir}/win32/Makefile.msc">
+        <arg line='LOC="-DASMV -DASMINF" OBJA="inffas32.obj match686.obj"' if="${platform == 'win32'}" />
+        <arg line='AS=ml64 LOC="-DASMV -DASMINF -I${zlibDir}" OBJA="inffasx64.obj gvmat64.obj inffas8664.obj"' if="${platform == 'x64'}" />
+      </NMake>
+    </OnceBlock>
+    <copy todir="${release}/include">
+      <fileset basedir="${zlibDir}">
+        <include name="zlib.h" />
+        <include name="zconf.h" />
+      </fileset>
+    </copy>
+    <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstat.lib" />
+    <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstatD.lib" />
+    
+    <copy todir="${releaseLib}" file="${zlibDir}/zlib.lib" />
+    <copy todir="${releaseLib}" file="${zlibDir}/zlib.pdb" />
+    <copy todir="${releaseLib}" file="${zlibDir}/zlibstat.lib" />
+    <copy todir="${releaseLib}" file="${zlibDir}/zlibstatD.lib" />
+  </target>
+</project> 

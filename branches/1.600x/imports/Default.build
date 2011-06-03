@@ -1,0 +1,67 @@
+<?xml version="1.0" ?>
+<project basedir="." default="help">
+  <property name="svnBuildType" value="tag" overwrite="false" />
+  <property name="serfBuildType" value="trunk" />
+  
+  <property name="guessedPlatform" value="win32" />
+  <if test="${environment::variable-exists('LIB')}">
+    <property name="guessedPlatform" value="x64" if="${string::contains(string::to-upper(environment::get-variable('LIB')),'LIB\AMD64')}" />
+  </if>
+
+  <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
+
+  <!-- -->
+  <property name="subversionVersion" value="1.6.17" overwrite="false" />
+  <property name="subversionMerges" value="876514,876515,877344;M877588;877964,878127,878129,878131,878142,878175,878176,878836;T879801;896915,898048,908980,908981,923737,935992,935996,944635" overwrite="false" />
+  <property name="subversionMergeBranches" value="" overwrite="false" />
+  <property name="svnAddSharpSvn" value="true" overwrite="false" />
+  <property name="aprMerges" value="960671" overwrite="false" />
+  <property name="neonMerges" value="" overwrite="false" />
+  <!-- -->
+  <property name="opensslVersion" value="1.0.0d" overwrite="false" />
+  <property name="neonVersion" value="0.29.6" overwrite="false" />
+
+  <property name="aprVersion" value="1.4.5" overwrite="false" />
+  <property name="aprUtilVersion" value="1.3.12" overwrite="false" />
+  <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
+  <property name="dbVersion" value="4.4.20" overwrite="false" />
+  <property name="zlibVersion" value="1.2.5" overwrite="false" />
+  <property name="serfVersion" value="0.7.2" overwrite="false" />
+  <property name="saslVersion" value="2.1.23" overwrite="false" />
+  <property name="swigVersion" value="2.0.2" overwrite="false" />
+
+  <property name="httpdVersion" value="2.2.15" overwrite="false" />
+  <property name="gettextVersion" value="0.17" overwrite="false" />
+  <property name="sqliteVersion" value="3.7.6.3" overwrite="false" />
+  
+  <!-- For testcase -->
+  <property name="nunitVersion" value="2.4.3" overwrite="false" />
+  <property name="sharpZipVersion" value="0860" overwrite="false" />
+  <property name="junitVersion" value="4.8.1" overwrite="false" />
+
+  <!-- Prefer http or https -->
+  <property name="httpOrHttps" value="http" />
+
+  <!-- Prefix to use for dependency DLL's -->
+  <property name="dllPrefix" value="SharpSvn-" overwrite="false" />
+
+  <property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 9.0\VC" />
+
+  <include buildfile="scripts/default.build" />
+
+  <target name="help">
+    <echo>
+      The following targets are defined
+      - build      - Build all
+      - clean      - Clean all
+      - distclean  - Clean all + clean downloads
+      - clean-svn  - Clean+Update subversion
+
+      Use nant /D:platform=x64 to build/clean the x64 binaries if autodetect fails
+
+      The following targets try to start nant within the specified context using vcvars.cmd
+      - x86
+      - x64
+    </echo>
+  </target>
+</project>

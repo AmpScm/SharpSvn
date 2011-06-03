@@ -1,0 +1,200 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
+  
+  <property name="junitFilename" value="junit${junitVersion}.zip" />
+  <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
+  <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
+
+  <target name="download" depends="initialize-layout">
+    <mkdir dir="${downloads}" />
+    <if test="${not file::exists(downloads + opensslFilename)}">
+      <get src="http://www.openssl.org/source/${opensslFilename}" dest="${downloads}/${opensslFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + dbFilename)}">
+      <get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="${downloads}/${dbFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + zlibFilename)}">
+      <get src="http://www.zlib.net/${zlibFilename}" dest="${downloads}/${zlibFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + nunitFilename)}">
+      <get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="${downloads}/${nunitFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + sharpZipFilename)}">
+      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="${downloads}/${sharpZipFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + saslFilename)}">
+      <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
+    </if>
+    <if test="${property::exists('withSwig') and not file::exists(downloads + swigFilename)}">
+      <get src="http://prdownloads.sourceforge.net/swig/${swigFilename}" dest="${downloads}/${swigFilename}" />
+    </if>
+    <if test="${intl == 'gettext'}">
+      <if test="${not file::exists(downloads + gettextFilename)}">
+        <get src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}" dest="${downloads}/${gettextFilename}" />
+      </if>
+      <if test="${not file::exists(downloads + gettextToolsFilename)}">
+        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsFilename}" dest="${downloads}/${gettextToolsFilename}" />
+      </if>
+      <if test="${not file::exists(downloads + gettextToolsRuntimeFilename)}">
+        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsRuntimeFilename}" dest="${downloads}/${gettextToolsRuntimeFilename}" />
+      </if>
+      <if test="${not file::exists(downloads + gettextToolsIconvFilename)}">
+        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}" dest="${downloads}/${gettextToolsIconvFilename}" />
+      </if>
+    </if>
+    <if test="${javaHome != ''}">
+      <if test="${not file::exists(downloads + junitFilename)}">
+        <get src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}" dest="${downloads}/${junitFilename}" />
+      </if>
+    </if>
+  </target>
+
+  <target name="extract" depends="download">
+    <mkdir dir="build" />
+    <if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
+      <UnTar tarfile="${downloads + opensslFilename}" todir="build/${platform}" compresstype="gzip" />
+    </if>
+    <if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
+      <UnTar tarfile="${downloads + dbFilename}" todir="build" compresstype="gzip" />
+    </if>
+    <if test="${not directory::exists(zlibDir)}">
+      <UnTar tarfile="${downloads + zlibFilename}" todir="build/${platform}" compresstype="gzip" />
+    </if>
+    <if test="${not directory::exists(nunitDir)}">
+      <unzip zipfile="${downloads + nunitFilename}" todir="${nunitDir}"  />
+    </if>
+    <if test="${not directory::exists(sharpZipLibDir)}">
+      <unzip zipfile="${downloads + sharpZipFilename}" todir="${sharpZipLibDir}"  />
+    </if>
+    <if test="${not directory::exists(saslDir)}">
+      <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
+    </if>
+    <if test="${property::exists('withSwig') and not directory::exists(swigDir)}">
+      <unzip zipfile="${downloads + swigFilename}" todir="build" />
+    </if>
+    <if test="${intl == 'gettext'}">
+      <if test="${not directory::exists(gettextDir)}">
+        <UnTar tarfile="${downloads + gettextFilename}" todir="build" compresstype="gzip" />
+      </if>
+      <if test="${not directory::exists(gettextToolsDir)}">
+        <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
+        <unzip zipfile="${downloads + gettextToolsRuntimeFilename}" todir="${gettextToolsDir}" />
+        <unzip zipfile="${downloads + gettextToolsIconvFilename}" todir="${gettextToolsDir}" />
+      </if>
+    </if>
+    <if test="${javaHome != ''}">
+      <if test="${not directory::exists(junitDir)}">
+        <unzip zipfile="${downloads + junitFilename}" todir="build" />
+      </if>
+    </if>
+  </target>
+  <target name="checkout" depends="initialize-layout">
+    <if test="${not directory::exists(svnBase)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
+        <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+        <arg value="${svnBase}" />
+      </Svn>
+    </if>
+    <if test="${not directory::exists(platformRoot + '/neon')}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
+        <arg value="build/${platform}/neon" />
+      </Svn>
+      <!-- Write version for subversion configure script -->
+      <echo message="${neonVersion}" file="${platformRoot}/neon/.version" />
+    </if>
+    <if test="${buildHttpd=='true' and not directory::exists(httpdDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" />
+        <arg value="${httpdDir}" />
+      </Svn>
+    </if>
+    <if test="${buildHttpd=='true' and not directory::exists(aprIconvDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
+        <arg value="${aprIconvDir}" />
+      </Svn>
+    </if>
+    <if test="${not directory::exists(aprDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
+        <arg value="${aprDir}" />
+      </Svn>
+    </if>
+    <if test="${not directory::exists(aprUtilDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
+        <arg value="${aprUtilDir}" />
+      </Svn>
+    </if>
+    <if test="${not directory::exists(platformRoot + '/serf')}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="http://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
+        <arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
+        <arg value="http://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
+        <arg value="${platformRoot}/serf" />
+      </Svn>
+    </if>
+    <if test="${buildSqlite and not directory::exists(sqliteDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="http://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
+        <arg value="${sqliteDir}" />
+      </Svn>
+    </if>
+  </target>
+
+  <target name="copy-licenses">
+    <copy
+			file="build/${platform}/subversion/subversion/LICENSE"
+			tofile="release/licenses/Subversion-License.txt" />
+    <copy
+			file="${aprDir}/LICENSE"
+			tofile="release/licenses/Apr-License.txt" />
+    <copy
+			file="${aprUtilDir}/LICENSE"
+			tofile="release/licenses/Apr-Util-License.txt" />
+    <copy
+			file="${dbDir}/LICENSE"
+			tofile="release/licenses/BerkeleyDB-License.txt" />
+    <copy
+			file="${saslDir}/COPYING"
+			tofile="release/licenses/Cyrus-Sasl-License.txt" />
+    <copy
+			file="${neonDir}/src/COPYING.LIB"
+			tofile="release/licenses/Neon-License.txt" />
+    <copy
+			file="${opensslDir}/LICENSE"
+			tofile="release/licenses/OpenSsl-License.txt" />
+    <copy
+			file="${serfDir}/LICENSE"
+			tofile="release/licenses/Serf-License.txt" />
+    <copy
+			file="${zlibDir}/README"
+			tofile="release/licenses/ZLib-License.txt" />
+    <copy
+			file="${sharpSvnDir}/LICENSE.txt"
+			tofile="release/licenses/SharpSvn-License.txt"
+			if="${file::exists(sharpSvnDir + '/LICENSE.txt')}"/>
+    <copy
+			file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
+			tofile="release/licenses/Putty-License.txt"
+			if="${file::exists(sharpSvnDir + '/src/SharpPlink/PuttySrc/LICENCE')}" />
+    <copy
+        file="${gettextDir}/gettext-runtime/COPYING"
+        tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
+    <copy
+			file="${sharpSvnDir}/imports/scripts/SharpSvn-Licenses.wxs"
+			tofile="release/licenses/SharpSvn-Licenses.wxs" />
+  </target>
+</project>
