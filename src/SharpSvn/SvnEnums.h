@@ -85,7 +85,7 @@ namespace SharpSvn {
 		Unknown			= svn_depth_unknown,
 
 		// Not supported in 1.5 client api
-		/// <summary>Exclude (remove, whatever) directory D (Currently unused on the client layer)</summary>
+		/// <summary>Exclude (remove, whatever) directory D</summary>
 		Exclude			= svn_depth_exclude,
 
 		/// <summary>
@@ -177,20 +177,67 @@ namespace SharpSvn {
 		TreeConflict				= svn_wc_notify_tree_conflict,
 		ExternalFailed				= svn_wc_notify_failed_external,
 
-		// 1.7+
-		/// <summary>[[[ Unversioned obstruction error (Not guaranteed compatible with future Subversion versions!)]]]</summary>
-		UpdateObstruction			= svn_wc_notify_update_obstruction,
-		/// <summary>[[[ External removed (Not guaranteed compatible with future Subversion versions!)]]]</summary>
-		ExternalRemoved				= svn_wc_notify_update_external_removed,
+        /// <summary>Starting an update operation.</summary>
+        UpdateStarted               = svn_wc_notify_update_started,
 
-		/// <summary>[[[ A node below a deleted and tree conflicted directory was added (Not guaranteed compatible with future Subversion versions!)]]]</summary>
-		UpdateAddDeleted			= svn_wc_notify_update_add_deleted,
+        /// <summary>An update tried to add a file or directory at a path where a separate working copy was found</summary>
+        UpdateSkipObstruction       = svn_wc_notify_update_skip_obstruction,
 
-		/// <summary>[[[ A node below a deleted and tree conflicted directory was updated (Not guaranteed compatible with future Subversion versions!)]]]</summary>
-		UpdateDeleted				= svn_wc_notify_update_update_deleted,
+        /// <summary>An explicit update tried to update a file or directory that doesn't live in the repository and can't be brought in.</summary>
+        UpdateSkipWorkingOnly       = svn_wc_notify_update_skip_working_only,
 
-		/// <summary>[[[The mergeinfo on path was updated (Not guaranteed compatible with future Subversion versions!)]]]</summary>
-		RecordMergeInfo				= svn_wc_notify_merge_record_info
+        /// <summary>An update operation removed an external working copy.</summary>
+        UpdateExternalRemoved       =  svn_wc_notify_update_external_removed,
+
+        /// <summary>A node below an existing node was added during update.</summary>
+        UpdateShadowedAdd           = svn_wc_notify_update_shadowed_add,
+
+        /// <summary>A node below an exising node was updated during update.</summary>
+        UpdateShadowedUpdate        = svn_wc_notify_update_shadowed_update,
+
+        /// <summary>A node below an existing node was deleted during update.</summary>
+        UpdateShadowedDelete        = svn_wc_notify_update_shadowed_delete,
+
+        /// <summary>The mergeinfo on path was updated.</summary>
+        RecordMergeInfo             = svn_wc_notify_merge_record_info,
+
+        /// <summary>An working copy directory was upgraded to the latest format.</summary>
+        UpgradedDirectory           = svn_wc_notify_upgraded_path,
+
+        /// <summary>Mergeinfo describing a merge was recorded.</summary>
+        RecordMergeInfoStarted      = svn_wc_notify_merge_record_info_begin,
+
+        /// <summary>Mergeinfo was removed due to elision.</summary>
+        RecordMergeInfoElided       = svn_wc_notify_merge_elide_info,
+
+        /// <summary>A file in the working copy was patched.</summary>
+        PatchApplied                = svn_wc_notify_patch,
+
+        /// <summary>A hunk from a patch was applied.</summary>
+        PatchAppliedHunk            = svn_wc_notify_patch_applied_hunk,
+
+        /// <summary>A hunk from a patch was rejected.</summary>
+        PatchRejectedHunk           = svn_wc_notify_patch_rejected_hunk,
+
+        /// <summary>A hunk from a patch was found to already be applied.</summary>
+        PatchFoundAlreadyApplied    = svn_wc_notify_patch_hunk_already_applied,
+
+        /// <summary>Committing a non-overwriting copy (path is the target of the
+        /// copy, not the source).</summary>
+        CommitAddCopy               = svn_wc_notify_commit_copied,
+
+        /// <summary>Committing an overwriting (replace) copy (path is the target of
+        /// the copy, not the source).</summary>
+        CommitReplacedWithCopy      = svn_wc_notify_commit_copied_replaced,
+
+        /// <summary>The server has instructed the client to follow a URL redirection.</summary>
+        FollowUrlRedirect           = svn_wc_notify_url_redirect,
+
+        /// <summary>The operation was attempted on a path which doesn't exist.</summary>
+        NonExistentPath             = svn_wc_notify_path_nonexistent,
+
+        /// <summary>Removing a path by excluding it.</summary>
+        Excluded                    = svn_wc_notify_exclude,
 	};
 
 	public enum class SvnNotifyState

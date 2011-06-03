@@ -63,3 +63,6 @@ struct svn_fs_root_t
 
 struct svn_ra_session_t
 {};
+
+struct svn_wc_context_t
+{};
