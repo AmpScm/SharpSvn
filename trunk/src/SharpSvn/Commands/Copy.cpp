@@ -99,8 +99,8 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyAr
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_commit_info_t* pInfo = nullptr;
 
@@ -252,8 +252,8 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopy
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sources, %pool);
 

@@ -105,8 +105,8 @@ bool SvnClient::GetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ 
 		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "revision");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_string_t *result = nullptr;
 	svn_revnum_t set_rev = 0;

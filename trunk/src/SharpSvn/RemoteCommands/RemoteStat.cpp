@@ -27,8 +27,8 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
         throw gcnew ArgumentException("Not a valid relative path", "relPath");
 
     Ensure();
-    ArgsStore store(this, args);
     AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
     result = nullptr;
 

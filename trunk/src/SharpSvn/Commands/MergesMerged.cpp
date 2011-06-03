@@ -79,8 +79,8 @@ bool SvnClient::ListMergesMerged(SvnTarget ^target, SvnTarget^ source, SvnMerges
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (handler)
 		args->List += handler;

@@ -110,8 +110,8 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
 

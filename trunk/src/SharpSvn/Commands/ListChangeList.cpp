@@ -74,8 +74,8 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (changeListHandler)
 		args->ListChangeList += changeListHandler;

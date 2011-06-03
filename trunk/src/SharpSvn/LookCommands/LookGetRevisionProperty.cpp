@@ -82,8 +82,8 @@ bool SvnLookClient::GetRevisionProperty(SvnLookOrigin^ lookOrigin, String^ prope
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	value = nullptr;
 

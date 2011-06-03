@@ -162,8 +162,8 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool subpool(pool);
+	ArgsStore store(this, args, %subpool);
 
 	svn_error_t *r;
 	svn_repos_t *repos;

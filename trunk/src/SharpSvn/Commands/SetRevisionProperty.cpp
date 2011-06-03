@@ -182,7 +182,7 @@ bool SvnClient::InternalSetRevisionProperty(Uri^ target, SvnRevision^ revision, 
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
-	ArgsStore store(this, args);
+	ArgsStore store(this, args, pool);
 
 	const char* pName = pool->AllocString(propertyName);
 

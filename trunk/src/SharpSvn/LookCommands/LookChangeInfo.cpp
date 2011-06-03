@@ -95,8 +95,8 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (changeInfoHandler)
 		args->ChangeInfo += changeInfoHandler;

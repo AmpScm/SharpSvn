@@ -55,8 +55,8 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 		throw gcnew ArgumentNullException("result");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	AprStreamFile out(result, %pool);
 	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
@@ -111,8 +111,8 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	AprStreamFile out(result, %pool);
 	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);

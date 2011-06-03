@@ -45,8 +45,8 @@ bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersi
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_wc_revision_status_t *result = nullptr;
 

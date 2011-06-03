@@ -61,8 +61,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_repos_t* repos = nullptr;
 	svn_error_t* r;

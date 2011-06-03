@@ -110,8 +110,8 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 	static const svn_wc_entry_callbacks2_t walk_callbacks =
 	{ sharpsvn_found_entry, sharpsvn_handle_error };
 
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	args->_dir = directory;
 

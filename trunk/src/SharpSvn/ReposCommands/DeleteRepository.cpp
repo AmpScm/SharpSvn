@@ -45,8 +45,8 @@ bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepo
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_error_t* r = svn_repos_delete(
 		pool.AllocPath(repositoryPath),

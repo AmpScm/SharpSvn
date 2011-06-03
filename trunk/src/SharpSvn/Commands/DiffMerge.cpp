@@ -51,8 +51,8 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeTo");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	apr_array_header_t *merge_options = nullptr;
 

@@ -34,8 +34,8 @@ bool SvnRepositoryClient::HotCopy(String^ fromRepository, String^ toRepository, 
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	return args->HandleResult(this,
 					   svn_repos_hotcopy(pool.AllocPath(fromRepository),

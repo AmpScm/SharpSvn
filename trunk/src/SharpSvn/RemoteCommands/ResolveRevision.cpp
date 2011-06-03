@@ -41,8 +41,8 @@ bool SvnRemoteSession::ResolveRevision(SvnRevision^ revision, SvnRemoteCommonArg
 	}
 
 	Ensure();
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 	revno = -1L;
 	svn_revnum_t rev;
 	svn_opt_revision_t opt_rev = revision->ToSvnRevision();

@@ -104,8 +104,8 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList
 		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);

@@ -196,7 +196,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 
 		if (!uri)
 		{
-			ArgsStore store(this, args);
+			ArgsStore store(this, args, nullptr);
 
 			// We must provide some kind of svn error, to eventually replace this method with real svn client code
 			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_NOT_DIRECTORY, nullptr, nullptr), targetPaths);
@@ -206,7 +206,7 @@ bool SvnClient::Log(ICollection<String^>^ targetPaths, SvnLogArgs^ args, EventHa
 			first = uri;
 		else if (Uri::Compare(uri, first, UriComponents::HostAndPort | UriComponents::Scheme | UriComponents::StrongAuthority, UriFormat::UriEscaped, StringComparison::Ordinal))
 		{
-			ArgsStore store(this, args);
+			ArgsStore store(this, args, nullptr);
 
 			// We must provide some kind of svn error, to eventually replace this method with real svn client code
 			return args->HandleResult(this, svn_error_create(SVN_ERR_WC_BAD_PATH, nullptr, "Working copy paths must be in the same repository"), targetPaths);
@@ -269,8 +269,8 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	args->_mergeLogLevel = 0; // Clear log level
 	args->_searchRoot = searchRoot;

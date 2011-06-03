@@ -77,8 +77,8 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_commit_info_t* pInfo = nullptr;
 
@@ -213,8 +213,8 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_commit_info_t* commitInfoPtr = nullptr;
 

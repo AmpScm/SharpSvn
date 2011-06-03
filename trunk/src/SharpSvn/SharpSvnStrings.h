@@ -98,13 +98,6 @@ namespace SharpSvn {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Depth must be Empty, Files or Infinity in 1.4 compatible compilation.
-        /// </summary>
-        internal: static property System::String^  DepthMustBeRecursiveValue {
-            System::String^  get();
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to A fatal error occurred within the subversion API - (Use Ctrl+C to copy message).
         /// </summary>
         internal: static property System::String^  FatalExceptionInSubversionApi {
@@ -545,10 +538,6 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::CropToValidDepth::get() {
         return ResourceManager->GetString(L"CropToValidDepth", resourceCulture);
-    }
-    
-    inline System::String^  SharpSvnStrings::DepthMustBeRecursiveValue::get() {
-        return ResourceManager->GetString(L"DepthMustBeRecursiveValue", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::FatalExceptionInSubversionApi::get() {

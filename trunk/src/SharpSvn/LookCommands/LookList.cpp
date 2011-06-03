@@ -81,8 +81,8 @@ bool SvnLookClient::List(SvnLookOrigin^ lookOrigin, String^ path, SvnLookListArg
 	// We allow a null listHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (listHandler)
 		args->List += listHandler;

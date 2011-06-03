@@ -86,6 +86,7 @@ namespace SharpSvn {
 	ref class SvnListChangeListArgs;
 	ref class SvnGetSuggestedMergeSourcesArgs;
 	ref class SvnGetAppliedMergeInfoArgs;
+	ref class SvnUpgradeArgs;
 
 	ref class SvnCropWorkingCopyArgs;
 	ref class SvnGetCapabilitiesArgs;
@@ -676,6 +677,23 @@ namespace SharpSvn {
 		/// <exception type="ArgumentException">Parameters invalid</exception>
 		bool CleanUp(String^ path, SvnCleanUpArgs^ args);
 #pragma endregion
+
+	public:
+		/////////////////////////////////////////
+#pragma region // Upgrade Client Command
+		/// <overloads>Recursively upgrades a working copy.(<c>svn upgrade</c>)</overloads>
+		/// <summary>Recursively upgrades a working copy.(<c>svn upgrade</c>)</summary>
+		/// <returns>true if the operation succeeded; false if it did not</returns>
+		/// <exception type="SvnException">Operation failed</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		bool Upgrade(String^ path);
+		/// <summary>Recursively upgrades a working copy.(<c>svn upgrade</c>)</summary>
+		/// <returns>true if the operation succeeded; false if it did not</returns>
+		/// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+		/// <exception type="ArgumentException">Parameters invalid</exception>
+		bool Upgrade(String^ path, SvnUpgradeArgs^ args);
+#pragma endregion
+
 
 	public:
 		/////////////////////////////////////////

@@ -60,8 +60,8 @@ bool SvnRemoteSession::LocationSegments(String^ relPath, SvnRemoteLocationSegmen
         throw gcnew ArgumentException("Not a valid relative path", "relPath");
 
     Ensure();
-    ArgsStore store(this, args);
     AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
     if (segmentHandler)
         args->LocationSegment += segmentHandler;

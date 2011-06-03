@@ -77,8 +77,8 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	AprArray<String^, AprCStrPathMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrPathMarshaller^>(targets, %pool);
 
@@ -132,8 +132,8 @@ bool SvnClient::RemoteUnlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 	}
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 

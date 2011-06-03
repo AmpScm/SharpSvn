@@ -49,8 +49,8 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded, SvnExtendedState::MimeTypesLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_add4(
 		pool.AllocPath(path),

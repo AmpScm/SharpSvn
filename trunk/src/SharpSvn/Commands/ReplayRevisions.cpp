@@ -140,8 +140,8 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 	// Allow null editor! (We allow overriding from args)
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	try
 	{

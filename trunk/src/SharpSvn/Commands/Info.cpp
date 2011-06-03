@@ -75,8 +75,8 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	// We allow a null infoHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (infoHandler)
 		args->Info += infoHandler;

@@ -126,9 +126,6 @@
   <data name="ArgumentMustBeAValidRepositoryUri" xml:space="preserve">
     <value>The argument must be a valid absolute repository Uri</value>
   </data>
-  <data name="DepthMustBeRecursiveValue" xml:space="preserve">
-    <value>Depth must be Empty, Files or Infinity in 1.4 compatible compilation</value>
-  </data>
   <data name="HandlerIsNotRegisteredAtThisTime" xml:space="preserve">
     <value>The handler is not registered at this time</value>
   </data>

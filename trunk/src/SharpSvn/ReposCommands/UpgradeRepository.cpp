@@ -43,8 +43,8 @@ bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRe
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_error_t* r = svn_repos_upgrade(
 		pool.AllocPath(repositoryPath),

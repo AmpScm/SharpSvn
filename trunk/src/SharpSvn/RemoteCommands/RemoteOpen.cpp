@@ -24,8 +24,8 @@ bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteOpenArgs^ args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_ra_session_t *session;
 

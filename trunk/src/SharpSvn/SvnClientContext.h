@@ -71,6 +71,7 @@ namespace SharpSvn {
 		// For SvnClient and SvnReposClient
 		SvnClientArgs^ _currentArgs;
 		Object^ _workState;
+		bool _keepSession;
 
 	internal:
 		// Used config path; used for the authentication cache
@@ -119,6 +120,18 @@ namespace SharpSvn {
 			bool get()
 			{
 				return !_ctx;
+			}
+		}
+
+		property bool KeepSession
+		{
+			bool get()
+			{
+				return _keepSession;
+			}
+			void set(bool value)
+			{
+				_keepSession = value;
 			}
 		}
 
@@ -186,8 +199,9 @@ namespace SharpSvn {
 		{
 			initonly SvnClientContext^ _client;
 			initonly SvnClientContext^ _lastContext;
+			initonly svn_wc_context_t *_wc_ctx;
 		public:
-			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args);
+			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args, AprPool^ pool);
 			~ArgsStore();
 		};
 	internal:

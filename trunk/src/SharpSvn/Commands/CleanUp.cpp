@@ -40,8 +40,8 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_cleanup(
 		pool.AllocPath(path),
