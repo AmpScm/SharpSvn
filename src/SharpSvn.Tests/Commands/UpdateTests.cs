@@ -46,8 +46,10 @@ namespace SharpSvn.Tests.Commands
             UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wc);
             this.RenameAdminDirs(_wc);
 
+            RawRelocate(_wc, new Uri("file:///tmp/repos/"), ReposUrl);
+
             SvnClient cl = new SvnClient(); // Fix working copy to real location
-            cl.Relocate(_wc, new Uri("file:///tmp/repos/"), ReposUrl);
+            cl.Upgrade(_wc);
         }
 
         [Test]
@@ -113,7 +115,7 @@ namespace SharpSvn.Tests.Commands
             bool obstructionFound = false;
             ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
             {
-                if (e.Action == SvnNotifyAction.UpdateObstruction)
+                if (e.Action == SvnNotifyAction.UpdateShadowedAdd)
                     obstructionFound = true;
 
             };
@@ -204,7 +206,7 @@ namespace SharpSvn.Tests.Commands
                     return;
 
                 gotIt = true;
-                Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateObstruction));
+                Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateShadowedAdd));
                 Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.Directory));
             };
             ua.ThrowOnError = false;
