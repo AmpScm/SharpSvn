@@ -25,7 +25,7 @@
 #include <apr-1/apr_strings.h>
 #include <apr-1/apr_file_io.h>
 
-#define SVN_DEPRECATED __declspec(deprecated)
+#define SVN_DEPRECATED //__declspec(deprecated)
 
 #include <svn_client.h>
 #include <svn_compat.h>

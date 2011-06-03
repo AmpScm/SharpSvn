@@ -383,9 +383,10 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		r = svn_client__get_revision_number(
 			&start_rev,
 			nullptr,
+			CtxHandle->wc_ctx,
+			pTarget,
 			ra_session,
 			args->Start->AllocSvnRevision(%pool),
-			pTarget,
 			pool.Handle);
 
 		if (r)

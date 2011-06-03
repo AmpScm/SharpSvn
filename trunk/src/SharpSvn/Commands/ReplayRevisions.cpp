@@ -179,9 +179,10 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 		r = svn_client__get_revision_number(
 			&start_rev,
 			nullptr,
+			CtxHandle->wc_ctx,
+			pTarget,
 			ra_session,
 			range->StartRevision->AllocSvnRevision(%pool),
-			pTarget,
 			pool.Handle);
 
 		if (r)
@@ -190,9 +191,11 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 		r = svn_client__get_revision_number(
 			&watermark_rev,
 			nullptr,
+			CtxHandle->wc_ctx,
+			pTarget,
 			ra_session,
 			args->LowWatermarkRevision->AllocSvnRevision(%pool),
-			pTarget,
+			
 			pool.Handle);
 
 		if (r)

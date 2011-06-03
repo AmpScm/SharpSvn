@@ -65,7 +65,7 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 	svn_wc_status2_t *status;
 	SVN_HANDLE(svn_wc_status2(&status, path, adm_access, pool.Handle));
 
-	svn_wc_conflict_description_t *conflict;
+	svn_wc_conflict_description2_t *conflict;
 	svn_wc_conflict_version_t *left_version, *right_version;
 
 	left_version = svn_wc_conflict_version_create(pool.AllocCanonical(leftSource->RepositoryRoot),
@@ -81,8 +81,7 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 												  pool.Handle);
 
 
-	conflict = svn_wc_conflict_description_create_tree(path,
-													   adm_access,
+    conflict = svn_wc_conflict_description_create_tree2(path,
 													   status->entry->kind,
 													   (svn_wc_operation_t)args->Operation,
 													   left_version,
@@ -91,7 +90,7 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 	conflict->reason = (svn_wc_conflict_reason_t)args->Reason;
 	conflict->action = (svn_wc_conflict_action_t)args->Action;
 
-	SVN_HANDLE(svn_wc__add_tree_conflict(conflict, adm_access, pool.Handle));
+	SVN_HANDLE(svn_wc__add_tree_conflict(CtxHandle->wc_ctx, conflict, pool.Handle));
 
 	SVN_HANDLE(svn_wc_adm_close2(adm_access, pool.Handle));
 
