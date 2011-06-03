@@ -74,8 +74,8 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 	// We allow a null listHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (listHandler)
 		args->PropertyList += listHandler;

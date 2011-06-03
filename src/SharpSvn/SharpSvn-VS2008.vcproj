@@ -1071,6 +1071,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\Upgrade.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\Write.cpp"
 					>
 				</File>
@@ -1340,6 +1344,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\Update.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Upgrade.h"
 					>
 				</File>
 				<File

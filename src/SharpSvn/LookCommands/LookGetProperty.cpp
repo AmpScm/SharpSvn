@@ -69,8 +69,8 @@ bool SvnLookClient::GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_fs_root_t* root = nullptr;
 	svn_error_t* r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool);

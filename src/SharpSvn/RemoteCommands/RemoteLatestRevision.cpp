@@ -19,8 +19,8 @@ bool SvnRemoteSession::GetLatestRevision(SvnRemoteCommonArgs^ args, [Out] __int6
 		throw gcnew ArgumentNullException("args");
 
 	Ensure();
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_revnum_t rev = -1;
 	try

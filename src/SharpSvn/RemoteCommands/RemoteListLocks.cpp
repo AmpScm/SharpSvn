@@ -29,8 +29,8 @@ bool SvnRemoteSession::ListLocks(String^ relPath, SvnRemoteListLocksArgs^ args, 
         throw gcnew ArgumentException("Not a valid relative path", "relPath");
 
     Ensure();
-    ArgsStore store(this, args);
     AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
 	if (listHandler)
 		args->List += listHandler;

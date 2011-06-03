@@ -75,8 +75,8 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 	// We allow a null listHandler; the args object might just handle it itself
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	args->Prepare(target, args->Revision->RevisionType != SvnRevisionType::None);
 

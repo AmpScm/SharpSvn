@@ -242,7 +242,7 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 		throw gcnew ArgumentOutOfRangeException("target");
 
 	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
-	ArgsStore store(this, args);
+	ArgsStore store(this, args, pool);
 
 	svn_commit_info_t* pInfo = nullptr;
 

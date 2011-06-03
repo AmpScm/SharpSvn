@@ -30,8 +30,8 @@ bool SvnClient::CropWorkingCopy(System::String ^path, SvnDepth toDepth, SvnCropW
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_client_ctx_t* ctx = CtxHandle;
 	svn_wc_adm_access_t *adm_access = nullptr;

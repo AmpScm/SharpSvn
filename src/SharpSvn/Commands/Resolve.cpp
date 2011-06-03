@@ -57,8 +57,8 @@ bool SvnClient::Resolve(String^ path, SvnAccept choice, SvnResolveArgs^ args)
 	EnumVerifier::Verify(choice);
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_resolve(
 		pool.AllocPath(path),

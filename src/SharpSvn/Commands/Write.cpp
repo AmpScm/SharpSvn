@@ -46,8 +46,8 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args)
 		throw gcnew ObjectDisposedException("args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	SvnStreamWrapper wrapper(output, false, true, %pool);
 

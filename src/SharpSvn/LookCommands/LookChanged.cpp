@@ -45,8 +45,8 @@ bool SvnLookClient::Changed(SvnLookOrigin^ lookOrigin, SvnChangedArgs^ args, Eve
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (changedHandler)
 		args->Changed += changedHandler;

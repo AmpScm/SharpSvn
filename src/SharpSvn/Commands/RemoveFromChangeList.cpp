@@ -60,8 +60,8 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFro
 		throw gcnew ArgumentNullException("args");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_remove_from_changelists(
 		AllocPathArray(targets, %pool),

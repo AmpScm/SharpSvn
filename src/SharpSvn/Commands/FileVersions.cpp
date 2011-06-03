@@ -342,8 +342,8 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeCantBeWorking, "args");
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	if (versionHandler)
 		args->FileVersion += versionHandler;

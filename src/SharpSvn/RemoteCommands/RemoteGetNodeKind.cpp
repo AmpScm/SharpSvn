@@ -25,8 +25,8 @@ bool SvnRemoteSession::GetNodeKind(String^ relPath, SvnRemoteCommonArgs^ args, [
         throw gcnew ArgumentException("Not a valid relative path", "relPath");
 
 	Ensure();
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_node_kind_t kind;
 	result = SvnNodeKind::Unknown;

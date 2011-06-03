@@ -48,8 +48,8 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	const char* pPath = pool.AllocPath(targetPath);
 	svn_wc_adm_access_t* acc = nullptr;

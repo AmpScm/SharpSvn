@@ -19,8 +19,8 @@ bool SvnRemoteSession::GetRepositoryRoot(SvnRemoteCommonArgs^ args, [Out] Uri^% 
 		throw gcnew ArgumentNullException("args");
 
 	Ensure();
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	const char *url;
 	uri = nullptr;

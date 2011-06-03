@@ -56,8 +56,8 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	EnsureState(SvnContextState::ConfigLoaded);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 
 	svn_fs_root_t* root = nullptr;
 	svn_error_t* r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool);

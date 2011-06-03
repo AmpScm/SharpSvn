@@ -49,8 +49,8 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 
 	targetPath = SvnTools::GetNormalizedFullPath(targetPath);
 
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 	svn_wc_adm_access_t *adm_access;
 	const char *path = pool.AllocPath(targetPath);
 

@@ -407,7 +407,7 @@ void SvnClientContext::MergeConfiguration(String^ path)
 	SVN_THROW(svn_config_get_config(&CtxHandle->config, szPath, _pool->Handle));
 }
 
-SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ args)
+SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ args, AprPool^ pool)
 {
 	if (!args)
 		throw gcnew ArgumentNullException("args");
@@ -421,8 +421,15 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 	_lastContext = SvnClientContext::_activeContext;
 	SvnClientContext::_activeContext = _client;
 
+	svn_client_ctx_t *ctx = _client->CtxHandle;
+	svn_wc_context_t **p_wc_ctx = &ctx->wc_ctx;
+	_wc_ctx = *p_wc_ctx;
+
 	try
 	{
+		if (! client->KeepSession && pool != nullptr)
+			SVN_THROW(svn_wc_context_create(p_wc_ctx, NULL, pool->Handle, pool->Handle));
+
 		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->CommandType));
 	}
 	catch(Exception^)
@@ -439,6 +446,8 @@ SvnClientContext::ArgsStore::~ArgsStore()
 	if (args)
 		args->_hooked = false;
 
+	svn_client_ctx_t *ctx = _client->CtxHandle;
+	ctx->wc_ctx = _wc_ctx;
 	_client->_currentArgs = nullptr;
 	SvnClientContext::_activeContext = _lastContext;
 }
