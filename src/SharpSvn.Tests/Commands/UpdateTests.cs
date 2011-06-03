@@ -137,7 +137,7 @@ namespace SharpSvn.Tests.Commands
                 switch (n++)
                 {
                     case 0:
-                        Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateUpdate));
+                        Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateStarted));
                         break;
                     case 1:
                         Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateCompleted));
@@ -146,10 +146,12 @@ namespace SharpSvn.Tests.Commands
             };
 
             Client.Update(WcPath, ua);
+            Assert.That(n, Is.EqualTo(2));
 
             n = 0;
 
             Client.Update(new string[] { WcPath }, ua);
+            Assert.That(n, Is.EqualTo(2));
         }
 
         [Test]
@@ -206,7 +208,7 @@ namespace SharpSvn.Tests.Commands
                     return;
 
                 gotIt = true;
-                Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.UpdateShadowedAdd));
+                Assert.That(e.Action, Is.EqualTo(SvnNotifyAction.TreeConflict));
                 Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.Directory));
             };
             ua.ThrowOnError = false;
