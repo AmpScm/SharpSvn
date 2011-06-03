@@ -8,30 +8,62 @@
       <!-- Primary Client Applications -->
       <Component Id="svn.exe" Guid="441D7AC9-F28A-4EDF-845C-A17E91EA1E0A">
         <File Name="svn.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svn.exe">
+          <RegistryValue Value="[#svn.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="svnversion.exe" Guid="87BE948F-08AD-476D-B944-EE956B98C942">
         <File Name="svnversion.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnversion.exe">
+          <RegistryValue Value="[#svnversion.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <!-- Local Repository Tools -->
       <Component Id="svnadmin.exe" Guid="88E79183-D419-4F55-A05A-5DB82DA0A391">
         <File Name="svnadmin.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnadmin.exe">
+          <RegistryValue Value="[#svnadmin.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="svnsync.exe" Guid="276B8FEC-C380-4AFC-BBBB-1D6251B3474D">
         <File Name="svnsync.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnsync.exe">
+          <RegistryValue Value="[#svnsync.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="svnlook.exe" Guid="4AD53387-7B77-4663-8840-ACEB31D116F9">
         <File Name="svnlook.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnlook.exe">
+          <RegistryValue Value="[#svnlook.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="svndumpfilter.exe" Guid="0BA4F0A0-F65C-4AFB-B806-030E1B08D1AA">
         <File Name="svndumpfilter.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svndumpfilter.exe">
+          <RegistryValue Value="[#svndumpfilter.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <!-- SvnServe -->
       <Component Id="svnserve.exe" Guid="7EC3BCC8-7873-4DC7-8BE3-72B945D6EB4A">
         <File Name="svnserve.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnserve.exe">
+          <RegistryValue Value="[#svnserve.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <!-- Extra Tools -->
       <Component Id="svnmucc.exe" Guid="30951697-0A28-4D44-92BC-7F2B7F2A16CD">
         <File Name="svnmucc.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnmucc.exe">
+          <RegistryValue Value="[#svnmucc.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="svnauthz_validate.exe" Guid="6A9F1164-4ED0-440D-9950-37EE918D9E56">
         <File Id="svnauthz_validate.exe" Name="svnauthz-validate.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
