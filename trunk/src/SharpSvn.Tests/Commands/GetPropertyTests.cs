@@ -76,9 +76,6 @@ namespace SharpSvn.Tests.Commands
 			string wc = GetTempDir();
 			Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
 
-			SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
-			pa.ThrowOnError = false;
-
 			string value;
 			Client.GetProperty(Path.Combine(wc, "no-index.html"), "new-prop", out value);
 		}
