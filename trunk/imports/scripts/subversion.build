@@ -122,8 +122,8 @@
           
           <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
             <filterchain>
-              <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY);'
-                               to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr);' />
+              <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
+                               to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
@@ -156,7 +156,6 @@
           <include name="*.ezt" />
         </fileset>
       </copy>
-      <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
       <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
         <filterchain>
           <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
