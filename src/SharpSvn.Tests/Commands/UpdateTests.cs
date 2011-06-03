@@ -201,7 +201,7 @@ namespace SharpSvn.Tests.Commands
 
             ua = new SvnUpdateArgs();
             bool gotIt = false;
-            bool noTreeConflict = true;
+            bool noConflict = true;
             ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
             {
                 if (e.FullPath != sd)
@@ -215,12 +215,19 @@ namespace SharpSvn.Tests.Commands
             ua.AddExpectedError(SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
             ua.Conflict += delegate(object sender, SvnConflictEventArgs e)
             {
-                noTreeConflict = false;
+                noConflict = false;
             };
 
-            Assert.That(Client.Update(dir, ua), Is.False, "Update failed");
+            Assert.That(Client.Update(dir, ua), "Update failed");
             Assert.That(gotIt, "Got obstruction notification");
-            Assert.That(noTreeConflict, "No tree conflict");
+            Assert.That(noConflict, "No conflict event");
+
+            Client.Status(sd,
+                delegate(object sender, SvnStatusEventArgs sa)
+                {
+                    Assert.That(sa.TreeConflict, Is.Not.Null, "Has tree conflict");
+                    Assert.That(sa.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
+                });
         }
 
         [Test]
