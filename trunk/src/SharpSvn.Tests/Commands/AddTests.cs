@@ -120,7 +120,7 @@ namespace SharpSvn.Tests.Commands
             {
                 // This check verifies Subversion 1.5 behavior, but will probably
                 // give the real guid in 1.6+
-                Assert.That(e.RepositoryId, Is.EqualTo(Guid.Empty));
+                Assert.That(e.RepositoryId, Is.Not.EqualTo(Guid.Empty));
             });
 
             Guid gg;
