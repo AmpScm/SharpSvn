@@ -224,12 +224,6 @@ namespace SharpSvn.SourceIndexer.Tools
                                 continue;
                             }
                         }
-
-                        srcToolError = new StringBuilder();
-                        foreach (string line in result.Output)
-                        {
-                            srcToolError.AppendFormat(line);
-                        }
                     }
 
                     foreach (string line in result.Error)

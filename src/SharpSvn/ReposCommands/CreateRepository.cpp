@@ -44,10 +44,9 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
 	EnsureState(SvnContextState::ConfigLoaded);
 	ArgsStore store(this, args);
+	AprPool pool(%_pool);
 
 	svn_repos_t* result;
-
-	AprPool pool(%_pool);
 
 	apr_hash_t *fs_config = apr_hash_make(pool.Handle);
 
