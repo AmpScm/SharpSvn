@@ -40,6 +40,8 @@ namespace SharpSvn.Tests.Commands
 			base.SetUp();
 			this._path = this.GetTempFile();
 			UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), _path);
+            RawRelocate(_path, new Uri("file:///tmp/repos/"), ReposUrl);
+            Client.Upgrade(_path);
 			this.RenameAdminDirs(this._path);
 		}
 
