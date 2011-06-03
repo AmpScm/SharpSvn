@@ -179,6 +179,7 @@ namespace SharpSvn {
 		TreeConflict				= svn_wc_notify_tree_conflict,
 		ExternalFailed				= svn_wc_notify_failed_external,
 
+        // 1.7+
         /// <summary>Starting an update operation.</summary>
         UpdateStarted               = svn_wc_notify_update_started,
 
