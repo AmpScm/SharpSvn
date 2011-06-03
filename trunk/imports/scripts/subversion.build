@@ -156,11 +156,6 @@
           <include name="*.ezt" />
         </fileset>
       </copy>
-      <loadfile file="${svnBase}/build/generator/gen_win.py" property="gen_win">
-        <filterchain>
-          <replacestring from="popen('ml /help" to="popen('unavailable-ml /help" />
-        </filterchain>
-      </loadfile>
       <echo message="${gen_win}" file="${svnBase}/build/generator/gen_win.py" />
       <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
         <filterchain>
@@ -170,13 +165,6 @@
         </filterchain>
       </loadfile>
       <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
-
-      <loadfile file="${svnBase}/build.conf" property="gen_win">
-        <filterchain>
-          <replacestring from='svn_repos_update()' to='svn_repos_up*ate()' />
-        </filterchain>
-      </loadfile>
-      <echo message="${gen_win}" file="${svnBase}/build.conf" />
 
       <loadfile file="${svnBase}/win-tests.py" property="gen_win">
         <filterchain>
