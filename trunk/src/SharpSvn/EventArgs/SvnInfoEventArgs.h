@@ -58,7 +58,7 @@ namespace SharpSvn {
 	internal:
 		SvnInfoEventArgs(String^ path, const svn_info_t* info, AprPool^ pool)
 		{
-			if (String::IsNullOrEmpty(path))
+			if (path == nullptr)
 				throw gcnew ArgumentNullException("path");
 			else if (!info)
 				throw gcnew ArgumentNullException("info");
