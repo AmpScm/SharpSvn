@@ -65,7 +65,9 @@ namespace SharpSvn {
 		Unlock,
 		Update,
 		Write,
-		CropWorkingCopy,
+		Upgrade,
+
+		CropWorkingCopy = 0x501,
 
 		// Wc library helper
 		GetWorkingCopyInfo = 0x1001,
