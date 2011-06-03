@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
-  <property name="svnBuildType" value="tag" overwrite="false" />
+  <property name="svnBuildType" value="trunk" overwrite="false" />
   <property name="serfBuildType" value="trunk" />
   
   <property name="guessedPlatform" value="win32" />

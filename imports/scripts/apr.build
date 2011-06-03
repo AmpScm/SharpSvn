@@ -345,11 +345,15 @@ APR_BEGIN_DECLS
     <copy todir="${aprIncludeDir}">
       <fileset basedir="${aprDir}/include">
         <include name="*.h" />
+        <include name="arch/*.h" />
+        <include name="arch/win32/*.h" />
       </fileset>
     </copy>
     <copy todir="${aprIncludeDir}">
       <fileset basedir="${aprUtilDir}/include">
         <include name="*.h" />
+        <include name="arch/*.h" />
+        <include name="arch/win32/*.h" />
       </fileset>
     </copy>
     <copy todir="${aprIncludeDir}">
