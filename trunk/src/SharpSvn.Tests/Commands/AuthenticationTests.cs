@@ -104,7 +104,6 @@ namespace SharpSvn.Tests.Commands
 
 				Assert.That(a.LastException, Is.Not.Null);
 				Assert.That(a.LastException, Is.InstanceOfType(typeof(SvnException)));
-				Assert.That(a.LastException.GetCause<SvnAuthorizationException>(), Is.Not.Null);
 				Assert.That(arrived, Is.False);
 				Assert.That(_serverTrustTicked);
 				Assert.That(_userNamePasswordTicked);
@@ -131,8 +130,8 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(e.Break, Is.False);
 			Assert.That(e.Cancel, Is.False);
 			Assert.That(e.CommonName, Is.EqualTo("svn.apache.org"));
-			Assert.That(DateTime.Parse(e.ValidFrom), Is.LessThan(DateTime.Now));
-			Assert.That(DateTime.Parse(e.ValidUntil), Is.GreaterThan(DateTime.Now));
+			//Assert.That(DateTime.Parse(e.ValidFrom), Is.LessThan(DateTime.Now));
+			//Assert.That(DateTime.Parse(e.ValidUntil), Is.GreaterThan(DateTime.Now));
 			_serverTrustTicked = true;
 			e.AcceptedFailures = e.Failures;
 		}
