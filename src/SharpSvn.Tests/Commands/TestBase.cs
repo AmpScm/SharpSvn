@@ -271,12 +271,26 @@ namespace SharpSvn.Tests.Commands
             this._wcPath = GetTempDir();
 
             UnzipToFolder(Path.Combine(ProjectBase, "Zips/" + WC_FILE), _wcPath);
-
+            RawRelocate(_wcPath, new Uri("file:///tmp/repos/"), ReposUrl);
             this.RenameAdminDirs(_wcPath);
 
             SvnClient cl = new SvnClient(); // Fix working copy to real location
-            cl.Relocate(_wcPath, new Uri("file:///tmp/repos/"), ReposUrl);
+            cl.Upgrade(_wcPath);
         }
+
+        protected static void RawRelocate(string wc, Uri from, Uri to)
+        {
+            foreach (DirectoryInfo adm_dir in new DirectoryInfo(wc).GetDirectories(".svn", SearchOption.AllDirectories))
+            {
+                string entries = Path.Combine(adm_dir.FullName, "entries");
+                string txt = File.ReadAllText(entries).Replace(from.AbsoluteUri.TrimEnd('/'), to.AbsoluteUri.TrimEnd('/'));
+
+                File.SetAttributes(entries, FileAttributes.Normal);
+                File.WriteAllText(entries, txt);
+                File.SetAttributes(entries, FileAttributes.ReadOnly);
+            }
+        }
+
 
         public static string ProjectBase
         {
