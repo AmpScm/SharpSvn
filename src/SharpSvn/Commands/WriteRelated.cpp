@@ -105,8 +105,8 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 	to->CopyTo(theStreams, 0);
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
-	ArgsStore store(this, args);
 	AprPool pool(%_pool);
+	ArgsStore store(this, args, %pool);
 	AprPool^ cur = gcnew AprPool(%pool);
 	AprPool^ next = gcnew AprPool(%pool);
 	WriteRelatedEditor^ wrEditor = gcnew WriteRelatedEditor();
