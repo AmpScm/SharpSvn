@@ -159,28 +159,13 @@
     <delete>
       <fileset basedir="build">
         <include name="subversion*_${platform}.*" />
-        <include name="serf*_${platform}.*" />
-        <include name="neon*_${platform}.*" />
-        <include name="${platform}/subversion/${Configuration}/**" />
       </fileset>
     </delete>
     <Svn nonInteractive="false">
       <arg line="revert -R build/${platform}/subversion" />
     </Svn>
-    <Svn nonInteractive="false">
-      <arg line="revert -R build/${platform}/neon" />
-    </Svn>
-    <Svn nonInteractive="false">
-      <arg line="revert -R build/${platform}/serf" />
-    </Svn>
-    <Svn>
+    <Svn> 
       <arg line="up build/${platform}/subversion" />
-    </Svn>
-    <Svn>
-      <arg line="up build/${platform}/neon" />
-    </Svn>
-    <Svn>
-      <arg line="up build/${platform}/serf" />
     </Svn>
   </target>
   <target name="svn-update" depends="update-svn">
