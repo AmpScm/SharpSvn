@@ -82,7 +82,10 @@ namespace SharpSvn {
 				_propertyTime = SvnBase::DateTimeFromAprTime(info->prop_time);
 			}
 
-			_depth = (SvnDepth)info->depth;
+			if (info->kind == svn_node_file && info->depth == svn_depth_infinity)
+				_depth = SvnDepth::Unknown;
+			else
+				_depth = (SvnDepth)info->depth;
 
 			if (info->size64 == SVN_INVALID_FILESIZE)
 				_size = -1;
