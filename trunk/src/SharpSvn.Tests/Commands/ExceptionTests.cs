@@ -43,20 +43,6 @@ namespace SharpSvn.Tests.Commands
 		}
 
 		/// <summary>
-		/// Attempt to update a locked wc.
-		/// </summary>
-		[Test]
-		[ExpectedException(typeof(SvnWorkingCopyLockException))]
-		public void TestCommitLockedWc()
-		{
-			string lockPath = Path.Combine(
-				Path.Combine(this.WcPath, SvnClient.AdministrativeDirectoryName), "lock");
-			File.Create(lockPath).Close();
-
-			this.Client.Update(this.WcPath);
-		}
-
-		/// <summary>
 		/// Attempt to commit an out of date resource.
 		/// </summary>
 		/*[Test]
