@@ -198,7 +198,8 @@ namespace SharpSvn.Tests.Commands
             {
                 bool found = File.Exists(e.FullPath) || Directory.Exists(e.FullPath) || Directory.Exists(Path.GetDirectoryName(e.FullPath));
 
-                if (e.CommandType != SvnCommandType.Blame)
+                if (e.CommandType != SvnCommandType.Blame
+                    && !(e.CommandType == SvnCommandType.Move && e.Action == SvnNotifyAction.Delete))
                 {
                     Assert.That(found,
                         "{0} is not a valid path and it's directory does not exist\n (Raw value = {1}, Current Directory = {2}, Action = {3}, CommandType = {4})",
