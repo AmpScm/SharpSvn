@@ -39,7 +39,7 @@ bool SvnClient::Upgrade(String ^path, SvnUpgradeArgs^ args)
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
+	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
