@@ -242,20 +242,6 @@ namespace SharpSvn.Tests.Commands
             Assert.That(File.Exists(e.FullPath), "{0} does exist; path was defined as {1}", e.FullPath, e.Path);
         }
 
-		[Test]
-		[ExpectedException(typeof(SvnWorkingCopyLockException))]
-		public void TestLockedWc()
-		{
-			string lockPath = Path.Combine(
-				Path.Combine(this.WcPath, SvnClient.AdministrativeDirectoryName), "lock");
-			using (File.CreateText(lockPath))
-			{
-				SvnCommitArgs a = new SvnCommitArgs();
-				a.Depth = SvnDepth.Empty;
-				this.Client.Commit(this.WcPath, a);
-			}
-		}
-
         [Test]
         public void NonRecursiveDirDelete()
         {
