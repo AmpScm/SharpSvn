@@ -42,34 +42,31 @@ namespace SharpSvn.Tests.Commands
             string dir = GetTempDir();
             string testFile = Path.Combine(dir, "testfile.txt");
 
-            using (SvnClient client = new SvnClient())
-            {
-                client.CheckOut(ReposUrl, dir);
+            Client.CheckOut(ReposUrl, dir);
 
-                File.WriteAllText(testFile, "This is a testfile");
+            File.WriteAllText(testFile, "This is a testfile");
 
-                SvnAddArgs a = new SvnAddArgs();
-                a.Depth = SvnDepth.Empty;
+            SvnAddArgs a = new SvnAddArgs();
+            a.Depth = SvnDepth.Empty;
 
-                client.Add(testFile, a);
+            Client.Add(testFile, a);
 
-                // Check if the file is part of a working copy
-                Guid g;
-                Assert.That(client.TryGetRepositoryId(testFile, out g));
-                Assert.That(g, Is.Not.EqualTo(Guid.Empty));
+            // Check if the file is part of a working copy
+            Guid g;
+            Assert.That(Client.TryGetRepositoryId(testFile, out g));
+            Assert.That(g, Is.Not.EqualTo(Guid.Empty));
 
-                Collection<SvnStatusEventArgs> st;
-                client.GetStatus(testFile, out st);
+            Collection<SvnStatusEventArgs> st;
+            Client.GetStatus(testFile, out st);
 
-                Assert.That(st.Count, Is.EqualTo(1));
-                Assert.That(st[0].LocalContentStatus, Is.EqualTo(SvnStatus.Added));
+            Assert.That(st.Count, Is.EqualTo(1));
+            Assert.That(st[0].LocalContentStatus, Is.EqualTo(SvnStatus.Added));
 
-                // Verify status with external command
-                Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
+            // Verify status with external command
+            Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
 
-                client.Configuration.LogMessageRequired = false;
-                Assert.That(client.Commit(dir));
-            }
+            Client.Configuration.LogMessageRequired = false;
+            Assert.That(Client.Commit(dir));
         }
 
         /// <summary>
