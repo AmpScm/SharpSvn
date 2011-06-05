@@ -257,7 +257,7 @@ namespace SharpSvn.Tests.Commands
             da.ThrowOnError = false; // This throws an error in 1.5 but succeeds anyway
             bool ok = Client.Delete(file, da);
 
-            Assert.That(!ok, "This fails in 1.5!");
+            Assert.That(ok, "This should succeed in 1.7+");
 
 
             file += ".3";
