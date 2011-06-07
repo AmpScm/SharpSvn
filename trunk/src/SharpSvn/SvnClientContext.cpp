@@ -416,14 +416,14 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 
 	args->Prepare();
 	client->_currentArgs = args;
-	client->_workState = nullptr;
 	_client = client;
-	_lastContext = SvnClientContext::_activeContext;
-	SvnClientContext::_activeContext = _client;
 
 	svn_client_ctx_t *ctx = _client->CtxHandle;
 	svn_wc_context_t **p_wc_ctx = &ctx->wc_ctx;
 	_wc_ctx = *p_wc_ctx;
+
+	_lastContext = SvnClientContext::_activeContext;
+	SvnClientContext::_activeContext = _client;
 
 	try
 	{
@@ -442,14 +442,50 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 
 SvnClientContext::ArgsStore::~ArgsStore()
 {
+	SvnClientContext::_activeContext = _lastContext;
 	SvnClientArgs^ args = _client->_currentArgs;
 	if (args)
 		args->_hooked = false;
 
+	_client->_currentArgs = nullptr;
+
 	svn_client_ctx_t *ctx = _client->CtxHandle;
 	ctx->wc_ctx = _wc_ctx;
-	_client->_currentArgs = nullptr;
+}
+
+SvnClientContext::NoArgsStore::NoArgsStore(SvnClientContext^ client, AprPool^ pool)
+{
+    if (client->_currentArgs)
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+
+	_client = client;
+
+	svn_client_ctx_t *ctx = _client->CtxHandle;
+	svn_wc_context_t **p_wc_ctx = &ctx->wc_ctx;
+	_wc_ctx = *p_wc_ctx;
+	_lastContext = SvnClientContext::_activeContext;
+	SvnClientContext::_activeContext = _client;
+
+
+	try
+	{
+		if (! client->KeepSession && pool != nullptr)
+			SVN_THROW(svn_wc_context_create(p_wc_ctx, NULL, pool->Handle, pool->Handle));
+
+	}
+	catch(Exception^)
+	{
+        SvnClientContext::_activeContext = _lastContext;
+		throw;
+	}
+}
+
+SvnClientContext::NoArgsStore::~NoArgsStore()
+{
 	SvnClientContext::_activeContext = _lastContext;
+
+	svn_client_ctx_t *ctx = _client->CtxHandle;
+	ctx->wc_ctx = _wc_ctx;
 }
 
 HWND __cdecl sharpsvn_get_ui_parent()
