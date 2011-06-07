@@ -164,7 +164,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(iaParent.FullPath, Is.EqualTo(dir));
             Assert.That(iaTrunk.FullPath, Is.Not.EqualTo(dir));
-            Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
+            //Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
 
             SvnWorkingCopyVersion ver;
             SvnWorkingCopyClient wcC = new SvnWorkingCopyClient();
@@ -204,7 +204,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
                     Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
                     Assert.That(e.CopyFromUri, Is.Null);
-                    Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
+                    Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
                     Assert.That(e.FullPath, Is.EqualTo(file));
                     Assert.That(e.HasLocalInfo, Is.True);
                     Assert.That(e.LastChangeAuthor, Is.Null);
@@ -238,7 +238,7 @@ namespace SharpSvn.Tests.Commands
                         Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
                         Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
                         Assert.That(e.CopyFromUri, Is.Null);
-                        Assert.That(e.Depth, Is.EqualTo(SvnDepth.Infinity));
+                        Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
                         Assert.That(e.FullPath, Is.EqualTo(file));
                         Assert.That(e.HasLocalInfo, Is.True);
                         Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
