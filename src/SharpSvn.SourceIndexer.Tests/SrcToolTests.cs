@@ -122,9 +122,20 @@ namespace SharpSvn.SourceIndexer.Tests
         [Test]
         public void TestExtract()
         {
-            TextReader tr = SourceServerTools.GetPdbStream(@"f:\QQn\sharpsvn-dist\release\SharpSvn\SharpPlink-Win32.pdb", "srcsrv");
+            TextReader tr = SourceServerTools.GetPdbStream(@"f:\QQn\sharpsvn-dist\release\SharpSvn\SharpSvn.pdb", "srcsrv");
 
             Assert.That(tr, Is.Not.Null);
+
+            int lines = 0;
+            string line;
+
+            while (null != (line = tr.ReadLine()))
+            {
+                lines++;
+                GC.KeepAlive(line);
+            }
+
+            Assert.That(lines, Is.GreaterThan(50));
         }
     }
 }
