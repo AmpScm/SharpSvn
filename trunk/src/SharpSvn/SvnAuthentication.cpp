@@ -286,12 +286,10 @@ svn_auth_provider_object_t *SvnSslServerTrustEventArgs::Wrapper::GetProviderPtr(
 	{
 		svn_auth_get_ssl_server_trust_file_provider(&provider, pool->Handle);
 	}
-#if (SVN_VER_MAJOR > 1) || (SVN_VER_MINOR >= 5)
 	else if (_handler->Equals(SvnAuthentication::SubversionWindowsSslServerTrustHandler))
 	{
 		svn_auth_get_windows_ssl_server_trust_provider(&provider, pool->Handle);
 	}
-#endif
 	else
 		svn_auth_get_ssl_server_trust_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func, (void*)_baton->Handle, pool->Handle);
 
