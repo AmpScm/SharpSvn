@@ -115,14 +115,12 @@ namespace SharpSvn.Tests.Commands
             bool obstructionFound = false;
             ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
             {
-                if (e.Action == SvnNotifyAction.UpdateShadowedAdd)
+                if (e.Action == SvnNotifyAction.TreeConflict)
                     obstructionFound = true;
-
             };
             ua.AddExpectedError(SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
-            Client.Update(tmp, ua);
+            Assert.That(Client.Update(tmp, ua), "Update ok");
 
-            Assert.That(ua.LastException.SvnErrorCode == SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
             Assert.That(obstructionFound, "Obstruction found");
         }
 
