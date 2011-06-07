@@ -51,19 +51,10 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
-	svn_wc_adm_access_t *adm_access;
 	const char *path = pool.AllocDirent(targetPath);
 
-	SVN_HANDLE(svn_wc_adm_probe_open3(&adm_access,
-									  NULL, 
-									  path, 
-									  TRUE, 
-									  1, 
-									  CtxHandle->cancel_func, CtxHandle->cancel_baton,
-									  pool.Handle));
-
-	svn_wc_status2_t *status;
-	SVN_HANDLE(svn_wc_status2(&status, path, adm_access, pool.Handle));
+	svn_node_kind_t kind;
+    SVN_HANDLE(svn_wc_read_kind(&kind, CtxHandle->wc_ctx, path, FALSE, pool.Handle));
 
 	svn_wc_conflict_description2_t *conflict;
 	svn_wc_conflict_version_t *left_version, *right_version;
@@ -82,17 +73,15 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 
 
     conflict = svn_wc_conflict_description_create_tree2(path,
-													   status->entry->kind,
-													   (svn_wc_operation_t)args->Operation,
-													   left_version,
-													   right_version,
-													   pool.Handle);
+														kind,
+														(svn_wc_operation_t)args->Operation,
+														left_version,
+														right_version,
+														pool.Handle);
 	conflict->reason = (svn_wc_conflict_reason_t)args->Reason;
 	conflict->action = (svn_wc_conflict_action_t)args->Action;
 
 	SVN_HANDLE(svn_wc__add_tree_conflict(CtxHandle->wc_ctx, conflict, pool.Handle));
-
-	SVN_HANDLE(svn_wc_adm_close2(adm_access, pool.Handle));
 
 	return true;
 }

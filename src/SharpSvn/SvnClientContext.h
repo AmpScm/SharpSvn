@@ -70,7 +70,6 @@ namespace SharpSvn {
 	private:
 		// For SvnClient and SvnReposClient
 		SvnClientArgs^ _currentArgs;
-		Object^ _workState;
 		bool _keepSession;
 
 	internal:
@@ -83,18 +82,6 @@ namespace SharpSvn {
 			SvnClientArgs^ get()
 			{
 				return _currentArgs;
-			}
-		}
-
-		property Object^ WorkState
-		{
-			Object^ get()
-			{
-				return _workState;
-			}
-			void set(Object^ value)
-			{
-				_workState = value;
 			}
 		}
 
@@ -204,6 +191,18 @@ namespace SharpSvn {
 			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args, AprPool^ pool);
 			~ArgsStore();
 		};
+
+		// Used as auto-dispose class for setting a temporary wc_ctx
+		ref class NoArgsStore sealed
+		{
+			initonly SvnClientContext^ _client;
+            initonly SvnClientContext^ _lastContext;
+			initonly svn_wc_context_t *_wc_ctx;
+		public:
+			NoArgsStore(SvnClientContext^ client, AprPool^ pool);
+			~NoArgsStore();
+		};
+
 	internal:
 		generic<typename T>
 		where T : SvnEventArgs

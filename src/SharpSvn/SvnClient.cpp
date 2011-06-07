@@ -354,7 +354,7 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 	path = SvnTools::GetNormalizedFullPath(path);
 
 	AprPool pool(%_pool);
-    // ### Use wc_ctx
+	NoArgsStore store(this, %pool);
 
 	const char* url = nullptr;
 
@@ -380,6 +380,7 @@ bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	AprPool pool(%_pool);
+	NoArgsStore store(this, %pool);
 
 	const char* uuidStr = nullptr;
 
@@ -410,6 +411,7 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 	EnsureState(SvnContextState::AuthorizationInitialized);
 
 	AprPool pool(%_pool);
+	NoArgsStore store(this, %pool);
 
 	const char* pPath = pool.AllocDirent(path);
 	const char* uuidStr = nullptr;
@@ -454,6 +456,7 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 	const char* resultUrl = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
+	NoArgsStore store(this, %pool);
 
 	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocUri(uri), CtxHandle, pool.Handle);
 
@@ -477,6 +480,7 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 	const char* resultUrl = nullptr;
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
+	NoArgsStore store(this, %pool);
 
 	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocDirent(target), CtxHandle, pool.Handle);
 
