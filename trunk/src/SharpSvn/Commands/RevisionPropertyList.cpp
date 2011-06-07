@@ -62,7 +62,7 @@ bool SvnClient::GetRevisionPropertyList(Uri^ target, SvnRevision^ revision, SvnR
 
 	svn_error_t* r = svn_client_revprop_list(
 		&props,
-		pool.AllocCanonical(target),
+		pool.AllocUri(target),
 		revision->AllocSvnRevision(%pool),
 		&set_rev,
 		CtxHandle,

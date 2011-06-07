@@ -31,7 +31,7 @@ bool SvnRemoteSession::GetNodeKind(String^ relPath, SvnRemoteCommonArgs^ args, [
 	svn_node_kind_t kind;
 	result = SvnNodeKind::Unknown;
 
-	SVN_HANDLE(svn_ra_check_path(_session, pool.AllocCanonical(relPath), -1, &kind, pool.Handle));
+	SVN_HANDLE(svn_ra_check_path(_session, pool.AllocRelpath(relPath), -1, &kind, pool.Handle));
 
 	result = (SvnNodeKind)kind;
 

@@ -52,7 +52,7 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 	svn_wc_adm_access_t *adm_access;
-	const char *path = pool.AllocPath(targetPath);
+	const char *path = pool.AllocDirent(targetPath);
 
 	SVN_HANDLE(svn_wc_adm_probe_open3(&adm_access,
 									  NULL, 
@@ -68,14 +68,14 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
 	svn_wc_conflict_description2_t *conflict;
 	svn_wc_conflict_version_t *left_version, *right_version;
 
-	left_version = svn_wc_conflict_version_create(pool.AllocCanonical(leftSource->RepositoryRoot),
-												  pool.AllocCanonical(rightSource->Uri->MakeRelativeUri(leftSource->RepositoryRoot)->ToString()),
+	left_version = svn_wc_conflict_version_create(pool.AllocUri(leftSource->RepositoryRoot),
+												  pool.AllocRelpath(rightSource->Uri->MakeRelativeUri(leftSource->RepositoryRoot)->ToString()),
 												  (svn_revnum_t)leftSource->Target->Revision->Revision,
 												  (svn_node_kind_t)leftSource->NodeKind,
 												  pool.Handle);
 
-	right_version = svn_wc_conflict_version_create(pool.AllocCanonical(rightSource->RepositoryRoot),
-												  pool.AllocCanonical(rightSource->Uri->MakeRelativeUri(rightSource->RepositoryRoot)->ToString()),
+	right_version = svn_wc_conflict_version_create(pool.AllocUri(rightSource->RepositoryRoot),
+												  pool.AllocRelpath(rightSource->Uri->MakeRelativeUri(rightSource->RepositoryRoot)->ToString()),
 												  (svn_revnum_t)rightSource->Target->Revision->Revision,
 												  (svn_node_kind_t)rightSource->NodeKind,
 												  pool.Handle);

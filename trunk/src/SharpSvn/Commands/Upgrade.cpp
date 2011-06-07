@@ -44,7 +44,7 @@ bool SvnClient::Upgrade(String ^path, SvnUpgradeArgs^ args)
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_upgrade(
-		pool.AllocPath(path),
+		pool.AllocDirent(path),
 		CtxHandle,
 		pool.Handle);
 

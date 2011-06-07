@@ -120,7 +120,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
 
 	try
 	{
-		const char* pPath = pool.AllocPath(directory);
+		const char* pPath = pool.AllocDirent(directory);
 		svn_wc_adm_access_t* adm_access = nullptr;
 
 		svn_error_t* r = svn_wc_adm_open3(

@@ -135,6 +135,8 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		throw gcnew ArgumentNullException("path");
 	else if (!target)
 		throw gcnew ArgumentNullException("target");
+	else if (!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 	else if (!SvnBase::IsValidReposUri(target))
@@ -150,8 +152,8 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 
 	svn_error_t *r = svn_client_import3(
 		&commitInfoPtr,
-		pool.AllocPath(path),
-		pool.AllocCanonical(target),
+		pool.AllocDirent(path),
+		pool.AllocUri(target),
 		(svn_depth_t)args->Depth,
 		args->NoIgnore,
 		args->IgnoreUnknownNodeTypes,

@@ -81,7 +81,7 @@ bool SvnRemoteSession::LocationSegments(String^ relPath, SvnRemoteLocationSegmen
         args->_reposUri = _root;
 
         SVN_HANDLE(svn_ra_get_location_segments(_session,
-                                                pool.AllocCanonical(relPath),
+                                                pool.AllocRelpath(relPath),
                                                 (svn_revnum_t)args->OperationalRevision,
                                                 (svn_revnum_t)args->StartRevision,
                                                 (svn_revnum_t)args->EndRevision,

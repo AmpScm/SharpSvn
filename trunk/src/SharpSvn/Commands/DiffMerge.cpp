@@ -64,7 +64,7 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 		&mergeFromRev,
 		pool.AllocString(mergeTo->SvnTargetName),
 		&mergeToRev,
-		pool.AllocPath(targetPath),
+		pool.AllocDirent(targetPath),
 		(svn_depth_t)args->Depth,
 		args->IgnoreAncestry,
 		args->Force,

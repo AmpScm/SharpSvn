@@ -88,7 +88,7 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 	svn_error_t* r = svn_client_export4(
 		&resultRev,
 		pool.AllocString(from->SvnTargetName),
-		pool.AllocPath(toPath),
+		pool.AllocDirent(toPath),
 		&pegRev,
 		&rev,
 		args->Overwrite,

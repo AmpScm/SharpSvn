@@ -115,7 +115,7 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 
 		if (r = svn_repos_open(
 			&repos,
-			pool.AllocCanonical(lookOrigin->RepositoryPath),
+			pool.AllocDirent(lookOrigin->RepositoryPath),
 			pool.Handle))
 		{
 			return args->HandleResult(this, r);

@@ -25,7 +25,7 @@ bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteCommonArgs^ args)
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	if (args->HandleResult(this, svn_ra_reparent(_session, pool.AllocCanonical(sessionUri), pool.Handle)))
+	if (args->HandleResult(this, svn_ra_reparent(_session, pool.AllocUri(sessionUri), pool.Handle)))
 	{
 		_root = nullptr;
 		return true;

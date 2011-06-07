@@ -108,7 +108,7 @@ svn_auth_baton_t *SvnAuthentication::GetAuthorizationBaton(int% cookie)
 		clone_credentials(creds, get_cache(rslt), _authPool);
 
 	if (_clientContext->_configPath)
-		svn_auth_set_parameter(rslt, SVN_AUTH_PARAM_CONFIG_DIR, _authPool->AllocPath(_clientContext->_configPath));
+		svn_auth_set_parameter(rslt, SVN_AUTH_PARAM_CONFIG_DIR, _authPool->AllocDirent(_clientContext->_configPath));
 
 	_currentBaton = rslt;
 

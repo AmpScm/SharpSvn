@@ -70,6 +70,8 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 {
 	if (String::IsNullOrEmpty(rootPath))
 		throw gcnew ArgumentNullException("rootPath");
+	else if (!IsNotUri(rootPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "rootPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -82,7 +84,7 @@ bool SvnClient::ListChangeList(String^ rootPath, SvnListChangeListArgs^ args, Ev
 	try
 	{
 		svn_error_t* r = svn_client_get_changelists(
-			pool.AllocPath(rootPath),
+			pool.AllocDirent(rootPath),
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			(svn_depth_t)args->Depth,
 			svnclient_changelist_handler,

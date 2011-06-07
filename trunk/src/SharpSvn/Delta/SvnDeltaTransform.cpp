@@ -132,8 +132,8 @@ void SvnDeltaFileTransform::OnFileChange(SvnDeltaFileChangeEventArgs^ e)
 	svn_stream_t* inStream;
 	svn_stream_t* outStream;
 
-	SVN_THROW(svn_stream_open_readonly(&inStream, _pool->AllocPath(_baseFile), _pool->Handle, tmpPool.Handle));
-	SVN_THROW(svn_stream_open_writable(&outStream, _pool->AllocPath(_toFile), _pool->Handle, tmpPool.Handle));
+	SVN_THROW(svn_stream_open_readonly(&inStream, _pool->AllocDirent(_baseFile), _pool->Handle, tmpPool.Handle));
+	SVN_THROW(svn_stream_open_writable(&outStream, _pool->AllocDirent(_toFile), _pool->Handle, tmpPool.Handle));
 
 	if(_verify)
 	{

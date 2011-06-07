@@ -121,7 +121,7 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
 	svn_error_t* r = svn_repos_create(
 		&result,
-		pool.AllocPath(repositoryPath),
+		pool.AllocDirent(repositoryPath),
 		nullptr,
 		nullptr,
 		CtxHandle->config,

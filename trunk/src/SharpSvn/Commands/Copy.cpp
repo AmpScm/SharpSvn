@@ -121,7 +121,7 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyAr
 	svn_error_t *r = svn_client_copy5(
 		&pInfo,
 		copies,
-		pool.AllocPath(toPath),
+		pool.AllocDirent(toPath),
 		args->AlwaysCopyAsChild || (sources->Count > 1),
 		args->CreateParents,
 		args->IgnoreExternals,
@@ -274,7 +274,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopy
 	svn_error_t *r = svn_client_copy5(
 		&commitInfoPtr,
 		copies,
-		pool.AllocCanonical(toUri),
+		pool.AllocUri(toUri),
 		args->AlwaysCopyAsChild || (sources->Count > 1),
 		args->CreateParents,
 		args->IgnoreExternals,

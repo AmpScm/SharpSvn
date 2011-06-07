@@ -47,7 +47,7 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t* r = svn_repos_recover3(
-		pool.AllocPath(repositoryPath),
+		pool.AllocDirent(repositoryPath),
 		args->NonBlocking,
 		nullptr,
 		nullptr,

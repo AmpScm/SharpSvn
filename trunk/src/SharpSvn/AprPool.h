@@ -137,12 +137,39 @@ namespace SharpSvn {
 			const char* AllocString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocUnixString(String^ value);
+
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			const char* AllocPath(String^ value);
+			const char* AllocDirent(String^ value);
+
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			const char* AllocCanonical(String^ value);
+			__declspec(deprecated) const char* AllocPath(String^ value)
+			{
+				return AllocDirent(value);
+			}
+
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			const char* AllocCanonical(Uri^ value);
+			const char* AllocUri(String^ value);
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			const char* AllocUri(Uri^ value);
+
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			const char* AllocRelpath(String^ value)
+			{
+				return AllocDirent(value);
+			}
+
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			__declspec(deprecated) const char* AllocCanonical(String^ value)
+			{
+				return AllocUri(value);
+			}
+
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			__declspec(deprecated) const char* AllocCanonical(Uri^ value)
+			{
+				return AllocUri(value);
+			}
+
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]

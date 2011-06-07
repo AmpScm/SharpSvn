@@ -366,7 +366,7 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 		path = nullptr;
 
 	AprPool tmpPool(_pool);
-	const char* szPath = path ? tmpPool.AllocPath(path) : nullptr;
+	const char* szPath = path ? tmpPool.AllocDirent(path) : nullptr;
 
 	if (ensurePath)
 		SVN_THROW(svn_config_ensure(szPath, tmpPool.Handle));

@@ -114,7 +114,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 		pool.AllocString(source->SvnTargetName),
 		mergeList->Handle,
 		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-		pool.AllocPath(targetPath),
+		pool.AllocDirent(targetPath),
 		(svn_depth_t)args->Depth,
 		args->IgnoreAncestry,
 		args->Force,

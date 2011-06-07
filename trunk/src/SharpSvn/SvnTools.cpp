@@ -38,7 +38,7 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 
 	const char* url = nullptr;
 
-	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocPath(path), pool.Handle);
+	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocDirent(path), pool.Handle);
 
 	if (!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);

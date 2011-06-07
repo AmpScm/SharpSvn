@@ -141,48 +141,7 @@ namespace SharpSvn {
 		static ICollection<SvnPathTarget^>^ Map(System::Collections::Generic::IEnumerable<String^>^ paths);
 
 	internal:
-		static bool TryParse(String^ targetName, bool allowOperationalRevisions, [Out] SvnPathTarget ^% target, AprPool^ pool)
-		{
-			if (String::IsNullOrEmpty(targetName))
-				throw gcnew ArgumentNullException("targetName");
-			else if (!pool)
-				throw gcnew ArgumentNullException("pool");
-
-			if (!SvnBase::IsNotUri(targetName))
-				return false;
-
-			if (allowOperationalRevisions)
-			{
-				svn_opt_revision_t rev;
-				svn_error_t* r;
-				const char* truePath;
-
-				const char* path = pool->AllocPath(targetName);
-
-				if (!(r = svn_opt_parse_path(&rev, &truePath, path, pool->Handle)))
-				{
-					String^ realPath = Utf8_PtrToString(truePath);
-
-					if (!realPath->Contains("://"))
-					{
-						SvnRevision^ pegRev = SvnRevision::Load(&rev);
-
-						target = gcnew SvnPathTarget(realPath, pegRev);
-						return true;
-					}
-				}
-				else
-					svn_error_clear(r);
-			}
-			else
-			{
-				target = gcnew SvnPathTarget(targetName);
-				return true;
-			}
-
-			target = nullptr;
-			return false;
-		}
+		static bool TryParse(String^ targetName, bool allowOperationalRevisions, [Out] SvnPathTarget ^% target, AprPool^ pool);
 
 	public:
 		static SvnPathTarget^ FromString(String^ value);

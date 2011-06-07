@@ -44,7 +44,7 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_cleanup(
-		pool.AllocPath(path),
+		pool.AllocDirent(path),
 		CtxHandle,
 		pool.Handle);
 

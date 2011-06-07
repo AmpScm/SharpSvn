@@ -46,7 +46,7 @@ bool SvnRemoteSession::ListLocks(String^ relPath, SvnRemoteListLocksArgs^ args, 
 
         nOffset = strlen(session_root) - strlen(repos_root);
 
-        SVN_HANDLE(svn_ra_get_locks(_session, &locks, pool.AllocCanonical(relPath), pool.Handle));
+        SVN_HANDLE(svn_ra_get_locks(_session, &locks, pool.AllocRelpath(relPath), pool.Handle));
 
 		for (apr_hash_index_t *hi = apr_hash_first(pool.Handle, locks); hi; hi = apr_hash_next(hi))
 		{

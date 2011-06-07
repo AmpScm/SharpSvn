@@ -38,7 +38,7 @@ bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRe
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -47,7 +47,7 @@ bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRe
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t* r = svn_repos_upgrade(
-		pool.AllocPath(repositoryPath),
+		pool.AllocDirent(repositoryPath),
 		args->NonBlocking,
 		nullptr,
 		nullptr,
