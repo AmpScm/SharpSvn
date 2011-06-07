@@ -80,7 +80,7 @@ bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrPathMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrPathMarshaller^>(targets, %pool);
+	AprArray<String^, AprCStrDirentMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrDirentMarshaller^>(targets, %pool);
 
 	return UnlockInternal(aprTargets, args, %pool);
 }

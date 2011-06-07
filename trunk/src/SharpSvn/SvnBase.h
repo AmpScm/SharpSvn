@@ -117,7 +117,7 @@ namespace SharpSvn {
 
 			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
 			static apr_array_header_t *AllocCanonicalArray(ICollection<String^>^ paths, AprPool^ pool);
-			static apr_array_header_t *AllocPathArray(ICollection<String^>^ paths, AprPool^ pool);
+			static apr_array_header_t *AllocDirentArray(ICollection<String^>^ paths, AprPool^ pool);
 			generic<typename TSvnTarget> where TSvnTarget : SvnTarget
 			static apr_array_header_t *AllocCopyArray(ICollection<TSvnTarget>^ targets, AprPool^ pool);
 

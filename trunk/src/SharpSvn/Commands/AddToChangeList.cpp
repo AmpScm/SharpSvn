@@ -69,7 +69,7 @@ bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeLis
 
 
 	svn_error_t *r = svn_client_add_to_changelist(
-		AllocPathArray(targets, %pool),
+		AllocDirentArray(targets, %pool),
 		pool.AllocString(changeList),
 		(svn_depth_t)args->Depth,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists

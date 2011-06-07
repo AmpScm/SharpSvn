@@ -84,7 +84,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 
 	svn_error_t *r = svn_client_move5(
 		&pInfo,
-		AllocPathArray(sourcePaths, %pool),
+		AllocDirentArray(sourcePaths, %pool),
 		pool.AllocDirent(toPath),
 		args->Force,
 		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
