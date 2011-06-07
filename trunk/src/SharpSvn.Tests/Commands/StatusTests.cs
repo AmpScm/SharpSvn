@@ -473,10 +473,7 @@ namespace SharpSvn.Tests.Commands
                             Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(reposGuid));
                         else*/
 
-                        if(nn == 1 || nn == 2 || nn == 3 || nn == 5 || nn == 6)
-                            Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.EqualTo(Guid.Empty), "Expected set guid for {0} / nn={1}", e.Path, nn);
-                        else if (nn >= 0)
-                            Assert.That(e.WorkingCopyInfo.RepositoryId, Is.EqualTo(Guid.Empty), "Expected empty guid for {0} / nn={1}", e.Path, nn);
+                        Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.EqualTo(Guid.Empty), "Expected guid for {0} / nn={1}", e.Path, nn);
 
                         Assert.That(e.WorkingCopyInfo.IsAbsent, Is.False);
                         Assert.That(e.WorkingCopyInfo.IsDeleted, Is.False);
@@ -491,7 +488,7 @@ namespace SharpSvn.Tests.Commands
                         {
                             Assert.That(e.WorkingCopyInfo.IsCopy, Is.True);
                             Assert.That(e.WorkingCopyInfo.CopiedFrom, Is.EqualTo(new Uri(ReposUrl, "statTst/localStatBase1")));
-                            Assert.That(e.WorkingCopyInfo.LastChangeAuthor, Is.Null);
+                            Assert.That(e.WorkingCopyInfo.LastChangeAuthor, Is.Not.Null);
                             Assert.That(e.WorkingCopyInfo.CopiedFromRevision, Is.EqualTo(ci.Revision + 2));
                         }
                         else
@@ -509,12 +506,12 @@ namespace SharpSvn.Tests.Commands
 
                         if (nn == 4)
                         {
-                            Assert.That(e.WorkingCopyInfo.LastChangeRevision, Is.EqualTo(-1L));
-                            Assert.That(e.WorkingCopyInfo.LastChangeTime, Is.EqualTo(DateTime.MinValue));
+                            Assert.That(e.WorkingCopyInfo.LastChangeRevision, Is.EqualTo(9));
+                            Assert.That(e.WorkingCopyInfo.LastChangeTime, Is.GreaterThan(DateTime.MinValue));
                             Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Add));
-                            Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.EqualTo(DateTime.MinValue));
+                            Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.GreaterThan(DateTime.MinValue));
                             Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
-                            Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(-1L));
+                            Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(36));
                         }
                         else
                         {
@@ -533,7 +530,11 @@ namespace SharpSvn.Tests.Commands
                             Assert.That(e.WorkingCopyInfo.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
                             Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo((nn == 5) ? SvnSchedule.Delete : SvnSchedule.Normal));
 
-                            if (nn >= 0)
+                            if (nn == 5)
+                            {
+                                // Deleted node
+                            }
+                            else if (nn >= 0)
                             {
                                 Assert.That(e.WorkingCopyInfo.ContentChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 0, 45)));
                                 Assert.That(e.WorkingCopyInfo.WorkingCopySize, Is.EqualTo(36L), "WCSize = 36");
