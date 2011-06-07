@@ -94,7 +94,7 @@ bool SvnLookClient::List(SvnLookOrigin^ lookOrigin, String^ path, SvnLookListArg
 		if (r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool))
 			return args->HandleResult(this, r);
 
-		r = ListEntries(args, root, pool.AllocPath(path), args->Depth == SvnDepth::Infinity, %pool);
+		r = ListEntries(args, root, pool.AllocRelpath(path), args->Depth == SvnDepth::Infinity, %pool);
 		return args->HandleResult(this, r);
 	}
 	finally

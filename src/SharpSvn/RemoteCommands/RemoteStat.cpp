@@ -32,7 +32,7 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
 
     result = nullptr;
 
-    const char *path = pool.AllocCanonical(relPath);
+    const char *path = pool.AllocUri(relPath);
     svn_dirent_t *dirent = nullptr;
     svn_error_t *err = svn_ra_stat(_session,
                                    path,
@@ -91,9 +91,9 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
             const char *basename;
 
             if (!String::IsNullOrEmpty(relPath))
-                url = svn_path_url_add_component2(pool.AllocCanonical(SessionUri), pool.AllocCanonical(relPath), pool.Handle);
+                url = svn_path_url_add_component2(pool.AllocUri(SessionUri), pool.AllocRelpath(relPath), pool.Handle);
             else
-                url = pool.AllocCanonical(SessionUri);
+                url = pool.AllocUri(SessionUri);
 
             svn_path_split(url, &url, &basename, pool.Handle); // 1.7: Use svn_uri_split()
 

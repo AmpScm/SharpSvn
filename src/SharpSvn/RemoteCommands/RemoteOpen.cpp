@@ -30,7 +30,7 @@ bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteOpenArgs^ args)
 	svn_ra_session_t *session;
 
 	SVN_HANDLE(svn_client_open_ra_session(&session,
-										  pool.AllocCanonical(sessionUri),
+										  pool.AllocUri(sessionUri),
 										  CtxHandle,
 										  _pool.Handle // Use session pool!
 										  ));

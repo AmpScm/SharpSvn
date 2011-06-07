@@ -81,7 +81,7 @@ String^ SvnRepositoryClient::FindRepositoryRoot(Uri^ repositoryUri)
 	AprPool pool(%_pool);
 
 	const char* root = svn_repos_find_root_path(
-		pool.AllocCanonical(repositoryUri),
+		pool.AllocUri(repositoryUri),
 		pool.Handle);
 
 	return root ? Utf8_PtrToString(root) : nullptr;

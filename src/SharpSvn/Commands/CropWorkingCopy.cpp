@@ -36,7 +36,7 @@ bool SvnClient::CropWorkingCopy(System::String ^path, SvnDepth toDepth, SvnCropW
 	svn_client_ctx_t* ctx = CtxHandle;
 	svn_wc_adm_access_t *adm_access = nullptr;
 	const svn_wc_entry_t *entry = nullptr;
-	const char* pPath = pool.AllocPath(path);
+	const char* pPath = pool.AllocDirent(path);
 
 	svn_error_t *r = svn_wc_adm_probe_open3(
 							&adm_access,

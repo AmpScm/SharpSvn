@@ -39,7 +39,7 @@ bool SvnRemoteSession::List(String^ relPath, SvnRemoteListArgs^ args, EventHandl
 		apr_hash_t *dirents;
 		svn_revnum_t gotRev;
 
-		SVN_HANDLE(svn_ra_get_dir2(_session, &dirents, &gotRev, NULL, pool.AllocCanonical(relPath),
+		SVN_HANDLE(svn_ra_get_dir2(_session, &dirents, &gotRev, NULL, pool.AllocRelpath(relPath),
 								   (svn_revnum_t)args->Revision, (apr_uint32_t)args->RetrieveEntries, pool.Handle));
 
 		if (!String::IsNullOrEmpty(relPath) && !relPath->EndsWith("/"))

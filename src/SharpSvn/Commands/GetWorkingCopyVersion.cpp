@@ -41,6 +41,8 @@ bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersi
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
+	else if (!IsNotUri(targetPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -52,7 +54,7 @@ bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersi
 
 	svn_error_t *r = svn_wc_revision_status(
 		&result,
-		pool.AllocPath(targetPath),
+		pool.AllocDirent(targetPath),
 		args->Trail ? pool.AllocString(args->Trail) : nullptr,
 		args->UseCommittedRevisions,
 		CtxHandle->cancel_func,

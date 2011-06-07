@@ -67,7 +67,7 @@ bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStr
 
 	svn_stream_t* fstream;
 
-	if (r = svn_fs_file_contents(&fstream, root, pool.AllocCanonical(path), pool.Handle))
+	if (r = svn_fs_file_contents(&fstream, root, pool.AllocRelpath(path), pool.Handle))
 		return args->HandleResult(this, r);
 
 	SvnStreamWrapper wrapper(toStream, false, true, %pool);

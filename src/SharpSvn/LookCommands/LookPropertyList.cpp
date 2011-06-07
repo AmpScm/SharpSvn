@@ -39,7 +39,7 @@ bool SvnLookClient::GetPropertyList(SvnLookOrigin^ lookOrigin, String^ path, Svn
 
 	apr_hash_t *props;
 
-	if (r = svn_fs_node_proplist(&props, root, pool.AllocCanonical(path), pool.Handle))
+	if (r = svn_fs_node_proplist(&props, root, pool.AllocRelpath(path), pool.Handle))
 		return args->HandleResult(this, r);
 
 	properties = SvnBase::CreatePropertyDictionary(props, %pool);

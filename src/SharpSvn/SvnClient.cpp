@@ -331,7 +331,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 			(*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
 
 			if (ea->Choice == SvnAccept::Merged)
-				(*result)->merged_file = tmpPool.AllocPath(ea->MergedFile);
+				(*result)->merged_file = tmpPool.AllocDirent(ea->MergedFile);
 		}
 
 		return nullptr;
@@ -354,10 +354,11 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 	path = SvnTools::GetNormalizedFullPath(path);
 
 	AprPool pool(%_pool);
+    // ### Use wc_ctx
 
 	const char* url = nullptr;
 
-	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocPath(path), pool.Handle);
+	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocDirent(path), pool.Handle);
 
 	if (!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
@@ -382,7 +383,7 @@ bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
 
 	const char* uuidStr = nullptr;
 
-	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocCanonical(uri), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocUri(uri), CtxHandle, pool.Handle);
 
 	if (err || !uuidStr)
 	{
@@ -410,7 +411,7 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 
 	AprPool pool(%_pool);
 
-	const char* pPath = pool.AllocPath(path);
+	const char* pPath = pool.AllocDirent(path);
 	const char* uuidStr = nullptr;
 
 	svn_wc_adm_access_t *adm = nullptr;
@@ -454,7 +455,7 @@ Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 
-	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocCanonical(uri), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocUri(uri), CtxHandle, pool.Handle);
 
 	if (!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
@@ -477,7 +478,7 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 
-	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocPath(target), CtxHandle, pool.Handle);
+	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocDirent(target), CtxHandle, pool.Handle);
 
 	if (!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);

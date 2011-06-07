@@ -74,10 +74,10 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
 	AprPool^ pool = gcnew AprPool();
 	try
 	{
-		const char* origPath = pool->AllocPath(originalPath);
-		const char* modPath = pool->AllocPath(modifiedPath);
-		const char* latPath = latestPath ? pool->AllocPath(latestPath) : nullptr;
-		const char* ancPath = ancestorPath ? pool->AllocPath(ancestorPath) : nullptr;
+		const char* origPath = pool->AllocDirent(originalPath);
+		const char* modPath = pool->AllocDirent(modifiedPath);
+		const char* latPath = latestPath ? pool->AllocDirent(latestPath) : nullptr;
+		const char* ancPath = ancestorPath ? pool->AllocDirent(ancestorPath) : nullptr;
 
 		svn_diff_file_options_t *options = svn_diff_file_options_create(pool->Handle);
 
@@ -153,7 +153,7 @@ bool SvnFileDiff::WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs
 		args->OriginalHeader ? pool.AllocString(args->OriginalHeader) : nullptr,
 		args->ModifiedHeader ? pool.AllocString(args->ModifiedHeader) : nullptr,
 		"UTF-8",
-		args->RelativeToPath ? pool.AllocPath(args->RelativeToPath) : nullptr,
+		args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
 		args->ShowCFunction,
 		pool.Handle);
 

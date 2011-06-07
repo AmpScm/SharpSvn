@@ -51,7 +51,7 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	const char* pPath = pool.AllocPath(targetPath);
+	const char* pPath = pool.AllocDirent(targetPath);
 	svn_wc_adm_access_t* acc = nullptr;
 
 	svn_error_t* r = svn_wc_adm_probe_open3(&acc, nullptr, pPath, false, 1, CtxHandle->cancel_func, CtxHandle->cancel_baton, pool.Handle);

@@ -85,7 +85,7 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	svn_error_t *r = svn_client_move5(
 		&pInfo,
 		AllocPathArray(sourcePaths, %pool),
-		pool.AllocPath(toPath),
+		pool.AllocDirent(toPath),
 		args->Force,
 		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
 		args->CreateParents,
@@ -221,7 +221,7 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	svn_error_t *r = svn_client_move5(
 		&commitInfoPtr,
 		AllocArray(uris, %pool),
-		pool.AllocCanonical(toUri),
+		pool.AllocUri(toUri),
 		args->Force,
 		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
 		args->CreateParents,

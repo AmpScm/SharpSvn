@@ -86,7 +86,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 
 	svn_error_t* r = svn_client_checkout3(&version,
 		pool.AllocString(url->SvnTargetName),
-		pool.AllocPath(path),
+		pool.AllocDirent(path),
 		&pegRev,
 		&coRev,
 		(svn_depth_t)args->Depth,

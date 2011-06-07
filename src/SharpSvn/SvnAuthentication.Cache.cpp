@@ -287,7 +287,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 	const char* cfg = nullptr;
 	SVN_THROW(svn_config_get_user_config_path(
 		&cfg,
-		_clientContext->_configPath ? pool.AllocPath(_clientContext->_configPath) : nullptr,
+		_clientContext->_configPath ? pool.AllocDirent(_clientContext->_configPath) : nullptr,
 		SVN_CONFIG__AUTH_SUBDIR,
 		pool.Handle));
 
@@ -345,7 +345,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 		pl.Clear(); // Clear before running to clear old state
 
 		svn_stream_t* stream = nullptr;
-		svn_error_t* r = svn_stream_open_readonly(&stream, pool.AllocPath(file->FullName), pl.Handle, pl.Handle);
+		svn_error_t* r = svn_stream_open_readonly(&stream, pool.AllocDirent(file->FullName), pl.Handle, pl.Handle);
 
 		apr_hash_t* hash = nullptr;
 		if (!r)

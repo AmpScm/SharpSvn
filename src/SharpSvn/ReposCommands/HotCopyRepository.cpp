@@ -38,8 +38,8 @@ bool SvnRepositoryClient::HotCopy(String^ fromRepository, String^ toRepository, 
 	ArgsStore store(this, args, %pool);
 
 	return args->HandleResult(this,
-					   svn_repos_hotcopy(pool.AllocPath(fromRepository),
-										 pool.AllocPath(toRepository),
+					   svn_repos_hotcopy(pool.AllocDirent(fromRepository),
+										 pool.AllocDirent(toRepository),
 										 args->CleanLogFiles,
 										 pool.Handle));
 }

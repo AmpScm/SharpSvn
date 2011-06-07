@@ -49,7 +49,7 @@ bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepo
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t* r = svn_repos_delete(
-		pool.AllocPath(repositoryPath),
+		pool.AllocDirent(repositoryPath),
 		pool.Handle);
 
 	return args->HandleResult(this, r);

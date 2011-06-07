@@ -211,7 +211,7 @@ const char* AprPool::AllocUnixString(String^ value)
 }
 
 
-const char* AprPool::AllocPath(String^ value)
+const char* AprPool::AllocDirent(String^ value)
 {
 	if (!value)
 		throw gcnew ArgumentNullException("value");
@@ -258,21 +258,24 @@ const char* AprPool::AllocPath(String^ value)
 			}
 		}
 
+		if (pData[0] >= 'a' && pData[0] <= 'z' && pData[1] == ':')
+			pData[0] -= ('a' - 'A');
+
 		return pData;
 	}
 	else
 		return (const char*)AllocCleared(1);
 }
 
-const char* AprPool::AllocCanonical(Uri^ value)
+const char* AprPool::AllocUri(Uri^ value)
 {
 	if (!value)
-		return AllocCanonical((String^)nullptr);
+		return AllocUri((String^)nullptr);
 
-	return AllocCanonical(SvnBase::UriToString(value));
+	return AllocUri(SvnBase::UriToString(value));
 }
 
-const char* AprPool::AllocCanonical(String^ value)
+const char* AprPool::AllocUri(String^ value)
 {
 	if (!value)
 		value = "";
@@ -288,7 +291,7 @@ const char* AprPool::AllocCanonical(String^ value)
 		pin_ptr<unsigned char> pBytes = &bytes[0];
 		const char* pcBytes = (const char*)static_cast<const unsigned char*>(pBytes);
 
-		const char* resPath = svn_path_canonicalize(pcBytes, Handle);
+		const char* resPath = svn_uri_canonicalize(pcBytes, Handle);
 
 		if (resPath == pcBytes)
 			resPath = apr_pstrdup(Handle, resPath);

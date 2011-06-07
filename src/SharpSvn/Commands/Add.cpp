@@ -53,7 +53,7 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_add4(
-		pool.AllocPath(path),
+		pool.AllocDirent(path),
 		(svn_depth_t)args->Depth,
 		args->Force,
 		args->NoIgnore,

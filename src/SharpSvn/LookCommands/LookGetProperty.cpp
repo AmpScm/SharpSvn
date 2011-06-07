@@ -81,7 +81,7 @@ bool SvnLookClient::GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^
 	svn_string_t *prop;
 	const char* pcPropName = pool.AllocString(propertyName);
 
-	if (r = svn_fs_node_prop(&prop, root, pool.AllocCanonical(path), pcPropName, pool.Handle))
+	if (r = svn_fs_node_prop(&prop, root, pool.AllocRelpath(path), pcPropName, pool.Handle))
 		return args->HandleResult(this, r);
 
 	value = SvnPropertyValue::Create(pcPropName, prop, nullptr);
