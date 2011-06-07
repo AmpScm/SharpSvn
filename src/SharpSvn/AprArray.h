@@ -140,37 +140,7 @@ namespace SharpSvn {
 				return SvnBase::Utf8_PtrToString(*ppcStr);
 			}
 		};
-#pragma warning(push)
-#pragma warning(disable: 4996)
 		__declspec(deprecated)
-		ref class AprCStrPathMarshaller sealed : public IItemMarshaller<String^>
-		{
-		public:
-			property int ItemSize
-			{
-				virtual int get()
-				{
-					return sizeof(char*);
-				}
-			}
-
-			virtual void Write(String^ value, void* ptr, AprPool^ pool)
-			{
-				const char** ppStr = (const char**)ptr;
-
-				*ppStr = pool->AllocPath(value);
-			}
-
-			virtual String^ Read(const void* ptr, AprPool^ pool)
-			{
-				UNUSED_ALWAYS(pool);
-				const char** ppcStr = (const char**)ptr;
-
-				return SvnBase::Utf8_PtrToString(svn_path_local_style(*ppcStr, pool->Handle));
-			}
-		};
-#pragma warning(pop)
-
 		ref class AprCStrDirentMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:

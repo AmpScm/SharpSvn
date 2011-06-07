@@ -130,7 +130,7 @@ apr_array_header_t *SvnBase::AllocCanonicalArray(ICollection<String^>^ paths, Ap
 }
 
 
-apr_array_header_t *SvnBase::AllocPathArray(ICollection<String^>^ paths, AprPool^ pool)
+apr_array_header_t *SvnBase::AllocDirentArray(ICollection<String^>^ paths, AprPool^ pool)
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -142,7 +142,7 @@ apr_array_header_t *SvnBase::AllocPathArray(ICollection<String^>^ paths, AprPool
 		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
-	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, pool);
+	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, pool);
 
 	return aprPaths->Handle;
 }

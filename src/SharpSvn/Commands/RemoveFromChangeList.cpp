@@ -64,7 +64,7 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFro
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_remove_from_changelists(
-		AllocPathArray(targets, %pool),
+		AllocDirentArray(targets, %pool),
 		(svn_depth_t)args->Depth,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,

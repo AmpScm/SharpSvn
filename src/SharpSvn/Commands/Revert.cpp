@@ -72,7 +72,7 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
+	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
 
 	svn_error_t *r = svn_client_revert2(
 		aprPaths->Handle,

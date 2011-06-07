@@ -113,7 +113,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrPathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrPathMarshaller^>(paths, %pool);
+	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
 
 	svn_commit_info_t *commitInfoPtr = nullptr;
 
