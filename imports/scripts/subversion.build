@@ -3,9 +3,7 @@
   <property name="intl" value="sharpsvn" overwrite="false" />
   <property name="svnBuildName" value="SharpSvn" overwrite="false" />
   <property name="svnBase" value="${platformRoot}/subversion" />
-  <property name="svnCheckUrl" value="" overwrite="false" />
-  <property name="svnCheckFs" value="fsfs" overwrite="false" />
-  <property name ="subversionMergeBranches" value="" overwrite="false" />
+  <property name="subversionMergeBranches" value="" overwrite="false" />
 
   <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, sharpintl-build">
 
@@ -150,28 +148,6 @@
     </exec>
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
-      <!-- Patches for x64 builds; hopefully included in svn 1.5 -->
-      <copy todir="${svnBase}/build/generator/" overwrite="true">
-        <fileset basedir="scripts">
-          <include name="*.ezt" />
-        </fileset>
-      </copy>
-      <loadfile file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" property="gen_win">
-        <filterchain>
-          <replacestring from="r'version \d+\.\d+\.\d+ \(.*\)'" to="r'version \d+\.\d+\.\d+ \(.*\)(.*${string::to-upper(platform)})?'" />
-          <replacestring from="r'^\d+\.\d+\.\d+(-[a-zA-Z0-9]+)?$'" to="r'^\d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?$'" />
-          <replacestring from="'version \d+\.\d+\.\d+(.|-[a-zA-Z0-9]+\.)$'" to="'version \d+\.\d+\.\d+(-[^\s]+-${string::to-upper(platform)})?\.$'" />
-        </filterchain>
-      </loadfile>
-      <echo message="${gen_win}" file="${svnBase}/subversion/tests/cmdline/getopt_tests.py" />
-
-      <loadfile file="${svnBase}/win-tests.py" property="gen_win">
-        <filterchain>
-          <replacestring from='for dll in dlls:' to='#' />
-          <replacestring from='copy_changed_file(dll' to='#'/>
-        </filterchain>
-      </loadfile>
-
       <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
         <arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
         <arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
@@ -200,18 +176,6 @@
       <echo message="@echo off" file="${svnBase}/build/win32/build_zlib.bat" />
 
       <!-- Replace shared library builds with static builds; to auto change dependencies -->
-      <foreach item="File" property="vcproj">
-        <in>
-          <items basedir="${svnBase}/build/win32">
-            <include name="svn_config.vcproj" />
-            <include name="svn_locale.vcproj" />
-            <include name="zlib.vcproj" />
-          </items>
-        </in>
-        <do>
-          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-        </do>
-      </foreach>
       <foreach item="File" property="vcproj" if="${static != 'true'}">
         <in>
           <items basedir="${svnBase}">
@@ -382,25 +346,5 @@
       </fileset>
     </copy>
     <copy tofile="${release}/include/sharpsvn-imports.h" file="${downloads}/../scripts/sharpsvn-imports.h" if="${applyMerges=='true'}"/>
-  </target>
-
-  <target name="check" depends="build-svn, copy-result">
-    <loadfile file="${svnBase}/win-tests.py" property="gen_win">
-      <filterchain>
-        <replacestring from='for dll in dlls:' to='#' />
-        <replacestring from='copy_changed_file(dll' to='#'/>
-      </filterchain>
-    </loadfile>
-    <echo message="${gen_win}" file="${svnBase}/win-tests.py" />
-
-    <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
-      <arg line="/c win-tests.py" if="${pythonAvailable != '0'}" />
-      <arg line="/c python.exe win-tests.py" if="${pythonAvailable == '0'}" />
-      <arg value="-r" />
-      <arg value="-v" />
-      <arg value="-c" />
-      <arg value="-p" />
-      <arg value="--bin=${path::get-full-path('release/bin')}" />
-    </exec>
   </target>
 </project>
