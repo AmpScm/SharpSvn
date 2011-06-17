@@ -45,7 +45,9 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if (!_path && (_pPath || _pEntry) && _pool)
-					_path = SvnBase::Utf8_PtrToString(svn_path_join(_pPath, _pEntry->name, _pool->Handle));
+				{
+					_path = SvnBase::Utf8_PtrToString(svn_relpath_join(_pPath, _pEntry->name, _pool->Handle));
+				}
 
 				return _path;
 			}
