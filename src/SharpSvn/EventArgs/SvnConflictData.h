@@ -50,7 +50,7 @@ namespace SharpSvn {
 			virtual System::Uri^ get() sealed
 			{
 				if (!_uri && _version && _version->repos_url && _version->path_in_repos && _pool)
-					_uri = SvnBase::Utf8_PtrToUri(svn_path_join(_version->repos_url, _version->path_in_repos, _pool->Handle), NodeKind);
+                    _uri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_version->repos_url, _version->path_in_repos, _pool->Handle), NodeKind);
 
 				return _uri;
 			}
