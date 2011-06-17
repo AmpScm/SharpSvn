@@ -107,7 +107,7 @@ namespace SharpSvn.Tests.Commands
                     File.Delete(name);
 
                 File.Move(tmpName, name);
-                Console.WriteLine(string.Format("Wrote '{0}'", e.Path));
+                //Console.WriteLine(string.Format("Wrote '{0}'", e.Path));
 
                 if (!_inAdd)
                     Assert.That(ee.BaseMD5, Is.EqualTo(e.BaseMD5));
