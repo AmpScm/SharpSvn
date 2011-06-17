@@ -53,11 +53,11 @@ namespace SharpSvn.Tests.Commands
 			Uri url = new Uri(ReposUrl, "mooNewDirectory/");
 
 			Assert.That(Client.RemoteCreateDirectory(url));
+            bool gotOne = false;
+            Client.List(url, delegate(object sender, SvnListEventArgs e) { gotOne = true; });
 
-			string output = this.RunCommand("svn", "ls " + this.ReposUrl);
-			Assert.That(Regex.IsMatch(output, @"mooNewDirectory/"), "No new dir found: " + output);
-
-		}
+            Assert.That(gotOne);
+        }
 
         [Test]
         public void CreateTrunk()
