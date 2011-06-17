@@ -169,11 +169,11 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 
 			const char* baseUrlDir;
 			const char* baseUrlFile;
-			svn_path_split(baseUrl, &baseUrlDir, &baseUrlFile, cur->Handle);
+			svn_uri_split(&baseUrlDir, &baseUrlFile, baseUrl, cur->Handle);
 
 			const char* switchUrlDir;
 			const char* switchUrlFile;
-			svn_path_split(switchUrl, &switchUrlDir, &switchUrlFile, cur->Handle);
+			svn_uri_split(&switchUrlDir, &switchUrlFile, switchUrl, cur->Handle);
 
 			r = svn_ra_reparent(ra_session, baseUrlDir, cur->Handle);
 

@@ -46,7 +46,7 @@ bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRe
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	svn_error_t* r = svn_repos_upgrade(
+	svn_error_t* r = svn_repos_upgrade2(
 		pool.AllocDirent(repositoryPath),
 		args->NonBlocking,
 		nullptr,

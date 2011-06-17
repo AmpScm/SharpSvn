@@ -52,14 +52,15 @@ bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersi
 
 	svn_wc_revision_status_t *result = nullptr;
 
-	svn_error_t *r = svn_wc_revision_status(
+	svn_error_t *r = svn_wc_revision_status2(
 		&result,
-		pool.AllocDirent(targetPath),
+		CtxHandle->wc_ctx,
+		pool.AllocAbsoluteDirent(targetPath),
 		args->Trail ? pool.AllocString(args->Trail) : nullptr,
 		args->UseCommittedRevisions,
 		CtxHandle->cancel_func,
 		CtxHandle->cancel_baton,
-		pool.Handle);
+		pool.Handle, pool.Handle);
 
 	if (result)
 		version = gcnew SvnWorkingCopyVersion(result->min_rev, result->max_rev, result->switched != 0, result->modified != 0, result->sparse_checkout != 0);
