@@ -73,7 +73,7 @@ namespace SharpSvn {
 			Uri^ get()
 			{
 				if (!_fromUri && _pFromUri && _diffSummary && _pool)
-					_fromUri = SvnBase::Utf8_PtrToUri(svn_path_join(_pFromUri, _diffSummary->path, _pool->Handle), NodeKind);
+					_fromUri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_pFromUri, _diffSummary->path, _pool->Handle), NodeKind);
 
 				return _fromUri;
 			}
@@ -84,7 +84,7 @@ namespace SharpSvn {
 			Uri^ get()
 			{
 				if (!_toUri && _pToUri && _diffSummary && _pool)
-					_toUri = SvnBase::Utf8_PtrToUri(svn_path_join(_pToUri, _diffSummary->path, _pool->Handle), NodeKind);
+					_toUri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_pToUri, _diffSummary->path, _pool->Handle), NodeKind);
 
 				return _toUri;
 			}
