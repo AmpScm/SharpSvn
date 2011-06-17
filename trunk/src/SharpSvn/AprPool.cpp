@@ -267,6 +267,11 @@ const char* AprPool::AllocDirent(String^ value)
 		return (const char*)AllocCleared(1);
 }
 
+const char* AprPool::AllocAbsoluteDirent(String^ value)
+{
+	return AllocDirent(System::IO::Path::GetFullPath(value));
+}
+
 const char* AprPool::AllocUri(Uri^ value)
 {
 	if (!value)

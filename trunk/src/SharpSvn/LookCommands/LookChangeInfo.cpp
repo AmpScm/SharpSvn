@@ -113,9 +113,10 @@ bool SvnLookClient::ChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ arg
 		svn_revnum_t base_rev;
 		svn_fs_root_t* root = nullptr;
 
-		if (r = svn_repos_open(
+		if (r = svn_repos_open2(
 			&repos,
 			pool.AllocDirent(lookOrigin->RepositoryPath),
+			nullptr,
 			pool.Handle))
 		{
 			return args->HandleResult(this, r);

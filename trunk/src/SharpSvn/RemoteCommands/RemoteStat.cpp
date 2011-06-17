@@ -95,7 +95,7 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
             else
                 url = pool.AllocUri(SessionUri);
 
-            svn_path_split(url, &url, &basename, pool.Handle); // 1.7: Use svn_uri_split()
+            svn_uri_split(&url, &basename, url, pool.Handle);
 
             svn_ra_session_t *subsession;
             apr_hash_t *entries;
@@ -103,7 +103,6 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
             SVN_HANDLE(svn_client_open_ra_session(&subsession, url, CtxHandle, pool.Handle));
             SVN_HANDLE(svn_ra_get_dir2(subsession, &entries, NULL, NULL, "", latest, SVN_DIRENT_ALL, pool.Handle));
 
-            basename = svn_path_uri_decode(basename, pool.Handle);
             dirent = (svn_dirent_t*)apr_hash_get(entries, basename, APR_HASH_KEY_STRING);
         }
     }

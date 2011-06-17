@@ -141,6 +141,9 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const char* AllocDirent(String^ value);
 
+            [System::Diagnostics::DebuggerStepThroughAttribute()]
+			const char* AllocAbsoluteDirent(String^ value);
+
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			__declspec(deprecated) const char* AllocPath(String^ value)
 			{

@@ -60,7 +60,7 @@ ListEntries(SvnLookListArgs^ args, svn_fs_root_t *root, const char *path, bool r
 
 		if (recurse && item->kind == svn_node_dir)
 		{
-			SVN_ERR(ListEntries(args, root, svn_path_join(path, item->name, subpool.Handle), true, %subpool));
+			SVN_ERR(ListEntries(args, root, svn_relpath_join(path, item->name, subpool.Handle), true, %subpool));
 		}
 	}
 

@@ -168,7 +168,7 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
 	svn_error_t *r;
 	svn_repos_t *repos;
 
-	if (r = svn_repos_open(&repos, subpool.AllocDirent(repositoryPath), subpool.Handle))
+	if (r = svn_repos_open2(&repos, subpool.AllocDirent(repositoryPath), nullptr, subpool.Handle))
 		return args->HandleResult(this, r);
 
 	svn_revnum_t rev;

@@ -55,7 +55,7 @@ bool SvnLookClient::Changed(SvnLookOrigin^ lookOrigin, SvnChangedArgs^ args, Eve
 	{
 		svn_error_t* r;
 		svn_repos_t* repos;
-		if (r = svn_repos_open(&repos, pool.AllocDirent(lookOrigin->RepositoryPath), pool.Handle))
+		if (r = svn_repos_open2(&repos, pool.AllocDirent(lookOrigin->RepositoryPath), nullptr, pool.Handle))
 			return args->HandleResult(this, r);
 
 		svn_fs_t* fs = svn_repos_fs(repos);
