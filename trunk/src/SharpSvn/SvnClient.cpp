@@ -415,11 +415,11 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 	AprPool pool(%_pool);
 	NoArgsStore store(this, %pool);
 
-	const char* pPath = pool.AllocDirent(path);
 	const char* uuidStr = nullptr;
     svn_error_t *err;
 
-    err = svn_client_uuid_from_path2(&uuidStr, pPath, CtxHandle, pool.Handle, pool.Handle);
+    err = svn_client_uuid_from_path2(&uuidStr, pool.AllocAbsoluteDirent(path),
+                                     CtxHandle, pool.Handle, pool.Handle);
 
 	if (err || !uuidStr)
 	{
