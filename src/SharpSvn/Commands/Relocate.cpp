@@ -61,11 +61,11 @@ bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_relocate(
+	svn_error_t *r = svn_client_relocate2(
 		pool.AllocDirent(path),
 		pool.AllocUri(from),
 		pool.AllocUri(to),
-		!args->NonRecursive,
+		args->IgnoreExternals,
 		CtxHandle,
 		pool.Handle);
 

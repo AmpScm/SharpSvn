@@ -350,6 +350,8 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if (!SvnBase::IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	path = SvnTools::GetNormalizedFullPath(path);
 
@@ -358,7 +360,7 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 
 	const char* url = nullptr;
 
-	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocDirent(path), pool.Handle);
+    svn_error_t* err = svn_client_url_from_path2(&url, pool.AllocAbsoluteDirent(path), CtxHandle, pool.Handle, pool.Handle);
 
 	if (!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
