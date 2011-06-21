@@ -22,7 +22,7 @@ namespace SharpSvn {
 	/// <threadsafety static="true" instance="false"/>
 	public ref class SvnRelocateArgs : public SvnClientArgs
 	{
-		bool _nonRecursive;
+		bool _ignoreExternals;
 	public:
 		SvnRelocateArgs()
 		{
@@ -36,15 +36,27 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Relocate is always recursive now")]
 		property bool NonRecursive
 		{
 			bool get()
 			{
-				return _nonRecursive;
+				return false;
 			}
 			void set(bool value)
 			{
-				_nonRecursive = value;
+			}
+		}
+
+		property bool IgnoreExternals
+		{
+			bool get()
+			{
+				return _ignoreExternals;
+			}
+			void set(bool value)
+			{
+				_ignoreExternals = value;
 			}
 		}
 	};

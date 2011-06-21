@@ -94,7 +94,8 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 
 		args->_sourceTarget = source;
 
-		svn_error_t* r = svn_client_mergeinfo_log_eligible(
+		svn_error_t* r = svn_client_mergeinfo_log(
+			FALSE,
 			pool.AllocString(target->SvnTargetName),
 			target->Revision->AllocSvnRevision(%pool),
 			pool.AllocString(source->SvnTargetName),
@@ -102,6 +103,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 			svnclient_eligible_log_handler,
 			(void*)_clientBaton->Handle,
 			args->RetrieveChangedPaths,
+			(svn_depth_t)args->Depth,
 			retrieveProperties,
 			CtxHandle,
 			pool.Handle);

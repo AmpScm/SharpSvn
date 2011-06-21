@@ -25,11 +25,13 @@ namespace SharpSvn {
 	{
 		SvnRevisionPropertyNameCollection^ _retrieveProperties;
 		bool _logChangedPaths;
+		SvnDepth _depth;
 	internal:
 		SvnTarget^ _sourceTarget;
 	public:
 		SvnMergesMergedArgs()
 		{
+			_depth = SvnDepth::Infinity;
 		}
 
 		virtual property SvnCommandType CommandType
@@ -86,6 +88,18 @@ namespace SharpSvn {
 					_retrieveProperties = gcnew SvnRevisionPropertyNameCollection(false);
 
 				return _retrieveProperties;
+			}
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
 			}
 		}
 

@@ -34,9 +34,18 @@ bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
 	return Blame(target, gcnew SvnBlameArgs(), blameHandler);
 }
 
-static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t line_no, svn_revnum_t revision, const char *author,
-													   const char *date, svn_revnum_t merged_revision,  const char *merged_author,
-													   const char *merged_date, const char *merged_path, const char *line, apr_pool_t *pool)
+static svn_error_t *svn_client_blame_receiver_handler3(void *baton,
+													   svn_revnum_t start_revnum,
+													   svn_revnum_t end_revnum,
+													   apr_int64_t line_no,
+													   svn_revnum_t revision,
+													   apr_hash_t *rev_props,
+													   svn_revnum_t merged_revision,
+													   apr_hash_t *merged_rev_props,
+													   const char *merged_path,
+													   const char *line,
+													   svn_boolean_t local_change,
+													   apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
@@ -46,14 +55,14 @@ static svn_error_t *svn_client_blame_receiver_handler2(void *baton, apr_int64_t 
 	if (!args)
 		return nullptr;
 
-	SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, author, date, merged_revision, merged_author, merged_date,
-		merged_path, line, %thePool);
+	SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, rev_props, merged_revision, merged_rev_props,
+		merged_path, line, local_change != FALSE, start_revnum, end_revnum, %thePool);
 	try
 	{
 		args->RaiseBlame(e);
 
 		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Blame receiver canceled operation");
 		else
 			return nullptr;
 	}
@@ -88,7 +97,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 		options->ignore_space = (svn_diff_file_ignore_space_t)args->IgnoreSpacing;
 		options->ignore_eol_style = args->IgnoreLineEndings;
 
-		svn_error_t *r = svn_client_blame4(
+		svn_error_t *r = svn_client_blame5(
 			pool.AllocString(target->SvnTargetName),
 			target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 			args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool),
@@ -96,7 +105,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 			options,
 			args->IgnoreMimeType,
 			args->RetrieveMergedRevisions,
-			svn_client_blame_receiver_handler2,
+			svn_client_blame_receiver_handler3,
 			(void*)_clientBaton->Handle,
 			CtxHandle,
 			pool.Handle);

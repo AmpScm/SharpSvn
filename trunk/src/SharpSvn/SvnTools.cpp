@@ -31,14 +31,19 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
+	else if (!SvnBase::IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
 	path = SvnTools::GetNormalizedFullPath(path);
 
 	AprPool pool(SmallThreadPool);
 
 	const char* url = nullptr;
+	svn_client_ctx_t *ctx;
 
-	svn_error_t* err = svn_client_url_from_path(&url, pool.AllocDirent(path), pool.Handle);
+	SVN_HANDLE(svn_client_create_context(&ctx, pool.Handle));
+
+	svn_error_t* err = svn_client_url_from_path2(&url, pool.AllocDirent(path), ctx, pool.Handle, pool.Handle);
 
 	if (!err && url)
 		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);

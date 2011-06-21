@@ -35,21 +35,38 @@ namespace SharpSvn {
 		initonly DateTime _mergedDate;
 		String^ _mergedAuthor;
 		String^ _mergedPath;
+		initonly bool _localChange;
+		initonly __int64 _startRevnum;
+		initonly __int64 _endRevnum;
 
 	internal:
-		SvnBlameEventArgs(__int64 revision, __int64 lineNr, const char* author, const char* date,
-			svn_revnum_t merged_revision, const char *merged_author, const char *merged_date,
-			const char *merged_path, const char* line, AprPool^ pool)
+		SvnBlameEventArgs(__int64 revision, __int64 lineNr, apr_hash_t *rev_props,
+			svn_revnum_t merged_revision, apr_hash_t *merged_rev_props,
+			const char *merged_path, const char* line, bool localChange,
+			__int64 start_revnum, __int64 end_revnum, AprPool^ pool)
 		{
 			if (!pool)
 				throw gcnew ArgumentNullException("pool");
 			else if (!line)
 				throw gcnew ArgumentNullException("line");
 
+			const char *date = NULL;
+			const char *merged_date = NULL;
+
 			_revision = revision;
 			_lineNr = lineNr;
-			_pcAuthor = author;
 			_pcLine = line;
+
+			if (rev_props != NULL)
+			{
+				_pcAuthor = svn_prop_get_value(rev_props, SVN_PROP_REVISION_AUTHOR);
+				date = svn_prop_get_value(rev_props, SVN_PROP_REVISION_DATE);
+			}
+			if (merged_rev_props != NULL)
+			{
+				_pcMergedAuthor = svn_prop_get_value(merged_rev_props, SVN_PROP_REVISION_AUTHOR);
+				merged_date = svn_prop_get_value(merged_rev_props, SVN_PROP_REVISION_DATE);
+			}
 
 			apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
 
@@ -71,7 +88,6 @@ namespace SharpSvn {
 				_date = DateTime::MinValue;
 
 			_mergedRevision = merged_revision;
-			_pcMergedAuthor = merged_author;
 			_pcMergedPath = merged_path;
 
 			if (merged_date)
@@ -88,6 +104,10 @@ namespace SharpSvn {
 			}
 			else
 				_mergedDate = DateTime::MinValue;
+
+			_localChange = localChange;
+			_startRevnum = start_revnum;
+			_endRevnum = end_revnum;
 		}
 
 	public:
@@ -96,6 +116,22 @@ namespace SharpSvn {
 			__int64 get()
 			{
 				return _revision;
+			}
+		}
+
+		property __int64 StartRevision
+		{
+			__int64 get()
+			{
+				return _startRevnum;
+			}
+		}
+
+		property __int64 EndRevision
+		{
+			__int64 get()
+			{
+				return _endRevnum;
 			}
 		}
 
@@ -181,6 +217,14 @@ namespace SharpSvn {
 			__int64 get()
 			{
 				return _mergedRevision;
+			}
+		}
+
+		property bool LocalChange
+		{
+			bool get()
+			{
+				return _localChange;
 			}
 		}
 
