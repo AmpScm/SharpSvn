@@ -120,18 +120,17 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 	if (start > end)
 		return args->HandleResult(this, svn_error_create(SVN_ERR_CL_ARG_PARSING_ERROR, NULL, "First revision cannot be higher than second"));
 
-	MemoryStream^ strResult = gcnew MemoryStream();
 	SvnStreamWrapper strmTo(to, false, true, %pool);
-	SvnStreamWrapper strmResponse(strResult, false, true, %pool);
 
-	r = svn_repos_dump_fs2(
+	r = svn_repos_dump_fs3(
 		repos,
 		strmTo.Handle,
-		strmResponse.Handle,
 		start,
 		end,
 		args->Incremental,
 		args->Deltas,
+		nullptr, // ###
+		nullptr, // ###
 		CtxHandle->cancel_func,
 		CtxHandle->cancel_baton,
 		pool.Handle);

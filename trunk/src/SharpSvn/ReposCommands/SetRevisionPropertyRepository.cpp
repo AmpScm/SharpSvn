@@ -67,6 +67,7 @@ bool SvnRepositoryClient::SetRevisionProperty(String^ repositoryPath, SvnRevisio
 		// Subversion does no normalization on the property value; so we have to do this before sending it
 		// to the server
 		pool.AllocPropertyValue(value, propertyName),
+		nullptr,
 		args,
 		%pool);
 }
@@ -104,6 +105,7 @@ bool SvnRepositoryClient::SetRevisionProperty(String^ repositoryPath, SvnRevisio
 		revision,
 		propertyName,
 		pool.AllocSvnString(byteArray),
+		nullptr,
 		args,
 		%pool);
 }
@@ -146,11 +148,12 @@ bool SvnRepositoryClient::DeleteRevisionProperty(String^ repositoryPath, SvnRevi
 		revision,
 		propertyName,
 		nullptr,
+		nullptr,
 		args,
 		%pool);
 }
 
-bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyRepositoryArgs^ args, AprPool^ pool)
+bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, const svn_string_t** oldValue, SvnSetRevisionPropertyRepositoryArgs^ args, AprPool^ pool)
 {
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
@@ -187,11 +190,12 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
 	}
 
 	return args->HandleResult(this,
-							  svn_repos_fs_change_rev_prop3(
+							  svn_repos_fs_change_rev_prop4(
 										repos,
 										rev,
 										args->Author ? subpool.AllocString(args->Author) : nullptr,
 										subpool.AllocString(propertyName),
+										oldValue,
 										value,
 										args->CallPreRevPropChangeHook,
 										args->CallPostRevPropChangeHook,

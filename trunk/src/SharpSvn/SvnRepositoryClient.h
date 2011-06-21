@@ -120,7 +120,7 @@ namespace SharpSvn {
 		bool DeleteRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, SvnSetRevisionPropertyRepositoryArgs^ args);
 
 	private:
-		bool InternalSetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, SvnSetRevisionPropertyRepositoryArgs^ args, AprPool^ pool);
+		bool InternalSetRevisionProperty(String^ repositoryPath, SvnRevision^ revision, String^ propertyName, const svn_string_t* value, const svn_string_t** oldValue, SvnSetRevisionPropertyRepositoryArgs^ args, AprPool^ pool);
 
 	public:
 		/// <overloads>Makes a hot copy of a repository</overloads>
