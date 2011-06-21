@@ -73,18 +73,18 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 	// Set a simple warning handler (see svnadmin/main.c), otherwise we might abort()
 	svn_fs_set_warning_func(svn_repos_fs(repos), warning_func, nullptr);
 
-	MemoryStream^ strResult = gcnew MemoryStream();
 	SvnStreamWrapper strmFrom(from, true, false, %pool);
-	SvnStreamWrapper strmResponse(strResult, false, true, %pool);
 
-	r = svn_repos_load_fs2(
+	r = svn_repos_load_fs3(
 		repos,
 		strmFrom.Handle,
-		strmResponse.Handle,
 		(svn_repos_load_uuid)args->LoadIdType,
 		args->ImportParent ? pool.AllocRelpath(args->ImportParent) : nullptr,
 		args->RunPreCommitHook,
 		args->RunPostCommitHook,
+		args->VerifyPropertyValues,
+		nullptr, // ###
+		nullptr, // ###
 		CtxHandle->cancel_func,
 		CtxHandle->cancel_baton,
 		pool.Handle);
