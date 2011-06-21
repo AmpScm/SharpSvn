@@ -45,6 +45,7 @@ namespace SharpSvn {
 			}
 			void set(bool value)
 			{
+                UNUSED_ALWAYS(value);
 			}
 		}
 
