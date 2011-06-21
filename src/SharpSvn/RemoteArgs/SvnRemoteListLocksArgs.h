@@ -7,6 +7,7 @@ namespace SharpSvn {
 
 	public ref class SvnRemoteListLocksArgs : public SvnRemoteSessionArgs
 	{
+		SvnDepth _depth;
 	public:
 		DECLARE_EVENT(SvnRemoteListLockEventArgs^, List)
 
@@ -19,6 +20,19 @@ namespace SharpSvn {
 	public:
 		SvnRemoteListLocksArgs()
 		{
+			_depth = SvnDepth::Infinity;
+		}
+
+		property SvnDepth Depth
+		{
+			SvnDepth get()
+			{
+				return _depth;
+			}
+			void set(SvnDepth value)
+			{
+				_depth = EnumVerifier::Verify(value);
+			}
 		}
 	};
 }
