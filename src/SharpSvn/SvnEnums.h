@@ -241,6 +241,21 @@ namespace SharpSvn {
 
         /// <summary>Removing a path by excluding it.</summary>
         Excluded                    = svn_wc_notify_exclude,
+
+        /// <summary>Operation failed because the node remains in conflict</summary>
+        FailedConflict              = svn_wc_notify_failed_conflict,
+
+        /// <summary>Operation failed because an added node is missing</summary>
+        FailedMissing               =  svn_wc_notify_failed_missing,
+
+        /// <summary>Operation failed because a node is out of date</summary>
+        FailedOutOfDate             = svn_wc_notify_failed_out_of_date,
+
+        /// <summary>Operation failed because an added parent is not selected</summary>
+        FailedNoParent              = svn_wc_notify_failed_no_parent,
+
+        /// <summary>Operation failed because a node is locked by another user and/or working copy</summary>
+        FailedLocked                = svn_wc_notify_failed_locked,
 	};
 
 	public enum class SvnNotifyState
