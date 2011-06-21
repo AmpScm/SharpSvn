@@ -90,7 +90,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
 	svn_opt_revision_t toRev = args->Revision->Or(target->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_switch2(
+	svn_error_t *r = svn_client_switch3(
 		&rev,
 		pool.AllocDirent(path),
 		pool.AllocString(target->SvnTargetName),
@@ -100,6 +100,7 @@ bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, 
 		args->KeepDepth,
 		args->IgnoreExternals,
 		args->AllowObstructions,
+		!args->VerifyAncestry,
 		CtxHandle,
 		pool.Handle);
 
