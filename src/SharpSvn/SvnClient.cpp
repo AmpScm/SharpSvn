@@ -417,26 +417,9 @@ bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 
 	const char* pPath = pool.AllocDirent(path);
 	const char* uuidStr = nullptr;
+    svn_error_t *err;
 
-	svn_wc_adm_access_t *adm = nullptr;
-	svn_error_t* err = svn_wc_adm_probe_open3(	&adm,
-												nullptr,
-												pPath,
-												false,
-												0,
-												CtxHandle->cancel_func,
-												CtxHandle->cancel_baton,
-												pool.Handle);
-
-	if (err || !adm)
-	{
-		svn_error_clear(err);
-		return false;
-	}
-
-	err = svn_client_uuid_from_path(&uuidStr, pPath, adm, CtxHandle, pool.Handle);
-
-	svn_error_clear(svn_wc_adm_close2(adm, pool.Handle));
+    err = svn_client_uuid_from_path2(&uuidStr, pPath, CtxHandle, pool.Handle, pool.Handle);
 
 	if (err || !uuidStr)
 	{
