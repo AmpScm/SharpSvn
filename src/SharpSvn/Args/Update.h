@@ -27,6 +27,8 @@ namespace SharpSvn {
 		bool _allowObstructions;
 		SvnRevision^ _revision;
 		bool _keepDepth;
+		bool _updateParents;
+		bool _addsAsModifications;
 
 	public:
 		SvnUpdateArgs()
@@ -137,6 +139,30 @@ namespace SharpSvn {
 				_allowObstructions = value;
 			}
 		}
+
+        property bool AddsAsModifications
+        {
+            bool get()
+            {
+                return _addsAsModifications;
+            }
+            void set(bool value)
+            {
+                _addsAsModifications = value;
+            }
+        }
+
+        property bool UpdateParents
+        {
+            bool get()
+            {
+                return _updateParents;
+            }
+            void set(bool value)
+            {
+                _updateParents = value;
+            }
+        }
 	};
 
 }

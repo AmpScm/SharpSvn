@@ -134,13 +134,15 @@ bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] S
 	apr_array_header_t* revs = nullptr;
 	svn_opt_revision_t uRev = args->Revision->Or(SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_update3(&revs,
+	svn_error_t *r = svn_client_update4(&revs,
 		aprPaths->Handle,
 		&uRev,
 		(svn_depth_t)args->Depth,
 		args->KeepDepth,
 		args->IgnoreExternals,
 		args->AllowObstructions,
+		args->AddsAsModifications,
+		args->UpdateParents,
 		CtxHandle,
 		pool.Handle);
 

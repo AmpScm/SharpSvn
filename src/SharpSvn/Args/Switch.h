@@ -27,6 +27,7 @@ namespace SharpSvn {
 		bool _allowObstructions;
 		bool _ignoreExternals;
 		bool _keepDepth;
+		bool _verifyAncestry;
 
 	public:
 		SvnSwitchArgs()
@@ -103,6 +104,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_ignoreExternals = value;
+			}
+		}
+
+		property bool VerifyAncestry
+		{
+			bool get()
+			{
+				return _verifyAncestry;
+			}
+			void set(bool value)
+			{
+				_verifyAncestry = value;
 			}
 		}
 	};
