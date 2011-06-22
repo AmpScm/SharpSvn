@@ -146,7 +146,7 @@ namespace SharpSvn {
 
 	public ref class SvnConflictData sealed
 	{
-		const svn_wc_conflict_description_t *_description;
+		const svn_wc_conflict_description2_t *_description;
 		AprPool^ _pool;
 
 		initonly SvnNodeKind _nodeKind;
@@ -157,6 +157,7 @@ namespace SharpSvn {
 		initonly SvnOperation _operation;
 
 		String^ _propertyName;
+        String^ _fullPath;
 		String^ _path;
 		String^ _mimeType;
 
@@ -171,7 +172,7 @@ namespace SharpSvn {
 		SvnConflictSource^ _rightOrigin;
 
 	internal:
-		SvnConflictData(const svn_wc_conflict_description_t *description, AprPool^ pool)
+		SvnConflictData(const svn_wc_conflict_description2_t *description, AprPool^ pool)
 		{
 			if (!description)
 				throw gcnew ArgumentNullException("description");
@@ -194,12 +195,23 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_path && _description && _description->path && _pool)
-					_path = SvnBase::Utf8_PathPtrToString(_description->path, _pool);
+				if (!_path && _description && _description->local_abspath && _pool)
+					_path = SvnBase::Utf8_PathPtrToString(svn_dirent_basename(_description->local_abspath, NULL), _pool);
 
 				return _path;
 			}
 		}
+
+        property String^ FullPath
+        {
+            String^ get()
+            {
+                if (!_fullPath && _description && _description->local_abspath && _pool)
+					_fullPath = SvnBase::Utf8_PathPtrToString(_description->local_abspath, _pool);
+
+				return _fullPath;
+            }
+        }
 
 		property String^ PropertyName
 		{
@@ -227,8 +239,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_baseFile && _description && _description->base_file && _pool)
-					_baseFile = SvnBase::Utf8_PathPtrToString(_description->base_file, _pool);
+				if (!_baseFile && _description && _description->base_abspath && _pool)
+					_baseFile = SvnBase::Utf8_PathPtrToString(_description->base_abspath, _pool);
 
 				return _baseFile;
 			}
@@ -238,8 +250,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_theirFile && _description && _description->their_file && _pool)
-					_theirFile = SvnBase::Utf8_PathPtrToString(_description->their_file, _pool);
+				if (!_theirFile && _description && _description->their_abspath && _pool)
+					_theirFile = SvnBase::Utf8_PathPtrToString(_description->their_abspath, _pool);
 
 				return _theirFile;
 			}
@@ -249,8 +261,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_myFile && _description && _description->my_file && _pool)
-					_myFile = SvnBase::Utf8_PathPtrToString(_description->my_file, _pool);
+				if (!_myFile && _description && _description->my_abspath && _pool)
+					_myFile = SvnBase::Utf8_PathPtrToString(_description->my_abspath, _pool);
 
 				return _myFile;
 			}
@@ -263,7 +275,7 @@ namespace SharpSvn {
 				if (_mergeResult)
 					return _mergeResult;
 
-				if (!_mergedFile && _description && _description->merged_file && _pool)
+                if (!_mergedFile && _description && _description->merged_file && _pool)
 					_mergedFile  = SvnBase::Utf8_PathPtrToString(_description->merged_file, _pool);
 
 				return _mergedFile;
@@ -362,6 +374,7 @@ namespace SharpSvn {
 				if (keepProperties)
 				{
 					GC::KeepAlive(Name);
+                    GC::KeepAlive(FullPath);
 					GC::KeepAlive(PropertyName);
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(BaseFile);

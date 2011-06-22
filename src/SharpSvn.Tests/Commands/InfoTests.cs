@@ -214,10 +214,11 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
                     Assert.That(e.Path, Is.Not.Null);
                     Assert.That(e.PropertyEditFile, Is.Null);
-                    Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime));
+                    Assert.That(e.PropertyTime, Is.EqualTo(DateTime.MinValue));
+                    Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
                     Assert.That(e.RepositorySize, Is.EqualTo(-1L));
                     Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri), "Repository valid");
-                    Assert.That(e.Revision, Is.EqualTo(0L), "Revision=0, not committed yet"); // Not committed yet
+                    Assert.That(e.Revision, Is.LessThanOrEqualTo(0L), "Not committed yet");
                     Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Add));
                     Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
                     Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
@@ -231,7 +232,7 @@ namespace SharpSvn.Tests.Commands
                 client.Info(file, delegate(object sender, SvnInfoEventArgs e)
                     {
                         Assert.That(e.ChangeList, Is.Null);
-                        Assert.That(e.Checksum, Is.EqualTo("d41d8cd98f00b204e9800998ecf8427e"));
+                        Assert.That(e.Checksum, Is.EqualTo("da39a3ee5e6b4b0d3255bfef95601890afd80709"));
                         Assert.That(e.ConflictNew, Is.Null);
                         Assert.That(e.ConflictOld, Is.Null);
                         Assert.That(e.ConflictWork, Is.Null);
@@ -268,7 +269,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.ConflictOld, Is.Null);
                     Assert.That(e.ConflictWork, Is.Null);
                     Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
-                    Assert.That(e.CopyFromRevision, Is.EqualTo(0L));
+                    Assert.That(e.CopyFromRevision, Is.LessThanOrEqualTo(0L));
                     Assert.That(e.CopyFromUri, Is.Null);
                     Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
                     Assert.That(e.FullPath, Is.Null);

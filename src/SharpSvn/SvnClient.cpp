@@ -63,7 +63,7 @@ struct SvnClientCallBacks
 	static void __cdecl svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
 	static void __cdecl svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 
-	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool);
+	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description2_t *description, void *baton, apr_pool_t *result_pool, apr_pool_t *scratch_pool);
 };
 
 void SvnClient::Initialize()
@@ -78,8 +78,8 @@ void SvnClient::Initialize()
 	CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
 	CtxHandle->progress_baton = baton;
 	CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
-	CtxHandle->conflict_baton = baton;
-	CtxHandle->conflict_func = &SvnClientCallBacks::svn_wc_conflict_resolver_func;
+	CtxHandle->conflict_baton2 = baton;
+	CtxHandle->conflict_func2 = &SvnClientCallBacks::svn_wc_conflict_resolver_func;
 }
 
 System::Version^ SvnClient::Version::get()
@@ -309,15 +309,16 @@ void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off
 	}
 }
 
-svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description_t *description, void *baton, apr_pool_t *pool)
+svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description2_t *description, void *baton, apr_pool_t *result_pool, apr_pool_t *scratch_pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	*result = svn_wc_create_conflict_result(svn_wc_conflict_choose_postpone, NULL, pool);
+	*result = svn_wc_create_conflict_result(svn_wc_conflict_choose_postpone, NULL, result_pool);
 
-	AprPool tmpPool(pool, false); // Connect to parent pool
+    AprPool resultPool(result_pool, false); // Connect to parent pool
+	AprPool scratchPool(scratch_pool, false); // Connect to parent pool
 
-	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %tmpPool);
+	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %scratchPool);
 
 	try
 	{
@@ -331,7 +332,7 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 			(*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
 
 			if (ea->Choice == SvnAccept::Merged)
-				(*result)->merged_file = tmpPool.AllocDirent(ea->MergedFile);
+				(*result)->merged_file = resultPool.AllocDirent(ea->MergedFile);
 		}
 
 		return nullptr;

@@ -461,7 +461,10 @@ namespace SharpSvn {
 		/// <summary>property conflict (on a file or dir)</summary>
 		Property		= svn_wc_conflict_kind_property,
 		/// <summary>tree conflict (on a dir)</summary>
-		TreeConflict    = svn_wc_conflict_kind_tree,
+		Tree    = svn_wc_conflict_kind_tree,
+
+		/// <summary>Deprecated: Use .Tree</summary>
+        TreeConflict = Tree,
 	};
 
 	public enum class SvnConflictReason
