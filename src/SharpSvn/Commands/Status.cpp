@@ -37,18 +37,18 @@ bool SvnClient::Status(String^ path, EventHandler<SvnStatusEventArgs^>^ statusHa
 	return Status(path, gcnew SvnStatusArgs(), statusHandler);
 }
 
-svn_error_t* svnclient_status_handler(void *baton, const char *path, svn_wc_status2_t *status, apr_pool_t *pool)
+static svn_error_t* svnclient_status_handler(void *baton, const char *path, const svn_client_status_t *status, apr_pool_t *scratch_pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	AprPool aprPool(pool, false);
+	AprPool aprPool(scratch_pool, false);
 	SvnStatusArgs^ args = dynamic_cast<SvnStatusArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 
 	if (!args)
 		return nullptr;
 
 	SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(
-		SvnBase::Utf8_PathPtrToString(path, %aprPool), status, %aprPool);
+		SvnBase::Utf8_PathPtrToString(path, %aprPool), status, client, %aprPool);
 
 	try
 	{
@@ -92,18 +92,19 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 
 		svn_opt_revision_t pegRev = args->Revision->ToSvnRevision();
 
-		svn_error_t* r = svn_client_status4(&version,
+		svn_error_t* r = svn_client_status5(&version,
+			CtxHandle,
 			pool.AllocDirent(path),
 			&pegRev,
-			svnclient_status_handler,
-			(void*)_clientBaton->Handle,
 			(svn_depth_t)args->Depth,
 			args->RetrieveAllEntries,
 			args->ContactRepository,
 			args->RetrieveIgnoredEntries,
 			args->IgnoreExternals,
+            args->DepthAsSticky,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-			CtxHandle,
+            svnclient_status_handler,
+			(void*)_clientBaton->Handle,
 			pool.Handle);
 
 		return args->HandleResult(this, r, path);
@@ -149,4 +150,43 @@ bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<Sv
 	{
 		statuses = results;
 	}
+}
+
+#include "private/svn_wc_private.h"
+
+SvnWorkingCopyInfo::SvnWorkingCopyInfo(const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
+{
+	if (!status)
+		throw gcnew ArgumentNullException("status");
+    else if (!client)
+		throw gcnew ArgumentNullException("client");
+	else if (!pool)
+		throw gcnew ArgumentNullException("pool");
+
+    svn_wc_status2_t *status2;
+    SVN_THROW(svn_wc__status2_from_3(&status2, (const svn_wc_status3_t*)status->backwards_compatibility_baton,
+                                     client->CtxHandle->wc_ctx,
+                                     status->local_abspath, pool->Handle, pool->Handle));
+
+    const svn_wc_entry_t *entry = status2->entry;
+	_entry = entry;
+	_pool = pool;
+
+	_revision = entry->revision;
+	_nodeKind = (SvnNodeKind)entry->kind;
+	_schedule = (SvnSchedule)entry->schedule;
+	_copied = (entry->copied != 0);
+	_deleted = (entry->deleted != 0);
+	_absent = (entry->absent != 0);
+	_incomplete = (entry->incomplete != 0);
+	_copyFromRev = entry->copyfrom_rev;
+	_textTime = SvnBase::DateTimeFromAprTime(entry->text_time);
+	_lastChangeRev = entry->cmt_rev;
+	_lastChangeTime = SvnBase::DateTimeFromAprTime(entry->cmt_date);
+	_lockTime = SvnBase::DateTimeFromAprTime(entry->lock_creation_date);
+	_hasProperties = (entry->has_props != 0);
+	_hasPropertyChanges = (entry->has_prop_mods != 0);
+	_wcSize = entry->working_size;
+	_keepLocal = (entry->keep_local != 0);
+	_depth = (SvnDepth)entry->depth;
 }
