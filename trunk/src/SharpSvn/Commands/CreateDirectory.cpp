@@ -72,13 +72,11 @@ bool SvnClient::CreateDirectories(ICollection<String^>^ paths, SvnCreateDirector
 	ArgsStore store(this, args, %pool);
 
 	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
-	svn_commit_info_t* result = nullptr;
 
-	svn_error_t *r = svn_client_mkdir3(
-		&result,
+	svn_error_t *r = svn_client_mkdir4(
 		aprPaths->Handle,
 		args->CreateParents,
-		nullptr,
+		nullptr, nullptr, nullptr,
 		CtxHandle,
 		pool.Handle);
 
@@ -157,22 +155,19 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+	CommitResultReceiver crr(this);
 
 	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
-	svn_commit_info_t* commitInfoPtr = nullptr;
 
-	svn_error_t *r = svn_client_mkdir3(
-		&commitInfoPtr,
+	svn_error_t *r = svn_client_mkdir4(
 		aprPaths->Handle,
 		args->CreateParents,
 		CreateRevPropList(args->LogProperties, %pool),
+		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool.Handle);
 
-	if (commitInfoPtr)
-		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
-	else
-		result = nullptr;
+	result = crr.CommitResult;
 
 	return args->HandleResult(this, r, uris);
 }

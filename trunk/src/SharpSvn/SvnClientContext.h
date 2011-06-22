@@ -17,6 +17,7 @@
 #pragma once
 
 #include "AprPool.h"
+#include "AprBaton.h"
 #include "EventArgs/SvnEventArgs.h"
 
 using namespace System;
@@ -52,6 +53,8 @@ namespace SharpSvn {
 	ref class SvnErrorEventArgs;
 	ref class SvnProcessingEventArgs;
 	ref class SvnClientArgs;
+	ref class SvnCommitResult;
+	ref class SvnClient;
 
 	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -88,7 +91,7 @@ namespace SharpSvn {
 	internal:
 		bool _dontLoadMimeFile;
 		bool _dontEnablePlink;
-        bool _useUserDiff;
+		bool _useUserDiff;
 		SvnClientContext(AprPool^ pool);
 		virtual void HandleClientError(SvnErrorEventArgs^ e);
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e);
@@ -133,10 +136,10 @@ namespace SharpSvn {
 		}
 
 	private:
-        void ApplyCustomRemoteConfig();
+		void ApplyCustomRemoteConfig();
 		void ApplyCustomSsh();
 		void ApplyMimeTypes();
-        void ApplyUserDiffConfig();
+		void ApplyUserDiffConfig();
 
 	public:
 		/// <summary>Loads the subversion configuration from the specified path</summary>
@@ -196,11 +199,52 @@ namespace SharpSvn {
 		ref class NoArgsStore sealed
 		{
 			initonly SvnClientContext^ _client;
-            initonly SvnClientContext^ _lastContext;
+			initonly SvnClientContext^ _lastContext;
 			initonly svn_wc_context_t *_wc_ctx;
 		public:
 			NoArgsStore(SvnClientContext^ client, AprPool^ pool);
 			~NoArgsStore();
+		};
+
+	internal:
+		ref class CommitResultReceiver sealed
+		{
+			SvnCommitResult^ _commitResult;
+			svn_commit_callback2_t _callback;
+			AprBaton<CommitResultReceiver^>^ _commitBaton;
+			SvnClientContext ^_client;
+
+		public:
+			CommitResultReceiver(SvnClientContext^ client);
+			~CommitResultReceiver();
+
+		internal:
+			property svn_commit_callback2_t CommitCallback
+			{
+				svn_commit_callback2_t get()
+				{
+					return _callback;
+				}
+			}
+
+			property void *CommitBaton
+			{
+				void* get()
+				{
+					return (void*)_commitBaton->Handle;
+				}
+			}
+
+			void ProvideCommitResult(const svn_commit_info_t *commit_info, AprPool^ pool);
+
+		public:
+			property SvnCommitResult^ CommitResult
+			{
+				SvnCommitResult^ get()
+				{
+					return _commitResult;
+				}
+			}
 		};
 
 	internal:
