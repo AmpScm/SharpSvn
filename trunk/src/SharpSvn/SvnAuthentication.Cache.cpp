@@ -316,7 +316,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
 	if (!cfg || !append)
 		return gcnew Collection<SvnAuthenticationCacheItem^>();
 
-	cfg = svn_path_join(cfg, append, pool.Handle);
+	cfg = svn_dirent_join(cfg, append, pool.Handle);
 
 	DirectoryInfo^ dir = gcnew DirectoryInfo(Utf8_PtrToString(cfg));
 
