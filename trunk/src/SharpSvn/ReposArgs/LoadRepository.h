@@ -36,6 +36,7 @@ namespace SharpSvn {
 		String^ _parentDir;
 		bool _noPreCommitHook;
 		bool _noPostCommitHook;
+		bool _noPropertyValidation;
 
 	public:
 		SvnLoadRepositoryArgs()
@@ -83,6 +84,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noPostCommitHook = !value;
+			}
+		}
+
+		property bool VerifyPropertyValues
+		{
+			bool get()
+			{
+				return !_noPropertyValidation;
+			}
+			void set(bool value)
+			{
+				_noPropertyValidation = !value;
 			}
 		}
 
