@@ -25,6 +25,7 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		bool _ignoreExternals;
 		bool _overwrite;
+		bool _ignoreKeywords;
 		SvnRevision^ _revision;
 		SvnLineStyle _lineStyle;
 	public:
@@ -102,6 +103,18 @@ namespace SharpSvn {
 			void set(SvnLineStyle value)
 			{
 				_lineStyle = EnumVerifier::Verify(value);
+			}
+		}
+
+        property bool IgnoreKeywords
+		{
+			bool get()
+			{
+				return _ignoreKeywords;
+			}
+			void set(bool value)
+			{
+				_ignoreKeywords = value;
 			}
 		}
 	};
