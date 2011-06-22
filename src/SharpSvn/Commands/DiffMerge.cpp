@@ -59,7 +59,7 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 	svn_opt_revision_t mergeFromRev = mergeFrom->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 	svn_opt_revision_t mergeToRev = mergeTo->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_merge3(
+	svn_error_t *r = svn_client_merge4(
 		pool.AllocString(mergeFrom->SvnTargetName),
 		&mergeFromRev,
 		pool.AllocString(mergeTo->SvnTargetName),
@@ -70,6 +70,7 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 		args->Force,
 		args->RecordOnly,
 		args->DryRun,
+		!args->CheckForMixedRevisions,
 		merge_options,
 		CtxHandle,
 		pool.Handle);

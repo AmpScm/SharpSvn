@@ -27,6 +27,8 @@ namespace SharpSvn {
 		bool _force;
 		bool _recordOnly;
 		bool _dryRun;
+		bool _checkForMixedRevisions;
+
 	public:
 		SvnDiffMergeArgs()
 		{
@@ -98,6 +100,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_dryRun = value;
+			}
+		}
+
+		property bool CheckForMixedRevisions
+		{
+			bool get()
+			{
+				return _checkForMixedRevisions;
+			}
+			void set(bool value)
+			{
+				_checkForMixedRevisions = value;
 			}
 		}
 	};
