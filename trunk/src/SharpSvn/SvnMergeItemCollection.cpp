@@ -167,7 +167,12 @@ bool SvnMergeItemCollection::TryRemove(ICollection<SvnMergeItem^>^ items, SvnMer
 
 	svn_mergeinfo_t result = nullptr;
 
-	svn_error_t* r = svn_mergeinfo_remove(&result, coll->AllocMergeInfo(%pool), AllocMergeInfo(%pool), pool.Handle);
+	svn_error_t* r = svn_mergeinfo_remove2(&result,
+                                           coll->AllocMergeInfo(%pool),
+                                           AllocMergeInfo(%pool),
+                                           args->ConsiderInheritance,
+                                           pool.Handle,
+                                           pool.Handle);
 
 	if (r)
 	{
@@ -206,7 +211,11 @@ bool SvnMergeItemCollection::TryIntersect(ICollection<SvnMergeItem^>^ to, SvnMer
 
 	svn_mergeinfo_t result = nullptr;
 
-	svn_error_t* r = svn_mergeinfo_intersect(&result, AllocMergeInfo(%pool), coll->AllocMergeInfo(%pool), pool.Handle);
+	svn_error_t* r = svn_mergeinfo_intersect2(&result,
+											  AllocMergeInfo(%pool),
+											  coll->AllocMergeInfo(%pool),
+											  args->ConsiderInheritance,
+											  pool.Handle, pool.Handle);
 
 	if (r)
 	{
