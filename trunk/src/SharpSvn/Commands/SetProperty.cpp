@@ -44,7 +44,7 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value)
 	return SetProperty(target, propertyName, value, gcnew SvnSetPropertyArgs());
 }
 
-bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value)
+bool SvnClient::RemoteSetProperty(Uri^ target, String^ propertyName, String^ value)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -53,7 +53,7 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value)
 	else if (!value)
 		throw gcnew ArgumentNullException("value");
 
-	return SetProperty(target, propertyName, value, gcnew SvnSetPropertyArgs());
+	return RemoteSetProperty(target, propertyName, value, gcnew SvnSetPropertyArgs());
 }
 
 bool SvnClient::SetProperty(String^ target, String^ propertyName, ICollection<Byte>^ bytes)
@@ -70,7 +70,7 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, ICollection<By
 	return SetProperty(target, propertyName, bytes, gcnew SvnSetPropertyArgs());
 }
 
-bool SvnClient::SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes)
+bool SvnClient::RemoteSetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -79,7 +79,7 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>
 	else if (!bytes)
 		throw gcnew ArgumentNullException("bytes");
 
-	return SetProperty(target, propertyName, bytes, gcnew SvnSetPropertyArgs());
+	return RemoteSetProperty(target, propertyName, bytes, gcnew SvnSetPropertyArgs());
 }
 
 bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args)
@@ -98,14 +98,14 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, String^ value,
 	AprPool pool(%_pool);
 
 	return InternalSetProperty(
-		gcnew SvnPathTarget(target),
+		target,
 		propertyName,
 		pool.AllocPropertyValue(value, propertyName),
 		args,
 		%pool);
 }
 
-bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args)
+bool SvnClient::RemoteSetProperty(Uri^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -119,7 +119,7 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, String^ value, Sv
 	AprPool pool(%_pool);
 
 	return InternalSetProperty(
-		gcnew SvnUriTarget(target),
+		target,
 		propertyName,
 		pool.AllocPropertyValue(value, propertyName),
 		args,
@@ -150,10 +150,10 @@ bool SvnClient::SetProperty(String^ target, String^ propertyName, ICollection<By
 		bytes->CopyTo(byteArray, 0);
 	}
 
-	return InternalSetProperty(gcnew SvnPathTarget(target), propertyName, pool.AllocSvnString(byteArray), args, %pool);
+	return InternalSetProperty(target, propertyName, pool.AllocSvnString(byteArray), args, %pool);
 }
 
-bool SvnClient::SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args)
+bool SvnClient::RemoteSetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -175,7 +175,7 @@ bool SvnClient::SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>
 		bytes->CopyTo(byteArray, 0);
 	}
 
-	return InternalSetProperty(gcnew SvnUriTarget(target), propertyName, pool.AllocSvnString(byteArray), args, %pool);
+	return InternalSetProperty(target, propertyName, pool.AllocSvnString(byteArray), args, %pool);
 }
 
 bool SvnClient::DeleteProperty(String^ target, String^ propertyName)
@@ -190,14 +190,14 @@ bool SvnClient::DeleteProperty(String^ target, String^ propertyName)
 	return DeleteProperty(target, propertyName, gcnew SvnSetPropertyArgs());
 }
 
-bool SvnClient::DeleteProperty(Uri^ target, String^ propertyName)
+bool SvnClient::RemoteDeleteProperty(Uri^ target, String^ propertyName)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
 
-	return DeleteProperty(target, propertyName, gcnew SvnSetPropertyArgs());
+	return RemoteDeleteProperty(target, propertyName, gcnew SvnSetPropertyArgs());
 }
 
 bool SvnClient::DeleteProperty(String^ target, String^ propertyName, SvnSetPropertyArgs^ args)
@@ -213,10 +213,10 @@ bool SvnClient::DeleteProperty(String^ target, String^ propertyName, SvnSetPrope
 
 	AprPool pool(%_pool);
 
-	return InternalSetProperty(gcnew SvnPathTarget(target), propertyName, nullptr, args, %pool);
+	return InternalSetProperty(target, propertyName, nullptr, args, %pool);
 }
 
-bool SvnClient::DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args)
+bool SvnClient::RemoteDeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -227,10 +227,10 @@ bool SvnClient::DeleteProperty(Uri^ target, String^ propertyName, SvnSetProperty
 
 	AprPool pool(%_pool);
 
-	return InternalSetProperty(gcnew SvnUriTarget(target), propertyName, nullptr, args, %pool);
+	return InternalSetProperty(target, propertyName, nullptr, args, %pool);
 }
 
-bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool)
+bool SvnClient::InternalSetProperty(String^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool)
 {
 	if (!target)
 		throw gcnew ArgumentNullException("target");
@@ -238,29 +238,54 @@ bool SvnClient::InternalSetProperty(SvnTarget^ target, String^ propertyName, con
 		throw gcnew ArgumentNullException("propertyName");
 	else if (String::IsNullOrEmpty(propertyName))
 		throw gcnew ArgumentNullException("propertyName");
-	else if (target->Revision->RevisionType != SvnRevisionType::None)
-		throw gcnew ArgumentOutOfRangeException("target");
 
-	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
+	EnsureState(SvnContextState::ConfigLoaded); // We might need repository access
 	ArgsStore store(this, args, pool);
-
-	svn_commit_info_t* pInfo = nullptr;
 
 	const char* pcPropertyName = pool->AllocString(propertyName);
 
 	if (!svn_prop_name_is_valid(pcPropertyName))
 		throw gcnew ArgumentException(SharpSvnStrings::PropertyNameIsNotValid, "propertyName");
 
-	svn_error_t *r = svn_client_propset3(
-		&pInfo,
+    svn_error_t *r = svn_client_propset_local(
 		pcPropertyName,
 		value,
-		pool->AllocString(target->SvnTargetName),
+        AllocDirentArray(NewSingleItemCollection(SvnTools::GetNormalizedFullPath(target)), pool),
 		(svn_depth_t)args->Depth,
 		args->SkipChecks,
-		(svn_revnum_t)args->BaseRevision,
 		CreateChangeListsList(args->ChangeLists, pool), // Intersect ChangeLists
+		CtxHandle,
+		pool->Handle);
+
+	return args->HandleResult(this, r, target);
+}
+
+bool SvnClient::InternalSetProperty(Uri^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool)
+{
+	if (!target)
+		throw gcnew ArgumentNullException("target");
+	else if (String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+	else if (String::IsNullOrEmpty(propertyName))
+		throw gcnew ArgumentNullException("propertyName");
+
+	EnsureState(SvnContextState::AuthorizationInitialized); // We might need repository access
+	ArgsStore store(this, args, pool);
+    CommitResultReceiver crr(this);
+
+	const char* pcPropertyName = pool->AllocString(propertyName);
+
+	if (!svn_prop_name_is_valid(pcPropertyName))
+		throw gcnew ArgumentException(SharpSvnStrings::PropertyNameIsNotValid, "propertyName");
+
+	svn_error_t *r = svn_client_propset_remote(
+		pcPropertyName,
+		value,
+		pool->AllocUri(target),
+		args->SkipChecks,
+		(svn_revnum_t)args->BaseRevision,
 		CreateRevPropList(args->LogProperties, pool),
+		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool->Handle);
 

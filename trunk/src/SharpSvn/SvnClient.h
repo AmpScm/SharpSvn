@@ -861,16 +861,16 @@ namespace SharpSvn {
 		/// <overloads>Set the value of a property on files, dirs (<c>svn propset</c>)</overloads>
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(Uri^ target, String^ propertyName, String^ value);
+		bool RemoteSetProperty(Uri^ target, String^ propertyName, String^ value);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes);
+		bool RemoteSetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(Uri^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
+		bool RemoteSetProperty(Uri^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args);
 		/// <summary>Sets the specified property on the specfied path to value</summary>
 		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
-		bool SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args);
+		bool RemoteSetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args);
 
 
 		/// <overloads>Deletes a property from files, dirs (<c>svn propdel</c>)</overloads>
@@ -879,12 +879,59 @@ namespace SharpSvn {
 		/// <summary>Removes the specified property from the specfied path</summary>
 		bool DeleteProperty(String^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 		/// <summary>Removes the specified property from the specfied path</summary>
-		bool DeleteProperty(Uri^ target, String^ propertyName);
+		bool RemoteDeleteProperty(Uri^ target, String^ propertyName);
 		/// <summary>Removes the specified property from the specfied path</summary>
-		bool DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args);
+		bool RemoteDeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args);
 
 	private:
-		bool InternalSetProperty(SvnTarget^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+		bool InternalSetProperty(String^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+        bool InternalSetProperty(Uri^ target, String^ propertyName, const svn_string_t* value, SvnSetPropertyArgs^ args, AprPool^ pool);
+
+    public:
+        /// <overloads>Set the value of a property on files, dirs (<c>svn propset</c>)</overloads>
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+        [Obsolete("Use .RemoteSetProperty() instead")]
+		bool SetProperty(Uri^ target, String^ propertyName, String^ value)
+        {
+            return RemoteSetProperty(target, propertyName, value);
+        }
+
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+        [Obsolete("Use .RemoteSetProperty() instead")]
+		bool SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes)
+        {
+            return RemoteSetProperty(target, propertyName, bytes);
+        }
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+        [Obsolete("Use .RemoteSetProperty() instead")]
+		bool SetProperty(Uri^ target, String^ propertyName, String^ value, SvnSetPropertyArgs^ args)
+        {
+            return RemoteSetProperty(target, propertyName, value, args);
+        }
+		/// <summary>Sets the specified property on the specfied path to value</summary>
+		/// <remarks>Use <see cref="DeleteProperty(String^,String^, SvnSetPropertyArgs^)" /> to remove an existing property</remarks>
+        [Obsolete("Use .RemoteSetProperty() instead")]
+		bool SetProperty(Uri^ target, String^ propertyName, ICollection<Byte>^ bytes, SvnSetPropertyArgs^ args)
+        {
+            return RemoteSetProperty(target, propertyName, bytes, args);
+        }
+
+        /// <summary>Removes the specified property from the specfied path</summary>
+        [Obsolete("Use .RemoteDeleteProperty() instead")]
+		bool DeleteProperty(Uri^ target, String^ propertyName)
+        {
+            return RemoteDeleteProperty(target, propertyName);
+        }
+
+		/// <summary>Removes the specified property from the specfied path</summary>
+        [Obsolete("Use .RemoteDeleteProperty() instead")]
+		bool DeleteProperty(Uri^ target, String^ propertyName, SvnSetPropertyArgs^ args)
+        {
+            return RemoteDeleteProperty(target, propertyName, args);
+        }
 
 #pragma endregion
 
