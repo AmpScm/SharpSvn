@@ -31,6 +31,8 @@ namespace SharpSvn {
 		SvnCommandLineArgumentCollection^ _diffArguments;
 		SvnChangeListCollection^ _changelists;
 		Stream^ _errorStream;
+        bool _copiesAsAdds;
+        bool _gitFormat;
 
 	public:
 		SvnDiffArgs()
@@ -152,6 +154,30 @@ namespace SharpSvn {
 			void set(Stream^ value)
 			{
 				_errorStream = value;
+			}
+		}
+
+		property bool CopiesAsAdds
+		{
+			bool get()
+			{
+				return _copiesAsAdds;
+			}
+			void set(bool value)
+			{
+				_copiesAsAdds = value;
+			}
+		}
+
+        property bool UseGitFormat
+		{
+			bool get()
+			{
+				return _gitFormat;
+			}
+			void set(bool value)
+			{
+				_gitFormat = value;
 			}
 		}
 	};

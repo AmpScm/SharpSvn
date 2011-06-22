@@ -96,6 +96,8 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 {
 	if (String::IsNullOrEmpty(targetPath))
 		throw gcnew ArgumentNullException("targetPath");
+    else if (!IsNotUri(targetPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 	else if (!source)
 		throw gcnew ArgumentNullException("source");
 	else if (!mergeRange)
@@ -110,7 +112,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList
 		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
 
-	svn_error_t *r = svn_client_merge_peg3(
+	svn_error_t *r = svn_client_merge_peg4(
 		pool.AllocString(source->SvnTargetName),
 		mergeList->Handle,
 		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
@@ -120,6 +122,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 		args->Force,
 		args->RecordOnly,
 		args->DryRun,
+		!args->CheckForMixedRevisions,
 		args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
 		CtxHandle,
 		pool.Handle);
