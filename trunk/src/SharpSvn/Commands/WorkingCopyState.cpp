@@ -51,28 +51,11 @@ bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	const char* pPath = pool.AllocDirent(targetPath);
-	svn_wc_adm_access_t* acc = nullptr;
+	const svn_string_t *value;
 
-	svn_error_t* r = svn_wc_adm_probe_open3(&acc, nullptr, pPath, false, 1, CtxHandle->cancel_func, CtxHandle->cancel_baton, pool.Handle);
+    SVN_HANDLE(svn_wc_prop_get2(&value, CtxHandle->wc_ctx, pool.AllocAbsoluteDirent(targetPath), SVN_PROP_MIME_TYPE, pool.Handle, pool.Handle));
 
-	if (r)
-		return args->HandleResult(this, r, targetPath);
+    result = gcnew SvnWorkingCopyState(!value || !svn_mime_type_is_binary(value->data));
 
-	try
-	{
-		svn_boolean_t pIsBinary = 0;
-
-		r = svn_wc_has_binary_prop(&pIsBinary, pPath, acc, pool.Handle);
-		if (r)
-			return args->HandleResult(this, r, targetPath);
-
-		result = gcnew SvnWorkingCopyState(!pIsBinary);
-	}
-	finally
-	{
-		svn_wc_adm_close2(acc, pool.Handle);
-	}
-
-	return true;
+	return args->HandleResult(this, (svn_error_t*)nullptr, targetPath);
 }
