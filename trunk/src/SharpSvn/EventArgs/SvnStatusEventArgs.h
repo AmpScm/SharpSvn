@@ -740,7 +740,7 @@ namespace SharpSvn {
 			}
 		}
 
-        property bool Conflicted
+        property bool IsConflicted
         {
             bool get()
             {
@@ -749,16 +749,13 @@ namespace SharpSvn {
         }
 
 		/// <summary>Gets the tree conflict data of this node or <c>null</c> if this node doesn't have a tree conflict</summary>
-        [Obsolete("Temporarily returns NULL")]
+        [Obsolete("Always returns NULL now; use .IsConflicted and a separate call to SvnClient.Info() to retrieve details")]
 		property SvnConflictData^ TreeConflict
 		{
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnConflictData^ get()
 			{
-				//if (!_treeConflict && _status && _status->tree_conflict && _pool)
-				//	_treeConflict = gcnew SvnConflictData(_status->tree_conflict, _pool);
-
-				return _treeConflict;
+				return nullptr;
 			}
 		}
 

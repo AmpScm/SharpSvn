@@ -23,7 +23,7 @@ namespace SharpSvn {
 
 	public ref class SvnConflictEventArgs sealed : public SvnCancelEventArgs
 	{
-		const svn_wc_conflict_description_t* _description;
+		const svn_wc_conflict_description2_t* _description;
 		AprPool^ _pool;
 		SvnAccept _result;
 
@@ -33,7 +33,7 @@ namespace SharpSvn {
 	internal:
 		// BH: Note svn_wc_conflict_description_t is also mapped by SvnConflictData
 		// for the non-event case
-		SvnConflictEventArgs(const svn_wc_conflict_description_t *description, AprPool^ pool)
+		SvnConflictEventArgs(const svn_wc_conflict_description2_t *description, AprPool^ pool)
 		{
 			if (!description)
 				throw gcnew ArgumentNullException("description");

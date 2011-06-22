@@ -52,8 +52,8 @@ namespace SharpSvn {
 		initonly SvnDepth _depth;
 		initonly __int64 _wcSize;
 		initonly __int64 _size;
-		SvnConflictData^ _treeConflict;
-        initonly bool _conflicted;
+		initonly bool _conflicted;
+		ICollection<SvnConflictData^>^ _conflicts;
 
 	internal:
 		SvnInfoEventArgs(String^ path, const svn_client_info2_t* info, AprPool^ pool)
@@ -74,20 +74,26 @@ namespace SharpSvn {
 			_lastChangeRev = info->last_changed_rev;
 			_lastChangeDate = SvnBase::DateTimeFromAprTime(info->last_changed_date);
 			_hasWcInfo = (info->wc_info != nullptr);
-            if (info->wc_info)
-            {
-                _wcSchedule = (SvnSchedule)info->wc_info->schedule;
-			    _copyFromRev = info->wc_info->copyfrom_rev;
-		    	_depth = (SvnDepth)info->wc_info->depth;
+			if (info->wc_info)
+			{
+				_wcSchedule = (SvnSchedule)info->wc_info->schedule;
+				_copyFromRev = info->wc_info->copyfrom_rev;
+				_depth = (SvnDepth)info->wc_info->depth;
 
-                _contentTime = SvnBase::DateTimeFromAprTime(info->wc_info->recorded_time);
-                if (info->wc_info->recorded_size == SVN_INVALID_FILESIZE)
-				    _wcSize = -1;
-			    else
-				    _wcSize = info->wc_info->recorded_size;
+				_contentTime = SvnBase::DateTimeFromAprTime(info->wc_info->recorded_time);
+				if (info->wc_info->recorded_size == SVN_INVALID_FILESIZE)
+					_wcSize = -1;
+				else
+					_wcSize = info->wc_info->recorded_size;
 
-                _conflicted = info->wc_info->conflicts && (info->wc_info->conflicts->nelts > 0);
-            }
+				_conflicted = info->wc_info->conflicts && (info->wc_info->conflicts->nelts > 0);
+			}
+			else
+			{
+				_depth = SvnDepth::Unknown;
+				_wcSize = -1;
+				_copyFromRev = -1;
+			}
 
 			if (info->size == SVN_INVALID_FILESIZE)
 				_size = -1;
@@ -286,6 +292,7 @@ namespace SharpSvn {
 			}
 		}
 
+        /// <summary>The SHA1 checksum of the file. (Used to return a MD5 checksom in Subversion &lt;= 1.6)</summary>
 		property String^ Checksum
 		{
 			String^ get()
@@ -297,51 +304,68 @@ namespace SharpSvn {
 			}
 		}
 
-        [Obsolete("Temporarily returns NULL")]
+		property ICollection<SvnConflictData^>^ Conflicts
+		{
+			ICollection<SvnConflictData^>^ get();
+		}
+
 		property String^ ConflictOld
 		{
 			String^ get()
 			{
-				//if (!_conflict_old && _info && _info->conflict_old && HasLocalInfo)
-				//	_conflict_old = SvnBase::Utf8_PtrToString(_info->conflict_old);
+				if (Conflicted && Conflicts)
+					for each(SvnConflictData^ d in Conflicts)
+					{
+						if (d->ConflictType == SvnConflictType::Content)
+							return d->BaseFile;
+					}
 
-				return _conflict_old;
+				return nullptr;
 			}
 		}
 
-        [Obsolete("Temporarily returns NULL")]
 		property String^ ConflictNew
 		{
 			String^ get()
 			{
-				//if (!_conflict_new && _info && _info->conflict_new && HasLocalInfo)
-				//	_conflict_new = SvnBase::Utf8_PtrToString(_info->conflict_new);
+				if (Conflicted && Conflicts)
+					for each(SvnConflictData^ d in Conflicts)
+					{
+						if (d->ConflictType == SvnConflictType::Content)
+							return d->TheirFile;
+					}
 
-				return _conflict_new;
+				return nullptr;
 			}
 		}
 
-        [Obsolete("Temporarily returns NULL")]
 		property String^ ConflictWork
 		{
 			String^ get()
 			{
-				//if (!_conflict_wrk && _info && _info->conflict_wrk && HasLocalInfo)
-				//	_conflict_wrk = SvnBase::Utf8_PtrToString(_info->conflict_wrk);
+				if (Conflicted && Conflicts)
+					for each(SvnConflictData^ d in Conflicts)
+					{
+						if (d->ConflictType == SvnConflictType::Content)
+							return d->MyFile;
+					}
 
-				return _conflict_wrk;
+				return nullptr;
 			}
 		}
 
-        [Obsolete("Temporarily returns NULL")]
 		property String^ PropertyEditFile
 		{
 			String^ get()
 			{
-				//if (!_prejfile && _info && _info->prejfile && HasLocalInfo)
-				//	_prejfile = SvnBase::Utf8_PtrToString(_info->prejfile);
+				if (Conflicted && Conflicts)
+					for each(SvnConflictData^ d in Conflicts)
+					{
+						if (d->ConflictType == SvnConflictType::Property)
+							return d->TheirFile;
+					}
 
-				return _prejfile;
+				return nullptr;
 			}
 		}
 
@@ -380,15 +404,18 @@ namespace SharpSvn {
 			}
 		}
 
-        [Obsolete("Temporarily returns NULL")]
 		property SvnConflictData^ TreeConflict
 		{
 			SvnConflictData^ get()
 			{
-				//if (!_treeConflict && _info && _info->tree_conflict && _pool)
-				//	_treeConflict = gcnew SvnConflictData(_info->tree_conflict, _pool);
+				if (Conflicted && Conflicts)
+					for each(SvnConflictData^ d in Conflicts)
+					{
+						if (d->ConflictType == SvnConflictType::Tree)
+							return d;
+					}
 
-				return _treeConflict;
+				return nullptr;
 			}
 		}
 
@@ -427,13 +454,11 @@ namespace SharpSvn {
 					GC::KeepAlive(ConflictWork);
 					GC::KeepAlive(PropertyEditFile);
 					GC::KeepAlive(ChangeList);
-					GC::KeepAlive(TreeConflict);
+					GC::KeepAlive(Conflicts);
 				}
 
 				if (_lock)
 					_lock->Detach(keepProperties);
-				if (_treeConflict)
-					_treeConflict->Detach(keepProperties);
 			}
 			finally
 			{

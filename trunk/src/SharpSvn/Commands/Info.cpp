@@ -146,3 +146,20 @@ bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] Collection<S
 		info = results;
 	}
 }
+
+ICollection<SvnConflictData^>^ SvnInfoEventArgs::Conflicts::get()
+{
+    if (!_conflicted || _conflicts || !_info || !_info->wc_info)
+        return _conflicts;
+
+    List<SvnConflictData^>^ items = gcnew List<SvnConflictData^>();
+
+	for (int i = 0; i < _info->wc_info->conflicts->nelts; i++)
+    {
+        svn_wc_conflict_description2_t *c = APR_ARRAY_IDX(_info->wc_info->conflicts, i, svn_wc_conflict_description2_t *);
+
+        items->Add(gcnew SvnConflictData(c, _pool));
+    }
+
+    return _conflicts = items->AsReadOnly();
+}
