@@ -69,34 +69,7 @@ namespace SharpSvn {
 		SvnRevision^ _fileExternalPegRevision;
 
 	internal:
-		SvnWorkingCopyInfo(const svn_wc_entry_t *entry, AprPool^ pool)
-		{
-			if (!entry)
-				throw gcnew ArgumentNullException("entry");
-			else if (!pool)
-				throw gcnew ArgumentNullException("pool");
-
-			_entry = entry;
-			_pool = pool;
-
-			_revision = entry->revision;
-			_nodeKind = (SvnNodeKind)entry->kind;
-			_schedule = (SvnSchedule)entry->schedule;
-			_copied = (entry->copied != 0);
-			_deleted = (entry->deleted != 0);
-			_absent = (entry->absent != 0);
-			_incomplete = (entry->incomplete != 0);
-			_copyFromRev = entry->copyfrom_rev;
-			_textTime = SvnBase::DateTimeFromAprTime(entry->text_time);
-			_lastChangeRev = entry->cmt_rev;
-			_lastChangeTime = SvnBase::DateTimeFromAprTime(entry->cmt_date);
-			_lockTime = SvnBase::DateTimeFromAprTime(entry->lock_creation_date);
-			_hasProperties = (entry->has_props != 0);
-			_hasPropertyChanges = (entry->has_prop_mods != 0);
-			_wcSize = entry->working_size;
-			_keepLocal = (entry->keep_local != 0);
-			_depth = (SvnDepth)entry->depth;
-		}
+		SvnWorkingCopyInfo(const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool);
 
 	public:
 		/// <summary>The entries name</summary>
@@ -516,8 +489,9 @@ namespace SharpSvn {
 
 	public ref class SvnStatusEventArgs : public SvnCancelEventArgs
 	{
-		const svn_wc_status2_t *_status;
+		const svn_client_status_t *_status;
 		AprPool^ _pool;
+        SvnClientContext^ _client;
 
 		initonly String^ _path;
 		String^ _fullPath;
@@ -540,9 +514,10 @@ namespace SharpSvn {
 		initonly bool _fileExternal;
 		initonly SvnStatus _prsTextStatus;
 		initonly SvnStatus _prsPropertyStatus;
+        initonly bool _conflicted;
 
 	internal:
-		SvnStatusEventArgs(String^ path, const svn_wc_status2_t *status, AprPool^ pool)
+		SvnStatusEventArgs(String^ path, const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
 		{
 			if (String::IsNullOrEmpty(path))
 				throw gcnew ArgumentNullException("path");
@@ -554,8 +529,9 @@ namespace SharpSvn {
 			_path = path;
 			_status = status;
 			_pool = pool;
+            _client = client;
 
-			_wcContentStatus = (SvnStatus)status->text_status;
+			_wcContentStatus = (SvnStatus)status->node_status;
 			_wcPropertyStatus = (SvnStatus)status->prop_status;
 			_wcLocked = status->locked != 0;
 			_copied = status->copied != 0;
@@ -563,19 +539,20 @@ namespace SharpSvn {
 			_reposContentStatus = (SvnStatus)status->repos_text_status;
 			_reposPropertyStatus = (SvnStatus)status->repos_prop_status;
 
-			_oodLastCommitRev = status->ood_last_cmt_rev;
+            _oodLastCommitRev = status->ood_changed_rev;
 
-			_nodeKind = status->entry ? (SvnNodeKind)status->entry->kind : SvnNodeKind::None;
+			_nodeKind = (SvnNodeKind)status->kind;
 
-			if (status->ood_last_cmt_rev != SVN_INVALID_REVNUM)
+			if (status->ood_changed_rev != SVN_INVALID_REVNUM)
 			{
-				_oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_last_cmt_date);
+                _oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_changed_date);
 				_oodLastCommitNodeKind = (SvnNodeKind)status->ood_kind;
 			}
 
 			_fileExternal = status->file_external != 0;
-			_prsTextStatus = (SvnStatus)status->pristine_text_status;
-			_prsPropertyStatus = (SvnStatus)status->pristine_prop_status;
+			_prsTextStatus = (SvnStatus)status->text_status;
+			_prsPropertyStatus = (SvnStatus)status->prop_status;
+            _conflicted = (status->conflicted != FALSE);
 		}
 
 	public:
@@ -685,8 +662,9 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-				if (!_uri && _status && _status->url)
-					_uri = SvnBase::Utf8_PtrToUri(_status->url, _nodeKind);
+				if (!_uri && _status && _status->repos_relpath)
+					_uri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_status->repos_root_url, _status->repos_relpath, _pool->Handle),
+												  _nodeKind);
 
 				return _uri;
 			}
@@ -724,8 +702,8 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_oodLastCommitAuthor && _status && _status->ood_last_cmt_author && IsRemoteUpdated)
-					_oodLastCommitAuthor = SvnBase::Utf8_PtrToString(_status->ood_last_cmt_author);
+				if (!_oodLastCommitAuthor && _status && _status->ood_changed_author && IsRemoteUpdated)
+					_oodLastCommitAuthor = SvnBase::Utf8_PtrToString(_status->ood_changed_author);
 
 				return _oodLastCommitAuthor;
 			}
@@ -746,8 +724,8 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnWorkingCopyInfo^ get()
 			{
-				if (!_wcInfo && _status && _status->entry && _pool)
-					_wcInfo = gcnew SvnWorkingCopyInfo(_status->entry, _pool);
+                if (!_wcInfo && _status && _status->versioned && _pool)
+					_wcInfo = gcnew SvnWorkingCopyInfo(_status, _client, _pool);
 
 				return _wcInfo;
 			}
@@ -762,14 +740,23 @@ namespace SharpSvn {
 			}
 		}
 
+        property bool Conflicted
+        {
+            bool get()
+            {
+                return _conflicted;
+            }
+        }
+
 		/// <summary>Gets the tree conflict data of this node or <c>null</c> if this node doesn't have a tree conflict</summary>
+        [Obsolete("Temporarily returns NULL")]
 		property SvnConflictData^ TreeConflict
 		{
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnConflictData^ get()
 			{
-				if (!_treeConflict && _status && _status->tree_conflict && _pool)
-					_treeConflict = gcnew SvnConflictData(_status->tree_conflict, _pool);
+				//if (!_treeConflict && _status && _status->tree_conflict && _pool)
+				//	_treeConflict = gcnew SvnConflictData(_status->tree_conflict, _pool);
 
 				return _treeConflict;
 			}
@@ -822,6 +809,7 @@ namespace SharpSvn {
 			{
 				_status = nullptr;
 				_pool = nullptr;
+                _client = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}

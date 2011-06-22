@@ -27,6 +27,7 @@ namespace SharpSvn {
 		bool _update;
 		bool _noIgnore;
 		bool _ignoreExternals;
+        bool _sticky;
 		SvnRevision^ _revision;
 		SvnChangeListCollection^ _changelists;
 
@@ -176,6 +177,18 @@ namespace SharpSvn {
 				if (!_changelists)
 					_changelists = gcnew SvnChangeListCollection();
 				return _changelists;
+			}
+		}
+
+        property bool DepthAsSticky
+		{
+			bool get()
+			{
+				return _sticky;
+			}
+			void set(bool value)
+			{
+				_sticky = value;
 			}
 		}
 	};
