@@ -147,24 +147,20 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	EnsureState(SvnContextState::AuthorizationInitialized, SvnExtendedState::MimeTypesLoaded);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+    CommitResultReceiver crr(this);
 
-	svn_commit_info_t *commitInfoPtr = nullptr;
-
-	svn_error_t *r = svn_client_import3(
-		&commitInfoPtr,
+	svn_error_t *r = svn_client_import4(
 		pool.AllocDirent(path),
 		pool.AllocUri(target),
 		(svn_depth_t)args->Depth,
 		args->NoIgnore,
 		args->IgnoreUnknownNodeTypes,
 		CreateRevPropList(args->LogProperties, %pool),
+		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool.Handle);
 
-	if (commitInfoPtr)
-		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
-	else
-		result = nullptr;
+	result = crr.CommitResult;
 
 	return args->HandleResult(this, r, path);
 }

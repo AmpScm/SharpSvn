@@ -102,8 +102,6 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyAr
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	svn_commit_info_t* pInfo = nullptr;
-
 	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sources, %pool);
 
 	if(copies && args->Revision->RevisionType != SvnRevisionType::None)
@@ -118,14 +116,14 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyAr
 		}
 	}
 
-	svn_error_t *r = svn_client_copy5(
-		&pInfo,
+	svn_error_t *r = svn_client_copy6(
 		copies,
 		pool.AllocDirent(toPath),
 		args->AlwaysCopyAsChild || (sources->Count > 1),
 		args->CreateParents,
 		args->IgnoreExternals,
 		nullptr,
+		nullptr, nullptr,
 		CtxHandle,
 		pool.Handle);
 
@@ -254,6 +252,7 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopy
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+    CommitResultReceiver crr(this);
 
 	apr_array_header_t* copies = AllocCopyArray<TSvnTarget>(sources, %pool);
 
@@ -269,23 +268,18 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopy
 		}
 	}
 
-	svn_commit_info_t* commitInfoPtr = nullptr;
-
-	svn_error_t *r = svn_client_copy5(
-		&commitInfoPtr,
+	svn_error_t *r = svn_client_copy6(
 		copies,
 		pool.AllocUri(toUri),
 		args->AlwaysCopyAsChild || (sources->Count > 1),
 		args->CreateParents,
 		args->IgnoreExternals,
 		CreateRevPropList(args->LogProperties, %pool),
+        crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool.Handle);
 
-	if (commitInfoPtr)
-		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
-	else
-		result = nullptr;
+	result = crr.CommitResult;
 
 	return args->HandleResult(this, r, sources);
 }

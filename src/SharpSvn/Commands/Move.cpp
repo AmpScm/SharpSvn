@@ -80,16 +80,13 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	svn_commit_info_t* pInfo = nullptr;
-
-	svn_error_t *r = svn_client_move5(
-		&pInfo,
+	svn_error_t *r = svn_client_move6(
 		AllocDirentArray(sourcePaths, %pool),
 		pool.AllocDirent(toPath),
-		args->Force,
 		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
 		args->CreateParents,
 		nullptr,
+		nullptr, nullptr,
 		CtxHandle,
 		pool.Handle);
 
@@ -215,24 +212,19 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+	CommitResultReceiver crr(this);
 
-	svn_commit_info_t* commitInfoPtr = nullptr;
-
-	svn_error_t *r = svn_client_move5(
-		&commitInfoPtr,
+	svn_error_t *r = svn_client_move6(
 		AllocArray(uris, %pool),
 		pool.AllocUri(toUri),
-		args->Force,
 		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
 		args->CreateParents,
 		CreateRevPropList(args->LogProperties, %pool),
+		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool.Handle);
 
-	if (commitInfoPtr)
-		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
-	else
-		result = nullptr;
+	result = crr.CommitResult;
 
 	return args->HandleResult(this, r, sourceUris);
 }

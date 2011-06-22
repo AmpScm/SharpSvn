@@ -112,26 +112,23 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+    CommitResultReceiver crr(this);
 
 	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
 
-	svn_commit_info_t *commitInfoPtr = nullptr;
-
-	svn_error_t *r = svn_client_commit4(
-		&commitInfoPtr,
+	svn_error_t *r = svn_client_commit5(
 		aprPaths->Handle,
 		(svn_depth_t)args->Depth,
 		args->KeepLocks,
 		args->KeepChangeLists,
+		!args->CommitOperationsRecursively,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CreateRevPropList(args->LogProperties, %pool),
+		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool.Handle);
 
-	if (commitInfoPtr)
-		result = SvnCommitResult::Create(this, args, commitInfoPtr, %pool);
-	else
-		result = nullptr;
+	result = crr.CommitResult;
 
 	return args->HandleResult(this, r, paths);
 }

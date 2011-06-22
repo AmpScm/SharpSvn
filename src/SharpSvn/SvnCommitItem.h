@@ -33,9 +33,10 @@ namespace SharpSvn {
 		initonly DateTime _date;
 		initonly String^ _author;
 		initonly String^ _postCommitError;
+		initonly Uri^ _reposRoot;
 
 	internal:
-		static SvnCommitResult^ Create(SvnClient^ client, SvnClientArgs^ args, const svn_commit_info_t *commitInfo, AprPool^ pool);
+		static SvnCommitResult^ Create(SvnClientContext^ client, const svn_commit_info_t *commitInfo, AprPool^ pool);
 
 	private:
 		SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ pool);
@@ -62,6 +63,14 @@ namespace SharpSvn {
 			String^ get()
 			{
 				return _author;
+			}
+		}
+
+		property Uri^ RepositoryRoot
+		{
+			Uri^ get()
+			{
+				return _reposRoot;
 			}
 		}
 

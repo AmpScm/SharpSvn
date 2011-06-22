@@ -488,6 +488,46 @@ SvnClientContext::NoArgsStore::~NoArgsStore()
 	ctx->wc_ctx = _wc_ctx;
 }
 
+static svn_error_t * the_commit_callback2(const svn_commit_info_t *commit_info, void *baton, apr_pool_t *pool)
+{
+	SvnClientContext::CommitResultReceiver^ receiver;
+
+	AprPool^ tmpPool = gcnew AprPool(pool, false);
+	receiver = AprBaton<SvnClientContext::CommitResultReceiver^>::Get((IntPtr)baton);
+
+	try
+	{
+		receiver->ProvideCommitResult(commit_info, tmpPool);
+
+		return nullptr;
+	}
+	catch(Exception^ e)
+	{
+		return SvnException::CreateExceptionSvnError("CommitResult function", e);
+	}
+}
+
+SvnClientContext::CommitResultReceiver::CommitResultReceiver(SvnClientContext^ client)
+{
+	_callback = the_commit_callback2;
+	_commitBaton = gcnew AprBaton<CommitResultReceiver^>(this);
+	_client = client;
+}
+
+SvnClientContext::CommitResultReceiver::~CommitResultReceiver()
+{
+	_client = nullptr;
+	_callback = nullptr;
+	delete _commitBaton;
+	_commitBaton = nullptr;
+}
+
+void SvnClientContext::CommitResultReceiver::ProvideCommitResult(const svn_commit_info_t *commit_info, AprPool^ pool)
+{
+	_commitResult = SvnCommitResult::Create(_client, commit_info, pool);
+}
+
+
 HWND __cdecl sharpsvn_get_ui_parent()
 {
 	SvnClientContext^ ctx = SvnClientContext::_activeContext;

@@ -26,6 +26,7 @@ namespace SharpSvn {
 		bool _keepLocks;
 		bool _keepChangeLists;
 		SvnChangeListCollection^ _changelists;
+		bool _commitOperationsRecursively;
 
 	public:
 		SvnCommitArgs()
@@ -86,6 +87,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_keepChangeLists = value;
+			}
+		}
+
+		property bool CommitOperationsRecursively
+		{
+			bool get()
+			{
+				return _commitOperationsRecursively;
+			}
+			void set(bool value)
+			{
+				_commitOperationsRecursively = value;
 			}
 		}
 	};
