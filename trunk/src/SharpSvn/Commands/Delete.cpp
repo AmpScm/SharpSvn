@@ -74,14 +74,13 @@ bool SvnClient::Delete(ICollection<String^>^ paths, SvnDeleteArgs^ args)
 	ArgsStore store(this, args, %pool);
 
 	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
-	svn_commit_info_t* result = nullptr;
 
-	svn_error_t *r = svn_client_delete3(
-		&result,
+	svn_error_t *r = svn_client_delete4(
 		aprPaths->Handle,
 		args->Force,
 		args->KeepLocal,
 		nullptr,
+		nullptr, nullptr,
 		CtxHandle,
 		pool.Handle);
 
