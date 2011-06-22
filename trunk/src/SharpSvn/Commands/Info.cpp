@@ -36,7 +36,7 @@ bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHan
 	return Info(target, gcnew SvnInfoArgs(), infoHandler);
 }
 
-static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_info_t *info, apr_pool_t *pool)
+static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_client_info2_t *info, apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
@@ -84,9 +84,12 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	{
 		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->Or(target->GetSvnRevision(SvnRevision::None, SvnRevision::Head))->ToSvnRevision();
+        String^ targetName = target->SvnTargetName;
 
-		svn_error_t* r = svn_client_info2(
-			pool.AllocString(target->SvnTargetName),
+		svn_error_t* r = svn_client_info3(
+			IsNotUri(targetName) 
+				? pool.AllocAbsoluteDirent(targetName)
+				: pool.AllocString(targetName),
 			&pegRev,
 			&rev,
 			svn_info_receiver,
