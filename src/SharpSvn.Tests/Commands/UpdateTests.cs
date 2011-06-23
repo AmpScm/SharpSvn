@@ -223,8 +223,9 @@ namespace SharpSvn.Tests.Commands
             Client.Status(sd,
                 delegate(object sender, SvnStatusEventArgs sa)
                 {
-                    Assert.That(sa.TreeConflict, Is.Not.Null, "Has tree conflict");
-                    Assert.That(sa.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
+                    Assert.That(sa.Conflicted, Is.True, "Has tree conflict");
+                    Assert.That(sa.LocalNodeStatus, Is.EqualTo(SvnStatus.Deleted));
+                    Assert.That(sa.LocalTextStatus, Is.EqualTo(SvnStatus.Normal));
                 });
         }
 
