@@ -402,6 +402,8 @@ namespace SharpSvn {
 		Subversion15		= 3,
 		/// <summary>Create a repository in Subversion 1.6 compatible format</summary>
 		Subversion16		= 4,
+		/// <summary>Create a repository in Subversion 1.7 compatible format</summary>
+		Subversion17		= 4,
 	};
 
 	public enum class SvnDiffKind
