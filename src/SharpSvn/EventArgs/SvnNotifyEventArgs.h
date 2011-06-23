@@ -33,9 +33,16 @@ namespace SharpSvn {
 		initonly SvnNotifyState _contentState;
 		initonly SvnNotifyState _propertyState;
 		initonly SvnLockState _lockState;
-		initonly __int64 _revision;
-        initonly __int64 _oldRevision;
+		initonly svn_revnum_t _revision;
+		initonly svn_revnum_t _oldRevision;
 		initonly SvnCommandType _commandType;
+
+		initonly svn_linenum_t _hunk_original_start;
+		initonly svn_linenum_t _hunk_original_length;
+		initonly svn_linenum_t _hunk_modified_start;
+		initonly svn_linenum_t _hunk_modified_length;
+		initonly svn_linenum_t _hunk_matched_line;
+		initonly svn_linenum_t _hunk_fuzz;
 
 		SvnLockInfo^ _lock;
 		String^ _changelistName;
@@ -62,7 +69,15 @@ namespace SharpSvn {
 			_propertyState = (SvnNotifyState)notify->prop_state;
 			_lockState = (SvnLockState)notify->lock_state;
 			_revision = notify->revision;
-            _oldRevision = notify->old_revision;
+			_oldRevision = notify->old_revision;
+
+			_hunk_original_start = notify->hunk_original_start;
+			_hunk_original_length = notify->hunk_original_length;
+			_hunk_modified_start = notify->hunk_modified_start;
+			_hunk_modified_length = notify->hunk_modified_length;
+			_hunk_matched_line = notify->hunk_matched_line;
+			_hunk_fuzz = notify->hunk_fuzz;
+
 			_commandType = commandType;
 		}
 
@@ -111,7 +126,7 @@ namespace SharpSvn {
 			String^ get()
 			{
 				if (!_fullPath && Path)
-					_fullPath = _pathIsUri ? Path : SvnTools::GetNormalizedFullPath(Path);
+					_fullPath = SvnTools::GetNormalizedFullPath(Path);
 
 				return _fullPath;
 			}
@@ -123,8 +138,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-				GC::KeepAlive(Path);
-				return Uri || _pathIsUri;
+				return (Uri != nullptr);
 			}
 		}
 
@@ -227,7 +241,7 @@ namespace SharpSvn {
 			}
 		}
 
-        /// <summary>[[[ The base revision before updating (Not guaranteed compatible with future Subversion versions!)]]]</summary>
+		/// <summary>The base revision before updating</summary>
 		property __int64 OldRevision
 		{
 			__int64 get()
