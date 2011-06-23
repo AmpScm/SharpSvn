@@ -186,11 +186,16 @@ namespace SharpSvn.Tests.Commands
                 GC.KeepAlive(e.Items);
             };
 
+            client.Notify += OnClientNotify;
+
             return client;
         }
 
         protected virtual void OnClientNotify(object sender, SvnNotifyEventArgs e)
         {
+            if (!Enum.IsDefined(typeof(SvnNotifyAction), e.Action))
+                Console.WriteLine("Enum value {0} not defined in SvnNotifyAction", e.Action);
+
             if (e.Uri != null)
             {
             }
