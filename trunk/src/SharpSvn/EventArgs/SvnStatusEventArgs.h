@@ -22,61 +22,68 @@
 
 namespace SharpSvn {
 	using namespace System::Collections::ObjectModel;
+	ref class SvnStatusEventArgs;
 
 	public ref class SvnWorkingCopyInfo sealed
 	{
 		// This class looks remarkibly simalar to SvnWorkingCopyEntryEventArgs
 		// I don't use them as the same to keep both open for future extensions
 		// in different directions
+        SvnClientContext^ _client;
+        const svn_client_status_t *_status;
 		const svn_wc_entry_t* _entry;
 		AprPool^ _pool;
+        bool _ensured;
 
 		String^ _name;
-		initonly __int64 _revision;
+		__int64 _revision;
 		Uri^ _uri;
 		Uri^ _repositoryUri;
 		String^ _repositoryId;
-		initonly SvnNodeKind _nodeKind;
-		initonly SvnSchedule _schedule;
-		initonly bool _copied;
-		initonly bool _deleted;
-		initonly bool _absent;
-		initonly bool _incomplete;
+		SvnNodeKind _nodeKind;
+		SvnSchedule _schedule;
+		bool _copied;
+		bool _deleted;
+		bool _absent;
+		bool _incomplete;
 		Uri^ _copyFrom;
-		initonly __int64 _copyFromRev;
+		svn_revnum_t _copyFromRev;
 
 		String^ _conflictOld;
 		String^ _conflictNew;
 		String^ _conflictWork;
 		String^ _prejfile;
-		initonly DateTime _textTime;
+		DateTime _textTime;
 		String^ _checksum;
-		initonly __int64 _lastChangeRev;
-		initonly DateTime _lastChangeTime;
+		svn_revnum_t _lastChangeRev;
+		DateTime _lastChangeTime;
 		String^ _lastChangeAuthor;
 		String^ _lockToken;
 		String^ _lockOwner;
 		String^ _lockComment;
-		initonly DateTime _lockTime;
-		initonly bool _hasProperties;
-		initonly bool _hasPropertyChanges;
+		DateTime _lockTime;
+		bool _hasProperties;
+		bool _hasPropertyChanges;
 		String^ _changelist;
-		initonly __int64 _wcSize;
-		initonly bool _keepLocal;
-		initonly SvnDepth _depth;
+		__int64 _wcSize;
+		bool _keepLocal;
+		SvnDepth _depth;
 		String^ _fileExternalPath;
 		SvnRevision^ _fileExternalRevision;
 		SvnRevision^ _fileExternalPegRevision;
 
 	internal:
 		SvnWorkingCopyInfo(const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool);
+		void Ensure();
 
 	public:
 		/// <summary>The entries name</summary>
+		[Obsolete("Use information from SvnStatusEventArgs.Path to avoid expensive lookup")]
 		property String^ Name
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_name && _entry && _entry->name && _pool)
 					_name = SvnBase::Utf8_PathPtrToString(_entry->name, _pool);
 
@@ -85,19 +92,23 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Base revision</summary>
+		[Obsolete("Use SvnStatusEventArgs.Revision to avoid expensive lookup")]
 		property __int64 Revision
 		{
 			__int64 get()
 			{
+                Ensure();
 				return _revision;
 			}
 		}
 
 		/// <summary>Url in repository, including final '/' if the entry specifies a directory</summary>
+		[Obsolete("Use SvnStatusEventArgs.Uri to avoid expensive lookup")]
 		property System::Uri^ Uri
 		{
 			System::Uri^ get()
 			{
+                Ensure();
 				if (!_uri && _entry && _entry->url)
 					_uri = SvnBase::Utf8_PtrToUri(_entry->url, _nodeKind);
 
@@ -106,10 +117,12 @@ namespace SharpSvn {
 		}
 
 		/// <summary>The repository Uri including a final '/'</summary>
+		[Obsolete("Use SvnStatusEventArgs.RepositoryRoot to avoid expensive lookup")]
 		property System::Uri^ RepositoryUri
 		{
 			System::Uri^ get()
 			{
+                Ensure();
 				if (!_repositoryUri && _entry && _entry->repos)
 					_repositoryUri = SvnBase::Utf8_PtrToUri(_entry->repos, SvnNodeKind::Directory);
 
@@ -131,6 +144,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_repositoryId && _entry && _entry->uuid)
 					_repositoryId = SvnBase::Utf8_PtrToString(_entry->uuid);
 
@@ -139,19 +153,23 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the node kind</summary>
+		[Obsolete("Use SvnStatusEventArgs.NodeKind to avoid expensive lookup")]
 		property SvnNodeKind NodeKind
 		{
 			SvnNodeKind get()
 			{
+                Ensure();
 				return _nodeKind;
 			}
 		}
 
 		/// <summary>Gets the node scheduling (add, delete, replace)</summary>
+		[Obsolete("Use SvnStatusEventArgs.NodeStatus to avoid expensive lookup")]
 		property SvnSchedule Schedule
 		{
 			SvnSchedule get()
 			{
+                Ensure();
 				return _schedule;
 			}
 		}
@@ -160,10 +178,12 @@ namespace SharpSvn {
 		/// (possibly because the entry is a child of a path that is
 		/// scheduled for addition or replacement when the entry itself is
 		/// normal</summary>
+		[Obsolete("Use SvnStatusEventArgs.IsCopy to avoid expensive lookup")]
 		property bool IsCopy
 		{
 			bool get()
 			{
+                Ensure();
 				return _copied;
 			}
 		}
@@ -172,6 +192,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
+                Ensure();
 				return _deleted;
 			}
 		}
@@ -180,6 +201,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
+                Ensure();
 				return _absent;
 			}
 		}
@@ -188,6 +210,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
+                Ensure();
 				return _incomplete;
 			}
 		}
@@ -196,6 +219,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
+                Ensure();
 				if (!_copyFrom && _entry && _entry->copyfrom_url)
 					_copyFrom = SvnBase::Utf8_PtrToUri(_entry->copyfrom_url, _nodeKind);
 
@@ -207,6 +231,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
+                Ensure();
 				return _copyFromRev;
 			}
 		}
@@ -215,6 +240,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_conflictOld && _entry && _entry->conflict_old)
 					_conflictOld = SvnBase::Utf8_PtrToString(_entry->conflict_old)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -226,6 +252,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_conflictNew && _entry && _entry->conflict_new)
 					_conflictNew = SvnBase::Utf8_PtrToString(_entry->conflict_new)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -237,6 +264,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_conflictWork && _entry && _entry->conflict_wrk)
 					_conflictWork = SvnBase::Utf8_PtrToString(_entry->conflict_wrk)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -248,6 +276,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_prejfile && _entry && _entry->prejfile)
 					_prejfile = SvnBase::Utf8_PtrToString(_entry->prejfile)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -260,6 +289,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
+                Ensure();
 				return DateTime::MinValue;
 			}
 		}
@@ -268,6 +298,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
+                Ensure();
 				return _textTime;
 			}
 		}
@@ -276,6 +307,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_checksum && _entry && _entry->checksum)
 					_checksum = SvnBase::Utf8_PtrToString(_entry->checksum);
 
@@ -283,26 +315,32 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.LastChangeRevision to avoid expensive lookup")]
 		property __int64 LastChangeRevision
 		{
 			__int64 get()
 			{
+                Ensure();
 				return _lastChangeRev;
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.LastChangeTime to avoid expensive lookup")]
 		property DateTime LastChangeTime
 		{
 			DateTime get()
 			{
+                Ensure();
 				return _lastChangeTime;
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.LastChangeAuthor to avoid expensive lookup")]
 		property String^ LastChangeAuthor
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_lastChangeAuthor && _entry && _entry->cmt_author)
 					_lastChangeAuthor = SvnBase::Utf8_PtrToString(_entry->cmt_author);
 
@@ -310,10 +348,12 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
 		property String^ LockToken
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_lockToken && _entry && _entry->lock_token)
 					_lockToken = SvnBase::Utf8_PtrToString(_entry->lock_token);
 
@@ -321,10 +361,12 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
 		property String^ LockOwner
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_lockOwner && _entry && _entry->lock_owner)
 					_lockOwner = SvnBase::Utf8_PtrToString(_entry->lock_owner);
 
@@ -332,10 +374,12 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
 		property String^ LockComment
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_lockComment && _entry && _entry->lock_comment)
 					_lockComment = SvnBase::Utf8_PtrToString(_entry->lock_comment);
 
@@ -343,34 +387,42 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
 		property DateTime LockTime
 		{
 			DateTime get()
 			{
+                Ensure();
 				return _lockTime;
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.LocalPropertyStatus to avoid expensive lookup")]
 		property bool HasProperties
 		{
 			bool get()
 			{
+                Ensure();
 				return _hasProperties;
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.LocalPropertyStatus to avoid expensive lookup")]
 		property bool HasPropertyChanges
 		{
 			bool get()
 			{
+                Ensure();
 				return _hasPropertyChanges;
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.ChangeList to avoid expensive lookup")]
 		property String^ ChangeList
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_changelist && _entry && _entry->changelist)
 					_changelist = SvnBase::Utf8_PtrToString(_entry->changelist);
 
@@ -382,6 +434,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
+                Ensure();
 				return _wcSize;
 			}
 		}
@@ -390,14 +443,17 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
+                Ensure();
 				return _keepLocal;
 			}
 		}
 
+		[Obsolete("Use SvnStatusEventArgs.Depth to avoid expensive lookup")]
 		property SvnDepth Depth
 		{
 			SvnDepth get()
 			{
+                Ensure();
 				return _depth;
 			}
 		}
@@ -410,6 +466,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
+                Ensure();
 				if (!_fileExternalPath && _entry && _entry->file_external_path)
 					_fileExternalPath = SvnBase::Utf8_PtrToString(_entry->file_external_path);
 
@@ -421,6 +478,7 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
+                Ensure();
 				if (!_fileExternalRevision && _entry && _entry->file_external_path)
 					_fileExternalRevision = SvnRevision::Load(&_entry->file_external_rev);
 
@@ -432,6 +490,7 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
+                Ensure();
 				if (!_fileExternalPegRevision && _entry && _entry->file_external_path)
 					_fileExternalPegRevision = SvnRevision::Load(&_entry->file_external_peg_rev);
 
@@ -479,116 +538,213 @@ namespace SharpSvn {
 			}
 			finally
 			{
+                _client = nullptr;
+                _status = nullptr;
 				_entry = nullptr;
 				_pool = nullptr;
 			}
 		}
 	};
 
-	;
-
 	public ref class SvnStatusEventArgs : public SvnCancelEventArgs
 	{
+		const char *_pPath;
 		const svn_client_status_t *_status;
 		AprPool^ _pool;
-        SvnClientContext^ _client;
+		SvnClientContext^ _client;
 
-		initonly String^ _path;
+		String^ _path;
 		String^ _fullPath;
-		initonly SvnStatus _wcContentStatus;
+		initonly bool _versioned;
+		initonly bool _conflicted;
+		initonly SvnStatus _wcNodeStatus;
+		initonly SvnStatus _wcTextStatus;
 		initonly SvnStatus _wcPropertyStatus;
 		initonly bool _wcLocked;
 		initonly bool _copied;
+		initonly svn_revnum_t _revision;
+		initonly svn_revnum_t _lastChangeRev;
+		initonly DateTime _lastChangeTime;
+		String^ _lastChangeAuthor;
+		Uri^ _reposRoot;
+		Uri^ _uri;
 		initonly bool _switched;
-		initonly SvnStatus _reposContentStatus;
+		initonly bool _fileExternal;
+		SvnLockInfo^ _localLock;
+		String^ _changelist;
+		initonly SvnDepth _depth;
+
+		initonly SvnStatus _reposNodeStatus;
+		initonly SvnStatus _reposTextStatus;
 		initonly SvnStatus _reposPropertyStatus;
 		SvnLockInfo^ _reposLock;
 		SvnWorkingCopyInfo^ _wcInfo;
-		Uri^ _uri;
-		initonly __int64 _oodLastCommitRev;
+
+		initonly svn_revnum_t _oodLastCommitRev;
 		initonly DateTime _oodLastCommitDate;
 		initonly SvnNodeKind _oodLastCommitNodeKind;
 		String^ _oodLastCommitAuthor;
 		initonly SvnNodeKind _nodeKind;
-		SvnConflictData^ _treeConflict;
-		initonly bool _fileExternal;
-		initonly SvnStatus _prsTextStatus;
-		initonly SvnStatus _prsPropertyStatus;
-        initonly bool _conflicted;
 
 	internal:
-		SvnStatusEventArgs(String^ path, const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
+		SvnStatusEventArgs(const char *path, const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
 		{
-			if (String::IsNullOrEmpty(path))
+			if (!path)
 				throw gcnew ArgumentNullException("path");
 			else if (!status)
 				throw gcnew ArgumentNullException("status");
 			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
 
-			_path = path;
+			_pPath = path;
 			_status = status;
 			_pool = pool;
-            _client = client;
+			_client = client;
 
-			_wcContentStatus = (SvnStatus)status->node_status;
-			_wcPropertyStatus = (SvnStatus)status->prop_status;
-			_wcLocked = status->locked != 0;
-			_copied = status->copied != 0;
-			_switched = status->switched != 0;
-			_reposContentStatus = (SvnStatus)status->repos_text_status;
-			_reposPropertyStatus = (SvnStatus)status->repos_prop_status;
-
-            _oodLastCommitRev = status->ood_changed_rev;
-
+			_versioned = status->versioned != 0;
+			_conflicted = status->conflicted != 0;
 			_nodeKind = (SvnNodeKind)status->kind;
 
+			_wcNodeStatus = (SvnStatus)status->node_status;
+			_wcTextStatus = (SvnStatus)status->text_status;
+			_wcPropertyStatus = (SvnStatus)status->prop_status;
+
+			_wcLocked = status->locked != 0;
+			_copied = status->copied != 0;
+			_revision = status->revision;
+
+			_lastChangeRev = status->changed_rev;
+			_lastChangeTime = SvnBase::DateTimeFromAprTime(status->changed_date);
+
+			_switched = status->switched != 0;
+			_fileExternal = status->file_external != 0;
+			_depth = (SvnDepth)status->depth;
+
+			_reposNodeStatus = (SvnStatus)status->repos_node_status;
+			_reposTextStatus = (SvnStatus)status->repos_text_status;
+			_reposPropertyStatus = (SvnStatus)status->repos_prop_status;
+
+			 _oodLastCommitRev = status->ood_changed_rev;
 			if (status->ood_changed_rev != SVN_INVALID_REVNUM)
 			{
-                _oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_changed_date);
+				_oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_changed_date);
 				_oodLastCommitNodeKind = (SvnNodeKind)status->ood_kind;
 			}
 
-			_fileExternal = status->file_external != 0;
-			_prsTextStatus = (SvnStatus)status->text_status;
-			_prsPropertyStatus = (SvnStatus)status->prop_status;
-            _conflicted = (status->conflicted != FALSE);
+						
 		}
 
 	public:
-		property String^ Path
+		/// <summary>Gets the recorded node type of this node</summary>
+		property SvnNodeKind NodeKind
 		{
-			String^ get()
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnNodeKind get()
 			{
-				return _path;
+				return _nodeKind;
 			}
 		}
 
-		/// <summary>The path the notification is about, translated via <see cref="SvnTools::GetNormalizedFullPath" /></summary>
-		/// <remarks>The <see cref="FullPath" /> property contains the path in normalized format; while <see cref="Path" /> returns the exact path from the subversion api</remarks>
+		/// <summary>The full path the notification is about, as translated via <see cref="SvnTools::GetNormalizedFullPath" /></summary>
+		/// <remarks>See also <see cref="Path" />.</remarks>
 		property String^ FullPath
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			String^ get()
 			{
-				if (!_fullPath && Path)
-					_fullPath = SvnTools::GetNormalizedFullPath(Path);
+				if (!_fullPath && _status && _pool)
+					_fullPath = SvnBase::Utf8_PathPtrToString(_status->local_abspath, _pool);
 
 				return _fullPath;
 			}
 		}
 
-		/// <summary>Content status in working copy</summary>
-		property SvnStatus LocalContentStatus
+		/// <summary>The path returned by the subversion api</summary>
+		property String^ Path
 		{
+			[System::Diagnostics::DebuggerStepThrough]
+			String^ get()
+			{
+				if (!_path && _pPath && _pool)
+					_path = SvnBase::Utf8_PathPtrToString(_pPath, _pool);
+
+				return _path;
+			}
+		}
+
+		property bool Versioned
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			bool get()
+			{
+				return _versioned;
+			}
+		}
+
+		property bool Conflicted
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			bool get()
+			{
+				return _conflicted;
+			}
+		}
+
+		property bool Modified
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			bool get()
+			{
+				switch (_wcNodeStatus)
+				{
+					case SvnStatus::Modified:
+					case SvnStatus::Added:
+					case SvnStatus::Deleted:
+					case SvnStatus::Replaced:
+					case SvnStatus::Merged:
+					case SvnStatus::Conflicted:
+						return true;
+					default:
+						return false;
+				}
+			}
+		}
+
+		/// <summary>The node status (combination of restructuring operations, text and property status.</summary>
+		property SvnStatus LocalNodeStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
 			SvnStatus get()
 			{
-				return _wcContentStatus;
+				return _wcNodeStatus;
+			}
+		}
+
+		/// <summary>Content status in working copy</summary>
+		[Obsolete("Use .LocalNodeStatus (all changes) or .LocalTextStatus (text/content only)")]
+		property SvnStatus LocalContentStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnStatus get()
+			{
+				return LocalNodeStatus;
+			}
+		}
+
+		/// <summary>The status of the text/content of the node</summary>
+		property SvnStatus LocalTextStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnStatus get()
+			{
+				return _wcTextStatus;
 			}
 		}
 
 		/// <summary>Property status in working copy</summary>
 		property SvnStatus LocalPropertyStatus
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			SvnStatus get()
 			{
 				return _wcPropertyStatus;
@@ -596,15 +752,17 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets a boolean indicating whether the workingcopy is locked</summary>
-		[Obsolete("Use .Wedged")]
+		[Obsolete("Please use .Wedged")]
 		property bool LocalLocked
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			bool get() { return Wedged; }
 		}
 
 		/// <summary>Gets a boolean indicating whether the workingcopy is locked</summary>
 		property bool Wedged
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			bool get()
 			{
 				return _wcLocked;
@@ -616,26 +774,162 @@ namespace SharpSvn {
 		/// (or part of a subtree that is scheduled as such.).</remarks>
 		property bool LocalCopied
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			bool get()
 			{
 				return _copied;
 			}
 		}
 
+		property __int64 Revision
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			__int64 get()
+			{
+				return _revision;
+			}
+		}
+
+		property __int64 LastChangeRevision
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			__int64 get()
+			{
+				return _lastChangeRev;
+			}
+		}
+
+		property DateTime LastChangeTime
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			DateTime get()
+			{
+				return _lastChangeTime;
+			}
+		}
+
+		property String^ LastChangeAuthor
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			String^ get()
+			{
+				if (!_lastChangeAuthor && _status && _status->changed_author)
+					_lastChangeAuthor = SvnBase::Utf8_PtrToString(_status->changed_author);
+
+				return _lastChangeAuthor;
+			}
+		}
+
+		property Uri^ RepositoryRoot
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			System::Uri^ get()
+			{
+				if (!_reposRoot && _status && _status->repos_root_url)
+					_uri = SvnBase::Utf8_PtrToUri(_status->repos_root_url, SvnNodeKind::Directory);
+
+				return _uri;
+			}
+		}
+
+		property Uri^ Uri
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			System::Uri^ get()
+			{
+				if (!_uri && _status && _status->repos_relpath && _pool)
+					_uri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_status->repos_root_url, _status->repos_relpath, _pool->Handle),
+												  _nodeKind);
+
+				return _uri;
+			}
+		}
+
 		/// <summary>Gets a boolean indicating whether the file is switched in the working copy</summary>
 		property bool Switched
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			bool get()
 			{
 				return _switched;
 			}
 		}
 
+		/// <summary>Gets a boolean indicating whether the node is a file external</summary>
+		property bool IsFileExternal
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			bool get() { return _fileExternal; }
+		}
+
+		property SvnLockInfo^ LocalLock
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnLockInfo^ get()
+			{
+				if (!_localLock && _status && _status->lock)
+					_localLock = gcnew SvnLockInfo(_status->lock, false);
+
+				return _reposLock;
+			}
+		}
+
+		property String^ ChangeList
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			String^ get()
+			{
+				if (!_changelist && _status && _status->changelist)
+					_changelist = SvnBase::Utf8_PtrToString(_status->changelist);
+
+				return _changelist;
+			}
+		}
+
+		property SvnDepth Depth
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnDepth get()
+			{
+				return _depth;
+			}
+		}
+
+		/// <summary>Gets the out of date status of the item; if true the RemoteUpdate* properties are set</summary>
+		property bool IsRemoteUpdated
+		{
+			bool get()
+			{
+				return _oodLastCommitRev != SVN_INVALID_REVNUM;
+			}
+		}
+
+
+		[Obsolete("Use .RemoteNodeStatus or .RemoteTextStatus")]
 		property SvnStatus RemoteContentStatus
 		{
+			[System::Diagnostics::DebuggerStepThrough]
 			SvnStatus get()
 			{
-				return _reposContentStatus;
+				return RemoteNodeStatus;
+			}
+		}
+
+		property SvnStatus RemoteNodeStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnStatus get()
+			{
+				return _reposNodeStatus;
+			}
+		}
+
+		property SvnStatus RemoteTextStatus
+		{
+			[System::Diagnostics::DebuggerStepThrough]
+			SvnStatus get()
+			{
+				return _reposTextStatus;
 			}
 		}
 
@@ -655,27 +949,6 @@ namespace SharpSvn {
 					_reposLock = gcnew SvnLockInfo(_status->repos_lock, false);
 
 				return _reposLock;
-			}
-		}
-
-		property Uri^ Uri
-		{
-			System::Uri^ get()
-			{
-				if (!_uri && _status && _status->repos_relpath)
-					_uri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_status->repos_root_url, _status->repos_relpath, _pool->Handle),
-												  _nodeKind);
-
-				return _uri;
-			}
-		}
-
-		/// <summary>Gets the out of date status of the item; if true the RemoteUpdate* properties are set</summary>
-		property bool IsRemoteUpdated
-		{
-			bool get()
-			{
-				return _oodLastCommitRev != SVN_INVALID_REVNUM;
 			}
 		}
 
@@ -724,32 +997,15 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnWorkingCopyInfo^ get()
 			{
-                if (!_wcInfo && _status && _status->versioned && _pool)
+				if (!_wcInfo && _status && _status->versioned && _client && _pool)
 					_wcInfo = gcnew SvnWorkingCopyInfo(_status, _client, _pool);
 
 				return _wcInfo;
 			}
 		}
 
-		/// <summary>Gets the recorded node type of this node</summary>
-		property SvnNodeKind NodeKind
-		{
-			SvnNodeKind get()
-			{
-				return _nodeKind;
-			}
-		}
-
-        property bool IsConflicted
-        {
-            bool get()
-            {
-                return _conflicted;
-            }
-        }
-
 		/// <summary>Gets the tree conflict data of this node or <c>null</c> if this node doesn't have a tree conflict</summary>
-        [Obsolete("Always returns NULL now; use .IsConflicted and a separate call to SvnClient.Info() to retrieve details")]
+		[Obsolete("Always returns NULL now; use .IsConflicted and a separate call to SvnClient.Info() to retrieve details")]
 		property SvnConflictData^ TreeConflict
 		{
 			[System::Diagnostics::DebuggerStepThrough]
@@ -759,25 +1015,22 @@ namespace SharpSvn {
 			}
 		}
 
-		/// <summary>Gets a boolean indicating whether the node is a file external</summary>
-		property bool IsFileExternal
-		{
-			[System::Diagnostics::DebuggerStepThrough]
-			bool get() { return _fileExternal; }
-		}
+		
 
 		/// <summary>Gets the raw content status of the node when available</summary>
+		[Obsolete("Use .LocalTextStatus")]
 		property SvnStatus PristineContentStatus
 		{
 			[System::Diagnostics::DebuggerStepThrough]
-			SvnStatus get() { return _prsTextStatus; }
+			SvnStatus get() { return LocalTextStatus; }
 		}
 
 		/// <summary>Gets the raw property status of the node when available</summary>
+		[Obsolete("Use .LocalPropertyStatus")]
 		property SvnStatus PristinePropertyStatus
 		{
 			[System::Diagnostics::DebuggerStepThrough]
-			SvnStatus get() { return _prsPropertyStatus; }
+			SvnStatus get() { return LocalPropertyStatus; }
 		}
 
 	protected public:
@@ -788,25 +1041,32 @@ namespace SharpSvn {
 				if (keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory
+					GC::KeepAlive(FullPath);
+					GC::KeepAlive(Path);
+					GC::KeepAlive(LastChangeAuthor);
+					GC::KeepAlive(RepositoryRoot);
 					GC::KeepAlive(Uri);
+					GC::KeepAlive(LocalLock);
+					GC::KeepAlive(ChangeList);
+
 					GC::KeepAlive(RemoteLock);
 					GC::KeepAlive(RemoteUpdateCommitAuthor);
 					GC::KeepAlive(WorkingCopyInfo);
-					GC::KeepAlive(TreeConflict);
 				}
 
+				if (_localLock)
+					_localLock->Detach(keepProperties);
 				if (_reposLock)
 					_reposLock->Detach(keepProperties);
 				if (_wcInfo)
 					_wcInfo->Detach(keepProperties);
-				if (_treeConflict)
-					_treeConflict->Detach(keepProperties);
 			}
 			finally
 			{
+				_pPath = nullptr;
 				_status = nullptr;
 				_pool = nullptr;
-                _client = nullptr;
+				_client = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}

@@ -47,8 +47,7 @@ static svn_error_t* svnclient_status_handler(void *baton, const char *path, cons
 	if (!args)
 		return nullptr;
 
-	SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(
-		SvnBase::Utf8_PathPtrToString(path, %aprPool), status, client, %aprPool);
+	SvnStatusEventArgs^ e = gcnew SvnStatusEventArgs(path, status, client, %aprPool);
 
 	try
 	{
@@ -156,21 +155,32 @@ bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<Sv
 
 SvnWorkingCopyInfo::SvnWorkingCopyInfo(const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
 {
-	if (!status)
+    if (!status)
 		throw gcnew ArgumentNullException("status");
     else if (!client)
 		throw gcnew ArgumentNullException("client");
 	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
+    _client = client;
+    _status = status;
+    _pool = pool;
+}
+
+void SvnWorkingCopyInfo::Ensure()
+{
+    if (_ensured || !_status)
+        return;
+
+    _ensured = true;
+
     svn_wc_status2_t *status2;
-    SVN_THROW(svn_wc__status2_from_3(&status2, (const svn_wc_status3_t*)status->backwards_compatibility_baton,
-                                     client->CtxHandle->wc_ctx,
-                                     status->local_abspath, pool->Handle, pool->Handle));
+    SVN_THROW(svn_wc__status2_from_3(&status2, (const svn_wc_status3_t*)_status->backwards_compatibility_baton,
+                                     _client->CtxHandle->wc_ctx,
+                                     _status->local_abspath, _pool->Handle, _pool->Handle));
 
     const svn_wc_entry_t *entry = status2->entry;
 	_entry = entry;
-	_pool = pool;
 
 	_revision = entry->revision;
 	_nodeKind = (SvnNodeKind)entry->kind;
