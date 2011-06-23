@@ -392,26 +392,32 @@ namespace SharpSvn.Tests.Commands
 						switch (nn)
 						{
 							case 1:
+                                Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Modified));
 								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Normal));
 								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.Modified));
 								break;
 							case 2:
+                                Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Normal));
 								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Normal));
 								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
 								break;
 							case 3:
+                                Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Normal));
 								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Normal));
 								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.Normal));
 								break;
 							case 4:
-								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Added));
-								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
+                                Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Added));
+								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Normal));
+								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.Normal));
 								break;
 							case 5:
-								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Deleted));
+                                Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Deleted));
+								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Normal));
 								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
 								break;
 							case 6:
+                                Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Modified));
 								Assert.That(e.LocalTextStatus, Is.EqualTo(SvnStatus.Modified));
 								Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.Normal));
 								break;
