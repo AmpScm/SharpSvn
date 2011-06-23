@@ -560,7 +560,7 @@ namespace SharpSvn {
 		initonly SvnStatus _wcNodeStatus;
 		initonly SvnStatus _wcTextStatus;
 		initonly SvnStatus _wcPropertyStatus;
-		initonly bool _wcLocked;
+		initonly bool _wcIsLocked;
 		initonly bool _copied;
 		initonly svn_revnum_t _revision;
 		initonly svn_revnum_t _lastChangeRev;
@@ -609,7 +609,7 @@ namespace SharpSvn {
 			_wcTextStatus = (SvnStatus)status->text_status;
 			_wcPropertyStatus = (SvnStatus)status->prop_status;
 
-			_wcLocked = status->locked != 0;
+			_wcIsLocked = status->wc_is_locked != 0;
 			_copied = status->copied != 0;
 			_revision = status->revision;
 
@@ -765,7 +765,7 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThrough]
 			bool get()
 			{
-				return _wcLocked;
+				return _wcIsLocked;
 			}
 		}
 
