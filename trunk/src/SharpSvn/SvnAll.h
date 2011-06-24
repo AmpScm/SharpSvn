@@ -42,4 +42,4 @@
 
 #include "SvnException.h"
 #include "SvnAuthentication.h"
-#pragma warning(error: 4996)
+
