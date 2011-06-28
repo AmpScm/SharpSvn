@@ -228,11 +228,16 @@ namespace SharpSvn.Tests.Commands
 
                 client.Update(diffFile, new SvnUpdateArgs { Revision = ci.Revision });
                 SvnPatchArgs pa = new SvnPatchArgs();
+                n = 0;
                 pa.Filter += delegate(object sender, SvnPatchFilterEventArgs e)
                 {
-                    GC.KeepAlive(e);
+                    Assert.That(File.Exists(e.RejectPath));
+                    Assert.That(File.Exists(e.ResultPath));
+                    Assert.That(new FileInfo(e.RejectPath).Length, Is.EqualTo(0));
+                    n++;
                 };
                 client.Patch(tempFile, Path.GetDirectoryName(diffFile), pa);
+                Assert.That(n, Is.EqualTo(1));
             }
         }
 
