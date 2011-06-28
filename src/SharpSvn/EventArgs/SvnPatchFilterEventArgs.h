@@ -23,26 +23,28 @@ namespace SharpSvn {
 	public ref class SvnPatchFilterEventArgs : public SvnCancelEventArgs
 	{
 		const char *_canon_path;
-		const char *_patch_path;
+		const char *_patched_path;
 		const char *_reject_path;
 		SvnClient^ _client;
 		AprPool^ _pool;
 		bool _filtered;
-        String^ _internalPath;
+		String^ _internalPath;
 		String^ _path;
 		String^ _rejectPath;
+		String^ _resultPath;
 
 	internal:
-		SvnPatchFilterEventArgs(const char *canon_path_from_patchfile, const char *patch_abspath, const char *reject_abspath, SvnClient^ client, AprPool^ pool)
+		SvnPatchFilterEventArgs(const char *canon_path_from_patchfile, const char *patched_abspath, const char *reject_abspath, SvnClient^ client, AprPool^ pool)
 		{
 			_canon_path = canon_path_from_patchfile;
-			_patch_path = patch_abspath;
+			_patched_path = patched_abspath;
 			_reject_path = reject_abspath;
 			_client = client;
 			_pool = pool;
 		}
 
 	public:
+		/// <summary>The path to the node as stored in the patch file, kept in Subversion canonical format</summary>
 		property String^ CanonicalPath
 		{
 			String^ get()
@@ -54,6 +56,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>The path to the node as stored in the patch file, normalized to Windows style</summary>
 		property String^ Path
 		{
 			String^ get()
@@ -65,6 +68,7 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Path to a temporary file containing the rejected hunks of the patch</summary>
 		property String^ RejectPath
 		{
 			String^ get()
@@ -73,6 +77,18 @@ namespace SharpSvn {
 					_rejectPath = SvnBase::Utf8_PathPtrToString(_reject_path, _pool);
 
 				return _rejectPath;
+			}
+		}
+
+		/// <summary>Path to a temporary file containing the result of the patch</summary>
+		property String^ ResultPath
+		{
+			String^ get()
+			{
+				if (!_resultPath && _patched_path && _pool)
+					_resultPath = SvnBase::Utf8_PathPtrToString(_patched_path, _pool);
+
+				return _resultPath;
 			}
 		}
 
@@ -101,12 +117,13 @@ namespace SharpSvn {
 					GC::KeepAlive(CanonicalPath);
 					GC::KeepAlive(Path);
 					GC::KeepAlive(RejectPath);
+					GC::KeepAlive(ResultPath);
 				}
 			}
 			finally
 			{
 				_canon_path = nullptr;
-				_patch_path = nullptr;
+				_patched_path = nullptr;
 				_reject_path = nullptr;
 				_client = nullptr;
 				_pool = nullptr;
