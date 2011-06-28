@@ -161,17 +161,17 @@ namespace SharpSvn.Tests.Commands
 
                 MemoryStream diffOutput = new MemoryStream();
 
-                client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Head), diffOutput);
+                client.Diff(diffFile, new SvnPathTarget(diffFile, SvnRevisionType.Head), diffOutput);
                 VerifyDiffOutput(origLine, newLine, diffOutput);
 
                 diffOutput = new MemoryStream();
 
-                client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new SvnPathTarget(diffFile, SvnRevisionType.Committed), diffOutput);
+                client.Diff(diffFile, new SvnPathTarget(diffFile, SvnRevisionType.Committed), diffOutput);
                 VerifyDiffOutput(origLine, newLine, diffOutput);
 
                 diffOutput = new MemoryStream();
 
-                client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Working), new Uri(ReposUrl, "DiffTest"), diffOutput);
+                client.Diff(diffFile, new Uri(ReposUrl, "DiffTest"), diffOutput);
                 VerifyDiffOutput(origLine, newLine, diffOutput);
 
                 SvnCommitResult info;
