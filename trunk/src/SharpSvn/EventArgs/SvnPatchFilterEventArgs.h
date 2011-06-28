@@ -28,6 +28,9 @@ namespace SharpSvn {
 		SvnClient^ _client;
 		AprPool^ _pool;
 		bool _filtered;
+        String^ _internalPath;
+		String^ _path;
+		String^ _rejectPath;
 
 	internal:
 		SvnPatchFilterEventArgs(const char *canon_path_from_patchfile, const char *patch_abspath, const char *reject_abspath, SvnClient^ client, AprPool^ pool)
@@ -37,6 +40,40 @@ namespace SharpSvn {
 			_reject_path = reject_abspath;
 			_client = client;
 			_pool = pool;
+		}
+
+	public:
+		property String^ CanonicalPath
+		{
+			String^ get()
+			{
+				if (!_internalPath && _canon_path && _pool)
+					_internalPath = SvnBase::Utf8_PtrToString(_canon_path);
+
+				return _internalPath;
+			}
+		}
+
+		property String^ Path
+		{
+			String^ get()
+			{
+				if (!_path && _canon_path && _pool)
+					_path = SvnBase::Utf8_PathPtrToString(_canon_path, _pool);
+
+				return _path;
+			}
+		}
+
+		property String^ RejectPath
+		{
+			String^ get()
+			{
+				if (!_rejectPath && _reject_path && _pool)
+					_rejectPath = SvnBase::Utf8_PathPtrToString(_reject_path, _pool);
+
+				return _rejectPath;
+			}
 		}
 
 	public:
@@ -61,6 +98,9 @@ namespace SharpSvn {
 				if (keepProperties)
 				{
 					// Use all properties to get them cached in .Net memory					
+					GC::KeepAlive(CanonicalPath);
+					GC::KeepAlive(Path);
+					GC::KeepAlive(RejectPath);
 				}
 			}
 			finally
