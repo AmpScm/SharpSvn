@@ -60,7 +60,7 @@ namespace SharpSvn.Tests.Commands
             Client.GetStatus(testFile, out st);
 
             Assert.That(st.Count, Is.EqualTo(1));
-            Assert.That(st[0].LocalContentStatus, Is.EqualTo(SvnStatus.Added));
+            Assert.That(st[0].LocalNodeStatus, Is.EqualTo(SvnStatus.Added));
 
             // Verify status with external command
             Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
