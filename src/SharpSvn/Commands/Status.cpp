@@ -79,7 +79,11 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 
 	// We allow a null statusHandler; the args object might just handle it itself
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
+	if (args->ContactRepository)
+		EnsureState(SvnContextState::AuthorizationInitialized);
+	else
+		EnsureState(SvnContextState::ConfigLoaded);
+
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
@@ -100,9 +104,9 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			args->ContactRepository,
 			args->RetrieveIgnoredEntries,
 			args->IgnoreExternals,
-            args->DepthAsSticky,
+			args->DepthAsSticky,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-            svnclient_status_handler,
+			svnclient_status_handler,
 			(void*)_clientBaton->Handle,
 			pool.Handle);
 
@@ -155,31 +159,31 @@ bool SvnClient::GetStatus(String^ path, SvnStatusArgs^ args, [Out] Collection<Sv
 
 SvnWorkingCopyInfo::SvnWorkingCopyInfo(const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
 {
-    if (!status)
+	if (!status)
 		throw gcnew ArgumentNullException("status");
-    else if (!client)
+	else if (!client)
 		throw gcnew ArgumentNullException("client");
 	else if (!pool)
 		throw gcnew ArgumentNullException("pool");
 
-    _client = client;
-    _status = status;
-    _pool = pool;
+	_client = client;
+	_status = status;
+	_pool = pool;
 }
 
 void SvnWorkingCopyInfo::Ensure()
 {
-    if (_ensured || !_status)
-        return;
+	if (_ensured || !_status)
+		return;
 
-    _ensured = true;
+	_ensured = true;
 
-    svn_wc_status2_t *status2;
-    SVN_THROW(svn_wc__status2_from_3(&status2, (const svn_wc_status3_t*)_status->backwards_compatibility_baton,
-                                     _client->CtxHandle->wc_ctx,
-                                     _status->local_abspath, _pool->Handle, _pool->Handle));
+	svn_wc_status2_t *status2;
+	SVN_THROW(svn_wc__status2_from_3(&status2, (const svn_wc_status3_t*)_status->backwards_compatibility_baton,
+									 _client->CtxHandle->wc_ctx,
+									 _status->local_abspath, _pool->Handle, _pool->Handle));
 
-    const svn_wc_entry_t *entry = status2->entry;
+	const svn_wc_entry_t *entry = status2->entry;
 	_entry = entry;
 
 	_revision = entry->revision;
