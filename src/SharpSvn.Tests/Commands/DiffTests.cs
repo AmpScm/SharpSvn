@@ -217,6 +217,22 @@ namespace SharpSvn.Tests.Commands
                 });
 
                 Assert.That(n, Is.EqualTo(5), "Blame receiver received 5 lines");
+
+                string tempFile = GetTempFile();
+                using(FileStream fs = File.Create(tempFile))
+                {
+                    SvnDiffArgs da = new SvnDiffArgs();
+                    da.RelativeToPath = Path.GetDirectoryName(diffFile);
+                    client.Diff(diffFile, new SvnRevisionRange(ci.Revision, SvnRevisionType.Head), da, fs);
+                }
+
+                client.Update(diffFile, new SvnUpdateArgs { Revision = ci.Revision });
+                SvnPatchArgs pa = new SvnPatchArgs();
+                pa.Filter += delegate(object sender, SvnPatchFilterEventArgs e)
+                {
+                    GC.KeepAlive(e);
+                };
+                client.Patch(tempFile, Path.GetDirectoryName(diffFile), pa);
             }
         }
 

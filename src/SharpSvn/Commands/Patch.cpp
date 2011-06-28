@@ -32,13 +32,13 @@ bool SvnClient::Patch(String^ patchFile, String^ targetDir)
 	else if (!IsNotUri(targetDir))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetDir");
 
-	return SvnClient::Patch(targetDir, patchFile, gcnew SvnPatchArgs());
+	return SvnClient::Patch(patchFile, targetDir, gcnew SvnPatchArgs());
 }
 
 static svn_error_t * __cdecl
 patch_func(void *baton, svn_boolean_t *filtered, const char *canon_path_from_patchfile, const char *patch_abspath, const char *reject_abspath, apr_pool_t *scratch_pool)
 {
-    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
 	AprPool aprPool(scratch_pool, false);
 	SvnPatchArgs^ args = dynamic_cast<SvnPatchArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
@@ -46,7 +46,7 @@ patch_func(void *baton, svn_boolean_t *filtered, const char *canon_path_from_pat
 	if (!args)
 		return nullptr;
 
-    SvnPatchFilterEventArgs^ e = gcnew SvnPatchFilterEventArgs(canon_path_from_patchfile, patch_abspath, reject_abspath, client, %aprPool);
+	SvnPatchFilterEventArgs^ e = gcnew SvnPatchFilterEventArgs(canon_path_from_patchfile, patch_abspath, reject_abspath, client, %aprPool);
 
 	try
 	{
@@ -57,7 +57,7 @@ patch_func(void *baton, svn_boolean_t *filtered, const char *canon_path_from_pat
 		else
 			return nullptr;
 
-        *filtered = e->Filtered;
+		*filtered = e->Filtered;
 	}
 	catch(Exception^ ex)
 	{
