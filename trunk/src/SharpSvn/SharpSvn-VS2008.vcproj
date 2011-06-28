@@ -1011,6 +1011,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\Patch.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\PropertyList.cpp"
 					>
 				</File>
@@ -1144,6 +1148,10 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnPatchFilterEventArgs.h"
 					>
 				</File>
 				<File
@@ -1288,6 +1296,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\Move.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Patch.h"
 					>
 				</File>
 				<File
