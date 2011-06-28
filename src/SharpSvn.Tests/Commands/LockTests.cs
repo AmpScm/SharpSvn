@@ -46,7 +46,7 @@ namespace SharpSvn.Tests.Commands
 
             Client.Status(filepath, delegate(object sender, SvnStatusEventArgs e)
             {
-                Assert.That(e.WorkingCopyInfo.LockToken, Is.Null);
+                Assert.That(e.LocalLock, Is.Null);
             });
 
             bool gotIn = false;
