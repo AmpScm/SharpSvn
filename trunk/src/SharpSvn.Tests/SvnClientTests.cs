@@ -218,9 +218,9 @@ namespace SharpSvn.Tests
                 client.Status(file4, delegate(object sender, SvnStatusEventArgs e)
                 {
                     Assert.That(e.FullPath, Is.EqualTo(file4));
-                    Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Added));
+                    Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Added));
                     Assert.That(e.IsRemoteUpdated, Is.False);
-                    Assert.That(e.Path.Replace('/', Path.DirectorySeparatorChar), Is.EqualTo(file4));
+                    Assert.That(e.Path, Is.EqualTo(file4));
                     visited = true;
                 });
                 Assert.That(visited, Is.True);
@@ -347,16 +347,17 @@ namespace SharpSvn.Tests
                 {
                     Assert.That(n++, Is.EqualTo(0));
                     Assert.That(e.FullPath, Is.EqualTo(local));
-                    Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
+                    Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Deleted));
                     Assert.That(e.Switched, Is.False);
+                    Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
                     Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
                     Assert.That(e.IsRemoteUpdated, Is.EqualTo(false));
-                    Assert.That(e.LocalContentStatus, Is.EqualTo(SvnStatus.Deleted));
+                    Assert.That(e.LocalNodeStatus, Is.EqualTo(SvnStatus.Deleted));
                     Assert.That(e.LocalCopied, Is.EqualTo(false));
                     Assert.That(e.Wedged, Is.EqualTo(false));
                     Assert.That(e.LocalPropertyStatus, Is.EqualTo(SvnStatus.None));
                     Assert.That(e.Path, Is.EqualTo(local));
-                    Assert.That(e.RemoteContentStatus, Is.EqualTo(SvnStatus.None));
+                    Assert.That(e.RemoteNodeStatus, Is.EqualTo(SvnStatus.None));
                     Assert.That(e.RemoteLock, Is.Null);
                     Assert.That(e.RemotePropertyStatus, Is.EqualTo(SvnStatus.None));
                     Assert.That(e.RemoteUpdateCommitAuthor, Is.Null);
@@ -365,6 +366,7 @@ namespace SharpSvn.Tests
                     Assert.That(e.RemoteUpdateRevision, Is.EqualTo(-1L));
                     Assert.That(e.Switched, Is.EqualTo(false));
 
+#pragma warning disable 0618
                     Assert.That(e.WorkingCopyInfo, Is.Not.Null);
                     Assert.That(e.WorkingCopyInfo.ChangeList, Is.Null);
                     Assert.That(e.WorkingCopyInfo.Checksum, Is.Not.Null);
@@ -397,7 +399,7 @@ namespace SharpSvn.Tests
                     Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
                     Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Delete));
                     Assert.That(e.WorkingCopyInfo.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
-
+#pragma warning restore 0618
                     visited = true;
                 });
                 Assert.That(visited, "Visited handler");
