@@ -35,12 +35,19 @@ perform_crop(void *baton,
 
     UNUSED_ALWAYS(result_pool);
 
-    SVN_ERR(svn_wc_crop_tree2(dcb->ctx->wc_ctx,
-                              dcb->target_abspath,
-                              dcb->depth,
-                              dcb->ctx->cancel_func, dcb->ctx->cancel_baton,
-                              dcb->ctx->notify_func2, dcb->ctx->notify_baton2,
-                              scratch_pool));
+    if (dcb->depth == svn_depth_exclude)
+        SVN_ERR(svn_wc_exclude(dcb->ctx->wc_ctx,
+                               dcb->target_abspath,
+                               dcb->ctx->cancel_func, dcb->ctx->cancel_baton,
+                               dcb->ctx->notify_func2, dcb->ctx->notify_baton2,
+                               scratch_pool));
+    else
+        SVN_ERR(svn_wc_crop_tree2(dcb->ctx->wc_ctx,
+                                  dcb->target_abspath,
+                                  dcb->depth,
+                                  dcb->ctx->cancel_func, dcb->ctx->cancel_baton,
+                                  dcb->ctx->notify_func2, dcb->ctx->notify_baton2,
+                                  scratch_pool));
 
     return SVN_NO_ERROR;
 }
@@ -49,7 +56,7 @@ bool SvnClient::CropWorkingCopy(System::String ^path, SvnDepth toDepth, SvnCropW
 {
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
-	else if (toDepth < SvnDepth::Exclude || toDepth >= SvnDepth::Files)
+    else if ((toDepth < SvnDepth::Exclude || toDepth >= SvnDepth::Files) && toDepth != SvnDepth::Exclude)
 		throw gcnew ArgumentOutOfRangeException("toDepth", toDepth, SharpSvnStrings::CropToValidDepth);
 	else if (!IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
