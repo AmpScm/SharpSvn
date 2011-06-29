@@ -1,3 +1,4 @@
+; SharpSvn build environment variables
 SVNVERSION=1.7
 SVNMAJOR=1
 SVNMINOR=7
