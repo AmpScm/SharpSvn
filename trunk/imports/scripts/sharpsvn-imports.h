@@ -46,18 +46,12 @@
 #pragma comment(lib, "libsvn_fs-1.lib")
 #pragma comment(lib, "libsvn_fs_base-1.lib")
 #pragma comment(lib, "libsvn_fs_fs-1.lib")
-#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
 #pragma comment(lib, "libsvn_fs_util-1.lib")
-#endif
 
 #pragma comment(lib, "libsvn_ra-1.lib")
-#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
 #pragma comment(lib, "libsvn_ra_neon-1.lib")
 #pragma comment(lib, "libsvn_ra_serf-1.lib")
 #pragma comment(lib, "libsasl.lib")
-#else
-#pragma comment(lib, "libsvn_ra_dav-1.lib")
-#endif
 #pragma comment(lib, "libsvn_ra_local-1.lib")
 #pragma comment(lib, "libsvn_ra_svn-1.lib")
 #pragma comment(lib, "libsvn_repos-1.lib")
@@ -65,11 +59,6 @@
 #pragma comment(lib, "libsvn_wc-1.lib")
 #pragma comment(lib, "xml.lib")
 #pragma comment(lib, "libneon.lib")
-#if (SERF_MAJOR_VERSION == 0)
-#pragma comment(lib, "serf.lib")
-#else
-#pragma comment(lib, "serf-1.lib")
-#endif
 
 #pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
@@ -80,7 +69,7 @@
 #pragma comment(lib, "sqlite3.lib")
 #endif
 
-#if (APR_MAJOR_VERSION == 0) && (APR_MINOR_VERSION == 9)
+#if (APR_MAJOR_VERSION == 0)
 #  pragma comment(lib, "apr.lib")
 #  pragma comment(lib, "aprutil.lib")
 #elif (APR_MAJOR_VERSION == 1)
@@ -88,4 +77,12 @@
 #  pragma comment(lib, "aprutil-1.lib")
 #else
 #  error Only apr 0.9.* and 1.* are supported at this time
+#endif
+
+#if (SERF_MAJOR_VERSION == 0)
+#pragma comment(lib, "serf.lib")
+#elif (SERF_MAJOR_VERSION == 1)
+#pragma comment(lib, "serf-1.lib")
+#else
+#error Only Serf 0.x and 1.x are supported
 #endif
