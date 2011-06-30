@@ -356,8 +356,11 @@ const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
 	pStr->data = pChars;
 	pStr->len = bytes->Length;
 
-	pin_ptr<Byte> pBytes = &bytes[0];
-	memcpy(pChars, pBytes, bytes->Length);
+    if (bytes->Length > 0)
+    {
+	    pin_ptr<Byte> pBytes = &bytes[0];
+	    memcpy(pChars, pBytes, bytes->Length);
+    }
 
 	return pStr;
 }
