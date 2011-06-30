@@ -17,6 +17,22 @@
 
 #pragma once
 
+#ifndef SVN_VER_MAJOR
+#error Needs SVN_VER_MAJOR
+#endif
+
+#ifndef APR_MAJOR_VERSION
+#error Needs APR_MAJOR_VERSION
+#endif
+
+#ifndef SERF_MAJOR_VERSION
+#error Needs SERF_MAJOR_VERSION
+#endif
+
+#ifndef DB_VERSION_MAJOR
+#error Needs DB_VERSION_MAJOR
+#endif
+
 // All required libraries SharpSvn needs to bind to the current build
 
 #pragma comment(lib, "intl3_svn.lib")
@@ -49,8 +65,10 @@
 #pragma comment(lib, "libsvn_wc-1.lib")
 #pragma comment(lib, "xml.lib")
 #pragma comment(lib, "libneon.lib")
-#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 5)
+#if (SERF_MAJOR_VERSION == 0)
 #pragma comment(lib, "serf.lib")
+#else
+#pragma comment(lib, "serf-1.lib")
 #endif
 
 #pragma comment(lib, "zlib.lib")
