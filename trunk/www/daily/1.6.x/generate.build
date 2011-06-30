@@ -14,7 +14,7 @@
     <exec program="svn.exe" verbose="true" output="project-log.xml">
       <arg line="log -v --xml -r" />
       <arg value="BASE:{${baseDate}}" />
-      <arg value="../../src" />
+      <arg value="../../../src" />
     </exec>
     <style
       style="generate-daily-report.xsl"
