@@ -145,6 +145,13 @@ namespace SharpSvn.Tests.Commands
             Client.GetProperty(dir, SvnPropertyNames.SvnIgnore, out v);
             Assert.That(v, Is.EqualTo("NewFile.ignored\r\n"));
         }
+
+        [Test]
+        public void SetEmtpy()
+        {
+            string path = Path.Combine(this.WcPath, "Form.cs");
+            this.Client.SetProperty(path, "EmptyBinary", new byte[0]);
+        }
     }
 
 }
