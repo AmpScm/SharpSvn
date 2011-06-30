@@ -6,7 +6,6 @@
       <in>
         <items basedir="${svnBase}">
           <include name="serf/serf.vcproj" />
-          <!--include name="neon/neon.vcproj" /-->
         </items>
       </in>
       <do>
@@ -47,8 +46,8 @@
   <target name="copy-serf" depends="build-serf, build-svn">
     <copy todir="${serfDir}/Debug">
       <fileset basedir="${serfDir}/Release">
-		<include name="*.lib" />
-		<include name="*.pdb" />
+        <include name="*.lib" />
+        <include name="*.pdb" />
       </fileset>
     </copy>
   </target>
