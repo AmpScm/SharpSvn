@@ -2,9 +2,9 @@
 <project name="Generate log" default="build-log" basedir=".">
 
   <target name="build-log">
-	<loadfile file="../../last.uri" property="dlUrl" />
-	<loadfile file="../../last-x64.uri" property="dlX64Url" />
-	<loadfile file="../../last.ex.uri" property="dlExUrl" />
+	<loadfile file="../../../last.uri" property="dlUrl" />
+	<loadfile file="../../../last-x64.uri" property="dlX64Url" />
+	<loadfile file="../../../last.ex.uri" property="dlExUrl" />
     <property name="dlX64Url" value="${string::trim(dlX64Url)}" />  
     <property name="dlUrl" value="${string::trim(dlUrl)}" />  
     <property name="dlExUrl" value="${string::trim(dlExUrl)}" />  
