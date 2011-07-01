@@ -465,7 +465,7 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
 	const char* resultUrl = nullptr;
-	EnsureState(SvnContextState::AuthorizationInitialized);
+    EnsureState(SvnContextState::ConfigLoaded);
 	AprPool pool(%_pool);
 	NoArgsStore store(this, %pool);
 
@@ -473,6 +473,28 @@ Uri^ SvnClient::GetRepositoryRoot(String^ target)
 
 	if (!err && resultUrl)
 		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
+	else if (err)
+		svn_error_clear(err);
+
+	return nullptr;
+}
+
+String^ SvnClient::GetWorkingCopyRoot(String^ path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+	else if (!IsNotUri(path))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+	const char* wcroot_abspath = nullptr;
+	EnsureState(SvnContextState::ConfigLoaded);
+	AprPool pool(%_pool);
+	NoArgsStore store(this, %pool);
+
+	svn_error_t* err = svn_client_get_wc_root(&wcroot_abspath, pool.AllocAbsoluteDirent(path), CtxHandle, pool.Handle, pool.Handle);
+
+	if (!err && wcroot_abspath)
+		return Utf8_PathPtrToString(wcroot_abspath, %pool);
 	else if (err)
 		svn_error_clear(err);
 

@@ -1254,6 +1254,9 @@ namespace SharpSvn {
 		/// <returns>true if successfull, otherwise false</returns>
 		bool TryGetRepositoryId(String^ path, [Out] Guid% id);
 
+		/// <summary>Gets the (relevant) working copy root of a path or <c>null</c> if the path doesn't have one</summary>
+		String^ GetWorkingCopyRoot(String^ path);
+
 #pragma region // Obsolete
 		[Obsolete("Use TryGetRepositoryId")]
 		bool GetRepositoryIdFromUri(Uri^ uri, [Out] Guid% id)

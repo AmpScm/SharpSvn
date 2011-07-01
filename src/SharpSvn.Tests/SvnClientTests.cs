@@ -570,5 +570,11 @@ namespace SharpSvn.Tests
                 Assert.That(file.FullName.StartsWith("C:\\"));
             }
         }
+
+        [Test]
+        public void FetchWcroot()
+        {
+            Assert.That(Client.GetWorkingCopyRoot(WcPath), Is.EqualTo(WcPath));
+        }
     }
 }
