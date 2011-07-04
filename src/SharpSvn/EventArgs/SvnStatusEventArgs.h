@@ -29,11 +29,11 @@ namespace SharpSvn {
 		// This class looks remarkibly simalar to SvnWorkingCopyEntryEventArgs
 		// I don't use them as the same to keep both open for future extensions
 		// in different directions
-        SvnClientContext^ _client;
-        const svn_client_status_t *_status;
+		SvnClientContext^ _client;
+		const svn_client_status_t *_status;
 		const svn_wc_entry_t* _entry;
 		AprPool^ _pool;
-        bool _ensured;
+		bool _ensured;
 
 		String^ _name;
 		__int64 _revision;
@@ -83,7 +83,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_name && _entry && _entry->name && _pool)
 					_name = SvnBase::Utf8_PathPtrToString(_entry->name, _pool);
 
@@ -97,7 +97,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-                Ensure();
+				Ensure();
 				return _revision;
 			}
 		}
@@ -108,7 +108,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_uri && _entry && _entry->url)
 					_uri = SvnBase::Utf8_PtrToUri(_entry->url, _nodeKind);
 
@@ -122,7 +122,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_repositoryUri && _entry && _entry->repos)
 					_repositoryUri = SvnBase::Utf8_PtrToUri(_entry->repos, SvnNodeKind::Directory);
 
@@ -131,20 +131,23 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the repository id as Guid</summary>
+		[Obsolete("Use information from SvnStatusEventArgs.Path to avoid expensive lookup")]
 		property Guid RepositoryId
 		{
 			Guid get()
 			{
+				Ensure();
 				return RepositoryIdValue ? Guid(RepositoryIdValue) : Guid::Empty;
 			}
 		}
 
 		/// <summary>Gets the repository id as String</summary>
+		[Obsolete("Use information from SvnStatusEventArgs.Path to avoid expensive lookup")]
 		property String^ RepositoryIdValue
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_repositoryId && _entry && _entry->uuid)
 					_repositoryId = SvnBase::Utf8_PtrToString(_entry->uuid);
 
@@ -158,7 +161,7 @@ namespace SharpSvn {
 		{
 			SvnNodeKind get()
 			{
-                Ensure();
+				Ensure();
 				return _nodeKind;
 			}
 		}
@@ -169,7 +172,7 @@ namespace SharpSvn {
 		{
 			SvnSchedule get()
 			{
-                Ensure();
+				Ensure();
 				return _schedule;
 			}
 		}
@@ -183,7 +186,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _copied;
 			}
 		}
@@ -192,7 +195,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _deleted;
 			}
 		}
@@ -201,7 +204,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _absent;
 			}
 		}
@@ -210,7 +213,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _incomplete;
 			}
 		}
@@ -219,7 +222,7 @@ namespace SharpSvn {
 		{
 			System::Uri^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_copyFrom && _entry && _entry->copyfrom_url)
 					_copyFrom = SvnBase::Utf8_PtrToUri(_entry->copyfrom_url, _nodeKind);
 
@@ -231,7 +234,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-                Ensure();
+				Ensure();
 				return _copyFromRev;
 			}
 		}
@@ -240,7 +243,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_conflictOld && _entry && _entry->conflict_old)
 					_conflictOld = SvnBase::Utf8_PtrToString(_entry->conflict_old)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -252,7 +255,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_conflictNew && _entry && _entry->conflict_new)
 					_conflictNew = SvnBase::Utf8_PtrToString(_entry->conflict_new)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -264,7 +267,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_conflictWork && _entry && _entry->conflict_wrk)
 					_conflictWork = SvnBase::Utf8_PtrToString(_entry->conflict_wrk)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -276,7 +279,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_prejfile && _entry && _entry->prejfile)
 					_prejfile = SvnBase::Utf8_PtrToString(_entry->prejfile)->Replace('/', System::IO::Path::DirectorySeparatorChar);
 
@@ -289,7 +292,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-                Ensure();
+				Ensure();
 				return DateTime::MinValue;
 			}
 		}
@@ -298,7 +301,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-                Ensure();
+				Ensure();
 				return _textTime;
 			}
 		}
@@ -307,7 +310,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_checksum && _entry && _entry->checksum)
 					_checksum = SvnBase::Utf8_PtrToString(_entry->checksum);
 
@@ -320,7 +323,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-                Ensure();
+				Ensure();
 				return _lastChangeRev;
 			}
 		}
@@ -330,7 +333,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-                Ensure();
+				Ensure();
 				return _lastChangeTime;
 			}
 		}
@@ -340,7 +343,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_lastChangeAuthor && _entry && _entry->cmt_author)
 					_lastChangeAuthor = SvnBase::Utf8_PtrToString(_entry->cmt_author);
 
@@ -353,7 +356,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_lockToken && _entry && _entry->lock_token)
 					_lockToken = SvnBase::Utf8_PtrToString(_entry->lock_token);
 
@@ -366,7 +369,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_lockOwner && _entry && _entry->lock_owner)
 					_lockOwner = SvnBase::Utf8_PtrToString(_entry->lock_owner);
 
@@ -379,7 +382,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_lockComment && _entry && _entry->lock_comment)
 					_lockComment = SvnBase::Utf8_PtrToString(_entry->lock_comment);
 
@@ -392,7 +395,7 @@ namespace SharpSvn {
 		{
 			DateTime get()
 			{
-                Ensure();
+				Ensure();
 				return _lockTime;
 			}
 		}
@@ -402,7 +405,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _hasProperties;
 			}
 		}
@@ -412,7 +415,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _hasPropertyChanges;
 			}
 		}
@@ -422,7 +425,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_changelist && _entry && _entry->changelist)
 					_changelist = SvnBase::Utf8_PtrToString(_entry->changelist);
 
@@ -434,7 +437,7 @@ namespace SharpSvn {
 		{
 			__int64 get()
 			{
-                Ensure();
+				Ensure();
 				return _wcSize;
 			}
 		}
@@ -443,7 +446,7 @@ namespace SharpSvn {
 		{
 			bool get()
 			{
-                Ensure();
+				Ensure();
 				return _keepLocal;
 			}
 		}
@@ -453,7 +456,7 @@ namespace SharpSvn {
 		{
 			SvnDepth get()
 			{
-                Ensure();
+				Ensure();
 				return _depth;
 			}
 		}
@@ -466,7 +469,7 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_fileExternalPath && _entry && _entry->file_external_path)
 					_fileExternalPath = SvnBase::Utf8_PtrToString(_entry->file_external_path);
 
@@ -478,7 +481,7 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_fileExternalRevision && _entry && _entry->file_external_path)
 					_fileExternalRevision = SvnRevision::Load(&_entry->file_external_rev);
 
@@ -490,7 +493,7 @@ namespace SharpSvn {
 		{
 			SvnRevision^ get()
 			{
-                Ensure();
+				Ensure();
 				if (!_fileExternalPegRevision && _entry && _entry->file_external_path)
 					_fileExternalPegRevision = SvnRevision::Load(&_entry->file_external_peg_rev);
 
@@ -538,8 +541,8 @@ namespace SharpSvn {
 			}
 			finally
 			{
-                _client = nullptr;
-                _status = nullptr;
+				_client = nullptr;
+				_status = nullptr;
 				_entry = nullptr;
 				_pool = nullptr;
 			}
@@ -568,6 +571,7 @@ namespace SharpSvn {
 		String^ _lastChangeAuthor;
 		Uri^ _reposRoot;
 		Uri^ _uri;
+        String^ _repositoryId;
 		initonly bool _switched;
 		initonly bool _fileExternal;
 		SvnLockInfo^ _localLock;
@@ -832,6 +836,27 @@ namespace SharpSvn {
 			}
 		}
 
+		/// <summary>Gets the repository id as Guid</summary>
+		property Guid RepositoryId
+		{
+			Guid get()
+			{
+				return RepositoryIdValue ? Guid(RepositoryIdValue) : Guid::Empty;
+			}
+		}
+
+		/// <summary>Gets the repository id as String</summary>
+		property String^ RepositoryIdValue
+		{
+			String^ get()
+			{
+				if (!_repositoryId && _status && _status->repos_uuid)
+					_repositoryId = SvnBase::Utf8_PtrToString(_status->repos_uuid);
+
+				return _repositoryId;
+			}
+		}
+
 		property Uri^ Uri
 		{
 			[System::Diagnostics::DebuggerStepThrough]
@@ -1045,6 +1070,7 @@ namespace SharpSvn {
 					GC::KeepAlive(Path);
 					GC::KeepAlive(LastChangeAuthor);
 					GC::KeepAlive(RepositoryRoot);
+					GC::KeepAlive(RepositoryIdValue);
 					GC::KeepAlive(Uri);
 					GC::KeepAlive(LocalLock);
 					GC::KeepAlive(ChangeList);
