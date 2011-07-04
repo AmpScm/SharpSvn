@@ -725,13 +725,15 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Content status in working copy</summary>
-		[Obsolete("Use .LocalNodeStatus (all changes) or .LocalTextStatus (text/content only)")]
 		property SvnStatus LocalContentStatus
 		{
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnStatus get()
 			{
-				return LocalNodeStatus;
+				if (LocalNodeStatus != SvnStatus::Modified && LocalNodeStatus != SvnStatus::Conflicted)
+				    return LocalNodeStatus;
+				else
+					return LocalTextStatus;
 			}
 		}
 
@@ -929,14 +931,15 @@ namespace SharpSvn {
 			}
 		}
 
-
-		[Obsolete("Use .RemoteNodeStatus or .RemoteTextStatus")]
 		property SvnStatus RemoteContentStatus
 		{
 			[System::Diagnostics::DebuggerStepThrough]
 			SvnStatus get()
 			{
-				return RemoteNodeStatus;
+				if (LocalNodeStatus != SvnStatus::Modified && LocalNodeStatus != SvnStatus::Conflicted)
+					return RemoteNodeStatus;
+				else
+					return RemoteTextStatus;
 			}
 		}
 
