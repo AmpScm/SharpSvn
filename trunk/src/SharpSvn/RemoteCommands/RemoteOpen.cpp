@@ -22,36 +22,23 @@ bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteOpenArgs^ args)
 		throw gcnew ArgumentNullException("sessionUri");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+    else if (_session)
+        throw gcnew InvalidOperationException(SharpSvnStrings::SessionAlreadyOpen);
 
 	EnsureState(SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+	const char *psession_uri = pool.AllocUri(sessionUri);
 
 	svn_ra_session_t *session;
 
 	SVN_HANDLE(svn_client_open_ra_session(&session,
-										  pool.AllocUri(sessionUri),
+										  psession_uri,
 										  CtxHandle,
 										  _pool.Handle // Use session pool!
 										  ));
 
 	_session = session;
-	_root = nullptr;
+	_sessionRoot = Utf8_PtrToUri(psession_uri, SvnNodeKind::Directory);
 	return true;
-}
-
-Uri^ SvnRemoteSession::SessionUri::get()
-{
-	if (_root)
-		return _root;
-	else if (!_session)
-		return nullptr;
-
-	AprPool pool(%_pool);
-	const char *url;
-	SVN_THROW(svn_ra_get_session_url(_session, &url, pool.Handle));
-
-	_root = Utf8_PtrToUri(url, SvnNodeKind::Directory);
-
-	return _root;
 }

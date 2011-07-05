@@ -33,7 +33,9 @@ namespace SharpSvn {
 		AprPool _pool;
 		svn_ra_session_t *_session;
 		bool _cbInitialized;
-		Uri^ _root;
+		Uri^ _sessionRoot;
+		Uri^ _reposRoot;
+
 	public:
 		/// <summary>Initializes a new SvnRemoteSession instance</summary>
 		SvnRemoteSession();
@@ -57,7 +59,10 @@ namespace SharpSvn {
 	public:
 		property Uri^ SessionUri
 		{
-			Uri^ get();
+			Uri^ get()
+            {
+                return _sessionRoot;
+            }
 		}
 
 	public:

@@ -427,6 +427,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The session is already open.
+        /// </summary>
+        internal: static property System::String^  SessionAlreadyOpen {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This function is not available from managed code. .
         /// </summary>
         internal: static property System::String^  SvnAuthManagedPlaceholder {
@@ -726,6 +733,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific::get() {
         return ResourceManager->GetString(L"RevisionTypeMustBeHeadDateOrSpecific", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::SessionAlreadyOpen::get() {
+        return ResourceManager->GetString(L"SessionAlreadyOpen", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::SvnAuthManagedPlaceholder::get() {

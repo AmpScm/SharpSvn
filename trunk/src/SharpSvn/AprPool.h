@@ -156,10 +156,7 @@ namespace SharpSvn {
 			const char* AllocUri(Uri^ value);
 
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			const char* AllocRelpath(String^ value)
-			{
-				return AllocDirent(value);
-			}
+			const char* AllocRelpath(String^ value);
 
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			__declspec(deprecated) const char* AllocCanonical(String^ value)
