@@ -190,7 +190,7 @@ String^ SvnRemoteSession::MakeRelativePath(Uri^ uri)
 	else if (!uri->IsAbsoluteUri)
 		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
-	AprPool pool(SmallThreadPool);
+	AprPool pool(%_pool);
 	const char *result;
 
 	SVN_THROW(svn_ra_get_path_relative_to_session(_session, &result, pool.AllocUri(uri), pool.Handle));
@@ -205,7 +205,7 @@ String^ SvnRemoteSession::MakeRepositoryRootRelativePath(Uri^ uri)
 	else if (!uri->IsAbsoluteUri)
 		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
-	AprPool pool(SmallThreadPool);
+	AprPool pool(%_pool);
 	const char *result;
 
 	SVN_THROW(svn_ra_get_path_relative_to_root(_session, &result, pool.AllocUri(uri), pool.Handle));

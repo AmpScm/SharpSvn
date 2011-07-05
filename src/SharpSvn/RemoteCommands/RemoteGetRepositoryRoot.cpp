@@ -18,6 +18,12 @@ bool SvnRemoteSession::GetRepositoryRoot(SvnRemoteCommonArgs^ args, [Out] Uri^% 
 	if (!args)
 		throw gcnew ArgumentNullException("args");
 
+	if (_reposRoot)
+	{
+		uri = _reposRoot;
+		return true;
+	}
+
 	Ensure();
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
@@ -27,7 +33,7 @@ bool SvnRemoteSession::GetRepositoryRoot(SvnRemoteCommonArgs^ args, [Out] Uri^% 
 
 	SVN_HANDLE(svn_ra_get_repos_root2(_session, &url, pool.Handle));
 
-	uri = Utf8_PtrToUri(url, SvnNodeKind::Directory);
+	uri = _reposRoot = Utf8_PtrToUri(url, SvnNodeKind::Directory);
 
 	return true;
 }

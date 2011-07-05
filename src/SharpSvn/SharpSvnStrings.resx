@@ -306,4 +306,7 @@
   <data name="CanOnlyResolveHeadDateandExplicitRevisions" xml:space="preserve">
     <value>Can only resolve head, number and date revisions</value>
   </data>
+  <data name="SessionAlreadyOpen" xml:space="preserve">
+    <value>The session is already open</value>
+  </data>
 </root>

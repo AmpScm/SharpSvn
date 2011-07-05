@@ -75,10 +75,10 @@ bool SvnRemoteSession::LocationSegments(String^ relPath, SvnRemoteLocationSegmen
 
         args->_nOffset = strlen(session_root) - strlen(repos_root);
 
-        if (_root == nullptr)
-            _root = Utf8_PtrToUri(repos_root, SvnNodeKind::Directory);
+        if (!_reposRoot)
+            _reposRoot = Utf8_PtrToUri(repos_root, SvnNodeKind::Directory);
 
-        args->_reposUri = _root;
+        args->_reposUri = _reposRoot;
 
         SVN_HANDLE(svn_ra_get_location_segments(_session,
                                                 pool.AllocRelpath(relPath),

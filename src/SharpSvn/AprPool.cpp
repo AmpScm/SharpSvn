@@ -267,6 +267,23 @@ const char* AprPool::AllocDirent(String^ value)
 		return (const char*)AllocCleared(1);
 }
 
+const char* AprPool::AllocRelpath(String^ value)
+{
+	if (!value)
+		throw gcnew ArgumentNullException("value");
+
+	if (value->Length >= 1)
+	{
+		pin_ptr<unsigned char> pBytes = &(System::Text::Encoding::UTF8->GetBytes(value))[0];
+
+		return svn_relpath_canonicalize((const char*)pBytes, Handle);
+	}
+	else
+		return (const char*)AllocCleared(1);
+}
+
+
+
 const char* AprPool::AllocAbsoluteDirent(String^ value)
 {
 	return AllocDirent(System::IO::Path::GetFullPath(value));
@@ -337,12 +354,12 @@ const svn_string_t* AprPool::AllocPropertyValue(String^ value, String^ propertyN
 {
 	const char* propName = AllocString(propertyName);
 
-    if (svn_prop_is_boolean(propName))
-        return AllocSvnString(value ? SVN_PROP_BOOLEAN_TRUE : "");
-    else if (svn_prop_needs_translation(propName))
-        return AllocUnixSvnString(value);
-    else
-        return AllocSvnString(value);
+	if (svn_prop_is_boolean(propName))
+		return AllocSvnString(value ? SVN_PROP_BOOLEAN_TRUE : "");
+	else if (svn_prop_needs_translation(propName))
+		return AllocUnixSvnString(value);
+	else
+		return AllocSvnString(value);
 }
 
 const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
@@ -356,11 +373,11 @@ const svn_string_t* AprPool::AllocSvnString(array<Byte>^ bytes)
 	pStr->data = pChars;
 	pStr->len = bytes->Length;
 
-    if (bytes->Length > 0)
-    {
-	    pin_ptr<Byte> pBytes = &bytes[0];
-	    memcpy(pChars, pBytes, bytes->Length);
-    }
+	if (bytes->Length > 0)
+	{
+		pin_ptr<Byte> pBytes = &bytes[0];
+		memcpy(pChars, pBytes, bytes->Length);
+	}
 
 	return pStr;
 }
