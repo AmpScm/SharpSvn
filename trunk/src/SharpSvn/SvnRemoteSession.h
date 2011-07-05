@@ -123,6 +123,7 @@ namespace SharpSvn {
 
 	public:
 		String^ MakeRelativePath(Uri^ uri);
+        String^ MakeRepositoryRootRelativePath(Uri^ uri);
 
 	public:
 		/// <summary>
