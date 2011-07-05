@@ -187,28 +187,28 @@ String^ SvnRemoteSession::MakeRelativePath(Uri^ uri)
 {
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
+	else if (!uri->IsAbsoluteUri)
+		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
-	Uri^ relativeUri = SessionUri->MakeRelativeUri(uri);
+	AprPool pool(SmallThreadPool);
+	const char *result;
 
-	if (relativeUri->IsAbsoluteUri)
-		throw gcnew ArgumentException(
-			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
-			"uri");
+	SVN_THROW(svn_ra_get_path_relative_to_session(_session, &result, pool.AllocUri(uri), pool.Handle));
 
-	String^ txt = relativeUri->ToString();
+	return Utf8_PtrToString(result);
+}
 
-	if (txt->StartsWith("../", StringComparison::Ordinal))
-	{
-		if (txt->Substring(3)->Equals(SvnTools::GetFileName(uri), StringComparison::Ordinal))
-			return "";
-		else
-			txt = "/"; // Fall in next error case
-	}
+String^ SvnRemoteSession::MakeRepositoryRootRelativePath(Uri^ uri)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
+	else if (!uri->IsAbsoluteUri)
+		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
-	if (txt->StartsWith("/", StringComparison::Ordinal))
-		throw gcnew ArgumentException(
-			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
-			"uri");
+	AprPool pool(SmallThreadPool);
+	const char *result;
 
-	return Uri::UnescapeDataString(txt);
+	SVN_THROW(svn_ra_get_path_relative_to_root(_session, &result, pool.AllocUri(uri), pool.Handle));
+
+	return Utf8_PtrToString(result);
 }
