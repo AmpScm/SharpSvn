@@ -261,5 +261,39 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(paths.ContainsKey(Path.Combine(dir,"alt2")));
         }
+
+        [Test, ExpectedException(typeof(SvnSystemException), ExpectedMessage = "Can't move", MatchType = MessageMatch.Contains)]
+        public void UpdateInUse()
+        {
+            string dir = GetTempDir();
+            Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk"), 1), dir);
+
+            using (File.OpenRead(Path.Combine(dir, "index.html")))
+            using (new Implementation.SvnFsOperationRetryOverride(0))
+            {
+                Client.Update(Path.Combine(dir, "index.html"));
+            }
+        }
+
+        [Test]
+        public void UpdateInUseWrite()
+        {
+            string dir = GetTempDir();
+            bool skippedDenied = false;
+            Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk"), 1), dir);
+            Client.Notify += delegate(object sender, SvnNotifyEventArgs e)
+            {
+                if (e.Action == SvnNotifyAction.UpdateSkipAccessDenied)
+                    skippedDenied = true;
+            };
+
+            using (File.Create(Path.Combine(dir, "index.html")))
+            using (new Implementation.SvnFsOperationRetryOverride(0))
+            {
+                Client.Update(Path.Combine(dir, "index.html"));
+            }
+
+            Assert.That(skippedDenied);
+        }
     }
 }
