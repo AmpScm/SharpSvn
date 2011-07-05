@@ -190,6 +190,9 @@ namespace SharpSvn {
 		/// <summary>An explicit update tried to update a file or directory that doesn't live in the repository and can't be brought in.</summary>
 		UpdateSkipWorkingOnly       = svn_wc_notify_update_skip_working_only,
 
+		/// <summary>An update tried to update a file or directory to which access could not be obtained.</summary>
+		UpdateSkipAccessDenied      = svn_wc_notify_update_skip_access_denied,
+
 		/// <summary>An update operation removed an external working copy.</summary>
 		UpdateExternalRemoved       =  svn_wc_notify_update_external_removed,
 
