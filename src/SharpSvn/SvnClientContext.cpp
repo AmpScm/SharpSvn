@@ -17,6 +17,7 @@
 #include "stdafx.h"
 
 #include "SvnAll.h"
+#include "SvnNames.h"
 #include "UnmanagedStructs.h"
 #include <svn_config.h>
 
@@ -69,6 +70,32 @@ void SvnClientContext::HandleProcessing(SvnProcessingEventArgs^ e)
 	/* NOOP at SvnClientContext level */
 }
 
+void SvnClientContext::SetConfigurationOption(String^ file, String^ section, String^ option, String^ value)
+{
+	if (!file)
+		throw gcnew ArgumentNullException("file");
+	else if (!section)
+		throw gcnew ArgumentNullException("section");
+	else if (!option)
+		throw gcnew ArgumentNullException("option");
+	else if (!value)
+		throw gcnew ArgumentNullException("value");
+	else if (State > SvnContextState::ConfigLoaded)
+		throw gcnew InvalidOperationException();
+
+	if (!String::Equals(file, SvnConfigNames::ConfigCategory)
+		&& !String::Equals(file, SvnConfigNames::ServersCategory))
+	{
+		throw gcnew ArgumentOutOfRangeException("file");
+	}
+
+	if (!_configOverrides)
+		_configOverrides = gcnew List<SvnConfigItem^>();
+
+	_configOverrides->Add(gcnew SvnConfigItem(file, section, option, value));
+}
+
+
 void SvnClientContext::EnsureState(SvnContextState requiredState)
 {
 	if (!_pool)
@@ -88,8 +115,24 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 	{
 		ApplyUserDiffConfig();
 
-		_contextState = SvnContextState::ConfigPrepared;
+		if (_pool && _configOverrides && _configOverrides->Count > 0)
+		{
+			AprPool sp(_pool);
+			for each (SvnConfigItem^ item in _configOverrides)
+			{
+				svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, sp.AllocString(item->File), APR_HASH_KEY_STRING);
+
+				if (!cfg)
+					continue;
+
+				svn_config_set(cfg, _pool->AllocString(item->Section), _pool->AllocString(item->Option),
+							   _pool->AllocString(item->Value));
+			}
+		}
+
+		_contextState = SvnContextState::ConfigLoaded;
 	}
+
 
 	if (requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
 	{
@@ -128,6 +171,7 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 		}
 
 		// TODO: Initialize Plink for ssh sessions?
+		System::Diagnostics::Debug::Assert(State == SvnContextState::AuthorizationInitialized);
 	}
 }
 
@@ -366,7 +410,7 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 		path = nullptr;
 
 	AprPool tmpPool(_pool);
-	const char* szPath = path ? tmpPool.AllocDirent(path) : nullptr;
+	const char* szPath = path ? tmpPool.AllocAbsoluteDirent(path) : nullptr;
 
 	if (ensurePath)
 		SVN_THROW(svn_config_ensure(szPath, tmpPool.Handle));
@@ -390,6 +434,25 @@ void SvnClientContext::LoadConfiguration(String ^path)
 void SvnClientContext::LoadConfigurationDefault()
 {
 	LoadConfiguration(nullptr, true);
+}
+
+void SvnClientContext::UseDefaultConfiguration()
+{
+	if (State >= SvnContextState::ConfigPrepared)
+		throw gcnew InvalidOperationException("Configuration already loaded");
+
+	apr_hash_t* cfg = apr_hash_make(_pool->Handle);
+	svn_config_t *cf;
+
+	SVN_THROW(svn_config_create(&cf, FALSE, _pool->Handle));
+	apr_hash_set(cfg, SVN_CONFIG_CATEGORY_SERVERS, APR_HASH_KEY_STRING, cf);
+
+	SVN_THROW(svn_config_create(&cf, FALSE, _pool->Handle));
+	apr_hash_set(cfg, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING, cf);
+
+	CtxHandle->config = cfg;
+
+	_contextState = SvnContextState::ConfigPrepared;
 }
 
 void SvnClientContext::MergeConfiguration(String^ path)
@@ -455,7 +518,7 @@ SvnClientContext::ArgsStore::~ArgsStore()
 
 SvnClientContext::NoArgsStore::NoArgsStore(SvnClientContext^ client, AprPool^ pool)
 {
-    if (client->_currentArgs)
+	if (client->_currentArgs)
 		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
 
 	_client = client;
@@ -475,7 +538,7 @@ SvnClientContext::NoArgsStore::NoArgsStore(SvnClientContext^ client, AprPool^ po
 	}
 	catch(Exception^)
 	{
-        SvnClientContext::_activeContext = _lastContext;
+		SvnClientContext::_activeContext = _lastContext;
 		throw;
 	}
 }
@@ -555,5 +618,5 @@ extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
 
 void SvnBase::InstallSslDialogHandler()
 {
-    sharpsvn_get_ui_parent_handler = sharpsvn_get_ui_parent;
+	sharpsvn_get_ui_parent_handler = sharpsvn_get_ui_parent;
 }

@@ -22,7 +22,7 @@ namespace SharpSvn {
 
     public ref class SvnClientConfiguration sealed : public SvnBase
     {
-        SvnClient^ _client;
+        initonly SvnClient^ _client;
     internal:
         SvnClientConfiguration(SvnClient^ client)
         {
@@ -79,6 +79,9 @@ namespace SharpSvn {
         {
             System::Collections::Generic::IEnumerable<String^>^ get();
         }
+
+        /// <summary>While the configuration isn't used yet, allows overriding specific configuration options</summary>
+        void SetOption(String^ file, String^ section, String^ option, String^ value);
     };
 
 }
