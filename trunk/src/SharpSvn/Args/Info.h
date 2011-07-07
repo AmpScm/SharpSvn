@@ -25,6 +25,8 @@ namespace SharpSvn {
 		SvnRevision^ _revision;
 		SvnDepth _depth;
 		SvnChangeListCollection^ _changelists;
+		bool _filterExcluded;
+		bool _filterActualOnly;
 
 	public:
 		DECLARE_EVENT(SvnInfoEventArgs^, Info);
@@ -47,6 +49,24 @@ namespace SharpSvn {
 			virtual SvnCommandType get() override sealed
 			{
 				return SvnCommandType::Info;
+			}
+		}
+
+        /// <summary>Include excluded nodes in the result (Default true)</summary>
+		property bool RetrieveExcluded
+		{
+			bool get()
+			{
+				return !_filterExcluded;
+			}
+		}
+
+        /// <summary>Include actual only (tree conflict) nodes in the result (Default true)</summary>
+		property bool RetrieveActualOnly
+		{
+			bool get()
+			{
+				return !_filterActualOnly;
 			}
 		}
 

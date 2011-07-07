@@ -92,10 +92,12 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 				: pool.AllocString(targetName),
 			&pegRev,
 			&rev,
+			(svn_depth_t)args->Depth,
+			args->RetrieveExcluded,
+			args->RetrieveActualOnly,
+			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			svn_info_receiver,
 			(void*)_clientBaton->Handle,
-			(svn_depth_t)args->Depth,
-			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			CtxHandle,
 			pool.Handle);
 
