@@ -60,25 +60,13 @@ static svn_error_t *file_version_window_handler(
 
 	svn_error_t * r = dbaton->wrapped_handler(window, dbaton->wrapped_baton);
 
-	if(r)
+	if(r || window)
 		return r;
 
 	SvnFileVersionEventArgs^ e = nullptr;
 	try
 	{
 		SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)dbaton->clientBaton);
-		if (window)
-		{
-			SvnCancelEventArgs^ ca = gcnew SvnCancelEventArgs();
-
-			client->HandleClientCancel(ca);
-
-			if (ca->Cancel)
-				return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled");
-
-
-			return nullptr; // We are only interested after the file is complete
-		}
 
 		SvnFileVersionsArgs^ args = dynamic_cast<SvnFileVersionsArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 		if (!args)
@@ -242,7 +230,7 @@ static svn_error_t *file_version_handler(
 			if (args->_lastFile)
 				SVN_ERR(svn_stream_open_readonly(&last_stream, args->_lastFile, curPool->Handle, curPool->Handle));
 			else
-				last_stream = svn_stream_empty(curPool->Handle);
+				last_stream = nullptr; /* Handled as svn_stream_empty(curPool->Handle); */
 
 			AprPool^ filePool;
 
@@ -571,16 +559,15 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 		const char* eol = nullptr;
 		if (ls == SvnLineStyle::Default)
 		{
-			svn_string_t* val = nullptr;
+			const char* val;
 
-			if (_fileProps)
-				val = (svn_string_t*)apr_hash_get(_fileProps, SVN_PROP_EOL_STYLE, APR_HASH_KEY_STRING);
+			val = svn_prop_get_value(_fileProps, SVN_PROP_EOL_STYLE);
 
 			if(val)
 			{
 				svn_subst_eol_style style = svn_subst_eol_style_native;
 
-				svn_subst_eol_style_from_value(&style, &eol, val->data);
+				svn_subst_eol_style_from_value(&style, &eol, val);
 			}
 		}
 		else
