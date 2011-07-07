@@ -79,3 +79,17 @@ System::Collections::Generic::IEnumerable<String^>^ SvnClientConfiguration::Glob
 
 	return ignList->AsReadOnly();
 }
+
+void SvnClientConfiguration::SetOption(String^ file, String^ section, String^ option, String^ value)
+{
+    if (!file)
+		throw gcnew ArgumentNullException("file");
+	else if (!section)
+		throw gcnew ArgumentNullException("section");
+	else if (!option)
+		throw gcnew ArgumentNullException("option");
+	else if (!value)
+		throw gcnew ArgumentNullException("value");
+
+    _client->SetConfigurationOption(file, section, option, value);
+}

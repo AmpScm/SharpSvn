@@ -48,6 +48,64 @@ namespace SharpSvn {
 		};
 
 		ref class SvnLibrary;
+
+		ref class SvnConfigItem
+		{
+			initonly String ^_file;
+			initonly String ^_section;
+			initonly String ^_option;
+			initonly String ^_value;
+
+		public:
+			SvnConfigItem(String^ file, String^ section, String^ option, String^ value)
+			{
+				if (!file)
+					throw gcnew ArgumentNullException("file");
+				else if (!section)
+					throw gcnew ArgumentNullException("section");
+				else if (!option)
+					throw gcnew ArgumentNullException("option");
+				else if (!value)
+					throw gcnew ArgumentNullException("value");
+
+				_file = file;
+				_section = section;
+				_option = option;
+				_value = value;
+			}
+
+			property String^ File
+			{
+				String^ get()
+				{
+					return _file;
+				}
+			}
+
+			property String^ Section
+			{
+				String^ get()
+				{
+					return _section;
+				}
+			}
+
+			property String^ Option
+			{
+				String^ get()
+				{
+					return _option;
+				}
+			}
+
+			property String^ Value
+			{
+				String^ get()
+				{
+					return _value;
+				}
+			}
+		};
 	}
 
 	ref class SvnErrorEventArgs;
@@ -127,6 +185,7 @@ namespace SharpSvn {
 
 	private:
 		~SvnClientContext();
+        System::Collections::Generic::List<SvnConfigItem^>^ _configOverrides;
 
 	internal:
 		property svn_client_ctx_t *CtxHandle
@@ -134,6 +193,8 @@ namespace SharpSvn {
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			svn_client_ctx_t *get();
 		}
+
+        void SetConfigurationOption(String^ file, String^ section, String^ option, String^ value);
 
 	private:
 		void ApplyCustomRemoteConfig();
@@ -150,6 +211,9 @@ namespace SharpSvn {
 		void LoadConfigurationDefault();
 		/// <summary>Merges configuration from the specified path into the existing configuration</summary>
 		void MergeConfiguration(String^ path);
+
+		/// <summary>Initializes a default configuration. Avoids loading a configuration at a later time</summary>
+		void UseDefaultConfiguration();
 
 	internal:
 		void EnsureState(SvnContextState requiredState);
