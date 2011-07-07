@@ -49,8 +49,6 @@ struct file_version_delta_baton_t
 	svn_txdelta_window_handler_t wrapped_handler;
 	void *wrapped_baton;
 
-	apr_file_t *source_file;  /* the delta source */
-	apr_file_t *file;  /* the result of the delta */
 	const char *filename;
 };
 
@@ -87,9 +85,6 @@ static svn_error_t *file_version_window_handler(
 			return nullptr;
 
 		AprPool^ next = args->_prevPool;
-
-		if (dbaton->source_file)
-			svn_io_file_close(dbaton->source_file, next->Handle);
 
 		// Clean up for the next round
 		args->_lastFile = dbaton->filename;
@@ -236,18 +231,18 @@ static svn_error_t *file_version_handler(
 
 		if (e->HasContentChanges)
 		{
-			AprPool ^_pool = args->_curPool;
+			AprPool ^curPool = args->_curPool;
 
-			file_version_delta_baton_t* delta_baton = (file_version_delta_baton_t*)_pool->AllocCleared(sizeof(file_version_delta_baton_t));
+			file_version_delta_baton_t* delta_baton = (file_version_delta_baton_t*)curPool->AllocCleared(sizeof(file_version_delta_baton_t));
 
 			delta_baton->clientBaton = baton;
 
+            svn_stream_t *cur_stream, *last_stream;
+
 			if (args->_lastFile)
-				SVN_ERR(svn_io_file_open(&delta_baton->source_file, args->_lastFile,
-										 APR_READ, APR_OS_DEFAULT, _pool->Handle));
+				SVN_ERR(svn_stream_open_readonly(&last_stream, args->_lastFile, curPool->Handle, curPool->Handle));
 			else
-				/* Means empty stream below. */
-				delta_baton->source_file = NULL;
+				last_stream = svn_stream_empty(curPool->Handle);
 
 			AprPool^ filePool;
 
@@ -256,18 +251,12 @@ static svn_error_t *file_version_handler(
 			else
 				filePool = args->_curPool;
 
-			SVN_ERR(svn_io_open_unique_file3(&delta_baton->file,
-				&delta_baton->filename,
-				nullptr,
-				svn_io_file_del_on_pool_cleanup,
-				filePool->Handle, filePool->Handle));
-
-			svn_stream_t* last_stream = svn_stream_from_aprfile2(delta_baton->source_file, false, _pool->Handle);
-			svn_stream_t* cur_stream = svn_stream_from_aprfile2(delta_baton->file, false, _pool->Handle);
+			SVN_ERR(svn_stream_open_unique(&cur_stream, &delta_baton->filename, nullptr,
+				                           svn_io_file_del_on_pool_cleanup, filePool->Handle, curPool->Handle));
 
 			/* Get window handler for applying delta. */
 			svn_txdelta_apply(last_stream, cur_stream, NULL, NULL,
-				_pool->Handle,
+				curPool->Handle,
 				&delta_baton->wrapped_handler,
 				&delta_baton->wrapped_baton);
 
@@ -572,10 +561,8 @@ Stream^ SvnFileVersionEventArgs::GetContentStream(SvnFileVersionWriteArgs^ args)
 	if (!fvArgs)
 		throw gcnew InvalidOperationException("This method can only be invoked when the client is still handling this request");
 
-	apr_file_t* txt;
-	SVN_THROW(svn_io_file_open(&txt, fvArgs->_lastFile, APR_READ, APR_OS_DEFAULT, _pool->Handle));
-
-	svn_stream_t* stream = svn_stream_from_aprfile2(txt, false, _pool->Handle);
+	svn_stream_t* stream;
+	SVN_THROW(svn_stream_open_readonly(&stream, fvArgs->_lastFile, _pool->Handle, _pool->Handle));
 
 	if (!args->WriteInRepositoryFormat)
 	{
