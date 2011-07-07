@@ -206,6 +206,7 @@ namespace SharpSvn {
 
 		literal String^		HelpersSection				= SVN_CONFIG_SECTION_HELPERS;
 		literal String^			EditorCommand			= SVN_CONFIG_OPTION_EDITOR_CMD;
+		literal String^			DiffExtensions			= SVN_CONFIG_OPTION_DIFF_EXTENSIONS;
 		literal String^			DiffCommand				= SVN_CONFIG_OPTION_DIFF_CMD;
 		literal String^			Diff3Command			= SVN_CONFIG_OPTION_DIFF3_CMD;
 		literal String^			Diff3HasProgramArguments= SVN_CONFIG_OPTION_DIFF3_HAS_PROGRAM_ARG;
