@@ -25,6 +25,7 @@ using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -294,6 +295,37 @@ namespace SharpSvn.Tests.Commands
             }
 
             Assert.That(skippedDenied);
+        }
+
+        [Test]
+        public void StatusReportsSparse()
+        {
+            string dir = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk"), dir);
+
+            Client.Update(Path.Combine(dir, "products"), new SvnUpdateArgs { Depth = SvnDepth.Empty, KeepDepth = true });
+            Client.Update(Path.Combine(dir, "about"), new SvnUpdateArgs { Depth = SvnDepth.Exclude, KeepDepth = true });
+            Client.Update(Path.Combine(dir, "jobs\\index.html"), new SvnUpdateArgs { Depth = SvnDepth.Exclude, KeepDepth = true });
+
+            Collection<SvnStatusEventArgs> list;
+            
+            Client.GetStatus(dir, out list);
+            Assert.That(list.Count, Is.EqualTo(0));
+
+            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus=true}, out list);
+            Assert.That(list.Count, Is.EqualTo(0));
+
+            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus = true, DepthAsSticky=true }, out list);
+            Assert.That(list.Count, Is.EqualTo(11));
+
+            int nAdded = 0;
+            foreach (SvnStatusEventArgs ee in list)
+            {
+                if (ee.RemoteNodeStatus == SvnStatus.Added)
+                    nAdded++;
+            }
+
+            Assert.That(nAdded, Is.EqualTo(8));
         }
     }
 }
