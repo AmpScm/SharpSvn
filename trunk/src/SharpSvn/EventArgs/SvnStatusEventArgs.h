@@ -131,7 +131,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the repository id as Guid</summary>
-		[Obsolete("Use information from SvnStatusEventArgs.Path to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgs.RepositoryId to avoid expensive lookup")]
 		property Guid RepositoryId
 		{
 			Guid get()
@@ -142,7 +142,7 @@ namespace SharpSvn {
 		}
 
 		/// <summary>Gets the repository id as String</summary>
-		[Obsolete("Use information from SvnStatusEventArgs.Path to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgs.RepositoryIdValue to avoid expensive lookup")]
 		property String^ RepositoryIdValue
 		{
 			String^ get()
@@ -181,7 +181,6 @@ namespace SharpSvn {
 		/// (possibly because the entry is a child of a path that is
 		/// scheduled for addition or replacement when the entry itself is
 		/// normal</summary>
-		[Obsolete("Use SvnStatusEventArgs.IsCopy to avoid expensive lookup")]
 		property bool IsCopy
 		{
 			bool get()
@@ -287,14 +286,10 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Not used since Subversion 1.4")]
+		[Obsolete("Not used since Subversion 1.4. Always DateTime.MinValue")]
 		property DateTime PropertyChangeTime
 		{
-			DateTime get()
-			{
-				Ensure();
-				return DateTime::MinValue;
-			}
+			DateTime get() { return DateTime::MinValue; }
 		}
 
 		property DateTime ContentChangeTime
