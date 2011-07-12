@@ -180,7 +180,8 @@ namespace SharpSvn {
 			}
 		}
 
-        property bool DepthAsSticky
+        /// <summary>If this value is TRUE and RetrieveRemoteStatus it TRUE, shows what an update with KeepDepth TRUE would do. (Shows excluded nodes as additions)</summary>
+        property bool KeepDepth
 		{
 			bool get()
 			{
