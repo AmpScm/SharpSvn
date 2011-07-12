@@ -104,7 +104,7 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 			args->ContactRepository,
 			args->RetrieveIgnoredEntries,
 			args->IgnoreExternals,
-			args->DepthAsSticky,
+			args->KeepDepth,
 			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 			svnclient_status_handler,
 			(void*)_clientBaton->Handle,

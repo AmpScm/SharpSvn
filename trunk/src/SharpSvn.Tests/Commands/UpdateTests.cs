@@ -315,7 +315,7 @@ namespace SharpSvn.Tests.Commands
             Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus=true}, out list);
             Assert.That(list.Count, Is.EqualTo(0));
 
-            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus = true, DepthAsSticky=true }, out list);
+            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus = true, KeepDepth=true }, out list);
             Assert.That(list.Count, Is.EqualTo(11));
 
             int nAdded = 0;
