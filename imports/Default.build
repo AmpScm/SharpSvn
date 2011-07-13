@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
-  <property name="svnBuildType" value="trunk" overwrite="false" />
+  <property name="svnBuildType" value="branch" overwrite="false" />
   <property name="serfBuildType" value="trunk" />
   
   <property name="guessedPlatform" value="win32" />
@@ -11,7 +11,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.7.0" overwrite="false" />
+  <property name="subversionVersion" value="1.7.x" overwrite="false" />
   <property name="subversionMerges" value="" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
