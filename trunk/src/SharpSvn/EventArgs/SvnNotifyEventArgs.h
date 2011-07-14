@@ -95,12 +95,12 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_path && !_uri && _notify && _pool && _notify->path && !_notify->url)
+				if (!_path && _notify && _pool && !_notify->url && _notify->path )
 				{
-					if (svn_path_is_url(_notify->path))
-						_uri = SvnBase::Utf8_PtrToUri(_notify->path, SvnNodeKind::None);
-					else
-						_path = SvnBase::Utf8_PathPtrToString(_notify->path, _pool);
+					_path = SvnBase::Utf8_PathPtrToString(_notify->path, _pool);
+
+					if (svn_dirent_is_absolute(_notify->path))
+						_fullPath = _path;
 				}
 
 				return _path;
@@ -113,7 +113,7 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if (!_uri && _notify && _notify->url)
-					System::Uri::TryCreate(SvnBase::Utf8_PtrToString(_notify->url), UriKind::RelativeOrAbsolute, _uri);
+					_uri = SvnBase::Utf8_PtrToUri(_notify->url, _nodeKind);
 
 				return _uri;
 			}
@@ -125,8 +125,16 @@ namespace SharpSvn {
 		{
 			String^ get()
 			{
-				if (!_fullPath && Path)
-					_fullPath = SvnTools::GetNormalizedFullPath(Path);
+				if (!_fullPath && _notify && _pool && !_notify->url && _notify->path)
+				{
+					if (!_path)
+						_path = SvnBase::Utf8_PathPtrToString(_notify->path, _pool);
+
+					if (svn_dirent_is_absolute(_notify->path))
+						_fullPath = _path;
+					else
+						_fullPath = SvnTools::GetNormalizedFullPath(_path);
+				}
 
 				return _fullPath;
 			}
@@ -325,6 +333,7 @@ namespace SharpSvn {
 				{
 					// Use all properties to get them cached in .Net memory
 					GC::KeepAlive(Path);
+					GC::KeepAlive(FullPath);
 					GC::KeepAlive(Uri);
 					GC::KeepAlive(MimeType);
 					GC::KeepAlive(Error);
