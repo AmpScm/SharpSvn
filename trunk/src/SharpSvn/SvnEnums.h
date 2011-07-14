@@ -263,6 +263,9 @@ namespace SharpSvn {
 
 		/// <summary>Operation failed because the operation was forbidden by the server</summary>
 		FailedForbiddenByServer     = svn_wc_notify_failed_forbidden_by_server,
+
+		/// <summary>The operation skipped the path because it was conflicted.</summary>
+        SkipConflicted              = svn_wc_notify_skip_conflicted,
 	};
 
 	public enum class SvnNotifyState
