@@ -116,7 +116,8 @@ namespace SharpSvn {
 			static String^ RemoveDoubleSlashes(String^ input);
 
 			static apr_array_header_t *AllocArray(ICollection<String^>^ strings, AprPool^ pool);
-			static apr_array_header_t *AllocCanonicalArray(ICollection<String^>^ paths, AprPool^ pool);
+			static apr_array_header_t *AllocUriArray(ICollection<String^>^ uris, AprPool^ pool);
+			static apr_array_header_t *AllocRelpathArray(ICollection<String^>^ relpaths, AprPool^ pool);
 			static apr_array_header_t *AllocDirentArray(ICollection<String^>^ paths, AprPool^ pool);
 			generic<typename TSvnTarget> where TSvnTarget : SvnTarget
 			static apr_array_header_t *AllocCopyArray(ICollection<TSvnTarget>^ targets, AprPool^ pool);

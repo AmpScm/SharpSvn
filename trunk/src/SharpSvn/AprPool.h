@@ -159,18 +159,6 @@ namespace SharpSvn {
 			const char* AllocRelpath(String^ value);
 
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			__declspec(deprecated) const char* AllocCanonical(String^ value)
-			{
-				return AllocUri(value);
-			}
-
-			[System::Diagnostics::DebuggerStepThroughAttribute()]
-			__declspec(deprecated) const char* AllocCanonical(Uri^ value)
-			{
-				return AllocUri(value);
-			}
-
-			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocSvnString(String^ value);
 			[System::Diagnostics::DebuggerStepThroughAttribute()]
 			const svn_string_t* AllocPropertyValue(String^ value, String^ propertyName);

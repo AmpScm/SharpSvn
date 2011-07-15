@@ -112,7 +112,7 @@ apr_array_header_t *SvnBase::AllocArray(ICollection<String^>^ strings, AprPool^ 
 	return aprStrings->Handle;
 }
 
-apr_array_header_t *SvnBase::AllocCanonicalArray(ICollection<String^>^ paths, AprPool^ pool)
+apr_array_header_t *SvnBase::AllocUriArray(ICollection<String^>^ paths, AprPool^ pool)
 {
 	if (!paths)
 		throw gcnew ArgumentNullException("paths");
@@ -124,7 +124,24 @@ apr_array_header_t *SvnBase::AllocCanonicalArray(ICollection<String^>^ paths, Ap
 		if (!s)
 			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
 	}
-	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(paths, pool);
+	AprArray<String^, AprUriMarshaller^>^ aprPaths = gcnew AprArray<String^, AprUriMarshaller^>(paths, pool);
+
+	return aprPaths->Handle;
+}
+
+apr_array_header_t *SvnBase::AllocRelpathArray(ICollection<String^>^ paths, AprPool^ pool)
+{
+	if (!paths)
+		throw gcnew ArgumentNullException("paths");
+	else if (!pool)
+		throw gcnew ArgumentNullException("pool");
+
+	for each (String^ s in paths)
+	{
+		if (!s)
+			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
+	}
+	AprArray<String^, AprRelpathMarshaller^>^ aprPaths = gcnew AprArray<String^, AprRelpathMarshaller^>(paths, pool);
 
 	return aprPaths->Handle;
 }
