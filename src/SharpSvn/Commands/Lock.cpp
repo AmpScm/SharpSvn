@@ -68,6 +68,8 @@ bool SvnClient::Lock(ICollection<String^>^ targets, SvnLockArgs^ args)
 		throw gcnew ArgumentNullException("targets");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!targets->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "targets");
 
 	for each (String^ target in targets)
 	{
@@ -133,6 +135,8 @@ bool SvnClient::RemoteLock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 		throw gcnew ArgumentNullException("targets");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
+	else if (!targets->Count)
+		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "targets");
 
 	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
