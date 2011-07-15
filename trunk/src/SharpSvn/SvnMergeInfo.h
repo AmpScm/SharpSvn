@@ -68,6 +68,11 @@ namespace SharpSvn {
 			}
 		}
 
+        SvnRevisionRange^ Reverse()
+        {
+            return gcnew SvnRevisionRange(EndRevision, StartRevision);
+        }
+
 		/// <summary>Creates a SvnRevision from {revision-1:revision}</summary>
 		static SvnRevisionRange^ FromRevision(__int64 revision)
 		{
@@ -78,6 +83,14 @@ namespace SharpSvn {
 		{
 			return String::Format("{0}-{1}", StartRevision, EndRevision);
 		}
+
+        static SvnRevisionRange^ operator -(SvnRevisionRange^ from)
+        {
+            if (!from)
+                return from;
+            else
+                return from->Reverse();
+        }
 	};
 
 	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
