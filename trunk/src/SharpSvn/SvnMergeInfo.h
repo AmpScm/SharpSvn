@@ -29,7 +29,7 @@ namespace SharpSvn {
 	using System::Diagnostics::DebuggerDisplayAttribute;
 
 	[DebuggerDisplayAttribute("Range={StartRevision}-{EndRevision}")]
-	public ref class SvnRevisionRange
+    public ref class SvnRevisionRange : IEquatable<SvnRevisionRange^>
 	{
 		initonly SvnRevision^ _start;
 		initonly SvnRevision^ _end;
@@ -68,10 +68,10 @@ namespace SharpSvn {
 			}
 		}
 
-        SvnRevisionRange^ Reverse()
-        {
-            return gcnew SvnRevisionRange(EndRevision, StartRevision);
-        }
+		SvnRevisionRange^ Reverse()
+		{
+			return gcnew SvnRevisionRange(EndRevision, StartRevision);
+		}
 
 		/// <summary>Creates a SvnRevision from {revision-1:revision}</summary>
 		static SvnRevisionRange^ FromRevision(__int64 revision)
@@ -84,13 +84,32 @@ namespace SharpSvn {
 			return String::Format("{0}-{1}", StartRevision, EndRevision);
 		}
 
-        static SvnRevisionRange^ operator -(SvnRevisionRange^ from)
-        {
-            if (!from)
-                return from;
-            else
-                return from->Reverse();
-        }
+		virtual int GetHashCode() override
+		{
+			return StartRevision->GetHashCode() ^ (EndRevision->GetHashCode() << 3);
+		}
+
+		virtual bool Equals(Object^ other) override
+		{
+			return Equals(dynamic_cast<SvnRevisionRange^>(other));
+		}
+
+		virtual bool Equals(SvnRevisionRange^ range)
+		{
+			if (range == nullptr)
+				return false;
+
+			return StartRevision->Equals(range->StartRevision) &&
+				   EndRevision->Equals(range->EndRevision);
+		}
+
+		static SvnRevisionRange^ operator -(SvnRevisionRange^ from)
+		{
+			if (!from)
+				return from;
+			else
+				return from->Reverse();
+		}
 	};
 
 	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
