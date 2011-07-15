@@ -73,6 +73,11 @@ namespace SharpSvn {
 		{
 			return gcnew SvnRevisionRange(revision-1, revision);
 		}
+
+		virtual String^ ToString() override
+		{
+			return String::Format("{0}-{1}", StartRevision, EndRevision);
+		}
 	};
 
 	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
