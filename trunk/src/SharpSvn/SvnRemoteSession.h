@@ -10,6 +10,7 @@
 namespace SharpSvn {
 	namespace Remote {
 
+	ref class SvnRemoteSessionArgs;
 	ref class SvnRemoteCommonArgs;
 
 	ref class SvnRemoteOpenArgs;
@@ -23,10 +24,10 @@ namespace SharpSvn {
 
 	ref class SvnRemoteStatEventArgs;
 
-    /// <summary>This class gives access to the Subversion network protocol. Make sure all
-    /// passed paths use '/' as path separator. Refer to svn_ra.h for details about the
-    /// functions on this class, or use the more polished wrappers on the SvnClient class
-    /// </summary>
+	/// <summary>This class gives access to the Subversion network protocol. Make sure all
+	/// passed paths use '/' as path separator. Refer to svn_ra.h for details about the
+	/// functions on this class, or use the more polished wrappers on the SvnClient class
+	/// </summary>
 	public ref class SvnRemoteSession : public SvnClientContext
 	{
 		initonly AprBaton<SvnRemoteSession^>^ _clientBaton;
@@ -60,9 +61,9 @@ namespace SharpSvn {
 		property Uri^ SessionUri
 		{
 			Uri^ get()
-            {
-                return _sessionRoot;
-            }
+			{
+				return _sessionRoot;
+			}
 		}
 
 	public:
@@ -79,12 +80,18 @@ namespace SharpSvn {
 		/// <summary>Get the latest revision in the repository</summary>
 		bool GetLatestRevision(SvnRemoteCommonArgs^ args, [Out] __int64% revision);
 
+    private:
+        bool InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Out] __int64% revno);
+
 	public:
 		/// <overloads>Resolves a dated or head revision to an actual revision number</overloads>
 		/// <summary>Resolves a dated or head revision to an actual revision number</summary>
 		bool ResolveRevision(SvnRevision^ revision, [Out] __int64% revno);
 		/// <summary>Resolves a dated or head revision to an actual revision number</summary>
 		bool ResolveRevision(SvnRevision^ revision, SvnRemoteCommonArgs^ args, [Out] __int64% revno);
+
+    private:
+		bool InternalResolveRevision(SvnRevision^ revision, SvnRemoteSessionArgs^ args, [Out] __int64% revno);
 
 	public:
 		bool GetRepositoryRoot([Out] Uri^% uri);
@@ -110,17 +117,15 @@ namespace SharpSvn {
 		bool ListLocks(String^ relPath, EventHandler<SvnRemoteListLockEventArgs^>^ listHandler);
 		bool ListLocks(String^ relPath, SvnRemoteListLocksArgs^ args, EventHandler<SvnRemoteListLockEventArgs^>^ listHandler);
 
-    public:
-        bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
-        bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+	public:
+		bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+		bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 	public:
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s)</overloads>
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
-        [Obsolete("Not implemented yet")]
-		bool Log(ICollection<String^>^ paths, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		bool Log(ICollection<String^>^ paths, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
-        [Obsolete("Not implemented yet")]
-		bool Log(ICollection<String^>^ paths, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		bool Log(ICollection<String^>^ paths, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 
 	public:
 		static bool IsConnectionlessRepository(Uri^ uri);
@@ -128,7 +133,7 @@ namespace SharpSvn {
 
 	public:
 		String^ MakeRelativePath(Uri^ uri);
-        String^ MakeRepositoryRootRelativePath(Uri^ uri);
+		String^ MakeRepositoryRootRelativePath(Uri^ uri);
 
 	public:
 		/// <summary>
