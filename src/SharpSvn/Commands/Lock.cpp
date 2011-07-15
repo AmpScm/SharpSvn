@@ -151,7 +151,7 @@ bool SvnClient::RemoteLock(ICollection<Uri^>^ targets, SvnLockArgs^ args)
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCanonicalMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+	AprArray<String^, AprUriMarshaller^>^ aprTargets = gcnew AprArray<String^, AprUriMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
 	return LockInternal(aprTargets, args, %pool);
 }

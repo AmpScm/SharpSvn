@@ -195,10 +195,7 @@ namespace SharpSvn {
 			}
 		};
 
-#pragma warning(push)
-#pragma warning(disable: 4996)
-        __declspec(deprecated)
-		ref class AprCanonicalMarshaller sealed : public IItemMarshaller<String^>
+		ref class AprRelpathMarshaller sealed : public IItemMarshaller<String^>
 		{
 		public:
 			property int ItemSize
@@ -212,7 +209,7 @@ namespace SharpSvn {
 			virtual void Write(String^ value, void* ptr, AprPool^ pool)
 			{
 				const char** ppStr = (const char**)ptr;
-				*ppStr = pool->AllocCanonical(value);
+				*ppStr = pool->AllocRelpath(value);
 			}
 
 			virtual String^ Read(const void* ptr, AprPool^ pool)
@@ -224,7 +221,6 @@ namespace SharpSvn {
 				return SvnBase::Utf8_PtrToString(*ppcStr);
 			}
 		};
-#pragma warning(pop)
 
 		ref class AprSvnRevNumMarshaller sealed : public IItemMarshaller<__int64>
 		{

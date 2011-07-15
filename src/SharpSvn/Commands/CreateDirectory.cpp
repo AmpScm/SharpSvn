@@ -157,7 +157,7 @@ bool SvnClient::RemoteCreateDirectories(ICollection<Uri^>^ uris, SvnCreateDirect
 	ArgsStore store(this, args, %pool);
 	CommitResultReceiver crr(this);
 
-	AprArray<String^, AprCanonicalMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCanonicalMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
+	AprArray<String^, AprUriMarshaller^>^ aprPaths = gcnew AprArray<String^, AprUriMarshaller^>(safe_cast<ICollection<String^>^>(uriData), %pool);
 
 	svn_error_t *r = svn_client_mkdir4(
 		aprPaths->Handle,
