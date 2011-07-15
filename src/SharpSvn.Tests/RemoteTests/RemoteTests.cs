@@ -8,6 +8,7 @@ using NUnit.Framework.SyntaxHelpers;
 
 using SharpSvn.Remote;
 using SharpSvn.Tests.Commands;
+using System.Diagnostics;
 
 namespace SharpSvn.Tests.RemoteTests
 {
@@ -269,6 +270,29 @@ namespace SharpSvn.Tests.RemoteTests
                 rc.GetNodeKind("QQQ", out kind);
 
                 Assert.That(kind, Is.EqualTo(SvnNodeKind.None));
+            }
+        }
+
+        [Test]
+        public void LogRanges()
+        {
+            using (SvnRemoteSession rc = new SvnRemoteSession())
+            using (SvnRemoteSession rc2 = new SvnRemoteSession())
+            {
+                Uri reposRoot;
+                rc.Open(CollabReposUri);
+                rc.GetRepositoryRoot(out reposRoot);
+                rc2.Open(reposRoot);
+
+                rc.LocationSegments("branches/c/products/medium.html",
+                    delegate(object sender, SvnRemoteLocationSegmentEventArgs e)
+                    {
+                        rc2.Log(rc2.MakeRelativePath(e.Uri), e.Range.Reverse(),
+                            delegate(object sender2, SvnRemoteLogEventArgs e2)
+                            {
+                                Debug.WriteLine(string.Format("{0} in {1} as {2} ({3}): {4}", e2.Author, e2.Revision, e.RepositoryPath, e.Range, e2.LogMessage));
+                            });
+                    });
             }
         }
     }

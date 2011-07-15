@@ -121,11 +121,15 @@ namespace SharpSvn {
 		bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 		bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 	public:
+		bool Log(String^ relPath, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
+		bool Log(String^ relPath, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s)</overloads>
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
-		bool Log(ICollection<String^>^ paths, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
-		bool Log(ICollection<String^>^ paths, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 
 	public:
 		static bool IsConnectionlessRepository(Uri^ uri);
