@@ -23,10 +23,33 @@ namespace SharpSvn {
 
 	public ref class SvnRemoteLogEventArgs : public SvnLoggingEventArgs
 	{
+		initonly bool _hasChildren;
+		initonly int _mergeLevel;
 	internal:
-		SvnRemoteLogEventArgs(svn_log_entry_t *entry, AprPool ^pool)
+		SvnRemoteLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool)
 			: SvnLoggingEventArgs(entry, pool)
 		{
+			_hasChildren = entry->has_children ? true : false;
+			_mergeLevel = mergeLevel;
+		}
+
+	public:
+		/// <summary>Set to true when the following items are merged-child items of this item.</summary>
+		property bool HasChildren
+		{
+			bool get()
+			{
+				return _hasChildren;
+			}
+		}
+
+		/// <summary>Gets the nesting level of the logs via merges</summary>
+		property int MergeLogNestingLevel
+		{
+			int get()
+			{
+				return _mergeLevel;
+			}
 		}
 
 	};
