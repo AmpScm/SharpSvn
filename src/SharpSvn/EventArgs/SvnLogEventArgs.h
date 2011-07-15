@@ -365,7 +365,7 @@ namespace SharpSvn {
 		}
 
 	public:
-				/// <summary>Gets the log origin SharpSvn used for retrieving the logfile</summary>
+				/// <summary>Gets the log origin SharpSvn used for retrieving the log</summary>
 		property Uri^ LogOrigin
 		{
 			Uri^ get()
