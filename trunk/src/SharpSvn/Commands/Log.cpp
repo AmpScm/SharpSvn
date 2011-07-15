@@ -318,7 +318,7 @@ bool SvnClient::InternalLog(ICollection<String^>^ targets, Uri^ searchRoot, SvnR
 		}
 
 		svn_error_t *r = svn_client_log5(
-			AllocCanonicalArray(targets, %pool),
+			AllocArray(targets, %pool),
 			&pegRev,
 			revision_ranges,
 			args->Limit,
