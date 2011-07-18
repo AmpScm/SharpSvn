@@ -116,7 +116,7 @@ namespace SharpSvn {
 				if (_type == SvnRevisionType::Number)
 					return _value;
 				else
-					return 0;
+					return -1;
 			}
 		}
 

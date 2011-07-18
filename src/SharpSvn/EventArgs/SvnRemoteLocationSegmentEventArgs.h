@@ -18,6 +18,7 @@
 
 #include "SvnLogEventArgs.h"
 #include "EventArgs/SvnListEventArgs.h"
+#include "SvnMergeInfo.h"
 
 namespace SharpSvn {
 	namespace Remote {
@@ -33,6 +34,7 @@ namespace SharpSvn {
         String^ _path;
         String^ _reposRelPath;
         Uri^ _uri;
+        SvnRevisionRange^ _range;
 
 	internal:
         SvnRemoteLocationSegmentEventArgs(const svn_location_segment_t *segment, Uri^ reposUri, int nOffset)
@@ -81,6 +83,17 @@ namespace SharpSvn {
             __int64 get()
             {
                 return _end;
+            }
+        }
+
+        /// <summary>Retrieve StartRevision-EndRevision as a <see cref="SvnRevisionRange" /></summary>
+        property SvnRevisionRange^ Range
+        {
+            SvnRevisionRange^ get()
+            {
+                if (!_range)
+                    _range = gcnew SvnRevisionRange(StartRevision, EndRevision);
+                return _range;
             }
         }
 

@@ -433,6 +433,35 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
 	}
 }
 
+SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ args, AprPool^ pool)
+{
+	if (!args)
+		throw gcnew ArgumentNullException("args");
+	else if (client->_currentArgs)
+		throw gcnew InvalidOperationException(SharpSvnStrings::SvnClientOperationInProgress);
+
+    UNUSED_ALWAYS(pool);
+
+	args->Prepare();
+	client->_currentArgs = args;
+	client->_workState = nullptr;
+	_client = client;
+	_lastContext = SvnClientContext::_activeContext;
+	SvnClientContext::_activeContext = _client;
+
+	try
+	{
+		client->HandleProcessing(gcnew SvnProcessingEventArgs(args->CommandType));
+	}
+	catch(Exception^)
+	{
+		client->_currentArgs = nullptr;
+		SvnClientContext::_activeContext = _lastContext;
+		throw;
+	}
+}
+
+
 SvnClientContext::ArgsStore::~ArgsStore()
 {
 	SvnClientArgs^ args = _client->_currentArgs;
