@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
-using System.Collections.ObjectModel;
 
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 
 using SharpSvn.Remote;
 using SharpSvn.Tests.Commands;
-using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.RemoteTests
 {
@@ -293,6 +293,38 @@ namespace SharpSvn.Tests.RemoteTests
                                 Debug.WriteLine(string.Format("{0} in {1} as {2} ({3}): {4}", e2.Author, e2.Revision, e.RepositoryPath, e.Range, e2.LogMessage));
                             });
                     });
+            }
+        }
+
+        [Test]
+        public void CompareRanges()
+        {
+            using (SvnRemoteSession rc = new SvnRemoteSession())
+            {
+                rc.Open(CollabReposUri);
+                Collection<SvnRemoteLocationSegmentEventArgs> c;
+                rc.GetLocationSegments("branches/c/products/medium.html", out c);
+                List<long> revs = new List<long>();
+
+                foreach(SvnRemoteLocationSegmentEventArgs e in c)
+                {
+                    revs.Add(e.StartRevision);
+                    revs.Add(e.EndRevision);
+                    System.Diagnostics.Debug.WriteLine(string.Format("{0}: {1}", e.Uri, e.Range));
+                }
+
+                SvnRevisionLocationMap revMap;
+                long head;
+                rc.GetLatestRevision(out head);
+                rc.GetLocations("branches/c/products/medium.html", head, revs, out revMap);
+
+                foreach (SvnRemoteLocationSegmentEventArgs e in c)
+                {
+                    Assert.That(revMap.Contains(e.StartRevision));
+                    Assert.That(revMap[e.StartRevision].Uri, Is.EqualTo(e.Uri));
+                    Assert.That(revMap.Contains(e.EndRevision));
+                    Assert.That(revMap[e.EndRevision].Uri, Is.EqualTo(e.Uri));
+                }
             }
         }
     }

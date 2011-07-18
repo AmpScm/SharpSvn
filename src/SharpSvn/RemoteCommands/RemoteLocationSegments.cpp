@@ -100,3 +100,40 @@ bool SvnRemoteSession::LocationSegments(String^ relPath, SvnRemoteLocationSegmen
         args->_reposUri = nullptr;
     }
 }
+
+bool SvnRemoteSession::GetLocationSegments(String^ relPath, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list)
+{
+	if (!relPath)
+		throw gcnew ArgumentNullException("relPath");
+
+	InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>^ results = gcnew InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>();
+
+	try
+	{
+		return LocationSegments(relPath, gcnew SvnRemoteLocationSegmentsArgs(), results->Handler);
+	}
+	finally
+	{
+		list = results;
+	}
+}
+
+
+bool SvnRemoteSession::GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list)
+{
+	if (!relPath)
+		throw gcnew ArgumentNullException("relPath");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>^ results = gcnew InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>();
+
+	try
+	{
+		return LocationSegments(relPath, args, results->Handler);
+	}
+	finally
+	{
+		list = results;
+	}
+}

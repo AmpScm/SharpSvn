@@ -1727,6 +1727,10 @@
 				Name="Sources"
 				>
 				<File
+					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
 					>
 				</File>
