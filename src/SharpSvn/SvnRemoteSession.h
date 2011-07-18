@@ -16,15 +16,17 @@ namespace SharpSvn {
 	ref class SvnRemoteOpenArgs;
 	ref class SvnRemoteReparentArgs;
 	ref class SvnRemoteLatestRevisionArgs;
+	ref class SvnRemoteNodeKindArgs;
 	ref class SvnRemoteLogArgs;
 	ref class SvnRemoteStatArgs;
 	ref class SvnRemoteListArgs;
 	ref class SvnRemoteListLocksArgs;
 	ref class SvnRemoteLocationSegmentsArgs;
+	ref class SvnRemotePropertiesArgs;
 
 	ref class SvnRemoteStatEventArgs;
 
-    public ref class SvnRevisionLocationMap sealed : KeyedCollection<__int64, SvnUriTarget^>
+	public ref class SvnRevisionLocationMap sealed : KeyedCollection<__int64, SvnUriTarget^>
 	{
 	protected:
 		virtual __int64 GetKeyForItem(SvnUriTarget^ item) override
@@ -119,7 +121,7 @@ namespace SharpSvn {
 
 	public:
 		bool GetNodeKind(String^ relPath, [Out] SvnNodeKind% result);
-		bool GetNodeKind(String^ relPath, SvnRemoteCommonArgs^ args, [Out] SvnNodeKind% result);
+		bool GetNodeKind(String^ relPath, SvnRemoteNodeKindArgs^ args, [Out] SvnNodeKind% result);
 
 	public:
 		bool List(String^ relPath, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
@@ -133,7 +135,7 @@ namespace SharpSvn {
 		bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 		bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 
-        bool GetLocationSegments(String^ relPath, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
+		bool GetLocationSegments(String^ relPath, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
 		bool GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
 
 	public:
@@ -150,6 +152,10 @@ namespace SharpSvn {
 		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
 		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+
+	public:
+		bool GetProperties(String^ relpath, [Out] SvnPropertyCollection^% properties);
+		bool GetProperties(String^ relpath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties);
 
 	public:
 		static bool IsConnectionlessRepository(Uri^ uri);
