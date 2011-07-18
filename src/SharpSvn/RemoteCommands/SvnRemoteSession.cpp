@@ -188,27 +188,47 @@ String^ SvnRemoteSession::MakeRelativePath(Uri^ uri)
 	if (!uri)
 		throw gcnew ArgumentNullException("uri");
 
-	Uri^ relativeUri = SessionUri->MakeRelativeUri(uri);
+    Ensure();
+    AprPool pool(%_pool);
 
-	if (relativeUri->IsAbsoluteUri)
-		throw gcnew ArgumentException(
+    const char *pUri = pool.AllocUri(uri);
+    const char *pSessUri;
+
+    SVN_THROW(svn_ra_get_session_url(_session, &pSessUri, pool.Handle));
+
+    const char *child = svn_path_is_child(pSessUri, pUri, pool.Handle);
+
+    if (!child && !strcmp(pUri, pSessUri))
+        return "";
+    else if (!child)
+        throw gcnew ArgumentException(
 			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
 			"uri");
 
-	String^ txt = relativeUri->ToString();
+    return Utf8_PtrToString(svn_path_uri_decode(child, pool.Handle));
+}
 
-	if (txt->StartsWith("../", StringComparison::Ordinal))
-	{
-		if (txt->Substring(3)->Equals(SvnTools::GetFileName(uri), StringComparison::Ordinal))
-			return "";
-		else
-			txt = "/"; // Fall in next error case
-	}
+String^ SvnRemoteSession::MakeRepositoryRootRelativePath(Uri^ uri)
+{
+	if (!uri)
+		throw gcnew ArgumentNullException("uri");
 
-	if (txt->StartsWith("/", StringComparison::Ordinal))
-		throw gcnew ArgumentException(
-			String::Format("Uri '{0}' is not relative from session '{1}'", uri, SessionUri),
+    Ensure();
+    AprPool pool(%_pool);
+
+    const char *pUri = pool.AllocUri(uri);
+    const char *pReposUri;
+
+    SVN_THROW(svn_ra_get_repos_root2(_session, &pReposUri, pool.Handle));
+
+    const char *child = svn_path_is_child(pReposUri, pUri, pool.Handle);
+
+    if (!child && !strcmp(pUri, pReposUri))
+        return "";
+    else if (!child)
+        throw gcnew ArgumentException(
+			String::Format("Uri '{0}' is not relative from root '{1}'", uri, Utf8_PtrToString(pReposUri)),
 			"uri");
 
-	return Uri::UnescapeDataString(txt);
+    return Utf8_PtrToString(svn_path_uri_decode(child, pool.Handle));
 }
