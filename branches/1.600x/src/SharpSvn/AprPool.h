@@ -154,6 +154,18 @@ namespace SharpSvn {
 
 			void KeepAlive(Object^ obj);
 			void KeepAlive(IDisposable^ obj, bool disposeOnCleanup);
+
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			const char* AllocUri(Uri^ value)
+			{
+				return AllocCanonical(value);
+			}
+
+			[System::Diagnostics::DebuggerStepThroughAttribute()]
+			const char* AllocRelpath(String^ value)
+			{
+				return AllocCanonical(value);
+			}
 		};
 
 

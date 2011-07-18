@@ -15,6 +15,11 @@ bool SvnRemoteSession::GetLatestRevision([Out] __int64% revision)
 
 bool SvnRemoteSession::GetLatestRevision(SvnRemoteCommonArgs^ args, [Out] __int64% revision)
 {
+	return InternalGetLatestRevision(args, revision);
+}
+
+bool SvnRemoteSession::InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Out] __int64% revision)
+{
 	if (!args)
 		throw gcnew ArgumentNullException("args");
 

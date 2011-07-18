@@ -188,6 +188,7 @@ namespace SharpSvn {
 			initonly SvnClientContext^ _lastContext;
 		public:
 			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args);
+			ArgsStore(SvnClientContext^ client, SvnClientArgs^ args, AprPool^ pool);
 			~ArgsStore();
 		};
 	internal:

@@ -10,30 +10,48 @@
 namespace SharpSvn {
 	namespace Remote {
 
+	ref class SvnRemoteSessionArgs;
 	ref class SvnRemoteCommonArgs;
 
 	ref class SvnRemoteOpenArgs;
 	ref class SvnRemoteReparentArgs;
 	ref class SvnRemoteLatestRevisionArgs;
+	ref class SvnRemoteNodeKindArgs;
 	ref class SvnRemoteLogArgs;
 	ref class SvnRemoteStatArgs;
 	ref class SvnRemoteListArgs;
 	ref class SvnRemoteListLocksArgs;
+	ref class SvnRemoteLocationArgs;
 	ref class SvnRemoteLocationSegmentsArgs;
+	ref class SvnRemotePropertiesArgs;
 
 	ref class SvnRemoteStatEventArgs;
 
-    /// <summary>This class gives access to the Subversion network protocol. Make sure all
-    /// passed paths use '/' as path separator. Refer to svn_ra.h for details about the
-    /// functions on this class, or use the more polished wrappers on the SvnClient class
-    /// </summary>
+	public ref class SvnRevisionLocationMap sealed : KeyedCollection<__int64, SvnUriTarget^>
+	{
+	protected:
+		virtual __int64 GetKeyForItem(SvnUriTarget^ item) override
+		{
+			if (!item)
+				throw gcnew ArgumentNullException("item");
+
+			return item->Revision->Revision;
+		}
+	};
+
+	/// <summary>This class gives access to the Subversion network protocol. Make sure all
+	/// passed paths use '/' as path separator. Refer to svn_ra.h for details about the
+	/// functions on this class, or use the more polished wrappers on the SvnClient class
+	/// </summary>
 	public ref class SvnRemoteSession : public SvnClientContext
 	{
 		initonly AprBaton<SvnRemoteSession^>^ _clientBaton;
 		AprPool _pool;
 		svn_ra_session_t *_session;
 		bool _cbInitialized;
-		Uri^ _root;
+		Uri^ _sessionRoot;
+		Uri^ _reposRoot;
+
 	public:
 		/// <summary>Initializes a new SvnRemoteSession instance</summary>
 		SvnRemoteSession();
@@ -57,7 +75,10 @@ namespace SharpSvn {
 	public:
 		property Uri^ SessionUri
 		{
-			Uri^ get();
+			Uri^ get()
+			{
+				return _sessionRoot;
+			}
 		}
 
 	public:
@@ -74,12 +95,18 @@ namespace SharpSvn {
 		/// <summary>Get the latest revision in the repository</summary>
 		bool GetLatestRevision(SvnRemoteCommonArgs^ args, [Out] __int64% revision);
 
+	private:
+		bool InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Out] __int64% revno);
+
 	public:
 		/// <overloads>Resolves a dated or head revision to an actual revision number</overloads>
 		/// <summary>Resolves a dated or head revision to an actual revision number</summary>
 		bool ResolveRevision(SvnRevision^ revision, [Out] __int64% revno);
 		/// <summary>Resolves a dated or head revision to an actual revision number</summary>
 		bool ResolveRevision(SvnRevision^ revision, SvnRemoteCommonArgs^ args, [Out] __int64% revno);
+
+	private:
+		bool InternalResolveRevision(SvnRevision^ revision, SvnRemoteSessionArgs^ args, [Out] __int64% revno);
 
 	public:
 		bool GetRepositoryRoot([Out] Uri^% uri);
@@ -95,7 +122,7 @@ namespace SharpSvn {
 
 	public:
 		bool GetNodeKind(String^ relPath, [Out] SvnNodeKind% result);
-		bool GetNodeKind(String^ relPath, SvnRemoteCommonArgs^ args, [Out] SvnNodeKind% result);
+		bool GetNodeKind(String^ relPath, SvnRemoteNodeKindArgs^ args, [Out] SvnNodeKind% result);
 
 	public:
 		bool List(String^ relPath, EventHandler<SvnRemoteListEventArgs^>^ listHandler);
@@ -105,17 +132,31 @@ namespace SharpSvn {
 		bool ListLocks(String^ relPath, EventHandler<SvnRemoteListLockEventArgs^>^ listHandler);
 		bool ListLocks(String^ relPath, SvnRemoteListLocksArgs^ args, EventHandler<SvnRemoteListLockEventArgs^>^ listHandler);
 
-    public:
-        bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
-        bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 	public:
+		bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+		bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+
+		bool GetLocationSegments(String^ relPath, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
+		bool GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
+
+	public:
+		bool GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations);
+		bool GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, SvnRemoteLocationArgs^ args, [Out] SvnRevisionLocationMap^% locations);
+
+	public:
+		bool Log(String^ relPath, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
+		bool Log(String^ relPath, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+
 		/// <overloads>Streamingly retrieve the log messages for a set of revision(s)</overloads>
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
-        [Obsolete("Not implemented yet")]
-		bool Log(ICollection<String^>^ paths, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
-        [Obsolete("Not implemented yet")]
-		bool Log(ICollection<String^>^ paths, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
+
+	public:
+		bool GetProperties(String^ relpath, [Out] SvnPropertyCollection^% properties);
+		bool GetProperties(String^ relpath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties);
 
 	public:
 		static bool IsConnectionlessRepository(Uri^ uri);
@@ -123,6 +164,7 @@ namespace SharpSvn {
 
 	public:
 		String^ MakeRelativePath(Uri^ uri);
+		String^ MakeRepositoryRootRelativePath(Uri^ uri);
 
 	public:
 		/// <summary>

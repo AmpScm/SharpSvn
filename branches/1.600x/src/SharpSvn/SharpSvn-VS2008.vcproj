@@ -1659,6 +1659,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteLocationArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
 					>
 				</File>
@@ -1667,7 +1671,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteNodeKindArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteOpenArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemotePropertiesArgs.h"
 					>
 				</File>
 				<File
@@ -1707,7 +1719,15 @@
 				Name="Sources"
 				>
 				<File
+					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetProperties.cpp"
 					>
 				</File>
 				<File

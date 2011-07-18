@@ -30,8 +30,6 @@
 
 #include "SvnTools.h"
 
-using System::Collections::Generic::IDictionary;
-
 namespace SharpSvn {
 	ref class SvnCommittingEventArgs;
 	ref class SvnCancelEventArgs;
@@ -113,7 +111,6 @@ namespace SharpSvn {
 	};
 
 	using System::Runtime::InteropServices::GCHandle;
-	using System::Collections::Generic::IDictionary;
 	using System::Collections::Generic::ICollection;
 	using System::Collections::Generic::IList;
 	using System::Collections::ObjectModel::Collection;

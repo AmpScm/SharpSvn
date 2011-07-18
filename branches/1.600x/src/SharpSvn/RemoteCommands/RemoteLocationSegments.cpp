@@ -75,10 +75,10 @@ bool SvnRemoteSession::LocationSegments(String^ relPath, SvnRemoteLocationSegmen
 
         args->_nOffset = strlen(session_root) - strlen(repos_root);
 
-        if (_root == nullptr)
-            _root = Utf8_PtrToUri(repos_root, SvnNodeKind::Directory);
+        if (!_reposRoot)
+            _reposRoot = Utf8_PtrToUri(repos_root, SvnNodeKind::Directory);
 
-        args->_reposUri = _root;
+        args->_reposUri = _reposRoot;
 
         SVN_HANDLE(svn_ra_get_location_segments(_session,
                                                 pool.AllocCanonical(relPath),
@@ -99,4 +99,41 @@ bool SvnRemoteSession::LocationSegments(String^ relPath, SvnRemoteLocationSegmen
         args->_nOffset = 0;
         args->_reposUri = nullptr;
     }
+}
+
+bool SvnRemoteSession::GetLocationSegments(String^ relPath, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list)
+{
+	if (!relPath)
+		throw gcnew ArgumentNullException("relPath");
+
+	InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>^ results = gcnew InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>();
+
+	try
+	{
+		return LocationSegments(relPath, gcnew SvnRemoteLocationSegmentsArgs(), results->Handler);
+	}
+	finally
+	{
+		list = results;
+	}
+}
+
+
+bool SvnRemoteSession::GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list)
+{
+	if (!relPath)
+		throw gcnew ArgumentNullException("relPath");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>^ results = gcnew InfoItemCollection<SvnRemoteLocationSegmentEventArgs^>();
+
+	try
+	{
+		return LocationSegments(relPath, args, results->Handler);
+	}
+	finally
+	{
+		list = results;
+	}
 }
