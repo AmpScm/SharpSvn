@@ -327,5 +327,23 @@ namespace SharpSvn.Tests.RemoteTests
                 }
             }
         }
+
+        [Test]
+        public void GetProps()
+        {
+            using (SvnRemoteSession rc = new SvnRemoteSession(CollabReposUri))
+            {
+                SvnPropertyCollection pc;
+                rc.GetProperties("trunk", out pc);
+                Assert.That(pc, Is.Not.Null);
+                Assert.That(pc.Count, Is.EqualTo(1));
+                Assert.That(pc.Contains(SvnPropertyNames.SvnMergeInfo));
+
+                rc.GetProperties("trunk/about/index.html", out pc);
+                Assert.That(pc, Is.Not.Null);
+                Assert.That(pc.Count, Is.EqualTo(1));
+                Assert.That(pc.Contains(SvnPropertyNames.SvnEolStyle));
+            }
+        }
     }
 }

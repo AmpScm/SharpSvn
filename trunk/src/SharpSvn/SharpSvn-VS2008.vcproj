@@ -1687,7 +1687,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteNodeKindArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteOpenArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemotePropertiesArgs.h"
 					>
 				</File>
 				<File
@@ -1732,6 +1740,10 @@
 				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetProperties.cpp"
 					>
 				</File>
 				<File
