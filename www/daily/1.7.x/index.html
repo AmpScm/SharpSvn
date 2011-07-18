@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.7000.1786</title>
+          SharpSvn-Daily Update - 1.7000.1811</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.7000.1786</h1>
+          SharpSvn-Daily Update - 1.7000.1811</h1>
 
 
 <p>
@@ -15,25 +15,62 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/4817/SSvn-1.7000.1786.zip">SharpSvn 1.7000.1786</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/4834/SSvn-1.7000.1811.zip">SharpSvn 1.7000.1811</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/4818/SSvn-1.7000.1786-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/4819/SSvnEx-1.7000.1786.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/4835/SSvn-1.7000.1811-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/4836/SSvnEx-1.7000.1811.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1786">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1811">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2011-07-18</td></tr>
+<tr><td> </td><td class="r"><a id="1806" href="http://sharpsvn.net/rev/?r=1806">
+            [r1806]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Discover:</strong> Dns/DnsBase.cs, Dns/DnsConstants.cs, Dns/Impl.cs, SvnBonjourService.cs, Dns/DnsRecord.cs, Dns/DnsResponse.cs, Properties/AssemblyInfo.cs, Dns/DnsEntry.cs, Dns/DnsMessage.cs, Dns/DnsQuestion.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update svn:eol-style</td></tr>
+<tr><td> </td><td class="r"><a id="1804" href="http://sharpsvn.net/rev/?r=1804">
+            [r1804]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/RemoteCommands/RemoteGetNodeKind.cpp, SharpSvn/RemoteCommands/RemoteGetRepositoryId.cpp, SharpSvn/RemoteArgs/SvnRemoteCommonArgs.h, SharpSvn.Tests/ConflictTest.cs, SharpSvn/Commands/Upgrade.cpp, SharpSvn/Commands/InstallConflict.cpp, SharpSvn/RemoteArgs/SvnRemotePropertiesArgs.h, SharpSvn.Tests/SvnAuthTests.cs, SharpSvn/RemoteCommands/RemoteListLocks.cpp, SharpSvn/EventArgs/SvnRemoteListEventArgs.h, SharpSvn/Args/Patch.h, SharpSvn/RemoteCommands/RemoteList.cpp, SharpSvn/EventArgs/SvnRemoteLogEventArgs.h, SharpSvn/SvnFsOperationRetryOverride.cpp (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Set svn:eol-style to native.</td></tr>
+<tr><td> </td><td class="r"><a id="1800" href="http://sharpsvn.net/rev/?r=1800">
+            [r1800]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/RemoteCommands/RemoteGetLocations.cpp, SharpSvn/RemoteArgs/SvnRemoteLocationArgs.h, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/SharpSvn.vcproj, SharpSvn/SvnRemoteSession.h, SharpSvn.Tests/RemoteTests/RemoteTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make the revision argument of SvnRemoteSession.GetLocations optional, like that
+of the other methods.</td></tr>
+<tr><td> </td><td class="r"><a id="1799" href="http://sharpsvn.net/rev/?r=1799">
+            [r1799]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/RemoteCommands/RemoteGetNodeKind.cpp, SharpSvn/RemoteCommands/RemoteGetProperties.cpp, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/RemoteArgs/SvnRemoteNodeKindArgs.h, SharpSvn/RemoteArgs/SvnRemotePropertiesArgs.h, SharpSvn/SvnRemoteSession.h, SharpSvn.Tests/RemoteTests/RemoteTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add support for retrieving properties to SvnRemoteSession.</td></tr>
+<tr><td> </td><td class="r"><a id="1798" href="http://sharpsvn.net/rev/?r=1798">
+            [r1798]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/RemoteCommands/RemoteGetLocations.cpp, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/RemoteCommands/RemoteLocationSegments.cpp, SharpSvn/SvnRemoteSession.h, SharpSvn.Tests/RemoteTests/RemoteTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add SvnRemoteSession.GetLocations() method.</td></tr>
+<tr class="d"><td colspan="4">2011-07-15</td></tr>
+<tr><td> </td><td class="r"><a id="1796" href="http://sharpsvn.net/rev/?r=1796">
+            [r1796]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/RemoteCommands/RemoteLog.cpp, SharpSvn/SvnRemoteSession.h, SharpSvn/EventArgs/SvnRemoteLocationSegmentEventArgs.h, SharpSvn.Tests/RemoteTests/RemoteTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add SvnRemoteSession.Log() override that accepts a string argument instead
+of a list of paths. And implement some simple tests on remot logging and
+retrieving location segments.</td></tr>
+<tr><td> </td><td class="r"><a id="1794" href="http://sharpsvn.net/rev/?r=1794">
+            [r1794]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnMergeInfo.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make SvnRevisionRange implement IEquatable, Equals(), GetHashCode().</td></tr>
+<tr><td> </td><td class="r"><a id="1793" href="http://sharpsvn.net/rev/?r=1793">
+            [r1793]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnMergeInfo.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add Unary minus / .Reverse() function to SvnRevisionRange to allow easier
+access to the reversed range.</td></tr>
+<tr><td> </td><td class="r"><a id="1792" href="http://sharpsvn.net/rev/?r=1792">
+            [r1792]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnMergeInfo.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement SvnRevisionRange.ToString()</td></tr>
+<tr><td> </td><td class="r"><a id="1791" href="http://sharpsvn.net/rev/?r=1791">
+            [r1791]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> RemoteCommands/RemoteLatestRevision.cpp, EventArgs/SvnRemoteLogEventArgs.h, RemoteCommands/RemoteLog.cpp, RemoteCommands/ResolveRevision.cpp, SvnRemoteSession.h, RemoteArgs/SvnRemoteLogArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement SvnRemoteSession.Log()
+(Will be used in the AnkhSVN log dialog)</td></tr>
 <tr class="d"><td colspan="4">2011-07-14</td></tr>
 <tr><td> </td><td class="r"><a id="1786" href="http://sharpsvn.net/rev/?r=1786">
             [r1786]
@@ -141,10 +178,6 @@ This commit switches most committing commands to the 1.7 apis.</td></tr>
             [r1697]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/EventArgs:</strong> SvnConflictData.h, SvnDiffSummaryEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Use the right functions to join urls and dirents. The .Net Uri
 class probably hides any differences.</td></tr>
-<tr class="d"><td colspan="4">2011-06-07</td></tr>
-<tr><td> </td><td class="r"><a id="1693" href="http://sharpsvn.net/rev/?r=1693">
-            [r1693]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> AprArray.cpp, Commands/Delete.cpp, Commands/Update.cpp, Commands/RemoveFromChangeList.cpp, AprArray.h, SvnBase.h, Commands/Move.cpp, Commands/Revert.cpp, Commands/Commit.cpp, Commands/CreateDirectory.cpp, Commands/Lock.cpp, Commands/Unlock.cpp, Commands/AddToChangeList.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove more old-style generic path handling by proper Dirent handling.</td></tr>
 
 </table>
 <!--/Recent changes-->
