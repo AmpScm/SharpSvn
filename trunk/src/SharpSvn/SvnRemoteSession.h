@@ -24,6 +24,18 @@ namespace SharpSvn {
 
 	ref class SvnRemoteStatEventArgs;
 
+    public ref class SvnRevisionLocationMap sealed : KeyedCollection<__int64, SvnUriTarget^>
+	{
+	protected:
+		virtual __int64 GetKeyForItem(SvnUriTarget^ item) override
+		{
+			if (!item)
+				throw gcnew ArgumentNullException("item");
+
+			return item->Revision->Revision;
+		}
+	};
+
 	/// <summary>This class gives access to the Subversion network protocol. Make sure all
 	/// passed paths use '/' as path separator. Refer to svn_ra.h for details about the
 	/// functions on this class, or use the more polished wrappers on the SvnClient class
@@ -80,8 +92,8 @@ namespace SharpSvn {
 		/// <summary>Get the latest revision in the repository</summary>
 		bool GetLatestRevision(SvnRemoteCommonArgs^ args, [Out] __int64% revision);
 
-    private:
-        bool InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Out] __int64% revno);
+	private:
+		bool InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Out] __int64% revno);
 
 	public:
 		/// <overloads>Resolves a dated or head revision to an actual revision number</overloads>
@@ -90,7 +102,7 @@ namespace SharpSvn {
 		/// <summary>Resolves a dated or head revision to an actual revision number</summary>
 		bool ResolveRevision(SvnRevision^ revision, SvnRemoteCommonArgs^ args, [Out] __int64% revno);
 
-    private:
+	private:
 		bool InternalResolveRevision(SvnRevision^ revision, SvnRemoteSessionArgs^ args, [Out] __int64% revno);
 
 	public:
@@ -120,6 +132,14 @@ namespace SharpSvn {
 	public:
 		bool LocationSegments(String^ relPath, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
 		bool LocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, EventHandler<SvnRemoteLocationSegmentEventArgs^>^ segmentHandler);
+
+        bool GetLocationSegments(String^ relPath, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
+		bool GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
+
+	public:
+		bool GetLocations(String^ relpath, __int64 revision, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations);
+		bool GetLocations(String^ relpath, __int64 revision, ICollection<__int64>^ resolveRevisions, SvnRemoteCommonArgs^ args, [Out] SvnRevisionLocationMap^% locations);
+
 	public:
 		bool Log(String^ relPath, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 		/// <summary>Streamingly retrieve the log messages for a set of revision(s).</summary>
