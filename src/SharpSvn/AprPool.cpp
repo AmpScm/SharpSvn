@@ -156,7 +156,7 @@ const char* AprPool::AllocString(String^ value)
 		return pData;
 	}
 	else
-		return (const char*)AllocCleared(1);
+		return "";
 }
 
 const char* AprPool::AllocUnixString(String^ value)
@@ -207,7 +207,7 @@ const char* AprPool::AllocUnixString(String^ value)
 		return pData;
 	}
 	else
-		return (const char*)AllocCleared(1);
+		return "";
 }
 
 
@@ -264,7 +264,7 @@ const char* AprPool::AllocDirent(String^ value)
 		return pData;
 	}
 	else
-		return (const char*)AllocCleared(1);
+		return "";
 }
 
 const char* AprPool::AllocRelpath(String^ value)
@@ -279,7 +279,7 @@ const char* AprPool::AllocRelpath(String^ value)
 		return svn_relpath_canonicalize((const char*)pBytes, Handle);
 	}
 	else
-		return (const char*)AllocCleared(1);
+		return "";
 }
 
 
@@ -321,7 +321,7 @@ const char* AprPool::AllocUri(String^ value)
 		return resPath;
 	}
 	else
-		return (const char*)AllocCleared(1);
+		return "";
 }
 
 const svn_string_t* AprPool::AllocSvnString(String^ value)
