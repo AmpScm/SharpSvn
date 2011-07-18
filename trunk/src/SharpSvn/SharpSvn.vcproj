@@ -1009,6 +1009,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\Patch.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\Commands\PropertyList.cpp"
 					>
 				</File>
@@ -1066,6 +1070,10 @@
 				</File>
 				<File
 					RelativePath=".\Commands\Update.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\Upgrade.cpp"
 					>
 				</File>
 				<File
@@ -1138,6 +1146,10 @@
 				</File>
 				<File
 					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\EventArgs\SvnPatchFilterEventArgs.h"
 					>
 				</File>
 				<File
@@ -1285,6 +1297,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Args\Patch.h"
+					>
+				</File>
+				<File
 					RelativePath=".\Args\PropertyList.h"
 					>
 				</File>
@@ -1338,6 +1354,10 @@
 				</File>
 				<File
 					RelativePath=".\Args\Update.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\Upgrade.h"
 					>
 				</File>
 				<File
@@ -1657,6 +1677,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteLocationArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
 					>
 				</File>
@@ -1665,7 +1689,15 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteNodeKindArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteOpenArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemotePropertiesArgs.h"
 					>
 				</File>
 				<File
@@ -1705,7 +1737,15 @@
 				Name="Sources"
 				>
 				<File
+					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetProperties.cpp"
 					>
 				</File>
 				<File
