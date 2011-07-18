@@ -21,6 +21,7 @@ namespace SharpSvn {
 	ref class SvnRemoteStatArgs;
 	ref class SvnRemoteListArgs;
 	ref class SvnRemoteListLocksArgs;
+	ref class SvnRemoteLocationArgs;
 	ref class SvnRemoteLocationSegmentsArgs;
 	ref class SvnRemotePropertiesArgs;
 
@@ -139,8 +140,8 @@ namespace SharpSvn {
 		bool GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
 
 	public:
-		bool GetLocations(String^ relpath, __int64 revision, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations);
-		bool GetLocations(String^ relpath, __int64 revision, ICollection<__int64>^ resolveRevisions, SvnRemoteCommonArgs^ args, [Out] SvnRevisionLocationMap^% locations);
+		bool GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations);
+		bool GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, SvnRemoteLocationArgs^ args, [Out] SvnRevisionLocationMap^% locations);
 
 	public:
 		bool Log(String^ relPath, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);

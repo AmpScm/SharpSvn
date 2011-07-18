@@ -314,9 +314,7 @@ namespace SharpSvn.Tests.RemoteTests
                 }
 
                 SvnRevisionLocationMap revMap;
-                long head;
-                rc.GetLatestRevision(out head);
-                rc.GetLocations("branches/c/products/medium.html", head, revs, out revMap);
+                rc.GetLocations("branches/c/products/medium.html", revs, out revMap);
 
                 foreach (SvnRemoteLocationSegmentEventArgs e in c)
                 {
