@@ -60,7 +60,13 @@ bool SvnRemoteSession::GetProperties(String^ relpath, SvnRemotePropertiesArgs^ a
     apr_array_header_t *regular_props;
     SVN_HANDLE(svn_categorize_props(all_props, nullptr, nullptr, &regular_props, pool.Handle));
 
-    properties = CreatePropertyDictionary(svn_prop_array_to_hash(regular_props, pool.Handle), %pool);
+    properties = gcnew SvnPropertyCollection();
+    for (int i = 0; i < regular_props->nelts; i++)
+    {
+        const svn_prop_t &p = APR_ARRAY_IDX(regular_props, i, const svn_prop_t);
+
+        properties->Add(SvnPropertyValue::Create(p.name, p.value, nullptr));
+    }
 
 	return true;
 }
