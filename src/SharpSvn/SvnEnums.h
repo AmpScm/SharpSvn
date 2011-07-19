@@ -531,7 +531,9 @@ namespace SharpSvn {
 		MergeInfo,
 		LogRevisionProperties,
 		PartialReplay,
-		CommitRevisionProperties
+		CommitRevisionProperties,
+        AtomicRevisionProperties,
+        ValidateInheritedMergeInfo,
 	};
 
 	public enum class SvnPropertyKind
