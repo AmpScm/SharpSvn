@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using System.Collections.ObjectModel;
+using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -31,6 +32,9 @@ namespace SharpSvn.Tests.Commands
             using (SvnClient client = new SvnClient())
             {
                 Collection<SvnCapability> caps;
+                SvnGetCapabilitiesArgs aa = new SvnGetCapabilitiesArgs();
+                aa.RetrieveAllCapabilities = true;
+
                 IEnumerable<SvnCapability> rCaps = new SvnCapability[] { SvnCapability.MergeInfo };
                 Assert.That(client.GetCapabilities(GetReposUri(TestReposType.Empty), rCaps, out caps));
 
@@ -39,6 +43,13 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(client.GetCapabilities(GetReposUri(TestReposType.EmptyNoMerge), rCaps, out caps));
 
                 Assert.That(!caps.Contains(SvnCapability.MergeInfo));
+                Assert.That(caps.Count, Is.EqualTo(0));
+                
+                Assert.That(client.GetCapabilities(GetReposUri(TestReposType.EmptyNoMerge), aa, out caps));
+                Assert.That(caps.Count, Is.GreaterThanOrEqualTo(5));
+
+                Assert.That(client.GetCapabilities(GetReposUri(TestReposType.Empty), aa, out caps));
+                Assert.That(caps.Count, Is.GreaterThanOrEqualTo(7));
             }
         }
 
@@ -54,6 +65,7 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(client.GetCapabilities(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/"), ca, out caps));
 
                 Assert.That(caps.Contains(SvnCapability.MergeInfo));
+                Assert.That(caps.Count, Is.GreaterThanOrEqualTo(5));
             }
         }
     }
