@@ -837,3 +837,67 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 	else
 		return nullptr;
 }
+
+bool SvnTools::TrySplitCommandLine(String^ command, [Out] String^% application, [Out] String^% arguments)
+{
+    if(!command)
+        throw gcnew ArgumentNullException("command");
+
+    application = arguments = nullptr;
+
+    String^ cmdline = command->TrimStart();
+
+    if (cmdline->Length == 0)
+        return false;
+
+    if (cmdline->StartsWith("\""))
+    {
+        // Ok: The easy way:
+        int nEnd = cmdline->IndexOf('\"', 1);
+
+        if (nEnd < 0)
+            return false; // Invalid string!
+
+        application = Environment::ExpandEnvironmentVariables(cmdline->Substring(1, nEnd - 1));
+        arguments = cmdline->Substring(nEnd + 1)->Trim();
+        return true;
+    }
+
+    // We use the algorithm as documented by CreateProcess() in MSDN
+    // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
+    array<wchar_t>^ spacers = gcnew array<wchar_t> { ' ', '\t' };
+    int nFrom = 0;
+    int nTok = -1;
+
+    String^ file;
+    
+    while ((nFrom < cmdline->Length) &&
+        (0 <= (nTok = cmdline->IndexOfAny(spacers, nFrom))))
+    {
+        application = cmdline->Substring(0, nTok);
+
+        file = Environment::ExpandEnvironmentVariables(application);
+
+        if (!String::IsNullOrEmpty(file) && File::Exists(file))
+        {
+            arguments = cmdline->Substring(nTok + 1)->Trim();
+            return true;
+        }
+        else
+            nFrom = nTok + 1;
+    }
+
+    if (nTok < 0 && nFrom <= cmdline->Length)
+    {
+        file = Environment::ExpandEnvironmentVariables(application);
+
+        if (!String::IsNullOrEmpty(file) && File::Exists(file))
+        {
+            application = file;
+            arguments = "";
+            return true;
+        }
+    }
+
+    return false;
+}
