@@ -32,17 +32,17 @@ All environments accept the following defines
 
 1) To build the dependencies
 	Go to sharpsvn/imports
-	Type NAnt
+	Type nant build
 	After about 20 a 30 minutes you should see build succeeded
 	(with maybe a few ignored errors)
 	
 2) To build the windows release
     Go to sharpsvn/imports/svn-dist
-    Type NAnt
+    Type nant
     
 3) To build the subversion development environment
     Copy the file sharpsvn/imports/dev-default.build to sharpsvn/default.build    
-    Type NAnt
+    Type nant
     
     Open wc\subversion_vcnet.sln in your IDE.
     
