@@ -267,6 +267,42 @@ namespace SharpSvn.Tests.Commands
         }
 
         [Test]
+        public void ListDepth()
+        {
+            Uri url = new Uri(CollabReposUri, "trunk/");
+            string dir = GetTempDir();
+            Client.CheckOut(url, dir);
+
+            foreach (SvnDepth d in new SvnDepth[] { SvnDepth.Infinity, SvnDepth.Children, SvnDepth.Files, SvnDepth.Empty })
+            {
+                Collection<SvnListEventArgs> remoteList, localList;
+                SvnListArgs la = new SvnListArgs();
+                la.Depth = d;
+
+                Client.GetList(url, la, out remoteList);
+                Client.GetList(dir, la, out localList);
+
+                Assert.That(remoteList.Count, Is.EqualTo(localList.Count));
+
+                switch (d)
+                {
+                    case SvnDepth.Infinity:
+                        Assert.That(localList.Count, Is.EqualTo(16));
+                        break;
+                    case SvnDepth.Children:
+                        Assert.That(localList.Count, Is.EqualTo(7));
+                        break;
+                    case SvnDepth.Files:
+                        Assert.That(localList.Count, Is.EqualTo(2));
+                        break;
+                    case SvnDepth.Empty:
+                        Assert.That(localList.Count, Is.EqualTo(1));
+                        break;
+                }
+            }
+        }
+
+        [Test]
         public void TestHash()
         {
             using (SvnClient client = new SvnClient())
