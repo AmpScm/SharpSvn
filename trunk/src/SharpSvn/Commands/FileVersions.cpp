@@ -228,7 +228,7 @@ static svn_error_t *file_version_handler(
             svn_stream_t *cur_stream, *last_stream;
 
 			if (args->_lastFile)
-				SVN_ERR(svn_stream_open_readonly(&last_stream, args->_lastFile, curPool->Handle, curPool->Handle));
+                SVN_ERR(svn_stream_open_readonly(&last_stream, args->_lastFile, args->_prevPool->Handle, args->_prevPool->Handle));
 			else
 				last_stream = nullptr; /* Handled as svn_stream_empty(curPool->Handle); */
 
