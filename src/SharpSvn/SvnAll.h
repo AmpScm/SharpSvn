@@ -43,3 +43,4 @@
 #include "SvnException.h"
 #include "SvnAuthentication.h"
 
+#undef GetTempPath

@@ -84,6 +84,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can&apos;t parse command &apos;{0}&apos;.
+        /// </summary>
+        internal: static property System::String^  CantParseCommandX {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The collection must at least contain one item.
         /// </summary>
         internal: static property System::String^  CollectionMustContainAtLeastOneItem {
@@ -537,6 +544,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::CanOnlyResolveHeadDateandExplicitRevisions::get() {
         return ResourceManager->GetString(L"CanOnlyResolveHeadDateandExplicitRevisions", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::CantParseCommandX::get() {
+        return ResourceManager->GetString(L"CantParseCommandX", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::CollectionMustContainAtLeastOneItem::get() {

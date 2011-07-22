@@ -309,4 +309,7 @@
   <data name="SessionAlreadyOpen" xml:space="preserve">
     <value>The session is already open</value>
   </data>
+  <data name="CantParseCommandX" xml:space="preserve">
+    <value>Can't parse command '{0}'</value>
+  </data>
 </root>

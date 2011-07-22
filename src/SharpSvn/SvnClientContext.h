@@ -30,6 +30,12 @@ namespace SharpSvn {
 
 	using SharpSvn::Security::SvnAuthentication;
 
+	ref class SvnErrorEventArgs;
+	ref class SvnProcessingEventArgs;
+	ref class SvnClientArgs;
+	ref class SvnCommitResult;
+	ref class SvnClient;
+
 	namespace Implementation
 	{
 		enum class SvnContextState
@@ -44,12 +50,14 @@ namespace SharpSvn {
 		[Flags]
 		enum class SvnExtendedState
 		{
+			None = 0,
 			MimeTypesLoaded = 0x01,
+			TortoiseSvnHooksLoaded = 0x02,
 		};
 
 		ref class SvnLibrary;
 
-		ref class SvnConfigItem
+		ref class SvnConfigItem sealed
 		{
 			initonly String ^_file;
 			initonly String ^_section;
@@ -106,13 +114,154 @@ namespace SharpSvn {
 				}
 			}
 		};
-	}
 
-	ref class SvnErrorEventArgs;
-	ref class SvnProcessingEventArgs;
-	ref class SvnClientArgs;
-	ref class SvnCommitResult;
-	ref class SvnClient;
+		/* This order matches the ordering of SvnClientHook::_hookTypes */
+		enum class SvnClientHookType
+		{
+			Undefined = -1,
+			StartCommit = 0,
+			PreCommit,
+			PostCommit,
+			StartUpdate,
+			PreUpdate,
+			PostUpdate,
+			PreConnect,
+		};
+
+		ref class SvnClientHook sealed : IComparable<SvnClientHook^>, IEquatable<SvnClientHook^>, IComparable
+		{
+			initonly SvnClientHookType _type;
+			initonly String^ _dir; 
+			initonly String^ _cmd; 
+			initonly bool _wait;
+			initonly bool _show;
+
+		public:
+			SvnClientHook(SvnClientHookType type, String^ dir, String^ cmd, bool wait, bool show)
+			{
+				if (!dir)
+					throw gcnew ArgumentNullException("dir");
+				else if (String::IsNullOrEmpty(cmd))
+					throw gcnew ArgumentNullException("cmd");
+
+				_type = type;
+				_dir = String::IsNullOrEmpty(dir) ? "" : SvnTools::GetNormalizedFullPath(dir);
+				_cmd = cmd;
+				_wait = wait;
+				_show = show;
+			}
+
+			property SvnClientHookType Type
+			{
+				SvnClientHookType get()
+				{
+					return _type;
+				}
+			}
+
+			property String^ Path
+			{
+				String^ get()
+				{
+					return _dir;
+				}
+			}
+
+			property String^ Command
+			{
+				String^ get()
+				{
+					return _cmd;
+				}
+			}
+
+			property bool WaitForExit
+			{
+				bool get()
+				{
+					return _wait;
+				}
+			}
+
+			property bool ShowConsole
+			{
+				bool get()
+				{
+					return _show;
+				}
+			}
+
+		private:
+		/* This order matches the ordering of SvnClientHookTypes */
+			static initonly array<String^>^ _hookTypes = gcnew array<String^> 
+			{ 
+				"start_commit_hook",
+				"pre_commit_hook",
+				"post_commit_hook",
+				"start_update_hook",
+				"pre_update_hook",
+				"post_update_hook",
+				"pre_connect_hook",
+			};
+
+		internal:
+			static SvnClientHookType GetHookType(String^ hookString)
+			{
+				if (!hookString)
+					throw gcnew ArgumentNullException("hookString");
+
+				int idx = Array::IndexOf(_hookTypes, hookString);
+
+				if (idx >= 0)
+					return (SvnClientHookType)idx;
+				else
+					return SvnClientHookType::Undefined;
+			}
+
+		public:
+			virtual int CompareTo(Object^ other)
+			{
+				return CompareTo(dynamic_cast<SvnClientHook^>(other));
+			}
+
+			virtual int CompareTo(SvnClientHook^ other)
+			{
+				if (other == nullptr)
+					return -1;
+
+				int n = Path->CompareTo(other->Path);
+
+				if (n == 0)
+					return (int)Type - (int)other->Type;
+				else
+					return n;
+			}
+
+			virtual bool Equals(Object^ other) override
+			{
+				return Equals(dynamic_cast<SvnClientHook^>(other));
+			}
+
+			virtual bool Equals(SvnClientHook^ other)
+			{
+				if (other == nullptr)
+					return false;
+
+				if (!Path->Equals(other->Path))
+					return false;
+
+				return Type == other->Type;
+			}
+
+			virtual int GetHashCode() override
+			{
+				return Path->GetHashCode() ^ Type.GetHashCode();
+			}
+
+		internal:
+			bool Run(SvnClientContext^ ctx, SvnClientArgs^ args, ...array<String^>^ commandArgs);
+		};
+	}
 
 	/// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
 	/// <threadsafety static="true" instance="false"/>
@@ -185,7 +334,8 @@ namespace SharpSvn {
 
 	private:
 		~SvnClientContext();
-        System::Collections::Generic::List<SvnConfigItem^>^ _configOverrides;
+		System::Collections::Generic::List<SvnConfigItem^>^ _configOverrides;
+		array<SvnClientHook^>^ _tsvnHooks;
 
 	internal:
 		property svn_client_ctx_t *CtxHandle
@@ -194,13 +344,17 @@ namespace SharpSvn {
 			svn_client_ctx_t *get();
 		}
 
-        void SetConfigurationOption(String^ file, String^ section, String^ option, String^ value);
+		void SetConfigurationOption(String^ file, String^ section, String^ option, String^ value);
 
 	private:
 		void ApplyCustomRemoteConfig();
 		void ApplyCustomSsh();
 		void ApplyMimeTypes();
 		void ApplyUserDiffConfig();
+		void LoadTortoiseSvnHooks();
+
+	internal:
+		bool FindHook(String^ path, SvnClientHookType hookType, [Out] SvnClientHook^% hook);
 
 	public:
 		/// <summary>Loads the subversion configuration from the specified path</summary>
@@ -368,6 +522,13 @@ namespace SharpSvn {
 				}
 			}
 		};
+
+        void NopEventHandler(Object^ sender, EventArgs^ e)
+        {
+            UNUSED_ALWAYS(sender);
+            UNUSED_ALWAYS(e);
+            GC::KeepAlive(this); // Keep reference online
+        }
 	};
 
 	public ref class SvnCommandResult abstract

@@ -26,7 +26,7 @@ namespace SharpSvn {
 		bool _keepLocks;
 		bool _keepChangeLists;
 		SvnChangeListCollection^ _changelists;
-		bool _commitOperationsRecursively;
+        bool _runTortoiseHooks;
 
 	public:
 		SvnCommitArgs()
@@ -90,17 +90,17 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool CommitOperationsRecursively
-		{
-			bool get()
-			{
-				return _commitOperationsRecursively;
-			}
-			void set(bool value)
-			{
-				_commitOperationsRecursively = value;
-			}
-		}
+        property bool RunTortoiseHooks
+        {
+            bool get()
+            {
+                return _runTortoiseHooks;
+            }
+            void set(bool value)
+            {
+                _runTortoiseHooks = value;
+            }
+        }
 	};
 
 }
