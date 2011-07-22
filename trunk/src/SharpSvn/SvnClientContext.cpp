@@ -24,6 +24,7 @@
 using namespace SharpSvn;
 using namespace System::Threading;
 using namespace Microsoft::Win32;
+using namespace System::Diagnostics;
 using System::IO::Path;
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
@@ -184,6 +185,9 @@ void SvnClientContext::EnsureState(SvnContextState requiredState, SvnExtendedSta
 
 	if (0 != (int)((xState & ~_xState) & SvnExtendedState::MimeTypesLoaded))
 		ApplyMimeTypes();
+
+    if (0 != (int)((xState & ~_xState) & SvnExtendedState::TortoiseSvnHooksLoaded))
+        LoadTortoiseSvnHooks();
 }
 
 void SvnClientContext::ApplyMimeTypes()
@@ -221,6 +225,197 @@ void SvnClientContext::ApplyMimeTypes()
 				throw exception;
 		}
 	}
+}
+
+void SvnClientContext::LoadTortoiseSvnHooks()
+{
+    if (0 != (int)(_xState & SvnExtendedState::TortoiseSvnHooksLoaded))
+		return;
+
+    _xState = _xState | SvnExtendedState::TortoiseSvnHooksLoaded;
+
+    String^ tsvnVersion = nullptr;
+    String^ hookScripts = nullptr;
+    RegistryKey ^rk = Registry::CurrentUser->OpenSubKey("Software\\TortoiseSVN", false);
+    if (rk != nullptr)
+    {
+        try
+        {
+            tsvnVersion = dynamic_cast<String^>(rk->GetValue("CurrentVersion"));
+            hookScripts = dynamic_cast<String^>(rk->GetValue("hooks"));
+        }
+        finally
+        {
+            delete rk;
+        }
+    }
+
+    if (!tsvnVersion || !hookScripts)
+        return;
+
+    /* Do a simple version check to verify if the hook format didn't change */
+    tsvnVersion = tsvnVersion->Replace(" ", "")->Replace(',', '.');
+    Version^ tsv = gcnew Version(tsvnVersion);
+    Version^ shv = SvnClient::SharpSvnVersion;
+
+    if (tsv->Major != shv->Major)
+        return;
+    int shMinor = shv->Minor / 1000;
+    if (tsv->Minor != shMinor && !(tsv->Minor+1 == shMinor && tsv->Build == 99))
+        return;
+
+    array<String^>^ hookVals = hookScripts->Replace("\r","")->Split('\n');
+
+    List<SvnClientHook^>^ hooks = gcnew List<SvnClientHook^>();
+
+    const int hookItems = 5;
+    for (int i = 0; i < hookVals->Length; i += hookItems)
+    {
+        if (i + hookItems >= hookVals->Length)
+            break;
+
+        String^ hookType = hookVals[i]->Trim();
+        String^ hookDir = hookVals[i+1]->Trim();
+        String^ hookCmd = hookVals[i+2]->Trim();
+        String^ hookWait = hookVals[i+3]->Trim();
+        String^ hookShow = hookVals[i+4]->Trim();
+
+        SvnClientHookType type = SvnClientHook::GetHookType(hookType);
+
+        if (type == SvnClientHookType::Undefined)
+            continue;
+        else if (String::IsNullOrEmpty(hookCmd))
+            continue;
+
+        bool wait = String::Equals("true", hookWait, StringComparison::OrdinalIgnoreCase);
+        bool show = String::Equals("show", hookShow, StringComparison::OrdinalIgnoreCase);
+        
+        hooks->Add(gcnew SvnClientHook(type, hookDir, hookCmd, wait, show));
+    }
+    hooks->Sort();
+    hooks->Reverse();
+    _tsvnHooks = hooks->ToArray();
+}
+
+bool SvnClientContext::FindHook(String^ path, SvnClientHookType hookType, [Out] SvnClientHook^% hook)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (0 == (int)(_xState & SvnExtendedState::TortoiseSvnHooksLoaded))
+        throw gcnew InvalidOperationException();
+    else if (!Enum::IsDefined(SvnClientHookType::typeid, hookType) || hookType == SvnClientHookType::Undefined)
+        throw gcnew ArgumentOutOfRangeException("hookType");
+
+    hook = nullptr;
+
+    if (_tsvnHooks == nullptr || _tsvnHooks->Length == 0)
+        return false;
+
+    path = SvnTools::GetNormalizedFullPath(path);
+
+    for each (SvnClientHook^ h in _tsvnHooks)
+    {
+        if (h->Type != hookType)
+            continue;
+
+        if (h->Path->Length == 0)
+        {
+            hook = h;
+            return true;
+        }
+
+        if (path->Length < h->Path->Length)
+            continue;
+        else if (!path->Substring(0, h->Path->Length)->Equals(h->Path, StringComparison::OrdinalIgnoreCase))
+            continue;
+
+        if (path->Length == h->Path->Length || path[h->Path->Length] == '\\')
+        {
+            hook = h;
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool SvnClientHook::Run(SvnClientContext^ ctx, SvnClientArgs^ args, ...array<String^>^ commandArgs)
+{
+    if (!ctx)
+        throw gcnew ArgumentNullException("ctx");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+
+    if (!commandArgs)
+        commandArgs = gcnew array<String^>(0);
+
+    String^ application;
+    String^ cmdArgs;
+    if (!SvnTools::TrySplitCommandLine(Command, application, cmdArgs)
+        || !System::IO::File::Exists(application))
+        return args->HandleResult(ctx, gcnew SvnSystemException(String::Format(SharpSvnStrings::CantParseCommandX, Command)));
+
+    Process^ p = gcnew Process();
+    p->StartInfo->UseShellExecute = false;
+    p->StartInfo->CreateNoWindow = !this->ShowConsole;
+    p->StartInfo->FileName = application;
+    p->StartInfo->WorkingDirectory = System::IO::Path::GetTempPath();
+
+    for each(String^ s in commandArgs)
+    {
+        if (!String::IsNullOrEmpty(cmdArgs))
+            cmdArgs += " ";
+
+        if (s->IndexOf(' ') > 0)
+            cmdArgs += "\"" + s->Replace("\"", "\"\"") + "\"";
+        else
+            cmdArgs += s;
+    }
+    p->StartInfo->Arguments = cmdArgs->Trim();
+
+    String^ hookName = this->Type.ToString();
+
+    p->StartInfo->EnvironmentVariables->Add("SharpSvn", SvnClient::SharpSvnVersion->ToString());
+    p->StartInfo->EnvironmentVariables->Add("SharpSvn_Hook", hookName);
+
+    /* Keep the tempfiles alive */
+    p->EnableRaisingEvents = true;
+    p->Exited += gcnew EventHandler(ctx, &SvnClientContext::NopEventHandler);
+
+    try
+    {
+        p->Start();
+    }
+    catch (Exception^ e)
+    {
+        return args->HandleResult(ctx, gcnew SvnClientHookException(e->Message, e));
+    }
+
+    if (!WaitForExit)
+        return true;
+
+    while (!p->HasExited)
+    {
+        if (ctx->CtxHandle->cancel_func)
+        {
+            svn_error_t *err = ctx->CtxHandle->cancel_func(ctx->CtxHandle->cancel_baton);
+
+            if (err)
+                return args->HandleResult(ctx, err);
+        }
+
+        if (p->HasExited)
+            break;
+
+        Sleep(100);
+    }
+
+    bool ok = p->HasExited && (p->ExitCode == 0);
+
+    if (p->HasExited)
+        delete p; /* Close process handle */
+
+    return ok;
 }
 
 void SvnClientContext::ApplyCustomRemoteConfig()
