@@ -135,8 +135,7 @@ namespace SharpSvn {
 				}
 				virtual void set(__int64 value) override
 				{
-					UNUSED_ALWAYS(value);
-					throw gcnew InvalidOperationException();
+					Seek(value, System::IO::SeekOrigin::Begin);
 				}
 			}
 
@@ -146,7 +145,7 @@ namespace SharpSvn {
 
 			virtual __int64 Seek(__int64 offset, System::IO::SeekOrigin origin) override
 			{
-				if (!_pool || !_pool->IsValid())
+				if (!_pool || !_pool->IsValid() || !_stream)
 					throw gcnew InvalidOperationException();
 				if (origin != System::IO::SeekOrigin::Begin)
 					throw gcnew ArgumentOutOfRangeException("origin", origin, "Only SeekOrigin.Begin is supported");
@@ -155,7 +154,18 @@ namespace SharpSvn {
 				else if (!_pool->IsValid())
 					throw gcnew InvalidOperationException();
 
-				throw gcnew NotImplementedException("Seek to 0 will be available later");
+				SVN_THROW(svn_stream_reset(_stream));
+				return 0;
+			}
+
+			virtual void Close() override
+			{
+				if (_stream)
+				{
+					svn_stream_t *s = _stream;
+					_stream = nullptr;
+					SVN_THROW(svn_stream_close(s));
+				}
 			}
 
 			virtual void SetLength(__int64 value) override
@@ -168,7 +178,7 @@ namespace SharpSvn {
 			{
 				if (!data)
 					throw gcnew ArgumentNullException("data");
-				else if (!_pool->IsValid())
+				else if (!_pool->IsValid() || !_stream)
 					throw gcnew InvalidOperationException();
 				else if (offset < 0 || offset >= data->Length)
 					throw gcnew ArgumentOutOfRangeException("offset", offset, "Offset out of range");
@@ -178,10 +188,7 @@ namespace SharpSvn {
 				pin_ptr<System::Byte> pData = &data[offset];
 
 				apr_size_t len = length;
-				svn_error_t* r = svn_stream_read(_stream, (char*)pData, &len);
-
-				if (r)
-					throw SvnException::Create(r);
+				SVN_THROW(svn_stream_read(_stream, (char*)pData, &len));
 
 				return (int)len;
 			}
