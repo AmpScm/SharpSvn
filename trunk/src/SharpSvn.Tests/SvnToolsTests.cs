@@ -93,5 +93,14 @@ namespace SharpSvn.Tests
             Directory.CreateDirectory(Path.Combine(sdsvnd, ".svn"));
             Assert.That(SvnTools.IsBelowManagedPath(sdsvnd), "d managed");
         }
+
+        [Test]
+        public void SplitPaths()
+        {
+            string app, args;
+            Assert.That(SvnTools.TrySplitCommandLine("wscript script", out app, out args));
+            Assert.That(Path.GetFileName(app), Is.EqualTo("wscript.exe"));
+            Assert.That(args, Is.EqualTo("script"));
+        }
     }
 }

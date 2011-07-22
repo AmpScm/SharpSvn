@@ -838,10 +838,35 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 		return nullptr;
 }
 
-bool SvnTools::TrySplitCommandLine(String^ command, [Out] String^% application, [Out] String^% arguments)
+static bool AppExists(String^% app)
 {
-    if(!command)
+    wchar_t buffer[512];
+    pin_ptr<const wchar_t> pApp = PtrToStringChars(app);
+
+    DWORD r = SearchPathW(nullptr, pApp, nullptr, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+
+    if (r > 0)
+    {
+        app = gcnew String((const wchar_t*)buffer, 0, r);
+        return true;
+    }
+
+    r = SearchPathW(nullptr, pApp, L".exe", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+    if (r > 0)
+    {
+        app = gcnew String((const wchar_t*)buffer, 0, r);
+        return true;
+    }
+
+    return false;
+}
+
+bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpander^ expander, [Out] String^% application, [Out] String^% arguments)
+{
+    if (!command)
         throw gcnew ArgumentNullException("command");
+    else if (!expander)
+        throw gcnew ArgumentNullException("expander");
 
     application = arguments = nullptr;
 
@@ -858,9 +883,9 @@ bool SvnTools::TrySplitCommandLine(String^ command, [Out] String^% application, 
         if (nEnd < 0)
             return false; // Invalid string!
 
-        application = Environment::ExpandEnvironmentVariables(cmdline->Substring(1, nEnd - 1));
+        application = expander(cmdline->Substring(1, nEnd - 1));
         arguments = cmdline->Substring(nEnd + 1)->Trim();
-        return true;
+        return AppExists(application);
     }
 
     // We use the algorithm as documented by CreateProcess() in MSDN
@@ -876,10 +901,11 @@ bool SvnTools::TrySplitCommandLine(String^ command, [Out] String^% application, 
     {
         application = cmdline->Substring(0, nTok);
 
-        file = Environment::ExpandEnvironmentVariables(application);
+        file = expander(application);
 
-        if (!String::IsNullOrEmpty(file) && File::Exists(file))
+        if (!String::IsNullOrEmpty(file) && AppExists(file))
         {
+            application = file;
             arguments = cmdline->Substring(nTok + 1)->Trim();
             return true;
         }
@@ -889,9 +915,9 @@ bool SvnTools::TrySplitCommandLine(String^ command, [Out] String^% application, 
 
     if (nTok < 0 && nFrom <= cmdline->Length)
     {
-        file = Environment::ExpandEnvironmentVariables(application);
+        file = expander(cmdline);
 
-        if (!String::IsNullOrEmpty(file) && File::Exists(file))
+        if (!String::IsNullOrEmpty(file) && AppExists(file))
         {
             application = file;
             arguments = "";
