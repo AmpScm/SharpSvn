@@ -26,6 +26,7 @@ using System::Runtime::InteropServices::Marshal;
 
 SvnStreamWrapper::~SvnStreamWrapper()
 {
+	delete _stream;
 	delete _streamBaton;
 }
 
