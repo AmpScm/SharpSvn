@@ -23,6 +23,8 @@ using System.IO;
 using NUnit.Framework.SyntaxHelpers;
 using System.Collections.ObjectModel;
 using SharpSvn.SourceIndexer.Tools;
+using System.Diagnostics;
+using SharpSvn.Implementation;
 
 namespace SharpSvn.SourceIndexer.Tests
 {
@@ -100,14 +102,111 @@ namespace SharpSvn.SourceIndexer.Tests
         [Test]
         public void GetAllFiles()
         {
-            string pdb = Pdbs[0];
+            foreach (string pdb in Pdbs)
+            {
+                Assert.That(File.Exists(pdb));
 
-            Assert.That(File.Exists(pdb));
+                Collection<string> files;
+                Assert.That(SourceServerTools.TryGetAllFiles(pdb, out files), "Can get files from pdb");
 
-            Collection<string> files;
-            Assert.That(SourceServerTools.TryGetAllFiles(pdb, out files), "Can get files from pdb");
+                Assert.That(files.Count, Is.GreaterThanOrEqualTo(1), "At least 1 file per pdb");
+                using (SvnPdbClient pdbClient = new SvnPdbClient())
+                {
+                    pdbClient.Open(Path.ChangeExtension(pdb, ".dll"));
 
-            Assert.That(files.Count, Is.GreaterThanOrEqualTo(1), "At least 1 file per pdb");
+                    IList<string> directFiles;
+                    pdbClient.GetAllSourceFiles(out directFiles);
+
+                    Assert.That(directFiles.Count, Is.EqualTo(files.Count));
+                    Assert.That(directFiles, Is.EquivalentTo(files));
+                }
+            }
+        }
+
+        [Test]
+        public void TestPdbStreams()
+        {
+            foreach(FileInfo fi in new DirectoryInfo(@"g:\AnkhSvn-Daily-2.1.10296.19-symbols").GetFiles("*.pdb"))
+            {
+                string pdb = fi.FullName;
+                using (SvnMsfClient msfClient = new SvnMsfClient())
+                {
+                    msfClient.Open(pdb);
+                    Debug.WriteLine(string.Format("OK: {0}", pdb));
+                }
+            }
+        }
+
+        [Test]
+        public void TestPdbStreams2()
+        {
+            using (SvnMsfClient baseClient = new SvnMsfClient())
+            {
+                string bn = @"G:\pdb-tests\SharpSvn.pdb";
+                baseClient.Open(bn);
+
+                foreach (FileInfo fi in new DirectoryInfo(@"g:\pdb-tests").GetFiles("SharpSvn.*.pdb"))
+                {
+                    string pdb = fi.FullName;
+
+                    using (SvnMsfClient tstClient = new SvnMsfClient())
+                    {
+                        tstClient.Open(pdb);
+                        if (tstClient.StreamCount != baseClient.StreamCount)
+                            Debug.WriteLine(string.Format("Nr of streams {0} vs {1}\n", baseClient.StreamCount, tstClient.StreamCount));
+                        for (int i = 0; i < baseClient.StreamCount; i++)
+                        {
+                            GC.KeepAlive(tstClient.GetStreamNames());
+
+                            using (Stream s1 = baseClient.GetStream(i))
+                            using (Stream s2 = tstClient.GetStream(i))
+                            {
+                                bool different = false;
+                                if (s1.Length == s2.Length)
+                                {
+                                    for (int n = 0; n < s1.Length; n++)
+                                    {
+                                        if (s1.ReadByte() != s2.ReadByte())
+                                        {
+                                            Debug.WriteLine(string.Format("Byte difference on stream {0} in {1} at {2}", i, pdb, n));
+                                            different = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Debug.WriteLine(string.Format("Length mismatch on stream {0} in {1} ({2} vs {3})", i, pdb, s1.Length, s2.Length));
+                                    different = true;
+                                }
+
+                                if (different)
+                                {
+                                    s1.Position = 0;
+                                    s2.Position = 0;
+
+                                    byte[] buffer = new byte[s1.Length];
+                                    s1.Read(buffer, 0, buffer.Length);
+                                    File.WriteAllBytes(bn + "." + i.ToString() +".bin", buffer);
+                                    using(StreamWriter sw = File.CreateText(bn + "." + i.ToString()+".txt"))
+                                    {
+                                        foreach(byte b in buffer)
+                                            sw.WriteLine(string.Format("0x{0:X2}", b));
+                                    }
+                                    buffer = new byte[s2.Length];
+                                    s2.Read(buffer, 0, buffer.Length);
+                                    File.WriteAllBytes(pdb + "." + i.ToString()+".bin", buffer);
+                                    using(StreamWriter sw = File.CreateText(pdb + "." + i.ToString()+".txt"))
+                                    {
+                                        foreach(byte b in buffer)
+                                            sw.WriteLine(string.Format("0x{0:X2}", b));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         [Test]
@@ -122,7 +221,7 @@ namespace SharpSvn.SourceIndexer.Tests
         [Test]
         public void TestExtract()
         {
-            TextReader tr = SourceServerTools.GetPdbStream(@"f:\QQn\sharpsvn-dist\release\SharpSvn\SharpSvn.pdb", "srcsrv");
+            TextReader tr = SourceServerTools.GetPdbStream(@"g:\dist\release\SharpSvn\SharpSvn.pdb", "srcsrv");
 
             Assert.That(tr, Is.Not.Null);
 
@@ -136,6 +235,27 @@ namespace SharpSvn.SourceIndexer.Tests
             }
 
             Assert.That(lines, Is.GreaterThan(50));
+        }
+
+        [Test]
+        public void TestAltExtract()
+        {
+            string tst = @"g:\dist\release\SharpSvn\SharpSvn.pdb";
+            TextReader tr = SourceServerTools.GetPdbStream(tst, "srcsrv");
+            string allText = tr.ReadToEnd();
+            tr.Close();
+
+            string allText2;
+            using (SvnMsfClient msf = new SvnMsfClient())
+            {
+                msf.Open(tst);
+                tr = new StreamReader(msf.GetStream("srcsrv"));
+                allText2 = tr.ReadToEnd();
+                tr.Close();
+
+            }
+
+            Assert.That(allText2, Is.EqualTo(allText.Replace("\r\r", "\r")));
         }
     }
 }

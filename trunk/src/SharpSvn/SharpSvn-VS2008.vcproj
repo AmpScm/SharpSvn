@@ -1800,6 +1800,30 @@
 				</File>
 			</Filter>
 		</Filter>
+		<Filter
+			Name="PdbClient"
+			>
+			<File
+				RelativePath=".\PdbTools\sbs_pdh.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PdbTools\SvnMsfClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PdbTools\SvnMsfClient.h"
+				>
+			</File>
+			<File
+				RelativePath=".\PdbTools\SvnPdbClient.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\PdbTools\SvnPdbClient.h"
+				>
+			</File>
+		</Filter>
 		<File
 			RelativePath=".\AssemblyInfo.cpp"
 			>
