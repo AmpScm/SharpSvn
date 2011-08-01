@@ -49,6 +49,13 @@
           <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
         </RegistryKey>
       </Component>
+      <Component Id="svnrdump.exe" Guid="70BC18EE-8B0B-41EA-9FD5-5839B72F4106" >
+        <File Name="svnrdump.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnrdump.exe">
+          <RegistryValue Value="[#svnrdump.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
       <!-- SvnServe -->
       <Component Id="svnserve.exe" Guid="7EC3BCC8-7873-4DC7-8BE3-72B945D6EB4A">
         <File Name="svnserve.exe" KeyPath="yes" Checksum="yes" Vital="yes" />

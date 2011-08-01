@@ -21,9 +21,9 @@
 
     <Property Id="ShortProductName" Value="Subversion" />
     <Property Id="ARPCONTACT">Subversion - users@subversion.collab.net</Property>
-    <Property Id="ARPURLINFOABOUT">http://subversion.tigris.org/</Property>
-    <Property Id="ARPHELPLINK">http://subversion.tigris.org/</Property>
-    <Property Id="ARPURLUPDATEINFO">http://subversion.tigris.org/</Property>
+    <Property Id="ARPURLINFOABOUT">http://subversion.apache.org/</Property>
+    <Property Id="ARPHELPLINK">http://svnbook.red-bean.com/</Property>
+    <Property Id="ARPURLUPDATEINFO">http://sliksvn.com/en/download//</Property>
 
     <!-- Error messages -->
     <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
@@ -90,12 +90,13 @@
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
-    <Feature Id="ReposTools" Title="Repository Tools" Level="1" Description="Install svnadmin, svnsync, svnlook and svndumpfilter">
+    <Feature Id="ReposTools" Title="Repository Tools" Level="1" Description="Install svnadmin, svndumpfilter, svnlook, svnrdump and svnsync">
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnadmin.exe"/>
-      <ComponentGroupRef Id="svnsync.exe"/>
-      <ComponentGroupRef Id="svnlook.exe"/>
       <ComponentGroupRef Id="svndumpfilter.exe"/>
+      <ComponentGroupRef Id="svnlook.exe"/>
+      <ComponentGroupRef Id="svnrdump.exe"/>
+      <ComponentGroupRef Id="svnsync.exe"/>
       <MergeRef Id="VC_CRT"/>
       <MergeRef Id="VC_CRT_Policy" />
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
