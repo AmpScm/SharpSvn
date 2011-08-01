@@ -55,6 +55,16 @@
       <ComponentGroupRef Id="svn_subr_1.dll"/>
       <ComponentGroupRef Id="libintl.dll" />
     </ComponentGroup>
+    <ComponentGroup Id="svnrdump.exe">
+      <ComponentRef Id="svnrdump.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="svn_client_1.dll"/>
+      <ComponentGroupRef Id="svn_ra_1.dll"/>
+      <ComponentGroupRef Id="svn_repos_1.dll"/>
+      <ComponentGroupRef Id="svn_delta_1.dll"/>
+      <ComponentGroupRef Id="svn_subr_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll" />
+    </ComponentGroup>
     <ComponentGroup Id="svnserve.exe">
       <ComponentRef Id="svnserve.exe"/>
       <ComponentGroupRef Id="libapr_1.dll"/>

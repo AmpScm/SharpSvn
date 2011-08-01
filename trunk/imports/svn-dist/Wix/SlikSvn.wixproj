@@ -35,7 +35,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=1.6.17;SvnSuffix=</DefineConstants>
+    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=1.7.0;SvnSuffix=Beta</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
