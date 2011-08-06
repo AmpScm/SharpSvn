@@ -83,7 +83,7 @@ bool SvnMsfClient::Open(String^ path)
     return true;
 }
 
-INT_PTR SvnMsfClient::PagesRequired(INT_PTR size)
+int SvnMsfClient::PagesRequired(int size)
 {
     if (!_data)
         return -1;
