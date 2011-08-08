@@ -30,7 +30,7 @@
   <property name="saslVersion" value="2.1.23" overwrite="false" />
   <property name="swigVersion" value="2.0.2" overwrite="false" />
 
-  <property name="httpdVersion" value="2.2.15" overwrite="false" />
+  <property name="httpdVersion" value="2.2.19" overwrite="false" />
   <property name="gettextVersion" value="0.17" overwrite="false" />
   <property name="sqliteVersion" value="3.7.7.1" overwrite="false" />
   
