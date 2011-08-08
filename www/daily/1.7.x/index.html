@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.7000.1827</title>
+          SharpSvn-Daily Update - 1.7000.1845</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.7000.1827</h1>
+          SharpSvn-Daily Update - 1.7000.1845</h1>
 
 
 <p>
@@ -15,25 +15,39 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/4881/SSvn-1.7000.1827.zip">SharpSvn 1.7000.1827</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/4936/SSvn-1.7000.1845.zip">SharpSvn 1.7000.1845</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/4882/SSvn-1.7000.1827-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/4883/SSvnEx-1.7000.1827.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/4937/SSvn-1.7000.1845-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/4938/SSvnEx-1.7000.1845.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1827">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1845">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2011-08-08</td></tr>
+<tr><td> </td><td class="r"><a id="1843" href="http://sharpsvn.net/rev/?r=1843">
+            [r1843]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/PdbTools:</strong> SvnMsfClient.cpp, SvnMsfClient.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove the MSFClient in !Debug builds.</td></tr>
+<tr><td> </td><td class="r"><a id="1842" href="http://sharpsvn.net/rev/?r=1842">
+            [r1842]
+          </a></td><td class="a">rhuijben</td><td class="f">src/SharpSvn/PdbTools/SvnPdbClient.cpp, src/SharpSvn/PdbTools/SvnPdbClient.h, src/SharpSvn.Discover, src/SharpSvn.SourceIndexer, src/SharpSvn/Stdafx.h, src/tools/Errors2Enum, src/SharpSvn.Tests/Commands/CommitTests.cs, src/SharpSvn/PdbTools/SvnMsfClient.cpp, src/SharpSvn/PdbTools/SvnMsfClient.h, src, src/tools/HookNotifier, src/SharpSvn/RemoteArgs/SvnRemoteSessionLatestRevisionArgs.h, src/tools/CollabUpload, src/ShSvn (and -8 other paths)</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Remove a double attribute and apply some properties</td></tr>
+<tr class="d"><td colspan="4">2011-07-29</td></tr>
+<tr><td> </td><td class="r"><a id="1835" href="http://sharpsvn.net/rev/?r=1835">
+            [r1835]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/PdbTools/SvnMsfClient.cpp, SharpSvn/PdbTools/SvnPdbClient.cpp, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/PdbTools/SvnMsfClient.h, SharpSvn/PdbTools/SvnPdbClient.h, SharpSvn.SourceIndexer.Tests/SrcToolTests.cs, SharpSvn/PdbTools/sbs_pdh.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add some code to parse pdb information in preparation for including
+sourceserver support.<br>
+This to avoid a bootstrapping problem between the SourceServerSharp and
+SharpSvn projects.</td></tr>
 <tr class="d"><td colspan="4">2011-07-22</td></tr>
 <tr><td> </td><td class="r"><a id="1824" href="http://sharpsvn.net/rev/?r=1824">
             [r1824]
@@ -112,57 +126,6 @@ was already absolute.</td></tr>
 <tr><td> </td><td class="r"><a id="1777" href="http://sharpsvn.net/rev/?r=1777">
             [r1777]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/ReposCommands:</strong> CreateRepository.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Adjust for removing of the Subversion 1.7 repository format.</td></tr>
-<tr class="d"><td colspan="4">2011-07-07</td></tr>
-<tr><td> </td><td class="r"><a id="1774" href="http://sharpsvn.net/rev/?r=1774">
-            [r1774]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnClientConfiguration.h, SvnClientContext.cpp, SvnClientConfiguration.cpp, SvnClientContext.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow overriding the on-disk configuration per SvnClient instance,
-like how --config-option allows that on svn.</td></tr>
-<tr><td> </td><td class="r"><a id="1771" href="http://sharpsvn.net/rev/?r=1771">
-            [r1771]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/Info.h, Commands/Info.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update Info command for Subversion trunk changes.</td></tr>
-<tr class="d"><td colspan="4">2011-07-05</td></tr>
-<tr><td> </td><td class="r"><a id="1768" href="http://sharpsvn.net/rev/?r=1768">
-            [r1768]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnEnums.h, SharpSvn.Tests/Commands/UpdateTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Verify Subversion's behavior on handling files that are locked by other
-applications.</td></tr>
-<tr><td> </td><td class="r"><a id="1766" href="http://sharpsvn.net/rev/?r=1766">
-            [r1766]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> AprPool.h, RemoteCommands/SvnRemoteSession.cpp, SharpSvnStrings.h, RemoteCommands/RemoteLocationSegments.cpp, RemoteCommands/RemoteReparent.cpp, RemoteCommands/RemoteOpen.cpp, SvnRemoteSession.h, AprPool.cpp, RemoteCommands/RemoteGetRepositoryRoot.cpp, SharpSvnStrings.resx</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Cache session root and repository root in the SvnRemoteSession.</td></tr>
-<tr class="d"><td colspan="4">2011-07-04</td></tr>
-<tr><td> </td><td class="r"><a id="1763" href="http://sharpsvn.net/rev/?r=1763">
-            [r1763]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/EventArgs:</strong> SvnStatusEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Restore behavior of (Local|Remote)ContentStatus properties of SvnStatusEventArgs.
-This makes it safe to remove the Obsolete() marker.</td></tr>
-<tr class="d"><td colspan="4">2011-07-01</td></tr>
-<tr><td> </td><td class="r"><a id="1758" href="http://sharpsvn.net/rev/?r=1758">
-            [r1758]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnClient.cpp, SharpSvn/SvnClient.h, SharpSvn.Tests/SvnClientTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add SvnClient.GetWorkingCopyRoot() method.</td></tr>
-<tr class="d"><td colspan="4">2011-06-30</td></tr>
-<tr><td> </td><td class="r"><a id="1746" href="http://sharpsvn.net/rev/?r=1746">
-            [r1746]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/SetPropertyTests.cs, SharpSvn/AprPool.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make it possible to set a binary property of 0 bytes, by fixing an
-invalid pointer retrieval for this specific case.</td></tr>
-<tr class="d"><td colspan="4">2011-06-28</td></tr>
-<tr><td> </td><td class="r"><a id="1733" href="http://sharpsvn.net/rev/?r=1733">
-            [r1733]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/EventArgs/SvnPatchFilterEventArgs.h, SharpSvn/Commands/Patch.cpp, SharpSvn.Tests/Commands/DiffTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Test the new Patch command and fix the argument order mismatch
-found while testing.</td></tr>
-<tr><td> </td><td class="r"><a id="1731" href="http://sharpsvn.net/rev/?r=1731">
-            [r1731]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnEnums.h, Commands/Status.cpp, SharpSvn-VS2008.vcproj, SvnClientEventArgs.h, SvnClient.h, EventArgs/SvnPatchFilterEventArgs.h, Args/Patch.h, Commands/Patch.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add initial implementation for new in 1.7 SvnClient.Patch() command.</td></tr>
-<tr class="d"><td colspan="4">2011-06-23</td></tr>
-<tr><td> </td><td class="r"><a id="1723" href="http://sharpsvn.net/rev/?r=1723">
-            [r1723]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnEnums.h, ReposCommands/CreateRepository.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow creating a repository in Subversion 1.6 specific format.</td></tr>
-<tr><td> </td><td class="r"><a id="1721" href="http://sharpsvn.net/rev/?r=1721">
-            [r1721]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/Status.cpp, SharpSvn.Tests/Commands/UpdateTests.cs, SharpSvn.Tests/Commands/StatusTests.cs, SharpSvn/EventArgs/SvnStatusEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add the new in 1.7 status output values to avoid doing an expensive
-database call per node to get the 1.6 compatible data.</td></tr>
-<tr class="d"><td colspan="4">2011-06-22</td></tr>
-<tr><td> </td><td class="r"><a id="1720" href="http://sharpsvn.net/rev/?r=1720">
-            [r1720]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnEnums.h, SharpSvn.Tests/Commands/InfoTests.cs, SharpSvn/EventArgs/SvnInfoEventArgs.h, SharpSvn/EventArgs/SvnConflictData.h, SharpSvn/SvnClient.cpp, SharpSvn/EventArgs/SvnConflictEventArgs.h, SharpSvn/Commands/Info.cpp, SharpSvn/EventArgs/SvnStatusEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement reading conflict information from the new conflict
-array of SvnClient.Info()</td></tr>
 
 </table>
 <!--/Recent changes-->
