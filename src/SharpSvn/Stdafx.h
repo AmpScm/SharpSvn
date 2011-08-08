@@ -51,8 +51,9 @@ using System::Runtime::InteropServices::OutAttribute;
 using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 using System::Diagnostics::DebuggerStepThroughAttribute;
 using System::Diagnostics::DebuggerDisplayAttribute;
+#define SecurityPermissionAttribute(x,y) System::ComponentModel::DescriptionAttribute("Importing SharpSvnStrings")
 #include "SharpSvnStrings.h"
-
+#undef SecurityPermissionAttribute
 #define SVN_THROW(expr)                         \
   do {                                          \
     svn_error_t *svn_err__temp = (expr);        \
