@@ -28,6 +28,7 @@ using SharpSvn.Implementation;
 
 namespace SharpSvn.SourceIndexer.Tests
 {
+#if DEBUG
     [TestFixture]
     public class SrcToolTests
     {
@@ -258,4 +259,5 @@ namespace SharpSvn.SourceIndexer.Tests
             Assert.That(allText2, Is.EqualTo(allText.Replace("\r\r", "\r")));
         }
     }
+#endif
 }
