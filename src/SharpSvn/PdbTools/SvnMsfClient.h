@@ -1,6 +1,7 @@
 #pragma once
 #include "SvnBase.h"
 
+#ifndef NDEBUG
 struct IDiaDataSource;
 struct IDiaSession;
 
@@ -117,3 +118,4 @@ namespace SharpSvn {
         };
     }
 }
+#endif
