@@ -100,6 +100,7 @@ namespace SharpSvn.Tests.Commands
             SvnCommitArgs ca = new SvnCommitArgs();
             ca.LogMessage = "Committed extra";
             ca.LogProperties.Add("my:prop", "PropValue");
+            ca.RunTortoiseHooks = true;
 
             SvnCommitResult cr;
             Client.Commit(WcPath, ca, out cr);
