@@ -1,5 +1,5 @@
 #include "stdafx.h"
-
+#ifndef NDEBUG
 #include "PdbTools/SvnMsfClient.h"
 
 #include "sbs_pdh.h"
@@ -445,3 +445,4 @@ __int64 SvnMsfStream::Seek(__int64 offset, System::IO::SeekOrigin origin)
 
     return _pos = newPos;
 }
+#endif
