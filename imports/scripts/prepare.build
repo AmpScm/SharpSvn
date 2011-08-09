@@ -99,6 +99,32 @@
         <arg value="${svnBase}" />
       </Svn>
     </if>
+    <if test="${buildSubversion != 'false'}">
+      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged">
+        <Svn>
+          <arg value="revert" />
+          <arg value="-R" />
+          <arg value="${svnBase}" />
+        </Svn>
+        <foreach item="String" property="range" in="${subversionMerges}" delim=";"
+          if="${string::get-length(subversionMerges) &gt; 0}">
+          <property name="accept" value="" />
+          <if test="${string::to-upper(range) != string::to-lower(range)}">
+            <property name="accept" value="theirs-conflict" if="${string::starts-with(range, 'T')}" />
+            <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />          
+            <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
+          </if>
+          <Svn verbose="true">
+            <arg value="merge" />
+            <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
+            <arg value="-c" />
+            <arg value="${range}" />
+            <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
+            <arg value="${svnBase}" />
+          </Svn>
+        </foreach>
+      </OnceBlock>
+    </if>
     <if test="${not directory::exists(platformRoot + '/neon')}">
       <Svn verbose="true">
         <arg value="co" />
