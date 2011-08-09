@@ -883,7 +883,7 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
         if (nEnd < 0)
             return false; // Invalid string!
 
-        application = expander(cmdline->Substring(1, nEnd - 1));
+        application = cmdline->Substring(1, nEnd - 1);
         arguments = cmdline->Substring(nEnd + 1)->Trim();
         return AppExists(application);
     }
@@ -905,7 +905,6 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
 
         if (!String::IsNullOrEmpty(file) && AppExists(file))
         {
-            application = file;
             arguments = cmdline->Substring(nTok + 1)->Trim();
             return true;
         }
@@ -919,7 +918,7 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
 
         if (!String::IsNullOrEmpty(file) && AppExists(file))
         {
-            application = file;
+            application = cmdline;
             arguments = "";
             return true;
         }
