@@ -91,6 +91,10 @@ namespace SharpSvn.Tests.Commands
             Client.Blame(uri, ba,
                 delegate(object sender, SvnBlameEventArgs e)
                 {
+                    Assert.That(e.Author, Is.Not.Null);
+                    Assert.That(e.RevisionProperties, Is.Not.Null);
+                    Assert.That(e.MergedAuthor, Is.Null);
+                    Assert.That(e.MergedRevisionProperties, Is.Null);
                     lines++;
                 });
 
