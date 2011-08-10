@@ -838,23 +838,48 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 		return nullptr;
 }
 
-static bool AppExists(String^% app)
+bool SvnTools::TryFindApplication(String^ applicationName, [Out] String^% path)
 {
+    if (String::IsNullOrEmpty("applicationName"))
+        throw gcnew ArgumentNullException("applicationName");
+
     wchar_t buffer[512];
-    pin_ptr<const wchar_t> pApp = PtrToStringChars(app);
+    pin_ptr<const wchar_t> pApp = PtrToStringChars(applicationName);
+    path = nullptr;
 
     DWORD r = SearchPathW(nullptr, pApp, nullptr, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
 
     if (r > 0)
     {
-        app = gcnew String((const wchar_t*)buffer, 0, r);
+        path = gcnew String((const wchar_t*)buffer, 0, r);
+        return true;
+    }
+
+    r = SearchPathW(nullptr, pApp, L".com", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+    if (r > 0)
+    {
+        path = gcnew String((const wchar_t*)buffer, 0, r);
         return true;
     }
 
     r = SearchPathW(nullptr, pApp, L".exe", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
     if (r > 0)
     {
-        app = gcnew String((const wchar_t*)buffer, 0, r);
+        path = gcnew String((const wchar_t*)buffer, 0, r);
+        return true;
+    }
+
+    r = SearchPathW(nullptr, pApp, L".bat", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+    if (r > 0)
+    {
+        path = gcnew String((const wchar_t*)buffer, 0, r);
+        return true;
+    }
+
+    r = SearchPathW(nullptr, pApp, L".cmd", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+    if (r > 0)
+    {
+        path = gcnew String((const wchar_t*)buffer, 0, r);
         return true;
     }
 
@@ -868,6 +893,7 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
     else if (!expander)
         throw gcnew ArgumentNullException("expander");
 
+    String ^tmp;
     application = arguments = nullptr;
 
     String^ cmdline = command->TrimStart();
@@ -885,7 +911,8 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
 
         application = cmdline->Substring(1, nEnd - 1);
         arguments = cmdline->Substring(nEnd + 1)->Trim();
-        return AppExists(application);
+
+        return TryFindApplication(expander(application), tmp);
     }
 
     // We use the algorithm as documented by CreateProcess() in MSDN
@@ -903,7 +930,8 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
 
         file = expander(application);
 
-        if (!String::IsNullOrEmpty(file) && AppExists(file))
+        if (!String::IsNullOrEmpty(file)
+            && TryFindApplication(file, tmp))
         {
             arguments = cmdline->Substring(nTok + 1)->Trim();
             return true;
@@ -916,7 +944,8 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
     {
         file = expander(cmdline);
 
-        if (!String::IsNullOrEmpty(file) && AppExists(file))
+        if (!String::IsNullOrEmpty(file)
+            && TryFindApplication(file, tmp))
         {
             application = cmdline;
             arguments = "";
