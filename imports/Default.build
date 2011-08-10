@@ -12,7 +12,7 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.7.x" overwrite="false" />
-  <property name="subversionMerges" value="1154278,1154379,1154382,1154717,1154718,1154733,1154982" overwrite="false" />
+  <property name="subversionMerges" value="1154278,1154379,1154382,1154717,1154718,1154733,1154982,1156080" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
