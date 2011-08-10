@@ -83,7 +83,7 @@ namespace SharpSvn.Tests.Commands
             SvnBlameArgs ba = new SvnBlameArgs();
             ba.Notify += delegate(object sender, SvnNotifyEventArgs e)
                 {
-                    Assert.That(e.Path, Is.EqualTo("\\trunk\\index.html"));
+                    Assert.That(e.Uri, Is.EqualTo(uri));
                     n++;
                 };
 
