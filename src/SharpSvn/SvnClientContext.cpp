@@ -351,9 +351,11 @@ bool SvnClientHook::Run(SvnClientContext^ ctx, SvnClientArgs^ args, ...array<Str
 
     String^ application;
     String^ cmdArgs;
-    if (!SvnTools::TrySplitCommandLine(Command, application, cmdArgs)
-        || !System::IO::File::Exists(application))
+    if (!SvnTools::TrySplitCommandLine(Command, application, cmdArgs))
         return args->HandleResult(ctx, gcnew SvnSystemException(String::Format(SharpSvnStrings::CantParseCommandX, Command)));
+
+    application = System::Environment::ExpandEnvironmentVariables(application);
+    cmdArgs = System::Environment::ExpandEnvironmentVariables(cmdArgs);
 
     Process^ p = gcnew Process();
     p->StartInfo->UseShellExecute = false;

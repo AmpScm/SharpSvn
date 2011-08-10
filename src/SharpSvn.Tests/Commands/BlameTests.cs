@@ -84,6 +84,7 @@ namespace SharpSvn.Tests.Commands
             ba.Notify += delegate(object sender, SvnNotifyEventArgs e)
                 {
                     Assert.That(e.Uri, Is.EqualTo(uri));
+                    Assert.That(e.RevisionProperties, Is.Not.Null);
                     n++;
                 };
 
