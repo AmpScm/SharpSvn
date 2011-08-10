@@ -154,3 +154,39 @@ bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection
 		list = results;
 	}
 }
+
+String^ SvnBlameEventArgs::Author::get()
+{
+	if (!_author)
+    {
+        if (_revProps)
+            _author = _revProps->Contains(SVN_PROP_REVISION_AUTHOR) ? _revProps[SVN_PROP_REVISION_AUTHOR]->StringValue : nullptr;
+        else if (_rev_props)
+        {
+            const char *pAuthor = svn_prop_get_value(_rev_props, SVN_PROP_REVISION_AUTHOR);
+
+            if (pAuthor)
+                _author = SvnBase::Utf8_PtrToString(pAuthor);
+        }
+    }				
+
+	return _author;
+}
+
+String^ SvnBlameEventArgs::MergedAuthor::get()
+{
+    if (!_mergedAuthor)
+    {
+        if (_mergedRevProps)
+            _mergedAuthor = _mergedRevProps->Contains(SVN_PROP_REVISION_AUTHOR) ? _mergedRevProps[SVN_PROP_REVISION_AUTHOR]->StringValue : nullptr;
+        else if (_merged_rev_props)
+        {
+            const char *pAuthor = svn_prop_get_value(_merged_rev_props, SVN_PROP_REVISION_AUTHOR);
+
+            if (pAuthor)
+                _mergedAuthor = SvnBase::Utf8_PtrToString(pAuthor);
+        }
+    }				
+
+	return _mergedAuthor;
+}

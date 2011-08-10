@@ -24,13 +24,11 @@ namespace SharpSvn {
 	{
 		initonly __int64 _revision;
 		initonly __int64 _lineNr;
-		const char* _pcAuthor;
 		const char* _pcLine;
 		initonly DateTime _date;
 		String^ _author;
 		String^ _line;
 		initonly __int64 _mergedRevision;
-		const char* _pcMergedAuthor;
 		const char* _pcMergedPath;
 		initonly DateTime _mergedDate;
 		String^ _mergedAuthor;
@@ -38,6 +36,11 @@ namespace SharpSvn {
 		initonly bool _localChange;
 		initonly __int64 _startRevnum;
 		initonly __int64 _endRevnum;
+        apr_hash_t *_rev_props;
+        apr_hash_t *_merged_rev_props;
+        AprPool ^_pool;
+        SvnPropertyCollection^ _revProps;
+        SvnPropertyCollection^ _mergedRevProps;
 
 	internal:
 		SvnBlameEventArgs(__int64 revision, __int64 lineNr, apr_hash_t *rev_props,
@@ -50,60 +53,58 @@ namespace SharpSvn {
 			else if (!line)
 				throw gcnew ArgumentNullException("line");
 
-			const char *date = NULL;
-			const char *merged_date = NULL;
-
 			_revision = revision;
 			_lineNr = lineNr;
 			_pcLine = line;
 
+            _pool = pool;
+            _rev_props = rev_props;
+            _merged_rev_props = merged_rev_props;
+
+            apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
+            svn_error_t *err;
+
 			if (rev_props != NULL)
 			{
-				_pcAuthor = svn_prop_get_value(rev_props, SVN_PROP_REVISION_AUTHOR);
-				date = svn_prop_get_value(rev_props, SVN_PROP_REVISION_DATE);
+                const char *date = svn_prop_get_value(rev_props, SVN_PROP_REVISION_DATE);
+
+                if (date)
+			    {
+				    err = svn_time_from_cstring(&when, date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
+
+				    if (!err)
+					    _date = SvnBase::DateTimeFromAprTime(when);
+				    else
+				    {
+					    svn_error_clear(err);
+					    _date = DateTime::MinValue;
+				    }
+			    }
+			    else
+				    _date = DateTime::MinValue;
 			}
 			if (merged_rev_props != NULL)
 			{
-				_pcMergedAuthor = svn_prop_get_value(merged_rev_props, SVN_PROP_REVISION_AUTHOR);
-				merged_date = svn_prop_get_value(merged_rev_props, SVN_PROP_REVISION_DATE);
+				const char *merged_date = svn_prop_get_value(merged_rev_props, SVN_PROP_REVISION_DATE);
+
+                if (merged_date)
+			    {
+			    	err = svn_time_from_cstring(&when, merged_date, pool->Handle);
+
+			    	if (!err)
+			    		_mergedDate = SvnBase::DateTimeFromAprTime(when);
+			    	else
+			    	{
+			    		svn_error_clear(err);
+			    		_mergedDate = DateTime::MinValue;
+			    	}
+			    }
+			    else
+			    	_mergedDate = DateTime::MinValue;
 			}
-
-			apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
-
-			svn_error_t *err;
-
-			if (date)
-			{
-				err = svn_time_from_cstring(&when, date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
-
-				if (!err)
-					_date = SvnBase::DateTimeFromAprTime(when);
-				else
-				{
-					svn_error_clear(err);
-					_date = DateTime::MinValue;
-				}
-			}
-			else
-				_date = DateTime::MinValue;
 
 			_mergedRevision = merged_revision;
 			_pcMergedPath = merged_path;
-
-			if (merged_date)
-			{
-				err = svn_time_from_cstring(&when, merged_date, pool->Handle);
-
-				if (!err)
-					_mergedDate = SvnBase::DateTimeFromAprTime(when);
-				else
-				{
-					svn_error_clear(err);
-					_mergedDate = DateTime::MinValue;
-				}
-			}
-			else
-				_mergedDate = DateTime::MinValue;
 
 			_localChange = localChange;
 			_startRevnum = start_revnum;
@@ -153,13 +154,7 @@ namespace SharpSvn {
 
 		property String^ Author
 		{
-			String^ get()
-			{
-				if (!_author && _pcAuthor)
-					_author = SvnBase::Utf8_PtrToString(_pcAuthor);
-
-				return _author;
-			}
+			String^ get();			
 		}
 
 		property String^ Line
@@ -184,13 +179,7 @@ namespace SharpSvn {
 
 		property String^ MergedAuthor
 		{
-			String^ get()
-			{
-				if (!_mergedAuthor && _pcMergedAuthor)
-					_mergedAuthor = SvnBase::Utf8_PtrToString(_pcMergedAuthor);
-
-				return _mergedAuthor;
-			}
+			String^ get();
 		}
 
 		property String^ MergedPath
@@ -228,6 +217,34 @@ namespace SharpSvn {
 			}
 		}
 
+        /// <summary>Gets the list of custom properties retrieved with the log</summary>
+		/// <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
+		property SvnPropertyCollection^ RevisionProperties
+		{
+			SvnPropertyCollection^ get()
+			{
+				if (!_revProps && _rev_props && _pool)
+				{
+					_revProps = SvnBase::CreatePropertyDictionary(_rev_props, _pool);
+				}
+				return _revProps;
+			}
+		}
+
+        /// <summary>Gets the list of custom properties retrieved with the log</summary>
+		/// <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
+		property SvnPropertyCollection^ MergedRevisionProperties
+		{
+			SvnPropertyCollection^ get()
+			{
+				if (!_mergedRevProps && _merged_rev_props && _pool)
+				{
+					_mergedRevProps = SvnBase::CreatePropertyDictionary(_merged_rev_props, _pool);
+				}
+				return _mergedRevProps;
+			}
+		}
+
 	public:
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
@@ -242,18 +259,19 @@ namespace SharpSvn {
 			{
 				if (keepProperties)
 				{
-					GC::KeepAlive(Author);
 					GC::KeepAlive(Line);
-					GC::KeepAlive(MergedAuthor);
 					GC::KeepAlive(MergedPath);
+                    GC::KeepAlive(RevisionProperties); // Includes Author
+                    GC::KeepAlive(MergedRevisionProperties); // Includes MergedAuthor
 				}
 			}
 			finally
 			{
-				_pcAuthor = nullptr;
+                _pool = nullptr;
 				_pcLine = nullptr;
-				_pcMergedAuthor = nullptr;
 				_pcMergedPath = nullptr;
+                _rev_props = nullptr;
+                _merged_rev_props = nullptr;
 				__super::Detach(keepProperties);
 			}
 		}
