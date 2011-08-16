@@ -855,32 +855,21 @@ bool SvnTools::TryFindApplication(String^ applicationName, [Out] String^% path)
         return true;
     }
 
-    r = SearchPathW(nullptr, pApp, L".com", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
-    if (r > 0)
-    {
-        path = gcnew String((const wchar_t*)buffer, 0, r);
-        return true;
-    }
+    String^ extensions = System::Environment::GetEnvironmentVariable("PATHEXT");
 
-    r = SearchPathW(nullptr, pApp, L".exe", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
-    if (r > 0)
-    {
-        path = gcnew String((const wchar_t*)buffer, 0, r);
-        return true;
-    }
+    if (String::IsNullOrEmpty(extensions))
+        extensions = ".COM;.EXE;.BAT;.CMD";
 
-    r = SearchPathW(nullptr, pApp, L".bat", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
-    if (r > 0)
+    for each(String^ ex in extensions->Split(';'))
     {
-        path = gcnew String((const wchar_t*)buffer, 0, r);
-        return true;
-    }
+        pin_ptr<const wchar_t> pExt = PtrToStringChars(ex->Trim());
 
-    r = SearchPathW(nullptr, pApp, L".cmd", sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
-    if (r > 0)
-    {
-        path = gcnew String((const wchar_t*)buffer, 0, r);
-        return true;
+        r = SearchPathW(nullptr, pApp, pExt, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+        if (r > 0)
+        {
+            path = gcnew String((const wchar_t*)buffer, 0, r);
+            return true;
+        }
     }
 
     return false;
