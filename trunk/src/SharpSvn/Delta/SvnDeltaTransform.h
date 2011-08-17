@@ -129,8 +129,10 @@ namespace SharpSvn {
 		{
 			initonly AprBaton<SvnDeltaTarget^>^ _targetBaton;
 			bool _disposed;
-		internal:
-			SvnDeltaTarget();
+
+        protected public:
+            SvnDeltaTarget();
+		internal:			
 			~SvnDeltaTarget();
 			virtual svn_error_t* apply_window(svn_txdelta_window_t *window, SvnDeltaWindowEventArgs^% e);
 			virtual void final_window(SvnDeltaCompleteEventArgs^ e);
@@ -176,6 +178,8 @@ namespace SharpSvn {
 		};
 
 
+        // This class should allow using System::Stream instances instead of just files.
+        // (or another variant should)
 		public ref class SvnDeltaFileTransform : SvnDeltaTarget
 		{
 			initonly String^ _baseFile;

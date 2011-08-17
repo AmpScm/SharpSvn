@@ -541,6 +541,11 @@ public:
 
 				args->PrepareForDelta(target);
 			}
+            else
+            {
+                *handler = svn_delta_noop_window_handler;
+                *handler_baton = nullptr;
+            }
 
 			return nullptr;
 		}
