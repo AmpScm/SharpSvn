@@ -65,6 +65,8 @@ namespace SharpSvn {
 					throw gcnew ArgumentNullException("parent");
 				else if (_parent)
 					throw gcnew InvalidOperationException();
+                else if (parent == this)
+                    throw gcnew ArgumentOutOfRangeException();
 
 				_parent = parent;
 			}
@@ -202,7 +204,7 @@ char* SvnLocalizer::gettext(const char* msgid)
 					SvnLocalizerData^ ldX;
 					if (_langMap->TryGetValue(ci->Name, ldX))
 					{
-						ldI->SetParent(ld);
+						ldI->SetParent(ldX);
 						break;
 					}
 					else
