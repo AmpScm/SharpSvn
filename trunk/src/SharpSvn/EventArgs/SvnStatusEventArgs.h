@@ -827,9 +827,9 @@ namespace SharpSvn {
 			System::Uri^ get()
 			{
 				if (!_reposRoot && _status && _status->repos_root_url)
-					_uri = SvnBase::Utf8_PtrToUri(_status->repos_root_url, SvnNodeKind::Directory);
+					_reposRoot = SvnBase::Utf8_PtrToUri(_status->repos_root_url, SvnNodeKind::Directory);
 
-				return _uri;
+				return _reposRoot;
 			}
 		}
 
