@@ -246,6 +246,8 @@ namespace SharpSvn {
 	public:
 		/// <summary>Raised just before committing to allow modifying the log message</summary>
 		DECLARE_EVENT(SvnCommittingEventArgs^, Committing)
+        /// <summary>Raised after a successfull commit</summary>
+        DECLARE_EVENT(SvnCommittedEventArgs^, Committed)
 
 	protected:
 		/// <summary>Applies the <see cref="LogMessage" /> and raises the <see cref="Committing" /> event</summary>
@@ -257,10 +259,20 @@ namespace SharpSvn {
 			Committing(this, e);
 		}
 
+        virtual void OnCommitted(SvnCommittedEventArgs^ e)
+		{
+			Committed(this, e);
+		}
+
 	internal:
 		void RaiseCommitting(SvnCommittingEventArgs^ e)
 		{
 			OnCommitting(e);
+		}
+
+        void RaiseCommitted(SvnCommittedEventArgs^ e)
+		{
+			OnCommitted(e);
 		}
 
 	public:

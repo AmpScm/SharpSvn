@@ -767,7 +767,7 @@ static svn_error_t * the_commit_callback2(const svn_commit_info_t *commit_info, 
 	}
 }
 
-SvnClientContext::CommitResultReceiver::CommitResultReceiver(SvnClientContext^ client)
+SvnClientContext::CommitResultReceiver::CommitResultReceiver(SvnClient^ client)
 {
 	_callback = the_commit_callback2;
 	_commitBaton = gcnew AprBaton<CommitResultReceiver^>(this);
@@ -784,7 +784,10 @@ SvnClientContext::CommitResultReceiver::~CommitResultReceiver()
 
 void SvnClientContext::CommitResultReceiver::ProvideCommitResult(const svn_commit_info_t *commit_info, AprPool^ pool)
 {
-	_commitResult = SvnCommitResult::Create(_client, commit_info, pool);
+	_commitResult = SvnCommittedEventArgs::Create(_client, commit_info, pool);
+
+
+    _client->HandleClientCommitted(_commitResult);
 }
 
 
