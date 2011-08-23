@@ -137,8 +137,8 @@ namespace SharpSvn {
 				}
 				finally
 				{
-					_name = nullptr;
-					_value = nullptr;
+					_pValue = nullptr;
+                    _pName = nullptr;
 
 					__super::Detach(keepProperties);
 				}
