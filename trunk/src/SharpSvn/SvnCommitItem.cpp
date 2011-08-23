@@ -21,7 +21,7 @@
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 
-SvnCommitResult^ SvnCommitResult::Create(SvnClientContext^ client, const svn_commit_info_t *commitInfo, AprPool^ pool)
+SvnCommittedEventArgs^ SvnCommittedEventArgs::Create(SvnClientContext^ client, const svn_commit_info_t *commitInfo, AprPool^ pool)
 {
 	if (!client)
 		throw gcnew ArgumentNullException("client");
@@ -31,7 +31,7 @@ SvnCommitResult^ SvnCommitResult::Create(SvnClientContext^ client, const svn_com
 	if (!commitInfo || (commitInfo->revision <= 0L))
 		return nullptr;
 
-	return gcnew SvnCommitResult(commitInfo, pool);
+	return gcnew SvnCommittedEventArgs(commitInfo, pool);
 }
 
 SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ pool)
@@ -63,6 +63,11 @@ SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ p
 
 	if (commitInfo->repos_root)
 		_reposRoot = SvnBase::Utf8_PtrToUri(commitInfo->repos_root, SvnNodeKind::Directory);
+}
+
+SvnCommittedEventArgs::SvnCommittedEventArgs(const svn_commit_info_t *commitInfo, AprPool^ pool)
+    : SvnCommitResult(commitInfo, pool)
+{
 }
 
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, AprPool^ pool)
