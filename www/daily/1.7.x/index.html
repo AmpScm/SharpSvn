@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.7000.1868</title>
+          SharpSvn-Daily Update - 1.7000.1871</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.7000.1868</h1>
+          SharpSvn-Daily Update - 1.7000.1871</h1>
 
 
 <p>
@@ -15,25 +15,30 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/4997/SSvn-1.7000.1868.zip">SharpSvn 1.7000.1868</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/5002/SSvn-1.7000.1871.zip">SharpSvn 1.7000.1871</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/4998/SSvn-1.7000.1868-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/4999/SSvnEx-1.7000.1868.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/5003/SSvn-1.7000.1871-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/5004/SSvnEx-1.7000.1871.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1868">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=1871">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2011-08-23</td></tr>
+<tr><td> </td><td class="r"><a id="1870" href="http://sharpsvn.net/rev/?r=1870">
+            [r1870]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/Delta:</strong> DeltaFileEventArgs.h, DeltaDirectoryEventArgs.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">In the delta editor handler: When detaching clear the right fields to
+avoid using uninitialized memory.</td></tr>
 <tr class="d"><td colspan="4">2011-08-22</td></tr>
 <tr><td> </td><td class="r"><a id="1868" href="http://sharpsvn.net/rev/?r=1868">
             [r1868]
@@ -67,21 +72,6 @@
 sourceserver support.<br>
 This to avoid a bootstrapping problem between the SourceServerSharp and
 SharpSvn projects.</td></tr>
-<tr class="d"><td colspan="4">2011-07-22</td></tr>
-<tr><td> </td><td class="r"><a id="1824" href="http://sharpsvn.net/rev/?r=1824">
-            [r1824]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn/Commands:</strong> FileVersions.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Open the 'previous file' in the previous pool to resolve a cleanup ordering
-issue that showed up as a performance regression in AnkhSVN.</td></tr>
-<tr><td> </td><td class="r"><a id="1822" href="http://sharpsvn.net/rev/?r=1822">
-            [r1822]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvnStrings.h, SvnAll.h, Args/Commit.h, Commands/Commit.cpp, SvnClientContext.cpp, SvnException.h, SharpSvnStrings.resx, SvnClientContext.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add an initial implementation for running the TortoiseSVN pre and post commit
-client hooks. This can be enabled by setting SvnCommitArgs.RunTortoiseHooks to
-true.</td></tr>
-<tr><td> </td><td class="r"><a id="1821" href="http://sharpsvn.net/rev/?r=1821">
-            [r1821]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnTools.cpp, SharpSvn/SvnTools.h, SharpSvn.Tests/SvnToolsTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make SvnTools.TrySplitCommandLine able to use a custom expander (for AnkhSVN)
-and validate if the application is resolvable. Return the resolved application
-instead of the raw path.</td></tr>
 
 </table>
 <!--/Recent changes-->
