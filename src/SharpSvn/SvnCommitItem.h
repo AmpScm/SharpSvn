@@ -35,6 +35,9 @@ namespace SharpSvn {
 		initonly String^ _postCommitError;
 		initonly Uri^ _reposRoot;
 
+    private protected:
+        SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ pool);
+
 	public:
 		property __int64 Revision
 		{
