@@ -33,6 +33,8 @@ namespace SharpSvn {
 			svn_stream_t* _svnStream;
 			AprPool^ _pool;
 
+        internal:
+            bool _written;
 
 		public:
 			SvnStreamWrapper(Stream^ stream, bool enableRead, bool enableWrite, AprPool^ pool)

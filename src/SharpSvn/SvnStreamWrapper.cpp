@@ -26,8 +26,15 @@ using System::Runtime::InteropServices::Marshal;
 
 SvnStreamWrapper::~SvnStreamWrapper()
 {
-	delete _stream;
-	delete _streamBaton;
+    try
+    {
+        if (_written)
+            _stream->Flush();
+    }
+    finally
+    {
+        delete _streamBaton;
+    }
 }
 
 static svn_error_t *svnStreamRead(void *baton, char *buffer, apr_size_t *len)
@@ -52,6 +59,9 @@ static svn_error_t *svnStreamRead(void *baton, char *buffer, apr_size_t *len)
 
 static svn_error_t *svnStreamWrite(void *baton, const char *data, apr_size_t *len)
 {
+    if (*len == 0)
+        return nullptr;
+
 	// Subversion:
 	//		Handlers are obliged to complete a read or write
 	//		to the maximum extent possible; thus, a short read with no
@@ -65,6 +75,7 @@ static svn_error_t *svnStreamWrite(void *baton, const char *data, apr_size_t *le
 	System::Runtime::InteropServices::Marshal::Copy((IntPtr)const_cast<char*>(data), bytes, 0, bytes->Length);
 
 	sw->Stream->Write(bytes, 0, bytes->Length);
+    sw->_written = true;
 
 	return nullptr;
 }
@@ -73,8 +84,11 @@ static svn_error_t *svnStreamClose(void *baton)
 {
 	SvnStreamWrapper^ sw = AprBaton<SvnStreamWrapper^>::Get((IntPtr)baton);
 
-	if (sw->Stream->CanWrite)
+	if (sw->_written)
+    {
+        sw->_written = false;
 		sw->Stream->Flush();
+    }
 
 	return nullptr;
 }
