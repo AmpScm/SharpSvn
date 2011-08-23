@@ -34,6 +34,7 @@ namespace SharpSvn {
 	ref class SvnProcessingEventArgs;
 	ref class SvnClientArgs;
 	ref class SvnCommitResult;
+    ref class SvnCommittedEventArgs;
 	ref class SvnClient;
 
 	namespace Implementation
@@ -531,7 +532,7 @@ namespace SharpSvn {
         }
 	};
 
-	public ref class SvnCommandResult abstract
+    public ref class SvnCommandResult abstract : SvnEventArgs
 	{
 	internal:
 		SvnCommandResult()
