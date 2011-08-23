@@ -574,6 +574,10 @@
 					RelativePath=".\SvnLibraryAttribute.h"
 					>
 				</File>
+				<File
+					RelativePath=".\SvnStatusCacheBlocker.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
@@ -636,6 +640,10 @@
 				</File>
 				<File
 					RelativePath=".\SvnLocalization.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnStatusCacheBlocker.cpp"
 					>
 				</File>
 				<File
