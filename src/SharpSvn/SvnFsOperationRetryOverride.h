@@ -5,7 +5,7 @@ namespace SharpSvn {
 
 		using System::Collections::Generic::Stack;
 
-		public ref class SvnFsOperationRetryOverride : public SvnBase
+        public ref class SvnFsOperationRetryOverride : public SvnBase, System::IDisposable
 		{
 			initonly int _maxRetries;
 			initonly bool _intOnly;
