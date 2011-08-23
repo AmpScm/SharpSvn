@@ -145,6 +145,21 @@ void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
 	Committing(this, e);
 }
 
+void SvnClient::HandleClientCommitted(SvnCommittedEventArgs^ e)
+{
+	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+
+	if (commitArgs)
+		commitArgs->RaiseCommitted(e);
+
+	OnCommitted(e);
+}
+
+void SvnClient::OnCommitted(SvnCommittedEventArgs^ e)
+{
+	Committed(this, e);
+}
+
 void SvnClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
 	if (CurrentCommandArgs)

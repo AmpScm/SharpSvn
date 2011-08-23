@@ -27,19 +27,13 @@ namespace SharpSvn {
 	ref class SvnClient;
 	ref class SvnClientArgs;
 
-	public ref class SvnCommitResult sealed : public SvnCommandResult
+	public ref class SvnCommitResult : public SvnCommandResult
 	{
 		initonly __int64 _revision;
 		initonly DateTime _date;
 		initonly String^ _author;
 		initonly String^ _postCommitError;
 		initonly Uri^ _reposRoot;
-
-	internal:
-		static SvnCommitResult^ Create(SvnClientContext^ client, const svn_commit_info_t *commitInfo, AprPool^ pool);
-
-	private:
-		SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ pool);
 
 	public:
 		property __int64 Revision
@@ -89,6 +83,18 @@ namespace SharpSvn {
 			return Revision.GetHashCode();
 		}
 	};
+
+    public ref class SvnCommittedEventArgs sealed : SvnCommitResult
+    {
+    internal:
+		static SvnCommittedEventArgs^ Create(SvnClientContext^ client, const svn_commit_info_t *commitInfo, AprPool^ pool);
+
+	private:
+		SvnCommittedEventArgs(const svn_commit_info_t *commitInfo, AprPool^ pool);
+
+    public:
+
+    };
 
 	[Flags]
 	public enum class SvnCommitTypes

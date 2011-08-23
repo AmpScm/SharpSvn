@@ -428,13 +428,13 @@ namespace SharpSvn {
 	internal:
 		ref class CommitResultReceiver sealed
 		{
-			SvnCommitResult^ _commitResult;
+			SvnCommittedEventArgs^ _commitResult;
 			svn_commit_callback2_t _callback;
 			AprBaton<CommitResultReceiver^>^ _commitBaton;
-			SvnClientContext ^_client;
+			SvnClient ^_client;
 
 		public:
-			CommitResultReceiver(SvnClientContext^ client);
+			CommitResultReceiver(SvnClient^ client);
 			~CommitResultReceiver();
 
 		internal:
@@ -457,9 +457,9 @@ namespace SharpSvn {
 			void ProvideCommitResult(const svn_commit_info_t *commit_info, AprPool^ pool);
 
 		public:
-			property SvnCommitResult^ CommitResult
+			property SvnCommittedEventArgs^ CommitResult
 			{
-				SvnCommitResult^ get()
+				SvnCommittedEventArgs^ get()
 				{
 					return _commitResult;
 				}

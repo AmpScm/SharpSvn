@@ -226,6 +226,12 @@ namespace SharpSvn {
 		/// then on the <see cref="SvnClient" />
 		/// </summary>
 		DECLARE_EVENT(SvnCommittingEventArgs^, Committing)
+        /// <summary>
+		/// Raised on progress. The event is first
+		/// raised on the <see cref="SvnClientArgsWithCommit" /> object and
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnCommittedEventArgs^, Committed)
 		/// <summary>
 		/// Raised on conflict. The event is first
 		/// raised on the <see cref="SvnClientArgsWithConflict" /> object and
@@ -253,6 +259,8 @@ namespace SharpSvn {
 		virtual void OnProgress(SvnProgressEventArgs^ e);
 		/// <summary>Raises the <see cref="Committing" /> event.</summary>
 		virtual void OnCommitting(SvnCommittingEventArgs^ e);
+        /// <summary>Raises the <see cref="Committing" /> event.</summary>
+		virtual void OnCommitted(SvnCommittedEventArgs^ e);
 		/// <summary>Raises the <see cref="Notify" /> event.</summary>
 		virtual void OnNotify(SvnNotifyEventArgs^ e);
 		/// <summary>Raises the <see cref="Conflict" /> event.</summary>
@@ -266,6 +274,7 @@ namespace SharpSvn {
 		void HandleClientCancel(SvnCancelEventArgs^ e);
 		void HandleClientProgress(SvnProgressEventArgs^ e);
 		void HandleClientCommitting(SvnCommittingEventArgs^ e);
+        void HandleClientCommitted(SvnCommittedEventArgs^ e);
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflict(SvnConflictEventArgs^ e);
 		virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
