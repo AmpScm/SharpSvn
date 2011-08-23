@@ -23,6 +23,7 @@ using System.Text.RegularExpressions;
 using NUnit.Framework;
 using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -101,6 +102,16 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(n, Is.EqualTo(3));
             Assert.That(lines, Is.EqualTo(32));
+
+            Collection<SvnBlameEventArgs> blames;
+            Client.GetBlame(uri, out blames);
+            Assert.That(blames.Count, Is.EqualTo(lines));
+            Assert.That(blames[0].Author, Is.Not.Null);
+            Assert.That(blames[1].RevisionProperties, Is.Not.Null);
+            Assert.That(blames[1].RevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
+            Assert.That(blames[1].RevisionProperties.Contains(SvnPropertyNames.SvnLog));
+            Assert.That(blames[1].RevisionProperties[SvnPropertyNames.SvnAuthor].StringValue, Is.Not.Null);
+            Assert.That(blames[1].RevisionProperties[SvnPropertyNames.SvnLog].StringValue, Is.Not.Null);
         }
 
 		private void Receiver(object sender, SvnBlameEventArgs e)
