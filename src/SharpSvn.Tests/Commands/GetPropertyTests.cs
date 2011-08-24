@@ -52,6 +52,40 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(pval.Target.TargetName, Is.EqualTo(path));
 		}
 
+        [Test]
+        public void GetPropertyValues()
+        {
+            Uri trunk = new Uri(CollabReposUri, "trunk");
+            string dir = GetTempDir();
+            Client.CheckOut(trunk, dir);
+
+            SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
+            pa.Depth = SvnDepth.Infinity;
+            SvnTargetPropertyCollection pc;
+            Client.GetProperty(trunk, SvnPropertyNames.SvnEolStyle, pa, out pc);
+
+            foreach (SvnPropertyValue pv in pc)
+            {
+                SvnUriTarget ut = pv.Target as SvnUriTarget;
+                Assert.That(ut, Is.Not.Null);
+                Uri relative = trunk.MakeRelativeUri(ut.Uri);
+                Assert.That(!relative.ToString().StartsWith("/"));
+                Assert.That(!relative.ToString().StartsWith("../"));
+            }
+
+            Client.GetProperty(dir, SvnPropertyNames.SvnEolStyle, pa, out pc);
+
+            dir += "\\";
+            foreach (SvnPropertyValue pv in pc)
+            {
+                SvnPathTarget pt = pv.Target as SvnPathTarget;
+                Assert.That(pt, Is.Not.Null);
+                Assert.That(pt.TargetPath.StartsWith(dir));
+            }
+
+            Assert.That(pc[dir + "index.html"], Is.Not.Null, "Can get wcroot\\index.html?");
+        }
+
 		[Test]
 		public void TestNonExistentPropertyExistingFile()
 		{
