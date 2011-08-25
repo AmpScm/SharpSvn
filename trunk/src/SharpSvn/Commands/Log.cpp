@@ -34,6 +34,20 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.String,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)")];
 [module: SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Scope="member", Target="SharpSvn.SvnClient.#Log(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.EventHandler`1<SharpSvn.SvnLogEventArgs>)")];
 
+static String^ UriToStringCanonical(Uri^ value)
+{
+	if (!value)
+		return nullptr;
+
+	String^ name = SvnBase::UriToString(value);
+
+	if (name && name->Length && (name[name->Length-1] == '/'))
+		return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
+	else
+		return name;
+}
+
+
 bool SvnClient::Log(String^ targetPath, EventHandler<SvnLogEventArgs^>^ logHandler)
 {
 	if (String::IsNullOrEmpty(targetPath))
@@ -57,7 +71,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-    return InternalLog(NewSingleItemCollection(UriToCanonicalString(target)), nullptr, SvnRevision::Head, args, logHandler);
+    return InternalLog(NewSingleItemCollection(UriToStringCanonical(target)), nullptr, SvnRevision::Head, args, logHandler);
 }
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -147,7 +161,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 	if (moreThanOne)
 	{
 		// Invoke with primary url followed by relative subpaths
-		rawTargets->Add(UriToCanonicalString(rootUri));
+		rawTargets->Add(UriToStringCanonical(rootUri));
 
 		for each (Uri^ uri in targets)
 		{
@@ -159,13 +173,13 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			if (uri->IsAbsoluteUri) // Should have happened before
 				throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
 
-			rawTargets->Add(UriToCanonicalString(uri));
+			rawTargets->Add(UriToStringCanonical(uri));
 		}
 	}
 	else
 	{
 		rootUri = nullptr;
-		rawTargets->Add(UriToCanonicalString(first));
+		rawTargets->Add(UriToStringCanonical(first));
 	}
 
 	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, SvnRevision::Head, args, logHandler);
