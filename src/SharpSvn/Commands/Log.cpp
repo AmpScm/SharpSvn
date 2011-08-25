@@ -57,7 +57,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-	return InternalLog(NewSingleItemCollection(UriToString(target)), nullptr, SvnRevision::Head, args, logHandler);
+    return InternalLog(NewSingleItemCollection(UriToCanonicalString(target)), nullptr, SvnRevision::Head, args, logHandler);
 }
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -147,7 +147,7 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 	if (moreThanOne)
 	{
 		// Invoke with primary url followed by relative subpaths
-		rawTargets->Add(UriToString(rootUri));
+		rawTargets->Add(UriToCanonicalString(rootUri));
 
 		for each (Uri^ uri in targets)
 		{
@@ -159,13 +159,13 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 			if (uri->IsAbsoluteUri) // Should have happened before
 				throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
 
-			rawTargets->Add(UriToString(uri));
+			rawTargets->Add(UriToCanonicalString(uri));
 		}
 	}
 	else
 	{
 		rootUri = nullptr;
-		rawTargets->Add(UriToString(first));
+		rawTargets->Add(UriToCanonicalString(first));
 	}
 
 	return InternalLog(static_cast<ICollection<String^>^>(rawTargets), rootUri, SvnRevision::Head, args, logHandler);
