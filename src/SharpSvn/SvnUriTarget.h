@@ -138,7 +138,7 @@ namespace SharpSvn {
 		{
 			virtual String^ get() override
 			{
-				return SvnBase::UriToString(_uri);
+				return SvnBase::UriToCanonicalString(_uri);
 			}
 		}
 
