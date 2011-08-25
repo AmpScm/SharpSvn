@@ -372,20 +372,25 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Use SvnStatusEventArgsLocalLock to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgs.LocalLock to avoid expensive lookup")]
 		property String^ LockComment
 		{
 			String^ get()
 			{
 				Ensure();
 				if (!_lockComment && _entry && _entry->lock_comment)
+                {
 					_lockComment = SvnBase::Utf8_PtrToString(_entry->lock_comment);
+
+                    if (_lockComment)
+                        _lockComment = _lockComment->Replace("\n", Environment::NewLine);
+                }
 
 				return _lockComment;
 			}
 		}
 
-		[Obsolete("Use SvnStatusEventArgsLocalLock to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgs.LocalLock to avoid expensive lookup")]
 		property DateTime LockTime
 		{
 			DateTime get()
