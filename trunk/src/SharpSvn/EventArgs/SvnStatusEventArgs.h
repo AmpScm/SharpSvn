@@ -346,7 +346,7 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgs.LocalLock to avoid expensive lookup")]
 		property String^ LockToken
 		{
 			String^ get()
@@ -359,7 +359,7 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgs.LocalLock to avoid expensive lookup")]
 		property String^ LockOwner
 		{
 			String^ get()
@@ -372,7 +372,7 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgsLocalLock to avoid expensive lookup")]
 		property String^ LockComment
 		{
 			String^ get()
@@ -385,7 +385,7 @@ namespace SharpSvn {
 			}
 		}
 
-		[Obsolete("Use SvnStatusEventArgs.Lock to avoid expensive lookup")]
+		[Obsolete("Use SvnStatusEventArgsLocalLock to avoid expensive lookup")]
 		property DateTime LockTime
 		{
 			DateTime get()
@@ -892,7 +892,7 @@ namespace SharpSvn {
 				if (!_localLock && _status && _status->lock)
 					_localLock = gcnew SvnLockInfo(_status->lock, false);
 
-				return _reposLock;
+				return _localLock;
 			}
 		}
 
