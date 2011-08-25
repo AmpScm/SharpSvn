@@ -303,7 +303,7 @@ String^ SvnBase::Utf8_PathPtrToString(const char *ptr, AprPool^ pool)
 	if (!*ptr)
 		return "";
 
-	return Utf8_PtrToString(svn_path_local_style(ptr, pool->Handle));
+	return Utf8_PtrToString(svn_dirent_local_style(ptr, pool->Handle));
 }
 
 
