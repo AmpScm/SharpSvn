@@ -28,7 +28,7 @@ namespace SharpSvn {
 		AprPool^ _pool;
 
 	internal:
-		SvnPropertyListEventArgs(const char *path, apr_hash_t* prop_hash, AprPool ^pool)
+		SvnPropertyListEventArgs(bool listDirent, const char *path, apr_hash_t* prop_hash, AprPool ^pool)
 		{
 			if (!path)
 				throw gcnew ArgumentNullException("path");
@@ -37,7 +37,8 @@ namespace SharpSvn {
 			else if (!pool)
 				throw gcnew ArgumentNullException("pool");
 
-			_path = SvnBase::Utf8_PtrToString(path);
+            _path = listDirent ? SvnBase::Utf8_PathPtrToString(path, pool)
+                               : SvnBase::Utf8_PtrToString(path);
 			_propHash = prop_hash;
 			_pool = pool;
 		}

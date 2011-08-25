@@ -44,7 +44,7 @@ static svn_error_t *svnclient_property_list_handler(void *baton, const char *pat
 	if (!args)
 		return nullptr;
 
-	SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(path, prop_hash, %aprPool);
+	SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(args->_listDirent, path, prop_hash, %aprPool);
 	try
 	{
 		args->OnPropertyList(e);
@@ -72,10 +72,15 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
 		throw gcnew ArgumentNullException("args");
 
 	// We allow a null listHandler; the args object might just handle it itself
+    SvnRevisionType rt = target->Revision->RevisionType;
+    bool asDirent = !dynamic_cast<SvnUriTarget^>(target) 
+                        && (rt == SvnRevisionType::None || rt == SvnRevisionType::Working || rt == SvnRevisionType::Base);
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
+    EnsureState(asDirent ? SvnContextState::ConfigLoaded : SvnContextState::AuthorizationInitialized);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
+
+    args->_listDirent = asDirent;
 
 	if (listHandler)
 		args->PropertyList += listHandler;
