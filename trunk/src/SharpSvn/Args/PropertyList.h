@@ -26,6 +26,9 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		SvnChangeListCollection^ _changelists;
 
+    internal:
+        bool _listDirent;
+
 	public:
 		SvnPropertyListArgs()
 		{
