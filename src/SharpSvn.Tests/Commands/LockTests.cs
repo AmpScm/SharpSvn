@@ -67,6 +67,9 @@ namespace SharpSvn.Tests.Commands
             {
                 Assert.That(e.WorkingCopyInfo.LockOwner, Is.EqualTo(Environment.UserName));
                 Assert.That(e.WorkingCopyInfo.LockToken, Is.Not.Null);
+                Assert.That(e.LocalLock, Is.Not.Null);
+                Assert.That(e.LocalLock.Owner, Is.EqualTo(Environment.UserDomainName));
+                Assert.That(e.LocalLock.Token, Is.EqualTo(e.WorkingCopyInfo.LockToken));
                 gotIn = true;
             });
 
