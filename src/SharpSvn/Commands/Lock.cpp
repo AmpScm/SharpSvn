@@ -173,7 +173,7 @@ bool SvnClient::LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^
 	args->Reset();
 	svn_error_t* r = svn_client_lock(
 		items->Handle,
-		pool->AllocString(args->Comment),
+        pool->AllocUnixString(args->Comment),
 		args->StealLock,
 		CtxHandle,
 		pool->Handle);

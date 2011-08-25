@@ -49,9 +49,10 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(e.LocalLock, Is.Null);
             });
 
+            string comment = "Moo\nMa";
             bool gotIn = false;
             SvnLockArgs la = new SvnLockArgs();
-            la.Comment = "Moo ";
+            la.Comment = comment;
             la.Notify +=
                 delegate(object sender, SvnNotifyEventArgs e)
                 {
@@ -67,9 +68,12 @@ namespace SharpSvn.Tests.Commands
             {
                 Assert.That(e.WorkingCopyInfo.LockOwner, Is.EqualTo(Environment.UserName));
                 Assert.That(e.WorkingCopyInfo.LockToken, Is.Not.Null);
+                Assert.That(e.WorkingCopyInfo.LockComment, Is.EqualTo(la.Comment));
                 Assert.That(e.LocalLock, Is.Not.Null);
-                Assert.That(e.LocalLock.Owner, Is.EqualTo(Environment.UserDomainName));
+                Assert.That(e.LocalLock.Owner, Is.EqualTo(Environment.UserName));
                 Assert.That(e.LocalLock.Token, Is.EqualTo(e.WorkingCopyInfo.LockToken));
+                Assert.That(e.LocalLock.Comment, Is.EqualTo(comment.Replace("\n", "\r\n")));
+                Assert.That(e.LocalLock.CreationTime, Is.EqualTo(e.WorkingCopyInfo.LockTime));
                 gotIn = true;
             });
 
