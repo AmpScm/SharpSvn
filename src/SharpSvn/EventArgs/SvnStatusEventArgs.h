@@ -379,12 +379,12 @@ namespace SharpSvn {
 			{
 				Ensure();
 				if (!_lockComment && _entry && _entry->lock_comment)
-                {
+				{
 					_lockComment = SvnBase::Utf8_PtrToString(_entry->lock_comment);
 
-                    if (_lockComment)
-                        _lockComment = _lockComment->Replace("\n", Environment::NewLine);
-                }
+					if (_lockComment)
+						_lockComment = _lockComment->Replace("\n", Environment::NewLine);
+				}
 
 				return _lockComment;
 			}
@@ -560,6 +560,7 @@ namespace SharpSvn {
 		String^ _fullPath;
 		initonly bool _versioned;
 		initonly bool _conflicted;
+		initonly __int64 _fileLength;
 		initonly SvnStatus _wcNodeStatus;
 		initonly SvnStatus _wcTextStatus;
 		initonly SvnStatus _wcPropertyStatus;
@@ -571,7 +572,7 @@ namespace SharpSvn {
 		String^ _lastChangeAuthor;
 		Uri^ _reposRoot;
 		Uri^ _uri;
-        String^ _repositoryId;
+		String^ _repositoryId;
 		initonly bool _switched;
 		initonly bool _fileExternal;
 		SvnLockInfo^ _localLock;
@@ -608,6 +609,7 @@ namespace SharpSvn {
 			_versioned = status->versioned != 0;
 			_conflicted = status->conflicted != 0;
 			_nodeKind = (SvnNodeKind)status->kind;
+			_fileLength = (status->filesize >= 0) ? status->filesize : -1;
 
 			_wcNodeStatus = (SvnStatus)status->node_status;
 			_wcTextStatus = (SvnStatus)status->text_status;
@@ -634,8 +636,6 @@ namespace SharpSvn {
 				_oodLastCommitDate = SvnBase::DateTimeFromAprTime(status->ood_changed_date);
 				_oodLastCommitNodeKind = (SvnNodeKind)status->ood_kind;
 			}
-
-						
 		}
 
 	public:
@@ -731,7 +731,7 @@ namespace SharpSvn {
 			SvnStatus get()
 			{
 				if (LocalNodeStatus != SvnStatus::Modified && LocalNodeStatus != SvnStatus::Conflicted)
-				    return LocalNodeStatus;
+					return LocalNodeStatus;
 				else
 					return LocalTextStatus;
 			}
@@ -1029,6 +1029,15 @@ namespace SharpSvn {
 					_wcInfo = gcnew SvnWorkingCopyInfo(_status, _client, _pool);
 
 				return _wcInfo;
+			}
+		}
+
+		/// <summary>The length of the file currently in the working copy, matching the name of this node. -1 if there is no such file.</summary>
+		property __int64 FileLength
+		{
+			__int64 get()
+			{
+				return _fileLength;
 			}
 		}
 
