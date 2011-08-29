@@ -197,19 +197,23 @@
       <property name="svnWcVersion" value="${string::trim(svnWcVersion)}" />
 
       <!-- Add more version information to the subversion binaries and functions -->
+      <property name="vVer" value="${subversionVersion}" />
+      <property name="vVer" value="${subversionVersion}@${svnWcVersion}" if="${svnBuildType!='tag'}" />
       <property name="vDesc" value=":${svnBuildType}/${subversionVersion}@${svnWcVersion}" if="${svnBuildType!='tag'}" />
       <property name="vDesc" value="/${subversionVersion}" if="${svnBuildType=='tag'}" />
       <property name="vPlatform" value="${platform}" />
       <property name="vPlatform" value="win64-x64" if="${platform=='x64'}" />
+      <property name="buildType" value="" />
+      <property name="buildType" value="-${svnBuildType}" if="${svnBuildType!='tag'}" />
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
         #pragma once
         #undef SVN_VER_TAG
         #undef SVN_VER_NUMTAG
         #define SVN_VER_TAG  " (${svnBuildName}${vDesc}) ${string::to-upper(platform)}"
         #ifndef SHARPSVN_INFO
-        #define SVN_VER_NUMTAG "-${svnBuildName}-${svnBuildType}-${subversionVersion}@${svnWcVersion}-${string::to-upper(platform)}"
+        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}-${vVer}-${string::to-upper(platform)}"
         #else
-        #define SVN_VER_NUMTAG "-${svnBuildName}-${svnBuildType}-${subversionVersion}@${svnWcVersion}"
+        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}-${vVer}"
         #endif
       </echo>
     </OnceBlock>
