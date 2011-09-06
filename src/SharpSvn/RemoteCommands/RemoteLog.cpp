@@ -97,6 +97,12 @@ bool SvnRemoteSession::Log(ICollection<String^>^ relPaths, SvnRevisionRange^ ran
 
 	Ensure();
 	AprPool pool(%_pool);
+
+    __int64 start_rev, end_rev;
+
+	if (!InternalResolveRevision(range->StartRevision, args, start_rev) || !InternalResolveRevision(range->EndRevision, args, end_rev))
+		return false;
+
 	ArgsStore store(this, args, %pool);
 
 	args->_mergeLogLevel = 0; // Clear log level
@@ -106,11 +112,6 @@ bool SvnRemoteSession::Log(ICollection<String^>^ relPaths, SvnRevisionRange^ ran
 
 	try
 	{
-		__int64 start_rev, end_rev;
-
-		if (!InternalResolveRevision(range->StartRevision, args, start_rev) || !InternalResolveRevision(range->EndRevision, args, end_rev))
-			return false;
-
 		apr_array_header_t* retrieveProperties;
 
 		if (args->RetrieveAllProperties)
