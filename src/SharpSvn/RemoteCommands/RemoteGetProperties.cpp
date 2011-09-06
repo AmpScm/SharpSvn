@@ -8,18 +8,18 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn::Remote;
 using namespace System::Collections::Generic;
 
-bool SvnRemoteSession::GetProperties(String^ relpath, [Out] SvnPropertyCollection^% properties)
+bool SvnRemoteSession::GetProperties(String^ relPath, [Out] SvnPropertyCollection^% properties)
 {
-    if (!relpath)
-        throw gcnew ArgumentNullException("relpath");
+    if (!relPath)
+        throw gcnew ArgumentNullException("relPath");
 
-	return GetProperties(relpath, gcnew SvnRemotePropertiesArgs(), properties);
+	return GetProperties(relPath, gcnew SvnRemotePropertiesArgs(), properties);
 }
 
-bool SvnRemoteSession::GetProperties(String^ relpath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties)
+bool SvnRemoteSession::GetProperties(String^ relPath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties)
 {
-    if (!relpath)
-        throw gcnew ArgumentNullException("relpath");
+    if (!relPath)
+        throw gcnew ArgumentNullException("relPath");
     else if (!args)
         throw gcnew ArgumentNullException("args");
 
@@ -28,7 +28,7 @@ bool SvnRemoteSession::GetProperties(String^ relpath, SvnRemotePropertiesArgs^ a
 	ArgsStore store(this, args, %pool);
 
 	svn_node_kind_t kind;
-    const char *pRelPath = pool.AllocRelpath(relpath);
+    const char *pRelPath = pool.AllocRelpath(relPath);
 
     svn_revnum_t rev;
     apr_hash_t *props = NULL;
@@ -50,7 +50,7 @@ bool SvnRemoteSession::GetProperties(String^ relpath, SvnRemotePropertiesArgs^ a
     else if (kind == svn_node_dir)
         SVN_HANDLE(svn_ra_get_dir2(_session, nullptr, nullptr, &props, pRelPath, rev, 0, pool.Handle));
     else
-        return args->HandleResult(this, svn_error_create(SVN_ERR_FS_NOT_FOUND, NULL, NULL), relpath);
+        return args->HandleResult(this, svn_error_create(SVN_ERR_FS_NOT_FOUND, NULL, NULL), relPath);
 
     if (!props)
         return true;

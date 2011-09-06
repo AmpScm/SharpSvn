@@ -24,6 +24,7 @@ namespace SharpSvn {
 	ref class SvnRemoteLocationArgs;
 	ref class SvnRemoteLocationSegmentsArgs;
 	ref class SvnRemotePropertiesArgs;
+    ref class SvnRemoteDeletedRevisionArgs;
 
 	ref class SvnRemoteStatEventArgs;
 
@@ -99,6 +100,10 @@ namespace SharpSvn {
 		bool InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Out] __int64% revno);
 
 	public:
+		bool GetDeletedRevision(String^ relPath, SvnRevision^ revision, [Out] __int64% revno);
+		bool GetDeletedRevision(String^ relPath, SvnRevision^ revision, SvnRemoteDeletedRevisionArgs^ args, [Out] __int64% revno);
+
+	public:
 		/// <overloads>Resolves a dated or head revision to an actual revision number</overloads>
 		/// <summary>Resolves a dated or head revision to an actual revision number</summary>
 		bool ResolveRevision(SvnRevision^ revision, [Out] __int64% revno);
@@ -140,8 +145,8 @@ namespace SharpSvn {
 		bool GetLocationSegments(String^ relPath, SvnRemoteLocationSegmentsArgs^ args, [Out] Collection<SvnRemoteLocationSegmentEventArgs^>^% list);
 
 	public:
-		bool GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations);
-		bool GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, SvnRemoteLocationArgs^ args, [Out] SvnRevisionLocationMap^% locations);
+		bool GetLocations(String^ relPath, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations);
+		bool GetLocations(String^ relPath, ICollection<__int64>^ resolveRevisions, SvnRemoteLocationArgs^ args, [Out] SvnRevisionLocationMap^% locations);
 
 	public:
 		bool Log(String^ relPath, SvnRevisionRange^ range, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
@@ -155,8 +160,8 @@ namespace SharpSvn {
 		bool Log(ICollection<String^>^ relPaths, SvnRevisionRange^ range, SvnRemoteLogArgs^ args, EventHandler<SvnRemoteLogEventArgs^>^ logHandler);
 
 	public:
-		bool GetProperties(String^ relpath, [Out] SvnPropertyCollection^% properties);
-		bool GetProperties(String^ relpath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties);
+		bool GetProperties(String^ relPath, [Out] SvnPropertyCollection^% properties);
+		bool GetProperties(String^ relPath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties);
 
 	public:
 		static bool IsConnectionlessRepository(Uri^ uri);

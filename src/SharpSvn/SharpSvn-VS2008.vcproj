@@ -1679,6 +1679,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\RemoteArgs\SvnRemoteDeletedRevisionArgs.h"
+					>
+				</File>
+				<File
 					RelativePath=".\RemoteArgs\SvnRemoteListArgs.h"
 					>
 				</File>
@@ -1746,6 +1750,10 @@
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetDeletedRevision.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
 					>
