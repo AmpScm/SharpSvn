@@ -8,22 +8,22 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn::Remote;
 using namespace System::Collections::Generic;
 
-bool SvnRemoteSession::GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations)
+bool SvnRemoteSession::GetLocations(String^ relPath, ICollection<__int64>^ resolveRevisions, [Out] SvnRevisionLocationMap^% locations)
 {
-	if (!relpath)
-		throw gcnew ArgumentNullException("relpath");
+	if (!relPath)
+		throw gcnew ArgumentNullException("relPath");
 	else if (!resolveRevisions)
 		throw gcnew ArgumentNullException("resolveRevisions");
 	else if (resolveRevisions->Count == 0)
 		throw gcnew ArgumentException(SharpSvnStrings::CollectionMustContainAtLeastOneItem, "resolveRevisions");
 
-	return GetLocations(relpath, resolveRevisions, gcnew SvnRemoteLocationArgs(), locations);
+	return GetLocations(relPath, resolveRevisions, gcnew SvnRemoteLocationArgs(), locations);
 }
 
-bool SvnRemoteSession::GetLocations(String^ relpath, ICollection<__int64>^ resolveRevisions, SvnRemoteLocationArgs^ args, [Out] SvnRevisionLocationMap^% locations)
+bool SvnRemoteSession::GetLocations(String^ relPath, ICollection<__int64>^ resolveRevisions, SvnRemoteLocationArgs^ args, [Out] SvnRevisionLocationMap^% locations)
 {
-	if (!relpath)
-		throw gcnew ArgumentNullException("relpath");
+	if (!relPath)
+		throw gcnew ArgumentNullException("relPath");
 	else if (!resolveRevisions)
 		throw gcnew ArgumentNullException("resolveRevisions");
 	else if (resolveRevisions->Count == 0)
@@ -40,7 +40,7 @@ bool SvnRemoteSession::GetLocations(String^ relpath, ICollection<__int64>^ resol
 	apr_hash_t *locs;
 	apr_array_header_t *revs = apr_array_make(pool.Handle, resolveRevisions->Count, sizeof(svn_revnum_t));
 	const char *repos_root;
-	const char *pcPath = pool.AllocRelpath(relpath);
+	const char *pcPath = pool.AllocRelpath(relPath);
     svn_revnum_t rev;
 
     if (args->Revision >= 0)
