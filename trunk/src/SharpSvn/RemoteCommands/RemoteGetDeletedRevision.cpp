@@ -29,15 +29,16 @@ bool SvnRemoteSession::GetDeletedRevision(String^ relPath, SvnRevision^ revision
 
 	Ensure();
 	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
 
-	__int64 startrev, endrev;
+    __int64 startrev, endrev;
 
 	revno = SVN_INVALID_REVNUM;
 
 	if (!InternalResolveRevision(revision, args, startrev)
 		|| !InternalResolveRevision(args->EndRevision, args, endrev))
 		return false;
+
+	ArgsStore store(this, args, %pool);
 
 	const char *pcPath = pool.AllocRelpath(relPath);
 	svn_revnum_t deleted_rev;

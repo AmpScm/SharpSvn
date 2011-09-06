@@ -244,6 +244,10 @@ namespace SharpSvn.Tests.RemoteTests
 
                 Assert.That(n, Is.EqualTo(2));
                 rs = rc;
+
+                long r;
+                Assert.That(rc.GetDeletedRevision("trunk", 2, out r));
+                Assert.That(r, Is.EqualTo(-1));
             }
 
             Assert.That(!rs.IsCommandRunning);
