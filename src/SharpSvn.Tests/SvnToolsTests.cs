@@ -99,8 +99,11 @@ namespace SharpSvn.Tests
         {
             string app, args;
             Assert.That(SvnTools.TrySplitCommandLine("wscript script", out app, out args));
-            Assert.That(Path.GetFileName(app), Is.EqualTo("wscript.exe"));
+            Assert.That(app, Is.EqualTo("wscript"));
             Assert.That(args, Is.EqualTo("script"));
+            Assert.That(SvnTools.TryFindApplication("wscript", out app));
+            Assert.That(File.Exists(app));
+            Assert.That(Path.GetFileName(app).ToLowerInvariant(), Is.EqualTo("wscript.exe"));
         }
     }
 }
