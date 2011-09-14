@@ -41,12 +41,12 @@ namespace SharpSvn {
 	{
 		ref class SvnLocalizerData sealed
 		{
-			CultureInfo^ _ci;
+			initonly CultureInfo^ _ci;
 			SvnLocalizerData^ _parent;
-			ResourceSet^ _res;
-			AprPool^ _pool;
-			apr_hash_t* _ptrHash;
-			apr_hash_t* _pStrHash;
+			initonly ResourceSet^ _res;
+			initonly AprPool^ _pool;
+			initonly apr_hash_t* _ptrHash;
+			initonly apr_hash_t* _pStrHash;
 
 
 		public:
@@ -102,7 +102,7 @@ namespace SharpSvn {
 					if (!skip)
 					{
 						if (!isWriter)
-							return false; // Please upgrade lock
+							return nullptr; // Please upgrade lock
 
 						String^ value = _res->GetString(SvnBase::Utf8_PtrToString(msgid));
 
