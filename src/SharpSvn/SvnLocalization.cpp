@@ -38,13 +38,11 @@ namespace SharpSvn {
 	{
 		ref class SvnLocalizerData sealed
 		{
-			CultureInfo^ _ci;
+			initonly CultureInfo^ _ci;
 			SvnLocalizerData^ _parent;
-			ResourceSet^ _res;
-			AprPool^ _pool;
-			apr_hash_t* _ptrHash;
-			apr_hash_t* _pStrHash;
-
+			initonly ResourceSet^ _res;
+			initonly AprPool^ _pool;
+			initonly apr_hash_t* _pStrHash;
 
 		public:
 			SvnLocalizerData(CultureInfo^ ci, ResourceManager^ mgr, AprPool^ pool)
@@ -52,7 +50,6 @@ namespace SharpSvn {
 				_ci = ci;
 				_pool = gcnew AprPool(pool);
 				_res = mgr->GetResourceSet(ci, true, false);
-				_ptrHash = apr_hash_make(pool->Handle);
 				_pStrHash = apr_hash_make(pool->Handle);
 			}
 
@@ -73,7 +70,7 @@ namespace SharpSvn {
 				if (_res)
 				{
 					bool skip = false;
-					char* r = (char*)apr_hash_get(_ptrHash, &msgid, sizeof(char*));
+					char* r = (char*)apr_hash_get(_pStrHash, msgid, APR_HASH_KEY_STRING);
 
 					if (r)
 					{
@@ -85,27 +82,13 @@ namespace SharpSvn {
 
 					if (!skip)
 					{
-						r = (char*)apr_hash_get(_pStrHash, msgid, APR_HASH_KEY_STRING);
-
-						if (r)
-						{
-							if (r == _untranslatableMarker)
-								skip = true;
-							else
-								return r;
-						}
-					}
-
-					if (!skip)
-					{
 						if (!isWriter)
-							return false; // Please upgrade lock
+							return nullptr; // Please upgrade lock
 
 						String^ value = _res->GetString(SvnBase::Utf8_PtrToString(msgid));
 
 						char* p = value ? const_cast<char*>(_pool->AllocString(value)) : nullptr;
 
-						apr_hash_set(_ptrHash, &msgid, sizeof(char*), p ? p : _untranslatableMarker); // Skip next time
 						apr_hash_set(_pStrHash, msgid, APR_HASH_KEY_STRING, p ? p : _untranslatableMarker);
 
 						return p;
