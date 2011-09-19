@@ -38,14 +38,6 @@
           <include name="*aprutil-1.lib" />
         </fileset>
       </copy>
-      <copy todir="build/win32/lib/zlib" flatten="true">
-        <fileset>
-          <include name="build/zlib-${zlibVersion}/z*.h" />
-          <include name="${release}/lib/zlib.lib" />
-        </fileset>
-      </copy>
-      <copy tofile="build/win32/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
-      <copy tofile="build/win32/lib/zlib/zlibstatD.lib" file="build/zlib-${zlibVersion}/projects/visualc6/win32_lib_release/zlib.lib" />
     </if>
     <if test="${platform == 'x64'}">
       <copy todir="${release}/lib-x64">
@@ -64,13 +56,6 @@
           <include name="libdb*.lib" />
         </fileset>
       </copy>
-      <copy todir="build/x64/lib/zlib" flatten="true">
-        <fileset>
-          <include name="build/zlib-${zlibVersion}/z*.h" />
-          <include name="${release}/lib-x64/zlib.lib" />
-        </fileset>
-      </copy>
-      <copy tofile="build/x64/lib/zlib/zlibstat.lib" file="build/zlib-${zlibVersion}/projects/visualc6/x64/win32_lib_release/zlib.lib" />
     </if>
     <copy todir="build/${platform}/lib/include" flatten="true">
       <fileset basedir="${dbWindowsDir}">
