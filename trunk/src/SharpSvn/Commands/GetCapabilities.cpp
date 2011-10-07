@@ -112,12 +112,9 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 		case SvnCapability::CommitRevisionProperties:
 			cap = SVN_RA_CAPABILITY_COMMIT_REVPROPS;
 			break;
-        case SvnCapability::AtomicRevisionProperties:
-            cap = SVN_RA_CAPABILITY_ATOMIC_REVPROPS;
-            break;
-        case SvnCapability::ValidateInheritedMergeInfo:
-            cap = SVN_RA_CAPABILITY_VALIDATE_INHERITED_MERGEINFO;
-            break;
+    case SvnCapability::AtomicRevisionProperties:
+      cap = SVN_RA_CAPABILITY_ATOMIC_REVPROPS;
+      break;
 		case SvnCapability::None:
 			if (args->RetrieveAllCapabilities)
 				continue;
