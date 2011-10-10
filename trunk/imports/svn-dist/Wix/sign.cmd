@@ -1,0 +1,1 @@
+signtool sign /v /n "Open Source" /du http://sliksvn.com/en/download/ /d "Slik Subversion Client 1.7" /t http://timestamp.certum.pl %1
