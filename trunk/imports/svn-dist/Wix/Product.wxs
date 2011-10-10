@@ -45,7 +45,7 @@
         <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install" Action="none">
           <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" Action="write"/>
         </RegistryKey>
-        <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION_BIN]" Action="set" />
+        <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
       </Component>
       <Directory Id="ProgramMenuFolder">
         <Directory Id="SlikSvn_MENU" Name="Subversion">          
