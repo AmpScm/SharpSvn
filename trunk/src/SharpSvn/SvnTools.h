@@ -87,6 +87,8 @@ namespace SharpSvn {
 		/// </summary>
 		static String^ UriPartToPath(String^ uriPath);
 
+		/// <summary>Gets a file:// style uri for the specified local path</summary>
+		static Uri^ LocalPathToUri(String^ localPath, bool endSlash);
 
 		/// <summary>
 		/// Converts a local relative path to a valid relative Uri

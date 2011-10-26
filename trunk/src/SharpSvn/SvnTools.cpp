@@ -724,6 +724,23 @@ String^ SvnTools::UriPartToPath(String^ uriPath)
 	return Uri::UnescapeDataString(uriPath)->Replace('/', Path::DirectorySeparatorChar);
 }
 
+Uri^ SvnTools::LocalPathToUri(String^ localPath, bool endSlash)
+{
+	if (String::IsNullOrEmpty(localPath))
+		throw gcnew ArgumentNullException("localPath");
+	else if (!SvnBase::IsNotUri(localPath))
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "localPath");
+
+	AprPool pool(SmallThreadPool);
+
+	const char *result;
+	SVN_THROW(svn_uri_get_file_url_from_dirent(&result,
+											   pool.AllocDirent(GetNormalizedFullPath(localPath)),
+											   pool.Handle));
+
+	return SvnBase::Utf8_PtrToUri(result, endSlash ? SvnNodeKind::Directory : SvnNodeKind::File);
+}
+
 Uri^ SvnTools::GetNormalizedUri(Uri^ uri)
 {
 	if (!uri)
@@ -840,107 +857,107 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 
 bool SvnTools::TryFindApplication(String^ applicationName, [Out] String^% path)
 {
-    if (String::IsNullOrEmpty("applicationName"))
-        throw gcnew ArgumentNullException("applicationName");
+	if (String::IsNullOrEmpty("applicationName"))
+		throw gcnew ArgumentNullException("applicationName");
 
-    wchar_t buffer[512];
-    pin_ptr<const wchar_t> pApp = PtrToStringChars(applicationName);
-    path = nullptr;
+	wchar_t buffer[512];
+	pin_ptr<const wchar_t> pApp = PtrToStringChars(applicationName);
+	path = nullptr;
 
-    DWORD r = SearchPathW(nullptr, pApp, nullptr, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+	DWORD r = SearchPathW(nullptr, pApp, nullptr, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
 
-    if (r > 0)
-    {
-        path = gcnew String((const wchar_t*)buffer, 0, r);
-        return true;
-    }
+	if (r > 0)
+	{
+		path = gcnew String((const wchar_t*)buffer, 0, r);
+		return true;
+	}
 
-    String^ extensions = System::Environment::GetEnvironmentVariable("PATHEXT");
+	String^ extensions = System::Environment::GetEnvironmentVariable("PATHEXT");
 
-    if (String::IsNullOrEmpty(extensions))
-        extensions = ".COM;.EXE;.BAT;.CMD";
+	if (String::IsNullOrEmpty(extensions))
+		extensions = ".COM;.EXE;.BAT;.CMD";
 
-    for each(String^ ex in extensions->Split(';'))
-    {
-        pin_ptr<const wchar_t> pExt = PtrToStringChars(ex->Trim());
+	for each(String^ ex in extensions->Split(';'))
+	{
+		pin_ptr<const wchar_t> pExt = PtrToStringChars(ex->Trim());
 
-        r = SearchPathW(nullptr, pApp, pExt, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
-        if (r > 0)
-        {
-            path = gcnew String((const wchar_t*)buffer, 0, r);
-            return true;
-        }
-    }
+		r = SearchPathW(nullptr, pApp, pExt, sizeof(buffer)/sizeof(buffer[0]), buffer, nullptr);
+		if (r > 0)
+		{
+			path = gcnew String((const wchar_t*)buffer, 0, r);
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
 
 bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpander^ expander, [Out] String^% application, [Out] String^% arguments)
 {
-    if (!command)
-        throw gcnew ArgumentNullException("command");
-    else if (!expander)
-        throw gcnew ArgumentNullException("expander");
+	if (!command)
+		throw gcnew ArgumentNullException("command");
+	else if (!expander)
+		throw gcnew ArgumentNullException("expander");
 
-    String ^tmp;
-    application = arguments = nullptr;
+	String ^tmp;
+	application = arguments = nullptr;
 
-    String^ cmdline = command->TrimStart();
+	String^ cmdline = command->TrimStart();
 
-    if (cmdline->Length == 0)
-        return false;
+	if (cmdline->Length == 0)
+		return false;
 
-    if (cmdline->StartsWith("\""))
-    {
-        // Ok: The easy way:
-        int nEnd = cmdline->IndexOf('\"', 1);
+	if (cmdline->StartsWith("\""))
+	{
+		// Ok: The easy way:
+		int nEnd = cmdline->IndexOf('\"', 1);
 
-        if (nEnd < 0)
-            return false; // Invalid string!
+		if (nEnd < 0)
+			return false; // Invalid string!
 
-        application = cmdline->Substring(1, nEnd - 1);
-        arguments = cmdline->Substring(nEnd + 1)->Trim();
+		application = cmdline->Substring(1, nEnd - 1);
+		arguments = cmdline->Substring(nEnd + 1)->Trim();
 
-        return TryFindApplication(expander(application), tmp);
-    }
+		return TryFindApplication(expander(application), tmp);
+	}
 
-    // We use the algorithm as documented by CreateProcess() in MSDN
-    // http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
-    array<wchar_t>^ spacers = gcnew array<wchar_t> { ' ', '\t' };
-    int nFrom = 0;
-    int nTok = -1;
+	// We use the algorithm as documented by CreateProcess() in MSDN
+	// http://msdn2.microsoft.com/en-us/library/ms682425(VS.85).aspx
+	array<wchar_t>^ spacers = gcnew array<wchar_t> { ' ', '\t' };
+	int nFrom = 0;
+	int nTok = -1;
 
-    String^ file;
-    
-    while ((nFrom < cmdline->Length) &&
-        (0 <= (nTok = cmdline->IndexOfAny(spacers, nFrom))))
-    {
-        application = cmdline->Substring(0, nTok);
+	String^ file;
+	
+	while ((nFrom < cmdline->Length) &&
+		(0 <= (nTok = cmdline->IndexOfAny(spacers, nFrom))))
+	{
+		application = cmdline->Substring(0, nTok);
 
-        file = expander(application);
+		file = expander(application);
 
-        if (!String::IsNullOrEmpty(file)
-            && TryFindApplication(file, tmp))
-        {
-            arguments = cmdline->Substring(nTok + 1)->Trim();
-            return true;
-        }
-        else
-            nFrom = nTok + 1;
-    }
+		if (!String::IsNullOrEmpty(file)
+			&& TryFindApplication(file, tmp))
+		{
+			arguments = cmdline->Substring(nTok + 1)->Trim();
+			return true;
+		}
+		else
+			nFrom = nTok + 1;
+	}
 
-    if (nTok < 0 && nFrom <= cmdline->Length)
-    {
-        file = expander(cmdline);
+	if (nTok < 0 && nFrom <= cmdline->Length)
+	{
+		file = expander(cmdline);
 
-        if (!String::IsNullOrEmpty(file)
-            && TryFindApplication(file, tmp))
-        {
-            application = cmdline;
-            arguments = "";
-            return true;
-        }
-    }
+		if (!String::IsNullOrEmpty(file)
+			&& TryFindApplication(file, tmp))
+		{
+			application = cmdline;
+			arguments = "";
+			return true;
+		}
+	}
 
-    return false;
+	return false;
 }
