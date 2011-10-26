@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn-1.6", "SharpSvn-1.6\SharpSvn-1.6.csproj", "{1E2EA09A-B08E-44E7-B46D-16DA5FEFCB43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn-1.7", "SharpSvn-1.7\SharpSvn-1.7.csproj", "{2AC6B45A-D07D-4691-BE24-BB3196822E96}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Files", "Shared Files", "{731A426C-745C-4002-A4CB-5F8B85A45B2C}"
+	ProjectSection(SolutionItems) = preProject
+		ReposTests.cs = ReposTests.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1E2EA09A-B08E-44E7-B46D-16DA5FEFCB43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E2EA09A-B08E-44E7-B46D-16DA5FEFCB43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E2EA09A-B08E-44E7-B46D-16DA5FEFCB43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E2EA09A-B08E-44E7-B46D-16DA5FEFCB43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AC6B45A-D07D-4691-BE24-BB3196822E96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AC6B45A-D07D-4691-BE24-BB3196822E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AC6B45A-D07D-4691-BE24-BB3196822E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AC6B45A-D07D-4691-BE24-BB3196822E96}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
