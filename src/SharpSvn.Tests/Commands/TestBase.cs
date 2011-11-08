@@ -80,15 +80,12 @@ namespace SharpSvn.Tests.Commands
 
         protected Uri PathToUri(string path)
         {
-            return PathToUri(path, false);
+            return SvnTools.LocalPathToUri(path, false);
         }
 
         protected Uri PathToUri(string path, bool endSlash)
         {
-            if ((endSlash || Directory.Exists(path)) && !path.EndsWith("/") && !path.EndsWith("\\"))
-                path += '/';
-
-            return new Uri("file:///" + Path.GetFullPath(path).Replace(Path.DirectorySeparatorChar, '/'));
+            return SvnTools.LocalPathToUri(path, endSlash);
         }
 
 

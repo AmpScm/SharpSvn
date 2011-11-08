@@ -357,6 +357,21 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        [Test]
+        public void TestLowerDrive()
+        {
+            using (SvnClient client = NewSvnClient(false, false))
+            {
+                Uri origUri = ReposUrl;
+                string uriString = origUri.AbsoluteUri;
+                SvnUriTarget target = new SvnUriTarget("file:///" + char.ToLower(uriString[8]) + uriString.Substring(9));
+
+                client.List(target, delegate(object sender, SvnListEventArgs e)
+                {
+                });
+            }
+        }
+
         //[Test]
         public void TestSpace()
         {
