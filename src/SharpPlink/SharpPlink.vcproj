@@ -49,7 +49,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="PuttySrc\windows;PuttySrc"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;SECURITY_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -127,7 +127,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="PuttySrc\windows;PuttySrc"
-				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;SECURITY_WIN32"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -207,7 +207,7 @@
 				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="PuttySrc\windows;PuttySrc"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;SECURITY_WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -288,7 +288,7 @@
 				Optimization="1"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="PuttySrc\windows;PuttySrc"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;SECURITY_WIN32"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -634,6 +634,10 @@
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\pgssapi.c"
+					>
 				</File>
 				<File
 					RelativePath=".\PuttySrc\pinger.c"
@@ -1293,6 +1297,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\sshgssc.c"
+					>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\sshmd5.c"
 					>
 					<FileConfiguration
@@ -1907,6 +1915,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\windows\wingss.c"
+					>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\windows\winhandl.c"
 					>
 					<FileConfiguration
@@ -1942,6 +1954,10 @@
 							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
 						/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\windows\winjump.c"
+					>
 				</File>
 				<File
 					RelativePath=".\PuttySrc\windows\winmisc.c"
@@ -2279,6 +2295,10 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\windows\winx11.c"
+					>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\x11fwd.c"
 					>
 					<FileConfiguration
@@ -2317,6 +2337,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath=".\SharpPlink-vs2008.vcproj"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>
