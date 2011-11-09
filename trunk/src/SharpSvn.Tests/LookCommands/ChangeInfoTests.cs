@@ -27,7 +27,7 @@ using System.IO;
 namespace SharpSvn.Tests.LookCommands
 {
     [TestFixture]
-    public class ChangeInfoTests : TestBase
+    public class ChangeInfoTests : HookTestBase
     {
         [Test]
         public void GetInfoHead()
@@ -82,7 +82,11 @@ namespace SharpSvn.Tests.LookCommands
             string file = Path.Combine(dir, "bigfile");
             WriteBigFile(file);
             Client.Add(file);
-            Client.Commit(dir);
+            Client.SetProperty(file, "a", "b");
+            using (InstallHook(uri, SvnHookType.PreCommit, OnPreCommitBigFile))
+            {
+                Client.Commit(dir);
+            }
 
             using (SvnLookClient cl = new SvnLookClient())
             {
@@ -95,6 +99,10 @@ namespace SharpSvn.Tests.LookCommands
                     cl.Write(lo, "/bigfile", ms);
                 }
 
+                string b_p;
+                Assert.That(cl.GetProperty(lo, "/bigfile", "a", out b_p));
+                Assert.That(b_p, Is.EqualTo("b"));
+
 				Collection<SvnLookListEventArgs> lst;
 				cl.GetList(lo, "", out lst);
 
@@ -106,6 +114,21 @@ namespace SharpSvn.Tests.LookCommands
 				Assert.That(r.Name, Is.EqualTo("bigfile"));
 				Assert.That(r.NodeKind, Is.EqualTo(SvnNodeKind.File));
 				Assert.That(r.Path, Is.EqualTo("bigfile"));
+            }
+        }
+
+        private void OnPreCommitBigFile(object sender, ReposHookEventArgs e)
+        {
+            using (SvnLookClient cl = new SvnLookClient())
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    cl.Write(e.HookArgs.LookOrigin, "/bigfile", ms);
+                }
+
+                string b_p;
+                Assert.That(cl.GetProperty(e.HookArgs.LookOrigin, "/bigfile", "a", out b_p));
+                Assert.That(b_p, Is.EqualTo("b"));
             }
         }
 
