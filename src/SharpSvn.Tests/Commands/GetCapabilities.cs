@@ -49,7 +49,7 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(caps.Count, Is.GreaterThanOrEqualTo(5));
 
                 Assert.That(client.GetCapabilities(GetReposUri(TestReposType.Empty), aa, out caps));
-                Assert.That(caps.Count, Is.GreaterThanOrEqualTo(7));
+                Assert.That(caps.Count, Is.GreaterThanOrEqualTo(6));
             }
         }
 
