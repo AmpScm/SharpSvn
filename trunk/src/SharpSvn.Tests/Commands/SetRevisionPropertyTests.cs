@@ -54,7 +54,7 @@ namespace SharpSvn.Tests.Commands
 
             InstallRevpropHook(reposPath);
 
-            Uri target = PathToUri(reposPath);
+            Uri target = PathToUri(reposPath, true);
             SvnRevision rev = 2;
 
             Client.SetRevisionProperty(target, rev, SvnPropertyNames.SvnDate, DateTime.UtcNow.ToString("o"));

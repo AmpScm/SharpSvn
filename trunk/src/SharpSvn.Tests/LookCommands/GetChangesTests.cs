@@ -32,7 +32,7 @@ namespace SharpSvn.Tests.LookCommands
         public void ChangedDirs()
         {
             string dir = CreateRepos(TestReposType.Empty);
-            Uri uri = PathToUri(dir);
+            Uri uri = PathToUri(dir, true);
             using (InstallHook(uri, SvnHookType.PreCommit, OnChangedDirs))
             {
                 using (SvnClient cl = new SvnClient())
@@ -79,7 +79,7 @@ namespace SharpSvn.Tests.LookCommands
 		public void PostCommitErrorTest()
 		{
 			string dir = CreateRepos(TestReposType.Empty);
-			Uri uri = PathToUri(dir);
+			Uri uri = PathToUri(dir, true);
 			using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
 			{
 				using (SvnClient cl = new SvnClient())
