@@ -247,6 +247,9 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 		{
 			part = part->TrimStart('/');
 		}
+
+        if (root->Host && String::Equals(root->Host, "localhost", StringComparison::OrdinalIgnoreCase))
+            part = part->Substring(1);
 	}
 
 	if (!Uri::TryCreate(part, UriKind::Relative, suffix))
