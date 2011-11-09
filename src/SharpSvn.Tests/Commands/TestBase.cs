@@ -78,16 +78,10 @@ namespace SharpSvn.Tests.Commands
             return file;
         }
 
-        protected Uri PathToUri(string path)
-        {
-            return SvnTools.LocalPathToUri(path, false);
-        }
-
         protected Uri PathToUri(string path, bool endSlash)
         {
             return SvnTools.LocalPathToUri(path, endSlash);
         }
-
 
         protected string CreateRepos(TestReposType type)
         {
@@ -261,7 +255,7 @@ namespace SharpSvn.Tests.Commands
 
             UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
 
-            _reposUri = PathToUri(_reposPath);
+            _reposUri = PathToUri(_reposPath, true);
         }
 
         void ExtractWorkingCopy()

@@ -73,7 +73,7 @@ namespace SharpSvn.Tests.LookCommands
         [Test]
         public void TestPreCommit()
         {
-            Uri uri = PathToUri(CreateRepos(TestReposType.CollabRepos));
+            Uri uri = PathToUri(CreateRepos(TestReposType.CollabRepos), true);
 
             using (InstallHook(uri, SvnHookType.PreCommit, OnPreCommit))
             {
@@ -109,7 +109,7 @@ namespace SharpSvn.Tests.LookCommands
         [Test]
         public void TestPostCommit()
         {
-            Uri uri = PathToUri(CreateRepos(TestReposType.CollabRepos));
+            Uri uri = PathToUri(CreateRepos(TestReposType.CollabRepos), true);
 
             using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
             {
