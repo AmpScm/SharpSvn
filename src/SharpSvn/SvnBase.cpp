@@ -241,15 +241,15 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 			part = "/" + Char::ToUpperInvariant(part[1]) + part->Substring(2);
 
 			if(part->Length == 3)
-				part += '/';
+				part += "/";
 		}
 		else if(uri->Host)
 		{
 			part = part->TrimStart('/');
 		}
 
-        if (root->Host && String::Equals(root->Host, "localhost", StringComparison::OrdinalIgnoreCase))
-            part = part->Substring(1);
+		if (root->Host && String::Equals(root->Host, "localhost", StringComparison::OrdinalIgnoreCase))
+			part = part->Substring(1);
 	}
 
 	if (!Uri::TryCreate(part, UriKind::Relative, suffix))
