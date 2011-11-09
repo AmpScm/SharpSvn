@@ -369,6 +369,12 @@ namespace SharpSvn.Tests.Commands
                 client.List(target, delegate(object sender, SvnListEventArgs e)
                 {
                 });
+
+                target = new SvnUriTarget("file://localhost/" + char.ToLower(uriString[8]) + uriString.Substring(9));
+
+                client.List(target, delegate(object sender, SvnListEventArgs e)
+                {
+                });
             }
         }
 
