@@ -406,6 +406,10 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedUri(new Uri("file://e:/")).AbsoluteUri, Is.EqualTo("file:///E:/"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("file:////e:/")).AbsoluteUri, Is.EqualTo("file:///E:/"));
 
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file:///e:/dir")).AbsoluteUri, Is.EqualTo("file:///E:/dir"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file://e:/dir/")).AbsoluteUri, Is.EqualTo("file:///E:/dir"));
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file:////e:/dir")).AbsoluteUri, Is.EqualTo("file:///E:/dir"));
+
             Assert.That(SvnTools.GetNormalizedUri(new Uri("e:/")).AbsoluteUri, Is.EqualTo("file:///E:/"));
 
             Assert.That(SvnTools.GetNormalizedUri(new Uri("E:\\")).AbsoluteUri, Is.EqualTo("file:///E:/"));
@@ -423,6 +427,8 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\share\a\")).AbsoluteUri, Is.EqualTo("file://server/share/a"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri(@"\\SERVER\Share\a\")).AbsoluteUri, Is.EqualTo("file://server/Share/a"));
 
+            Assert.That(SvnTools.GetNormalizedUri(new Uri("file://localhost/C:/Repositories/testrepo/TraceStart")).AbsoluteUri, Is.EqualTo("file://localhost/C:/Repositories/testrepo/TraceStart"));
+            Assert.That(SvnUriTarget.FromUri(new Uri("file://localhost/C:/Repositories/testrepo/TraceStart")).Uri.AbsoluteUri, Is.EqualTo("file://localhost/C:/Repositories/testrepo/TraceStart"));
         }
 
         [Test]
