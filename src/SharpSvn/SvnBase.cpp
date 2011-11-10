@@ -191,7 +191,7 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 	bool schemeOk = !ContainsUpper(uri->Scheme) && !ContainsUpper(uri->Host);
 
 	if (schemeOk && (path->Length == 0 || (path[path->Length -1] != '/' && path->IndexOf('\\') < 0) && !path->Contains("//"))
-		&& !(uri->IsFile && !uri->IsUnc && Char::IsLower(uri->LocalPath, 0)))
+        && !(uri->IsFile && (uri->IsUnc ? String::Equals("localhost", uri->Host) : Char::IsLower(uri->LocalPath, 0))))
 		return uri;
 
 	String^ components = uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped);
@@ -236,20 +236,23 @@ Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 
 	if (root->IsFile)
 	{
-		if(part->Length >= 3 && part[0] =='/' && part[2] == ':' && part[1] >= 'a' && part[1] <= 'z')
+		if (!root->IsUnc || root->Host == "localhost")
 		{
-			part = "/" + Char::ToUpperInvariant(part[1]) + part->Substring(2);
+			if(part->Length >= 3 && part[0] =='/' && part[2] == ':' && part[1] >= 'a' && part[1] <= 'z')
+			{
+				part = "/" + Char::ToUpperInvariant(part[1]) + part->Substring(2);
 
-			if(part->Length == 3)
-				part += "/";
+				if(part->Length == 3)
+					part += "/";
+			}
+
+			if (root->IsUnc)
+                part = "//localhost/" + part->TrimStart('/');
 		}
-		else if(uri->Host)
+		else
 		{
 			part = part->TrimStart('/');
 		}
-
-		if (root->Host && String::Equals(root->Host, "localhost", StringComparison::OrdinalIgnoreCase))
-			part = part->Substring(1);
 	}
 
 	if (!Uri::TryCreate(part, UriKind::Relative, suffix))
