@@ -466,14 +466,14 @@ namespace SharpSvn.Tests
         [Test]
         public void SvnUriTargetConstructor()
         {
-            Assert.That(new SvnUriTarget("file:///C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos").Uri.OriginalString, Is.EqualTo("file:///C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file:///c:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos").Uri.OriginalString, Is.EqualTo("file:///C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file:///C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos/").Uri.OriginalString, Is.EqualTo("file:///C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file:///c:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos/").Uri.OriginalString, Is.EqualTo("file:///C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file://localhost/C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos").Uri.OriginalString, Is.EqualTo("file://localhost/C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file://localhost/c:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos").Uri.OriginalString, Is.EqualTo("file://localhost/C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file://localhost/C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos/").Uri.OriginalString, Is.EqualTo("file://localhost/C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
-            Assert.That(new SvnUriTarget("file://localhost/c:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos/").Uri.OriginalString, Is.EqualTo("file://localhost/C:/Users/m.schaber/AppData/Local/Temp/SvnTest/SharpSvn.Tests.SvnClientTests/repos"));
+            Assert.That(new SvnUriTarget("file:///C:/some/repos").Uri.OriginalString, Is.EqualTo("file:///C:/some/repos"));
+            Assert.That(new SvnUriTarget("file:///c:/some/repos").Uri.OriginalString, Is.EqualTo("file:///C:/some/repos"));
+            Assert.That(new SvnUriTarget("file:///C:/some/repos/").Uri.OriginalString, Is.EqualTo("file:///C:/some/repos"));
+            Assert.That(new SvnUriTarget("file:///c:/some/repos/").Uri.OriginalString, Is.EqualTo("file:///C:/some/repos"));
+            Assert.That(new SvnUriTarget("file://localhost/C:/some/repos").Uri.OriginalString, Is.EqualTo("file://localhost/C:/some/repos"));
+            Assert.That(new SvnUriTarget("file://localhost/c:/some/repos").Uri.OriginalString, Is.EqualTo("file://localhost/C:/some/repos"));
+            Assert.That(new SvnUriTarget("file://localhost/C:/some/repos/").Uri.OriginalString, Is.EqualTo("file://localhost/C:/some/repos"));
+            Assert.That(new SvnUriTarget("file://localhost/c:/some/repos/").Uri.OriginalString, Is.EqualTo("file://localhost/C:/some/repos"));
         }
 
         [Test]
