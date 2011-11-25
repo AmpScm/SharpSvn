@@ -130,7 +130,7 @@
       <arg line="-V" />
     </exec>
 
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated" if="${buildSubversion!='false'}">
       <exec program="cmd.exe" workingdir="${svnBase}" verbose="true">
         <arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
         <arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
