@@ -206,14 +206,14 @@ APR_BEGIN_DECLS
         </filterchain>
       </loadfile>
       <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
-      <loadfile file="${aprDir}\threadproc\win32\proc.c" property="proc.c">
+      <!--loadfile file="${aprDir}\threadproc\win32\proc.c" property="proc.c">
         <filterchain>
           <replacestring from='si.dwFlags |= STARTF_USESTDHANDLES;'
-                         to='si.dwFlags |= STARTF_USESTDHANDLES;
+                         to='si.dwFlags  |= STARTF_USESTDHANDLES;
                              dwCreationFlags |= CREATE_NO_WINDOW;' />
         </filterchain>
       </loadfile>
-      <echo message="${proc.c}" file="${aprDir}\threadproc\win32\proc.c" />
+      <echo message="${proc.c}" file="${aprDir}\threadproc\win32\proc.c" /-->
       <!-- Add Windows 2000 ipv6 workarounds -->
       <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
     </OnceBlock>
