@@ -5,14 +5,14 @@
     <ProductVersion>3.0</ProductVersion>
     <ProjectGuid>{a30bd3bb-a4e1-41b9-ac12-1993c739cb34}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>SlikSvn</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
+    <SvnVersion>1.7.2</SvnVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=1.7.1;platform=Win32;SvnSuffix=</DefineConstants>
+    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=$(SvnVersion);platform=Win32;SvnSuffix=</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressValidation>False</SuppressValidation>
@@ -21,11 +21,11 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=1.7.1;SvnSuffix=</DefineConstants>
+    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=1.7.1;platform=x64;SvnSuffix=</DefineConstants>
+    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=$(SvnVersion);platform=x64;SvnSuffix=</DefineConstants>
     <WixVariables>
     </WixVariables>
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
@@ -35,10 +35,16 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=1.7.1;SvnSuffix=</DefineConstants>
+    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=</DefineConstants>
     <WixVariables>
     </WixVariables>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <OutputName>Slik-Subversion-$(SvnVersion)-win32</OutputName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x64' ">
+    <OutputName>Slik-Subversion-$(SvnVersion)-x64</OutputName>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Localization.wxs" />
