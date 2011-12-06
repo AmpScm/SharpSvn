@@ -32,7 +32,7 @@
 			<exclude name="**/*test*" />
 		</fileset>
 	</copy>
-	<get src="http://svnbook.red-bean.com/nightly/en/svn-book.pdf" dest="dist-${platform}/svn-book.pdf" />
+	<get src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf" dest="dist-${platform}/svn-book.pdf" />
 	<property name="releasenotesFile" value="${string::substring(subversionVersion, 0, 3)}.html" />
 	<Svn>
     <arg line="export --force http://svn.apache.org/repos/asf/subversion/site/publish/docs/release-notes/${releasenotesFile}" />
