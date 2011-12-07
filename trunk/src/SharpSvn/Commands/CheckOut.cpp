@@ -85,7 +85,7 @@ bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args,
 	svn_opt_revision_t coRev = args->Revision->Or(url->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
 
 	svn_error_t* r = svn_client_checkout3(&version,
-		pool.AllocString(url->SvnTargetName),
+		pool.AllocUri(url->Uri),
 		pool.AllocDirent(path),
 		&pegRev,
 		&coRev,
