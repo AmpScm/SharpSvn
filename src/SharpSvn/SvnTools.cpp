@@ -484,7 +484,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 		{
 			// Use the retry
 		}
-		catch(NotSupportedException^) // Something fishy is gowing on
+		catch(NotSupportedException^) // Something fishy is going on
 		{
 			// Use the retry
 		}
