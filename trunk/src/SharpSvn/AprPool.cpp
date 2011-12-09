@@ -286,7 +286,7 @@ const char* AprPool::AllocRelpath(String^ value)
 
 const char* AprPool::AllocAbsoluteDirent(String^ value)
 {
-	return AllocDirent(System::IO::Path::GetFullPath(value));
+    return AllocDirent(SvnTools::GetNormalizedFullPath(value));
 }
 
 const char* AprPool::AllocUri(Uri^ value)
