@@ -20,6 +20,8 @@
 #include <svn_path.h>
 #include <svn_pools.h>
 
+#include "SvnTools.h"
+
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types
 
 using namespace SharpSvn::Implementation;
@@ -286,7 +288,7 @@ const char* AprPool::AllocRelpath(String^ value)
 
 const char* AprPool::AllocAbsoluteDirent(String^ value)
 {
-    return AllocDirent(SvnTools::GetNormalizedFullPath(value));
+    return AllocDirent(SharpSvn::SvnTools::GetNormalizedFullPath(value));
 }
 
 const char* AprPool::AllocUri(Uri^ value)
