@@ -358,6 +358,14 @@ namespace SharpSvn {
 			}
 		}
 
+	internal:
+		virtual const char *AllocAsString(AprPool^ pool, bool absolute) abstract;
+
+		const char *AllocAsString(AprPool^ pool)
+		{
+			return AllocAsString(pool, false);
+		}
+
 	public:
 		/// <summary>Gets the SvnTarget as string</summary>
 		virtual String^ ToString() override
