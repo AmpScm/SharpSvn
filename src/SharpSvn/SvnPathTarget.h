@@ -1,3 +1,4 @@
+
 // $Id$
 //
 // Copyright 2007-2008 The SharpSvn Project
@@ -114,6 +115,13 @@ namespace SharpSvn {
 			{
 				return _path->Replace(System::IO::Path::DirectorySeparatorChar, '/')->TrimEnd('/');
 			}
+		}
+
+		virtual const char *AllocAsString(AprPool^ pool, bool absolute) override
+		{
+			return absolute 
+				? pool->AllocAbsoluteDirent(SvnTargetName)
+				: pool->AllocDirent(SvnTargetName);
 		}
 
 	public:

@@ -159,6 +159,12 @@ namespace SharpSvn {
 			}
 		}
 
+		virtual const char *AllocAsString(AprPool^ pool, bool absolute) override
+		{
+			UNUSED_ALWAYS(absolute);
+			return pool->AllocUri(Uri);
+		}
+
 	public:
 
 		static bool TryParse(String^ path, [Out] SvnUriTarget^% pegUri)

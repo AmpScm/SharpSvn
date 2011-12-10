@@ -84,12 +84,9 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
 	{
 		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->Or(target->GetSvnRevision(SvnRevision::None, SvnRevision::Head))->ToSvnRevision();
-        String^ targetName = target->SvnTargetName;
 
 		svn_error_t* r = svn_client_info3(
-			IsNotUri(targetName) 
-				? pool.AllocAbsoluteDirent(targetName)
-				: pool.AllocString(targetName),
+			target->AllocAsString(%pool, true),
 			&pegRev,
 			&rev,
 			(svn_depth_t)args->Depth,
