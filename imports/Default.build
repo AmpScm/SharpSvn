@@ -22,7 +22,7 @@
   <property name="neonVersion" value="0.29.6" overwrite="false" />
 
   <property name="aprVersion" value="1.4.5" overwrite="false" />
-  <property name="aprUtilVersion" value="1.3.12" overwrite="false" />
+  <property name="aprUtilVersion" value="1.4.1" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
   <property name="zlibVersion" value="1.2.5" overwrite="false" />
