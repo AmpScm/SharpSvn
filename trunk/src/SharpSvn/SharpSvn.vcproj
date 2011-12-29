@@ -1577,7 +1577,7 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\InstallConflict.cpp"
+					RelativePath=".\WorkingCopyCommands\InstallConflict.cpp"
 					>
 				</File>
 				<File
@@ -1585,11 +1585,15 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\WorkingCopyEntries.cpp"
+					RelativePath=".\WorkingCopyCommands\WorkingCopyEntries.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\WorkingCopyState.cpp"
+					RelativePath=".\WorkingCopyCommands\WorkingCopyMove.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\WorkingCopyCommands\WorkingCopyState.cpp"
 					>
 				</File>
 			</Filter>
@@ -1601,15 +1605,19 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Args\WorkingCopyEntries.h"
+					RelativePath=".\WorkingCopyArgs\WorkingCopyEntries.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\WorkingCopyInstallConflictArgs.h"
+					RelativePath=".\WorkingCopyArgs\WorkingCopyInstallConflictArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\WorkingCopyState.h"
+					RelativePath=".\WorkingCopyArgs\WorkingCopyMove.h"
+					>
+				</File>
+				<File
+					RelativePath=".\WorkingCopyArgs\WorkingCopyState.h"
 					>
 				</File>
 			</Filter>
@@ -1674,6 +1682,10 @@
 				>
 				<File
 					RelativePath=".\RemoteArgs\SvnRemoteCommonArgs.h"
+					>
+				</File>
+				<File
+					RelativePath=".\RemoteArgs\SvnRemoteDeletedRevisionArgs.h"
 					>
 				</File>
 				<File
@@ -1744,6 +1756,10 @@
 			<Filter
 				Name="Sources"
 				>
+				<File
+					RelativePath=".\RemoteCommands\RemoteGetDeletedRevision.cpp"
+					>
+				</File>
 				<File
 					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
 					>
