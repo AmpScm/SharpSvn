@@ -71,7 +71,7 @@ bool SvnClient::Log(Uri^ target, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
-    return InternalLog(NewSingleItemCollection(UriToStringCanonical(target)), nullptr, SvnRevision::Head, args, logHandler);
+	return InternalLog(NewSingleItemCollection(UriToStringCanonical(target)), nullptr, SvnRevision::Head, args, logHandler);
 }
 
 bool SvnClient::Log(String^ targetPath, SvnLogArgs^ args, EventHandler<SvnLogEventArgs^>^ logHandler)
@@ -161,20 +161,17 @@ bool SvnClient::Log(ICollection<Uri^>^ targets, SvnLogArgs^ args, EventHandler<S
 	if (moreThanOne)
 	{
 		// Invoke with primary url followed by relative subpaths
-		rawTargets->Add(UriToStringCanonical(rootUri));
+		AprPool tmpPool(%_pool);
+		AprArray<System::Uri^, AprUriMarshaller^> uriArray(targets, %tmpPool);
+		const char *pCommon;
+		apr_array_header_t *pCondensed;
 
-		for each (Uri^ uri in targets)
-		{
-			if (!uri->IsAbsoluteUri && args->BaseUri) // Allow relative Uri's relative from the first
-				uri = gcnew Uri(args->BaseUri, uri);
+		SVN_THROW(svn_uri_condense_targets(&pCommon, &pCondensed, uriArray.Handle, true, tmpPool.Handle, tmpPool.Handle));
 
-			uri = rootUri->MakeRelativeUri(uri);
+		rawTargets->Add(SvnBase::Utf8_PtrToString(pCommon));;
 
-			if (uri->IsAbsoluteUri) // Should have happened before
-				throw gcnew ArgumentException(SharpSvnStrings::AllUrisMustBeOnTheSameServer, "targets");
-
-			rawTargets->Add(UriToStringCanonical(uri));
-		}
+		for (int i = 0; i < pCondensed->nelts; i++)
+			rawTargets->Add(SvnBase::Utf8_PtrToString(APR_ARRAY_IDX(pCondensed, i, const char *)));
 	}
 	else
 	{
