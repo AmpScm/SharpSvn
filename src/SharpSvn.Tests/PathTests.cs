@@ -477,6 +477,13 @@ namespace SharpSvn.Tests
         }
 
         [Test]
+        public void PathToUri()
+        {
+            Assert.That(SvnTools.LocalPathToUri(@"c:\TemP\file", false).AbsoluteUri, Is.EqualTo("file:///C:/TemP/file"));
+            //Assert.That(SvnTools.LocalPathToUri(@"\\QUAD\public\temp", false), Is.EqualTo("file://quad/public/temp"));
+        }
+
+        [Test]
         public void ParsePaths()
         {
             SvnUriTarget ut;

@@ -360,6 +360,9 @@ namespace SharpSvn.Tests.Commands
         [Test]
         public void TestLowerDrive()
         {
+            if (!GetTempDir().Contains(":"))
+                return; // Testing on UNC share
+
             using (SvnClient client = NewSvnClient(false, false))
             {
                 Uri origUri = ReposUrl;
