@@ -26,9 +26,10 @@ namespace Po2Resx
         readonly string _id;
         readonly string _value;
         readonly string _comment;
+        readonly string _flags;
         readonly int _line;
 
-        public Msg(string id, string value, string comment, int line)
+        public Msg(string id, string value, string comment, string flags, int line)
         {
             _id = id;
             _value = value;
@@ -50,6 +51,10 @@ namespace Po2Resx
         {
             get { return _comment; }
         }
+        public string Flags
+        {
+            get { return _flags; }
+        }
 
         public int Line
         {
@@ -62,14 +67,16 @@ namespace Po2Resx
         readonly string _key;
         readonly string _value;
         readonly string _comment;
+        readonly string _flags;
         readonly int _line;
         readonly int _percent;
 
-        public Token(string key, string value, string comment, int line, int percent)
+        public Token(string key, string value, string comment, string flags, int line, int percent)
         {
             _key = key;
             _value = value;
-            _comment = comment;
+            _comment = comment ?? "";
+            _flags = flags ?? "";
             _line = line;
             _percent = percent;
         }
@@ -87,6 +94,11 @@ namespace Po2Resx
         public string Comment
         {
             get { return _comment; }
+        }
+
+        public string Flags
+        {
+            get { return _flags; }
         }
 
         public int Line
@@ -124,6 +136,7 @@ namespace Po2Resx
                             if (msgid == null)
                                 throw new InvalidOperationException();
 
+                            string flags = msgid.Flags + token.Flags;
                             if (msgid.Value == "")
                             {
                                 if (encoding == null)
@@ -165,10 +178,15 @@ namespace Po2Resx
                             }
                             else if (string.IsNullOrEmpty(token.Value))
                             { /* Skip: No translation available */ }
+                            else if (flags.Contains(", c-format") && flags.Contains(", fuzzy"))
+                            { /* Skip: Fuzzy translations of c-format strings */ }
                             else if (msgid.Percent != token.Percent)
-                                Console.Error.WriteLine(string.Format("{0}({1}): Warning: Percent mismatch in token: {2} vs {3}", file.FullName, msgid.Line, CEscape(msgid.Value), CEscape(token.Value)));
+                            {
+                                if (!flags.Contains(", fuzzy"))
+                                    Console.Error.WriteLine(string.Format("{0}({1}): Warning: Percent mismatch in token: {2} vs {3} ({4})", file.FullName, msgid.Line, CEscape(msgid.Value), CEscape(token.Value), CEscape(token.Flags)));
+                            }
                             else
-                                yield return new Msg(msgid.Value, token.Value, msgid.Comment ?? token.Comment, msgid.Line);
+                                yield return new Msg(msgid.Value, token.Value, msgid.Comment ?? token.Comment, flags, msgid.Line);
 
                             msgid = null;
                             break;
@@ -211,6 +229,7 @@ namespace Po2Resx
                 StringBuilder sbToken = new StringBuilder();
                 StringBuilder sbTextBuilding = new StringBuilder();
                 string comment = null;
+                string flags = null;
                 bool inString = false;
                 bool inToken = false;
                 int percent = 0;
@@ -225,7 +244,9 @@ namespace Po2Resx
                         if (line.StartsWith("#", StringComparison.Ordinal))
                         {
                             if (line.StartsWith("#:"))
-                                comment = line.Substring(2).TrimStart(); ;
+                                comment = line.Substring(2).TrimStart();
+                            else if (line.StartsWith("#,"))
+                                flags = line.Substring(1).TrimStart();
 
                             continue; // Skip line
                         }
@@ -309,9 +330,10 @@ namespace Po2Resx
                         {
                             if (!inToken && sbToken.Length > 0)
                             {
-                                yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, lineNumber, percent);
+                                yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, flags, lineNumber, percent);
                                 percent = 0;
                                 comment = null;
+                                flags = null;
 
                                 sbToken.Length = 0;
                                 sbTextBuilding.Length = 0;
@@ -323,10 +345,21 @@ namespace Po2Resx
                         }
                         i++;
                     }
+
+                    if (string.IsNullOrEmpty(line) && sbToken.Length > 0)
+                    {
+                        yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, flags, lineNumber, percent);
+                        percent = 0;
+                        comment = null;
+                        flags = null;
+
+                        sbToken.Length = 0;
+                        sbTextBuilding.Length = 0;
+                    }
                 }
 
                 if (!inToken && sbToken.Length > 0)
-                    yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, lineNumber, percent);
+                    yield return new Token(sbToken.ToString(), sbTextBuilding.ToString(), comment, flags, lineNumber, percent);
             }
         }
     }

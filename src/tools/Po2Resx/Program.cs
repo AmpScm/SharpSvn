@@ -139,6 +139,8 @@ namespace Po2Resx
 
                             if (!string.IsNullOrEmpty(msg.Comment))
                                 xw.WriteComment(msg.Comment);
+                            if (!string.IsNullOrEmpty(msg.Flags))
+                                xw.WriteComment(msg.Comment);
 
                             WriteData(xw, msg.Key, msg.Value);
                         }
