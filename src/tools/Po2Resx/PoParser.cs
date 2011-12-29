@@ -34,6 +34,7 @@ namespace Po2Resx
             _id = id;
             _value = value;
             _comment = comment;
+            _flags = flags;
             _line = line;
         }
 
