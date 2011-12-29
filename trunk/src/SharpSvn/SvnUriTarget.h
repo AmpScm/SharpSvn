@@ -151,14 +151,6 @@ namespace SharpSvn {
 		}
 
 	internal:
-		property String^ SvnTargetName
-		{
-			virtual String^ get() override
-			{
-				return UriToCanonicalString(_uri);
-			}
-		}
-
 		virtual const char *AllocAsString(AprPool^ pool, bool absolute) override
 		{
 			UNUSED_ALWAYS(absolute);

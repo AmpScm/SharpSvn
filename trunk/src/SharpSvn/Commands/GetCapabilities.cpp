@@ -71,7 +71,7 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 	ArgsStore store(this, args, %pool);
 
 	svn_ra_session_t* ra_session = nullptr;
-	const char* pTarget = pool.AllocString(target->SvnTargetName);
+	const char* pTarget = target->AllocAsString(%pool);
 	const char* pUrl = nullptr;
 	svn_revnum_t end_rev = 0;
 

@@ -88,7 +88,7 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 		svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
 		svn_error_t* r = svn_client_list2(
-			pool.AllocString(target->SvnTargetName),
+			target->AllocAsString(%pool),
 			&pegrev,
 			&rev,
 			(svn_depth_t)args->Depth,

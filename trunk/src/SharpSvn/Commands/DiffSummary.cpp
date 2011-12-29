@@ -86,8 +86,8 @@ bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ 
 		args->DiffSummary += summaryHandler;
 	try
 	{
-		args->_fromUri = pool.AllocString(from->SvnTargetName);
-		args->_toUri = pool.AllocString(to->SvnTargetName);
+		args->_fromUri = from->AllocAsString(%pool);
+		args->_toUri = to->AllocAsString(%pool);
 
 		svn_error_t *r = svn_client_diff_summarize2(
 			args->_fromUri,

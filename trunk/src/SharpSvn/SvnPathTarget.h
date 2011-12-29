@@ -109,19 +109,11 @@ namespace SharpSvn {
 			}
 		}
 	internal:
-		property String^ SvnTargetName
-		{
-			virtual String^ get() override
-			{
-				return _path->Replace(System::IO::Path::DirectorySeparatorChar, '/')->TrimEnd('/');
-			}
-		}
-
 		virtual const char *AllocAsString(AprPool^ pool, bool absolute) override
 		{
 			return absolute 
-				? pool->AllocAbsoluteDirent(SvnTargetName)
-				: pool->AllocDirent(SvnTargetName);
+				? pool->AllocAbsoluteDirent(_path)
+				: pool->AllocDirent(_path);
 		}
 
 	public:

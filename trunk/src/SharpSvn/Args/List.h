@@ -113,7 +113,7 @@ namespace SharpSvn {
 
 			SvnUriTarget^ uriTarget = dynamic_cast<SvnUriTarget^>(target);
 			if (uriTarget && !hasRevision)
-				_queryRoot = uriTarget->SvnTargetName;
+				_queryRoot = SvnBase::UriToCanonicalString(uriTarget->Uri);
 			else
 				_queryRoot = nullptr;
 		}

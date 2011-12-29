@@ -48,7 +48,7 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
 	ArgsStore store(this, args, %pool);
 
 	svn_error_t *r = svn_client_merge_reintegrate(
-		pool.AllocString(source->SvnTargetName),
+		source->AllocAsString(%pool),
 		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocDirent(targetPath),
 		args->DryRun,

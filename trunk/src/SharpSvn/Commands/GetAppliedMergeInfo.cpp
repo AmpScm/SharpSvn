@@ -49,7 +49,7 @@ bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArg
 
 	svn_error_t* r = svn_client_mergeinfo_get_merged(
 		&svnMergeInfo,
-		pool.AllocString(target->SvnTargetName),
+		target->AllocAsString(%pool),
 		target->Revision->AllocSvnRevision(%pool),
 		CtxHandle,
 		pool.Handle);

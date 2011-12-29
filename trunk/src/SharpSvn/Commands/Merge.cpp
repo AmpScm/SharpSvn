@@ -113,7 +113,7 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
 
 	svn_error_t *r = svn_client_merge_peg4(
-		pool.AllocString(source->SvnTargetName),
+		source->AllocAsString(%pool),
 		mergeList->Handle,
 		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocDirent(targetPath),

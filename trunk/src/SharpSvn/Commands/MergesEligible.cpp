@@ -96,9 +96,9 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 
 		svn_error_t* r = svn_client_mergeinfo_log(
 			FALSE,
-			pool.AllocString(target->SvnTargetName),
+			target->AllocAsString(%pool),
 			target->Revision->AllocSvnRevision(%pool),
-			pool.AllocString(source->SvnTargetName),
+			source->AllocAsString(%pool),
 			source->Revision->AllocSvnRevision(%pool),
 			svnclient_eligible_log_handler,
 			(void*)_clientBaton->Handle,

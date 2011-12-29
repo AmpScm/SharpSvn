@@ -89,7 +89,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 	svn_error_t *r = svn_client_propget3(
 		&pHash,
 		pName,
-		pool.AllocString(target->SvnTargetName),
+		target->AllocAsString(%pool),
 		&pegRev,
 		&rev,
 		&actualRev,
