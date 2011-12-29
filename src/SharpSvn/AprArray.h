@@ -168,7 +168,7 @@ namespace SharpSvn {
 			}
 		};
 
-        ref class AprUriMarshaller sealed : public IItemMarshaller<String^>
+		ref class AprUriMarshaller sealed : public IItemMarshaller<String^>, public IItemMarshaller<Uri^>
 		{
 		public:
 			property int ItemSize
@@ -192,6 +192,21 @@ namespace SharpSvn {
 				const char** ppcStr = (const char**)ptr;
 
 				return SvnBase::Utf8_PtrToString(*ppcStr);
+			}
+
+			virtual void Write(Uri^ value, void* ptr, AprPool^ pool)
+			{
+				const char** ppStr = (const char**)ptr;
+				*ppStr = pool->AllocUri(value);
+			}
+
+			virtual Uri^ Read_Uri(const void* ptr, AprPool^ pool) = IItemMarshaller<Uri^>::Read
+			{
+				UNUSED_ALWAYS(pool);
+
+				const char** ppcStr = (const char**)ptr;
+
+				return SvnBase::Utf8_PtrToUri(*ppcStr, SvnNodeKind::Unknown);
 			}
 		};
 
