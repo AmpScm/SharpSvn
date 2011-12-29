@@ -98,7 +98,7 @@ bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBla
 		options->ignore_eol_style = args->IgnoreLineEndings;
 
 		svn_error_t *r = svn_client_blame5(
-			pool.AllocString(target->SvnTargetName),
+			target->AllocAsString(%pool),
 			target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 			args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool),
 			args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool),

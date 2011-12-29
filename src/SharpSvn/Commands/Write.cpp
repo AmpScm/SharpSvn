@@ -56,7 +56,7 @@ bool SvnClient::Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args)
 
 	svn_error_t *r = svn_client_cat2(
 		wrapper.Handle,
-		pool.AllocString(target->SvnTargetName),
+		target->AllocAsString(%pool, true),
 		&pegRev,
 		&rev,
 		CtxHandle,

@@ -130,7 +130,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 		// else
 		{
 			SvnUriTarget^ first = FirstOf(targets);
-			const char* pTarget = pool.AllocString(first->SvnTargetName);
+			const char* pTarget = first->AllocAsString(%pool);
 
 			r = svn_client__ra_session_from_path(
 				&ra_session,
@@ -165,7 +165,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 			cur->Clear();
 
 			svn_revnum_t switchToRevision = (svn_revnum_t)ta->Revision->Revision;
-			const char* switchUrl = cur->AllocString(ta->SvnTargetName);
+			const char* switchUrl = ta->AllocAsString(cur);
 
 			const char* baseUrlDir;
 			const char* baseUrlFile;

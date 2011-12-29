@@ -458,7 +458,7 @@ public:
 		svn_client_copy_source_t **src = (svn_client_copy_source_t**)ptr;
 		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
 
-		(*src)->path = pool->AllocString(value->SvnTargetName);
+        (*src)->path = value->AllocAsString(pool, true);
 		(*src)->revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
 		(*src)->peg_revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
 	}

@@ -87,13 +87,13 @@ bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Ou
 
 	svn_error_t* r = svn_client_export5(
 		&resultRev,
-		pool.AllocString(from->SvnTargetName),
+		from->AllocAsString(%pool),
 		pool.AllocDirent(toPath),
 		&pegRev,
 		&rev,
 		args->Overwrite,
 		args->IgnoreExternals,
-        args->IgnoreKeywords,
+		args->IgnoreKeywords,
 		(svn_depth_t)args->Depth,
 		GetEolPtr(args->LineStyle),
 		CtxHandle,

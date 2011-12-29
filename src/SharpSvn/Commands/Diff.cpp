@@ -68,9 +68,9 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 
 	svn_error_t *r = svn_client_diff5(
 		AllocArray(diffArgs, %pool),
-		pool.AllocString(from->SvnTargetName),
+		from->AllocAsString(%pool),
 		from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-		pool.AllocString(to->SvnTargetName),
+		to->AllocAsString(%pool),
 		to->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
 		(svn_depth_t)args->Depth,
@@ -130,7 +130,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 
 	svn_error_t *r = svn_client_diff_peg5(
 		AllocArray(diffArgs, %pool),
-		pool.AllocString(source->SvnTargetName),
+		source->AllocAsString(%pool),
 		&pegRev,
 		&fromRev,
 		&toRev,

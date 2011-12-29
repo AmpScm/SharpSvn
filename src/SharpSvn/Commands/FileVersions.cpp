@@ -327,7 +327,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 	try
 	{
 		svn_ra_session_t* ra_session = nullptr;
-		const char* pTarget = pool.AllocString(target->SvnTargetName);
+		const char* pTarget = target->AllocAsString(%pool);
 		const char* pUrl = nullptr;
 		const char* repos_root = nullptr;
 		svn_revnum_t end_rev = 0;

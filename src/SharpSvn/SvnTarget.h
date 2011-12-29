@@ -350,15 +350,6 @@ namespace SharpSvn {
 		}
 
 	internal:
-		property String^ SvnTargetName
-		{
-			virtual String^ get()
-			{
-				return TargetName;
-			}
-		}
-
-	internal:
 		virtual const char *AllocAsString(AprPool^ pool, bool absolute) abstract;
 
 		const char *AllocAsString(AprPool^ pool)
@@ -396,7 +387,7 @@ namespace SharpSvn {
 			if (!other)
 				return false;
 
-			if (!String::Equals(other->SvnTargetName, SvnTargetName))
+			if (!String::Equals(other->TargetName, TargetName))
 				return false;
 
 			return Revision->Equals(other->Revision);

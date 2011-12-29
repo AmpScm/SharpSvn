@@ -370,8 +370,6 @@ Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 	else if (!SvnBase::IsNotUri(path))
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	path = SvnTools::GetNormalizedFullPath(path);
-
 	AprPool pool(%_pool);
 	NoArgsStore store(this, %pool);
 
