@@ -16,7 +16,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
-#include "Args/WorkingCopyState.h"
+#include "WorkingCopyArgs/WorkingCopyState.h"
 
 #include "UnmanagedStructs.h"
 

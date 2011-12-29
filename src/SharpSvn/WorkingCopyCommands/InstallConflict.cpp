@@ -16,7 +16,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
-#include "Args/WorkingCopyInstallConflictArgs.h"
+#include "WorkingCopyArgs/WorkingCopyInstallConflictArgs.h"
 
 #include "UnmanagedStructs.h"
 #include <private/svn_wc_private.h>
