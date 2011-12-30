@@ -22,6 +22,10 @@
 
 #pragma warning(disable: 6255) // warning C6255: _alloca indicates failure by raising a stack overflow exception. Consider using _malloca instead
 
+#ifdef GetEnvironmentVariable
+#undef GetEnvironmentVariable
+#endif
+
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
 using System::Text::StringBuilder;
@@ -527,8 +531,6 @@ bool SvnTools::IsAbsolutePath(String^ path)
 	if (String::IsNullOrEmpty(path))
 		throw gcnew ArgumentNullException("path");
 
-	int c = path->Length;
-
 	if (path->Length < 3)
 		return false;
 
@@ -540,7 +542,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 		for (i = 2; i < path->Length; i++)
 		{
-			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+			if (!Char::IsLetterOrDigit(path, i) && 0 > _hostChars->IndexOf(path[i]))
 				break;
 		}
 
@@ -553,7 +555,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 		for (; i < path->Length; i++)
 		{
-			if (!Char::IsLetterOrDigit(path, i) && 0 > static_cast<String^>("._-")->IndexOf(path[i]))
+			if (!Char::IsLetterOrDigit(path, i) && 0 > _shareChars->IndexOf(path[i]))
 				break;
 		}
 
@@ -569,17 +571,17 @@ bool SvnTools::IsAbsolutePath(String^ path)
 	else
 		i = 3;
 
-	while (i < c)
+	while (i < path->Length)
 	{
-		if (i >= c && IsSeparator(path, i))
+		if (IsSeparator(path, i))
 			return false; // '\'-s behind each other
 
-		if (i < c && path[i] == '.')
+		if (path[i] == '.')
 		{
 			int j = i;
 			j++;
 
-			if (j < c && path[j] == '.')
+			if (j < path->Length && path[j] == '.')
 				j++;
 
 			if (IsSeparator(path, j))
@@ -588,17 +590,17 @@ bool SvnTools::IsAbsolutePath(String^ path)
 
 		n = i;
 
-		while (i < c && !IsInvalid(path, i) && !IsSeparator(path, i))
+		while (i < path->Length && !IsInvalid(path, i) && !IsSeparator(path, i))
 			i++;
 
 		if (n == i)
 			return false;
-		else if (i == c)
+		else if (i == path->Length)
 			return true;
 		else if (!IsSeparator(path, i++))
 			return false;
 
-		if (i == c)
+		if (i == path->Length)
 			return false; // We don't like paths with a '\' at the end
 	}
 
@@ -628,7 +630,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 			if (! ((cc >= 'a' && cc <= 'z') ||
 				   (cc >= '0' && cc <= '9') ||
-				   0 <= static_cast<String^>("._-")->IndexOf(cc)))
+				   0 <= _hostChars->IndexOf(cc)))
 				break;
 		}
 
@@ -642,7 +644,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 		for (; i < path->Length; i++)
 		{
 			// Check share name rules
-			if (!Char::IsLetterOrDigit(path, i) && (0 > static_cast<String^>("._-$ ")->IndexOf(path[i])))
+			if (!Char::IsLetterOrDigit(path, i) && (0 > _shareChars->IndexOf(path[i])))
 				break;
 		}
 
