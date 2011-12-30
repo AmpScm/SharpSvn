@@ -519,5 +519,19 @@ namespace SharpSvn.Tests
             Assert.That(SvnTarget.TryParse("C:\\@123", true, out st));
             Assert.That(st, Is.InstanceOfType(typeof(SvnPathTarget)));
         }
+
+        [Test]
+        public void UncLocalDriveTests()
+        {
+            string sysDir = SvnTools.GetTruePath(System.Environment.GetFolderPath(Environment.SpecialFolder.System));
+            string testPath = "\\\\" + Environment.MachineName.ToLowerInvariant() + "\\" + sysDir[0] + "$" + sysDir.Substring(2);
+
+            Assert.That(SvnTools.IsAbsolutePath(testPath));
+
+            Assert.That(SvnTools.GetNormalizedFullPath(testPath), Is.EqualTo(testPath));
+            Assert.That(SvnTools.GetTruePath(testPath), Is.EqualTo(testPath));
+
+            Assert.That(new SvnPathTarget(testPath).TargetName, Is.EqualTo(testPath));
+        }
     }
 }

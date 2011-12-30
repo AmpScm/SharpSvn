@@ -161,8 +161,8 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	String^ dualSeparator = String::Concat(Path::DirectorySeparatorChar, Path::DirectorySeparatorChar);
 
 	int nNext;
-	// Remove double backslash
-	while ((nNext = path->IndexOf(dualSeparator, StringComparison::Ordinal)) >= 0)
+	// Remove double backslash except at the start
+	while ((nNext = path->IndexOf(dualSeparator, 1, StringComparison::Ordinal)) >= 0)
 		path = path->Remove(nNext, 1);
 
 	// Remove '\.\'
