@@ -28,6 +28,9 @@ namespace SharpSvn {
 		SvnTools()
 		{} // Static class
 
+		literal String^ _hostChars = "._-";
+		literal String^ _shareChars = "._-$ ";
+
 		static String^ FindTruePath(String^ path, String^ root, bool bestEffort);
 
 	public:
