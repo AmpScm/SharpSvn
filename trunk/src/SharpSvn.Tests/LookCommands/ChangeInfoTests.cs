@@ -211,7 +211,7 @@ namespace SharpSvn.Tests.LookCommands
                     for (int i = 0; i < r.ChangedPaths.Count; i++)
                     {
                         SvnChangeItem c = r.ChangedPaths[i];
-                        SvnChangeItem lc = lr.ChangedPaths[i];
+                        SvnChangeItem lc = lr.ChangedPaths[c.Path];
 
                         Assert.That(c.Path, Is.EqualTo(lc.Path));
                         Assert.That(c.Action, Is.EqualTo(lc.Action));
