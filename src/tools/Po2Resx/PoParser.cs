@@ -179,12 +179,11 @@ namespace Po2Resx
                             }
                             else if (string.IsNullOrEmpty(token.Value))
                             { /* Skip: No translation available */ }
-                            else if (flags.Contains(", c-format") && flags.Contains(", fuzzy"))
+                            else if (flags.Contains(", fuzzy"))
                             { /* Skip: Fuzzy translations of c-format strings */ }
-                            else if (msgid.Percent != token.Percent)
+                            else if (msgid.Percent != token.Percent && flags.Contains(", c-format"))
                             {
-                                if (!flags.Contains(", fuzzy"))
-                                    Console.Error.WriteLine(string.Format("{0}({1}): Warning: Percent mismatch in token: {2} vs {3} ({4})", file.FullName, msgid.Line, CEscape(msgid.Value), CEscape(token.Value), CEscape(token.Flags)));
+                                Console.Error.WriteLine(string.Format("{0}({1}): Warning: Percent mismatch in token: {2} vs {3} ({4})", file.FullName, msgid.Line, CEscape(msgid.Value), CEscape(token.Value), CEscape(token.Flags)));
                             }
                             else
                                 yield return new Msg(msgid.Value, token.Value, msgid.Comment ?? token.Comment, flags, msgid.Line);
