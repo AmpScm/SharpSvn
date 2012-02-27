@@ -615,6 +615,19 @@ void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 	apr_hash_t* cfg = nullptr;
 	SVN_THROW(svn_config_get_config(&cfg, szPath, _pool->Handle));
 
+    if (cfg)
+    {
+        svn_config_t *config = NULL;
+        const char *memory_cache_size_str;
+
+        config = (svn_config_t*)apr_hash_get(cfg, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
+        svn_config_get(config, &memory_cache_size_str, SVN_CONFIG_SECTION_MISCELLANY,
+                       SVN_CONFIG_OPTION_MEMORY_CACHE_SIZE, NULL);
+
+        if (memory_cache_size_str)
+            svn_config_set(config, SVN_CONFIG_SECTION_MISCELLANY, SVN_CONFIG_OPTION_MEMORY_CACHE_SIZE, NULL);
+    }
+
 	CtxHandle->config = cfg;
 
 	_contextState = SvnContextState::ConfigPrepared;

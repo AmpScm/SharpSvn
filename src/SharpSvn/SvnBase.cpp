@@ -20,6 +20,7 @@
 
 #include "svn_dso.h"
 #include "svn_utf.h"
+#include "svn_cache_config.h"
 
 using System::Text::StringBuilder;
 using System::IO::Path;
@@ -72,6 +73,12 @@ void SvnBase::EnsureLoaded()
 
 				svn_utf_initialize(pool);
 				svn_fs_initialize(pool);
+				{
+					svn_cache_config_t settings = *svn_cache_config_get();
+					settings.cache_size = 0;
+					settings.file_handle_count = 0;
+					settings.single_threaded = FALSE;
+				}
 
 				if (getenv("SVN_ASP_DOT_NET_HACK"))
 				{
