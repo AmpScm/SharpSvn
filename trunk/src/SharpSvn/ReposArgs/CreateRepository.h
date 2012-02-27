@@ -26,6 +26,7 @@ namespace SharpSvn {
 		bool _bdbKeepLogs;
 		SvnRepositoryFileSystem _reposType;
 		SvnRepositoryCompatibility _reposCompat;
+        Nullable<System::Guid> _uuid;
 
 	public:
 		SvnCreateRepositoryArgs()
@@ -87,5 +88,19 @@ namespace SharpSvn {
 				_reposCompat = EnumVerifier::Verify(value);
 			}
 		}
+
+        /// <summary>If not <c>null</c> allows creates a repository with this UUID</summary>
+        property Nullable<Guid> RepositoryUuid
+        {
+            Nullable<Guid> get()
+            {
+                return _uuid;
+            }
+
+            void set(Nullable<Guid> value)
+            {
+                _uuid = value;
+            }
+        }
 	};
 }
