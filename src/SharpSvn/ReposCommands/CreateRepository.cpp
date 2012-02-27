@@ -129,5 +129,11 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 		fs_config,
 		pool.Handle);
 
+	if (!r && args->RepositoryUuid.HasValue)
+	{
+		svn_fs_t *fs = svn_repos_fs(result);
+		r = svn_fs_set_uuid(fs, pool.AllocString(args->RepositoryUuid.ToString()), pool.Handle);
+	}
+
 	return args->HandleResult(this, r);
 }
