@@ -379,6 +379,7 @@ bool SvnClientHook::Run(SvnClientContext^ ctx, SvnClientArgs^ args, ...array<Str
 
     p->StartInfo->EnvironmentVariables->Add("SharpSvn", SvnClient::SharpSvnVersion->ToString());
     p->StartInfo->EnvironmentVariables->Add("SharpSvn_Hook", hookName);
+    p->StartInfo->EnvironmentVariables->Add("SharpSvn_ClientName", SvnBase::_clientName);
 
     /* Keep the tempfiles alive */
     p->EnableRaisingEvents = true;
