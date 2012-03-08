@@ -177,8 +177,11 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 
 	if (preCommitHook != nullptr)
 	{
-		if (!preCommitHook->Run(this, args, 
-								pathsFile, ((int)args->Depth).ToString(CultureInfo::InvariantCulture), commonPath))
+		if (!preCommitHook->Run(this, args,
+								pathsFile,
+								((int)args->Depth).ToString(CultureInfo::InvariantCulture),
+								msgFile,
+								commonPath))
 			return false;
 	}
 
@@ -220,9 +223,13 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 		SVN_HANDLE(svn_stream_close(f));
 		String^ errFile = Utf8_PathPtrToString(path, %subpool);
 
-		if (!postCommitHook->Run(this, args, 
-								 pathsFile, ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
-								 (result ? result->Revision : -1).ToString(CultureInfo::InvariantCulture), errFile, commonPath))
+		if (!postCommitHook->Run(this, args,
+								 pathsFile,
+								 ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
+								 msgFile,
+								 (result ? result->Revision : -1).ToString(CultureInfo::InvariantCulture),
+								 errFile,
+								 commonPath))
 			return false;
 	}
 
