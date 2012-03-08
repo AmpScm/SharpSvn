@@ -155,7 +155,7 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 			SVN_HANDLE(svn_stream_open_unique(&f, &path, nullptr, svn_io_file_del_on_pool_cleanup,
 											  _pool.Handle, subpool.Handle));
 
-			for (int i = 0; i < h->nelts; h++)
+			for (int i = 0; i < h->nelts; i++)
 			{
 				SVN_HANDLE(svn_stream_printf(f, subpool.Handle, "%s\n",
 											 svn_dirent_local_style(APR_ARRAY_IDX(h, i, const char *), subpool.Handle)));
