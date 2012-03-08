@@ -33,6 +33,7 @@
           <replacestring from="@HAVE_SNPRINTF@" to="SHARPSVN_GETTEXT" />
           <replacestring from="@HAVE_ASPRINTF@" to="!SHARPSVN_GETTEXT" />
           <replacestring from="@HAVE_WPRINTF@" to="!SHARPSVN_GETTEXT" />
+          <replacestring from="@HAVE_NEWLOCALE@" to="!SHARPSVN_GETTEXT" />
         </filterchain>
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
@@ -120,6 +121,8 @@
           <define name="HAVE_CONFIG_H" value="1" />
           <define name="IN_LIBINTL" value="1" />
           <define name="LIBDIR" value="1" />
+          <define name="WIN32" value="1" />
+          <define name="_WIN32" value="1" />
           <define name="alloca" value="_alloca" />
         </defines>
         <includedirs>
