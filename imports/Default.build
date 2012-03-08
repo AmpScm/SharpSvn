@@ -11,11 +11,10 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.7.3" overwrite="false" />
+  <property name="subversionVersion" value="1.7.4" overwrite="false" />
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1238121 - Fix incorrect url construction in libsvn_ra_serf -->
-  <!-- r1243976 - Fix compilation when compiling without Apache Httpd -->
-  <property name="subversionMerges" value="1156080,1238121,1243976" overwrite="false" />
+  <property name="subversionMerges" value="1156080,1238121" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
