@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "EventArgs/SvnImportFilterEventArgs.h"
+
 namespace SharpSvn {
 
 /// <summary>Extended Parameter container of <see cref="SvnClient::Import(String^,Uri^,SvnImportArgs^)" /> and <see cref="SvnClient::RemoteImport(String^,Uri^,SvnImportArgs^)" /></summary>
@@ -75,12 +77,29 @@ namespace SharpSvn {
 			}
 		}
 
+    public:
+        DECLARE_EVENT(SvnImportFilterEventArgs^, Filter)
+
 	internal:
 		// Used by SvnImport to forward SvnCheckout errors
 		void HandleOnSvnError(Object^ sender, SvnErrorEventArgs^ e)
 		{
 			UNUSED_ALWAYS(sender);
 			OnSvnError(e);
+		}
+
+        property bool HasFilter
+        {
+            bool get()
+            {
+                return (event_Filter != nullptr) || (GetType() != SvnImportArgs::typeid);
+            }
+        }
+
+    protected public:
+		virtual void OnFilter(SvnImportFilterEventArgs^ e)
+		{
+			Filter(this, e);
 		}
 	};
 

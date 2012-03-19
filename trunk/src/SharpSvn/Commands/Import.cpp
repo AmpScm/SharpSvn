@@ -84,7 +84,7 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
 
 		try
 		{
-			return CheckOut(target, path, aa);
+			return CheckOut(gcnew SvnUriTarget(target, result->Revision), path, aa);
 		}
 		finally
 		{
@@ -129,6 +129,39 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 	return RemoteImport(path, target, args, result);
 }
 
+static svn_error_t *
+sharpsvn_import_filter(void *baton, svn_boolean_t *filtered, const char *local_abspath, const svn_io_dirent2_t *dirent, apr_pool_t *scratch_pool)
+{
+	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+
+	AprPool thePool(scratch_pool, false);
+
+	SvnImportArgs^ args = dynamic_cast<SvnImportArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+	if (!args)
+		return nullptr;
+
+	SvnImportFilterEventArgs^ e = gcnew SvnImportFilterEventArgs(local_abspath, dirent, %thePool);
+	try
+	{
+		args->OnFilter(e);
+
+		*filtered = e->Filter ? TRUE : FALSE;
+
+		if (e->Cancel)
+			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Import filter canceled operation");
+		else
+			return nullptr;
+	}
+	catch(Exception^ ex)
+	{
+		return SvnException::CreateExceptionSvnError("Import filter", ex);
+	}
+	finally
+	{
+		e->Detach(false);
+	}
+}
+
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result)
 {
 	if (String::IsNullOrEmpty(path))
@@ -147,15 +180,16 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 	EnsureState(SvnContextState::AuthorizationInitialized, SvnExtendedState::MimeTypesLoaded);
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
-    CommitResultReceiver crr(this);
+	CommitResultReceiver crr(this);
 
-	svn_error_t *r = svn_client_import4(
+	svn_error_t *r = svn_client_import5(
 		pool.AllocDirent(path),
 		pool.AllocUri(target),
 		(svn_depth_t)args->Depth,
 		args->NoIgnore,
 		args->IgnoreUnknownNodeTypes,
 		CreateRevPropList(args->LogProperties, %pool),
+		args->HasFilter ? sharpsvn_import_filter : nullptr, (void*)_clientBaton->Handle,
 		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
 		pool.Handle);
