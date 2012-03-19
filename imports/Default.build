@@ -14,13 +14,14 @@
   <property name="subversionVersion" value="1.7.4" overwrite="false" />
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1238121 - Fix incorrect url construction in libsvn_ra_serf -->
-  <property name="subversionMerges" value="1156080,1238121" overwrite="false" />
+  <!-- r1302450 - Upgrade svn_client_import to support filtering -->
+  <property name="subversionMerges" value="1156080,1238121,1302450" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
-  <property name="opensslVersion" value="1.0.1" overwrite="false" />
+  <property name="opensslVersion" value="1.0.0g" overwrite="false" />
   <property name="neonVersion" value="0.29.6" overwrite="false" />
 
   <property name="aprVersion" value="1.4.6" overwrite="false" />
