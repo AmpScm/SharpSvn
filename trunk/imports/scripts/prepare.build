@@ -5,6 +5,9 @@
   <property name="junitFilename" value="junit${junitVersion}.zip" />
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
+  
+  <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
+  <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
@@ -25,6 +28,9 @@
     </if>
     <if test="${not file::exists(downloads + saslFilename)}">
       <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
+    </if>
+    <if test="${not file::exists(downloads + nasmFilename)}">
+      <get src=" http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}" dest="${downloads}/${nasmFilename}" />
     </if>
     <if test="${property::exists('withSwig') and not file::exists(downloads + swigFilename)}">
       <get src="http://prdownloads.sourceforge.net/swig/${swigFilename}" dest="${downloads}/${swigFilename}" />
@@ -69,6 +75,9 @@
     </if>
     <if test="${not directory::exists(saslDir)}">
       <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
+    </if>
+    <if test="${not directory::exists(nasmDir)}">
+      <unzip zipfile="${downloads + nasmFilename}" todir="build" />
     </if>
     <if test="${property::exists('withSwig') and not directory::exists(swigDir)}">
       <unzip zipfile="${downloads + swigFilename}" todir="build" />

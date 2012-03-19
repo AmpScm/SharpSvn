@@ -27,7 +27,7 @@
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
       <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='win32'}">
-        <arg line="/c ms\do_ms.bat" />
+        <arg line="/c ms\do_nasm.bat" />
       </exec>
       <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
         <arg line="/c ms\do_win64a.bat" />
