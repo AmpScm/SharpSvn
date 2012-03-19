@@ -84,6 +84,10 @@
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
 
+  <setenv>
+    <variable name="PATH" value="${environment::get-variable('PATH')};${path::get-full-path(nasmDir)}"/>
+  </setenv>
+
   <target name="clean">
     <delete>
       <fileset basedir="build" defaultexcludes="false">
