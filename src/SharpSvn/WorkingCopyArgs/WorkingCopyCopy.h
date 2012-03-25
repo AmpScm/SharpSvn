@@ -18,13 +18,13 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnWorkingCopyClient::Move(String^,String^,SvnWorkingCopyMoveArgs^)" />.</summary>
+	/// <summary>Extended Parameter container of <see cref="SvnWorkingCopyClient::Copy(String^,String^,SvnWorkingCopyCopyArgs^)" />.</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnWorkingCopyMoveArgs : public SvnClientArgs
+	public ref class SvnWorkingCopyCopyArgs : public SvnClientArgs
 	{
 		bool _metaDataOnly;
 	public:
-		SvnWorkingCopyMoveArgs()
+		SvnWorkingCopyCopyArgs()
 		{
 		}
 
@@ -32,7 +32,7 @@ namespace SharpSvn {
 		{
 			virtual SvnCommandType get() override sealed
 			{
-				return SvnCommandType::WorkingCopyMove;
+				return SvnCommandType::WorkingCopyCopy;
 			}
 		}
 

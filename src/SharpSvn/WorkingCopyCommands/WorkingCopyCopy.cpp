@@ -16,7 +16,7 @@
 
 #include "stdafx.h"
 #include "SvnAll.h"
-#include "WorkingCopyArgs/WorkingCopyMove.h"
+#include "WorkingCopyArgs/WorkingCopyCopy.h"
 
 #include <private/svn_wc_private.h>
 
@@ -24,17 +24,17 @@ using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath)
+bool SvnWorkingCopyClient::Copy(String^ sourcePath, String^ toPath)
 {
 	if (String::IsNullOrEmpty(sourcePath))
 		throw gcnew ArgumentNullException("sourcePath");
 	else if (String::IsNullOrEmpty(toPath))
 		throw gcnew ArgumentNullException("toPath");
 
-	return Move(sourcePath, toPath, gcnew SvnWorkingCopyMoveArgs());
+	return Copy(sourcePath, toPath, gcnew SvnWorkingCopyCopyArgs());
 }
 
-bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath, SvnWorkingCopyMoveArgs^ args)
+bool SvnWorkingCopyClient::Copy(String^ sourcePath, String^ toPath, SvnWorkingCopyCopyArgs^ args)
 {
 	if (String::IsNullOrEmpty(sourcePath))
 		throw gcnew ArgumentNullException("sourcePath");
@@ -78,7 +78,7 @@ bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath, SvnWorkingCo
         }
     }
 
-    r = svn_wc_move(
+    r = svn_wc_copy3(
 		CtxHandle->wc_ctx,
 		pSrc,
 		pDst,
