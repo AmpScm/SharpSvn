@@ -274,7 +274,7 @@ namespace SharpSvn {
 		void HandleClientCancel(SvnCancelEventArgs^ e);
 		void HandleClientProgress(SvnProgressEventArgs^ e);
 		void HandleClientCommitting(SvnCommittingEventArgs^ e);
-        void HandleClientCommitted(SvnCommittedEventArgs^ e);
+		void HandleClientCommitted(SvnCommittedEventArgs^ e);
 		void HandleClientNotify(SvnNotifyEventArgs^ e);
 		void HandleClientConflict(SvnConflictEventArgs^ e);
 		virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;

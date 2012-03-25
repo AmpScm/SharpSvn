@@ -37,6 +37,49 @@ namespace SharpSvn {
 	private:
 		~SvnWorkingCopyClient();
 
+		void SvnWorkingCopyClient::Initialize();
+
+    public:
+		/// <summary>
+		/// Raised to allow canceling operations. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
+		/// <summary>
+		/// Raised on notifications. The event is first
+		/// raised on the <see cref="SvnClientArgs" /> object and
+		/// then on the <see cref="SvnClient" />
+		/// </summary>
+		DECLARE_EVENT(SvnNotifyEventArgs^, Notify);
+		/// <summary>
+		/// Raised when a subversion exception occurs.
+		/// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel
+		/// throwing the exception
+		/// </summary>
+		DECLARE_EVENT(SvnErrorEventArgs^, SvnError)
+		/// <summary>
+		/// Raised just before a command is executed. This allows a listener
+		/// to cleanup before a new command is started
+		/// </summary>
+		DECLARE_EVENT(SvnProcessingEventArgs^, Processing)
+
+protected:
+		/// <summary>Raises the <see cref="Cancel" /> event.</summary>
+		virtual void OnCancel(SvnCancelEventArgs^ e);
+		/// <summary>Raises the <see cref="Notify" /> event.</summary>
+		virtual void OnNotify(SvnNotifyEventArgs^ e);
+		/// <summary>Raises the <see cref="Exception" /> event.</summary>
+		virtual void OnSvnError(SvnErrorEventArgs^ e);
+		/// <summary>Raises the <see cref="Processing" /> event.</summary>
+		virtual void OnProcessing(SvnProcessingEventArgs^ e);
+
+	internal:
+		void HandleClientCancel(SvnCancelEventArgs^ e);
+		void HandleClientNotify(SvnNotifyEventArgs^ e);
+        virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
+        virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
+
 	public:
 		/// <summary>Gets the text file status of a working copy path</summary>
 		bool GetState(String^ targetPath, [Out] SvnWorkingCopyState^% result);
