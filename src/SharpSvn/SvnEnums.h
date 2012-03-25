@@ -76,7 +76,7 @@ namespace SharpSvn {
 		GetWorkingCopyEntries,
 		WorkingCopyMove,
 		WorkingCopyCopy,
-
+		WorkingCopyRestore,
 
 		// Custom commands
 		FileVersions = 0x2001,

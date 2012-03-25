@@ -1603,6 +1603,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\WorkingCopyCommands\WorkingCopyRestore.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WorkingCopyCommands\WorkingCopyState.cpp"
 					>
 				</File>
@@ -1628,6 +1632,10 @@
 				</File>
 				<File
 					RelativePath=".\WorkingCopyArgs\WorkingCopyMove.h"
+					>
+				</File>
+				<File
+					RelativePath=".\WorkingCopyArgs\WorkingCopyRestore.h"
 					>
 				</File>
 				<File
