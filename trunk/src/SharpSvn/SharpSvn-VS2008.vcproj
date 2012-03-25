@@ -1591,6 +1591,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\WorkingCopyCommands\WorkingCopyCopy.cpp"
+					>
+				</File>
+				<File
 					RelativePath=".\WorkingCopyCommands\WorkingCopyEntries.cpp"
 					>
 				</File>
@@ -1608,6 +1612,10 @@
 				>
 				<File
 					RelativePath=".\Args\GetWorkingCopyVersion.h"
+					>
+				</File>
+				<File
+					RelativePath=".\WorkingCopyArgs\WorkingCopyCopy.h"
 					>
 				</File>
 				<File
