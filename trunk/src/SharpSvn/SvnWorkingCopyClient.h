@@ -25,6 +25,7 @@ namespace SharpSvn {
 	ref class SvnWorkingCopyInstallConflictArgs;
 	ref class SvnWorkingCopyMoveArgs;
 	ref class SvnWorkingCopyCopyArgs;
+    ref class SvnWorkingCopyRestoreArgs;
 
 	public ref class SvnWorkingCopyClient : public SvnClientContext
 	{
@@ -133,6 +134,12 @@ protected:
 		bool Copy(String^ sourcePath, String^ toPath);
 		/// <summary>Copies a node to a different path</summary>
 		bool Copy(String^ sourcePath, String^ toPath, SvnWorkingCopyCopyArgs^ args);
+
+    public:
+		/// <summary>Restores a missing node</summary>
+		bool Restore(String^ path);
+		/// <summary>Restores a missing node</summary>
+		bool Restore(String^ path, SvnWorkingCopyRestoreArgs^ args);
 
 	public:
 		bool InstallConflict(String^ targetPath, SvnUriOrigin^ leftSource, SvnUriOrigin^ rightSource, SvnWorkingCopyInstallConflictArgs^ args);
