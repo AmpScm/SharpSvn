@@ -105,5 +105,14 @@ namespace SharpSvn.Tests
             Assert.That(File.Exists(app));
             Assert.That(Path.GetFileName(app).ToLowerInvariant(), Is.EqualTo("wscript.exe"));
         }
+
+        [Test]
+        public void Normalize800000()
+        {
+            for (int i = 0; i < 800000; i++)
+            {
+                GC.KeepAlive(SvnTools.GetNormalizedFullPath("C:\\Users\\Bert\\AppData\\Local\\Microsoft\\VisualStudio\\10.0\\Extensions\\Microsoft\\Productivity Power Tools\\10.0.20626.18\\package\\services\\digital-signature\\xml-signature\\yp5utn4wx4uezottryfbg9mac.psdsxs"));
+            }
+        }
     }
 }

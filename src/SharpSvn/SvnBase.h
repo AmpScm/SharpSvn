@@ -146,7 +146,14 @@ namespace SharpSvn {
 
 			static String^ EnsureSafeAprArgument(String^ argument, bool preferQuotes);
 
-			static array<Char>^ _invalidChars;
+			static array<char>^ _invalidCharMap;
+
+            static property array<char>^ InvalidCharMap
+            {
+                array<char>^ get();
+            }
+
+            static void GenerateInvalidCharMap();
 		};
 
 		[SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true), SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
