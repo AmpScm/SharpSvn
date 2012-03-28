@@ -163,37 +163,37 @@ static bool IsDirSeparator(String^ v, int index)
 
 static bool IsInvalid(String^ v, int index)
 {
-    unsigned short c = v[index]; // .Net handles index checking
-    array<char>^ invalidChars = SvnBase::InvalidCharMap;
+	unsigned short c = v[index]; // .Net handles index checking
+	array<char>^ invalidChars = SvnBase::InvalidCharMap;
 
-    if (c < invalidChars->Length)
-        return (0 != invalidChars[c]);
+	if (c < invalidChars->Length)
+		return (0 != invalidChars[c]);
 
-    return false;
+	return false;
 }
 
 array<char>^ SvnBase::InvalidCharMap::get()
 {
-    if (!_invalidCharMap)
-        GenerateInvalidCharMap();
+	if (!_invalidCharMap)
+		GenerateInvalidCharMap();
 
-    return _invalidCharMap;
+	return _invalidCharMap;
 }
 
 void SvnBase::GenerateInvalidCharMap()
 {
-    List<char> ^invalid = gcnew List<char>(128); // Typical required: 124
+	List<char> ^invalid = gcnew List<char>(128); // Typical required: 124
 
-    for each (Char c in Path::GetInvalidPathChars())
-    {
-        unsigned short cs = c;
+	for each (Char c in Path::GetInvalidPathChars())
+	{
+		unsigned short cs = c;
 
-        while (cs >= invalid->Count)
-            invalid->Add(0);
+		while (cs >= invalid->Count)
+			invalid->Add(0);
 
-        invalid[cs] = 1;
-    }
-    _invalidCharMap = invalid->ToArray();
+		invalid[cs] = 1;
+	}
+	_invalidCharMap = invalid->ToArray();
 }
 
 bool SvnBase::PathContainsInvalidChars(String^ path)
@@ -201,15 +201,15 @@ bool SvnBase::PathContainsInvalidChars(String^ path)
 	array<char>^ invalidChars = InvalidCharMap;
 
 	for each (Char c in path)
-    {
-        unsigned short cs = c;
+	{
+		unsigned short cs = c;
 
-        if (cs < invalidChars->Length
-            && invalidChars[cs] != 0)
-        {
-            return false;
-        }
-    }
+		if (cs < invalidChars->Length
+			&& invalidChars[cs] != 0)
+		{
+			return false;
+		}
+	}
 
 	return false;
 }
@@ -491,10 +491,10 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 	if (path[0] == L'\\')
 		path = StripLongPrefix(path);
 
-	if (PathContainsInvalidChars(path) || path->LastIndexOf(':') >= 2)
-		throw gcnew ArgumentException(String::Format(SharpSvnStrings::PathXContainsInvalidCharacters, path), "path");
-	else if (IsNormalizedFullPath(path))
+	if (IsNormalizedFullPath(path))
 		return path; // Just pass through; no allocations
+	else if (PathContainsInvalidChars(path) || path->LastIndexOf(':') >= 2)
+		throw gcnew ArgumentException(String::Format(SharpSvnStrings::PathXContainsInvalidCharacters, path), "path");
 
 	bool retry = true;
 
@@ -692,6 +692,8 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 	else
 		i = 3;
 
+	array<char>^ invalidMap = InvalidCharMap;
+
 	while (i < c)
 	{
 		if (i >= c && IsDirSeparator(path, i))
@@ -710,8 +712,17 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 
 		n = i;
 
-		while (i < c && !IsInvalid(path, i) && !IsDirSeparator(path, i) && path[i] != Path::AltDirectorySeparatorChar)
+		while (i < c)
+		{
+			unsigned short cc = path[i];
+
+			if (cc < invalidMap->Length && 0 != invalidMap[cc])
+				return false;
+			else if (cc == '\\' || cc == '/' || cc == ':')
+				break;
+
 			i++;
+		}
 
 		if (n == i)
 			return false;
