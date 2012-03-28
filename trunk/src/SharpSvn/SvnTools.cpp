@@ -151,9 +151,6 @@ static String^ GetPathRootPart(String^ path)
 
 static bool IsSeparator(String^ v, int index)
 {
-	if (index < 0 || (index >= v->Length))
-		return false;
-
 	wchar_t c = v[index];
 
 	return (c == Path::DirectorySeparatorChar) || (c == Path::AltDirectorySeparatorChar);
@@ -161,34 +158,58 @@ static bool IsSeparator(String^ v, int index)
 
 static bool IsDirSeparator(String^ v, int index)
 {
-	if (index < 0 || (index >= v->Length))
-		return false;
-
 	return (v[index] == Path::DirectorySeparatorChar);
 }
 
 static bool IsInvalid(String^ v, int index)
 {
-	if (index < 0 || (index >= v->Length))
-		return false;
+    unsigned short c = v[index]; // .Net handles index checking
+    array<char>^ invalidChars = SvnBase::InvalidCharMap;
 
-	array<Char>^ invalidChars = SvnBase::_invalidChars;
+    if (c < invalidChars->Length)
+        return (0 != invalidChars[c]);
 
-	if (!invalidChars)
-		SvnBase::_invalidChars = invalidChars = Path::GetInvalidPathChars();
+    return false;
+}
 
-	return 0 <= Array::IndexOf(invalidChars, v[index]);
+array<char>^ SvnBase::InvalidCharMap::get()
+{
+    if (!_invalidCharMap)
+        GenerateInvalidCharMap();
+
+    return _invalidCharMap;
+}
+
+void SvnBase::GenerateInvalidCharMap()
+{
+    List<char> ^invalid = gcnew List<char>(128); // Typical required: 124
+
+    for each (Char c in Path::GetInvalidPathChars())
+    {
+        unsigned short cs = c;
+
+        while (cs >= invalid->Count)
+            invalid->Add(0);
+
+        invalid[cs] = 1;
+    }
+    _invalidCharMap = invalid->ToArray();
 }
 
 bool SvnBase::PathContainsInvalidChars(String^ path)
 {
-	array<Char>^ invalidChars = _invalidChars;
+	array<char>^ invalidChars = InvalidCharMap;
 
-	if (!invalidChars)
-		_invalidChars = invalidChars = Path::GetInvalidPathChars();
+	for each (Char c in path)
+    {
+        unsigned short cs = c;
 
-	if (0 <= path->IndexOfAny(invalidChars))
-		return true;
+        if (cs < invalidChars->Length
+            && invalidChars[cs] != 0)
+        {
+            return false;
+        }
+    }
 
 	return false;
 }
