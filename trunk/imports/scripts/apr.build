@@ -95,6 +95,7 @@
             <include name="${aprDir}/apr.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/xml/expat/lib/*.vcproj" />
+            <include name="${aprUtilDir}/crypto/*.vcproj" />
           </items>
         </in>
         <do>
@@ -103,9 +104,11 @@
             <filterchain>
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static=='true'}" />
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static!='true'}" />
-              <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib ' if="${static!='true'}" />
+              <!-- Fix crypto compilation -->
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true'}" />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+              <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
               <replacestring from='XML_STATIC' to='XML_BUILDING_EXPAT;XML_USE_MSC_EXTENSIONS;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
               <replacestring from='EXPAT_EXPORTS' to='EXPAT_EXPORTS;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
             </filterchain>
@@ -118,6 +121,7 @@
           <items>
             <include name="${aprDir}/libapr.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" />
+            <include name="${aprUtilDir}/crypto/*.vcproj" />
           </items>
         </in>
         <do>
@@ -126,6 +130,7 @@
             <filterchain>
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
+              <replacestring from=",../include/private" to=",../include/private,${path::get-full-path(opensslDir)}\inc32" />
               <!-- Import APR from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
               <!-- Increase security a little little bit in some cases -->
@@ -150,6 +155,7 @@
               <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
+              <replacestring from='#define APU_HAVE_CRYPTO ' to='#define APU_HAVE_CRYPTO 1 //' />
               <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
 #ifndef WIN64
 #  define WIN64
@@ -229,6 +235,7 @@ APR_BEGIN_DECLS
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
+            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" />
           </items>
         </in>
         <do>
@@ -236,16 +243,16 @@ APR_BEGIN_DECLS
             <arg value="${project}" />
             <arg value="${Configuration}|${platform}" />
           </VCBuild>
-          <if test="${static != 'true'}">
-            <copy todir="${aprUtilDir}" flatten="true">
-              <fileset>
-                <include name="${aprDir}/release/*.lib" if="${platform=='win32'}" />
-                <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" if="${platform=='win32'}" />
-                <include name="${aprDir}/x64/release/*.lib" if="${platform=='x64'}" />
-                <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" if="${platform=='x64'}" />
-              </fileset>
-            </copy>
-          </if>
+          <copy todir="${aprUtilDir}" flatten="true">
+            <fileset>
+              <include name="${aprDir}/release/*.lib" if="${platform=='win32'}" />
+              <include name="${aprUtilDir}/release/*.lib" if="${platform=='win32'}" />
+              <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" if="${platform=='win32'}" />
+              <include name="${aprDir}/x64/release/*.lib" if="${platform=='x64'}" />
+              <include name="${aprUtilDir}/x64/release/*.lib" if="${platform=='x64'}" />
+              <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" if="${platform=='x64'}" />
+            </fileset>
+          </copy>
         </do>
       </foreach>
       <if test="${static != 'true'}">
@@ -339,12 +346,14 @@ APR_BEGIN_DECLS
       <fileset>
         <include name="${aprDir}/Release/*.dll" />
         <include name="${aprUtilDir}/Release/*.dll" />
+        <include name="${aprUtilDir}/crypto/Release/*.dll" />
       </fileset>
     </copy>
     <copy todir="${release}/bin/x64" flatten="true">
       <fileset>
         <include name="${aprDir}/x64/Release/*.dll" />
         <include name="${aprUtilDir}/x64/Release/*.dll" />
+        <include name="${aprUtilDir}/crypto/x64/Release/*.dll" />
       </fileset>
     </copy>
     <property name="aprIncludeDir" value="${release}/include/apr-1" />
