@@ -106,6 +106,7 @@
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static!='true'}" />
               <!-- Fix crypto compilation -->
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true'}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true'}" />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
               <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
@@ -246,10 +247,14 @@ APR_BEGIN_DECLS
           <copy todir="${aprUtilDir}" flatten="true">
             <fileset>
               <include name="${aprDir}/release/*.lib" if="${platform=='win32'}" />
+              <include name="${aprDir}/libR/*-1.lib" if="${platform=='win32'}" />
               <include name="${aprUtilDir}/release/*.lib" if="${platform=='win32'}" />
+              <include name="${aprUtilDir}/libR/*-1.lib" if="${platform=='win32'}" />
               <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" if="${platform=='win32'}" />
               <include name="${aprDir}/x64/release/*.lib" if="${platform=='x64'}" />
+              <include name="${aprDir}/x64/libR/*-1.lib" if="${platform=='x64'}" />
               <include name="${aprUtilDir}/x64/release/*.lib" if="${platform=='x64'}" />
+              <include name="${aprUtilDir}/x64/libR/*-1.lib" if="${platform=='x64'}" />
               <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" if="${platform=='x64'}" />
             </fileset>
           </copy>
