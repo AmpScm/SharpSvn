@@ -30,7 +30,7 @@
       <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
     </if>
     <if test="${not file::exists(downloads + nasmFilename)}">
-      <get src=" http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}" dest="${downloads}/${nasmFilename}" />
+      <get src="http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}" dest="${downloads}/${nasmFilename}" />
     </if>
     <if test="${property::exists('withSwig') and not file::exists(downloads + swigFilename)}">
       <get src="http://prdownloads.sourceforge.net/swig/${swigFilename}" dest="${downloads}/${swigFilename}" />
