@@ -102,6 +102,8 @@
           <echo message="Patching ${vcproj}" />
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
+              <!-- Add openssl includes to aprutil and aprutil/crypto -->
+              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static=='true'}" />
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static!='true'}" />
               <!-- Fix crypto compilation -->
@@ -131,7 +133,8 @@
             <filterchain>
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
-              <replacestring from=",../include/private" to=",../include/private,${path::get-full-path(opensslDir)}\inc32" />
+              <!-- Add openssl includes to aprutil and aprutil/crypto -->
+              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
               <!-- Import APR from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
               <!-- Increase security a little little bit in some cases -->
@@ -157,6 +160,7 @@
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#define APU_HAVE_CRYPTO ' to='#define APU_HAVE_CRYPTO 1 //' />
+              <replacestring from='#define APU_HAVE_OPENSSL ' to='#define APU_HAVE_OPENSSL 1 //' if="${svnAddSharpSvn == 'true'}" />
               <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
 #ifndef WIN64
 #  define WIN64
@@ -195,6 +199,9 @@ APR_BEGIN_DECLS
 /* /SharpSvn */
 
 ' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
+      <echo message='
+#include "apr_crypto_openssl.c"
+' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn == 'true'}" />
 
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
@@ -236,7 +243,7 @@ APR_BEGIN_DECLS
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
-            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" />
+            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true'}" />
           </items>
         </in>
         <do>
