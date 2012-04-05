@@ -229,7 +229,9 @@ APR_BEGIN_DECLS
       </loadfile>
       <echo message="${proc.c}" file="${aprDir}\threadproc\win32\proc.c" /-->
       <!-- Add Windows 2000 ipv6 workarounds -->
-      <echo message="#include &lt;Wspiapi.h&gt;" file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
+      <echo message="
+ #include &lt;Wspiapi.h&gt;
+ " file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
     </OnceBlock>
   </target>
   <target name="build-apr" depends="download,extract,checkout, prepare-apr">
