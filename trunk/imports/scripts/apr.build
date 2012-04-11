@@ -200,7 +200,10 @@ APR_BEGIN_DECLS
 
 ' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
       <echo message='
+#ifndef __SHARPSVN_APR_CRYPTO_OPENSSL_INCLUDED__
+#define __SHARPSVN_APR_CRYPTO_OPENSSL_INCLUDED__
 #include "apr_crypto_openssl.c"
+#endif
 ' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn == 'true'}" />
 
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
