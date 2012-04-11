@@ -74,6 +74,14 @@ namespace SharpSvn {
             void set(bool value);
         }
 
+        /// <summary>Gets or sets a value indicating whether the 'preserved-conflict-file-exts' should be forced to '*'</summary>
+        [System::ComponentModel::DefaultValue(SvnOverride::Never)]
+        property SvnOverride KeepAllExtensionsOnConflict
+        {
+            SvnOverride get();
+            void set(SvnOverride value);
+        }
+
         /// <summary>Gets the subversion global ignore pattern as specified in the configuration</summary>
         property System::Collections::Generic::IEnumerable<String^>^ GlobalIgnorePattern
         {
