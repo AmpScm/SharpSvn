@@ -300,6 +300,7 @@ namespace SharpSvn {
 		bool _dontLoadMimeFile;
 		bool _dontEnablePlink;
 		bool _useUserDiff;
+		SvnOverride _keepAllExtensionsOnConflict;
 		SvnClientContext(AprPool^ pool);
 		virtual void HandleClientError(SvnErrorEventArgs^ e);
 		virtual void HandleProcessing(SvnProcessingEventArgs^ e);
@@ -352,6 +353,7 @@ namespace SharpSvn {
 		void ApplyCustomSsh();
 		void ApplyMimeTypes();
 		void ApplyUserDiffConfig();
+		void ApplyOverrideFlags();
 		void LoadTortoiseSvnHooks();
 
 	internal:

@@ -60,6 +60,16 @@ void SvnClientConfiguration::UseSubversionDiff::set(bool value)
 	_client->_useUserDiff = !value;
 }
 
+SvnOverride SvnClientConfiguration::KeepAllExtensionsOnConflict::get()
+{
+    return _client->_keepAllExtensionsOnConflict;
+}
+
+void SvnClientConfiguration::KeepAllExtensionsOnConflict::set(SvnOverride value)
+{
+    _client->_keepAllExtensionsOnConflict = value;
+}
+
 System::Collections::Generic::IEnumerable<String^>^ SvnClientConfiguration::GlobalIgnorePattern::get()
 {
 	_client->EnsureState(SvnContextState::ConfigLoaded);
@@ -93,3 +103,4 @@ void SvnClientConfiguration::SetOption(String^ file, String^ section, String^ op
 
     _client->SetConfigurationOption(file, section, option, value);
 }
+

@@ -544,6 +544,13 @@ namespace SharpSvn {
 		Regular
 	};
 
+	public enum class SvnOverride
+	{
+		Never=0,
+		WhenNotSet,
+		Always
+	};
+
 	namespace Implementation
 	{
 
