@@ -41,9 +41,7 @@
 		<arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
 		<arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
 		<arg line="-t vcproj" />
-		<arg line="--vsnet-version=2005" if="${VSversion=='2005'}"/>
-		<arg line="--vsnet-version=2008" if="${VSversion=='2008'}"/>
-		<arg line="--vsnet-version=2010" if="${VSversion=='2010'}"/>
+		<arg line="--vsnet-version=${VSversion}" />
 		<arg value="--release" />
 		<arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
 		<arg value="--with-apr=${impBase}/lib" />
