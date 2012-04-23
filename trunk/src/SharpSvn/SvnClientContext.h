@@ -256,7 +256,7 @@ namespace SharpSvn {
 
 			virtual int GetHashCode() override
 			{
-				return Path->GetHashCode() ^ Type.GetHashCode();
+				return Path->GetHashCode() ^ (int)Type;
 			}
 
 		internal:
