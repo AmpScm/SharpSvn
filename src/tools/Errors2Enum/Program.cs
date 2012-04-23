@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -153,7 +152,7 @@ namespace Errors2Enum
                             r.WriteLine("/// </summary>");
 
                             msgText = msgText.Trim();
-                            if (!msgText.Contains('\n'))
+                            if (!msgText.Contains("\n"))
                                 r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"" + Escape(msgId) + ": " + Escape(msgText.Substring(3).Trim()) + "\")]");
                             else
                                 r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"" + Escape(msgId) + "\")]");
