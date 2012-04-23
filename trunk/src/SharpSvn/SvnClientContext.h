@@ -117,7 +117,7 @@ namespace SharpSvn {
 		};
 
 		/* This order matches the ordering of SvnClientHook::_hookTypes */
-		enum class SvnClientHookType
+		private enum class SvnClientHookType
 		{
 			Undefined = -1,
 			StartCommit = 0,
@@ -256,7 +256,7 @@ namespace SharpSvn {
 
 			virtual int GetHashCode() override
 			{
-				return Path->GetHashCode() ^ (int)Type;
+				return Path->GetHashCode() ^ Type.GetHashCode();
 			}
 
 		internal:
