@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.7004.2064</title>
+          SharpSvn-Daily Update - 1.7004.2080</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.7004.2064</h1>
+          SharpSvn-Daily Update - 1.7004.2080</h1>
 
 
 <p>
@@ -15,25 +15,39 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/6005/SSvn-1.7004.2064.zip">SharpSvn 1.7004.2064</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/6051/SSvn-1.7004.2080.zip">SharpSvn 1.7004.2080</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/6006/SSvn-1.7004.2064-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/6007/SSvnEx-1.7004.2064.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/6052/SSvn-1.7004.2080-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/6053/SSvnEx-1.7004.2080.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2064">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2080">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-04-23</td></tr>
+<tr><td> </td><td class="r"><a id="2075" href="http://sharpsvn.net/rev/?r=2075">
+            [r2075]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/SharpSvn.Tests-VS2008.csproj, SharpSvn/SharpSvn.vcxproj.filters, SharpSvn.Tests/SharpSvn.Tests.csproj, SharpSvn.UI/SharpSvn.UI.csproj, SharpSvn/SharpSvn.vcxproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Make SharpSvn.Tests Visual Studio version agnostic to avoid duplicating the
+project for every Visual Studio version.</td></tr>
+<tr><td> </td><td class="r"><a id="2074" href="http://sharpsvn.net/rev/?r=2074">
+            [r2074]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.UI/SharpSvn.UI-2008.csproj, SharpSvn-VS11.sln, SharpSvn.UI/SharpSvn.UI.csproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Potentially breaking change: Make SharpSvn.UI follow the same platform and .Net
+version as SharpSvn. This makes the project much easier to maintain as it
+removes the requirement for a separate project for every Visual Studio version.</td></tr>
+<tr><td> </td><td class="r"><a id="2072" href="http://sharpsvn.net/rev/?r=2072">
+            [r2072]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpPlink/SharpPlink.vcxproj.filters, SharpSvn-VS11.sln, SharpSvn/SharpSvn.vcxproj.filters, SharpPlink/SharpPlink.vcxproj, SharpSvn/SharpSvn.vcxproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add some Visual Studio 11 project files. Note that this is not a complete set at
+this time as that would break older builds.</td></tr>
 <tr class="d"><td colspan="4">2012-04-11</td></tr>
 <tr><td> </td><td class="r"><a id="2063" href="http://sharpsvn.net/rev/?r=2063">
             [r2063]
@@ -66,10 +80,6 @@ SvnWorkingCopyClient.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> WorkingCopyArgs/WorkingCopyCopy.h, SvnEnums.h, WorkingCopyCommands/WorkingCopyCopy.cpp, SharpSvn-VS2008.vcproj, SvnWorkingCopyClient.h, WorkingCopyArgs/WorkingCopyMove.h, WorkingCopyCommands/WorkingCopyMove.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a SvnWorkingCopyClient.Copy() which like it's cousing .Move() allows
 copying metadata only. This allows clients like AnkhSVN to avoid a move-back
 dance after another tool already performed the operation.</td></tr>
-<tr class="d"><td colspan="4">2012-03-19</td></tr>
-<tr><td> </td><td class="r"><a id="2037" href="http://sharpsvn.net/rev/?r=2037">
-            [r2037]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvn-VS2008.vcproj, EventArgs/SvnImportFilterEventArgs.h, Args/Import.h, Commands/Import.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add a .Filter callback to SvnImportArgs, based on some Subversion 1.8 code.</td></tr>
 
 </table>
 <!--/Recent changes-->
