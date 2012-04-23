@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Putty">
+      <UniqueIdentifier>{62f20325-1315-4c45-8bc6-ff63cc9dff3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Putty\Headers">
+      <UniqueIdentifier>{769b7d8e-e692-4f79-b74b-e43b514fa08a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Putty\Source Files">
+      <UniqueIdentifier>{7606008a-d9a2-4012-a2ee-a10936ba79a7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include=".\SharpPlink.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\SharpSvnCmdLine.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\SharpSvnConsole.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\be_all_s.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\cproxy.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\ldisc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\logging.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\misc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\pgssapi.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\pinger.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\portfwd.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\proxy.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\raw.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\rlogin.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\settings.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\ssh.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshaes.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\ssharcf.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshblowf.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshbn.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshcrc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshcrcda.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshdes.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshdh.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshdss.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshdssg.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshgssc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshmd5.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshprime.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshpubk.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshrand.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshrsa.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshrsag.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshsh256.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshsh512.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshsha.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\sshzlib.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\telnet.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\timing.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\tree234.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\version.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\wildcard.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\windefs.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\wingss.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winhandl.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winjump.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winmisc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winnet.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winnoise.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winpgntc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winplink.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winproxy.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winser.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winstore.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\wintime.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\windows\winx11.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include=".\PuttySrc\x11fwd.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include=".\Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include=".\SharpPlink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include=".\stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include=".\targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include=".\SharpPlink.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include=".\small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include=".\SharpPlink.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include=".\SharpPlink-vs2008.vcproj" />
+  </ItemGroup>
+</Project>
