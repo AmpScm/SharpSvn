@@ -449,6 +449,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include=".\PdbTools\sbs_pdh.h" />
     <ClInclude Include=".\PdbTools\SvnMsfClient.h" />
     <ClInclude Include=".\PdbTools\SvnPdbClient.h" />
+    <ClInclude Include="EventArgs\SvnImportFilterEventArgs.h" />
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h" />
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyRestore.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include=".\SharpSvnStrings.resx">
@@ -644,6 +647,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include=".\PdbTools\SvnPdbClient.cpp" />
     <ClCompile Include=".\AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp" />
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".\SharpSvn-VS2008.vcproj" />
