@@ -173,7 +173,7 @@ namespace Errors2Enum
                         r.WriteLine("# define SVN_DEF_" + msgId);
                         r.WriteLine("#endif");
 
-                        r.WriteLine(msgId + " = " + value + ",");
+                        r.WriteLine(msgId + " = (int)" + value + ",");
 
                         r.WriteLine("#ifdef SVN_DEF_" + msgId);
                         r.WriteLine("# define " + msgId + " ((DWORD)::SharpSvn::SvnWindowsErrorCode::" + msgId + ")");
@@ -279,7 +279,7 @@ namespace Errors2Enum
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
 
-                    r.WriteLine("\t{0} = {1},", name, line.Substring(nameEnd + 1).Trim());
+                    r.WriteLine("\t{0} = (int){1},", name, line.Substring(nameEnd + 1).Trim());
 
                     r.WriteLine("#ifdef SVN_DEF_" + name);
                     r.WriteLine("# define " + name + " ((apr_status_t)::SharpSvn::SvnAprErrorCode::" + name + ")");
@@ -295,7 +295,7 @@ namespace Errors2Enum
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
                     r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"System error " + Escape(oname) + "\")]");
-                    r.WriteLine("\t{0} = {1},", name, oname);
+                    r.WriteLine("\t{0} = (int){1},", name, oname);
                 }
             }
         }
