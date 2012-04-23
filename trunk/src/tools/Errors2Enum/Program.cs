@@ -14,34 +14,40 @@ namespace Errors2Enum
             if (args.Length != 4)
             {
                 Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <apr_errno.h> <outputfile>");
-				foreach (string s in args)
-				{
-					Console.Error.WriteLine("'" + s + "'");
-				}
+                foreach (string s in args)
+                {
+                    Console.Error.WriteLine("'" + s + "'");
+                }
                 Environment.ExitCode = 1;
                 return;
             }
 
-			string vcPath = Path.GetFullPath(args[0]);
+            string vcPath = Path.GetFullPath(args[0]);
             string sdkPath = Path.GetFullPath(args[1]);
-			string winerror = Path.Combine(sdkPath, "include\\winerror.h");
-			string errno = Path.Combine(vcPath, "include\\errno.h");
+            string winerror = Path.Combine(sdkPath, "include\\winerror.h");
+            string errno = Path.Combine(vcPath, "include\\errno.h");
             string aprerrno = Path.GetFullPath(args[2]);
             string to = Path.GetFullPath(args[3]);
 
             if (!File.Exists(winerror))
+                winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
+
+            if (!File.Exists(winerror))
             {
-                Console.Error.WriteLine("'{0}' does not exist", winerror);
+                if (!File.Exists(winerror))
+                {
+                    Console.Error.WriteLine("'{0}' does not exist", winerror);
+                    Environment.ExitCode = 1;
+                    return;
+                }
+            }
+
+            if (!File.Exists(errno))
+            {
+                Console.Error.WriteLine("'{0}' does not exist", errno);
                 Environment.ExitCode = 1;
                 return;
             }
-
-			if (!File.Exists(errno))
-			{
-				Console.Error.WriteLine("'{0}' does not exist", errno);
-				Environment.ExitCode = 1;
-				return;
-			}
 
             if (!File.Exists(aprerrno))
             {
@@ -78,7 +84,7 @@ namespace Errors2Enum
             using (StreamWriter r = File.CreateText(to))
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
-			using (StreamReader syserrs = File.OpenText(errno))
+            using (StreamReader syserrs = File.OpenText(errno))
             {
                 r.WriteLine(verHeader);
                 r.WriteLine("/* GENERATED CODE - Don't edit this file */");
@@ -96,9 +102,9 @@ namespace Errors2Enum
                 r.WriteLine("/// <summary>Generated mapping from apr_errno.h</summary>");
                 r.WriteLine("public enum class SvnAprErrorCode {");
 
-				Dictionary<string, string> defined = new Dictionary<string, string>();
+                Dictionary<string, string> defined = new Dictionary<string, string>();
                 WriteAprEnumBody(aprheader, r, true, defined);
-				WriteAprEnumBody(syserrs, r, false, defined);
+                WriteAprEnumBody(syserrs, r, false, defined);
 
                 r.WriteLine("};");
                 r.WriteLine();
@@ -188,7 +194,7 @@ namespace Errors2Enum
             }
         }
 
-		private static void WriteAprEnumBody(StreamReader header, StreamWriter r, bool direct, Dictionary<string, string> defined)
+        private static void WriteAprEnumBody(StreamReader header, StreamWriter r, bool direct, Dictionary<string, string> defined)
         {
             string line;
             Dictionary<string, string> descs = new Dictionary<string, string>();
@@ -241,56 +247,56 @@ namespace Errors2Enum
                     continue;
 
                 string name = line.Substring(8, nameEnd - 8);
-				string oname = name;
+                string oname = name;
 
-				if (!direct)
-					name = "APR_" + name;
-				else if (!name.StartsWith("APR_", StringComparison.Ordinal))
-					continue;
+                if (!direct)
+                    name = "APR_" + name;
+                else if (!name.StartsWith("APR_", StringComparison.Ordinal))
+                    continue;
 
-				if (defined.ContainsKey(name))
-					continue;
+                if (defined.ContainsKey(name))
+                    continue;
 
-				defined[name] = name;
+                defined[name] = name;
 
-				if (direct)
-				{
-					r.WriteLine("#ifdef " + name);
-					r.WriteLine("# undef " + name);
-					r.WriteLine("# define SVN_DEF_" + name);
-					r.WriteLine("#endif");
+                if (direct)
+                {
+                    r.WriteLine("#ifdef " + name);
+                    r.WriteLine("# undef " + name);
+                    r.WriteLine("# define SVN_DEF_" + name);
+                    r.WriteLine("#endif");
 
-					if (descs.ContainsKey(name))
-					{
-						r.Write("/// <summary>");
-						r.Write(descs[name].Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"));
-						r.WriteLine("</summary>");
+                    if (descs.ContainsKey(name))
+                    {
+                        r.Write("/// <summary>");
+                        r.Write(descs[name].Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;"));
+                        r.WriteLine("</summary>");
 
-						r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"" + Escape(descs[name]) + "\")]");
-					}
+                        r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"" + Escape(descs[name]) + "\")]");
+                    }
 
-					r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1702:CompoundWordsShouldBeCasedCorrectly\")]");
-					r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
-					r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
+                    r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1702:CompoundWordsShouldBeCasedCorrectly\")]");
+                    r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
+                    r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
 
-					r.WriteLine("\t{0} = {1},", name, line.Substring(nameEnd + 1).Trim());
+                    r.WriteLine("\t{0} = {1},", name, line.Substring(nameEnd + 1).Trim());
 
-					r.WriteLine("#ifdef SVN_DEF_" + name);
-					r.WriteLine("# define " + name + " ((apr_status_t)::SharpSvn::SvnAprErrorCode::" + name + ")");
-					r.WriteLine("#undef SVN_DEF_" + name);
-					r.WriteLine("#endif");
-					r.WriteLine();
-					r.WriteLine();
-				}
-				else
-				{
-					r.WriteLine("/// <summary>System error " + oname + "</summary>");
-					r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1702:CompoundWordsShouldBeCasedCorrectly\")]");
-					r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
-					r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
-					r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"System error " + Escape(oname) + "\")]");
-					r.WriteLine("\t{0} = {1},", name, oname);
-				}
+                    r.WriteLine("#ifdef SVN_DEF_" + name);
+                    r.WriteLine("# define " + name + " ((apr_status_t)::SharpSvn::SvnAprErrorCode::" + name + ")");
+                    r.WriteLine("#undef SVN_DEF_" + name);
+                    r.WriteLine("#endif");
+                    r.WriteLine();
+                    r.WriteLine();
+                }
+                else
+                {
+                    r.WriteLine("/// <summary>System error " + oname + "</summary>");
+                    r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1702:CompoundWordsShouldBeCasedCorrectly\")]");
+                    r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
+                    r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
+                    r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"System error " + Escape(oname) + "\")]");
+                    r.WriteLine("\t{0} = {1},", name, oname);
+                }
             }
         }
 
