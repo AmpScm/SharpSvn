@@ -230,7 +230,7 @@ Exception^ SvnMsfClient::VerifyFile()
                     if (Array::IndexOf(s, (DWORD)n) >= 0)
                     {
                         if (nn > 0)
-                            System::Diagnostics::Debug::WriteLine(String::Format("Page {0}, in use by stream {0}, is marked free", n, nn));
+                            System::Diagnostics::Debug::WriteLine(String::Format("Page {0}, in use by stream {1}, is marked free", n, nn));
 
                         found = true;
                         break;
@@ -260,33 +260,33 @@ void SvnMsfClient::LoadNames()
         return;
 
     SvnMsfStream nameStream(this, _streams[1], _streamSizes[1]);
-    System::IO::BinaryReader bits(%nameStream);
+    System::IO::BinaryReader^ bits = gcnew System::IO::BinaryReader(%nameStream);
 
     // Definition from the CodePlex CCI Metadata project
 
-    int version = bits.ReadInt32();
+    int version = bits->ReadInt32();
     if (version != 20000404)
         throw gcnew InvalidOperationException("Invalid version");
-    bits.ReadInt32(); // Signature
-    bits.ReadInt32(); // Age
-    bits.ReadBytes(16); // GUID
+    bits->ReadInt32(); // Signature
+    bits->ReadInt32(); // Age
+    bits->ReadBytes(16); // GUID
 
-    int nChars = bits.ReadInt32();
-    array<Byte>^ names = bits.ReadBytes(nChars);
+    int nChars = bits->ReadInt32();
+    array<Byte>^ names = bits->ReadBytes(nChars);
 
-    int cnt = bits.ReadInt32();
-    int max = bits.ReadInt32();
+    int cnt = bits->ReadInt32();
+    int max = bits->ReadInt32();
 
-    int nPresent = bits.ReadInt32();
+    int nPresent = bits->ReadInt32();
     array<DWORD>^ presentBits = gcnew array<DWORD>(nPresent);
     for (int n = 0; n < nPresent; n++)
-        presentBits[n] = bits.ReadInt32();
+        presentBits[n] = bits->ReadInt32();
 
     // The deleted bitset should be all 0.
-    int nDeleted = bits.ReadInt32();
+    int nDeleted = bits->ReadInt32();
     array<DWORD>^ deletedBits = gcnew array<DWORD>(nDeleted);
     for (int n = 0; n < nDeleted; n++)
-        deletedBits[n] = bits.ReadInt32();
+        deletedBits[n] = bits->ReadInt32();
 
     Dictionary<String^, int>^ map = gcnew Dictionary<String^, int>();
 
@@ -296,8 +296,8 @@ void SvnMsfClient::LoadNames()
             throw gcnew InvalidOperationException("Can't handle deleted");
         if (BitSet(presentBits, i))
         {
-            int ns = bits.ReadInt32();
-            int ni = bits.ReadInt32();
+            int ns = bits->ReadInt32();
+            int ni = bits->ReadInt32();
 
             map->Add(GetString(names, ns), ni);
         }
@@ -306,7 +306,7 @@ void SvnMsfClient::LoadNames()
     if ((int)cnt != map->Count)
         throw gcnew InvalidOperationException("Invalid bitset?");
 
-    bits.ReadInt32(); // 0
+    bits->ReadInt32(); // 0
 
     System::Diagnostics::Debug::Assert(nameStream.Position == nameStream.Length);
     _streamNames = map;
