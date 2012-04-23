@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,7 +12,7 @@
     <AssemblyName>SharpSvn.Tests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <SignAssembly>true</SignAssembly>
@@ -141,15 +142,46 @@
     <Compile Include="SvnRemoteTests.cs" />
     <Compile Include="SvnToolsTests.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
-      <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
-      <Name>SharpSvn</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{B4F97281-0DBD-4835-9ED8-7DFB966E87FF}" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(MSBuildToolsVersion)' == ''">
+      <!-- Visual Studio 2005 -->
+      <ItemGroup>
+        <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
+          <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+          <Name>SharpSvn</Name>
+          <Private>True</Private>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </When>
+    <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
+      <!-- Visual Studio 2008 -->
+      <ItemGroup>
+        <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
+          <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+          <Name>SharpSvn</Name>
+          <Private>True</Private>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\SharpSvn\SharpSvn.vcxproj">
+          <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+          <Name>SharpSvn</Name>
+          <Private>True</Private>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
