@@ -1046,7 +1046,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".\SharpSvn-VS2008.vcproj" />
     <None Include=".\SharpSvn.snk" />
   </ItemGroup>
   <ItemGroup>

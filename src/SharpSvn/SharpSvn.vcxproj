@@ -650,7 +650,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include=".\SharpSvn-VS2008.vcproj" />
     <None Include=".\SharpSvn.snk" />
   </ItemGroup>
   <ItemGroup>
