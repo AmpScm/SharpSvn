@@ -145,7 +145,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	{
 		strncat(sTarget, "ssh://", CREDUI_MAX_GENERIC_TARGET_LENGTH);
 
-		if (sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
+		if (sPlinkCurrentConfig && sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
 		{
 			sHasConfiguredUser = TRUE;
 			strncat(sTarget, sPlinkCurrentConfig->username, CREDUI_MAX_GENERIC_TARGET_LENGTH);
@@ -258,7 +258,7 @@ int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
 		"safe choice.\n\n"
 		"Update cached key? (y/n, Return cancels connection)";
 
-	char buffer[2048];
+	char buffer[2048] = "";
 	int result;
 
 	if(console_batch_mode)
