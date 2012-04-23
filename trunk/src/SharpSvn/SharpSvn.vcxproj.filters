@@ -622,6 +622,15 @@
     <ClInclude Include=".\PdbTools\SvnPdbClient.h">
       <Filter>PdbClient</Filter>
     </ClInclude>
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h">
+      <Filter>SvnWorkingCopyClient\Args</Filter>
+    </ClInclude>
+    <ClInclude Include="EventArgs\SvnImportFilterEventArgs.h">
+      <Filter>SvnClient\EventArgs</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyRestore.h">
+      <Filter>SvnWorkingCopyClient\Args</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include=".\SharpSvnStrings.resx">
@@ -1030,6 +1039,9 @@
     </ClCompile>
     <ClCompile Include=".\AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp">
+      <Filter>SvnWorkingCopyClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
