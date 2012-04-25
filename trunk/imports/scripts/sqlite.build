@@ -22,6 +22,12 @@
         
         <!-- Store temporary tables in RAM, unless requested otherwise -->
         <define name="SQLITE_TEMP_STORE" value="2" />
+        <define name="SQLITE_DEFAULT_PAGE_SIZE" value="4096" />
+        <define name="SQLITE_DEFAULT_CACHE_SIZE" value="20000" /><!-- default=2000 -->
+        <define name="SQLITE_DEFAULT_FOREIGN_KEYS" value="1" />
+        <define name="SQLITE_DEFAULT_MEMSTATUS" value="0" />
+        <define name="SQLITE_POWERSAFE_OVERWRITE" value="1" /><!-- Assume whole sector writes -->
+        <define name="SQLITE_DISABLE_DIRSYNC" /><!-- Not needed on Windows -->
         
         <!-- Ommit some parts of SQLite not used by Subversion -->
         <define name="SQLITE_OMIT_AUTOINIT" /><!-- Subversion initializes properly -->
@@ -33,9 +39,23 @@
         <define name="SQLITE_OMIT_TRACE" /><!-- No debug tracing -->
         <define name="SQLITE_OMIT_UTF16" /><!-- Subversion uses utf-8 everywhere -->
         <define name="SQLITE_OMIT_FLOATING_POINT" /><!-- Floating point ops in a version management system? -->
+        <define name="SQLITE_OMIT_DATETIME_FUNCS" /><!-- Date time uses APR -->
+        <define name="SQLITE_OMIT_LOCALTIME" />
         <define name="SQLITE_OMIT_AUTORESET" /><!-- Make forgetting a reset an error -->
         
+        <define name="SQLITE_OMIT_SHARED_CACHE" /><!-- Unstable in our previous usage -->
+        <define name="SQLITE_OMIT_BUILTIN_TEST" />
         <define name="SQLITE_OMIT_AUTHORIZATION" />
+        
+        <define name="SQLITE_OMIT_GET_TABLE" />
+        <define name="SQLITE_OMIT_SCHEMA_PRAGMAS" />
+        
+        <define name="SQLITE_OMIT_INTEGRITY_CHECK" />
+        
+        <!-- These would be nice, but currently break compilation -->
+        <!--define name="SQLITE_OMIT_ATTACH" /-->
+        <!--define name="SQLITE_OMIT_VIRTUALTABLE" /-->
+        
       </defines>
       <sources basedir="${sqliteDir}">
         <include name="sqlite3.c" />
