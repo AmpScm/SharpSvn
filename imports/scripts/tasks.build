@@ -57,21 +57,21 @@ public class UnTar : Task
     string _todir;
     string _compresstype;
 
-    [TaskAttribute("tarfile", Required = true)]
+    [TaskAttribute("src", Required = true)]
     public string tarfile
     {
         get { return _tarfile; }
         set { _tarfile = value; }
     }
 
-    [TaskAttribute("todir", Required = true)]
+    [TaskAttribute("dest", Required = true)]
     public string todir
     {
         get { return _todir; }
         set { _todir = value; }
     }
 
-    [TaskAttribute("compresstype", Required = false)]
+    [TaskAttribute("compression", Required = false)]
     public string compresstype
     {
         get { return _compresstype; }

@@ -59,13 +59,13 @@
   <target name="extract" depends="download">
     <mkdir dir="build" />
     <if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
-      <UnTar tarfile="${downloads + opensslFilename}" todir="build/${platform}" compresstype="gzip" />
+      <UnTar src="${downloads + opensslFilename}" dest="build/${platform}" compression="gzip" />
     </if>
     <if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
-      <UnTar tarfile="${downloads + dbFilename}" todir="build" compresstype="gzip" />
+      <UnTar src="${downloads + dbFilename}" dest="build" compression="gzip" />
     </if>
     <if test="${not directory::exists(zlibDir)}">
-      <UnTar tarfile="${downloads + zlibFilename}" todir="build/${platform}" compresstype="gzip" />
+      <UnTar src="${downloads + zlibFilename}" dest="build/${platform}" compression="gzip" />
     </if>
     <if test="${not directory::exists(nunitDir)}">
       <unzip zipfile="${downloads + nunitFilename}" todir="${nunitDir}"  />
@@ -74,7 +74,7 @@
       <unzip zipfile="${downloads + sharpZipFilename}" todir="${sharpZipLibDir}"  />
     </if>
     <if test="${not directory::exists(saslDir)}">
-      <UnTar tarfile="${downloads + saslFilename}" todir="build/${platform}" compresstype="gzip" />
+      <UnTar src="${downloads + saslFilename}" dest="build/${platform}" compression="gzip" />
     </if>
     <if test="${not directory::exists(nasmDir)}">
       <unzip zipfile="${downloads + nasmFilename}" todir="build" />
@@ -84,7 +84,7 @@
     </if>
     <if test="${intl == 'gettext'}">
       <if test="${not directory::exists(gettextDir)}">
-        <UnTar tarfile="${downloads + gettextFilename}" todir="build" compresstype="gzip" />
+        <UnTar src="${downloads + gettextFilename}" dest="build" compression="gzip" />
       </if>
       <if test="${not directory::exists(gettextToolsDir)}">
         <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
