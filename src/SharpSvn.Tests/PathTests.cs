@@ -140,6 +140,14 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\Path"), Is.True, @"\\server\Path");
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\file"), Is.True);
 
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\dir"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\dir\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath(@"\server"), Is.False);
         }
 
         [Test]
