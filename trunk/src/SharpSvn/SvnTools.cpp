@@ -572,7 +572,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 				break;
 		}
 
-		if (i == 2 || !IsSeparator(path, i))
+		if (i == 2 || i == path->Length || !IsSeparator(path, i))
 			return false;
 
 		i++;
@@ -585,7 +585,9 @@ bool SvnTools::IsAbsolutePath(String^ path)
 				break;
 		}
 
-		if (i == n || !IsSeparator(path, i))
+		if (i == path->Length)
+			return (i != n);
+		else if (i == n || !IsSeparator(path, i))
 			return false;
 
 		i++;
@@ -706,7 +708,7 @@ bool SvnTools::IsNormalizedFullPath(String^ path)
 			while (j < c && path[j] == '.')
 				j++;
 
-			if (IsSeparator(path, j) || j >= c)
+			if (j < path->Length && IsSeparator(path, j) || j >= c)
 				return false; // Relative path
 		}
 

@@ -75,7 +75,7 @@ namespace SharpSvn {
 		static Uri^ GetNormalizedUri(Uri^ uri);
 
 		/// <summary>
-		/// Checks whether the specified path is an absolute path
+		/// Checks whether the specified path is an absolute path that doesn't end in an unneeded '\'
 		/// </summary>
 		static bool IsAbsolutePath(String^ path);
 
