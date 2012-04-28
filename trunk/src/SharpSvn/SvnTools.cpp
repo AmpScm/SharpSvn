@@ -591,6 +591,9 @@ bool SvnTools::IsAbsolutePath(String^ path)
 			return false;
 
 		i++;
+
+		if (i == path->Length)
+			return false; // "\\server\share\"
 	}
 	else if ((path[1] != ':') || !IsSeparator(path, 2))
 		return false;
