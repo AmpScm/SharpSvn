@@ -126,6 +126,9 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.IsAbsolutePath("a:\\"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("A:\\"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath("A:\\\\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath("A:\\B"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath("A:\\B\\"), Is.False);
             Assert.That(SvnTools.IsAbsolutePath("a:/sdfsdfsd"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath("A:\\dfsdfds"), Is.True);
 
@@ -140,10 +143,13 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\Path"), Is.True, @"\\server\Path");
             Assert.That(SvnTools.IsNormalizedFullPath(@"\\server\path\file"), Is.True);
 
+            Assert.That(SvnTools.IsAbsolutePath(@"\\\"), Is.False);
             Assert.That(SvnTools.IsAbsolutePath(@"\\server\path"), Is.True);
-            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\"), Is.True);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\\"), Is.False);
             Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\dir"), Is.True);
             Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\dir\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath(@"\\server\path\dir\\"), Is.False);
             Assert.That(SvnTools.IsAbsolutePath(@"\\server"), Is.False);
             Assert.That(SvnTools.IsAbsolutePath(@"\\server\"), Is.False);
             Assert.That(SvnTools.IsAbsolutePath(@"\\server\\"), Is.False);
