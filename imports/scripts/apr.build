@@ -95,7 +95,6 @@
             <include name="${aprDir}/apr.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/xml/expat/lib/*.vcproj" />
-            <include name="${aprUtilDir}/crypto/*.vcproj" />
           </items>
         </in>
         <do>
@@ -106,9 +105,8 @@
               <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static=='true'}" />
               <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static!='true'}" />
-              <!-- Fix crypto compilation -->
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true'}" />
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true'}" />
+              <!-- Don't add default library info -->
+              <replacestring from='Name="VCCLCompilerTool"' to='Name="VCCLCompilerTool" OmitDefaultLibName="true"' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
               <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
@@ -137,6 +135,9 @@
               <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
               <!-- Import APR from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
+              <!-- Fix crypto compilation -->
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true'}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true'}" />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
             </filterchain>
