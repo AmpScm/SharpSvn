@@ -53,7 +53,7 @@
 #endif
 /* /SharpSvn */
 
-' append="true" file="${neonDir}/src/ne_socket.c" if="${platform=='win32'}" />
+' append="true" file="${neonDir}/src/ne_socket.c" if="${(platform=='win32') and (svnAddSharpSvn!='false')}" />
 
   
     </OnceBlock>
