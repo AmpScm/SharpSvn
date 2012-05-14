@@ -15,6 +15,7 @@
       <arg value="/Zi" />      <!-- Write debug information -->
       <arg value="/Zl" />      <!-- Ommit default library name -->
       <arg value="/Gy" />      <!-- Function level linking -->
+      <arg value="/ltcg" />    <!-- Enable link time code generation -->
       <arg value="/link" />
       <arg value="/NODEFAULTLIB" />
       <defines>
