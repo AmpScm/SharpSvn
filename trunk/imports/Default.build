@@ -11,19 +11,17 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.7.4" overwrite="false" />
+  <property name="subversionVersion" value="1.7.5" overwrite="false" />
   <!-- r1156080 - Blame notification change (1.8) -->
-  <!-- r1238121 - Fix incorrect url construction in libsvn_ra_serf -->
   <!-- r1302450 - Upgrade svn_client_import to support filtering -->
-  <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC -->
-  <!-- r1306334 - Don't open unexisting databases using SQLite to improve performance -->
-  <property name="subversionMerges" value="1156080,1238121,1302450,1304407,1304439,1306334" overwrite="false" />
+  <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC (1.8) -->
+  <property name="subversionMerges" value="1156080,1302450,1304407,1304439" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
-  <property name="opensslVersion" value="1.0.1a" overwrite="false" />
+  <property name="opensslVersion" value="1.0.1c" overwrite="false" />
   <property name="neonVersion" value="0.29.6" overwrite="false" />
 
   <property name="aprVersion" value="1.4.6" overwrite="false" />
@@ -36,9 +34,9 @@
   <property name="swigVersion" value="2.0.2" overwrite="false" />
   <property name="nasmVersion" value="2.10" overwrite="false" />
 
-  <property name="httpdVersion" value="2.2.21" overwrite="false" />
+  <property name="httpdVersion" value="2.2.22" overwrite="false" />
   <property name="gettextVersion" value="0.17" overwrite="false" />
-  <property name="sqliteVersion" value="3.7.11" overwrite="false" />
+  <property name="sqliteVersion" value="3.7.12" overwrite="false" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.4.8" overwrite="false" />
