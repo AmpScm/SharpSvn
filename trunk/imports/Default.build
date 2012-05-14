@@ -28,7 +28,7 @@
   <property name="aprUtilVersion" value="1.4.2" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
-  <property name="zlibVersion" value="1.2.6" overwrite="false" />
+  <property name="zlibVersion" value="1.2.7" overwrite="false" />
   <property name="serfVersion" value="1.0.3" overwrite="false" />
   <property name="saslVersion" value="2.1.23" overwrite="false" />
   <property name="swigVersion" value="2.0.2" overwrite="false" />
