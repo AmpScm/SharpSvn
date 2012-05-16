@@ -19,7 +19,7 @@ namespace SharpSvn {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [System::CodeDom::Compiler::GeneratedCodeAttribute(L"System.Resources.Tools.StronglyTypedResourceBuilder", L"2.0.0.0"), 
+    [System::CodeDom::Compiler::GeneratedCodeAttribute(L"System.Resources.Tools.StronglyTypedResourceBuilder", L"4.0.0.0"), 
     System::Diagnostics::DebuggerNonUserCodeAttribute, 
     System::Runtime::CompilerServices::CompilerGeneratedAttribute]
     ref class SharpSvnStrings {
@@ -217,6 +217,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Removed external &apos;{0}&apos;.
+        /// </summary>
+        internal: static property System::String^  NotifyExternalXRemoved {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Failed to revert &apos;{0}&apos; -- try updating instead.
         /// </summary>
         internal: static property System::String^  NotifyFailedToRevertX {
@@ -308,6 +315,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skipped &apos;{0}&apos; - Access denied.
+        /// </summary>
+        internal: static property System::String^  NotifySkippedAccessDeniedX {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Skipped missing target &apos;{0}&apos;.
         /// </summary>
         internal: static property System::String^  NotifySkippedMissingTargetX {
@@ -315,9 +329,23 @@ namespace SharpSvn {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skipped missing &apos;{0}&apos;.
+        ///   Looks up a localized string similar to Skipped &apos;{0}&apos; - An obstructing working copy found.
         /// </summary>
-        internal: static property System::String^  NotifySkippedMissingX {
+        internal: static property System::String^  NotifySkippedObstructionX {
+            System::String^  get();
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipped &apos;{0}&apos;.
+        /// </summary>
+        internal: static property System::String^  NotifySkippedX {
+            System::String^  get();
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skipped &apos;{0}&apos; - Node remains in conflict.
+        /// </summary>
+        internal: static property System::String^  NotifySkippedXRemainsInConflict {
             System::String^  get();
         }
         
@@ -346,6 +374,13 @@ namespace SharpSvn {
         ///   Looks up a localized string similar to Updated to revision {0}..
         /// </summary>
         internal: static property System::String^  NotifyUpdatedToRevisionX {
+            System::String^  get();
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating &apos;{0}&apos;.
+        /// </summary>
+        internal: static property System::String^  NotifyUpdateStartedX {
             System::String^  get();
         }
         
@@ -622,6 +657,10 @@ namespace SharpSvn {
         return ResourceManager->GetString(L"NotifyExternalAtRevisionX", resourceCulture);
     }
     
+    inline System::String^  SharpSvnStrings::NotifyExternalXRemoved::get() {
+        return ResourceManager->GetString(L"NotifyExternalXRemoved", resourceCulture);
+    }
+    
     inline System::String^  SharpSvnStrings::NotifyFailedToRevertX::get() {
         return ResourceManager->GetString(L"NotifyFailedToRevertX", resourceCulture);
     }
@@ -674,12 +713,24 @@ namespace SharpSvn {
         return ResourceManager->GetString(L"NotifyRevertedX", resourceCulture);
     }
     
+    inline System::String^  SharpSvnStrings::NotifySkippedAccessDeniedX::get() {
+        return ResourceManager->GetString(L"NotifySkippedAccessDeniedX", resourceCulture);
+    }
+    
     inline System::String^  SharpSvnStrings::NotifySkippedMissingTargetX::get() {
         return ResourceManager->GetString(L"NotifySkippedMissingTargetX", resourceCulture);
     }
     
-    inline System::String^  SharpSvnStrings::NotifySkippedMissingX::get() {
-        return ResourceManager->GetString(L"NotifySkippedMissingX", resourceCulture);
+    inline System::String^  SharpSvnStrings::NotifySkippedObstructionX::get() {
+        return ResourceManager->GetString(L"NotifySkippedObstructionX", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::NotifySkippedX::get() {
+        return ResourceManager->GetString(L"NotifySkippedX", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::NotifySkippedXRemainsInConflict::get() {
+        return ResourceManager->GetString(L"NotifySkippedXRemainsInConflict", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::NotifyStatusAgainstRevisionX::get() {
@@ -696,6 +747,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::NotifyUpdatedToRevisionX::get() {
         return ResourceManager->GetString(L"NotifyUpdatedToRevisionX", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::NotifyUpdateStartedX::get() {
+        return ResourceManager->GetString(L"NotifyUpdateStartedX", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::NotifyXLockedByUserY::get() {
