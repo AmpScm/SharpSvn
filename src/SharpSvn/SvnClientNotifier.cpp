@@ -43,10 +43,23 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 		if (e->ContentState == SvnNotifyState::Missing)
 			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedMissingTargetX, e->Path));
 		else
-			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedMissingX, e->Path));
+			WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedX, e->Path));
 		break;
+    case SvnNotifyAction::UpdateSkipObstruction:
+		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedObstructionX, e->Path));
+        break;
+    case SvnNotifyAction::UpdateSkipAccessDenied:
+        WriteLine(String::Format(_fp,  SharpSvnStrings::NotifySkippedAccessDeniedX, e->Path));
+        break;
+    case SvnNotifyAction::SkipConflicted:
+        WriteLine(String::Format(_fp, SharpSvnStrings::NotifySkippedXRemainsInConflict, e->Path));
+        break;
+    case SvnNotifyAction::UpdateExternalRemoved:
+        WriteLine(String::Format(_fp, SharpSvnStrings::NotifyExternalXRemoved, e->Path));
+        break;
 
 	case SvnNotifyAction::UpdateDelete:
+    case SvnNotifyAction::Excluded:
 		_receivedSomeChange = true;
 		WriteLine("D    " + e->Path);
 		break;
@@ -61,6 +74,22 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 		else
 			WriteLine("A    " + e->Path);
 		break;
+    case SvnNotifyAction::TreeConflict:
+        _receivedSomeChange = true;
+        WriteLine("   C " + e->Path);
+        break;
+    case SvnNotifyAction::UpdateShadowedAdd:
+        _receivedSomeChange = true;
+        WriteLine("   A " + e->Path);
+        break;
+    case SvnNotifyAction::UpdateShadowedUpdate:
+        _receivedSomeChange = true;
+        WriteLine("   U " + e->Path);
+        break;
+    case SvnNotifyAction::UpdateShadowedDelete:
+        _receivedSomeChange = true;
+        WriteLine("   D " + e->Path);
+        break;
 	case SvnNotifyAction::Exists:
 		_receivedSomeChange = true;
 		if (e->ContentState == SvnNotifyState::Conflicted)
@@ -165,6 +194,9 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
 
 		WriteLine("");
 		WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyFetchExternalItemIntoX, e->Path));
+		break;
+    case SvnNotifyAction::UpdateStarted:
+        WriteLine(String::Format(_fp,  SharpSvnStrings::NotifyUpdateStartedX, e->Path));
 		break;
 	case SvnNotifyAction::UpdateCompleted:
 		if (!_suppressFinalLine)
