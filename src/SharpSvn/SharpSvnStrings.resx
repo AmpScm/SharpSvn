@@ -325,6 +325,6 @@
     <value>Skipped '{0}' - Node remains in conflict</value>
   </data>
   <data name="NotifyUpdateStartedX" xml:space="preserve">
-    <value>Updating '{0}'</value>
+    <value>Updating '{0}':</value>
   </data>
 </root>
