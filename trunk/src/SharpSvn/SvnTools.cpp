@@ -149,16 +149,16 @@ static String^ GetPathRootPart(String^ path)
 	return "\\\\" + path->Substring(2, nSlash-2)->ToLowerInvariant() + path->Substring(nSlash, nEnd-nSlash);
 }
 
-static bool IsSeparator(String^ v, int index)
+static inline bool IsSeparator(String^ v, int index)
 {
 	wchar_t c = v[index];
 
-	return (c == Path::DirectorySeparatorChar) || (c == Path::AltDirectorySeparatorChar);
+	return (c == '\\') || (c == '/');
 }
 
-static bool IsDirSeparator(String^ v, int index)
+static inline bool IsDirSeparator(String^ v, int index)
 {
-	return (v[index] == Path::DirectorySeparatorChar);
+	return (v[index] == '\\');
 }
 
 static bool IsInvalid(String^ v, int index)
@@ -426,7 +426,7 @@ bool SvnTools::IsManagedPath(String^ path)
 	else
 		path += "\\" + SvnClient::AdministrativeDirectoryName;
 
-	return IsDirectory(path->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar));
+	return IsDirectory(path->Replace('/', '\\'));
 }
 
 bool SvnTools::IsBelowManagedPath(String^ path)
@@ -469,14 +469,12 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 		nEnd = i - 1;
 	}
 
-    for (i = nStart; i < path->Length; i++)
-    {
-        if (path[i] == '\\')
-        {
-		    if (IsManagedPath(path->Substring(0, i)))
-			    return true;
-            nStart = i+1;
-        }
+	while (0 <= (i = path->IndexOf('\\', nStart)))
+	{
+		if (IsManagedPath(path->Substring(0, i)))
+			return true;
+
+		nStart = i+1;
 	}
 
 	if (nStart >= path->Length)
@@ -762,7 +760,7 @@ String^ SvnTools::UriPartToPath(String^ uriPath)
 	if (!uriPath)
 		throw gcnew ArgumentNullException("uriPath");
 
-	return Uri::UnescapeDataString(uriPath)->Replace('/', Path::DirectorySeparatorChar);
+	return Uri::UnescapeDataString(uriPath)->Replace('/', '\\');
 }
 
 Uri^ SvnTools::LocalPathToUri(String^ localPath, bool endSlash)
@@ -847,8 +845,8 @@ String^ SvnTools::PathCombine(String^ path1, String^ path2)
 	{
 		if (GetPathRootPart(path2))
 		{
-			// Handle large absolute paths in path2
-			return path2;
+			// Handle large absolute paths in path2, including UNC paths
+			return SvnTools::GetNormalizedFullPath(path2);
 		}
 
 		// The next code is fall back code that is only really supported
@@ -870,10 +868,10 @@ String^ SvnTools::PathCombine(String^ path1, String^ path2)
 		}
 
 		if (!IsSeparator(path1, path1->Length-1))
-			path1 += Path::DirectorySeparatorChar;
+			path1 += '\\';
 
 		return SvnTools::GetNormalizedFullPath(path1 +
-			path2->Replace(Path::AltDirectorySeparatorChar, Path::DirectorySeparatorChar)->TrimStart(Path::DirectorySeparatorChar));
+			path2->Replace('/', '\\')->TrimStart('\\'));
 	}
 }
 
@@ -885,8 +883,10 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 	path = GetNormalizedFullPath(path);
 
 	String^ root = GetPathRootPart(path);
+	if (!root)
+		return nullptr;
 
-	int nLs = path->LastIndexOf(Path::DirectorySeparatorChar);
+	int nLs = path->LastIndexOf('\\');
 
 	if (nLs > root->Length)
 		return path->Substring(0, nLs);
@@ -894,6 +894,14 @@ String^ SvnTools::GetNormalizedDirectoryName(String^ path)
 		return root;
 	else
 		return nullptr;
+}
+
+String^ SvnTools::GetPathRoot(String^ path)
+{
+    if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+    return GetPathRootPart(path);
 }
 
 bool SvnTools::TryFindApplication(String^ applicationName, [Out] String^% path)

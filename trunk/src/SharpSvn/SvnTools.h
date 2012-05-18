@@ -104,6 +104,8 @@ namespace SharpSvn {
 		/// <summary>Gets the normalized directory name of path (Long path enabled version of <see cref="System::IO::Path::GetDirectoryName" />, always returning full paths)</summary>
 		static String^ GetNormalizedDirectoryName(String^ path);
 
+        static String^ GetPathRoot(String^ path);
+
         delegate String^ SplitCommandExpander(String^ from);
 
 		/// 
