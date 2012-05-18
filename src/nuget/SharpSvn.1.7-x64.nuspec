@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>SharpSvn.1.7-x86</id>
+    <id>SharpSvn.1.7-x64</id>
     <version>$version$</version>
     <authors>SharpSvn Project</authors>
     <owners>SharpSvn Project</owners>
@@ -14,13 +14,13 @@
     <tags>Subversion Svn SharpSvn</tags>
   </metadata>
   <files>
-    <file src="SharpSvn\SharpSvn.dll" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.xml" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn-*-win32.dll" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.pdb" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.UI.dll" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.UI.xml" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.UI.pdb" target="lib\net20" />
-    <file src="SharpSvn\**\SharpSvn.resources.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.xml" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn-*-win32.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.pdb" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.UI.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.UI.xml" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.UI.pdb" target="lib\net20" />
+    <file src="SharpSvn-x64\**\SharpSvn.resources.dll" target="lib\net20" />
   </files>
 </package>
