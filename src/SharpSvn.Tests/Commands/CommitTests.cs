@@ -121,7 +121,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(lc.Count, Is.EqualTo(1));
             Assert.That(lc[0].RevisionProperties.Contains("my:prop"));
             SvnLogEventArgs l = lc[0];
-            Assert.That(l.CustomProperties["my:prop"].StringValue, Is.EqualTo("PropValue"));
+            Assert.That(l.RevisionProperties["my:prop"].StringValue, Is.EqualTo("PropValue"));
             Assert.That(l.Author, Is.EqualTo(Environment.UserName));
         }
 
