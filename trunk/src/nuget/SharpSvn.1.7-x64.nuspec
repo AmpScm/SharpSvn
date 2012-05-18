@@ -9,7 +9,7 @@
     <projectUrl>http://sharpsvn.net/</projectUrl>
     <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>SharpSvn - Subversion Support for .Net</description>
+    <description>SharpSvn - Subversion Support for .Net. This is the x64 - 64 bit version, See SharpSvn.1.7-x86 for the 32 bit version.</description>
     <copyright>(C) Copyright 2006-2012 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
   </metadata>
