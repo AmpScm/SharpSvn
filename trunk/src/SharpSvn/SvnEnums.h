@@ -569,6 +569,7 @@ namespace SharpSvn {
 				{
 					_values = static_cast<array<T>^>(T::typeid->GetEnumValues());
 					_default = gcnew EnumVerifyHelper<T>();
+					System::Array::Sort(_values, _default);
 				}
 
 			public:
