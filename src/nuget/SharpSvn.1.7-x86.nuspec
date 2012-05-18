@@ -9,7 +9,7 @@
     <projectUrl>http://sharpsvn.net/</projectUrl>
     <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>SharpSvn - Subversion Support for .Net</description>
+    <description>SSharpSvn is a binding of the Subversion Client API for .NET. This is the 32-bit/x86 version, See SharpSvn.1.7-x64 for the 64 bit version.</description>
     <copyright>(C) Copyright 2006-2012 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
   </metadata>
