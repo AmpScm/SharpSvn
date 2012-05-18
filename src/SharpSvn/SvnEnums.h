@@ -577,11 +577,11 @@ namespace SharpSvn {
 			public:
 				static bool IsDefined(T value)
 				{
-					return 0 > System::Array::BinarySearch(_values,
-														   0,
-														   _values->Length,
-														   value,
-														   static_cast<System::Collections::Generic::IComparer<T>^>(nullptr));
+					return 0 <= System::Array::BinarySearch(_values,
+															0,
+															_values->Length,
+															value,
+															static_cast<System::Collections::Generic::IComparer<T>^>(nullptr));
 				}
 			};
 
