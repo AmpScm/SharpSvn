@@ -36,7 +36,7 @@ namespace SharpSvn.Tests.Commands
 		public void TestPropGetOnFile()
 		{
 			string path = Path.Combine(this.WcPath, "Form.cs");
-			this.RunCommand("svn", "ps foo bar " + path);
+            Client.SetProperty(path, "foo", "bar");
 
 			string value;
 			Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out value));
