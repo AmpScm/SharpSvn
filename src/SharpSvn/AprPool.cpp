@@ -81,16 +81,15 @@ void AprPool::Destroy()
     {
         delete _tag;
         _tag = nullptr;
-    }
 
-    if (_destroyPool)
-    {
-        try
+        if (_destroyPool)
         {
-            if (valid)
+            try
+            {
                 svn_pool_destroy(handle);
+            }
+            catch (...) {}
         }
-        catch (...) {}
     }
 }
 
