@@ -3,8 +3,8 @@
   <metadata>
     <id>SharpSvn.1.7-x86</id>
     <version>$version$</version>
-    <authors>SharpSvn Project</authors>
-    <owners>SharpSvn Project</owners>
+    <authors>SharpSvn,rhuijben,srijken</authors>
+    <owners>SharpSvn,rhuijben,srijken</owners>
     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
     <projectUrl>http://sharpsvn.net/</projectUrl>
     <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
@@ -17,6 +17,7 @@
     <file src="SharpSvn\SharpSvn.dll" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.xml" target="lib\net20" />
     <file src="SharpSvn\SharpSvn-*-win32.dll" target="lib\net20" />
+    <file src="SharpSvn\SharpSvn-*-win32.svnExe" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.pdb" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.UI.dll" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.UI.xml" target="lib\net20" />
