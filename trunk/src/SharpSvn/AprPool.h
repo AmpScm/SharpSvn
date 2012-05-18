@@ -29,8 +29,6 @@ namespace SharpSvn {
         [SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]
         ref class AprPool sealed : public SvnHandleBase, public System::IDisposable
         {
-            static initonly int StandardMemoryPressure = 128*1024;
-
             ref class AprPoolTag sealed : public IDisposable
             {
             private:
@@ -83,7 +81,6 @@ namespace SharpSvn {
             AprPoolTag^ _tag;
             apr_pool_t *_handle;
             initonly bool _destroyPool;
-            initonly int _pressure;
 
             !AprPool();
         public:
@@ -116,8 +113,6 @@ namespace SharpSvn {
             }
 
         internal:
-            static bool _noPressure = false;
-
             property apr_pool_t* Handle
             {
                 [System::Diagnostics::DebuggerStepThroughAttribute()]

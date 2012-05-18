@@ -28,7 +28,6 @@ using namespace SharpSvn::Implementation;
 
 
 [module: SuppressMessage("Microsoft.Usage", "CA2213:DisposableFieldsShouldBeDisposed", Scope="member", Target="SharpSvn.Implementation.AprPool.Dispose(System.Boolean):System.Void", MessageId="_tag")];
-[module: SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields", Scope="member", Target="SharpSvn.Implementation.AprPool.#StandardMemoryPressure")];
 
 AprPool::AprPool(AprPool ^parentPool)
 {
@@ -39,9 +38,6 @@ AprPool::AprPool(AprPool ^parentPool)
     _parent = parentPool;
     _handle = svn_pool_create(parentPool->Handle);
     _destroyPool = true;
-
-    if (!_noPressure)
-        GC::AddMemoryPressure(_pressure = AprPool::StandardMemoryPressure);
 }
 
 AprPool::AprPool()
@@ -49,8 +45,6 @@ AprPool::AprPool()
     _tag = gcnew AprPoolTag();
     _handle = svn_pool_create(const_cast<apr_pool_t*>(_ultimateParentPool));
     _destroyPool = true;
-    if (!_noPressure)
-        GC::AddMemoryPressure(_pressure = AprPool::StandardMemoryPressure);
 }
 
 AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
@@ -61,8 +55,6 @@ AprPool::AprPool(apr_pool_t *handle, bool destroyPool)
     _handle = handle;
     _tag = gcnew AprPoolTag();
     _destroyPool = destroyPool;
-    if (destroyPool && !_noPressure)
-        GC::AddMemoryPressure(_pressure = AprPool::StandardMemoryPressure);
 }
 
 AprPool::~AprPool()
@@ -99,11 +91,6 @@ void AprPool::Destroy()
                 svn_pool_destroy(handle);
         }
         catch (...) {}
-        finally
-        {
-            if (_pressure > 0)
-                GC::RemoveMemoryPressure(_pressure);
-        }
     }
 }
 
