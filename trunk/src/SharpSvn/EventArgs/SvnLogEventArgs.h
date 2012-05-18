@@ -313,6 +313,25 @@ namespace SharpSvn {
 			}
 		}
 
+        /// <summary>MergeInfo only: Not inheritable</summary>
+		property bool NotInheritable
+		{
+			bool get()
+			{
+				return _nonInheritable;
+			}
+		}
+
+		/// <summary>MergeInfo only: Subtractive merge</summary>
+		property bool SubtractiveMerge
+		{
+			bool get()
+			{
+				return _subtractiveMerge;
+			}
+		}
+
+
 		/// <summary>Serves as a hashcode for the specified type</summary>
 		virtual int GetHashCode() override
 		{
@@ -394,25 +413,6 @@ namespace SharpSvn {
 			int get()
 			{
 				return _mergeLevel;
-			}
-		}
-
-	public:
-		/// <summary>MergeInfo only: Not inheritable</summary>
-		property bool NotInheritable
-		{
-			bool get()
-			{
-				return _nonInheritable;
-			}
-		}
-
-		/// <summary>MergeInfo only: Subtractive merge</summary>
-		property bool SubtractiveMerge
-		{
-			bool get()
-			{
-				return _subtractiveMerge;
 			}
 		}
 	};
