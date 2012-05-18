@@ -1010,3 +1010,11 @@ bool SvnTools::TrySplitCommandLine(String^ command, SvnTools::SplitCommandExpand
 
 	return false;
 }
+
+generic<typename T>
+where T : System::Enum
+bool SvnTools::IsEnumValueDefined(T value)
+{
+	return EnumVerifier::IsValueDefined(value);
+}
+

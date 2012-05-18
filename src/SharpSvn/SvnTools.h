@@ -119,6 +119,11 @@ namespace SharpSvn {
 
         static bool TryFindApplication(String^ applicationName, [Out] String^% path);
 
+		generic<typename T>
+		where T : System::Enum
+		static bool IsEnumValueDefined(T value);
+
+
 	internal:
 		/// <summary>Long path capable version of <see cref="System::IO::Path::Combine(String^, String^)" /></summary>
 		static String^ PathCombine(String^ path1, String^ path2);
