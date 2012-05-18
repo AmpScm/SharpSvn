@@ -90,6 +90,9 @@ namespace SharpSvn {
 
         /// <summary>While the configuration isn't used yet, allows overriding specific configuration options</summary>
         void SetOption(String^ file, String^ section, String^ option, String^ value);
+
+        /// <summary>Stop reporting unmanaged memory claims to the garbage collector within the current AppDomain</summary>
+        static void DisableMemoryPressureReporting();
     };
 
 }

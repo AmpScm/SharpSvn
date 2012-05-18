@@ -469,12 +469,14 @@ bool SvnTools::IsBelowManagedPath(String^ path)
 		nEnd = i - 1;
 	}
 
-	while (0 <= (i = path->IndexOf('\\', nStart)))
-	{
-		if (IsManagedPath(path->Substring(0, i)))
-			return true;
-
-		nStart = i+1;
+    for (i = nStart; i < path->Length; i++)
+    {
+        if (path[i] == '\\')
+        {
+		    if (IsManagedPath(path->Substring(0, i)))
+			    return true;
+            nStart = i+1;
+        }
 	}
 
 	if (nStart >= path->Length)

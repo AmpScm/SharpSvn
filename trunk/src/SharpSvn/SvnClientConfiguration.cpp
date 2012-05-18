@@ -104,3 +104,7 @@ void SvnClientConfiguration::SetOption(String^ file, String^ section, String^ op
     _client->SetConfigurationOption(file, section, option, value);
 }
 
+void SvnClientConfiguration::DisableMemoryPressureReporting()
+{
+    AprPool::_noPressure = true;
+}
