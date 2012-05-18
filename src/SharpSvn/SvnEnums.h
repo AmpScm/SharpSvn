@@ -554,18 +554,43 @@ namespace SharpSvn {
 	namespace Implementation
 	{
 
-		ref class EnumVerifier
+		ref class EnumVerifier sealed
 		{
 		private:
 			EnumVerifier()
 			{}
+
+			generic<typename T> where T : System::Enum
+			ref class EnumVerifyHelper sealed
+			{
+				static initonly array<T>^ _values;
+				
+				static EnumVerifyHelper()
+				{
+					_values = static_cast<array<T>^>(T::typeid->GetEnumValues());
+				}
+
+				EnumVerifyHelper()
+				{
+				}
+
+			public:
+				static bool IsDefined(T value)
+				{
+					return 0 > System::Array::BinarySearch(_values,
+														   0,
+														   _values->Length,
+														   value,
+														   static_cast<System::Collections::Generic::IComparer<T>^>(nullptr));
+				}
+			};
 
 		public:
 			generic<typename T>
 			where T : System::Enum
 			static T Verify(T value)
 			{
-				if (!Enum::IsDefined(T::typeid, value))
+				if (!EnumVerifyHelper<T>::IsDefined(value))
 					throw gcnew ArgumentOutOfRangeException("value", value, String::Format(CultureInfo::InvariantCulture, SharpSvnStrings::VerifyEnumFailed, value, T::typeid->FullName));
 
 				return value;
