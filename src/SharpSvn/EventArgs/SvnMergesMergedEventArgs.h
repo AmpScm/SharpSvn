@@ -31,8 +31,9 @@ namespace SharpSvn {
 				throw gcnew ArgumentNullException("source");
 
 			_source = source;
+            _nonInheritable = (entry->non_inheritable != FALSE);
+            _subtractiveMerge = (entry->subtractive_merge != FALSE);
 		}
-
 
 	public:
 		/// <summary>Gets the specified SourceUri or <c>null</c> if the source was a local path</summary>
@@ -61,6 +62,22 @@ namespace SharpSvn {
 		{
 			return gcnew SvnRevisionRange(Revision-1, Revision);
 		}
+
+        property bool NonInheritable
+        {
+            bool get()
+            {
+                return _nonInheritable;
+            }
+        }
+
+        property bool SubtractiveMerge
+        {
+            bool get()
+            {
+                return _subtractiveMerge;
+            }
+        }
 	};
 
 }

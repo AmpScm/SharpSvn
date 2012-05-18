@@ -158,6 +158,8 @@ namespace SharpSvn {
 		initonly DateTime _date;
 		String^ _message;
 		initonly __int64 _revision;
+		initonly bool _nonInheritable;
+		initonly bool _subtractiveMerge;
 
 		const char* _pcAuthor;
 		const char* _pcMessage;
@@ -200,6 +202,9 @@ namespace SharpSvn {
 			_revision = entry->revision;
 			_pcAuthor = pcAuthor;
 			_pcMessage = pcMessage;
+
+			_nonInheritable = (entry->non_inheritable != FALSE);
+			_subtractiveMerge = (entry->subtractive_merge != FALSE);
 		}
 
 	public:
@@ -392,6 +397,24 @@ namespace SharpSvn {
 			}
 		}
 
+	public:
+		/// <summary>MergeInfo only: Not inheritable</summary>
+		property bool NotInheritable
+		{
+			bool get()
+			{
+				return _nonInheritable;
+			}
+		}
+
+		/// <summary>MergeInfo only: Subtractive merge</summary>
+		property bool SubtractiveMerge
+		{
+			bool get()
+			{
+				return _subtractiveMerge;
+			}
+		}
 	};
 
 }
