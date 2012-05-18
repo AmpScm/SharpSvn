@@ -465,16 +465,35 @@ namespace SharpSvn.Tests
         [Test]
         public void UriStrangeness()
         {
-            Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
-            Assert.That(new Uri("http://server/dir./file.").AbsoluteUri, Is.EqualTo("http://server/dir/file"));
-            Assert.That(new Uri("http://server/file.").OriginalString, Is.EqualTo("http://server/file."));
-            Assert.That(new Uri("http://server/dir./file.").OriginalString, Is.EqualTo("http://server/dir./file."));
-            Assert.That(new Uri("http://server/").AbsoluteUri, Is.EqualTo("http://server/"));
-            Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
-            Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
-            Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
+            if (Environment.Version.Major < 4)
+            {
+                // This is where we wrote this test for
+                Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
+                Assert.That(new Uri("http://server/dir./file.").AbsoluteUri, Is.EqualTo("http://server/dir/file"));
+                Assert.That(new Uri("http://server/file.").OriginalString, Is.EqualTo("http://server/file."));
+                Assert.That(new Uri("http://server/dir./file.").OriginalString, Is.EqualTo("http://server/dir./file."));
+                Assert.That(new Uri("http://server/").AbsoluteUri, Is.EqualTo("http://server/"));
+                Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
+                Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
+                Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
 
-            Assert.That(new Uri("http://server/file%2E").AbsoluteUri, Is.EqualTo("http://server/file"));
+                Assert.That(new Uri("http://server/file%2E").AbsoluteUri, Is.EqualTo("http://server/file"));
+
+            }
+            else
+            {
+                // And in .Net 4.0 many strange cases are gone
+                Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file."));
+                Assert.That(new Uri("http://server/dir./file.").AbsoluteUri, Is.EqualTo("http://server/dir./file."));
+                Assert.That(new Uri("http://server/file.").OriginalString, Is.EqualTo("http://server/file."));
+                Assert.That(new Uri("http://server/dir./file.").OriginalString, Is.EqualTo("http://server/dir./file."));
+                Assert.That(new Uri("http://server/").AbsoluteUri, Is.EqualTo("http://server/"));
+                Assert.That(new Uri("http://server/").OriginalString, Is.EqualTo("http://server/"));
+                Assert.That(new Uri("http://server").AbsoluteUri, Is.EqualTo("http://server/"));
+                Assert.That(new Uri("http://server").OriginalString, Is.EqualTo("http://server"));
+
+                Assert.That(new Uri("http://server/file%2E").AbsoluteUri, Is.EqualTo("http://server/file."));
+            }
         }
 
         [Test]
