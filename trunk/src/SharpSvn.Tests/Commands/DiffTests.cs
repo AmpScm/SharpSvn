@@ -72,16 +72,18 @@ namespace SharpSvn.Tests.Commands
 
 			SvnDiffArgs a = new SvnDiffArgs();
 			a.ErrorStream = errstream;
-			this.Client.Diff(
-				new SvnUriTarget(this.ReposUrl, 1),
-				new SvnUriTarget(this.ReposUrl, 5),
-				a, outstream);
+			Client.Diff(ReposUrl, new SvnRevisionRange(1, 5), a, outstream);
 
 			string err = Encoding.Default.GetString(errstream.ToArray());
 			Assert.That(err, Is.EqualTo(string.Empty), "Error in diff: " + err);
 
 			string apiDiff = Encoding.Default.GetString(outstream.ToArray());
-			Assert.That(apiDiff, Is.EqualTo(clientDiff), "Diffs differ");
+            string[] clientLines = clientDiff.Split('\n');
+            string[] apiLines = apiDiff.Split('\n');
+            Array.Sort<string>(clientLines);
+            Array.Sort<string>(apiLines);
+
+			Assert.That(apiLines, Is.EqualTo(clientLines), "Diffs differ");
 		}
 
 		[Test]

@@ -25,7 +25,7 @@ using System.ComponentModel;
 
 namespace SharpSvn.Tests.LookCommands
 {
-    public class HookTestBase : TestBase
+    public abstract class HookTestBase : TestBase
     {
         public class ReposHookEventArgs : CancelEventArgs
         {
