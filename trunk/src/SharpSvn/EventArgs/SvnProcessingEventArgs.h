@@ -27,8 +27,6 @@ namespace SharpSvn {
 	internal:
 		SvnProcessingEventArgs(SvnCommandType commandType)
 		{
-			EnumVerifier::Verify(commandType);
-
 			_commandType = commandType;
 		}
 
