@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace HookNotifier
 {
@@ -45,11 +46,18 @@ namespace HookNotifier
             {
                 using (StreamWriter sw = File.CreateText(file))
                 {
-                    string line;
-                    while(null != (line = Console.In.ReadLine()))
-                        sw.WriteLine(line);
+                    try
+                    {
+                        string line;
+                        while (null != (line = Console.In.ReadLine()))
+                            sw.WriteLine(line);
 
-                    sw.Write(Console.In.ReadToEnd());
+                        sw.Write(Console.In.ReadToEnd());
+                    }
+                    catch (IOException)
+                    {
+                        /* STDIN was not passed */
+                    }
                 }
             }
 
