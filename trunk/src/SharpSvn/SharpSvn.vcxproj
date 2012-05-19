@@ -459,39 +459,51 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.de.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.es.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.fr.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.it.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.ja.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.ko.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.nb.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.pl.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.pt-BR.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.sv.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.zh-CN.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include=".\SvnText\SvnText.zh-TW.resx">
       <SubType>Designer</SubType>
+      <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
