@@ -38,9 +38,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>HookNotifier.Program</StartupObject>
-    <TargetZone>LocalIntranet</TargetZone>
-    <GenerateManifests>true</GenerateManifests>
-    <ApplicationManifest>Properties\app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -50,9 +47,6 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Properties\app.manifest" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
