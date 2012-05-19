@@ -192,14 +192,11 @@ namespace SharpSvn.Tests
             }
             catch (PathTooLongException e)
             {
-                Assert.That(Environment.Version.Major, Is.LessThan(4));
                 ptl = e;
             }
 
             if (Environment.Version.Major < 4)
                 Assert.That(ptl, Is.Not.Null, "Expected error in v2.0");
-            else
-                Assert.That(ptl, Is.Null, "No error in v4.0+");
         }
 
         [Test]
@@ -237,7 +234,10 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
-            Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Null);
+            if (Environment.Version.Major < 4)
+                Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Null);
+            else
+                Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Not.Null); // CWD on C:\
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
@@ -326,16 +326,30 @@ namespace SharpSvn.Tests
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"));
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
+        [Test]
         public void NormalizePathSharpFail()
         {
-            Assert.That(SvnTools.GetNormalizedFullPath("c:\\<>\\..\\123456789012345678901234567890123456789012345678901234567890" +
-                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
-                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
-                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
-                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
-                "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"),
-                Is.Null, "Should never complete");
+            string result = null;
+            bool gotException = false;
+            try
+            {
+                result = SvnTools.GetNormalizedFullPath("c:\\<>\\..\\123456789012345678901234567890123456789012345678901234567890" +
+                    "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                    "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                    "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                    "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
+                    "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890");
+            }
+            catch (ArgumentException)
+            {
+                Assert.That(Environment.Version.Major, Is.LessThan(4));
+                gotException = true;
+            }
+
+            if (Environment.Version.Major >= 4)
+                Assert.That(result, Is.Not.Null);
+            else
+                Assert.That(gotException, "Got exception");
         }
 
         [Test]
