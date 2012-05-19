@@ -115,9 +115,11 @@ namespace SharpSvn.Tests.Commands
                             Assert.That(!once);
                             once = true;
                             e.UserName = "guest";
+                            e.Password = "";
                         };
 
-                    cl.CheckOut(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/imports/scripts"), GetTempDir());
+                    SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
+                    cl.CheckOut(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts"), GetTempDir(), ca);
                     Assert.That(once, "Asked for password");
                 }
             }
