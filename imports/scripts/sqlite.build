@@ -28,7 +28,6 @@ static int original_isNT(void){" />
       <arg value="/Zi" />      <!-- Write debug information -->
       <arg value="/Zl" />      <!-- Ommit default library name -->
       <arg value="/Gy" />      <!-- Function level linking -->
-      <arg value="/GL" if="${svn-dev == 'false'}" />      <!-- Enable link time code generation -->
       <defines>
         <define name="NDEBUG" />
         
@@ -75,7 +74,6 @@ static int original_isNT(void){" />
     </cl>
     <lib output="${sqliteLibDir}/sqlite3.lib">
       <arg value="/NODEFAULTLIB" />
-      <arg value="/ltcg" if="${svn-dev == 'false'}" />      <!-- Enable link time code generation -->
       <sources basedir="${sqliteIntDir}">
         <include name="*.obj" />
       </sources>
