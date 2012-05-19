@@ -15,7 +15,8 @@
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1302450 - Upgrade svn_client_import to support filtering -->
   <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC (1.8) -->
-  <property name="subversionMerges" value="1156080,1302450,1304407,1304439" overwrite="false" />
+  <!-- r1340318 - Avoid ancestor check in the status walker -->
+  <property name="subversionMerges" value="1156080,1302450,1304407,1304439,1340318" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
