@@ -22,7 +22,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Net;
 using System.Collections.Generic;

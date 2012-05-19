@@ -20,7 +20,6 @@ using System.IO;
 using System.Text;
 using NUnit.Framework;
 using SharpSvn.Implementation;
-using NUnit.Framework.SyntaxHelpers;
 using System.Reflection;
 
 namespace SharpSvn.Tests

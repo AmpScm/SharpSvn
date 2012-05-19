@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using SharpSvn.Tests.Commands;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests
 {

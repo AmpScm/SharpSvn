@@ -21,7 +21,6 @@ using NUnit.Framework;
 using SharpSvn.Tests.Commands;
 using System.IO;
 using SharpSvn.Diff;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests
 {

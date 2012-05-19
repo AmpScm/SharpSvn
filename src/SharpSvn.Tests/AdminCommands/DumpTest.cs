@@ -4,7 +4,6 @@ using System.Text;
 using NUnit.Framework;
 using SharpSvn.Tests.Commands;
 using System.IO;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests.AdminCommands
 {

@@ -23,7 +23,6 @@ using System.ComponentModel;
 using System.Threading;
 using System.CodeDom.Compiler;
 using System.IO;
-using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 namespace SharpSvn.Tests.LookCommands

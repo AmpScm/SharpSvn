@@ -21,7 +21,6 @@ using NUnit.Framework;
 using SharpSvn;
 using System.Threading;
 using System.Globalization;
-using NUnit.Framework.SyntaxHelpers;
 using System.Reflection;
 
 namespace SharpSvn.Tests
