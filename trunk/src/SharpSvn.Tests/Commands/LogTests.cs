@@ -24,7 +24,6 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Collections.ObjectModel;
 using System.Diagnostics;

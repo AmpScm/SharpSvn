@@ -21,7 +21,6 @@ using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 
 /// <summary>

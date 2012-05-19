@@ -24,7 +24,6 @@ using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using ICSharpCode.SharpZipLib.Zip;
 
 using SharpSvn;

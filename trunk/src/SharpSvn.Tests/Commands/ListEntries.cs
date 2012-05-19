@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests.Commands
 {

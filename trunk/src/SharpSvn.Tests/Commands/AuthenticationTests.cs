@@ -21,7 +21,6 @@ using System.IO;
 using NUnit.Framework;
 
 using SharpSvn;
-using NUnit.Framework.SyntaxHelpers;
 using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands

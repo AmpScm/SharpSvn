@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using System.Text;
 using NUnit.Framework;
 using System.Collections.ObjectModel;
-using NUnit.Framework.SyntaxHelpers;
 
 namespace SharpSvn.Tests.Commands
 {
