@@ -22,7 +22,6 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
 using SharpSvn;
 using System.Text;
 
@@ -745,5 +744,28 @@ namespace SharpSvn.Tests.Commands
 					Assert.IsFalse(e.RemoteLock.IsRawNetworkComment);
 				});
 		}
+
+        [Test]
+        public void TestStatusResult()
+        {
+            Uri repos = GetReposUri(TestReposType.Empty);
+            string dir = GetTempDir();
+
+            SvnStatusArgs sa = new SvnStatusArgs { Depth = SvnDepth.Children, ThrowOnError = false };
+
+            Assert.That(Client.Status(dir, sa, null), Is.False);
+            Assert.That(sa.LastException, Is.Not.Null);
+            Assert.That(sa.LastException.SvnErrorCode, Is.EqualTo(SvnErrorCode.SVN_ERR_WC_NOT_WORKING_COPY));
+
+            Client.CheckOut(repos, dir);
+            Assert.That(Client.Status(dir, sa, null), Is.True);
+            Assert.That(sa.LastException, Is.Null);
+
+            Assert.That(Client.Status(Path.Combine(dir, "subdir"), sa, null), Is.True);
+            Assert.That(sa.LastException, Is.Null);
+
+            Assert.That(Client.Status(Path.Combine(dir, "subdir\\subsubdir"), sa, null), Is.False);
+            Assert.That(sa.LastException.SvnErrorCode, Is.EqualTo(SvnErrorCode.SVN_ERR_WC_PATH_NOT_FOUND));
+        }
 	}
 }
