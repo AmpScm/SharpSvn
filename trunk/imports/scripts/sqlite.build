@@ -1,13 +1,26 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="sqliteDir" value="${buildRoot}/sqlite" overwrite="false" />
-  <property name="buildSqlite" value="${subversionVersion &gt; '1.6' or svnBuildType == 'trunk'}" overwrite="false" />
   <property name="sqliteIntDir" value="${sqliteDir}/obj/${platform}" />
   <property name="sqliteLibDir" value="${sqliteDir}/bin/${platform}" />
 
-  <target name="build-sqlite" depends="checkout" if="${buildSqlite}">
+  <target name="build-sqlite" depends="checkout">
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
+    <OnceBlock file="build/sqlite-${sqliteVersion}.patched">
+      <loadfile file="${sqliteDir}/sqlite3.c" property="projtext">
+        <filterchain>
+          <!-- Add openssl includes to aprutil and aprutil/crypto -->
+          <replacestring from="static int mutexIsNT(void){" to="
+#define mutexIsNT() (1)
+static int original_mutexIsNT(void){" />
+          <replacestring from="static int isNT(void){" to="
+#define isNT() (1)
+static int original_isNT(void){" />
+        </filterchain>
+      </loadfile>
+      <echo message="${projtext}" file="${sqliteDir}/sqlite3.c" />
+    </OnceBlock>
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
       <arg value="/O2" />      <!-- Maximize speed -->
       <arg value="/GF" />      <!-- String Pooling -->
@@ -15,9 +28,7 @@
       <arg value="/Zi" />      <!-- Write debug information -->
       <arg value="/Zl" />      <!-- Ommit default library name -->
       <arg value="/Gy" />      <!-- Function level linking -->
-      <arg value="/ltcg" />    <!-- Enable link time code generation -->
-      <arg value="/link" />
-      <arg value="/NODEFAULTLIB" />
+      <arg value="/GL" if="${svn-dev == 'false'}" />      <!-- Enable link time code generation -->
       <defines>
         <define name="NDEBUG" />
         
@@ -63,6 +74,8 @@
       </sources>
     </cl>
     <lib output="${sqliteLibDir}/sqlite3.lib">
+      <arg value="/NODEFAULTLIB" />
+      <arg value="/ltcg" if="${svn-dev == 'false'}" />      <!-- Enable link time code generation -->
       <sources basedir="${sqliteIntDir}">
         <include name="*.obj" />
       </sources>
