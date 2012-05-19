@@ -85,7 +85,7 @@ namespace SharpSvn.Tests.Commands
 		[Test]
 		public void RepeatedEventHookUp_SOC_411()
 		{
-			Uri projectRoot = new Uri(@"http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/imports");
+			Uri projectRoot = new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts");
 
 			using (var svnClient = new SvnClient())
 			{
@@ -98,7 +98,8 @@ namespace SharpSvn.Tests.Commands
 					try
 					{
 						SvnUpdateResult svnUpdateResult;
-						Assert.IsTrue(svnClient.CheckOut(projectRoot, workingcopy, new SvnCheckOutArgs(), out svnUpdateResult));
+                        SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
+						Assert.IsTrue(svnClient.CheckOut(projectRoot, workingcopy, ca, out svnUpdateResult));
 						Assert.IsNotNull(svnUpdateResult);
 						Assert.IsTrue(svnUpdateResult.HasRevision);
 					}
