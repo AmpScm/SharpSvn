@@ -6,6 +6,16 @@
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
   
+  <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
+  <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
+
+  <property name="nunitVersionMMR" value="${string::substring(nunitVersion, 0, string::last-index-of(nunitVersion,'.'))}" />
+  <property name="nunitVersionMM" value="${string::substring(nunitVersionMMR, 0, string::last-index-of(nunitVersionMMR,'.'))}" />
+  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
+
+  <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
+  <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
+ 
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
 
@@ -21,7 +31,7 @@
       <get src="http://www.zlib.net/${zlibFilename}" dest="${downloads}/${zlibFilename}" />
     </if>
     <if test="${not file::exists(downloads + nunitFilename)}">
-      <get src="http://switch.dl.sourceforge.net/sourceforge/nunit/${nunitFilename}" dest="${downloads}/${nunitFilename}" />
+      <get src="http://launchpad.net/nunitv2/${nunitVersionMM}/${nunitVersionMMR}/+download/${nunitFilename}" dest="${downloads}/${nunitFilename}" />
     </if>
     <if test="${not file::exists(downloads + sharpZipFilename)}">
       <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="${downloads}/${sharpZipFilename}" />
@@ -68,7 +78,7 @@
       <UnTar src="${downloads + zlibFilename}" dest="build/${platform}" compression="gzip" />
     </if>
     <if test="${not directory::exists(nunitDir)}">
-      <unzip zipfile="${downloads + nunitFilename}" todir="${nunitDir}"  />
+      <unzip zipfile="${downloads + nunitFilename}" todir="build"  />
     </if>
     <if test="${not directory::exists(sharpZipLibDir)}">
       <unzip zipfile="${downloads + sharpZipFilename}" todir="${sharpZipLibDir}"  />

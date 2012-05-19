@@ -40,7 +40,7 @@
   <property name="sqliteVersion" value="3.7.12" overwrite="false" />
   
   <!-- For testcase -->
-  <property name="nunitVersion" value="2.4.8" overwrite="false" />
+  <property name="nunitVersion" value="2.6.0.12051" overwrite="false" />
   <property name="sharpZipVersion" value="0860" overwrite="false" />
   <property name="junitVersion" value="4.8.1" overwrite="false" />
 

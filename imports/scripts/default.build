@@ -129,16 +129,11 @@
     </exec>
   </target>
 
-  <property name="nunitFilename" value="NUnit-${nunitVersion}-net-2.0.zip" />
-  <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
-  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
-  <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
-
   <target name="build" depends="download,extract,checkout, build-svn, copy-result">
 
   </target>
 
-  <target name="misc-copy">
+  <target name="misc-copy" depends="extract">
     <copy todir="${release}/lib-AnyCPU">
       <fileset basedir="${nunitDir}/bin">
         <include name="nunit.framework.dll" />
