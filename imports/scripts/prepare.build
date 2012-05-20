@@ -190,7 +190,7 @@
         <arg value="${platformRoot}/serf" />
       </Svn>
     </if>
-    <if test="${buildSqlite and not directory::exists(sqliteDir)}">
+    <if test="${not directory::exists(sqliteDir)}">
       <Svn verbose="true">
         <arg value="co" />
         <arg value="http://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
