@@ -7,6 +7,18 @@
     <if test="${platform != 'win32'}">
       <fail message="Building apache is currently only supported for platform win32" />
     </if>
+    <OnceBlock file="build/httpd-${httpdVersion}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/httpd">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${httpdDir}" />
+        </do>
+      </foreach>
+    </OnceBlock>
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
       <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
 
