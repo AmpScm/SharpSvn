@@ -7,7 +7,7 @@ Index: server/request.c
               */
              rv = apr_stat(&thisinfo, r->filename,
 -                          APR_FINFO_MIN | APR_FINFO_NAME | APR_FINFO_LINK,
-+                          APR_FINFO_MIN /*| APR_FINFO_NAME*/ | APR_FINFO_LINK,
++                          APR_FINFO_TYPE /*APR_FINFO_MIN | APR_FINFO_NAME*/ | APR_FINFO_LINK,
                            r->pool);
  
              if (APR_STATUS_IS_ENOENT(rv)) {
