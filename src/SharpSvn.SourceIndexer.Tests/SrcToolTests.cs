@@ -20,7 +20,6 @@ using System.Text;
 using NUnit.Framework;
 using System.Reflection;
 using System.IO;
-using NUnit.Framework.SyntaxHelpers;
 using System.Collections.ObjectModel;
 using SharpSvn.SourceIndexer.Tools;
 using System.Diagnostics;
