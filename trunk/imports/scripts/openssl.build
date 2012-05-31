@@ -77,6 +77,21 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
         </loadfile>
         <echo message="${mk}" file="${opensslDir}/engines/e_capi.c" />
       </if>
+      <loadfile file="${opensslDir}/crypto/rand/rand_win.c" property="mk">
+        <filterchain>
+          <!-- If OpenSSL already used a *good* source for entropy, such as most likely
+               CryptoAPI, don't start asking for kernel objects for up to 1 second, which might
+               be very expensive on x64 where that many objects exist.
+               
+               BUT ONLY if we have GOOD entropy, or we introduce a huge security problem.
+               
+               ### The CryptoAPI random generator should be 'safe enough' on XP SP3 and later.
+               (src: Wikipedia) Should we check for that or trust the rest of the data?
+            -->
+          <replacestring from="if (kernel)" to="if (good &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
+        </filterchain>
+      </loadfile>
+      <echo message="${mk}" file="${opensslDir}/crypto/rand/rand_win.c" />
     </OnceBlock>
   </target>
   <target name="build-openssl" depends="prepare-openssl">
