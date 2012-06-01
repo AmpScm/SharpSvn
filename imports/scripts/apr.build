@@ -52,12 +52,6 @@
           <arg value="-mt" />
         </exec>
       </if>
-      <exec program="perl.exe" workingdir="${aprUtilDir}">
-        <arg value="build/w32locatedb.pl" />
-        <arg value="dll" />
-        <arg value="${intDir}/include" />
-        <arg value="${intDir}/lib" />
-      </exec>
       <foreach item="File" property="project">
         <in>
           <items>
