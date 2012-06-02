@@ -102,7 +102,6 @@
               <!-- Don't add default library info -->
               <replacestring from='Name="VCCLCompilerTool"' to='Name="VCCLCompilerTool" OmitDefaultLibName="true"' />
               <!-- Increase security a little little bit in some cases -->
-              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
               <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
               <replacestring from='XML_STATIC' to='XML_BUILDING_EXPAT;XML_USE_MSC_EXTENSIONS;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
               <replacestring from='EXPAT_EXPORTS' to='EXPAT_EXPORTS;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
@@ -116,7 +115,7 @@
           <items>
             <include name="${aprDir}/libapr.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" />
-            <include name="${aprUtilDir}/crypto/*.vcproj" />
+            <include name="${aprUtilDir}/crypto/*.vcproj" if="${enableAprCrypto}" />
           </items>
         </in>
         <do>
@@ -126,14 +125,12 @@
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
               <!-- Add openssl includes to aprutil and aprutil/crypto -->
-              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
+              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" if="${enableAprCrypto}" />
               <!-- Import APR from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
               <!-- Fix crypto compilation -->
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true'}" />
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true'}" />
-              <!-- Increase security a little little bit in some cases -->
-              <replacestring from='BufferSecurityCheck="FALSE"' to='BufferSecurityCheck="true"' />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true' and enableAprCrypto}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true' and enableAprCrypto}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
@@ -155,7 +152,7 @@
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#define APU_HAVE_CRYPTO ' to='#define APU_HAVE_CRYPTO 1 //' />
-              <replacestring from='#define APU_HAVE_OPENSSL ' to='#define APU_HAVE_OPENSSL 1 //' if="${svnAddSharpSvn == 'true'}" />
+              <replacestring from='#define APU_HAVE_OPENSSL ' to='#define APU_HAVE_OPENSSL 1 //' if="${svnAddSharpSvn == 'true' and enableAprCrypto}" />
               <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
 #ifndef WIN64
 #  define WIN64
@@ -199,7 +196,7 @@ APR_BEGIN_DECLS
 #define __SHARPSVN_APR_CRYPTO_OPENSSL_INCLUDED__
 #include "apr_crypto_openssl.c"
 #endif
-' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn == 'true'}" />
+' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn == 'true' and enableAprCrypto}" />
 
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
@@ -243,7 +240,7 @@ APR_BEGIN_DECLS
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
-            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true'}" />
+            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true' and enableAprCrypto}" />
           </items>
         </in>
         <do>

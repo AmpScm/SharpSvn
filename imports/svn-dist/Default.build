@@ -13,6 +13,7 @@
   <property name="svnAddSharpSvn" value="false" />
   <property name="applyMerges" value="false" />
   <property name="applyPatches" value="false" />
+  <property name="enableAprCrypto" value="false" />
   
   <include buildfile="../Default.build" />
   
