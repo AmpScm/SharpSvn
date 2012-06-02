@@ -175,6 +175,11 @@
 APR_END_DECLS
 #include &lt;wspiapi.h&gt;
 APR_BEGIN_DECLS
+#ifndef HAVE_GETADDRINFO
+#define HAVE_GETADDRINFO 1
+#define HAVE_GETNAMEINFO 1
+#endif
+
 /* /SharpSvn extension */' />
               <replacestring from='#pragma' to='// #disabled-pragma' />
             </filterchain>
