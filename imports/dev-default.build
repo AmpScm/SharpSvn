@@ -37,10 +37,10 @@
 	</if>
 	
 	<!-- Calculate the branch suffix via an ugly hack -->
-	<exec program="svn.exe" output="build\svn.${wc}.info">
+	<exec program="svn.exe" output="build\svn.wc.info">
 	  <arg line="info ${wc}" />
 	</exec>
-	<loadfile file="build\svn.${wc}.info" property="wc.info" />
+	<loadfile file="build\svn.wc.info" property="wc.info" />
 	<property name="wc.url.start" value="${string::index-of(wc.info, 'URL: ')}" />
   <property name="wc.url" value="${string::substring(wc.info, int::parse(wc.url.start)+5, string::get-length(wc.info)-int::parse(wc.url.start)-5)}" />
   <property name="wc.url" value="${string::substring(wc.url, 0, string::index-of(wc.url, 'Repository')-2)}" />
