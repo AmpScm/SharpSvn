@@ -50,7 +50,7 @@
         <filterchain>
           <replacestring from='CPPFLAGS = /D NEED_GETOPT' to='CPPFLAGS = /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT' />
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
-          <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64" /D "_WIN64"' if="${platform=='x64'}" />
+          <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
       </loadfile>
       <echo message="${propText}" file="${saslDir}/plugins/NTMakefile" />
@@ -65,7 +65,7 @@
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
           <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"${saslPdb}" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib zlib.lib /delayload:${fullDbDllName} '/>
           <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" />
-          <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64" /D "_WIN64"' if="${platform=='x64'}" />
+          <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
       </loadfile>
       <echo message="${propText}" file="${saslDir}/lib/NTMakefile" />
@@ -117,7 +117,7 @@
         <include name="${saslPdb}" />
       </fileset>
     </copy>
-    <copy todir="release/lib-x64">
+    <copy todir="release/lib-x64" if="${platform=='x64'}">
       <fileset basedir="build/x64/cyrus-sasl-${saslVersion}/lib">
         <include name="${dllPrefix}*.dll" />
         <include name="libsasl.lib" />
