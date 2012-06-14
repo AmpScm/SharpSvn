@@ -35,6 +35,17 @@
 			<arg line="co https://svn.apache.org/repos/asf/subversion/tags/${tag} ${wc}" if="${tag != ''}" />
 		</Svn>
 	</if>
+	
+	<!-- Calculate the branch suffix via an ugly hack -->
+	<exec program="svn.exe" output="build\svn.${wc}.info">
+	  <arg line="info ${wc}" />
+	</exec>
+	<loadfile file="build\svn.${wc}.info" property="wc.info" />
+	<property name="wc.url.start" value="${string::index-of(wc.info, 'URL: ')}" />
+  <property name="wc.url" value="${string::substring(wc.info, int::parse(wc.url.start)+5, string::get-length(wc.info)-int::parse(wc.url.start)-5)}" />
+  <property name="wc.url" value="${string::substring(wc.url, 0, string::index-of(wc.url, 'Repository')-2)}" />
+  <property name="wc.branch.start" value="${string::last-index-of(wc.url,'/')}" />
+  <property name="wc.branch" value="${string::substring(wc.url, int::parse(wc.branch.start)+1, string::get-length(wc.url)-int::parse(wc.branch.start)-1)}" />
 
 	<property name="pythonAvailable" value="0" />
 	<property name="impBase" value="../build/win32" overwrite="false" />
@@ -50,7 +61,7 @@
 		<arg value="--with-berkeley-db=${impBase}/lib" />
 		<arg value="--with-openssl=${impBase}/openssl-${opensslVersion}" />
 		<arg value="--with-zlib=${zlibDir}" />
-		<arg value="--with-neon=${impBase}/neon" />
+		<arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
 		<arg value="--with-serf=${impBase}/serf" />
 		<arg value="--with-sasl=${impBase}/lib" />
 		<arg value="--with-sqlite=${intDir}" />

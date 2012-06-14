@@ -146,7 +146,7 @@
         <arg value="--with-berkeley-db=../lib" />
         <arg value="--with-openssl=../openssl-${opensslVersion}" />
         <arg value="--with-zlib=${zlibDir}" />
-        <arg value="--with-neon=../neon" />
+        <arg value="--with-neon=../neon" if="${subversionVersion &lt; '1.8.'}" />
         <arg value="--with-serf=../serf" />
         <arg value="--with-sasl=../lib" />
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
