@@ -87,8 +87,13 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
                
                ### The CryptoAPI random generator should be 'safe enough' on XP SP3 and later.
                (src: Wikipedia) Should we check for that or trust the rest of the data?
+               
+               Ensure that we have at least two good/improved sources to handle the case where the
+               'Workstation' service is disabled.
             -->
-          <replacestring from="if (kernel)" to="if (good &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
+          <replacestring from="BYTE buf[64];" to="BYTE buf[256];" />
+          <replacestring from="good = 1;" to="good += 1;" />
+          <replacestring from="if (kernel)" to="if (good &gt;= 2 &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
         </filterchain>
       </loadfile>
       <echo message="${mk}" file="${opensslDir}/crypto/rand/rand_win.c" />
