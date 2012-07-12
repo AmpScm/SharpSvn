@@ -91,8 +91,9 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
                Ensure that we have at least two good/improved sources to handle the case where the
                'Workstation' service is disabled.
             -->
-          <replacestring from="BYTE buf[64];" to="BYTE buf[256];" />
-          <replacestring from="good = 1;" to="good += 1;" />
+          <replacestring from="BYTE buf[64];" to="BYTE buf[4*64];" /><!-- Ask more entropy -->
+          <replacestring from="good = 1;" to="good += 1;" /><!-- Count sources -->
+          <replacestring from="RAND_add(buf, sizeof(buf), 0);" to="RAND_add(buf, sizeof(buf), sizeof(buf)/4);" /><!-- Adding entropy helps -->
           <replacestring from="if (kernel)" to="if (good &gt;= 2 &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
         </filterchain>
       </loadfile>
