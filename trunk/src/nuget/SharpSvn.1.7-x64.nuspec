@@ -16,7 +16,7 @@
   <files>
     <file src="SharpSvn-x64\SharpSvn.dll" target="lib\net20" />
     <file src="SharpSvn-x64\SharpSvn.xml" target="lib\net20" />
-    <file src="SharpSvn-x64\SharpSvn-*-x64.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn-*-x64.svnDll" target="lib\net20" />
     <file src="SharpSvn-x64\SharpSvn-*-x64.svnExe" target="lib\net20" />
     <file src="SharpSvn-x64\SharpSvn.pdb" target="lib\net20" />
     <file src="SharpSvn-x64\SharpSvn.UI.dll" target="lib\net20" />
