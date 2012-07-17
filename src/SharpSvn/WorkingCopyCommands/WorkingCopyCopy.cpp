@@ -66,11 +66,9 @@ bool SvnWorkingCopyClient::Copy(String^ sourcePath, String^ toPath, SvnWorkingCo
     }
     else
     {
-        lock1 = svn_dirent_dirname(pSrc, pool.Handle);
-        lock2 = svn_dirent_dirname(pDst, pool.Handle);
-        SVN_HANDLE(svn_wc__acquire_write_lock(&lock1, CtxHandle->wc_ctx, lock1, FALSE, pool.Handle, pool.Handle));
+        SVN_HANDLE(svn_wc__acquire_write_lock(&lock1, CtxHandle->wc_ctx, lock1, TRUE, pool.Handle, pool.Handle));
 
-        r = svn_wc__acquire_write_lock(&lock2, CtxHandle->wc_ctx, lock2, FALSE, pool.Handle, pool.Handle);
+        r = svn_wc__acquire_write_lock(&lock2, CtxHandle->wc_ctx, lock2, TRUE, pool.Handle, pool.Handle);
 
         if (r)
         {
