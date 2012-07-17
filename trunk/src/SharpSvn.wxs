@@ -50,8 +50,8 @@
       <Component Id="C_LOCAL_SharpSvn.dll" Guid="32EB117A-B450-4137-B453-072D03DAECB1">
         <File Id="CF_LOCAL_SharpSvn.dll" Name="SharpSvn.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
-      <Component Id="C_LOCAL_SharpSvn_Sasl21_23_win32.svnDll" Guid="29D3AD3F-2027-4FF8-A9C4-3AC7268D6AE5">
-        <File Id="CF_LOCAL_SharpSvn_Sasl21_23_win32.svnDll" Name="SharpSvn-Sasl21-23-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
+      <Component Id="C_LOCAL_SharpSvn_Sasl21_23_win32.svnDll" Guid="9117A066-FCBB-47C5-92A2-66DF13E28160">
+        <File Id="CF_LOCAL_SharpSvn_Sasl21_23_win32.svnDll" Name="SharpSvn-Sasl21-23-win32.svnDll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
       <Component Id="C_LOCAL_SharpPlink_Win32.svnExe" Guid="34F616E9-637E-44F0-9416-F79325560FDE">
         <File Id="CF_LOCAL_SharpPlink_Win32.svnExe" Name="SharpPlink-Win32.svnExe" Vital="yes" KeyPath="yes" Checksum="yes" />
@@ -61,8 +61,8 @@
   <Fragment>
     <!-- BDB is optional (BDB repository format support is disabled if not available) -->
     <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
-      <Component Id="C_LOCAL_SharpSvn_DB44_20_win32.svnDll" Guid="13E8937F-0936-4F96-A216-103923611F5B">
-        <File Id="CF_LOCAL_SharpSvn_DB44_20_win32.svnDll" Name="SharpSvn-DB44-20-win32.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
+      <Component Id="C_LOCAL_SharpSvn_DB44_20_win32.svnDll" Guid="17EC4369-1FBD-4345-A865-AB08B99D33FF">
+        <File Id="CF_LOCAL_SharpSvn_DB44_20_win32.svnDll" Name="SharpSvn-DB44-20-win32.svnDll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
