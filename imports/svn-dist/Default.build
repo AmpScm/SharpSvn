@@ -14,6 +14,7 @@
   <property name="applyMerges" value="false" />
   <property name="applyPatches" value="false" />
   <property name="enableAprCrypto" value="false" />
+  <property name="svnDll" value="dll" />
   
   <include buildfile="../Default.build" />
   

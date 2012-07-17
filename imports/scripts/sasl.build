@@ -9,7 +9,7 @@
   <property name="saslPrefix" value="${dllPrefix}Sasl${SASL_MAJOR_VERSION}${SASL_MINOR_VERSION}-${SASL_MICRO_VERSION}-${platform}" if="${dllPrefix!=''}"/>
   <property name="saslPdb" value="sasl.pdb" if="${dllPrefix==''}"/>
   <property name="saslPdb" value="${saslPrefix}.pdb" if="${dllPrefix!=''}"/>
-  <property name="saslDllName" value="${saslPrefix}.dll" if="${dllPrefix!=''}"/>
+  <property name="saslDllName" value="${saslPrefix}.${svnDll}" if="${dllPrefix!=''}"/>
 
   <target name="prepare-sasl" depends="checkout,build-bdb,build-openssl">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
@@ -119,7 +119,7 @@
     </copy>
     <copy todir="release/lib-x64" if="${platform=='x64'}">
       <fileset basedir="build/x64/cyrus-sasl-${saslVersion}/lib">
-        <include name="${dllPrefix}*.dll" />
+        <include name="${dllPrefix}*.${svnDll}" />
         <include name="libsasl.lib" />
         <include name="${saslPdb}" />
       </fileset>
@@ -138,6 +138,7 @@
     <copy todir="build/${platform}/lib/lib">
     <fileset basedir="${saslDir}/lib">
       <include name="*.dll" />
+      <include name="*.${svnDll}" />
     </fileset>
   </copy>
   </target>
