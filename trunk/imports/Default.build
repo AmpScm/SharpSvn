@@ -51,6 +51,7 @@
 
   <!-- Prefix to use for dependency DLL's -->
   <property name="dllPrefix" value="SharpSvn-" overwrite="false" />
+  <property name="svnDll" value="svnDll" overwrite="false" />
 
   <property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 9.0\VC" />
 
