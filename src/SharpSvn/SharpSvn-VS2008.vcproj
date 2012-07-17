@@ -242,14 +242,12 @@
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
-				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
 				DebugInformationFormat="3"
-				OmitDefaultLibName="true"
 			/>
 			<Tool
 				Name="VCManagedResourceCompilerTool"
