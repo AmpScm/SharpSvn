@@ -17,7 +17,7 @@
     <file src="SharpSvn\SharpSvn.dll" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.xml" target="lib\net20" />
     <file src="SharpSvn\SharpSvn-*-win32.svnDll" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn-*-win32.svnExe" target="lib\net20" />
+    <file src="SharpSvn\Sharp*-win32.svnExe" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.pdb" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.UI.dll" target="lib\net20" />
     <file src="SharpSvn\SharpSvn.UI.xml" target="lib\net20" />
