@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.7005.2192</title>
+          SharpSvn-Daily Update - 1.7005.2197</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.7005.2192</h1>
+          SharpSvn-Daily Update - 1.7005.2197</h1>
 
 
 <p>
@@ -15,25 +15,30 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/6343/SSvn-1.7005.2192.zip">SharpSvn 1.7005.2192</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/6358/SSvn-1.7005.2197.zip">SharpSvn 1.7005.2197</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/6344/SSvn-1.7005.2192-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/6345/SSvnEx-1.7005.2192.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/6359/SSvn-1.7005.2197-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/6360/SSvnEx-1.7005.2197.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2192">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2197">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2012-07-20</td></tr>
+<tr><td> </td><td class="r"><a id="2195" href="http://sharpsvn.net/rev/?r=2195">
+            [r2195]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/Export.cpp, SharpSvn.Tests/Commands/ExportTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Default to exporting from Working instead of Head when exporting from a working
+copy path, to match the svn behavior.</td></tr>
 <tr class="d"><td colspan="4">2012-07-18</td></tr>
 <tr><td> </td><td class="r"><a id="2192" href="http://sharpsvn.net/rev/?r=2192">
             [r2192]
@@ -47,7 +52,7 @@
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn-VS11.sln, SharpSvn-VS2012.sln</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Rename solution file to match other files and new naming.</td></tr>
 <tr><td> </td><td class="r"><a id="2187" href="http://sharpsvn.net/rev/?r=2187">
             [r2187]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn-VS11.sln, SharpSvn/SharpSvnStrings.h, SharpSvn.UI/Properties/Resources.Designer.cs, SharpSvn.UI/Strings.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update VS2012 project files</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.UI/Strings.Designer.cs, SharpSvn-VS11.sln, SharpSvn/SharpSvnStrings.h, SharpSvn.UI/Properties/Resources.Designer.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Update VS2012 project files</td></tr>
 <tr><td> </td><td class="r"><a id="2186" href="http://sharpsvn.net/rev/?r=2186">
             [r2186]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> Copy-Dependencies.cmd</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Script tweak</td></tr>
@@ -56,7 +61,7 @@
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/nuget:</strong> SharpSvn.1.7-x64.nuspec, SharpSvn.1.7-x86.nuspec</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Publish *.svnDll instead of .dll</td></tr>
 <tr><td> </td><td class="r"><a id="2183" href="http://sharpsvn.net/rev/?r=2183">
             [r2183]
-          </a></td><td class="a">rhuijben</td><td class="f">imports/svn-dist/Default.build, imports/scripts/bdb.build, src/SharpSvn/SharpSvn.vcxproj, imports/dev-default.build, src/SharpSvn.wxs, imports/Default.build, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj, imports/scripts/sasl.build</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create .svnDll native dlls to allow packaging as Nuget</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f">imports/scripts/sasl.build, imports/svn-dist/Default.build, imports/scripts/bdb.build, src/SharpSvn/SharpSvn.vcxproj, imports/dev-default.build, src/SharpSvn.wxs, imports/Default.build, src/SharpSvn/SharpSvn-VS2008.vcproj, src/SharpSvn/SharpSvn.vcproj</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Create .svnDll native dlls to allow packaging as Nuget</td></tr>
 
 </table>
 <!--/Recent changes-->
