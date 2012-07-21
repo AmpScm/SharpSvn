@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using SharpSvn.Tests.Commands;
-using NUnit.Framework;
 using System.IO;
-using NUnit.Framework.SyntaxHelpers;
+using NUnit.Framework;
+using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests
 {

@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text;
-
 using NUnit.Framework;
-using NUnit.Framework.SyntaxHelpers;
-
 using SharpSvn.Remote;
 using SharpSvn.Tests.Commands;
-using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.RemoteTests
 {
