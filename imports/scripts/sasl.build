@@ -46,6 +46,12 @@
       <property name="linkAddendum" value="" />
       <property name="linkAddendum" value="/MACHINE:x64" if="${platform=='x64'}" />
 
+      <loadfile file="${saslDir}/include/prop.h" property="propText" if="${static=='true'}" >
+        <filterchain>
+          <replacestring from='WIN32' to='no_WIN32_exports' />
+        </filterchain>
+      </loadfile>
+      <echo message="${propText}" file="${saslDir}/include/prop.h" if="${static=='true'}" />
       <loadfile file="${saslDir}/plugins/NTMakefile" property="propText">
         <filterchain>
           <replacestring from='CPPFLAGS = /D NEED_GETOPT' to='CPPFLAGS = /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT' />
@@ -68,7 +74,24 @@
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
       </loadfile>
+      <loadfile file="${saslDir}/lib/NTMakefile" property="propTextStatic" if="${static=='true'}" >
+        <filterchain>
+          <replacestring
+            from='CPPFLAGS = /D NEED_GETOPT'
+            to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
+          <replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
+          <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
+          <replacestring from='$(LINK32DLL_FLAGS) /out' to='${linkAddendum} /out' />
+          <replacestring from=' $(libsasl_res)' to='' />
+          <replacestring from='$(LINK32DLL)' to='$(LIB32) -lib' />
+          <replacestring from='/implib:"libsasl.lib" ' to='' />
+          <replacestring from='/pdb:"libsasl.pdb" ' to='' />
+          <replacestring from='libsasl.dll' to='libsasl.lib' />
+          <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
+        </filterchain>
+      </loadfile>
       <echo message="${propText}" file="${saslDir}/lib/NTMakefile" />
+      <echo message="${propTextStatic}" file="${saslDir}/lib/NTMakefile" if="${static=='true'}" />
       <loadfile file="${saslDir}/win32/common.mak" property="propText">
         <filterchain>
           <replacestring from='SYS_LIBS=' to='SYS_LIBS="/LIBPATH:${path::get-full-path(releaseLib)}" zlib.lib ' />
@@ -94,7 +117,7 @@
         <arg value="NTLM=1" />
         <arg value="NTLM_STATIC=1" />
       </NMake>
-      <exec program="mt.exe" workingdir="${saslDir}/lib">
+      <exec program="mt.exe" workingdir="${saslDir}/lib" if="${static!='true'}">
         <arg value="-manifest" />
         <arg value="${saslDllName}.manifest" />
         <arg value="-outputresource:${saslDllName};2" />
