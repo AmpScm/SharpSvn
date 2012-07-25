@@ -231,7 +231,7 @@
         <arg value="/t:Programs\svn" />
         <arg value="/t:Programs\svnadmin" />        
         <arg value="/t:Programs\svnversion" />
-        <arg value="/t:Programs\svnserve" />
+        <arg value="/t:Programs\svnserve" if="${static!='true'}"/>
         <arg value="/t:Programs\svnsync" />
         <arg value="/t:Programs\svnlook" />
         <arg value="/t:Programs\svnmucc"/>
@@ -278,7 +278,7 @@
     </copy>
     <if test="${platform!='win32'}">
       <copy file="${svnBase}/release/subversion/svn/svn.exe" tofile="${release}/bin/svn-${platform}.exe" />
-      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve-${platform}.exe" />
+      <copy file="${svnBase}/release/subversion/svnserve/svnserve.exe" tofile="${release}/bin/svnserve-${platform}.exe" if="${static!='true'}"/>
       <copy file="${svnBase}/release/subversion/svnadmin/svnadmin.exe" tofile="${release}/bin/svnadmin-${platform}.exe" />
       <copy file="${svnBase}/release/subversion/svnversion/svnversion.exe" tofile="${release}/bin/svnversion-${platform}.exe" />
     </if>
