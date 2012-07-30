@@ -78,6 +78,7 @@ void SvnBase::EnsureLoaded()
 					settings.cache_size = 0;
 					settings.file_handle_count = 0;
 					settings.single_threaded = FALSE;
+					svn_cache_config_set(&settings);
 				}
 
 				if (getenv("SVN_ASP_DOT_NET_HACK"))
