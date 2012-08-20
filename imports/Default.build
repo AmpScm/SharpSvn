@@ -15,9 +15,7 @@
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1302450 - Upgrade svn_client_import to support filtering -->
   <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC (1.8) -->
-  <!-- r1340556 - Use stat on '.svn' instead of '.svn/wc.db' and '.svn/entries' -->
-  <!-- r1342984 - Speed up 'svn upgrade' query -->
-  <property name="subversionMerges" value="1156080,1302450,1304407,1304439,1340556,1342984" overwrite="false" />
+  <property name="subversionMerges" value="1156080,1302450,1304407,1304439" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
