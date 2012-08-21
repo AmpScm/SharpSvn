@@ -71,58 +71,60 @@
   </target>
 
   <target name="svn-merge" depends="checkout">
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
-      <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
-         if="${string::get-length(subversionMergeBranches) &gt; 0}">
-        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
-          <arg value="merge" />
-          <arg line="^/subversion/${branch}" />
-          <arg value="${svnBase}" />
-        </Svn>
-      </foreach>
-      <if test="${applyMerges}">
-        <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
-          /* Appended by sharpsvn/imports/scripts/build-subversion.build */
-          apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
-          {
-          if (!auth_baton)
-          return NULL;
+    <if test="${buildSubversion != 'false'}">
+      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
+        <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
+           if="${string::get-length(subversionMergeBranches) &gt; 0}">
+          <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+            <arg value="merge" />
+            <arg line="^/subversion/${branch}" />
+            <arg value="${svnBase}" />
+          </Svn>
+        </foreach>
+        <if test="${applyMerges}">
+          <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
+            /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+            apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+            {
+            if (!auth_baton)
+            return NULL;
 
-          return auth_baton->creds_cache;
-          }
-        </echo>
+            return auth_baton->creds_cache;
+            }
+          </echo>
 
-        <if test="${svnAddSharpSvn == 'true'}">
-          <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
-            <filterchain>
-              <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-                       to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
-          
-          <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
-            <filterchain>
-              <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
-                               to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
+          <if test="${svnAddSharpSvn == 'true'}">
+            <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
+              <filterchain>
+                <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+                         to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+              </filterchain>
+            </loadfile>
+            <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
+            
+            <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
+              <filterchain>
+                <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
+                                 to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
+              </filterchain>
+            </loadfile>
+            <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
+          </if>
         </if>
-      </if>
-    </OnceBlock>
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${applyPatches=='true'}">
-      <foreach item="File" property="patch">
-        <in>
-          <items basedir="${downloads}/../patches/subversion">
-            <include name="*.patch" />
-          </items>
-        </in>
-        <do>
-          <ApplyPatch patchFile="${patch}" toDir="${svnBase}" />
-        </do>
-      </foreach>
-    </OnceBlock>
+      </OnceBlock>
+      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${applyPatches=='true'}">
+        <foreach item="File" property="patch">
+          <in>
+            <items basedir="${downloads}/../patches/subversion">
+              <include name="*.patch" />
+            </items>
+          </in>
+          <do>
+            <ApplyPatch patchFile="${patch}" toDir="${svnBase}" />
+          </do>
+        </foreach>
+      </OnceBlock>
+    </if>
   </target>
 
   <target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
