@@ -13,6 +13,16 @@
       </do>
     </foreach>
     <OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/serf">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${platformRoot}/serf" />
+        </do>
+      </foreach>
       <foreach item="File" property="mak">
         <in>
           <items basedir="${platformRoot}">
