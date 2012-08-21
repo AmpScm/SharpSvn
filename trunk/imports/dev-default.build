@@ -68,6 +68,8 @@
 		<arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
 		<arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
 		<arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
+		<arg value="--with-static-apr" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true'))}" />
+		<arg value="--with-static-openssl" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true'))}" />
 	</exec>
 	<echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
 </target>
