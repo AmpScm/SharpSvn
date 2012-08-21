@@ -61,14 +61,14 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:AssemblyDescriptionAttribute("SharpSvn (Compiled statically with subversion " SVN_VER_NUMBER
 									   ", apr " APR_VERSION_STRING
 									   ", apr-util " APU_VERSION_STRING
+									   ", Cyrus Sasl " SASL_VERSION
 									   ", neon " NEON_VERSION
 									   ", serf " SERF_VERSION
 									   ", sqlite" SQLITE_VERSION
 									   ", zlib " ZLIB_VERSION
 									   " and " OPENSSL_VERSION_TEXT
-									   ". Dynamically linked to Cyrus Sasl " SASL_VERSION
-									   " and if available Berkeley DB " BDB_VERSION
-									   " and Putty's Plink)")];
+									   ". if available this library also uses the optional Berkeley DB " BDB_VERSION
+									   " and our compilation of Putty's Plink)")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
@@ -79,13 +79,13 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Subversion", SVN_VER_NUMBER)];
 [assembly:SvnLibrary("Apr", APR_VERSION_STRING)];
 [assembly:SvnLibrary("Apr-util", APU_VERSION_STRING)];
+[assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("Neon", NEON_VERSION)];
 [assembly:SvnLibrary("serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix=true)];
 [assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked=true, Optional=true)];
-[assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpSvnVersion=true, Optional=true)];
 
 //
