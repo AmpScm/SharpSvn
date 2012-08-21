@@ -83,6 +83,7 @@
           <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
         </do>
       </foreach>
+      <!-- Patch .lib projects -->
       <foreach item="File" property="vcproj">
         <in>
           <items>
@@ -110,6 +111,7 @@
           <echo message="${projtext}" file="${vcproj}" />
         </do>
       </foreach>
+      <!-- Patch .dll projects -->
       <foreach item="File" property="vcproj">
         <in>
           <items>
@@ -126,7 +128,7 @@
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
               <!-- Add openssl includes to aprutil and aprutil/crypto -->
               <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" if="${enableAprCrypto}" />
-              <!-- Import APR from APR-Util -->
+              <!-- Import APR and XML from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
               <!-- Fix crypto compilation -->
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true' and enableAprCrypto}" />
@@ -152,7 +154,14 @@
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#define APU_HAVE_CRYPTO ' to='#define APU_HAVE_CRYPTO 1 //' />
-              <replacestring from='#define APU_HAVE_OPENSSL ' to='#define APU_HAVE_OPENSSL 1 //' if="${svnAddSharpSvn == 'true' and enableAprCrypto}" />
+              <replacestring from='#define APU_HAVE_OPENSSL ' to='
+// SharpSvn:              
+#ifdef APU_DECLARE_STATIC
+#define  APU_HAVE_OPENSSL 1
+#else
+#define  APU_HAVE_OPENSSL 0
+#endif
+// /SharpSvn' if="${enableAprCrypto}" />
               <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
 #ifndef WIN64
 #  define WIN64
@@ -188,20 +197,15 @@ APR_BEGIN_DECLS
         </do>
       </foreach>
       <echo message='
-          
-/* SharpSvn */
-#ifndef freeaddrinfo
-#error freeaddrinfo is not redefined, please fix compilation to fix Windows 2000 compatibility
-#endif
-/* /SharpSvn */
-
-' append="true" file="${aprDir}/network_io\unix\sockaddr.c" if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
-      <echo message='
 #ifndef __SHARPSVN_APR_CRYPTO_OPENSSL_INCLUDED__
+#ifdef APU_DECLARE_STATIC
 #define __SHARPSVN_APR_CRYPTO_OPENSSL_INCLUDED__
 #include "apr_crypto_openssl.c"
+#pragma comment(lib, "libeay32.lib")
+#pragma comment(lib, "ssleay32.lib")
 #endif
-' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn == 'true' and enableAprCrypto}" />
+#endif
+' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${(svnAddSharpSvn == 'true' or svnStatic == 'true') and enableAprCrypto}" />
 
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
