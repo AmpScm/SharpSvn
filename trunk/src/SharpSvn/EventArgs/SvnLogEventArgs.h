@@ -29,6 +29,9 @@ namespace SharpSvn {
 		initonly __int64 _copyFromRevision;
 		initonly SvnNodeKind _nodeKind;
 		Uri^ _repositoryPath;
+		initonly System::Nullable<bool> _textModified;
+		initonly System::Nullable<bool> _propsModified;
+		
 	internal:
 		SvnChangeItem(String^ path, const svn_log_changed_path2_t* changed_path)
 		{
@@ -43,6 +46,30 @@ namespace SharpSvn {
 			_copyFromPath = SvnBase::Utf8_PtrToString(changed_path->copyfrom_path);
 			_copyFromRevision = changed_path->copyfrom_path ? changed_path->copyfrom_rev : -1;
 			_nodeKind = (SvnNodeKind)changed_path->node_kind;
+
+			switch (changed_path->text_modified)
+			{
+				case svn_tristate_false:
+					_textModified = false;
+					break;
+				case svn_tristate_true:
+					_textModified = true;
+					break;
+				default:
+					;
+			}
+
+			switch (changed_path->props_modified)
+			{
+			case svn_tristate_false:
+				_propsModified = false;
+				break;
+			case svn_tristate_true:
+				_propsModified = true;
+				break;
+			default:
+				;
+			}
 		}
 
 	public:
@@ -101,6 +128,24 @@ namespace SharpSvn {
 			SvnNodeKind get()
 			{
 				return _nodeKind;
+			}
+		}
+
+		/// <summary>Gets a boolean indicating whether the content of a node is modified in this revision. (Value only available for 1.7+ servers)</summary>
+		property System::Nullable<bool> ContentModified
+		{
+			System::Nullable<bool> get()			
+			{ 
+				return _textModified;
+			}
+		}
+
+		/// <summary>Gets a boolean indicating whether the versioned properties of a node are modified in this revision. (Value only available for 1.7+ servers)</summary>
+		property System::Nullable<bool> PropertiesModified
+		{
+			System::Nullable<bool> get()			
+			{ 
+				return _propsModified;
 			}
 		}
 
