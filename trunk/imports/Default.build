@@ -11,7 +11,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.7.6" overwrite="false" />
+  <property name="subversionVersion" value="1.7.7" overwrite="false" />
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1302450 - Upgrade svn_client_import to support filtering -->
   <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC (1.8) -->
@@ -38,7 +38,7 @@
 
   <property name="httpdVersion" value="2.2.22" overwrite="false" />
   <property name="gettextVersion" value="0.17" overwrite="false" />
-  <property name="sqliteVersion" value="3.7.14" overwrite="false" />
+  <property name="sqliteVersion" value="3.7.14.1" overwrite="false" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.6.0.12051" overwrite="false" />
