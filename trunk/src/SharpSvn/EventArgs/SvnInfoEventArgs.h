@@ -457,6 +457,10 @@ namespace SharpSvn {
 					GC::KeepAlive(Conflicts);
 				}
 
+				if (_conflicts)
+					for each (SvnConflictData ^cd in _conflicts)
+						cd->Detach(keepProperties);
+
 				if (_lock)
 					_lock->Detach(keepProperties);
 			}
