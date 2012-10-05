@@ -60,8 +60,8 @@ namespace SharpSvn {
 		{
 			virtual System::Uri^ get() sealed
 			{
-				if (!_uri && _version && _version->repos_url && _version->path_in_repos && _pool)
-					_uri = SvnBase::Utf8_PtrToUri(_version->repos_url, SvnNodeKind::Directory);
+				if (!_repositoryRoot && _version && _version->repos_url && _pool)
+					_repositoryRoot = SvnBase::Utf8_PtrToUri(_version->repos_url, SvnNodeKind::Directory);
 
 				return _repositoryRoot;
 			}
