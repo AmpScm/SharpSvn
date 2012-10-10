@@ -179,7 +179,7 @@ namespace SharpSvn {
 		protected:
 			void set(String^ value)
 			{
-				_propertyName = value;
+				_action = value;
 			}
 		}
 
