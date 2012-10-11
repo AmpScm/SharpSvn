@@ -59,6 +59,7 @@ void SvnAuthentication::Clear()
     _wrappers->Clear();
     _handlers->Clear();
     _cookie++;
+	_forcedUser = _forcedPassword = nullptr;
     ClearAuthenticationCache();
 }
 
