@@ -216,7 +216,6 @@ namespace SharpSvn {
 		literal String^			GlobalIgnores			= SVN_CONFIG_OPTION_GLOBAL_IGNORES;
 		literal String^			LogEncoding				= SVN_CONFIG_OPTION_LOG_ENCODING;
 		literal String^			UseCommitTimes			= SVN_CONFIG_OPTION_USE_COMMIT_TIMES;
-		literal String^			TemplateRoot			= SVN_CONFIG_OPTION_TEMPLATE_ROOT;
 		literal String^			EnableAutoProps			= SVN_CONFIG_OPTION_ENABLE_AUTO_PROPS;
 		literal String^			NoUnlock				= SVN_CONFIG_OPTION_NO_UNLOCK;
 		literal String^			MimeTypesFile			= SVN_CONFIG_OPTION_MIMETYPES_FILE;
