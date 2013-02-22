@@ -39,7 +39,7 @@
 
   <property name="httpdVersion" value="2.2.22" overwrite="false" />
   <property name="gettextVersion" value="0.17" overwrite="false" />
-  <property name="sqliteVersion" value="3.7.15.1" overwrite="false" />
+  <property name="sqliteVersion" value="3.7.15.2" overwrite="false" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.6.0.12051" overwrite="false" />
