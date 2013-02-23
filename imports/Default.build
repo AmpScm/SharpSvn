@@ -24,7 +24,7 @@
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
-  <property name="opensslVersion" value="1.0.1c" overwrite="false" />
+  <property name="opensslVersion" value="1.0.1e" overwrite="false" />
   <property name="neonVersion" value="0.29.6" overwrite="false" />
 
   <property name="aprVersion" value="1.4.6" overwrite="false" />
@@ -37,7 +37,7 @@
   <property name="swigVersion" value="2.0.4" overwrite="false" />
   <property name="nasmVersion" value="2.10.01" overwrite="false" />
 
-  <property name="httpdVersion" value="2.2.22" overwrite="false" />
+  <property name="httpdVersion" value="2.2.23" overwrite="false" />
   <property name="gettextVersion" value="0.17" overwrite="false" />
   <property name="sqliteVersion" value="3.7.15.2" overwrite="false" />
   
