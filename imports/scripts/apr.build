@@ -249,7 +249,7 @@ APR_BEGIN_DECLS
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
-            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true' and enableAprCrypto}" />
+            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true' and enableAprCrypto and platform!='x64'}" />
           </items>
         </in>
         <do>
