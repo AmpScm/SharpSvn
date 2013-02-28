@@ -22,6 +22,10 @@
   <property name="botBuild" value="true" overwrite="false" />
     
   <include buildfile="imports/Default.build" />
+  
+  <if test="${platform == 'x64'}">
+    <property name="buildHttpd" value="false" />
+  </if>
 
   <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd">
   </target>
@@ -47,6 +51,7 @@
   <property name="wc.branch" value="${string::substring(wc.url, int::parse(wc.branch.start)+1, string::get-length(wc.url)-int::parse(wc.branch.start)-1)}" />
 
 	<property name="pythonAvailable" value="0" />
+	<property name="impBase" value="../build/x64" overwrite="false" if="${platform=='x64'}"/>
 	<property name="impBase" value="../build/win32" overwrite="false" />
 	<exec program="cmd.exe" workingdir="${wc}" verbose="true">
 		<arg line="/c gen-make.py" if="${pythonAvailable != '0'}" />
