@@ -1,5 +1,11 @@
 <?xml version="1.0" ?>
 <project basedir="." default="prepare-dev">
+  <property name="guessedPlatform" value="win32" />
+  <if test="${environment::variable-exists('LIB')}">
+    <property name="guessedPlatform" value="x64" if="${string::contains(string::to-upper(environment::get-variable('LIB')),'LIB\AMD64')}" />
+  </if>
+  <property name="platform" value="${guessedPlatform}" overwrite="false" />
+
   <property name="svn-dev" value="true" />
   <property name="applyMerges" value="false" />
   <property name="subversionMerges" value="" overwrite="false" />
@@ -9,7 +15,7 @@
   <property name="intl" value="none" />
   <property name="svnBuildName" value="SlikSvn" />
   <property name="enableIpv6" value="true" overwrite="false" />
-  <property name="buildHttpd" value="true" />
+  <property name="buildHttpd" value="${platform=='win32'}" />
   <property name="buildSubversion" value="false" />
   <property name="buildSqlite" value="true" />
   <property name="svnStatic" value="true" overwrite="false" />
