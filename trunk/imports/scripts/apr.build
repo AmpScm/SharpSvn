@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="aprBase" value="${buildRoot}" if="${buildHttpd=='false'}" />
-  <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd!='false'}" />
+  <property name="aprBase" value="${buildRoot}" if="${not buildHttpd}" />
+  <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd}" />
   <property name="aprDir" value="${aprBase}/apr" />
   <property name="aprUtilDir" value="${aprBase}/apr-util" />
 
@@ -335,6 +335,17 @@ APR_BEGIN_DECLS
         <include name="${aprUtilDir}/LibR/*.lib" />
         <include name="${aprUtilDir}/Release/*.lib" />
         <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/Release/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="build/x64/lib/debug" flatten="true">
+      <fileset>
+        <include name="${aprDir}/x64/LibR/*.lib" />
+        <include name="${aprDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/x64/LibR/*.lib" />
+        <include name="${aprUtilDir}/x64/Release/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/x64/Release/*.lib" />
       </fileset>
     </copy>
     <copy todir="${release}/lib-x64" flatten="true">
