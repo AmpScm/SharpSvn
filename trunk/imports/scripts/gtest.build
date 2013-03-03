@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="gtestDir" value="${buildRoot}/${platform}/gtest" />
+
+  <target name="build-gtest" depends="download,extract,checkout">
+    <OnceBlock file="build/gtest-${gtestVersion}.build">
+      <VCBuild platform="${platform}">
+        <arg line="/upgrade" />
+        <arg line="${gtestDir}/msvc/gtest.vcproj" />
+      </VCBuild>
+      <VCBuild platform="${platform}">
+        <arg line="${gtestDir}/msvc/gtest.vcproj" />
+      </VCBuild>
+    </OnceBlock>
+    <copy todir="${release}/lib" flatten="true">
+      <fileset>
+        <include name="${gtestDir}/msvc/gtest/Debug/*.lib" />
+        <include name="${gtestDir}/msvc/gtest/Release/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${gtestDir}/include">
+        <include name="**/*.h" />
+      </fileset>
+    </copy>
+  </target>
+</project>
