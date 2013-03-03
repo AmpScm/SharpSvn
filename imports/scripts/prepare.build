@@ -197,6 +197,13 @@
         <arg value="${sqliteDir}" />
       </Svn>
     </if>
+    <if test="${not directory::exists(gtestDir)}">
+      <Svn verbose="true">
+        <arg value="co" />
+        <arg value="http://googletest.googlecode.com/svn/tags/release-${gtestVersion}/" />
+        <arg value="${gtestDir}" />
+      </Svn>
+    </if>
   </target>
 
   <target name="copy-licenses">

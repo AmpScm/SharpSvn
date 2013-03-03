@@ -33,7 +33,7 @@
     <property name="buildHttpd" value="false" />
   </if>
 
-  <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd">
+  <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd, build-gtest">
   </target>
 
   <target name="prepare-dev" depends="prep-dev, gen-dev">
