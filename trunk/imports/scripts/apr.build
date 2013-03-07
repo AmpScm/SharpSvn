@@ -151,7 +151,7 @@
           <loadfile file="${winHeader}" property="headertext">
             <filterchain>
               <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
-              <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${(enableIpv6 == 'true') and (buildHttpd!='true')}" />
+              <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${enableIpv6}" />
               <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
               <replacestring from='#define APU_HAVE_CRYPTO ' to='#define APU_HAVE_CRYPTO 1 //' />
               <replacestring from='#define APU_HAVE_OPENSSL ' to='
