@@ -60,10 +60,8 @@
 	<property name="impBase" value="../build/win32" overwrite="false" />
 	<exec program="python.exe" workingdir="${wc}" verbose="true">
 		<arg line="gen-make.py" />
-		<arg line="/c python.exe gen-make.py" if="${pythonAvailable == '0'}" />
 		<arg line="-t vcproj" />
 		<arg line="--vsnet-version=${VSversion}" />
-		<arg value="--release" />
 		<arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
 		<arg value="--with-apr=${impBase}/lib" />
 		<arg value="--with-apr-util=${impBase}/lib" />
