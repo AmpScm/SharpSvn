@@ -62,7 +62,7 @@
 		<arg line="gen-make.py" />
 		<arg line="-t vcproj" />
 		<arg line="--vsnet-version=${VSversion}" />
-		<arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
+		<arg value="--with-httpd=${httpdDir}" if="${buildHttpd}" />
 		<arg value="--with-apr=${impBase}/lib" />
 		<arg value="--with-apr-util=${impBase}/lib" />
 		<arg value="--with-berkeley-db=${impBase}/lib" />
