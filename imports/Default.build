@@ -2,6 +2,7 @@
 <project basedir="." default="help">
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
+  <property name="libgit2BuildType" value="tag" overwrite="false" />
   
   <property name="guessedPlatform" value="win32" />
   <if test="${environment::variable-exists('LIB')}">
@@ -20,9 +21,11 @@
   <property name="subversionMerges" value="1156080,1302450,1304407,1304439,1380295,1396285" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
-  <property name="svnAddSharpSvn" value="true" overwrite="false" />
+  <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
+  <!-- -->
+  <property name="libgit2Version" value="0.8.0" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.1e" overwrite="false" />
   <property name="neonVersion" value="0.29.6" overwrite="false" />

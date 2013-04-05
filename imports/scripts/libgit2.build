@@ -1,0 +1,24 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="libgit2Dir" value="${buildRoot}/${platform}/libgit2" />
+
+  <target name="build-libgit2" depends="download,extract,checkout">
+    <mkdir dir="${libgit2Dir}/build" />
+  
+    <CMake workingdir="${libgit2Dir}" verbose="true">
+      <arg value="-DBUILD_SHARED_LIBS=OFF" />
+      <arg value="-DBUILD_CLAR=OFF" />
+      <arg value="-DBUILD_EXAMPLES=OFF" />
+      <arg value="-DSTATIC_CRT=OFF" />
+    </CMake>
+    
+    <MSBuild>
+      <arg value="${libgit2Dir}/libgit2.sln" />
+      <arg value="/p:Configuration=RelWithDebInfo" />
+      <arg value="/p:Platform=${platform}" />
+      
+      <arg value="/t:git2" />
+    </MSBuild>
+  </target>
+
+</project>

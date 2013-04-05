@@ -19,7 +19,7 @@
   </if>
   
   <if test="${not property::exists('VSversion')}">
-    <!-- Auto detect VS 2005 and VS 2008 -->
+    <!-- Auto detect VS 2005-2012 -->
     <if test="${environment::variable-exists('VCINSTALLDIR')}">
       <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
 
@@ -34,6 +34,23 @@
     </if>
     <echo message="Using Visual Studio ${VSversion} ${platform} for building" />
   </if>
+  
+  <property name="cmakeGenerator" value="Visual Studio 8 2005"
+            overwrite="false" if="${VSversion == '2005' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 8 2005 Win64"
+            overwrite="false" if="${VSversion == '2005' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 9 2008"
+            overwrite="false" if="${VSversion == '2008' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 9 2008 Win64"
+            overwrite="false" if="${VSversion == '2008' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 10"
+            overwrite="false" if="${VSversion == '2010' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 10 Win64"
+            overwrite="false" if="${VSversion == '2010' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 11"
+            overwrite="false" if="${VSversion == '2012' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 11 Win64"
+            overwrite="false" if="${VSversion == '2012' and platform=='x64'}" />
   
   <property name="MSBuildExe" value="MSBuild.exe" />
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
@@ -86,6 +103,7 @@
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
   <include buildfile="gtest.build" />
+  <include buildfile="libgit2.build" />
 
   <setenv>
     <variable name="PATH" value="${environment::get-variable('PATH')};${path::get-full-path(nasmDir)}"/>
