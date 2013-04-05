@@ -14,6 +14,14 @@
     
     <MSBuild>
       <arg value="${libgit2Dir}/libgit2.sln" />
+      <arg value="/p:Configuration=Debug" />
+      <arg value="/p:Platform=${platform}" />
+      
+      <arg value="/t:git2" />
+    </MSBuild>
+    
+    <MSBuild>
+      <arg value="${libgit2Dir}/libgit2.sln" />
       <arg value="/p:Configuration=RelWithDebInfo" />
       <arg value="/p:Platform=${platform}" />
       
