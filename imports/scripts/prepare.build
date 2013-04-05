@@ -1,24 +1,25 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
-  
+
   <property name="junitFilename" value="junit${junitVersion}.zip" />
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
-  
+
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
   <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
 
   <property name="nunitVersionMMR" value="${string::substring(nunitVersion, 0, string::last-index-of(nunitVersion,'.'))}" />
   <property name="nunitVersionMM" value="${string::substring(nunitVersionMMR, 0, string::last-index-of(nunitVersionMMR,'.'))}" />
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
-  
+
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
+  <property name="cmakeDir" value="build/cmake-${cmakeVersion}-win32-x86" />
 
   <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
   <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
- 
+
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
 
@@ -27,102 +28,122 @@
 
     <get
       src="http://www.openssl.org/source/${opensslFilename}"
-      dest="${downloads}/${opensslFilename}"
+      dest="${downloads + opensslFilename}"
       unless="${file::exists(downloads + opensslFilename)}" />
-         
+
     <get
       src="http://download.oracle.com/berkeley-db/${dbFilename}"
-      dest="${downloads}/${dbFilename}"
+      dest="${downloads + dbFilename}"
       unless="${file::exists(downloads + dbFilename)}" />
 
     <get
       src="http://www.zlib.net/${zlibFilename}"
-      dest="${downloads}/${zlibFilename}"
+      dest="${downloads + zlibFilename}"
       unless="${file::exists(downloads + zlibFilename)}" />
 
     <get
       src="http://launchpad.net/nunitv2/${nunitVersionMM}/${nunitVersionMMR}/+download/${nunitFilename}"
-      dest="${downloads}/${nunitFilename}"
+      dest="${downloads + nunitFilename}"
       unless="${file::exists(downloads + nunitFilename)}" />
-      
+
     <get
       src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}"
-      dest="${downloads}/${sharpZipFilename}"
+      dest="${downloads + sharpZipFilename}"
       unless="${file::exists(downloads + sharpZipFilename)}" />
 
     <get
       src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}"
-      dest="${downloads}/${saslFilename}"
+      dest="${downloads + saslFilename}"
       unless="${file::exists(downloads + saslFilename)}" />
 
     <get src="http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}"
-      dest="${downloads}/${nasmFilename}"
+      dest="${downloads + nasmFilename}"
       unless="${file::exists(downloads + nasmFilename)}" />
-      
+
     <get src="http://www.cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
-      dest="${downloads}/${cmakeFilename}"
+      dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
 
     <if test="${property::exists('withSwig')}">
       <get
         src="http://prdownloads.sourceforge.net/swig/${swigFilename}"
-        dest="${downloads}/${swigFilename}"
+        dest="${downloads + swigFilename}"
         unless="${file::exists(downloads + swigFilename)}" />
     </if>
 
     <if test="${intl == 'gettext'}">
       <get
         src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}"
-        dest="${downloads}/${gettextFilename}"
+        dest="${downloads + gettextFilename}"
         unless="${file::exists(downloads + gettextFilename)}" />
 
       <get
         src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsFilename}"
-        dest="${downloads}/${gettextToolsFilename}"
+        dest="${downloads + gettextToolsFilename}"
         unless="${file::exists(downloads + gettextToolsFilename)}" />
 
       <get
         src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsRuntimeFilename}"
-        dest="${downloads}/${gettextToolsRuntimeFilename}"
+        dest="${downloads + gettextToolsRuntimeFilename}"
         unless="${file::exists(downloads + gettextToolsRuntimeFilename)}" />
 
       <get
         src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}"
-        dest="${downloads}/${gettextToolsIconvFilename}"
+        dest="${downloads + gettextToolsIconvFilename}"
         unless="${file::exists(downloads + gettextToolsIconvFilename)}" />
     </if>
-    
+
     <if test="${javaHome != ''}">
       <get
         src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}"
-        dest="${downloads}/${junitFilename}"
+        dest="${downloads + junitFilename}"
         unless="${file::exists(downloads + junitFilename)}" />
     </if>
   </target>
 
   <target name="extract" depends="download">
     <mkdir dir="build" />
-    <if test="${not directory::exists('build/' + platform + '/openssl-' + opensslVersion)}">
-      <UnTar src="${downloads + opensslFilename}" dest="build/${platform}" compression="gzip" />
-    </if>
-    <if test="${not directory::exists('build/db-' + dbVersion + '.NC')}">
-      <UnTar src="${downloads + dbFilename}" dest="build" compression="gzip" />
-    </if>
-    <if test="${not directory::exists(zlibDir)}">
-      <UnTar src="${downloads + zlibFilename}" dest="build/${platform}" compression="gzip" />
-    </if>
-    <if test="${not directory::exists(nunitDir)}">
-      <unzip zipfile="${downloads + nunitFilename}" todir="build"  />
-    </if>
-    <if test="${not directory::exists(sharpZipLibDir)}">
-      <unzip zipfile="${downloads + sharpZipFilename}" todir="${sharpZipLibDir}"  />
-    </if>
-    <if test="${not directory::exists(saslDir)}">
-      <UnTar src="${downloads + saslFilename}" dest="build/${platform}" compression="gzip" />
-    </if>
-    <if test="${not directory::exists(nasmDir)}">
-      <unzip zipfile="${downloads + nasmFilename}" todir="build" />
-    </if>
+
+    <UnTar
+      src="${downloads + opensslFilename}" compression="gzip"
+      dest="build/${platform}"
+      unless="${directory::exists('build/' + platform + '/openssl-' + opensslVersion)}" />
+
+    <UnTar
+      src="${downloads + dbFilename}" compression="gzip"
+      dest="build"
+      unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
+
+    <UnTar
+      src="${downloads + zlibFilename}" compression="gzip"
+      dest="build/${platform}"
+      unless="${directory::exists(zlibDir)}" />
+
+    <unzip
+      zipfile="${downloads + nunitFilename}"
+      todir="build"
+      unless="${directory::exists(nunitDir)}" />
+
+    <unzip
+      zipfile="${downloads + sharpZipFilename}"
+      todir="${sharpZipLibDir}"
+      unless="${directory::exists(sharpZipLibDir)}" />
+
+    <UnTar
+      src="${downloads + saslFilename}" compression="gzip"
+      dest="build/${platform}"
+      unless="${directory::exists(saslDir)}" />
+
+    <unzip
+      zipfile="${downloads + nasmFilename}"
+      todir="build"
+      unless="${directory::exists(nasmDir)}" />
+
+    <unzip
+      zipfile="${downloads + cmakeFilename}"
+      todir="build"
+      unless="${directory::exists(cmakeDir)}" />
+
     <if test="${property::exists('withSwig') and not directory::exists(swigDir)}">
       <unzip zipfile="${downloads + swigFilename}" todir="build" />
     </if>
@@ -164,7 +185,7 @@
           <property name="accept" value="" />
           <if test="${string::to-upper(range) != string::to-lower(range)}">
             <property name="accept" value="theirs-conflict" if="${string::starts-with(range, 'T')}" />
-            <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />          
+            <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />
             <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
           </if>
           <Svn verbose="true">
