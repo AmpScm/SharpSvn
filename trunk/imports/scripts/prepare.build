@@ -12,6 +12,9 @@
   <property name="nunitVersionMMR" value="${string::substring(nunitVersion, 0, string::last-index-of(nunitVersion,'.'))}" />
   <property name="nunitVersionMM" value="${string::substring(nunitVersionMMR, 0, string::last-index-of(nunitVersionMMR,'.'))}" />
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
+  
+  <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
+  <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
 
   <property name="sharpZipFilename" value="SharpZipLib_${sharpZipVersion}_Bin.zip" />
   <property name="sharpZipLibDir" value="${'build/sharpzip-' + sharpZipVersion}" />
@@ -21,48 +24,79 @@
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
-    <if test="${not file::exists(downloads + opensslFilename)}">
-      <get src="http://www.openssl.org/source/${opensslFilename}" dest="${downloads}/${opensslFilename}" />
+
+    <get
+      src="http://www.openssl.org/source/${opensslFilename}"
+      dest="${downloads}/${opensslFilename}"
+      unless="${file::exists(downloads + opensslFilename)}" />
+         
+    <get
+      src="http://download.oracle.com/berkeley-db/${dbFilename}"
+      dest="${downloads}/${dbFilename}"
+      unless="${file::exists(downloads + dbFilename)}" />
+
+    <get
+      src="http://www.zlib.net/${zlibFilename}"
+      dest="${downloads}/${zlibFilename}"
+      unless="${file::exists(downloads + zlibFilename)}" />
+
+    <get
+      src="http://launchpad.net/nunitv2/${nunitVersionMM}/${nunitVersionMMR}/+download/${nunitFilename}"
+      dest="${downloads}/${nunitFilename}"
+      unless="${file::exists(downloads + nunitFilename)}" />
+      
+    <get
+      src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}"
+      dest="${downloads}/${sharpZipFilename}"
+      unless="${file::exists(downloads + sharpZipFilename)}" />
+
+    <get
+      src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}"
+      dest="${downloads}/${saslFilename}"
+      unless="${file::exists(downloads + saslFilename)}" />
+
+    <get src="http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}"
+      dest="${downloads}/${nasmFilename}"
+      unless="${file::exists(downloads + nasmFilename)}" />
+      
+    <get src="http://www.cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
+      dest="${downloads}/${cmakeFilename}"
+      unless="${file::exists(downloads + cmakeFilename)}" />
+
+    <if test="${property::exists('withSwig')}">
+      <get
+        src="http://prdownloads.sourceforge.net/swig/${swigFilename}"
+        dest="${downloads}/${swigFilename}"
+        unless="${file::exists(downloads + swigFilename)}" />
     </if>
-    <if test="${not file::exists(downloads + dbFilename)}">
-      <get src="http://download.oracle.com/berkeley-db/${dbFilename}" dest="${downloads}/${dbFilename}" />
-    </if>
-    <if test="${not file::exists(downloads + zlibFilename)}">
-      <get src="http://www.zlib.net/${zlibFilename}" dest="${downloads}/${zlibFilename}" />
-    </if>
-    <if test="${not file::exists(downloads + nunitFilename)}">
-      <get src="http://launchpad.net/nunitv2/${nunitVersionMM}/${nunitVersionMMR}/+download/${nunitFilename}" dest="${downloads}/${nunitFilename}" />
-    </if>
-    <if test="${not file::exists(downloads + sharpZipFilename)}">
-      <get src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}" dest="${downloads}/${sharpZipFilename}" />
-    </if>
-    <if test="${not file::exists(downloads + saslFilename)}">
-      <get src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}" dest="${downloads}/${saslFilename}" />
-    </if>
-    <if test="${not file::exists(downloads + nasmFilename)}">
-      <get src="http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}" dest="${downloads}/${nasmFilename}" />
-    </if>
-    <if test="${property::exists('withSwig') and not file::exists(downloads + swigFilename)}">
-      <get src="http://prdownloads.sourceforge.net/swig/${swigFilename}" dest="${downloads}/${swigFilename}" />
-    </if>
+
     <if test="${intl == 'gettext'}">
-      <if test="${not file::exists(downloads + gettextFilename)}">
-        <get src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}" dest="${downloads}/${gettextFilename}" />
-      </if>
-      <if test="${not file::exists(downloads + gettextToolsFilename)}">
-        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsFilename}" dest="${downloads}/${gettextToolsFilename}" />
-      </if>
-      <if test="${not file::exists(downloads + gettextToolsRuntimeFilename)}">
-        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsRuntimeFilename}" dest="${downloads}/${gettextToolsRuntimeFilename}" />
-      </if>
-      <if test="${not file::exists(downloads + gettextToolsIconvFilename)}">
-        <get src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}" dest="${downloads}/${gettextToolsIconvFilename}" />
-      </if>
+      <get
+        src="ftp://ftp.gnu.org/gnu/gettext/${gettextFilename}"
+        dest="${downloads}/${gettextFilename}"
+        unless="${file::exists(downloads + gettextFilename)}" />
+
+      <get
+        src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsFilename}"
+        dest="${downloads}/${gettextToolsFilename}"
+        unless="${file::exists(downloads + gettextToolsFilename)}" />
+
+      <get
+        src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsRuntimeFilename}"
+        dest="${downloads}/${gettextToolsRuntimeFilename}"
+        unless="${file::exists(downloads + gettextToolsRuntimeFilename)}" />
+
+      <get
+        src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}"
+        dest="${downloads}/${gettextToolsIconvFilename}"
+        unless="${file::exists(downloads + gettextToolsIconvFilename)}" />
     </if>
+    
     <if test="${javaHome != ''}">
-      <if test="${not file::exists(downloads + junitFilename)}">
-        <get src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}" dest="${downloads}/${junitFilename}" />
-      </if>
+      <get
+        src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}"
+        dest="${downloads}/${junitFilename}"
+        unless="${file::exists(downloads + junitFilename)}" />
     </if>
   </target>
 
