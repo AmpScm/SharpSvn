@@ -18,6 +18,7 @@
   <property name="buildHttpd" value="${platform=='win32'}" />
   <property name="buildSubversion" value="false" />
   <property name="buildSqlite" value="true" />
+  <property name="buildLibgit2" value="false" />
   <property name="svnStatic" value="true" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
   <property name="svnDll" value="dll" />

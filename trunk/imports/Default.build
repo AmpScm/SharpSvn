@@ -2,7 +2,7 @@
 <project basedir="." default="help">
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
-  <property name="libgit2BuildType" value="tag" overwrite="false" />
+  <property name="libgit2BuildType" value="trunk" overwrite="false" />
   
   <property name="guessedPlatform" value="win32" />
   <if test="${environment::variable-exists('LIB')}">
@@ -26,6 +26,7 @@
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
   <property name="libgit2Version" value="0.8.0" overwrite="false" />
+  <property name="buildLibgit2" value="true" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.1e" overwrite="false" />
   <property name="neonVersion" value="0.29.6" overwrite="false" />

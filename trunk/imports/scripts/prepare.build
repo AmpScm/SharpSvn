@@ -273,6 +273,7 @@
 
     <Svn
       verbose="true"
+      if="${buildLibgit2}"
       unless="${directory::exists(libgit2Dir)}">
 
       <arg value="co" />
