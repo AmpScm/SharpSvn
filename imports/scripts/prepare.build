@@ -164,101 +164,121 @@
     </if>
   </target>
   <target name="checkout" depends="initialize-layout">
-    <if test="${not directory::exists(svnBase) and buildSubversion != 'false'}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
-        <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
-        <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+
+    <Svn
+      verbose="true"
+      if="${buildSubversion}"
+      unless="${directory::exists(svnBase)}">
+
+      <arg value="co" />
+      <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" if="${svnBuildType == 'trunk'}" />
+      <arg value="http://svn.apache.org/repos/asf/subversion/tags/${subversionVersion}/" if="${svnBuildType == 'tag'}" />
+      <arg value="http://svn.apache.org/repos/asf/subversion/branches/${subversionVersion}/" if="${svnBuildType == 'branch'}" />
+      <arg value="${svnBase}" />
+    </Svn>
+
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged" if="${buildSubversion}">
+      <Svn>
+        <arg value="revert" />
+        <arg value="-R" />
         <arg value="${svnBase}" />
       </Svn>
-    </if>
-    <if test="${buildSubversion != 'false'}">
-      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged">
-        <Svn>
-          <arg value="revert" />
-          <arg value="-R" />
+      <foreach item="String" property="range" in="${subversionMerges}" delim=";"
+        if="${string::get-length(subversionMerges) &gt; 0}">
+        <property name="accept" value="" />
+        <if test="${string::to-upper(range) != string::to-lower(range)}">
+          <property name="accept" value="theirs-conflict" if="${string::starts-with(range, 'T')}" />
+          <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />
+          <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
+        </if>
+        <Svn verbose="true">
+          <arg value="merge" />
+          <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
+          <arg value="-c" />
+          <arg value="${range}" />
+          <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
           <arg value="${svnBase}" />
         </Svn>
-        <foreach item="String" property="range" in="${subversionMerges}" delim=";"
-          if="${string::get-length(subversionMerges) &gt; 0}">
-          <property name="accept" value="" />
-          <if test="${string::to-upper(range) != string::to-lower(range)}">
-            <property name="accept" value="theirs-conflict" if="${string::starts-with(range, 'T')}" />
-            <property name="accept" value="mine-conflict" if="${string::starts-with(range, 'M')}" />
-            <property name="range" value="${string::substring(range, 1, string::get-length(range)-1)}" />
-          </if>
-          <Svn verbose="true">
-            <arg value="merge" />
-            <arg line="--accept ${accept}" if="${string::get-length(accept) &gt; 0}" />
-            <arg value="-c" />
-            <arg value="${range}" />
-            <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
-            <arg value="${svnBase}" />
-          </Svn>
-        </foreach>
-      </OnceBlock>
-    </if>
-    <if test="${not directory::exists(platformRoot + '/neon')}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
-        <arg value="build/${platform}/neon" />
-      </Svn>
-      <!-- Write version for subversion configure script -->
-      <echo message="${neonVersion}" file="${platformRoot}/neon/.version" />
-    </if>
-    <if test="${buildHttpd=='true' and not directory::exists(httpdDir)}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" />
-        <arg value="${httpdDir}" />
-      </Svn>
-    </if>
-    <if test="${buildHttpd=='true' and not directory::exists(aprIconvDir)}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
-        <arg value="${aprIconvDir}" />
-      </Svn>
-    </if>
-    <if test="${not directory::exists(aprDir)}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
-        <arg value="${aprDir}" />
-      </Svn>
-    </if>
-    <if test="${not directory::exists(aprUtilDir)}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
-        <arg value="${aprUtilDir}" />
-      </Svn>
-    </if>
-    <if test="${not directory::exists(platformRoot + '/serf')}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="http://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
-        <arg value="http://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
-        <arg value="http://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
-        <arg value="${platformRoot}/serf" />
-      </Svn>
-    </if>
-    <if test="${not directory::exists(sqliteDir)}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="http://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
-        <arg value="${sqliteDir}" />
-      </Svn>
-    </if>
-    <if test="${not directory::exists(gtestDir)}">
-      <Svn verbose="true">
-        <arg value="co" />
-        <arg value="http://googletest.googlecode.com/svn/tags/release-${gtestVersion}/" />
-        <arg value="${gtestDir}" />
-      </Svn>
-    </if>
+      </foreach>
+    </OnceBlock>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(platformRoot + '/neon')}">
+
+      <arg value="co" />
+      <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
+      <arg value="build/${platform}/neon" />
+    </Svn>
+    <!-- Write version for subversion configure script -->
+    <echo message="${neonVersion}" file="${platformRoot}/neon/.version" />
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${directory::exists(httpdDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" />
+      <arg value="${httpdDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${directory::exists(aprIconvDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
+      <arg value="${aprIconvDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(aprDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr/tags/${aprVersion}/" />
+      <arg value="${aprDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(aprUtilDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
+      <arg value="${aprUtilDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(platformRoot + '/serf')}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
+      <arg value="${httpOrHttps}://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
+      <arg value="${httpOrHttps}://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
+      <arg value="${platformRoot}/serf" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(sqliteDir)}">
+
+      <arg value="co" />
+      <arg value="http://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
+      <arg value="${sqliteDir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(gtestDir)}">
+
+      <arg value="co" />
+      <arg value="http://googletest.googlecode.com/svn/tags/release-${gtestVersion}/" />
+      <arg value="${gtestDir}" />
+    </Svn>
   </target>
 
   <target name="copy-licenses">
