@@ -15,6 +15,7 @@
   <property name="applyPatches" value="false" />
   <property name="enableAprCrypto" value="false" />
   <property name="svnDll" value="dll" />
+  <property name="buildLibgit2" value="false" />
   
   <include buildfile="../Default.build" />
   
