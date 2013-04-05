@@ -397,6 +397,28 @@ public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
     }
 }
 
+[TaskName("CMake")]
+public class CMake : ExternalAppTask
+{
+    public override string ProgramFileName
+    {
+        get
+        {
+            string app = Path.GetFullPath(Path.Combine(Properties["cmakeDir"], "bin/cmake.exe"));
+
+            if (!File.Exists(app))
+                app = base.ProgramFileName;
+
+            return app;
+        }
+    }
+    
+    public override string ProgramArguments
+    {
+        get { return string.Format("-G \"{0}\" --build .", Properties["cmakeGenerator"]); }
+    }
+}
+
 ]]>
     </code>
   </script>
