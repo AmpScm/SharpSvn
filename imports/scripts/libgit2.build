@@ -27,6 +27,40 @@
       
       <arg value="/t:git2" />
     </MSBuild>
+    
+    <copy todir="${release}/lib" if="${platform == 'win32'}">
+      <fileset basedir="${libgit2Dir}/RelWithDebInfo">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${release}/lib-${platform}" unless="${platform == 'win32'}">
+      <fileset basedir="${libgit2Dir}/RelWithDebInfo">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${release}/debug-lib" if="${platform == 'win32'}">
+      <fileset basedir="${libgit2Dir}/Debug">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${release}/debug-lib-${platform}" unless="${platform == 'win32'}">
+      <fileset basedir="${libgit2Dir}/Debug">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${release}/include">
+      <fileset basedir="${libgit2Dir}/include">
+        <include name="**/*.h" />
+      </fileset>
+    </copy>
   </target>
 
 </project>
