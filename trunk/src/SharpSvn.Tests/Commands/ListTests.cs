@@ -307,8 +307,15 @@ namespace SharpSvn.Tests.Commands
         {
             using (SvnClient client = new SvnClient())
             {
-                Uri reposUri = new Uri("https://svn.apache.org/repos/asf/");
-                client.List(new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/"), 656380),
+                Uri reposUri = new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn/");
+                string baseUri = "http://ankhsvn.open.collab.net/svn/ankhsvn/testcases/trunk/WorstCase/AllTypesSolution/";
+                string exUri = baseUri + "%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%9f%e3%83%b3%e3%82%b0%23Silverlight/";
+
+                client.Authentication.Clear();
+                client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
+
+                bool found = false;
+                client.List(new SvnUriTarget(new Uri(baseUri), 11888),
                     delegate(object sender, SvnListEventArgs e)
                     {
                         if (string.IsNullOrEmpty(e.Path))
@@ -317,27 +324,31 @@ namespace SharpSvn.Tests.Commands
                             return;
                         }
 
-                        Assert.That(e.Uri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")));
+                        if (e.Uri == new Uri(exUri))
+                            found = true;
                     });
 
-                client.List(new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/"), 656380),
+                Assert.That(found, "Found subdir");
+                found = false;
+
+                client.List(new SvnUriTarget(new Uri(baseUri), 11888),
                     delegate(object sender, SvnListEventArgs e)
                     {
                         if (string.IsNullOrEmpty(e.Path))
                         {
                             Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
-                            Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")));
+                            Assert.That(e.BaseUri, Is.EqualTo(new Uri(baseUri)));
                             return;
                         }
                     });
 
-                client.List(new SvnUriTarget(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/src/"), 656380),
+                client.List(new SvnUriTarget(new Uri(exUri + "Properties/"), 11888),
                     delegate(object sender, SvnListEventArgs e)
                     {
                         if (string.IsNullOrEmpty(e.Path))
                         {
                             Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
-                            Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/src/")));
+                            Assert.That(e.BaseUri, Is.EqualTo(new Uri(exUri + "Properties/")));
                             return;
                         }
                     });
