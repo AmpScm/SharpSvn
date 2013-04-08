@@ -10,6 +10,7 @@
       <arg value="-DBUILD_CLAR=OFF" />
       <arg value="-DBUILD_EXAMPLES=OFF" />
       <arg value="-DSTATIC_CRT=OFF" />
+      <arg value="-DSTDCALL=OFF" />
     </CMake>
     
     <MSBuild>
