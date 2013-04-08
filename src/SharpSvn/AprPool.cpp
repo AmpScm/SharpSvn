@@ -214,8 +214,11 @@ const char* AprPool::AllocDirent(String^ value)
 
         int len = bytes->Length;
 
-        while (len && ((bytes[len-1] == System::IO::Path::DirectorySeparatorChar) || bytes[len-1] == System::IO::Path::AltDirectorySeparatorChar))
+        while (len && ((bytes[len-1] == '\\') || bytes[len-1] == '/'))
             len--;
+
+        if (len == 2 && bytes[1] == ':' && value->Length > 2)
+            len++;
 
         char* pData = (char*)Alloc(len+1);
 
@@ -230,7 +233,7 @@ const char* AprPool::AllocDirent(String^ value)
 
             // Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
             for (int i = 0; i < len; i++)
-                if ((pData[i] == System::IO::Path::DirectorySeparatorChar) || (pData[i] == System::IO::Path::AltDirectorySeparatorChar))
+                if (pData[i] == '\\')
                     pData[i] = '/';
         }
 
