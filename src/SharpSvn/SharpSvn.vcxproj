@@ -420,7 +420,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include=".\EventArgs\SvnChangeInfoEventArgs.h" />
     <ClInclude Include=".\EventArgs\SvnLookListEventArgs.h" />
     <ClInclude Include=".\SvnWorkingCopyClient.h" />
-    <ClInclude Include=".\Args\GetWorkingCopyVersion.h" />
+    <ClInclude Include="Args\WorkingCopyGetVersion.h" />
     <ClInclude Include=".\WorkingCopyArgs\WorkingCopyEntries.h" />
     <ClInclude Include=".\WorkingCopyArgs\WorkingCopyInstallConflictArgs.h" />
     <ClInclude Include=".\WorkingCopyArgs\WorkingCopyMove.h" />
@@ -635,8 +635,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include=".\LookCommands\LookPropertyList.cpp" />
     <ClCompile Include=".\LookCommands\LookWrite.cpp" />
     <ClCompile Include=".\LookCommands\SvnLookClient.cpp" />
-    <ClCompile Include=".\Commands\GetWorkingCopyVersion.cpp" />
-    <ClCompile Include=".\WorkingCopyCommands\InstallConflict.cpp" />
+    <ClCompile Include="Commands\WorkingCopyGetVersion.cpp" />
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyInstallConflict.cpp" />
     <ClCompile Include=".\Commands\SvnWorkingCopyClient.cpp" />
     <ClCompile Include=".\WorkingCopyCommands\WorkingCopyEntries.cpp" />
     <ClCompile Include=".\WorkingCopyCommands\WorkingCopyMove.cpp" />
@@ -667,6 +667,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   </ItemGroup>
   <ItemGroup>
     <None Include=".\SharpSvn.snk" />
+    <None Include="SharpSvn-VS2008.vcproj" />
+    <None Include="SharpSvn.vcproj" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpPlink\SharpPlink.vcxproj">
