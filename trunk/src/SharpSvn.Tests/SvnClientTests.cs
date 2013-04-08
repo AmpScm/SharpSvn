@@ -27,21 +27,21 @@ namespace SharpSvn.Tests
     public class SvnClientTests : Commands.TestBase
     {
 
-		string _testPath;
-		public string TestPath
-		{
-			get
-			{
-				if (_testPath == null)
-				{
-					_testPath = Path.Combine(Path.GetTempPath(), "SvnTest\\" + GetType().FullName);
+        string _testPath;
+        public string TestPath
+        {
+            get
+            {
+                if (_testPath == null)
+                {
+                    _testPath = Path.Combine(Path.GetTempPath(), "SvnTest\\" + GetType().FullName);
 
-					if (!Directory.Exists(_testPath))
-						Directory.CreateDirectory(_testPath);
-				}
-				return _testPath;
-			}
-		}
+                    if (!Directory.Exists(_testPath))
+                        Directory.CreateDirectory(_testPath);
+                }
+                return _testPath;
+            }
+        }
 
         string _repos;
         string _wc;
@@ -121,10 +121,10 @@ namespace SharpSvn.Tests
         public void DestroyRepository()
         {
 #if !DEBUG
-			using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
-			{
-				reposClient.DeleteRepository(RepositoryPath);
-			}
+            using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
+            {
+                reposClient.DeleteRepository(RepositoryPath);
+            }
 #endif
         }
 
@@ -524,16 +524,28 @@ namespace SharpSvn.Tests
             }
         }
 
-		[Test]
-		public void HasIgnorePatterns()
-		{
-			SvnClient cl = new SvnClient();
-			cl.LoadConfigurationDefault();
+        [Test]
+        public void SvnVersionRoot()
+        {
+            using (SvnWorkingCopyClient wcC = new SvnWorkingCopyClient())
+            {
+                SvnGetWorkingCopyVersionArgs sa = new SvnGetWorkingCopyVersionArgs();
+                sa.ThrowOnError = false;
+                SvnWorkingCopyVersion wcv;
+                wcC.GetVersion("C:\\", sa, out wcv); // Used to throw an assertion error
+            }
+        }
 
-			List<string> items = new List<string>(cl.Configuration.GlobalIgnorePattern);
+        [Test]
+        public void HasIgnorePatterns()
+        {
+            SvnClient cl = new SvnClient();
+            cl.LoadConfigurationDefault();
 
-			Assert.That(new string[] {"*.a", ".DS_Store", "*.lo"}, Is.SubsetOf(items));
-		}
+            List<string> items = new List<string>(cl.Configuration.GlobalIgnorePattern);
+
+            Assert.That(new string[] {"*.a", ".DS_Store", "*.lo"}, Is.SubsetOf(items));
+        }
 
         [Test]
         public void DontCanonicalizeToDotSlash()
