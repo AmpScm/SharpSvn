@@ -523,9 +523,6 @@
     <ClInclude Include=".\SvnWorkingCopyClient.h">
       <Filter>SvnWorkingCopyClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\GetWorkingCopyVersion.h">
-      <Filter>SvnWorkingCopyClient\Args</Filter>
-    </ClInclude>
     <ClInclude Include=".\WorkingCopyArgs\WorkingCopyEntries.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
@@ -629,6 +626,9 @@
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
     <ClInclude Include="WorkingCopyArgs\WorkingCopyRestore.h">
+      <Filter>SvnWorkingCopyClient\Args</Filter>
+    </ClInclude>
+    <ClInclude Include="Args\WorkingCopyGetVersion.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
   </ItemGroup>
@@ -959,12 +959,6 @@
     <ClCompile Include=".\LookCommands\SvnLookClient.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\GetWorkingCopyVersion.cpp">
-      <Filter>SvnWorkingCopyClient\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include=".\WorkingCopyCommands\InstallConflict.cpp">
-      <Filter>SvnWorkingCopyClient\Sources</Filter>
-    </ClCompile>
     <ClCompile Include=".\Commands\SvnWorkingCopyClient.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
@@ -1044,9 +1038,17 @@
     <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="Commands\WorkingCopyGetVersion.cpp">
+      <Filter>SvnWorkingCopyClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyInstallConflict.cpp">
+      <Filter>SvnWorkingCopyClient\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".\SharpSvn.snk" />
+    <None Include="SharpSvn.vcproj" />
+    <None Include="SharpSvn-VS2008.vcproj" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include=".\SharpSvnStrings.txt" />
