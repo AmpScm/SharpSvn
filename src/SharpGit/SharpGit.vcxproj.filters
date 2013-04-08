@@ -14,6 +14,12 @@
     <Filter Include="Common\Sources">
       <UniqueIdentifier>{85c5cc60-6b56-46b1-b49b-0abdca3cba46}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GitClient">
+      <UniqueIdentifier>{25fea488-79dc-44a6-8b0e-9b4725742f8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GitClient\Sources">
+      <UniqueIdentifier>{22daee4b-182e-4d73-b7da-da69069ac0b0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -24,6 +30,9 @@
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="stdafx.cpp">
       <Filter>Common\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitClient.cpp">
+      <Filter>GitClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -37,6 +46,12 @@
     </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Common\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClientContext.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -78,5 +78,7 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "Gdi32.lib")
 #pragma comment(lib, "User32.lib")
 
+#pragma comment(lib, "Ws2_32.lib")
+
 //#include "../../imports/release/include/sharpsvn-imports.h"
 [assembly:AssemblyVersionAttribute("1.6012.1576.9657")]; 
