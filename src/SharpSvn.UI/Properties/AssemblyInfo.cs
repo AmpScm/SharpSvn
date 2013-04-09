@@ -28,7 +28,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SharpSvn Project - http://sharpsvn.net/")]
 [assembly: AssemblyProduct("SharpSvn.UI")]
-[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2009")]
+[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
