@@ -72,7 +72,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
-[assembly:AssemblyCopyrightAttribute("Copyright (c) SharpSvn Project 2007-2012")];
+[assembly:AssemblyCopyrightAttribute("Copyright (c) SharpSvn Project 2007-2013")];
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 

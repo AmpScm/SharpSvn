@@ -35,7 +35,7 @@ namespace SharpSvn.Tests.Commands
 	public class RelocateTests : TestBase
 	{
 		[Test]
-		public void Test()
+		public void SvnServeRelocate()
 		{
 			// start a svnserve process on this repos
 			Process svnserve = this.StartSvnServe(this.ReposPath.Replace('\\', '/'));
