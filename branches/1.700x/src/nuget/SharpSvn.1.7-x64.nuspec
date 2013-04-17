@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>SharpSvn.1.7-x64</id>
+    <version>$version$</version>
+    <authors>SharpSvn Project</authors>
+    <owners>SharpSvn Project</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://sharpsvn.net/</projectUrl>
+    <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>SharpSvn is a binding of the Subversion Client API for .NET. This is the x64/64-bit version, See SharpSvn.1.7-x86 for the 32 bit version.</description>
+    <copyright>(C) Copyright 2006-2012 The SharpSvn Project</copyright>
+    <tags>Subversion Svn SharpSvn</tags>
+  </metadata>
+  <files>
+    <file src="SharpSvn-x64\SharpSvn.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.xml" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn-*-x64.svnDll" target="lib\net20" />
+    <file src="SharpSvn-x64\Sharp*-x64.svnExe" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.pdb" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.UI.dll" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.UI.xml" target="lib\net20" />
+    <file src="SharpSvn-x64\SharpSvn.UI.pdb" target="lib\net20" />
+    <file src="SharpSvn-x64\**\SharpSvn.resources.dll" target="lib\net20" />
+  </files>
+</package>

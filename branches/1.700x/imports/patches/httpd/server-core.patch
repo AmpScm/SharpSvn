@@ -1,0 +1,13 @@
+Index: server/core.c
+===================================================================
+--- server/core.c	(revision 1338359)
++++ server/core.c	(working copy)
+@@ -3597,7 +3597,7 @@
+             ++path;
+         }
+         if ((rv = apr_filepath_merge(&r->filename, conf->ap_document_root, path,
+-                                     APR_FILEPATH_TRUENAME
++                                     0 /*APR_FILEPATH_TRUENAME*/
+                                    | APR_FILEPATH_SECUREROOT, r->pool))
+                     != APR_SUCCESS) {
+             ap_log_rerror(APLOG_MARK, APLOG_ERR, rv, r,

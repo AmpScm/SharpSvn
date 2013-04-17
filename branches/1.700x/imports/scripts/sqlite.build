@@ -1,0 +1,102 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="sqliteDir" value="${buildRoot}/sqlite" overwrite="false" />
+  <property name="sqliteIntDir" value="${sqliteDir}/obj/${platform}" />
+  <property name="sqliteLibDir" value="${sqliteDir}/bin/${platform}" />
+
+  <target name="build-sqlite" depends="checkout">
+    <mkdir dir="${sqliteIntDir}" />
+    <mkdir dir="${sqliteLibDir}" />
+    <OnceBlock file="build/sqlite-${sqliteVersion}.patched">
+      <loadfile file="${sqliteDir}/sqlite3.c" property="projtext">
+        <filterchain>
+          <!-- Add openssl includes to aprutil and aprutil/crypto -->
+          <replacestring from="static int mutexIsNT(void){" to="
+#define mutexIsNT() (1)
+static int original_mutexIsNT(void){" />
+          <replacestring from="static int isNT(void){" to="
+#define isNT() (1)
+static int original_isNT(void){" />
+        </filterchain>
+      </loadfile>
+      <echo message="${projtext}" file="${sqliteDir}/sqlite3.c" />
+    </OnceBlock>
+    <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
+      <arg value="/O2" />      <!-- Maximize speed -->
+      <arg value="/GF" />      <!-- String Pooling -->
+      <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
+      <arg value="/Zi" />      <!-- Write debug information -->
+      <arg value="/Zl" />      <!-- Ommit default library name -->
+      <arg value="/Gy" />      <!-- Function level linking -->
+      <defines>
+        <define name="NDEBUG" />
+        
+        <!-- Store temporary tables in RAM, unless requested otherwise -->
+        <define name="SQLITE_TEMP_STORE" value="2" />
+        <define name="SQLITE_DEFAULT_PAGE_SIZE" value="4096" />
+        <define name="SQLITE_DEFAULT_CACHE_SIZE" value="20000" /><!-- default=2000 -->
+        <define name="SQLITE_DEFAULT_MEMSTATUS" value="0" />
+        <define name="SQLITE_DEFAULT_RECURSIVE_TRIGGERS" value="1" />
+        <define name="SQLITE_POWERSAFE_OVERWRITE" value="1" /><!-- Assume whole sector writes -->
+        <define name="SQLITE_DISABLE_DIRSYNC" /><!-- Not needed on Windows -->
+        
+        <!-- Ommit some parts of SQLite not used by Subversion -->
+        <define name="SQLITE_OMIT_AUTOINIT" /><!-- Subversion initializes properly -->
+        <define name="SQLITE_OMIT_DEPRECATED" /><!-- Removes deprecated APIs -->
+        <define name="SQLITE_OMIT_EXPLAIN" if="${svn-dev != 'true'}"/><!-- Use other tools for this -->
+        <define name="SQLITE_OMIT_LOAD_EXTENSION" /><!-- No dynamic extensions please -->
+        <define name="SQLITE_OMIT_PROGRESS_CALLBACK" /><!-- Progress is not mapped by SVN -->
+        <define name="SQLITE_OMIT_TCL_VARIABLE" /><!-- Don't allow TCL syntax -->
+        <define name="SQLITE_OMIT_TRACE" /><!-- No debug tracing -->
+        <define name="SQLITE_OMIT_UTF16" /><!-- Subversion uses utf-8 everywhere -->
+        <define name="SQLITE_OMIT_FLOATING_POINT" /><!-- Floating point ops in a version management system? -->
+        <define name="SQLITE_OMIT_DATETIME_FUNCS" /><!-- Date time uses APR -->
+        <define name="SQLITE_OMIT_LOCALTIME" />
+        <define name="SQLITE_OMIT_AUTORESET" /><!-- Make forgetting a reset an error -->
+        
+        <define name="SQLITE_OMIT_SHARED_CACHE" /><!-- Unstable in our previous usage -->
+        <define name="SQLITE_OMIT_BUILTIN_TEST" />
+        <define name="SQLITE_OMIT_AUTHORIZATION" />
+        
+        <define name="SQLITE_OMIT_GET_TABLE" />
+        <define name="SQLITE_OMIT_SCHEMA_PRAGMAS" />
+        
+        <define name="SQLITE_OMIT_INTEGRITY_CHECK" />
+        
+        <!-- These would be nice, but currently break compilation -->
+        <!--define name="SQLITE_OMIT_ATTACH" /-->
+        <!--define name="SQLITE_OMIT_VIRTUALTABLE" /-->
+        
+      </defines>
+      <sources basedir="${sqliteDir}">
+        <include name="sqlite3.c" />
+      </sources>
+    </cl>
+    <lib output="${sqliteLibDir}/sqlite3.lib">
+      <arg value="/NODEFAULTLIB" />
+      <sources basedir="${sqliteIntDir}">
+        <include name="*.obj" />
+      </sources>
+    </lib>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${sqliteLibDir}">
+        <include name="sqlite3.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}\lib">
+      <fileset basedir="${sqliteLibDir}">
+        <include name="sqlite3.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}\inc">
+      <fileset basedir="${sqliteDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseInc}">
+      <fileset basedir="${sqliteDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+  </target>
+</project>

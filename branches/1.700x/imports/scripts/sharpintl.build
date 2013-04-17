@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="intl" value="sharpsvn" overwrite="false" />
+  <property name="svnBuildName" value="SharpSvn" overwrite="false" />
+
+  <target name="sharpintl-prepare" if="${intl=='sharpsvn'}">
+  </target>
+
+  <target name="sharpintl-build" depends="sharpintl-prepare" if="${intl=='sharpsvn'}">
+    <VCBuild platform="${platform}" configuration="release">
+      <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2005.vcproj" if="${VSversion == '2005'}" />
+      <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcproj" if="${VSversion == '2008'}" />      
+    </VCBuild>
+    <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />
+    <if test="${platform == 'win32'}">
+      <copy todir="${release}/lib">
+        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+          <include name="*.lib" />
+        </fileset>
+      </copy>
+    </if>
+    <if test="${platform == 'x64'}">
+      <copy todir="${release}/lib-x64">
+        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+          <include name="*.lib" />
+        </fileset>
+      </copy>
+    </if>
+  </target>
+</project>

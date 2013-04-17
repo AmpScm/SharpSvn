@@ -1,0 +1,68 @@
+<?xml version="1.0" ?>
+<project basedir="." default="build-svn-dist">
+  <property name="subversionMerges" value="1156080,1188609,1396285" overwrite="false" />
+
+  <property name="svnBuildType" value="tag" overwrite="false" />
+  <!--property name="subversionVersion" value="1.7.0" overwrite="false" /-->
+  
+  <property name="static" value="false" />
+  <property name="downloads" value="../downloads/" />
+  <property name="dllPrefix" value="SlikSvn-" />
+  <property name="intl" value="gettext" />
+  <property name="svnBuildName" value="SlikSvn" />
+  <property name="svnAddSharpSvn" value="false" />
+  <property name="applyMerges" value="false" />
+  <property name="applyPatches" value="false" />
+  <property name="enableAprCrypto" value="false" />
+  <property name="svnDll" value="dll" />
+  
+  <include buildfile="../Default.build" />
+  
+  
+  <target name="build-svn-dist" depends="build">
+	<delete>
+		<fileset basedir="dist-${platform}">
+			<include name="**" />
+		</fileset>
+	</delete>
+		
+	<mkdir dir="dist-${platform}" />
+	<copy todir="dist-${platform}/bin" flatten="true">
+		<fileset basedir="${svnBase}\release">
+			<include name="**/*.exe" />
+			<include name="**/*.dll" />
+			<exclude name="**/*test*" />
+		</fileset>
+	</copy>
+	<get src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf" dest="dist-${platform}/svn-book.pdf" />
+	<property name="releasenotesFile" value="${string::substring(subversionVersion, 0, 3)}.html" />
+	<Svn>
+    <arg line="export --force http://svn.apache.org/repos/asf/subversion/site/publish/docs/release-notes/${releasenotesFile}" />
+    <arg value="${release}/ReleaseNotes.html" />
+	</Svn>
+	<copy todir="dist-${platform}/bin" flatten="true">
+		<fileset>
+			<include name="${opensslDir}/out32dll/*.dll" />
+			<include name="${saslDir}/lib/*.dll" />
+			<include name="${dbWindowsDir}/Release/*.dll" if="${platform == 'win32'}" />
+			<include name="${dbWindowsDir}/Release_AMD64/*.dll" if="${platform == 'x64'}" />
+			<include name="${aprDir}/Release/*.dll" if="${platform == 'win32'}" />
+			<include name="${aprUtilDir}/Release/*.dll" if="${platform == 'win32'}" />
+			<include name="${aprDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
+			<include name="${aprUtilDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
+			<include name="${gettextDir}/bin/${platform}/release/*.dll" />
+		</fileset>
+	</copy>
+	<copy todir="dist-${platform}/share">
+    <fileset basedir="${release}/share">
+      <include name="**" />
+    </fileset>
+  </copy>
+  <copy 
+    file="${svnBase}/CHANGES"
+    tofile="dist-${platform}/CHANGES.txt" />
+  <copy
+    file="${release}/ReleaseNotes.html"
+    tofile="dist-${platform}/ReleaseNotes.html" />
+  </target>  
+</project>
