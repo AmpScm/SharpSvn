@@ -1573,11 +1573,11 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\Commands\WorkingCopyGetVersion.cpp"
+					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyInstallConflict.cpp"
+					RelativePath=".\WorkingCopyCommands\InstallConflict.cpp"
 					>
 				</File>
 				<File
@@ -1601,7 +1601,7 @@
 				Name="Args"
 				>
 				<File
-					RelativePath=".\Args\WorkingCopyGetVersion.h"
+					RelativePath=".\Args\GetWorkingCopyVersion.h"
 					>
 				</File>
 				<File
