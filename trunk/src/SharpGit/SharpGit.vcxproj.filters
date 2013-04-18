@@ -20,6 +20,9 @@
     <Filter Include="GitClient\Sources">
       <UniqueIdentifier>{22daee4b-182e-4d73-b7da-da69069ac0b0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Plumbing">
+      <UniqueIdentifier>{1d00b5eb-771e-419e-8b13-2994d759f54e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -34,6 +37,13 @@
     <ClCompile Include="GitClient\GitClient.cpp">
       <Filter>GitClient\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="GitClientContext.cpp" />
+    <ClCompile Include="GitClient\GitStatus.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
+    <ClCompile Include="Plumbing\GitRepository.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -47,11 +57,21 @@
     <ClInclude Include="resource.h">
       <Filter>Common\Header</Filter>
     </ClInclude>
-    <ClInclude Include="GitClient.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
     <ClInclude Include="GitClientContext.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitClientEventArgs.h" />
+    <ClInclude Include="GitClient\GitClient.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\Args\GitStatus.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\EventArgs\GitStatusEventArgs.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitRepository.h">
+      <Filter>Plumbing</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
