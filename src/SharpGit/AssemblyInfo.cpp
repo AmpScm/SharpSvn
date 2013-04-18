@@ -20,6 +20,8 @@
 #pragma warning(disable: 4635)
 #pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target.
 
+#include <apr-1/apr_version.h>
+
 using namespace System;
 using namespace System::Reflection;
 using namespace System::Resources;
@@ -81,4 +83,19 @@ using namespace System::Security::Permissions;
 #pragma comment(lib, "Ws2_32.lib")
 
 //#include "../../imports/release/include/sharpsvn-imports.h"
-[assembly:AssemblyVersionAttribute("1.6012.1576.9657")]; 
+[assembly:AssemblyVersionAttribute("0.1700.1.1")]; 
+
+#pragma comment(lib, "intl3_svn.lib")
+#pragma comment(lib, "xml.lib")
+#pragma comment(lib, "libsvn_subr-1.lib")
+
+#if (APR_MAJOR_VERSION == 0)
+#  pragma comment(lib, "apr.lib")
+#  pragma comment(lib, "aprutil.lib")
+#elif (APR_MAJOR_VERSION == 1)
+#  pragma comment(lib, "apr-1.lib")
+#  pragma comment(lib, "aprutil-1.lib")
+#else
+#  error Only apr 0.9.* and 1.* are supported at this time
+#endif
+
