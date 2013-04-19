@@ -279,6 +279,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="GitClientContext.cpp" />
     <ClCompile Include="GitClient\GitClient.cpp" />
     <ClCompile Include="GitClient\GitStatus.cpp" />
+    <ClCompile Include="Plumbing\GitConfiguration.cpp" />
+    <ClCompile Include="Plumbing\GitIndex.cpp" />
+    <ClCompile Include="Plumbing\GitObjectDatabase.cpp" />
     <ClCompile Include="Plumbing\GitRepository.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -296,6 +299,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="GitClient\EventArgs\GitStatusEventArgs.h" />
     <ClInclude Include="GitClient\GitClient.h" />
     <ClInclude Include="GitClient\GitClientEventArgs.h" />
+    <ClInclude Include="Plumbing\GitConfiguration.h" />
+    <ClInclude Include="Plumbing\GitIndex.h" />
+    <ClInclude Include="Plumbing\GitObjectDatabase.h" />
     <ClInclude Include="Plumbing\GitRepository.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />

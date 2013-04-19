@@ -44,6 +44,15 @@
     <ClCompile Include="Plumbing\GitRepository.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
+    <ClCompile Include="Plumbing\GitConfiguration.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
+    <ClCompile Include="Plumbing\GitIndex.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
+    <ClCompile Include="Plumbing\GitObjectDatabase.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -71,6 +80,15 @@
       <Filter>GitClient</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\GitRepository.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitConfiguration.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitIndex.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitObjectDatabase.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
   </ItemGroup>
