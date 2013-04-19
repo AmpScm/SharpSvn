@@ -73,10 +73,34 @@ namespace SharpGit {
 		internal:
 			bool Add(const char *relPath, GitAddArgs ^args, GitPool ^pool);
 
+		public:
+			property int Count
+			{
+				int get()
+				{
+					if (!_index)
+						return -1;
+					else
+						return git_index_entrycount(_index);
+				}
+			}
+
+			property int UnmergedCount
+			{
+				int get()
+				{
+					if (!_index)
+						return -1;
+					else
+						return git_index_entrycount_unmerged(_index);
+				}
+			}
+
+			bool Contains(String ^relPath);
 
 		public:
-			bool Commit();
-			bool Commit(GitArgs ^args);
+			bool Write();
+			bool Write(GitArgs ^args);
 		};
 	}
 }

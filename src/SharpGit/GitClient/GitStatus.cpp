@@ -30,6 +30,8 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 	opts->flags = 0;
 	if (this->IncludeUnversioned)
 		opts->flags |= GIT_STATUS_OPT_INCLUDE_UNTRACKED;
+	if (this->IncludeIgnored)
+		opts->flags |= GIT_STATUS_OPT_INCLUDE_IGNORED;
 	if (this->IncludeUnmodified)
 		opts->flags |= GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
 	if (! this->IncludeSubmodules)
