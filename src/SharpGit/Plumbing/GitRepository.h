@@ -21,6 +21,10 @@ namespace SharpGit {
 			}
 		};
 
+		ref class GitConfiguration;
+		ref class GitIndex;
+		ref class GitObjectDatabase;
+
 		public ref class GitRepository : public Implementation::GitBase
 		{
 		private:
@@ -124,6 +128,18 @@ namespace SharpGit {
 				void set(String ^value);
 			}
 
+		public:
+			// Cache and provide as property?
+			GitConfiguration^ GetConfigurationInstance();
+			void SetConfiguration(GitConfiguration ^newConfig);
+
+			// Cache and provide as property?
+			GitIndex^ GetIndexInstance();
+			void SetIndex(GitIndex ^newIndex);
+
+			// Cache and provide as property?
+			GitObjectDatabase^ GetObjectDatabaseInstance();
+			void SetObjectDatabase(GitObjectDatabase ^newDatabase);
 		};
 
 

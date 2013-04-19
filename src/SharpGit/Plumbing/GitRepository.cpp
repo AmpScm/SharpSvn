@@ -2,6 +2,10 @@
 
 #include "GitRepository.h"
 
+#include "GitConfiguration.h"
+#include "GitIndex.h"
+#include "GitObjectDatabase.h"
+
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
 using namespace SharpGit::Implementation;
@@ -159,4 +163,80 @@ void GitRepository::WorkingPath::set(String ^value)
 		(gcnew GitNoArgs())->HandleGitError(this, r);
 		throw gcnew InvalidOperationException();
 	}
+}
+
+GitConfiguration^ GitRepository::GetConfigurationInstance()
+{
+	AssertOpen();
+
+	git_config *config;
+	int r = git_repository_config(&config, _repository);
+	if (r)
+	{
+		(gcnew GitNoArgs())->HandleGitError(this, r);
+		throw gcnew InvalidOperationException();
+	}
+
+	return gcnew GitConfiguration(config);
+}
+
+void GitRepository::SetConfiguration(GitConfiguration^ newConfig)
+{
+	if (! newConfig)
+		throw gcnew ArgumentNullException("newConfig");
+
+	AssertOpen();
+
+	git_repository_set_config(_repository, newConfig->Handle);
+}
+
+GitIndex^ GitRepository::GetIndexInstance()
+{
+	AssertOpen();
+
+	git_index *index;
+	int r = git_repository_index(&index, _repository);
+	if (r)
+	{
+		(gcnew GitNoArgs())->HandleGitError(this, r);
+		throw gcnew InvalidOperationException();
+	}
+
+	return gcnew GitIndex(index);
+}
+
+void GitRepository::SetIndex(GitIndex ^newIndex)
+{
+	if (! newIndex)
+		throw gcnew ArgumentNullException("newIndex");
+
+	AssertOpen();
+
+	git_repository_set_index(_repository, newIndex->Handle);
+}
+
+// Cache and provide as property?
+GitObjectDatabase^ GitRepository::GetObjectDatabaseInstance()
+{
+	AssertOpen();
+
+	git_odb *odb;
+	int r = git_repository_odb(&odb, _repository);
+	if (r)
+	{
+		(gcnew GitNoArgs())->HandleGitError(this, r);
+		throw gcnew InvalidOperationException();
+	}
+
+	return gcnew GitObjectDatabase(odb);
+}
+
+void GitRepository::SetObjectDatabase(GitObjectDatabase ^newDatabase)
+{
+	if (! newDatabase)
+		throw gcnew ArgumentNullException("newDatabase");
+
+	AssertOpen();
+
+	git_repository_set_odb(_repository, newDatabase->Handle);
 }

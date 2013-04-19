@@ -18,7 +18,5 @@ bool GitClient::Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatus
 	if (!repo.Locate(path, args))
 		return false;
 	
-	//repo_stat
-	
 	return false;
 }
