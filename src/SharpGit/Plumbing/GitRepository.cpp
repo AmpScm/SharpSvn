@@ -1,11 +1,13 @@
 #include "stdafx.h"
 
 #include "GitRepository.h"
+#include "../GitClient/GitStatus.h"
 
 #include "GitConfiguration.h"
 #include "GitIndex.h"
 #include "GitObjectDatabase.h"
 
+using namespace System;
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
 using namespace SharpGit::Implementation;
@@ -240,3 +242,54 @@ void GitRepository::SetObjectDatabase(GitObjectDatabase ^newDatabase)
 
 	git_repository_set_odb(_repository, newDatabase->Handle);
 }
+
+#pragma region STATUS
+
+static int __cdecl on_status(const char *path, unsigned int status, void *baton)
+{
+	GitRoot<GitStatusArgs^> args(baton);
+	GitPool pool(args.GetPool());
+	try
+	{
+		GitStatusEventArgs^ ee = gcnew GitStatusEventArgs(path, status, args, %pool);
+
+		args->OnStatus(ee);
+	}
+	catch(Exception^ e)
+	{
+		return args->WrapException(e);
+	}
+
+	return 0;
+}
+
+bool GitRepository::Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatusEventArgs^>^ handler)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	if (handler)
+		args->Status += handler;
+
+	try
+	{
+		GitPool pool;
+		GitRoot<GitStatusArgs^> root(args, %pool);
+
+		int r = git_status_foreach_ext(_repository,
+									   args->MakeOptions(path, %pool),
+									   on_status,
+									   root.GetBatonValue());
+
+		return args->HandleGitError(this, r);
+	}
+	finally
+	{
+		if (handler)
+			args->Status -= handler;
+	}
+}
+
+#pragma endregion STATUS
