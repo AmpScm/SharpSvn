@@ -1,7 +1,10 @@
 #pragma once
 #include "GitClientContext.h"
+#include "../GitClient/GitClientEventArgs.h"
 
 namespace SharpGit {
+	ref class GitStatusArgs;
+
 	namespace Plumbing {
 
 		public ref class GitRepositoryCreateArgs : GitArgs
@@ -44,6 +47,7 @@ namespace SharpGit {
 				{
 					try
 					{
+						ClearReferences();
 						git_repository_free(_repository);
 					}
 					finally
@@ -56,13 +60,14 @@ namespace SharpGit {
 			~GitRepository()
 			{
 				try
-					{
-						git_repository_free(_repository);
-					}
-					finally
-					{
-						_repository = nullptr;
-					}
+				{
+					ClearReferences();
+					git_repository_free(_repository);
+				}
+				finally
+				{
+					_repository = nullptr;
+				}
 			}
 
 		internal:
@@ -128,6 +133,38 @@ namespace SharpGit {
 				void set(String ^value);
 			}
 
+		private:
+			GitIndex ^_indexRef;
+			GitObjectDatabase ^_dbRef;
+			void ClearReferences()
+			{
+				_indexRef = nullptr;
+				_dbRef = nullptr;
+			}
+
+		public:
+			property GitIndex^ Index
+			{
+				GitIndex^ get()
+				{
+					if (!_indexRef && _repository)
+						_indexRef = GetIndexInstance();
+
+					return _indexRef;
+				}
+			}
+
+			property GitObjectDatabase^ ObjectDatabase
+			{
+				GitObjectDatabase^ get()
+				{
+					if (!_dbRef && _repository)
+						_dbRef = GetObjectDatabaseInstance();
+
+					return _dbRef;
+				}
+			}
+
 		public:
 			// Cache and provide as property?
 			GitConfiguration^ GetConfigurationInstance();
@@ -140,6 +177,9 @@ namespace SharpGit {
 			// Cache and provide as property?
 			GitObjectDatabase^ GetObjectDatabaseInstance();
 			void SetObjectDatabase(GitObjectDatabase ^newDatabase);
+
+		public:
+			bool Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatusEventArgs^>^ handler);
 		};
 
 

@@ -34,9 +34,10 @@ namespace SharpGit.Tests
             {
                 using (GitClient gc = new GitClient())
                 {
-                    Assert.That(gc.Status(dir, new GitStatusArgs(), delegate(object sender, GitStatusEventArgs e)
-                    {
-                    }), Is.False);
+                    Assert.That(gc.Status(dir, new GitStatusArgs(),
+                        delegate(object sender, GitStatusEventArgs e)
+                        {
+                        }), Is.True);
                 }
             }
         }
