@@ -123,11 +123,72 @@ namespace SharpGit {
 	public:
 
 	internal:
+		literal int WrappedError = 1099001;
+		Exception ^_ex;
+
 		bool HandleGitError(Object^ q, int r)
 		{
+			if (_ex && r == WrappedError)
+			{
+				try
+				{
+					throw gcnew Exception(String::Format("Wrapped Exception: {0}", _ex), _ex);
+				}
+				finally
+				{
+					_ex = nullptr;
+				}
+			}
+
 			UNUSED(q);
-			if (r != 0)
-				throw gcnew Exception(String::Format("Git Failure: {0}", r));
+			_ex = nullptr;
+
+			switch (r)
+			{
+			case GIT_OK /* 0 */:
+				return true;
+
+			case GIT_ERROR:
+			case GIT_ENOTFOUND:
+			case GIT_EEXISTS:
+			case GIT_EAMBIGUOUS:
+			case GIT_EBUFS:
+
+			case GIT_PASSTHROUGH:
+			case GIT_REVWALKOVER:
+			case GITERR_OS:
+			case GITERR_INVALID:
+			case GITERR_REFERENCE:
+			case GITERR_ZLIB:
+			case GITERR_REPOSITORY:
+			case GITERR_CONFIG:
+			case GITERR_REGEX:
+			case GITERR_ODB:
+			case GITERR_INDEX:
+			case GITERR_OBJECT:
+			case GITERR_NET:
+			case GITERR_TAG:
+			case GITERR_TREE:
+			case GITERR_INDEXER:
+				{
+					const git_error *info = giterr_last();
+
+					try
+					{
+						if (info)
+							throw gcnew Exception(String::Format("Git Error: {0}/{1}: {2}", r, info->klass, GitBase::Utf8_PtrToString(info->message)));
+						else
+							throw gcnew Exception(String::Format("Git Error: {0}", r));
+					}
+					finally
+					{
+						if (info)
+							giterr_clear();
+					}
+				}
+			default:
+				throw gcnew Exception(String::Format("Unknown git Error: {0}", r));
+			}
 
 			return true;
 		}
@@ -137,8 +198,8 @@ namespace SharpGit {
 			if (e)
 			{
 				System::Diagnostics::Debug::WriteLine("Wrapping: {0}", e);
-
-				return (git_error_t)999;
+				_ex = e;
+				return WrappedError;
 			}
 
 			return 0;

@@ -40,25 +40,33 @@ bool GitIndex::Add(const char *relPath, GitAddArgs ^args, GitPool ^pool)
 		throw gcnew ArgumentNullException("args");
 	AssertOpen();
 
-	int stage = 0;
 	int r;
 
 	// TODO: Use append2/index2 for advanced options
 	
 	if (args->Append)
-		r = git_index_append(_index, relPath, stage);
+		r = git_index_append(_index, relPath, args->Stage);
 	else
-		r = git_index_add(_index, relPath, stage);
+		r = git_index_add(_index, relPath, args->Stage);
 
 	return args->HandleGitError(this, r);
 }
 
-bool GitIndex::Commit()
+bool GitIndex::Contains(String ^relPath)
 {
-	return Commit(gcnew GitNoArgs());
+	AssertOpen();
+
+	GitPool pool;
+
+	return git_index_find(_index, pool.AllocRelpath(relPath)) >= 0;
 }
 
-bool GitIndex::Commit(GitArgs ^args)
+bool GitIndex::Write()
+{
+	return Write(gcnew GitNoArgs());
+}
+
+bool GitIndex::Write(GitArgs ^args)
 {
 	if (! args)
 		throw gcnew ArgumentNullException("args");

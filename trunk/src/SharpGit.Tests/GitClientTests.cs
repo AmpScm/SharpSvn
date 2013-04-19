@@ -33,22 +33,30 @@ namespace SharpGit.Tests
             using (GitRepository repo = GitRepository.Create(dir))
             using (GitClient git = new GitClient())
             {
+                string ignoreFile = Path.Combine(dir, ".gitignore");
                 string file = Path.Combine(dir, "newfile");
                 string subDir = Path.Combine(dir, "dir");
                 string fileInSubDir = Path.Combine(subDir, "file2");
                 string file3 = Path.Combine(dir, "other");
-                string file4 = Path.Combine(dir, "q.ignored");
+                string file4 = Path.Combine(dir, "q.ignore");
                 File.WriteAllText(file, "Some body");
                 Directory.CreateDirectory(subDir);
                 File.WriteAllText(fileInSubDir, "Some other body");
                 File.WriteAllText(file3, "file3");
+
+                File.WriteAllText(ignoreFile, "*.ignore\n");
                 File.WriteAllText(file4, "file4");
 
+                git.Add(ignoreFile);
                 git.Add(file);
                 git.Add(fileInSubDir);
 
                 int ticked = 0;
-                Assert.That(git.Status(dir, new GitStatusArgs(),
+
+                GitStatusArgs gsa = new GitStatusArgs();
+                gsa.IncludeIgnored = true;
+
+                Assert.That(git.Status(dir, gsa,
                     delegate(object sender, GitStatusEventArgs e)
                     {
                         switch (e.RelativePath)
@@ -69,14 +77,19 @@ namespace SharpGit.Tests
                                 Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New));
                                 Assert.That(e.Ignored, Is.False);
                                 break;
-                            case "q.ignored":
-                                // TODO: Make this ignored
-                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal));
-                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New));
+                            case ".gitignore":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
                                 Assert.That(e.Ignored, Is.False);
                                 break;
+                            case "q.ignore":
+                                // TODO: Make this ignored
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.Ignored, Is.True);
+                                break;
                             default:
-                                Assert.Fail("Invalid node found");
+                                Assert.Fail("Invalid node found: {0}", e.RelativePath);
                                 break;
                         }
 
@@ -84,7 +97,7 @@ namespace SharpGit.Tests
                         ticked++;
                     }), Is.True);
 
-                Assert.That(ticked, Is.EqualTo(4), "Ticked");
+                Assert.That(ticked, Is.EqualTo(5), "Ticked");
             }
 
         }
