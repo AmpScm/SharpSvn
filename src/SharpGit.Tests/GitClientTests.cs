@@ -31,15 +31,62 @@ namespace SharpGit.Tests
         {
             string dir = GetTempPath();
             using (GitRepository repo = GitRepository.Create(dir))
+            using (GitClient git = new GitClient())
             {
-                using (GitClient gc = new GitClient())
-                {
-                    Assert.That(gc.Status(dir, new GitStatusArgs(),
-                        delegate(object sender, GitStatusEventArgs e)
+                string file = Path.Combine(dir, "newfile");
+                string subDir = Path.Combine(dir, "dir");
+                string fileInSubDir = Path.Combine(subDir, "file2");
+                string file3 = Path.Combine(dir, "other");
+                string file4 = Path.Combine(dir, "q.ignored");
+                File.WriteAllText(file, "Some body");
+                Directory.CreateDirectory(subDir);
+                File.WriteAllText(fileInSubDir, "Some other body");
+                File.WriteAllText(file3, "file3");
+                File.WriteAllText(file4, "file4");
+
+                git.Add(file);
+                git.Add(fileInSubDir);
+
+                int ticked = 0;
+                Assert.That(git.Status(dir, new GitStatusArgs(),
+                    delegate(object sender, GitStatusEventArgs e)
+                    {
+                        switch (e.RelativePath)
                         {
-                        }), Is.True);
-                }
+                            case "newfile":
+                                //Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.Ignored, Is.False);
+                                break;
+                            case "dir/file2":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.Ignored, Is.False);
+                                break;
+                            case "other":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New));
+                                Assert.That(e.Ignored, Is.False);
+                                break;
+                            case "q.ignored":
+                                // TODO: Make this ignored
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New));
+                                Assert.That(e.Ignored, Is.False);
+                                break;
+                            default:
+                                Assert.Fail("Invalid node found");
+                                break;
+                        }
+
+                        Assert.That(e.FullPath, Is.EqualTo(Path.GetFullPath(Path.Combine(dir, e.RelativePath))));
+                        ticked++;
+                    }), Is.True);
+
+                Assert.That(ticked, Is.EqualTo(4), "Ticked");
             }
+
         }
 
         [Test]
@@ -54,16 +101,16 @@ namespace SharpGit.Tests
                 Assert.That(repo.RepositoryPath, Is.EqualTo(Path.Combine(dir, GitClient.AdministrativeDirectoryName)));
                 Assert.That(repo.WorkingPath, Is.EqualTo(dir));
 
-                GitConfiguration config = repo.GetConfigurationInstance();
+                GitConfiguration config = repo.Configuration;
 
                 Assert.That(config, Is.Not.Null);
                 repo.SetConfiguration(config);
 
-                GitIndex index = repo.GetIndexInstance();
+                GitIndex index = repo.Index;
                 Assert.That(index, Is.Not.Null);
                 repo.SetIndex(index);
 
-                GitObjectDatabase odb = repo.GetObjectDatabaseInstance();
+                GitObjectDatabase odb = repo.ObjectDatabase;
                 Assert.That(odb, Is.Not.Null);
                 repo.SetObjectDatabase(odb);
             }

@@ -125,6 +125,45 @@ const char *GitPool::AllocDirent(String ^path)
         return "";
 }
 
+const char *GitPool::AllocRelpath(String ^path)
+{
+	if (!path)
+        throw gcnew ArgumentNullException("path");
+
+    if (path->Length >= 1)
+    {
+        cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(path);
+
+        int len = bytes->Length;
+
+        while (len && ((bytes[len-1] == '\\') || bytes[len-1] == '/'))
+            len--;
+
+        char* pData = (char*)Alloc(len+1);
+
+        if (!pData)
+            throw gcnew InvalidOperationException();
+
+        pin_ptr<unsigned char> pBytes = &bytes[0];
+
+        if (pData && pBytes)
+        {
+            memcpy(pData, pBytes, len);
+
+            // Should match: svn_path_internal_style() implementation, but doesn't copy an extra time
+            for (int i = 0; i < len; i++)
+                if (pData[i] == '\\')
+                    pData[i] = '/';
+        }
+
+        pData[len] = 0;
+
+        return svn_relpath_canonicalize(pData, Handle);
+    }
+    else
+        return "";
+}
+
 System::String ^GitBase::Utf8_PtrToString(const char *ptr)
 {
 	if (! ptr)

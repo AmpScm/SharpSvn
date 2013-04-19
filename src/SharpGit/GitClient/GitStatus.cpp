@@ -6,16 +6,36 @@
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
 
-GitStatusEventArgs::GitStatusEventArgs(const char *path, unsigned status, GitStatusArgs ^args, Implementation::GitPool ^pool)
+GitStatusEventArgs::GitStatusEventArgs(const char *path, const char *wcPath, unsigned status, GitStatusArgs ^args, Implementation::GitPool ^pool)
 {
+	_path = path;
+	_wcPath = wcPath;
+	_status = status;
+	_pool = pool;
 }
 
 const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementation::GitPool ^pool)
 {
 	git_status_options *opts = (git_status_options *)pool->Alloc(sizeof(*opts));
 
+	if (! this->WorkingDirectoryStatus)
+		opts->show = GIT_STATUS_SHOW_INDEX_ONLY;
+	else if (! this->IndexStatus)
+		opts->show = GIT_STATUS_SHOW_WORKDIR_ONLY;
+	else if (! this->ParallelStatus)
+		opts->show = GIT_STATUS_SHOW_INDEX_THEN_WORKDIR;
+	else
+		opts->show = GIT_STATUS_SHOW_INDEX_THEN_WORKDIR;
+
 	opts->flags = 0;
-	opts->show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
+	if (this->IncludeUnversioned)
+		opts->flags |= GIT_STATUS_OPT_INCLUDE_UNTRACKED;
+	if (this->IncludeUnmodified)
+		opts->flags |= GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
+	if (! this->IncludeSubmodules)
+		opts->flags |= GIT_STATUS_OPT_EXCLUDE_SUBMODULED;
+	if (this->IncludeUnversionedRecursive)
+		opts->flags |= GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
 
 	return opts;
 }

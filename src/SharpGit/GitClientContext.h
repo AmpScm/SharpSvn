@@ -13,15 +13,26 @@ namespace SharpGit {
 		struct GitRoot : gcroot<T>
 		{
 			apr_pool_t *_pool;
+			const char *_wcPath;
 		public:
 			GitRoot(T value)
 				: gcroot(value)
 			{
+				_pool = nullptr;
+				_wcPath = nullptr;
+			}
+
+			GitRoot(T value, const char *wcPath, GitPool ^pool)
+				: gcroot(value)
+			{
+				_wcPath = wcPath;
+				_pool = pool->Handle;
 			}
 
 			GitRoot(T value, GitPool ^pool)
 				: gcroot(value)
 			{
+				_wcPath = nullptr;
 				_pool = pool->Handle;
 			}
 
@@ -29,11 +40,13 @@ namespace SharpGit {
 				: gcroot(*reinterpret_cast<GitRoot<T>*>(batonValue))
 			{
 				_pool = reinterpret_cast<GitRoot<T>*>(batonValue)->_pool;
+				_wcPath = reinterpret_cast<GitRoot<T>*>(batonValue)->_wcPath;
 			}
 
 		public:
 			void *GetBatonValue() { return (void*)this; }
 			apr_pool_t *GetPool() { return _pool; }
+			const char *GetWcPath() { return _wcPath; }
 		};
 
 		public ref class GitBase : public System::MarshalByRefObject
@@ -90,6 +103,7 @@ namespace SharpGit {
 		public:
 			char *Alloc(size_t sz);
 			const char *AllocDirent(String ^path);
+			const char *AllocRelpath(String ^relPath);
 		};
 	}
 

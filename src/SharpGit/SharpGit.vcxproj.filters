@@ -53,6 +53,9 @@
     <ClCompile Include="Plumbing\GitObjectDatabase.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
+    <ClCompile Include="GitClient\GitAdd.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -90,6 +93,9 @@
     </ClInclude>
     <ClInclude Include="Plumbing\GitObjectDatabase.h">
       <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitAdd.h">
+      <Filter>GitClient</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

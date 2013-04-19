@@ -2,8 +2,16 @@
 #include "GitClientContext.h"
 
 namespace SharpGit {
-	namespace Plumbing {
+	ref class GitAddArgs;
 
+	namespace Implementation {
+		ref class GitPool;
+	}
+
+	namespace Plumbing {
+		using ::SharpGit::Implementation::GitPool;
+
+		ref class GitObjectDatabase;
 
 		public ref class GitIndex : public Implementation::GitBase
 		{
@@ -56,7 +64,19 @@ namespace SharpGit {
 				}
 			}
 
+		private:
+			void AssertOpen();
 
+		public:
+			bool Add(String ^relPath);
+			bool Add(String ^relPath, GitAddArgs ^args);
+		internal:
+			bool Add(const char *relPath, GitAddArgs ^args, GitPool ^pool);
+
+
+		public:
+			bool Commit();
+			bool Commit(GitArgs ^args);
 		};
 	}
 }
