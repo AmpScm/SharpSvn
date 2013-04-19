@@ -19,7 +19,7 @@ namespace SharpSvn {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [System::CodeDom::Compiler::GeneratedCodeAttribute(L"System.Resources.Tools.StronglyTypedResourceBuilder", L"2.0.0.0"), 
+    [System::CodeDom::Compiler::GeneratedCodeAttribute(L"System.Resources.Tools.StronglyTypedResourceBuilder", L"4.0.0.0"), 
     System::Diagnostics::DebuggerNonUserCodeAttribute, 
     System::Runtime::CompilerServices::CompilerGeneratedAttribute]
     ref class SharpSvnStrings {

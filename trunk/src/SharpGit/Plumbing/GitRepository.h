@@ -133,16 +133,27 @@ namespace SharpGit {
 				void set(String ^value);
 			}
 
+		internal:
+			const char *MakeRelpath(String ^path, GitPool ^pool);
+
 		private:
+			GitConfiguration ^_configRef;
 			GitIndex ^_indexRef;
 			GitObjectDatabase ^_dbRef;
-			void ClearReferences()
-			{
-				_indexRef = nullptr;
-				_dbRef = nullptr;
-			}
+			void ClearReferences();
 
 		public:
+			property GitConfiguration^ Configuration
+			{
+				GitConfiguration^ get()
+				{
+					if (!_configRef && _repository)
+						_configRef = GetConfigurationInstance();
+
+					return _configRef;
+				}
+			}
+
 			property GitIndex^ Index
 			{
 				GitIndex^ get()
@@ -166,17 +177,14 @@ namespace SharpGit {
 			}
 
 		public:
-			// Cache and provide as property?
-			GitConfiguration^ GetConfigurationInstance();
 			void SetConfiguration(GitConfiguration ^newConfig);
-
-			// Cache and provide as property?
-			GitIndex^ GetIndexInstance();
 			void SetIndex(GitIndex ^newIndex);
-
-			// Cache and provide as property?
-			GitObjectDatabase^ GetObjectDatabaseInstance();
 			void SetObjectDatabase(GitObjectDatabase ^newDatabase);
+
+		private:
+			GitConfiguration^ GetConfigurationInstance();
+			GitIndex^ GetIndexInstance();
+			GitObjectDatabase^ GetObjectDatabaseInstance();
 
 		public:
 			bool Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatusEventArgs^>^ handler);

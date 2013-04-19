@@ -277,6 +277,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="GitClientContext.cpp" />
+    <ClCompile Include="GitClient\GitAdd.cpp" />
     <ClCompile Include="GitClient\GitClient.cpp" />
     <ClCompile Include="GitClient\GitStatus.cpp" />
     <ClCompile Include="Plumbing\GitConfiguration.cpp" />
@@ -297,6 +298,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="GitClientContext.h" />
     <ClInclude Include="GitClient\Args\GitStatus.h" />
     <ClInclude Include="GitClient\EventArgs\GitStatusEventArgs.h" />
+    <ClInclude Include="GitClient\GitAdd.h" />
     <ClInclude Include="GitClient\GitClient.h" />
     <ClInclude Include="GitClient\GitClientEventArgs.h" />
     <ClInclude Include="Plumbing\GitConfiguration.h" />

@@ -14,6 +14,25 @@ using namespace SharpGit::Implementation;
 
 struct git_repository {};
 
+void GitRepository::ClearReferences()
+{
+	try
+	{
+		if (_configRef)
+			delete _configRef;
+		if (_indexRef)
+			delete _indexRef;
+		if (_dbRef)
+			delete _dbRef;
+	}
+	finally
+	{
+		_configRef = nullptr;
+		_indexRef = nullptr;
+		_dbRef = nullptr;
+	}
+}
+
 bool GitRepository::Open(String ^repositoryPath)
 {
 	return Open(repositoryPath, gcnew GitNoArgs());
@@ -189,6 +208,10 @@ void GitRepository::SetConfiguration(GitConfiguration^ newConfig)
 
 	AssertOpen();
 
+	if (Object::ReferenceEquals(newConfig, _configRef))
+		return;
+
+	ClearReferences();
 	git_repository_set_config(_repository, newConfig->Handle);
 }
 
@@ -214,6 +237,10 @@ void GitRepository::SetIndex(GitIndex ^newIndex)
 
 	AssertOpen();
 
+	if (Object::ReferenceEquals(newIndex, _indexRef))
+		return;
+
+	ClearReferences();
 	git_repository_set_index(_repository, newIndex->Handle);
 }
 
@@ -240,7 +267,28 @@ void GitRepository::SetObjectDatabase(GitObjectDatabase ^newDatabase)
 
 	AssertOpen();
 
+	if (Object::ReferenceEquals(newDatabase, _dbRef))
+		return;
+
+	ClearReferences();
 	git_repository_set_odb(_repository, newDatabase->Handle);
+}
+
+const char *GitRepository::MakeRelpath(String ^path, GitPool ^pool)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+	else if (! pool)
+		throw gcnew ArgumentNullException("pool");
+
+	AssertOpen();
+
+	const char *wrk_path = svn_dirent_canonicalize(
+								git_repository_workdir(_repository),
+								pool->Handle);
+	const char *item_path = pool->AllocDirent(path);
+
+	return svn_dirent_skip_ancestor(wrk_path, item_path);
 }
 
 #pragma region STATUS
@@ -251,7 +299,7 @@ static int __cdecl on_status(const char *path, unsigned int status, void *baton)
 	GitPool pool(args.GetPool());
 	try
 	{
-		GitStatusEventArgs^ ee = gcnew GitStatusEventArgs(path, status, args, %pool);
+		GitStatusEventArgs^ ee = gcnew GitStatusEventArgs(path, args.GetWcPath(), status, args, %pool);
 
 		args->OnStatus(ee);
 	}
@@ -276,7 +324,10 @@ bool GitRepository::Status(String ^path, GitStatusArgs ^args, EventHandler<GitSt
 	try
 	{
 		GitPool pool;
-		GitRoot<GitStatusArgs^> root(args, %pool);
+		const char *wcPath = svn_dirent_canonicalize(git_repository_workdir(_repository), pool.Handle);
+
+		GitRoot<GitStatusArgs^> root(args, wcPath, %pool);
+		
 
 		int r = git_status_foreach_ext(_repository,
 									   args->MakeOptions(path, %pool),
