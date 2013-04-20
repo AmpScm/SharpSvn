@@ -182,6 +182,9 @@ namespace SharpGit {
 			bool Remove(String^ relativePath) { return Remove(relativePath, false); }
 			bool Remove(String^ relativePath, bool recursive);
 
+			bool CreateTree([Out] GitId^% id);
+			bool CreateTree(GitArgs ^args, [Out] GitId^% id);
+
 		public:
 			bool Read(GitTree ^replacementTree);
 			bool Read(GitTree ^replacementTree, GitArgs ^args);

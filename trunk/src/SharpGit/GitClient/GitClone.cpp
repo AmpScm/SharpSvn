@@ -8,6 +8,22 @@
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
 
+const git_clone_options * GitCloneArgs::MakeCloneOptions(GitPool ^pool)
+{
+	if (! pool)
+		throw gcnew ArgumentNullException("pool");
+
+	git_clone_options *opts = (git_clone_options *)pool->Alloc(sizeof(*opts));
+
+	opts->version = GIT_CLONE_OPTIONS_VERSION;
+	opts->bare = CreateBareRepository;
+
+	const git_checkout_opts *coo = MakeCheckOutOptions(pool);
+	opts->checkout_opts = *coo;
+
+	return opts;
+}
+
 bool GitClient::Clone(Uri ^remoteRepository, String ^path)
 {
 	return Clone(remoteRepository, path, gcnew GitCloneArgs());
@@ -27,7 +43,9 @@ bool GitClient::Clone(Uri ^remoteRepository, String ^path, GitCloneArgs ^args)
 	else if (! args)
 		throw gcnew ArgumentNullException("args");
 
-	return CloneInternal(remoteRepository->AbsoluteUri, path, args);
+	GitPool pool(_pool);
+
+	return CloneInternal(svn_uri_canonicalize(pool.AllocString(remoteRepository->AbsoluteUri), pool.Handle), path, args, %pool);
 }
 
 bool GitClient::Clone(String ^localRepository, String ^path, GitCloneArgs ^args)
@@ -42,11 +60,23 @@ bool GitClient::Clone(String ^localRepository, String ^path, GitCloneArgs ^args)
 	if (localRepository->LastIndexOf(':') > 1)
 		throw gcnew ArgumentOutOfRangeException("Use Clone(Uri,...) to pass urls", "localRepository");
 
-	return CloneInternal(localRepository, path, args);
+	GitPool pool(_pool);
+	return CloneInternal(pool.AllocDirent(path), path, args, %pool);
 }
 
-bool GitClient::CloneInternal(String ^rawRepository, String ^path, GitCloneArgs ^args)
+bool GitClient::CloneInternal(const char *rawRepository, String ^path, GitCloneArgs ^args, GitPool ^pool)
 {
-	//git_clone();
-	return false;
+	git_repository *repository;
+
+	int r;
+
+	if (args->Synchronous)
+	{
+		r = git_clone(&repository, rawRepository, pool->AllocDirent(path), args->MakeCloneOptions(pool));
+	}
+	else
+		throw gcnew NotImplementedException();
+
+
+	return args->HandleGitError(this, r);
 }

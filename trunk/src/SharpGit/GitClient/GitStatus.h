@@ -15,7 +15,7 @@ namespace SharpGit {
 		bool _showUnmodified;
 		bool _noSubmodules;
 		bool _recurseUnversioned;
-		bool _recurseIgnored;s
+		bool _recurseIgnored;
 
 	public:
 		event EventHandler<GitStatusEventArgs^>^ Status;

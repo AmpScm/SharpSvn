@@ -4,6 +4,7 @@
 
 namespace SharpGit {
 	ref class GitStatusArgs;
+	ref class GitCommitArgs;
 
 	namespace Plumbing {
 
@@ -27,6 +28,7 @@ namespace SharpGit {
 		ref class GitConfiguration;
 		ref class GitIndex;
 		ref class GitObjectDatabase;
+		ref class GitTree;
 
 		public ref class GitRepository : public Implementation::GitBase
 		{
@@ -120,6 +122,12 @@ namespace SharpGit {
 			static GitRepository^ Create(String ^repositoryPath);
 			static GitRepository^ Create(String ^repositoryPath, GitRepositoryCreateArgs ^args);
 
+		public:
+			bool Lookup(GitId ^id, [Out] GitTree^% tree);
+			bool Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree);
+
+			bool Commit(GitTree ^tree, GitCommitArgs ^args);
+			bool Commit(GitTree ^tree, GitCommitArgs ^args, [Out] GitId^% id);
 
 		public:
 			property bool IsEmpty

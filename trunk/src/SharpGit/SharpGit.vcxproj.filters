@@ -65,6 +65,12 @@
     <ClCompile Include="GitClient\GitClone.cpp">
       <Filter>GitClient</Filter>
     </ClCompile>
+    <ClCompile Include="GitClient\GitCheckOut.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitCommit.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -117,6 +123,12 @@
       <Filter>GitClient</Filter>
     </ClInclude>
     <ClInclude Include="GitClient\GitStatusEventArgs.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitCheckOut.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitCommit.h">
       <Filter>GitClient</Filter>
     </ClInclude>
   </ItemGroup>

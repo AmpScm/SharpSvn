@@ -211,3 +211,26 @@ bool GitIndex::Remove(String ^relativePath, bool recursive)
 
 	return deletedOne;
 }
+
+bool GitIndex::CreateTree([Out] GitId^% id)
+{
+	return CreateTree(gcnew GitNoArgs(), id);
+}
+
+bool GitIndex::CreateTree(GitArgs ^args, [Out] GitId^% id)
+{
+	if (! args)
+		throw gcnew ArgumentNullException("args");
+
+	AssertOpen();
+
+	git_oid oid;
+	int r = git_index_write_tree(&oid, _index);
+
+	if (! r)
+		id = gcnew GitId(oid);
+	else
+		id = nullptr;
+
+	return args->HandleGitError(this, r);
+}
