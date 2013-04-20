@@ -27,7 +27,7 @@
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
-  <property name="libgit2Version" value="0.17.0" overwrite="false" />
+  <property name="libgit2Version" value="0.18.0" overwrite="false" />
   <property name="buildLibgit2" value="true" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.1e" overwrite="false" />
