@@ -61,7 +61,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return _config != nullptr;
+					return !_config;
 				}
 			}
 

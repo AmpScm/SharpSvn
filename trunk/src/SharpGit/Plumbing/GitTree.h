@@ -64,7 +64,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return _tree != nullptr;
+					return !_tree;
 				}
 			}
 		};

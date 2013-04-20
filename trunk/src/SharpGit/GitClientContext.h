@@ -110,6 +110,7 @@ namespace SharpGit {
 			char *Alloc(size_t sz);
 			const char *AllocDirent(String ^path);
 			const char *AllocRelpath(String ^relPath);
+			const char *AllocString(String^ value);
 		};
 	}
 

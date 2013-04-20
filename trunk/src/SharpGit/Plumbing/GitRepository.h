@@ -92,7 +92,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return _repository != nullptr;
+					return !_repository;
 				}
 			}
 

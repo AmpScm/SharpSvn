@@ -61,7 +61,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return _odb != nullptr;
+					return !_odb;
 				}
 			}
 
