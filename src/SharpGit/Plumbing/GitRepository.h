@@ -32,6 +32,7 @@ namespace SharpGit {
 		{
 		private:
 			git_repository *_repository;
+			GitPool _pool;
 
 			GitRepository(git_repository *repository)
 			{
@@ -144,6 +145,9 @@ namespace SharpGit {
 
 		internal:
 			const char *MakeRelpath(String ^path, GitPool ^pool);
+
+		public:
+			String ^MakeRelativePath(String ^path);
 
 		private:
 			GitConfiguration ^_configRef;

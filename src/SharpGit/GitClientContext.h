@@ -79,6 +79,12 @@ namespace SharpGit {
 				_pool = svn_pool_create(parent->Handle);
 			}
 
+			GitPool(GitPool %parent)
+			{
+				_parent = %parent;
+				_pool = svn_pool_create(parent.Handle);
+			}
+
 			GitPool()
 			{
 				_pool = svn_pool_create(nullptr);

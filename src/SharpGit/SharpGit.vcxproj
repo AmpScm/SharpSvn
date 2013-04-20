@@ -273,6 +273,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="GitClientContext.cpp" />
+    <ClCompile Include="GitClient\GitDelete.cpp" />
     <ClCompile Include="GitClient\GitAdd.cpp" />
     <ClCompile Include="GitClient\GitClient.cpp" />
     <ClCompile Include="GitClient\GitStatus.cpp" />
@@ -298,6 +299,7 @@
     <ClInclude Include="GitClient\GitAdd.h" />
     <ClInclude Include="GitClient\GitClient.h" />
     <ClInclude Include="GitClient\GitClientEventArgs.h" />
+    <ClInclude Include="GitClient\GitDelete.h" />
     <ClInclude Include="GitLibraryAttribute.h" />
     <ClInclude Include="Plumbing\GitConfiguration.h" />
     <ClInclude Include="Plumbing\GitIndex.h" />
