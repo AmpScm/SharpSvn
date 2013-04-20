@@ -42,14 +42,9 @@ bool GitIndex::Add(const char *relPath, GitAddArgs ^args, GitPool ^pool)
 		throw gcnew ArgumentNullException("args");
 	AssertOpen();
 
-	int r;
-
 	// TODO: Use append2/index2 for advanced options
 	
-	if (args->Append)
-		r = git_index_append(_index, relPath, args->Stage);
-	else
-		r = git_index_add(_index, relPath, args->Stage);
+	int r = git_index_add_bypath(_index, relPath);
 
 	return args->HandleGitError(this, r);
 }
@@ -60,7 +55,10 @@ bool GitIndex::Contains(String ^relPath)
 
 	GitPool pool;
 
-	return git_index_find(_index, pool.AllocRelpath(relPath)) >= 0;
+	size_t pos;
+	int r = git_index_find(&pos, _index, pool.AllocRelpath(relPath));
+
+	return !r && (pos >= 0);
 }
 
 bool GitIndex::Write()
@@ -97,15 +95,6 @@ bool GitIndex::Reload(GitArgs ^args)
 	return args->HandleGitError(this, r);
 }
 
-bool GitIndex::Normalize()
-{
-	AssertOpen();
-
-	git_index_uniq(_index);
-	return true;
-}
-
-
 bool GitIndex::Clear()
 {
 	AssertOpen();
@@ -140,7 +129,7 @@ GitIndexEntry^ GitIndex::default::get(int index)
 	if (index < 0)
 		throw gcnew ArgumentOutOfRangeException("index");
 
-	git_index_entry* entry = git_index_get(_index, index);
+	const git_index_entry* entry = git_index_get_byindex(_index, index);
 
 	if (! entry)
 		throw gcnew ArgumentOutOfRangeException("index");
@@ -157,10 +146,11 @@ GitIndexEntry^ GitIndex::default::get(String^ relativePath)
 
 	GitPool pool;
 
-	int n = git_index_find(_index, pool.AllocRelpath(relativePath));
+	const git_index_entry *entry;
+	entry = git_index_get_bypath(_index, pool.AllocRelpath(relativePath), 0);
 
-	if (n >= 0)
-		return default[n];
+	if (entry)
+		return gcnew GitIndexEntry(this, entry);
 	else
 		throw gcnew ArgumentOutOfRangeException("relativePath");
 }
@@ -185,7 +175,12 @@ bool GitIndex::Remove(int index)
 	if (index < 0)
 		throw gcnew ArgumentOutOfRangeException("index");
 
-	return ! git_index_remove(_index, index);
+	const git_index_entry *entry = git_index_get_byindex(_index, index);
+
+	if (entry)
+		return git_index_remove(_index, entry->path, git_index_entry_stage(entry)) == 0;
+	else
+		return false;
 }
 
 bool GitIndex::Remove(String ^relativePath, bool recursive)
@@ -204,11 +199,11 @@ bool GitIndex::Remove(String ^relativePath, bool recursive)
 	
 	for (int i = 0; i < c; i++)
 	{
-		git_index_entry * entry = git_index_get(_index, i);
+		const git_index_entry * entry = git_index_get_byindex(_index, i);
 		if (recursive ? (svn_relpath_skip_ancestor(path, entry->path) != nullptr)
 					  : ! strcmp(path, entry->path))
 		{
-			git_index_remove(_index, i--);
+			git_index_remove(_index, entry->path, git_index_entry_stage(entry));
 			c--;
 			deletedOne = true;
 		}

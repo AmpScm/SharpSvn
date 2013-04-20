@@ -138,7 +138,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX86</TargetMachine>
-      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;MSVCRT.lib</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>ws2_32.dll;crypt32.dll;shell32.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
@@ -182,7 +182,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX64</TargetMachine>
-      <IgnoreSpecificDefaultLibraries>libcmtd.lib</IgnoreSpecificDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;MSVCRT.lib</IgnoreSpecificDefaultLibraries>
       <DelayLoadDLLs>ws2_32.dll;crypt32.dll;shell32.dll</DelayLoadDLLs>
     </Link>
   </ItemDefinitionGroup>
@@ -222,6 +222,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <DelayLoadDLLs>ws2_32.dll;crypt32.dll;shell32.dll</DelayLoadDLLs>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;MSVCRTD.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -263,6 +264,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
       <DelayLoadDLLs>ws2_32.dll;crypt32.dll;shell32.dll</DelayLoadDLLs>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcmtd.lib;MSVCRTD.lib</IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -277,6 +279,7 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="GitClientContext.cpp" />
+    <ClCompile Include="GitClient\GitClone.cpp" />
     <ClCompile Include="GitClient\GitDelete.cpp" />
     <ClCompile Include="GitClient\GitAdd.cpp" />
     <ClCompile Include="GitClient\GitClient.cpp" />
@@ -303,6 +306,7 @@
     <ClInclude Include="GitClient\GitAdd.h" />
     <ClInclude Include="GitClient\GitClient.h" />
     <ClInclude Include="GitClient\GitClientEventArgs.h" />
+    <ClInclude Include="GitClient\GitClone.h" />
     <ClInclude Include="GitClient\GitDelete.h" />
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitLibraryAttribute.h" />

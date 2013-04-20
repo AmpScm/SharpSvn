@@ -19,6 +19,8 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 {
 	git_status_options *opts = (git_status_options *)pool->Alloc(sizeof(*opts));
 
+	opts->version = GIT_STATUS_OPTIONS_VERSION;
+
 	if (! this->WorkingDirectoryStatus)
 		opts->show = GIT_STATUS_SHOW_INDEX_ONLY;
 	else if (! this->IndexStatus)
@@ -36,7 +38,7 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 	if (this->IncludeUnmodified)
 		opts->flags |= GIT_STATUS_OPT_INCLUDE_UNMODIFIED;
 	if (! this->IncludeSubmodules)
-		opts->flags |= GIT_STATUS_OPT_EXCLUDE_SUBMODULED;
+		opts->flags |= GIT_STATUS_OPT_EXCLUDE_SUBMODULES;
 	if (this->IncludeUnversionedRecursive)
 		opts->flags |= GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
 

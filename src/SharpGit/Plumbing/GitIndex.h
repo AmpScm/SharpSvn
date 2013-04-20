@@ -97,17 +97,6 @@ namespace SharpGit {
 				}
 			}
 
-			property int UnmergedCount
-			{
-				int get()
-				{
-					if (!_index)
-						return -1;
-					else
-						return git_index_entrycount_unmerged(_index);
-				}
-			}
-
 			bool Contains(String ^relPath);
 
 			property GitIndexEntry ^ default[int]
@@ -188,8 +177,6 @@ namespace SharpGit {
 			bool Reload();
 			bool Reload(GitArgs ^args);
 
-			bool Normalize();
-
 			bool Clear();
 			bool Remove(int index);
 			bool Remove(String^ relativePath) { return Remove(relativePath, false); }
@@ -203,11 +190,11 @@ namespace SharpGit {
 		public ref class GitIndexEntry sealed : public Implementation::GitBase
 		{
 			initonly GitIndex ^_index;
-			initonly git_index_entry *_entry;
+			initonly const git_index_entry *_entry;
 			String^ _relPath;
 
 		internal:
-			GitIndexEntry(GitIndex ^index, git_index_entry *entry)
+			GitIndexEntry(GitIndex ^index, const git_index_entry *entry)
 			{
 				if (! index)
 					throw gcnew ArgumentNullException("index");

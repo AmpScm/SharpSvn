@@ -8,6 +8,7 @@ namespace SharpGit {
 	ref class GitStatusArgs;
 	ref class GitAddArgs;
 	ref class GitDeleteArgs;
+	ref class GitCloneArgs;
 
 	namespace Implementation {
 		ref class GitLibrary;
@@ -40,6 +41,14 @@ namespace SharpGit {
 		bool Delete(String ^path);
 		bool Delete(String ^path, GitDeleteArgs ^args);
 
+		bool Clone(System::Uri ^remoteRepository, String ^path);
+		bool Clone(String ^localRepository, String ^path);
+
+		bool Clone(System::Uri ^remoteRepository, String ^path, GitCloneArgs ^args);
+		bool Clone(String ^localRepository, String ^path, GitCloneArgs ^args);
+
+	private:
+		bool CloneInternal(String ^rawRepository, String ^path, GitCloneArgs ^args);
 	public:
 		/// <summary>Gets the libgit2 version</summary>
 		static property System::Version ^Version
