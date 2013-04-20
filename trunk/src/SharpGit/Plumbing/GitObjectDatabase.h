@@ -56,6 +56,14 @@ namespace SharpGit {
 				}
 			}
 
+		public:
+			property bool IsDisposed
+			{
+				bool get()
+				{
+					return _odb != nullptr;
+				}
+			}
 
 		};
 	}

@@ -59,7 +59,14 @@ namespace SharpGit {
 				}
 			}
 
-
+		public:
+			property bool IsDisposed
+			{
+				bool get()
+				{
+					return _tree != nullptr;
+				}
+			}
 		};
 	}
 }
