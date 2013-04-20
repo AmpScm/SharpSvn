@@ -87,6 +87,15 @@ namespace SharpGit {
 			}
 
 		public:
+			property bool IsDisposed
+			{
+				bool get()
+				{
+					return _repository != nullptr;
+				}
+			}
+
+		public:
 			/// <summary>Creates an unopened repository</summary>
 			GitRepository() {}
 
