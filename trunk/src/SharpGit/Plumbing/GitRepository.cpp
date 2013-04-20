@@ -178,7 +178,7 @@ void GitRepository::WorkingPath::set(String ^value)
 
 	GitPool pool;
 	
-	int r = git_repository_set_workdir(_repository, pool.AllocDirent(value));
+	int r = git_repository_set_workdir(_repository, pool.AllocDirent(value), FALSE);
 	if (r)
 	{
 		(gcnew GitNoArgs())->HandleGitError(this, r);

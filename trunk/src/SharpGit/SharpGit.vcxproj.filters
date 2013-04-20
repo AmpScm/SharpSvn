@@ -62,6 +62,9 @@
     <ClCompile Include="GitClient\GitDelete.cpp">
       <Filter>GitClient</Filter>
     </ClCompile>
+    <ClCompile Include="GitClient\GitClone.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -113,6 +116,9 @@
       <Filter>GitClient</Filter>
     </ClInclude>
     <ClInclude Include="GitId.h" />
+    <ClInclude Include="GitClient\GitClone.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">

@@ -161,8 +161,16 @@ namespace SharpGit {
 			case GIT_EAMBIGUOUS:
 			case GIT_EBUFS:
 
+			case GIT_EUSER:
+			case GIT_EBAREREPO:
+			case GIT_EORPHANEDHEAD:
+			case GIT_EUNMERGED:
+			case GIT_ENONFASTFORWARD:
+			case GIT_EINVALIDSPEC:
+			case GIT_EMERGECONFLICT:
 			case GIT_PASSTHROUGH:
-			case GIT_REVWALKOVER:
+			case GIT_ITEROVER:
+
 			case GITERR_OS:
 			case GITERR_INVALID:
 			case GITERR_REFERENCE:
