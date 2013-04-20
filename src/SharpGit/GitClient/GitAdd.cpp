@@ -46,3 +46,4 @@ bool GitClient::Add(String ^path, GitAddArgs ^args)
 	return repo.Index->Add(repo.MakeRelpath(path, %pool), args, %pool)
 			&& repo.Index->Write(args);
 }
+

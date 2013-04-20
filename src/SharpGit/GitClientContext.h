@@ -190,7 +190,7 @@ namespace SharpGit {
 				throw gcnew Exception(String::Format("Unknown git Error: {0}", r));
 			}
 
-			return true;
+			//return true;
 		}
 
 		int WrapException(Exception ^e)

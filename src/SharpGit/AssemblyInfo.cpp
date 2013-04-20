@@ -15,12 +15,13 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-//#include "SvnLibraryAttribute.h"
+#include "GitLibraryAttribute.h"
 
 #pragma warning(disable: 4635)
 #pragma warning(disable: 4634) // XML document comment: cannot be applied:  Discarding XML document comment for invalid target.
 
 #include <apr-1/apr_version.h>
+#include <svn_version.h>
 
 using namespace System;
 using namespace System::Reflection;
@@ -28,7 +29,7 @@ using namespace System::Resources;
 using namespace System::Runtime::CompilerServices;
 using namespace System::Runtime::InteropServices;
 using namespace System::Security::Permissions;
-//using SharpSvn::Implementation::SvnLibraryAttribute;
+using SharpGit::Implementation::GitLibraryAttribute;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -36,6 +37,8 @@ using namespace System::Security::Permissions;
 //
 [assembly:AssemblyTitleAttribute("SharpGit - Git for .Net 2.0-3.5 and 4.0")];
 [assembly:AssemblyDescriptionAttribute("SharpGit (Compiled statically with libgit2 " LIBGIT2_VERSION
+									   ", apr " APR_VERSION_STRING
+									   " and the platform and diff libraries of Subversion " SVN_VER_NUMBER
 									   ". if available this library also uses our compilation of Putty's Plink)")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
@@ -44,17 +47,10 @@ using namespace System::Security::Permissions;
 [assembly:AssemblyTrademarkAttribute("")];
 [assembly:AssemblyCultureAttribute("")];
 
-/*[assembly:SvnLibrary("Subversion", SVN_VER_NUMBER)];
-[assembly:SvnLibrary("Apr", APR_VERSION_STRING)];
-[assembly:SvnLibrary("Apr-util", APU_VERSION_STRING)];
-[assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
-[assembly:SvnLibrary("Neon", NEON_VERSION)];
-[assembly:SvnLibrary("serf", SERF_VERSION)];
-[assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
-[assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
-[assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix=true)];
-[assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked=true, Optional=true)];
-[assembly:SvnLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpSvnVersion=true, Optional=true)];*/
+[assembly:GitLibrary("Libgit2", LIBGIT2_VERSION)]
+[assembly:GitLibrary("Apr", APR_VERSION_STRING)];
+[assembly:GitLibrary("Subversion", SVN_VER_NUMBER)];
+[assembly:GitLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpSvnVersion=true, Optional=true)];
 
 //
 // Version information for an assembly consists of the following four values:
