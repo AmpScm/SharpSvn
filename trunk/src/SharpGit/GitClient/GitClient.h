@@ -7,6 +7,7 @@ namespace SharpGit {
 
 	ref class GitStatusArgs;
 	ref class GitAddArgs;
+	ref class GitDeleteArgs;
 
 	namespace Implementation {
 		ref class GitLibrary;
@@ -35,6 +36,9 @@ namespace SharpGit {
 
 		bool Add(String ^path);
 		bool Add(String ^path, GitAddArgs ^args);
+
+		bool Delete(String ^path);
+		bool Delete(String ^path, GitDeleteArgs ^args);
 
 	public:
 		/// <summary>Gets the libgit2 version</summary>

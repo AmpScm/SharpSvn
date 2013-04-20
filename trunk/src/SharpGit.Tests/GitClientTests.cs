@@ -99,6 +99,8 @@ namespace SharpGit.Tests
                     }), Is.True);
 
                 Assert.That(ticked, Is.EqualTo(5), "Ticked");
+
+                Assert.That(git.Delete(fileInSubDir));
             }
 
         }

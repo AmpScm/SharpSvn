@@ -209,6 +209,7 @@ bool GitIndex::Remove(String ^relativePath, bool recursive)
 					  : ! strcmp(path, entry->path))
 		{
 			git_index_remove(_index, i--);
+			c--;
 			deletedOne = true;
 		}
 	}

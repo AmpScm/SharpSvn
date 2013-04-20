@@ -291,6 +291,16 @@ const char *GitRepository::MakeRelpath(String ^path, GitPool ^pool)
 	return svn_dirent_skip_ancestor(wrk_path, item_path);
 }
 
+String ^GitRepository::MakeRelativePath(String ^path)
+{
+	if (String::IsNullOrEmpty(path))
+		throw gcnew ArgumentNullException("path");
+
+	GitPool pool(_pool);
+
+	return Utf8_PtrToString(MakeRelpath(path, %pool));
+}
+
 #pragma region STATUS
 
 static int __cdecl on_status(const char *path, unsigned int status, void *baton)
@@ -327,7 +337,6 @@ bool GitRepository::Status(String ^path, GitStatusArgs ^args, EventHandler<GitSt
 		const char *wcPath = svn_dirent_canonicalize(git_repository_workdir(_repository), pool.Handle);
 
 		GitRoot<GitStatusArgs^> root(args, wcPath, %pool);
-		
 
 		int r = git_status_foreach_ext(_repository,
 									   args->MakeOptions(path, %pool),

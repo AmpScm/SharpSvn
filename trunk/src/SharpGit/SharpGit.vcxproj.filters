@@ -59,6 +59,9 @@
     <ClCompile Include="Plumbing\GitTree.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
+    <ClCompile Include="GitClient\GitDelete.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -105,6 +108,9 @@
     </ClInclude>
     <ClInclude Include="Plumbing\GitTree.h">
       <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitDelete.h">
+      <Filter>GitClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

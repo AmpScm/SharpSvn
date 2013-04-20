@@ -41,7 +41,7 @@ bool GitClient::Add(String ^path, GitAddArgs ^args)
 
 	AssertNotBare(repo);
 
-	GitPool pool;
+	GitPool pool(_pool);
 
 	return repo.Index->Add(repo.MakeRelpath(path, %pool), args, %pool)
 			&& repo.Index->Write(args);
