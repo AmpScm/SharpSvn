@@ -126,19 +126,21 @@ namespace SharpSvn {
 
 				if(attribute->UseSharpSvnVersion)
 					_version = (gcnew System::Reflection::AssemblyName(SvnLibrary::typeid->Assembly->FullName))->Version->ToString();
+				else
+				{
+					System::Text::RegularExpressions::Match^ m =
+						System::Text::RegularExpressions::Regex::Match(_version, "\\d+\\.(\\d+\\.)*\\d+");
+
+					if (m->Success)
+					{
+						_versionData = gcnew System::Version(m->Value);
+
+						if (attribute->SkipPrefix)
+							_version = _version->Substring(m->Index);
+					}
+				}
 
 				_dynamicallyLinked = attribute->DynamicallyLinked;
-
-				System::Text::RegularExpressions::Match^ m =
-					System::Text::RegularExpressions::Regex::Match(_version, "\\d+\\.(\\d+\\.)*\\d+");
-
-				if (m->Success)
-				{
-					_versionData = gcnew System::Version(m->Value);
-
-					if (attribute->SkipPrefix)
-						_version = _version->Substring(m->Index);
-				}
 				_optional = attribute->Optional;
 			}
 
