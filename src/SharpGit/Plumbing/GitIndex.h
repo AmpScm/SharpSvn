@@ -12,8 +12,11 @@ namespace SharpGit {
 		using ::SharpGit::Implementation::GitPool;
 
 		ref class GitObjectDatabase;
+		ref class GitTree;
+		ref class GitIndexEntry;
 
-		public ref class GitIndex : public Implementation::GitBase
+		public ref class GitIndex : public Implementation::GitBase,
+									public System::Collections::Generic::ICollection<GitIndexEntry^>
 		{
 		private:
 			git_index *_index;
@@ -64,6 +67,15 @@ namespace SharpGit {
 				}
 			}
 
+		public:
+			property bool IsDisposed
+			{
+				bool get()
+				{
+					return _index != nullptr;
+				}
+			}
+
 		private:
 			void AssertOpen();
 
@@ -76,7 +88,7 @@ namespace SharpGit {
 		public:
 			property int Count
 			{
-				int get()
+				virtual int get()
 				{
 					if (!_index)
 						return -1;
@@ -98,9 +110,126 @@ namespace SharpGit {
 
 			bool Contains(String ^relPath);
 
+			property GitIndexEntry ^ default[int]
+			{
+				GitIndexEntry^ get(int index);
+			}
+
+			property GitIndexEntry ^ default[String^]
+			{
+				GitIndexEntry^ get(String ^relativePath);
+			}
+
+		public:
+			virtual System::Collections::Generic::IEnumerator<GitIndexEntry^>^ GetEnumerator();
+
+		private:
+			virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+			{
+				return GetEnumerator();
+			}
+
+			virtual void CollectionClear() sealed = System::Collections::Generic::ICollection<GitIndexEntry^>::Clear
+			{
+				Clear();
+			}
+
+			property bool IsReadOnly
+			{
+				virtual bool get() sealed = System::Collections::Generic::ICollection<GitIndexEntry^>::IsReadOnly::get
+				{
+					return false;
+				}
+			}
+
+			virtual void Add(GitIndexEntry ^entry) sealed = System::Collections::Generic::ICollection<GitIndexEntry^>::Add
+			{
+				UNUSED(entry);
+				throw gcnew InvalidOperationException();
+			}
+
+			virtual bool Contains(GitIndexEntry ^entry) sealed = System::Collections::Generic::ICollection<GitIndexEntry^>::Contains
+			{
+				for each (GitIndexEntry^ i in this)
+				{
+					if (i == entry)
+						return true;
+				}
+				return false;
+			}
+
+			virtual void CopyTo(array<GitIndexEntry^>^ to, int index) sealed = System::Collections::Generic::ICollection<GitIndexEntry^>::CopyTo
+			{
+				for each (GitIndexEntry^ i in this)
+				{
+					to[index++] = i;
+				}
+			}
+
+			virtual bool Remove(GitIndexEntry^ entry) sealed = System::Collections::Generic::ICollection<GitIndexEntry^>::Remove
+			{
+				int n = 0;
+
+				for each (GitIndexEntry^ i in this)
+				{
+					if (i == entry)
+					{
+						return Remove(n);
+					}
+					n++;
+				}
+				return false;
+			}
+
 		public:
 			bool Write();
 			bool Write(GitArgs ^args);
+
+			bool Reload();
+			bool Reload(GitArgs ^args);
+
+			bool Normalize();
+
+			bool Clear();
+			bool Remove(int index);
+			bool Remove(String^ relativePath) { return Remove(relativePath, false); }
+			bool Remove(String^ relativePath, bool recursive);
+
+		public:
+			bool Read(GitTree ^replacementTree);
+			bool Read(GitTree ^replacementTree, GitArgs ^args);
+		};
+
+		public ref class GitIndexEntry sealed : public Implementation::GitBase
+		{
+			initonly GitIndex ^_index;
+			initonly git_index_entry *_entry;
+			String^ _relPath;
+
+		internal:
+			GitIndexEntry(GitIndex ^index, git_index_entry *entry)
+			{
+				if (! index)
+					throw gcnew ArgumentNullException("index");
+				else if (! entry)
+					throw gcnew ArgumentNullException("entry");
+
+				_index = index;
+				_entry = entry;
+			}
+
+		public:
+			property String^ RelativePath
+			{
+				String^ get()
+				{
+					if (!_relPath && !_index->IsDisposed)
+						_relPath = Utf8_PtrToString(_entry->path);
+
+					return _relPath;
+				}
+			}
+
 		};
 	}
 }
