@@ -50,7 +50,7 @@ using SharpGit::Implementation::GitLibraryAttribute;
 [assembly:GitLibrary("Libgit2", LIBGIT2_VERSION)]
 [assembly:GitLibrary("Apr", APR_VERSION_STRING)];
 [assembly:GitLibrary("Subversion", SVN_VER_NUMBER)];
-[assembly:GitLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpSvnVersion=true, Optional=true)];
+[assembly:GitLibrary("SharpPlink", "", DynamicallyLinked=true, UseSharpGitVersion=true, Optional=true)];
 
 //
 // Version information for an assembly consists of the following four values:
