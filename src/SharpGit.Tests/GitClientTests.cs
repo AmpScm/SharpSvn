@@ -100,6 +100,26 @@ namespace SharpGit.Tests
                 Assert.That(ticked, Is.EqualTo(5), "Ticked");
 
                 Assert.That(git.Delete(fileInSubDir));
+
+                GitId commit;
+
+                GitCommitArgs ga = new GitCommitArgs();
+                ga.Author.Name = "Tester";
+                ga.Author.EmailAddress = "author@example.com";
+                ga.Committer.Name = "Tester";
+                ga.Committer.EmailAddress = "author@example.com";
+                DateTime ct = new DateTime(2002, 01, 01);
+                ga.Author.When = ct;
+                ga.Committer.When = ct;
+
+                // The passed path is currently just used to find the local repository
+                Assert.That(git.Commit(dir, ga, out commit));
+                Assert.That(commit, Is.EqualTo(new GitId("80fc0c0b7bcbb032ca0403d1df872506c6538274")));
+
+                GitCloneArgs gc = new GitCloneArgs();
+                gc.Synchronous = true;
+
+                git.Clone(dir, GetTempPath(), gc);
             }
 
         }

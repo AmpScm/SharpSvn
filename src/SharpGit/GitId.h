@@ -130,7 +130,7 @@ namespace SharpGit {
 		}
 
 	internal:
-		operator git_oid()
+		git_oid AsOid()
 		{
 			git_oid rslt;
 

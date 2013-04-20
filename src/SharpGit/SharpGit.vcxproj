@@ -279,7 +279,9 @@
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="GitClientContext.cpp" />
+    <ClCompile Include="GitClient\GitCheckOut.cpp" />
     <ClCompile Include="GitClient\GitClone.cpp" />
+    <ClCompile Include="GitClient\GitCommit.cpp" />
     <ClCompile Include="GitClient\GitDelete.cpp" />
     <ClCompile Include="GitClient\GitAdd.cpp" />
     <ClCompile Include="GitClient\GitClient.cpp" />
@@ -302,9 +304,11 @@
   <ItemGroup>
     <ClInclude Include="GitClientContext.h" />
     <ClInclude Include="GitClient\GitAdd.h" />
+    <ClInclude Include="GitClient\GitCheckOut.h" />
     <ClInclude Include="GitClient\GitClient.h" />
     <ClInclude Include="GitClient\GitClientEventArgs.h" />
     <ClInclude Include="GitClient\GitClone.h" />
+    <ClInclude Include="GitClient\GitCommit.h" />
     <ClInclude Include="GitClient\GitDelete.h" />
     <ClInclude Include="GitClient\GitStatus.h" />
     <ClInclude Include="GitClient\GitStatusEventArgs.h" />

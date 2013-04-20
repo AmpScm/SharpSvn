@@ -9,6 +9,7 @@ namespace SharpGit {
 	ref class GitAddArgs;
 	ref class GitDeleteArgs;
 	ref class GitCloneArgs;
+	ref class GitCommitArgs;
 
 	namespace Implementation {
 		ref class GitLibrary;
@@ -47,8 +48,18 @@ namespace SharpGit {
 		bool Clone(System::Uri ^remoteRepository, String ^path, GitCloneArgs ^args);
 		bool Clone(String ^localRepository, String ^path, GitCloneArgs ^args);
 
+		bool Commit(String ^path);
+		bool Commit(System::Collections::Generic::ICollection<String^> ^paths);
+		bool Commit(String ^path, GitCommitArgs ^args);
+		bool Commit(System::Collections::Generic::ICollection<String^> ^paths, GitCommitArgs ^args);
+
+		bool Commit(String ^path, [Out] GitId ^%commitId);
+		bool Commit(System::Collections::Generic::ICollection<String^> ^paths, [Out] GitId ^%commitId);
+		bool Commit(String ^path, GitCommitArgs ^args, [Out] GitId ^%commitId);
+		bool Commit(System::Collections::Generic::ICollection<String^> ^paths, GitCommitArgs ^args, [Out] GitId ^%commitId);
+
 	private:
-		bool CloneInternal(String ^rawRepository, String ^path, GitCloneArgs ^args);
+		bool CloneInternal(const char *rawRepository, String ^path, GitCloneArgs ^args, GitPool ^pool);
 	public:
 		/// <summary>Gets the libgit2 version</summary>
 		static property System::Version ^Version

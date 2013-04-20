@@ -32,5 +32,6 @@ namespace SharpGit {
 using SharpGit::Implementation::GitBase;
 using SharpGit::Implementation::GitPool;
 using SharpGit::Plumbing::GitRepository;
+using System::Runtime::InteropServices::OutAttribute;
 
 #include "GitId.h"

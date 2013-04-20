@@ -2,10 +2,12 @@
 
 #include "GitRepository.h"
 #include "../GitClient/GitStatus.h"
+#include "../GitClient/GitCommit.h"
 
 #include "GitConfiguration.h"
 #include "GitIndex.h"
 #include "GitObjectDatabase.h"
+#include "GitTree.h"
 
 using namespace System;
 using namespace SharpGit;
@@ -13,6 +15,7 @@ using namespace SharpGit::Plumbing;
 using namespace SharpGit::Implementation;
 
 struct git_repository {};
+struct git_commit {};
 
 void GitRepository::ClearReferences()
 {
@@ -289,6 +292,63 @@ const char *GitRepository::MakeRelpath(String ^path, GitPool ^pool)
 	const char *item_path = pool->AllocDirent(path);
 
 	return svn_dirent_skip_ancestor(wrk_path, item_path);
+}
+
+bool GitRepository::Lookup(GitId ^id, [Out] GitTree^% tree)
+{
+	return Lookup(id, gcnew GitNoArgs(), tree);
+}
+
+bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree)
+{
+	if (! id)
+		throw gcnew ArgumentNullException("id");
+
+	AssertOpen();
+
+	git_tree *the_tree;
+	int r = git_tree_lookup(&the_tree, _repository, &id->AsOid());
+
+	if (r == 0)
+		tree = gcnew GitTree(the_tree);
+	else
+		tree = nullptr;
+	
+	return args->HandleGitError(this, r);
+}
+
+bool GitRepository::Commit(GitTree ^tree, GitCommitArgs ^args)
+{
+	GitId ^ignored;
+
+	return Commit(tree, args, ignored);
+}
+
+bool GitRepository::Commit(GitTree ^tree, GitCommitArgs ^args, [Out] GitId^% id)
+{
+	if (!tree)
+		throw gcnew ArgumentNullException("tree");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	AssertOpen();
+
+	GitPool pool;
+
+	git_oid commit_id;
+	int r = git_commit_create(&commit_id, _repository,
+							  pool.AllocString(args->UpdateReference),
+							  args->Author->Alloc(%pool),
+							  args->Committer->Alloc(%pool),
+							  NULL /* utf-8 */,
+							  pool.AllocString(args->LogMessage),
+							  tree->Handle,
+							  0, NULL);
+
+	if (! r)
+		id = gcnew GitId(commit_id);
+	
+	return args->HandleGitError(this, r);
 }
 
 String ^GitRepository::MakeRelativePath(String ^path)
