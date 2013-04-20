@@ -24,6 +24,7 @@ namespace SharpGit.Tests
 
             Assert.That(GitClient.SharpGitVersion, Is.GreaterThanOrEqualTo(new Version(0, 1700)));
             Assert.That(GitClient.AdministrativeDirectoryName, Is.EqualTo(".git"));
+            Assert.That(GitClient.GitLibraries, Is.Not.Empty);
         }
 
         [Test]

@@ -8,13 +8,20 @@ namespace SharpGit {
 	ref class GitStatusArgs;
 	ref class GitAddArgs;
 
+	namespace Implementation {
+		ref class GitLibrary;
+	}
 	namespace Plumbing {
 		ref class GitRepository;
 	}
+
+	using ::SharpGit::Implementation::GitLibrary;
 	using ::SharpGit::Plumbing::GitRepository;
+	using System::Collections::Generic::ICollection;
 
 	public ref class GitClient : GitClientContext
 	{
+		static ICollection<GitLibrary^>^ _gitLibraries;
 	public:
 		GitClient() {}
 
@@ -40,6 +47,11 @@ namespace SharpGit {
 		static property System::Version ^SharpGitVersion
 		{
 			System::Version^ get();
+		}
+
+		property static System::Collections::Generic::ICollection<GitLibrary^>^ GitLibraries
+		{
+			System::Collections::Generic::ICollection<GitLibrary^>^ get();
 		}
 
 		static property String^ AdministrativeDirectoryName

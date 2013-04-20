@@ -56,6 +56,9 @@
     <ClCompile Include="GitClient\GitAdd.cpp">
       <Filter>GitClient</Filter>
     </ClCompile>
+    <ClCompile Include="Plumbing\GitTree.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -97,5 +100,16 @@
     <ClInclude Include="GitClient\GitAdd.h">
       <Filter>GitClient</Filter>
     </ClInclude>
+    <ClInclude Include="GitLibraryAttribute.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitTree.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
