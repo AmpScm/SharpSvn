@@ -41,6 +41,8 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 		opts->flags |= GIT_STATUS_OPT_EXCLUDE_SUBMODULES;
 	if (this->IncludeUnversionedRecursive)
 		opts->flags |= GIT_STATUS_OPT_RECURSE_UNTRACKED_DIRS;
+	if (this->IncludeIgnoredRecursive)
+		opts->flags |= GIT_STATUS_OPT_RECURSE_IGNORED_DIRS;
 
 	return opts;
 }

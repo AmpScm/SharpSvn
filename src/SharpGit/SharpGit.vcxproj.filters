@@ -85,12 +85,6 @@
     <ClInclude Include="GitClient\GitClient.h">
       <Filter>GitClient</Filter>
     </ClInclude>
-    <ClInclude Include="GitClient\Args\GitStatus.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
-    <ClInclude Include="GitClient\EventArgs\GitStatusEventArgs.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
     <ClInclude Include="Plumbing\GitRepository.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
@@ -117,6 +111,12 @@
     </ClInclude>
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitClient\GitClone.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitStatus.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitStatusEventArgs.h">
       <Filter>GitClient</Filter>
     </ClInclude>
   </ItemGroup>
