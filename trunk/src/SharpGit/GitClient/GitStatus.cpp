@@ -8,6 +8,7 @@ using namespace SharpGit::Plumbing;
 
 GitStatusEventArgs::GitStatusEventArgs(const char *path, const char *wcPath, unsigned status, GitStatusArgs ^args, Implementation::GitPool ^pool)
 {
+	UNUSED(args);
 	_path = path;
 	_wcPath = wcPath;
 	_status = status;
