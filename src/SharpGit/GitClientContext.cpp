@@ -164,6 +164,31 @@ const char *GitPool::AllocRelpath(String ^path)
         return "";
 }
 
+const char* GitPool::AllocString(String^ value)
+{
+    if (!value)
+        value = "";
+
+    if (value->Length >= 1)
+    {
+        cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
+
+        char* pData = (char*)Alloc(bytes->Length+1);
+
+        pin_ptr<unsigned char> pBytes = &bytes[0];
+
+        if (pData && pBytes)
+            memcpy(pData, pBytes, bytes->Length);
+
+        pData[bytes->Length] = 0;
+
+        return pData;
+    }
+    else
+        return "";
+}
+
+
 System::String ^GitBase::Utf8_PtrToString(const char *ptr)
 {
 	if (! ptr)

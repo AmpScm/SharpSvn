@@ -14,7 +14,7 @@ namespace SharpGit.Tests
     {
         string GetTempPath()
         {
-            return Path.Combine(Path.GetTempPath(), "gittest-"+Guid.NewGuid().ToString("N"));
+            return Path.Combine(Path.GetTempPath(), "gittest\\"+Guid.NewGuid().ToString("N"));
         }
 
         [Test]
@@ -109,6 +109,7 @@ namespace SharpGit.Tests
         public void CreateGitRepository()
         {
             string dir = GetTempPath();
+            string file = Path.Combine(dir, "file");
             using (GitRepository repo = GitRepository.Create(dir))
             {
                 Assert.That(repo, Is.Not.Null);
@@ -129,6 +130,22 @@ namespace SharpGit.Tests
                 GitObjectDatabase odb = repo.ObjectDatabase;
                 Assert.That(odb, Is.Not.Null);
                 repo.SetObjectDatabase(odb);
+
+                File.WriteAllText(file, "qqq");
+
+                repo.Index.Add("file");
+
+
+                Assert.That(index.Contains("file"));
+                GitIndexEntry entry = repo.Index["file"];
+
+                Assert.That(entry, Is.Not.Null);
+                Assert.That(entry.FileSize, Is.EqualTo(3));
+                Assert.That(entry.Id, Is.EqualTo(new GitId("E5A49F32170B89EE4425C4AB09E70DFCDB93E174")));
+
+                index.Reload();
+
+                Assert.That(index.Contains("file"), Is.False);
             }
         }
     }

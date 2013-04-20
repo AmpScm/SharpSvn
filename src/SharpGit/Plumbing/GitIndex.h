@@ -72,7 +72,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return _index != nullptr;
+					return !_index;
 				}
 			}
 
@@ -230,6 +230,38 @@ namespace SharpGit {
 				}
 			}
 
+			property int Stage
+			{
+				int get()
+				{
+					if (!_index->IsDisposed)
+						return git_index_entry_stage(_entry);
+					else
+						return -1;
+				}
+			}
+
+			property __int64 FileSize
+			{
+				__int64 get()
+				{
+					if (!_index->IsDisposed)
+						return _entry->file_size;
+					else
+						return -1;
+				}
+			}
+
+			property GitId^ Id
+			{
+				GitId^ get()
+				{
+					if (!_index->IsDisposed)
+						return gcnew GitId(_entry->oid);
+
+					return nullptr;
+				}
+			}
 		};
 	}
 }

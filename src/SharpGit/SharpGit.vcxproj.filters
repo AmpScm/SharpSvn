@@ -112,6 +112,7 @@
     <ClInclude Include="GitClient\GitDelete.h">
       <Filter>GitClient</Filter>
     </ClInclude>
+    <ClInclude Include="GitId.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
