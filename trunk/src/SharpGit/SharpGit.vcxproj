@@ -301,13 +301,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GitClientContext.h" />
-    <ClInclude Include="GitClient\Args\GitStatus.h" />
-    <ClInclude Include="GitClient\EventArgs\GitStatusEventArgs.h" />
     <ClInclude Include="GitClient\GitAdd.h" />
     <ClInclude Include="GitClient\GitClient.h" />
     <ClInclude Include="GitClient\GitClientEventArgs.h" />
     <ClInclude Include="GitClient\GitClone.h" />
     <ClInclude Include="GitClient\GitDelete.h" />
+    <ClInclude Include="GitClient\GitStatus.h" />
+    <ClInclude Include="GitClient\GitStatusEventArgs.h" />
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitLibraryAttribute.h" />
     <ClInclude Include="Plumbing\GitConfiguration.h" />
