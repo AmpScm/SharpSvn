@@ -328,7 +328,7 @@ GitReference^ GitRepository::Head::get()
 	int r = git_repository_head(&ref, _repository);
 
 	if (!r)
-		return gcnew GitReference(ref);
+		return gcnew GitReference(this, ref);
 
 	return nullptr;
 }

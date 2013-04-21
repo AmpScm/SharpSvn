@@ -125,7 +125,8 @@ namespace SharpGit {
 							items[i] = gcnew GitCommit(_commit->_repository, commit);
 					}
 
-					return safe_cast<IEnumerator<GitCommit^>^>(items->GetEnumerator());
+					ICollection<GitCommit^>^ col = safe_cast<ICollection<GitCommit^>^>(items);
+					return col->GetEnumerator();
 				}
 
 				property bool IsReadOnly
@@ -231,7 +232,9 @@ namespace SharpGit {
 							items[i] = gcnew GitId(oid);
 					}
 
-					return safe_cast<IEnumerator<GitId^>^>(items->GetEnumerator());
+					ICollection<GitId^>^ col = safe_cast<ICollection<GitId^>^>(items);
+
+					return col->GetEnumerator();
 				}
 
 				property bool IsReadOnly
@@ -302,7 +305,7 @@ namespace SharpGit {
 				}
 			}
 
-			property CommitParentIdCollection^ ParentsIds
+			property CommitParentIdCollection^ ParentIds
 			{
 				CommitParentIdCollection^ get()
 				{

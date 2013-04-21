@@ -34,9 +34,13 @@ namespace SharpGit.Tests
             ga.Author.EmailAddress = "author@example.com";
             ga.Committer.Name = "Other";
             ga.Committer.EmailAddress = "committer@example.com";
+
+            // Use stable time and offset to always produce the same hash
             DateTime ct = new DateTime(2002, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             ga.Author.When = ct;
+            ga.Author.TimeOffsetInMinutes = 120;
             ga.Committer.When = ct;
+            ga.Committer.TimeOffsetInMinutes = 120;
 
             string repoDir = GetTempPath();
             string repo2Dir = GetTempPath();
@@ -124,17 +128,53 @@ namespace SharpGit.Tests
                 Assert.That(git.Commit(repoDir, ga, out commit));
                 Assert.That(commit, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
 
-                GitCloneArgs gc = new GitCloneArgs();
-                gc.Synchronous = true;
 
-                git.Clone(repoDir, repo2Dir, gc);
+                File.Move(file, file + ".a");
 
+                ticked = 0;
+                gsa.IncludeIgnored = false;
+                gsa.IncludeUnversioned = true;
+                gsa.IncludeUnmodified = false;
+                Assert.That(git.Status(repoDir, gsa,
+                    delegate(object sender, GitStatusEventArgs e)
+                    {
+                        switch (e.RelativePath)
+                        {
+                            case "dir":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "dir index normal");
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New), "dir wc normal");
+                                break;
+                            case "newfile":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "newfile index normal");
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Deleted), "newfile wc deleted");
+                                break;
+                            case "newfile.a":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "newfile.a index normal");
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New), "newfile.a wc new");
+                                break;
+                            case "other":
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "other index normal");
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New), "other wc normal");
+                                break;
+                            default:
+                                Assert.Fail("Invalid node found: {0}", e.RelativePath);
+                                break;
+                        }
+
+                        Assert.That(e.FullPath, Is.EqualTo(Path.GetFullPath(Path.Combine(repoDir, e.RelativePath))));
+                        ticked++;
+                    }), Is.True);
+
+                Assert.That(ticked, Is.EqualTo(4));
             }
 
             using (GitRepository repo1 = new GitRepository(repoDir))
             //using (GitRepository repo2 = new GitRepository(repo2Dir))
             {
-                Assert.That(repo1.Head, Is.Not.Null);
+                GitReference head = repo1.Head;
+                Assert.That(head, Is.Not.Null, "Has head");
+
+                Assert.That(head.Name, Is.EqualTo("refs/heads/master"));
                 //Assert.That(repo2.Head, Is.Not.Null);
                 
                 GitId headId;
@@ -155,6 +195,9 @@ namespace SharpGit.Tests
 
                 // Assert.That(commit.Committer.TimeOffsetInMinutes, Is.EqualTo(120)); // CEST dependent
                 Assert.That(commit.LogMessage, Is.EqualTo("A log message to remember"));
+
+                Assert.That(commit.Parents, Is.Not.Empty);
+                Assert.That(commit.ParentIds, Is.Not.Empty);
             }
         }
 
