@@ -333,6 +333,79 @@ GitReference^ GitRepository::Head::get()
 	return nullptr;
 }
 
+bool GitRepository::ResolveReference(String^ referenceName, [Out] GitId ^%id)
+{
+	if (String::IsNullOrEmpty(referenceName))
+		throw gcnew ArgumentNullException("referenceName");
+
+	AssertOpen();
+
+	GitPool pool;
+	git_oid oid;
+	int r = git_reference_name_to_id(&oid, _repository, pool.AllocString(referenceName));
+
+	if (r == 0)
+	{
+		id = gcnew GitId(oid);
+		return true;
+	}
+	else
+	{
+		id = nullptr;
+		return false;
+	}
+}
+
+bool GitRepository::ResolveReference(GitReference^ reference, [Out] GitId ^%id)
+{
+	if (! reference)
+		throw gcnew ArgumentNullException("reference");
+
+	AssertOpen();
+
+	GitPool pool;
+	git_reference *ref;
+	int r = git_reference_resolve(&ref, reference->Handle);
+
+	if (r == 0)
+	{
+		const git_oid *oid = git_reference_target(ref);
+		id = gcnew GitId(oid);
+
+		git_reference_free(ref);
+
+		return true;
+	}
+	else
+	{
+		id = nullptr;
+		return false;
+	}
+}
+
+bool GitRepository::GetCommit(GitId ^id, [Out] GitCommit ^%commit)
+{
+	if (! id)
+		throw gcnew ArgumentNullException("id");
+
+	AssertOpen();
+
+	git_commit *cmt;
+	git_oid oid = id->AsOid();
+	int r = git_commit_lookup(&cmt, _repository, &oid);
+
+	if (r == 0)
+	{
+		commit = gcnew GitCommit(this, cmt);
+		return true;
+	}
+	else
+	{
+		commit = nullptr;
+		return false;
+	}
+}
+
 bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitCommitArgs ^args)
 {
 	GitId ^ignored;
