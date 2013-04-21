@@ -2,6 +2,8 @@
 #include "GitClientContext.h"
 
 namespace SharpGit {
+	ref class GitSignature;
+
 	namespace Plumbing {
 		ref class GitRepository;
 
@@ -176,8 +178,118 @@ namespace SharpGit {
 				}
 			};
 
+			ref class CommitParentIdCollection sealed : public ICollection<GitId^>
+			{
+				initonly GitCommit ^_commit;
+
+			internal:
+				CommitParentIdCollection(GitCommit ^commit)
+				{
+					if (! commit)
+						throw gcnew ArgumentNullException("commit");
+
+					_commit = commit;
+				}
+
+			public:
+				property int Count
+				{
+					virtual int get()
+					{
+						if (_commit->IsDisposed)
+							return 0;
+
+						return git_commit_parentcount(_commit->Handle);
+					}
+				}
+
+				property GitId^ default[int]
+				{
+					GitId^ get(int index)
+					{
+						if (index < 0)
+							throw gcnew ArgumentOutOfRangeException("index");
+
+						const git_oid *oid = git_commit_parent_id(_commit->Handle, index);
+						if (oid)
+							return gcnew GitId(oid);
+
+						return nullptr;
+					}
+				}
+
+				virtual IEnumerator<GitId^>^ GetEnumerator()
+				{
+					array<GitId^>^ items = gcnew array<GitId^>(Count);
+
+					int c = git_commit_parentcount(_commit->Handle);
+
+					for(int i = 0; i < c; i++)
+					{
+						const git_oid *oid = git_commit_parent_id(_commit->Handle, i);
+						if (oid)
+							items[i] = gcnew GitId(oid);
+					}
+
+					return safe_cast<IEnumerator<GitId^>^>(items->GetEnumerator());
+				}
+
+				property bool IsReadOnly
+				{
+					virtual bool get()
+					{
+						return true;
+					}
+				}
+
+				virtual bool Contains(GitId^ commit)
+				{
+					for each(GitId^ c in this)
+					{
+						if (c->Equals(commit))
+							return true;
+					}
+					return false;
+				}
+
+			private:
+				virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+				{
+					return GetEnumerator();
+				}
+
+				virtual void Add(GitId^ item) sealed = ICollection<GitId^>::Add
+				{
+					UNUSED(item);
+					throw gcnew InvalidOperationException();
+				}
+
+				virtual bool Remove(GitId^ item) sealed = ICollection<GitId^>::Remove
+				{
+					UNUSED(item);
+					throw gcnew InvalidOperationException();
+				}
+
+				virtual void Clear() sealed = ICollection<GitId^>::Clear
+				{
+					throw gcnew InvalidOperationException();
+				}
+
+				virtual void CopyTo(array<GitId^>^ toArray, int index) sealed = ICollection<GitId^>::CopyTo
+				{
+					for each(GitId^ c in this)
+					{
+						toArray[index++] = c;
+					}
+				}
+			};
+
 		private:
 			CommitParentCollection ^_parents;
+			CommitParentIdCollection ^_parentIds;
+			GitSignature ^_author;
+			GitSignature ^_committer;
+			String ^_logMessage;
 		public:
 			property CommitParentCollection^ Parents
 			{
@@ -190,6 +302,31 @@ namespace SharpGit {
 				}
 			}
 
+			property CommitParentIdCollection^ ParentsIds
+			{
+				CommitParentIdCollection^ get()
+				{
+					if (!_parentIds)
+						_parentIds = gcnew CommitParentIdCollection(this);
+
+					return _parentIds;
+				}
+			}
+
+			property GitSignature^ Author
+			{
+				GitSignature ^get();
+			}
+
+			property GitSignature^ Committer
+			{
+				GitSignature ^get();
+			}
+
+			property String^ LogMessage
+			{
+				String^ get();
+			}
 		};
 	}
 }
