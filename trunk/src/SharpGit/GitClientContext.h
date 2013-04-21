@@ -135,7 +135,7 @@ namespace SharpGit {
 
 		bool HandleGitError(Object^ q, int r)
 		{
-			if (_ex && r == WrappedError)
+			if (_ex && (r == WrappedError || r == GIT_EUSER))
 			{
 				try
 				{

@@ -55,7 +55,7 @@ namespace SharpGit {
 			{
 				git_commit* get()
 				{
-					if (! IsDisposed)
+					if (IsDisposed)
 						throw gcnew InvalidOperationException();
 					return _commit;
 				}

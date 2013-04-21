@@ -29,6 +29,15 @@ namespace SharpGit.Tests
         [Test]
         public void UseGitClient()
         {
+            GitCommitArgs ga = new GitCommitArgs();
+            ga.Author.Name = "Tester";
+            ga.Author.EmailAddress = "author@example.com";
+            ga.Committer.Name = "Tester";
+            ga.Committer.EmailAddress = "author@example.com";
+            DateTime ct = new DateTime(2002, 01, 01);
+            ga.Author.When = ct;
+            ga.Committer.When = ct;
+
             string dir = GetTempPath();
             using (GitRepository repo = GitRepository.Create(dir))
             using (GitClient git = new GitClient())
@@ -49,12 +58,17 @@ namespace SharpGit.Tests
 
                 git.Add(ignoreFile);
                 git.Add(file);
+                git.Commit(dir, ga);
+
                 git.Add(fileInSubDir);
 
                 int ticked = 0;
 
+                File.AppendAllText(file, "\nExtra Line");
+
                 GitStatusArgs gsa = new GitStatusArgs();
                 gsa.IncludeIgnored = true;
+                gsa.IncludeUnmodified = true;
 
                 Assert.That(git.Status(dir, gsa,
                     delegate(object sender, GitStatusEventArgs e)
@@ -63,13 +77,13 @@ namespace SharpGit.Tests
                         {
                             case "newfile":
                                 //Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
-                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
-                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "newfile index normal");
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Modified), "newfile wc modified");
                                 Assert.That(e.Ignored, Is.False);
                                 break;
                             case "dir/file2":
-                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
-                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added), "file2 index added");
+                                Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal), "file2 wc normal");
                                 Assert.That(e.Ignored, Is.False);
                                 break;
                             case "other":
@@ -78,7 +92,7 @@ namespace SharpGit.Tests
                                 Assert.That(e.Ignored, Is.False);
                                 break;
                             case ".gitignore":
-                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Added));
+                                Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal));
                                 Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Normal));
                                 Assert.That(e.Ignored, Is.False);
                                 break;
@@ -103,18 +117,9 @@ namespace SharpGit.Tests
 
                 GitId commit;
 
-                GitCommitArgs ga = new GitCommitArgs();
-                ga.Author.Name = "Tester";
-                ga.Author.EmailAddress = "author@example.com";
-                ga.Committer.Name = "Tester";
-                ga.Committer.EmailAddress = "author@example.com";
-                DateTime ct = new DateTime(2002, 01, 01);
-                ga.Author.When = ct;
-                ga.Committer.When = ct;
-
                 // The passed path is currently just used to find the local repository
                 Assert.That(git.Commit(dir, ga, out commit));
-                Assert.That(commit, Is.EqualTo(new GitId("80fc0c0b7bcbb032ca0403d1df872506c6538274")));
+                Assert.That(commit, Is.EqualTo(new GitId("e172fb4b367df8fc64d679bb4fdff2788c0886f0")));
 
                 GitCloneArgs gc = new GitCloneArgs();
                 gc.Synchronous = true;
