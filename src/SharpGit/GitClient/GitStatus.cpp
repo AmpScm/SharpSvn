@@ -28,7 +28,7 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 	else if (! this->ParallelStatus)
 		opts->show = GIT_STATUS_SHOW_INDEX_THEN_WORKDIR;
 	else
-		opts->show = GIT_STATUS_SHOW_INDEX_THEN_WORKDIR;
+		opts->show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
 
 	opts->flags = 0;
 	if (this->IncludeUnversioned)
