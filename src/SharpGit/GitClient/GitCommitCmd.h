@@ -112,6 +112,17 @@ namespace SharpGit {
 			{
 				return _offset;
 			}
+			void set(int value)
+			{
+				if (_readOnly)
+					throw gcnew InvalidOperationException();
+
+				// Not strictly OK, but should avoid most problems
+				if ((value / 60) * 60 != value)
+					throw gcnew InvalidOperationException();
+
+				_offset = value;
+			}
 		}
 	};
 

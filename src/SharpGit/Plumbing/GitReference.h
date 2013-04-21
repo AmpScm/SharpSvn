@@ -8,6 +8,7 @@ namespace SharpGit {
 		public ref class GitReference : public Implementation::GitBase
 		{
 		private:
+			initonly GitRepository ^_repository;
 			git_reference *_reference;
 
 			!GitReference()
@@ -38,11 +39,14 @@ namespace SharpGit {
 			}
 
 		internal:
-			GitReference(git_reference *handle)
+			GitReference(GitRepository ^repository, git_reference *handle)
 			{
+				if (! repository)
+					throw gcnew ArgumentNullException("repository");
 				if (! handle)
 					throw gcnew ArgumentNullException("handle");
 
+				_repository = repository;
 				_reference = handle;
 			}
 
@@ -50,21 +54,36 @@ namespace SharpGit {
 			{
 				git_reference* get()
 				{
-					if (!_reference)
+					if (IsDisposed)
 						throw gcnew InvalidOperationException();
 					return _reference;
 				}
 			}
 
+		private:
+			String^ _name;
+
 		public:
 			property bool IsDisposed
 			{
-				bool get()
+				bool get();
+			}
+
+			property String^ Name
+			{
+				String^ get()
 				{
-					return !_reference;
+					if (!_name && !IsDisposed)
+					{
+						_name = GitBase::Utf8_PtrToString(git_reference_name(_reference));
+					}
+
+					return _name;
 				}
 			}
 
+			bool Delete();
+			bool Delete(GitArgs ^args);
 		};
 	}
 }

@@ -165,7 +165,8 @@ System::Collections::Generic::IEnumerator<GitIndexEntry^>^ GitIndex::GetEnumerat
 	for (int i = 0; i < cnt; i++)
 		items[i] = default[i];
 
-	return static_cast<System::Collections::Generic::IEnumerable<GitIndexEntry^>^>(items)->GetEnumerator();
+	ICollection<GitIndexEntry^>^ col = safe_cast<ICollection<GitIndexEntry^>^>(items);
+	return col->GetEnumerator();
 }
 
 bool GitIndex::Remove(int index)
