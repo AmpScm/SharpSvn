@@ -88,5 +88,18 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 	if (!repo.Lookup(id, args, tree))
 		return false;
 
-	return repo.Commit(tree, nullptr, args, commitId);
+	array<GitCommit^>^ parents = nullptr;
+	GitReference^ ref = repo.Head;
+	if (ref)
+	{
+		GitId ^commitId;
+		if (repo.ResolveReference(ref, commitId))
+		{
+			parents = gcnew array<GitCommit^>(1);
+			if (! repo.GetCommit(commitId, parents[0]))
+				parents = nullptr;
+		}
+	}
+
+	return repo.Commit(tree, safe_cast<ICollection<GitCommit^>^>(parents), args, commitId);
 }

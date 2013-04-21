@@ -26,6 +26,8 @@ static GitPool::GitPool()
 	}
 
 	svn_utf_initialize(pool);
+
+	git_threads_init();
 }
 
 GitPool::!GitPool()
