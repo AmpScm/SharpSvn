@@ -32,22 +32,23 @@ namespace SharpGit.Tests
             GitCommitArgs ga = new GitCommitArgs();
             ga.Author.Name = "Tester";
             ga.Author.EmailAddress = "author@example.com";
-            ga.Committer.Name = "Tester";
-            ga.Committer.EmailAddress = "author@example.com";
-            DateTime ct = new DateTime(2002, 01, 01);
+            ga.Committer.Name = "Other";
+            ga.Committer.EmailAddress = "committer@example.com";
+            DateTime ct = new DateTime(2002, 01, 01, 0, 0, 0, DateTimeKind.Utc);
             ga.Author.When = ct;
             ga.Committer.When = ct;
 
-            string dir = GetTempPath();
-            using (GitRepository repo = GitRepository.Create(dir))
+            string repoDir = GetTempPath();
+            string repo2Dir = GetTempPath();
+            using (GitRepository repo = GitRepository.Create(repoDir))
             using (GitClient git = new GitClient())
             {
-                string ignoreFile = Path.Combine(dir, ".gitignore");
-                string file = Path.Combine(dir, "newfile");
-                string subDir = Path.Combine(dir, "dir");
+                string ignoreFile = Path.Combine(repoDir, ".gitignore");
+                string file = Path.Combine(repoDir, "newfile");
+                string subDir = Path.Combine(repoDir, "dir");
                 string fileInSubDir = Path.Combine(subDir, "file2");
-                string file3 = Path.Combine(dir, "other");
-                string file4 = Path.Combine(dir, "q.ignore");
+                string file3 = Path.Combine(repoDir, "other");
+                string file4 = Path.Combine(repoDir, "q.ignore");
                 File.WriteAllText(file, "Some body");
                 Directory.CreateDirectory(subDir);
                 File.WriteAllText(fileInSubDir, "Some other body");
@@ -58,7 +59,7 @@ namespace SharpGit.Tests
 
                 git.Add(ignoreFile);
                 git.Add(file);
-                git.Commit(dir, ga);
+                git.Commit(repoDir, ga);
 
                 git.Add(fileInSubDir);
 
@@ -70,7 +71,7 @@ namespace SharpGit.Tests
                 gsa.IncludeIgnored = true;
                 gsa.IncludeUnmodified = true;
 
-                Assert.That(git.Status(dir, gsa,
+                Assert.That(git.Status(repoDir, gsa,
                     delegate(object sender, GitStatusEventArgs e)
                     {
                         switch (e.RelativePath)
@@ -107,7 +108,7 @@ namespace SharpGit.Tests
                                 break;
                         }
 
-                        Assert.That(e.FullPath, Is.EqualTo(Path.GetFullPath(Path.Combine(dir, e.RelativePath))));
+                        Assert.That(e.FullPath, Is.EqualTo(Path.GetFullPath(Path.Combine(repoDir, e.RelativePath))));
                         ticked++;
                     }), Is.True);
 
@@ -117,16 +118,44 @@ namespace SharpGit.Tests
 
                 GitId commit;
 
+                ga.LogMessage = "A log message to remember";
+
                 // The passed path is currently just used to find the local repository
-                Assert.That(git.Commit(dir, ga, out commit));
-                Assert.That(commit, Is.EqualTo(new GitId("e172fb4b367df8fc64d679bb4fdff2788c0886f0")));
+                Assert.That(git.Commit(repoDir, ga, out commit));
+                Assert.That(commit, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
 
                 GitCloneArgs gc = new GitCloneArgs();
                 gc.Synchronous = true;
 
-                git.Clone(dir, GetTempPath(), gc);
+                git.Clone(repoDir, repo2Dir, gc);
+
             }
 
+            using (GitRepository repo1 = new GitRepository(repoDir))
+            //using (GitRepository repo2 = new GitRepository(repo2Dir))
+            {
+                Assert.That(repo1.Head, Is.Not.Null);
+                //Assert.That(repo2.Head, Is.Not.Null);
+                
+                GitId headId;
+                Assert.That(repo1.ResolveReference(repo1.Head, out headId));
+                Assert.That(headId, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
+                GitCommit commit;
+
+                Assert.That(repo1.GetCommit(headId, out commit));
+                Assert.That(commit, Is.Not.Null, "Have a commit");
+
+                Assert.That(commit.Author, Is.Not.Null);
+                Assert.That(commit.Author.Name, Is.EqualTo("Tester"));
+                Assert.That(commit.Author.EmailAddress, Is.EqualTo("author@example.com"));
+
+                Assert.That(commit.Committer, Is.Not.Null);
+                Assert.That(commit.Committer.Name, Is.EqualTo("Other"));
+                Assert.That(commit.Committer.EmailAddress, Is.EqualTo("committer@example.com"));
+
+                // Assert.That(commit.Committer.TimeOffsetInMinutes, Is.EqualTo(120)); // CEST dependent
+                Assert.That(commit.LogMessage, Is.EqualTo("A log message to remember"));
+            }
         }
 
         [Test]
