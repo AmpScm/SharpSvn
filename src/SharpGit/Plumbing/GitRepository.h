@@ -29,6 +29,8 @@ namespace SharpGit {
 		ref class GitIndex;
 		ref class GitObjectDatabase;
 		ref class GitTree;
+		ref class GitCommit;
+		ref class GitReference;
 
 		public ref class GitRepository : public Implementation::GitBase
 		{
@@ -126,8 +128,8 @@ namespace SharpGit {
 			bool Lookup(GitId ^id, [Out] GitTree^% tree);
 			bool Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree);
 
-			bool Commit(GitTree ^tree, GitCommitArgs ^args);
-			bool Commit(GitTree ^tree, GitCommitArgs ^args, [Out] GitId^% id);
+			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args);
+			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args, [Out] GitId^% id);
 
 		public:
 			property bool IsEmpty
@@ -149,6 +151,34 @@ namespace SharpGit {
 			{
 				String^ get();
 				void set(String ^value);
+			}
+
+		public:
+			property GitReference^ Head
+			{
+				GitReference^ get();
+			}
+
+			property bool IsHeadDetached
+			{
+				bool get()
+				{
+					if (IsDisposed)
+						return false;
+
+					return (git_repository_head_detached(_repository) == 1);
+				}
+			}
+
+			property bool IsHeadOrphaned
+			{
+				bool get()
+				{
+					if (IsDisposed)
+						return false;
+
+					return (git_repository_head_orphan(_repository) == 1);
+				}
 			}
 
 		internal:

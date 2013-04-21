@@ -68,8 +68,14 @@
     <ClCompile Include="GitClient\GitCheckOut.cpp">
       <Filter>GitClient</Filter>
     </ClCompile>
-    <ClCompile Include="GitClient\GitCommit.cpp">
+    <ClCompile Include="Plumbing\GitCommit.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitCommitCmd.cpp">
       <Filter>GitClient</Filter>
+    </ClCompile>
+    <ClCompile Include="Plumbing\GitReference.cpp">
+      <Filter>Plumbing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -128,8 +134,14 @@
     <ClInclude Include="GitClient\GitCheckOut.h">
       <Filter>GitClient</Filter>
     </ClInclude>
-    <ClInclude Include="GitClient\GitCommit.h">
+    <ClInclude Include="Plumbing\GitCommit.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitCommitCmd.h">
       <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitReference.h">
+      <Filter>Plumbing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

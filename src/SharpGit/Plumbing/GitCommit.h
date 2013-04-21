@@ -5,54 +5,54 @@ namespace SharpGit {
 	namespace Plumbing {
 
 
-		public ref class GitObjectDatabase : public Implementation::GitBase
+		public ref class GitCommit : public Implementation::GitBase
 		{
 		private:
-			git_odb *_odb;
+			git_commit *_commit;
 
-			!GitObjectDatabase()
+			!GitCommit()
 			{
-				if (_odb)
+				if (_commit)
 				{
 					try
 					{
-						git_odb_free(_odb);
+						git_commit_free(_commit);
 					}
 					finally
 					{
-						_odb = nullptr;
+						_commit = nullptr;
 					}
 				}
 			}
 
-			~GitObjectDatabase()
+			~GitCommit()
 			{
 				try
 					{
-						git_odb_free(_odb);
+						git_commit_free(_commit);
 					}
 					finally
 					{
-						_odb = nullptr;
+						_commit = nullptr;
 					}
 			}
 
 		internal:
-			GitObjectDatabase(git_odb *handle)
+			GitCommit(git_commit *handle)
 			{
 				if (! handle)
 					throw gcnew ArgumentNullException("handle");
 
-				_odb = handle;
+				_commit = handle;
 			}
 
-			property git_odb* Handle
+			property git_commit* Handle
 			{
-				git_odb* get()
+				git_commit* get()
 				{
-					if (!_odb)
+					if (!_commit)
 						throw gcnew InvalidOperationException();
-					return _odb;
+					return _commit;
 				}
 			}
 
@@ -61,7 +61,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return !_odb;
+					return !_commit;
 				}
 			}
 
