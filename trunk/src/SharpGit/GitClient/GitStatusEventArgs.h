@@ -38,7 +38,14 @@ namespace SharpGit {
 			String^ get()
 			{
 				if (!_relPath && _path)
-					_relPath = GitBase::Utf8_PtrToString(_path);
+				{
+					int n = strlen(_path);
+
+					if (n > 0 && _path[n-1] == '/')
+						n--;
+
+					_relPath = GitBase::Utf8_PtrToString(_path, n);
+				}
 
 				return _relPath;
 			}
@@ -49,7 +56,20 @@ namespace SharpGit {
 			String^ get()
 			{
 				if (!_fullPath && _pool && _path && _wcPath)
+				{
+					int n = strlen(_path);
+
+					if (n > 0 && _path[n-1] == '/')
+					{
+						char *p = (char*)_pool->Alloc(n);
+
+						memcpy(p, _path, n-1);
+						p[n-1] = 0;
+						_path = p;
+					}
+
 					_fullPath = GitBase::StringFromDirent(svn_dirent_join(_wcPath, _path, _pool->Handle), _pool);
+				}
 
 				return _fullPath;
 			}
