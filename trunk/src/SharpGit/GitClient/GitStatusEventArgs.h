@@ -8,14 +8,16 @@ namespace SharpGit {
 	{
 		Normal = 0,
 
-		New			= 0x0001,
-		Added		= 0x0002,
+		New			=	  0x0001,
+		Added		=	  0x0002,
 
-		Modified	= 0x0010,
+		Modified	=	  0x0010,
+		Renamed		=	  0x0020,
+		TypeChange	=	  0x0040,
 
-		Deleted		= 0x0100,
+		Deleted		= 0x01000000,
 
-		Ignored		= 0x1000,
+		Ignored		= 0x10000000,
 	};
 
 	public ref class GitStatusEventArgs : public GitClientEventArgs

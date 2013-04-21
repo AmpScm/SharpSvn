@@ -2,12 +2,14 @@
 
 #include "GitRepository.h"
 #include "../GitClient/GitStatus.h"
-#include "../GitClient/GitCommit.h"
+#include "../GitClient/GitCommitCmd.h"
 
 #include "GitConfiguration.h"
 #include "GitIndex.h"
 #include "GitObjectDatabase.h"
 #include "GitTree.h"
+#include "GitCommit.h"
+#include "GitReference.h"
 
 using namespace System;
 using namespace SharpGit;
@@ -15,7 +17,6 @@ using namespace SharpGit::Plumbing;
 using namespace SharpGit::Implementation;
 
 struct git_repository {};
-struct git_commit {};
 
 void GitRepository::ClearReferences()
 {
@@ -307,7 +308,8 @@ bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree)
 	AssertOpen();
 
 	git_tree *the_tree;
-	int r = git_tree_lookup(&the_tree, _repository, &id->AsOid());
+	git_oid tree_id = id->AsOid();
+	int r = git_tree_lookup(&the_tree, _repository, &tree_id);
 
 	if (r == 0)
 		tree = gcnew GitTree(the_tree);
@@ -317,14 +319,28 @@ bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree)
 	return args->HandleGitError(this, r);
 }
 
-bool GitRepository::Commit(GitTree ^tree, GitCommitArgs ^args)
+GitReference^ GitRepository::Head::get()
+{
+	if (IsDisposed)
+		return nullptr;
+
+	git_reference *ref;
+	int r = git_repository_head(&ref, _repository);
+
+	if (!r)
+		return gcnew GitReference(ref);
+
+	return nullptr;
+}
+
+bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitCommitArgs ^args)
 {
 	GitId ^ignored;
 
-	return Commit(tree, args, ignored);
+	return Commit(tree, parents, args, ignored);
 }
 
-bool GitRepository::Commit(GitTree ^tree, GitCommitArgs ^args, [Out] GitId^% id)
+bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitCommitArgs ^args, [Out] GitId^% id)
 {
 	if (!tree)
 		throw gcnew ArgumentNullException("tree");
@@ -335,6 +351,18 @@ bool GitRepository::Commit(GitTree ^tree, GitCommitArgs ^args, [Out] GitId^% id)
 
 	GitPool pool;
 
+	const git_commit** commits = nullptr;
+	int nCommits = 0;
+
+	if (parents)
+	{
+		// Theoretical problem: External change of parents might change count
+		commits = (const git_commit**)alloca(sizeof(git_commit*) * parents->Count);
+
+		for each (GitCommit^ c in parents)
+			commits[nCommits++] = c->Handle;
+	}
+
 	git_oid commit_id;
 	int r = git_commit_create(&commit_id, _repository,
 							  pool.AllocString(args->UpdateReference),
@@ -343,10 +371,12 @@ bool GitRepository::Commit(GitTree ^tree, GitCommitArgs ^args, [Out] GitId^% id)
 							  NULL /* utf-8 */,
 							  pool.AllocString(args->LogMessage),
 							  tree->Handle,
-							  0, NULL);
+							  nCommits, commits);
 
 	if (! r)
 		id = gcnew GitId(commit_id);
+	else
+		id = nullptr;
 	
 	return args->HandleGitError(this, r);
 }

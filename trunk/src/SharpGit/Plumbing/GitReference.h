@@ -5,54 +5,54 @@ namespace SharpGit {
 	namespace Plumbing {
 
 
-		public ref class GitObjectDatabase : public Implementation::GitBase
+		public ref class GitReference : public Implementation::GitBase
 		{
 		private:
-			git_odb *_odb;
+			git_reference *_reference;
 
-			!GitObjectDatabase()
+			!GitReference()
 			{
-				if (_odb)
+				if (_reference)
 				{
 					try
 					{
-						git_odb_free(_odb);
+						git_reference_free(_reference);
 					}
 					finally
 					{
-						_odb = nullptr;
+						_reference = nullptr;
 					}
 				}
 			}
 
-			~GitObjectDatabase()
+			~GitReference()
 			{
 				try
 					{
-						git_odb_free(_odb);
+						git_reference_free(_reference);
 					}
 					finally
 					{
-						_odb = nullptr;
+						_reference = nullptr;
 					}
 			}
 
 		internal:
-			GitObjectDatabase(git_odb *handle)
+			GitReference(git_reference *handle)
 			{
 				if (! handle)
 					throw gcnew ArgumentNullException("handle");
 
-				_odb = handle;
+				_reference = handle;
 			}
 
-			property git_odb* Handle
+			property git_reference* Handle
 			{
-				git_odb* get()
+				git_reference* get()
 				{
-					if (!_odb)
+					if (!_reference)
 						throw gcnew InvalidOperationException();
-					return _odb;
+					return _reference;
 				}
 			}
 
@@ -61,7 +61,7 @@ namespace SharpGit {
 			{
 				bool get()
 				{
-					return !_odb;
+					return !_reference;
 				}
 			}
 

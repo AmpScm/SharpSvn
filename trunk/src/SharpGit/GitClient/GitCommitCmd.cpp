@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #include "GitClient.h"
-#include "GitCommit.h"
+#include "GitCommitCmd.h"
 
 #include "Plumbing/GitRepository.h"
 #include "Plumbing/GitIndex.h"
@@ -88,5 +88,5 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 	if (!repo.Lookup(id, args, tree))
 		return false;
 
-	return repo.Commit(tree, args, commitId);
+	return repo.Commit(tree, nullptr, args, commitId);
 }
