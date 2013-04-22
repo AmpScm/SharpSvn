@@ -11,6 +11,7 @@
       <arg value="-DBUILD_EXAMPLES=OFF" />
       <arg value="-DSTATIC_CRT=OFF" />
       <arg value="-DSTDCALL=OFF" />
+      <arg value="-DTHREADSAFE=ON" />
     </CMake>
     
     <MSBuild>
