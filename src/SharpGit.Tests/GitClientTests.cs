@@ -44,6 +44,7 @@ namespace SharpGit.Tests
 
             string repoDir = GetTempPath();
             string repo2Dir = GetTempPath();
+            GitId firstResult;
             using (GitRepository repo = GitRepository.Create(repoDir))
             using (GitClient git = new GitClient())
             {
@@ -63,7 +64,7 @@ namespace SharpGit.Tests
 
                 git.Add(ignoreFile);
                 git.Add(file);
-                git.Commit(repoDir, ga);
+                git.Commit(repoDir, ga, out firstResult);
 
                 git.Add(fileInSubDir);
 
@@ -184,6 +185,11 @@ namespace SharpGit.Tests
 
                 Assert.That(repo1.GetCommit(headId, out commit));
                 Assert.That(commit, Is.Not.Null, "Have a commit");
+
+                Assert.That(commit.Id, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
+                Assert.That(commit.Ancestor, Is.Not.Null);
+                Assert.That(commit.Ancestor.Id, Is.EqualTo(firstResult));
+                Assert.That(commit.Ancestor.Ancestor, Is.Null);
 
                 Assert.That(commit.Author, Is.Not.Null);
                 Assert.That(commit.Author.Name, Is.EqualTo("Tester"));
