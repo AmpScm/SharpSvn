@@ -127,7 +127,7 @@ namespace SharpGit.Tests
 
                 // The passed path is currently just used to find the local repository
                 Assert.That(git.Commit(repoDir, ga, out commit));
-                Assert.That(commit, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
+                Assert.That(commit, Is.EqualTo(new GitId("a57248e7a2a4ae15d1782920edd7beb36d6f95ab")));
 
 
                 File.Move(file, file + ".a");
@@ -180,13 +180,13 @@ namespace SharpGit.Tests
                 
                 GitId headId;
                 Assert.That(repo1.ResolveReference(repo1.Head, out headId));
-                Assert.That(headId, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
+                Assert.That(headId, Is.EqualTo(new GitId("a57248e7a2a4ae15d1782920edd7beb36d6f95ab")));
                 GitCommit commit;
 
                 Assert.That(repo1.GetCommit(headId, out commit));
                 Assert.That(commit, Is.Not.Null, "Have a commit");
 
-                Assert.That(commit.Id, Is.EqualTo(new GitId("fb55a493fe14a38875ceb0ecec50f63025503a79")));
+                Assert.That(commit.Id, Is.EqualTo(new GitId("a57248e7a2a4ae15d1782920edd7beb36d6f95ab")));
                 Assert.That(commit.Ancestor, Is.Not.Null);
                 Assert.That(commit.Ancestor.Id, Is.EqualTo(firstResult));
                 Assert.That(commit.Ancestor.Ancestor, Is.Null);
@@ -200,7 +200,7 @@ namespace SharpGit.Tests
                 Assert.That(commit.Committer.EmailAddress, Is.EqualTo("committer@example.com"));
 
                 // Assert.That(commit.Committer.TimeOffsetInMinutes, Is.EqualTo(120)); // CEST dependent
-                Assert.That(commit.LogMessage, Is.EqualTo("A log message to remember"));
+                Assert.That(commit.LogMessage, Is.EqualTo("A log message to remember\n"));
 
                 Assert.That(commit.Parents, Is.Not.Empty);
                 Assert.That(commit.ParentIds, Is.Not.Empty);

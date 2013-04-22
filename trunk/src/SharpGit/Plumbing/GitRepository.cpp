@@ -425,13 +425,47 @@ bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitC
 			commits[nCommits++] = c->Handle;
 	}
 
+	bool normalize = args->NormalizeLogMessage;
+	bool strip = args->StripLogMessageComments;
+	const char *msg;
+	if (normalize || strip)
+	{
+		String^ msgString = args->LogMessage ? args->LogMessage : "";
+		msgString = msgString->Replace("\r", "");
+		msg = pool.AllocString(msgString);
+		size_t sz = strlen(msg);
+		sz += sz/4 + 4;
+		char *result = (char*)pool.Alloc(sz+1);
+
+		int r = git_message_prettify(result, sz, msg, strip);
+
+		if (r < 0)
+		{
+			int len = git_message_prettify(NULL, 0, msg, strip);
+
+			if (len >= 0)
+			{
+				result = (char*)pool.Alloc(sz+1);
+
+				r = git_message_prettify(result, sz, msg, strip);
+			}
+		}
+
+		if (r < 0)
+			return args->HandleGitError(this, r);
+
+		msg = result;
+	}
+	else
+		msg = args->LogMessage ? pool.AllocString(args->LogMessage) : "";
+
 	git_oid commit_id;
 	int r = git_commit_create(&commit_id, _repository,
 							  pool.AllocString(args->UpdateReference),
 							  args->Author->Alloc(%pool),
 							  args->Committer->Alloc(%pool),
 							  NULL /* utf-8 */,
-							  pool.AllocString(args->LogMessage),
+							  msg,
 							  tree->Handle,
 							  nCommits, commits);
 
