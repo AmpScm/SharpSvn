@@ -73,3 +73,93 @@ String^ GitCommit::LogMessage::get()
 
 	return _logMessage;
 }
+
+private ref class GitCommitAncestorWalker sealed : public IEnumerable<GitCommit^>, public IEnumerator<GitCommit^>
+{
+	initonly GitCommit^ _root;
+	initonly bool _startSelf;
+	GitCommit^ _current;
+	bool _started;
+
+public:
+	GitCommitAncestorWalker(GitCommit^ root, bool startSelf)
+	{
+		if (! root)
+			throw gcnew ArgumentNullException("root");
+
+		_root = root;
+		_startSelf = startSelf;
+		_current = _root;
+	}
+
+private:
+	~GitCommitAncestorWalker()
+	{
+	}
+
+private:
+	virtual IEnumerator<GitCommit^>^ GetCommitEnumerator() sealed = IEnumerable<GitCommit^>::GetEnumerator
+	{
+		return gcnew GitCommitAncestorWalker(_root, _startSelf);
+	}
+
+	virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+	{
+		return GetCommitEnumerator();
+	}
+
+	property Object^ ObjectCurrent
+	{
+		virtual Object^ get() sealed = System::Collections::IEnumerator::Current::get
+		{
+			return Current;
+		}
+	}
+
+public:
+	property GitCommit^ Current
+	{
+		virtual GitCommit^ get()
+		{
+			if (!_started)
+				return nullptr;
+
+			return _current;
+		}
+	}
+
+	virtual bool MoveNext()
+	{
+		if (!_started)
+		{
+			if (_startSelf)
+				_current = _root;
+			else
+				_current = _root->Ancestor;
+
+			_started = true;
+		}
+		else if ((Object^)_current)
+		{
+			_current = _current->Ancestor;
+		}
+		
+		return nullptr != (Object^)_current;
+	}
+
+	virtual void Reset()
+	{
+		_started = false;
+		_current = nullptr;
+	}
+};
+
+IEnumerable<GitCommit^>^ GitCommit::Ancestors::get()
+{
+	return gcnew GitCommitAncestorWalker(this, false);
+}
+
+IEnumerable<GitCommit^>^ GitCommit::AncestorsAndSelf::get()
+{
+	return gcnew GitCommitAncestorWalker(this, true);
+}

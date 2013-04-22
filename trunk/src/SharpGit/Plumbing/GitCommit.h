@@ -290,10 +290,24 @@ namespace SharpGit {
 		private:
 			CommitParentCollection ^_parents;
 			CommitParentIdCollection ^_parentIds;
+			GitCommit^ _ancestor;
 			GitSignature ^_author;
 			GitSignature ^_committer;
 			String ^_logMessage;
+			GitId ^_id;
+
 		public:
+			property GitId^ Id
+			{
+				GitId^ get()
+				{
+					if (!_id && !IsDisposed)
+						_id = gcnew GitId(git_commit_id(_commit));
+
+					return _id;
+				}
+			}
+
 			property CommitParentCollection^ Parents
 			{
 				CommitParentCollection^ get()
@@ -314,6 +328,36 @@ namespace SharpGit {
 
 					return _parentIds;
 				}
+			}
+
+			/// <summary>Get the first ancestor/first parent of this commit</summary>
+			property GitCommit^ Ancestor
+			{
+				GitCommit^ get()
+				{
+					if (!_ancestor && !IsDisposed)
+					{
+						git_commit *commit;
+						int r = git_commit_parent(&commit, Handle, 0);
+						
+						if (!r)
+							_ancestor = gcnew GitCommit(_repository, commit);
+					}
+
+					return _ancestor;
+				}
+			}
+
+			/// <summary>Get an enumerator over this nodes ancestors</summary>
+			property IEnumerable<GitCommit^>^ Ancestors
+			{
+				IEnumerable<GitCommit^>^ get();
+			}
+
+			/// <summary>Get an enumerator over this nodes ancestors, starting by this node itself</summary>
+			property IEnumerable<GitCommit^>^ AncestorsAndSelf
+			{
+				IEnumerable<GitCommit^>^ get();
 			}
 
 			property GitSignature^ Author
