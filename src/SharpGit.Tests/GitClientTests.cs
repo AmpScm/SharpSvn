@@ -45,6 +45,7 @@ namespace SharpGit.Tests
             string repoDir = GetTempPath();
             string repo2Dir = GetTempPath();
             GitId firstResult;
+            GitId lastCommit;
             using (GitRepository repo = GitRepository.Create(repoDir))
             using (GitClient git = new GitClient())
             {
@@ -119,15 +120,20 @@ namespace SharpGit.Tests
 
                 Assert.That(ticked, Is.EqualTo(5), "Ticked");
 
+                ga.LogMessage = "Intermediate";
+                git.Commit(repoDir, ga);
+
                 Assert.That(git.Delete(fileInSubDir));
+                Assert.That(git.Add(file));
 
                 GitId commit;
 
                 ga.LogMessage = "A log message to remember";
 
                 // The passed path is currently just used to find the local repository
+                lastCommit = new GitId("c860e9b866737faae5a047d4dbd07a082b5c0bc9");
                 Assert.That(git.Commit(repoDir, ga, out commit));
-                Assert.That(commit, Is.EqualTo(new GitId("a57248e7a2a4ae15d1782920edd7beb36d6f95ab")));
+                Assert.That(commit, Is.EqualTo(lastCommit));
 
 
                 File.Move(file, file + ".a");
@@ -180,16 +186,18 @@ namespace SharpGit.Tests
                 
                 GitId headId;
                 Assert.That(repo1.ResolveReference(repo1.Head, out headId));
-                Assert.That(headId, Is.EqualTo(new GitId("a57248e7a2a4ae15d1782920edd7beb36d6f95ab")));
+                Assert.That(headId, Is.EqualTo(lastCommit));
                 GitCommit commit;
 
                 Assert.That(repo1.GetCommit(headId, out commit));
                 Assert.That(commit, Is.Not.Null, "Have a commit");
 
-                Assert.That(commit.Id, Is.EqualTo(new GitId("a57248e7a2a4ae15d1782920edd7beb36d6f95ab")));
+                Assert.That(commit.Id, Is.EqualTo(lastCommit));
+                Assert.That(commit.Ancestors, Is.Not.Empty);
                 Assert.That(commit.Ancestor, Is.Not.Null);
-                Assert.That(commit.Ancestor.Id, Is.EqualTo(firstResult));
-                Assert.That(commit.Ancestor.Ancestor, Is.Null);
+                Assert.That(commit.Ancestor.Ancestor, Is.Not.Null);
+                Assert.That(commit.Ancestor.Ancestor.Ancestor, Is.Null);
+                Assert.That(commit.Ancestor.Ancestor.Id, Is.EqualTo(firstResult));
 
                 Assert.That(commit.Author, Is.Not.Null);
                 Assert.That(commit.Author.Name, Is.EqualTo("Tester"));
@@ -204,6 +212,30 @@ namespace SharpGit.Tests
 
                 Assert.That(commit.Parents, Is.Not.Empty);
                 Assert.That(commit.ParentIds, Is.Not.Empty);
+
+                Assert.That(commit.Tree, Is.Not.Empty);
+                Assert.That(commit.Tree.Count, Is.EqualTo(2));
+                Assert.That(commit.Ancestor.Tree.Count, Is.EqualTo(3));
+                Assert.That(commit.Ancestor.Ancestor.Tree.Count, Is.EqualTo(2));
+                Assert.That(commit.Tree.Id, Is.Not.EqualTo(commit.Ancestor.Tree.Id));
+                //Console.WriteLine("1:");
+                //foreach (GitTreeEntry e in commit.Tree)
+                //{
+                //    Console.WriteLine(string.Format("{0}: {1} ({2})", e.Name, e.Kind, e.Children.Count));
+                //}
+
+                //Console.WriteLine("2:");
+                //foreach (GitTreeEntry e in commit.Ancestor.Tree)
+                //{
+                //    Console.WriteLine(string.Format("{0}: {1} ({2})", e.Name, e.Kind, e.Children.Count));
+                //}
+
+                //Console.WriteLine("3:");
+                //foreach (GitTreeEntry e in commit.Ancestor.Ancestor.Tree)
+                //{
+                //    Console.WriteLine(string.Format("{0}: {1} ({2})", e.Name, e.Kind, e.Children.Count));
+                //}
+                //Console.WriteLine("-");
             }
         }
 

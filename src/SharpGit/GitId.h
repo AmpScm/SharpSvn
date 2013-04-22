@@ -142,4 +142,34 @@ namespace SharpGit {
 		}
 	};
 
+	namespace Plumbing
+	{
+		public enum class GitObjectKind
+		{
+			/// <summary>Object can be any of the following</summary>
+			Any = GIT_OBJ_ANY,
+
+			/// <summary>Object is invalid</summary>
+			Bad = GIT_OBJ_BAD,
+
+			/// <summary>Reserved</summary>
+			Ext0 = GIT_OBJ__EXT1,
+
+			Commit = GIT_OBJ_COMMIT,
+
+			Tree = GIT_OBJ_TREE,
+
+			Blob = GIT_OBJ_BLOB,
+
+			Tag = GIT_OBJ_TAG,
+
+			/// <summary>Reserved</summary>
+			Ext5 = GIT_OBJ__EXT2,
+
+			/// <summary>GIT_OBJ_OFS_DELTA</summary>
+			DeltaOffset = GIT_OBJ_OFS_DELTA,
+
+			DeltaReference = GIT_OBJ_REF_DELTA,
+		};
+	}
 }

@@ -2,6 +2,7 @@
 
 #include "GitCommit.h"
 #include "GitRepository.h"
+#include "GitTree.h"
 #include "../GitClient/GitCommitCmd.h"
 
 using namespace SharpGit::Plumbing;
@@ -162,4 +163,19 @@ IEnumerable<GitCommit^>^ GitCommit::Ancestors::get()
 IEnumerable<GitCommit^>^ GitCommit::AncestorsAndSelf::get()
 {
 	return gcnew GitCommitAncestorWalker(this, true);
+}
+
+GitTree^ GitCommit::Tree::get()
+{
+	if (!_tree && !IsDisposed)
+	{
+		git_tree *tree;
+		
+		int r = git_commit_tree(&tree, _commit);
+
+		if (r == 0)
+			_tree = gcnew GitTree(tree);
+	}
+
+	return _tree;
 }
