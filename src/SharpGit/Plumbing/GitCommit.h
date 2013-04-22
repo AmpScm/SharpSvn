@@ -348,7 +348,7 @@ namespace SharpGit {
 				}
 			}
 
-			/// <summary>Get an enumerator over this nodes ancestors</summary>
+			/// <summary>Get an enumerator over this nodes ancestors, starting by the parent of this commit</summary>
 			property IEnumerable<GitCommit^>^ Ancestors
 			{
 				IEnumerable<GitCommit^>^ get();
