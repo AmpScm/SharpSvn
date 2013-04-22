@@ -227,6 +227,10 @@ namespace SharpGit {
 			}
 
 		public:
+			bool OpenTree(GitId^ id, [Out] GitTree ^%tree);
+			bool OpenTree(GitId^ id, GitArgs^ args, [Out] GitTree ^%tree);
+
+		public:
 			void SetIndex(GitIndex ^newIndex);
 			void SetObjectDatabase(GitObjectDatabase ^newDatabase);
 
