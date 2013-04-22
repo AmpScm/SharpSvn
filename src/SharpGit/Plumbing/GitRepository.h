@@ -193,7 +193,7 @@ namespace SharpGit {
 			String ^MakeRelativePath(String ^path);
 
 		private:
-			GitConfiguration ^_configRef;
+			GitConfiguration ^_configuration;
 			GitIndex ^_indexRef;
 			GitObjectDatabase ^_dbRef;
 			void ClearReferences();
@@ -201,13 +201,7 @@ namespace SharpGit {
 		public:
 			property GitConfiguration^ Configuration
 			{
-				GitConfiguration^ get()
-				{
-					if (!_configRef && _repository)
-						_configRef = GetConfigurationInstance();
-
-					return _configRef;
-				}
+				GitConfiguration^ get();
 			}
 
 			property GitIndex^ Index
@@ -233,12 +227,10 @@ namespace SharpGit {
 			}
 
 		public:
-			void SetConfiguration(GitConfiguration ^newConfig);
 			void SetIndex(GitIndex ^newIndex);
 			void SetObjectDatabase(GitObjectDatabase ^newDatabase);
 
 		private:
-			GitConfiguration^ GetConfigurationInstance();
 			GitIndex^ GetIndexInstance();
 			GitObjectDatabase^ GetObjectDatabaseInstance();
 

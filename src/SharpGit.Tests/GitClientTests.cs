@@ -223,7 +223,6 @@ namespace SharpGit.Tests
                 GitConfiguration config = repo.Configuration;
 
                 Assert.That(config, Is.Not.Null);
-                repo.SetConfiguration(config);
 
                 GitIndex index = repo.Index;
                 Assert.That(index, Is.Not.Null);
