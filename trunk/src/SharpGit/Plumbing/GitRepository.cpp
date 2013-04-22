@@ -22,8 +22,8 @@ void GitRepository::ClearReferences()
 {
 	try
 	{
-		if (_configRef)
-			delete _configRef;
+		if (_configuration)
+			delete _configuration;
 		if (_indexRef)
 			delete _indexRef;
 		if (_dbRef)
@@ -31,7 +31,7 @@ void GitRepository::ClearReferences()
 	}
 	finally
 	{
-		_configRef = nullptr;
+		_configuration = nullptr;
 		_indexRef = nullptr;
 		_dbRef = nullptr;
 	}
@@ -190,8 +190,11 @@ void GitRepository::WorkingPath::set(String ^value)
 	}
 }
 
-GitConfiguration^ GitRepository::GetConfigurationInstance()
+GitConfiguration^ GitRepository::Configuration::get()
 {
+	if (IsDisposed)
+		return nullptr;
+
 	AssertOpen();
 
 	git_config *config;
@@ -202,21 +205,7 @@ GitConfiguration^ GitRepository::GetConfigurationInstance()
 		throw gcnew InvalidOperationException();
 	}
 
-	return gcnew GitConfiguration(config);
-}
-
-void GitRepository::SetConfiguration(GitConfiguration^ newConfig)
-{
-	if (! newConfig)
-		throw gcnew ArgumentNullException("newConfig");
-
-	AssertOpen();
-
-	if (Object::ReferenceEquals(newConfig, _configRef))
-		return;
-
-	ClearReferences();
-	git_repository_set_config(_repository, newConfig->Handle);
+	return _configuration = gcnew GitConfiguration(this, config);
 }
 
 GitIndex^ GitRepository::GetIndexInstance()
