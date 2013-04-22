@@ -132,6 +132,8 @@ namespace SharpGit {
 		String ^_updateReference;
 		GitSignature ^_author;
 		GitSignature ^_committer;
+		bool _noNormalize;
+		bool _stripComments;
 
 	public:
 		GitCommitArgs()
@@ -182,6 +184,30 @@ namespace SharpGit {
 			GitSignature^ get()
 			{
 				return _committer;
+			}
+		}
+
+		property bool NormalizeLogMessage
+		{
+			bool get()
+			{
+				return !_noNormalize;
+			}
+			void set(bool value)
+			{
+				_noNormalize = !value;
+			}
+		}
+
+		property bool StripLogMessageComments
+		{
+			bool get()
+			{
+				return _stripComments;
+			}
+			void set(bool value)
+			{
+				_stripComments = value;
 			}
 		}
 	};
