@@ -487,6 +487,35 @@ String ^GitRepository::MakeRelativePath(String ^path)
 	return Utf8_PtrToString(MakeRelpath(path, %pool));
 }
 
+bool GitRepository::OpenTree(GitId^ id, [Out] GitTree ^%tree)
+{
+	if (!id)
+		throw gcnew ArgumentNullException("id");
+
+	return OpenTree(id, gcnew GitNoArgs(), tree);
+}
+
+bool GitRepository::OpenTree(GitId^ id, GitArgs^ args, [Out] GitTree ^%tree)
+{
+	if (!id)
+		throw gcnew ArgumentNullException("id");
+	else if (!args)
+		throw gcnew ArgumentNullException("args");
+
+	AssertOpen();
+
+	git_oid oid = id->AsOid();
+	git_tree *gtree;
+
+	int r = git_tree_lookup(&gtree, _repository, &oid);
+	if (!r)
+		tree = gcnew GitTree(gtree);
+	else
+		tree = nullptr;
+
+	return args->HandleGitError(this, r);
+}
+
 #pragma region STATUS
 
 static int __cdecl on_status(const char *path, unsigned int status, void *baton)
