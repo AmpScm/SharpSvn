@@ -141,7 +141,7 @@ namespace SharpGit {
 			{
 				for each (GitIndexEntry^ i in this)
 				{
-					if (i == entry)
+					if (Equals(i, entry))
 						return true;
 				}
 				return false;

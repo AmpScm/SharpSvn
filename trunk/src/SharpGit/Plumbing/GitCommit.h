@@ -6,6 +6,7 @@ namespace SharpGit {
 
 	namespace Plumbing {
 		ref class GitRepository;
+		ref class GitTree;
 
 		public ref class GitCommit : public Implementation::GitBase
 		{
@@ -295,6 +296,7 @@ namespace SharpGit {
 			GitSignature ^_committer;
 			String ^_logMessage;
 			GitId ^_id;
+			GitTree^ _tree;
 
 		public:
 			property GitId^ Id
@@ -373,6 +375,11 @@ namespace SharpGit {
 			property String^ LogMessage
 			{
 				String^ get();
+			}
+
+			property GitTree^ Tree
+			{
+				GitTree^ get();
 			}
 		};
 	}
