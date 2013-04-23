@@ -171,5 +171,137 @@ namespace SharpGit {
 
 			DeltaReference = GIT_OBJ_REF_DELTA,
 		};
+
+		public enum class GitError
+		{
+			NoMemory			= GITERR_NOMEMORY,
+			OperatingSystem		= GITERR_OS,
+			Invalid				= GITERR_INVALID,
+			Reference			= GITERR_REFERENCE,
+			Zlib				= GITERR_ZLIB,
+			Repository			= GITERR_REPOSITORY,
+			Configuration		= GITERR_CONFIG,
+			RegularExpression	= GITERR_REGEX,
+			ObjectDatabase		= GITERR_ODB,
+			Index				= GITERR_INDEX,
+			Object				= GITERR_OBJECT,
+			Network				= GITERR_NET,
+			Tag					= GITERR_TAG,
+			Tree				= GITERR_TREE,
+			Indexer				= GITERR_INDEXER,
+			SecureSockets		= GITERR_SSL,
+			Submodule			= GITERR_SUBMODULE,
+			Thread				= GITERR_THREAD,
+			Stash				= GITERR_STASH,
+			CheckOut			= GITERR_CHECKOUT,
+			FetchHead			= GITERR_FETCHHEAD,
+			Merge				= GITERR_MERGE,
+		};
+
 	}
+
+	using System::ArgumentNullException;
+	using System::ArgumentOutOfRangeException;
+
+	[System::Serializable]
+	public ref class GitException : public System::Exception
+	{
+		initonly SharpGit::Plumbing::GitError _err;
+
+	protected:
+		GitException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+			: Exception(info, context)
+		{
+			if (!info)
+				throw gcnew ArgumentNullException("info");
+
+			_err = (SharpGit::Plumbing::GitError)info->GetInt32("_err");
+		}
+
+	public:
+		GitException()
+		{
+		}
+
+		GitException(String^ message)
+			: Exception(message)
+		{
+		}
+
+		GitException(SharpGit::Plumbing::GitError err, String^ message)
+			: Exception(message)
+		{
+			_err = err;
+		}
+
+		GitException(String^ message, Exception^ inner)
+			: Exception(message, inner)
+		{
+		}
+
+		GitException(SharpGit::Plumbing::GitError err, String^ message, Exception^ inner)
+			: Exception(message, inner)
+		{
+			_err = err;
+		}
+
+		/// <summary>Gets the raw subversion error code</summary>
+		property SharpGit::Plumbing::GitError GitError
+		{
+			SharpGit::Plumbing::GitError get()
+			{
+				return _err;
+			}
+		}
+
+		/// <summary>Gets the root cause of the exception; commonly the most <see cref="InnerException" /></summary>
+		property Exception^ RootCause
+		{
+			Exception^ get()
+			{
+				Exception^ e = this;
+				while (e->InnerException)
+					e = e->InnerException;
+
+				return e;
+			}
+		}
+
+		Exception^ GetCause(System::Type^ exceptionType)
+		{
+			if (!exceptionType)
+				throw gcnew ArgumentNullException("exceptionType");
+			else if (!Exception::typeid->IsAssignableFrom(exceptionType))
+				throw gcnew ArgumentOutOfRangeException("exceptionType");
+
+			Exception^ e = this;
+
+			while (e)
+			{
+				if (exceptionType->IsAssignableFrom(e->GetType()))
+					return e;
+
+				e = e->InnerException;
+			}
+
+			return nullptr;
+		}
+
+		generic<typename T> where T : Exception
+		T GetCause()
+		{
+			return (T)GetCause(T::typeid);
+		}
+
+	public:
+		[System::Security::Permissions::SecurityPermission(System::Security::Permissions::SecurityAction::LinkDemand, Flags = System::Security::Permissions::SecurityPermissionFlag::SerializationFormatter)]
+		virtual void GetObjectData(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context) override
+		{
+			if (!info)
+				throw gcnew ArgumentNullException("info");
+			Exception::GetObjectData(info, context);
+
+			info->AddValue("_err", (int)_err);
+		}
+	};
 }
