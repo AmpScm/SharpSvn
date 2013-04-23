@@ -149,6 +149,7 @@ namespace SharpGit {
 
 			UNUSED(q);
 			_ex = nullptr;
+			bool defined = false;
 
 			switch (r)
 			{
@@ -170,30 +171,23 @@ namespace SharpGit {
 			case GIT_EMERGECONFLICT:
 			case GIT_PASSTHROUGH:
 			case GIT_ITEROVER:
+				defined = true;
+				// Fall through
 
-			case GITERR_OS:
-			case GITERR_INVALID:
-			case GITERR_REFERENCE:
-			case GITERR_ZLIB:
-			case GITERR_REPOSITORY:
-			case GITERR_CONFIG:
-			case GITERR_REGEX:
-			case GITERR_ODB:
-			case GITERR_INDEX:
-			case GITERR_OBJECT:
-			case GITERR_NET:
-			case GITERR_TAG:
-			case GITERR_TREE:
-			case GITERR_INDEXER:
+			default:
 				{
 					const git_error *info = giterr_last();
+					String^ prefix = defined ? "" : "Undefined ";
 
 					try
 					{
+						SharpGit::Plumbing::GitError ge = (SharpGit::Plumbing::GitError)info->klass;
+
 						if (info)
-							throw gcnew Exception(String::Format("Git Error: {0}/{1}: {2}", r, info->klass, GitBase::Utf8_PtrToString(info->message)));
+							throw gcnew GitException(ge, String::Format("{0}Git Error: {1}/{2}: {3}", prefix, 
+														 r, ge, GitBase::Utf8_PtrToString(info->message)));
 						else
-							throw gcnew Exception(String::Format("Git Error: {0}", r));
+							throw gcnew GitException(ge, String::Format("{0}Git Error: {1}", prefix, r));
 					}
 					finally
 					{
@@ -201,11 +195,9 @@ namespace SharpGit {
 							giterr_clear();
 					}
 				}
-			default:
-				throw gcnew Exception(String::Format("Unknown git Error: {0}", r));
 			}
 
-			//return true;
+			return false;
 		}
 
 		int WrapException(Exception ^e)
