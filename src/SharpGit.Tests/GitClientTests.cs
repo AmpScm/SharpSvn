@@ -249,8 +249,8 @@ namespace SharpGit.Tests
                 Assert.That(repo, Is.Not.Null);
                 Assert.That(repo.IsEmpty, Is.True);
                 Assert.That(repo.IsBare, Is.False);
-                Assert.That(repo.RepositoryPath, Is.EqualTo(Path.Combine(dir, GitClient.AdministrativeDirectoryName)));
-                Assert.That(repo.WorkingPath, Is.EqualTo(dir));
+                Assert.That(repo.RepositoryDirectory, Is.EqualTo(Path.Combine(dir, GitClient.AdministrativeDirectoryName)));
+                Assert.That(repo.WorkingCopyDirectory, Is.EqualTo(dir));
 
                 GitConfiguration config = repo.Configuration;
 

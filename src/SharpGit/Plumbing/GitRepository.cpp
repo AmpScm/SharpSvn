@@ -155,7 +155,7 @@ bool GitRepository::IsBare::get()
 	return git_repository_is_bare(_repository) != 0;
 }
 
-String^ GitRepository::RepositoryPath::get()
+String^ GitRepository::RepositoryDirectory::get()
 {
 	AssertOpen();
 
@@ -164,7 +164,7 @@ String^ GitRepository::RepositoryPath::get()
 	return GitBase::StringFromDirentNoPool(path);
 }
 
-String^ GitRepository::WorkingPath::get()
+String^ GitRepository::WorkingCopyDirectory::get()
 {
 	AssertOpen();
 
@@ -173,7 +173,7 @@ String^ GitRepository::WorkingPath::get()
 	return GitBase::StringFromDirentNoPool(path);
 }
 
-void GitRepository::WorkingPath::set(String ^value)
+void GitRepository::WorkingCopyDirectory::set(String ^value)
 {
 	AssertOpen();
 
