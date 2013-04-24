@@ -142,12 +142,12 @@ namespace SharpGit {
 				bool get();
 			}
 
-			property String^ RepositoryPath
+			property String^ RepositoryDirectory
 			{
 				String^ get();
 			}
 
-			property String^ WorkingPath
+			property String^ WorkingCopyDirectory
 			{
 				String^ get();
 				void set(String ^value);
