@@ -301,7 +301,7 @@ bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree)
 	int r = git_tree_lookup(&the_tree, _repository, &tree_id);
 
 	if (r == 0)
-		tree = gcnew GitTree(the_tree);
+		tree = gcnew GitTree(this, the_tree);
 	else
 		tree = nullptr;
 	
@@ -509,7 +509,7 @@ bool GitRepository::OpenTree(GitId^ id, GitArgs^ args, [Out] GitTree ^%tree)
 
 	int r = git_tree_lookup(&gtree, _repository, &oid);
 	if (!r)
-		tree = gcnew GitTree(gtree);
+		tree = gcnew GitTree(this, gtree);
 	else
 		tree = nullptr;
 
@@ -538,7 +538,7 @@ static int __cdecl on_status(const char *path, unsigned int status, void *baton)
 
 bool GitRepository::Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatusEventArgs^>^ handler)
 {
-	if (String::IsNullOrEmpty(path))
+	if (! path)
 		throw gcnew ArgumentNullException("path");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");

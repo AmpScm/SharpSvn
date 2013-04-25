@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+#include "GitRepository.h"
 #include "GitTree.h"
 
 using namespace System;
@@ -68,13 +69,12 @@ GitTree^ GitTreeEntry::AsTree()
 	if (!_thisTree && !_tree->IsDisposed && Kind == GitObjectKind::Tree)
 	{
 		const git_oid* id = git_tree_entry_id(_entry);
-		git_repository *owner = git_tree_owner(_tree->Handle);
 		git_tree *tree;
 			
-		int r = git_tree_lookup(&tree, owner, id);
+		int r = git_tree_lookup(&tree, _tree->Repository->Handle, id);
 
 		if (!r)
-			_thisTree = gcnew GitTree(tree, this);
+			_thisTree = gcnew GitTree(_tree->Repository, tree, this);
 	}
 
 	return _thisTree;

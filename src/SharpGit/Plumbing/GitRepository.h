@@ -105,6 +105,17 @@ namespace SharpGit {
 					throw gcnew InvalidOperationException();
 			}
 
+			property git_repository* Handle
+			{
+				git_repository* get()
+				{
+					if (IsDisposed)
+						throw gcnew InvalidOperationException();
+
+					return _repository;
+				}
+			}
+
 		public:
 			property bool IsDisposed
 			{
