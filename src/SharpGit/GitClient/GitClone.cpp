@@ -61,7 +61,7 @@ bool GitClient::Clone(String ^localRepository, String ^path, GitCloneArgs ^args)
 		throw gcnew ArgumentOutOfRangeException("Use Clone(Uri,...) to pass urls", "localRepository");
 
 	GitPool pool(_pool);
-	return CloneInternal(pool.AllocDirent(path), path, args, %pool);
+	return CloneInternal(pool.AllocDirent(localRepository), path, args, %pool);
 }
 
 bool GitClient::CloneInternal(const char *rawRepository, String ^path, GitCloneArgs ^args, GitPool ^pool)

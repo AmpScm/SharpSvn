@@ -173,10 +173,15 @@ namespace SharpGit.Tests
                     }), Is.True);
 
                 Assert.That(ticked, Is.EqualTo(4));
+
+                GitCloneArgs gc = new GitCloneArgs();
+                gc.Synchronous = true;
+
+                git.Clone(repoDir, repo2Dir, gc);
             }
 
             using (GitRepository repo1 = new GitRepository(repoDir))
-            //using (GitRepository repo2 = new GitRepository(repo2Dir))
+            using (GitRepository repo2 = new GitRepository(repo2Dir))
             {
                 GitReference head = repo1.Head;
                 Assert.That(head, Is.Not.Null, "Has head");
