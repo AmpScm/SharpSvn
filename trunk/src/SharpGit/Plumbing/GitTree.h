@@ -202,7 +202,7 @@ namespace SharpGit {
 			}
 		};
 
-		public ref class GitTreeEntry sealed : public GitBase
+		public ref class GitTreeEntry sealed : public GitBase, public System::IComparable<GitTreeEntry^>
 		{
 			initonly GitTree ^_tree;
 			initonly const git_tree_entry *_entry;
@@ -275,6 +275,15 @@ namespace SharpGit {
 			}
 
 			GitTree^ AsTree();
+
+		public:
+			virtual int CompareTo(GitTreeEntry ^other)
+			{
+				if (! (Object^)other)
+					return -1;
+
+				return String::Compare(RelativePath, other->RelativePath);
+			}
 
 		public:
 			property ICollection<GitTreeEntry^>^ Children

@@ -23,6 +23,9 @@
     <Filter Include="Plumbing">
       <UniqueIdentifier>{1d00b5eb-771e-419e-8b13-2994d759f54e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Diff">
+      <UniqueIdentifier>{1fe341df-72ad-42f0-97fb-8a872e95ed52}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="app.rc">
@@ -142,6 +145,9 @@
     </ClInclude>
     <ClInclude Include="Plumbing\GitReference.h">
       <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\DiffEnumerator.h">
+      <Filter>Diff</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
