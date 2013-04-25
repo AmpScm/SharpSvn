@@ -32,6 +32,20 @@ namespace SharpGit {
 		ref class GitCommit;
 		ref class GitReference;
 
+		public enum class GitRepositoryState
+		{
+			None = 0, // GIT_REPOSITORY_STATE_NONE
+			Merge = GIT_REPOSITORY_STATE_MERGE,
+			Revert = GIT_REPOSITORY_STATE_REVERT,
+			CherryPick = GIT_REPOSITORY_STATE_CHERRY_PICK,
+			Bisect = GIT_REPOSITORY_STATE_BISECT,
+			Rebase = GIT_REPOSITORY_STATE_REBASE,
+			RebaseInteractive = GIT_REPOSITORY_STATE_REBASE_INTERACTIVE,
+			RebaseMerge = GIT_REPOSITORY_STATE_REBASE_MERGE,
+			MailBox = GIT_REPOSITORY_STATE_APPLY_MAILBOX,
+			MailBoxOrRebase = GIT_REPOSITORY_STATE_APPLY_MAILBOX_OR_REBASE
+		};
+
 		public ref class GitRepository : public Implementation::GitBase
 		{
 		private:
@@ -223,6 +237,17 @@ namespace SharpGit {
 						_dbRef = GetObjectDatabaseInstance();
 
 					return _dbRef;
+				}
+			}
+
+			property GitRepositoryState RepositoryState
+			{
+				GitRepositoryState get()
+				{
+					if (IsDisposed)
+						return GitRepositoryState::None;
+
+					return (GitRepositoryState)git_repository_state(_repository);
 				}
 			}
 
