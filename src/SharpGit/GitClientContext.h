@@ -200,6 +200,14 @@ namespace SharpGit {
 			return false;
 		}
 
+		bool HandleException(Exception ^e)
+		{
+			if (e)
+				throw e;
+
+			return true;
+		}
+
 		int WrapException(Exception ^e)
 		{
 			if (e)
