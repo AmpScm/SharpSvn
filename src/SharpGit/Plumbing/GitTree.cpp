@@ -63,25 +63,135 @@ IEnumerator<GitTreeEntry^>^ GitTree::GetEnumerator()
 	return col->GetEnumerator();
 }
 
+GitTree^ GitTreeEntry::AsTree()
+{
+	if (!_thisTree && !_tree->IsDisposed && Kind == GitObjectKind::Tree)
+	{
+		const git_oid* id = git_tree_entry_id(_entry);
+		git_repository *owner = git_tree_owner(_tree->Handle);
+		git_tree *tree;
+			
+		int r = git_tree_lookup(&tree, owner, id);
+
+		if (!r)
+			_thisTree = gcnew GitTree(tree, this);
+	}
+
+	return _thisTree;
+}
+
 ICollection<GitTreeEntry^>^ GitTreeEntry::Children::get()
 {
 	if (!_children && !_tree->IsDisposed)
 	{
 		if (Kind == GitObjectKind::Tree)
-		{
-			const git_oid* id = git_tree_entry_id(_entry);
-			git_repository *owner = git_tree_owner(_tree->Handle);
-			git_tree *tree;
-			
-			int r = git_tree_lookup(&tree, owner, id);
-
-			if (!r)
-				_children = gcnew GitTree(tree);
-		}
+			_children = AsTree();
 
 		if ((Object^)_children == nullptr)
 			_children = safe_cast<ICollection<GitTreeEntry^>^>(gcnew array<GitTreeEntry^>(0));
 	}
 
 	return _children;
+}
+
+IEnumerable<GitTreeEntry^>^ GitTreeEntry::Descendants::get()
+{
+	if (_thisTree)
+		return _thisTree->Descendants;
+	else if (!_tree->IsDisposed)
+	{
+		if (Kind == GitObjectKind::Tree)
+			return AsTree()->Descendants;
+		else
+			return Children; // Easy empty list
+	}
+
+	return nullptr;
+}
+
+
+private ref class GitTreeDescendantsWalker sealed : IEnumerator<GitTreeEntry^>, IEnumerable<GitTreeEntry^>
+{
+private:
+	initonly GitTree^ _tree;
+	GitTreeDescendantsWalker ^_inner;
+	int _index;
+	GitTreeEntry ^_current;
+	~GitTreeDescendantsWalker()
+	{
+	}
+
+public:
+	GitTreeDescendantsWalker(GitTree ^tree)
+	{
+		if (! tree)
+			throw gcnew ArgumentNullException("tree");
+
+		_tree = tree;
+		_index = -1;
+	}
+
+	virtual bool MoveNext()
+	{
+		_current = nullptr;
+		if (_inner && _inner->MoveNext())
+			return true;
+
+		_inner = nullptr;
+
+		int cnt = _tree->Count;
+
+		if (_index + 1 >= cnt)
+			return false;
+
+		_index++;
+		_current = _tree[_index];
+
+		if (_current->Kind == GitObjectKind::Tree)
+			_inner = gcnew GitTreeDescendantsWalker(_current->AsTree());
+
+		return true;
+	}
+
+	virtual property GitTreeEntry^ Current
+	{
+		GitTreeEntry^ get()
+		{
+			if (!_current && _inner)
+				_current = _inner->Current;
+
+			return _current;
+		}
+	}
+
+	virtual void Reset()
+	{
+		_current = nullptr;
+		_inner = nullptr;
+		_index = -1;
+	}
+
+private:
+	virtual property Object^ ObjectCurrent
+	{
+		virtual Object^ get() sealed = System::Collections::IEnumerator::Current::get
+		{
+			return Current;
+		}
+	}
+
+	virtual IEnumerator<GitTreeEntry^>^ GetEnumerator() sealed = IEnumerable<GitTreeEntry^>::GetEnumerator
+	{
+		return gcnew GitTreeDescendantsWalker(_tree);
+	}
+
+	virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+	{
+		return GetEnumerator();
+	}
+};
+
+IEnumerable<GitTreeEntry^>^ GitTree::Descendants::get()
+{
+	return gcnew GitTreeDescendantsWalker(this);
 }

@@ -13,6 +13,7 @@ namespace SharpGit {
 										  public System::Collections::Generic::ICollection<GitTreeEntry^>
 		{
 		private:
+			initonly GitTreeEntry^ _parentEntry;
 			git_tree *_tree;
 
 			!GitTree()
@@ -43,11 +44,21 @@ namespace SharpGit {
 			}
 
 		internal:
+			GitTree(git_tree *handle, GitTreeEntry^ parentEntry)
+			{
+				if (! handle)
+					throw gcnew ArgumentNullException("handle");
+
+				_parentEntry = parentEntry;
+				_tree = handle;
+			}
+
 			GitTree(git_tree *handle)
 			{
 				if (! handle)
 					throw gcnew ArgumentNullException("handle");
 
+				_parentEntry = nullptr;
 				_tree = handle;
 			}
 
@@ -59,6 +70,20 @@ namespace SharpGit {
 						throw gcnew InvalidOperationException();
 					return _tree;
 				}
+			}
+
+		public:
+			property ICollection<GitTreeEntry^>^ Children
+			{
+				ICollection<GitTreeEntry^>^ get()
+				{
+					return this;
+				}
+			}
+
+			property IEnumerable<GitTreeEntry^>^ Descendants
+			{
+				IEnumerable<GitTreeEntry^>^ get();
 			}
 
 		public:
@@ -105,6 +130,14 @@ namespace SharpGit {
 			virtual IEnumerator<GitTreeEntry^>^ GetEnumerator();
 
 			bool Contains(String ^relPath);
+
+			property GitTreeEntry ^ParentEntry
+			{
+				GitTreeEntry^ get()
+				{
+					return _parentEntry;
+				}
+			}
 
 		private:
 			virtual bool Contains(GitTreeEntry^ entry) sealed  = ICollection<GitTreeEntry^>::Contains
@@ -161,8 +194,10 @@ namespace SharpGit {
 			initonly GitTree ^_tree;
 			initonly const git_tree_entry *_entry;
 			String^ _name;
+			String^ _relativePath;
 			GitId^ _id;
 			ICollection<GitTreeEntry^>^ _children;
+			GitTree^ _thisTree;
 
 		internal:
 			GitTreeEntry(GitTree ^tree, const git_tree_entry *entry)
@@ -188,6 +223,22 @@ namespace SharpGit {
 				}
 			}
 
+			property String^ RelativePath
+			{
+				String^ get()
+				{
+					if (!_relativePath && !_tree->IsDisposed)
+					{
+						if (_tree->ParentEntry)
+							_relativePath = _tree->ParentEntry->RelativePath + "/" + Name;
+						else
+							_relativePath = Name;
+					}
+
+					return _relativePath;
+				}
+			}
+
 			property GitId^ Id
 			{
 				GitId^ get()
@@ -210,10 +261,17 @@ namespace SharpGit {
 				}
 			}
 
+			GitTree^ AsTree();
+
 		public:
 			property ICollection<GitTreeEntry^>^ Children
 			{
 				ICollection<GitTreeEntry^>^ get();
+			}
+
+			property IEnumerable<GitTreeEntry^>^ Descendants
+			{
+				IEnumerable<GitTreeEntry^>^ get();
 			}
 		};
 	}
