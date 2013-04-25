@@ -57,7 +57,7 @@ namespace SharpGit {
 			initonly T _base;
 
 		public:
-			DiffTripple(T base, T left, T right)
+			DiffTripple(T left, T right, T base)
 				: DiffPair(left, right)
 			{
 				_base = base;
@@ -370,11 +370,11 @@ namespace SharpGit {
 
 							int lr = _comparer->Compare(lv, rv);
 
-							if (lr >= 0)
+							if (lr <= 0)
 							{
 								// left <= right
 
-								if (lr > 0)
+								if (lr < 0)
 									rv = T(); /* We can ignore right */
 
 								if (_haveBase)
