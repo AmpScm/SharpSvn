@@ -2,6 +2,7 @@
 
 #include "GitRepository.h"
 #include "GitTree.h"
+#include "DiffEnumerator.h"
 
 using namespace System;
 using namespace SharpGit;

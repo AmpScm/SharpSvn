@@ -320,6 +320,7 @@
     <ClInclude Include="GitLibraryAttribute.h" />
     <ClInclude Include="Plumbing\GitCommit.h" />
     <ClInclude Include="Plumbing\GitConfiguration.h" />
+    <ClInclude Include="Plumbing\DiffEnumerator.h" />
     <ClInclude Include="Plumbing\GitIndex.h" />
     <ClInclude Include="Plumbing\GitObjectDatabase.h" />
     <ClInclude Include="Plumbing\GitReference.h" />
