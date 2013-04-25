@@ -7,6 +7,7 @@
 
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
+using System::Collections::Generic::List;
 
 bool GitClient::Commit(String ^path)
 {
@@ -88,18 +89,28 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 	if (!repo.Lookup(id, args, tree))
 		return false;
 
-	array<GitCommit^>^ parents = nullptr;
-	GitReference^ ref = repo.Head;
-	if (ref)
+	List<GitCommit^>^ parents = gcnew List<GitCommit^>();
+	GitReference^ head = repo.Head;
+
+	GitRepositoryState state = repo.RepositoryState;
+	switch (state)
 	{
-		GitId ^commitId;
-		if (repo.ResolveReference(ref, commitId))
+	case GitRepositoryState::None:
+		if (head)
 		{
-			parents = gcnew array<GitCommit^>(1);
-			if (! repo.GetCommit(commitId, parents[0]))
-				parents = nullptr;
+			GitId ^commitId;
+			if (repo.ResolveReference(head, commitId))
+			{
+				GitCommit^ commit;
+				if (repo.GetCommit(commitId, commit))
+					parents->Add(commit);
+			}
 		}
+		break;
+	default:
+		args->HandleException(gcnew NotSupportedException(String::Format("Invalid repository state: {0}", state)));
 	}
+
 
 	return repo.Commit(tree, safe_cast<ICollection<GitCommit^>^>(parents), args, commitId);
 }
