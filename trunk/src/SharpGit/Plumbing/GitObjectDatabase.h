@@ -50,7 +50,7 @@ namespace SharpGit {
 			{
 				git_odb* get()
 				{
-					if (!_odb)
+					if (IsDisposed)
 						throw gcnew InvalidOperationException();
 					return _odb;
 				}

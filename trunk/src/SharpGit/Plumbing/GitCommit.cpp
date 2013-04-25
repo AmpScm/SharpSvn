@@ -174,7 +174,7 @@ GitTree^ GitCommit::Tree::get()
 		int r = git_commit_tree(&tree, _commit);
 
 		if (r == 0)
-			_tree = gcnew GitTree(tree);
+			_tree = gcnew GitTree(_repository, tree);
 	}
 
 	return _tree;

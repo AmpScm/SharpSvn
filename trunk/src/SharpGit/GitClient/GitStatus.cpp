@@ -44,6 +44,9 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 	if (this->IncludeIgnoredRecursive)
 		opts->flags |= GIT_STATUS_OPT_RECURSE_IGNORED_DIRS;
 
+	if (!String::IsNullOrEmpty(path))
+		throw gcnew NotImplementedException("Only root status is currently implemented");
+
 	return opts;
 }
 
@@ -59,5 +62,5 @@ bool GitClient::Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatus
 	if (!repo.Locate(path, args))
 		return false;
 
-	return repo.Status(path, args, status);
+	return repo.Status(repo.MakeRelativePath(path), args, status);
 }

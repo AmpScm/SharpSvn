@@ -14,6 +14,7 @@ namespace SharpGit {
 		{
 		private:
 			initonly GitTreeEntry^ _parentEntry;
+			initonly GitRepository^ _repository;
 			git_tree *_tree;
 
 			!GitTree()
@@ -44,20 +45,24 @@ namespace SharpGit {
 			}
 
 		internal:
-			GitTree(git_tree *handle, GitTreeEntry^ parentEntry)
+			GitTree(GitRepository^ repository, git_tree *handle, GitTreeEntry^ parentEntry)
 			{
-				if (! handle)
+				if (! repository)
+					throw gcnew ArgumentNullException("repository");
+				else if (! handle)
 					throw gcnew ArgumentNullException("handle");
 
+				_repository = repository;
 				_parentEntry = parentEntry;
 				_tree = handle;
 			}
 
-			GitTree(git_tree *handle)
+			GitTree(GitRepository^ repository, git_tree *handle)
 			{
 				if (! handle)
 					throw gcnew ArgumentNullException("handle");
 
+				_repository = repository;
 				_parentEntry = nullptr;
 				_tree = handle;
 			}
@@ -136,6 +141,14 @@ namespace SharpGit {
 				GitTreeEntry^ get()
 				{
 					return _parentEntry;
+				}
+			}
+
+			property GitRepository ^Repository
+			{
+				GitRepository ^get()
+				{
+					return _repository;
 				}
 			}
 
