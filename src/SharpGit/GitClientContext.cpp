@@ -235,3 +235,15 @@ System::String ^GitBase::StringFromDirentNoPool(const char *dirent)
 
 	return StringFromDirent(dirent, %tmp);
 }
+
+GitId^ GitId::FromPrefix(String ^idPrefix)
+{
+	if (String::IsNullOrEmpty(idPrefix))
+		throw gcnew ArgumentNullException("idPrefix");
+	else if (idPrefix->Length > GIT_OID_HEXSZ)
+		throw gcnew ArgumentOutOfRangeException("idPrefix");
+
+	String^ add = safe_cast<String^>("0000000000000000000000000000000000000000")->Substring(0, GIT_OID_HEXSZ-idPrefix->Length);
+
+	return gcnew GitId(String::Concat(idPrefix, add));
+}

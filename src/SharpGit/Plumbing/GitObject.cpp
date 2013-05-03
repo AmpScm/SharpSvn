@@ -114,6 +114,48 @@ bool GitRepository::Lookup(GitId ^id, GitObjectKind kind, GitArgs ^args, [Out] G
 	return args->HandleGitError(this, r);
 }
 
+bool GitRepository::LookupViaPrefix(String ^idPrefix, [Out] GitId^% id)
+{
+	GitObject^ ob;
+	id = nullptr;
+
+	if (LookupViaPrefix(idPrefix, ob))
+	{
+		id = ob->Id;
+		delete ob;
+		return true;
+	}
+
+	return false;
+}
+
+bool GitRepository::LookupViaPrefix(String ^idPrefix, [Out] GitObject^% object)
+{
+	if (String::IsNullOrEmpty(idPrefix))
+		throw gcnew ArgumentNullException("idPrefix");
+
+	AssertOpen();
+
+	object = nullptr;
+
+	GitId ^id = GitId::FromPrefix(idPrefix);
+
+	git_oid oid = id->AsOid();
+	git_object *obj;
+	int r = git_object_lookup_prefix(&obj, Handle, &oid, idPrefix->Length, GIT_OBJ_ANY);
+
+	if (!r && obj)
+	{
+		object = GitObject::Create(this, obj);
+		return true;
+	}
+
+	return false;
+}
+
+
+bool LookupViaPrefix(String ^idPrefix, [Out] GitObject^% object);
+
 generic<typename T> where T : GitObject
 GitObjectKind GitObject::ObjectKind()
 {

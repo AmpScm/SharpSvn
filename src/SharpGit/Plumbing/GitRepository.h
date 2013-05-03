@@ -161,6 +161,9 @@ namespace SharpGit {
 			bool Lookup(GitId ^id, GitObjectKind kind, [Out] GitObject^% object);
 			bool Lookup(GitId ^id, GitObjectKind kind, GitArgs ^args, [Out] GitObject^% object);
 
+			bool LookupViaPrefix(String ^idPrefix, [Out] GitId^% id);
+			bool LookupViaPrefix(String ^idPrefix, [Out] GitObject^% object);
+
 			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args);
 			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args, [Out] GitId^% id);
 

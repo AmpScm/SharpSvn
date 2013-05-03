@@ -134,7 +134,7 @@ namespace SharpGit {
 			}
 		};
 
-		public ref class GitTreeEntry sealed : public GitBase, public System::IComparable<GitTreeEntry^>
+		public ref class GitTreeEntry sealed : public GitBase, public System::IComparable<GitTreeEntry^>, public System::IEquatable<GitTreeEntry^>
 		{
 			initonly GitTree ^_tree;
 			initonly const git_tree_entry *_entry;
@@ -214,7 +214,25 @@ namespace SharpGit {
 				if (! (Object^)other)
 					return -1;
 
+				if (!_tree->IsDisposed && !other->_tree->IsDisposed)
+					return git_tree_entry_cmp(_entry, other->_entry);
+
 				return String::Compare(RelativePath, other->RelativePath);
+			}
+
+			virtual bool Equals(GitTreeEntry ^other)
+			{
+				return 0 == CompareTo(other);
+			}
+
+			virtual bool Equals(Object ^other) override
+			{
+				return Equals(dynamic_cast<GitTreeEntry ^>(other));
+			}
+
+			virtual int GetHashCode() override
+			{
+				return StringComparer::Ordinal->GetHashCode(RelativePath);
 			}
 
 		public:

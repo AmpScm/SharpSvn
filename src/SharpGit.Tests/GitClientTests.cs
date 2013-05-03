@@ -223,6 +223,18 @@ namespace SharpGit.Tests
                 Assert.That(commit.Ancestor.Tree.Count, Is.EqualTo(3));
                 Assert.That(commit.Ancestor.Ancestor.Tree.Count, Is.EqualTo(2));
                 Assert.That(commit.Tree.Id, Is.Not.EqualTo(commit.Ancestor.Tree.Id));
+
+                GitId id;
+                Assert.That(repo1.LookupViaPrefix(commit.Id.ToString(), out id));
+                Assert.That(id, Is.EqualTo(commit.Id));
+
+                Assert.That(repo1.LookupViaPrefix(commit.Id.ToString().Substring(0,10), out id));
+                Assert.That(id, Is.EqualTo(commit.Id));
+
+                Assert.That(commit.Peel<GitObject>().Id, Is.EqualTo(commit.Tree.Id));
+                Assert.That(commit.Peel<GitTree>(), Is.EqualTo(commit.Tree)); // Compares members
+                Assert.That(commit.Tree.Peel<GitObject>(), Is.Null);
+
                 //Console.WriteLine("1:");
                 //foreach (GitTreeEntry e in commit.Tree)
                 //{
