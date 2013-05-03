@@ -4,6 +4,7 @@
 
 #include "Plumbing/GitRepository.h"
 #include "Plumbing/GitIndex.h"
+#include "Plumbing/GitTree.h"
 
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
@@ -86,7 +87,7 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 
 	GitTree^ tree;
 
-	if (!repo.Lookup(id, args, tree))
+	if (!repo.Lookup<GitTree^>(id, args, tree))
 		return false;
 
 	List<GitCommit^>^ parents = gcnew List<GitCommit^>();

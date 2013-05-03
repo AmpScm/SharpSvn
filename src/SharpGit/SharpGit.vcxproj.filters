@@ -80,7 +80,12 @@
     <ClCompile Include="Plumbing\GitReference.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
-    <ClCompile Include="Plumbing\GitObject.cpp" />
+    <ClCompile Include="Plumbing\GitObject.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
+    <ClCompile Include="Plumbing\GitTag.cpp">
+      <Filter>Plumbing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -150,9 +155,16 @@
     <ClInclude Include="Plumbing\DiffEnumerator.h">
       <Filter>Diff</Filter>
     </ClInclude>
-    <ClInclude Include="Plumbing\GitObject.h" />
     <ClInclude Include="Plumbing\GitBlob.h" />
-    <ClInclude Include="Plumbing\GitTag.h" />
+    <ClInclude Include="GitClient\GitTagCmd.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitTag.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitObject.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">

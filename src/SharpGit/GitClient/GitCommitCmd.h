@@ -124,14 +124,35 @@ namespace SharpGit {
 				_offset = value;
 			}
 		}
+
+		virtual String^ ToString() override
+		{
+			System::Text::StringBuilder ^sb = gcnew System::Text::StringBuilder();
+
+			if (Name)
+				sb->Append(Name);
+
+			if (EmailAddress)
+			{
+				sb->Append('<');
+				sb->Append(EmailAddress);
+				sb->Append('>');
+			}
+			if (Name || EmailAddress)
+				sb->Append(' ');
+
+			sb->Append(When);
+
+			return sb->ToString();
+		}
 	};
 
 	public ref class GitCommitArgs : public GitClientArgs
 	{
 		String ^_logMessage;
 		String ^_updateReference;
-		GitSignature ^_author;
-		GitSignature ^_committer;
+		initonly GitSignature ^_author;
+		initonly GitSignature ^_committer;
 		bool _noNormalize;
 		bool _stripComments;
 
@@ -141,6 +162,8 @@ namespace SharpGit {
 			UpdateReference = "HEAD";
 			_author = gcnew GitSignature();
 			_committer = gcnew GitSignature();
+
+			// By default use the exact same timestamp for both
 			DateTime now = DateTime::UtcNow;
 			_author->When = now;
 			_committer->When = now;

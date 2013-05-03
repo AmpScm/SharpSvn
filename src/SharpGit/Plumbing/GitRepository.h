@@ -152,11 +152,10 @@ namespace SharpGit {
 			static GitRepository^ Create(String ^repositoryPath, GitRepositoryCreateArgs ^args);
 
 		public:
-			bool Lookup(GitId ^id, [Out] GitTree^% tree);
-			bool Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree);
-
-			bool Lookup(GitId ^id, [Out] GitObject^% object);
-			bool Lookup(GitId ^id, GitArgs ^args, [Out] GitObject^% object);
+			generic<typename T> where T : GitObject
+			bool Lookup(GitId ^id, [Out] T% object);
+			generic<typename T> where T : GitObject
+			bool Lookup(GitId ^id, GitArgs ^args, [Out] T% object);
 
 			bool Lookup(GitId ^id, GitObjectKind kind, [Out] GitObject^% object);
 			bool Lookup(GitId ^id, GitObjectKind kind, GitArgs ^args, [Out] GitObject^% object);

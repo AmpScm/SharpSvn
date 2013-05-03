@@ -293,6 +293,7 @@
     <ClCompile Include="Plumbing\GitObjectDatabase.cpp" />
     <ClCompile Include="Plumbing\GitReference.cpp" />
     <ClCompile Include="Plumbing\GitRepository.cpp" />
+    <ClCompile Include="Plumbing\GitTag.cpp" />
     <ClCompile Include="Plumbing\GitTree.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -317,6 +318,7 @@
     <ClInclude Include="GitClient\GitDelete.h" />
     <ClInclude Include="GitClient\GitStatus.h" />
     <ClInclude Include="GitClient\GitStatusEventArgs.h" />
+    <ClInclude Include="GitClient\GitTagCmd.h" />
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitLibraryAttribute.h" />
     <ClInclude Include="Plumbing\GitBlob.h" />

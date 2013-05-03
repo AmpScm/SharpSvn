@@ -4,10 +4,17 @@
 struct git_tag {};
 
 namespace SharpGit {
+	ref class GitSignature;
+
 	namespace Plumbing {
 
 		public ref class GitTag : GitObject
 		{
+			GitSignature ^_tagger;
+			String ^_message;
+			GitId ^_targetId;
+			GitObject^ _target;
+
 		internal:
 			GitTag(GitRepository^ repository, git_tag *handle)
 				: GitObject(repository, reinterpret_cast<git_object*>(handle))
@@ -23,6 +30,32 @@ namespace SharpGit {
 				}
 			}
 
+		public:
+			property GitSignature^ Tagger
+			{
+				GitSignature^ get();
+			}
+
+			property String^ LogMessage
+			{
+				String^ get()
+				{
+					if (!_message && !IsDisposed)
+						_message = Utf8_PtrToString(git_tag_message(Handle));
+
+					return _message;
+				}
+			}
+
+			property GitObject^ Target
+			{
+				GitObject^ get();
+			}
+
+			property GitId^ TargetId
+			{
+				GitId^ get();
+			}
 		};
 	}
 }
