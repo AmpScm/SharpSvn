@@ -59,6 +59,8 @@ namespace SharpGit {
 			_id = c;
 		}
 
+		static GitId^ FromPrefix(String ^idPrefix);
+
 	public:
 		virtual String^ ToString() override
 		{

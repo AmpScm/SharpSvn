@@ -6,6 +6,7 @@ namespace SharpGit {
 
 		ref class GitRepository;
 
+		[System::Diagnostics::DebuggerDisplay("{Kind}: {Id}")]
 		public ref class GitObject : public Implementation::GitBase
 		{
 		private:
