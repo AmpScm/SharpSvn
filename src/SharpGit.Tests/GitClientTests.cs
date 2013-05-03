@@ -246,8 +246,12 @@ namespace SharpGit.Tests
                 GitTag tag;
                 Assert.That(repo1.Lookup(id, out tag));
                 Assert.That(tag, Is.Not.Null);
+                Assert.That(tag.Name, Is.EqualTo("MyTag"));
                 Assert.That(tag.LogMessage, Is.EqualTo("Some message\n"));
                 Assert.That(tag.Tagger.Name, Is.EqualTo("Me"));
+
+                Assert.That(tag.Target.Id, Is.EqualTo(commit.Id));
+                Assert.That(tag.Peel<GitTree>(), Is.EqualTo(commit.Peel<GitTree>()));
 
                 //Console.WriteLine("1:");
                 //foreach (GitTreeEntry e in commit.Tree)
