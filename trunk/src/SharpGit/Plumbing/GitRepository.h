@@ -5,6 +5,7 @@
 namespace SharpGit {
 	ref class GitStatusArgs;
 	ref class GitCommitArgs;
+	ref class GitCheckOutArgs;
 
 	namespace Plumbing {
 
@@ -31,6 +32,7 @@ namespace SharpGit {
 		ref class GitTree;
 		ref class GitCommit;
 		ref class GitReference;
+		ref class GitObject;
 
 		public enum class GitRepositoryState
 		{
@@ -153,8 +155,17 @@ namespace SharpGit {
 			bool Lookup(GitId ^id, [Out] GitTree^% tree);
 			bool Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree);
 
+			bool Lookup(GitId ^id, [Out] GitObject^% object);
+			bool Lookup(GitId ^id, GitArgs ^args, [Out] GitObject^% object);
+
+			bool Lookup(GitId ^id, GitObjectKind kind, [Out] GitObject^% object);
+			bool Lookup(GitId ^id, GitObjectKind kind, GitArgs ^args, [Out] GitObject^% object);
+
 			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args);
 			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args, [Out] GitId^% id);
+
+			//bool Checkout(GitObject^ tree, GitCheckOutArgs^ args);
+			//bool Checkout(GitTree^ tree, GitCheckOutArgs^ args);
 
 		public:
 			property bool IsEmpty

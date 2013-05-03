@@ -1,5 +1,6 @@
 #pragma once
 #include "GitClientContext.h"
+#include "GitObject.h"
 
 namespace SharpGit {
 	ref class GitSignature;
@@ -8,68 +9,24 @@ namespace SharpGit {
 		ref class GitRepository;
 		ref class GitTree;
 
-		public ref class GitCommit : public Implementation::GitBase
+		public ref class GitCommit : public GitObject
 		{
-		private:
-			git_commit *_commit;
-			initonly GitRepository ^_repository;
-
-			!GitCommit()
-			{
-				if (_commit)
-				{
-					try
-					{
-						git_commit_free(_commit);
-					}
-					finally
-					{
-						_commit = nullptr;
-					}
-				}
-			}
-
-			~GitCommit()
-			{
-				try
-					{
-						git_commit_free(_commit);
-					}
-					finally
-					{
-						_commit = nullptr;
-					}
-			}
-
 		internal:
 			GitCommit(GitRepository^ repository, git_commit *handle)
+				: GitObject(repository, reinterpret_cast<git_object*>(handle))
 			{
-				if (! repository)
-					throw gcnew ArgumentNullException("repository");
-				else if (! handle)
-					throw gcnew ArgumentNullException("handle");
-
-				_repository = repository;
-				_commit = handle;
 			}
 				
 
 			property git_commit* Handle
 			{
-				git_commit* get()
+				git_commit* get() new
 				{
-					if (IsDisposed)
-						throw gcnew InvalidOperationException();
-					return _commit;
+					return reinterpret_cast<git_commit*>(GitObject::Handle);
 				}
 			}
 
 		public:
-			property bool IsDisposed
-			{
-				bool get();
-			}
-
 			ref class CommitParentCollection sealed : public ICollection<GitCommit^>
 			{
 				initonly GitCommit ^_commit;
@@ -106,7 +63,7 @@ namespace SharpGit {
 
 						int r = git_commit_parent(&commit, _commit->Handle, index);
 						if (!r)
-							return gcnew GitCommit(_commit->_repository, commit);
+							return gcnew GitCommit(_commit->Repository, commit);
 
 						return nullptr;
 					}
@@ -123,7 +80,7 @@ namespace SharpGit {
 						git_commit *commit;
 						int r = git_commit_parent(&commit, _commit->Handle, i);
 						if (!r)
-							items[i] = gcnew GitCommit(_commit->_repository, commit);
+							items[i] = gcnew GitCommit(_commit->Repository, commit);
 					}
 
 					ICollection<GitCommit^>^ col = safe_cast<ICollection<GitCommit^>^>(items);
@@ -295,21 +252,9 @@ namespace SharpGit {
 			GitSignature ^_author;
 			GitSignature ^_committer;
 			String ^_logMessage;
-			GitId ^_id;
 			GitTree^ _tree;
 
 		public:
-			property GitId^ Id
-			{
-				GitId^ get()
-				{
-					if (!_id && !IsDisposed)
-						_id = gcnew GitId(git_commit_id(_commit));
-
-					return _id;
-				}
-			}
-
 			property CommitParentCollection^ Parents
 			{
 				CommitParentCollection^ get()
@@ -343,7 +288,7 @@ namespace SharpGit {
 						int r = git_commit_parent(&commit, Handle, 0);
 						
 						if (!r)
-							_ancestor = gcnew GitCommit(_repository, commit);
+							_ancestor = gcnew GitCommit(Repository, commit);
 					}
 
 					return _ancestor;

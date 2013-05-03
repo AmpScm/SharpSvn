@@ -1,5 +1,5 @@
 #pragma once
-#include "GitClientContext.h"
+#include "GitObject.h"
 
 struct git_tree {};
 struct git_object {};
@@ -9,71 +9,30 @@ namespace SharpGit {
 
 		ref class GitTreeEntry;
 
-		public ref class GitTree sealed : public Implementation::GitBase,
+		public ref class GitTree sealed : public GitObject,
 										  public System::Collections::Generic::ICollection<GitTreeEntry^>
 		{
 		private:
 			initonly GitTreeEntry^ _parentEntry;
-			initonly GitRepository^ _repository;
-			git_tree *_tree;
-
-			!GitTree()
-			{
-				if (_tree)
-				{
-					try
-					{
-						git_tree_free(_tree);
-					}
-					finally
-					{
-						_tree = nullptr;
-					}
-				}
-			}
-
-			~GitTree()
-			{
-				try
-					{
-						git_tree_free(_tree);
-					}
-					finally
-					{
-						_tree = nullptr;
-					}
-			}
 
 		internal:
 			GitTree(GitRepository^ repository, git_tree *handle, GitTreeEntry^ parentEntry)
+				: GitObject(repository, reinterpret_cast<git_object*>(handle))
 			{
-				if (! repository)
-					throw gcnew ArgumentNullException("repository");
-				else if (! handle)
-					throw gcnew ArgumentNullException("handle");
-
-				_repository = repository;
 				_parentEntry = parentEntry;
-				_tree = handle;
 			}
 
 			GitTree(GitRepository^ repository, git_tree *handle)
+				: GitObject(repository, reinterpret_cast<git_object*>(handle))
 			{
-				if (! handle)
-					throw gcnew ArgumentNullException("handle");
-
-				_repository = repository;
 				_parentEntry = nullptr;
-				_tree = handle;
 			}
 
 			property git_tree* Handle
 			{
-				git_tree* get()
+				git_tree* get() new
 				{
-					if (!_tree)
-						throw gcnew InvalidOperationException();
-					return _tree;
+					return reinterpret_cast<git_tree*>(GitObject::Handle);
 				}
 			}
 
@@ -92,25 +51,6 @@ namespace SharpGit {
 			}
 
 		public:
-			property bool IsDisposed
-			{
-				bool get()
-				{
-					return !_tree;
-				}
-			}
-
-			property GitId^ Id
-			{
-				GitId^ get()
-				{
-					if (IsDisposed)
-						return nullptr;
-
-					return gcnew GitId(git_tree_id(_tree));
-				}
-			}
-
 			property int Count
 			{
 				virtual int get()
@@ -141,14 +81,6 @@ namespace SharpGit {
 				GitTreeEntry^ get()
 				{
 					return _parentEntry;
-				}
-			}
-
-			property GitRepository ^Repository
-			{
-				GitRepository ^get()
-				{
-					return _repository;
 				}
 			}
 

@@ -58,7 +58,7 @@ IEnumerator<GitTreeEntry^>^ GitTree::GetEnumerator()
 
 	for (int i = 0; i < count; i++)
 	{
-		items[i] = gcnew GitTreeEntry(this, git_tree_entry_byindex(_tree, i));
+		items[i] = gcnew GitTreeEntry(this, git_tree_entry_byindex(Handle, i));
 	}
 
 	ICollection<GitTreeEntry^>^ col = safe_cast<ICollection<GitTreeEntry^>^>(items);

@@ -289,6 +289,7 @@
     <ClCompile Include="Plumbing\GitCommit.cpp" />
     <ClCompile Include="Plumbing\GitConfiguration.cpp" />
     <ClCompile Include="Plumbing\GitIndex.cpp" />
+    <ClCompile Include="Plumbing\GitObject.cpp" />
     <ClCompile Include="Plumbing\GitObjectDatabase.cpp" />
     <ClCompile Include="Plumbing\GitReference.cpp" />
     <ClCompile Include="Plumbing\GitRepository.cpp" />
@@ -318,13 +319,16 @@
     <ClInclude Include="GitClient\GitStatusEventArgs.h" />
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitLibraryAttribute.h" />
+    <ClInclude Include="Plumbing\GitBlob.h" />
     <ClInclude Include="Plumbing\GitCommit.h" />
     <ClInclude Include="Plumbing\GitConfiguration.h" />
     <ClInclude Include="Plumbing\DiffEnumerator.h" />
     <ClInclude Include="Plumbing\GitIndex.h" />
+    <ClInclude Include="Plumbing\GitObject.h" />
     <ClInclude Include="Plumbing\GitObjectDatabase.h" />
     <ClInclude Include="Plumbing\GitReference.h" />
     <ClInclude Include="Plumbing\GitRepository.h" />
+    <ClInclude Include="Plumbing\GitTag.h" />
     <ClInclude Include="Plumbing\GitTree.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
