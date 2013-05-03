@@ -12,6 +12,7 @@ namespace SharpGit {
 		{
 			GitSignature ^_tagger;
 			String ^_message;
+			String ^_name;
 			GitId ^_targetId;
 			GitObject^ _target;
 
@@ -31,6 +32,17 @@ namespace SharpGit {
 			}
 
 		public:
+			property String^ Name
+			{
+				String^ get()
+				{
+					if (!_name && !IsDisposed)
+						_name = Utf8_PtrToString(git_tag_name(Handle));
+
+					return _name;
+				}
+			}
+
 			property GitSignature^ Tagger
 			{
 				GitSignature^ get();

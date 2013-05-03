@@ -155,7 +155,6 @@
     <ClInclude Include="Plumbing\DiffEnumerator.h">
       <Filter>Diff</Filter>
     </ClInclude>
-    <ClInclude Include="Plumbing\GitBlob.h" />
     <ClInclude Include="GitClient\GitTagCmd.h">
       <Filter>GitClient</Filter>
     </ClInclude>
@@ -163,6 +162,9 @@
       <Filter>Plumbing</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\GitObject.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="Plumbing\GitBlob.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
   </ItemGroup>
