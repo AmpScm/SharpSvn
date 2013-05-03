@@ -10,17 +10,11 @@ using namespace SharpGit;
 
 struct git_commit {};
 
-bool GitCommit::IsDisposed::get()
-{
-	return !_commit || _repository->IsDisposed;
-}
-
-
 GitSignature^ GitCommit::Author::get()
 {
 	if (!_author && !IsDisposed)
 	{
-		const git_signature *s = git_commit_author(_commit);
+		const git_signature *s = git_commit_author(Handle);
 		_author = gcnew GitSignature(s);
 	}
 	return _author;
@@ -30,7 +24,7 @@ GitSignature^ GitCommit::Committer::get()
 {
 	if (!_committer && !IsDisposed)
 	{
-		const git_signature *s = git_commit_committer(_commit);
+		const git_signature *s = git_commit_committer(Handle);
 		_committer = gcnew GitSignature(s);
 	}
 	return _committer;
@@ -40,8 +34,8 @@ String^ GitCommit::LogMessage::get()
 {
 	if (!_logMessage && !IsDisposed)
 	{
-		const char *encoding = git_commit_message_encoding(_commit);
-		const char *msg = git_commit_message(_commit);
+		const char *encoding = git_commit_message_encoding(Handle);
+		const char *msg = git_commit_message(Handle);
 
 		if (!msg || !msg[0])
 			return _logMessage = "";
@@ -171,10 +165,10 @@ GitTree^ GitCommit::Tree::get()
 	{
 		git_tree *tree;
 		
-		int r = git_commit_tree(&tree, _commit);
+		int r = git_commit_tree(&tree, Handle);
 
 		if (r == 0)
-			_tree = gcnew GitTree(_repository, tree);
+			_tree = gcnew GitTree(Repository, tree);
 	}
 
 	return _tree;

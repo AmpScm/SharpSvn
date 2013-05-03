@@ -7,6 +7,7 @@
 #include "GitConfiguration.h"
 #include "GitIndex.h"
 #include "GitObjectDatabase.h"
+#include "GitObject.h"
 #include "GitTree.h"
 #include "GitCommit.h"
 #include "GitReference.h"
@@ -282,30 +283,6 @@ const char *GitRepository::MakeRelpath(String ^path, GitPool ^pool)
 	const char *item_path = pool->AllocDirent(path);
 
 	return svn_dirent_skip_ancestor(wrk_path, item_path);
-}
-
-bool GitRepository::Lookup(GitId ^id, [Out] GitTree^% tree)
-{
-	return Lookup(id, gcnew GitNoArgs(), tree);
-}
-
-bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree)
-{
-	if (! id)
-		throw gcnew ArgumentNullException("id");
-
-	AssertOpen();
-
-	git_tree *the_tree;
-	git_oid tree_id = id->AsOid();
-	int r = git_tree_lookup(&the_tree, _repository, &tree_id);
-
-	if (r == 0)
-		tree = gcnew GitTree(this, the_tree);
-	else
-		tree = nullptr;
-	
-	return args->HandleGitError(this, r);
 }
 
 GitReference^ GitRepository::Head::get()
