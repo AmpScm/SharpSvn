@@ -135,7 +135,6 @@ namespace SharpGit.Tests
                 Assert.That(git.Commit(repoDir, ga, out commit));
                 Assert.That(commit, Is.EqualTo(lastCommit));
 
-
                 File.Move(file, file + ".a");
 
                 ticked = 0;
@@ -234,6 +233,21 @@ namespace SharpGit.Tests
                 Assert.That(commit.Peel<GitObject>().Id, Is.EqualTo(commit.Tree.Id));
                 Assert.That(commit.Peel<GitTree>(), Is.EqualTo(commit.Tree)); // Compares members
                 Assert.That(commit.Tree.Peel<GitObject>(), Is.Null);
+
+                GitTagArgs ta = new GitTagArgs();
+                ta.Tagger.When = ct;
+                ta.Tagger.Name = "Me";
+                ta.Tagger.EmailAddress = "me@myself.and.I";
+                ta.LogMessage = "Some message";
+                ga.Author.TimeOffsetInMinutes = 120;
+                Assert.That(commit.Tag("MyTag", ta, out id));
+                Assert.That(id, Is.EqualTo(new GitId("c7baaa514b4c05a4c140fd2623948f0ddf847952")));
+
+                GitTag tag;
+                Assert.That(repo1.Lookup(id, out tag));
+                Assert.That(tag, Is.Not.Null);
+                Assert.That(tag.LogMessage, Is.EqualTo("Some message\n"));
+                Assert.That(tag.Tagger.Name, Is.EqualTo("Me"));
 
                 //Console.WriteLine("1:");
                 //foreach (GitTreeEntry e in commit.Tree)

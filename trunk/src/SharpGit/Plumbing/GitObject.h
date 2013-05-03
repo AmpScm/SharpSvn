@@ -2,6 +2,7 @@
 #include "GitClientContext.h"
 
 namespace SharpGit {
+	ref class GitTagArgs;
 	namespace Plumbing {
 
 		ref class GitRepository;
@@ -96,7 +97,10 @@ namespace SharpGit {
 			generic<typename T> where T : GitObject
 			T Peel();
 
-		protected:
+			bool Tag(String ^tagName, GitTagArgs ^args);
+			bool Tag(String ^tagName, GitTagArgs ^args, [Out] GitId ^%id);
+
+		protected public:
 			generic<typename T> where T : GitObject
 			static GitObjectKind ObjectKind();
 

@@ -7,6 +7,7 @@
 #include "GitTag.h"
 #include "GitTree.h"
 
+#include "../GitClient/GitCommitCmd.h"
 
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
@@ -47,43 +48,32 @@ GitObject^ GitObject::Create(GitRepository^ repository, git_object *handle)
 	}
 }
 
-bool GitRepository::Lookup(GitId ^id, [Out] GitTree^% tree)
-{
-	return Lookup(id, gcnew GitNoArgs(), tree);
-}
-
-bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitTree^% tree)
-{
-	if (! id)
-		throw gcnew ArgumentNullException("id");
-
-	AssertOpen();
-
-	git_tree *the_tree;
-	git_oid tree_id = id->AsOid();
-	int r = git_tree_lookup(&the_tree, _repository, &tree_id);
-
-	if (r == 0)
-		tree = gcnew GitTree(this, the_tree);
-	else
-		tree = nullptr;
-	
-	return args->HandleGitError(this, r);
-}
-
-bool GitRepository::Lookup(GitId ^id, [Out] GitObject^% object)
+generic<typename T> where T : GitObject
+bool GitRepository::Lookup(GitId ^id, [Out] T% object)
 {
 	return Lookup(id, gcnew GitNoArgs(), object);
 }
 
-bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] GitObject^% object)
+generic<typename T> where T : GitObject
+bool GitRepository::Lookup(GitId ^id, GitArgs ^args, [Out] T% object)
 {
 	if (! id)
 		throw gcnew ArgumentNullException("id");
 	else if (! args)
 		throw gcnew ArgumentNullException("args");
 
-	return Lookup(id, GitObjectKind::Any, args, object);
+	AssertOpen();
+
+	GitObject ^ob;
+	object = (T)(Object^)nullptr;
+
+	if (Lookup(id, GitObject::ObjectKind<T>(), args, ob))
+	{
+		object = safe_cast<T>(ob);
+		return (Object^)object != nullptr;
+	}
+
+	return false;
 }
 
 bool GitRepository::Lookup(GitId ^id, GitObjectKind kind, [Out] GitObject^% object)
@@ -191,3 +181,4 @@ T GitObject::Peel()
 
 	return safe_cast<T>((Object^)nullptr);
 }
+
