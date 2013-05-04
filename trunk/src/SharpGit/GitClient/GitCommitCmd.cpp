@@ -94,22 +94,38 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 	GitReference^ head = repo.Head;
 
 	GitRepositoryState state = repo.RepositoryState;
+
+	if (head)
+	{
+		GitId ^commitId;
+		if (repo.ResolveReference(head, commitId))
+		{
+			GitCommit^ commit;
+			if (repo.GetCommit(commitId, commit))
+				parents->Add(commit);
+		}
+	}
+
+
 	switch (state)
 	{
 	case GitRepositoryState::None:
-		if (head)
+		break; // One parent
+	case GitRepositoryState::Merge:
+		// Head + the merged nodes
+		for each(GitId ^id in repo.MergeHeads)
 		{
-			GitId ^commitId;
-			if (repo.ResolveReference(head, commitId))
-			{
-				GitCommit^ commit;
-				if (repo.GetCommit(commitId, commit))
-					parents->Add(commit);
-			}
+			GitCommit^ commit;
+
+			if (repo.GetCommit(id, commit))
+				parents->Add(commit);
+			else
+				return args->HandleException(gcnew InvalidOperationException("Merge not found"));
 		}
 		break;
+	
 	default:
-		args->HandleException(gcnew NotSupportedException(String::Format("Invalid repository state: {0}", state)));
+		return args->HandleException(gcnew NotSupportedException(String::Format("Invalid repository state: {0}", state)));
 	}
 
 	if (repo.Commit(tree, safe_cast<ICollection<GitCommit^>^>(parents), args, commitId))

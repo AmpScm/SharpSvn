@@ -17,6 +17,7 @@ using namespace System;
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
 using namespace SharpGit::Implementation;
+using System::Collections::Generic::List;
 
 struct git_repository {};
 
@@ -493,6 +494,30 @@ bool GitRepository::MergeCleanup(GitArgs ^args)
 	int r = git_repository_merge_cleanup(Handle);
 
 	return args->HandleGitError(this, r);
+}
+
+static int __cdecl add_oid_cb(const git_oid *oid, void *baton)
+{
+	GitRoot<List<GitId^>^> root(baton);
+
+	root->Add(gcnew GitId(oid));
+	return 0;
+}
+
+IEnumerable<GitId^>^ GitRepository::MergeHeads::get()
+{
+	if (!IsDisposed)
+	{
+		List<GitId^>^ results = gcnew List<GitId^>();
+		GitRoot<List<GitId^>^> root(results);
+
+		int r = git_repository_mergehead_foreach(Handle, add_oid_cb, root.GetBatonValue());
+
+		if (r == 0)
+			return results->AsReadOnly();
+	}
+
+	return gcnew array<GitId^>(0);
 }
 
 String ^GitRepository::MakeRelativePath(String ^path)

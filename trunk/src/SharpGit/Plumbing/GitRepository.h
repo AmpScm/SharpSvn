@@ -278,6 +278,11 @@ namespace SharpGit {
 				}
 			}
 
+			property IEnumerable<GitId^>^ MergeHeads
+			{
+				IEnumerable<GitId^>^ get();
+			}
+
 		public:
 			bool OpenTree(GitId^ id, [Out] GitTree ^%tree);
 			bool OpenTree(GitId^ id, GitArgs^ args, [Out] GitTree ^%tree);
