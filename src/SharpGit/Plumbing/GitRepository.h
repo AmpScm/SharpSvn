@@ -166,8 +166,11 @@ namespace SharpGit {
 			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args);
 			bool Commit(GitTree ^tree, ICollection<GitCommit^> ^parents, GitCommitArgs ^args, [Out] GitId^% id);
 
-			//bool Checkout(GitObject^ tree, GitCheckOutArgs^ args);
-			//bool Checkout(GitTree^ tree, GitCheckOutArgs^ args);
+			bool CheckOut(GitTree^ tree);
+			bool CheckOut(GitTree^ tree, GitCheckOutArgs^ args);
+
+			bool MergeCleanup();
+			bool MergeCleanup(GitArgs ^args);
 
 		public:
 			property bool IsEmpty

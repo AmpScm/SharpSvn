@@ -3,6 +3,7 @@
 #include "GitRepository.h"
 #include "../GitClient/GitStatus.h"
 #include "../GitClient/GitCommitCmd.h"
+#include "../GitClient/GitCheckOut.h"
 
 #include "GitConfiguration.h"
 #include "GitIndex.h"
@@ -451,6 +452,46 @@ bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitC
 	else
 		id = nullptr;
 	
+	return args->HandleGitError(this, r);
+}
+
+bool GitRepository::CheckOut(GitTree ^tree)
+{
+	if (! tree)
+		throw gcnew ArgumentNullException("tree");
+
+	return CheckOut(tree, gcnew GitCheckOutArgs());
+}
+
+bool GitRepository::CheckOut(GitTree ^tree, GitCheckOutArgs ^args)
+{
+	if (! tree)
+		throw gcnew ArgumentNullException("tree");
+	else if (! args)
+		throw gcnew ArgumentNullException("args");
+
+	AssertOpen();
+	GitPool pool(_pool);
+	
+	int r = git_checkout_tree(Handle, safe_cast<GitObject^>(tree)->Handle,
+		                      const_cast<git_checkout_opts*>(args->MakeCheckOutOptions(%pool)));
+
+	return args->HandleGitError(this, r);
+}
+
+bool GitRepository::MergeCleanup()
+{
+	return MergeCleanup(gcnew GitNoArgs());
+}
+
+bool GitRepository::MergeCleanup(GitArgs ^args)
+{
+	if (! args)
+		throw gcnew ArgumentNullException("args");
+
+	AssertOpen();
+	int r = git_repository_merge_cleanup(Handle);
+
 	return args->HandleGitError(this, r);
 }
 
