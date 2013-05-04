@@ -253,6 +253,8 @@ namespace SharpGit.Tests
                 Assert.That(tag.Target.Id, Is.EqualTo(commit.Id));
                 Assert.That(tag.Peel<GitTree>(), Is.EqualTo(commit.Peel<GitTree>()));
 
+                repo1.CheckOut(commit.Tree);
+
                 //Console.WriteLine("1:");
                 //foreach (GitTreeEntry e in commit.Tree)
                 //{

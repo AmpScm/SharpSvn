@@ -54,6 +54,7 @@ namespace SharpGit {
 				_obj = handle;
 			}
 
+		internal:
 			property git_object* Handle
 			{
 				git_object* get()
