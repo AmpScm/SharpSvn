@@ -112,6 +112,13 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 		args->HandleException(gcnew NotSupportedException(String::Format("Invalid repository state: {0}", state)));
 	}
 
+	if (repo.Commit(tree, safe_cast<ICollection<GitCommit^>^>(parents), args, commitId))
+	{
+		if (state == GitRepositoryState::Merge)
+			return repo.MergeCleanup(args);
+		else
+			return true;
+	}
 
-	return repo.Commit(tree, safe_cast<ICollection<GitCommit^>^>(parents), args, commitId);
+	return false;
 }
