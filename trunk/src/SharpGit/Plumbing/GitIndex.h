@@ -15,6 +15,22 @@ namespace SharpGit {
 		ref class GitTree;
 		ref class GitIndexEntry;
 
+		/// <summary>Disambiguates the different versions of an index entry during a merge.</summary>
+		public enum class GitIndexStage
+		{
+			/// <summary>The standard fully merged state for an index entry.</summary>
+			Normal = 0,
+
+			/// <summary>Version of the entry as it was in the common base merge commit.</summary>
+			Ancestor = 1,
+
+			/// <summary>Version of the entry as it is in the commit of the Head.</summary>
+			Ours = 2,
+
+			/// <summary>Version of the entry as it is in the commit being merged.</summary>
+			Theirs = 3,
+		};
+
 		public ref class GitIndex : public Implementation::GitBase,
 									public System::Collections::Generic::ICollection<GitIndexEntry^>
 		{
@@ -107,6 +123,18 @@ namespace SharpGit {
 			property GitIndexEntry ^ default[String^]
 			{
 				GitIndexEntry^ get(String ^relativePath);
+			}
+
+		public:
+			property bool HasConflicts
+			{
+				bool get()
+				{
+					if (IsDisposed)
+						return false;
+
+					return git_index_has_conflicts(Handle) == 1;
+				}
 			}
 
 		public:
@@ -220,14 +248,14 @@ namespace SharpGit {
 				}
 			}
 
-			property int Stage
+			property GitIndexStage Stage
 			{
-				int get()
+				GitIndexStage get()
 				{
 					if (!_index->IsDisposed)
-						return git_index_entry_stage(_entry);
+						return (GitIndexStage)git_index_entry_stage(_entry);
 					else
-						return -1;
+						return GitIndexStage::Normal;
 				}
 			}
 
@@ -242,6 +270,7 @@ namespace SharpGit {
 				}
 			}
 
+			/// <summary>Id of blob</summary>
 			property GitId^ Id
 			{
 				GitId^ get()
