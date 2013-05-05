@@ -55,48 +55,58 @@ bool GitObject::Tag(String ^tagName, GitTagArgs ^args, [Out] GitId ^%id)
 		throw gcnew ArgumentNullException("args");
 
 	GitPool pool;
-
-	bool normalize = args->NormalizeLogMessage;
-	bool strip = args->StripLogMessageComments;
-	const char *msg;
-	if (normalize || strip)
-	{
-		String^ msgString = args->LogMessage ? args->LogMessage : "";
-		msgString = msgString->Replace("\r", "");
-		msg = pool.AllocString(msgString);
-		size_t sz = strlen(msg);
-		sz += sz/4 + 4;
-		char *result = (char*)pool.Alloc(sz+1);
-
-		int r = git_message_prettify(result, sz, msg, strip);
-
-		if (r < 0)
-		{
-			int len = git_message_prettify(NULL, 0, msg, strip);
-
-			if (len >= 0)
-			{
-				result = (char*)pool.Alloc(sz+1);
-
-				r = git_message_prettify(result, sz, msg, strip);
-			}
-		}
-
-		if (r < 0)
-			return args->HandleGitError(this, r);
-
-		msg = result;
-	}
-	else
-		msg = args->LogMessage ? pool.AllocString(args->LogMessage) : "";
-
 	git_oid result;
-	int r = git_tag_create(&result, Repository->Handle,
+	int r;
+	if (!args->LightWeight)
+	{
+		bool normalize = args->NormalizeLogMessage;
+		bool strip = args->StripLogMessageComments;
+		const char *msg;
+		if (normalize || strip)
+		{
+			String^ msgString = args->LogMessage ? args->LogMessage : "";
+			msgString = msgString->Replace("\r", "");
+			msg = pool.AllocString(msgString);
+			size_t sz = strlen(msg);
+			sz += sz/4 + 4;
+			char *result = (char*)pool.Alloc(sz+1);
+
+			int r = git_message_prettify(result, sz, msg, strip);
+
+			if (r < 0)
+			{
+				int len = git_message_prettify(NULL, 0, msg, strip);
+
+				if (len >= 0)
+				{
+					result = (char*)pool.Alloc(sz+1);
+
+					r = git_message_prettify(result, sz, msg, strip);
+				}
+			}
+
+			if (r < 0)
+				return args->HandleGitError(this, r);
+
+			msg = result;
+		}
+		else
+			msg = args->LogMessage ? pool.AllocString(args->LogMessage) : "";
+
+		r = git_tag_create(&result, Repository->Handle,
 						   pool.AllocString(tagName),
 						   Handle,
 						   args->Tagger->Alloc(Repository, %pool),
 						   msg,
 						   args->OverwriteExisting);
+	}
+	else
+	{
+		r = git_tag_create_lightweight(&result, Repository->Handle,
+									   pool.AllocString(tagName),
+									   Handle,
+									   args->OverwriteExisting);
+	}
 
 	if (r == 0)
 		id = gcnew GitId(result);

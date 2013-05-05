@@ -63,6 +63,7 @@ namespace SharpGit {
 			}
 		}
 
+		/// <summary>The user name. When using for commit preparation NULL represents the configured value</summary>
 		property String^ Name
 		{
 			String^ get()
@@ -78,6 +79,7 @@ namespace SharpGit {
 			}
 		}
 
+		/// <summary>The email address. When using for commit preparation NULL represents the configured value</summary>
 		property String^ EmailAddress
 		{
 			String^ get()
@@ -120,6 +122,9 @@ namespace SharpGit {
 
 			if (EmailAddress)
 			{
+				if (Name)
+					sb->Append(' ');
+
 				sb->Append('<');
 				sb->Append(EmailAddress);
 				sb->Append('>');

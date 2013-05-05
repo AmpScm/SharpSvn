@@ -11,6 +11,7 @@ namespace SharpGit {
 		bool _overwrite;
 		bool _noNormalize;
 		bool _stripComments;
+		bool _lightWeight;
 
 	public:
 		GitTagArgs()
@@ -71,6 +72,18 @@ namespace SharpGit {
 			void set(bool value)
 			{
 				_stripComments = value;
+			}
+		}
+
+		property bool LightWeight
+		{
+			bool get()
+			{
+				return _lightWeight;
+			}
+			void set(bool value)
+			{
+				_lightWeight = value;
 			}
 		}
 	};
