@@ -193,7 +193,7 @@ namespace SharpGit.Tests
                 Assert.That(headId, Is.EqualTo(lastCommit));
                 GitCommit commit;
 
-                Assert.That(repo1.GetCommit(headId, out commit));
+                Assert.That(repo1.Lookup(headId, out commit));
                 Assert.That(commit, Is.Not.Null, "Have a commit");
 
                 Assert.That(commit.Id, Is.EqualTo(lastCommit));
@@ -305,6 +305,15 @@ namespace SharpGit.Tests
 
                 repo.Index.Add("file");
 
+                Assert.That(repo.Configuration.Set(GitConfigurationLevel.Repository, GitConfigurationKeys.UserName, "Tester"));
+                Assert.That(repo.Configuration.Set(GitConfigurationLevel.Repository, GitConfigurationKeys.UserEmail, "me@myself.and.i"));
+
+                string v;
+                Assert.That(repo.Configuration.TryGetString(GitConfigurationKeys.UserName, out v));
+                Assert.That(v, Is.EqualTo("Tester"));
+
+                Assert.That(repo.Configuration.TryGetString(GitConfigurationKeys.UserEmail, out v));
+                Assert.That(v, Is.EqualTo("me@myself.and.i"));
 
                 Assert.That(index.Contains("file"));
                 GitIndexEntry entry = repo.Index["file"];

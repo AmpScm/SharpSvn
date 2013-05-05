@@ -94,7 +94,7 @@ bool GitObject::Tag(String ^tagName, GitTagArgs ^args, [Out] GitId ^%id)
 	int r = git_tag_create(&result, Repository->Handle,
 						   pool.AllocString(tagName),
 						   Handle,
-						   args->Tagger->Alloc(%pool),
+						   args->Tagger->Alloc(Repository, %pool),
 						   msg,
 						   args->OverwriteExisting);
 

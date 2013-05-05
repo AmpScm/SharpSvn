@@ -31,98 +31,162 @@ bool GitConfiguration::Reload(GitArgs ^args)
 
 bool GitConfiguration::TryGetInt32(String ^key, [Out] int %value)
 {
-	if (String::IsNullOrEmpty(key))
-		throw gcnew ArgumentNullException("key");
-
-	GitPool pool;
-
-	value = 0;
-
-	int32_t v;
-
-	int r = git_config_get_int32(&v, Handle, pool.AllocString(key));
-
-	value = v;
-
-	return (r == 0);
+	return TryGetInt32(GitConfigurationLevel::Unspecified, key, value);
 }
 
 bool GitConfiguration::TryGetInt64(String ^key, [Out] __int64 %value)
 {
-	if (String::IsNullOrEmpty(key))
-		throw gcnew ArgumentNullException("key");
-
-	GitPool pool;
-
-	value = 0;
-
-	int64_t v = 0;
-
-	int r = git_config_get_int64(&v, Handle, pool.AllocString(key));
-	value = v;
-
-	return (r == 0);
+	return TryGetInt64(GitConfigurationLevel::Unspecified, key, value);
 }
-
 
 bool GitConfiguration::TryGetString(String ^key, [Out] String ^%value)
 {
-	if (String::IsNullOrEmpty(key))
-		throw gcnew ArgumentNullException("key");
-
-	GitPool pool;
-
-	value = nullptr;
-
-	const char *v;
-
-	// Returns string owned by configuration
-	int r = git_config_get_string(&v, Handle, pool.AllocString(key));
-
-	value = v ? Utf8_PtrToString(v) : nullptr;
-
-	return (r == 0);
+	return TryGetString(GitConfigurationLevel::Unspecified, key, value);
 }
 
 bool GitConfiguration::TryGetBoolean(String ^key, [Out] bool ^value)
 {
+	return TryGetBoolean(GitConfigurationLevel::Unspecified, key, value);
+}
+
+bool GitConfiguration::TryGetInt32(GitConfigurationLevel level, String ^key, [Out] int %value)
+{
 	if (String::IsNullOrEmpty(key))
 		throw gcnew ArgumentNullException("key");
 
+	value = 0;
+
 	GitPool pool;
+	git_config *cfg = Handle;
+	int r = 0;
 
-	value = nullptr;
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
 
-	int v = 0;
+	if (r == 0)
+	{
+		int32_t v = 0;
 
-	// Returns string owned by configuration
-	int r = git_config_get_bool(&v, Handle, pool.AllocString(key));
+		r = git_config_get_int32(&v, cfg, pool.AllocString(key));
 
-	value = (v != 0);
+		value = v;
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
 
 	return (r == 0);
 }
 
-bool GitConfiguration::Set(String^ key, int value)
+bool GitConfiguration::TryGetInt64(GitConfigurationLevel level, String ^key, [Out] __int64 %value)
 {
-	return Set(key, gcnew GitNoArgs(), value);
-}
-bool GitConfiguration::Set(String^ key, __int64 value)
-{
-	return Set(key, gcnew GitNoArgs(), value);
+	if (String::IsNullOrEmpty(key))
+		throw gcnew ArgumentNullException("key");
+
+	value = 0;
+
+	GitPool pool;
+	git_config *cfg = Handle;
+	int r = 0;
+
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		int64_t v = 0;
+
+		r = git_config_get_int64(&v, cfg, pool.AllocString(key));
+
+		value = v;
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
+
+	return (r == 0);
 }
 
-bool GitConfiguration::Set(String^ key, String ^value)
+
+bool GitConfiguration::TryGetString(GitConfigurationLevel level, String ^key, [Out] String ^%value)
 {
-	return Set(key, gcnew GitNoArgs(), value);
+	if (String::IsNullOrEmpty(key))
+		throw gcnew ArgumentNullException("key");
+
+	value = nullptr;
+
+	GitPool pool;
+	git_config *cfg = Handle;
+	int r = 0;
+
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		const char *v;
+
+		// Returns string owned by configuration
+		r = git_config_get_string(&v, cfg, pool.AllocString(key));
+
+		value = v ? Utf8_PtrToString(v) : nullptr;
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
+
+	return (r == 0);
 }
 
-bool GitConfiguration::Set(String^ key, bool value)
+bool GitConfiguration::TryGetBoolean(GitConfigurationLevel level, String ^key, [Out] bool ^value)
 {
-	return Set(key, gcnew GitNoArgs(), value);
+	if (String::IsNullOrEmpty(key))
+		throw gcnew ArgumentNullException("key");
+
+	value = false;
+
+	GitPool pool;
+	git_config *cfg = Handle;
+	int r = 0;
+
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		int v = 0;
+
+		r = git_config_get_bool(&v, cfg, pool.AllocString(key));
+
+		value = (v != 0);
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
+
+	return (r == 0);
 }
 
-bool GitConfiguration::Set(String^ key, GitArgs^ args, int value)
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, int value)
+{
+	return Set(level, key, gcnew GitNoArgs(), value);
+}
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, __int64 value)
+{
+	return Set(level, key, gcnew GitNoArgs(), value);
+}
+
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, String ^value)
+{
+	return Set(level, key, gcnew GitNoArgs(), value);
+}
+
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, bool value)
+{
+	return Set(level, key, gcnew GitNoArgs(), value);
+}
+
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ args, int value)
 {
 	if (String::IsNullOrEmpty(key))
 		throw gcnew ArgumentNullException("key");
@@ -131,12 +195,24 @@ bool GitConfiguration::Set(String^ key, GitArgs^ args, int value)
 
 	GitPool pool;
 
-	int r = git_config_set_int32(Handle, pool.AllocString(key), value);
+	git_config *cfg = Handle;
+	int r = 0;
+	
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		r = git_config_set_int32(cfg, pool.AllocString(key), value);
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
 
 	return args->HandleGitError(this, r);
 }
 
-bool GitConfiguration::Set(String^ key, GitArgs^ args, __int64 value)
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ args, __int64 value)
 {
 	if (String::IsNullOrEmpty(key))
 		throw gcnew ArgumentNullException("key");
@@ -145,12 +221,24 @@ bool GitConfiguration::Set(String^ key, GitArgs^ args, __int64 value)
 
 	GitPool pool;
 
-	int r = git_config_set_int64(Handle, pool.AllocString(key), value);
+	git_config *cfg = Handle;
+	int r = 0;
+	
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		r = git_config_set_int64(cfg, pool.AllocString(key), value);
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
 
 	return args->HandleGitError(this, r);
 }
 
-bool GitConfiguration::Set(String^ key, GitArgs^ args, String ^value)
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ args, String ^value)
 {
 	if (String::IsNullOrEmpty(key))
 		throw gcnew ArgumentNullException("key");
@@ -161,12 +249,24 @@ bool GitConfiguration::Set(String^ key, GitArgs^ args, String ^value)
 
 	GitPool pool;
 
-	int r = git_config_set_string(Handle, pool.AllocString(key), pool.AllocString(value));
+	git_config *cfg = Handle;
+	int r = 0;
+	
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		r = git_config_set_string(cfg, pool.AllocString(key), pool.AllocString(value));
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
 
 	return args->HandleGitError(this, r);
 }
 
-bool GitConfiguration::Set(String^ key, GitArgs^ args, bool value)
+bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ args, bool value)
 {
 	if (String::IsNullOrEmpty(key))
 		throw gcnew ArgumentNullException("key");
@@ -175,26 +275,51 @@ bool GitConfiguration::Set(String^ key, GitArgs^ args, bool value)
 
 	GitPool pool;
 
-	int r = git_config_set_bool(Handle, pool.AllocString(key), value);
+
+	git_config *cfg = Handle;
+	int r = 0;
+	
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		r = git_config_set_bool(cfg, pool.AllocString(key), value);
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
 
 	return args->HandleGitError(this, r);
 }
 
-bool GitConfiguration::Delete(String ^key)
+bool GitConfiguration::Delete(GitConfigurationLevel level, String ^key)
 {
-	return Delete(key, gcnew GitNoArgs());
+	return Delete(level, key, gcnew GitNoArgs());
 }
 
-bool GitConfiguration::Delete(String ^key, GitArgs ^args)
+bool GitConfiguration::Delete(GitConfigurationLevel level, String ^key, GitArgs ^args)
 {
 	if (String::IsNullOrEmpty(key))
 		throw gcnew ArgumentNullException("key");
 	else if (! args)
 		throw gcnew ArgumentNullException("args");
 
-		GitPool pool;
+	GitPool pool;
 
-	int r = git_config_delete_entry(Handle, pool.AllocString(key));
+	git_config *cfg = Handle;
+	int r = 0;
+	
+	if (level != GitConfigurationLevel::Unspecified)
+		r = git_config_open_level(&cfg, Handle, (int)level);
+
+	if (r == 0)
+	{
+		r = git_config_delete_entry(cfg, pool.AllocString(key));
+
+		if (level != GitConfigurationLevel::Unspecified)
+			git_config_free(cfg);
+	}
 
 	return args->HandleGitError(this, r);
 }

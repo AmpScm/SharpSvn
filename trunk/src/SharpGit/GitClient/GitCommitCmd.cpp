@@ -3,12 +3,36 @@
 #include "GitCommitCmd.h"
 
 #include "Plumbing/GitRepository.h"
+#include "Plumbing/GitConfiguration.h"
 #include "Plumbing/GitIndex.h"
 #include "Plumbing/GitTree.h"
+#include "Plumbing/GitCommit.h"
 
 using namespace SharpGit;
 using namespace SharpGit::Plumbing;
 using System::Collections::Generic::List;
+
+const git_signature * GitSignature::Alloc(GitRepository^ repository, GitPool ^pool)
+{
+	git_signature *sig = (git_signature *)pool->Alloc(sizeof(*sig));
+
+	sig->when.time = (When.ToFileTimeUtc() - DELTA_EPOCH_AS_FILETIME) / 10000000i64;
+	sig->when.time -= 60 * _offset;
+	sig->when.offset = _offset;
+
+	String ^name = Name;
+	String ^emailAddress = EmailAddress;
+	if (!name)
+		repository->Configuration->TryGetString(GitConfigurationKeys::UserName, name);
+	if (!emailAddress)
+		repository->Configuration->TryGetString(GitConfigurationKeys::UserEmail, emailAddress);
+
+	sig->name = const_cast<char*>(pool->AllocString(name));
+	sig->email = const_cast<char*>(pool->AllocString(emailAddress));
+
+	return sig;
+}
+
 
 bool GitClient::Commit(String ^path)
 {
@@ -101,7 +125,7 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 		if (repo.ResolveReference(head, commitId))
 		{
 			GitCommit^ commit;
-			if (repo.GetCommit(commitId, commit))
+			if (repo.Lookup(commitId, commit))
 				parents->Add(commit);
 		}
 	}
@@ -117,7 +141,7 @@ bool GitClient::Commit(System::Collections::Generic::ICollection<String^> ^paths
 		{
 			GitCommit^ commit;
 
-			if (repo.GetCommit(id, commit))
+			if (repo.Lookup(id, commit))
 				parents->Add(commit);
 			else
 				return args->HandleException(gcnew InvalidOperationException("Merge not found"));
