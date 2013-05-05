@@ -14,21 +14,7 @@ namespace SharpGit {
 		int _offset;
 
 	internal:
-		const git_signature * Alloc(GitPool ^pool)
-		{
-			git_signature *sig = (git_signature *)pool->Alloc(sizeof(*sig));
-
-			// TODO: Store proper time in local tz
-
-			sig->when.time = (When.ToFileTimeUtc() - DELTA_EPOCH_AS_FILETIME) / 10000000i64;
-			sig->when.time -= 60 * _offset;
-			sig->when.offset = _offset;
-
-			sig->name = const_cast<char*>(pool->AllocString(Name));
-			sig->email = const_cast<char*>(pool->AllocString(EmailAddress));
-
-			return sig;
-		}
+		const git_signature * Alloc(GitRepository^ repository, GitPool ^pool);
 
 	internal:
 		GitSignature(const git_signature *from)

@@ -351,29 +351,6 @@ bool GitRepository::ResolveReference(GitReference^ reference, [Out] GitId ^%id)
 	}
 }
 
-bool GitRepository::GetCommit(GitId ^id, [Out] GitCommit ^%commit)
-{
-	if (! id)
-		throw gcnew ArgumentNullException("id");
-
-	AssertOpen();
-
-	git_commit *cmt;
-	git_oid oid = id->AsOid();
-	int r = git_commit_lookup(&cmt, _repository, &oid);
-
-	if (r == 0)
-	{
-		commit = gcnew GitCommit(this, cmt);
-		return true;
-	}
-	else
-	{
-		commit = nullptr;
-		return false;
-	}
-}
-
 bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitCommitArgs ^args)
 {
 	GitId ^ignored;
@@ -441,8 +418,8 @@ bool GitRepository::Commit(GitTree ^tree, ICollection<GitCommit^>^ parents, GitC
 	git_oid commit_id;
 	int r = git_commit_create(&commit_id, _repository,
 							  pool.AllocString(args->UpdateReference),
-							  args->Author->Alloc(%pool),
-							  args->Committer->Alloc(%pool),
+							  args->Author->Alloc(this, %pool),
+							  args->Committer->Alloc(this, %pool),
 							  NULL /* utf-8 */,
 							  msg,
 							  tree->Handle,

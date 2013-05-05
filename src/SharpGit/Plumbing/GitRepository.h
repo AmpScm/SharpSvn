@@ -225,7 +225,6 @@ namespace SharpGit {
 		public:
 			bool ResolveReference(String^ referenceName, [Out] GitId ^%id);
 			bool ResolveReference(GitReference^ reference, [Out] GitId ^%id);
-			bool GetCommit(GitId ^id, [Out] GitCommit ^%commit);
 
 		internal:
 			const char *MakeRelpath(String ^path, GitPool ^pool);
