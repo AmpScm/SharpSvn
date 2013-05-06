@@ -106,10 +106,10 @@ namespace SharpGit {
 			{
 				virtual int get()
 				{
-					if (!_index)
-						return -1;
-					else
-						return git_index_entrycount(_index);
+					if (IsDisposed)
+						return 0;
+					
+					return git_index_entrycount(_index);
 				}
 			}
 
