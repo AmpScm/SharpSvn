@@ -14,7 +14,7 @@ struct git_index {};
 void GitIndex::AssertOpen()
 {
 	if (! _index)
-		throw gcnew InvalidOperationException();
+		throw gcnew ObjectDisposedException("index");
 }
 
 bool GitIndex::Add(String ^relPath)

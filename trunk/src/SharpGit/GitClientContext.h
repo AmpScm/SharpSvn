@@ -101,7 +101,7 @@ namespace SharpGit {
 				apr_pool_t *get()
 				{
 					if (!_pool)
-						throw gcnew InvalidOperationException();
+						throw gcnew ObjectDisposedException("pool");
 					return _pool;
 				}
 			}

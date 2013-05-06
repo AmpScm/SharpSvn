@@ -63,7 +63,7 @@ GitPool::~GitPool()
 char *GitPool::Alloc(size_t sz)
 {
 	if (!_pool)
-		throw gcnew InvalidOperationException();
+		throw gcnew ObjectDisposedException("pool");
 
 	return (char*)apr_pcalloc(_pool, sz);
 }

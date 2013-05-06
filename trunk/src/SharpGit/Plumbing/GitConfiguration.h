@@ -66,7 +66,7 @@ namespace SharpGit {
 				git_config* get()
 				{
 					if (IsDisposed)
-						throw gcnew InvalidOperationException();
+						throw gcnew ObjectDisposedException("configuration");
 
 					return _config;
 				}
