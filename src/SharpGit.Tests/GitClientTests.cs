@@ -177,6 +177,11 @@ namespace SharpGit.Tests
                 gc.Synchronous = true;
 
                 git.Clone(repoDir, repo2Dir, gc);
+
+                GitCommit theCommit;
+                Assert.That(repo.Lookup(commit, out theCommit));
+                Assert.That(repo.Branches.Create(theCommit, "vNext"));
+                Assert.That(repo.Branches, Is.Not.Empty);
             }
 
             using (GitRepository repo1 = new GitRepository(repoDir))

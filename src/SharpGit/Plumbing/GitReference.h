@@ -10,6 +10,7 @@ namespace SharpGit {
 		private:
 			initonly GitRepository ^_repository;
 			git_reference *_reference;
+			String^ _name;
 
 			!GitReference()
 			{
@@ -22,6 +23,7 @@ namespace SharpGit {
 					finally
 					{
 						_reference = nullptr;
+						_name = nullptr;
 					}
 				}
 			}
@@ -35,6 +37,7 @@ namespace SharpGit {
 					finally
 					{
 						_reference = nullptr;
+						_name = nullptr;
 					}
 			}
 
@@ -50,18 +53,24 @@ namespace SharpGit {
 				_reference = handle;
 			}
 
+			GitReference(GitRepository ^repository, String^ name)
+			{
+				if (! repository)
+					throw gcnew ArgumentNullException("repository");
+				else if (String::IsNullOrEmpty(name))
+					throw gcnew ArgumentNullException("name");
+
+				_repository = repository;
+				_name = name;
+			}
+
 			property git_reference* Handle
 			{
-				git_reference* get()
-				{
-					if (IsDisposed)
-						throw gcnew InvalidOperationException();
-					return _reference;
-				}
+				git_reference* get();
 			}
 
 		private:
-			String^ _name;
+			
 
 		public:
 			property bool IsDisposed
@@ -71,19 +80,47 @@ namespace SharpGit {
 
 			property String^ Name
 			{
-				String^ get()
-				{
-					if (!_name && !IsDisposed)
-					{
-						_name = GitBase::Utf8_PtrToString(git_reference_name(_reference));
-					}
-
-					return _name;
-				}
+				String^ get();
 			}
 
 			bool Delete();
 			bool Delete(GitArgs ^args);
+		};
+
+		public ref class GitReferenceCollection sealed : public Implementation::GitBase,
+											   public System::Collections::Generic::IEnumerable<GitReference^>
+		{
+			initonly GitRepository ^_repository;
+		internal:
+			GitReferenceCollection(GitRepository ^repository)
+			{
+				if (!repository)
+					throw gcnew ArgumentNullException("repository");
+
+				_repository = repository;
+			}
+
+		public:
+			virtual System::Collections::Generic::IEnumerator<GitReference^>^ GetEnumerator();
+
+			property IEnumerable<GitReference^>^ Strict
+			{
+				IEnumerable<GitReference^>^ get();
+			}
+
+			property IEnumerable<GitReference^>^ Symbolic
+			{
+				IEnumerable<GitReference^>^ get();
+			}
+
+		private:
+			IEnumerable<GitReference^>^ GetEnumerable(git_ref_t type);
+
+		private:
+			virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+			{
+				return GetEnumerator();
+			}
 		};
 	}
 }

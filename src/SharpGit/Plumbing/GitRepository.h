@@ -33,6 +33,8 @@ namespace SharpGit {
 		ref class GitCommit;
 		ref class GitReference;
 		ref class GitObject;
+		ref class GitBranchCollection;
+		ref class GitReferenceCollection;
 
 		public enum class GitRepositoryState
 		{
@@ -53,6 +55,8 @@ namespace SharpGit {
 		private:
 			git_repository *_repository;
 			GitPool _pool;
+			GitBranchCollection^ _branches;
+			GitReferenceCollection^ _references;
 
 			GitRepository(git_repository *repository)
 			{
@@ -115,6 +119,14 @@ namespace SharpGit {
 						throw gcnew InvalidOperationException();
 
 					return _repository;
+				}
+			}
+
+			property GitPool^ Pool
+			{
+				GitPool^ get()
+				{
+					return %_pool;
 				}
 			}
 
@@ -220,6 +232,16 @@ namespace SharpGit {
 
 					return (git_repository_head_orphan(_repository) == 1);
 				}
+			}
+
+			property GitBranchCollection^ Branches
+			{
+				GitBranchCollection^ get();
+			}
+
+			property GitReferenceCollection^ References
+			{
+				GitReferenceCollection^ get();
 			}
 
 		public:
