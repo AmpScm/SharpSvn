@@ -322,6 +322,7 @@
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitLibraryAttribute.h" />
     <ClInclude Include="Plumbing\GitBlob.h" />
+    <ClInclude Include="Plumbing\GitBranch.h" />
     <ClInclude Include="Plumbing\GitCommit.h" />
     <ClInclude Include="Plumbing\GitConfiguration.h" />
     <ClInclude Include="Plumbing\DiffEnumerator.h" />

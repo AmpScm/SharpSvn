@@ -167,6 +167,9 @@
     <ClInclude Include="Plumbing\GitBlob.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
+    <ClInclude Include="Plumbing\GitBranch.h">
+      <Filter>Plumbing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="app.ico">
