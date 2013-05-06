@@ -60,7 +60,7 @@ namespace SharpGit {
 				git_object* get()
 				{
 					if (IsDisposed)
-						throw gcnew InvalidOperationException();
+						throw gcnew ObjectDisposedException("object");
 					return _obj;
 				}
 			}

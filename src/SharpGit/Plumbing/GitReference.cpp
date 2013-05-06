@@ -31,7 +31,7 @@ String^ GitReference::Name::get()
 git_reference* GitReference::Handle::get()
 {
 	if (IsDisposed)
-		throw gcnew InvalidOperationException();
+		throw gcnew ObjectDisposedException("reference");
 
 	// Not thread safe!
 	if (!_reference && _name)

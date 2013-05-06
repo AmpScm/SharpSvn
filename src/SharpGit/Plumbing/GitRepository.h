@@ -108,7 +108,7 @@ namespace SharpGit {
 			void AssertOpen()
 			{
 				if (! _repository)
-					throw gcnew InvalidOperationException();
+					throw gcnew ObjectDisposedException("repository");
 			}
 
 			property git_repository* Handle
@@ -116,7 +116,7 @@ namespace SharpGit {
 				git_repository* get()
 				{
 					if (IsDisposed)
-						throw gcnew InvalidOperationException();
+						throw gcnew ObjectDisposedException("repository");
 
 					return _repository;
 				}

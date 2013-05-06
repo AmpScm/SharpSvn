@@ -78,7 +78,7 @@ namespace SharpGit {
 				git_index* get()
 				{
 					if (!_index)
-						throw gcnew InvalidOperationException();
+						throw gcnew ObjectDisposedException("index");
 					return _index;
 				}
 			}

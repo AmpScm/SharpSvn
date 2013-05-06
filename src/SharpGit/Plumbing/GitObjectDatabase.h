@@ -51,7 +51,7 @@ namespace SharpGit {
 				git_odb* get()
 				{
 					if (IsDisposed)
-						throw gcnew InvalidOperationException();
+						throw gcnew ObjectDisposedException("objectdatabase");
 					return _odb;
 				}
 			}

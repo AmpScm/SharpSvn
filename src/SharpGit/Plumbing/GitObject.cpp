@@ -169,7 +169,7 @@ generic<typename T> where T : GitObject
 T GitObject::Peel()
 {
 	if (IsDisposed)
-		throw gcnew InvalidOperationException();
+		throw gcnew ObjectDisposedException("object");
 
 	GitObjectKind kind = ObjectKind<T>();
 
