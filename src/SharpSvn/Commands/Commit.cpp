@@ -185,12 +185,14 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 			return false;
 	}
 
-	svn_error_t *r = svn_client_commit5(
+	svn_error_t *r = svn_client_commit6(
 		aprPaths->Handle,
 		(svn_depth_t)args->Depth,
 		args->KeepLocks,
 		args->KeepChangeLists,
 		TRUE,
+		args->IncludeFileExternals,
+		args->IncludeDirectoryExternals,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CreateRevPropList(args->LogProperties, %pool),
 		crr.CommitCallback, crr.CommitBaton,
