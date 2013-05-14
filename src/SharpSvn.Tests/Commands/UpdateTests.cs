@@ -199,9 +199,11 @@ namespace SharpSvn.Tests.Commands
 
             ua = new SvnUpdateArgs();
             bool gotIt = false;
-            bool noConflict = true;
+            bool gotConflict = false;
             ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
             {
+                if (e.Action == SvnNotifyAction.ConflictResolverStarting || e.Action == SvnNotifyAction.ConflictResolverDone)
+                    return;
                 if (e.FullPath != sd)
                     return;
 
@@ -213,12 +215,12 @@ namespace SharpSvn.Tests.Commands
             ua.AddExpectedError(SvnErrorCode.SVN_ERR_WC_OBSTRUCTED_UPDATE);
             ua.Conflict += delegate(object sender, SvnConflictEventArgs e)
             {
-                noConflict = false;
+                gotConflict = true;
             };
 
             Assert.That(Client.Update(dir, ua), "Update failed");
             Assert.That(gotIt, "Got obstruction notification");
-            Assert.That(noConflict, "No conflict event");
+            Assert.That(gotConflict, "Got conflict event");
 
             Client.Status(sd,
                 delegate(object sender, SvnStatusEventArgs sa)
