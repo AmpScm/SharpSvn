@@ -328,17 +328,15 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 	{
 		svn_ra_session_t* ra_session = nullptr;
 		const char* pTarget = target->AllocAsString(%pool);
-		const char* pUrl = nullptr;
 		const char* repos_root = nullptr;
-		svn_revnum_t end_rev = 0;
 		svn_revnum_t start_rev = 0;
+		svn_client__pathrev_t *resolved;
 
 		svn_error_t* r;
 
-		r = svn_client__ra_session_from_path(
+		r = svn_client__ra_session_from_path2(
 			&ra_session,
-			&end_rev,
-			&pUrl,
+			&resolved,
 			pTarget,
 			nullptr,
 			target->Revision->AllocSvnRevision(%pool),
@@ -393,7 +391,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
 			ra_session,
 			"", // We opened the repository at the right spot
 			start_rev,
-			end_rev,
+			resolved->rev,
 			args->RetrieveMergedRevisions,
 			file_version_handler,
 			(void*)_clientBaton->Handle,

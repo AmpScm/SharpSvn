@@ -187,6 +187,7 @@ bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Ou
 		pool.AllocUri(target),
 		(svn_depth_t)args->Depth,
 		args->NoIgnore,
+		args->NoAutoProps,
 		args->IgnoreUnknownNodeTypes,
 		CreateRevPropList(args->LogProperties, %pool),
 		args->HasFilter ? sharpsvn_import_filter : nullptr, (void*)_clientBaton->Handle,

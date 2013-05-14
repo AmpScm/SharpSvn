@@ -147,17 +147,15 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 	{
 		svn_ra_session_t* ra_session = nullptr;
 		const char* pTarget = target->AllocAsString(%pool);
-		const char* pUrl = nullptr;
-		svn_revnum_t end_rev = 0;
+		svn_client__pathrev_t *pathrev;
 		svn_revnum_t start_rev = 0;
 		svn_revnum_t watermark_rev = 0;
 
 		svn_error_t* r;
 
-		r = svn_client__ra_session_from_path(
+		r = svn_client__ra_session_from_path2(
 			&ra_session,
-			&end_rev,
-			&pUrl,
+			&pathrev,
 			pTarget,
 			nullptr,
 			target->Revision->AllocSvnRevision(%pool),
@@ -201,7 +199,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 		if (r)
 			return args->HandleResult(this, r, target);
 
-		if (start_rev == 0 && end_rev > start_rev)
+		if (start_rev == 0 && pathrev->rev > start_rev)
 		{
 			// Replaying revision 0 (which contains nothing per definition)
 			// Breaks the watermark handling in subversion. This is currently
@@ -215,7 +213,7 @@ bool SvnClient::ReplayRevisions(SvnTarget^ target, SvnRevisionRange^ range, Delt
 		r = svn_ra_replay_range(
 			ra_session,
 			start_rev,
-			end_rev,
+			pathrev->rev,
 			watermark_rev,
 			args->RetrieveContent,
 			sharpsvn_replay_rev_start,
