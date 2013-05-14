@@ -63,7 +63,7 @@
 #pragma comment(lib, "secur32.lib")
 #pragma comment(lib, "libdb" APR_STRINGIFY(DB_VERSION_MAJOR) APR_STRINGIFY(DB_VERSION_MINOR) ".lib")
 
-#if (SVN_VER_MAJOR == 1 || SVN_VER_MINOR <= 7)
+#if (SVN_VER_MAJOR == 1 && SVN_VER_MINOR <= 7)
 #pragma comment(lib, "libsvn_ra_neon-1.lib")
 #pragma comment(lib, "libneon.lib")
 #endif
