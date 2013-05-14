@@ -35,7 +35,8 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 	_pool = pool;
 	svn_client_ctx_t *ctx;
 
-	SVN_THROW(svn_client_create_context(&ctx, pool->Handle));
+	// We manage the context hash ourselves
+	SVN_THROW(svn_client_create_context2(&ctx, NULL, pool->Handle));
 
 	ctx->client_name = pool->AllocString(SvnBase::_clientName);
 
@@ -452,7 +453,7 @@ void SvnClientContext::ApplyOverrideFlags()
 
 	if (!cfg)
 	{
-		SVN_THROW(svn_config_create(&cfg, FALSE, apr_hash_pool_get(CtxHandle->config)));
+		SVN_THROW(svn_config_create2(&cfg, FALSE, FALSE, apr_hash_pool_get(CtxHandle->config)));
 		apr_hash_set(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING, cfg);
 	}
 
@@ -681,10 +682,10 @@ void SvnClientContext::UseDefaultConfiguration()
 	apr_hash_t* cfg = apr_hash_make(_pool->Handle);
 	svn_config_t *cf;
 
-	SVN_THROW(svn_config_create(&cf, FALSE, _pool->Handle));
+	SVN_THROW(svn_config_create2(&cf, FALSE, FALSE, _pool->Handle));
 	apr_hash_set(cfg, SVN_CONFIG_CATEGORY_SERVERS, APR_HASH_KEY_STRING, cf);
 
-	SVN_THROW(svn_config_create(&cf, FALSE, _pool->Handle));
+	SVN_THROW(svn_config_create2(&cf, FALSE, FALSE, _pool->Handle));
 	apr_hash_set(cfg, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING, cf);
 
 	CtxHandle->config = cfg;
