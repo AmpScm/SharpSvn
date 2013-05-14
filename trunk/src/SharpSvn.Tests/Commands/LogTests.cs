@@ -327,7 +327,7 @@ namespace SharpSvn.Tests.Commands
 
             Client.CheckOut(repos, dir);
             string file;
-            File.WriteAllText(file = Path.Combine(dir, "qwqwqw"),"fds gsdfgsfdgdsf");
+            File.WriteAllText(file = Path.Combine(dir, "qwqwqw.q"),"fds gsdfgsfdgdsf");
             Client.Add(file);
             Client.Commit(file);
 
@@ -337,7 +337,12 @@ namespace SharpSvn.Tests.Commands
                     if(e.Revision != 0)
                         foreach (SvnChangeItem ci in e.ChangedPaths)
                         {
-                            Assert.That(ci.NodeKind, Is.EqualTo(SvnNodeKind.Unknown));
+                            SvnNodeKind expected;
+                            if (!string.IsNullOrEmpty(Path.GetExtension(ci.Path)))
+                                expected = SvnNodeKind.File;
+                            else
+                                expected = SvnNodeKind.Directory;
+                            Assert.That(ci.NodeKind, Is.EqualTo(SvnNodeKind.Unknown).Or.EqualTo(expected), "{0}", ci.Path);
                         }
                 });
         }
