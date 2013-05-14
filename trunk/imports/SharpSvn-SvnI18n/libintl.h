@@ -61,6 +61,12 @@ static __forceinline char* dngettext(const char* domain, const char* msgid, cons
     return dgettext(domain, (n == 1) ? msgid : msgid_plural);
 }
 
+static __forceinline char * bind_textdomain_codeset(const char * domainname, const char * codeset)
+{
+    errno = 0;
+    return NULL;
+}
+
 struct svn_error_t;
 struct apr_pool_t;
 
