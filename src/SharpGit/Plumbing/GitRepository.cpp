@@ -114,7 +114,8 @@ GitRepository^ GitRepository::Create(String ^repositoryPath, GitRepositoryCreate
 			return repo;
 		}
 
-		return args->HandleException(gcnew InvalidOperationException());
+		args->HandleException(gcnew InvalidOperationException());
+		return nullptr;
 	}
 	finally
 	{
