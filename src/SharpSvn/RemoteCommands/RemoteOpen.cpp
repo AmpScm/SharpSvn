@@ -32,11 +32,12 @@ bool SvnRemoteSession::Open(Uri^ sessionUri, SvnRemoteOpenArgs^ args)
 
 	svn_ra_session_t *session;
 
-	SVN_HANDLE(svn_client_open_ra_session(&session,
+	SVN_HANDLE(svn_client_open_ra_session2(&session,
 										  psession_uri,
+										  nullptr /* wri_abspath */,
 										  CtxHandle,
-										  _pool.Handle // Use session pool!
-										  ));
+										  _pool.Handle, // Use session pool!
+										  pool.Handle));
 
 	_session = session;
 	_sessionRoot = Utf8_PtrToUri(psession_uri, SvnNodeKind::Directory);

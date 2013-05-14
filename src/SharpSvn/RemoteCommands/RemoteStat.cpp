@@ -100,7 +100,7 @@ bool SvnRemoteSession::GetStat(String^ relPath, SvnRemoteStatArgs^ args, [Out] S
             svn_ra_session_t *subsession;
             apr_hash_t *entries;
 
-            SVN_HANDLE(svn_client_open_ra_session(&subsession, url, CtxHandle, pool.Handle));
+            SVN_HANDLE(svn_client_open_ra_session2(&subsession, url, nullptr, CtxHandle, pool.Handle, pool.Handle));
             SVN_HANDLE(svn_ra_get_dir2(subsession, &entries, NULL, NULL, "", latest, SVN_DIRENT_ALL, pool.Handle));
 
             dirent = (svn_dirent_t*)apr_hash_get(entries, basename, APR_HASH_KEY_STRING);
