@@ -26,7 +26,9 @@ namespace SharpSvn {
 		bool _keepLocks;
 		bool _keepChangeLists;
 		SvnChangeListCollection^ _changelists;
-        bool _runTortoiseHooks;
+		bool _runTortoiseHooks;
+		bool _includeFileExternals;
+		bool _includeDirExternals;
 
 	public:
 		SvnCommitArgs()
@@ -90,17 +92,41 @@ namespace SharpSvn {
 			}
 		}
 
-        property bool RunTortoiseHooks
-        {
-            bool get()
-            {
-                return _runTortoiseHooks;
-            }
-            void set(bool value)
-            {
-                _runTortoiseHooks = value;
-            }
-        }
+		property bool IncludeFileExternals
+		{
+			bool get()
+			{
+				return _includeFileExternals;
+			}
+			void set(bool value)
+			{
+				_includeFileExternals = value;
+			}
+		}
+
+		property bool IncludeDirectoryExternals
+		{
+			bool get()
+			{
+				return _includeDirExternals;
+			}
+			void set(bool value)
+			{
+				_includeDirExternals = value;
+			}
+		}
+
+		property bool RunTortoiseHooks
+		{
+			bool get()
+			{
+				return _runTortoiseHooks;
+			}
+			void set(bool value)
+			{
+				_runTortoiseHooks = value;
+			}
+		}
 	};
 
 }
