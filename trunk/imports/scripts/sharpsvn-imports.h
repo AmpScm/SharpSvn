@@ -89,3 +89,21 @@
 #else
 #error Only Serf 0.x and 1.x are supported
 #endif
+
+#pragma comment(lib, "ole32.lib")
+#pragma comment(lib, "Gdi32.lib")
+#pragma comment(lib, "User32.lib")
+#pragma comment(lib, "Version.lib")
+
+#pragma comment(linker, "/delayload:crypt32.dll")
+#pragma comment(linker, "/delayload:mswsock.dll")
+#pragma comment(linker, "/delayload:secur32.dll")
+#pragma comment(linker, "/delayload:user32.dll")
+#pragma comment(linker, "/delayload:ole32.dll")
+#pragma comment(linker, "/delayload:advapi32.dll")
+
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 8)
+#pragma comment(lib, "Psapi.lib")
+#pragma comment(linker, "/delayload:psapi.dll")
+#endif
+
