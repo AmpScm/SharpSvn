@@ -113,7 +113,10 @@ namespace SharpGit {
 				_version = attribute->Version;
 
 				if(attribute->UseSharpGitVersion)
-					_version = (gcnew System::Reflection::AssemblyName(GitLibrary::typeid->Assembly->FullName))->Version->ToString();
+				{
+					_versionData = (gcnew System::Reflection::AssemblyName(GitLibrary::typeid->Assembly->FullName))->Version;
+					_version = _versionData->ToString();
+				}
 				else
 				{
 					System::Text::RegularExpressions::Match^ m =

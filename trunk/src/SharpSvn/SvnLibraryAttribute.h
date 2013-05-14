@@ -125,7 +125,10 @@ namespace SharpSvn {
 				_version = attribute->Version;
 
 				if(attribute->UseSharpSvnVersion)
-					_version = (gcnew System::Reflection::AssemblyName(SvnLibrary::typeid->Assembly->FullName))->Version->ToString();
+				{
+					_versionData = (gcnew System::Reflection::AssemblyName(SvnLibrary::typeid->Assembly->FullName))->Version;
+					_version = _versionData->ToString();
+				}
 				else
 				{
 					System::Text::RegularExpressions::Match^ m =
