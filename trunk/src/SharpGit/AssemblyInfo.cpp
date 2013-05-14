@@ -77,6 +77,8 @@ using SharpGit::Implementation::GitLibraryAttribute;
 #pragma comment(lib, "User32.lib")
 
 #pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "Psapi.lib")
+#pragma comment(lib, "Version.lib")
 
 //#include "../../imports/release/include/sharpsvn-imports.h"
 [assembly:AssemblyVersionAttribute("0.1700.1.1")]; 
@@ -84,6 +86,8 @@ using SharpGit::Implementation::GitLibraryAttribute;
 #pragma comment(lib, "intl3_svn.lib")
 #pragma comment(lib, "xml.lib")
 #pragma comment(lib, "libsvn_subr-1.lib")
+#pragma comment(lib, "sqlite3.lib")
+
 
 #if (APR_MAJOR_VERSION == 0)
 #  pragma comment(lib, "apr.lib")
