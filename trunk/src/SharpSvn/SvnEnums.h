@@ -268,6 +268,35 @@ namespace SharpSvn {
 
 		/// <summary>The operation skipped the path because it was conflicted.</summary>
         SkipConflicted              = svn_wc_notify_skip_conflicted,
+
+		// 1.8+
+		/// <summary>Just the lock on a file was removed during update</summary>
+		UpdateBrokenLock			= svn_wc_notify_update_broken_lock,
+
+		/// <summary>Operation failed because a node is obstructed</summary>
+		FailedObstruction			= svn_wc_notify_failed_obstruction,
+
+		/// <summary>Conflict resolver is starting. This can be used by clients to
+		/// detect when to display conflict summary information, for example.</summary>
+		ConflictResolverStarting	= svn_wc_notify_conflict_resolver_starting,
+
+  
+		/// <summary>Conflict resolver is done. This can be used by clients to
+		/// detect when to display conflict summary information, for example</summary>
+		ConflictResolverDone		= svn_wc_notify_conflict_resolver_done,
+
+		/// <summary>The current operation left local changes of something that
+		/// was deleted. The changes are available on (and below) the notified path
+		/// </summary>
+		LeftLocalModifications		= svn_wc_notify_left_local_modifications,
+
+		/// <summary>A copy from a foreign repository has started</summary>
+		ForeignCopyBegin			= svn_wc_notify_foreign_copy_begin,
+
+		/// <summary>A move in the working copy has been broken, i.e. degraded into a
+		/// copy + delete. The notified path is the move source (the deleted path).
+		/// </summary>
+		MoveBroken					= svn_wc_notify_move_broken,
 	};
 
 	public enum class SvnNotifyState
