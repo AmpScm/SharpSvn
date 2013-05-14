@@ -52,11 +52,12 @@ bool SvnClient::Add(String^ path, SvnAddArgs^ args)
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_add4(
+	svn_error_t *r = svn_client_add5(
 		pool.AllocDirent(path),
 		(svn_depth_t)args->Depth,
 		args->Force,
 		args->NoIgnore,
+		args->NoAutoProps,
 		args->AddParents,
 		CtxHandle,
 		pool.Handle);
