@@ -25,6 +25,7 @@ namespace SharpSvn {
 	public ref class SvnImportArgs : public SvnClientArgsWithCommit
 	{
 		bool _noIgnore;
+		bool _noAutoProps;
 		bool _ignoreUnknownNodeTypes;
 		SvnDepth _depth;
 	public:
@@ -62,6 +63,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noIgnore = value;
+			}
+		}
+
+		property bool NoAutoProps
+		{
+			bool get()
+			{
+				return _noAutoProps;
+			}
+			void set(bool value)
+			{
+				_noAutoProps = value;
 			}
 		}
 

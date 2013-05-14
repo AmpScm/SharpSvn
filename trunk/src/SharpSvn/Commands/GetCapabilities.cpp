@@ -72,15 +72,13 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 
 	svn_ra_session_t* ra_session = nullptr;
 	const char* pTarget = target->AllocAsString(%pool);
-	const char* pUrl = nullptr;
-	svn_revnum_t end_rev = 0;
+	svn_client__pathrev_t *pathrev;
 
 	svn_error_t* r;
 
-	r = svn_client__ra_session_from_path(
+	r = svn_client__ra_session_from_path2(
 		&ra_session,
-		&end_rev,
-		&pUrl,
+		&pathrev,
 		pTarget,
 		nullptr,
 		target->Revision->AllocSvnRevision(%pool),

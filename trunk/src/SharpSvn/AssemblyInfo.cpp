@@ -108,9 +108,6 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
 
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
-#pragma comment(lib, "ole32.lib")
-#pragma comment(lib, "Gdi32.lib")
-#pragma comment(lib, "User32.lib")
 
 #include "../../imports/release/include/sharpsvn-imports.h"
 [assembly:AssemblyVersionAttribute("1.6012.1576.9657")]; 

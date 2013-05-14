@@ -119,9 +119,8 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 		const char* baseUrl = nullptr;
 		svn_revnum_t baseRev;
 
-		const char* pUrl = nullptr;
+		svn_client__pathrev_t *pathrev;
 		svn_error_t* r;
-		svn_revnum_t end_rev;
 		svn_revnum_t rev_head;
 
 		// if (args->WcBase)
@@ -132,10 +131,9 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 			SvnUriTarget^ first = FirstOf(targets);
 			const char* pTarget = first->AllocAsString(%pool);
 
-			r = svn_client__ra_session_from_path(
+			r = svn_client__ra_session_from_path2(
 				&ra_session,
-				&end_rev,
-				&pUrl,
+				&pathrev,
 				pTarget,
 				nullptr,
 				first->Revision->AllocSvnRevision(%pool),
@@ -152,7 +150,7 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 			if (r)
 				return args->HandleResult(this, r, targets);
 
-			baseUrl = pUrl;
+			baseUrl = pathrev->url;
 			baseRev = 0; // Nothing exists
 		}
 
