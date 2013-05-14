@@ -49,7 +49,6 @@
 #pragma comment(lib, "libsvn_fs_util-1.lib")
 
 #pragma comment(lib, "libsvn_ra-1.lib")
-#pragma comment(lib, "libsvn_ra_neon-1.lib")
 #pragma comment(lib, "libsvn_ra_serf-1.lib")
 #pragma comment(lib, "libsasl.lib")
 #pragma comment(lib, "libsvn_ra_local-1.lib")
@@ -58,12 +57,16 @@
 #pragma comment(lib, "libsvn_subr-1.lib")
 #pragma comment(lib, "libsvn_wc-1.lib")
 #pragma comment(lib, "xml.lib")
-#pragma comment(lib, "libneon.lib")
 
 #pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "secur32.lib")
 #pragma comment(lib, "libdb" APR_STRINGIFY(DB_VERSION_MAJOR) APR_STRINGIFY(DB_VERSION_MINOR) ".lib")
+
+#if (SVN_VER_MAJOR == 1 || SVN_VER_MINOR <= 7)
+#pragma comment(lib, "libsvn_ra_neon-1.lib")
+#pragma comment(lib, "libneon.lib")
+#endif
 
 #if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 6)
 #pragma comment(lib, "sqlite3.lib")
