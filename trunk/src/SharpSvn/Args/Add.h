@@ -24,6 +24,7 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _noIgnore;
+		bool _noAutoProps;
 		bool _force;
 		bool _addParents;
 
@@ -62,6 +63,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noIgnore = value;
+			}
+		}
+
+		property bool NoAutoProps
+		{
+			bool get()
+			{
+				return _noAutoProps;
+			}
+			void set(bool value)
+			{
+				_noAutoProps = value;
 			}
 		}
 
