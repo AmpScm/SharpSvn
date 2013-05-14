@@ -1,0 +1,13 @@
+Index: build.conf
+===================================================================
+--- build.conf	(revision 1482261)
++++ build.conf	(working copy)
+@@ -1169,6 +1169,7 @@
+ [sasl]
+ type = lib
+ external-lib = $(SVN_SASL_LIBS)
++msvc-libs = libeay32.lib ssleay32.lib
+ 
+ [zlib]
+ type = lib
+
