@@ -24,6 +24,7 @@
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
+  <!-- r960671 - Only deal with the mutex when XTHREAD is enabled. -->
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->

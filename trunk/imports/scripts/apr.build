@@ -134,8 +134,8 @@
               <!-- Fix crypto compilation -->
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib"' if="${static!='true' and enableAprCrypto}" />
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib""' if="${static=='true' and enableAprCrypto}" />
-              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(opensslDir)}\out32dll;${path::get-full-path(releaseLib)}" if="${not static}" />
-              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(releaseLib)}" if="${static}" />
+              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(opensslDir)}\out32dll;${path::get-full-path(aprUtilDir)};${path::get-full-path(releaseLib)}" if="${not static}" />
+              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(aprUtilDir)};${path::get-full-path(releaseLib)}" if="${static}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
