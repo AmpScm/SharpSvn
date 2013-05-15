@@ -134,14 +134,14 @@
         <include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="release/lib">
+    <copy todir="release/lib" if="${platform=='win32'}">
       <fileset basedir="build/win32/cyrus-sasl-${saslVersion}/lib">
         <include name="libsasl.lib" />
         <include name="${saslPdb}" />
       </fileset>
     </copy>
-    <copy todir="release/lib-x64" if="${platform=='x64'}">
-      <fileset basedir="build/x64/cyrus-sasl-${saslVersion}/lib">
+    <copy todir="release/lib-${platform}" if="${platform!='win32'}">
+      <fileset basedir="build/${platform}/cyrus-sasl-${saslVersion}/lib">
         <include name="${dllPrefix}*.${svnDll}" />
         <include name="libsasl.lib" />
         <include name="${saslPdb}" />
