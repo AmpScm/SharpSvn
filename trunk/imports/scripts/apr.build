@@ -285,26 +285,26 @@ APR_BEGIN_DECLS
         </delete>
       </if>
     </OnceBlock>
-    <copy todir="${aprDir}/Debug" if="${static!='true'}">
+    <copy todir="${aprDir}/Debug" if="${static!='true' and platform=='win32'}">
       <fileset basedir="${aprDir}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${aprUtilDir}/Debug" if="${static!='true'}">
+    <copy todir="${aprUtilDir}/Debug" if="${static!='true' and platform=='win32'}">
       <fileset basedir="${aprUtilDir}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${aprDir}/LibD">
+    <copy todir="${aprDir}/LibD" if="${platform=='win32'}">
       <fileset basedir="${aprDir}/LibR">
         <include name="*.lib" />
       </fileset>
     </copy>
-    <copy todir="${aprUtilDir}/LibD">
+    <copy todir="${aprUtilDir}/LibD" if="${platform=='win32'}">
       <fileset basedir="${aprUtilDir}/LibR">
         <include name="*.lib" />
       </fileset>
