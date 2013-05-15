@@ -15,7 +15,7 @@
   <property name="intl" value="none" />
   <property name="svnBuildName" value="SlikSvn" />
   <property name="enableIpv6" value="true" overwrite="false" />
-  <property name="buildHttpd" value="${platform=='win32'}" />
+  <property name="buildHttpd" value="true" overwrite="false" />
   <property name="buildSubversion" value="false" />
   <property name="buildSqlite" value="true" />
   <property name="buildLibgit2" value="false" />

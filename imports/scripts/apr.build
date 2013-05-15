@@ -122,6 +122,7 @@
         </in>
         <do>
           <echo message="Patching ${vcproj}" />
+          <property name="vcprojForCrypto" value="${string::contains(vcproj, 'crypto')}" />
           <loadfile file="${vcproj}" property="projtext">
             <filterchain>
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
@@ -131,8 +132,10 @@
               <!-- Import APR and XML from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
               <!-- Fix crypto compilation -->
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true' and enableAprCrypto}" />
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true' and enableAprCrypto}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib"' if="${static!='true' and enableAprCrypto}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib""' if="${static=='true' and enableAprCrypto}" />
+              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(opensslDir)}\out32dll;${path::get-full-path(releaseLib)}" if="${not static}" />
+              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(releaseLib)}" if="${static}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
@@ -249,7 +252,7 @@ APR_BEGIN_DECLS
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
-            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true' and enableAprCrypto and platform!='x64'}" />
+            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true' and enableAprCrypto}" />
           </items>
         </in>
         <do>
