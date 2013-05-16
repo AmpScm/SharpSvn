@@ -309,18 +309,26 @@ public class VCProjAddPlatform : NAnt.Core.Task
 
             XmlElement nn = (XmlElement)n.CloneNode(true);
             nn.SetAttribute("Name", name.Substring(0, name.Length - FromPlatform.Length) + Platform);
+            
+            string platformValue = null;
+            switch (Platform.ToUpper())
+            {
+                case "X64":
+                    platformValue = "17";
+                    break;
+                case "IA64":
+                    platformValue = "error";
+                    break;
+            }
 
             foreach (XmlNode i in nn.SelectNodes("Tool/@TargetMachine"))
             {
-                switch (Platform.ToUpper())
-                {
-                    case "X64":
-                        i.Value = "17";
-                        break;
-                    case "IA64":
-                        i.Value = "error";
-                        break;
-                }
+                i.Value = platformValue;
+            }
+            
+            foreach(XmlElement i in nn.SelectNodes("Tool[@Name='VCLinkerTool'] | Tool[@Name='VCLibrarianTool']"))
+            {
+                i.SetAttribute("TargetMachine", platformValue);
             }
 
             foreach (XmlNode i in nn.SelectNodes("@OutputDirectory | @IntermediateDirectory | .//@OutputFile | .//@TypeLibraryName | .//@PrecompiledHeaderFile | .//@ObjectFile | .//@ProgramDataBaseFileName | .//@ImportLibrary"))
