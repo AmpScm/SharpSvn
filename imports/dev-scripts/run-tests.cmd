@@ -12,6 +12,7 @@ set ARGS=
 set LOGLEVEL=
 set LOCAL=1
 set HTTPLOG=--httpd-no-log
+set FS=fsfs
 :next
 
 IF "%1" == "-d" (
@@ -46,19 +47,28 @@ IF "%1" == "-d" (
 ) ELSE IF "%1" == "--no-local" (
    SET LOCAL=
    SHIFT
+) ELSE IF "%1" == "--bdb" (
+   SET FS=bdb
+   SHIFT
 ) ELSE (
    SET ARGS=!ARGS! -t %1
    SHIFT
 )
 
-if NOT "%1" == "" GOTO next
+IF NOT "%1" == "" GOTO next
 
-set BASE=R:\Tst-2012
+if EXIST "%cd%\release\httpd\bin\httpd.exe" (
+  SET HTTPDDIR="%cd%\release\httpd"
+) ELSE IF EXIST "%cd%\release\httpd-x64\bin\httpd.exe" (
+  SET HTTPDDIR="%cd%\release\httpd-x64"
+)
+
+set BASE=R:\Tst
 
 set path=%BASE%\bin;%path%
 set TEMP=%BASE%\Z-temp
 set TMP=%TEMP%
-set HTTPINFO=--httpd-dir %cd%\release\httpd --httpd-port 7829 -u http://127.0.0.1:7829 %HTTPLOG%
+set HTTPINFO=--httpd-dir "%HTTPDDIR%" --httpd-port 7829 -u http://127.0.0.1:7829 %HTTPLOG%
 set SVN_DBG_REAL_QUIET=1
 set LOCATION=R:\
 IF NOT EXIST "%BASE%\bin" MKDIR "%BASE%\bin"
@@ -82,16 +92,16 @@ set ARGS=%ARGS% %CLEANUP% %LOCATION% %LOGLEVEL%
 pushd dev
 if NOT "%LOCAL%" == "" (
   del %LOCATION%tests.log %LOCATION%fails.log 2> nul:
-  timethis win-tests.py %PARALLEL% %VALS% -f fsfs %ARGS%
+  timethis win-tests.py %PARALLEL% %VALS% -f %FS% %ARGS%
 )
 if NOT "%SVNSERVE%" == "" (
   del %LOCATION%svn-tests.log %LOCATION%svn-fails.log 2> nul:
-  timethis win-tests.py %PARALLEL% %VALS% -f fsfs -u svn://127.0.0.1 %ARGS%
+  timethis win-tests.py %PARALLEL% %VALS% -f %FS% -u svn://127.0.0.1 %ARGS%
 )
 if NOT "%HTTP%" == "" (
   echo del %LOCATION%dav-tests.log %LOCATION%dav-fails.log %LOCATION%subversion\tests\cmdline\httpd\log
   del %LOCATION%dav-tests.log %LOCATION%dav-fails.log %LOCATION%subversion\tests\cmdline\httpd\log
-  timethis win-tests.py %VALS% -f fsfs %HTTPINFO% %ARGS%
+  timethis win-tests.py %VALS% -f %FS% %HTTPINFO% %ARGS%
 )
 
 REM timethis win-tests.py %PARALLEL% %VALS% -f bdb %ARGS%
