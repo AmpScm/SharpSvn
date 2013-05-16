@@ -227,7 +227,7 @@
         <arg value="/t:Programs\svn" />
         <arg value="/t:Programs\svnadmin" />        
         <arg value="/t:Programs\svnversion" />
-        <arg value="/t:Programs\svnserve" if="${static!='true'}"/>
+        <arg value="/t:Programs\svnserve" />
         <arg value="/t:Programs\svnsync" />
         <arg value="/t:Programs\svnlook" />
         <arg value="/t:Programs\svnmucc"/>

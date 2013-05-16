@@ -15,14 +15,11 @@
   <!-- -->
   <property name="subversionVersion" value="1.7.9" overwrite="false" />
   <property name="libgit2Version" value="0.8.0" overwrite="false" />
-  <!-- r1156080 - Blame notification change (1.8) -->
-  <!-- r1302450 - Upgrade svn_client_import to support filtering -->
-  <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC (1.8) -->
-  <!-- r1380295 - Fix svn update output value -->
-  <!-- r1396285 - Potential crash in Window password cache handling -->
-  <property name="subversionMerges" value="1156080,1302450,1304407,1304439,1380295,1396285" overwrite="false" />
+  <!-- r1482327 - Segfault (1.8.0) -->
+  <!-- r1482436 - ra replay regression (1.8.x) -->
+  <property name="subversionMerges" value="1482327,1482436" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
-  <property name="subversionMergeBranches" value="branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
+  <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <!-- r960671 - Only deal with the mutex when XTHREAD is enabled. -->
   <property name="aprMerges" value="960671" overwrite="false" />
@@ -53,7 +50,7 @@
   <property name="cmakeVersion" value="2.8.10.2" overwrite="false" />
   
   <!-- For testcase -->
-  <property name="nunitVersion" value="2.6.0.12051" overwrite="false" />
+  <property name="nunitVersion" value="2.6.2" overwrite="false" />
   <property name="sharpZipVersion" value="0860" overwrite="false" />
   <property name="junitVersion" value="4.8.1" overwrite="false" />
 
