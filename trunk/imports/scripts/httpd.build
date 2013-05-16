@@ -47,14 +47,19 @@
       </MSBuild>
     </OnceBlock>
 
-    <!-- Enable compiling subversion in debug mode -->    
-    <copy todir="${httpdDir}/Debug" flatten="true">
+    <!-- Enable compiling Subversion in debug and relase mode -->
+    <copy todir="${httpdDir}/Release" flatten="true">
       <fileset basedir="${httpdDir}">
         <include name="**/Release/*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${httpdDir}/Debug" flatten="true">
+      <fileset basedir="${httpdDir}">
         <include name="Release/*.lib" />
       </fileset>
     </copy>
-    <copy todir="${release}/httpd/bin" flatten="true">
+    
+    <copy todir="${release}/httpd/bin" flatten="true" if="${platform=='win32'}">
       <fileset basedir="${httpdDir}">
         <include name="release/*.exe" />
         <include name="release/*.dll" />
@@ -62,14 +67,32 @@
         <include name="support/release/*.dll" />
       </fileset>
     </copy>
-    <copy todir="${release}/httpd/modules" flatten="true">
+    <copy todir="${release}/httpd/modules" flatten="true" if="${platform=='win32'}">
       <fileset basedir="${httpdDir}">
         <include name="**/*.so" />
         <exclude name="srclib/**" />
       </fileset>
-    </copy>    
+    </copy>
     <mkdir dir="${release}/httpd/conf" />
     <mkdir dir="${release}/httpd/logs" />
     <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />
+    
+    <copy todir="${release}/httpd-${platform}/bin" flatten="true" if="${platform!='win32'}">
+      <fileset basedir="${httpdDir}">
+        <include name="${platform}/release/*.exe" />
+        <include name="${platform}/release/*.dll" />
+        <include name="support/${platform}/release/*.exe" />
+        <include name="support/${platform}/release/*.dll" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/httpd-${platform}/modules" flatten="true" if="${platform!='win32'}">
+      <fileset basedir="${httpdDir}">
+        <include name="**/*.so" />
+        <exclude name="srclib/**" />
+      </fileset>
+    </copy>
+    <mkdir dir="${release}/httpd-${platform}/conf" if="${platform!='win32'}"/>
+    <mkdir dir="${release}/httpd-${platform}/logs" if="${platform!='win32'}" />
+    <echo message="Listen 1234" file="${release}/httpd-${platform}/conf/httpd.conf"  if="${platform!='win32'}" />
   </target>
 </project>
