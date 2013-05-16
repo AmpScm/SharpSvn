@@ -287,30 +287,57 @@ APR_BEGIN_DECLS
         </delete>
       </if>
     </OnceBlock>
-    <copy todir="${aprDir}/Debug" if="${static!='true' and platform=='win32'}">
+    
+    <copy todir="${aprDir}/Release" if="${static!='true' and platform!='win32'}">
+      <fileset basedir="${aprDir}/${platform}/Release">
+        <include name="*.lib" />
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${aprUtilDir}/Release" if="${static!='true' and platform!='win32'}">
+      <fileset basedir="${aprUtilDir}/${platform}/Release">
+        <include name="*.lib" />
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${aprDir}/LibR" if="${platform!='win32'}">
+      <fileset basedir="${aprDir}/${platform}/LibR">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${aprUtilDir}/LibR" if="${platform!='win32'}">
+      <fileset basedir="${aprUtilDir}/${platform}/LibR">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${aprDir}/Debug" if="${static!='true'}">
       <fileset basedir="${aprDir}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${aprUtilDir}/Debug" if="${static!='true' and platform=='win32'}">
+    <copy todir="${aprUtilDir}/Debug" if="${static!='true'}">
       <fileset basedir="${aprUtilDir}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${aprDir}/LibD" if="${platform=='win32'}">
+    <copy todir="${aprDir}/LibD">
       <fileset basedir="${aprDir}/LibR">
         <include name="*.lib" />
       </fileset>
     </copy>
-    <copy todir="${aprUtilDir}/LibD" if="${platform=='win32'}">
+    <copy todir="${aprUtilDir}/LibD">
       <fileset basedir="${aprUtilDir}/LibR">
         <include name="*.lib" />
       </fileset>
     </copy>
+        
     <copy todir="${release}/lib" flatten="true">
       <fileset>
         <include name="${aprDir}/LibR/*.lib" />
