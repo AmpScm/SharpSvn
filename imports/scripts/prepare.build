@@ -9,8 +9,8 @@
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
   <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
 
-  <property name="nunitVersionMMR" value="${string::substring(nunitVersion, 0, string::last-index-of(nunitVersion,'.'))}" />
-  <property name="nunitVersionMM" value="${string::substring(nunitVersionMMR, 0, string::last-index-of(nunitVersionMMR,'.'))}" />
+  <regex pattern="^(?'nunitVersionMMR'\d+\.\d+(\.\d+))" input="${nunitVersion}" />
+  <regex pattern="^(?'nunitVersionMM'\d+\.\d+)" input="${nunitVersion}" />
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
@@ -42,7 +42,7 @@
       unless="${file::exists(downloads + zlibFilename)}" />
 
     <get
-      src="http://launchpad.net/nunitv2/${nunitVersionMM}/${nunitVersionMMR}/+download/${nunitFilename}"
+      src="http://launchpad.net/nunitv2/${nunitVersionMMR}/${nunitVersionMMR}/+download/${nunitFilename}"
       dest="${downloads + nunitFilename}"
       unless="${file::exists(downloads + nunitFilename)}" />
 
