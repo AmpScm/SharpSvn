@@ -111,6 +111,9 @@ namespace SharpGit {
 			const char *AllocDirent(String ^path);
 			const char *AllocRelpath(String ^relPath);
 			const char *AllocString(String^ value);
+
+			git_strarray* AllocStringArray(String ^path);
+			git_strarray* AllocStringArray(IEnumerable<String^> ^path);
 		};
 	}
 
