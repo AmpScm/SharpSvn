@@ -190,6 +190,40 @@ const char* GitPool::AllocString(String^ value)
         return "";
 }
 
+git_strarray* GitPool::AllocStringArray(String ^path)
+{
+	return AllocStringArray(gcnew array<String^> { path });
+}
+
+git_strarray* GitPool::AllocStringArray(IEnumerable<String^> ^paths)
+{
+	git_strarray *pArr = (git_strarray *)apr_pcalloc(Handle, sizeof(*pArr));
+
+	int alloc = 16;
+	ICollection<String^>^ coll = dynamic_cast<ICollection<String^>^>(paths);
+
+	if (coll)
+		alloc = coll->Count;
+
+	pArr->strings = (char**)apr_pcalloc(Handle,sizeof(const char *)*alloc);
+
+	for each(String ^v in paths)
+	{
+		if (pArr->count >= alloc)
+		{
+			int newAlloc = alloc * 2;
+			char **old = pArr->strings;
+			pArr->strings = (char**)apr_pcalloc(Handle,sizeof(const char *) * newAlloc);
+			memcpy(pArr->strings, old, sizeof(const char *) * alloc);
+			alloc = newAlloc;
+		}
+
+		pArr->strings[pArr->count++] = (char*)AllocString(v);
+	}
+
+	return pArr;
+}
+
 
 System::String ^GitBase::Utf8_PtrToString(const char *ptr)
 {

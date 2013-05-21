@@ -332,5 +332,57 @@ namespace SharpGit.Tests
                 Assert.That(index.Contains("file"), Is.False);
             }
         }
+
+        [Test]
+        public void StatusTests()
+        {
+            string[] A = new string[] { "A/a", "A/b", "A/c", "A/d" };
+            string[] B = new string[] { "B/a", "B/b", "B/c", "B/d" };
+            string[] C = new string[] { "C/a", "C/b", "C/c", "C/d" };
+
+            List<string> all = new List<string>();
+            all.AddRange(A);
+            all.AddRange(B);
+            all.AddRange(C);
+
+            using(GitRepository repo = GitRepository.Create(GetTempPath()))
+            {
+                foreach (string d in all)
+                {
+                    string fp = Path.Combine(repo.WorkingCopyDirectory, d);
+                    Directory.CreateDirectory(Path.GetDirectoryName(fp));
+
+                    File.WriteAllText(fp, string.Format("This is {0}\n", fp));
+                    repo.Index.Add(d);
+                }
+                repo.Index.Write();
+
+                using(GitClient git = new GitClient())
+                {
+                    List<string> found = new List<string>();
+
+                    GitStatusArgs sa = new GitStatusArgs();
+
+                    git.Status(Path.Combine(repo.WorkingCopyDirectory, "B"),
+                        delegate(object sender, GitStatusEventArgs e)
+                        {
+                            found.Add(e.RelativePath);
+                        });
+
+                    Assert.That(found.Count, Is.EqualTo(4));
+                    Assert.That(found, Is.All.GreaterThan("B"));
+                    Assert.That(found, Is.All.LessThan("C"));
+
+                    found.Clear();
+                    git.Status(Path.Combine(repo.WorkingCopyDirectory, "B/c"),
+                        delegate(object sender, GitStatusEventArgs e)
+                        {
+                            found.Add(e.RelativePath);
+                        });
+                    Assert.That(found.Count, Is.EqualTo(1));
+                    Assert.That(found, Is.All.Contains("B/c"));
+                }
+            }
+        }
     }
 }

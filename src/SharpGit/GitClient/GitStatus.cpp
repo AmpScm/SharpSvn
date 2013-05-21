@@ -45,7 +45,11 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 		opts->flags |= GIT_STATUS_OPT_RECURSE_IGNORED_DIRS;
 
 	if (!String::IsNullOrEmpty(path))
-		throw gcnew NotImplementedException("Only root status is currently implemented");
+	{
+		opts->pathspec = *pool->AllocStringArray(path);
+	}
+	else
+		opts->flags |= GIT_STATUS_OPT_DISABLE_PATHSPEC_MATCH;
 
 	return opts;
 }
