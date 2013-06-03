@@ -52,7 +52,6 @@ Index: serf.mak
  !ENDIF
  
  ########
-
 @@ -148,6 +165,16 @@
      "$(INTDIR)\test_server.obj" \
  
