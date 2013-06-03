@@ -2,22 +2,6 @@ Index: serf.mak
 ===================================================================
 --- serf.mak	(revision 1624)
 +++ serf.mak	(working copy)
-@@ -9,6 +9,7 @@
- !ENDIF
- 
- CFLAGS = /Zi /W3 /EHsc /I "./"
-+LIB32_FLAGS = /nologo
- 
- !IF "$(DEBUG_BUILD)" == ""
- INTDIR = Release
-@@ -18,6 +19,7 @@
- INTDIR = Debug
- CFLAGS = /MDd /Od /W3 /Gm /D "_DEBUG" $(CFLAGS)
- STATIC_LIB = $(INTDIR)\serf-1.lib
-+LIB32_FLAGS = $(LIB32_FLAGS) /NODEFAULTLIB:msvcrt.lib
- !ENDIF
- 
- ########
 @@ -40,16 +42,32 @@
  !ENDIF
  
@@ -68,22 +52,20 @@ Index: serf.mak
  !ENDIF
  
  ########
-@@ -95,7 +113,6 @@
- CPP=cl.exe
- CPP_PROJ = /c /nologo $(CFLAGS) $(WIN32_DEFS) $(APR_FLAGS) $(APRUTIL_FLAGS) $(OPENSSL_FLAGS) $(ZLIB_FLAGS) /Fo"$(INTDIR)\\" /Fd"$(INTDIR)\\"
- LIB32=link.exe
--LIB32_FLAGS=/nologo
- 
- LIB32_OBJS= \
-     "$(INTDIR)\aggregate_buckets.obj" \
-@@ -148,6 +165,11 @@
+
+@@ -148,6 +165,16 @@
      "$(INTDIR)\test_server.obj" \
  
  TEST_LIBS = user32.lib advapi32.lib gdi32.lib ws2_32.lib
++
 +!IFDEF APR_STATIC
-+TEST_LIBS = $(TEST_LIBS) mswsock.lib rpcrt4.lib shell32.lib msvcrt.lib
-+!ELSE
++TEST_LIBS = $(TEST_LIBS) mswsock.lib rpcrt4.lib shell32.lib
++!ENDIF
++
++!IF "$(DEBUG_BUILD)" == ""
 +TEST_LIBS = $(TEST_LIBS) msvcrt.lib
++!ELSE
++TEST_LIBS = $(TEST_LIBS) msvcrtd.lib
 +!ENDIF
  
  
