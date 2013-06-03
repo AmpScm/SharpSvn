@@ -17,7 +17,6 @@
   <property name="enableIpv6" value="true" overwrite="false" />
   <property name="buildHttpd" value="true" overwrite="false" />
   <property name="buildSubversion" value="false" />
-  <property name="buildSqlite" value="true" />
   <property name="buildLibgit2" value="false" />
   <property name="svnStatic" value="true" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
