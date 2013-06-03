@@ -76,19 +76,15 @@ Index: serf.mak
  
  LIB32_OBJS= \
      "$(INTDIR)\aggregate_buckets.obj" \
-@@ -148,6 +165,9 @@
+@@ -148,6 +165,11 @@
      "$(INTDIR)\test_server.obj" \
  
  TEST_LIBS = user32.lib advapi32.lib gdi32.lib ws2_32.lib
 +!IFDEF APR_STATIC
-+TEST_LIBS = $(TEST_LIBS) mswsock.lib rpcrt4.lib shell32.lib
++TEST_LIBS = $(TEST_LIBS) mswsock.lib rpcrt4.lib shell32.lib msvcrt.lib
++!ELSE
++TEST_LIBS = $(TEST_LIBS) msvcrt.lib
 +!ENDIF
  
  
  ALL: INTDIR $(STATIC_LIB) TESTS
-@@ -211,3 +231,4 @@
- 
- $(INTDIR)\test_all.exe: $(TEST_OBJS) $(STATIC_LIB)
-   $(LIB32) /DEBUG /OUT:$@ $** $(LIB32_FLAGS) $(TEST_LIBS)
-+ 
-\ No newline at end of file
