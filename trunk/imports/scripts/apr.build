@@ -98,14 +98,14 @@
             <filterchain>
               <!-- Add openssl includes to aprutil and aprutil/crypto -->
               <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static=='true'}" />
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static!='true'}" />
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static}" />
+              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${not static}" />
               <!-- Don't add default library info -->
               <replacestring from='Name="VCCLCompilerTool"' to='Name="VCCLCompilerTool" OmitDefaultLibName="true"' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
-              <replacestring from='XML_STATIC' to='XML_BUILDING_EXPAT;XML_USE_MSC_EXTENSIONS;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
-              <replacestring from='EXPAT_EXPORTS' to='EXPAT_EXPORTS;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport)' if="${static!='true'}" />
+              <replacestring from='XML_STATIC' to='XML_BUILDING_EXPAT;XML_USE_MSC_EXTENSIONS;XMLIMPORT=__declspec(dllexport)' if="${not static}" />
+              <replacestring from='EXPAT_EXPORTS' to='EXPAT_EXPORTS;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport)' if="${not static}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
@@ -117,7 +117,7 @@
           <items>
             <include name="${aprDir}/libapr.vcproj" />
             <include name="${aprUtilDir}/libaprutil.vcproj" />
-            <include name="${aprUtilDir}/crypto/*.vcproj" if="${enableAprCrypto}" />
+            <include name="${aprUtilDir}/crypto/*.vcproj" />
           </items>
         </in>
         <do>
@@ -128,12 +128,12 @@
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
               <!-- Add openssl includes to aprutil and aprutil/crypto -->
-              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" if="${enableAprCrypto}" />
+              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
               <!-- Import APR and XML from APR-Util -->
               <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
               <!-- Fix crypto compilation -->
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib"' if="${static!='true' and enableAprCrypto}" />
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib""' if="${static=='true' and enableAprCrypto}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib"' if="${not static}" />
+              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib""' if="${static}" />
               <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(aprUtilDir)};${path::get-full-path(opensslDir)}\out32dll" />
             </filterchain>
           </loadfile>
@@ -163,7 +163,7 @@
 #else
 #define  APU_HAVE_OPENSSL 0
 #endif
-// /SharpSvn' if="${enableAprCrypto}" />
+// /SharpSvn' />
               <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
 #ifndef WIN64
 #  define WIN64
@@ -207,7 +207,7 @@ APR_BEGIN_DECLS
 #pragma comment(lib, "ssleay32.lib")
 #endif
 #endif
-' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${(svnAddSharpSvn == 'true' or svnStatic == 'true') and enableAprCrypto}" />
+' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn}" />
 
       <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
         <filterchain>
@@ -226,14 +226,6 @@ APR_BEGIN_DECLS
         </filterchain>
       </loadfile>
       <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
-      <!--loadfile file="${aprDir}\threadproc\win32\proc.c" property="proc.c">
-        <filterchain>
-          <replacestring from='si.dwFlags |= STARTF_USESTDHANDLES;'
-                         to='si.dwFlags  |= STARTF_USESTDHANDLES;
-                             dwCreationFlags |= CREATE_NO_WINDOW;' />
-        </filterchain>
-      </loadfile>
-      <echo message="${proc.c}" file="${aprDir}\threadproc\win32\proc.c" /-->
       <!-- Add Windows 2000 ipv6 workarounds -->
       <echo message="
  #include &lt;Wspiapi.h&gt;
@@ -247,11 +239,11 @@ APR_BEGIN_DECLS
         <in>
           <items>
             <include name="${aprDir}/apr.vcproj" />
-            <include name="${aprDir}/libapr.vcproj" if="${static!='true'}" />
+            <include name="${aprDir}/libapr.vcproj" if="${not static}" />
             <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
             <include name="${aprUtilDir}/aprutil.vcproj" />
-            <include name="${aprUtilDir}/libaprutil.vcproj" if="${static!='true'}" />
-            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${static!='true' and enableAprCrypto}" />
+            <include name="${aprUtilDir}/libaprutil.vcproj" if="${not static}" />
+            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${not static}" />
           </items>
         </in>
         <do>
@@ -275,7 +267,7 @@ APR_BEGIN_DECLS
           </copy>
         </do>
       </foreach>
-      <if test="${static != 'true'}">
+      <if test="${not static}">
         <!-- Delete xml and apr intermediates used for building apr-util -->
         <delete>
           <fileset basedir="${aprUtilDir}">
@@ -288,14 +280,14 @@ APR_BEGIN_DECLS
       </if>
     </OnceBlock>
     
-    <copy todir="${aprDir}/Release" if="${static!='true' and platform!='win32'}">
+    <copy todir="${aprDir}/Release" if="${(not static) and platform!='win32'}">
       <fileset basedir="${aprDir}/${platform}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${aprUtilDir}/Release" if="${static!='true' and platform!='win32'}">
+    <copy todir="${aprUtilDir}/Release" if="${(not static) and platform!='win32'}">
       <fileset basedir="${aprUtilDir}/${platform}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
@@ -313,14 +305,14 @@ APR_BEGIN_DECLS
       </fileset>
     </copy>
     
-    <copy todir="${aprDir}/Debug" if="${static!='true'}">
+    <copy todir="${aprDir}/Debug" if="${not static}">
       <fileset basedir="${aprDir}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${aprUtilDir}/Debug" if="${static!='true'}">
+    <copy todir="${aprUtilDir}/Debug" if="${not static}">
       <fileset basedir="${aprUtilDir}/Release">
         <include name="*.lib" />
         <include name="*.dll" />
