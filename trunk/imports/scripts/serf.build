@@ -44,7 +44,7 @@
               <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' if="${static}" />
               <!-- Only compile library, the testfiles don't like the small library -->
               <replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
-              <replacestring from="ALL: $(INTDIR) $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
+              <replacestring from="ALL: $(INTDIR) $(STATIC_LIB) TESTS" to="ALL: $(INTDIR) $(STATIC_LIB)" />
               <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
               <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' if="${enableIpv6=='true'}"/>
             </filterchain>
