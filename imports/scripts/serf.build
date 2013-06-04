@@ -40,8 +40,8 @@
               <replacestring from=" /MDd " to=" /MDd /Zl " />
               <replacestring from=" /MD " to=" /MD /Zl " />
               <!-- Don't include apr and openssl in the intermediate libraries -->
-              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" if="${static=='true'}" />
-              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' if="${static=='true'}" />
+              <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" if="${static}" />
+              <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' if="${static}" />
               <!-- Only compile library, the testfiles don't like the small library -->
               <replacestring from="ALL: INTDIR $(STATIC_LIB) TESTS" to="ALL: INTDIR $(STATIC_LIB)" />
               <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\${path::get-file-name-without-extension(mak)}.pdb"' />
