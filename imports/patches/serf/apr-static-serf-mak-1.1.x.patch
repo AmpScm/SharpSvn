@@ -52,19 +52,13 @@ Index: serf.mak
  !ENDIF
  
  ########
-@@ -148,6 +165,16 @@
+@@ -148,6 +165,10 @@
      "$(INTDIR)\test_server.obj" \
  
  TEST_LIBS = user32.lib advapi32.lib gdi32.lib ws2_32.lib
 +
 +!IFDEF APR_STATIC
 +TEST_LIBS = $(TEST_LIBS) mswsock.lib rpcrt4.lib shell32.lib
-+!ENDIF
-+
-+!IF "$(DEBUG_BUILD)" == ""
-+TEST_LIBS = $(TEST_LIBS) msvcrt.lib
-+!ELSE
-+TEST_LIBS = $(TEST_LIBS) msvcrtd.lib
 +!ENDIF
  
  
