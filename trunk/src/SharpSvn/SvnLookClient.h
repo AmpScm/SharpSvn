@@ -175,6 +175,10 @@ namespace SharpSvn {
 		bool GetList(SvnLookOrigin^ origin, String^ path, SvnLookListArgs^ args, [Out] Collection<SvnLookListEventArgs^>^% list);
 
 	public:
+		bool TryGetRepositoryId(SvnLookOrigin^ origin, [Out] Guid% id);
+		bool TryGetRepositoryId(String^ repositoryPath, [Out] Guid% id);
+
+	public:
 		/// <summary>
 		/// Raised to allow canceling operations. The event is first
 		/// raised on the <see cref="SvnClientArgs" /> object and
