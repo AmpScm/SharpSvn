@@ -66,6 +66,10 @@ namespace SharpSvn.Tests.LookCommands
                     Assert.That(props, Is.Not.Null);
                     Assert.That(props.Count, Is.EqualTo(1));
                 }
+
+                Guid id;
+                Assert.That(cl.TryGetRepositoryId(e.HookArgs.LookOrigin, out id));
+                Assert.That(id, Is.Not.EqualTo(Guid.Empty));
             }
         }
 
