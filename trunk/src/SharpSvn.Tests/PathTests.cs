@@ -566,18 +566,18 @@ namespace SharpSvn.Tests
             Assert.That(pt.Revision, Is.EqualTo((SvnRevision)123L));
 
             Assert.That(SvnTarget.TryParse("http://svn.apache.org/repos/asf/subversion/", out st));
-            Assert.That(st, Is.InstanceOfType(typeof(SvnUriTarget)));
+            Assert.That(st, Is.InstanceOf(typeof(SvnUriTarget)));
             Assert.That(SvnTarget.TryParse("http://svn.apache.org/repos/asf/subversion/@123", out st));
-            Assert.That(st, Is.InstanceOfType(typeof(SvnUriTarget)));
+            Assert.That(st, Is.InstanceOf(typeof(SvnUriTarget)));
             Assert.That(SvnTarget.TryParse("http://svn.apache.org/repos/asf/subversion/@123", true, out st));
-            Assert.That(st, Is.InstanceOfType(typeof(SvnUriTarget)));
+            Assert.That(st, Is.InstanceOf(typeof(SvnUriTarget)));
 
             Assert.That(SvnTarget.TryParse("C:\\A", out st));
-            Assert.That(st, Is.InstanceOfType(typeof(SvnPathTarget)));
+            Assert.That(st, Is.InstanceOf(typeof(SvnPathTarget)));
             Assert.That(SvnTarget.TryParse("C:\\A@123", out st));
-            Assert.That(st, Is.InstanceOfType(typeof(SvnPathTarget)));
+            Assert.That(st, Is.InstanceOf(typeof(SvnPathTarget)));
             Assert.That(SvnTarget.TryParse("C:\\@123", true, out st));
-            Assert.That(st, Is.InstanceOfType(typeof(SvnPathTarget)));
+            Assert.That(st, Is.InstanceOf(typeof(SvnPathTarget)));
         }
 
         [Test]
@@ -592,6 +592,29 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetTruePath(testPath), Is.EqualTo(testPath));
 
             Assert.That(new SvnPathTarget(testPath).TargetName, Is.EqualTo(testPath));
+        }
+
+        [Test]
+        public void NormalizingPathsDot()
+        {
+            Assert.That(SvnTools.IsNormalizedFullPath("C:\\source\\."), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("C:\\source\\.\\"), Is.False);
+            Assert.That(SvnTools.IsNormalizedFullPath("C:\\source\\.\\dump"), Is.False);
+
+            Assert.That(SvnTools.IsAbsolutePath("C:\\source\\."), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath("C:\\source\\.\\"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath("C:\\source\\.\\dump"), Is.False);
+
+            Assert.That(SvnPathTarget.FromString("C:\\source\\.").TargetPath, Is.EqualTo("C:\\source"));
+            Assert.That(SvnPathTarget.FromString("C:\\source\\.\\").TargetPath, Is.EqualTo("C:\\source"));
+            Assert.That(SvnPathTarget.FromString("C:\\source\\.\\dump").TargetPath, Is.EqualTo("C:\\source\\dump"));
+
+            Assert.That(SvnTools.IsNormalizedFullPath("c:\\source"), Is.False);
+            Assert.That(SvnTools.IsAbsolutePath("c:\\source"), Is.True);
+
+            Assert.That(SvnPathTarget.FromString("c:\\source\\.").TargetPath, Is.EqualTo("C:\\source"));
+            Assert.That(SvnPathTarget.FromString("c:\\source\\.\\").TargetPath, Is.EqualTo("C:\\source"));
+            Assert.That(SvnPathTarget.FromString("c:\\source\\.\\dump").TargetPath, Is.EqualTo("C:\\source\\dump"));
         }
     }
 }
