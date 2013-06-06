@@ -128,7 +128,7 @@ static String^ GetPathRootPart(String^ path)
 	if (path->Length >= 3 && path[1] == ':' && path[2] == '\\')
 	{
 		if (path[0] >= 'a' && path[0] <= 'z')
-			return Char::ToUpper(path[0]) + ":\\";
+			return Char::ToUpperInvariant(path[0]) + ":\\";
 		else
 			return path->Substring(0, 3);
 	}
@@ -528,7 +528,7 @@ String^ SvnTools::GetNormalizedFullPath(String^ path)
 		wchar_t c = path[0];
 
 		if ((c >= 'a') && (c <= 'z'))
-			path = wchar_t::ToUpperInvariant(c) + path->Substring(1);
+			path = Char::ToUpperInvariant(c) + path->Substring(1);
 
 		String^ r = path->TrimEnd('\\');
 
@@ -615,7 +615,7 @@ bool SvnTools::IsAbsolutePath(String^ path)
 			if (j < path->Length && path[j] == '.')
 				j++;
 
-			if (IsSeparator(path, j))
+			if (j >= path->Length || IsSeparator(path, j))
 				return false; // '\'-s behind each other
 		}
 

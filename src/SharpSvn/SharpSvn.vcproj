@@ -1560,6 +1560,10 @@
 					RelativePath=".\LookCommands\SvnLookClient.cpp"
 					>
 				</File>
+				<File
+					RelativePath=".\LookCommands\LookGetRepositoryId.cpp"
+					>
+				</File>
 			</Filter>
 		</Filter>
 		<Filter
