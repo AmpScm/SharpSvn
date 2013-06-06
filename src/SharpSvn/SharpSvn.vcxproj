@@ -636,6 +636,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include=".\LookCommands\LookWrite.cpp" />
     <ClCompile Include=".\LookCommands\SvnLookClient.cpp" />
     <ClCompile Include="Commands\WorkingCopyGetVersion.cpp" />
+    <ClCompile Include="LookCommands\LookGetRepositoryId.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyInstallConflict.cpp" />
     <ClCompile Include=".\Commands\SvnWorkingCopyClient.cpp" />
     <ClCompile Include=".\WorkingCopyCommands\WorkingCopyEntries.cpp" />
