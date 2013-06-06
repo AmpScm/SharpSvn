@@ -120,8 +120,28 @@ namespace SharpSvn.Tests.Commands
 			string value;
 			Client.GetProperty("c:/{632382A5-F992-4ab8-8D37-47977B190819}/no-file.txt", "no-prop", out value);
 		}
+
+        [Test]
+        public void TestGetOnCwd()
+        {
+            string wc = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+
+            string dir = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(wc);
+            try
+            {
+                string v;
+                Assert.That(Client.TryGetProperty(".", SvnPropertyNames.SvnMergeInfo, out v));
+                Assert.That(v, Is.Not.Null);
+
+                Assert.That(Client.TryGetProperty(SvnTarget.FromString("."), SvnPropertyNames.SvnMergeInfo, out v));
+                Assert.That(v, Is.Not.Null);
+            }
+            finally
+            {
+                Directory.SetCurrentDirectory(wc);
+            }
+        }
 	}
 }
-
-
-

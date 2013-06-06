@@ -1044,6 +1044,9 @@
     <ClCompile Include="WorkingCopyCommands\WorkingCopyInstallConflict.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
+    <ClCompile Include="LookCommands\LookGetRepositoryId.cpp">
+      <Filter>SvnLookClient\Sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include=".\SharpSvn.snk" />
