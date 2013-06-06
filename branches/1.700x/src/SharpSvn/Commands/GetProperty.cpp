@@ -110,7 +110,14 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-			SvnTarget^ itemTarget = SvnTarget::FromString(Utf8_PtrToString(pKey, (int)keyLen));
+			String ^path;
+
+			if (keyLen == 0)
+				path = ".";
+			else
+				path = Utf8_PtrToString(pKey, (int)keyLen);
+
+			SvnTarget^ itemTarget = SvnTarget::FromString(path);
 
 			rd->Add(SvnPropertyValue::Create(pName, propVal, itemTarget, propertyName));
 		}

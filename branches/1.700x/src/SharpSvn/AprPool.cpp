@@ -208,7 +208,9 @@ const char* AprPool::AllocDirent(String^ value)
     if (!value)
         throw gcnew ArgumentNullException("value");
 
-    if (value->Length >= 1)
+    if (value->Length == 1 && value[0] == '.')
+        return "";
+    else if (value->Length >= 1)
     {
         cli::array<unsigned char>^ bytes = System::Text::Encoding::UTF8->GetBytes(value);
 
@@ -267,7 +269,9 @@ const char* AprPool::AllocRelpath(String^ value)
     if (!value)
         throw gcnew ArgumentNullException("value");
 
-    if (value->Length >= 1)
+    if (value->Length == 1 && value[0] == '.')
+        return "";
+    else if (value->Length >= 1)
     {
         pin_ptr<unsigned char> pBytes = &(System::Text::Encoding::UTF8->GetBytes(value))[0];
 
