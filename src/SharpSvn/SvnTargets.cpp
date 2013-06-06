@@ -180,6 +180,9 @@ String^ SvnPathTarget::GetTargetPath(String^ path)
 	if (path->Length == 0)
 		path = ".";
 
+	if (path->Length > 2 && path[1] == ':' && path[0] >= 'a' && path[0] <= 'z')
+		path = Char::ToUpperInvariant(path[0]) + path->Substring(1);
+
 	return path;
 }
 
@@ -192,10 +195,20 @@ bool SvnPathTarget::TryParse(String^ targetName, bool allowPegRevision, [Out] Sv
 {
 	if (String::IsNullOrEmpty(targetName))
 		throw gcnew ArgumentNullException("targetName");
+	else if (!SvnBase::IsNotUri(targetName))
+		return false;
 
-	AprPool pool(SvnBase::SmallThreadPool);
+	if (allowPegRevision)
+	{
+		AprPool pool(SvnBase::SmallThreadPool);
 
-	return TryParse(targetName, allowPegRevision, target, %pool);
+		return TryParse(targetName, allowPegRevision, target, %pool);
+	}
+	else
+	{
+		target = gcnew SvnPathTarget(targetName);
+		return true;
+	}
 }
 
 SvnTarget^ SvnTarget::FromString(String^ value)
