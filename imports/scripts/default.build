@@ -150,7 +150,7 @@
     </exec>
   </target>
 
-  <target name="build" depends="download,extract,checkout, build-svn, copy-result">
+  <target name="build" depends="download,extract,checkout, build-svn, build-libgit2, copy-result">
 
   </target>
 
