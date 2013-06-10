@@ -3,7 +3,7 @@
   <property name="svnBuildType" value="branch" overwrite="false" />
   <property name="libgit2BuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
-  <property name="libgit2BuildType" value="tag" overwrite="false" />
+  <property name="libgit2BuildType" value="trunk" overwrite="false" />
   
   <property name="guessedPlatform" value="win32" />
   <if test="${environment::variable-exists('LIB')}">
@@ -14,7 +14,7 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.8.x" overwrite="false" />
-  <property name="libgit2Version" value="0.8.0" overwrite="false" />
+  <property name="libgit2Version" value="0.18.0" overwrite="false" />
   <property name="subversionMerges" value="" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="" overwrite="false" />
