@@ -105,8 +105,15 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
         <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" />
       </if>
     </OnceBlock>
-    <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
+    <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${not static}">
       <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="build/${platform}/openssl-${opensslVersion}/out32dll" if="${static}">
+      <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32">
         <include name="*.lib" />
         <include name="*.exp" />
         <include name="*.pdb" />
