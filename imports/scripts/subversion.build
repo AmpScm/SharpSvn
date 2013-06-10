@@ -291,7 +291,7 @@
     <copy todir="${release}/include">
       <fileset basedir="${svnBase}\subversion\include">
         <include name="**/*.h" />
-        <include name="${svnBase}\subversion\svn_private_config.h" />
+        <include name="${svnBase}\release\svn_private_config.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include/svn-internal">
