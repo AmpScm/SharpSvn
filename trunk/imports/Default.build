@@ -60,6 +60,7 @@
   <property name="svnDll" value="svnDll" overwrite="false" />
 
   <property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 9.0\VC" />
+  <property name="buildJavaHL" value="false" overwrite="false" />
 
   <include buildfile="scripts/default.build" />
 

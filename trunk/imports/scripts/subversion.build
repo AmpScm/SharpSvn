@@ -237,7 +237,7 @@
         <arg value="/t:Programs\svn-populate-node-origins-index" />
         <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
         <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
-        <arg value="/t:__JAVAHL__" if="${javaHome != ''}" />
+        <arg value="/t:__JAVAHL__" if="${buildJavaHL and javaHome != ''}" />
       </MSBuild>
     </OnceBlock>
   </target>
