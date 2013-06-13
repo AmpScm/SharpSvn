@@ -45,7 +45,7 @@
   <property name="sqliteVersion" value="3.7.17" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="2.8.10.2" overwrite="false" />
+  <property name="cmakeVersion" value="2.8.11" overwrite="false" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.6.2" overwrite="false" />
