@@ -342,7 +342,7 @@ APR_BEGIN_DECLS
       </fileset>
     </copy>
             
-    <copy todir="${release}/lib" flatten="true">
+    <copy todir="${releaseLib}" flatten="true">
       <fileset>
         <include name="${aprDir}/${aprRelSubdir}/*.lib" />
         <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
@@ -366,28 +366,16 @@ APR_BEGIN_DECLS
         <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
       </fileset>
     </copy>
-    <copy todir="${release}/lib-x64" flatten="true" if="${platform == 'x64'}">
+    <copy todir="${releaseBin}" flatten="true">
       <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.lib" />
+        <include name="${aprDir}/${aprRelSubdir}/*.dll" />
         <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
+        <include name="${aprUtilDir}/${aprRelSubdir}/*.dll" />
         <include name="${aprUtilDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.dll" />
         <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin" flatten="true">
-      <fileset>
-        <include name="${aprDir}/Release/*.dll" />
-        <include name="${aprUtilDir}/Release/*.dll" />
         <include name="${aprUtilDir}/crypto/Release/*.dll" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin/x64" flatten="true">
-      <fileset>
-        <include name="${aprDir}/x64/Release/*.dll" />
-        <include name="${aprUtilDir}/x64/Release/*.dll" />
-        <include name="${aprUtilDir}/crypto/x64/Release/*.dll" />
+        <include name="${aprUtilDir}/crypto/Release/*.pdb" />
       </fileset>
     </copy>
     <property name="aprIncludeDir" value="${release}/include/apr-1" />

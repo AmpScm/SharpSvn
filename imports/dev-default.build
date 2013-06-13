@@ -54,6 +54,7 @@
 
 	<property name="impBase" value="../build/x64" overwrite="false" if="${platform=='x64'}"/>
 	<property name="impBase" value="../build/win32" overwrite="false" />
+	
 	<exec program="python.exe" workingdir="${wc}" verbose="true">
 		<arg line="gen-make.py" />
 		<arg line="-t vcproj" />
