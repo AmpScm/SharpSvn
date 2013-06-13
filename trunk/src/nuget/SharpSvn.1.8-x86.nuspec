@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package >
   <metadata>
-    <id>SharpSvn.1.7-x86</id>
+    <id>SharpSvn.1.8-x86</id>
     <version>$version$</version>
     <authors>SharpSvn Project</authors>
     <owners>SharpSvn Project</owners>
@@ -9,8 +9,8 @@
     <projectUrl>http://sharpsvn.net/</projectUrl>
     <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <description>SharpSvn is a binding of the Subversion Client API for .NET. This is the 32-bit/x86 version, See SharpSvn.1.7-x64 for the 64 bit version.</description>
-    <copyright>(C) Copyright 2006-2012 The SharpSvn Project</copyright>
+    <description>SharpSvn is a binding of the Subversion Client API for .NET on Subversion 1.8.x. This is the 32-bit/x86 version, See SharpSvn.1.8-x64 for the 64 bit version.</description>
+    <copyright>(C) Copyright 2006-2013 The SharpSvn Project</copyright>
     <tags>Subversion Svn SharpSvn</tags>
   </metadata>
   <files>
