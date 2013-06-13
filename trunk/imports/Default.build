@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
-  <property name="svnBuildType" value="branch" overwrite="false" />
+  <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="libgit2BuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
   <property name="libgit2BuildType" value="trunk" overwrite="false" />
@@ -13,7 +13,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.8.x" overwrite="false" />
+  <property name="subversionVersion" value="1.8.0" overwrite="false" />
   <property name="libgit2Version" value="0.18.0" overwrite="false" />
   <property name="subversionMerges" value="" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
