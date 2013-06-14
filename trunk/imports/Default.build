@@ -15,7 +15,7 @@
   <!-- -->
   <property name="subversionVersion" value="1.8.0" overwrite="false" />
   <property name="libgit2Version" value="0.18.0" overwrite="false" />
-  <property name="subversionMerges" value="" overwrite="false" />
+  <property name="subversionMerges" value="-1446177" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
