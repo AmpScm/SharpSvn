@@ -282,7 +282,7 @@ APR_BEGIN_DECLS
     <property name="aprRelSubdir" value="Release" if="${not static}" />
     <property name="aprRelSubdir" value="LibR" if="${static}" />
     
-    <property name="aprStaticSubdir" value="LibR" if="LibR" />
+    <property name="aprStaticSubdir" value="LibR" />
     
     <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
     <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
