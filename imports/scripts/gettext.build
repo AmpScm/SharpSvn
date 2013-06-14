@@ -91,18 +91,19 @@
       <echo file="${gettextDir}/gettext-runtime/intl/gettext.def" verbose="true">
         ;LIBRARY ${dllPrefix}libintl-${platform}
         EXPORTS
-        gettext                 @401
-        dgettext                @402
-        dcgettext               @403
+        gettext                                @401
+        dgettext                               @402
+        dcgettext                              @403
 
-        libintl_gettext         @501
-        libintl_dgettext        @502
-        libintl_dcgettext       @503
-        libintl_printf          @504
-        libintl_fprintf         @505
-        libintl_sprintf         @506
-        libintl_bindtextdomain  @507
-        libintl_dngettext       @508
+        libintl_gettext                        @501
+        libintl_dgettext                       @502
+        libintl_dcgettext                      @503
+        libintl_printf                         @504
+        libintl_fprintf                        @505
+        libintl_sprintf                        @506
+        libintl_bindtextdomain                 @507
+        libintl_dngettext                      @508
+        libintl_bind_textdomain_codeset        @509
       </echo>
     </OnceBlock>
   </target>
