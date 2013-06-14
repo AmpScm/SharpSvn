@@ -282,8 +282,18 @@ APR_BEGIN_DECLS
     <property name="aprRelSubdir" value="Release" if="${not static}" />
     <property name="aprRelSubdir" value="LibR" if="${static}" />
     
-    <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
+    <property name="aprStaticSubdir" value="LibR" if="LibR" />
     
+    <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
+    <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
+    
+    <copy todir="${aprUtilDir}/${aprRelSubdir}" if="${not static}">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}">
+        <include name="*.lib" />
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
     <copy todir="${aprDir}/Release" if="${aprRelSubdir != 'Release'}">
       <fileset basedir="${aprDir}/${aprRelSubdir}">
         <include name="*.lib" />

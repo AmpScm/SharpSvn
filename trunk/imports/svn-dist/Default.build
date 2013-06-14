@@ -16,6 +16,7 @@
   <property name="enableAprCrypto" value="false" />
   <property name="svnDll" value="dll" />
   <property name="buildLibgit2" value="false" />
+  <property name="buildJavaHL" value="true" />
   
   <include buildfile="../Default.build" />
   
