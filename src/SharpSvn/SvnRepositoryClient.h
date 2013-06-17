@@ -31,6 +31,7 @@ namespace SharpSvn {
 	ref class SvnUpgradeRepositoryArgs;
 	ref class SvnSetRevisionPropertyRepositoryArgs;
 	ref class SvnHotCopyRepositoryArgs;
+	ref class SvnSetRepositoryIdArgs;
 
 	/// <summary>
 	/// Managed wrapper of some of the most common repository management functions.
@@ -101,6 +102,9 @@ namespace SharpSvn {
 		/// dump and subsequent load would.
 		/// </remarks>
 		bool UpgradeRepository(String^ repositoryPath, SvnUpgradeRepositoryArgs^ args);
+
+		bool SetRepositoryId(String^ repositoryPath, Guid id);
+		bool SetRepositoryId(String^ repositoryPath, Guid id, SvnSetRepositoryIdArgs ^args);
 
 	public:
 		/// <overloads>Set the property NAME on revision REVISION</overloads>

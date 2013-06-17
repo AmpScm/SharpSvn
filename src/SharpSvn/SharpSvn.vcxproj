@@ -454,6 +454,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include=".\PdbTools\SvnMsfClient.h" />
     <ClInclude Include=".\PdbTools\SvnPdbClient.h" />
     <ClInclude Include="EventArgs\SvnImportFilterEventArgs.h" />
+    <ClInclude Include="ReposArgs\SetRepositoryId.h" />
     <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h" />
     <ClInclude Include="WorkingCopyArgs\WorkingCopyRestore.h" />
   </ItemGroup>
@@ -637,6 +638,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include=".\LookCommands\SvnLookClient.cpp" />
     <ClCompile Include="Commands\WorkingCopyGetVersion.cpp" />
     <ClCompile Include="LookCommands\LookGetRepositoryId.cpp" />
+    <ClCompile Include="ReposCommands\SetRepositoryId.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyInstallConflict.cpp" />
     <ClCompile Include=".\Commands\SvnWorkingCopyClient.cpp" />
     <ClCompile Include=".\WorkingCopyCommands\WorkingCopyEntries.cpp" />
