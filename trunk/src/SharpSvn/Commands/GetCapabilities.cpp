@@ -110,9 +110,18 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args,
 		case SvnCapability::CommitRevisionProperties:
 			cap = SVN_RA_CAPABILITY_COMMIT_REVPROPS;
 			break;
-    case SvnCapability::AtomicRevisionProperties:
-      cap = SVN_RA_CAPABILITY_ATOMIC_REVPROPS;
-      break;
+		case SvnCapability::AtomicRevisionProperties:
+			cap = SVN_RA_CAPABILITY_ATOMIC_REVPROPS;
+			break;
+		case SvnCapability::InheritedProperties:
+			cap = SVN_RA_CAPABILITY_INHERITED_PROPS;
+			break;
+		case SvnCapability::EphemeralTxnProperties:
+			cap = SVN_RA_CAPABILITY_EPHEMERAL_TXNPROPS;
+			break;
+		case SvnCapability::GetFileRevisionsInReverse:
+			cap = SVN_RA_CAPABILITY_GET_FILE_REVS_REVERSE;
+			break;
 		case SvnCapability::None:
 			if (args->RetrieveAllCapabilities)
 				continue;

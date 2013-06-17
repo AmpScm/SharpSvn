@@ -92,6 +92,7 @@ void SvnCommitItem::Detach(bool keepProperties)
 			GC::KeepAlive(Path);
 			GC::KeepAlive(Uri);
 			GC::KeepAlive(CopyFromUri);
+			GC::KeepAlive(MovedFrom);
 		}
 	}
 	finally

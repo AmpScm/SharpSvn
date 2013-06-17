@@ -115,6 +115,12 @@ namespace SharpSvn {
 		literal String^ SvnSyncLastMergedRev = SVNSYNC_PROP_LAST_MERGED_REV;
 		literal String^ SvnSyncCurrentlyCopying = SVNSYNC_PROP_CURRENTLY_COPYING;
 
+		literal String^ SvnTxnPrefix = SVN_PROP_TXN_PREFIX;
+		literal String^ SvnTxnClientCompatibleVersion = SVN_PROP_TXN_CLIENT_COMPAT_VERSION;
+		literal String^ SvnTxnUserAgent = SVN_PROP_TXN_USER_AGENT;
+
+		literal String^ SvnPropRevisionPrefix = SVN_PROP_REVISION_PREFIX;
+
 		static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ AllSvnRevisionProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^> {SVN_PROP_REVISION_ALL_PROPS }));
 
 		// From TortoiseSvn src\TortoiseProc\ProjectProperties.h
@@ -193,6 +199,9 @@ namespace SharpSvn {
 		literal String^		HttpAuthTypes				= SVN_CONFIG_OPTION_HTTP_AUTH_TYPES;
 		literal String^		HttpLibrary					= SVN_CONFIG_OPTION_HTTP_LIBRARY;
 
+		literal String^		HttpBulkUpdates				= SVN_CONFIG_OPTION_HTTP_BULK_UPDATES;
+		literal String^		HttpMaxConnections			= SVN_CONFIG_OPTION_HTTP_MAX_CONNECTIONS;
+
 		literal String^		SslAuthorityFiles			= SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
 		literal String^		SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
 		literal String^		SslClientCertificateFile	= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
@@ -225,6 +234,10 @@ namespace SharpSvn {
 		literal String^		TunnelsSection				= SVN_CONFIG_SECTION_TUNNELS;
 
 		literal String^		AutoPropsSection			= SVN_CONFIG_SECTION_AUTO_PROPS;
+
+		literal String^		WorkingCopySection			= SVN_CONFIG_SECTION_WORKING_COPY;
+		literal String^			SqliteExclusive			= SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE;
+		literal String^			SqliteExclusiveClients	= SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE_CLIENTS;
 
 		static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores
 			= gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
