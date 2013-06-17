@@ -631,6 +631,9 @@
     <ClInclude Include="Args\WorkingCopyGetVersion.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
+    <ClInclude Include="ReposArgs\SetRepositoryId.h">
+      <Filter>SvnRepositoryClient\Args</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include=".\SharpSvnStrings.resx">
@@ -1046,6 +1049,9 @@
     </ClCompile>
     <ClCompile Include="LookCommands\LookGetRepositoryId.cpp">
       <Filter>SvnLookClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ReposCommands\SetRepositoryId.cpp">
+      <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
