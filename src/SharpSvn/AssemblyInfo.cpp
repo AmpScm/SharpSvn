@@ -35,6 +35,7 @@
 #include <sqlite3.h>
 #define Byte ZByte
 #include <zlib.h>
+#undef Byte
 
 using namespace System;
 using namespace System::Reflection;
