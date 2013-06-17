@@ -109,6 +109,7 @@ namespace SharpSvn {
 		PropertiesModified = SVN_CLIENT_COMMIT_ITEM_PROP_MODS,
 		Copied = SVN_CLIENT_COMMIT_ITEM_IS_COPY,
 		HasLockToken = SVN_CLIENT_COMMIT_ITEM_LOCK_TOKEN,
+		MovedHere = SVN_CLIENT_COMMIT_ITEM_MOVED_HERE,
 	};
 
 	public ref class SvnCommitItem sealed
@@ -123,6 +124,7 @@ namespace SharpSvn {
 		Uri^ _copyFromUri;
 		initonly __int64 _copyFromRevision;
 		initonly SvnCommitTypes _commitType;
+		String^ _movedFrom;
 
 	internal:
 		SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, AprPool^ pool);
@@ -146,6 +148,16 @@ namespace SharpSvn {
 					_fullPath = SvnTools::GetNormalizedFullPath(Path);
 
 				return _fullPath;
+			}
+		}
+
+		property String^ MovedFrom
+		{
+			String^ get()
+			{
+				if (!_movedFrom && _info && _info->moved_from_abspath && _pool)
+					_movedFrom = SvnBase::Utf8_PathPtrToString(_info->moved_from_abspath, _pool);
+				return _movedFrom;
 			}
 		}
 

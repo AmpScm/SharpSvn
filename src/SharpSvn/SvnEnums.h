@@ -308,7 +308,8 @@ namespace SharpSvn {
 		Obstructed	= svn_wc_notify_state_obstructed,
 		Changed		= svn_wc_notify_state_changed,
 		Merged		= svn_wc_notify_state_merged,
-		Conflicted	= svn_wc_notify_state_conflicted
+		Conflicted	= svn_wc_notify_state_conflicted,
+		SourceMissing = svn_wc_notify_state_source_missing,
 	};
 
 	public enum class SvnChangeAction
@@ -442,6 +443,8 @@ namespace SharpSvn {
 		Subversion16,
 		/// <summary>Create a repository in Subversion 1.7 compatible format</summary>
 		Subversion17,
+		/// <summary>Create a repository in Subversion 1.8 compatible format</summary>
+		Subversion18,
 	};
 
 	public enum class SvnDiffKind
@@ -493,8 +496,11 @@ namespace SharpSvn {
 		/// <summary>Choose the 'merged file'. The result file of the automatic merging; possibly with local edits</summary>
 		Merged			= svn_wc_conflict_choose_merged,
 
-		/// <summary>Aliad for Merged</summary>
+		/// <summary>Alias for Merged</summary>
 		Working			= Merged,
+
+		/// <summary>Value not determined yet</summary>
+		Unspecified		= svn_wc_conflict_choose_unspecified,
 	};
 
 	public enum class SvnConflictType
@@ -518,12 +524,16 @@ namespace SharpSvn {
 		Obstructed = svn_wc_conflict_reason_obstructed,
 		/// <summary>object is already schedule-delete</summary>
 		Deleted = svn_wc_conflict_reason_deleted,
-		/// <summary>object is already added or schedule-add</summary>
-		Added = svn_wc_conflict_reason_added,
 		/// <summary>object is unknown or missing</summary>
 		Missing = svn_wc_conflict_reason_missing,
 		/// <summary>object is unversioned</summary>
-		NotVersioned = svn_wc_conflict_reason_unversioned
+		NotVersioned = svn_wc_conflict_reason_unversioned,
+		/// <summary>object is already added or schedule-add</summary>
+		Added = svn_wc_conflict_reason_added,
+
+		Replaced = svn_wc_conflict_reason_replaced,
+		MovedAway = svn_wc_conflict_reason_moved_away,
+		MovedHere = svn_wc_conflict_reason_moved_here,
 	};
 
 	public enum class SvnConflictAction
@@ -533,7 +543,9 @@ namespace SharpSvn {
 		/// <summary>Attempting to add object</summary>
 		Add = svn_wc_conflict_action_add,
 		/// <summary>Attempting to delete object</summary>
-		Delete = svn_wc_conflict_action_delete
+		Delete = svn_wc_conflict_action_delete,
+
+		Replace = svn_wc_conflict_action_replace,
 	};
 
 	public enum class SvnOperation
@@ -564,6 +576,9 @@ namespace SharpSvn {
 		PartialReplay,
 		CommitRevisionProperties,
 		AtomicRevisionProperties,
+		InheritedProperties,
+		EphemeralTxnProperties,
+		GetFileRevisionsInReverse,
 	};
 
 	public enum class SvnPropertyKind
