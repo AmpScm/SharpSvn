@@ -153,6 +153,8 @@ namespace SharpSvn {
 		const char* _pAbsPath;
 		const svn_lock_t *_pLock;
 		const svn_dirent_t *_pDirEnt;
+		const char *_external_parent_url;
+		const char *_external_target;
 
 		String^ _absPath;
 		SvnLockInfo^ _lock;
@@ -161,9 +163,12 @@ namespace SharpSvn {
 		Uri^ _baseUri;
 		Uri^ _entryUri;
 		String^ _name;
+		Uri^ _externalParent;
+		String^ _externalTarget;
 
 	internal:
-		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot)
+		SvnListEventArgs(const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, Uri^ repositoryRoot,
+						 const char *external_parent_url, const char *external_target)
 		{
 			if (!path)
 				throw gcnew ArgumentNullException("path");
@@ -176,6 +181,8 @@ namespace SharpSvn {
 			_pLock = lock;
 			_pAbsPath = abs_path;
 			_repositoryRoot = repositoryRoot;
+			_external_parent_url = external_parent_url;
+			_external_target = external_target;
 		}
 
 	public:
@@ -287,6 +294,28 @@ namespace SharpSvn {
 			}
 		}
 
+		property System::Uri^ ExternalParent
+		{
+			System::Uri^ get()
+			{
+				if (!_externalParent && _external_parent_url)
+					_externalParent = SvnBase::Utf8_PtrToUri(_external_parent_url, SvnNodeKind::Directory);
+
+				return _externalParent;
+			}
+		}
+
+		property String^ ExternalTarget
+		{
+			String^ get()
+			{
+				if (!_externalTarget && _external_target)
+					_externalTarget = SvnBase::Utf8_PtrToString(_external_target);
+
+				return _externalTarget;
+			}
+		}
+
 		/// <summary>Gets lock information if RetrieveLocks is set on the args object</summary>
 		property SvnLockInfo^ Lock
 		{
@@ -329,6 +358,8 @@ namespace SharpSvn {
 					GC::KeepAlive(BasePath);
 					GC::KeepAlive(Lock);
 					GC::KeepAlive(Entry);
+					GC::KeepAlive(ExternalParent);
+					GC::KeepAlive(ExternalTarget);
 				}
 
 				if (_lock)
@@ -341,6 +372,8 @@ namespace SharpSvn {
 				_pAbsPath = nullptr;
 				_pLock = nullptr;
 				_pDirEnt = nullptr;
+				_external_parent_url = nullptr;
+				_external_target = nullptr;
 
 				__super::Detach(keepProperties);
 			}

@@ -26,6 +26,7 @@ namespace SharpSvn {
 		SvnDepth _depth;
 		SvnDirEntryItems _entryItems;
 		bool _fetchLocks;
+		bool _includeExternals;
 
 	public:
 		DECLARE_EVENT(SvnListEventArgs^, List)
@@ -101,6 +102,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_fetchLocks = value;
+			}
+		}
+
+		property bool IncludeExternals
+		{
+			bool get()
+			{
+				return _includeExternals;
+			}
+			void set(bool value)
+			{
+				_includeExternals = value;
 			}
 		}
 
