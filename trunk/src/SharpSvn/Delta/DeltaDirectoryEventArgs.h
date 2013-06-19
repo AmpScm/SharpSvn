@@ -126,7 +126,7 @@ namespace SharpSvn {
 				_pName = name;
 				_pValue = value;
 				if(name && *name)
-					_propKind = (SvnPropertyKind)svn_property_kind(nullptr, name);
+					_propKind = (SvnPropertyKind)svn_property_kind2(name);
 			}
 
 		public:
