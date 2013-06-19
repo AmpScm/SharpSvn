@@ -28,6 +28,7 @@ namespace SharpSvn {
 		bool _recordOnly;
 		bool _dryRun;
 		bool _checkForMixedRevisions;
+		Nullable<bool> _ignoreMergeInfo;
 
 	public:
 		SvnDiffMergeArgs()
@@ -52,6 +53,18 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		property Nullable<bool> IgnoreMergeInfo
+		{
+			Nullable<bool> get()
+			{
+				return _ignoreMergeInfo;
+			}
+			void set(Nullable<bool> value)
+			{
+				_ignoreMergeInfo = value;
 			}
 		}
 

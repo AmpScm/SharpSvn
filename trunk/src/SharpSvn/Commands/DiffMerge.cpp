@@ -59,13 +59,14 @@ bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ m
 	svn_opt_revision_t mergeFromRev = mergeFrom->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 	svn_opt_revision_t mergeToRev = mergeTo->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_merge4(
+	svn_error_t *r = svn_client_merge5(
 		mergeFrom->AllocAsString(%pool),
 		&mergeFromRev,
 		mergeTo->AllocAsString(%pool),
 		&mergeToRev,
 		pool.AllocDirent(targetPath),
 		(svn_depth_t)args->Depth,
+		args->IgnoreMergeInfo.HasValue ? args->IgnoreMergeInfo.Value : args->IgnoreAncestry,
 		args->IgnoreAncestry,
 		args->Force,
 		args->RecordOnly,

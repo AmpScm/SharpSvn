@@ -100,8 +100,6 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 	else if (!source)
 		throw gcnew ArgumentNullException("source");
-	else if (!mergeRange)
-		throw gcnew ArgumentNullException("mergeRange");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -109,15 +107,18 @@ bool SvnClient::Merge(String^ targetPath, SvnTarget^ source, ICollection<TRevisi
 	AprPool pool(%_pool);
 	ArgsStore store(this, args, %pool);
 
-	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList
-		= gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
+	AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>^ mergeList = nullptr;
 
-	svn_error_t *r = svn_client_merge_peg4(
+	if (mergeRange)
+		mergeList = gcnew AprArray<TRevisionRange, RevisionRangeMarshaller<TRevisionRange>^>(mergeRange, %pool);
+
+	svn_error_t *r = svn_client_merge_peg5(
 		source->AllocAsString(%pool),
-		mergeList->Handle,
+		mergeList ? mergeList->Handle : nullptr,
 		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
 		pool.AllocDirent(targetPath),
 		(svn_depth_t)args->Depth,
+		args->IgnoreMergeInfo.HasValue ? args->IgnoreMergeInfo.Value : args->IgnoreAncestry,
 		args->IgnoreAncestry,
 		args->Force,
 		args->RecordOnly,
