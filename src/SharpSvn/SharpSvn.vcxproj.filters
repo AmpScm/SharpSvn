@@ -110,513 +110,513 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include=".\app.rc">
+    <ResourceCompile Include="app.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include=".\SharpSvnStrings.h">
+    <ClInclude Include="SharpSvnStrings.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnEventArgs.h">
+    <ClInclude Include="EventArgs\SvnEventArgs.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnStreamWrapper.h">
+    <ClInclude Include="SvnStreamWrapper.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include=".\AprArray.h">
+    <ClInclude Include="AprArray.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\AprBaton.h">
+    <ClInclude Include="AprBaton.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\AprPool.h">
+    <ClInclude Include="AprPool.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\resource.h">
+    <ClInclude Include="resource.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\Stdafx.h">
+    <ClInclude Include="Stdafx.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnBase.h">
+    <ClInclude Include="SvnBase.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnFsOperationRetryOverride.h">
+    <ClInclude Include="SvnFsOperationRetryOverride.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnLibraryAttribute.h">
+    <ClInclude Include="SvnLibraryAttribute.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnStatusCacheBlocker.h">
+    <ClInclude Include="SvnStatusCacheBlocker.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnAll.h">
+    <ClInclude Include="SvnAll.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnAuthentication.h">
+    <ClInclude Include="SvnAuthentication.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnChangeList.h">
+    <ClInclude Include="SvnChangeList.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnClientArgs.h">
+    <ClInclude Include="SvnClientArgs.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnClientConfiguration.h">
+    <ClInclude Include="SvnClientConfiguration.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnClientContext.h">
+    <ClInclude Include="SvnClientContext.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnClientEventArgs.h">
+    <ClInclude Include="SvnClientEventArgs.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnClientNotifier.h">
+    <ClInclude Include="SvnClientNotifier.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnNames.h">
+    <ClInclude Include="SvnNames.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\UnmanagedStructs.h">
+    <ClInclude Include="UnmanagedStructs.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnCommandLineArgumentCollection.h">
+    <ClInclude Include="SvnCommandLineArgumentCollection.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnCommitItem.h">
+    <ClInclude Include="SvnCommitItem.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnDiff.h">
+    <ClInclude Include="SvnDiff.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnEnums.h">
+    <ClInclude Include="SvnEnums.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnErrorCodes.h">
+    <ClInclude Include="SvnErrorCodes.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnException.h">
+    <ClInclude Include="SvnException.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnExternalItem.h">
+    <ClInclude Include="SvnExternalItem.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnFileDiff.h">
+    <ClInclude Include="SvnFileDiff.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnLockInfo.h">
+    <ClInclude Include="SvnLockInfo.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnMergeInfo.h">
+    <ClInclude Include="SvnMergeInfo.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnMergeInfoArgs.h">
+    <ClInclude Include="SvnMergeInfoArgs.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnMergeSourcesCollection.h">
+    <ClInclude Include="SvnMergeSourcesCollection.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnPathTarget.h">
+    <ClInclude Include="SvnPathTarget.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnPropertyValue.h">
+    <ClInclude Include="SvnPropertyValue.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnTarget.h">
+    <ClInclude Include="SvnTarget.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnUpdateResult.h">
+    <ClInclude Include="SvnUpdateResult.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnUriTarget.h">
+    <ClInclude Include="SvnUriTarget.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnWindowsError.h">
+    <ClInclude Include="SvnWindowsError.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\SvnWorkingCopyState.h">
+    <ClInclude Include="Args\SvnWorkingCopyState.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\SvnWorkingCopyVersion.h">
+    <ClInclude Include="Args\SvnWorkingCopyVersion.h">
       <Filter>Svn\Types</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnHookArguments.h">
+    <ClInclude Include="SvnHookArguments.h">
       <Filter>Svn\Tools Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnTools.h">
+    <ClInclude Include="SvnTools.h">
       <Filter>Svn\Tools Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnClient.h">
+    <ClInclude Include="SvnClient.h">
       <Filter>SvnClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnBlameEventArgs.h">
+    <ClInclude Include="EventArgs\SvnBlameEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnCancelEventArgs.h">
+    <ClInclude Include="EventArgs\SvnCancelEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnCommittingEventArgs.h">
+    <ClInclude Include="EventArgs\SvnCommittingEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnConflictData.h">
+    <ClInclude Include="EventArgs\SvnConflictData.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnConflictEventArgs.h">
+    <ClInclude Include="EventArgs\SvnConflictEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnDiffSummaryEventArgs.h">
+    <ClInclude Include="EventArgs\SvnDiffSummaryEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnErrorEventArgs.h">
+    <ClInclude Include="EventArgs\SvnErrorEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnFileVersionEventArgs.h">
+    <ClInclude Include="EventArgs\SvnFileVersionEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnInfoEventArgs.h">
+    <ClInclude Include="EventArgs\SvnInfoEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnListChangeListEventArgs.h">
+    <ClInclude Include="EventArgs\SvnListChangeListEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnListEventArgs.h">
+    <ClInclude Include="EventArgs\SvnListEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnLogEventArgs.h">
+    <ClInclude Include="EventArgs\SvnLogEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnMergesEligibleEventArgs.h">
+    <ClInclude Include="EventArgs\SvnMergesEligibleEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnMergesMergedEventArgs.h">
+    <ClInclude Include="EventArgs\SvnMergesMergedEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnNotifyEventArgs.h">
+    <ClInclude Include="EventArgs\SvnNotifyEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnPatchFilterEventArgs.h">
+    <ClInclude Include="EventArgs\SvnPatchFilterEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnProcessingEventArgs.h">
+    <ClInclude Include="EventArgs\SvnProcessingEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnProgressEventArgs.h">
+    <ClInclude Include="EventArgs\SvnProgressEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnPropertyListEventArgs.h">
+    <ClInclude Include="EventArgs\SvnPropertyListEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnReplayRevisionEventArgs.h">
+    <ClInclude Include="EventArgs\SvnReplayRevisionEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnStatusEventArgs.h">
+    <ClInclude Include="EventArgs\SvnStatusEventArgs.h">
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Add.h">
+    <ClInclude Include="Args\Add.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\AddToChangeList.h">
+    <ClInclude Include="Args\AddToChangeList.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Blame.h">
+    <ClInclude Include="Args\Blame.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\CheckOut.h">
+    <ClInclude Include="Args\CheckOut.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\CleanUp.h">
+    <ClInclude Include="Args\CleanUp.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Commit.h">
+    <ClInclude Include="Args\Commit.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Copy.h">
+    <ClInclude Include="Args\Copy.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\CreateDirectory.h">
+    <ClInclude Include="Args\CreateDirectory.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\CropWorkingCopy.h">
+    <ClInclude Include="Args\CropWorkingCopy.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Delete.h">
+    <ClInclude Include="Args\Delete.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Diff.h">
+    <ClInclude Include="Args\Diff.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\DiffMerge.h">
+    <ClInclude Include="Args\DiffMerge.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\DiffSummary.h">
+    <ClInclude Include="Args\DiffSummary.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Export.h">
+    <ClInclude Include="Args\Export.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\FileVersions.h">
+    <ClInclude Include="Args\FileVersions.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\GetAppliedMergeInfo.h">
+    <ClInclude Include="Args\GetAppliedMergeInfo.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\GetCapabilities.h">
+    <ClInclude Include="Args\GetCapabilities.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\GetProperty.h">
+    <ClInclude Include="Args\GetProperty.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\GetRevisionProperty.h">
+    <ClInclude Include="Args\GetRevisionProperty.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\GetSuggestedMergeSources.h">
+    <ClInclude Include="Args\GetSuggestedMergeSources.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Import.h">
+    <ClInclude Include="Args\Import.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Info.h">
+    <ClInclude Include="Args\Info.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\List.h">
+    <ClInclude Include="Args\List.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\ListChangeList.h">
+    <ClInclude Include="Args\ListChangeList.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Lock.h">
+    <ClInclude Include="Args\Lock.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Log.h">
+    <ClInclude Include="Args\Log.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Merge.h">
+    <ClInclude Include="Args\Merge.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\MergesEligible.h">
+    <ClInclude Include="Args\MergesEligible.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\MergesMerged.h">
+    <ClInclude Include="Args\MergesMerged.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Move.h">
+    <ClInclude Include="Args\Move.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Patch.h">
+    <ClInclude Include="Args\Patch.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\PropertyList.h">
+    <ClInclude Include="Args\PropertyList.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\ReintegrationMerge.h">
+    <ClInclude Include="Args\ReintegrationMerge.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Relocate.h">
+    <ClInclude Include="Args\Relocate.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\RemoveFromChangeList.h">
+    <ClInclude Include="Args\RemoveFromChangeList.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\ReplayRevision.h">
+    <ClInclude Include="Args\ReplayRevision.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Resolve.h">
+    <ClInclude Include="Args\Resolve.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Revert.h">
+    <ClInclude Include="Args\Revert.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\RevisionPropertyList.h">
+    <ClInclude Include="Args\RevisionPropertyList.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\SetProperty.h">
+    <ClInclude Include="Args\SetProperty.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\SetRevisionProperty.h">
+    <ClInclude Include="Args\SetRevisionProperty.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Status.h">
+    <ClInclude Include="Args\Status.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Switch.h">
+    <ClInclude Include="Args\Switch.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Unlock.h">
+    <ClInclude Include="Args\Unlock.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Update.h">
+    <ClInclude Include="Args\Update.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Upgrade.h">
+    <ClInclude Include="Args\Upgrade.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\Write.h">
+    <ClInclude Include="Args\Write.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\Args\WriteRelated.h">
+    <ClInclude Include="Args\WriteRelated.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnRepositoryClient.h">
+    <ClInclude Include="SvnRepositoryClient.h">
       <Filter>SvnRepositoryClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\CreateRepository.h">
+    <ClInclude Include="ReposArgs\CreateRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\DeleteRepository.h">
+    <ClInclude Include="ReposArgs\DeleteRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\DumpRepository.h">
+    <ClInclude Include="ReposArgs\DumpRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\HotCopyRepository.h">
+    <ClInclude Include="ReposArgs\HotCopyRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\LoadRepository.h">
+    <ClInclude Include="ReposArgs\LoadRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\RecoverRepository.h">
+    <ClInclude Include="ReposArgs\RecoverRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\SetRevisionPropertyRepository.h">
+    <ClInclude Include="ReposArgs\SetRevisionPropertyRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\ReposArgs\UpgradeRepository.h">
+    <ClInclude Include="ReposArgs\UpgradeRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnLookClient.h">
+    <ClInclude Include="SvnLookClient.h">
       <Filter>SvnLookClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnChangedArgs.h">
+    <ClInclude Include="LookArgs\SvnChangedArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnChangeInfoArgs.h">
+    <ClInclude Include="LookArgs\SvnChangeInfoArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnLookClientArgs.h">
+    <ClInclude Include="LookArgs\SvnLookClientArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnLookGetPropertyArgs.h">
+    <ClInclude Include="LookArgs\SvnLookGetPropertyArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnLookListArgs.h">
+    <ClInclude Include="LookArgs\SvnLookListArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnLookPropertyListArgs.h">
+    <ClInclude Include="LookArgs\SvnLookPropertyListArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnLookRevisionPropertyArgs.h">
+    <ClInclude Include="LookArgs\SvnLookRevisionPropertyArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\LookArgs\SvnLookWriteArgs.h">
+    <ClInclude Include="LookArgs\SvnLookWriteArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnChangedEventArgs.h">
+    <ClInclude Include="EventArgs\SvnChangedEventArgs.h">
       <Filter>SvnLookClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnChangeInfoEventArgs.h">
+    <ClInclude Include="EventArgs\SvnChangeInfoEventArgs.h">
       <Filter>SvnLookClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnLookListEventArgs.h">
+    <ClInclude Include="EventArgs\SvnLookListEventArgs.h">
       <Filter>SvnLookClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnWorkingCopyClient.h">
+    <ClInclude Include="SvnWorkingCopyClient.h">
       <Filter>SvnWorkingCopyClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\WorkingCopyArgs\WorkingCopyEntries.h">
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyEntries.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\WorkingCopyArgs\WorkingCopyInstallConflictArgs.h">
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyInstallConflictArgs.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\WorkingCopyArgs\WorkingCopyMove.h">
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyMove.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\WorkingCopyArgs\WorkingCopyState.h">
+    <ClInclude Include="WorkingCopyArgs\WorkingCopyState.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnWorkingCopyEntryEventArgs.h">
+    <ClInclude Include="EventArgs\SvnWorkingCopyEntryEventArgs.h">
       <Filter>SvnWorkingCopyClient\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\Delta\DeltaDirectoryEventArgs.h">
+    <ClInclude Include="Delta\DeltaDirectoryEventArgs.h">
       <Filter>SvnDeltaEditor\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\Delta\DeltaFileEventArgs.h">
+    <ClInclude Include="Delta\DeltaFileEventArgs.h">
       <Filter>SvnDeltaEditor\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\Delta\DeltaGlobalEventArgs.h">
+    <ClInclude Include="Delta\DeltaGlobalEventArgs.h">
       <Filter>SvnDeltaEditor\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\Delta\SvnDeltaEditor.h">
+    <ClInclude Include="Delta\SvnDeltaEditor.h">
       <Filter>SvnDeltaEditor\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\Delta\SvnDeltaNode.h">
+    <ClInclude Include="Delta\SvnDeltaNode.h">
       <Filter>SvnDeltaEditor\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\Delta\SvnDeltaTransform.h">
+    <ClInclude Include="Delta\SvnDeltaTransform.h">
       <Filter>SvnDeltaEditor\Headers</Filter>
     </ClInclude>
-    <ClInclude Include=".\SvnRemoteSession.h">
+    <ClInclude Include="SvnRemoteSession.h">
       <Filter>SvnRemoteSession</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteCommonArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteCommonArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteDeletedRevisionArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteDeletedRevisionArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteListArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteListArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteListLocksArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteListLocksArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteLocationArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteLocationArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteLocationSegmentsArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteLogArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteLogArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteNodeKindArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteNodeKindArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteOpenArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteOpenArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemotePropertiesArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemotePropertiesArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteSessionArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteSessionArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\RemoteArgs\SvnRemoteStatArgs.h">
+    <ClInclude Include="RemoteArgs\SvnRemoteStatArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnRemoteListEventArgs.h">
+    <ClInclude Include="EventArgs\SvnRemoteListEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnRemoteListLockEventArgs.h">
+    <ClInclude Include="EventArgs\SvnRemoteListLockEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnRemoteLocationSegmentEventArgs.h">
+    <ClInclude Include="EventArgs\SvnRemoteLocationSegmentEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnRemoteLogEventArgs.h">
+    <ClInclude Include="EventArgs\SvnRemoteLogEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\EventArgs\SvnRemoteStatEventArgs.h">
+    <ClInclude Include="EventArgs\SvnRemoteStatEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include=".\PdbTools\sbs_pdh.h">
+    <ClInclude Include="PdbTools\sbs_pdh.h">
       <Filter>PdbClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\PdbTools\SvnMsfClient.h">
+    <ClInclude Include="PdbTools\SvnMsfClient.h">
       <Filter>PdbClient</Filter>
     </ClInclude>
-    <ClInclude Include=".\PdbTools\SvnPdbClient.h">
+    <ClInclude Include="PdbTools\SvnPdbClient.h">
       <Filter>PdbClient</Filter>
     </ClInclude>
     <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h">
@@ -636,405 +636,405 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include=".\SharpSvnStrings.resx">
+    <EmbeddedResource Include="SharpSvnStrings.resx">
       <Filter>Resource Files</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.de.resx">
+    <EmbeddedResource Include="SvnText\SvnText.de.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.es.resx">
+    <EmbeddedResource Include="SvnText\SvnText.es.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.fr.resx">
+    <EmbeddedResource Include="SvnText\SvnText.fr.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.it.resx">
+    <EmbeddedResource Include="SvnText\SvnText.it.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.ja.resx">
+    <EmbeddedResource Include="SvnText\SvnText.ja.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.ko.resx">
+    <EmbeddedResource Include="SvnText\SvnText.ko.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.nb.resx">
+    <EmbeddedResource Include="SvnText\SvnText.nb.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.pl.resx">
+    <EmbeddedResource Include="SvnText\SvnText.pl.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.pt-BR.resx">
+    <EmbeddedResource Include="SvnText\SvnText.pt-BR.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.sv.resx">
+    <EmbeddedResource Include="SvnText\SvnText.sv.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.zh-CN.resx">
+    <EmbeddedResource Include="SvnText\SvnText.zh-CN.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
-    <EmbeddedResource Include=".\SvnText\SvnText.zh-TW.resx">
+    <EmbeddedResource Include="SvnText\SvnText.zh-TW.resx">
       <Filter>Resource Files\Subversion</Filter>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include=".\AprArray.cpp">
+    <ClCompile Include="AprArray.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\AprPool.cpp">
+    <ClCompile Include="AprPool.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Stdafx.cpp">
+    <ClCompile Include="Stdafx.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnAbortHandler.cpp">
+    <ClCompile Include="SvnAbortHandler.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnBase.cpp">
+    <ClCompile Include="SvnBase.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnFsOperationRetryOverride.cpp">
+    <ClCompile Include="SvnFsOperationRetryOverride.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnLocalization.cpp">
+    <ClCompile Include="SvnLocalization.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnStatusCacheBlocker.cpp">
+    <ClCompile Include="SvnStatusCacheBlocker.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnStreamWrapper.cpp">
+    <ClCompile Include="SvnStreamWrapper.cpp">
       <Filter>Common\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnAuthentication.Cache.cpp">
+    <ClCompile Include="SvnAuthentication.Cache.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnAuthentication.cpp">
+    <ClCompile Include="SvnAuthentication.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnClientArgs.cpp">
+    <ClCompile Include="SvnClientArgs.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnClientConfiguration.cpp">
+    <ClCompile Include="SvnClientConfiguration.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnClientContext.cpp">
+    <ClCompile Include="SvnClientContext.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnClientEventArgs.cpp">
+    <ClCompile Include="SvnClientEventArgs.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnClientNotifier.cpp">
+    <ClCompile Include="SvnClientNotifier.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnNames.cpp">
+    <ClCompile Include="SvnNames.cpp">
       <Filter>Svn\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnCommitItem.cpp">
+    <ClCompile Include="SvnCommitItem.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnDiff.cpp">
+    <ClCompile Include="SvnDiff.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnException.cpp">
+    <ClCompile Include="SvnException.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnExternalItem.cpp">
+    <ClCompile Include="SvnExternalItem.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnFileDiff.cpp">
+    <ClCompile Include="SvnFileDiff.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnMergeInfo.cpp">
+    <ClCompile Include="SvnMergeInfo.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnMergeItemCollection.cpp">
+    <ClCompile Include="SvnMergeItemCollection.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnMergeRangeCollection.cpp">
+    <ClCompile Include="SvnMergeRangeCollection.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnPropertyNames.cpp">
+    <ClCompile Include="SvnPropertyNames.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnTargets.cpp">
+    <ClCompile Include="SvnTargets.cpp">
       <Filter>Svn\Types Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnHookArguments.cpp">
+    <ClCompile Include="SvnHookArguments.cpp">
       <Filter>Svn\Tools Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnTools.cpp">
+    <ClCompile Include="SvnTools.cpp">
       <Filter>Svn\Tools Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Add.cpp">
+    <ClCompile Include="Commands\Add.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\AddToChangeList.cpp">
+    <ClCompile Include="Commands\AddToChangeList.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Blame.cpp">
+    <ClCompile Include="Commands\Blame.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\CheckOut.cpp">
+    <ClCompile Include="Commands\CheckOut.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\CleanUp.cpp">
+    <ClCompile Include="Commands\CleanUp.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Commit.cpp">
+    <ClCompile Include="Commands\Commit.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Copy.cpp">
+    <ClCompile Include="Commands\Copy.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\CreateDirectory.cpp">
+    <ClCompile Include="Commands\CreateDirectory.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\CropWorkingCopy.cpp">
+    <ClCompile Include="Commands\CropWorkingCopy.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Delete.cpp">
+    <ClCompile Include="Commands\Delete.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Diff.cpp">
+    <ClCompile Include="Commands\Diff.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\DiffMerge.cpp">
+    <ClCompile Include="Commands\DiffMerge.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\DiffSummary.cpp">
+    <ClCompile Include="Commands\DiffSummary.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Export.cpp">
+    <ClCompile Include="Commands\Export.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\FileVersions.cpp">
+    <ClCompile Include="Commands\FileVersions.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\GetAppliedMergeInfo.cpp">
+    <ClCompile Include="Commands\GetAppliedMergeInfo.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\GetCapabilities.cpp">
+    <ClCompile Include="Commands\GetCapabilities.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\GetProperty.cpp">
+    <ClCompile Include="Commands\GetProperty.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\GetRevisionProperty.cpp">
+    <ClCompile Include="Commands\GetRevisionProperty.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\GetSuggestedMergeSources.cpp">
+    <ClCompile Include="Commands\GetSuggestedMergeSources.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Import.cpp">
+    <ClCompile Include="Commands\Import.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Info.cpp">
+    <ClCompile Include="Commands\Info.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\List.cpp">
+    <ClCompile Include="Commands\List.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\ListChangeList.cpp">
+    <ClCompile Include="Commands\ListChangeList.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Lock.cpp">
+    <ClCompile Include="Commands\Lock.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Log.cpp">
+    <ClCompile Include="Commands\Log.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Merge.cpp">
+    <ClCompile Include="Commands\Merge.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\MergesEligible.cpp">
+    <ClCompile Include="Commands\MergesEligible.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\MergesMerged.cpp">
+    <ClCompile Include="Commands\MergesMerged.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Move.cpp">
+    <ClCompile Include="Commands\Move.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Patch.cpp">
+    <ClCompile Include="Commands\Patch.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\PropertyList.cpp">
+    <ClCompile Include="Commands\PropertyList.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\ReintegrationMerge.cpp">
+    <ClCompile Include="Commands\ReintegrationMerge.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Relocate.cpp">
+    <ClCompile Include="Commands\Relocate.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\RemoveFromChangeList.cpp">
+    <ClCompile Include="Commands\RemoveFromChangeList.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\ReplayRevisions.cpp">
+    <ClCompile Include="Commands\ReplayRevisions.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Resolve.cpp">
+    <ClCompile Include="Commands\Resolve.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Revert.cpp">
+    <ClCompile Include="Commands\Revert.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\RevisionPropertyList.cpp">
+    <ClCompile Include="Commands\RevisionPropertyList.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\SetProperty.cpp">
+    <ClCompile Include="Commands\SetProperty.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\SetRevisionProperty.cpp">
+    <ClCompile Include="Commands\SetRevisionProperty.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Status.cpp">
+    <ClCompile Include="Commands\Status.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnClient.cpp">
+    <ClCompile Include="SvnClient.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Switch.cpp">
+    <ClCompile Include="Commands\Switch.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Unlock.cpp">
+    <ClCompile Include="Commands\Unlock.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Update.cpp">
+    <ClCompile Include="Commands\Update.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Upgrade.cpp">
+    <ClCompile Include="Commands\Upgrade.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\Write.cpp">
+    <ClCompile Include="Commands\Write.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\WriteRelated.cpp">
+    <ClCompile Include="Commands\WriteRelated.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\CreateRepository.cpp">
+    <ClCompile Include="ReposCommands\CreateRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\DeleteRepository.cpp">
+    <ClCompile Include="ReposCommands\DeleteRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\DumpRepository.cpp">
+    <ClCompile Include="ReposCommands\DumpRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\HotCopyRepository.cpp">
+    <ClCompile Include="ReposCommands\HotCopyRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\LoadRepository.cpp">
+    <ClCompile Include="ReposCommands\LoadRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\RecoverRepository.cpp">
+    <ClCompile Include="ReposCommands\RecoverRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\SetRevisionPropertyRepository.cpp">
+    <ClCompile Include="ReposCommands\SetRevisionPropertyRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\SvnRepositoryClient.cpp">
+    <ClCompile Include="SvnRepositoryClient.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\ReposCommands\UpgradeRepository.cpp">
+    <ClCompile Include="ReposCommands\UpgradeRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookChanged.cpp">
+    <ClCompile Include="LookCommands\LookChanged.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookChangeInfo.cpp">
+    <ClCompile Include="LookCommands\LookChangeInfo.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookGetProperty.cpp">
+    <ClCompile Include="LookCommands\LookGetProperty.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookGetRevisionProperty.cpp">
+    <ClCompile Include="LookCommands\LookGetRevisionProperty.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookList.cpp">
+    <ClCompile Include="LookCommands\LookList.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookPropertyList.cpp">
+    <ClCompile Include="LookCommands\LookPropertyList.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\LookWrite.cpp">
+    <ClCompile Include="LookCommands\LookWrite.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\LookCommands\SvnLookClient.cpp">
+    <ClCompile Include="LookCommands\SvnLookClient.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Commands\SvnWorkingCopyClient.cpp">
+    <ClCompile Include="Commands\SvnWorkingCopyClient.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\WorkingCopyCommands\WorkingCopyEntries.cpp">
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyEntries.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\WorkingCopyCommands\WorkingCopyMove.cpp">
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyMove.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\WorkingCopyCommands\WorkingCopyState.cpp">
+    <ClCompile Include="WorkingCopyCommands\WorkingCopyState.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\Delta\SvnDeltaEditor.cpp">
+    <ClCompile Include="Delta\SvnDeltaEditor.cpp">
       <Filter>SvnDeltaEditor</Filter>
     </ClCompile>
-    <ClCompile Include=".\Delta\SvnDeltaTransform.cpp">
+    <ClCompile Include="Delta\SvnDeltaTransform.cpp">
       <Filter>SvnDeltaEditor</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteGetDeletedRevision.cpp">
+    <ClCompile Include="RemoteCommands\RemoteGetDeletedRevision.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteGetLocations.cpp">
+    <ClCompile Include="RemoteCommands\RemoteGetLocations.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteGetNodeKind.cpp">
+    <ClCompile Include="RemoteCommands\RemoteGetNodeKind.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteGetProperties.cpp">
+    <ClCompile Include="RemoteCommands\RemoteGetProperties.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteGetRepositoryId.cpp">
+    <ClCompile Include="RemoteCommands\RemoteGetRepositoryId.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteGetRepositoryRoot.cpp">
+    <ClCompile Include="RemoteCommands\RemoteGetRepositoryRoot.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteLatestRevision.cpp">
+    <ClCompile Include="RemoteCommands\RemoteLatestRevision.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteList.cpp">
+    <ClCompile Include="RemoteCommands\RemoteList.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteListLocks.cpp">
+    <ClCompile Include="RemoteCommands\RemoteListLocks.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteLocationSegments.cpp">
+    <ClCompile Include="RemoteCommands\RemoteLocationSegments.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteLog.cpp">
+    <ClCompile Include="RemoteCommands\RemoteLog.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteOpen.cpp">
+    <ClCompile Include="RemoteCommands\RemoteOpen.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteReparent.cpp">
+    <ClCompile Include="RemoteCommands\RemoteReparent.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\RemoteStat.cpp">
+    <ClCompile Include="RemoteCommands\RemoteStat.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\ResolveRevision.cpp">
+    <ClCompile Include="RemoteCommands\ResolveRevision.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\RemoteCommands\SvnRemoteSession.cpp">
+    <ClCompile Include="RemoteCommands\SvnRemoteSession.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include=".\PdbTools\SvnMsfClient.cpp">
+    <ClCompile Include="PdbTools\SvnMsfClient.cpp">
       <Filter>PdbClient</Filter>
     </ClCompile>
-    <ClCompile Include=".\PdbTools\SvnPdbClient.cpp">
+    <ClCompile Include="PdbTools\SvnPdbClient.cpp">
       <Filter>PdbClient</Filter>
     </ClCompile>
-    <ClCompile Include=".\AssemblyInfo.cpp" />
+    <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
     </ClCompile>
@@ -1055,11 +1055,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include=".\SharpSvn.snk" />
+    <None Include="SharpSvn.snk" />
     <None Include="SharpSvn.vcproj" />
     <None Include="SharpSvn-VS2008.vcproj" />
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include=".\SharpSvnStrings.txt" />
+    <CustomBuild Include="SharpSvnStrings.txt" />
   </ItemGroup>
 </Project>
