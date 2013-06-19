@@ -26,6 +26,9 @@ namespace SharpSvn {
 		bool _force;
 		bool _moveAsChild;
 		bool _makeParents;
+		bool _noMixedRevisions;
+		bool _metadataOnly;
+
 	public:
 		SvnMoveArgs()
 		{
@@ -73,6 +76,30 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_makeParents = value;
+			}
+		}
+
+		property bool AllowMixedRevisions
+		{
+			bool get()
+			{
+				return !_noMixedRevisions;
+			}
+			void set(bool value)
+			{
+				_noMixedRevisions = !value;
+			}
+		}
+
+		property bool MetadataOnly
+		{
+			bool get()
+			{
+				return _metadataOnly;
+			}
+			void set(bool value)
+			{
+				_metadataOnly = value;
 			}
 		}
 
