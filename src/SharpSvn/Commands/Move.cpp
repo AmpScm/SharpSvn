@@ -85,6 +85,8 @@ bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveA
 		pool.AllocDirent(toPath),
 		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
 		args->CreateParents,
+		args->AllowMixedRevisions,
+		args->MetadataOnly,
 		nullptr,
 		nullptr, nullptr,
 		CtxHandle,
@@ -214,11 +216,13 @@ bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArg
 	ArgsStore store(this, args, %pool);
 	CommitResultReceiver crr(this);
 
-	svn_error_t *r = svn_client_move6(
+	svn_error_t *r = svn_client_move7(
 		AllocArray(uris, %pool),
 		pool.AllocUri(toUri),
 		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
 		args->CreateParents,
+		args->AllowMixedRevisions,
+		args->MetadataOnly,
 		CreateRevPropList(args->LogProperties, %pool),
 		crr.CommitCallback, crr.CommitBaton,
 		CtxHandle,
