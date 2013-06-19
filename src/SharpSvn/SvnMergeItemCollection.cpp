@@ -121,7 +121,11 @@ bool SvnMergeItemCollection::TryDiff(ICollection<SvnMergeItem^>^ to, SvnMergeDif
 	svn_mergeinfo_t addedPtr = nullptr;
 	svn_mergeinfo_t removedPtr = nullptr;
 
-	svn_error_t* r = svn_mergeinfo_diff(&removedPtr, &addedPtr, AllocMergeInfo(%pool), toCol->AllocMergeInfo(%pool), args->ConsiderInheritance, pool.Handle);
+	svn_error_t* r = svn_mergeinfo_diff2(&removedPtr, &addedPtr,
+										 AllocMergeInfo(%pool),
+										 toCol->AllocMergeInfo(%pool),
+										 args->ConsiderInheritance,
+										 pool.Handle, pool.Handle);
 
 	if (r)
 	{
