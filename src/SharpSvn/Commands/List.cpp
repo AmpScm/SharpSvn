@@ -35,7 +35,14 @@ bool SvnClient::List(SvnTarget^ target, EventHandler<SvnListEventArgs^>^ listHan
 	return List(target, gcnew SvnListArgs(), listHandler);
 }
 
-static svn_error_t *svnclient_list_handler(void *baton, const char *path, const svn_dirent_t *dirent, const svn_lock_t *lock, const char *abs_path, apr_pool_t *pool)
+static svn_error_t *svnclient_list_handler(void *baton,
+										   const char *path,
+										   const svn_dirent_t *dirent,
+										   const svn_lock_t *lock,
+										   const char *abs_path,
+										   const char *external_parent_url,
+										   const char *external_target,
+										   apr_pool_t *pool)
 {
 	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
@@ -45,7 +52,8 @@ static svn_error_t *svnclient_list_handler(void *baton, const char *path, const 
 	if (!args)
 		return nullptr;
 
-	SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path, args->CalculateRepositoryRoot(abs_path));
+	SvnListEventArgs^ e = gcnew SvnListEventArgs(path, dirent, lock, abs_path, args->CalculateRepositoryRoot(abs_path),
+												 external_parent_url, external_target);
 	try
 	{
 		args->OnList(e);
@@ -87,13 +95,14 @@ bool SvnClient::List(SvnTarget^ target, SvnListArgs^ args, EventHandler<SvnListE
 		svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
 		svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
-		svn_error_t* r = svn_client_list2(
+		svn_error_t* r = svn_client_list3(
 			target->AllocAsString(%pool),
 			&pegrev,
 			&rev,
 			(svn_depth_t)args->Depth,
 			(apr_uint32_t)args->RetrieveEntries,
 			args->RetrieveLocks,
+			args->IncludeExternals,
 			svnclient_list_handler,
 			(void*)_clientBaton->Handle,
 			CtxHandle,
