@@ -71,8 +71,7 @@ void SvnBase::EnsureLoaded()
 					apr_allocator_max_free_set(allocator, 1); // Keep a maximum of 1 free block
 				}
 
-				svn_utf_initialize(pool);
-				svn_fs_initialize(pool);
+				svn_utf_initialize2(TRUE, pool);
 				{
 					svn_cache_config_t settings = *svn_cache_config_get();
 					settings.cache_size = 0;
