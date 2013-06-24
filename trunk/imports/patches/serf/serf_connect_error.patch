@@ -1,0 +1,33 @@
+Index: outgoing.c
+===================================================================
+--- outgoing.c	(revision 1950)
++++ outgoing.c	(working copy)
+@@ -16,6 +16,7 @@
+ #include <apr_pools.h>
+ #include <apr_poll.h>
+ #include <apr_version.h>
++#include <apr_portable.h>
+ 
+ #include "serf.h"
+ #include "serf_bucket_util.h"
+@@ -1137,6 +1138,20 @@
+         if (conn->completed_requests && !conn->probable_keepalive_limit) {
+             return reset_connection(conn, 1);
+         }
++#ifdef SO_ERROR
++        {
++          apr_os_sock_t *h;
++          if (!apr_os_sock_get(&h, conn->skt))
++            {
++              int rc;
++              int rclen = sizeof(rc);
++              if (getsockopt(h, SOL_SOCKET, SO_ERROR, (char*) &rc, &rclen)) {
++                return apr_get_netos_error();
++              }
++                return APR_FROM_OS_ERROR(rc);
++            }
++        }
++#endif
+         return APR_EGENERAL;
+     }
+     if ((events & APR_POLLOUT) != 0) {
