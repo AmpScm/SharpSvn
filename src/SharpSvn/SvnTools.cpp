@@ -45,7 +45,7 @@ Uri^ SvnTools::GetUriFromWorkingCopy(String^ path)
 	const char* url = nullptr;
 	svn_client_ctx_t *ctx;
 
-	SVN_THROW(svn_client_create_context(&ctx, NULL, pool.Handle));
+	SVN_THROW(svn_client_create_context2(&ctx, NULL, pool.Handle));
 
 	svn_error_t* err = svn_client_url_from_path2(&url, pool.AllocDirent(path), ctx, pool.Handle, pool.Handle);
 
