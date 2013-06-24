@@ -17,7 +17,8 @@
   <property name="libgit2Version" value="0.18.0" overwrite="false" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1493703 - Add upgrade notification -->
-  <property name="subversionMerges" value="1493272,1493703" overwrite="false" /> 
+  <!-- r1495104 - Handle http status codes in serf -->
+  <property name="subversionMerges" value="1493272,1493703,1495104" overwrite="false" /> 
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
