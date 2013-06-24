@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head><META http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>
-          SharpSvn-Daily Update - 1.8000.2415</title>
+          SharpSvn-Daily Update - 1.8000.2431</title>
 <link rel="Stylesheet" type="text/css" href="daily.css"></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.8000.2415</h1>
+          SharpSvn-Daily Update - 1.8000.2431</h1>
 
 
 <p>
@@ -15,25 +15,43 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/7356/SSvn-1.8000.2415.zip">SharpSvn 1.8000.2415</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/7422/SSvn-1.8000.2431.zip">SharpSvn 1.8000.2431</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/7357/SSvn-1.8000.2415-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/7358/SSvnEx-1.8000.2415.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/7423/SSvn-1.8000.2431-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/7424/SSvnEx-1.8000.2431.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2415">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2431">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2013-06-19</td></tr>
+<tr><td> </td><td class="r"><a id="2427" href="http://sharpsvn.net/rev/?r=2427">
+            [r2427]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> EventArgs/SvnListEventArgs.h, Args/List.h, Commands/List.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Allow walking externals in SvnClient.List().</td></tr>
+<tr><td> </td><td class="r"><a id="2426" href="http://sharpsvn.net/rev/?r=2426">
+            [r2426]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/Move.h, Commands/Move.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Extend SvnClient.Move() with 1.7 specific flags.</td></tr>
+<tr><td> </td><td class="r"><a id="2421" href="http://sharpsvn.net/rev/?r=2421">
+            [r2421]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/DiffMerge.h, Commands/DiffMerge.cpp, Args/Merge.h, Commands/Merge.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">1.8 support: Allow passing a different value for IgnoreMergeInfo than for
+IgnoreAncestry on SvnClient.Merge() and .DiffMerge().</td></tr>
+<tr class="d"><td colspan="4">2013-06-17</td></tr>
+<tr><td> </td><td class="r"><a id="2419" href="http://sharpsvn.net/rev/?r=2419">
+            [r2419]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Commands/GetCapabilities.cpp, SvnCommitItem.cpp, SvnNames.h, SvnCommitItem.h, SvnEnums.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Extend capabilities, property names and enums with their new in 1.8 values.</td></tr>
+<tr><td> </td><td class="r"><a id="2418" href="http://sharpsvn.net/rev/?r=2418">
+            [r2418]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnRepositoryClient.h, SharpSvn.vcxproj, ReposArgs/SetRepositoryId.h, ReposCommands/SetRepositoryId.cpp, SharpSvn.vcxproj.filters</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Add SetRepositoryId method to the SvnRepositoryClient.</td></tr>
 <tr class="d"><td colspan="4">2013-06-13</td></tr>
 <tr><td> </td><td class="r"><a id="2404" href="http://sharpsvn.net/rev/?r=2404">
             [r2404]
@@ -49,7 +67,7 @@ into SharpSvn.dll</td></tr>
 <tr class="d"><td colspan="4">2013-06-06</td></tr>
 <tr><td> </td><td class="r"><a id="2390" href="http://sharpsvn.net/rev/?r=2390">
             [r2390]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/PathTests.cs, SharpSvn/SvnTools.cpp, SharpSvn/SvnTargets.cpp</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Apply some tweaks to the path normalization code to avoid exceptions on
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnTools.cpp, SharpSvn/SvnTargets.cpp, SharpSvn.Tests/PathTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Apply some tweaks to the path normalization code to avoid exceptions on
 paths like "c:\some\." and "." when passed as SvnPathTarget.</td></tr>
 <tr><td> </td><td class="r"><a id="2389" href="http://sharpsvn.net/rev/?r=2389">
             [r2389]
@@ -60,7 +78,7 @@ paths like "c:\some\." and "." when passed as SvnPathTarget.</td></tr>
 <tr class="d"><td colspan="4">2013-05-21</td></tr>
 <tr><td> </td><td class="r"><a id="2369" href="http://sharpsvn.net/rev/?r=2369">
             [r2369]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit/GitClientContext.cpp, SharpGit/GitClient/GitStatus.cpp, SharpGit.Tests/GitClientTests.cs, SharpGit/GitClientContext.h</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement calling GitClient.Status() on a specific subdir or path in a working
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit/GitClientContext.h, SharpGit/GitClientContext.cpp, SharpGit/GitClient/GitStatus.cpp, SharpGit.Tests/GitClientTests.cs</td></tr><tr><td colspan="2"></td><td class="l" colspan="2">Implement calling GitClient.Status() on a specific subdir or path in a working
 copy.</td></tr>
 
 </table>
