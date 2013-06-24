@@ -403,20 +403,20 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\app.rc"
+				RelativePath="app.rc"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpSvnStrings.h"
+				RelativePath="SharpSvnStrings.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpSvnStrings.resx"
+				RelativePath="SharpSvnStrings.resx"
 				SubType="Designer"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpSvnStrings.txt"
+				RelativePath="SharpSvnStrings.txt"
 				>
 				<FileConfiguration
 					Name="Debug|Win32"
@@ -467,62 +467,62 @@
 				Name="Subversion"
 				>
 				<File
-					RelativePath=".\SvnText\SvnText.de.resx"
+					RelativePath="SvnText\SvnText.de.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.es.resx"
+					RelativePath="SvnText\SvnText.es.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.fr.resx"
+					RelativePath="SvnText\SvnText.fr.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.it.resx"
+					RelativePath="SvnText\SvnText.it.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.ja.resx"
+					RelativePath="SvnText\SvnText.ja.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.ko.resx"
+					RelativePath="SvnText\SvnText.ko.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.nb.resx"
+					RelativePath="SvnText\SvnText.nb.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.pl.resx"
+					RelativePath="SvnText\SvnText.pl.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.pt-BR.resx"
+					RelativePath="SvnText\SvnText.pt-BR.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.sv.resx"
+					RelativePath="SvnText\SvnText.sv.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.zh-CN.resx"
+					RelativePath="SvnText\SvnText.zh-CN.resx"
 					SubType="Designer"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnText\SvnText.zh-TW.resx"
+					RelativePath="SvnText\SvnText.zh-TW.resx"
 					SubType="Designer"
 					>
 				</File>
@@ -534,50 +534,50 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\EventArgs\SvnEventArgs.h"
+				RelativePath="EventArgs\SvnEventArgs.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SvnStreamWrapper.h"
+				RelativePath="SvnStreamWrapper.h"
 				>
 			</File>
 			<Filter
 				Name="Headers"
 				>
 				<File
-					RelativePath=".\AprArray.h"
+					RelativePath="AprArray.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AprBaton.h"
+					RelativePath="AprBaton.h"
 					>
 				</File>
 				<File
-					RelativePath=".\AprPool.h"
+					RelativePath="AprPool.h"
 					>
 				</File>
 				<File
-					RelativePath=".\resource.h"
+					RelativePath="resource.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Stdafx.h"
+					RelativePath="Stdafx.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnBase.h"
+					RelativePath="SvnBase.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnFsOperationRetryOverride.h"
+					RelativePath="SvnFsOperationRetryOverride.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnLibraryAttribute.h"
+					RelativePath="SvnLibraryAttribute.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnStatusCacheBlocker.h"
+					RelativePath="SvnStatusCacheBlocker.h"
 					>
 				</File>
 			</Filter>
@@ -585,15 +585,15 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\AprArray.cpp"
+					RelativePath="AprArray.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\AprPool.cpp"
+					RelativePath="AprPool.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Stdafx.cpp"
+					RelativePath="Stdafx.cpp"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -629,27 +629,27 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath=".\SvnAbortHandler.cpp"
+					RelativePath="SvnAbortHandler.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnBase.cpp"
+					RelativePath="SvnBase.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnFsOperationRetryOverride.cpp"
+					RelativePath="SvnFsOperationRetryOverride.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnLocalization.cpp"
+					RelativePath="SvnLocalization.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnStatusCacheBlocker.cpp"
+					RelativePath="SvnStatusCacheBlocker.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnStreamWrapper.cpp"
+					RelativePath="SvnStreamWrapper.cpp"
 					>
 				</File>
 			</Filter>
@@ -661,43 +661,43 @@
 				Name="Headers"
 				>
 				<File
-					RelativePath=".\SvnAll.h"
+					RelativePath="SvnAll.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnAuthentication.h"
+					RelativePath="SvnAuthentication.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnChangeList.h"
+					RelativePath="SvnChangeList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientArgs.h"
+					RelativePath="SvnClientArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientConfiguration.h"
+					RelativePath="SvnClientConfiguration.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientContext.h"
+					RelativePath="SvnClientContext.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientEventArgs.h"
+					RelativePath="SvnClientEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientNotifier.h"
+					RelativePath="SvnClientNotifier.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnNames.h"
+					RelativePath="SvnNames.h"
 					>
 				</File>
 				<File
-					RelativePath=".\UnmanagedStructs.h"
+					RelativePath="UnmanagedStructs.h"
 					>
 				</File>
 			</Filter>
@@ -705,35 +705,35 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\SvnAuthentication.Cache.cpp"
+					RelativePath="SvnAuthentication.Cache.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnAuthentication.cpp"
+					RelativePath="SvnAuthentication.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientArgs.cpp"
+					RelativePath="SvnClientArgs.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientConfiguration.cpp"
+					RelativePath="SvnClientConfiguration.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientContext.cpp"
+					RelativePath="SvnClientContext.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientEventArgs.cpp"
+					RelativePath="SvnClientEventArgs.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClientNotifier.cpp"
+					RelativePath="SvnClientNotifier.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnNames.cpp"
+					RelativePath="SvnNames.cpp"
 					>
 				</File>
 			</Filter>
@@ -741,83 +741,83 @@
 				Name="Types"
 				>
 				<File
-					RelativePath=".\SvnCommandLineArgumentCollection.h"
+					RelativePath="SvnCommandLineArgumentCollection.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnCommitItem.h"
+					RelativePath="SvnCommitItem.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnDiff.h"
+					RelativePath="SvnDiff.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnEnums.h"
+					RelativePath="SvnEnums.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnErrorCodes.h"
+					RelativePath="SvnErrorCodes.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnException.h"
+					RelativePath="SvnException.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnExternalItem.h"
+					RelativePath="SvnExternalItem.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnFileDiff.h"
+					RelativePath="SvnFileDiff.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnLockInfo.h"
+					RelativePath="SvnLockInfo.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeInfo.h"
+					RelativePath="SvnMergeInfo.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeInfoArgs.h"
+					RelativePath="SvnMergeInfoArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeSourcesCollection.h"
+					RelativePath="SvnMergeSourcesCollection.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnPathTarget.h"
+					RelativePath="SvnPathTarget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnPropertyValue.h"
+					RelativePath="SvnPropertyValue.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnTarget.h"
+					RelativePath="SvnTarget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnUpdateResult.h"
+					RelativePath="SvnUpdateResult.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnUriTarget.h"
+					RelativePath="SvnUriTarget.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnWindowsError.h"
+					RelativePath="SvnWindowsError.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\SvnWorkingCopyState.h"
+					RelativePath="Args\SvnWorkingCopyState.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\SvnWorkingCopyVersion.h"
+					RelativePath="Args\SvnWorkingCopyVersion.h"
 					>
 				</File>
 			</Filter>
@@ -825,43 +825,43 @@
 				Name="Types Sources"
 				>
 				<File
-					RelativePath=".\SvnCommitItem.cpp"
+					RelativePath="SvnCommitItem.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnDiff.cpp"
+					RelativePath="SvnDiff.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnException.cpp"
+					RelativePath="SvnException.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnExternalItem.cpp"
+					RelativePath="SvnExternalItem.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnFileDiff.cpp"
+					RelativePath="SvnFileDiff.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeInfo.cpp"
+					RelativePath="SvnMergeInfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeItemCollection.cpp"
+					RelativePath="SvnMergeItemCollection.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnMergeRangeCollection.cpp"
+					RelativePath="SvnMergeRangeCollection.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnPropertyNames.cpp"
+					RelativePath="SvnPropertyNames.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnTargets.cpp"
+					RelativePath="SvnTargets.cpp"
 					>
 				</File>
 			</Filter>
@@ -869,11 +869,11 @@
 				Name="Tools Args"
 				>
 				<File
-					RelativePath=".\SvnHookArguments.h"
+					RelativePath="SvnHookArguments.h"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnTools.h"
+					RelativePath="SvnTools.h"
 					>
 				</File>
 			</Filter>
@@ -881,11 +881,11 @@
 				Name="Tools Sources"
 				>
 				<File
-					RelativePath=".\SvnHookArguments.cpp"
+					RelativePath="SvnHookArguments.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnTools.cpp"
+					RelativePath="SvnTools.cpp"
 					>
 				</File>
 			</Filter>
@@ -894,206 +894,206 @@
 			Name="SvnClient"
 			>
 			<File
-				RelativePath=".\SvnClient.h"
+				RelativePath="SvnClient.h"
 				>
 			</File>
 			<Filter
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\Commands\Add.cpp"
+					RelativePath="Commands\Add.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\AddToChangeList.cpp"
+					RelativePath="Commands\AddToChangeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Blame.cpp"
+					RelativePath="Commands\Blame.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\CheckOut.cpp"
+					RelativePath="Commands\CheckOut.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\CleanUp.cpp"
+					RelativePath="Commands\CleanUp.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Commit.cpp"
+					RelativePath="Commands\Commit.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Copy.cpp"
+					RelativePath="Commands\Copy.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\CreateDirectory.cpp"
+					RelativePath="Commands\CreateDirectory.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\CropWorkingCopy.cpp"
+					RelativePath="Commands\CropWorkingCopy.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Delete.cpp"
+					RelativePath="Commands\Delete.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Diff.cpp"
+					RelativePath="Commands\Diff.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\DiffMerge.cpp"
+					RelativePath="Commands\DiffMerge.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\DiffSummary.cpp"
+					RelativePath="Commands\DiffSummary.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Export.cpp"
+					RelativePath="Commands\Export.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\FileVersions.cpp"
+					RelativePath="Commands\FileVersions.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetAppliedMergeInfo.cpp"
+					RelativePath="Commands\GetAppliedMergeInfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetCapabilities.cpp"
+					RelativePath="Commands\GetCapabilities.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetProperty.cpp"
+					RelativePath="Commands\GetProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetRevisionProperty.cpp"
+					RelativePath="Commands\GetRevisionProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\GetSuggestedMergeSources.cpp"
+					RelativePath="Commands\GetSuggestedMergeSources.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Import.cpp"
+					RelativePath="Commands\Import.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Info.cpp"
+					RelativePath="Commands\Info.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\List.cpp"
+					RelativePath="Commands\List.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\ListChangeList.cpp"
+					RelativePath="Commands\ListChangeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Lock.cpp"
+					RelativePath="Commands\Lock.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Log.cpp"
+					RelativePath="Commands\Log.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Merge.cpp"
+					RelativePath="Commands\Merge.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\MergesEligible.cpp"
+					RelativePath="Commands\MergesEligible.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\MergesMerged.cpp"
+					RelativePath="Commands\MergesMerged.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Move.cpp"
+					RelativePath="Commands\Move.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Patch.cpp"
+					RelativePath="Commands\Patch.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\PropertyList.cpp"
+					RelativePath="Commands\PropertyList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\ReintegrationMerge.cpp"
+					RelativePath="Commands\ReintegrationMerge.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Relocate.cpp"
+					RelativePath="Commands\Relocate.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\RemoveFromChangeList.cpp"
+					RelativePath="Commands\RemoveFromChangeList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\ReplayRevisions.cpp"
+					RelativePath="Commands\ReplayRevisions.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Resolve.cpp"
+					RelativePath="Commands\Resolve.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Revert.cpp"
+					RelativePath="Commands\Revert.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\RevisionPropertyList.cpp"
+					RelativePath="Commands\RevisionPropertyList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\SetProperty.cpp"
+					RelativePath="Commands\SetProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\SetRevisionProperty.cpp"
+					RelativePath="Commands\SetRevisionProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Status.cpp"
+					RelativePath="Commands\Status.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnClient.cpp"
+					RelativePath="SvnClient.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Switch.cpp"
+					RelativePath="Commands\Switch.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Unlock.cpp"
+					RelativePath="Commands\Unlock.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Update.cpp"
+					RelativePath="Commands\Update.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Upgrade.cpp"
+					RelativePath="Commands\Upgrade.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\Write.cpp"
+					RelativePath="Commands\Write.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\WriteRelated.cpp"
+					RelativePath="Commands\WriteRelated.cpp"
 					>
 				</File>
 			</Filter>
@@ -1101,91 +1101,91 @@
 				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
+					RelativePath="EventArgs\SvnBlameEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnCancelEventArgs.h"
+					RelativePath="EventArgs\SvnCancelEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
+					RelativePath="EventArgs\SvnCommittingEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnConflictData.h"
+					RelativePath="EventArgs\SvnConflictData.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnConflictEventArgs.h"
+					RelativePath="EventArgs\SvnConflictEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnDiffSummaryEventArgs.h"
+					RelativePath="EventArgs\SvnDiffSummaryEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnErrorEventArgs.h"
+					RelativePath="EventArgs\SvnErrorEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnFileVersionEventArgs.h"
+					RelativePath="EventArgs\SvnFileVersionEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnImportFilterEventArgs.h"
+					RelativePath="EventArgs\SvnImportFilterEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnInfoEventArgs.h"
+					RelativePath="EventArgs\SvnInfoEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnListChangeListEventArgs.h"
+					RelativePath="EventArgs\SvnListChangeListEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnListEventArgs.h"
+					RelativePath="EventArgs\SvnListEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnLogEventArgs.h"
+					RelativePath="EventArgs\SvnLogEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnMergesEligibleEventArgs.h"
+					RelativePath="EventArgs\SvnMergesEligibleEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnMergesMergedEventArgs.h"
+					RelativePath="EventArgs\SvnMergesMergedEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
+					RelativePath="EventArgs\SvnNotifyEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnPatchFilterEventArgs.h"
+					RelativePath="EventArgs\SvnPatchFilterEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnProcessingEventArgs.h"
+					RelativePath="EventArgs\SvnProcessingEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnProgressEventArgs.h"
+					RelativePath="EventArgs\SvnProgressEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
+					RelativePath="EventArgs\SvnPropertyListEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnReplayRevisionEventArgs.h"
+					RelativePath="EventArgs\SvnReplayRevisionEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
+					RelativePath="EventArgs\SvnStatusEventArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1193,195 +1193,195 @@
 				Name="Args"
 				>
 				<File
-					RelativePath=".\Args\Add.h"
+					RelativePath="Args\Add.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\AddToChangeList.h"
+					RelativePath="Args\AddToChangeList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Blame.h"
+					RelativePath="Args\Blame.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\CheckOut.h"
+					RelativePath="Args\CheckOut.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\CleanUp.h"
+					RelativePath="Args\CleanUp.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Commit.h"
+					RelativePath="Args\Commit.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Copy.h"
+					RelativePath="Args\Copy.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\CreateDirectory.h"
+					RelativePath="Args\CreateDirectory.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\CropWorkingCopy.h"
+					RelativePath="Args\CropWorkingCopy.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Delete.h"
+					RelativePath="Args\Delete.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Diff.h"
+					RelativePath="Args\Diff.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\DiffMerge.h"
+					RelativePath="Args\DiffMerge.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\DiffSummary.h"
+					RelativePath="Args\DiffSummary.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Export.h"
+					RelativePath="Args\Export.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\FileVersions.h"
+					RelativePath="Args\FileVersions.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetAppliedMergeInfo.h"
+					RelativePath="Args\GetAppliedMergeInfo.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetCapabilities.h"
+					RelativePath="Args\GetCapabilities.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetProperty.h"
+					RelativePath="Args\GetProperty.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetRevisionProperty.h"
+					RelativePath="Args\GetRevisionProperty.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\GetSuggestedMergeSources.h"
+					RelativePath="Args\GetSuggestedMergeSources.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Import.h"
+					RelativePath="Args\Import.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Info.h"
+					RelativePath="Args\Info.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\List.h"
+					RelativePath="Args\List.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\ListChangeList.h"
+					RelativePath="Args\ListChangeList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Lock.h"
+					RelativePath="Args\Lock.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Log.h"
+					RelativePath="Args\Log.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Merge.h"
+					RelativePath="Args\Merge.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\MergesEligible.h"
+					RelativePath="Args\MergesEligible.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\MergesMerged.h"
+					RelativePath="Args\MergesMerged.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Move.h"
+					RelativePath="Args\Move.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Patch.h"
+					RelativePath="Args\Patch.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\PropertyList.h"
+					RelativePath="Args\PropertyList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\ReintegrationMerge.h"
+					RelativePath="Args\ReintegrationMerge.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Relocate.h"
+					RelativePath="Args\Relocate.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\RemoveFromChangeList.h"
+					RelativePath="Args\RemoveFromChangeList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\ReplayRevision.h"
+					RelativePath="Args\ReplayRevision.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Resolve.h"
+					RelativePath="Args\Resolve.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Revert.h"
+					RelativePath="Args\Revert.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\RevisionPropertyList.h"
+					RelativePath="Args\RevisionPropertyList.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\SetProperty.h"
+					RelativePath="Args\SetProperty.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\SetRevisionProperty.h"
+					RelativePath="Args\SetRevisionProperty.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Status.h"
+					RelativePath="Args\Status.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Switch.h"
+					RelativePath="Args\Switch.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Unlock.h"
+					RelativePath="Args\Unlock.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Update.h"
+					RelativePath="Args\Update.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Upgrade.h"
+					RelativePath="Args\Upgrade.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\Write.h"
+					RelativePath="Args\Write.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Args\WriteRelated.h"
+					RelativePath="Args\WriteRelated.h"
 					>
 				</File>
 			</Filter>
@@ -1390,42 +1390,46 @@
 			Name="SvnRepositoryClient"
 			>
 			<File
-				RelativePath=".\SvnRepositoryClient.h"
+				RelativePath="SvnRepositoryClient.h"
 				>
 			</File>
 			<Filter
 				Name="Args"
 				>
 				<File
-					RelativePath=".\ReposArgs\CreateRepository.h"
+					RelativePath="ReposArgs\CreateRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\DeleteRepository.h"
+					RelativePath="ReposArgs\DeleteRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\DumpRepository.h"
+					RelativePath="ReposArgs\DumpRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\HotCopyRepository.h"
+					RelativePath="ReposArgs\HotCopyRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\LoadRepository.h"
+					RelativePath="ReposArgs\LoadRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\RecoverRepository.h"
+					RelativePath="ReposArgs\RecoverRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\SetRevisionPropertyRepository.h"
+					RelativePath="ReposArgs\SetRevisionPropertyRepository.h"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposArgs\UpgradeRepository.h"
+					RelativePath="ReposArgs\UpgradeRepository.h"
+					>
+				</File>
+				<File
+					RelativePath="ReposArgs\SetRepositoryId.h"
 					>
 				</File>
 			</Filter>
@@ -1437,39 +1441,43 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\ReposCommands\CreateRepository.cpp"
+					RelativePath="ReposCommands\CreateRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\DeleteRepository.cpp"
+					RelativePath="ReposCommands\DeleteRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\DumpRepository.cpp"
+					RelativePath="ReposCommands\DumpRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\HotCopyRepository.cpp"
+					RelativePath="ReposCommands\HotCopyRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\LoadRepository.cpp"
+					RelativePath="ReposCommands\LoadRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\RecoverRepository.cpp"
+					RelativePath="ReposCommands\RecoverRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\SetRevisionPropertyRepository.cpp"
+					RelativePath="ReposCommands\SetRevisionPropertyRepository.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\SvnRepositoryClient.cpp"
+					RelativePath="SvnRepositoryClient.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\ReposCommands\UpgradeRepository.cpp"
+					RelativePath="ReposCommands\UpgradeRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath="ReposCommands\SetRepositoryId.cpp"
 					>
 				</File>
 			</Filter>
@@ -1478,42 +1486,42 @@
 			Name="SvnLookClient"
 			>
 			<File
-				RelativePath=".\SvnLookClient.h"
+				RelativePath="SvnLookClient.h"
 				>
 			</File>
 			<Filter
 				Name="Args"
 				>
 				<File
-					RelativePath=".\LookArgs\SvnChangedArgs.h"
+					RelativePath="LookArgs\SvnChangedArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnChangeInfoArgs.h"
+					RelativePath="LookArgs\SvnChangeInfoArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookClientArgs.h"
+					RelativePath="LookArgs\SvnLookClientArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookGetPropertyArgs.h"
+					RelativePath="LookArgs\SvnLookGetPropertyArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookListArgs.h"
+					RelativePath="LookArgs\SvnLookListArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookPropertyListArgs.h"
+					RelativePath="LookArgs\SvnLookPropertyListArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookRevisionPropertyArgs.h"
+					RelativePath="LookArgs\SvnLookRevisionPropertyArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\LookArgs\SvnLookWriteArgs.h"
+					RelativePath="LookArgs\SvnLookWriteArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1521,15 +1529,15 @@
 				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
+					RelativePath="EventArgs\SvnChangedEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnChangeInfoEventArgs.h"
+					RelativePath="EventArgs\SvnChangeInfoEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnLookListEventArgs.h"
+					RelativePath="EventArgs\SvnLookListEventArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1537,39 +1545,39 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\LookCommands\LookChanged.cpp"
+					RelativePath="LookCommands\LookChanged.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookChangeInfo.cpp"
+					RelativePath="LookCommands\LookChangeInfo.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookGetProperty.cpp"
+					RelativePath="LookCommands\LookGetProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookGetRevisionProperty.cpp"
+					RelativePath="LookCommands\LookGetRevisionProperty.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookList.cpp"
+					RelativePath="LookCommands\LookList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookPropertyList.cpp"
+					RelativePath="LookCommands\LookPropertyList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookWrite.cpp"
+					RelativePath="LookCommands\LookWrite.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\SvnLookClient.cpp"
+					RelativePath="LookCommands\SvnLookClient.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\LookCommands\LookGetRepositoryId.cpp"
+					RelativePath="LookCommands\LookGetRepositoryId.cpp"
 					>
 				</File>
 			</Filter>
@@ -1578,42 +1586,42 @@
 			Name="SvnWorkingCopyClient"
 			>
 			<File
-				RelativePath=".\SvnWorkingCopyClient.h"
+				RelativePath="SvnWorkingCopyClient.h"
 				>
 			</File>
 			<Filter
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\Commands\WorkingCopyGetVersion.cpp"
+					RelativePath="Commands\WorkingCopyGetVersion.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyInstallConflict.cpp"
+					RelativePath="WorkingCopyCommands\WorkingCopyInstallConflict.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
+					RelativePath="Commands\SvnWorkingCopyClient.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyCopy.cpp"
+					RelativePath="WorkingCopyCommands\WorkingCopyCopy.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyEntries.cpp"
+					RelativePath="WorkingCopyCommands\WorkingCopyEntries.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyMove.cpp"
+					RelativePath="WorkingCopyCommands\WorkingCopyMove.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyRestore.cpp"
+					RelativePath="WorkingCopyCommands\WorkingCopyRestore.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyState.cpp"
+					RelativePath="WorkingCopyCommands\WorkingCopyState.cpp"
 					>
 				</File>
 			</Filter>
@@ -1621,31 +1629,31 @@
 				Name="Args"
 				>
 				<File
-					RelativePath=".\Args\WorkingCopyGetVersion.h"
+					RelativePath="Args\WorkingCopyGetVersion.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyCopy.h"
+					RelativePath="WorkingCopyArgs\WorkingCopyCopy.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyEntries.h"
+					RelativePath="WorkingCopyArgs\WorkingCopyEntries.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyInstallConflictArgs.h"
+					RelativePath="WorkingCopyArgs\WorkingCopyInstallConflictArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyMove.h"
+					RelativePath="WorkingCopyArgs\WorkingCopyMove.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyRestore.h"
+					RelativePath="WorkingCopyArgs\WorkingCopyRestore.h"
 					>
 				</File>
 				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyState.h"
+					RelativePath="WorkingCopyArgs\WorkingCopyState.h"
 					>
 				</File>
 			</Filter>
@@ -1653,7 +1661,7 @@
 				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\EventArgs\SvnWorkingCopyEntryEventArgs.h"
+					RelativePath="EventArgs\SvnWorkingCopyEntryEventArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1662,38 +1670,38 @@
 			Name="SvnDeltaEditor"
 			>
 			<File
-				RelativePath=".\Delta\SvnDeltaEditor.cpp"
+				RelativePath="Delta\SvnDeltaEditor.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\Delta\SvnDeltaTransform.cpp"
+				RelativePath="Delta\SvnDeltaTransform.cpp"
 				>
 			</File>
 			<Filter
 				Name="Headers"
 				>
 				<File
-					RelativePath=".\Delta\DeltaDirectoryEventArgs.h"
+					RelativePath="Delta\DeltaDirectoryEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Delta\DeltaFileEventArgs.h"
+					RelativePath="Delta\DeltaFileEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Delta\DeltaGlobalEventArgs.h"
+					RelativePath="Delta\DeltaGlobalEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Delta\SvnDeltaEditor.h"
+					RelativePath="Delta\SvnDeltaEditor.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Delta\SvnDeltaNode.h"
+					RelativePath="Delta\SvnDeltaNode.h"
 					>
 				</File>
 				<File
-					RelativePath=".\Delta\SvnDeltaTransform.h"
+					RelativePath="Delta\SvnDeltaTransform.h"
 					>
 				</File>
 			</Filter>
@@ -1702,58 +1710,58 @@
 			Name="SvnRemoteSession"
 			>
 			<File
-				RelativePath=".\SvnRemoteSession.h"
+				RelativePath="SvnRemoteSession.h"
 				>
 			</File>
 			<Filter
 				Name="Args"
 				>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteCommonArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteCommonArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteDeletedRevisionArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteDeletedRevisionArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteListArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteListArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteListLocksArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteListLocksArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteLocationArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteLocationArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteLogArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteLogArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteNodeKindArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteNodeKindArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteOpenArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteOpenArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemotePropertiesArgs.h"
+					RelativePath="RemoteArgs\SvnRemotePropertiesArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteSessionArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteSessionArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteArgs\SvnRemoteStatArgs.h"
+					RelativePath="RemoteArgs\SvnRemoteStatArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1761,23 +1769,23 @@
 				Name="EventArgs"
 				>
 				<File
-					RelativePath=".\EventArgs\SvnRemoteListEventArgs.h"
+					RelativePath="EventArgs\SvnRemoteListEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnRemoteListLockEventArgs.h"
+					RelativePath="EventArgs\SvnRemoteListLockEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnRemoteLocationSegmentEventArgs.h"
+					RelativePath="EventArgs\SvnRemoteLocationSegmentEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnRemoteLogEventArgs.h"
+					RelativePath="EventArgs\SvnRemoteLogEventArgs.h"
 					>
 				</File>
 				<File
-					RelativePath=".\EventArgs\SvnRemoteStatEventArgs.h"
+					RelativePath="EventArgs\SvnRemoteStatEventArgs.h"
 					>
 				</File>
 			</Filter>
@@ -1785,67 +1793,67 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath=".\RemoteCommands\RemoteGetDeletedRevision.cpp"
+					RelativePath="RemoteCommands\RemoteGetDeletedRevision.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
+					RelativePath="RemoteCommands\RemoteGetLocations.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
+					RelativePath="RemoteCommands\RemoteGetNodeKind.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteGetProperties.cpp"
+					RelativePath="RemoteCommands\RemoteGetProperties.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteGetRepositoryId.cpp"
+					RelativePath="RemoteCommands\RemoteGetRepositoryId.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteGetRepositoryRoot.cpp"
+					RelativePath="RemoteCommands\RemoteGetRepositoryRoot.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteLatestRevision.cpp"
+					RelativePath="RemoteCommands\RemoteLatestRevision.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteList.cpp"
+					RelativePath="RemoteCommands\RemoteList.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteListLocks.cpp"
+					RelativePath="RemoteCommands\RemoteListLocks.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteLocationSegments.cpp"
+					RelativePath="RemoteCommands\RemoteLocationSegments.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteLog.cpp"
+					RelativePath="RemoteCommands\RemoteLog.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteOpen.cpp"
+					RelativePath="RemoteCommands\RemoteOpen.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteReparent.cpp"
+					RelativePath="RemoteCommands\RemoteReparent.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\RemoteStat.cpp"
+					RelativePath="RemoteCommands\RemoteStat.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\ResolveRevision.cpp"
+					RelativePath="RemoteCommands\ResolveRevision.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\RemoteCommands\SvnRemoteSession.cpp"
+					RelativePath="RemoteCommands\SvnRemoteSession.cpp"
 					>
 				</File>
 			</Filter>
@@ -1854,36 +1862,36 @@
 			Name="PdbClient"
 			>
 			<File
-				RelativePath=".\PdbTools\sbs_pdh.h"
+				RelativePath="PdbTools\sbs_pdh.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnMsfClient.cpp"
+				RelativePath="PdbTools\SvnMsfClient.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnMsfClient.h"
+				RelativePath="PdbTools\SvnMsfClient.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnPdbClient.cpp"
+				RelativePath="PdbTools\SvnPdbClient.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnPdbClient.h"
+				RelativePath="PdbTools\SvnPdbClient.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\AssemblyInfo.cpp"
+			RelativePath="AssemblyInfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\SharpSvn.snk"
+			RelativePath="SharpSvn.snk"
 			>
 		</File>
 		<File
-			RelativePath=".\SharpSvn.vcproj"
+			RelativePath="SharpSvn.vcproj"
 			>
 		</File>
 	</Files>
