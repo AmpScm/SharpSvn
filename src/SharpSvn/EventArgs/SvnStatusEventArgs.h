@@ -590,6 +590,8 @@ namespace SharpSvn {
 		initonly SvnNodeKind _oodLastCommitNodeKind;
 		String^ _oodLastCommitAuthor;
 		initonly SvnNodeKind _nodeKind;
+		String^ _movedTo;
+		String^ _movedFrom;
 
 	internal:
 		SvnStatusEventArgs(const char *path, const svn_client_status_t *status, SvnClientContext^ client, AprPool^ pool)
@@ -673,6 +675,28 @@ namespace SharpSvn {
 					_path = SvnBase::Utf8_PathPtrToString(_pPath, _pool);
 
 				return _path;
+			}
+		}
+
+		property String^ MovedFrom
+		{
+			String^ get()
+			{
+				if (!_movedFrom && _status && _status->moved_from_abspath && _pool)
+					_movedFrom = SvnBase::Utf8_PathPtrToString(_status->moved_from_abspath, _pool);
+
+				return _movedFrom;
+			}
+		}
+
+		property String^ MovedTo
+		{
+			String^ get()
+			{
+				if (!_movedTo && _status && _status->moved_to_abspath && _pool)
+					_movedTo = SvnBase::Utf8_PathPtrToString(_status->moved_to_abspath, _pool);
+
+				return _movedTo;
 			}
 		}
 
@@ -1090,6 +1114,8 @@ namespace SharpSvn {
 					GC::KeepAlive(RemoteLock);
 					GC::KeepAlive(RemoteUpdateCommitAuthor);
 					GC::KeepAlive(WorkingCopyInfo);
+					GC::KeepAlive(MovedFrom);
+					GC::KeepAlive(MovedTo);
 				}
 
 				if (_localLock)
