@@ -102,7 +102,7 @@ namespace SharpSvn.Tests.Commands
 					}), Is.False);
 
 				Assert.That(a.LastException, Is.Not.Null);
-				Assert.That(a.LastException, Is.InstanceOfType(typeof(SvnException)));
+				Assert.That(a.LastException, Is.InstanceOf(typeof(SvnException)));
 				Assert.That(arrived, Is.False);
 				Assert.That(_serverTrustTicked);
 				Assert.That(_userNamePasswordTicked);
