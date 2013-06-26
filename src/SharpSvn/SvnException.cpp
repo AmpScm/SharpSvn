@@ -430,7 +430,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 			return gcnew SvnIllegalTargetException(error);
 
 		case SVN_ERR_UNVERSIONED_RESOURCE:
-			return gcnew SvnUnversionedResourceException(error);
+			return gcnew SvnUnversionedNodeException(error);
 
 		case SVN_ERR_BASE:
 		case SVN_ERR_PLUGIN_LOAD_FAILURE:
