@@ -102,7 +102,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(value, Is.Null, "No value available");
 		}
 
-		[Test, ExpectedException(typeof(SvnEntryNotFoundException),
+        [Test, ExpectedException(typeof(SvnUnversionedNodeException),
 			ExpectedMessage="no-index.html", MatchType=MessageMatch.Contains)]
 		public void TestNonExistentPropertyNonExistingFile()
 		{

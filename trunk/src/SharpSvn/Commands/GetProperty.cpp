@@ -86,16 +86,28 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 	const char* pName = pool.AllocString(propertyName);
 
-	svn_error_t *r = svn_client_propget3(
+	const char *prefix = nullptr;
+	const char *targetName = target->AllocAsString(%pool);
+
+	if (!svn_path_is_url(targetName))
+	{
+		prefix = targetName;
+
+		SVN_HANDLE(svn_dirent_get_absolute(&targetName, prefix, pool.Handle));
+	}
+
+	svn_error_t *r = svn_client_propget5(
 		&pHash,
+		nullptr,
 		pName,
-		target->AllocAsString(%pool),
+		targetName,
 		&pegRev,
 		&rev,
 		&actualRev,
 		(svn_depth_t)args->Depth,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
+		pool.Handle,
 		pool.Handle);
 
 	if (pHash)
@@ -110,14 +122,18 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
 
 			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-			String ^path;
+			SvnTarget^ itemTarget;
+			if (prefix && !svn_path_is_url(pKey))
+			{
+				String^ path = Utf8_PathPtrToString(svn_dirent_join(prefix, svn_dirent_skip_ancestor(targetName, pKey), pool.Handle), %pool);
 
-			if (keyLen == 0)
-				path = ".";
+				if (!String::IsNullOrEmpty(path))
+					itemTarget = path;
+				else
+					itemTarget = ".";
+			}
 			else
-				path = Utf8_PtrToString(pKey, (int)keyLen);
-
-			SvnTarget^ itemTarget = SvnTarget::FromString(path);
+				itemTarget = Utf8_PtrToUri(pKey, SvnNodeKind::Unknown);
 
 			rd->Add(SvnPropertyValue::Create(pName, propVal, itemTarget, propertyName));
 		}
