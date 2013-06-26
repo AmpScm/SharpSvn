@@ -623,11 +623,12 @@ apr_hash_t* SvnFileVersionEventArgs::GetKeywords(SvnFileVersionsArgs^ args)
 
 	apr_hash_t* kw = nullptr;
 
-	SVN_THROW(svn_subst_build_keywords2(
+	SVN_THROW(svn_subst_build_keywords3(
 						&kw,
 						kwProp->data,
 						apr_psprintf(pool->Handle, "%ld", (svn_revnum_t)Revision),
 						ItemUrl,
+						_pReposRoot,
 						SvnBase::AprTimeFromDateTime(Time),
 						apr_pstrdup(pool->Handle, _pcAuthor),
 						pool->Handle));
