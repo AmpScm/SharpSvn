@@ -213,7 +213,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
                     Assert.That(e.Path, Is.Not.Null);
                     Assert.That(e.PropertyEditFile, Is.Null);
-                    Assert.That(e.PropertyTime, Is.EqualTo(DateTime.MinValue));
+                    //Assert.That(e.PropertyTime, Is.EqualTo(DateTime.MinValue));
                     Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
                     Assert.That(e.RepositorySize, Is.EqualTo(-1L));
                     Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri), "Repository valid");
