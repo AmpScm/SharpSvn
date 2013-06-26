@@ -171,7 +171,7 @@ namespace SharpSvn.Tests.LookCommands
                 SvnSetPropertyArgs sa = new SvnSetPropertyArgs();
                 sa.BaseRevision = 17;
                 sa.LogMessage = "Message";
-                cl.SetProperty(reposUri, "MyProp", "Value", sa);
+                cl.RemoteSetProperty(reposUri, "MyProp", "Value", sa);
             }
 
             for (long ii = 1; ii < 19; ii++)
