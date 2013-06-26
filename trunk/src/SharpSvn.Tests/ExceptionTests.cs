@@ -24,7 +24,7 @@ namespace SharpSvn.Tests
                     throw new InvalidOperationException();
                 }), Is.False);
 
-            Assert.That(sa.LastException.RootCause, Is.InstanceOfType(typeof(InvalidOperationException)));
+            Assert.That(sa.LastException.RootCause, Is.InstanceOf(typeof(InvalidOperationException)));
         }
     }
 }
