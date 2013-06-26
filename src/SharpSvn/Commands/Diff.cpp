@@ -61,12 +61,15 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 	AprStreamFile out(result, %pool);
 	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
 
+	svn_stream_t *outstream = svn_stream_from_aprfile2(out.CreateHandle(), TRUE, pool.Handle);
+	svn_stream_t *errstream = svn_stream_from_aprfile2(err.CreateHandle(), TRUE, pool.Handle);
+
 	ICollection<String^>^ diffArgs = args->DiffArguments;
 
 	if (!diffArgs)
 		diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-	svn_error_t *r = svn_client_diff5(
+	svn_error_t *r = svn_client_diff6(
 		AllocArray(diffArgs, %pool),
 		from->AllocAsString(%pool),
 		from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
@@ -75,13 +78,16 @@ bool SvnClient::Diff(SvnTarget^ from, SvnTarget^ to, SvnDiffArgs^ args, Stream^ 
 		args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
 		(svn_depth_t)args->Depth,
 		args->IgnoreAncestry,
+		args->NoAdded,
 		args->NoDeleted,
 		args->CopiesAsAdds,
 		args->IgnoreContentType,
+		args->NoProperties,
+		args->PropertiesOnly,
 		args->UseGitFormat,
 		pool.AllocString(args->HeaderEncoding),
-		out.CreateHandle(),
-		err.CreateHandle(),
+		outstream,
+		errstream,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
 		pool.Handle);
@@ -119,6 +125,9 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 	AprStreamFile out(result, %pool);
 	AprStreamFile err(args->ErrorStream ? args->ErrorStream : gcnew System::IO::MemoryStream(), %pool);
 
+	svn_stream_t *outstream = svn_stream_from_aprfile2(out.CreateHandle(), TRUE, pool.Handle);
+	svn_stream_t *errstream = svn_stream_from_aprfile2(err.CreateHandle(), TRUE, pool.Handle);
+
 	svn_opt_revision_t pegRev = source->Revision->ToSvnRevision();
 	svn_opt_revision_t fromRev = range->StartRevision->ToSvnRevision();
 	svn_opt_revision_t toRev = range->EndRevision->ToSvnRevision();
@@ -128,7 +137,7 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 	if (!diffArgs)
 		diffArgs = safe_cast<IList<String^>^>(gcnew array<String^>(0));
 
-	svn_error_t *r = svn_client_diff_peg5(
+	svn_error_t *r = svn_client_diff_peg6(
 		AllocArray(diffArgs, %pool),
 		source->AllocAsString(%pool),
 		&pegRev,
@@ -137,13 +146,16 @@ bool SvnClient::Diff(SvnTarget^ source, SvnRevisionRange^ range, SvnDiffArgs^ ar
 		args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
 		(svn_depth_t)args->Depth,
 		args->IgnoreAncestry,
+		args->NoAdded,
 		args->NoDeleted,
 		args->CopiesAsAdds,
 		args->IgnoreContentType,
+		args->NoProperties,
+		args->PropertiesOnly,
 		args->UseGitFormat,
 		pool.AllocString(args->HeaderEncoding),
-		out.CreateHandle(),
-		err.CreateHandle(),
+		outstream,
+		errstream,
 		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
 		CtxHandle,
 		pool.Handle);
