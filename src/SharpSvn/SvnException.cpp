@@ -429,12 +429,14 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
 		case SVN_ERR_ILLEGAL_TARGET:
 			return gcnew SvnIllegalTargetException(error);
 
+		case SVN_ERR_UNVERSIONED_RESOURCE:
+			return gcnew SvnUnversionedResourceException(error);
+
 		case SVN_ERR_BASE:
 		case SVN_ERR_PLUGIN_LOAD_FAILURE:
 		case SVN_ERR_MALFORMED_FILE:
 		case SVN_ERR_INCOMPLETE_DATA:
 		case SVN_ERR_INCORRECT_PARAMS:
-		case SVN_ERR_UNVERSIONED_RESOURCE:
 		case SVN_ERR_TEST_FAILED:
 		case SVN_ERR_BAD_PROP_KIND:
 		case SVN_ERR_DELTA_MD5_CHECKSUM_ABSENT:
