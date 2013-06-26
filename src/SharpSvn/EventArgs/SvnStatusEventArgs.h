@@ -181,6 +181,7 @@ namespace SharpSvn {
 		/// (possibly because the entry is a child of a path that is
 		/// scheduled for addition or replacement when the entry itself is
 		/// normal</summary>
+		[Obsolete("Use SvnStatusEventArgs.LocalCopied to avoid expensive lookup")]
 		property bool IsCopy
 		{
 			bool get()
@@ -433,6 +434,7 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Use SvntatusEventArgs.FileLength to avoid expensive lookup")]
 		property __int64 WorkingCopySize
 		{
 			__int64 get()
@@ -442,6 +444,7 @@ namespace SharpSvn {
 			}
 		}
 
+		[Obsolete("Unused concept since Subversion 1.7")]
 		property bool KeepLocal
 		{
 			bool get()
