@@ -7,6 +7,8 @@ namespace SharpSvn {
 	public ref class SvnHotCopyRepositoryArgs : public SvnClientArgs
 	{
 		bool _dontCleanLogFiles;
+		bool _incremental;
+
 	public:
 		SvnHotCopyRepositoryArgs()
 		{
@@ -31,6 +33,18 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_dontCleanLogFiles = !value;
+			}
+		}
+
+		property bool Incremental
+		{
+			bool get()
+			{
+				return _incremental;
+			}
+			void set(bool value)
+			{
+				_incremental = value;
 			}
 		}
 	};
