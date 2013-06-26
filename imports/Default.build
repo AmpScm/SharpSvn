@@ -14,7 +14,7 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.8.0" overwrite="false" />
-  <property name="libgit2Version" value="0.18.0" overwrite="false" />
+  <property name="libgit2Version" value="0.19.0" overwrite="false" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1493703 - Add upgrade notification -->
   <!-- r1495104 - Handle http status codes in serf -->
