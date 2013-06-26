@@ -24,8 +24,11 @@ namespace SharpSvn {
 	{
 		SvnDepth _depth;
 		bool _ignoreAncestry;
+		bool _noAdded;
 		bool _noDeleted;
 		bool _ignoreContentType;
+		bool _noProperties;
+		bool _propertiesOnly;
 		String^ _headerEncoding;
 		String^ _relativeFrom;
 		SvnCommandLineArgumentCollection^ _diffArguments;
@@ -72,6 +75,18 @@ namespace SharpSvn {
 			}
 		}
 
+		property bool NoAdded
+		{
+			bool get()
+			{
+				return _noAdded;
+			}
+			void set(bool value)
+			{
+				_noAdded = value;
+			}
+		}
+
 		property bool NoDeleted
 		{
 			bool get()
@@ -81,6 +96,30 @@ namespace SharpSvn {
 			void set(bool value)
 			{
 				_noDeleted = value;
+			}
+		}
+
+		property bool PropertiesOnly
+		{
+			bool get()
+			{
+				return _propertiesOnly;
+			}
+			void set(bool value)
+			{
+				_propertiesOnly = value;
+			}
+		}
+
+		property bool NoProperties
+		{
+			bool get()
+			{
+				return _noProperties;
+			}
+			void set(bool value)
+			{
+				_noProperties = value;
 			}
 		}
 
@@ -95,6 +134,8 @@ namespace SharpSvn {
 				_ignoreContentType = value;
 			}
 		}
+
+		//property bool
 
 		property String^ HeaderEncoding
 		{
