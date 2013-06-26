@@ -372,4 +372,6 @@ namespace SharpSvn {
 
 	DECLARE_SVN_EXCEPTION_TYPE(SvnSystemException, SvnException);
 	DECLARE_SVN_EXCEPTION_TYPE(SvnClientHookException, SvnClientException);
+
+	DECLARE_SVN_EXCEPTION_TYPE(SvnUnversionedResourceException, SvnException);
 }
