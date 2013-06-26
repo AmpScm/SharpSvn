@@ -66,14 +66,12 @@ namespace SharpSvn.Tests.Commands
 
             Client.Status(filepath, delegate(object sender, SvnStatusEventArgs e)
             {
-                Assert.That(e.WorkingCopyInfo.LockOwner, Is.EqualTo(Environment.UserName));
-                Assert.That(e.WorkingCopyInfo.LockToken, Is.Not.Null);
-                Assert.That(e.WorkingCopyInfo.LockComment, Is.EqualTo(comment));
                 Assert.That(e.LocalLock, Is.Not.Null);
                 Assert.That(e.LocalLock.Owner, Is.EqualTo(Environment.UserName));
-                Assert.That(e.LocalLock.Token, Is.EqualTo(e.WorkingCopyInfo.LockToken));
+                Assert.That(e.LocalLock.Token, Is.Not.Null);
                 Assert.That(e.LocalLock.Comment, Is.EqualTo(comment));
-                Assert.That(e.LocalLock.CreationTime, Is.EqualTo(e.WorkingCopyInfo.LockTime));
+                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.LessThan(DateTime.Now));
+                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.GreaterThan(DateTime.Now - new TimeSpan(0,0,20)));
                 gotIn = true;
             });
 
