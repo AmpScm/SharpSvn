@@ -1,4 +1,4 @@
-// $Id: CreateRepository.h 2021 2012-02-27 19:48:21Z rhuijben $
+// $Id: SvnMergesEligibleEventArgs.h 944 2008-12-12 10:20:50Z rhuijben $
 //
 // Copyright 2007-2008 The SharpSvn Project
 //
@@ -16,22 +16,37 @@
 
 #pragma once
 
+#include "EventArgs\SvnEventArgs.h"
+
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnSetRepositoryIdArgs : public SvnRepositoryClientArgs
+	public ref class SvnRepositoryNotifyEventArgs sealed : public SvnEventArgs
 	{
-	public:
-		SvnSetRepositoryIdArgs()
+	private:
+		const svn_repos_notify_t *_notify;
+		AprPool^ _pool;
+
+	internal:
+		SvnRepositoryNotifyEventArgs(const svn_repos_notify_t *notify, AprPool^ pool)
 		{
+			_notify = notify;
+			_pool = pool;
 		}
 
-		virtual property SvnCommandType CommandType
+	protected public:
+		virtual void Detach(bool keepProperties) override
 		{
-			virtual SvnCommandType get() override sealed
+			try
 			{
-				return SvnCommandType::Unknown;
+				if (keepProperties)
+				{
+					// GC::KeepAlive()
+				}
+			}
+			finally
+			{
+				_notify = nullptr;
+				_pool = nullptr;
 			}
 		}
 	};

@@ -284,6 +284,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ReposEventArgs\SvnRepositoryNotifyEventArgs.h" />
     <ClInclude Include="SharpSvnStrings.h" />
     <ClInclude Include="EventArgs\SvnEventArgs.h" />
     <ClInclude Include="SvnStreamWrapper.h" />
@@ -670,7 +671,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpSvn.snk" />
-    <None Include="SharpSvn-VS2008.vcproj" />
+    <None Include="SharpSvn-VS2008.vcproj">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="SharpSvn.vcproj" />
   </ItemGroup>
   <ItemGroup>

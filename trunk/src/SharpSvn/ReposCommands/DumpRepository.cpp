@@ -129,8 +129,8 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
 		end,
 		args->Incremental,
 		args->Deltas,
-		nullptr, // ###
-		nullptr, // ###
+		repos_notify_func,
+		_clientBaton->Handle,
 		CtxHandle->cancel_func,
 		CtxHandle->cancel_baton,
 		pool.Handle);

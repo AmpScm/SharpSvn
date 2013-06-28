@@ -75,16 +75,18 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
 
 	SvnStreamWrapper strmFrom(from, true, false, %pool);
 
-	r = svn_repos_load_fs3(
+	r = svn_repos_load_fs4(
 		repos,
 		strmFrom.Handle,
+		(svn_revnum_t)args->StartRevision,
+		(svn_revnum_t)args->EndRevision,
 		(svn_repos_load_uuid)args->LoadIdType,
 		args->ImportParent ? pool.AllocRelpath(args->ImportParent) : nullptr,
 		args->RunPreCommitHook,
 		args->RunPostCommitHook,
 		args->VerifyPropertyValues,
-		nullptr, // ###
-		nullptr, // ###
+		repos_notify_func,
+		_clientBaton->Handle,
 		CtxHandle->cancel_func,
 		CtxHandle->cancel_baton,
 		pool.Handle);

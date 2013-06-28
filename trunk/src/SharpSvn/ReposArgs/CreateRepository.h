@@ -20,7 +20,7 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnCreateRepositoryArgs : public SvnClientArgs
+	public ref class SvnCreateRepositoryArgs : public SvnRepositoryClientArgs
 	{
 		bool _bdbNoFSyncCommit;
 		bool _bdbKeepLogs;

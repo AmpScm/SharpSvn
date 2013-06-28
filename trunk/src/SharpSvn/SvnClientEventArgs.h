@@ -51,4 +51,4 @@
 #include "EventArgs/SvnRemoteListLockEventArgs.h"
 #include "EventArgs/SvnRemoteLocationSegmentEventArgs.h"
 
-
+#include "ReposEventArgs/SvnRepositoryNotifyEventArgs.h"

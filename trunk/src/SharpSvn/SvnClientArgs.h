@@ -355,6 +355,26 @@ namespace SharpSvn {
 			}
 		}
 	};
+
+	public ref class SvnRepositoryClientArgs abstract : public SvnClientArgs
+	{
+	public:
+		/// <summary>Raised to notify changes by an in-progress command</summary>
+		DECLARE_EVENT(SvnRepositoryNotifyEventArgs^, Notify)
+
+	protected:
+		/// <summary>Raises the <see cref="Notify" /> event</summary>
+		virtual void OnNotify(SvnRepositoryNotifyEventArgs^ e)
+		{
+			Notify(this, e);
+		}
+
+	internal:
+		virtual void RaiseOnNotify(SvnRepositoryNotifyEventArgs^ e)
+		{
+			OnNotify(e);
+		}
+	};
 }
 
 #include "SvnMergeInfoArgs.h"

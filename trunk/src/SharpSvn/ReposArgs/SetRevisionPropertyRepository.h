@@ -4,7 +4,7 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnSetRevisionPropertyRepositoryArgs : public SvnClientArgs
+	public ref class SvnSetRevisionPropertyRepositoryArgs : public SvnRepositoryClientArgs
 	{
 		bool _callPreHook;
 		bool _callPostHook;

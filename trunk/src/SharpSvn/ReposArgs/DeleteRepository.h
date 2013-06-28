@@ -20,7 +20,7 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s DeleteRepository method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnDeleteRepositoryArgs : public SvnClientArgs
+	public ref class SvnDeleteRepositoryArgs : public SvnRepositoryClientArgs
 	{
 	public:
 		SvnDeleteRepositoryArgs()

@@ -634,6 +634,9 @@
     <ClInclude Include="ReposArgs\SetRepositoryId.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
+    <ClInclude Include="ReposEventArgs\SvnRepositoryNotifyEventArgs.h">
+      <Filter>SvnRepositoryClient\EventArgs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
