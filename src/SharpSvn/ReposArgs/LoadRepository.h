@@ -30,17 +30,21 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnLoadRepositoryArgs : public SvnClientArgs
+	public ref class SvnLoadRepositoryArgs : public SvnRepositoryClientArgs
 	{
 		SvnRepositoryIdType _loadIdType;
 		String^ _parentDir;
 		bool _noPreCommitHook;
 		bool _noPostCommitHook;
 		bool _noPropertyValidation;
+		__int64 _startRev;
+		__int64 _endRev;
 
 	public:
 		SvnLoadRepositoryArgs()
 		{
+			_startRev = SVN_INVALID_REVNUM;
+			_endRev = SVN_INVALID_REVNUM;
 		}
 
 		virtual property SvnCommandType CommandType
@@ -110,5 +114,30 @@ namespace SharpSvn {
 				_parentDir = value;
 			}
 		}
+
+		property __int64 StartRevision
+		{
+			__int64 get()
+			{
+				return _startRev;
+			}
+			void set(__int64 value)
+			{
+				_startRev = value;
+			}
+		}
+
+		property __int64 EndRevision
+		{
+			__int64 get()
+			{
+				return _endRev;
+			}
+			void set(__int64 value)
+			{
+				_endRev = value;
+			}
+		}
+
 	};
 }

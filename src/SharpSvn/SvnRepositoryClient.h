@@ -45,6 +45,10 @@ namespace SharpSvn {
 		AprPool _pool;
 		AprBaton<SvnRepositoryClient^>^ _clientBaton;
 
+		static initonly svn_repos_notify_func_t repos_notify_func;
+
+		static SvnRepositoryClient();
+
 	public:
 		///<summary>Initializes a new <see cref="SvnRepositoryClient" /> instance with default properties</summary>
 		SvnRepositoryClient();
@@ -140,11 +144,24 @@ namespace SharpSvn {
 		/// </summary>
 		DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
 
+		DECLARE_EVENT(SvnRepositoryNotifyEventArgs^, Notify)
+
 	protected:
 		virtual void OnCancel(SvnCancelEventArgs^ e);
+		virtual void OnNotify(SvnRepositoryNotifyEventArgs^ e);
+
+	internal:
+		property SvnRepositoryClientArgs^ CurrentCommandArgs
+		{
+			SvnRepositoryClientArgs^ get() new
+			{
+				return dynamic_cast<SvnRepositoryClientArgs^>(__super::CurrentCommandArgs);
+			}
+		}
 
 	internal:
 		void HandleClientCancel(SvnCancelEventArgs^ e);
+		void HandleClientNotify(SvnRepositoryNotifyEventArgs^ e);
 
 	private:
 		~SvnRepositoryClient();

@@ -21,7 +21,7 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnDumpRepositoryArgs : public SvnClientArgs
+	public ref class SvnDumpRepositoryArgs : public SvnRepositoryClientArgs
 	{
 		SvnRevision^ _start;
 		SvnRevision^ _end;

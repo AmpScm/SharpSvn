@@ -33,7 +33,7 @@ using namespace SharpSvn::Implementation;
 static svn_error_t *
 svnrepository_cancel_func(void *cancel_baton)
 {
-	SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get((IntPtr)cancel_baton);
+	SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get(cancel_baton);
 
 	SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
 	try
@@ -55,7 +55,30 @@ svnrepository_cancel_func(void *cancel_baton)
 	}
 }
 
+void
+svnrepository_notify_func(void *baton,
+                          const svn_repos_notify_t *notify,
+                          apr_pool_t *scratch_pool)
+{
+	SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get(baton);
 
+	AprPool tmpPool(scratch_pool, false);
+	SvnRepositoryNotifyEventArgs^ ea = gcnew SvnRepositoryNotifyEventArgs(notify, %tmpPool);
+
+	try
+	{
+		client->HandleClientNotify(ea);
+	}
+	finally
+	{
+		ea->Detach(false);
+	}
+}
+
+static SvnRepositoryClient::SvnRepositoryClient()
+{
+	repos_notify_func = svnrepository_notify_func;
+}
 
 SvnRepositoryClient::SvnRepositoryClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
@@ -101,4 +124,17 @@ void SvnRepositoryClient::HandleClientCancel(SvnCancelEventArgs^ e)
 void SvnRepositoryClient::OnCancel(SvnCancelEventArgs^ e)
 {
 	Cancel(this, e);
+}
+
+void SvnRepositoryClient::HandleClientNotify(SvnRepositoryNotifyEventArgs^ e)
+{
+	if (CurrentCommandArgs)
+		CurrentCommandArgs->RaiseOnNotify(e);
+
+	OnNotify(e);
+}
+
+void SvnRepositoryClient::OnNotify(SvnRepositoryNotifyEventArgs^ e)
+{
+	Notify(this, e);
 }

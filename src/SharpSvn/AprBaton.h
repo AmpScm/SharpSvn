@@ -59,12 +59,12 @@ namespace SharpSvn {
 			}
 
 
-			property IntPtr Handle
+			property void* Handle
 			{
 				[System::Diagnostics::DebuggerStepThrough]
-				IntPtr get()
+				void *get()
 				{
-					return GCHandle::ToIntPtr(_handle);
+					return (void *)GCHandle::ToIntPtr(_handle);
 				}
 			}
 		};

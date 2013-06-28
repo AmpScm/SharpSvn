@@ -20,7 +20,7 @@ namespace SharpSvn {
 
 	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s RecoverRepository method</summary>
 	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnRecoverRepositoryArgs : public SvnClientArgs
+	public ref class SvnRecoverRepositoryArgs : public SvnRepositoryClientArgs
 	{
 		bool _nonBlocking;
 	public:
