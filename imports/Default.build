@@ -19,7 +19,10 @@
   <!-- r1493703 - Add upgrade notification -->
   <!-- r1495104 - Handle http status codes in serf -->
   <!-- r1497551 - Provide proper accept header in serf (breaks IIS frontend) -->
-  <property name="subversionMerges" value="1493272,1493703,1495104,1497551" overwrite="false" /> 
+  <!-- r1497641 - fix the standard 'Accept-Encoding' header -->
+  <!-- r1494287 - Fix svnadmin upgrade -->
+  <!-- r1495850 - Fix cancel baton on conflict -->
+  <property name="subversionMerges" value="1493272,1493703,1495104,1497551,1497641,1494287,1495850" overwrite="false" /> 
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
@@ -27,7 +30,7 @@
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
-  <property name="libgit2Version" value="0.18.0" overwrite="false" />
+  <property name="libgit2Version" value="0.19.0" overwrite="false" />
   <property name="buildLibgit2" value="true" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.1e" overwrite="false" />
