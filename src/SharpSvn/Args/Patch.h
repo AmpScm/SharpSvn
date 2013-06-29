@@ -1,5 +1,3 @@
-// $Id: Diff.h 1715 2011-06-22 09:46:09Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

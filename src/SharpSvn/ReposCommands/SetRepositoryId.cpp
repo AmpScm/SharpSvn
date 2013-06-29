@@ -1,5 +1,3 @@
-// $Id: DumpRepository.cpp 1702 2011-06-21 17:37:29Z rhuijben $
-//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

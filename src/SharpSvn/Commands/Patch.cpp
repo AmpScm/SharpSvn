@@ -1,5 +1,3 @@
-// $Id: Add.cpp 1691 2011-06-07 16:24:14Z rhuijben $
-//
 // Copyright 2007-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

@@ -1,5 +1,3 @@
-// $Id: DeleteRepository.h 2448 2013-06-28 15:45:23Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

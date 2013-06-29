@@ -1,5 +1,3 @@
-// $Id: Upgrade.cpp 1431 2010-01-14 11:47:53Z rhuijben $
-//
 // Copyright 2007-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
