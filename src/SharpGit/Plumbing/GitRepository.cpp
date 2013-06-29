@@ -227,20 +227,6 @@ GitIndex^ GitRepository::GetIndexInstance()
 	return gcnew GitIndex(index);
 }
 
-void GitRepository::SetIndex(GitIndex ^newIndex)
-{
-	if (! newIndex)
-		throw gcnew ArgumentNullException("newIndex");
-
-	AssertOpen();
-
-	if (Object::ReferenceEquals(newIndex, _indexRef))
-		return;
-
-	ClearReferences();
-	git_repository_set_index(_repository, newIndex->Handle);
-}
-
 // Cache and provide as property?
 GitObjectDatabase^ GitRepository::GetObjectDatabaseInstance()
 {
@@ -255,20 +241,6 @@ GitObjectDatabase^ GitRepository::GetObjectDatabaseInstance()
 	}
 
 	return gcnew GitObjectDatabase(odb);
-}
-
-void GitRepository::SetObjectDatabase(GitObjectDatabase ^newDatabase)
-{
-	if (! newDatabase)
-		throw gcnew ArgumentNullException("newDatabase");
-
-	AssertOpen();
-
-	if (Object::ReferenceEquals(newDatabase, _dbRef))
-		return;
-
-	ClearReferences();
-	git_repository_set_odb(_repository, newDatabase->Handle);
 }
 
 const char *GitRepository::MakeRelpath(String ^path, GitPool ^pool)

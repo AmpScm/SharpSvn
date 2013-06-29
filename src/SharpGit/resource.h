@@ -1,5 +1,3 @@
-// $Id: resource.h 1003 2009-01-11 23:47:44Z rhuijben $
-//
 // Copyright 2007-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

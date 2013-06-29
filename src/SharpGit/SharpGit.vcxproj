@@ -285,7 +285,9 @@
     <ClCompile Include="GitClient\GitDelete.cpp" />
     <ClCompile Include="GitClient\GitAdd.cpp" />
     <ClCompile Include="GitClient\GitClient.cpp" />
+    <ClCompile Include="GitClient\GitStage.cpp" />
     <ClCompile Include="GitClient\GitStatus.cpp" />
+    <ClCompile Include="GitClient\GitUnstage.cpp" />
     <ClCompile Include="Plumbing\GitCommit.cpp" />
     <ClCompile Include="Plumbing\GitConfiguration.cpp" />
     <ClCompile Include="Plumbing\GitIndex.cpp" />
@@ -316,9 +318,11 @@
     <ClInclude Include="GitClient\GitClone.h" />
     <ClInclude Include="GitClient\GitCommitCmd.h" />
     <ClInclude Include="GitClient\GitDelete.h" />
+    <ClInclude Include="GitClient\GitStage.h" />
     <ClInclude Include="GitClient\GitStatus.h" />
     <ClInclude Include="GitClient\GitStatusEventArgs.h" />
     <ClInclude Include="GitClient\GitTagCmd.h" />
+    <ClInclude Include="GitClient\GitUnstage.h" />
     <ClInclude Include="GitId.h" />
     <ClInclude Include="GitLibraryAttribute.h" />
     <ClInclude Include="Plumbing\GitBlob.h" />

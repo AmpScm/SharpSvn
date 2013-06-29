@@ -61,7 +61,7 @@ bool GitConfiguration::TryGetInt32(GitConfigurationLevel level, String ^key, [Ou
 	int r = 0;
 
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -90,7 +90,7 @@ bool GitConfiguration::TryGetInt64(GitConfigurationLevel level, String ^key, [Ou
 	int r = 0;
 
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -120,7 +120,7 @@ bool GitConfiguration::TryGetString(GitConfigurationLevel level, String ^key, [O
 	int r = 0;
 
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -150,7 +150,7 @@ bool GitConfiguration::TryGetBoolean(GitConfigurationLevel level, String ^key, [
 	int r = 0;
 
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -199,7 +199,7 @@ bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ ar
 	int r = 0;
 	
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -225,7 +225,7 @@ bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ ar
 	int r = 0;
 	
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -253,7 +253,7 @@ bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ ar
 	int r = 0;
 	
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -280,7 +280,7 @@ bool GitConfiguration::Set(GitConfigurationLevel level, String^ key, GitArgs^ ar
 	int r = 0;
 	
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{
@@ -311,7 +311,7 @@ bool GitConfiguration::Delete(GitConfigurationLevel level, String ^key, GitArgs 
 	int r = 0;
 	
 	if (level != GitConfigurationLevel::Unspecified)
-		r = git_config_open_level(&cfg, Handle, (int)level);
+		r = git_config_open_level(&cfg, Handle, (git_config_level_t)level);
 
 	if (r == 0)
 	{

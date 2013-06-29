@@ -86,6 +86,12 @@
     <ClCompile Include="Plumbing\GitTag.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
+    <ClCompile Include="GitClient\GitStage.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitUnstage.cpp">
+      <Filter>GitClient</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpGit-VS2008.vcproj" />
@@ -169,6 +175,12 @@
     </ClInclude>
     <ClInclude Include="Plumbing\GitBranch.h">
       <Filter>Plumbing</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitStage.h">
+      <Filter>GitClient</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitUnstage.h">
+      <Filter>GitClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
