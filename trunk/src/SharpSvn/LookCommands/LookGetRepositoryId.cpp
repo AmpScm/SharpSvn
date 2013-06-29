@@ -1,5 +1,3 @@
-// $Id: LookGetRevisionProperty.cpp 1699 2011-06-17 13:43:02Z rhuijben $
-//
 // Copyright 2008-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

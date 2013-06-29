@@ -1,5 +1,3 @@
-// $Id: AprArray.h 534 2008-04-14 22:52:59Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

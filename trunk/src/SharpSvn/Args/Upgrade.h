@@ -1,5 +1,3 @@
-// $Id: CleanUp.h 944 2008-12-12 10:20:50Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

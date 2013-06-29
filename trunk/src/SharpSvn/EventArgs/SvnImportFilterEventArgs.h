@@ -1,5 +1,3 @@
-// $Id: SvnInfoEventArgs.h 1720 2011-06-22 14:56:57Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

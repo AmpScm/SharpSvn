@@ -1,5 +1,3 @@
-// $Id: SvnStatusEventArgs.h 1024 2009-01-27 19:54:11Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

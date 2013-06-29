@@ -1,5 +1,3 @@
-// $Id: CreateRepository.h 2021 2012-02-27 19:48:21Z rhuijben $
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
