@@ -284,6 +284,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ReposArgs\PackRepository.h" />
+    <ClInclude Include="ReposArgs\VerifyRepository.h" />
     <ClInclude Include="ReposEventArgs\SvnRepositoryNotifyEventArgs.h" />
     <ClInclude Include="SharpSvnStrings.h" />
     <ClInclude Include="EventArgs\SvnEventArgs.h" />
@@ -539,6 +541,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemGroup>
     <ClCompile Include="AprArray.cpp" />
     <ClCompile Include="AprPool.cpp" />
+    <ClCompile Include="ReposCommands\PackRepository.cpp" />
+    <ClCompile Include="ReposCommands\VerifyRepository.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

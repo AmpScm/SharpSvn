@@ -32,6 +32,8 @@ namespace SharpSvn {
 	ref class SvnSetRevisionPropertyRepositoryArgs;
 	ref class SvnHotCopyRepositoryArgs;
 	ref class SvnSetRepositoryIdArgs;
+	ref class SvnPackRepositoryArgs;
+	ref class SvnVerifyRepositoryArgs;
 
 	/// <summary>
 	/// Managed wrapper of some of the most common repository management functions.
@@ -135,6 +137,14 @@ namespace SharpSvn {
 		/// <summary>Makes a hot copy of a repository</summary>
 		bool HotCopy(String^ fromRepository, String^ toRepository);
 		bool HotCopy(String^ fromRepository, String^ toRepository, SvnHotCopyRepositoryArgs^ args);
+
+	public:
+		bool Pack(String^ repositoryPath);
+		bool Pack(String^ repositoryPath, SvnPackRepositoryArgs^ args);
+
+	public:
+		bool Verify(String^ repositoryPath);
+		bool Verify(String^ repositoryPath, SvnVerifyRepositoryArgs^ args);
 
 	public:
 		/// <summary>

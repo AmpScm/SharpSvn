@@ -637,6 +637,12 @@
     <ClInclude Include="ReposEventArgs\SvnRepositoryNotifyEventArgs.h">
       <Filter>SvnRepositoryClient\EventArgs</Filter>
     </ClInclude>
+    <ClInclude Include="ReposArgs\PackRepository.h">
+      <Filter>SvnRepositoryClient\Args</Filter>
+    </ClInclude>
+    <ClInclude Include="ReposArgs\VerifyRepository.h">
+      <Filter>SvnRepositoryClient\Args</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1054,6 +1060,12 @@
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="ReposCommands\SetRepositoryId.cpp">
+      <Filter>SvnRepositoryClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ReposCommands\PackRepository.cpp">
+      <Filter>SvnRepositoryClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="ReposCommands\VerifyRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
