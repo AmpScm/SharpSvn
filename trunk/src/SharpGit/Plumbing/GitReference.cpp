@@ -80,17 +80,7 @@ GitReferenceCollection^ GitRepository::References::get()
 
 System::Collections::Generic::IEnumerator<GitReference^>^ GitReferenceCollection::GetEnumerator()
 {
-	return GetEnumerable((git_ref_t)(GIT_REF_OID | GIT_REF_SYMBOLIC))->GetEnumerator();
-}
-
-System::Collections::Generic::IEnumerable<GitReference^>^ GitReferenceCollection::Strict::get()
-{
-	return GetEnumerable(GIT_REF_OID);
-}
-
-System::Collections::Generic::IEnumerable<GitReference^>^ GitReferenceCollection::Symbolic::get()
-{
-	return GetEnumerable(GIT_REF_SYMBOLIC);
+	return GetEnumerable()->GetEnumerator();
 }
 
 private ref class RefWalkInfo
@@ -100,15 +90,15 @@ public:
 	GitRepository^ repository;
 };
 
-static int __cdecl for_reference(const char *refname, void *payload)
+static int __cdecl for_reference(git_reference *reference, void *payload)
 {
 	GitRoot<RefWalkInfo^> root(payload);
 
-	root->references->Add(gcnew GitReference(root->repository, GitBase::Utf8_PtrToString(refname)));
+	root->references->Add(gcnew GitReference(root->repository, reference));
 	return 0;
 }
 
-System::Collections::Generic::IEnumerable<GitReference^>^ GitReferenceCollection::GetEnumerable(git_ref_t type)
+System::Collections::Generic::IEnumerable<GitReference^>^ GitReferenceCollection::GetEnumerable()
 {
 	List<GitReference^> ^references = gcnew List<GitReference^>();
 	if (_repository->IsDisposed)
@@ -118,7 +108,7 @@ System::Collections::Generic::IEnumerable<GitReference^>^ GitReferenceCollection
 	root->references = references;
 	root->repository = _repository;
 
-	int r = git_reference_foreach(_repository->Handle, type /* | GIT_REF_PACKED*/, for_reference, root.GetBatonValue());
+	int r = git_reference_foreach(_repository->Handle, for_reference, root.GetBatonValue());
 	if (r != 0)
 		references->Clear();
 

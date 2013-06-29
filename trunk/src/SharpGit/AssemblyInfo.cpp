@@ -1,5 +1,3 @@
-// $Id: AssemblyInfo.cpp 2213 2012-08-21 13:45:59Z rhuijben $
-//
 // Copyright 2007-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");

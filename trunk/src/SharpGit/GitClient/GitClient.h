@@ -10,6 +10,8 @@ namespace SharpGit {
 	ref class GitDeleteArgs;
 	ref class GitCloneArgs;
 	ref class GitCommitArgs;
+	ref class GitStageArgs;
+	ref class GitUnstageArgs;
 
 	namespace Implementation {
 		ref class GitLibrary;
@@ -57,6 +59,18 @@ namespace SharpGit {
 		bool Commit(System::Collections::Generic::ICollection<String^> ^paths, [Out] GitId ^%commitId);
 		bool Commit(String ^path, GitCommitArgs ^args, [Out] GitId ^%commitId);
 		bool Commit(System::Collections::Generic::ICollection<String^> ^paths, GitCommitArgs ^args, [Out] GitId ^%commitId);
+
+		bool Stage(String ^path);
+		bool Stage(String ^path, GitStageArgs^ args);
+
+		bool Stage(IEnumerable<String^>^ paths);
+		bool Stage(IEnumerable<String^>^ paths, GitStageArgs^ args);
+
+		bool Unstage(String ^path);
+		bool Unstage(String ^path, GitUnstageArgs^ args);
+
+		bool Unstage(IEnumerable<String^>^ paths);
+		bool Unstage(IEnumerable<String^>^ paths, GitUnstageArgs^ args);
 
 	private:
 		bool CloneInternal(const char *rawRepository, String ^path, GitCloneArgs ^args, GitPool ^pool);

@@ -103,18 +103,8 @@ namespace SharpGit {
 		public:
 			virtual System::Collections::Generic::IEnumerator<GitReference^>^ GetEnumerator();
 
-			property IEnumerable<GitReference^>^ Strict
-			{
-				IEnumerable<GitReference^>^ get();
-			}
-
-			property IEnumerable<GitReference^>^ Symbolic
-			{
-				IEnumerable<GitReference^>^ get();
-			}
-
 		private:
-			IEnumerable<GitReference^>^ GetEnumerable(git_ref_t type);
+			IEnumerable<GitReference^>^ GetEnumerable();
 
 		private:
 			virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
