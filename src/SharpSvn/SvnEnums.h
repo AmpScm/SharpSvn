@@ -121,6 +121,69 @@ namespace SharpSvn {
 		Infinity		= svn_depth_infinity,
 	};
 
+	public enum class SvnRepositoryNotifyAction
+	{
+		/// <summary> A warning message is waiting. </summary>
+		Warning = svn_repos_notify_warning,
+
+		/// <summary> A revision has finished being dumped. </summary>
+		DumpedRevision = svn_repos_notify_dump_rev_end,
+
+		/// <summary> A revision has finished being verified. </summary>
+		VerifyRevision = svn_repos_notify_verify_rev_end,
+
+		/// <summary> All revisions have finished being dumped. </summary>
+		FinishedDump = svn_repos_notify_dump_end,
+
+		/// <summary> All revisions have finished being verified. </summary>
+		FinishedVerify = svn_repos_notify_verify_end,
+
+		/// <summary> packing of an FSFS shard has commenced </summary>
+		PackShardStarted = svn_repos_notify_pack_shard_start,
+
+		/// <summary> packing of an FSFS shard is completed </summary>
+		PackShardFinished = svn_repos_notify_pack_shard_end,
+
+		/// <summary> packing of the shard revprops has commenced </summary>
+		PackShardPropertiesStarted = svn_repos_notify_pack_shard_start_revprop,
+
+		/// <summary> packing of the shard revprops has completed </summary>
+		PackShardPropertiesFinished = svn_repos_notify_pack_shard_end_revprop,
+
+		/// <summary> A revision has begun loading </summary>
+		LoadRevStarted = svn_repos_notify_load_txn_start,
+
+		/// <summary> A revision has finished loading </summary>
+		LoadRevFinished = svn_repos_notify_load_txn_committed,
+
+		/// <summary> A node has begun loading </summary>
+		LoadNodeStarted = svn_repos_notify_load_node_start,
+
+		/// <summary> A node has finished loading </summary>
+		LoadNodeFinished = svn_repos_notify_load_node_done,
+
+		/// <summary> A copied node has been encountered </summary>
+		LoadNodeCopy = svn_repos_notify_load_copied_node,
+
+		/// <summary> Mergeinfo has been normalized </summary>
+		LoadNormalizingMergeInfo = svn_repos_notify_load_normalized_mergeinfo,
+
+		/// <summary> The operation has acquired a mutex for the repo. </summary>
+		LockAcquired = svn_repos_notify_mutex_acquired,
+
+		/// <summary> Recover has started. </summary>
+		RecoverStarted = svn_repos_notify_recover_start,
+
+		/// <summary> Upgrade has started. </summary>
+		UpgradeStarted = svn_repos_notify_upgrade_start,
+
+		/// <summary> A revision was skipped during loading. @since New in 1.8. </summary>
+		//LoadSkippedRevision = svn_repos_notify_load_skipped_rev,
+
+		/// <summary> The structure of a revision is being verified.  @since New in 1.8. </summary>
+		//VerifyStructure = svn_repos_notify_verify_rev_structure
+	};
+
 	public enum class SvnRevisionType
 	{
 		None		= svn_opt_revision_unspecified,
@@ -267,7 +330,7 @@ namespace SharpSvn {
 		FailedForbiddenByServer     = svn_wc_notify_failed_forbidden_by_server,
 
 		/// <summary>The operation skipped the path because it was conflicted.</summary>
-        SkipConflicted              = svn_wc_notify_skip_conflicted,
+		SkipConflicted              = svn_wc_notify_skip_conflicted,
 
 		// 1.8+
 		/// <summary>Just the lock on a file was removed during update</summary>
@@ -280,7 +343,7 @@ namespace SharpSvn {
 		/// detect when to display conflict summary information, for example.</summary>
 		ConflictResolverStarting	= svn_wc_notify_conflict_resolver_starting,
 
-  
+
 		/// <summary>Conflict resolver is done. This can be used by clients to
 		/// detect when to display conflict summary information, for example</summary>
 		ConflictResolverDone		= svn_wc_notify_conflict_resolver_done,
@@ -608,7 +671,7 @@ namespace SharpSvn {
 			{
 				static initonly array<T>^ _values;
 				static initonly EnumVerifyHelper<T>^ _default;
-				
+
 				static EnumVerifyHelper()
 				{
 					_values = static_cast<array<T>^>(System::Enum::GetValues(T::typeid));
@@ -620,8 +683,8 @@ namespace SharpSvn {
 				static bool IsDefined(T value)
 				{
 					return 0 <= System::Array::BinarySearch(_values,
-															value,
-															_default);
+						value,
+						_default);
 				}
 
 				virtual int Compare(T x, T y)

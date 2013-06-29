@@ -25,12 +25,23 @@ namespace SharpSvn {
 	private:
 		const svn_repos_notify_t *_notify;
 		AprPool^ _pool;
+		initonly SvnRepositoryNotifyAction _action;
 
 	internal:
 		SvnRepositoryNotifyEventArgs(const svn_repos_notify_t *notify, AprPool^ pool)
 		{
 			_notify = notify;
 			_pool = pool;
+			_action = (SvnRepositoryNotifyAction)notify->action;
+		}
+
+	public:
+		property SvnRepositoryNotifyAction Action
+		{
+			SvnRepositoryNotifyAction get()
+			{
+				return _action;
+			}
 		}
 
 	protected public:

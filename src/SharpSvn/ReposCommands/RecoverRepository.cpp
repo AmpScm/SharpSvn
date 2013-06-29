@@ -28,7 +28,7 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
 	return RecoverRepository(repositoryPath, gcnew SvnRecoverRepositoryArgs());
 }
@@ -38,7 +38,7 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 	if (String::IsNullOrEmpty(repositoryPath))
 		throw gcnew ArgumentNullException("repositoryPath");
 	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 	else if (!args)
 		throw gcnew ArgumentNullException("args");
 
@@ -49,8 +49,8 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
 	svn_error_t* r = svn_repos_recover4(
 		pool.AllocDirent(repositoryPath),
 		args->NonBlocking,
-		nullptr,
-		nullptr,
+		repos_notify_func,
+		_clientBaton->Handle,
 		CtxHandle->cancel_func,
 		CtxHandle->cancel_baton,
 		pool.Handle);
