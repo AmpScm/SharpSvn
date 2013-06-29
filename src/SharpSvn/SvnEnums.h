@@ -178,10 +178,10 @@ namespace SharpSvn {
 		UpgradeStarted = svn_repos_notify_upgrade_start,
 
 		/// <summary> A revision was skipped during loading. @since New in 1.8. </summary>
-		//LoadSkippedRevision = svn_repos_notify_load_skipped_rev,
+		LoadSkippedRevision = svn_repos_notify_load_skipped_rev,
 
 		/// <summary> The structure of a revision is being verified.  @since New in 1.8. </summary>
-		//VerifyStructure = svn_repos_notify_verify_rev_structure
+		VerifyStructure = svn_repos_notify_verify_rev_structure
 	};
 
 	public enum class SvnRevisionType
