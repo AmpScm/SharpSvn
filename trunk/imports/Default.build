@@ -22,6 +22,7 @@
   <!-- r1497641 - fix the standard 'Accept-Encoding' header -->
   <!-- r1494287 - Fix svnadmin upgrade -->
   <!-- r1495850 - Fix cancel baton on conflict -->
+  <!-- r1498564 - Fix a metadata only move problem -->
   <property name="subversionMerges" value="1493272,1493703,1495104,1497551,1497641,1494287,1495850" overwrite="false" /> 
   <!-- r1340318 - Avoid ancestor check in the status walker -->
   <property name="subversionMergeBranches" value="" overwrite="false" />
