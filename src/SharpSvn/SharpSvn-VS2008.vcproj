@@ -1417,7 +1417,15 @@
 					>
 				</File>
 				<File
+					RelativePath="ReposArgs\PackRepository.h"
+					>
+				</File>
+				<File
 					RelativePath="ReposArgs\RecoverRepository.h"
+					>
+				</File>
+				<File
+					RelativePath="ReposArgs\SetRepositoryId.h"
 					>
 				</File>
 				<File
@@ -1429,13 +1437,17 @@
 					>
 				</File>
 				<File
-					RelativePath="ReposArgs\SetRepositoryId.h"
+					RelativePath="ReposArgs\VerifyRepository.h"
 					>
 				</File>
 			</Filter>
 			<Filter
 				Name="EventArgs"
 				>
+				<File
+					RelativePath="ReposEventArgs\SvnRepositoryNotifyEventArgs.h"
+					>
+				</File>
 			</Filter>
 			<Filter
 				Name="Sources"
@@ -1461,7 +1473,15 @@
 					>
 				</File>
 				<File
+					RelativePath="ReposCommands\PackRepository.cpp"
+					>
+				</File>
+				<File
 					RelativePath="ReposCommands\RecoverRepository.cpp"
+					>
+				</File>
+				<File
+					RelativePath="ReposCommands\SetRepositoryId.cpp"
 					>
 				</File>
 				<File
@@ -1477,7 +1497,7 @@
 					>
 				</File>
 				<File
-					RelativePath="ReposCommands\SetRepositoryId.cpp"
+					RelativePath="ReposCommands\VerifyRepository.cpp"
 					>
 				</File>
 			</Filter>
@@ -1557,6 +1577,10 @@
 					>
 				</File>
 				<File
+					RelativePath="LookCommands\LookGetRepositoryId.cpp"
+					>
+				</File>
+				<File
 					RelativePath="LookCommands\LookGetRevisionProperty.cpp"
 					>
 				</File>
@@ -1576,10 +1600,6 @@
 					RelativePath="LookCommands\SvnLookClient.cpp"
 					>
 				</File>
-				<File
-					RelativePath="LookCommands\LookGetRepositoryId.cpp"
-					>
-				</File>
 			</Filter>
 		</Filter>
 		<Filter
@@ -1593,14 +1613,6 @@
 				Name="Sources"
 				>
 				<File
-					RelativePath="Commands\WorkingCopyGetVersion.cpp"
-					>
-				</File>
-				<File
-					RelativePath="WorkingCopyCommands\WorkingCopyInstallConflict.cpp"
-					>
-				</File>
-				<File
 					RelativePath="Commands\SvnWorkingCopyClient.cpp"
 					>
 				</File>
@@ -1610,6 +1622,14 @@
 				</File>
 				<File
 					RelativePath="WorkingCopyCommands\WorkingCopyEntries.cpp"
+					>
+				</File>
+				<File
+					RelativePath="Commands\WorkingCopyGetVersion.cpp"
+					>
+				</File>
+				<File
+					RelativePath="WorkingCopyCommands\WorkingCopyInstallConflict.cpp"
 					>
 				</File>
 				<File
@@ -1629,15 +1649,15 @@
 				Name="Args"
 				>
 				<File
-					RelativePath="Args\WorkingCopyGetVersion.h"
-					>
-				</File>
-				<File
 					RelativePath="WorkingCopyArgs\WorkingCopyCopy.h"
 					>
 				</File>
 				<File
 					RelativePath="WorkingCopyArgs\WorkingCopyEntries.h"
+					>
+				</File>
+				<File
+					RelativePath="Args\WorkingCopyGetVersion.h"
 					>
 				</File>
 				<File
