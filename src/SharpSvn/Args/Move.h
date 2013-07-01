@@ -89,7 +89,7 @@ namespace SharpSvn {
 			}
 		}
 
-		property bool MetadataOnly
+		property bool MetaDataOnly
 		{
 			bool get()
 			{
