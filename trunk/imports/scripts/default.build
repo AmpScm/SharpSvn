@@ -106,6 +106,7 @@
   <include buildfile="swig.build" />
   <include buildfile="gtest.build" />
   <include buildfile="libgit2.build" />
+  <include buildfile="scons.build" />
 
   <setenv>
     <variable name="PATH" value="${environment::get-variable('PATH')};${path::get-full-path(nasmDir)}"/>

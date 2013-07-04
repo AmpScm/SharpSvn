@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+
+  <property name="sconsApp" value="${path::get-full-path('build/scons/scripts/scons.bat')}" />
+  <property name="sconsPythonPath" value="${path::get-full-path('build/scons/Lib/site-packages/scons')}" />
+
+  <target name="install-scons" depends="download,extract">
+    <OnceBlock file="build/scons-${sconsVersion}.installed">
+      <exec program="python.exe" workingdir="${sconsDir}" verbose="true">
+        <arg value="setup.py" />
+        <arg value="install" />
+        <arg value="--standalone-lib" />
+        <arg value="--prefix=${path::get-full-path('build/scons')}" />
+      </exec>
+    </OnceBlock>
+  </target>
+
+</project>

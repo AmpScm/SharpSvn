@@ -54,6 +54,7 @@
 
   <!-- Building only -->
   <property name="cmakeVersion" value="2.8.11" overwrite="false" />
+  <property name="sconsVersion" value="2.3.0" overwrite="false" />
   
   <!-- For testcase -->
   <property name="nunitVersion" value="2.6.2" overwrite="false" />
