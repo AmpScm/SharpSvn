@@ -52,7 +52,19 @@
       </foreach>
     </OnceBlock>
   </target>
-  <target name="build-serf" depends="prepare-serf, build-zlib,build-apr">
+  <target name="build-serf" depends="prepare-serf,build-zlib,build-apr,install-scons">
+    <!--exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+        if="${file::exists(serfDir + '/SConstruct')}">
+      <environment>
+        <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+      </environment>
+      <arg value="PREFIX=${buildRoot}/${platform}" />
+      <arg value="OPENSSL=../openssl-${opensslVersion}" />
+      <arg value="ZLIB=../zlib-${zlibVersion}" />
+      <arg value="APR=../lib" />
+      <arg value="APU=../lib" />
+      <arg value="install-lib" />
+    </exec-->
   </target>
   <target name="copy-serf" depends="build-serf, build-svn">
     <copy todir="${serfDir}/Debug">
