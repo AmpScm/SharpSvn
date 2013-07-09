@@ -369,6 +369,13 @@ APR_BEGIN_DECLS
         <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
       </fileset>
     </copy>
+    <copy todir="build/${platform}/lib/LibR" flatten="true">
+      <fileset>
+        <include name="${aprDir}/LibR/*.lib" />
+        <include name="${aprUtilDir}/LibR/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+      </fileset>
+    </copy>
     <copy todir="build/${platform}/lib/debug" flatten="true">
       <fileset>
         <include name="${aprDir}/${aprRelSubdir}/*.lib" />
