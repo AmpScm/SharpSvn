@@ -53,7 +53,7 @@
     </OnceBlock>
   </target>
   <target name="build-serf" depends="prepare-serf,build-zlib,build-apr,install-scons">
-    <!--exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+    <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>
         <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
@@ -63,8 +63,8 @@
       <arg value="ZLIB=../zlib-${zlibVersion}" />
       <arg value="APR=../lib" />
       <arg value="APU=../lib" />
-      <arg value="install-lib" />
-    </exec-->
+      <arg value="APR_STATIC=yes" if="${static}" />
+    </exec>
   </target>
   <target name="copy-serf" depends="build-serf, build-svn">
     <copy todir="${serfDir}/Debug">
