@@ -12,6 +12,15 @@
         <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
       </do>
     </foreach>
+    <OnceBlock file="build/serf-${serfVersion}.merged">
+      <Svn verbose="true" if="${string::get-length(serfMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${serfMerges}" />
+        <arg value="^/trunk" />
+        <arg value="${serfDir}" />
+      </Svn>
+    </OnceBlock>
     <OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
       <foreach item="File" property="patch">
         <in>
@@ -58,12 +67,13 @@
       <environment>
         <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
       </environment>
-      <arg value="PREFIX=${buildRoot}/${platform}" />
+      <arg value="PREFIX=${buildRoot}/${platform}/lib" />
       <arg value="OPENSSL=../openssl-${opensslVersion}" />
       <arg value="ZLIB=../zlib-${zlibVersion}" />
       <arg value="APR=../lib" />
       <arg value="APU=../lib" />
       <arg value="APR_STATIC=yes" if="${static}" />
+      <arg value="install" />
     </exec>
   </target>
   <target name="copy-serf" depends="build-serf, build-svn">
