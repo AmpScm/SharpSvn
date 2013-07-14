@@ -34,6 +34,8 @@
 #include <svn_repos.h>
 #include <svn_time.h>
 
+#include <serf-1/serf.h>
+
 #ifndef UNUSED_ALWAYS
 #define UNUSED_ALWAYS(x) (x)
 #endif
