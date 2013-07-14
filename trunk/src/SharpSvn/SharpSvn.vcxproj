@@ -111,7 +111,7 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <CustomBuildStep>
@@ -152,7 +152,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <CustomBuildStep>
@@ -196,7 +196,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <CustomBuildStep>
@@ -235,7 +235,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
       <Command>$(SolutionDir)tools\Po2Resx\bin\$(Configuration)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po
-$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(ProjectDir)\SvnWindowsError.h"
+$(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
     <CustomBuildStep>

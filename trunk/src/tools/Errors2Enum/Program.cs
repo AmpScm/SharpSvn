@@ -10,9 +10,9 @@ namespace Errors2Enum
     {
         static void Main(string[] args)
         {
-            if (args.Length != 4)
+            if (args.Length != 5)
             {
-                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <apr_errno.h> <outputfile>");
+                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <apr_errno.h> <serf.h> <outputfile>");
                 foreach (string s in args)
                 {
                     Console.Error.WriteLine("'" + s + "'");
@@ -26,7 +26,8 @@ namespace Errors2Enum
             string winerror = Path.Combine(sdkPath, "include\\winerror.h");
             string errno = Path.Combine(vcPath, "include\\errno.h");
             string aprerrno = Path.GetFullPath(args[2]);
-            string to = Path.GetFullPath(args[3]);
+            string serfh = Path.GetFullPath(args[3]);
+            string to = Path.GetFullPath(args[4]);
 
             if (!File.Exists(winerror))
                 winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
@@ -49,6 +50,13 @@ namespace Errors2Enum
             }
 
             if (!File.Exists(aprerrno))
+            {
+                Console.Error.WriteLine("'{0}' does not exist", aprerrno);
+                Environment.ExitCode = 1;
+                return;
+            }
+
+            if (!File.Exists(serfh))
             {
                 Console.Error.WriteLine("'{0}' does not exist", aprerrno);
                 Environment.ExitCode = 1;
@@ -83,6 +91,7 @@ namespace Errors2Enum
             using (StreamWriter r = File.CreateText(to))
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
+            using (StreamReader serfheader = File.OpenText(serfh))
             using (StreamReader syserrs = File.OpenText(errno))
             {
                 r.WriteLine(verHeader);
@@ -102,8 +111,10 @@ namespace Errors2Enum
                 r.WriteLine("public enum class SvnAprErrorCode {");
 
                 Dictionary<string, string> defined = new Dictionary<string, string>();
-                WriteAprEnumBody(aprheader, r, true, defined);
-                WriteAprEnumBody(syserrs, r, false, defined);
+                defined["SERF_ERROR_RANGE"] = "";
+                WriteAprEnumBody(aprheader, r, true, null, defined);
+                WriteAprEnumBody(syserrs, r, false, null, defined);
+                WriteAprEnumBody(serfheader, r, true, "SERF_ERROR_", defined);
 
                 r.WriteLine("};");
                 r.WriteLine();
@@ -193,7 +204,7 @@ namespace Errors2Enum
             }
         }
 
-        private static void WriteAprEnumBody(StreamReader header, StreamWriter r, bool direct, Dictionary<string, string> defined)
+        private static void WriteAprEnumBody(StreamReader header, StreamWriter r, bool direct, string prefix, Dictionary<string, string> defined)
         {
             string line;
             Dictionary<string, string> descs = new Dictionary<string, string>();
@@ -248,7 +259,16 @@ namespace Errors2Enum
                 string name = line.Substring(8, nameEnd - 8);
                 string oname = name;
 
-                if (!direct)
+                if (!string.IsNullOrEmpty(prefix))
+                {
+                    if (!name.StartsWith(prefix, StringComparison.Ordinal))
+                    {
+                        Console.WriteLine("Ignoring: {0}", name);
+                        continue;
+                    }
+                    Console.WriteLine("Defining: {0}", name);
+                }
+                else if (!direct)
                     name = "APR_" + name;
                 else if (!name.StartsWith("APR_", StringComparison.Ordinal))
                     continue;
@@ -287,7 +307,7 @@ namespace Errors2Enum
                     r.WriteLine();
                     r.WriteLine();
                 }
-                else
+                else if (string.Equals(name, name.ToUpperInvariant(), StringComparison.Ordinal))
                 {
                     r.WriteLine("/// <summary>System error " + oname + "</summary>");
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1702:CompoundWordsShouldBeCasedCorrectly\")]");
