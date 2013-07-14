@@ -216,7 +216,12 @@ namespace Errors2Enum
                 if (line.StartsWith("#if", StringComparison.Ordinal)
                     || line.StartsWith("#el", StringComparison.Ordinal)
                     || line.StartsWith("#end", StringComparison.Ordinal))
-                    r.WriteLine(line.Replace("APR_ERRNO_H", "GEN_APR_ERRNO_H").Replace("_INC", "GEN_INC"));
+                {
+                    if (line.TrimEnd().EndsWith("_H"))
+                        line = line.TrimEnd() + "_GEN";
+
+                    r.WriteLine(line.Replace("_INC", "GEN_INC"));
+                }
 
                 if (line.StartsWith(" * APR_"))
                 {
@@ -262,11 +267,7 @@ namespace Errors2Enum
                 if (!string.IsNullOrEmpty(prefix))
                 {
                     if (!name.StartsWith(prefix, StringComparison.Ordinal))
-                    {
-                        Console.WriteLine("Ignoring: {0}", name);
                         continue;
-                    }
-                    Console.WriteLine("Defining: {0}", name);
                 }
                 else if (!direct)
                     name = "APR_" + name;
