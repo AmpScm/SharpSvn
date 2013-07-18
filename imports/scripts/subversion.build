@@ -137,16 +137,15 @@
         <arg line="--vsnet-version=${VSversion}" />
         <arg value="--release" />
         <arg value="--with-httpd=../../httpd" if="${(buildHttpd == 'true') and (platform == 'win32')}" />
-        <arg value="--with-apr=../lib" />
-        <arg value="--with-apr-util=../lib" />
-        <arg value="--with-berkeley-db=../lib" />
-        <arg value="--with-openssl=../openssl-${opensslVersion}" />
-        <arg value="--with-zlib=${zlibDir}" />
-        <arg value="--with-neon=../neon" if="${subversionVersion &lt; '1.8.'}" />
-        <arg value="--with-serf=../serf" />
-        <arg value="--with-sasl=../lib" />
+        <arg value="--with-apr=${intDir}" />
+        <arg value="--with-apr-util=${intDir}" />
+        <arg value="--with-berkeley-db=${intDir}" />
+        <arg value="--with-zlib=${intDir}" />
+        <arg value="--with-sasl=${intDir}" />
+        <arg value="--with-openssl=${intDir}" />
+        <arg value="--with-serf=${intDir}" />
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
-        <arg value="--with-sqlite=${intDir}" />
+        <arg value="--with-sqlite=${path::get-full-path(intDir)}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>

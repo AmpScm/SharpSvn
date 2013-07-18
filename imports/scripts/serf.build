@@ -70,6 +70,18 @@
       <arg value="ZLIB_SRC=${zlibDir}" />
       <arg value="OPENSSL_SRC=${opensslDir}" />
     </NMake>
+    <copy todir="${intDir}/lib" if="${file::exists(serfDir + '/serf.mak')}">
+      <fileset basedir="${serfDir}">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <mkdir dir="${intDir}/include/serf-1" if="${file::exists(serfDir + '/serf.mak')}" />
+    <copy todir="${intDir}/include/serf-1" if="${file::exists(serfDir + '/serf.mak')}">
+      <fileset basedir="${serfDir}">
+        <include name="serf.h" />
+        <include name="serf_bucket_*.h" />
+      </fileset>
+    </copy>
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>

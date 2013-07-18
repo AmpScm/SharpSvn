@@ -98,14 +98,10 @@
             <filterchain>
               <!-- Add openssl includes to aprutil and aprutil/crypto -->
               <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${static}" />
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="APR_DECLARE_STATIC;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport);APU_DECLARE_STATIC;_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;WIN32;WINNT;' if="${not static}" />
               <!-- Don't add default library info -->
               <replacestring from='Name="VCCLCompilerTool"' to='Name="VCCLCompilerTool" OmitDefaultLibName="true"' />
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
-              <replacestring from='XML_STATIC' to='XML_BUILDING_EXPAT;XML_USE_MSC_EXTENSIONS;XMLIMPORT=__declspec(dllexport)' if="${not static}" />
-              <replacestring from='EXPAT_EXPORTS' to='EXPAT_EXPORTS;XML_BUILDING_EXPAT;XMLIMPORT=__declspec(dllexport)' if="${not static}" />
             </filterchain>
           </loadfile>
           <echo message="${projtext}" file="${vcproj}" />
@@ -286,6 +282,60 @@ APR_BEGIN_DECLS
     
     <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
     <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
+    
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${aprDir}/${aprRelSubdir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${aprUtilDir}/${aprRelSubdir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${aprDir}/${aprRelSubdir}">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${aprUtilDir}/${aprRelSubdir}">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${intDir}/include">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${aprDir}/include">
+        <include name="**.h" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${aprUtilDir}/include">
+        <include name="**.h" />
+      </fileset>
+    </copy>
     
     <copy todir="${aprUtilDir}/${aprRelSubdir}" if="${not static}">
       <fileset basedir="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}">

@@ -12,18 +12,16 @@
         <arg line='zlib.lib AS=ml64 LOC="/Zl -DASMV -DASMINF -I${zlibDir}" OBJA="inffasx64.obj gvmat64.obj inffas8664.obj"' if="${platform == 'x64'}" />
       </NMake>
     </OnceBlock>
-    <copy todir="${release}/include">
+    <copy todir="${intDir}/include">
       <fileset basedir="${zlibDir}">
         <include name="zlib.h" />
         <include name="zconf.h" />
       </fileset>
     </copy>
-    <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstat.lib" />
-    <copy file="${zlibDir}/zlib.lib" tofile="${zlibDir}/zlibstatD.lib" />
-    
-    <copy todir="${releaseLib}" file="${zlibDir}/zlib.lib" />
-    <copy todir="${releaseLib}" file="${zlibDir}/zlib.pdb" />
-    <copy todir="${releaseLib}" file="${zlibDir}/zlibstat.lib" />
-    <copy todir="${releaseLib}" file="${zlibDir}/zlibstatD.lib" />
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${zlibDir}">
+        <include name="zlib.lib" />
+      </fileset>
+    </copy>
   </target>
 </project> 

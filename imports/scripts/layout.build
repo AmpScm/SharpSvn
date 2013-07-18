@@ -31,6 +31,9 @@
     <mkdir dir="${downloads}" />
     <mkdir dir="${platformRoot}" />
     <mkdir dir="${intDir}" />
+    <mkdir dir="${intDir}/lib" />
+    <mkdir dir="${intDir}/include" />
+    <mkdir dir="${intDir}/bin" />
     <mkdir dir="${releaseLib}" />
     <mkdir dir="${releaseBin}" />
     <mkdir dir="${releaseInc}" />
