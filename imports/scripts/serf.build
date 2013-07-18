@@ -62,16 +62,27 @@
     </OnceBlock>
   </target>
   <target name="build-serf" depends="prepare-serf,build-zlib,build-apr,install-scons">
+    <NMake workingdir="${serfDir}" makeFile="serf.mak" verbose="true"
+        if="${file::exists(serfDir + '/serf.mak')}">
+      <arg value="ALL" />
+      <arg value="APR_SRC=${aprDir}" />
+      <arg value="APRUTIL_SRC=${aprUtilDir}" />
+      <arg value="ZLIB_SRC=${zlibDir}" />
+      <arg value="OPENSSL_SRC=${opensslDir}" />
+    </NMake>
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>
         <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
       </environment>
-      <arg value="PREFIX=${buildRoot}/${platform}/lib" />
-      <arg value="OPENSSL=../openssl-${opensslVersion}" />
-      <arg value="ZLIB=../zlib-${zlibVersion}" />
-      <arg value="APR=../lib" />
-      <arg value="APU=../lib" />
+      <arg value="PREFIX=${buildRoot}/${platform}/release" />
+      <arg value="OPENSSL=${intDir}" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
+      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="MSVC_VERSION=${sconsVSVersion}" />
       <arg value="APR_STATIC=yes" if="${static}" />
       <arg value="install" />
     </exec>
