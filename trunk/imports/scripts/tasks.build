@@ -408,6 +408,7 @@ public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
 [TaskName("CMake")]
 public class CMake : ExternalAppTask
 {
+    string _process;
     public override string ProgramFileName
     {
         get
@@ -421,9 +422,25 @@ public class CMake : ExternalAppTask
         }
     }
     
+    [TaskAttribute("process")]
+    public string Process
+    {
+        get { return _process; }
+        set { _process = value; }
+    }
+    
     public override string ProgramArguments
     {
-        get { return string.Format("-G \"{0}\" --build .", Properties["cmakeGenerator"]); }
+        get
+        {
+            string job;
+            
+            if (!string.IsNullOrEmpty(Process))
+                job = string.Format("-P \"{0}\"", Process);
+            else
+                job = "--build .";
+            return string.Format("-G \"{0}\" {1}", Properties["cmakeGenerator"], job);
+        }
     }
 }
 
