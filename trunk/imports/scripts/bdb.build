@@ -50,52 +50,39 @@
     </OnceBlock>
   </target>
   <target name="build-bdb" depends="prepare-bdb">
-    <VCBuild platform="${platform}">
-      <arg value="${dbWindowsDir}/db_dll.vcproj" />
-      <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
-      <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
-      <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
-    </VCBuild>
-    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
-    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
+    <OnceBlock file="build/db-${dbVersion}-${platform}.build">
+      <VCBuild platform="${platform}">
+        <arg value="${dbWindowsDir}/db_dll.vcproj" />
+        <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
+        <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
+        <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
+      </VCBuild>
+      <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
+      <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
 
-    <copy todir="${intDir}/lib">
-      <fileset basedir="${bdbResultDir}">
-        <include name="*.lib" />
-        <include name="*.pdb" />
-        <include name="*.exp" />
+      <copy todir="${intDir}/lib">
+        <fileset basedir="${bdbResultDir}">
+          <include name="*.lib" />
+          <include name="*.pdb" />
+          <include name="*.exp" />
+        </fileset>
+      </copy>
+      <copy todir="${intDir}/include">
+        <fileset basedir="${dbWindowsDir}">
+          <include name="*.h" />
+        </fileset>
+      </copy>
+      <copy todir="${intDir}/bin">
+        <fileset basedir="${bdbResultDir}">
+          <include name="*.${svnDll}" />
+          <include name="*.pdb" />
+        </fileset>
+      </copy>
+    </OnceBlock>
+    <copy todir="${release}/include">    
+      <fileset basedir="${intDir}/include">
+        <include name="db*.h" />
       </fileset>
-    </copy>
-    <copy file="${intDir}/lib/${libDb}.lib" tofile="${intDir}/lib/${libDb}d.lib"/>   
-    <copy todir="${intDir}/include">
-      <fileset basedir="${dbWindowsDir}">
-        <include name="*.h" />
-      </fileset>
-    </copy>
-    <copy todir="${releaseLib}">
-      <fileset basedir="${bdbResultDir}">
-        <include name="*.lib" />
-        <include name="*.pdb" />
-        <include name="*.exp" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin">
-      <fileset basedir="${bdbResultDir}">
-        <include name="*.${svnDll}" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/include">
-      <fileset basedir="${dbWindowsDir}">
-        <include name="*.h" />
-      </fileset>
-    </copy>
-    <copy todir="build/${platform}/lib/bin">
-		<fileset basedir="${bdbResultDir}">
-			<include name="*.${svnDll}" />
-      <include name="*.pdb" />
-		</fileset>		
-    </copy>
-    <copy tofile="build/${platform}/lib/bin/${libDb}d.dll" file="${bdbResultDir}/${fullDbDllName}" />
+    </copy>    
   </target>
 </project>

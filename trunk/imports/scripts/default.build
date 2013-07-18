@@ -54,6 +54,12 @@
   <property name="cmakeGenerator" value="Visual Studio 11 Win64"
             overwrite="false" if="${VSversion == '2012' and platform=='x64'}" />
   
+  <property name="sconsVSVersion" value="8.0"  if="${VSversion == '2005'}" />
+  <property name="sconsVSVersion" value="9.0"  if="${VSversion == '2008'}" />
+  <property name="sconsVSVersion" value="10.0" if="${VSversion == '2010'}" />
+  <property name="sconsVSVersion" value="11.0" if="${VSversion == '2012'}" />
+  <property name="sconsVSVersion" value="12.0" if="${VSversion == '2013'}" />
+  
   <property name="MSBuildExe" value="MSBuild.exe" />
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
@@ -107,6 +113,7 @@
   <include buildfile="gtest.build" />
   <include buildfile="libgit2.build" />
   <include buildfile="scons.build" />
+  <include buildfile="dev.build" />
 
   <setenv>
     <variable name="PATH" value="${environment::get-variable('PATH')};${path::get-full-path(nasmDir)}"/>

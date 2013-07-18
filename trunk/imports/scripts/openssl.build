@@ -11,6 +11,7 @@
         <arg value="VC-WIN64A" if="${platform=='x64'}" />
         <arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
         <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
+        <arg value="threads" />
         <arg value="no-asm" if="${platform=='x64'}" />
         <arg value="no-dso"/>
         <arg value="no-shared" />
@@ -21,8 +22,9 @@
         <arg value="enable-capieng" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
-        <arg value="--with-zlib-lib=${releaseLib}/zlib.lib" />
-        <arg value="--with-zlib-include=${string::replace(release,'\','/')}/include" />
+        <arg value="--with-zlib-lib=${path::get-full-path(intDir + '/lib/zlib.lib')}" />
+        <arg value="--with-zlib-include=${path::get-full-path(intDir + '/include')}" />
+        <arg value="--prefix=${path::get-full-path(intDir)}" />
       </exec>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
@@ -99,59 +101,19 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
   <target name="build-openssl" depends="prepare-openssl">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">    
       <if test="${static == 'true'}">
-        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" />
+        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak">
+          <arg value="install" />
+        </NMake>
       </if>
       <if test="${static != 'true'}">
-        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" />
+        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak">
+          <arg value="install" />
+        </NMake>
       </if>
     </OnceBlock>
-    <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${not static}">
-      <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
-        <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="build/${platform}/openssl-${opensslVersion}/out32dll" if="${static}">
-      <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32">
-        <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib" flatten="true">
-      <fileset basedir="build/win32/openssl-${opensslVersion}">
-        <include name="out32/*.lib" />
-        <include name="out32/*.exp" />
-        <include name="out32/*.pdb" />
-        <include name="out32dll/*.lib" />
-        <include name="out32dll/*.exp" />
-        <include name="out32dll/*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin" flatten="true">
-      <fileset basedir="build/win32/openssl-${opensslVersion}/out32dll">
-        <include name="*.dll" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin/x64" flatten="true">
-      <fileset basedir="build/x64/openssl-${opensslVersion}/out32dll">
-        <include name="*.dll" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib-x64" flatten="true">
-      <fileset basedir="build/x64/openssl-${opensslVersion}">
-        <include name="out32/*.lib" />
-        <include name="out32/*.exp" />
-        <include name="out32/*.pdb" />
-        <include name="out32dll/*.lib" />
-        <include name="out32dll/*.exp" />
-        <include name="out32dll/*.pdb" />
-      </fileset>
-    </copy>
     <copy todir="${release}/include">
-      <fileset basedir="${opensslDir}/inc32">
-        <include name="**/*.h" />
+      <fileset basedir="${intDir}/include">
+        <include name="openssl/**" />
       </fileset>
     </copy>
   </target>
