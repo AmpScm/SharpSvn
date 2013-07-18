@@ -36,7 +36,7 @@
       <arg value="--with-serf=${intDir}" if="${wc.branch &gt; '1.9.'}" />
       <arg value="--with-sasl=${intDir}" />
       <arg value="--with-sqlite=${intDir}" />
-      <arg value="--enable-nls" if="${intl != 'none'}"/>
+      <arg value="--with-libintl=${intDir}" if="${intl != 'none'}"/>
       <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
       <arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
       <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />

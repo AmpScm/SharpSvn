@@ -111,17 +111,17 @@
   <target name="extract" depends="download">
     <mkdir dir="build" />
 
-    <UnTar
+    <untar
       src="${downloads + opensslFilename}" compression="gzip"
       dest="build/${platform}"
       unless="${directory::exists('build/' + platform + '/openssl-' + opensslVersion)}" />
 
-    <UnTar
+    <untar
       src="${downloads + dbFilename}" compression="gzip"
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
 
-    <UnTar
+    <untar
       src="${downloads + zlibFilename}" compression="gzip"
       dest="build/${platform}"
       unless="${directory::exists(zlibDir)}" />
@@ -141,7 +141,7 @@
       todir="${sharpZipLibDir}"
       unless="${directory::exists(sharpZipLibDir)}" />
 
-    <UnTar
+    <untar
       src="${downloads + saslFilename}" compression="gzip"
       dest="build/${platform}"
       unless="${directory::exists(saslDir)}" />
@@ -161,7 +161,7 @@
     </if>
     <if test="${intl == 'gettext'}">
       <if test="${not directory::exists(gettextDir)}">
-        <UnTar src="${downloads + gettextFilename}" dest="build" compression="gzip" />
+        <untar src="${downloads + gettextFilename}" dest="build" compression="gzip" />
       </if>
       <if test="${not directory::exists(gettextToolsDir)}">
         <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
