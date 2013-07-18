@@ -30,7 +30,7 @@
   <!-- r960671 - Only deal with the mutex when XTHREAD is enabled. -->
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
-  <property name="serfMerges" value="1998,2006,2000,2002,2003,2018,2019,2026,2027" overwrite="false" />
+  <property name="serfMerges" value="2035,2041,2047,2048,2050-2053" overwrite="false" />
 
   <!-- -->
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
