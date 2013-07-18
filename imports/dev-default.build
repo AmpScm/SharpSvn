@@ -35,48 +35,4 @@
   <target name="prepare-dev" depends="prep-dev, gen-dev">
   </target>
   
-<target name="gen-dev">
-	<if test="${not directory::exists(wc)}">
-		<Svn>
-			<arg line="co https://svn.apache.org/repos/asf/subversion/trunk ${wc}" if="${branch == '' and tag == ''}" />
-			<arg line="co https://svn.apache.org/repos/asf/subversion/branches/${branch} ${wc}" if="${branch != ''}" />
-			<arg line="co https://svn.apache.org/repos/asf/subversion/tags/${tag} ${wc}" if="${tag != ''}" />
-		</Svn>
-	</if>
-	
-	<!-- Calculate the branch suffix via an ugly hack -->
-	<exec program="svn.exe" output="build\svn.wc.info">
-	  <arg line="info --xml ${wc}" />
-	</exec>
-	<xmlpeek file="build\svn.wc.info" xpath="//url" property="wc.url" />
-  <property name="wc.branch.start" value="${string::last-index-of(wc.url,'/')}" />
-  <property name="wc.branch" value="${string::substring(wc.url, int::parse(wc.branch.start)+1, string::get-length(wc.url)-int::parse(wc.branch.start)-1)}" />
-
-	<property name="impBase" value="../build/x64" overwrite="false" if="${platform=='x64'}"/>
-	<property name="impBase" value="../build/win32" overwrite="false" />
-	
-	<exec program="python.exe" workingdir="${wc}" verbose="true">
-		<arg line="gen-make.py" />
-		<arg line="-t vcproj" />
-		<arg line="--vsnet-version=${VSversion}" />
-		<arg value="--with-httpd=${httpdDir}" if="${buildHttpd}" />
-		<arg value="--with-apr=${impBase}/lib" />
-		<arg value="--with-apr-util=${impBase}/lib" />
-		<arg value="--with-berkeley-db=${impBase}/lib" />
-		<arg value="--with-openssl=${impBase}/openssl-${opensslVersion}" />
-		<arg value="--with-zlib=${zlibDir}" />
-		<arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
-		<arg value="--with-serf=${impBase}/serf" if="${wc.branch &gt; '1.7.'}" />
-		<arg value="--with-sasl=${impBase}/lib" />
-		<arg value="--with-sqlite=${intDir}" />
-		<arg value="--enable-nls" if="${intl != 'none'}"/>
-		<arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
-		<arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
-		<arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
-		<arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
-		<arg value="--with-static-apr" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
-		<arg value="--with-static-openssl" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
-	</exec>
-	<echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
-</target>
 </project>
