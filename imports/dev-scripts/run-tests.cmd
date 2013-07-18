@@ -22,7 +22,7 @@ IF "%1" == "-d" (
    SET VALS=-r
    SHIFT
 ) ELSE IF "%1" == "-k" (
-   taskkill /im tsvncache.exe /im python.exe /im svn.exe /im httpd.exe /im svnrdump.exe /f
+   taskkill /im tsvncache.exe /im python.exe /im svn.exe /im httpd.exe /im svnrdump.exe /im svnsync.exe /f
    SHIFT
 ) ELSE IF "%1" == "-s" (
    SET PARALLEL=
@@ -57,32 +57,20 @@ IF "%1" == "-d" (
 
 IF NOT "%1" == "" GOTO next
 
-if EXIST "%cd%\release\httpd\bin\httpd.exe" (
-  SET HTTPDDIR="%cd%\release\httpd"
-) ELSE IF EXIST "%cd%\release\httpd-x64\bin\httpd.exe" (
-  SET HTTPDDIR="%cd%\release\httpd-x64"
-)
-
 set BASE=R:\Tst
 
-set path=%BASE%\bin;%path%
 set TEMP=%BASE%\Z-temp
 set TMP=%TEMP%
-set HTTPINFO=--httpd-dir "%HTTPDDIR%" --httpd-port 7829 -u http://127.0.0.1:7829 %HTTPLOG%
+set HTTPINFO=--httpd-dir %cd%\release\httpd --httpd-port 7829 -u http://127.0.0.1:7829 %HTTPLOG%
 set SVN_DBG_REAL_QUIET=1
 set LOCATION=R:\
-IF NOT EXIST "%BASE%\bin" MKDIR "%BASE%\bin"
-xcopy /y Release\bin "%BASE%\bin" > nul:
-if EXIST "Release\bin\%PLATFORM%" (
-  xcopy /y "Release\bin\%PLATFORM%" "%BASE%\bin" > nul:
-)
 
 mkdir %LOCATION%\subversion\tests\cmdline\svn-test-work\working_copies 2>nul:
 subst w: /d > nul:
 subst w: %LOCATION%\subversion\tests\cmdline\svn-test-work\working_copies
 
-if NOT EXIST "%TEMP%\." MKDIR "%TEMP%"
-if NOT EXIST "%LOCATION%" MKDIR "%LOCATION%"
+IF NOT EXIST "%TEMP%\." MKDIR "%TEMP%"
+IF NOT EXIST "%LOCATION%" MKDIR "%LOCATION%"
 
 del "%TEMP%\*" /q
 
