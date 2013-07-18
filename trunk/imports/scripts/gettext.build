@@ -30,11 +30,11 @@
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/config.h" />
       <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.in.h" property="configh">
         <filterchain>
-          <replacestring from="@HAVE_POSIX_PRINTF@" to="SHARPSVN_GETTEXT" />
-          <replacestring from="@HAVE_SNPRINTF@" to="SHARPSVN_GETTEXT" />
-          <replacestring from="@HAVE_ASPRINTF@" to="!SHARPSVN_GETTEXT" />
-          <replacestring from="@HAVE_WPRINTF@" to="!SHARPSVN_GETTEXT" />
-          <replacestring from="@HAVE_NEWLOCALE@" to="!SHARPSVN_GETTEXT" />
+          <replacestring from="@HAVE_POSIX_PRINTF@" to="1 /* SHARPSVN */" />
+          <replacestring from="@HAVE_SNPRINTF@"     to="1 /* SHARPSVN */" />
+          <replacestring from="@HAVE_ASPRINTF@"     to="0 /* SHARPSVN */" />
+          <replacestring from="@HAVE_WPRINTF@"      to="0 /* SHARPSVN */" />
+          <replacestring from="@HAVE_NEWLOCALE@"    to="0 /* SHARPSVN */" />
         </filterchain>
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
@@ -125,9 +125,11 @@
           <exclude name="os2*.c" />
         </sources>
       </cl>
-      <link output="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll"
+      <property name="libintlDllName" value="intl.dll" />
+      <property name="libintlDllName" value="${dllPrefix}libintl-${platform}.dll" if="${dllPrefix != ''}" />      
+      <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
         options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
-        /IMPLIB:"${gettextDir}/bin/${platform}/release/intl3_svn.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
+        /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
         /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
         <sources basedir="${gettextDir}/obj/${platform}/release">
           <include name="**/*.obj" />
@@ -138,7 +140,7 @@
         <arg value="-nologo" />
         <arg value="-manifest" />
         <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" />
-        <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll;#2"' />
+        <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${libintlDllName};#2"' />
       </exec>
     </OnceBlock>
     <copy tofile="${intDir}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
