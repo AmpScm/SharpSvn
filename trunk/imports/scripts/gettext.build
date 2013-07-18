@@ -14,6 +14,7 @@
       <loadfile file="${gettextDir}/gettext-runtime/config.h.in" property="configh">
         <filterchain>
           <replacestring from="#undef USE_WIN32_THREADS" to="#define USE_WIN32_THREADS 1" />
+          <replacestring from="#undef USE_WINDOWS_THREADS" to="#define USE_WINDOWS_THREADS 1" />
           <replacestring from="#undef HAVE_ALLOCAH" to="#define HAVE_ALLOCAH 1 //" />
           <replacestring from="#undef HAVE_ALLOCA" to="#define HAVE_ALLOCA 1 //" />
           <replacestring from="#undef HAVE_GETCWD" to="#define HAVE_GETCWD 1" />
@@ -27,7 +28,7 @@
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/config.h" />
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/config.h" />
-      <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.h.in" property="configh">
+      <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.in.h" property="configh">
         <filterchain>
           <replacestring from="@HAVE_POSIX_PRINTF@" to="SHARPSVN_GETTEXT" />
           <replacestring from="@HAVE_SNPRINTF@" to="SHARPSVN_GETTEXT" />
@@ -74,21 +75,7 @@
         </filterchain>
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" />
-      <loadfile file="${gettextDir}/gettext-runtime/intl/gettextP.h" property="configh">
-        <filterchain>
-          <replacestring
-              from="# define gl_locale"
-              to="# define _qnl_locale" />
-          <replacestring
-              from="_nl_locale"
-              to="gl_locale" />
-          <replacestring
-              from="_qnl_locale"
-              to="_nl_locale" />
-        </filterchain>
-      </loadfile>
-      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/gettextP.h" />
-      <echo file="${gettextDir}/gettext-runtime/intl/gettext.def" verbose="true">
+      <echo file="${gettextDir}/gettext-runtime/intl/gettext.def">
         ;LIBRARY ${dllPrefix}libintl-${platform}
         EXPORTS
         gettext                                @401
@@ -117,13 +104,13 @@
         <defines>
           <define name="SHARPSVN_GETTEXT" />
           <define name="inline" value="__inline" />
-          <define name="USE_WIN32_THREADS" />
           <define name="BUILDING_LIBINTL" value="1" />
           <define name="HAVE_CONFIG_H" value="1" />
           <define name="IN_LIBINTL" value="1" />
           <define name="LIBDIR" value="1" />
           <define name="WIN32" value="1" />
           <define name="_WIN32" value="1" />
+          <define name="WIN64" value="1" if="${platform == 'x64'}" />
           <define name="alloca" value="_alloca" />
         </defines>
         <includedirs>
@@ -153,25 +140,22 @@
         <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" />
         <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll;#2"' />
       </exec>
-      <copy tofile="${release}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
-      <copy todir="${release}/lib">
-        <fileset basedir="${gettextDir}/bin/win32/release">
-          <include name="*.lib" />
-          <include name="*.exp" />
-        </fileset>
-      </copy>
-      <copy todir="${release}/lib-x64">
-        <fileset basedir="${gettextDir}/bin/x64/release">
-          <include name="*.lib" />
-          <include name="*.exp" />
-        </fileset>
-      </copy>
-      <copy todir="${release}/bin" flatten="true">
-        <fileset basedir="${gettextDir}/bin">
-          <include name="**/release/**/*.dll" />
-        </fileset>
-      </copy>
     </OnceBlock>
+    <copy tofile="${intDir}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${gettextDir}/bin/win32/release">
+        <include name="*.lib" />
+        <include name="*.exp" />
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${gettextDir}/bin/win32/release">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
   </target>
 
   <target name="gettext-translate" depends="build-gettext, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">
