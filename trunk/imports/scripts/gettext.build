@@ -35,6 +35,7 @@
           <replacestring from="@HAVE_ASPRINTF@"     to="0 /* SHARPSVN */" />
           <replacestring from="@HAVE_WPRINTF@"      to="0 /* SHARPSVN */" />
           <replacestring from="@HAVE_NEWLOCALE@"    to="0 /* SHARPSVN */" />
+          <replacestring from="#ifndef GNULIB_defined" to="#if 0 /* SHARPSVN: GNULIB_defined */" />
         </filterchain>
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
