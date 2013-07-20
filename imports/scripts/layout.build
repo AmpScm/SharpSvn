@@ -16,16 +16,16 @@
   </if>
 
   <property name="platformRoot" value="${buildRoot}" if="${singlePlatform=='true'}" />
-  <property name="platformRoot" value="${buildRoot}/${platform}" if="${singlePlatform!='true'}" />
+  <property name="platformRoot" value="${buildRoot}\${platform}" if="${singlePlatform!='true'}" />
 
-  <property name="intDir" value="${platformRoot}/release" />
+  <property name="intDir" value="${platformRoot}\release" />
 
   <property name="release" value="${path::get-full-path(release)}" />
-  <property name="releaseLib" value="${release}/lib" if="${singlePlatform or platform=='win32'}" />
-  <property name="releaseLib" value="${release}/lib-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
-  <property name="releaseBin" value="${release}/bin" if="${singlePlatform or platform=='win32'}" />
-  <property name="releaseBin" value="${release}/bin-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
-  <property name="releaseInc" value="${release}/include" />
+  <property name="releaseLib" value="${release}\lib" if="${singlePlatform or platform=='win32'}" />
+  <property name="releaseLib" value="${release}\lib-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
+  <property name="releaseBin" value="${release}\bin" if="${singlePlatform or platform=='win32'}" />
+  <property name="releaseBin" value="${release}\bin-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
+  <property name="releaseInc" value="${release}\include" />
 
   <target name="initialize-layout">
     <mkdir dir="${downloads}" />
