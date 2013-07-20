@@ -320,18 +320,18 @@ APR_BEGIN_DECLS
         <include name="*.pdb" />
       </fileset>
     </copy>
-    
-    <copy todir="${intDir}/include">
+        
+    <copy todir="${intDir}/include/apr-1">
       <fileset basedir="${aprUtilDir}/xml/expat/lib">
         <include name="*.h" />
       </fileset>
     </copy>
-    <copy todir="${intDir}/include">
+    <copy todir="${intDir}/include/apr-1">
       <fileset basedir="${aprDir}/include">
         <include name="**.h" />
       </fileset>
     </copy>
-    <copy todir="${intDir}/include">
+    <copy todir="${intDir}/include/apr-1">
       <fileset basedir="${aprUtilDir}/include">
         <include name="**.h" />
       </fileset>
