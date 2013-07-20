@@ -86,6 +86,8 @@
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>
         <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+        <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                       + environment::get-variable('PATH') }" />
       </environment>
       <arg value="PREFIX=${buildRoot}/${platform}/release" />
       <arg value="OPENSSL=${intDir}" />
@@ -106,5 +108,46 @@
         <include name="*.pdb" />
       </fileset>
     </copy>
+  </target>
+  <target name="serf-clean">
+    <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+        if="${file::exists(serfDir + '/SConstruct')}">
+      <environment>
+        <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+        <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                       + environment::get-variable('PATH') }" />
+      </environment>
+      <arg value="PREFIX=${buildRoot}/${platform}/release" />
+      <arg value="OPENSSL=${intDir}" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
+      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="MSVC_VERSION=${sconsVSVersion}" />
+      <arg value="APR_STATIC=yes" if="${static}" />
+      <arg value="--clean" />
+    </exec>
+  </target>
+  <target name="serf-check">
+    <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+        if="${file::exists(serfDir + '/SConstruct')}">
+      <environment>
+        <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+        <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                       + environment::get-variable('PATH') }" />
+      </environment>
+      <arg value="PREFIX=${buildRoot}/${platform}/release" />
+      <arg value="OPENSSL=${intDir}" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
+      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="MSVC_VERSION=${sconsVSVersion}" />
+      <arg value="APR_STATIC=yes" if="${static}" />
+      <arg value="DEBUG=yes"/>
+      <arg value="check" />
+    </exec>
   </target>
 </project>
