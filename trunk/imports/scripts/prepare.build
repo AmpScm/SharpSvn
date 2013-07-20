@@ -160,19 +160,26 @@
       <unzip zipfile="${downloads + swigFilename}" todir="build" />
     </if>
     <if test="${intl == 'gettext'}">
-      <if test="${not directory::exists(gettextDir)}">
-        <untar src="${downloads + gettextFilename}" dest="build" compression="gzip" />
-      </if>
-      <if test="${not directory::exists(gettextToolsDir)}">
-        <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
-        <unzip zipfile="${downloads + gettextToolsRuntimeFilename}" todir="${gettextToolsDir}" />
-        <unzip zipfile="${downloads + gettextToolsIconvFilename}" todir="${gettextToolsDir}" />
-      </if>
+      <untar
+        src="${downloads + gettextFilename}" compression="gzip"
+        dest="build"
+        unless="${directory::exists(gettextDir)}" />
+    </if>
+    <if test="${intl == 'gettext' and not directory::exists(gettextToolsDir)}">
+      <unzip
+        zipfile="${downloads + gettextToolsFilename}"
+        todir="${gettextToolsDir}" />
+      <unzip
+        zipfile="${downloads + gettextToolsRuntimeFilename}"
+        todir="${gettextToolsDir}" />        
+      <unzip
+        zipfile="${downloads + gettextToolsIconvFilename}"
+        todir="${gettextToolsDir}" />
     </if>
     <if test="${javaHome != ''}">
-      <if test="${not directory::exists(junitDir)}">
-        <unzip zipfile="${downloads + junitFilename}" todir="build" />
-      </if>
+      <unzip
+        zipfile="${downloads + junitFilename}" todir="build"
+        unless="${directory::exists(junitDir)}" />
     </if>
   </target>
   <target name="checkout" depends="initialize-layout">
