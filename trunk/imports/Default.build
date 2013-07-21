@@ -46,7 +46,7 @@
   <property name="zlibVersion" value="1.2.8" overwrite="false" />
   <property name="serfVersion" value="1.3.x" overwrite="false" />
   <property name="saslVersion" value="2.1.23" overwrite="false" />
-  <property name="swigVersion" value="2.0.4" overwrite="false" />
+  <property name="swigVersion" value="2.0.10" overwrite="false" />
   <property name="nasmVersion" value="2.10.01" overwrite="false" />
   <property name="gtestVersion" value="1.6.0" overwrite="false" />
 
