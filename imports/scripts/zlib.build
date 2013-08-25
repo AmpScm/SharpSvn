@@ -18,6 +18,12 @@
         <include name="zconf.h" />
       </fileset>
     </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${zlibDir}">
+        <include name="zlib.h" />
+        <include name="zconf.h" />
+      </fileset>
+    </copy>
     <copy todir="${intDir}/lib" flatten="true">
       <fileset basedir="${zlibDir}">
         <include name="zlib.lib" />

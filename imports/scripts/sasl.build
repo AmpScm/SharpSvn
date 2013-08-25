@@ -139,5 +139,11 @@
         <include name="${saslPdb}" />
       </fileset>
     </copy>
+    <mkdir dir="${release}/include/sasl" />
+    <copy todir="${release}/include/sasl">
+      <fileset basedir="${saslDir}/include">
+        <include name="**/*.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
