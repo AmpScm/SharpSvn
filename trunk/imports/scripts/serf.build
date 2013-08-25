@@ -103,7 +103,7 @@
     <mkdir dir="${incDir}/serf-1" />
     <copy todir="${incDir}/serf-1">
       <fileset basedir="${intDir}/include/serf-1">
-        <include "**/*.h" />
+        <include name="**/*.h" />
       </fileset>
     </copy>
   </target>
