@@ -5,7 +5,7 @@
   <property name="svnBase" value="${platformRoot}/subversion" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
 
-  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, sharpintl-build">
+  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, build-sasl, sharpintl-build">
 
     <!-- Fake direct result for subversion to hide platforms -->
     <copy todir="build/${platform}/lib/include">
@@ -127,7 +127,7 @@
     </if>
   </target>
 
-  <target name="generate-svnfiles" depends="checkout, build-bdb, build-zlib, build-openssl, build-apr, build-sasl, svn-prepare">
+  <target name="generate-svnfiles" depends="checkout, svn-prepare">
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated" if="${buildSubversion}">
 
@@ -252,8 +252,6 @@
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
         <include name="neon/**/*.lib" />
         <include name="neon/**/*.pdb" />
-        <include name="serf/${Configuration}/*.lib" />
-        <include name="serf/${Configuration}/*.pdb" />
 
         <!-- Don't copy the GPL as a *.lib file -->
         <exclude name="neon/src/COPYING.LIB" />
@@ -267,8 +265,6 @@
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
         <include name="neon/**/*.lib" />
         <include name="neon/**/*.pdb" />
-        <include name="serf/${Configuration}/*.lib" />
-        <include name="serf/${Configuration}/*.pdb" />
 
         <!-- Don't copy the GPL as a *.lib file -->
         <exclude name="neon/src/COPYING.LIB" />
