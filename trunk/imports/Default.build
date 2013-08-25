@@ -13,7 +13,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.8.3" overwrite="false" />
+  <property name="subversionVersion" value="1.8.1" overwrite="false" />
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1493703 - Add upgrade notification -->
