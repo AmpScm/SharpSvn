@@ -89,7 +89,7 @@
         <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
                                        + environment::get-variable('PATH') }" />
       </environment>
-      <arg value="PREFIX=${buildRoot}/${platform}/release" />
+      <arg value="PREFIX=${intDir}" />
       <arg value="OPENSSL=${intDir}" />
       <arg value="ZLIB=${intDir}" />
       <arg value="APR=${intDir}" />
@@ -100,8 +100,8 @@
       <arg value="APR_STATIC=yes" if="${static}" />
       <arg value="install" />
     </exec>
-    <mkdir dir="${incDir}/serf-1" />
-    <copy todir="${incDir}/serf-1">
+    <mkdir dir="${releaseInc}/serf-1" />
+    <copy todir="${releaseInc}/serf-1">
       <fileset basedir="${intDir}/include/serf-1">
         <include name="**/*.h" />
       </fileset>
