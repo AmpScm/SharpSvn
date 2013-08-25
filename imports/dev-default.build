@@ -29,7 +29,7 @@
     
   <include buildfile="imports/Default.build" />
   
-  <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,build-serf,prepare-neon, build-httpd, build-gtest">
+  <target name="prep-dev" depends="svn-prepare,build-bdb,build-zlib,build-openssl,serf-build,prepare-neon, build-httpd, build-gtest">
   </target>
 
   <target name="prepare-dev" depends="prep-dev, gen-dev">
