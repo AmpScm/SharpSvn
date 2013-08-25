@@ -12,6 +12,11 @@
       <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcproj" if="${VSversion == '2008'}" />      
     </VCBuild>
     <copy todir="${release}/include" file="SharpSvn-SvnI18n/libintl.h" />
+    <copy todir="${intDir}/lib">
+      <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
     <if test="${platform == 'win32'}">
       <copy todir="${release}/lib">
         <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
