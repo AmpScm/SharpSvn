@@ -24,7 +24,6 @@
 #include <apr-1/api_version.h>
 #endif
 #include <svn_version.h>
-#include <serf/serf.h>
 #include <openssl/opensslv.h>
 #include <db.h>
 #define STRUCT_IOVEC_DEFINED // Kill compile error
