@@ -290,6 +290,11 @@
         </fileset>
       </copy>
     </if>
+   <copy todir="${releaseLib}">
+      <fileset basedir="${intDir}/lib">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
     <copy todir="${release}/include">
       <fileset basedir="${svnBase}\subversion\include">
         <include name="**/*.h" />
