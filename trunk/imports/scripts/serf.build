@@ -90,6 +90,7 @@
                                        + environment::get-variable('PATH') }" />
       </environment>
       <arg value="PREFIX=${intDir}" />
+      <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
       <arg value="ZLIB=${intDir}" />
       <arg value="APR=${intDir}" />
@@ -123,7 +124,8 @@
         <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
                                        + environment::get-variable('PATH') }" />
       </environment>
-      <arg value="PREFIX=${buildRoot}/${platform}/release" />
+      <arg value="PREFIX=${intDir}" />
+      <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
       <arg value="ZLIB=${intDir}" />
       <arg value="APR=${intDir}" />
@@ -143,7 +145,8 @@
         <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
                                        + environment::get-variable('PATH') }" />
       </environment>
-      <arg value="PREFIX=${buildRoot}/${platform}/release" />
+      <arg value="PREFIX=${intDir}" />
+      <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
       <arg value="ZLIB=${intDir}" />
       <arg value="APR=${intDir}" />
