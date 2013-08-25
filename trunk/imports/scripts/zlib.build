@@ -29,10 +29,5 @@
         <include name="zlib.lib" />
       </fileset>
     </copy>
-    <copy todir="${releaseLib}">
-      <fileset basedir="${zlibDir}">
-        <include name="zlib.lib" />
-      </fileset>
-    </copy>
   </target>
 </project> 
