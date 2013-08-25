@@ -302,11 +302,6 @@
         <include name="libsvn_subr/config_impl.h" />
       </fileset>
     </copy>
-    <copy todir="${release}/include/serf">
-      <fileset basedir="${platformRoot}\serf">
-        <include name="**/*.h" />
-      </fileset>
-    </copy>
     <copy todir="${release}/include/neon">
       <fileset basedir="${platformRoot}\neon\src">
         <include name="**/*.h" />
