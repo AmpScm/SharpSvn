@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="..">
-    <target name="gen-dev">
+    <target name="gen-dev" depends="extract,checkout">
     <if test="${not directory::exists(wc)}">
       <Svn>
         <arg line="co https://svn.apache.org/repos/asf/subversion/trunk ${wc}" if="${branch == '' and tag == ''}" />
@@ -19,31 +19,54 @@
 
     <property name="impBase" value="../build/x64" overwrite="false" if="${platform=='x64'}"/>
     <property name="impBase" value="../build/win32" overwrite="false" />
-    
-    <exec program="python.exe" workingdir="${wc}" verbose="true">
-      <arg line="gen-make.py" />
-      <arg line="-t vcproj" />
-      <arg line="--vsnet-version=${VSversion}" />
-      <arg value="--with-httpd=${httpdDir}" if="${buildHttpd}" />
-      <arg value="--with-apr=${impBase}/lib" />
-      <arg value="--with-apr-util=${impBase}/lib" />
-      <arg value="--with-berkeley-db=${intDir}" />
-      <arg value="--with-openssl=${impBase}/openssl-${opensslVersion}" />
-      <arg value="--with-zlib=${zlibDir}" if="${wc.branch &lt; '1.9.'}" />
-      <arg value="--with-zlib=${intDir}" if="${wc.branch &gt; '1.9.'}" />
-      <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
-      <arg value="--with-serf=${impBase}/serf" if="${wc.branch &gt; '1.7.' and wc.branch &lt; '1.9.'}" />
-      <arg value="--with-serf=${intDir}" if="${wc.branch &gt; '1.9.'}" />
-      <arg value="--with-sasl=${intDir}" />
-      <arg value="--with-sqlite=${intDir}" />
-      <arg value="--with-libintl=${intDir}" if="${intl != 'none'}"/>
-      <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
-      <arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
-      <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
-      <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
-      <arg value="--with-static-apr" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
-      <arg value="--with-static-openssl" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
-    </exec>
+
+    <if test="${wc.branch &gt; '1.9.'}">
+      <exec program="python.exe" workingdir="${wc}" verbose="true">
+        <arg line="gen-make.py" />
+        <arg line="-t vcproj" />
+        <arg line="--vsnet-version=${VSversion}" />
+        <arg value="--with-httpd=${httpdDir}"     if="${buildHttpd}" />
+        <arg value="--with-apr=${intDir}" />
+        <arg value="--with-apr-util=${intDir}" />
+        <arg value="--with-berkeley-db=${intDir}" />
+        <arg value="--with-openssl=${intDir}" />
+        <arg value="--with-zlib=${intDir}" />
+        <arg value="--with-serf=${intDir}"        if="${wc.branch &gt; '1.9.'}" />
+        <arg value="--with-sasl=${intDir}" />
+        <arg value="--with-sqlite=${intDir}" />
+        <arg value="--with-libintl=${intDir}"     if="${intl != 'none'}"/>
+        <arg value="--with-swig=${path::get-full-path(swigDir)}"
+                                                  if="${property::exists('withSwig')}" />
+        <arg value="--with-jdk=${javaHome}"       if="${javaHome != ''}" />
+        <arg value="--with-junit=${junitJar}"     if="${javaHome != ''}" />
+        <arg value="--disable-shared"             if="${(static=='true') or (svnStatic=='true')}"/>
+        <arg value="--with-static-apr"            if="${((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
+        <arg value="--with-static-openssl"        if="${((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
+      </exec>
+    </if>
+    <if test="${wc.branch &lt; '1.9.'}">
+      <exec program="python.exe" workingdir="${wc}" verbose="true">
+        <arg line="gen-make.py" />
+        <arg line="-t vcproj" />
+        <arg line="--vsnet-version=${VSversion}" />
+        <arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
+        <!-- apr and apr-util locations are implied via httpd -->
+        <arg value="--with-berkeley-db=${impBase}/lib" />
+        <arg value="--with-openssl=${impBase}/openssl-${opensslVersion}" />
+        <arg value="--with-zlib=${zlibDir}" />
+        <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
+        <arg value="--with-serf=${impBase}/serf" if="${wc.branch &gt; '1.7.'}" />
+        <arg value="--with-sasl=${intDir}" />
+        <arg value="--with-sqlite=${intDir}" />
+        <arg value="--enable-nls" if="${intl != 'none'}"/>
+        <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
+        <arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
+        <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
+        <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
+        <arg value="--with-static-apr" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
+        <arg value="--with-static-openssl" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
+      </exec>
+    </if>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
   </target>
 </project>

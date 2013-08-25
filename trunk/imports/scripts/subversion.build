@@ -215,7 +215,7 @@
     </OnceBlock>
   </target>
 
-  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,build-swig,prepare-neon,generate-svnfiles,build-httpd">
+  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,serf-build,build-swig,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
       <MSBuild>
@@ -240,7 +240,7 @@
       </MSBuild>
     </OnceBlock>
   </target>
-  <target name="copy-result" depends="build-svn,misc-copy,copy-licenses,gettext-translate,copy-serf">
+  <target name="copy-result" depends="build-svn,misc-copy,copy-licenses,gettext-translate,serf-copy">
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32">
         <include name="subversion/${Configuration}/**/*.lib" />
