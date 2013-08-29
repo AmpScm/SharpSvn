@@ -28,23 +28,24 @@
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/config.h" />
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/config.h" />
-      <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.in.h" property="configh">
+      <loadfile file="${gettextDir}/gettext-runtime/intl/libgnuintl.in.h" property="intlh">
         <filterchain>
           <replacestring from="@HAVE_POSIX_PRINTF@" to="1 /* SHARPSVN */" />
           <replacestring from="@HAVE_SNPRINTF@"     to="1 /* SHARPSVN */" />
           <replacestring from="@HAVE_ASPRINTF@"     to="0 /* SHARPSVN */" />
           <replacestring from="@HAVE_WPRINTF@"      to="0 /* SHARPSVN */" />
           <replacestring from="@HAVE_NEWLOCALE@"    to="0 /* SHARPSVN */" />
-          <replacestring from="#ifndef GNULIB_defined" to="#if 0 /* SHARPSVN: GNULIB_defined */" />
+          <replacestring from="#ifndef GNULIB_defined" to="#if 0 // SHARPSVN: GNULIB_defined" />
         </filterchain>
       </loadfile>
-      <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
       <echo file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" append="true">
+${intlh}
 #define nls_uint32 unsigned int
 #define LOCALEDIR "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\Locales"
 #define LOCALE_ALIAS_PATH "c:\\3CF00513-BA00-4F54-9D07-9B776DEA1353\\LocaleAliases"
 #undef SUBLANG_SINDHI_PAKISTAN
 #undef SUBLANG_SINDHI_AFGHANISTAN
+
 </echo>
 <echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
 #define uintmax_t unsigned __int64
@@ -146,7 +147,7 @@
     </OnceBlock>
     <copy tofile="${intDir}/include/libintl.h" file="${gettextDir}/gettext-runtime/intl/libgnuintl.h" />
     <copy todir="${intDir}/lib">
-      <fileset basedir="${gettextDir}/bin/win32/release">
+      <fileset basedir="${gettextDir}/bin/${platform}/release">
         <include name="*.lib" />
         <include name="*.exp" />
         <include name="*.dll" />
@@ -159,6 +160,7 @@
         <include name="*.pdb" />
       </fileset>
     </copy>
+    <copy tofile="${intDir}/lib/intl3_svn.lib" file="${intDir}/lib/intl.lib" />
   </target>
 
   <target name="gettext-translate" depends="build-gettext, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">

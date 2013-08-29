@@ -13,7 +13,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.8.1" overwrite="false" />
+  <property name="subversionVersion" value="1.8.3" overwrite="false" />
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1493703 - Add upgrade notification -->
@@ -23,8 +23,9 @@
   <!-- r1494287 - Fix svnadmin upgrade -->
   <!-- r1495850 - Fix cancel baton on conflict -->
   <!-- r1498564 - Fix a metadata only move problem -->
-  <property name="subversionMerges" value="1493272,1493703,1495104,1497551,1497641,1494287,1495850,1498564" overwrite="false" /> 
-  <!-- r1340318 - Avoid ancestor check in the status walker -->
+  <!-- r1498000 - Use transition based iprop handling -->
+  <!-- r1518184 - Allow repositories in drive roots -->
+  <property name="subversionMerges" value="1493272,1493703,1495104,1497551,1497641,1494287,1495850,1498564,1498000,1518184" overwrite="false" /> 
   <property name="subversionMergeBranches" value="branches/1.8.x-serf-1.3+-windows -c r1517123" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <!-- r960671 - Only deal with the mutex when XTHREAD is enabled. -->
