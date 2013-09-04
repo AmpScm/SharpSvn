@@ -198,6 +198,27 @@
     <ClCompile Include=".\PuttySrc\x11fwd.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PuttySrc\conf.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\config.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\dialog.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winucs.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winprint.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winctrls.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winhelp.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include=".\Resource.h">
