@@ -11,7 +11,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.7.11" overwrite="false" />
+  <property name="subversionVersion" value="1.7.13" overwrite="false" />
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1302450 - Upgrade svn_client_import to support filtering -->
   <!-- r1304407,1304439 - Fix svn cp - -parents SRC DST where DST is an unversioned directory below a WC (1.8) -->
@@ -25,7 +25,7 @@
   <property name="neonMerges" value="" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.1e" overwrite="false" />
-  <property name="neonVersion" value="0.29.6" overwrite="false" />
+  <property name="neonVersion" value="0.30.0" overwrite="false" />
 
   <property name="aprVersion" value="1.4.6" overwrite="false" />
   <property name="aprUtilVersion" value="1.5.2" overwrite="false" />
