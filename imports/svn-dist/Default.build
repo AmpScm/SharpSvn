@@ -21,7 +21,7 @@
   <include buildfile="../Default.build" />
   
   
-  <target name="build-svn-dist" depends="build">
+  <target name="build-svn-dist" depends="build, zip-symbols">
 	<delete>
 		<fileset basedir="dist-${platform}">
 			<include name="**" />
@@ -67,4 +67,14 @@
     file="${release}/ReleaseNotes.html"
     tofile="dist-${platform}/ReleaseNotes.html" />
   </target>  
+  <target name="zip-symbols">
+    <mkdir dir="dist-${platform}" />
+    <zip zipfile="dist-${platform}/Symbols-Subversion-${platform}-${subversionVersion}.zip" flatten="true" ziplevel="9">
+      <fileset>
+        <include name="${intDir}/lib/*.pdb" />
+        <include name="${intDir}/bin/*.pdb" />
+        <include name="${svnBase}/release/**/*.pdb" />
+      </fileset>
+    </zip>
+  </target>
 </project>
