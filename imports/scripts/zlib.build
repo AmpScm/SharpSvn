@@ -1,15 +1,16 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="zlibFilename" value="zlib-${zlibVersion}.tar.gz" />
-  <property name="zlibDir" value="${buildRoot}/${platform}/zlib-${zlibVersion}" />
+  <property name="zlibDir" value="${buildRoot}/${platform}/zlib" />
 
   <target name="prepare-zlib" depends="extract">
   </target>
   <target name="build-zlib" depends="prepare-zlib, extract">
     <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
       <NMake workingdir="${zlibDir}" makeFile="${zlibDir}/win32/Makefile.msc">
+        <arg line='zlib.lib LOC="/Zl"' />
+      <!-- ** DISABLED until the serf decompression bug is resolved **
         <arg line='zlib.lib AS="ml -safeseh" LOC="/Zl -DASMV -DASMINF" OBJA="inffas32.obj match686.obj"' if="${platform == 'win32'}" />
-        <arg line='zlib.lib AS=ml64 LOC="/Zl -DASMV -DASMINF -I${zlibDir}" OBJA="inffasx64.obj gvmat64.obj inffas8664.obj"' if="${platform == 'x64'}" />
+        <arg line='zlib.lib AS=ml64 LOC="/Zl -DASMV -DASMINF -I${zlibDir}" OBJA="inffasx64.obj gvmat64.obj inffas8664.obj"' if="${platform == 'x64'}" /-->        
       </NMake>
     </OnceBlock>
     <copy todir="${intDir}/include">

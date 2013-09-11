@@ -40,11 +40,6 @@
       unless="${file::exists(downloads + dbFilename)}" />
 
     <get
-      src="http://www.zlib.net/${zlibFilename}"
-      dest="${downloads + zlibFilename}"
-      unless="${file::exists(downloads + zlibFilename)}" />
-
-    <get
       src="http://launchpad.net/nunitv2/${nunitVersionMMR}/${nunitVersionMMR}/+download/${nunitFilename}"
       dest="${downloads + nunitFilename}"
       unless="${file::exists(downloads + nunitFilename)}" />
@@ -120,11 +115,6 @@
       src="${downloads + dbFilename}" compression="gzip"
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
-
-    <untar
-      src="${downloads + zlibFilename}" compression="gzip"
-      dest="build/${platform}"
-      unless="${directory::exists(zlibDir)}" />
 
     <unzip
       zipfile="${downloads + nunitFilename}"
@@ -220,6 +210,15 @@
         </Svn>
       </foreach>
     </OnceBlock>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(zlibDir)}">
+
+      <arg value="co" />
+      <arg value="${httpOrHttps}://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
+      <arg value="${zlibDir}" />
+    </Svn>
 
     <Svn
       verbose="true"

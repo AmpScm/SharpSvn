@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
   <property name="serfDir" value="build/${platform}/serf" />
+  <property name="serfDebug" value="false" overwrite="false" />
   <target name="serf-prepare" depends="checkout, generate-svnfiles">
     <foreach item="File" property="vcproj">
       <in>
@@ -96,6 +97,7 @@
       <arg value="APR=${intDir}" />
       <arg value="APU=${intDir}" />
       <arg value="SOURCE_LAYOUT=no" />
+      <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
       <arg value="APR_STATIC=yes" if="${static}" />
@@ -131,6 +133,7 @@
       <arg value="APR=${intDir}" />
       <arg value="APU=${intDir}" />
       <arg value="SOURCE_LAYOUT=no" />
+      <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
       <arg value="APR_STATIC=yes" if="${static}" />
@@ -152,6 +155,7 @@
       <arg value="APR=${intDir}" />
       <arg value="APU=${intDir}" />
       <arg value="SOURCE_LAYOUT=no" />
+      <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
       <arg value="APR_STATIC=yes" if="${static}" />
