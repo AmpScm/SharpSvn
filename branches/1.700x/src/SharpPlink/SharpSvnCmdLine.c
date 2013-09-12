@@ -9,10 +9,10 @@
 
 #pragma warning(pop)
 
-extern Config* sPlinkCurrentConfig = NULL;
+extern Conf* sPlinkCurrentConfig = NULL;
 
 
-void cmdline_run_saved(Config *cfg)
+void cmdline_run_saved(Conf *cfg)
 {
 	putty_cmdline_run_saved(cfg);
 
