@@ -3,12 +3,14 @@
 #include "windows.h"
 #include "WinCred.h"
 #include "Tlhelp32.h"
+#pragma comment(lib, "comctl32.lib")
 #pragma comment(lib, "credui.lib")
 
 #define verify_ssh_host_key putty_verify_ssh_host_key
 #define console_get_userpass_input putty_console_get_userpass_input
 #define cleanup_exit putty_cleanup_exit
 
+#include "PuttySrc/Windows/winstuff.h"
 #include "PuttySrc/Windows/wincons.c"
 #undef verify_ssh_host_key
 #undef console_get_userpass_input
@@ -19,7 +21,7 @@
 #define MIN(x, y) ((x < y) ? x : y)
 #endif
 
-extern Config* sPlinkCurrentConfig ;
+extern Conf* sPlinkCurrentConfig;
 static char userName[CREDUI_MAX_USERNAME_LENGTH+1] = "";
 static char password[CREDUI_MAX_PASSWORD_LENGTH+1] = "";
 static char sTarget[CREDUI_MAX_GENERIC_TARGET_LENGTH+1] = "";
@@ -126,12 +128,13 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	DWORD dwResult;
 	char captionBuffer[256];
 	char messageBuffer[256];
-	const char* host = sPlinkCurrentConfig ? sPlinkCurrentConfig->host : NULL;
+	const char* host = sPlinkCurrentConfig ? conf_get_str(sPlinkCurrentConfig, CONF_host) : NULL;
+	char* pLinkUsername = sPlinkCurrentConfig ? conf_get_str(sPlinkCurrentConfig, CONF_username) : NULL;
 
 	if(keptForNext && !p->prompts[0]->echo)
 	{
 		keptForNext = FALSE;
-		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->result_len, CREDUI_MAX_PASSWORD_LENGTH), password);
+		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->resultsize, CREDUI_MAX_PASSWORD_LENGTH), password);
 
 		memset(password, 0, sizeof(password));
 		nextIsPwError = TRUE;
@@ -145,10 +148,10 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	{
 		strncat(sTarget, "ssh://", CREDUI_MAX_GENERIC_TARGET_LENGTH);
 
-		if (sPlinkCurrentConfig && sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
+		if (pLinkUsername && pLinkUsername[0])
 		{
 			sHasConfiguredUser = TRUE;
-			strncat(sTarget, sPlinkCurrentConfig->username, CREDUI_MAX_GENERIC_TARGET_LENGTH);
+			strncat(sTarget, pLinkUsername, CREDUI_MAX_GENERIC_TARGET_LENGTH);
 			strncat(sTarget, "@", CREDUI_MAX_GENERIC_TARGET_LENGTH);
 		}
 		strncat(sTarget, host, CREDUI_MAX_GENERIC_TARGET_LENGTH);
@@ -156,8 +159,8 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 
 	sPlinkShouldConfirm = FALSE;	
 
-	if(!userName[0] && sPlinkCurrentConfig && sPlinkCurrentConfig->username && sPlinkCurrentConfig->username[0])
-		strcpy_s(userName, sizeof(userName), sPlinkCurrentConfig->username);
+	if(!userName[0] && pLinkUsername && pLinkUsername[0])
+		strcpy_s(userName, sizeof(userName), pLinkUsername);
 
 	memset(password, 0, sizeof(password));
 	memset(&info, 0, sizeof(info));
@@ -193,12 +196,12 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 
 	if(p->prompts[0]->echo)
 	{
-		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->result_len, CREDUI_MAX_USERNAME_LENGTH), userName);
+		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->resultsize, CREDUI_MAX_USERNAME_LENGTH), userName);
 		keptForNext = TRUE;
 	}
 	else
 	{
-		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->result_len, CREDUI_MAX_PASSWORD_LENGTH), password);
+		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->resultsize, CREDUI_MAX_PASSWORD_LENGTH), password);
 		memset(password, 0, sizeof(password));
 		nextIsPwError = TRUE;
 	}
@@ -298,4 +301,81 @@ void cleanup_exit(int code)
 		CredUIConfirmCredentials(sTarget, sPlinkShouldConfirm);
 	}
 	putty_cleanup_exit(code);
+}
+
+/*
+ * GetOpenFileName/GetSaveFileName tend to muck around with the process'
+ * working directory on at least some versions of Windows.
+ * Here's a wrapper that gives more control over this, and hides a little
+ * bit of other grottiness.
+ */
+
+struct filereq_tag {
+    TCHAR cwd[MAX_PATH];
+};
+
+/*
+ * `of' is expected to be initialised with most interesting fields, but
+ * this function does some administrivia. (assume `of' was memset to 0)
+ * save==1 -> GetSaveFileName; save==0 -> GetOpenFileName
+ * `state' is optional.
+ */
+BOOL request_file(filereq *state, OPENFILENAME *of, int preserve, int save)
+{
+    TCHAR cwd[MAX_PATH]; /* process CWD */
+    BOOL ret;
+
+    /* Get process CWD */
+    if (preserve) {
+	DWORD r = GetCurrentDirectory(lenof(cwd), cwd);
+	if (r == 0 || r >= lenof(cwd))
+	    /* Didn't work, oh well. Stop trying to be clever. */
+	    preserve = 0;
+    }
+
+    /* Open the file requester, maybe setting lpstrInitialDir */
+    {
+#ifdef OPENFILENAME_SIZE_VERSION_400
+	of->lStructSize = OPENFILENAME_SIZE_VERSION_400;
+#else
+	of->lStructSize = sizeof(*of);
+#endif
+	of->lpstrInitialDir = (state && state->cwd[0]) ? state->cwd : NULL;
+	/* Actually put up the requester. */
+	ret = save ? GetSaveFileName(of) : GetOpenFileName(of);
+    }
+
+    /* Get CWD left by requester */
+    if (state) {
+	DWORD r = GetCurrentDirectory(lenof(state->cwd), state->cwd);
+	if (r == 0 || r >= lenof(state->cwd))
+	    /* Didn't work, oh well. */
+	    state->cwd[0] = '\0';
+    }
+    
+    /* Restore process CWD */
+    if (preserve)
+	/* If it fails, there's not much we can do. */
+	(void) SetCurrentDirectory(cwd);
+
+    return ret;
+}
+
+/*
+ * Handy wrapper around GetDlgItemText which doesn't make you invent
+ * an arbitrary length limit on the output string. Returned string is
+ * dynamically allocated; caller must free.
+ */
+char *GetDlgItemText_alloc(HWND hwnd, int id)
+{
+    char *ret = NULL;
+    int size = 0;
+
+    do {
+	size = size * 4 / 3 + 512;
+	ret = sresize(ret, size, char);
+	GetDlgItemText(hwnd, id, ret, size);
+    } while (!memchr(ret, '\0', size-1));
+
+    return ret;
 }
