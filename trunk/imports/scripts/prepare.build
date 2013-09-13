@@ -30,11 +30,6 @@
     <mkdir dir="${downloads}" />
 
     <get
-      src="http://www.openssl.org/source/${opensslFilename}"
-      dest="${downloads + opensslFilename}"
-      unless="${file::exists(downloads + opensslFilename)}" />
-
-    <get
       src="http://download.oracle.com/berkeley-db/${dbFilename}"
       dest="${downloads + dbFilename}"
       unless="${file::exists(downloads + dbFilename)}" />
@@ -218,6 +213,15 @@
       <arg value="co" />
       <arg value="${httpOrHttps}://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
       <arg value="${zlibDir}" />
+    </Svn>
+    
+    <Svn
+      verbose="true"
+      unless="${directory::exists(opensslDir)}">
+      
+      <arg value="co" />
+      <arg value="${httpOrHttps}://github.com/openssl/openssl.git/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="${opensslDir}" />
     </Svn>
 
     <Svn
