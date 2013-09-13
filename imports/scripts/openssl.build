@@ -1,7 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
-  <property name="opensslFilename" value="openssl-${opensslVersion}.tar.gz" />
-  <property name="opensslDir" value="build/${platform}/openssl-${opensslVersion}" />
+  <property name="opensslDir" value="build/${platform}/openssl" />
 
   <target name="prepare-openssl" depends="extract, build-zlib">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
