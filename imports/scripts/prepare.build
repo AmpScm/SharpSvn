@@ -102,11 +102,6 @@
     <mkdir dir="build" />
 
     <untar
-      src="${downloads + opensslFilename}" compression="gzip"
-      dest="build/${platform}"
-      unless="${directory::exists('build/' + platform + '/openssl-' + opensslVersion)}" />
-
-    <untar
       src="${downloads + dbFilename}" compression="gzip"
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
