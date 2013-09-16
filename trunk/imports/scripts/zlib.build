@@ -2,9 +2,7 @@
 <project basedir=".." default="build">
   <property name="zlibDir" value="${buildRoot}/${platform}/zlib" />
 
-  <target name="prepare-zlib" depends="extract">
-  </target>
-  <target name="build-zlib" depends="prepare-zlib, extract">
+  <target name="build-zlib" depends="checkout">
     <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
       <NMake workingdir="${zlibDir}" makeFile="${zlibDir}/win32/Makefile.msc">
         <arg line='zlib.lib LOC="/Zl"' />
