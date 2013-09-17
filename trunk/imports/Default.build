@@ -53,7 +53,7 @@
 
   <property name="httpdVersion" value="2.2.23" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
-  <property name="sqliteVersion" value="3.7.17" overwrite="false" />
+  <property name="sqliteVersion" value="3.8.0.1" overwrite="false" />
 
   <!-- Building only -->
   <property name="cmakeVersion" value="2.8.11" overwrite="false" />
