@@ -88,7 +88,7 @@ static int original_isNT(void){" />
         <include name="sqlite3.lib" />
       </fileset>
     </copy>
-    <copy todir="${intDir}\inc">
+    <copy todir="${intDir}\include">
       <fileset basedir="${sqliteDir}">
         <include name="*.h" />
       </fileset>

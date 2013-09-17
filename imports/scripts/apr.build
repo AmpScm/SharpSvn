@@ -460,7 +460,7 @@ APR_BEGIN_DECLS
         <include name="arch/win32/*.h" />
       </fileset>
     </copy>
-    <copy todir="${aprIncludeDir}">
+    <copy todir="${intDir}/include">
       <fileset basedir="${aprUtilDir}/xml/expat/lib">
         <include name="expat.h" />
       </fileset>
