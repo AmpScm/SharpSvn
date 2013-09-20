@@ -98,5 +98,11 @@ static int original_isNT(void){" />
         <include name="*.h" />
       </fileset>
     </copy>
+    <!-- For Subversion 1.7 / 1.8 -->
+    <copy todir="${intDir}\inc">
+      <fileset basedir="${sqliteDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
