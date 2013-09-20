@@ -130,97 +130,108 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	char messageBuffer[256];
 	const char* host = sPlinkCurrentConfig ? conf_get_str(sPlinkCurrentConfig, CONF_host) : NULL;
 	char* pLinkUsername = sPlinkCurrentConfig ? conf_get_str(sPlinkCurrentConfig, CONF_username) : NULL;
+	int iPrompt;
 
-	if(keptForNext && !p->prompts[0]->echo)
+	// Produce sane default
+	for (iPrompt = 0; iPrompt < (int)p->n_prompts; iPrompt++)
+        prompt_set_result(p->prompts[iPrompt], "");
+
+	if (p->n_prompts == 0)
+		return 1; // Success
+
+	for (iPrompt = 0; iPrompt < p->n_prompts; iPrompt++)
 	{
-		keptForNext = FALSE;
-		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->resultsize, CREDUI_MAX_PASSWORD_LENGTH), password);
+		prompt_t *prompt = p->prompts[iPrompt];
 
-		memset(password, 0, sizeof(password));
-		nextIsPwError = TRUE;
-		return 1;
-	}
-
-	if(!host)
-		host = "localhost";
-
-	if (!sTarget[0])
-	{
-		strncat(sTarget, "ssh://", CREDUI_MAX_GENERIC_TARGET_LENGTH);
-
-		if (pLinkUsername && pLinkUsername[0])
+		if(keptForNext && !prompt->echo)
 		{
-			sHasConfiguredUser = TRUE;
-			strncat(sTarget, pLinkUsername, CREDUI_MAX_GENERIC_TARGET_LENGTH);
-			strncat(sTarget, "@", CREDUI_MAX_GENERIC_TARGET_LENGTH);
-		}
-		strncat(sTarget, host, CREDUI_MAX_GENERIC_TARGET_LENGTH);
-	}
+			keptForNext = FALSE;
+			prompt_set_result(prompt, password);
 
-	sPlinkShouldConfirm = FALSE;	
-
-	if(!userName[0] && pLinkUsername && pLinkUsername[0])
-		strcpy_s(userName, sizeof(userName), pLinkUsername);
-
-	memset(password, 0, sizeof(password));
-	memset(&info, 0, sizeof(info));
-	sprintf_s(captionBuffer, sizeof(captionBuffer), "Connect to %s", host);
-	sprintf_s(messageBuffer, sizeof(messageBuffer), "Connecting to %s with ssh:", host);
-
-	info.cbSize = sizeof(info);
-	info.hwndParent = GetOwnerHwnd();
-	info.pszCaptionText = captionBuffer;
-	info.pszMessageText = messageBuffer;
-
-	bAskUserName = p->prompts[0]->echo && !sHasConfiguredUser;
-
-	if (nextIsPwError)
-	{
-		// Delete invalid settings from store to allow changing
-		// password on next request
-		CredDelete(sTarget, CRED_TYPE_GENERIC, 0);
-	}
-
-	dwResult = CredUIPromptForCredentials(
-		&info, 
-		sTarget, 
-		NULL, 
-		nextIsPwError ? ERROR_LOGON_FAILURE : 0, 
-		userName, CREDUI_MAX_USERNAME_LENGTH, 
-		password, CREDUI_MAX_PASSWORD_LENGTH,
-		&bSave,
-		CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
-		| (nextIsPwError ? CREDUI_FLAGS_ALWAYS_SHOW_UI : 0)
-		| (bAskUserName ? 0 : CREDUI_FLAGS_KEEP_USERNAME)
-		| (nextIsPwError ? CREDUI_FLAGS_INCORRECT_PASSWORD : 0));
-
-	if(p->prompts[0]->echo)
-	{
-		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->resultsize, CREDUI_MAX_USERNAME_LENGTH), userName);
-		keptForNext = TRUE;
-	}
-	else
-	{
-		strcpy_s(p->prompts[0]->result, MIN(p->prompts[0]->resultsize, CREDUI_MAX_PASSWORD_LENGTH), password);
-		memset(password, 0, sizeof(password));
-		nextIsPwError = TRUE;
-	}
-
-	if(!dwResult)
-	{
-		sPlinkShouldConfirm = TRUE;
-		return 1;
-	}
-	else
-	{
-		sPlinkShouldConfirm = FALSE;
-		if (dwResult == ERROR_CANCELLED)
-		{
-			dwResult = CredUIConfirmCredentials(sTarget, FALSE);
+			memset(password, 0, sizeof(password));
+			nextIsPwError = TRUE;
+			continue;
 		}
 
-		return 0;
+		if(!host)
+			host = "localhost";
+
+		if (!sTarget[0])
+		{
+			strncat(sTarget, "ssh://", CREDUI_MAX_GENERIC_TARGET_LENGTH);
+
+			if (pLinkUsername && pLinkUsername[0])
+			{
+				sHasConfiguredUser = TRUE;
+				strncat(sTarget, pLinkUsername, CREDUI_MAX_GENERIC_TARGET_LENGTH);
+				strncat(sTarget, "@", CREDUI_MAX_GENERIC_TARGET_LENGTH);
+			}
+			strncat(sTarget, host, CREDUI_MAX_GENERIC_TARGET_LENGTH);
+		}
+
+		sPlinkShouldConfirm = FALSE;	
+
+		if(!userName[0] && pLinkUsername && pLinkUsername[0])
+			strcpy_s(userName, sizeof(userName), pLinkUsername);
+
+		memset(password, 0, sizeof(password));
+		memset(&info, 0, sizeof(info));
+		sprintf_s(captionBuffer, sizeof(captionBuffer), "Connect to %s", host);
+		sprintf_s(messageBuffer, sizeof(messageBuffer), "Connecting to %s with ssh:", host);
+
+		info.cbSize = sizeof(info);
+		info.hwndParent = GetOwnerHwnd();
+		info.pszCaptionText = captionBuffer;
+		info.pszMessageText = messageBuffer;
+
+		bAskUserName = prompt->echo && !sHasConfiguredUser;
+
+		if (nextIsPwError)
+		{
+			// Delete invalid settings from store to allow changing
+			// password on next request
+			CredDelete(sTarget, CRED_TYPE_GENERIC, 0);
+		}
+
+		dwResult = CredUIPromptForCredentials(
+			&info, 
+			sTarget, 
+			NULL, 
+			nextIsPwError ? ERROR_LOGON_FAILURE : 0, 
+			userName, CREDUI_MAX_USERNAME_LENGTH, 
+			password, CREDUI_MAX_PASSWORD_LENGTH,
+			&bSave,
+			CREDUI_FLAGS_EXPECT_CONFIRMATION | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
+			| (nextIsPwError ? CREDUI_FLAGS_ALWAYS_SHOW_UI : 0)
+			| (bAskUserName ? 0 : CREDUI_FLAGS_KEEP_USERNAME)
+			| (nextIsPwError ? CREDUI_FLAGS_INCORRECT_PASSWORD : 0));
+
+		if(prompt->echo)
+		{
+			prompt_set_result(prompt, userName);
+			keptForNext = TRUE;
+		}
+		else
+		{
+			prompt_set_result(prompt, password);
+			memset(password, 0, sizeof(password));
+			nextIsPwError = TRUE;
+		}
+
+		if (dwResult)
+		{
+			sPlinkShouldConfirm = FALSE;
+			if (dwResult == ERROR_CANCELLED)
+			{
+				dwResult = CredUIConfirmCredentials(sTarget, FALSE);
+			}
+
+			return 0; // Failure
+		}
+		else
+			sPlinkShouldConfirm = TRUE;
 	}
+	return 1; // Success
 }
 
 int verify_ssh_host_key(void *frontend, char *host, int port, char *keytype,
