@@ -3,7 +3,7 @@
   <?if var.SvnSuffix = 0 ?>
   <?define SvnSuffixVal = "" ?>
   <?else?>
-  <?define SvnSuffixVal=".$(var.SvnSuffix)" ?>
+  <?define SvnSuffixVal="-$(var.SvnSuffix)" ?>
   <?endif?>
   <Product Id="*" Name="Slik Subversion $(var.SvnVersion)$(var.SvnSuffixVal) ($(var.Platform))"
            Language="1033" Version="$(var.SvnVersion).$(var.SvnSuffix)"
