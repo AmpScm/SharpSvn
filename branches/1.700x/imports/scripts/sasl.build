@@ -111,7 +111,7 @@
         <arg value="DB_LIBPATH=${path::get-full-path('release\lib-x64')}" if="${platform == 'x64'}"/>
         <arg value="DB_INCLUDE=${path::get-full-path('release\include')}" />
         <!-- OpenSSL -->
-        <arg value="OPENSSL_INCLUDE=${path::get-full-path(opensslDir + '\openssl-' + opensslVersion + '\inc32')}" />
+        <arg value="OPENSSL_INCLUDE=${path::get-full-path(opensslDir + '\inc32')}" />
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(opensslDir + '\out32')}" if="${static=='true'}" />
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(opensslDir + '\out32dll')}" if="${static!='true'}" />
         <arg value="NTLM=1" />
