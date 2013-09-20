@@ -140,7 +140,7 @@
         <arg value="--with-apr=../lib" />
         <arg value="--with-apr-util=../lib" />
         <arg value="--with-berkeley-db=../lib" />
-        <arg value="--with-openssl=../openssl-${opensslVersion}" />
+        <arg value="--with-openssl=../openssl" />
         <arg value="--with-zlib=${zlibDir}" />
         <arg value="--with-neon=../neon" if="${subversionVersion &lt; '1.8.'}" />
         <arg value="--with-serf=../serf" />
