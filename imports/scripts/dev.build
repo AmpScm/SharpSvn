@@ -66,6 +66,12 @@
         <arg value="--with-static-apr" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
         <arg value="--with-static-openssl" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
       </exec>
+      <!-- Pre 1.9 the test suite expects this dll here -->
+      <copy todir="${intDir}/lib">
+        <fileset include="${intDir}/bin">
+          <include name="libsasl.dll" />
+        </fileset>
+      </copy>
     </if>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
   </target>
