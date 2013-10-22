@@ -52,7 +52,7 @@
         <arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
         <!-- apr and apr-util locations are implied via httpd -->
         <arg value="--with-berkeley-db=${impBase}/lib" />
-        <arg value="--with-openssl=${impBase}/openssl-${opensslVersion}" />
+        <arg value="--with-openssl=${impBase}/openssl" />
         <arg value="--with-zlib=${zlibDir}" />
         <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
         <arg value="--with-serf=${impBase}/serf" if="${wc.branch &gt; '1.7.'}" />
