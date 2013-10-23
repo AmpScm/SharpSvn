@@ -68,7 +68,7 @@
       </exec>
       <!-- Pre 1.9 the test suite expects this dll here -->
       <copy todir="${intDir}/lib">
-        <fileset include="${intDir}/bin">
+        <fileset basedir="${intDir}/bin">
           <include name="libsasl.dll" />
         </fileset>
       </copy>
