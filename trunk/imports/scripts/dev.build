@@ -73,6 +73,7 @@
         </fileset>
       </copy>
       <copy tofile="${intDir}/lib/${libDb}d.lib" file="${intDir}/lib/${libDb}.lib" />
+      <copy tofile="${intDir}/bin/${libDb}d.dll" file="${intDir}/bin/${libDb}.dll" />
     </if>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
   </target>
