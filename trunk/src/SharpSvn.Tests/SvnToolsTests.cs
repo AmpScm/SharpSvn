@@ -113,5 +113,12 @@ namespace SharpSvn.Tests
                 GC.KeepAlive(SvnTools.GetNormalizedFullPath("C:\\Users\\Bert\\AppData\\Local\\Microsoft\\VisualStudio\\10.0\\Extensions\\Microsoft\\Productivity Power Tools\\10.0.20626.18\\package\\services\\digital-signature\\xml-signature\\yp5utn4wx4uezottryfbg9mac.psdsxs"));
             }
         }
+
+        [Test]
+        public void TestGetUriFromWc()
+        {
+            Assert.That(SvnTools.GetUriFromWorkingCopy("C:\\"), Is.Null);
+            Assert.That(SvnTools.GetUriFromWorkingCopy("B:\\"), Is.Null);
+        }
     }
 }
