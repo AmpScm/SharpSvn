@@ -293,7 +293,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
     else if (args->Break)
         return nullptr;
 
-    if (args->AcceptedFailures)
+    if (args->AcceptedFailures != SvnCertificateTrustFailures::None)
     {
         *cred = (svn_auth_cred_ssl_server_trust_t*)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t));
 
