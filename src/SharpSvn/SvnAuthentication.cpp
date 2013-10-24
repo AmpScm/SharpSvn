@@ -293,11 +293,13 @@ svn_error_t* AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func(svn_auth_
     else if (args->Break)
         return nullptr;
 
+    if (args->AcceptedFailures)
+    {
+        *cred = (svn_auth_cred_ssl_server_trust_t*)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t));
 
-    *cred = (svn_auth_cred_ssl_server_trust_t*)tmpPool.AllocCleared(sizeof(svn_auth_cred_ssl_server_trust_t));
-
-    (*cred)->accepted_failures = (apr_uint32_t)args->AcceptedFailures;
-    (*cred)->may_save = args->Save;
+        (*cred)->accepted_failures = (apr_uint32_t)args->AcceptedFailures;
+        (*cred)->may_save = args->Save;
+    }
 
     return nullptr;
 }
