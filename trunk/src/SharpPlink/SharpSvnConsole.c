@@ -130,7 +130,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
 	char messageBuffer[256];
 	const char* host = sPlinkCurrentConfig ? conf_get_str(sPlinkCurrentConfig, CONF_host) : NULL;
 	char* pLinkUsername = sPlinkCurrentConfig ? conf_get_str(sPlinkCurrentConfig, CONF_username) : NULL;
-	int iPrompt;
+	size_t iPrompt;
 
 	// Produce sane default
 	for (iPrompt = 0; iPrompt < (int)p->n_prompts; iPrompt++)
