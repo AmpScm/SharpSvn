@@ -114,6 +114,60 @@ namespace SharpSvn.Tests.Commands
 			}
 		}
 
+        [Test]
+        public void TestASFCertSafe()
+        {
+            using(SvnClient client = new SvnClient())
+            {
+                client.Authentication.Clear();
+
+                bool arrived = false;
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
+                //ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
+                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        arrived = true;
+                    }), Is.False);
+
+                Assert.That(arrived, Is.False);
+            }
+
+            using (SvnClient client = new SvnClient())
+            {
+                client.Authentication.Clear();
+                client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
+
+                bool arrived = false;
+                SvnInfoArgs ia = new SvnInfoArgs();
+                //ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
+                ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
+                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        arrived = true;
+                    }), Is.False);
+
+                Assert.That(arrived, Is.False);
+            }
+
+            using (SvnClient client = new SvnClient())
+            {
+                client.Authentication.Clear();
+                client.Authentication.SslAuthorityTrustHandlers += SvnAuthentication.SubversionWindowsSslAuthorityTrustHandler;
+
+                bool arrived = false;
+                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"),
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        arrived = true;
+                    }));
+
+                Assert.That(arrived);
+            }
+        }
+
 		void Authenticator_UserNamePasswordHandlers(object sender, SharpSvn.Security.SvnUserNamePasswordEventArgs e)
 		{
 			GC.KeepAlive(e.InitialUserName);
