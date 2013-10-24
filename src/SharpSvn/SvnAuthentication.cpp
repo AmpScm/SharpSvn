@@ -90,6 +90,7 @@ void SvnAuthentication::AddSubversionFileHandlers()
     UserNamePasswordHandlers				+= SubversionFileUserNamePasswordHandler;
     SslServerTrustHandlers					+= SubversionWindowsSslServerTrustHandler;
     SslServerTrustHandlers					+= SubversionFileSslServerTrustHandler;
+    SslAuthorityTrustHandlers				+= SubversionWindowsSslAuthorityTrustHandler;
     SslClientCertificateHandlers			+= SubversionFileSslClientCertificateHandler;
     SslClientCertificatePasswordHandlers	+= SubversionFileSslClientCertificatePasswordHandler;
     SslClientCertificatePasswordHandlers	+= SubversionWindowsSslClientCertificatePasswordHandler;
@@ -324,6 +325,30 @@ svn_auth_provider_object_t *SvnSslServerTrustEventArgs::Wrapper::GetProviderPtr(
 
     return provider;
 }
+#pragma endregion
+
+////////////////////////////////////////////////////////////////
+#pragma region // SsslAuthority handler wrapper
+svn_auth_provider_object_t *SvnSslAuthorityTrustEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
+{
+    if (!pool)
+        throw gcnew ArgumentNullException("pool");
+
+    svn_auth_provider_object_t *provider = nullptr;
+
+    if (_handler->Equals(SvnAuthentication::SubversionWindowsSslAuthorityTrustHandler))
+    {
+        SVN_THROW(svn_auth_get_platform_specific_provider(&provider,
+                                                          "windows",
+                                                          "ssl_server_authority",
+                                                          pool->Handle));
+    }
+    else
+        throw gcnew InvalidOperationException();
+
+    return provider;
+}
+
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////
@@ -645,6 +670,13 @@ void SvnAuthentication::ImpSubversionWindowsSslClientCertificatePasswordHandler(
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
+{
+    UNUSED_ALWAYS(sender);
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+}
+
+void SvnAuthentication::ImpSubversionWindowsSslAuthorityTrustHandler(Object ^sender, SvnSslAuthorityTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
     UNUSED_ALWAYS(e);

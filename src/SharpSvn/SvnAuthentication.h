@@ -392,6 +392,139 @@ namespace SharpSvn {
             MaskAllFailures				=	CertificateNotValidYet | CertificateExpired | CommonNameMismatch | UnknownCertificateAuthority | UnknownSslProviderFailure
         };
 
+        public ref class SvnSslAuthorityTrustEventArgs : public SvnAuthenticationEventArgs
+        {
+#if 0
+            initonly SvnCertificateTrustFailures _failures;
+            initonly String^ _certCommonName;
+            initonly String^ _certFingerprint;
+            initonly String^ _certValidFrom;
+            initonly String^ _certValidUntil;
+            initonly String^ _certIssuer;
+            initonly String^ _certValue;
+            SvnCertificateTrustFailures _acceptedFailures;
+#endif
+
+        private:
+            SvnSslAuthorityTrustEventArgs(String^ realm, bool maySave)
+                : SvnAuthenticationEventArgs(realm, maySave)
+            {}
+#if 0
+        public:
+            SvnSslAuthorityTrustEventArgs (SvnCertificateTrustFailures failures, String^ certificateCommonName, String^ certificateFingerprint, String^ certificateValidFrom,
+                String^ certificateValidUntil, String^ certificateIssuer, String^ certificateValue, String^ realm, bool maySave)
+                : SvnAuthenticationEventArgs(realm, maySave)
+            {
+                if (!certificateCommonName)
+                    throw gcnew ArgumentNullException("certificateCommonName");
+                else if (!certificateFingerprint)
+                    throw gcnew ArgumentNullException("certificateFingerprint");
+                else if (!certificateValidFrom)
+                    throw gcnew ArgumentNullException("certificateValidFrom");
+                else if (!certificateValidUntil)
+                    throw gcnew ArgumentNullException("certificateValidUntil");
+                else if (!certificateIssuer)
+                    throw gcnew ArgumentNullException("certificateIssuer");
+                else if (!certificateValue)
+                    throw gcnew ArgumentNullException("certificateValue");
+
+                _failures			= failures;
+                _certCommonName		= certificateCommonName;
+                _certFingerprint	= certificateFingerprint;
+                _certValidFrom		= certificateValidFrom;
+                _certValidUntil		= certificateValidUntil;
+                _certIssuer			= certificateIssuer;
+                _certValue			= certificateValue;
+            }
+
+        public:
+            property SvnCertificateTrustFailures Failures
+            {
+                SvnCertificateTrustFailures get()
+                {
+                    return _failures;
+                }
+            }
+
+            property SvnCertificateTrustFailures AcceptedFailures
+            {
+                SvnCertificateTrustFailures get()
+                {
+                    return _acceptedFailures;
+                }
+
+                void set(SvnCertificateTrustFailures value)
+                {
+                    _acceptedFailures = (SvnCertificateTrustFailures)(value & SvnCertificateTrustFailures::MaskAllFailures);
+                }
+            }
+
+            /// <summary>Common name of the certificate</summary>
+            property String^ CommonName
+            {
+                String^ get()
+                {
+                    return _certCommonName;
+                }
+            }
+
+            /// <summary>Fingerprint name of the certificate</summary>
+            property String^ Fingerprint
+            {
+                String^ get()
+                {
+                    return _certFingerprint;
+                }
+            }
+
+            /// <summary>Text valid-from value of the certificate</summary>
+            property String^ ValidFrom
+            {
+                String^ get()
+                {
+                    return _certValidFrom;
+                }
+            }
+
+            /// <summary>Text valid-until value of the certificate</summary>
+            property String^ ValidUntil
+            {
+                String^ get()
+                {
+                    return _certValidUntil;
+                }
+            }
+
+            /// <summary>Issuer value of the certificate</summary>
+            property String^ Issuer
+            {
+                String^ get()
+                {
+                    return _certIssuer;
+                }
+            }
+
+            /// <summary>Text version of the certificate</summary>
+            property String^ CertificateValue
+            {
+                String^ get()
+                {
+                    return _certValue;
+                }
+            }
+#endif
+        internal:
+            ref class Wrapper sealed : public SvnAuthWrapper<SvnSslAuthorityTrustEventArgs^>
+            {
+            public:
+                Wrapper(EventHandler<SvnSslAuthorityTrustEventArgs^>^ handler, SvnAuthentication^ authentication)
+                    : SvnAuthWrapper<SvnSslAuthorityTrustEventArgs^>(handler, authentication)
+                {
+                }
+
+                virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
+            };
+        };
 
         public ref class SvnSslServerTrustEventArgs : public SvnAuthenticationEventArgs
         {
@@ -826,6 +959,43 @@ namespace SharpSvn {
                 }
             }
 
+            event EventHandler<SvnSslAuthorityTrustEventArgs^>^ SslAuthorityTrustHandlers
+            {
+                void add(EventHandler<SvnSslAuthorityTrustEventArgs^>^ e)
+                {
+                    if (_readOnly)
+                        throw gcnew InvalidOperationException();
+                    else if (!e)
+                        return;
+
+                    ISvnAuthWrapper^ handler = gcnew SvnSslAuthorityTrustEventArgs::Wrapper(e, this);
+
+                    if (!_wrappers->ContainsKey(e))
+                    {
+                        _cookie++;
+                        _wrappers->Add(e, handler);
+                        _handlers->Add(handler);
+                    }
+                }
+
+                void remove(EventHandler<SvnSslAuthorityTrustEventArgs^>^ e)
+                {
+                    if (_readOnly)
+                        throw gcnew InvalidOperationException();
+                    else if (!e)
+                        return;
+
+                    ISvnAuthWrapper^ wrapper;
+
+                    if (_wrappers->TryGetValue(e, wrapper))
+                    {
+                        _cookie++;
+                        _wrappers->Remove(e);
+                        _handlers->Remove(wrapper);
+                    }
+                }
+            }
+
             event EventHandler<SvnSslClientCertificateEventArgs^>^ SslClientCertificateHandlers
             {
                 void add(EventHandler<SvnSslClientCertificateEventArgs^>^ e)
@@ -978,6 +1148,7 @@ namespace SharpSvn {
             static void ImpSubversionWindowsFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e);
             static void ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
             static void ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
+            static void ImpSubversionWindowsSslAuthorityTrustHandler(Object ^sender, SvnSslAuthorityTrustEventArgs^ e);
             static void ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
             static void ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
             static void ImpSubversionWindowsSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
@@ -994,6 +1165,8 @@ namespace SharpSvn {
                 = gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionFileSslServerTrustHandler);
             static initonly EventHandler<SvnSslServerTrustEventArgs^>^					_subversionWindowsSslServerTrustHandler
                 = gcnew EventHandler<SvnSslServerTrustEventArgs^>(ImpSubversionWindowsSslServerTrustHandler);
+            static initonly EventHandler<SvnSslAuthorityTrustEventArgs^>^				_subversionWindowsSslAuthorityTrustHandler
+                = gcnew EventHandler<SvnSslAuthorityTrustEventArgs^>(ImpSubversionWindowsSslAuthorityTrustHandler);
             static initonly EventHandler<SvnSslClientCertificateEventArgs^>^			_subversionFileSslClientCertificateHandler
                 = gcnew EventHandler<SvnSslClientCertificateEventArgs^>(ImpSubversionFileSslClientCertificateHandler);
             static initonly EventHandler<SvnSslClientCertificatePasswordEventArgs^>^	_subversionFileSslClientCertificatePasswordHandler
@@ -1050,6 +1223,12 @@ namespace SharpSvn {
             static property EventHandler<SvnSslServerTrustEventArgs^>^				SubversionWindowsSslServerTrustHandler
             {
                 EventHandler<SvnSslServerTrustEventArgs^>^ get() { return _subversionWindowsSslServerTrustHandler; }
+            }
+
+            /// <summary>Subversion CryptoApi Ssl Trust handler</summary>
+            static property EventHandler<SvnSslAuthorityTrustEventArgs^>^				SubversionWindowsSslAuthorityTrustHandler
+            {
+                EventHandler<SvnSslAuthorityTrustEventArgs^>^ get() { return _subversionWindowsSslAuthorityTrustHandler; }
             }
 
         private:
