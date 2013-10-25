@@ -21,7 +21,7 @@
   <include buildfile="../Default.build" />
   
   
-<target name="build-svn-dist" depends="build, zip-symbols">
+<target name="build-svn-dist" depends="build">
 	<delete>
 	
 		<fileset basedir="dist-${platform}">
