@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?if var.SvnSuffix = 0 ?>
+  <?if $(var.SvnSuffix) = 0 ?>
   <?define SvnSuffixVal = "" ?>
   <?else?>
   <?define SvnSuffixVal="-$(var.SvnSuffix)" ?>
