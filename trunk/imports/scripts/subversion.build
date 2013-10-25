@@ -250,11 +250,11 @@
         <include name="subversion/${Configuration}/**/*.pdb" />
         <!-- Don't copy pdb's for executables -->
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
-        <include name="neon/**/*.lib" />
-        <include name="neon/**/*.pdb" />
+        <include name="neon/**/*.lib" if="${buildNeon}" />
+        <include name="neon/**/*.pdb" if="${buildNeon}" />
 
         <!-- Don't copy the GPL as a *.lib file -->
-        <exclude name="neon/src/COPYING.LIB" />
+        <exclude name="neon/src/COPYING.LIB" if="${buildNeon}" />
       </fileset>
     </copy>
     <copy todir="${release}/lib-x64" flatten="true">
@@ -263,11 +263,11 @@
         <include name="subversion/${Configuration}/**/*.pdb" />
         <!-- Don't copy pdb's for executables -->
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
-        <include name="neon/**/*.lib" />
-        <include name="neon/**/*.pdb" />
+        <include name="neon/**/*.lib" if="${buildNeon}" />
+        <include name="neon/**/*.pdb" if="${buildNeon}" />
 
         <!-- Don't copy the GPL as a *.lib file -->
-        <exclude name="neon/src/COPYING.LIB" />
+        <exclude name="neon/src/COPYING.LIB" if="${buildNeon}" />
       </fileset>
     </copy>
     <if test="${platform!='win32'}">
@@ -303,7 +303,7 @@
         <include name="libsvn_subr/config_impl.h" />
       </fileset>
     </copy>
-    <copy todir="${release}/include/neon">
+    <copy todir="${release}/include/neon" if="${buildNeon}">
       <fileset basedir="${platformRoot}\neon\src">
         <include name="**/*.h" />
       </fileset>
