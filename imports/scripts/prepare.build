@@ -228,7 +228,7 @@
       <arg value="build/${platform}/neon" />
     </Svn>
     <!-- Write version for subversion configure script -->
-    <echo message="${neonVersion}" file="${platformRoot}/neon/.version" />
+    <echo message="${neonVersion}" file="${platformRoot}/neon/.version" if="${buildNeon}" />
 
     <Svn
       verbose="true"
@@ -328,6 +328,7 @@
 			file="${saslDir}/COPYING"
 			tofile="release/licenses/Cyrus-Sasl-License.txt" />
     <copy
+      if="${buildNeon}"
 			file="${neonDir}/src/COPYING.LIB"
 			tofile="release/licenses/Neon-License.txt" />
     <copy
