@@ -64,6 +64,8 @@
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
   <property name="buildHttpd" value="false" overwrite="false" />
+  <property name="buildNeon" value="false" overwrite="false" />
+  <property name="buildGit" value="false" overwrite="false" />
 
   <foreach item="Folder" property="jhbp">
     <in>

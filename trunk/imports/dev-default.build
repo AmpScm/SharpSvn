@@ -16,6 +16,7 @@
   <property name="svnBuildName" value="SlikSvn" />
   <property name="enableIpv6" value="true" overwrite="false" />
   <property name="buildHttpd" value="true" overwrite="false" />
+  <property name="buildNeon" value="true" overwrite="false" />
   <property name="buildSubversion" value="false" />
   <property name="buildLibgit2" value="false" />
   <property name="svnStatic" value="true" overwrite="false" />
