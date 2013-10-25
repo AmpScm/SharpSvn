@@ -19,7 +19,7 @@
   <!-- r1498000 - Use transition based iprop handling -->
   <!-- r1534149 - Properly handle certificate chains -->
   <!-- r1535532 - Properly use multiple ssl accept providers -->
-  <property name="subversionMerges" value="1493272,1498000,1534149,1535532" overwrite="false" /> 
+  <property name="subversionMerges" value="1493272,1498000,1534149,1535532,1535676" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <!-- r960671 - Only deal with the mutex when XTHREAD is enabled. -->
