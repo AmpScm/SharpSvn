@@ -3,7 +3,7 @@
   <property name="httpdDir" value="${buildRoot}/httpd" />
   <property name="aprIconvDir" value="${httpdDir}/srclib/apr-iconv" />
 
-  <target name="build-httpd" depends="build-apr" if="${buildHttpd=='true'}">
+  <target name="build-httpd" depends="build-apr" if="${buildHttpd}">
     <OnceBlock file="build/httpd-${httpdVersion}.patched">
       <foreach item="File" property="patch">
         <in>

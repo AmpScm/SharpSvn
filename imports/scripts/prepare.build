@@ -220,6 +220,7 @@
 
     <Svn
       verbose="true"
+      if="${buildNeon}"
       unless="${directory::exists(platformRoot + '/neon')}">
 
       <arg value="co" />
