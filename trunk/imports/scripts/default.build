@@ -65,7 +65,6 @@
 
   <property name="buildHttpd" value="false" overwrite="false" />
   <property name="buildNeon" value="false" overwrite="false" />
-  <property name="buildGit" value="false" overwrite="false" />
 
   <foreach item="Folder" property="jhbp">
     <in>
