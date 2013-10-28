@@ -27,7 +27,8 @@
   <property name="neonMerges" value="" overwrite="false" />
   <!-- r2183-r2186          - Return connection timeouts as a specific error -->
   <!-- r2187                - Retry connect at next address -->
-  <property name="serfMerges" value="2183-2186,2187" overwrite="false" />
+  <!-- r2225                - Handle X509_V_ERR_UNABLE_TO_VERIFY_LEAF_SIGNATURE -->
+  <property name="serfMerges" value="2183-2186,2187,2225" overwrite="false" />
 
   <!-- -->
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
