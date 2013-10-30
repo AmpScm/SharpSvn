@@ -47,9 +47,15 @@
 
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Component Id="AddToPath" Guid="621896B6-6C44-4178-9A12-D88B43FC5AAE">
-        <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install" Action="none">
-          <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" Action="write"/>
+        <RegistryKey Root="HKLM" Key="SOFTWARE\SlikSvn\Install">
+          <RegistryValue Type="string" Name="Location" Value="[INSTALLLOCATION_BIN]" KeyPath="yes" />
+          <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
         </RegistryKey>
+        <?if "$(var.Platform)" != "x86" ?>
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Wow6432Node\SlikSvn\Install">
+          <RegistryValue Type="string" Name="Bin" Value="[INSTALLLOCATION_BIN]" />
+        </RegistryKey>
+        <?endif?>
         <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
       </Component>
       <Directory Id="ProgramMenuFolder">
