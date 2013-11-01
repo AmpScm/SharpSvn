@@ -29,6 +29,9 @@
     <Property Id="ARPURLINFOABOUT">http://subversion.apache.org/</Property>
     <Property Id="ARPHELPLINK">http://svnbook.red-bean.com/</Property>
     <Property Id="ARPURLUPDATEINFO">http://sliksvn.com/en/download//</Property>
+    <Property Id="ARPPRODUCTICON">ICON_Subversion</Property>
+
+    <Icon Id="ICON_Subversion" SourceFile="$(sys.SOURCEFILEDIR)svn.ico" />
 
     <!-- Error messages -->
     <Property Id="VSDVERSIONMSG">Unable to install because a newer version of this product is already installed.</Property>
