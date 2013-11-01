@@ -13,7 +13,7 @@
         <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
       </do>
     </foreach>
-    <OnceBlock file="build/serf-${serfVersion}.merged">
+    <OnceBlock file="build/serf-${serfVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(serfMerges) &gt; 0}">
         <arg value="merge" />
         <arg value="-c" />
