@@ -205,7 +205,7 @@
       unless="${directory::exists(zlibDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
+      <arg value="https://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
       <arg value="${zlibDir}" />
     </Svn>
     
@@ -214,7 +214,7 @@
       unless="${directory::exists(opensslDir)}">
       
       <arg value="co" />
-      <arg value="${httpOrHttps}://github.com/openssl/openssl.git/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="https://github.com/openssl/openssl.git/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
       <arg value="${opensslDir}" />
     </Svn>
 
