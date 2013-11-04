@@ -101,6 +101,19 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
 
         base.ExecuteTask();
     }
+    
+    public override void Log(Level messageLevel, string message)
+    {
+        if (message != null && message.StartsWith("Visual C++ now provides improved safety", StringComparison.Ordinal))
+        {
+           int n = message.LastIndexOf("Successfully upgraded");
+           if (n <= 0)
+             return;
+           message = message.Substring(n);
+        }
+
+        base.Log(messageLevel, message);
+    }
 }
 
 [TaskName("Svn")]
