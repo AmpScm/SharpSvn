@@ -32,6 +32,7 @@
           <replacestring from=" /MD " to=" /MD /Zl " />
           <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\neon.pdb"' />
           <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' if="${enableIpv6=='true'}"/>
+        </filterchain>
       </loadfile>
       <echo file="${platformRoot}/neon/neon.mak" message="${neonmak}" />
     </OnceBlock>
