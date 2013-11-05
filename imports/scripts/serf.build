@@ -33,7 +33,7 @@
           <ApplyPatch patchFile="${patch}" toDir="${platformRoot}/serf" />
         </do>
       </foreach>
-      <loadfile file="${platformRoot}/serf/serf.mak" property="serfmak">
+      <loadfile file="${serfDir}/serf.mak" property="serfmak" if="${file::exists(serfDir + '/serf.mak')}">
         <filterchain>
           <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
           <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${static}"/>
@@ -49,7 +49,7 @@
 # ALL WAS: ' />
         </filterchain>
       </loadfile>
-      <echo file="${platformRoot}/serf/serf.mak" message="${serfmak}" />
+      <echo file="${platformRoot}/serf/serf.mak" message="${serfmak}" if="${file::exists(serfDir + '/serf.mak')}" />
     </OnceBlock>
   </target>
   <target name="serf-build" depends="serf-prepare,build-zlib,build-apr,install-scons">
