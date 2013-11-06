@@ -289,8 +289,8 @@ APR_BEGIN_DECLS
         <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
         <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
         <include name="${aprUtilDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}/*.pdb" />
         <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.lib" />
         <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.pdb" />
       </fileset>
