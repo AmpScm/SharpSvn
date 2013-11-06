@@ -142,27 +142,89 @@
           <include name="*.pdb" />
         </fileset>
       </copy>
-    <copy todir="build/${platform}/lib/release" flatten="true">
-      <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
-      </fileset>
-    </copy>
-    <copy todir="build/${platform}/lib/LibR" flatten="true">
-      <fileset>
-        <include name="${aprDir}/LibR/*.lib" />
-        <include name="${aprUtilDir}/LibR/*.lib" />
-        <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
-      </fileset>
-    </copy>
-    <copy todir="build/${platform}/lib/debug" flatten="true">
-      <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
-      </fileset>
-    </copy>      
+      <copy todir="build/${platform}/lib/release" flatten="true">
+        <fileset>
+          <include name="${aprDir}/${aprRelSubdir}/*.lib" />
+          <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
+          <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="build/${platform}/lib/LibR" flatten="true">
+        <fileset>
+          <include name="${aprDir}/LibR/*.lib" />
+          <include name="${aprUtilDir}/LibR/*.lib" />
+          <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="build/${platform}/lib/debug" flatten="true">
+        <fileset>
+          <include name="${aprDir}/${aprRelSubdir}/*.lib" />
+          <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
+          <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
+        </fileset>
+      </copy>
+      
+      <!-- Fake direct result for subversion to hide platforms -->
+      <copy todir="build/${platform}/lib/include">
+        <fileset basedir="${release}/include/apr-1">
+          <include name="**/*.h" />
+        </fileset>
+      </copy>
+      <copy todir="build/${platform}/lib/xml/expat/lib" file="${intDir}/include/expat.h" />
+      <copy todir="build/${platform}/lib/include">
+        <fileset basedir="${aprDir}/include">
+          <include name="arch/win32/**.h" />
+        </fileset>
+      </copy>
+      <copy todir="build/${platform}/lib/include">
+        <fileset basedir="${release}/include">
+          <include name="**.h" />
+        </fileset>
+      </copy>
+      <if test="${platform == 'win32'}">
+        <copy todir="build/win32/lib/lib">
+          <fileset basedir="${release}/lib">
+            <include name="libdb*.lib" />
+            <include name="libeay32.lib" />
+            <include name="ssleay32.lib" />
+            <include name="intl3_svn.lib" />
+            <include name="xml.lib" />
+            <include name="*apr-1.lib" />
+            <include name="*aprutil-1.lib" />
+          </fileset>
+        </copy>
+      </if>
+      <if test="${platform == 'x64'}">
+        <copy todir="${release}/lib-x64">
+          <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+            <include name="*.lib" />
+          </fileset>
+        </copy>
+        <copy todir="build/x64/lib/lib">
+          <fileset basedir="${release}/lib-x64">
+            <include name="xml.lib" />
+            <include name="libeay32.lib" />
+            <include name="ssleay32.lib" />
+            <include name="*apr-1.lib" />
+            <include name="*aprutil-1.lib" />
+            <include name="intl3_svn.lib" />
+            <include name="libdb*.lib" />
+          </fileset>
+        </copy>
+      </if>
+      <copy todir="build/${platform}/lib/include" flatten="true">
+        <fileset basedir="${dbWindowsDir}">
+          <include name="*.h" />
+        </fileset>
+      </copy>
+      <copy tofile="build/${platform}/lib/release/libapr-1.lib" file="build/${platform}/lib/lib/apr-1.lib" if="${static=='true'}" />
+      <copy tofile="build/${platform}/lib/release/libaprutil-1.lib" file="build/${platform}/lib/lib/aprutil-1.lib" if="${static=='true'}" />
+      <copy todir="build/${platform}/lib/include" flatten="true" if="${javaHome != ''}">
+        <fileset basedir="${javaHome}/include">
+          <include name="*.h" />
+          <include name="win32/*.h" />
+        </fileset>
+      </copy>
     </if>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
   </target>
