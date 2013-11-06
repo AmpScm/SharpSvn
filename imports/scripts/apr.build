@@ -5,6 +5,14 @@
   <property name="aprDir" value="${aprBase}/apr" />
   <property name="aprUtilDir" value="${aprBase}/apr-util" />
 
+  <property name="aprRelSubdir" value="Release" if="${not static}" />
+  <property name="aprRelSubdir" value="LibR" if="${static}" />    
+  <property name="aprStaticSubdir" value="LibR" />
+    
+  <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
+  <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
+
+
   <target name="apr-merge" depends="checkout">
     <OnceBlock file="build/apr-${aprVersion}.merged">
       <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
@@ -275,14 +283,7 @@ APR_BEGIN_DECLS
         </delete>
       </if>
     </OnceBlock>
-    <property name="aprRelSubdir" value="Release" if="${not static}" />
-    <property name="aprRelSubdir" value="LibR" if="${static}" />
-    
-    <property name="aprStaticSubdir" value="LibR" />
-    
-    <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
-    <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
-    
+   
     <copy todir="${intDir}/lib" flatten="true">
       <fileset>
         <include name="${aprDir}/${aprRelSubdir}/*.lib" />
