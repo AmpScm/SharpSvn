@@ -108,6 +108,12 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
         <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak">
           <arg value="install" />
         </NMake>
+        <copy todir="${intDir}/bin">
+          <fileset basedir="${opensslDir}/out32dll">
+            <include name="libeay32.pdb" />
+            <include name="ssleay32.pdb" />
+          </fileset>
+        </copy>
       </if>
     </OnceBlock>
     <copy todir="${release}/include">
