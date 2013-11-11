@@ -31,7 +31,11 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${aprDir}" />
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${aprDir}" />
+          </Svn>
         </do>
       </foreach>
       <foreach item="File" property="patch">
