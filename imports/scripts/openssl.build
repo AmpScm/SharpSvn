@@ -30,36 +30,30 @@
       <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
         <arg line="/c ms\do_win64a.bat" />
       </exec>
-      <if test="${static != 'true'}">
-        <loadfile file="${opensslDir}/ms/libeay32.def" property="def">
-          <filterchain>
-            <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${def}" file="${opensslDir}/ms/libeay32.def" />
-        <loadfile file="${opensslDir}/ms/ssleay32.def" property="def">
-          <filterchain>
-            <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${def}" file="${opensslDir}/ms/ssleay32.def" />
-        <loadfile file="${opensslDir}/ms/ntdll.mak" property="mk">
-          <filterchain>
-            <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
-            <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
-            <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
-            <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
-            <replacestring from=" /MT " to=" /MD " />
-          </filterchain>
-        </loadfile>
-        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />
-      </if>
-      <loadfile file="${opensslDir}/ms/nt.mak" property="mk">
+      <FilterFile file="${opensslDir}/ms/libeay32.def" unless="${static}">
+        <filterchain>
+          <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/ssleay32.def" unless="${static}">
+        <filterchain>
+          <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}">
+        <filterchain>
+          <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
+          <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
+          <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
+          <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
+          <replacestring from=" /MT " to=" /MD " />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
         <filterchain>
           <replacestring from=" /MT " to=" /MD " />
         </filterchain>
-      </loadfile>
-      <echo message="${mk}" file="${opensslDir}/ms/nt.mak" />
+      </FilterFile>
       <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
         <filterchain>
           <replacestring from="static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" to="
@@ -72,7 +66,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
             if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
         </filterchain>
       </FilterFile>
-      <FilterFile file="${opensslDir}/crypto/rand/rand_win.c" property="mk">
+      <FilterFile file="${opensslDir}/crypto/rand/rand_win.c">
         <filterchain>
           <!-- If OpenSSL already used a *good* source for entropy, such as most likely
                CryptoAPI, don't start asking for kernel objects for up to 1 second, which might
