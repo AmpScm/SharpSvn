@@ -60,22 +60,19 @@
         </filterchain>
       </loadfile>
       <echo message="${mk}" file="${opensslDir}/ms/nt.mak" />
-      <if test="${svnAddSharpSvn == 'true'}">
-        <loadfile file="${opensslDir}/engines/e_capi.c" property="mk">
-          <filterchain>
-            <replacestring from="static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" to="
+      <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
+        <filterchain>
+          <replacestring from="static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" to="
             
 typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
 extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
 sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler = NULL;
 static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
-            <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL; 
+          <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL; 
             if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
-          </filterchain>
-        </loadfile>
-        <echo message="${mk}" file="${opensslDir}/engines/e_capi.c" />
-      </if>
-      <loadfile file="${opensslDir}/crypto/rand/rand_win.c" property="mk">
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/crypto/rand/rand_win.c" property="mk">
         <filterchain>
           <!-- If OpenSSL already used a *good* source for entropy, such as most likely
                CryptoAPI, don't start asking for kernel objects for up to 1 second, which might
@@ -90,28 +87,23 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
           <replacestring from="RAND_add(buf, sizeof(buf), 0);" to="RAND_add(buf, sizeof(buf), sizeof(buf) / 4.0); /* SharpSvn */" />
           <replacestring from="if (kernel)" to="if (good &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
         </filterchain>
-      </loadfile>
-      <echo message="${mk}" file="${opensslDir}/crypto/rand/rand_win.c" />
+      </FilterFile>
     </OnceBlock>
   </target>
   <target name="build-openssl" depends="prepare-openssl">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">    
-      <if test="${static == 'true'}">
-        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak">
-          <arg value="install" />
-        </NMake>
-      </if>
-      <if test="${static != 'true'}">
-        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak">
-          <arg value="install" />
-        </NMake>
-        <copy todir="${intDir}/bin">
-          <fileset basedir="${opensslDir}/out32dll">
-            <include name="libeay32.pdb" />
-            <include name="ssleay32.pdb" />
-          </fileset>
-        </copy>
-      </if>
+      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" if="${static}">
+        <arg value="install" />
+      </NMake>
+      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" unless="${static}">
+        <arg value="install" />
+      </NMake>
+      <copy todir="${intDir}/bin" unless="${static}">
+        <fileset basedir="${opensslDir}/out32dll">
+          <include name="libeay32.pdb" />
+          <include name="ssleay32.pdb" />
+        </fileset>
+      </copy>
     </OnceBlock>
     <copy todir="${release}/include">
       <fileset basedir="${intDir}/include">

@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <project>
   <property name="vcxproj" value="${int::parse(VSversion) &gt;= 2010}" />
-  <property name="vcproj" value="vcproj" if="${vcxproj}" />
-  <property name="vcproj" value="vcxproj" unless="${vcxproj}" />
+  <property name="vcproj" value="vcxproj" if="${vcxproj}" />
+  <property name="vcproj" value="vcproj" unless="${vcxproj}" />
   
   <property name="cmakeGenerator" value="Visual Studio 8 2005"
             overwrite="false" if="${VSversion == '2005' and platform=='win32'}" />

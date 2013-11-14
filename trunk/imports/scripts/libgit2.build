@@ -14,16 +14,18 @@
       <arg value="-DTHREADSAFE=ON" />
     </CMake>
     
-    <MSBuild configuration="Debug">
-      <arg value="${libgit2Dir}/libgit2.sln" />
-      
-      <arg value="/t:git2" />
+    <MSBuild
+          src="${libgit2Dir}/libgit2.sln"
+          configuration="Debug">
+          
+      <target value="git2" />
     </MSBuild>
     
-    <MSBuild configuration="RelWithDebInfo">
-      <arg value="${libgit2Dir}/libgit2.sln" />
-      
-      <arg value="/t:git2" />
+    <MSBuild
+          src="${libgit2Dir}/libgit2.sln"
+          configuration="RelWithDebInfo">
+          
+      <target value="git2" />
     </MSBuild>
     
     <copy todir="${release}/lib" if="${platform == 'win32'}">
