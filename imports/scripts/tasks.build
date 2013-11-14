@@ -54,6 +54,7 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
     bool _showLogo;
     string _platform;
     string _configuration;
+    FileInfo _src;
 
     [TaskAttribute("nologo", Required = false), BooleanValidator]
     public bool NoLogo
@@ -61,6 +62,14 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
         get { return !_showLogo; }
         set { _showLogo = !value; }
     }
+    
+    [TaskAttribute("src", Required=true)]
+    public FileInfo Src
+    {
+        get { return _src; }
+        set { _src = value; }
+    }
+
 
     public override string ProgramFileName
     {
@@ -90,10 +99,18 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
             if (NoLogo)
                 sb.Append(" /nologo");
 
-            if (Platform != null)
-                sb.AppendFormat(" /platform:{0}", Platform);
+            string platform = Platform;
+            if (!String.IsNullOrEmpty(platform))
+            {
+                if (platform == "win32")
+                    platform = "Win32"; // Fix casing
+                    
+                sb.AppendFormat(" /platform:{0}", platform);
+            }
+            
+            sb.AppendFormat(" \"{0}\"", Src.FullName);
 
-            return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
+            return sb.ToString().Trim();
         }
     }
     
@@ -117,6 +134,7 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
     bool _showLogo;
     bool _noOverwrite;
     string _configuration;
+    FileInfo _src;
 
     [TaskAttribute("nologo", Required = false), BooleanValidator]
     public bool NoLogo
@@ -130,6 +148,13 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
     {
         get { return !_noOverwrite; }
         set { _noOverwrite = !value; }
+    }
+    
+    [TaskAttribute("src", Required=true)]
+    public FileInfo Src
+    {
+        get { return _src; }
+        set { _src = value; }
     }
 
     public override string ProgramFileName
@@ -157,8 +182,10 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
             
             if (Overwrite)
                 sb.Append(" -overwrite");
+                
+            sb.AppendFormat(" \"{0}\"", Src.FullName);
 
-            return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
+            return sb.ToString().Trim();
         }
     }
 }

@@ -14,13 +14,10 @@
 
   <target name="prepare-bdb" depends="extract">
     <OnceBlock file="build/db-${dbVersion}.prepared">
-      <VCBuild unless="${vcxproj}">
+      <VCBuild src="${dbWindowsDir}/db_dll.dsp" unless="${vcxproj}">
         <arg line="/upgrade" />
-        <arg value="${dbWindowsDir}/db_dll.dsp" />
       </VCBuild>
-      <VCUpgrade if="${vcxproj}">
-        <arg value="${dbWindowsDir}/db_dll.dsp" />
-      </VCUpgrade>
+      <VCUpgrade src="${dbWindowsDir}/db_dll.dsp" if="${vcxproj}" />
     </OnceBlock>
     <OnceBlock file="build/db-${dbVersion}.patched">
       <if test="${not vcxproj}">
@@ -49,15 +46,12 @@
   </target>
   <target name="build-bdb" depends="prepare-bdb">
     <OnceBlock file="build/db-${dbVersion}-${platform}.build">
-      <VCBuild platform="${platform}" unless="${vcxproj}">
-        <arg value="${dbWindowsDir}/db_dll.vcproj" />
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" platform="${platform}" unless="${vcxproj}">
         <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
         <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
         <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
       </VCBuild>
-      <MSBuild if="${vcxproj}">
-        <arg value="${dbWindowsDir}/db_dll.vcxproj" />
-      </MSBuild>
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" if="${vcxproj}" />
       <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
       <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
 
