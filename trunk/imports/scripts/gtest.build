@@ -4,13 +4,10 @@
 
   <target name="build-gtest" depends="download,extract,checkout">
     <OnceBlock file="build/gtest-${gtestVersion}.build">
-      <VCBuild platform="${platform}">
+      <VCBuild src="${gtestDir}/msvc/gtest.vcproj">
         <arg line="/upgrade" />
-        <arg line="${gtestDir}/msvc/gtest.vcproj" />
       </VCBuild>
-      <VCBuild platform="${platform}">
-        <arg line="${gtestDir}/msvc/gtest.vcproj" />
-      </VCBuild>
+      <VCBuild src="${gtestDir}/msvc/gtest.vcproj" />
     </OnceBlock>
     <copy todir="${release}/lib" flatten="true">
       <fileset>

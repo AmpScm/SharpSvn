@@ -45,7 +45,11 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${aprUtilDir}" />
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${aprDir}" />
+          </Svn>
         </do>
       </foreach>
     </OnceBlock>
@@ -73,9 +77,8 @@
           </items>
         </in>
         <do>
-          <VCBuild platform="${platform}">
+          <VCBuild src="${project}">
             <arg line="/upgrade" />
-            <arg line="${project}" />
           </VCBuild>
         </do>
       </foreach>
@@ -105,8 +108,7 @@
           </items>
         </in>
         <do>
-          <echo message="Patching ${vcproj}" />
-          <loadfile file="${vcproj}" property="projtext">
+          <FilterFile file="${vcproj}">
             <filterchain>
               <!-- Add openssl includes to aprutil and aprutil/crypto -->
               <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
@@ -115,8 +117,7 @@
               <!-- Increase security a little little bit in some cases -->
               <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
             </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${vcproj}" />
+          </FilterFile>
         </do>
       </foreach>
       <!-- Patch .dll projects -->
@@ -131,7 +132,7 @@
         <do>
           <echo message="Patching ${vcproj}" />
           <property name="vcprojForCrypto" value="${string::contains(vcproj, 'crypto')}" />
-          <loadfile file="${vcproj}" property="projtext">
+          <FilterFile file="${vcproj}">
             <filterchain>
               <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
               <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
@@ -144,8 +145,7 @@
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib""' if="${static}" />
               <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(aprUtilDir)};${path::get-full-path(opensslDir)}\out32dll" />
             </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${vcproj}" />
+          </FilterFile>
         </do>
       </foreach>
       <foreach item="File" property="winHeader">
@@ -158,7 +158,7 @@
         </in>
         <do>
           <property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
-          <loadfile file="${winHeader}" property="headertext">
+          <FilterFile file="${winHeader}">
             <filterchain>
               <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
               <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${enableIpv6}" />
@@ -202,8 +202,7 @@ APR_BEGIN_DECLS
 /* /SharpSvn extension */' />
               <replacestring from='#pragma' to='// #disabled-pragma' />
             </filterchain>
-          </loadfile>
-          <echo message="${headertext}" file="${winHeader2}" />
+          </FilterFile>
         </do>
       </foreach>
       <echo message='
@@ -217,23 +216,21 @@ APR_BEGIN_DECLS
 #endif
 ' append="true" file="${aprUtilDir}/crypto/apr_md4.c" if="${svnAddSharpSvn}" />
 
-      <loadfile file="${aprDir}\atomic\win32\apr_atomic.c" property="atomic">
+      <FilterFile file="${aprDir}\atomic\win32\apr_atomic.c">
         <filterchain>
           <replacestring from='(apr_atomic_win32_ptr_val_fn)' to='' />
           <replacestring from='(apr_atomic_win32_ptr_fn)' to='' />
           <replacestring from='(apr_atomic_win32_ptr_val_val_fn)' to='' />
           <replacestring from='(apr_atomic_win32_ptr_ptr_ptr_fn)' to='' />
         </filterchain>
-      </loadfile>
-      <echo message="${atomic}" file="${aprDir}\atomic\win32\apr_atomic.c" />
-      <loadfile file="${aprDir}\file_io\win32\open.c" property="open.c">
+      </FilterFile>
+      <FilterFile file="${aprDir}\file_io\win32\open.c">
         <filterchain>
           <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
                          to='DWORD sharemode = FILE_SHARE_READ;' if="${applyMerges}" />
           <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' unless="${buildSubversion == 'false'}" />
         </filterchain>
-      </loadfile>
-      <echo message="${open.c}" file="${aprDir}\file_io\win32\open.c" />
+      </FilterFile>
       <!-- Add Windows 2000 ipv6 workarounds -->
       <echo message="
  #include &lt;Wspiapi.h&gt;
@@ -255,8 +252,7 @@ APR_BEGIN_DECLS
           </items>
         </in>
         <do>
-          <VCBuild platform="${platform}">
-            <arg value="${project}" />
+          <VCBuild src="${project}">
             <arg value="${Configuration}|${platform}" />
           </VCBuild>
           <copy todir="${aprUtilDir}" flatten="true">

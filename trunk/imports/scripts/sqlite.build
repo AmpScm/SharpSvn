@@ -8,7 +8,7 @@
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
     <OnceBlock file="build/sqlite-${sqliteVersion}.patched">
-      <loadfile file="${sqliteDir}/sqlite3.c" property="projtext">
+      <FilterFile file="${sqliteDir}/sqlite3.c">
         <filterchain>
           <!-- Add openssl includes to aprutil and aprutil/crypto -->
           <replacestring from="static int mutexIsNT(void){" to="
@@ -18,8 +18,7 @@ static int original_mutexIsNT(void){" />
 #define isNT() (1)
 static int original_isNT(void){" />
         </filterchain>
-      </loadfile>
-      <echo message="${projtext}" file="${sqliteDir}/sqlite3.c" />
+      </FilterFile>
     </OnceBlock>
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
       <arg value="/O2" />      <!-- Maximize speed -->

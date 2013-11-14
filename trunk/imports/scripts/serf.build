@@ -2,17 +2,7 @@
 <project basedir=".." default="build">
   <property name="serfDir" value="build/${platform}/serf" />
   <property name="serfDebug" value="false" overwrite="false" />
-  <target name="serf-prepare" depends="checkout, generate-svnfiles">
-    <foreach item="File" property="vcproj">
-      <in>
-        <items basedir="${svnBase}">
-          <include name="serf/serf.vcproj" />
-        </items>
-      </in>
-      <do>
-        <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-      </do>
-    </foreach>
+  <target name="serf-prepare" depends="checkout,build-zlib,build-apr,install-scons">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(serfMerges) &gt; 0}">
         <arg value="merge" />
@@ -30,50 +20,16 @@
           </items>
         </in>
         <do>
-          <ApplyPatch patchFile="${patch}" toDir="${platformRoot}/serf" />
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${aprDir}" />
+          </Svn>
         </do>
       </foreach>
-      <property name="mak" value="" overwrite="false" />
-      <loadfile file="${serfDir}/serf.mak" property="mak" if="${file::exists(serfDir + '/serf.mak')}">
-        <filterchain>
-          <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
-          <replacestring from="= /D WIN32 " to="= /D APR_DECLARE_STATIC /D APU_DECLARE_STATIC /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${static}"/>
-          <replacestring from="= /D WIN32 " to="= /D WIN32 /D _CRT_NONSTDC_NO_DEPRECATE /D _CRT_SECURE_NO_DEPRECATE " if="${not static}"/>
-          <replacestring from=" /O2 " to=" /O2 /W3 /GS /Zi " />
-          <!-- Don't include apr and openssl in the intermediate libraries -->
-          <replacestring from="LIB32_OBJS = $(LIB32_OBJS) $(APR" to="LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) $(APR" if="${static}" />
-          <replacestring from='LIB32_OBJS = $(LIB32_OBJS) "$(APR' to='LIB32_OBJS_EXE = $(LIB32_OBJS_EXE) "$(APR' if="${static}" />
-          <!-- Only compile library, the testfiles don't like the small library -->
-          <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\serf.pdb"' />
-          <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' if="${enableIpv6=='true'}"/>
-          <replacestring from='ALL: ' to='ALL: $(INTDIR) $(STATIC_LIB)
-# ALL WAS: ' />
-        </filterchain>
-      </loadfile>
-      <echo file="${platformRoot}/serf/serf.mak" message="${mak}" if="${file::exists(serfDir + '/serf.mak')}" />
     </OnceBlock>
   </target>
-  <target name="serf-build" depends="serf-prepare,build-zlib,build-apr,install-scons">
-    <NMake workingdir="${serfDir}" makeFile="serf.mak" verbose="true"
-        if="${file::exists(serfDir + '/serf.mak')}">
-      <arg value="ALL" />
-      <arg value="APR_SRC=${aprDir}" />
-      <arg value="APRUTIL_SRC=${aprUtilDir}" />
-      <arg value="ZLIB_SRC=${zlibDir}" />
-      <arg value="OPENSSL_SRC=${opensslDir}" />
-    </NMake>
-    <copy todir="${intDir}/lib" if="${file::exists(serfDir + '/serf.mak')}">
-      <fileset basedir="${serfDir}">
-        <include name="*.lib" />
-      </fileset>
-    </copy>
-    <mkdir dir="${intDir}/include/serf-1" if="${file::exists(serfDir + '/serf.mak')}" />
-    <copy todir="${intDir}/include/serf-1" if="${file::exists(serfDir + '/serf.mak')}">
-      <fileset basedir="${serfDir}">
-        <include name="serf.h" />
-        <include name="serf_bucket_*.h" />
-      </fileset>
-    </copy>
+  <target name="serf-build" depends="serf-prepare">
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>
@@ -98,14 +54,6 @@
     <copy todir="${releaseInc}/serf-1">
       <fileset basedir="${intDir}/include/serf-1">
         <include name="**/*.h" />
-      </fileset>
-    </copy>
-  </target>
-  <target name="serf-copy" depends="serf-build, build-svn">
-    <copy todir="${serfDir}/Debug" if="${serfVersion &lt; '1.3.'}">
-      <fileset basedir="${serfDir}/Release">
-        <include name="*.lib" />
-        <include name="*.pdb" />
       </fileset>
     </copy>
   </target>
