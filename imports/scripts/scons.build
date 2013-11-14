@@ -10,7 +10,7 @@
   <property name="sconsVSVersion" value="11.0" if="${VSversion == '2012'}" />
   <property name="sconsVSVersion" value="12.0" if="${VSversion == '2013'}" />
 
-  <target name="install-scons" depends="download,extract">
+  <target name="scons-install" depends="download,extract">
     <OnceBlock file="build/scons-${sconsVersion}.patched">
       <foreach item="File" property="patch">
         <in>

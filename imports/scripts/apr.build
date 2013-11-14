@@ -1,20 +1,15 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="aprBase" value="${buildRoot}" if="${not buildHttpd}" />
+  <property name="aprBase" value="${platformRoot}" if="${not buildHttpd}" />
   <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd}" />
-  <property name="aprDir" value="${aprBase}/apr" />
-  <property name="aprUtilDir" value="${aprBase}/apr-util" />
+  <property name="aprDir" value="${aprBase}\apr" />
+  <property name="aprUtilDir" value="${aprBase}\apr-util" />
 
-  <property name="aprRelSubdir" value="Release" if="${not static}" />
-  <property name="aprRelSubdir" value="LibR" if="${static}" />    
-  <property name="aprStaticSubdir" value="LibR" />
-    
-  <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
-  <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
-
-
+  <property name="libAprSharedLib" value="${aprDir}\Release\libapr-1.lib" />
+  <property name="libAprUtilSharedLib" value="${aprUtilDir}\Release\libaprutil-1.lib" />
+ 
   <target name="apr-merge" depends="checkout">
-    <OnceBlock file="build/apr-${aprVersion}.merged">
+    <OnceBlock file="build/apr-${aprVersion}-${platform}.merged">
       <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
         <arg value="merge" />
         <arg value="-c" />
@@ -23,7 +18,7 @@
         <arg value="${aprDir}" />
       </Svn>
     </OnceBlock>
-    <OnceBlock file="build/apr-${aprVersion}.patched">
+    <OnceBlock file="build/apr-${aprVersion}-${platform}.patched">
       <foreach item="File" property="patch">
         <in>
           <items basedir="${downloads}/../patches/apr">
@@ -45,166 +40,14 @@
           </items>
         </in>
         <do>
-          <Svn verbose="true">
-            <arg value="patch" />
-            <arg value="${patch}" />
-            <arg value="${aprDir}" />
-          </Svn>
+          <ApplyPatch patchFile="${patch}" toDir="${aprUtilDir}" />
         </do>
       </foreach>
-    </OnceBlock>
-  </target>
-  <target name="upgrade-apr" depends="checkout,apr-merge,build-bdb">
-    <OnceBlock file="build/apr-${aprVersion}_${platform}.upgraded">
-      <exec program="perl.exe" workingdir="${aprDir}">
-        <arg value="build/cvtdsp.pl" />
-        <arg value="-2005" />
-        <arg value="-mt" />
-      </exec>
-      <if test="${buildHttpd}">
-        <exec program="perl.exe" workingdir="${httpdDir}">
-          <arg value="${aprDir}/build/cvtdsp.pl" />
-          <arg value="-2005" />
-          <arg value="-mt" />
-        </exec>
-      </if>
-      <foreach item="File" property="project">
-        <in>
-          <items>
-            <include name="${aprDir}/**/*.dsp" />
-            <include name="${aprUtilDir}/**/*.dsp" />
-            <include name="${httpdDir}/**/*.dsp" if="${buildHttpd == 'true'}" />
-          </items>
-        </in>
-        <do>
-          <VCBuild src="${project}">
-            <arg line="/upgrade" />
-          </VCBuild>
-        </do>
-      </foreach>
-    </OnceBlock>
-  </target>
-  <target name="prepare-apr" depends="upgrade-apr">
-    <OnceBlock file="build/apr-${aprVersion}_${platform}.prepared">
-      <foreach item="File" property="vcproj">
-        <in>
-          <items>
-            <include name="${aprDir}/**/*.vcproj" />
-            <include name="${aprUtilDir}/**/*.vcproj" />
-            <include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
-          </items>
-        </in>
-        <do>
-          <VCProjAddPlatform project="${vcproj}" platform="${platform}" fromPlatform="win32" />
-        </do>
-      </foreach>
-      <!-- Patch .lib projects -->
-      <foreach item="File" property="vcproj">
-        <in>
-          <items>
-            <include name="${aprDir}/apr.vcproj" />
-            <include name="${aprUtilDir}/aprutil.vcproj" />
-            <include name="${aprUtilDir}/xml/expat/lib/*.vcproj" />
-          </items>
-        </in>
-        <do>
-          <FilterFile file="${vcproj}">
-            <filterchain>
-              <!-- Add openssl includes to aprutil and aprutil/crypto -->
-              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
-              <!-- Don't add default library info -->
-              <replacestring from='Name="VCCLCompilerTool"' to='Name="VCCLCompilerTool" OmitDefaultLibName="true"' />
-              <!-- Increase security a little little bit in some cases -->
-              <replacestring from='DataExecutionPrevention="0"' to='DataExecutionPrevention="1"' />
-            </filterchain>
-          </FilterFile>
-        </do>
-      </foreach>
-      <!-- Patch .dll projects -->
-      <foreach item="File" property="vcproj">
-        <in>
-          <items>
-            <include name="${aprDir}/libapr.vcproj" />
-            <include name="${aprUtilDir}/libaprutil.vcproj" />
-            <include name="${aprUtilDir}/crypto/*.vcproj" />
-          </items>
-        </in>
-        <do>
-          <echo message="Patching ${vcproj}" />
-          <property name="vcprojForCrypto" value="${string::contains(vcproj, 'crypto')}" />
-          <FilterFile file="${vcproj}">
-            <filterchain>
-              <replacestring from="\libapr-1.dll" to="\${dllPrefix}libapr-1.dll" />
-              <replacestring from="\libaprutil-1.dll" to="\${dllPrefix}libaprutil-1.dll" />
-              <!-- Add openssl includes to aprutil and aprutil/crypto -->
-              <replacestring from="./include/private" to="./include/private,${path::get-full-path(releaseInc)}" />
-              <!-- Import APR and XML from APR-Util -->
-              <replacestring from='AdditionalDependencies="' to='AdditionalDependencies="libapr-1.lib xml.lib ' if="${string::contains(vcproj, 'util.vcproj')}"/>
-              <!-- Fix crypto compilation -->
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib"' if="${not static}" />
-              <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib""' if="${static}" />
-              <replacestring from="..\..\openssl\out32dll" to="${path::get-full-path(aprUtilDir)};${path::get-full-path(opensslDir)}\out32dll" />
-            </filterchain>
-          </FilterFile>
-        </do>
-      </foreach>
-      <foreach item="File" property="winHeader">
-        <in>
-          <items>
-            <include name="${aprDir}/**/*.hw" />
-            <include name="${aprUtilDir}/**/*.hw" />
-            <include name="${aprUtilDir}/**/expat.h.in" />
-          </items>
-        </in>
-        <do>
-          <property name="winHeader2" value="${string::replace(string::replace(winHeader, '.h.in', '.h'), '.hw', '.h')}" />
-          <FilterFile file="${winHeader}">
-            <filterchain>
-              <replacestring from='#define APU_HAVE_APR_ICONV ' to='#define APU_HAVE_APR_ICONV     0 //' />
-              <replacestring from='#define APR_HAVE_IPV6 ' to='#define APR_HAVE_IPV6 1 //' if="${enableIpv6}" />
-              <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 //' />
-              <replacestring from='#define APU_HAVE_CRYPTO ' to='#define APU_HAVE_CRYPTO 1 //' />
-              <replacestring from='#define APU_HAVE_OPENSSL ' to='
-// SharpSvn:              
-#ifdef APU_DECLARE_STATIC
-#define  APU_HAVE_OPENSSL 1
-#else
-#define  APU_HAVE_OPENSSL 0
-#endif
-// /SharpSvn' />
-              <replacestring from='#ifdef WIN64' to='#if defined(WIN64) || defined(_WIN64)
-#ifndef WIN64
-#  define WIN64
-#endif' />
-              <replacestring from='#define _WIN32_WINNT ' to='
-/* SharpSvn */
-#ifndef WINNT
-#  define WINNT
-#endif
-#ifndef _WIN32_WINNT
-#  define _WIN32_WINNT 0x0501
-#endif
-#if !defined(NTDDI_VERSION) &amp;&amp; defined(_M_IX86)
-#  define NTDDI_VERSION 0x05000000
-#endif
-/* /SharpSvn */
-//#define  _WIN32_WINNT ' if="${(VSversion == '2005')}" />
-              <replacestring from='#if APR_HAVE_IPV6' to='#if APR_HAVE_IPV6
-/* SharpSvn extension */
-APR_END_DECLS
-#include &lt;wspiapi.h&gt;
-APR_BEGIN_DECLS
-#ifndef HAVE_GETADDRINFO
-#define HAVE_GETADDRINFO 1
-#define HAVE_GETNAMEINFO 1
-#endif
-
-/* /SharpSvn extension */' />
-              <replacestring from='#pragma' to='// #disabled-pragma' />
-            </filterchain>
-          </FilterFile>
-        </do>
-      </foreach>
+      <FilterFile file="${aprUtilDir}/include/apu_want.hw" if="${vcxproj}">
+        <filterchain>
+          <replacestring from='#if APU_HAVE_DB' to='#if 1 || APU_HAVE_DB' />
+        </filterchain>
+      </FilterFile>
       <echo message='
 #ifndef __SHARPSVN_APR_CRYPTO_OPENSSL_INCLUDED__
 #ifdef APU_DECLARE_STATIC
@@ -227,85 +70,90 @@ APR_BEGIN_DECLS
       <FilterFile file="${aprDir}\file_io\win32\open.c">
         <filterchain>
           <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
-                         to='DWORD sharemode = FILE_SHARE_READ;' if="${applyMerges}" />
+                          to='DWORD sharemode = FILE_SHARE_READ;' if="${applyMerges}" />
           <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' unless="${buildSubversion == 'false'}" />
         </filterchain>
       </FilterFile>
-      <!-- Add Windows 2000 ipv6 workarounds -->
-      <echo message="
- #include &lt;Wspiapi.h&gt;
- " file="${aprDir}/include/apr_want.h" append="true" if="${static=='true'}" />
+      <FilterFile file="${aprDir}\include\apr.hwc">
+        <filterchain>
+          <replacestring from='#pragma warning(disable: 4996)' to='//# WAS: #pragma warning(disable: 4996)' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}\include\apu.hwc">
+        <filterchain>
+          <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 // WAS: ' />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
-  <target name="build-apr" depends="download,extract,checkout, prepare-apr">
+  <target name="apr-build" depends="checkout, apr-merge, openssl-build">
+    <OnceBlock file="build/apr-${aprVersion}-${platform}.cmakegen">
+      <!-- Trick scripts to detect projects that haven't been build -->
+      <echo message="#error SharpSvn apr.h fake" file="${intDir}/include/apr.h" />
+      <echo message="#error SharpSvn apr.lib fake" file="${libAprSharedLib}" />
+
+      <CMake workingdir="${aprDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />        
+        <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+        
+        <prop name="MIN_WINDOWS_VER" value="0x0501" /><!-- Windows XP -->
+        
+        <prop name="APR_INSTALL_PRIVATE_H" value="ON" />
+      </CMake>
+      
+      <CMake workingdir="${aprUtilDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+        <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+        
+        <prop name="APR_INCLUDE_DIR" value="${intDir}/include" />
+        <prop name="APR_LIBRARIES" value="${libAprSharedLib}" />
+        <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+        
+        <prop name="APU_HAVE_CRYPTO" value="ON" />
+        <prop name="APR_HAS_LDAP" value="OFF" />
+        <prop name="APU_HAVE_ODBC" value="OFF" />
+      </CMake>
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}">
+        <filterchain>
+          <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
+          <replacestring from='libeay32.lib;' to='libeay32.lib;crypt32.lib;' />
+        </filterchain>
+      </FilterFile>
+      
+      <delete file="${intDir}/include/apr.h" />
+      <delete file="${libAprSharedLib}" />
+    </OnceBlock>      
     <OnceBlock file="build/apr-${aprVersion}_${platform}.build">
-      <!-- Prepare static builds (requires changed build order) -->
-      <foreach item="File" property="project">
-        <in>
-          <items>
-            <include name="${aprDir}/apr.vcproj" />
-            <include name="${aprDir}/libapr.vcproj" if="${not static}" />
-            <include name="${aprUtilDir}/xml/expat/lib/xml.vcproj" />
-            <include name="${aprUtilDir}/aprutil.vcproj" />
-            <include name="${aprUtilDir}/libaprutil.vcproj" if="${not static}" />
-            <include name="${aprUtilDir}/crypto/apr_*_openssl.vcproj" if="${not static}" />
-          </items>
-        </in>
-        <do>
-          <VCBuild src="${project}">
-            <arg value="${Configuration}|${platform}" />
-          </VCBuild>
-          <copy todir="${aprUtilDir}" flatten="true">
-            <fileset>
-              <include name="${aprDir}/release/*.lib" if="${platform=='win32'}" />
-              <include name="${aprDir}/libR/*-1.lib" if="${platform=='win32'}" />
-              <include name="${aprUtilDir}/release/*.lib" if="${platform=='win32'}" />
-              <include name="${aprUtilDir}/libR/*-1.lib" if="${platform=='win32'}" />
-              <include name="${aprUtilDir}/xml/expat/lib/LibR/*.lib" if="${platform=='win32'}" />
-              <include name="${aprDir}/x64/release/*.lib" if="${platform=='x64'}" />
-              <include name="${aprDir}/x64/libR/*-1.lib" if="${platform=='x64'}" />
-              <include name="${aprUtilDir}/x64/release/*.lib" if="${platform=='x64'}" />
-              <include name="${aprUtilDir}/x64/libR/*-1.lib" if="${platform=='x64'}" />
-              <include name="${aprUtilDir}/xml/expat/lib/x64/LibR/*.lib" if="${platform=='x64'}" />
-            </fileset>
-          </copy>
-        </do>
-      </foreach>
-      <if test="${not static}">
-        <!-- Delete xml and apr intermediates used for building apr-util -->
-        <delete>
-          <fileset basedir="${aprUtilDir}">
-            <include name="apr*.lib" />
-            <include name="libapr*.lib" />
-            <include name="xml*.lib" />
-            <include name="libxml*.lib" />
-          </fileset>
-        </delete>
-      </if>
+    
+      <MSBuild src="${aprDir}/APR.sln">
+        <target value="apr-1" />
+        <target value="libapr-1" />
+      </MSBuild>
+      <MSBuild src="${aprDir}/INSTALL.${vcproj}" />
+      
+      <MSBuild src="${aprUtilDir}/APR-Util.sln">
+        <target value="aprutil-1" />
+        <target value="libaprutil-1" />
+      </MSBuild>
+      <MSBuild src="${aprUtilDir}/INSTALL.${vcproj}" />
+      
     </OnceBlock>
    
     <copy todir="${intDir}/lib" flatten="true">
       <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}/*.lib" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.pdb" />
+        <include name="${aprDir}/Release/*.lib" />
+        <include name="${aprDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/Release/*.pdb" />
       </fileset>
     </copy>
+    <copy file="${intDir}/lib/libexpat.lib" tofile="${intDir}/lib/xml.lib" />
     <copy todir="${intDir}/bin" flatten="true">
       <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.dll" />
-        <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.dll" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.dll" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.dll" />
-        <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.pdb" />
+        <include name="${aprDir}/Release/*.dll" />
+        <include name="${aprDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/Release/*.dll" />
+        <include name="${aprUtilDir}/Release/*.pdb" />
       </fileset>
     </copy>
       
@@ -326,24 +174,24 @@ APR_BEGIN_DECLS
     </copy>
     <copy todir="${releaseLib}" flatten="true">
       <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.lib" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.pdb" />
+        <include name="${aprDir}/Release/*.lib" />
+        <include name="${aprDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/Release/*.lib" />
+        <include name="${aprUtilDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/Release/*.lib" />
+        <include name="${aprUtilDir}/xml/expat/lib/Release/*.pdb" />
       </fileset>
     </copy>
     <copy todir="${releaseBin}" flatten="true">
       <fileset>
-        <include name="${aprDir}/${aprRelSubdir}/*.dll" />
-        <include name="${aprDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.dll" />
-        <include name="${aprUtilDir}/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.dll" />
-        <include name="${aprUtilDir}/xml/expat/lib/${aprRelSubdir}/*.pdb" />
-        <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.dll" />
-        <include name="${aprUtilDir}/crypto/${aprRelSubdir}/*.pdb" />
+        <include name="${aprDir}/Release/*.dll" />
+        <include name="${aprDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/Release/*.dll" />
+        <include name="${aprUtilDir}/Release/*.pdb" />
+        <include name="${aprUtilDir}/xml/expat/lib/Release/*.dll" />
+        <include name="${aprUtilDir}/xml/expat/lib/Release/*.pdb" />
+        <include name="${aprUtilDir}/crypto/Release/*.dll" />
+        <include name="${aprUtilDir}/crypto/Release/*.pdb" />
       </fileset>
     </copy>
     <property name="aprIncludeDir" value="${release}/include/apr-1" />

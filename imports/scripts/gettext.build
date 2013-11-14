@@ -9,7 +9,7 @@
 
   <property name="gettextToolsDir" value="build/gettext-tools" />
 
-  <target name="prepare-gettext" depends="extract" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+  <target name="gettext-prepare" depends="extract" if="${(intl != 'none') and (intl != 'sharpsvn')}">
     <OnceBlock file="build/gettext-${gettextVersion}.patched">
       <loadfile file="${gettextDir}/gettext-runtime/config.h.in" property="configh">
         <filterchain>
@@ -96,7 +96,7 @@ ${intlh}
       </echo>
     </OnceBlock>
   </target>
-  <target name="build-gettext" depends="prepare-gettext" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+  <target name="gettext-build" depends="gettext-prepare" if="${(intl != 'none') and (intl != 'sharpsvn')}">
     <OnceBlock file="build/gettext-${gettextVersion}-${platform}.build">
       <mkdir dir="${gettextDir}/obj/${platform}/release" />
       <mkdir dir="${gettextDir}/bin/${platform}/release" />
@@ -163,7 +163,7 @@ ${intlh}
     <copy tofile="${intDir}/lib/intl3_svn.lib" file="${intDir}/lib/intl.lib" />
   </target>
 
-  <target name="gettext-translate" depends="build-gettext, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">
+  <target name="gettext-translate" depends="gettext-build, checkout" if="${(intl != 'none') and (intl != 'sharpsvn')}">
     <foreach item="File" property="po">
       <in>
         <items basedir="${svnBase}\subversion\po">

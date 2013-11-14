@@ -4,6 +4,7 @@
   <property name="libgit2BuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
   <property name="libgit2BuildType" value="trunk" overwrite="false" />
+  <property name="httpdBuildType" value="branch" overwrite="false" />
   
   <property name="guessedPlatform" value="win32" />
   <if test="${environment::variable-exists('LIB')}">
@@ -37,8 +38,8 @@
   <property name="opensslVersion" value="1.0.1e" overwrite="false" />
   <property name="neonVersion" value="0.30.0" overwrite="false" />
 
-  <property name="aprVersion" value="1.4.8" overwrite="false" />
-  <property name="aprUtilVersion" value="1.5.2" overwrite="false" />
+  <property name="aprVersion" value="1.5.0" overwrite="false" />
+  <property name="aprUtilVersion" value="1.5.3" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
   <property name="zlibVersion" value="1.2.8" overwrite="false" />
@@ -47,8 +48,8 @@
   <property name="swigVersion" value="2.0.10" overwrite="false" />
   <property name="nasmVersion" value="2.10.01" overwrite="false" />
   <property name="gtestVersion" value="1.6.0" overwrite="false" />
-
-  <property name="httpdVersion" value="2.2.23" overwrite="false" />
+  <property name="pcreVersion" value="8.33" overwrite="false" />
+  <property name="httpdVersion" value="2.4.x" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
   <property name="sqliteVersion" value="3.7.17" overwrite="false" />
 

@@ -225,6 +225,18 @@
           <include name="win32/*.h" />
         </fileset>
       </copy>
+      <copy todir="${intDir}\inc">
+        <fileset basedir="${intDir}\include">
+          <include name="sqlite*.h" />
+        </fileset>
+      </copy>
+      
+      <copy todir="${release}/include">
+        <fileset basedir="${zlibDir}">
+          <include name="zlib.h" />
+          <include name="zconf.h" />
+        </fileset>
+      </copy>
     </if>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
   </target>

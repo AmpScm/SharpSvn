@@ -3,7 +3,7 @@
   <property name="httpdDir" value="${buildRoot}/httpd" />
   <property name="aprIconvDir" value="${httpdDir}/srclib/apr-iconv" />
 
-  <target name="build-httpd" depends="build-apr" if="${buildHttpd}">
+  <target name="httpd-build" depends="apr-build, zlib-build, pcre-build" if="${buildHttpd}">
     <OnceBlock file="build/httpd-${httpdVersion}.patched">
       <foreach item="File" property="patch">
         <in>
@@ -17,17 +17,40 @@
       </foreach>
     </OnceBlock>
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
-      <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
+    
+      <CMake workingdir="${httpdDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${string::replace(intDir, '\', '/')}" />
+        <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+        
+        <prop name="APR_INCLUDE_DIR" value="${string::replace(intDir + '\include', '\', '/')}" />
+        <prop name="APR_LIBRARIES" value="${libAprSharedLib};${libAprUtilSharedLib}" />
+        
+        <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+        
+        <prop name="PCRE_INCLUDE_DIR" value="${intDir}/include" />
+        <prop name="PCRE_LIBRARIES" value="${intDir}/lib/pcre.lib" />
+      </CMake>
       
-      <!-- On systems that compile to x64 we can't be sure that they can run x64,
-           so build the helper tools to win32 -->
-      <MSBuild src="${httpdDir}/apache.sln" platform="Win32">
-        <target value="dftables" />
-        <target value="gen_test_char" />
-      </MSBuild>
+      <!-- Remove some defines that somehow break the build -->
+      <foreach item="File" property="project" if="${vcxproj}">
+        <in>
+          <items basedir="${httpdDir}">
+            <include name="*.vcxproj" />
+          </items>
+        </in>
+        <do>
+          <FilterFile file="${project}" if="${vcxproj}">
+            <filterchain>
+              <LineRegexReplace re='LONG_NAME=\\"([^"]*)\\";' to='' />
+              <LineRegexReplace re='CMAKE_INTDIR=\\"([^"]*)\\";' to='' />
+              <LineRegexReplace re='ICON_FILE=([^"][^;]*);' to='' />
+            </filterchain>
+          </FilterFile>
+        </do>
+      </foreach>
 
       <!-- And now build the binaries for the intended target -->
-      <MSBuild src="${httpdDir}/apache.sln">
+      <MSBuild src="${httpdDir}/HTTPD.sln">
         <target value="httpd" />
         <target value="htpasswd" />
         <target value="mod_dav" />

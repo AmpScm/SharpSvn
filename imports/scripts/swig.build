@@ -4,7 +4,7 @@
   <property name="swigDir" value="build/swigwin-${swigVersion}" />
   
   
-  <target name="build-swig" if="${property::exists('withSwig')}">
+  <target name="swig-build" if="${property::exists('withSwig')}">
     <exec program="where.exe" output="build/perl.where" failonerror="false">
       <arg value="perl" />
     </exec>

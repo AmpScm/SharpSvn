@@ -577,6 +577,7 @@ public class CMake : ExternalAppTask
 {
     string _process;
     readonly OptionCollection _properties = new OptionCollection();
+    readonly ArgumentCollection _targets = new ArgumentCollection();
     
     public override string ProgramFileName
     {
@@ -591,18 +592,18 @@ public class CMake : ExternalAppTask
         }
     }
     
-    [TaskAttribute("process")]
-    public string Process
-    {
-        get { return _process; }
-        set { _process = value; }
-    }
-    
     [BuildElementArray("prop")]
     public OptionCollection AppProperties
     {
         get { return _properties; }
     }
+    
+    [BuildElementArray("target")]
+    public ArgumentCollection Targets
+    {
+        get { return _targets; }
+    }
+
     
     public override string ProgramArguments
     {
@@ -610,7 +611,8 @@ public class CMake : ExternalAppTask
         {
             StringBuilder sb = new StringBuilder();
             
-            sb.AppendFormat(" -G \"{0}\"", Properties["cmakeGenerator"]);
+            if (Targets.Count == 0)
+                sb.AppendFormat(" -G \"{0}\"", Properties["cmakeGenerator"]);
                 
             foreach(Option o in AppProperties)
             {
@@ -618,10 +620,12 @@ public class CMake : ExternalAppTask
                   sb.AppendFormat(" \"-D{0}={1}\"", o.OptionName, o.Value);
             }
 
-            if (!string.IsNullOrEmpty(Process))
-                sb.AppendFormat(" -P \"{0}\"", Process);
-            else
-                sb.Append(" --build .");
+            sb.Append(" --build .");
+                
+            foreach(Argument a in Targets)
+            {
+                sb.AppendFormat(" --target \"{0}\"", a);
+            }
                 
             return sb.ToString().Trim();
         }

@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="serfDir" value="build/${platform}/serf" />
   <property name="serfDebug" value="false" overwrite="false" />
-  <target name="serf-prepare" depends="checkout,build-zlib,build-apr,install-scons">
+  <target name="serf-prepare" depends="checkout">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(serfMerges) &gt; 0}">
         <arg value="merge" />
@@ -29,7 +29,7 @@
       </foreach>
     </OnceBlock>
   </target>
-  <target name="serf-build" depends="serf-prepare">
+  <target name="serf-build" depends="serf-prepare,zlib-build,apr-build,openssl-build,scons-install">
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>

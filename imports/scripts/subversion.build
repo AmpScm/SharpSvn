@@ -5,12 +5,7 @@
   <property name="svnBase" value="${platformRoot}/subversion" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
 
-  <target name="svn-prepare" depends="svn-merge, build-bdb, build-zlib, build-openssl, build-apr, build-gettext, build-sqlite, build-sasl, sharpintl-build">
-
-     <!-- stub entry -->
-  </target>
-
-  <target name="svn-merge" depends="checkout">
+  <target name="svn-prepare" depends="bdb-build, zlib-build, openssl-build, gettext-build, sqlite-build, sasl-build, sharpintl-build">
     <if test="${buildSubversion}">
       <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
         <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
@@ -67,9 +62,15 @@
     </if>
   </target>
 
-  <target name="generate-svnfiles" depends="checkout, svn-prepare">
+  <target name="svn-generate" depends="checkout, apr-build, serf-build, svn-prepare">
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated" if="${buildSubversion}">
+    
+      <copy todir="${intDir}\inc" if="${subversionVersion &lt; '1.9.'}">
+        <fileset basedir="${intDir}\include">
+          <include name="sqlite*.h" />
+        </fileset>
+      </copy>
 
       <exec program="python.exe" workingdir="${svnBase}" verbose="true">
         <arg value="gen-make.py" />
@@ -77,10 +78,8 @@
         <arg line="--vsnet-version=${VSversion}" />
         <arg value="--release" />
         <arg value="--with-httpd=../../httpd" if="${(buildHttpd == 'true') and (platform == 'win32')}" />
-        <arg value="--with-apr=${intDir}" if="false" />
-        <arg value="--with-apr=../lib" />
-        <arg value="--with-apr-util=${intDir}" if="false" />
-        <arg value="--with-apr-util=../lib" />
+        <arg value="--with-apr=${intDir}" />
+        <arg value="--with-apr-util=${intDir}" />
         <arg value="--with-berkeley-db=${intDir}" />
         <arg value="--with-zlib=${intDir}" />
         <arg value="--with-sasl=${intDir}" />
@@ -91,8 +90,8 @@
         <arg value="--with-sqlite=${path::get-full-path(intDir)}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
-        <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
-        <arg value="--with-static-apr" if="${static=='true'}" />
+        <arg value="--disable-shared" if="${static or svnStatic}"/>
+        <arg value="--with-static-apr" if="${static}" />
       </exec>
       <!-- The ZLib build has already completed -->
 
@@ -158,32 +157,29 @@
     </OnceBlock>
   </target>
 
-  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,serf-build,build-swig,prepare-neon,generate-svnfiles,build-httpd">
+  <target name="svn-build" depends="bdb-build, zlib-build, apr-build, serf-build, swig-build, httpd-build, svn-generate">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
-      <MSBuild>
-        <arg value="${svnBase}/subversion_vcnet.sln" />
+      <MSBuild src="${svnBase}/subversion_vcnet.sln">
         <!--arg value="/verbosity:quiet" /-->
-        <arg value="/p:Configuration=Release" />
-        <arg value="/p:Platform=${platform}" />
-        <arg value="/t:Programs\svn" />
-        <arg value="/t:Programs\svnadmin" />        
-        <arg value="/t:Programs\svnversion" />
-        <arg value="/t:Programs\svnserve" />
-        <arg value="/t:Programs\svnsync" />
-        <arg value="/t:Programs\svnlook" />
-        <arg value="/t:Programs\svnmucc"/>
-        <arg value="/t:Programs\svnauthz-validate" />
-        <arg value="/t:Programs\svndumpfilter" />
-        <arg value="/t:Programs\svnrdump" />
-        <arg value="/t:Programs\svn-populate-node-origins-index" />
-        <arg value="/t:__SWIG_PERL__" if="${property::exists('withSwig')}" />
-        <arg value="/t:__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
-        <arg value="/t:__JAVAHL__" if="${buildJavaHL and javaHome != ''}" />
+        <target value="Programs\svn" />
+        <target value="Programs\svnadmin" />        
+        <target value="Programs\svnversion" />
+        <target value="Programs\svnserve" />
+        <target value="Programs\svnsync" />
+        <target value="Programs\svnlook" />
+        <target value="Programs\svnmucc"/>
+        <target value="Programs\svnauthz-validate" />
+        <target value="Programs\svndumpfilter" />
+        <target value="Programs\svnrdump" />
+        <target value="Programs\svn-populate-node-origins-index" />
+        <target value="__SWIG_PERL__" if="${property::exists('withSwig')}" />
+        <target value="__SWIG_PYTHON__" if="${property::exists('withSwig')}" />
+        <target value="__JAVAHL__" if="${buildJavaHL and javaHome != ''}" />
       </MSBuild>
     </OnceBlock>
   </target>
-  <target name="copy-result" depends="build-svn,misc-copy,copy-licenses,gettext-translate">
+  <target name="copy-result" depends="svn-build,misc-copy,copy-licenses,gettext-translate">
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32">
         <include name="subversion/${Configuration}/**/*.lib" />

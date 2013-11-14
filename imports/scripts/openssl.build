@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="opensslDir" value="build/${platform}/openssl" />
 
-  <target name="prepare-openssl" depends="extract">
+  <target name="openssl-prepare" depends="extract">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
       <exec program="perl.exe" workingdir="${opensslDir}">
         <arg value="Configure" />
@@ -84,7 +84,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
       </FilterFile>
     </OnceBlock>
   </target>
-  <target name="build-openssl" depends="prepare-openssl">
+  <target name="openssl-build" depends="openssl-prepare">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">    
       <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" if="${static}">
         <arg value="install" />
