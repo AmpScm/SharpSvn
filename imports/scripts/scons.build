@@ -4,6 +4,12 @@
   <property name="sconsApp" value="${path::get-full-path('build/scons/scripts/scons.bat')}" />
   <property name="sconsPythonPath" value="${path::get-full-path('build/scons/Lib/site-packages/scons')}" />
 
+  <property name="sconsVSVersion" value="8.0"  if="${VSversion == '2005'}" />
+  <property name="sconsVSVersion" value="9.0"  if="${VSversion == '2008'}" />
+  <property name="sconsVSVersion" value="10.0" if="${VSversion == '2010'}" />
+  <property name="sconsVSVersion" value="11.0" if="${VSversion == '2012'}" />
+  <property name="sconsVSVersion" value="12.0" if="${VSversion == '2013'}" />
+
   <target name="install-scons" depends="download,extract">
     <OnceBlock file="build/scons-${sconsVersion}.patched">
       <foreach item="File" property="patch">

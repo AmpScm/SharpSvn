@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+<project>
+  <property name="vcxproj" value="${int::parse(VSversion) &gt;= 2010}" />
+  <property name="vcproj" value="vcproj" if="${vcxproj}" />
+  <property name="vcproj" value="vcxproj" unless="${vcxproj}" />
+  
+  <property name="cmakeGenerator" value="Visual Studio 8 2005"
+            overwrite="false" if="${VSversion == '2005' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 8 2005 Win64"
+            overwrite="false" if="${VSversion == '2005' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 9 2008"
+            overwrite="false" if="${VSversion == '2008' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 9 2008 Win64"
+            overwrite="false" if="${VSversion == '2008' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 10"
+            overwrite="false" if="${VSversion == '2010' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 10 Win64"
+            overwrite="false" if="${VSversion == '2010' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 11"
+            overwrite="false" if="${VSversion == '2012' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 11 Win64"
+            overwrite="false" if="${VSversion == '2012' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 12"
+            overwrite="false" if="${VSversion == '2013' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 12 Win64"
+            overwrite="false" if="${VSversion == '2013' and platform=='x64'}" />            
+
+</project>

@@ -14,49 +14,50 @@
 
   <target name="prepare-bdb" depends="extract">
     <OnceBlock file="build/db-${dbVersion}.prepared">
-      <foreach item="File" property="dsp">
-        <in>
-          <items basedir="${dbWindowsDir}">
-            <include name="*.dsp" />
-          </items>
-        </in>
-        <do>
-          <VCBuild>
-            <arg line="/upgrade" />
-            <arg value="${dsp}" />
-          </VCBuild>
-        </do>
-      </foreach>
+      <VCBuild unless="${vcxproj}">
+        <arg line="/upgrade" />
+        <arg value="${dbWindowsDir}/db_dll.dsp" />
+      </VCBuild>
+      <VCUpgrade if="${vcxproj}">
+        <arg value="${dbWindowsDir}/db_dll.dsp" />
+      </VCUpgrade>
     </OnceBlock>
     <OnceBlock file="build/db-${dbVersion}.patched">
-      <foreach item="File" property="vcproj">
-        <in>
-          <items basedir="${dbWindowsDir}">
-            <include name="*.vcproj" />
-          </items>
-        </in>
-        <do>
-          <loadfile file="${vcproj}" property="projtext">
-            <filterchain>
-              <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-              <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
-              <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
-              <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${vcproj}" />
-        </do>
-      </foreach>
+      <if test="${not vcxproj}">
+        <loadfile file="${dbWindowsDir}/db_dll.vcproj" property="projtext">
+          <filterchain>
+            <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+            <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
+            <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
+            <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
+          </filterchain>
+        </loadfile>
+        <echo message="${projtext}" file="${dbWindowsDir}/db_dll.vcproj" />
+      </if>
+      <if test="${vcxproj}">
+        <loadfile file="${dbWindowsDir}/db_dll.vcxproj" property="projtext">
+          <filterchain>
+            <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+            <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
+            <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
+            <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
+          </filterchain>
+        </loadfile>
+        <echo message="${projtext}" file="${dbWindowsDir}/db_dll.vcxproj" />
+      </if>
     </OnceBlock>
   </target>
   <target name="build-bdb" depends="prepare-bdb">
     <OnceBlock file="build/db-${dbVersion}-${platform}.build">
-      <VCBuild platform="${platform}">
+      <VCBuild platform="${platform}" unless="${vcxproj}">
         <arg value="${dbWindowsDir}/db_dll.vcproj" />
         <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
         <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
         <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
       </VCBuild>
+      <MSBuild if="${vcxproj}">
+        <arg value="${dbWindowsDir}/db_dll.vcxproj" />
+      </MSBuild>
       <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
       <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
 

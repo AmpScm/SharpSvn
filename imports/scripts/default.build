@@ -37,29 +37,6 @@
     <echo message="Using Visual Studio ${VSversion} ${platform} for building" />
   </if>
   
-  <property name="cmakeGenerator" value="Visual Studio 8 2005"
-            overwrite="false" if="${VSversion == '2005' and platform=='win32'}" />
-  <property name="cmakeGenerator" value="Visual Studio 8 2005 Win64"
-            overwrite="false" if="${VSversion == '2005' and platform=='x64'}" />
-  <property name="cmakeGenerator" value="Visual Studio 9 2008"
-            overwrite="false" if="${VSversion == '2008' and platform=='win32'}" />
-  <property name="cmakeGenerator" value="Visual Studio 9 2008 Win64"
-            overwrite="false" if="${VSversion == '2008' and platform=='x64'}" />
-  <property name="cmakeGenerator" value="Visual Studio 10"
-            overwrite="false" if="${VSversion == '2010' and platform=='win32'}" />
-  <property name="cmakeGenerator" value="Visual Studio 10 Win64"
-            overwrite="false" if="${VSversion == '2010' and platform=='x64'}" />
-  <property name="cmakeGenerator" value="Visual Studio 11"
-            overwrite="false" if="${VSversion == '2012' and platform=='win32'}" />
-  <property name="cmakeGenerator" value="Visual Studio 11 Win64"
-            overwrite="false" if="${VSversion == '2012' and platform=='x64'}" />
-  
-  <property name="sconsVSVersion" value="8.0"  if="${VSversion == '2005'}" />
-  <property name="sconsVSVersion" value="9.0"  if="${VSversion == '2008'}" />
-  <property name="sconsVSVersion" value="10.0" if="${VSversion == '2010'}" />
-  <property name="sconsVSVersion" value="11.0" if="${VSversion == '2012'}" />
-  <property name="sconsVSVersion" value="12.0" if="${VSversion == '2013'}" />
-  
   <property name="MSBuildExe" value="MSBuild.exe" />
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
@@ -97,6 +74,9 @@
 
   <include buildfile="layout.build" />
   <include buildfile="prepare.build" />
+  
+  <include buildfile="cmake.build" />
+  <include buildfile="scons.build" />
 
   <include buildfile="bdb.build" />
   <include buildfile="zlib.build" />
@@ -113,7 +93,6 @@
   <include buildfile="swig.build" />
   <include buildfile="gtest.build" />
   <include buildfile="libgit2.build" />
-  <include buildfile="scons.build" />
   <include buildfile="dev.build" />
 
   <setenv>
