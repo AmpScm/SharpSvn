@@ -12,6 +12,9 @@
       <import namespace="System.Xml"/>
       <import namespace="System.Xml.XPath"/>
       <import namespace="System.Diagnostics"/>
+      <import namespace="NAnt.Core.Types"/>
+      <import namespace="NAnt.Core.Filters"/>
+      <import namespace="NAnt.Core.Util"/>
     </imports>
     <code>
       <![CDATA[			
@@ -67,7 +70,7 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
     [TaskAttribute("platform")]
     public string Platform
     {
-        get { return _platform; }
+        get { return _platform ?? Properties["platform"]; }
         set { _platform = value; }
     }
 
@@ -93,14 +96,6 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
             return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
         }
     }
-
-    protected override void ExecuteTask()
-    {
-        if (Configuration != null)
-            Arguments.Add(new NAnt.Core.Types.Argument(Configuration));
-
-        base.ExecuteTask();
-    }
     
     public override void Log(Level messageLevel, string message)
     {
@@ -116,6 +111,58 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
     }
 }
 
+[TaskName("VCUpgrade")]
+public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
+{
+    bool _showLogo;
+    bool _noOverwrite;
+    string _configuration;
+
+    [TaskAttribute("nologo", Required = false), BooleanValidator]
+    public bool NoLogo
+    {
+        get { return !_showLogo; }
+        set { _showLogo = !value; }
+    }
+    
+    [TaskAttribute("overwrite", Required = false), BooleanValidator]
+    public bool Overwrite
+    {
+        get { return !_noOverwrite; }
+        set { _noOverwrite = !value; }
+    }
+
+    public override string ProgramFileName
+    {
+        get { return "vcupgrade.exe"; }
+    }
+
+    [TaskAttribute("configuration")]
+    public string Configuration
+    {
+        get { return _configuration; }
+        set { _configuration = value; }
+    }
+
+    public override string ProgramArguments
+    {
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (NoLogo)
+                sb.Append(" -nologo");
+                
+            sb.Append(" -nocolor");
+            
+            if (Overwrite)
+                sb.Append(" -overwrite");
+
+            return sb.Length > 0 ? sb.ToString().Substring(1) : ""; // Remove first space
+        }
+    }
+}
+
 [TaskName("Svn")]
 public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 {
@@ -126,7 +173,7 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
     }
 
 
-    [TaskAttribute("nonInteractive")]
+    [TaskAttribute("nonInteractive", Required = false), BooleanValidator]
     public bool NonInteractive
     {
         get { return !_interactive; }
@@ -138,13 +185,87 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
 {
     bool _showLogo;
+    string _configuration;
+    string _platform;
+    readonly OptionCollection _properties = new OptionCollection();
+    readonly ArgumentCollection _targets = new ArgumentCollection();
+    FileInfo _src;
+    
+    [TaskAttribute("platform")]
+    public string Platform
+    {
+        get { return _platform ?? Properties["platform"]; }
+        set { _platform = value; }
+    }
+    
+    [TaskAttribute("configuration")]
+    public string Configuration
+    {
+        get { return _configuration ?? "Release"; }
+        set { _configuration = value; }
+    }
+    
+    [BuildElementArray("prop")]
+    public OptionCollection AppProperties
+    {
+        get { return _properties; }
+    }
+    
+    [BuildElementArray("target")]
+    public ArgumentCollection Targets
+    {
+        get { return _targets; }
+    }
+    
+    [TaskAttribute("src", Required=true)]
+    public FileInfo Src
+    {
+        get { return _src; }
+        set { _src = value; }
+    }
+    
     public override string ProgramArguments
     {
-        get { return _showLogo ? "" : "/nologo"; }
+        get
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            if (NoLogo)
+              sb.Append(" /nologo");
+              
+            if (!string.IsNullOrEmpty(Configuration))
+              sb.AppendFormat(" \"/P:Configuration={0}\"", Configuration);
+              
+            string platform = Platform;
+            if (!string.IsNullOrEmpty(platform))
+            {
+              if (platform == "win32")
+                platform = "Win32"; // Fix casing
+                
+              sb.AppendFormat(" \"/P:Platform={0}\"", platform);
+            }
+
+            foreach(Option o in AppProperties)
+            {
+                if (o.IfDefined && !o.UnlessDefined)
+                  sb.AppendFormat(" \"/P:{0}={1}\"", o.OptionName, o.Value);
+            }
+            
+            foreach(Argument a in Targets)
+            {
+                if (a.IfDefined && !a.UnlessDefined)
+                  sb.AppendFormat(" \"/t:{0}\"", a);
+            }
+            
+            if (Src != null)
+              sb.AppendFormat(" \"{0}\"", Src.FullName);
+
+            return sb.ToString().Trim();
+        }
     }
 
-    [TaskAttribute("noLogo")]
-    public bool NonInteractive
+    [TaskAttribute("noLogo", Required = false), BooleanValidator]
+    public bool NoLogo
     {
         get { return !_showLogo; }
         set { _showLogo = !value; }
@@ -363,10 +484,58 @@ public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
     }
 }
 
+[TaskName("FilterFile")]
+public class FilterFile : Task
+{
+  FilterChain _filterChain;
+  FileInfo _file;
+  Encoding _encoding;
+  
+  [BuildElement("filterchain")]
+  public FilterChain FilterChain
+  {
+    get { return _filterChain; }
+    set { _filterChain = value; }
+  }
+  
+  [TaskAttribute("file", Required = true)]
+  public FileInfo File
+  {
+    get { return _file; }
+	  set { _file = value; }
+	}
+	
+  [TaskAttribute("encoding")]
+  public Encoding Encoding
+  {
+    get { return _encoding ?? (_encoding = new UTF8Encoding()); }
+    set { _encoding = value; }
+  }
+
+  protected override void ExecuteTask()
+  {
+    string text;
+    string from = File.FullName + ".preTweak";
+
+    if (!System.IO.File.Exists(from))
+      System.IO.File.Copy(File.FullName, from);
+    
+    text = FileUtils.ReadFile(from, FilterChain, Encoding);
+
+    using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
+    {
+      sw.Write(text ?? "");
+    }
+  }
+	
+}
+
 [TaskName("CMake")]
 public class CMake : ExternalAppTask
 {
     string _process;
+    readonly OptionCollection _properties = new OptionCollection();
+    
     public override string ProgramFileName
     {
         get
@@ -387,17 +556,32 @@ public class CMake : ExternalAppTask
         set { _process = value; }
     }
     
+    [BuildElementArray("prop")]
+    public OptionCollection AppProperties
+    {
+        get { return _properties; }
+    }
+    
     public override string ProgramArguments
     {
         get
         {
-            string job;
+            StringBuilder sb = new StringBuilder();
             
+            sb.AppendFormat(" -G \"{0}\"", Properties["cmakeGenerator"]);
+                
+            foreach(Option o in AppProperties)
+            {
+                if (o.IfDefined && !o.UnlessDefined)
+                  sb.AppendFormat(" \"-D{0}={1}\"", o.OptionName, o.Value);
+            }
+
             if (!string.IsNullOrEmpty(Process))
-                job = string.Format("-P \"{0}\"", Process);
+                sb.AppendFormat(" -P \"{0}\"", Process);
             else
-                job = "--build .";
-            return string.Format("-G \"{0}\" {1}", Properties["cmakeGenerator"], job);
+                sb.Append(" --build .");
+                
+            return sb.ToString().Trim();
         }
     }
 }
