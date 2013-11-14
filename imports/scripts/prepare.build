@@ -352,7 +352,7 @@
         file="${gettextDir}/gettext-runtime/COPYING"
         tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
     <copy
-			file="${sharpSvnDir}/imports/scripts/SharpSvn-Licenses.wxs"
+			file="${downloads}/../scripts/SharpSvn-Licenses.wxs"
 			tofile="release/licenses/SharpSvn-Licenses.wxs" />
   </target>
 </project>
