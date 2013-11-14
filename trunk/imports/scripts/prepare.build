@@ -236,18 +236,19 @@
       unless="${directory::exists(httpdDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" if="${httpdBuildType == 'tag'}" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/branches/${httpdVersion}/" if="${httpdBuildType == 'branch'}" />
       <arg value="${httpdDir}" />
     </Svn>
-
+    
     <Svn
       verbose="true"
       if="${buildHttpd}"
-      unless="${directory::exists(aprIconvDir)}">
-
+      unless="${directory::exists(pcreDir)}">
+      
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
-      <arg value="${aprIconvDir}" />
+      <arg value="svn://vcs.exim.org/pcre/code/tags/pcre-${pcreVersion}/" />
+      <arg value="${pcreDir}" />
     </Svn>
 
     <Svn

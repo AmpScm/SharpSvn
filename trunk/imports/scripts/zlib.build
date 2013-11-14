@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="zlibDir" value="${buildRoot}/${platform}/zlib" />
 
-  <target name="build-zlib" depends="checkout">
+  <target name="zlib-build" depends="checkout">
     <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
       <NMake workingdir="${zlibDir}" makeFile="${zlibDir}/win32/Makefile.msc">
         <arg line='zlib.lib LOC="/Zl"' />
@@ -12,12 +12,6 @@
       </NMake>
     </OnceBlock>
     <copy todir="${intDir}/include">
-      <fileset basedir="${zlibDir}">
-        <include name="zlib.h" />
-        <include name="zconf.h" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/include">
       <fileset basedir="${zlibDir}">
         <include name="zlib.h" />
         <include name="zconf.h" />

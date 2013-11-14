@@ -12,7 +12,7 @@
   <property name="fullDbDllName" value="${dbDllName}-${platform}.${svnDll}" if="${dllPrefix != ''}"/>
   <property name="fullDbDllName" value="${libDb}.${svnDll}" if="${dllPrefix == ''}"/>
 
-  <target name="prepare-bdb" depends="extract">
+  <target name="bdb-prepare" depends="extract">
     <OnceBlock file="build/db-${dbVersion}.prepared">
       <VCBuild src="${dbWindowsDir}/db_dll.dsp" unless="${vcxproj}">
         <arg line="/upgrade" />
@@ -20,31 +20,24 @@
       <VCUpgrade src="${dbWindowsDir}/db_dll.dsp" if="${vcxproj}" />
     </OnceBlock>
     <OnceBlock file="build/db-${dbVersion}.patched">
-      <if test="${not vcxproj}">
-        <loadfile file="${dbWindowsDir}/db_dll.vcproj" property="projtext">
-          <filterchain>
-            <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-            <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
-            <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
-            <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${projtext}" file="${dbWindowsDir}/db_dll.vcproj" />
-      </if>
-      <if test="${vcxproj}">
-        <loadfile file="${dbWindowsDir}/db_dll.vcxproj" property="projtext">
-          <filterchain>
-            <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
-            <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
-            <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
-            <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${projtext}" file="${dbWindowsDir}/db_dll.vcxproj" />
-      </if>
+      <FilterFile file="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <filterchain>
+          <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+          <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${dbWindowsDir}/db_dll.vcxproj" if="${vcxproj}">
+        <filterchain>
+          <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='bufferoverflowU.lib' to='' />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
-  <target name="build-bdb" depends="prepare-bdb">
+  <target name="bdb-build" depends="bdb-prepare">
     <OnceBlock file="build/db-${dbVersion}-${platform}.build">
       <VCBuild src="${dbWindowsDir}/db_dll.vcproj" platform="${platform}" unless="${vcxproj}">
         <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />

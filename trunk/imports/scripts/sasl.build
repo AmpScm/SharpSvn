@@ -11,7 +11,7 @@
   <property name="saslPdb" value="${saslPrefix}.pdb" if="${dllPrefix!=''}"/>
   <property name="saslDllName" value="${saslPrefix}.${svnDll}" if="${dllPrefix!=''}"/>
 
-  <target name="prepare-sasl" depends="checkout,build-bdb,build-openssl">
+  <target name="sasl-prepare" depends="checkout, bdb-build, openssl-build">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
       <FilterFile file="${saslDir}/win32/include/config.h">
         <filterchain>
@@ -41,9 +41,6 @@
         </filterchain>
       </FilterFile>
 
-      <property name="linkAddendum" value="" />
-      <property name="linkAddendum" value="/MACHINE:x64" if="${platform=='x64'}" />
-
       <FilterFile file="${saslDir}/include/prop.h" if="${static}" >
         <filterchain>
           <replacestring from='WIN32' to='no_WIN32_exports' />
@@ -51,8 +48,9 @@
       </FilterFile>
       <FilterFile file="${saslDir}/plugins/NTMakefile">
         <filterchain>
+          <replacestring from='"afxres.h"' to='&lt;winresrc.h&gt;' />
           <replacestring from='CPPFLAGS = /D NEED_GETOPT' to='CPPFLAGS = /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT' />
-          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
+          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
       </FilterFile>
@@ -64,7 +62,7 @@
             to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
           <replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
           <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
-          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
+          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" />
           <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"${saslPdb}" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} '/>
           <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
@@ -77,7 +75,7 @@
             to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
           <replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
           <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
-          <replacestring from='$(LINK32DLL_FLAGS) /out' to='${linkAddendum} /out' />
+          <replacestring from='$(LINK32DLL_FLAGS) /out' to='/MACHINE:x64 /out' if="${platform=='x64'}" />
           <replacestring from=' $(libsasl_res)' to='' />
           <replacestring from='$(LINK32DLL)' to='$(LIB32) -lib' />
           <replacestring from='/implib:"libsasl.lib" ' to='' />
@@ -93,7 +91,7 @@
       </FilterFile>
     </OnceBlock>
   </target>
-  <target name="build-sasl" depends="prepare-sasl">
+  <target name="sasl-build" depends="sasl-prepare">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.build">
       <NMake workingdir="${saslDir}" makeFile="${saslDir}/NTMakefile" verbose="true">
         <arg value="TARGET_WIN_SYSTEM=50" />

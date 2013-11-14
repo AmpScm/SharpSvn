@@ -2,10 +2,10 @@
 <project basedir=".." default="build">
   <property name="libgit2Dir" value="${buildRoot}/${platform}/libgit2" />
 
-  <target name="build-libgit2" depends="download,extract,checkout" if="${buildLibgit2}">
+  <target name="libgit2-build" depends="download,extract,checkout" if="${buildLibgit2}">
     <mkdir dir="${libgit2Dir}/build" />
   
-    <CMake workingdir="${libgit2Dir}" verbose="true">
+    <CMake workingdir="${libgit2Dir}">
       <arg value="-DBUILD_SHARED_LIBS=OFF" />
       <arg value="-DBUILD_CLAR=OFF" />
       <arg value="-DBUILD_EXAMPLES=OFF" />
