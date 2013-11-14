@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="opensslDir" value="build/${platform}/openssl" />
 
-  <target name="prepare-openssl" depends="extract, build-zlib">
+  <target name="prepare-openssl" depends="extract">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
       <exec program="perl.exe" workingdir="${opensslDir}">
         <arg value="Configure" />
@@ -16,13 +16,10 @@
         <arg value="no-shared" />
         <arg value="no-krb5"/>
         <arg value="no-hw"/>
-        <arg value="zlib" />
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
-        <arg value="--with-zlib-lib=${path::get-full-path(intDir + '/lib/zlib.lib')}" />
-        <arg value="--with-zlib-include=${path::get-full-path(intDir + '/include')}" />
         <arg value="--prefix=${path::get-full-path(intDir)}" />
       </exec>
     </OnceBlock>
