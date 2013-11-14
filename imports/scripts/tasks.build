@@ -214,6 +214,7 @@ public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
     bool _showLogo;
     string _configuration;
     string _platform;
+    string _verbosity;
     readonly OptionCollection _properties = new OptionCollection();
     readonly ArgumentCollection _targets = new ArgumentCollection();
     FileInfo _src;
@@ -251,6 +252,13 @@ public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
         set { _src = value; }
     }
     
+    [TaskAttribute("verbosity")]
+    public string Verbosity
+    {
+        get { return _verbosity; }
+        set { _verbosity = value; }
+    }
+    
     public override string ProgramArguments
     {
         get
@@ -286,6 +294,12 @@ public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
             
             if (Src != null)
               sb.AppendFormat(" \"{0}\"", Src.FullName);
+              
+              
+            if (!String.IsNullOrEmpty(Verbosity))
+              sb.AppendFormat(" \"/verbosity:{0}\"", Verbosity);
+            else if (!Verbose)
+              sb.AppendFormat(" /v:m");
 
             return sb.ToString().Trim();
         }
