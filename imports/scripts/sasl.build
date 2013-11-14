@@ -13,7 +13,7 @@
 
   <target name="prepare-sasl" depends="checkout,build-bdb,build-openssl">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
-      <loadfile file="${saslDir}/win32/include/config.h" property="propText">
+      <FilterFile file="${saslDir}/win32/include/config.h">
         <filterchain>
           <replacestring from='/* which mechs can we link staticly? */' to='#define STATIC_NTLM 1 /* Which mechs can we link staticly?  */ ' />
           <replacestring from='#define STATIC_OTP 1' to='/* #undef STATIC_OTP */' />
@@ -21,8 +21,7 @@
           <replacestring from='#define STATIC_GSSAPIV2 1' to='/* #undef STATIC_GSSAPIV2 */' />
           <replacestring from='typedef int ssize_t;' to='typedef INT_PTR ssize_t;' />
         </filterchain>
-      </loadfile>
-      <echo message="${propText}" file="${saslDir}/win32/include/config.h" />
+      </FilterFile>
       <echo message='
 
 /* SharpSvn */
@@ -34,34 +33,31 @@
 /* /SharpSvn */
 
 ' file="${saslDir}/win32/include/config.h" append="true" />
-      <loadfile file="${saslDir}/NTMakefile" property="propText">
+      <FilterFile file="${saslDir}/NTMakefile">
         <filterchain>
           <replacestring
             from='SUBDIRS=lib plugins utils sample'
             to='SUBDIRS=plugins lib' />
         </filterchain>
-      </loadfile>
-      <echo message="${propText}" file="${saslDir}/NTMakefile" />
+      </FilterFile>
 
       <property name="linkAddendum" value="" />
       <property name="linkAddendum" value="/MACHINE:x64" if="${platform=='x64'}" />
 
-      <loadfile file="${saslDir}/include/prop.h" property="propText" if="${static=='true'}" >
+      <FilterFile file="${saslDir}/include/prop.h" if="${static}" >
         <filterchain>
           <replacestring from='WIN32' to='no_WIN32_exports' />
         </filterchain>
-      </loadfile>
-      <echo message="${propText}" file="${saslDir}/include/prop.h" if="${static=='true'}" />
-      <loadfile file="${saslDir}/plugins/NTMakefile" property="propText">
+      </FilterFile>
+      <FilterFile file="${saslDir}/plugins/NTMakefile">
         <filterchain>
           <replacestring from='CPPFLAGS = /D NEED_GETOPT' to='CPPFLAGS = /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT' />
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) ${linkAddendum} /out' />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
-      </loadfile>
-      <echo message="${propText}" file="${saslDir}/plugins/NTMakefile" />
+      </FilterFile>
 
-      <loadfile file="${saslDir}/lib/NTMakefile" property="propText">
+      <FilterFile file="${saslDir}/lib/NTMakefile" unless="${static}">
         <filterchain>
           <replacestring
             from='CPPFLAGS = /D NEED_GETOPT'
@@ -73,8 +69,8 @@
           <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
-      </loadfile>
-      <loadfile file="${saslDir}/lib/NTMakefile" property="propTextStatic">
+      </FilterFile>
+      <FilterFile file="${saslDir}/lib/NTMakefile" if="${static}">
         <filterchain>
           <replacestring
             from='CPPFLAGS = /D NEED_GETOPT'
@@ -89,15 +85,12 @@
           <replacestring from='libsasl.dll' to='libsasl.lib' />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
         </filterchain>
-      </loadfile>
-      <echo file="${saslDir}/lib/NTMakefile" message="${propText}"       if="${static!='true'}" />
-      <echo file="${saslDir}/lib/NTMakefile" message="${propTextStatic}" if="${static=='true'}" />
-      <loadfile file="${saslDir}/win32/common.mak" property="propText">
+      </FilterFile>
+      <FilterFile file="${saslDir}/win32/common.mak">
         <filterchain>
           <replacestring from='SYS_LIBS=' to='SYS_LIBS="/LIBPATH:$(OPENSSL_LIBPATH)" zlib.lib ' />
         </filterchain>
-      </loadfile>
-      <echo message="${propText}" file="${saslDir}/win32/common.mak" />
+      </FilterFile>
     </OnceBlock>
   </target>
   <target name="build-sasl" depends="prepare-sasl">

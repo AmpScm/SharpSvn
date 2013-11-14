@@ -21,29 +21,21 @@
       
       <!-- On systems that compile to x64 we can't be sure that they can run x64,
            so build the helper tools to win32 -->
-      <MSBuild>
-        <arg value="${httpdDir}/apache.sln" />
-        <arg value="/P:configuration=Release" />
-        <arg value="/P:platform=Win32" />
-        
-        <arg value="/t:dftables" />
-        <arg value="/t:gen_test_char" />
+      <MSBuild src="${httpdDir}/apache.sln" platform="Win32">
+        <target value="dftables" />
+        <target value="gen_test_char" />
       </MSBuild>
 
       <!-- And now build the binaries for the intended target -->
-      <MSBuild>
-        <arg value="${httpdDir}/apache.sln" />
-        <arg value="/P:configuration=Release" />
-        <arg value="/P:platform=${platform}" />
-        
-        <arg value="/t:httpd" />
-        <arg value="/t:htpasswd" />
-        <arg value="/t:mod_dav" />
-        <arg value="/t:mod_auth_basic" />
-        <arg value="/t:mod_authn_file" />
-        <arg value="/t:mod_mime" />
-        <arg value="/t:mod_alias" />
-        <arg value="/t:mod_log_config" />
+      <MSBuild src="${httpdDir}/apache.sln">
+        <target value="httpd" />
+        <target value="htpasswd" />
+        <target value="mod_dav" />
+        <target value="mod_auth_basic" />
+        <target value="mod_authn_file" />
+        <target value="mod_mime" />
+        <target value="mod_alias" />
+        <target value="mod_log_config" />
       </MSBuild>
     </OnceBlock>
 
