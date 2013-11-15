@@ -113,13 +113,22 @@
         <prop name="APR_HAS_LDAP" value="OFF" />
         <prop name="APU_HAVE_ODBC" value="OFF" />
       </CMake>
-      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}">
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}" generated="true">
         <filterchain>
           <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
           <replacestring from='libeay32.lib;' to='libeay32.lib;crypt32.lib;' />
         </filterchain>
       </FilterFile>
-      
+      <FilterFile file="${aprDir}/libapr-1.${vcproj}" if="${dllPrefix!=''}">
+        <filterchain>
+          <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}">
+        <filterchain>
+          <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' />
+        </filterchain>
+      </FilterFile>
       <delete file="${intDir}/include/apr.h" />
       <delete file="${libAprSharedLib}" />
     </OnceBlock>      

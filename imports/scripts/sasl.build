@@ -57,6 +57,7 @@
 
       <FilterFile file="${saslDir}/lib/NTMakefile" unless="${static}">
         <filterchain>
+          <replacestring from='"afxres.h"' to='&lt;winresrc.h&gt;' />
           <replacestring
             from='CPPFLAGS = /D NEED_GETOPT'
             to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
@@ -107,7 +108,8 @@
         <arg value="NTLM=1" />
         <arg value="NTLM_STATIC=1" />
       </NMake>
-      <exec program="mt.exe" workingdir="${saslDir}/lib" unless="${static}">
+      <!-- VS2005 and VS2008 binaries need a manifest -->
+      <exec program="mt.exe" workingdir="${saslDir}/lib" unless="${static}" if="${not vxproj}">
         <arg value="-manifest" />
         <arg value="${saslDllName}.manifest" />
         <arg value="-outputresource:${saslDllName};2" />

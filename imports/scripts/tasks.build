@@ -57,7 +57,7 @@ public class VCBuild : NAnt.Core.Tasks.ExternalProgramBase
     string _configuration;
     FileInfo _src;
 
-    [TaskAttribute("nologo", Required = false), BooleanValidator]
+    [TaskAttribute("nologo"), BooleanValidator]
     public bool NoLogo
     {
         get { return !_showLogo; }
@@ -137,14 +137,14 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
     string _configuration;
     FileInfo _src;
 
-    [TaskAttribute("nologo", Required = false), BooleanValidator]
+    [TaskAttribute("nologo"), BooleanValidator]
     public bool NoLogo
     {
         get { return !_showLogo; }
         set { _showLogo = !value; }
     }
     
-    [TaskAttribute("overwrite", Required = false), BooleanValidator]
+    [TaskAttribute("overwrite"), BooleanValidator]
     public bool Overwrite
     {
         get { return !_noOverwrite; }
@@ -201,7 +201,7 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
     }
 
 
-    [TaskAttribute("nonInteractive", Required = false), BooleanValidator]
+    [TaskAttribute("nonInteractive"), BooleanValidator]
     public bool NonInteractive
     {
         get { return !_interactive; }
@@ -306,7 +306,7 @@ public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
         }
     }
 
-    [TaskAttribute("noLogo", Required = false), BooleanValidator]
+    [TaskAttribute("noLogo"), BooleanValidator]
     public bool NoLogo
     {
         get { return !_showLogo; }
@@ -326,7 +326,7 @@ public class NMake : ExternalAppTask
         set { _makeFile = value; }
     }
 
-    [TaskAttribute("nologo", Required = false), BooleanValidator]
+    [TaskAttribute("nologo"), BooleanValidator]
     public bool NoLogo
     {
         get { return !_showLogo; }
@@ -532,6 +532,7 @@ public class FilterFile : Task
   FilterChain _filterChain;
   FileInfo _file;
   Encoding _encoding;
+  bool _generated;
   
   [BuildElement("filterchain")]
   public FilterChain FilterChain
@@ -553,13 +554,22 @@ public class FilterFile : Task
     get { return _encoding ?? (_encoding = new UTF8Encoding()); }
     set { _encoding = value; }
   }
+  
+  [TaskAttribute("generated"), BooleanValidator]
+  public bool Generated
+  {
+      get { return _generated; }
+      set { _generated = value; }
+  }
 
   protected override void ExecuteTask()
   {
     string text;
     string from = File.FullName + ".preTweak";
 
-    if (!System.IO.File.Exists(from))
+    if (_generated)
+      from = File.FullName;
+    else if (!System.IO.File.Exists(from))
       System.IO.File.Copy(File.FullName, from);
     
     text = FileUtils.ReadFile(from, FilterChain, Encoding);
