@@ -16,39 +16,7 @@
             <arg value="${svnBase}" />
           </Svn>
         </foreach>
-        <if test="${applyMerges}">
-          <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
-            /* Appended by sharpsvn/imports/scripts/build-subversion.build */
-            apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
-            {
-            if (!auth_baton)
-            return NULL;
-
-            return auth_baton->creds_cache;
-            }
-          </echo>
-
-          <if test="${svnAddSharpSvn == 'true'}">
-            <loadfile file="${svnBase}/subversion/libsvn_fs_base/fs.c" property="projtext">
-              <filterchain>
-                <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-                         to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-              </filterchain>
-            </loadfile>
-            <echo message="${projtext}" file="${svnBase}/subversion/libsvn_fs_base/fs.c" />
-            
-            <loadfile file="${svnBase}/subversion/libsvn_subr/io.c" property="projtext">
-              <filterchain>
-                <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
-                                 to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
-              </filterchain>
-            </loadfile>
-            <echo message="${projtext}" file="${svnBase}/subversion/libsvn_subr/io.c" />
-          </if>
-        </if>
-      </OnceBlock>
-      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${applyPatches=='true'}">
-        <foreach item="File" property="patch">
+        <foreach item="File" property="patch" if="${applyPatches}">
           <in>
             <items basedir="${downloads}/../patches/subversion">
               <include name="*.patch" />
@@ -58,7 +26,45 @@
             <ApplyPatch patchFile="${patch}" toDir="${svnBase}" />
           </do>
         </foreach>
+        
+        <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn and applyMerges}">
+          /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+          apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+          {
+          if (!auth_baton)
+          return NULL;
+
+          return auth_baton->creds_cache;
+          }
+        </echo>
+
+        <FilterFile file="${svnBase}/subversion/libsvn_fs_base/fs.c" if="${svnAddSharpSvn and applyMerges}">
+          <filterchain>
+            <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+                     to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+          </filterchain>
+        </FilterFile>
+          
+        <FilterFile file="${svnBase}/subversion/libsvn_subr/io.c" if="${svnAddSharpSvn and applyMerges}">
+          <filterchain>
+            <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
+                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
+          </filterchain>
+        </FilterFile>
       </OnceBlock>
+      
+      <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcproj.ezt" if="${(not static) and (dllPrefix != '')}">
+        <filterchain>
+          <replacestring from='$(OutDir)\[target.output_name]'
+                         to='$(OutDir)\[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name]' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcxproj.ezt" if="${(not static) and (dllPrefix != '')}">
+        <filterchain>
+          <replacestring from='[target.output_name_without_ext]'
+                         to='[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name_without_ext]' />
+        </filterchain>
+      </FilterFile>
     </if>
   </target>
 
@@ -97,25 +103,6 @@
 
       <echo message="@echo off" file="${svnBase}/build/win32/build_zlib.bat" />
 
-      <!-- Replace shared library builds with static builds; to auto change dependencies -->
-      <foreach item="File" property="vcproj" if="${static != 'true'}">
-        <in>
-          <items basedir="${svnBase}">
-            <include name="build/win32/**/*.vcproj" />
-            <!--include name="../serf/serf.vcproj" /-->
-          </items>
-        </in>
-        <do>
-          <loadfile file="${vcproj}" property="projtext">
-            <filterchain>
-              <!--replacestring from='AdditionalDependencies="zlibstat' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib zlibstat' />
-              <replacestring from='AdditionalDependencies="advapi32.lib' to='AdditionalDependencies="Rpcrt4.lib Mswsock.lib Ws2_32.lib libeay32.lib ssleay32.lib advapi32.lib' /-->
-              <replacestring from='OutputFile="$(OutDir)\libsvn_' to='OutputFile="$(OutDir)\${dllPrefix}svn_' if="${(static != 'true') and (dllPrefix != '')}"/>
-            </filterchain>
-          </loadfile>
-          <echo message="${projtext}" file="${vcproj}" />
-        </do>
-      </foreach>
       <echo file="build/subversion-${subversionVersion}_${platform}-version.txt" message="?" />
       <exec program="svnversion.exe" output="build/subversion-${subversionVersion}_${platform}-version.txt" failonerror="false">
         <arg value="-n" />
