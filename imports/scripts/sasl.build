@@ -99,9 +99,8 @@
         <!-- Win 2000+ -->
         <!-- BDB -->
         <arg value="DB_LIB=${libDb}.lib" />
-        <arg value="DB_LIBPATH=${path::get-full-path('release\lib')}" if="${platform == 'win32'}"/>
-        <arg value="DB_LIBPATH=${path::get-full-path('release\lib-x64')}" if="${platform == 'x64'}"/>
-        <arg value="DB_INCLUDE=${path::get-full-path('release\include')}" />
+        <arg value="DB_INCLUDE=${path::get-full-path(intDir + '/include')}" />
+        <arg value="DB_LIBPATH=${path::get-full-path(intDir + '/lib')}" />
         <!-- OpenSSL -->
         <arg value="OPENSSL_INCLUDE=${path::get-full-path(intDir + '/include')}" />
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(intDir + '/lib')}" />
@@ -109,7 +108,7 @@
         <arg value="NTLM_STATIC=1" />
       </NMake>
       <!-- VS2005 and VS2008 binaries need a manifest -->
-      <exec program="mt.exe" workingdir="${saslDir}/lib" unless="${static}" if="${not vxproj}">
+      <exec program="mt.exe" workingdir="${saslDir}/lib" unless="${static}" if="${not vcxproj}">
         <arg value="-manifest" />
         <arg value="${saslDllName}.manifest" />
         <arg value="-outputresource:${saslDllName};2" />
