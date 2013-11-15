@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="saslDir" value="build/${platform}/cyrus-sasl-${saslVersion}" />
-  <property name="saslFilename" value="cyrus-sasl-${saslVersion}.tar.gz" />
+  <property name="saslDir" value="build/${platform}/sasl" />
 
   <regex pattern="^(?'SASL_MAJOR_VERSION'\d+)\.(?'SASL_MINOR_VERSION'\d+)\.(?'SASL_MICRO_VERSION'\d+)" input="${saslVersion}" />
 
@@ -33,11 +32,14 @@
 /* /SharpSvn */
 
 ' file="${saslDir}/win32/include/config.h" append="true" />
+      <FilterFile file="${saslDir}/win32/common.mak">
+        <filterchain>
+          <replacestring from='=/Wp64' to='=/D_CRT_SECURE_NO_DEPRECATE' />
+        </filterchain>
+      </FilterFile>
       <FilterFile file="${saslDir}/NTMakefile">
         <filterchain>
-          <replacestring
-            from='SUBDIRS=lib plugins utils sample'
-            to='SUBDIRS=plugins lib' />
+          <replacestring from='SUBDIRS=lib plugins utils sample' to='SUBDIRS=plugins lib' />
         </filterchain>
       </FilterFile>
 
@@ -50,12 +52,18 @@
         <filterchain>
           <replacestring from='"afxres.h"' to='&lt;winresrc.h&gt;' />
           <replacestring from='CPPFLAGS = /D NEED_GETOPT' to='CPPFLAGS = /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT' />
-          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" />
+          <replacestring from='$(LINK32DLL_FLAGS) /out' to='/MACHINE:x64 /out' if="${platform=='x64'}" />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
+          <replacestring from='$(LINK32DLL_FLAGS)' to='$(LIB32_FLAGS)' />
+          <replacestring from='$(LINK32DLL)' to='$(LINK32LIB)' />
+          <LineRegexReplace re='/implib:"sasl[A-Za-z0-9_]+\.lib" ' to='' />
+          <LineRegexReplace re=' ([a-zA-Z0-9_]+)_init.(c|obj)' to='' />
+          <LineRegexReplace re='(sasl[A-Z0-9a-z]+)_out\s*=\s*(\1).dll\s+(\1).exp\s*(\1).exp' to='$1_out = ' />
+          <LineRegexReplace re='(sasl[A-Z0-9a-z]+).dll' to='$1.lib' />
         </filterchain>
       </FilterFile>
 
-      <FilterFile file="${saslDir}/lib/NTMakefile" unless="${static}">
+      <FilterFile file="${saslDir}/lib/NTMakefile">
         <filterchain>
           <replacestring from='"afxres.h"' to='&lt;winresrc.h&gt;' />
           <replacestring
@@ -63,40 +71,27 @@
             to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
           <replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
           <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
-          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" />
-          <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"${saslPdb}" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} '/>
-          <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" />
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
-        </filterchain>
-      </FilterFile>
-      <FilterFile file="${saslDir}/lib/NTMakefile" if="${static}">
-        <filterchain>
-          <replacestring
-            from='CPPFLAGS = /D NEED_GETOPT'
-            to='CPPFLAGS = /Gy /Zi /Zl /O1 /D NTLM_STATIC=1 /D _CRT_SECURE_NO_WARNINGS /D NEED_GETOPT /I "$(OPENSSL_INCLUDE)"' />
-          <replacestring from=' windlopen.c ' to=' dlopen.c ../plugins/ntlm.c ../plugins/digestmd5.c ../plugins/crammd5.c ../plugins/login.c ../plugins/plain.c ../plugins/anonymous.c ../plugins/sasldb.c ../plugins/allockey.c ../plugins/db_berkeley.c ' />
-          <replacestring from=' windlopen.obj ' to=' dlopen.obj ../plugins/ntlm.obj ../plugins/digestmd5.obj ../plugins/cram.obj ../plugins/login.obj ../plugins/plain.obj ../plugins/anonymous.obj ../plugins/sasldb.obj ../plugins/allockey.obj ../plugins/db_berkeley.obj ' />
-          <replacestring from='$(LINK32DLL_FLAGS) /out' to='/MACHINE:x64 /out' if="${platform=='x64'}" />
-          <replacestring from=' $(libsasl_res)' to='' />
-          <replacestring from='$(LINK32DLL)' to='$(LIB32) -lib' />
-          <replacestring from='/implib:"libsasl.lib" ' to='' />
-          <replacestring from='/pdb:"libsasl.pdb" ' to='' />
-          <replacestring from='libsasl.dll' to='libsasl.lib' />
-          <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
-        </filterchain>
-      </FilterFile>
-      <FilterFile file="${saslDir}/win32/common.mak">
-        <filterchain>
-          <replacestring from='SYS_LIBS=' to='SYS_LIBS="/LIBPATH:$(OPENSSL_LIBPATH)" zlib.lib ' />
+          <!-- Shared Library -->
+          <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" unless="${static}" />
+          <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"${saslPdb}" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} ' unless="${static}" />
+          <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" unless="${static}" />
+          <!-- Static library -->
+          <replacestring from='$(LINK32DLL)' to='$(LINK32LIB)' if="${static}" />
+          <replacestring from='$(LINK32DLL_FLAGS)' to='$(LINK32LIB_FLAGS)' if="${static}" />
+          <replacestring from=' $(libsasl_res)' to='' if="${static}" />
+          <replacestring from='/implib:"libsasl.lib" ' to='' if="${static}" />
+          <replacestring from='libsasl.dll' to='libsasl.lib' if="${static}" />          
         </filterchain>
       </FilterFile>
     </OnceBlock>
   </target>
   <target name="sasl-build" depends="sasl-prepare">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.build">
-      <NMake workingdir="${saslDir}" makeFile="${saslDir}/NTMakefile" verbose="true">
+      <NMake workingdir="${saslDir}" makeFile="${saslDir}/NTMakefile">
         <arg value="TARGET_WIN_SYSTEM=50" />
         <!-- Win 2000+ -->
+        <arg value="STATIC=no" /><!-- Use shared CRTpus -->
         <!-- BDB -->
         <arg value="DB_LIB=${libDb}.lib" />
         <arg value="DB_INCLUDE=${path::get-full-path(intDir + '/include')}" />
@@ -105,7 +100,7 @@
         <arg value="OPENSSL_INCLUDE=${path::get-full-path(intDir + '/include')}" />
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(intDir + '/lib')}" />
         <arg value="NTLM=1" />
-        <arg value="NTLM_STATIC=1" />
+        <arg value="NTLM_STATIC=1" />        
       </NMake>
       <!-- VS2005 and VS2008 binaries need a manifest -->
       <exec program="mt.exe" workingdir="${saslDir}/lib" unless="${static}" if="${not vcxproj}">

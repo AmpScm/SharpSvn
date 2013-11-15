@@ -1,0 +1,115 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="aprBase" value="${platformRoot}" if="${not buildHttpd}" />
+  <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd}" />
+  <property name="aprDir" value="${aprBase}\apr" />
+  <property name="aprUtilDir" value="${aprBase}\apr-util" />
+
+  <property name="libAprSharedLib" value="${aprDir}\Release\libapr-1.lib" />
+  <property name="libAprUtilSharedLib" value="${aprUtilDir}\Release\libaprutil-1.lib" />
+ 
+  <target name="aprutil-merge" depends="checkout">
+    <OnceBlock file="build/aprutil-${aprVersion}-${platform}.merged">
+      <Svn verbose="true" if="${string::get-length(aprutilMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${aprutilMerges}" />
+        <arg value="http://svn.apache.org/repos/asf/apr/apr-util/trunk/" />
+        <arg value="${aprUtilDir}" />
+      </Svn>
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/apr-util">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${aprUtilDir}" />
+          </Svn>
+        </do>
+      </foreach>
+      <FilterFile file="${aprUtilDir}/include/apu_want.hw" if="${vcxproj}">
+        <filterchain>
+          <replacestring from='#if APU_HAVE_DB' to='#if 1 || APU_HAVE_DB' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}\include\apu.hwc">
+        <filterchain>
+          <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 // WAS: ' />
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+  </target>
+  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build">
+    <CMake workingdir="${aprUtilDir}">
+      <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+      <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+      
+      <prop name="APR_INCLUDE_DIR" value="${intDir}/include/apr-1" />
+      <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />
+      <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+      <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
+      
+      <prop name="APU_HAVE_CRYPTO" value="ON" />
+      <prop name="APR_HAS_LDAP" value="OFF" />
+      <prop name="APU_HAVE_ODBC" value="OFF" />
+    </CMake>
+    <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}" generated="true">
+      <filterchain>
+        <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
+        <replacestring from='libeay32.lib;' to='libeay32.lib;crypt32.lib;' />
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
+      <filterchain>
+        <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' />
+      </filterchain>
+    </FilterFile>
+
+    <MSBuild src="${aprUtilDir}/APR-Util.sln" configuration="RelWithDebInfo">
+      <target value="aprutil-1" />
+      <target value="libaprutil-1" />
+    </MSBuild>
+
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${aprUtilDir}/RelWithDebInfo">
+        <include name="*.lib" />
+        <include name="apr*.pdb" />
+        <include name="libexpat*.pdb" />
+        <exclude name="apr_*.pdb" />
+      </fileset>
+    </copy>
+    <copy file="${intDir}/lib/libexpat.lib" tofile="${intDir}/lib/xml.lib" />
+    <copy todir="${intDir}/bin" flatten="true">
+      <fileset basedir="${aprUtilDir}/RelWithDebInfo">
+        <include name="libapr*.dll" />
+        <include name="libapr*.pdb" />
+        <include name="apr_*.dll" />
+        <include name="apr_*.pdb" />
+        <include name="${dllPrefix}*.dll" if="${dllPrefix != ''}" />
+        <include name="${dllPrefix}*.pdb" if="${dllPrefix != ''}" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include/apr-1" flatten="true">
+      <fileset basedir="${aprUtilDir}/include">
+        <include name="../apu.h" /> <!-- Generated -->
+        <include name="../apu_want.h" /> <!-- Generated -->
+      </fileset>
+    </copy>        
+    <copy todir="${intDir}/include/apr-1">
+      <fileset basedir="${aprUtilDir}/include">
+        <include name="*.h" />
+        <include name="arch/*.h" />
+        <include name="arch/win32/*.h" />
+      </fileset>
+    </copy>
+  </target>
+</project>

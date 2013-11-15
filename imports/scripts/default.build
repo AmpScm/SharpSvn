@@ -86,6 +86,7 @@
   <include buildfile="httpd.build" />
   <include buildfile="pcre.build" />
   <include buildfile="apr.build" />
+  <include buildfile="aprutil.build" />
   <include buildfile="sasl.build" />
   <include buildfile="gettext.build" />
   <include buildfile="sharpintl.build" />

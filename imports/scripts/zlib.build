@@ -20,6 +20,7 @@
     <copy todir="${intDir}/lib">
       <fileset basedir="${zlibDir}">
         <include name="zlib.lib" />
+        <include name="zlib.pdb" />
       </fileset>
     </copy>
   </target>

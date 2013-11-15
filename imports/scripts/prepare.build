@@ -43,11 +43,6 @@
       dest="${downloads + sharpZipFilename}"
       unless="${file::exists(downloads + sharpZipFilename)}" />
 
-    <get
-      src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}"
-      dest="${downloads + saslFilename}"
-      unless="${file::exists(downloads + saslFilename)}" />
-
     <get src="http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}"
       dest="${downloads + nasmFilename}"
       unless="${file::exists(downloads + nasmFilename)}" />
@@ -119,11 +114,6 @@
       zipfile="${downloads + sharpZipFilename}"
       todir="${sharpZipLibDir}"
       unless="${directory::exists(sharpZipLibDir)}" />
-
-    <untar
-      src="${downloads + saslFilename}" compression="gzip"
-      dest="build/${platform}"
-      unless="${directory::exists(saslDir)}" />
 
     <unzip
       zipfile="${downloads + nasmFilename}"
@@ -269,10 +259,7 @@
       <arg value="${aprUtilDir}" />
     </Svn>
 
-    <Svn
-      verbose="true"
-      unless="${directory::exists(platformRoot + '/serf')}">
-
+    <Svn unless="${directory::exists(platformRoot + '/serf')}">
       <arg value="co" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
@@ -280,20 +267,13 @@
       <arg value="${platformRoot}/serf" />
     </Svn>
 
-    <Svn
-      verbose="true"
-      unless="${directory::exists(sqliteDir)}">
-
+    <Svn unless="${directory::exists(sqliteDir)}">
       <arg value="co" />
       <arg value="http://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
     </Svn>
 
-    <Svn
-      verbose="true"
-      if="${buildLibgit2}"
-      unless="${directory::exists(libgit2Dir)}">
-
+    <Svn unless="${directory::exists(libgit2Dir)}" if="${buildLibgit2}" >
       <arg value="co" />
       <arg value="https://github.com/libgit2/libgit2.git/trunk/" if="${libgit2BuildType == 'trunk'}" />
       <arg value="https://github.com/libgit2/libgit2.git/tags/v${libgit2Version}/" if="${libgit2BuildType == 'tag'}" />
@@ -301,14 +281,16 @@
       <arg value="${libgit2Dir}" />
     </Svn>
 
-
-    <Svn
-      verbose="true"
-      unless="${directory::exists(gtestDir)}">
-
+    <Svn unless="${directory::exists(gtestDir)}">
       <arg value="co" />
       <arg value="http://googletest.googlecode.com/svn/tags/release-${gtestVersion}/" />
       <arg value="${gtestDir}" />
+    </Svn>
+    
+    <Svn unless="${directory::exists(saslDir)}">
+      <arg value="co" />
+      <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
+      <arg value="${saslDir}" />
     </Svn>
   </target>
 
