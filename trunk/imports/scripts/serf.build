@@ -29,7 +29,7 @@
       </foreach>
     </OnceBlock>
   </target>
-  <target name="serf-build" depends="serf-prepare,zlib-build,apr-build,openssl-build,scons-install">
+  <target name="serf-build" depends="serf-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
         if="${file::exists(serfDir + '/SConstruct')}">
       <environment>

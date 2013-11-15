@@ -68,13 +68,19 @@
     </if>
   </target>
 
-  <target name="svn-generate" depends="checkout, apr-build, serf-build, svn-prepare">
+  <target name="svn-generate" depends="checkout, apr-build, aprutil-build, serf-build, svn-prepare" if="${buildSubversion}">
 
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated" if="${buildSubversion}">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
     
       <copy todir="${intDir}\inc" if="${subversionVersion &lt; '1.9.'}">
         <fileset basedir="${intDir}\include">
           <include name="sqlite*.h" />
+        </fileset>
+      </copy>
+      
+      <copy todir="${intDir}\include" if="${subversionVersion &lt; '1.9.'}">
+        <fileset basedir="${intDir}\include\apr-1">
+          <include name="**.h" />
         </fileset>
       </copy>
 
@@ -144,7 +150,7 @@
     </OnceBlock>
   </target>
 
-  <target name="svn-build" depends="bdb-build, zlib-build, apr-build, serf-build, swig-build, httpd-build, svn-generate">
+  <target name="svn-build" depends="bdb-build, zlib-build, apr-build, serf-build, swig-build, httpd-build, svn-generate" if="${buildSubversion}">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
       <MSBuild src="${svnBase}/subversion_vcnet.sln">
