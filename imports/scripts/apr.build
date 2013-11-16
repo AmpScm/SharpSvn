@@ -71,10 +71,7 @@
       </filterchain>
     </FilterFile>
     <FilterFile file="${aprDir}/apr-1.${vcproj}" generated="true">
-      <filterchain>
-        <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
-                         to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' />
-      </filterchain>
+      <filterchain refid="cmake-lib" />
     </FilterFile>
     <MSBuild src="${aprDir}/APR.sln" configuration="Release">
       <target value="apr-1" />
