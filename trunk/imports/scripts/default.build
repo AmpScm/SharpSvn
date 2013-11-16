@@ -94,7 +94,6 @@
   <include buildfile="subversion.build" />
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
-  <include buildfile="gtest.build" />
   <include buildfile="libgit2.build" />
   
   
