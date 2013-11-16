@@ -22,10 +22,11 @@
         <prop name="CMAKE_INSTALL_PREFIX" value="${string::replace(intDir, '\', '/')}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
         
-        <prop name="APR_INCLUDE_DIR" value="${string::replace(intDir + '\include', '\', '/')}" />
+        <prop name="APR_INCLUDE_DIR" value="${string::replace(intDir + '\include\apr-1', '\', '/')}" />
         <prop name="APR_LIBRARIES" value="${libAprSharedLib};${libAprUtilSharedLib}" />
         
         <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+        <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include/openssl" />
         
         <prop name="PCRE_INCLUDE_DIR" value="${intDir}/include" />
         <prop name="PCRE_LIBRARIES" value="${intDir}/lib/pcre.lib" />

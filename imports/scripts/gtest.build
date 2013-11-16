@@ -2,13 +2,14 @@
 <project basedir=".." default="build">
   <property name="gtestDir" value="${buildRoot}/${platform}/gtest" />
 
-  <target name="gtest-build" depends="download,extract,checkout">
+  <target name="gtest-build" depends="download,extract,checkout" if="${VSversion=='2008'}">
     <OnceBlock file="build/gtest-${gtestVersion}.build">
       <VCBuild src="${gtestDir}/msvc/gtest.vcproj" if="${VSversion=='2008'}">
         <arg line="/upgrade" />
       </VCBuild>
-      <VCBuild src="${gtestDir}/msvc/gtest.vcproj" unless="${vcxproj}" />
       <VCUpgrade src="${gtestDir}/msvc/gtest.vcproj" if="${vcxproj}" />
+      
+      <VCBuild src="${gtestDir}/msvc/gtest.vcproj" unless="${vcxproj}" />
       <MSBuild src="${gtestDir}/msvc/gtest.vcxproj" if="${vcxproj}" />
     </OnceBlock>
     <copy todir="${release}/lib" flatten="true">
