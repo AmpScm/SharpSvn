@@ -24,6 +24,10 @@
 
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
+  
+  <property name="ltcgFlags" value="" />
+  <property name="ltcgFlags" value="-GL" if="${ltcg}" />
+  <property name="ltcgFlags" value="${ltcgFlags} -Gw" if="${int::parse(VSversion) &gt;= 2013}" />
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
