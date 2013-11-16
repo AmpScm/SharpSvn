@@ -65,7 +65,12 @@
     
     <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
       <filterchain>
-        <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' />
+        <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' if="${vcxproj}" />
+        
+        <replacestring from='InlineFunctionExpansion="2"'
+                         to='InlineFunctionExpansion="2" DebugInformationFormat="3"' unless="${vcxproj}" />
+        <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+                         to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />        
       </filterchain>
     </FilterFile>
     <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
