@@ -17,7 +17,7 @@
   <property name="svnDll" value="dll" />
   <property name="buildLibgit2" value="false" />
   <property name="buildJavaHL" value="true" />
-  <property name="ltcg" overwrite="true" />
+  <property name="ltcg" value="true" />
   
   <include buildfile="../Default.build" />
   
