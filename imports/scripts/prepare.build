@@ -284,12 +284,6 @@
       <arg value="https://github.com/libgit2/libgit2.git/branches/${libgit2Version}/" if="${libgit2BuildType == 'branch'}" />
       <arg value="${libgit2Dir}" />
     </Svn>
-
-    <Svn unless="${directory::exists(gtestDir)}">
-      <arg value="co" />
-      <arg value="http://googletest.googlecode.com/svn/tags/release-${gtestVersion}/" />
-      <arg value="${gtestDir}" />
-    </Svn>
     
     <Svn unless="${directory::exists(saslDir)}">
       <arg value="co" />
