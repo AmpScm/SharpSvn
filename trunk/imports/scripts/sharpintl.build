@@ -12,8 +12,8 @@
     
     <OnceBlock file="build/sharpintl-${platform}.build" if="${buildSubversion}">
       <VCBuild src="${i18proj}" unless="${vcxproj}" />
-      <VCUpgrade src="${i18proj}" if="${vcxproj}" />
-    
+
+      <VCUpgrade src="${i18proj}" if="${vcxproj}" />    
       <move if="${vcxproj}"
             file="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcxproj"
             tofile="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcxproj" overwrite="true" />

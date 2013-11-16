@@ -14,7 +14,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.8.4" overwrite="false" />
+  <property name="subversionVersion" value="1.8.5" overwrite="false" />
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1498000 - Use transition based iprop handling -->
@@ -48,7 +48,7 @@
   <property name="saslVersion" value="2.1.25" overwrite="false" />
   <property name="swigVersion" value="2.0.10" overwrite="false" />
   <property name="nasmVersion" value="2.10.01" overwrite="false" />
-  <property name="gtestVersion" value="1.6.0" overwrite="false" />
+  <property name="gtestVersion" value="1.7.0" overwrite="false" />
   <property name="pcreVersion" value="8.33" overwrite="false" />
   <property name="httpdVersion" value="2.4.x" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
