@@ -69,10 +69,10 @@
       </filterchain>
     </FilterFile>
     <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
-      <filterchain>
-        <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
-                         to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' />
-      </filterchain>
+      <filterchain refid="cmake-lib" />
+    </FilterFile>
+    <FilterFile file="${aprUtilDir}/libexpat.${vcproj}" generated="true">
+      <filterchain refid="cmake-lib" />
     </FilterFile>
 
     <MSBuild src="${aprUtilDir}/APR-Util.sln" configuration="Release">

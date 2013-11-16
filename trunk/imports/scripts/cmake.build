@@ -25,4 +25,22 @@
   <property name="cmakeGenerator" value="Visual Studio 12 Win64"
             overwrite="false" if="${VSversion == '2013' and platform=='x64'}" />            
 
+  <filterchain id="cmake-lib">
+    <!-- DebugInformationFormat is only empty for release mode -->
+    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+                     to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;
+                         &lt;OmitDefaultLibName&gt;true&lt;/OmitDefaultLibName&gt;
+                         &lt;WholeProgramOptimization&gt;true&lt;/WholeProgramOptimization&gt;' if="${ltcg}" unless="${not vcxproj}" />
+    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+                     to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;
+                         &lt;OmitDefaultLibName&gt;true&lt;/OmitDefaultLibName&gt;
+                         &lt;WholeProgramOptimization&gt;true&lt;/WholeProgramOptimization&gt;' if="${not ltcg}" unless="${not vcxproj}" />
+    <!-- InlineFunctionExpansion is only 2 for release mode -->               
+    <replacestring from='InlineFunctionExpansion="2"'
+                     to='InlineFunctionExpansion="2" DebugInformationFormat="3"
+                         EnableFunctionLevelLinking="true" OmitDefaultLibName="true" WholeProgramOptimization="true"' if="${ltcg}" unless="${vcxproj}" />       
+    <replacestring from='InlineFunctionExpansion="2"'
+                     to='InlineFunctionExpansion="2" DebugInformationFormat="3"
+                         EnableFunctionLevelLinking="true" OmitDefaultLibName="true"' if="${not ltcg}" unless="${vcxproj}" />
+  </filterchain>
 </project>
