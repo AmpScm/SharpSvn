@@ -87,6 +87,8 @@
       <fileset basedir="${aprDir}/RelWithDebInfo">
         <include name="lib*.dll" />
         <include name="lib*.pdb" />
+        <include name="${dllPrefix}*.dll" if="${dllPrefix != ''}" />
+        <include name="${dllPrefix}*.pdb" if="${dllPrefix != ''}" />
       </fileset>
     </copy>
     <copy todir="${intDir}/include/apr-1" flatten="true">
