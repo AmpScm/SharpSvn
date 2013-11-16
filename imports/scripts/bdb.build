@@ -44,7 +44,9 @@
         <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
         <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
       </VCBuild>
-      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" if="${vcxproj}" />
+      <property name="dbConfig" value="Release" />
+      <property name="dbConfig" value="Release AMD64" if="${platform == 'x64'}"/>
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}" />
       <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
       <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
 
