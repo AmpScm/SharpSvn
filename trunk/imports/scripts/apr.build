@@ -70,21 +70,26 @@
         <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' />
       </filterchain>
     </FilterFile>
-  
-    <MSBuild src="${aprDir}/APR.sln" configuration="RelWithDebInfo">
+    <FilterFile file="${aprDir}/apr-1.${vcproj}" generated="true">
+      <filterchain>
+        <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+                         to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' />
+      </filterchain>
+    </FilterFile>
+    <MSBuild src="${aprDir}/APR.sln" configuration="Release">
       <target value="apr-1" />
       <target value="libapr-1" />
     </MSBuild>
     
     <copy todir="${intDir}/lib" flatten="true">
-      <fileset basedir="${aprDir}/RelWithDebInfo">
+      <fileset basedir="${aprDir}/Release">
         <include name="apr*.lib" />
         <include name="apr*.pdb" />
         <include name="lib*.lib" />
       </fileset>
     </copy>
     <copy todir="${intDir}/bin" flatten="true">
-      <fileset basedir="${aprDir}/RelWithDebInfo">
+      <fileset basedir="${aprDir}/Release">
         <include name="lib*.dll" />
         <include name="lib*.pdb" />
         <include name="${dllPrefix}*.dll" if="${dllPrefix != ''}" />

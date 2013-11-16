@@ -14,6 +14,7 @@
   <property name="svn-dev" value="false" overwrite="false" />
   <property name="enableAprCrypto" value="true" overwrite="false" />
   <property name="buildJavaHL" value="true" overwrite="false" />
+  <property name="ltcg" value="false" overwrite="false" />
 
   <if test="${platform != 'win32' and platform != 'x64'}">
     <fail message="Platform must be win32 or x64 at this time" />

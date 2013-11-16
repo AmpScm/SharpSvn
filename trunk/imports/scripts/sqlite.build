@@ -21,12 +21,16 @@ static int original_isNT(void){" />
       </FilterFile>
     </OnceBlock>
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
-      <arg value="/O2" />      <!-- Maximize speed -->
+      <arg value="/Ox" />      <!-- Maximize speed -->
       <arg value="/GF" />      <!-- String Pooling -->
       <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
       <arg value="/Zi" />      <!-- Write debug information -->
-      <arg value="/Zl" />      <!-- Ommit default library name -->
-      <arg value="/Gy" />      <!-- Function level linking -->
+      <arg value="/Zl" />      <!-- No default library name -->
+      
+      <arg value="/GL" if="${ltcg}" />      <!-- Whole program optimization -->
+      <arg value="/Gy" if="${ltcg}" />      <!-- Function level linking -->
+      <arg value="/Gw" if="${ltcg}" />      <!-- Optimize global data -->
+      
       <defines>
         <define name="NDEBUG" />
         

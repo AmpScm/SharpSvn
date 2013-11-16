@@ -62,19 +62,26 @@
         <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
       </filterchain>
     </FilterFile>
+    
     <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
       <filterchain>
         <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' />
       </filterchain>
     </FilterFile>
+    <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
+      <filterchain>
+        <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+                         to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' />
+      </filterchain>
+    </FilterFile>
 
-    <MSBuild src="${aprUtilDir}/APR-Util.sln" configuration="RelWithDebInfo">
+    <MSBuild src="${aprUtilDir}/APR-Util.sln" configuration="Release">
       <target value="aprutil-1" />
       <target value="libaprutil-1" />
     </MSBuild>
 
     <copy todir="${intDir}/lib" flatten="true">
-      <fileset basedir="${aprUtilDir}/RelWithDebInfo">
+      <fileset basedir="${aprUtilDir}/Release">
         <include name="*.lib" />
         <include name="apr*.pdb" />
         <include name="libexpat*.pdb" />
@@ -83,7 +90,7 @@
     </copy>
     <copy file="${intDir}/lib/libexpat.lib" tofile="${intDir}/lib/xml.lib" />
     <copy todir="${intDir}/bin" flatten="true">
-      <fileset basedir="${aprUtilDir}/RelWithDebInfo">
+      <fileset basedir="${aprUtilDir}/Release">
         <include name="libapr*.dll" />
         <include name="libapr*.pdb" />
         <include name="apr_*.dll" />
