@@ -47,28 +47,29 @@
       <property name="dbConfig" value="Release" />
       <property name="dbConfig" value="Release AMD64" if="${platform == 'x64'}"/>
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}" />
-      <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
-      <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
-
-      <copy todir="${intDir}/lib">
-        <fileset basedir="${bdbResultDir}">
-          <include name="*.lib" />
-          <include name="*.pdb" />
-          <include name="*.exp" />
-        </fileset>
-      </copy>
-      <copy todir="${intDir}/include">
-        <fileset basedir="${dbWindowsDir}">
-          <include name="*.h" />
-        </fileset>
-      </copy>
-      <copy todir="${intDir}/bin">
-        <fileset basedir="${bdbResultDir}">
-          <include name="*.${svnDll}" />
-          <include name="*.pdb" />
-        </fileset>
-      </copy>
     </OnceBlock>
+
+    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
+    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
+
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${bdbResultDir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+        <include name="*.exp" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${bdbResultDir}">
+        <include name="*.${svnDll}" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
     <copy todir="${release}/include">    
       <fileset basedir="${intDir}/include">
         <include name="db*.h" />

@@ -86,6 +86,13 @@
         src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}"
         dest="${downloads + gettextToolsIconvFilename}"
         unless="${file::exists(downloads + gettextToolsIconvFilename)}" />
+        
+      <get
+         src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
+         dest="${downloads + 'svn-book.pdf'}"
+         unless="${file::exists(downloads + 'svn-book.pdf')}"
+         if="${getSvnBook}" />
+
     </if>
 
     <if test="${javaHome != ''}">
