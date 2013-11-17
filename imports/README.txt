@@ -14,47 +14,49 @@ in a number of ways. Normally you only build one variant.
 
 
 The scripts require the following tools: (currently used version)
-  * NAnt                        (0.86 Beta 1)
-  * Perl 5                      (Activestate perl 5.10.0)
-  * Python                      (Activestate python 2.7.1)
-  * Wix                         (3.5.2519.0)
-  * Visual C++ 2005 or 2008     (2008 SP1)
+  * NAnt        (0.92)
+  * Perl 5      (Activestate perl   5.16.3 x86)
+  * Python      (Activestate python 2.7.2  x86)
+  * Visual Studio 2008, 2010 or 2012
+    (Untested, so might require tweaks: 2005 and 2013)
 
 It is assumed all these tools are in the PATH and the settings for
 the 'Visual Studio Command Prompt' are loaded.
 
 All environments accept the following defines
 
- Setting platform
-  -D:platform=x64
-  -D:platform=win32 (Default)
-
 
 1) To build all the dependencies (including Subversion) as used by SharpSvn
-	Go to sharpsvn/imports
-	Type nant build
-	After about 20 a 30 minutes you should see build succeeded
-	(with maybe a few ignored errors)
+   Open the visual studio command prompt for the right architecture,
+   e.g. VS2012 x64 Cross Tools Command Prompt
+   
+   I recommend using the 'native x86' or 'x64 cross' tools as the native
+   x64 variants can't always find everything in MSBuild.
+	
+	 * Go to 'imports'
+	 * Type> 'nant build'
+	 After something between 5 and 30 minutes you should see build succeeded
+	 (with maybe 'a few' ignored errors)
 	
 2) If (instead of building SharpSvn) you just want to build a windows release
-   of Subversion
-    Go to sharpsvn/imports/svn-dist
-    Type nant
+   of Subversion open a command prompt (see 1).
+   
+   Go to 'imports/svn-dist'
+   * Type> 'nant'
+   After something between 5 and 30 minutes you should see build succeeded
+	 (with maybe 'a few' ignored errors)
     
-3) Or if you want to do development on Subversion itself:
-    Copy the file sharpsvn/imports/dev-default.build to sharpsvn/default.build    
-    Type nant
+3) Or if you want to do development on Subversion itself, open a command
+   prompt (See 1)
+   
+   * Create a base directory
+   * Type> 'svn co http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/imports'
+   * Type> 'copy /y imports\default.build'
+   * Type> 'nant'
+   After something between 5 and 30 minutes you should see build succeeded
+	 (with maybe 'a few' ignored errors)
     
-    Open wc\subversion_vcnet.sln in your IDE.
-    
-
-This directory contains a script which builds subversion and its 
-dependencies.
-
-You can use this script to retrieve the dependencies; but you can also
-use the precompiled files from the SharpSvn website.
-
-Only the SharpSvn-DB-XXXXXX.dll is needed at runtime as all c code is
-compiled into SharpSvn.dll. All unmanaged PDB information is copied into 
-SharpSvn.pdb and annotated with SourceServerSharp to allow debugging without
-your own import directory.
+   Open the generated 'dev\subversion_vcnet.sln' in your IDE.
+   
+   You can type 'nant gen-dev' to regenerate the solution whenever the
+   build scripts have changed.
