@@ -68,6 +68,7 @@
         <include name="ap_config_layout.h" />
         <include name="os/win32/os.h" />
         <include name="modules/*/mod_*.h" />
+        <include name="modules/dav/*/mod_*.h" />
       </fileset>
     </copy>
     <!-- Enable compiling Subversion in debug and relase mode -->
