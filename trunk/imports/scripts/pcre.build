@@ -4,16 +4,13 @@
   
   <target name="pcre-build" depends="zlib-build" if="${buildHttpd}">
     <CMake workingdir="${pcreDir}">
-        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+      <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         
-        <prop name="BUILD_SHARED_LIBS" value="ON" />
+      <prop name="BUILD_SHARED_LIBS" value="ON" />
     </CMake>
-  
-    <MSBuild src="${pcreDir}/PCRE.sln">
-      <target value="pcre" />
-      <target value="INSTALL" if="${not vcxproj}" />
-    </MSBuild>
     
-    <MSBuild src="${pcreDir}/INSTALL.vcxproj" if="${vcxproj}" />
+    <CMake workingdir="${pcreDir}">
+      <target value="INSTALL" />
+    </CMake>
   </target>
 </project>
