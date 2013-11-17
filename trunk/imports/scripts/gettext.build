@@ -78,7 +78,7 @@ ${intlh}
       </loadfile>
       <echo message="${configh}" file="${gettextDir}/gettext-runtime/intl/loadmsgcat.c" />
       <echo file="${gettextDir}/gettext-runtime/intl/gettext.def">
-        ;LIBRARY ${dllPrefix}libintl-${platform}
+        ;LIBRARY ${dllPrefix}libintl
         EXPORTS
         gettext                                @401
         dgettext                               @402
@@ -128,9 +128,9 @@ ${intlh}
         </sources>
       </cl>
       <property name="libintlDllName" value="intl.dll" />
-      <property name="libintlDllName" value="${dllPrefix}libintl-${platform}.dll" if="${dllPrefix != ''}" />      
+      <property name="libintlDllName" value="${dllPrefix}libintl.dll" if="${dllPrefix != ''}" />      
       <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
-        options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
+        options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
         /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
         /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
         <sources basedir="${gettextDir}/obj/${platform}/release">
@@ -141,7 +141,7 @@ ${intlh}
       <exec program="mt.exe">
         <arg value="-nologo" />
         <arg value="-manifest" />
-        <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl-${platform}.dll.intermediate.manifest" />
+        <arg value="${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" />
         <arg value='/outputresource:"${gettextDir}/bin/${platform}/release/${libintlDllName};#2"' />
       </exec>
     </OnceBlock>
@@ -155,7 +155,7 @@ ${intlh}
       </fileset>
     </copy>
     <copy todir="${intDir}/bin">
-      <fileset basedir="${gettextDir}/bin/win32/release">
+      <fileset basedir="${gettextDir}/bin/${platform}/release">
         <include name="*.dll" />
         <include name="*.pdb" />
       </fileset>
