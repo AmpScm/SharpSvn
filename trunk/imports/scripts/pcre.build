@@ -11,8 +11,9 @@
   
     <MSBuild src="${pcreDir}/PCRE.sln">
       <target value="pcre" />
+      <target value="INSTALL" if="${not vcxproj}" />
     </MSBuild>
     
-    <MSBuild src="${pcreDir}/INSTALL.${vcproj}" />
+    <MSBuild src="${pcreDir}/INSTALL.vcxproj" if="${vcxproj}" />
   </target>
 </project>
