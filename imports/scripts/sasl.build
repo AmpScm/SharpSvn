@@ -4,11 +4,8 @@
 
   <regex pattern="^(?'SASL_MAJOR_VERSION'\d+)\.(?'SASL_MINOR_VERSION'\d+)\.(?'SASL_MICRO_VERSION'\d+)" input="${saslVersion}" />
 
-  <property name="saslDllName" value="libsasl.dll" if="${dllPrefix==''}" />
-  <property name="saslName" value="${dllPrefix}Sasl${SASL_MAJOR_VERSION}-${SASL_MINOR_VERSION}-${SASL_MICRO_VERSION}" if="${dllPrefix!=''}"/>
-  <property name="saslPdb" value="sasl.pdb" if="${dllPrefix==''}"/>
-  <property name="saslPdb" value="${saslName}.pdb" if="${dllPrefix!=''}"/>
-  <property name="saslDllName" value="${saslName}.${svnDll}" if="${dllPrefix!=''}"/>
+  <property name="saslDllName" value="libsasl.dll" />
+  <property name="saslDllName" value="${dllPrefix}libsasl${SASL_MAJOR_VERSION}${SASL_MINOR_VERSION}.${svnDll}" if="${dllPrefix!=''}"/>
 
   <target name="sasl-prepare" depends="checkout, bdb-build, openssl-build">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
@@ -74,7 +71,7 @@
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
           <!-- Shared Library -->
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" unless="${static}" />
-          <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"${saslPdb}" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} ' unless="${static}" />
+          <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} ' unless="${static}" />
           <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" unless="${static}" />
           <!-- Static library -->
           <replacestring from='$(LINK32DLL)' to='$(LINK32LIB)' if="${static}" />
@@ -112,7 +109,6 @@
     <copy todir="${intDir}/lib">
       <fileset basedir="${saslDir}/lib">
         <include name="libsasl.lib" />
-        <include name="${saslPdb}" />
       </fileset>
     </copy>
     <copy todir="${intDir}/include">
@@ -123,7 +119,7 @@
     <copy todir="${intDir}/bin">
       <fileset basedir="${saslDir}/lib">
         <include name="${saslDllName}" />
-        <include name="${saslPdb}" />
+        <include name="libsasl.pdb" />
       </fileset>
     </copy>
     <mkdir dir="${release}/include/sasl" />
