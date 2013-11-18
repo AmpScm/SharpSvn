@@ -40,7 +40,10 @@
           </items>
         </in>
         <do>
-          <FilterFile file="${project}">
+          <FilterFile file="${project}" generated="true">
+            <filterchain refid="cmake-link" />
+          </FilterFile>
+          <FilterFile file="${project}" generated="true">
             <filterchain>
               <LineRegexReplace re='LONG_NAME=\\"([^"]*)\\";' to='' if="${vcxproj}" />
               <LineRegexReplace re='CMAKE_INTDIR=\\"([^"]*)\\";' to='' if="${vcxproj}" />
