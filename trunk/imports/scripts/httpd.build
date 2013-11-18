@@ -57,7 +57,11 @@
         <target value="httpd" />
         <target value="htpasswd" />
         <target value="mod_dav" />
+        <target value="mod_access_compat" />
+        <target value="mod_authz_core" />
+        <target value="mod_authz_user" />
         <target value="mod_auth_basic" />
+        <target value="mod_authn_core" />
         <target value="mod_authn_file" />
         <target value="mod_mime" />
         <target value="mod_alias" />
@@ -73,52 +77,23 @@
         <include name="modules/dav/*/mod_*.h" />
       </fileset>
     </copy>
-    <!-- Enable compiling Subversion in debug and relase mode -->
-    <copy todir="${httpdDir}/Release" flatten="true">
-      <fileset basedir="${httpdDir}">
-        <include name="**/Release/*.lib" />
-      </fileset>
-    </copy>
-    <copy todir="${httpdDir}/Debug" flatten="true">
-      <fileset basedir="${httpdDir}">
-        <include name="Release/*.lib" />
-      </fileset>
-    </copy>
-    
-    <copy todir="${release}/httpd/bin" flatten="true" if="${platform=='win32'}">
+
+    <copy todir="${release}/httpd/bin" flatten="true">
       <fileset basedir="${httpdDir}">
         <include name="release/*.exe" />
         <include name="release/*.dll" />
-        <include name="support/release/*.exe" />
-        <include name="support/release/*.dll" />
+        <include name="${intDir}/bin/libapr*.dll" />
+        <include name="${intDir}/bin/pcre.dll" />
+        <exclude name="gen_*.exe" />
       </fileset>
     </copy>
-    <copy todir="${release}/httpd/modules" flatten="true" if="${platform=='win32'}">
+    <copy todir="${release}/httpd/modules" flatten="true">
       <fileset basedir="${httpdDir}">
-        <include name="**/*.so" />
-        <exclude name="srclib/**" />
+        <include name="release/*.so" />
       </fileset>
     </copy>
     <mkdir dir="${release}/httpd/conf" />
     <mkdir dir="${release}/httpd/logs" />
     <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />
-    
-    <copy todir="${release}/httpd-${platform}/bin" flatten="true" if="${platform!='win32'}">
-      <fileset basedir="${httpdDir}">
-        <include name="${platform}/release/*.exe" />
-        <include name="${platform}/release/*.dll" />
-        <include name="support/${platform}/release/*.exe" />
-        <include name="support/${platform}/release/*.dll" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/httpd-${platform}/modules" flatten="true" if="${platform!='win32'}">
-      <fileset basedir="${httpdDir}">
-        <include name="**/*.so" />
-        <exclude name="srclib/**" />
-      </fileset>
-    </copy>
-    <mkdir dir="${release}/httpd-${platform}/conf" if="${platform!='win32'}"/>
-    <mkdir dir="${release}/httpd-${platform}/logs" if="${platform!='win32'}" />
-    <echo message="Listen 1234" file="${release}/httpd-${platform}/conf/httpd.conf"  if="${platform!='win32'}" />
   </target>
 </project>
