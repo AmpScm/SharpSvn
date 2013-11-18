@@ -41,5 +41,17 @@
     <replacestring from='InlineFunctionExpansion="2"'
                      to='InlineFunctionExpansion="2" DebugInformationFormat="3"
                          EnableFunctionLevelLinking="true" OmitDefaultLibName="true"' if="${not ltcg}" unless="${vcxproj}" />
+    
+                         GenerateDebugInformation="true"
+  </filterchain>
+  
+  <filterchain id="cmake-link">
+    <replacestring from='LinkIncremental="1"'
+                     to='LinkIncremental="1" GenerateDebugInformation="true"' unless="${vcxproj}" />
+    <replacestring from='InlineFunctionExpansion="2"'
+                     to='InlineFunctionExpansion="2" DebugInformationFormat="3"' unless="${vcxproj}" />
+                         
+    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+                     to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />                     
   </filterchain>
 </project>

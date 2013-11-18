@@ -65,18 +65,17 @@
       <prop name="APR_INSTALL_PRIVATE_H" value="ON" />
     </CMake>
     
-    <FilterFile file="${aprDir}/libapr-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
-      <filterchain>
-        <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' if="${vcxproj}" />
-        
-        <replacestring from='InlineFunctionExpansion="2"'
-                         to='InlineFunctionExpansion="2" DebugInformationFormat="3"' unless="${vcxproj}" />
-        <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
-                         to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />
-      </filterchain>
+    <FilterFile file="${aprDir}/libapr-1.${vcproj}" generated="true">
+      <filterchain refid="cmake-link" />
     </FilterFile>
     <FilterFile file="${aprDir}/apr-1.${vcproj}" generated="true">
       <filterchain refid="cmake-lib" />
+    </FilterFile>
+    
+    <FilterFile file="${aprDir}/libapr-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
+      <filterchain>
+        <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' if="${vcxproj}" />
+      </filterchain>
     </FilterFile>
     <MSBuild src="${aprDir}/APR.sln" configuration="Release">
       <target value="apr-1" />
