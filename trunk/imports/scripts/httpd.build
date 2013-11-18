@@ -33,18 +33,20 @@
       </CMake>
       
       <!-- Remove some defines that somehow break the build -->
-      <foreach item="File" property="project" if="${vcxproj}">
+      <foreach item="File" property="project">
         <in>
           <items basedir="${httpdDir}">
-            <include name="*.vcxproj" />
+            <include name="*.${vcproj}" />
           </items>
         </in>
         <do>
-          <FilterFile file="${project}" if="${vcxproj}">
+          <FilterFile file="${project}">
             <filterchain>
-              <LineRegexReplace re='LONG_NAME=\\"([^"]*)\\";' to='' />
-              <LineRegexReplace re='CMAKE_INTDIR=\\"([^"]*)\\";' to='' />
+              <LineRegexReplace re='LONG_NAME=\\"([^"]*)\\";' to='' if="${vcxproj}" />
+              <LineRegexReplace re='CMAKE_INTDIR=\\"([^"]*)\\";' to='' if="${vcxproj}" />
               <LineRegexReplace re='ICON_FILE=([^"][^;]*);' to='' />
+              <replacestring from='LONG_NAME=\' to='NO_LONG_NAME=\' unless="${vcxproj}" />
+              <replacestring from='CMAKE_INTDIR=\' to='NO_CMAKE_INTDIR=\' unless="${vcxproj}" />
             </filterchain>
           </FilterFile>
         </do>

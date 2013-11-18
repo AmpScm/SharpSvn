@@ -10,6 +10,7 @@
     </CMake>
     
     <CMake workingdir="${pcreDir}">
+      <arg line="--config Release" />
       <target value="INSTALL" />
     </CMake>
   </target>
