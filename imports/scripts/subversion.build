@@ -83,6 +83,13 @@
           <include name="**.h" />
         </fileset>
       </copy>
+      
+      <!-- Enable compiling Subversion in debug and release mode -->
+      <copy todir="${httpdDir}/Debug" flatten="true" if="${buildHttpd and (subversionVersion &lt; '1.9.')}">
+        <fileset basedir="${httpdDir}">
+          <include name="Release/*.lib" />
+        </fileset>
+      </copy>
 
       <exec program="python.exe" workingdir="${svnBase}" verbose="true">
         <arg value="gen-make.py" />
