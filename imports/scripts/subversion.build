@@ -67,30 +67,32 @@
       </FilterFile>
     </if>
   </target>
+  
+  <target name="svn-compat">
+    
+    <copy todir="${intDir}\inc" if="${subversionVersion &lt; '1.9.'}">
+      <fileset basedir="${intDir}\include">
+        <include name="sqlite*.h" />
+      </fileset>
+    </copy>
+    
+    <copy todir="${intDir}\include" if="${subversionVersion &lt; '1.9.'}">
+      <fileset basedir="${intDir}\include\apr-1">
+        <include name="**.h" />
+      </fileset>
+    </copy>
+    
+    <!-- Enable compiling Subversion in debug and release mode -->
+    <copy todir="${httpdDir}/Debug" flatten="true" if="${buildHttpd and (subversionVersion &lt; '1.9.')}">
+      <fileset basedir="${httpdDir}">
+        <include name="Release/*.lib" />
+      </fileset>
+    </copy>  
+  </target>
 
-  <target name="svn-generate" depends="checkout, apr-build, aprutil-build, serf-build, svn-prepare" if="${buildSubversion}">
+  <target name="svn-generate" depends="checkout, apr-build, aprutil-build, serf-build, svn-prepare, svn-compat" if="${buildSubversion}">
 
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.generated">
-    
-      <copy todir="${intDir}\inc" if="${subversionVersion &lt; '1.9.'}">
-        <fileset basedir="${intDir}\include">
-          <include name="sqlite*.h" />
-        </fileset>
-      </copy>
-      
-      <copy todir="${intDir}\include" if="${subversionVersion &lt; '1.9.'}">
-        <fileset basedir="${intDir}\include\apr-1">
-          <include name="**.h" />
-        </fileset>
-      </copy>
-      
-      <!-- Enable compiling Subversion in debug and release mode -->
-      <copy todir="${httpdDir}/Debug" flatten="true" if="${buildHttpd and (subversionVersion &lt; '1.9.')}">
-        <fileset basedir="${httpdDir}">
-          <include name="Release/*.lib" />
-        </fileset>
-      </copy>
-
       <exec program="python.exe" workingdir="${svnBase}" verbose="true">
         <arg value="gen-make.py" />
         <arg line="-t vcproj" />
