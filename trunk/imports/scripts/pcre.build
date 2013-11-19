@@ -24,9 +24,9 @@
       </fileset>
     </copy>
     <copy todir="${intDir}/bin">
-      <fileset basedir="${pcreDir}">
-        <include name="Release/*.dll" />
-        <include name="Release/*.pdb" />
+      <fileset basedir="${pcreDir}/Release">
+        <include name="*.dll" />
+        <include name="*.pdb" />
       </fileset>
     </copy>
   </target>
