@@ -77,7 +77,7 @@
         <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' if="${vcxproj}" />
       </filterchain>
     </FilterFile>
-    <MSBuild src="${aprDir}/APR.sln" configuration="Release">
+    <MSBuild src="${aprDir}/APR.sln">
       <target value="apr-1" />
       <target value="libapr-1" />
     </MSBuild>

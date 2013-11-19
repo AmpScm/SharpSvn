@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <project>
-  <property name="pcreDir" value="${httpdDir}/srclib/pcre" />
+  <property name="pcreDir" value="${platformRoot}/pcre" />
   
   <target name="pcre-build" depends="zlib-build" if="${buildHttpd}">
     <CMake workingdir="${pcreDir}">
@@ -9,8 +9,25 @@
       <prop name="BUILD_SHARED_LIBS" value="ON" />
     </CMake>
     
-    <CMake workingdir="${pcreDir}">
-      <target value="INSTALL" />
-    </CMake>
+    <MSBuild src="${pcreDir}/PCRE.sln">
+      <target value="pcre" />
+    </MSBuild>
+    
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${pcreDir}/Release">
+        <include name="pcre.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${pcreDir}">
+        <include name="pcre.h" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin">
+      <fileset basedir="${pcreDir}">
+        <include name="Release/*.dll" />
+        <include name="Release/*.pdb" />
+      </fileset>
+    </copy>
   </target>
 </project>
