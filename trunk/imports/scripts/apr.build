@@ -43,7 +43,8 @@
       </FilterFile>
       <FilterFile file="${aprDir}\file_io\win32\open.c">
         <filterchain>
-          <replacestring from='attributes |= FILE_FLAG_DELETE_ON_CLOSE | FILE_ATTRIBUTE_TEMPORARY;' />
+          <replacestring from='attributes |= FILE_FLAG_DELETE_ON_CLOSE;'
+                           to='attributes |= FILE_FLAG_DELETE_ON_CLOSE | FILE_ATTRIBUTE_TEMPORARY;' />
           <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
                            to='DWORD sharemode = FILE_SHARE_READ;' if="${applyMerges}" />
           <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' unless="${buildSubversion == 'false'}" />
