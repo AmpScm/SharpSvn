@@ -26,8 +26,7 @@
   <property name="subversionMerges" value="1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1541635,1535676" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
-  <!-- r960671 - Only deal with the mutex when XTHREAD is enabled. -->
-  <property name="aprMerges" value="960671" overwrite="false" />
+  <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- r2183-r2186          - Return connection timeouts as a specific error -->
