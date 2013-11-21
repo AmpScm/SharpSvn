@@ -111,6 +111,14 @@
           <include name="*.h" />
         </fileset>
       </copy>
+      
+      <!-- Allow neon to find expat where Subversion 1.7 says it is -->
+      <copy todir="${httpdDir}/srclib/apr-util/xml/expat/lib">
+        <fileset basedir="${intDir}/include">
+          <include name="expat.h" />
+        </fileset>
+      </copy>
+      <fail />
       <exec program="python.exe" workingdir="${wc}" verbose="true">
         <arg line="gen-make.py" />
         <arg line="-t vcproj" />
