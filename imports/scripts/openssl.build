@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
   <property name="opensslDir" value="build/${platform}/openssl" />
+  <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
 
   <target name="openssl-prepare" depends="extract">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
@@ -33,11 +34,13 @@
       <FilterFile file="${opensslDir}/ms/libeay32.def" unless="${static}">
         <filterchain>
           <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
+          <LineRegexReplace re="@[0-9]+" to=";$0" />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/ms/ssleay32.def" unless="${static}">
         <filterchain>
           <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
+          <LineRegexReplace re="@[0-9]+" to=";$0" />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}">
