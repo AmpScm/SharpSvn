@@ -43,7 +43,9 @@
         <filterchain>
           <replacestring from='	log_compare' to=';	log_compare' />
           <replacestring from='	db_env_set_' to=';	db_env_set_' />
+          <replacestring from='	db_xa_'      to=';	db_xa_' />
           <replacestring from='	__' to=';	__' />
+          <LineRegexReplace re="@[0-9]+" to=";$0" />
         </filterchain>
       </FilterFile>
     </OnceBlock>
