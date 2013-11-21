@@ -12,9 +12,7 @@
       <arg value="python" />
     </exec>
     <loadfile file="build/perl.where" property="perl.location" />
-    <loadfile file="build/python.where" property="python.location" />
     <property name="perl.location" value="${path::get-directory-name(string::trim(perl.location))}" />
-    <property name="python.location" value="${path::get-directory-name(string::trim(python.location))}" />
     
     <copy todir="${swigDir}/lib/perl">
       <fileset basedir="${swigDir}/lib/perl5">
