@@ -52,6 +52,65 @@
       </exec>
     </if>
     <if test="${wc.branch &lt; '1.9.'}">
+      <!-- 1.8 and earlier expect this nonstandard sqlite layout -->
+      <copy todir="${intDir}\inc">
+        <fileset basedir="${intDir}\include">
+          <include name="sqlite*.h" />
+        </fileset>
+      </copy>      
+      <!-- Place APR below HTTPD where 1.8 and 1.7 expect it -->
+      <copy todir="${httpdDir}/srclib/apr/LibR">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr/LibD">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr/Release">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr/Debug">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr/include" verbose="true">
+        <fileset basedir="${intDir}/include/apr-1">
+          <include name="*.h" />
+        </fileset>
+      </copy>
+      
+      <copy todir="${httpdDir}/srclib/apr-util/LibR">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr-util/LibD">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr-util/Release">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      <copy todir="${httpdDir}/srclib/apr-util/Debug">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
+        </fileset>
+      </copy>
+      
+      <copy todir="${httpdDir}/srclib/apr-util/include">
+        <fileset basedir="${intDir}/include/apr-1">
+          <include name="*.h" />
+        </fileset>
+      </copy>
       <exec program="python.exe" workingdir="${wc}" verbose="true">
         <arg line="gen-make.py" />
         <arg line="-t vcproj" />
@@ -70,8 +129,6 @@
         <arg value="--with-jdk=${javaHome}" if="${javaHome != ''}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
-        <arg value="--with-static-apr" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
-        <arg value="--with-static-openssl" if="${wc.branch &gt;= '1.8.' and ((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
       </exec>
       <!-- Pre 1.9 the test suite expects this dll here -->
       <copy todir="${intDir}/lib">
@@ -83,67 +140,9 @@
         <fileset basedir="${intDir}/bin">
           <include name="*apr-1.dll" />
           <include name="*aprutil-1.dll" />
-        </fileset>
-      </copy>
-      
-      <!-- From APR -->
-      <copy todir="${httpDir}/srclib/apr/LibR">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpDir}/srclib/apr/LibD">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpDir}/srclib/apr/Release">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpDir}/srclib/apr/Debug">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      
-      <copy todir="${httpDir}/srclib/apr-util/LibR">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpDir}/srclib/apr-util/LibD">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpDir}/srclib/apr-util/Release">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpDir}/srclib/apr-util/Debug">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      
-      <!-- Fake direct result for subversion to hide platforms -->
-      <copy todir="${intDir}/lib/include">
-        <fileset basedir="${intDir}/include/apr-1">
-          <include name="**/*.h" />
-        </fileset>
-      </copy>
-      <copy todir="${intDir}\inc">
-        <fileset basedir="${intDir}\include">
-          <include name="sqlite*.h" />
-        </fileset>
-      </copy>      
-      <copy todir="${release}/include">
-        <fileset basedir="${zlibDir}">
-          <include name="zlib.h" />
-          <include name="zconf.h" />
+          <include name="*libeay*.dll" />
+          <include name="*ssl*.dll" />
+          <include name="*sasl*.dll" />
         </fileset>
       </copy>
     </if>
