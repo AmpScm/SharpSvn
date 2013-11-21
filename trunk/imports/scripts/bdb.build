@@ -76,9 +76,6 @@
       </MSBuild>
     </OnceBlock>
 
-    <property name="bdbResultDir" value="${dbWindowsDir}/Release" if="${platform=='win32'}"/>
-    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
-
     <copy todir="${intDir}/lib" flatten="true">
       <fileset basedir="${dbWindowsDir}">
         <include name="Release/*.lib" if="${platform == 'win32'}" />
@@ -89,25 +86,21 @@
     </copy>
     <copy todir="${intDir}/bin" flatten="true">
       <fileset basedir="${dbWindowsDir}">
-        <include name="Release/*.dll" if="${platform == 'win32'}" />
+        <include name="Release/*.${svnDll}" if="${platform == 'win32'}" />
         <include name="Release/*.pdb" if="${platform == 'win32'}" />
         <include name="Debug/*.dll" if="${platform == 'win32'}" />
+        <include name="Debug/*.${svnDll}" if="${platform == 'win32'}" />
         <include name="Debug/*.pdb" if="${platform == 'win32'}" />
-        <include name="Release_AMD64/*.dll" if="${platform == 'x64'}" />
+        <include name="Release_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
         <include name="Release_AMD64/*.pdb" if="${platform == 'x64'}" />
         <include name="Debug_AMD64/*.dll" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
         <include name="Debug_AMD64/*.pdb" if="${platform == 'x64'}" />
       </fileset>
     </copy>
     <copy todir="${intDir}/include">
       <fileset basedir="${dbWindowsDir}">
         <include name="*.h" />
-      </fileset>
-    </copy>
-    <copy todir="${intDir}/bin">
-      <fileset basedir="${bdbResultDir}">
-        <include name="*.${svnDll}" />
-        <include name="*.pdb" />
       </fileset>
     </copy>
     <copy todir="${release}/include">
@@ -118,6 +111,8 @@
     <copy todir="${release}/bin">
       <fileset basedir="${intDir}/bin">
         <include name="${fullDbDllName}" />
+        <include name="*libdb*.dll" />
+        <include name="*libdb*.${svnDll}" />
       </fileset>
     </copy>    
   </target>
