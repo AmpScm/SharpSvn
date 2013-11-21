@@ -79,6 +79,12 @@
     <copy todir="${intDir}/lib" flatten="true">
       <fileset basedir="${dbWindowsDir}">
         <include name="Release/*.lib" if="${platform == 'win32'}" />
+        <include name="Release_AMD64/*.lib" if="${platform == 'x64'}" />
+      </fileset>
+    </copy>
+    <copy todir="${platformRoot}/bdb-install/lib" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Release/*.lib" if="${platform == 'win32'}" />
         <include name="Debug/*.lib" if="${platform == 'win32'}" />
         <include name="Release_AMD64/*.lib" if="${platform == 'x64'}" />
         <include name="Debug_AMD64/*.lib" if="${platform == 'x64'}" />
@@ -88,6 +94,12 @@
       <fileset basedir="${dbWindowsDir}">
         <include name="Release/*.${svnDll}" if="${platform == 'win32'}" />
         <include name="Release/*.pdb" if="${platform == 'win32'}" />
+        <include name="Release_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
+        <include name="Release_AMD64/*.pdb" if="${platform == 'x64'}" />
+      </fileset>
+    </copy>
+    <copy todir="${platformRoot}/bdb-install/bin" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
         <include name="Debug/*.dll" if="${platform == 'win32'}" />
         <include name="Debug/*.${svnDll}" if="${platform == 'win32'}" />
         <include name="Debug/*.pdb" if="${platform == 'win32'}" />
@@ -99,6 +111,11 @@
       </fileset>
     </copy>
     <copy todir="${intDir}/include">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${platformRoot}/bdb-install/include">
       <fileset basedir="${dbWindowsDir}">
         <include name="*.h" />
       </fileset>

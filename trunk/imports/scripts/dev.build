@@ -52,80 +52,14 @@
       </exec>
     </if>
     <if test="${wc.branch &lt; '1.9.'}">
-      <!-- 1.8 and earlier expect this nonstandard sqlite layout -->
-      <copy todir="${intDir}\inc">
-        <fileset basedir="${intDir}\include">
-          <include name="sqlite*.h" />
-        </fileset>
-      </copy>      
-      <!-- Place APR below HTTPD where 1.8 and 1.7 expect it -->
-      <copy todir="${httpdDir}/srclib/apr/LibR">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr/LibD">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr/Release">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr/Debug">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr/include" verbose="true">
-        <fileset basedir="${intDir}/include/apr-1">
-          <include name="*.h" />
-        </fileset>
-      </copy>
-      
-      <copy todir="${httpdDir}/srclib/apr-util/LibR">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr-util/LibD">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr-util/Release">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      <copy todir="${httpdDir}/srclib/apr-util/Debug">
-        <fileset basedir="${intDir}/lib">
-          <include name="*apr*.lib" />
-        </fileset>
-      </copy>
-      
-      <copy todir="${httpdDir}/srclib/apr-util/include">
-        <fileset basedir="${intDir}/include/apr-1">
-          <include name="*.h" />
-        </fileset>
-      </copy>
-      
-      <!-- Allow neon to find expat where Subversion 1.7 says it is -->
-      <copy todir="${httpdDir}/srclib/apr-util/xml/expat/lib">
-        <fileset basedir="${intDir}/include">
-          <include name="expat.h" />
-        </fileset>
-      </copy>
-      <fail />
+
       <exec program="python.exe" workingdir="${wc}" verbose="true">
         <arg line="gen-make.py" />
         <arg line="-t vcproj" />
         <arg line="--vsnet-version=${VSversion}" />
         <arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
         <!-- apr and apr-util locations are implied via httpd -->
-        <arg value="--with-berkeley-db=${intDir}" />
+        <arg value="--with-berkeley-db=${platformRoot}" />
         <arg value="--with-openssl=${impBase}/openssl" />
         <arg value="--with-zlib=${zlibDir}" />
         <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
@@ -138,21 +72,6 @@
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>
-      <!-- Pre 1.9 the test suite expects this dll here -->
-      <copy todir="${intDir}/lib">
-        <fileset basedir="${intDir}/bin">
-          <include name="libsasl.dll" />
-        </fileset>
-      </copy>
-      <copy todir="${release}/bin">
-        <fileset basedir="${intDir}/bin">
-          <include name="*apr-1.dll" />
-          <include name="*aprutil-1.dll" />
-          <include name="*libeay*.dll" />
-          <include name="*ssl*.dll" />
-          <include name="*sasl*.dll" />
-        </fileset>
-      </copy>
     </if>
     <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
   </target>
