@@ -149,12 +149,16 @@
         </fileset>
       </copy>
       
-      <!-- Allow neon to find expat where Subversion 1.7 says it is -->
+      <!-- Allow neon to find expat and zlib where Subversion 1.7 says it is -->
       <copy todir="${httpdDir}/srclib/apr-util/xml/expat/lib">
         <fileset basedir="${intDir}/include">
           <include name="expat.h" />
         </fileset>
       </copy>
+      <copy tofile="${zlibDir}/zlibstat.lib" file="${zlibDir}/zlib.lib" />
+      <copy tofile="${zlibDir}/zlibstatD.lib" file="${zlibDir}/zlib.lib" />
+      <!-- /Neon -->
+
       
       <!-- Pre 1.9 the test suite expects this dll here -->
       <copy todir="${intDir}/lib">
