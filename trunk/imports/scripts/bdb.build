@@ -50,26 +50,51 @@
   </target>
   <target name="bdb-build" depends="bdb-prepare">
     <OnceBlock file="build/db-${dbVersion}-${platform}.build">
-      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" platform="${platform}" unless="${vcxproj}">
-        <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
-        <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
-        <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
-      </VCBuild>
       <property name="dbConfig" value="Release" />
+      <property name="dbConfig" value="Release X86" if="${dbVersion &gt;= '4.6'}"/>
       <property name="dbConfig" value="Release AMD64" if="${platform == 'x64'}"/>
+      <property name="dbDebugConfig" value="Debug" />
+      <property name="dbDebugConfig" value="Debug X86" if="${dbVersion &gt;= '4.6'}"/>
+      <property name="dbDebugConfig" value="Debug AMD64" if="${platform == 'x64'}"/>
+    
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <arg value="${dbConfig}|${platform}" />
+      </VCBuild>
+      
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <arg value="${dbDebugConfig}|${platform}" />
+      </VCBuild>
+      
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}">
+        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" /><!-- Bug in VS2012 for x64? -->
+      </MSBuild>
+      
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj}">
         <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" /><!-- Bug in VS2012 for x64? -->
       </MSBuild>
     </OnceBlock>
 
-    <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
+    <property name="bdbResultDir" value="${dbWindowsDir}/Release" if="${platform=='win32'}"/>
     <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
 
-    <copy todir="${intDir}/lib">
-      <fileset basedir="${bdbResultDir}">
-        <include name="*.lib" />
-        <include name="*.pdb" />
-        <include name="*.exp" />
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Release/*.lib" if="${platform == 'win32'}" />
+        <include name="Debug/*.lib" if="${platform == 'win32'}" />
+        <include name="Release_AMD64/*.lib" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.lib" if="${platform == 'x64'}" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Release/*.dll" if="${platform == 'win32'}" />
+        <include name="Release/*.pdb" if="${platform == 'win32'}" />
+        <include name="Debug/*.dll" if="${platform == 'win32'}" />
+        <include name="Debug/*.pdb" if="${platform == 'win32'}" />
+        <include name="Release_AMD64/*.dll" if="${platform == 'x64'}" />
+        <include name="Release_AMD64/*.pdb" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.dll" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.pdb" if="${platform == 'x64'}" />
       </fileset>
     </copy>
     <copy todir="${intDir}/include">
