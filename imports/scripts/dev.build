@@ -59,7 +59,7 @@
         <arg line="--vsnet-version=${VSversion}" />
         <arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
         <!-- apr and apr-util locations are implied via httpd -->
-        <arg value="--with-berkeley-db=${platformRoot}" />
+        <arg value="--with-berkeley-db=${platformRoot}/bdb-install" />
         <arg value="--with-openssl=${impBase}/openssl" />
         <arg value="--with-zlib=${zlibDir}" />
         <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
