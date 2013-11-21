@@ -79,72 +79,56 @@
           <include name="libsasl.dll" />
         </fileset>
       </copy>
+      <copy todir="${release}/bin">
+        <fileset basedir="${intDir}/bin">
+          <include name="*apr-1.dll" />
+          <include name="*aprutil-1.dll" />
+        </fileset>
+      </copy>
       
       <!-- From APR -->
-      <copy todir="${aprUtilDir}/${aprRelSubdir}" if="${not static}">
-        <fileset basedir="${aprUtilDir}/xml/expat/lib/${aprStaticSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr/LibR">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprDir}/Release" if="${aprRelSubdir != 'Release'}">
-        <fileset basedir="${aprDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr/LibD">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprDir}/Debug" if="${aprRelSubdir != 'Debug'}">
-        <fileset basedir="${aprDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr/Release">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprDir}/LibR" if="${aprRelSubdir != 'LibR'}">
-        <fileset basedir="${aprDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr/Debug">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprDir}/LibD" if="${aprRelSubdir != 'LibR'}">
-        <fileset basedir="${aprDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      
+      <copy todir="${httpDir}/srclib/apr-util/LibR">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-
-      <copy todir="${aprUtilDir}/Release" if="${aprRelSubdir != 'Release'}">
-        <fileset basedir="${aprUtilDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr-util/LibD">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprUtilDir}/Debug" if="${aprRelSubdir != 'Debug'}">
-        <fileset basedir="${aprUtilDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr-util/Release">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprUtilDir}/LibR" if="${aprRelSubdir != 'LibR'}">
-        <fileset basedir="${aprUtilDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
+      <copy todir="${httpDir}/srclib/apr-util/Debug">
+        <fileset basedir="${intDir}/lib">
+          <include name="*apr*.lib" />
         </fileset>
       </copy>
-      <copy todir="${aprUtilDir}/LibD" if="${aprRelSubdir != 'LibR'}">
-        <fileset basedir="${aprUtilDir}/${aprRelSubdir}">
-          <include name="*.lib" />
-          <include name="*.dll" />
-          <include name="*.pdb" />
-        </fileset>
-      </copy>
+      
       <!-- Fake direct result for subversion to hide platforms -->
       <copy todir="${intDir}/lib/include">
         <fileset basedir="${intDir}/include/apr-1">

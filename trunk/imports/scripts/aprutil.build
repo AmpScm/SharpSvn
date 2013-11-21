@@ -1,11 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="aprBase" value="${platformRoot}" if="${not buildHttpd}" />
-  <property name="aprBase" value="${httpdDir}/srclib" if="${buildHttpd}" />
-  <property name="aprDir" value="${aprBase}\apr" />
-  <property name="aprUtilDir" value="${aprBase}\apr-util" />
-
-  <property name="libAprSharedLib" value="${aprDir}\Release\libapr-1.lib" />
+  <property name="aprUtilDir" value="${platformRoot}\apr-util" /> 
   <property name="libAprUtilSharedLib" value="${aprUtilDir}\Release\libaprutil-1.lib" />
  
   <target name="aprutil-merge" depends="checkout">
