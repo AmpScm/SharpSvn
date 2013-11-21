@@ -110,9 +110,14 @@
         <include name="*.pdb" />
       </fileset>
     </copy>
-    <copy todir="${release}/include">    
+    <copy todir="${release}/include">
       <fileset basedir="${intDir}/include">
         <include name="db*.h" />
+      </fileset>
+    </copy>    
+    <copy todir="${release}/bin">
+      <fileset basedir="${intDir}/bin">
+        <include name="${fullDbDllName}" />
       </fileset>
     </copy>    
   </target>
