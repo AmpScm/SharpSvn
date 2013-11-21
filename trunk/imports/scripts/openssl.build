@@ -34,13 +34,11 @@
       <FilterFile file="${opensslDir}/ms/libeay32.def" unless="${static}">
         <filterchain>
           <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
-          <LineRegexReplace re="@[0-9]+" to=";$0" />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/ms/ssleay32.def" unless="${static}">
         <filterchain>
           <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
-          <LineRegexReplace re="@[0-9]+" to=";$0" />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}">
