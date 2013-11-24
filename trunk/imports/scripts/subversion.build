@@ -276,11 +276,6 @@
         <include name="subversion/${Configuration}/**/*.pdb" />
         <!-- Don't copy pdb's for executables -->
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
-        <include name="neon/**/*.lib" if="${buildNeon}" />
-        <include name="neon/**/*.pdb" if="${buildNeon}" />
-
-        <!-- Don't copy the GPL as a *.lib file -->
-        <exclude name="neon/src/COPYING.LIB" if="${buildNeon}" />
       </fileset>
     </copy>
     <copy todir="${release}/lib-x64" flatten="true">
@@ -289,11 +284,6 @@
         <include name="subversion/${Configuration}/**/*.pdb" />
         <!-- Don't copy pdb's for executables -->
         <exclude name="subversion/${Configuration}/**/svn*.pdb" />
-        <include name="neon/**/*.lib" if="${buildNeon}" />
-        <include name="neon/**/*.pdb" if="${buildNeon}" />
-
-        <!-- Don't copy the GPL as a *.lib file -->
-        <exclude name="neon/src/COPYING.LIB" if="${buildNeon}" />
       </fileset>
     </copy>
     <if test="${platform!='win32'}">
@@ -329,19 +319,19 @@
         <include name="libsvn_subr/config_impl.h" />
       </fileset>
     </copy>
-    <copy todir="${release}/include/neon" if="${buildNeon}">
-      <fileset basedir="${platformRoot}\neon\src">
-        <include name="**/*.h" />
+    <copy todir="${release}/include">
+      <fileset basedir="${intDir}/include">
+        <include name="**" />
       </fileset>
     </copy>
-    <copy todir="${release}/include/apr-1">
-      <fileset basedir="${platformRoot}\apr\include">
-        <include name="**.h" />
+    <copy todir="${release}/lib" if="${platform == 'win32'}">
+      <fileset basedir="${intDir}/lib">
+        <include name="**" />
       </fileset>
     </copy>
-    <copy todir="${release}/include/apr-1">
-      <fileset basedir="${platformRoot}\apr-util\include">
-        <include name="**.h" />
+    <copy todir="${release}/lib-x64" if="${platform == 'x64'}">
+      <fileset basedir="${intDir}/lib">
+        <include name="**" />
       </fileset>
     </copy>
     <echo file="${release}/copylibs.cmd">
