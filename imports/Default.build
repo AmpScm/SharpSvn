@@ -23,7 +23,9 @@
   <!-- r1541635 - Diff on drive root -->
   <!-- r1538812, r1538925, r1538928, r1538939 - Move original deleted -->
   <!-- r1542610 - Fix resource file issue -->
-  <property name="subversionMerges" value="1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1541635,1535676" overwrite="false" /> 
+  <!-- r1538812, r1538925, r1538928, r1538939 - Properly fix up moves after delete of target -->
+  <!-- r1544597, r1544600, r1544688, r1544690, r1545111, r1545122 - status direct vs ancestor -->
+  <property name="subversionMerges" value="1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1541635,1535676,1538812,1538925,1538928,1538939,1544597,1544600,1544688,1544690,1545111,1545122" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
