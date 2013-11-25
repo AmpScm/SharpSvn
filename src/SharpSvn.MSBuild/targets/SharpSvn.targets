@@ -1,0 +1,15 @@
+<!-- SharpSvn.net ImportAfter Targets -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!-- Guard against multiple imports -->
+  <PropertyGroup>
+    <SharpSvnIncluded>true</SharpSvnIncluded>
+    <SharpSvnEnabled Condition="$(SharpSvnEnabled) == ''">true</SharpSvnEnabled>
+  </PropertyGroup>
+
+  <ImportGroup Condition="$(SharpSvnEnabled) != 'false'">
+    <Import Project="$(SharpSvnTargetsDir)\SharpSvn.common.targets"
+            Condition="Exists('$(SharpSvnTargetsDir)\SharpSvn.common.targets')" />
+    <Import Project="$(SharpSvnTargetsDir)\Projects\SharpSvn$(MSBuildProjectExtension).targets"
+            Condition="$(MSBuildProjectExtension) != '' and Exists('$(SharpSvnTargetsDir)\Projects\SharpSvn$(MSBuildProjectExtension).targets')" />
+  </ImportGroup>
+</Project>
