@@ -100,7 +100,6 @@
       <ComponentGroupRef Id="svnversion.exe" />
       <ComponentGroupRef Id="svnmucc.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <MergeRef Id="VC_CRT_Policy" />
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
@@ -112,7 +111,6 @@
       <ComponentGroupRef Id="svnrdump.exe"/>
       <ComponentGroupRef Id="svnsync.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <MergeRef Id="VC_CRT_Policy" />
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
@@ -125,7 +123,6 @@
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="libsvnjavahl_1.dll"/>
       <MergeRef Id="VC_CRT"/>
-      <MergeRef Id="VC_CRT_Policy" />
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
@@ -133,7 +130,6 @@
       <ComponentRef Id="AddToPath"/>
       <ComponentGroupRef Id="svnserve.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <MergeRef Id="VC_CRT_Policy" />
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
@@ -142,7 +138,6 @@
       <ComponentGroupRef Id="svnauthz_validate.exe"/>
       <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
       <MergeRef Id="VC_CRT"/>
-      <MergeRef Id="VC_CRT_Policy" />
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentGroupRef Id="SharpSvnGettext_LICENSE" />
     </Feature>
