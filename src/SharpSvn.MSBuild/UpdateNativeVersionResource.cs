@@ -237,7 +237,7 @@ namespace SharpSvn.MSBuild
 			{
 				if (_snExe == null)
 				{
-					string sn = Path.Combine(FrameworkSdkDir, "bin\\sn.exe");
+					string sn = Path.Combine(FrameworkSdkDir ?? ".", "bin\\sn.exe");
 
 					if (File.Exists(sn))
 						_snExe = sn;
