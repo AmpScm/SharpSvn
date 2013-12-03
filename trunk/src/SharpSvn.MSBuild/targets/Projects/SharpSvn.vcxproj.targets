@@ -1,42 +1,19 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
-  <UsingTask TaskName="GenerateVersionResourceFromAssembly" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+  <UsingTask TaskName="UpdateNativeVersionResource" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
 
-  <Target Name="SharpSvnPreLink"
-          BeforeTargets="Link;ResourceCompile"
-          DependsOnTargets="CLCompile"
+  <Target Name="SharpSvnPostLink"
+          AfterTargets="Link"
           Condition="'$(CLRSupport)' != '' and '$(CLRSupport)'!='false'">
 
-    <ItemGroup>
-      <SharpSvnAttributeObj
-                        Include="@(Obj)"
-                        Condition="%(Obj.Filename) == 'AssemblyInfo'" />
-      <SharpSvnAttributeObj
-                        Include="@(Obj)"
-                        Condition="%(Obj.Filename) == $([System.IO.Path]::GetFilenameWithoutExtension('$(TargetFrameworkMonikerAssemblyAttributesPath)'))" />
-    </ItemGroup>
+    <UpdateNativeVersionResource
+      Source          ="%(Link.OutputFile)"
+      TempDir         ="$(IntDir)SharpSvn.Targets"
+      SourceUpdated   ="$(SharpSvnUpdatedResource)"
+      KeyContainer    ="%(Link.KeyContainer)"
+      KeyFile         ="$(LinkKeyFile)"
 
-    <Message Text="Linking mini dll to obtain version information; this DLL doesn't have to run" 
-             Condition="'@(SharpSvnAttributeObj)' != ''" />
-    <Link
-       BuildingInIDE               ="$(BuildingInsideVisualStudio)"
-       Sources                     ="@(SharpSvnAttributeObj)"
-       ForceFileOutput             ="Enabled"
-       LinkDLL                     ="true"
-       OutputFile                  ="$(IntDir)_SharpSvn.Attribute.Mini.dll"
-       AcceptableNonZeroExitCodes  ="-1" />
-       
-    <GenerateVersionResourceFromAssembly
-      Source="$(IntDir)_SharpSvn.Attribute.Mini.dll"
-      OutputFile="$(IntDir)_SharpSvn.Attribute.res"
-      TempDir="$(IntDir)" />
-
-    <Message Text="B: @(SharpSvnAttributeObjects)" />
-            
-      <Message Text='-' />
-      <!--Message
-            Text='%(Obj)'
-            Condition="%(Obj.Filename) == 'AssemblyInfo.obj'" /-->
+      Condition="%(Link.OutputFile) != ''"/>
   </Target>
 
 
