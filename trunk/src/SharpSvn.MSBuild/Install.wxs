@@ -13,7 +13,7 @@
             </Component>
             <Component Id="SharpSvnMSBuild_dll" Guid="783D0F89-F894-4B97-A3F9-E5D7CA678CE3">
               <File Name="SharpSvn.MSBuild.dll" Vital="yes" Checksum="yes" KeyPath="yes"
-                    Source="bin\$(var.Configuration)\SharpSvn.MSBuild.dll"/>
+                    Source="$(var.SharpSvn.MSBuild.TargetDir)\SharpSvn.MSBuild.dll"/>
             </Component>
             <Directory Id="MSBuild_SharpSvn_Project" Name="Projects">
               <Component Id="vcxproj_targets" Guid="6D58BED8-6D25-4B11-989B-3FF83E18BD5A">
