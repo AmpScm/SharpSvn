@@ -82,15 +82,13 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup>
-    <_ProjectFileVersion>11.0.50417.1</_ProjectFileVersion>
-  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
@@ -98,6 +96,7 @@
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
@@ -105,6 +104,7 @@
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
@@ -112,6 +112,7 @@
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
+    <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <PreBuildEvent>
@@ -119,14 +120,6 @@
 $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Message>
-      </Message>
-      <Command>
-      </Command>
-      <Inputs> ;%(Inputs)</Inputs>
-      <Outputs> ;%(Outputs)</Outputs>
-    </CustomBuildStep>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -160,17 +153,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
 $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Message>
-      </Message>
-      <Command>
-      </Command>
-      <Inputs> ;%(Inputs)</Inputs>
-      <Outputs> ;%(Outputs)</Outputs>
-    </CustomBuildStep>
-    <Midl>
-      <TargetEnvironment>X64</TargetEnvironment>
-    </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
@@ -204,16 +186,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
 $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Message>
-      </Message>
-      <Command>
-      </Command>
-      <Inputs> ;%(Inputs)</Inputs>
-      <Outputs> ;%(Outputs)</Outputs>
-    </CustomBuildStep>
     <ClCompile>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -236,6 +210,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -244,19 +219,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
 $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstallDir)." "$(WindowsSdkDir)." "$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h" "$(SolutionDir)..\imports\release\include\serf-1\serf.h" "$(ProjectDir)\SvnWindowsError.h"
 </Command>
     </PreBuildEvent>
-    <CustomBuildStep>
-      <Message>
-      </Message>
-      <Command>
-      </Command>
-      <Inputs> ;%(Inputs)</Inputs>
-      <Outputs> ;%(Outputs)</Outputs>
-    </CustomBuildStep>
-    <Midl>
-      <TargetEnvironment>X64</TargetEnvironment>
-    </Midl>
     <ClCompile>
-      <Optimization>MinSpace</Optimization>
+      <Optimization>Full</Optimization>
       <AdditionalIncludeDirectories>..\..\imports\release\include;..\..\imports\release\include\apr-1;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(Platform);%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
@@ -279,6 +243,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -297,7 +263,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="AprArray.h" />
     <ClInclude Include="AprBaton.h" />
     <ClInclude Include="AprPool.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="SvnBase.h" />
     <ClInclude Include="SvnFsOperationRetryOverride.h" />

@@ -128,9 +128,6 @@
     <ClInclude Include="AprPool.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Common\Headers</Filter>
-    </ClInclude>
     <ClInclude Include="Stdafx.h">
       <Filter>Common\Headers</Filter>
     </ClInclude>
