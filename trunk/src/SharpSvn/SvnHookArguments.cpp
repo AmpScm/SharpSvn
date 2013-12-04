@@ -14,7 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnHookArguments.h"
 
 [module: SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", Scope="member", Target="SharpSvn.SvnHookArguments.#ParsePreLock(System.String[],System.Boolean,SharpSvn.SvnHookArguments&)", MessageId="useConsole")];

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,9 +18,8 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <PropertyGroup Label="Globals" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{3B2682F1-0092-4422-8E12-588163AD9422}</ProjectGuid>
+    <ProjectGuid>{F47E6F0F-0639-45AE-B029-7EDD8CD5910A}</ProjectGuid>
     <RootNamespace>SharpSvnPlink</RootNamespace>
     <SccProjectName>Svn</SccProjectName>
     <SccAuxPath>Svn</SccAuxPath>
@@ -31,32 +30,38 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
-    <UseOfAtl>false</UseOfAtl>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
-    <UseOfAtl>Static</UseOfAtl>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
     <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
-    <UseOfAtl>false</UseOfAtl>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
-    <UseOfAtl>Static</UseOfAtl>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />

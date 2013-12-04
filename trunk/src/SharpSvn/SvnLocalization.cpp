@@ -14,10 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
-
-#include "svn_dso.h"
-#include "svn_utf.h"
 #define SHARPSVN_NO_ABORT
 #include <libintl.h>
 

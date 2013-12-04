@@ -3,10 +3,13 @@
 
 struct IDiaDataSource;
 struct IDiaSession;
+struct IDiaSymbol;
 
 namespace SharpSvn {
     namespace Implementation
     {
+        using namespace System;
+        using namespace System::Collections::Generic;
 
         public ref class SvnPdbClient sealed : public Implementation::SvnBase
         {
@@ -31,8 +34,11 @@ namespace SharpSvn {
         public:
             bool Open(String^ path);
 
-        public:
+        private:
             bool GetAllSourceFiles([Out] IList<String^> ^%files);
+
+        public:
+            IEnumerable<String^>^ GetAllSourceFiles();
 
         private:
             ~SvnPdbClient();

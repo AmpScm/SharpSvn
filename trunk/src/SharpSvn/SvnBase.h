@@ -14,12 +14,12 @@
 
 #pragma once
 
-using namespace System;
-using System::Collections::Generic::IList;
-using System::Collections::Generic::ICollection;
-using System::Collections::Generic::IDictionary;
-
 namespace SharpSvn {
+    using namespace System;
+    using System::Collections::Generic::IList;
+    using System::Collections::Generic::ICollection;
+    using System::Collections::Generic::IDictionary;
+
 	ref class SvnTarget;
 	ref class SvnClientContext;
 	ref class SvnPropertyCollection;

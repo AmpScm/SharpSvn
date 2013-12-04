@@ -1,14 +1,17 @@
 
 #include "stdafx.h"
 
-#include <WinCrypt.h>
-/* The DIA SDK is installed as part of Visual Studio 2005 and 2008. "../../" is the Visual Studio root dir */
 #ifdef NOUSER
-typedef struct tagMSG FAR *LPMSG;
+typedef struct tagMSG MSG, *PMSG, NEAR *NPMSG, FAR *LPMSG;
 #endif
-#include <../../DIA SDK/include/dia2.h>
+
+#include <wincrypt.h>
+#import "dia2.tlb" no_namespace raw_interfaces_only
+//#include <../../DIA SDK/include/dia2.h>
 
 #include "PdbTools/SvnPdbClient.h"
+
+
 
 #define SysFreeString(bstr) System::Runtime::InteropServices::Marshal::FreeBSTR((IntPtr)bstr)
 
@@ -71,8 +74,8 @@ bool SvnPdbClient::Open(String^ path)
 
     pin_ptr<const wchar_t> pPath = PtrToStringChars(path);
 
-    if (FAILED(_dataSource->loadDataFromPdb(pPath))
-        && FAILED(_dataSource->loadDataForExe(pPath, nullptr, nullptr)))
+    if (FAILED(_dataSource->loadDataFromPdb(const_cast<LPWSTR>(pPath)))
+        && FAILED(_dataSource->loadDataForExe(const_cast<LPWSTR>(pPath), nullptr, nullptr)))
     {
         throw gcnew SystemException("Opening PDB failed");
     }
@@ -112,7 +115,7 @@ bool SvnPdbClient::GetAllSourceFiles(System::Collections::Generic::IList<String^
     ULONG celt = 0;
 
     // In order to find the source files, we have to look at the image's compilands/modules
-    if (!SUCCEEDED(_scope->findChildren(SymTagCompiland, NULL, nsNone, &pEnumCompiland)))
+    if (!SUCCEEDED(_scope->findChildren(SymTagCompiland, NULL, 0 /* nsNone */, &pEnumCompiland)))
     {
         return false;
     }
@@ -131,7 +134,7 @@ bool SvnPdbClient::GetAllSourceFiles(System::Collections::Generic::IList<String^
 
         // Every compiland could contain multiple references to the source files which were used to build it
         // Retrieve all source files by compiland by passing NULL for the name of the source file
-        if (SUCCEEDED(_session->findFile(pCompiland, NULL, nsNone, &pEnumSrcFile)))
+        if (SUCCEEDED(_session->findFile(pCompiland, NULL, 0 /* nsNone */, &pEnumSrcFile)))
         {
             ULONG celt = 0;
             IDiaSourceFile* pSrcFile;
@@ -170,3 +173,12 @@ bool SvnPdbClient::GetAllSourceFiles(System::Collections::Generic::IList<String^
     return true;
 }
 
+IEnumerable<String^> ^SvnPdbClient::GetAllSourceFiles()
+{
+    System::Collections::Generic::IList<String^> ^files;
+
+    if (GetAllSourceFiles(files))
+        return files;
+    else
+        return gcnew array<String^>(0);
+}

@@ -14,14 +14,12 @@
 
 #pragma once
 
-using namespace System;
-using System::Collections::Generic::ICollection;
 #include "SvnBase.h"
-#include <svn_pools.h>
-
 
 namespace SharpSvn {
     namespace Implementation {
+        using namespace System;
+        using System::Collections::Generic::ICollection;
 
         [SecurityPermission(SecurityAction::InheritanceDemand, UnmanagedCode=true)]
         [SecurityPermission(SecurityAction::LinkDemand, UnmanagedCode=true)]

@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "Args/WorkingCopyGetVersion.h"
 #include "Args/SvnWorkingCopyVersion.h"
 

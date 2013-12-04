@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "LookArgs/SvnLookPropertyListArgs.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types

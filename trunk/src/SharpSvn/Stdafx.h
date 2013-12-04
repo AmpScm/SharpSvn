@@ -27,12 +27,18 @@
 
 #include <svn_client.h>
 #include <svn_compat.h>
+#include <svn_config.h>
 #include <svn_dirent_uri.h>
+#include <svn_dso.h>
 #include <svn_io.h>
 #include <svn_path.h>
+#include <svn_pools.h>
+
 #include <svn_props.h>
 #include <svn_repos.h>
 #include <svn_time.h>
+#include "svn_utf.h"
+
 
 #include <serf-1/serf.h>
 
@@ -104,3 +110,5 @@ using System::Diagnostics::DebuggerDisplayAttribute;
 #define DECLARE_EVENT(type, name) DECLARE_EVENT_X(type, name, public)
 
 #pragma warning(disable: 4127) // warning C4127: conditional expression is constant
+
+#include "SvnAll.h"

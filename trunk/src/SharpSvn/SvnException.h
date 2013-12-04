@@ -14,11 +14,10 @@
 
 #pragma once
 
-using namespace System;
-
 #include "SvnErrorCodes.h"
 
 namespace SharpSvn {
+    using namespace System;
 
 	[Serializable]
 	public ref class SvnException : public System::Exception

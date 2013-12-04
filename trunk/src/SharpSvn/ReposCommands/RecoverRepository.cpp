@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "ReposArgs/RecoverRepository.h"
 
 #include "UnmanagedStructs.h" // Resolves linker warnings for opaque types

@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "Args/Log.h"
 
 using namespace SharpSvn::Implementation;

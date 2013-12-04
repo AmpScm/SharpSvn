@@ -14,8 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
-
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 

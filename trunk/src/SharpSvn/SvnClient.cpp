@@ -15,7 +15,6 @@
 #include "stdafx.h"
 #include <svn_version.h>
 
-#include "SvnAll.h"
 #include "SvnLibraryAttribute.h"
 
 using namespace SharpSvn;

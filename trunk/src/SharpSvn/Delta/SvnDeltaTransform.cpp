@@ -1,7 +1,6 @@
 #include "StdAfx.h"
-#include "SvnAll.h"
-#include "SvnDeltaTransform.h"
 
+#include "SvnDeltaTransform.h"
 #include "SvnDeltaEditor.h"
 
 using namespace SharpSvn;

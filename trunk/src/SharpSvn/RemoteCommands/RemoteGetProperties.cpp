@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "RemoteArgs/SvnRemotePropertiesArgs.h"
 
 using namespace SharpSvn;

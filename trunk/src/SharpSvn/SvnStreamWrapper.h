@@ -14,14 +14,13 @@
 
 #pragma once
 
-using namespace System;
-
 #include "SvnBase.h"
 #include "AprBaton.h"
 
 
 namespace SharpSvn {
 	namespace Implementation {
+        using namespace System;
 		using System::IO::Stream;
 
 		ref class SvnStreamWrapper : public IDisposable

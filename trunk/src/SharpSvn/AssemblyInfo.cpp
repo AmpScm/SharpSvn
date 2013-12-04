@@ -105,4 +105,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 
 #include "../../imports/release/include/sharpsvn-imports.h"
-[assembly:AssemblyVersionAttribute("1.6012.1576.9657")]; 
+[assembly:AssemblyVersionAttribute("1.7999.*")];

@@ -15,7 +15,7 @@
 #include "stdafx.h"
 
 #include <malloc.h>
-#include "SvnAll.h"
+
 #include "SvnTools.h"
 
 #pragma warning(disable: 6255) // warning C6255: _alloca indicates failure by raising a stack overflow exception. Consider using _malloca instead

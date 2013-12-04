@@ -14,8 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
-
 #include "svn_dso.h"
 #include "svn_utf.h"
 #include "svn_cache_config.h"

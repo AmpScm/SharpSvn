@@ -14,5 +14,4 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnNames.h"

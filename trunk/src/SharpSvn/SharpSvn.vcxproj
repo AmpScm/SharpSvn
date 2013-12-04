@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -18,9 +18,8 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <PropertyGroup Label="Globals" />
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{A3166809-1484-4442-BF75-5FB0E8356381}</ProjectGuid>
+    <ProjectGuid>{6DD8A600-5A7E-4B7A-91EE-86AB78F58AAC}</ProjectGuid>
     <RootNamespace>SharpSvn</RootNamespace>
     <SccProjectName>Svn</SccProjectName>
     <SccAuxPath>Svn</SccAuxPath>
@@ -31,31 +30,39 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
     <WholeProgramOptimization>true</WholeProgramOptimization>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
-    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>true</CLRSupport>
   </PropertyGroup>
@@ -128,7 +135,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -139,12 +145,13 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;psapi.dll;user32.dll;ole32.dll;advapi32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;user32.dll;ole32.dll;advapi32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpSvn-DB44-20-$(Platform).svnDll;$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX86</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -172,7 +179,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <GenerateXMLDocumentationFiles>true</GenerateXMLDocumentationFiles>
       <BrowseInformation>true</BrowseInformation>
       <WarningLevel>Level4</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -183,12 +189,13 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;psapi.dll;user32.dll;Ole32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;user32.dll;Ole32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpSvn-DB44-20-$(Platform).svnDll;$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX64</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -223,11 +230,12 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;psapi.dll;user32.dll;Ole32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;user32.dll;Ole32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpSvn-DB44-20-$(Platform).svnDll;$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -265,11 +273,12 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </PreLinkEvent>
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;psapi.dll;user32.dll;Ole32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;crypt32.dll;mswsock.dll;user32.dll;Ole32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <AssemblyLinkResource>$(TargetDir)SharpSvn-DB44-20-$(Platform).svnDll;$(TargetDir)SharpPlink-$(Platform).svnExe;%(AssemblyLinkResource)</AssemblyLinkResource>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
+      <KeyFile>SharpSvn.snk</KeyFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -277,9 +286,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="app.rc" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ReposArgs\PackRepository.h" />
@@ -451,8 +457,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="EventArgs\SvnRemoteLocationSegmentEventArgs.h" />
     <ClInclude Include="EventArgs\SvnRemoteLogEventArgs.h" />
     <ClInclude Include="EventArgs\SvnRemoteStatEventArgs.h" />
-    <ClInclude Include="PdbTools\sbs_pdh.h" />
-    <ClInclude Include="PdbTools\SvnMsfClient.h" />
     <ClInclude Include="PdbTools\SvnPdbClient.h" />
     <ClInclude Include="EventArgs\SvnImportFilterEventArgs.h" />
     <ClInclude Include="ReposArgs\SetRepositoryId.h" />
@@ -665,23 +669,24 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="RemoteCommands\RemoteStat.cpp" />
     <ClCompile Include="RemoteCommands\ResolveRevision.cpp" />
     <ClCompile Include="RemoteCommands\SvnRemoteSession.cpp" />
-    <ClCompile Include="PdbTools\SvnMsfClient.cpp" />
     <ClCompile Include="PdbTools\SvnPdbClient.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="PdbTools\dia2.tlb" />
     <None Include="SharpSvn.snk" />
-    <None Include="SharpSvn-VS2008.vcproj">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="SharpSvn.vcproj" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpPlink\SharpPlink.vcxproj">
-      <Project>{3b2682f1-0092-4422-8e12-588163ad9422}</Project>
+      <Project>{f47e6f0f-0639-45ae-b029-7edd8cd5910a}</Project>
+      <Private>false</Private>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyLocal>true</CopyLocal>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
     <ProjectReference Include="..\tools\Errors2Enum\Errors2Enum.csproj">
       <Project>{80ca13e9-790a-4dc3-a45a-edf6996d82d0}</Project>
@@ -696,7 +701,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <Private>false</Private>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
   </ItemGroup>

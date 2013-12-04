@@ -14,11 +14,10 @@
 
 #pragma once
 
-using namespace System;
-
 namespace SharpSvn {
 	namespace Implementation {
 
+        using namespace System;
 		using System::Collections::Generic::ICollection;
 
 		generic<typename T>

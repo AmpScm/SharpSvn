@@ -14,11 +14,9 @@
 
 #pragma once
 
-using namespace System;
-
 namespace SharpSvn {
-
-using System::ComponentModel::DescriptionAttribute;
+    using namespace System;
+    using System::ComponentModel::DescriptionAttribute;
 
 #define SVN_ERRDEF(x,y,z)                                                                          \
             [DescriptionAttribute(z)]                                                              \
@@ -77,3 +75,31 @@ public enum class SvnErrorCategory
 #undef WSABASEERR // Enable including winsock errors
 #include "SvnWindowsError.h"
 
+#undef INET_E_INVALID_URL
+#undef INET_E_NO_SESSION
+#undef INET_E_CANNOT_CONNECT
+#undef INET_E_RESOURCE_NOT_FOUND
+#undef INET_E_OBJECT_NOT_FOUND
+#undef INET_E_DATA_NOT_AVAILABLE
+#undef INET_E_DOWNLOAD_FAILURE
+#undef INET_E_AUTHENTICATION_REQUIRED
+#undef INET_E_NO_VALID_MEDIA
+#undef INET_E_CONNECTION_TIMEOUT
+#undef INET_E_INVALID_REQUEST
+#undef INET_E_UNKNOWN_PROTOCOL
+#undef INET_E_SECURITY_PROBLEM
+#undef INET_E_CANNOT_LOAD_DATA
+#undef INET_E_CANNOT_INSTANTIATE_OBJECT
+#undef INET_E_INVALID_CERTIFICATE
+#undef INET_E_REDIRECT_FAILED
+#undef INET_E_REDIRECT_TO_DIR
+#undef INET_E_CANNOT_LOCK_REQUEST
+#undef INET_E_USE_EXTEND_BINDING
+#undef INET_E_TERMINATED_BIND
+#undef INET_E_RESERVED_1
+#undef INET_E_BLOCKED_REDIRECT_XSECURITYID
+#undef INET_E_DOMINJECTIONVALIDATION
+#undef INET_E_ERROR_FIRST
+#undef INET_E_CODE_DOWNLOAD_DECLINED
+#undef INET_E_RESULT_DISPATCHED
+#undef INET_E_CANNOT_REPLACE_SFP_FILE
