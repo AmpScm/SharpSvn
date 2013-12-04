@@ -6,8 +6,7 @@ typedef struct tagMSG MSG, *PMSG, NEAR *NPMSG, FAR *LPMSG;
 #endif
 
 #include <wincrypt.h>
-#import "dia2.tlb" no_namespace raw_interfaces_only
-//#include <../../DIA SDK/include/dia2.h>
+#import "dia2.tlb" no_namespace raw_interfaces_only exclude("IStream", "ISequentialStream", "IEnumUnknown", "_LARGE_INTEGER", "_ULARGE_INTEGER", "tagSTATSTG", "_FILETIME")
 
 #include "PdbTools/SvnPdbClient.h"
 
