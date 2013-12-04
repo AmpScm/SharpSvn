@@ -223,14 +223,14 @@ namespace SharpGit {
 				}
 			}
 
-			property bool IsHeadOrphaned
+			property bool IsHeadUnborn
 			{
 				bool get()
 				{
 					if (IsDisposed)
 						return false;
 
-					return (git_repository_head_orphan(_repository) == 1);
+                    return (git_repository_head_unborn(_repository) == 1);
 				}
 			}
 

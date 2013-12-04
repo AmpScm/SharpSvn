@@ -90,7 +90,7 @@ bool GitIndex::Reload(GitArgs ^args)
 
 	AssertOpen();
 
-	int r = git_index_read(_index);
+	int r = git_index_read(_index, FALSE /* force */);
 
 	return args->HandleGitError(this, r);
 }

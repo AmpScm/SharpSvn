@@ -1,10 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
-    </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{91bc4231-ab71-4893-ad21-3115f62fa83c}</UniqueIdentifier>
     </Filter>
@@ -26,11 +22,6 @@
     <Filter Include="Diff">
       <UniqueIdentifier>{1fe341df-72ad-42f0-97fb-8a872e95ed52}</UniqueIdentifier>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="app.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
@@ -94,15 +85,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="SharpGit-VS2008.vcproj" />
     <None Include="SharpGit.snk" />
     <None Include="SharpGit.vcproj" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
-      <Filter>Common\Header</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
       <Filter>Common\Header</Filter>
     </ClInclude>
     <ClInclude Include="GitClientContext.h">
@@ -182,10 +169,5 @@
     <ClInclude Include="GitClient\GitUnstage.h">
       <Filter>GitClient</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="app.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>

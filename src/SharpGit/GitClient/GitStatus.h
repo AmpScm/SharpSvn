@@ -9,7 +9,6 @@ namespace SharpGit {
 	{
 		bool _noWorkDir;
 		bool _noIndex;
-		bool _sequential;
 		bool _noUnversioned;
 		bool _showIgnored;
 		bool _showUnmodified;
@@ -41,18 +40,6 @@ namespace SharpGit {
 			void set(bool value)
 			{
 				_noIndex = !value;
-			}
-		}
-
-		property bool ParallelStatus
-		{
-			bool get()
-			{
-				return !_sequential;
-			}
-			void set(bool value)
-			{
-				_sequential = !value;
 			}
 		}
 

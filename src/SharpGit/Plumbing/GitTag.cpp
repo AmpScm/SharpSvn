@@ -179,11 +179,14 @@ IEnumerable<GitBranch^>^ GitBranchCollection::GetEnumerable(git_branch_t flags)
 	root->branches = branches;
 	root->repository = _repository;
 
+#if 0
 	int r = git_branch_foreach(_repository->Handle, flags, for_branch, root.GetBatonValue());
 	if (r != 0)
 		branches->Clear();
 
 	return branches->AsReadOnly();
+#endif
+    throw gcnew NotImplementedException();
 }
 
 bool GitBranchCollection::Create(GitCommit^ commit, String^ name)

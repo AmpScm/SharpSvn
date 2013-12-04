@@ -12,6 +12,7 @@
 #pragma warning(pop)
 
 #include <assert.h>
+#include <malloc.h>
 
 #pragma warning(disable: 4706) // assignment within conditional expression
 
