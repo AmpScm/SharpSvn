@@ -300,11 +300,11 @@ namespace SharpGit.Tests
 
                 GitIndex index = repo.Index;
                 Assert.That(index, Is.Not.Null);
-                repo.SetIndex(index);
+                //repo.SetIndex(index);
 
                 GitObjectDatabase odb = repo.ObjectDatabase;
                 Assert.That(odb, Is.Not.Null);
-                repo.SetObjectDatabase(odb);
+                //repo.SetObjectDatabase(odb);
 
                 File.WriteAllText(file, "qqq");
 

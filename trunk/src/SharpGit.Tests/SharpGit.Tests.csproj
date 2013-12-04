@@ -9,7 +9,6 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SharpGit.Tests</RootNamespace>
     <AssemblyName>SharpGit.Tests</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
@@ -65,11 +64,33 @@
     <Compile Include="GitClientTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <Choose>
+    <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
+      <!-- Visual Studio 2008 -->
+      <ItemGroup>
+        <ProjectReference Include="..\SharpSvn\SharpGit.vcproj">
+          <Project>{0d01253e-6359-43fc-a3c8-1a3754c4468d}</Project>
+          <Name>SharpGit</Name>
+          <Private>True</Private>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\SharpGit\SharpGit.vcxproj">
+          <Project>{0d01253e-6359-43fc-a3c8-1a3754c4468d}</Project>
+          <Name>SharpGit</Name>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <ProjectReference Include="..\SharpGit\SharpGit.vcxproj">
-      <Project>{0d01253e-6359-43fc-a3c8-1a3754c4468d}</Project>
-      <Name>SharpGit</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

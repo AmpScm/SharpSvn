@@ -25,8 +25,6 @@ const git_status_options* GitStatusArgs::MakeOptions(String^ path, Implementatio
 		opts->show = GIT_STATUS_SHOW_INDEX_ONLY;
 	else if (! this->IndexStatus)
 		opts->show = GIT_STATUS_SHOW_WORKDIR_ONLY;
-	else if (! this->ParallelStatus)
-		opts->show = GIT_STATUS_SHOW_INDEX_THEN_WORKDIR;
 	else
 		opts->show = GIT_STATUS_SHOW_INDEX_AND_WORKDIR;
 
