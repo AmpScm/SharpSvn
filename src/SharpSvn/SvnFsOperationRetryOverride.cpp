@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnFsOperationRetryOverride.h"
+#include "SvnWindowsError.h"
+
 #include <libintl.h>
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;

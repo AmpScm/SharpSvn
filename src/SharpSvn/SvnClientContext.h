@@ -18,11 +18,11 @@
 #include "AprBaton.h"
 #include "EventArgs/SvnEventArgs.h"
 
-using namespace System;
-using namespace SharpSvn::Implementation;
-
 namespace SharpSvn {
-	namespace Security {
+    using namespace System;
+    using namespace SharpSvn::Implementation;
+
+namespace Security {
 		ref class SvnAuthentication;
 	};
 

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "Args/CropWorkingCopy.h"
 #include <private/svn_wc_private.h>
 

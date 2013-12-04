@@ -14,7 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnFileDiff.h"
 #include "SvnStreamWrapper.h"
 

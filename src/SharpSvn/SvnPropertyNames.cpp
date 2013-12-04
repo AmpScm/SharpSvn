@@ -14,7 +14,7 @@
 
 #pragma once
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "SvnNames.h"
 
 using namespace SharpSvn::Implementation;

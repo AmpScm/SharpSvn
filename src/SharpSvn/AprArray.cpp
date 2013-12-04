@@ -13,7 +13,6 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
 
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCStrPathMarshaller")];
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Implementation.AprCanonicalMarshaller")];

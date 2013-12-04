@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "SvnStreamWrapper.h"
 #include "Args/WriteRelated.h"
 #include "Delta/SvnDeltaEditor.h"

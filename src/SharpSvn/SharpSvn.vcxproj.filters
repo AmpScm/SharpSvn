@@ -110,11 +110,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="app.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="SharpSvnStrings.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
@@ -610,12 +605,6 @@
     <ClInclude Include="EventArgs\SvnRemoteStatEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include="PdbTools\sbs_pdh.h">
-      <Filter>PdbClient</Filter>
-    </ClInclude>
-    <ClInclude Include="PdbTools\SvnMsfClient.h">
-      <Filter>PdbClient</Filter>
-    </ClInclude>
     <ClInclude Include="PdbTools\SvnPdbClient.h">
       <Filter>PdbClient</Filter>
     </ClInclude>
@@ -1037,9 +1026,6 @@
     <ClCompile Include="RemoteCommands\SvnRemoteSession.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="PdbTools\SvnMsfClient.cpp">
-      <Filter>PdbClient</Filter>
-    </ClCompile>
     <ClCompile Include="PdbTools\SvnPdbClient.cpp">
       <Filter>PdbClient</Filter>
     </ClCompile>
@@ -1072,7 +1058,9 @@
   <ItemGroup>
     <None Include="SharpSvn.snk" />
     <None Include="SharpSvn.vcproj" />
-    <None Include="SharpSvn-VS2008.vcproj" />
+    <None Include="PdbTools\dia2.tlb">
+      <Filter>PdbClient</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SharpSvnStrings.txt" />

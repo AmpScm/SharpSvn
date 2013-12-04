@@ -13,7 +13,6 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
 #include "DelayImp.h"
 
 #include "db.h"

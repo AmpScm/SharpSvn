@@ -14,7 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnClientContext.h"
 #include "SvnAuthentication.h"
 
@@ -25,6 +24,8 @@ using System::Text::RegularExpressions::Match;
 using System::Collections::ObjectModel::Collection;
 using System::IO::DirectoryInfo;
 using System::IO::FileInfo;
+
+using namespace SharpSvn;
 
 //////////////////////////////////////////////////////////////////////////////////////
 // All this depends on intimate knowledge of implementation within

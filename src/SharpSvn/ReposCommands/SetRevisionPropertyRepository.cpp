@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "ReposArgs/SetRevisionPropertyRepository.h"
 
 using namespace SharpSvn;

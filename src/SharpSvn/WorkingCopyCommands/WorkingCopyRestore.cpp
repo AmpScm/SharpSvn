@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "WorkingCopyArgs/WorkingCopyRestore.h"
 
 #include <private/svn_wc_private.h>

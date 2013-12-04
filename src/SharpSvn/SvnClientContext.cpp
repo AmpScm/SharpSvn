@@ -14,7 +14,6 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnNames.h"
 #include "UnmanagedStructs.h"
 #include <svn_config.h>

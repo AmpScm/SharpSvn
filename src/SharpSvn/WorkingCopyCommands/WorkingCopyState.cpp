@@ -13,7 +13,7 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#include "SvnAll.h"
+
 #include "WorkingCopyArgs/WorkingCopyState.h"
 
 #include "UnmanagedStructs.h"

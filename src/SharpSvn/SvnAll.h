@@ -14,8 +14,6 @@
 
 #pragma once
 
-#include <apr.h>
-
 #include "SharpSvnStrings.h"
 
 #include "AprPool.h"

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnStatusCacheBlocker.h"
 
 using namespace SharpSvn;

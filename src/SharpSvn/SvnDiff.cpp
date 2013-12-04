@@ -14,10 +14,10 @@
 
 #include "stdafx.h"
 
-#include "SvnAll.h"
 #include "SvnDiff.h"
 #include "UnmanagedStructs.h"
 
+using namespace SharpSvn;
 using namespace SharpSvn::Diff;
 
 generic<typename TToken> where TToken : ref class
