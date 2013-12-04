@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.20706</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E929A4D4-6C65-4D00-9432-E082169BDDC3}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -170,23 +170,10 @@
     <Content Include="Authentication\TopBar.Design.png" />
   </ItemGroup>
   <Choose>
-    <When Condition="'$(MSBuildToolsVersion)' == ''">
-      <!-- Visual Studio 2005 -->
-      <ItemGroup>
-        <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
-          <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
-          <Name>SharpSvn</Name>
-          <Private>True</Private>
-        </ProjectReference>
-      </ItemGroup>
-      <PropertyGroup>
-        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
-      </PropertyGroup>
-    </When>
     <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
       <!-- Visual Studio 2008 -->
       <ItemGroup>
-        <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
+        <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
           <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
           <Name>SharpSvn</Name>
           <Private>True</Private>
