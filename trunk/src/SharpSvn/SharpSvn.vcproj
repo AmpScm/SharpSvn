@@ -34,7 +34,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -54,7 +54,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
@@ -146,14 +145,13 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="0"
 				InlineFunctionExpansion="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;_DEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
@@ -237,7 +235,6 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
@@ -329,13 +326,12 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/MP"
 				Optimization="1"
 				AdditionalIncludeDirectories="..\..\imports\release\include;..\..\imports\release\include\apr-1;."
 				PreprocessorDefinitions="WIN32;NDEBUG;SHARPSVN_PLATFORM_SUFFIX=$(PlatformName)"
 				StringPooling="true"
 				RuntimeLibrary="2"
-				UsePrecompiledHeader="0"
+				UsePrecompiledHeader="2"
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
@@ -402,10 +398,6 @@
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
-			<File
-				RelativePath="app.rc"
-				>
-			</File>
 			<File
 				RelativePath="SharpSvnStrings.h"
 				>
@@ -557,10 +549,6 @@
 					>
 				</File>
 				<File
-					RelativePath="resource.h"
-					>
-				</File>
-				<File
 					RelativePath="Stdafx.h"
 					>
 				</File>
@@ -608,7 +596,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
+							UsePrecompiledHeader="1"
 						/>
 					</FileConfiguration>
 					<FileConfiguration
@@ -624,7 +612,7 @@
 						>
 						<Tool
 							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="0"
+							UsePrecompiledHeader="1"
 						/>
 					</FileConfiguration>
 				</File>
@@ -1881,18 +1869,6 @@
 		<Filter
 			Name="PdbClient"
 			>
-			<File
-				RelativePath="PdbTools\sbs_pdh.h"
-				>
-			</File>
-			<File
-				RelativePath="PdbTools\SvnMsfClient.cpp"
-				>
-			</File>
-			<File
-				RelativePath="PdbTools\SvnMsfClient.h"
-				>
-			</File>
 			<File
 				RelativePath="PdbTools\SvnPdbClient.cpp"
 				>
