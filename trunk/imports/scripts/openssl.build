@@ -83,6 +83,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
           <replacestring from="BYTE buf[64];" to="BYTE buf[4*64];" /><!-- Ask more entropy -->
           <replacestring from="RAND_add(buf, sizeof(buf), 0);" to="RAND_add(buf, sizeof(buf), sizeof(buf) / 4.0); /* SharpSvn */" />
           <replacestring from="if (kernel)" to="if (good &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
+          <replacestring from="!defined(OPENSSL_SYS_WIN32_CYGWIN)" to="0 &amp;&amp; ! defined(OPENSSL_SYS_WIN32_CYGWIN)" />
         </filterchain>
       </FilterFile>
     </OnceBlock>
