@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="SharpPlink"
 	ProjectGUID="{3B2682F1-0092-4422-8E12-588163AD9422}"
 	RootNamespace="SharpSvnPlink"
@@ -10,6 +10,7 @@
 	SccLocalPath="Svn"
 	SccProvider="SubversionScc"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="196613"
 	>
 	<Platforms>
 		<Platform
@@ -25,7 +26,7 @@
 		<Configuration
 			Name="Debug|Win32"
 			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\2008\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfATL="1"
 			CharacterSet="2"
@@ -91,9 +92,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -102,7 +100,7 @@
 		<Configuration
 			Name="Debug|x64"
 			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\2008\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfATL="1"
 			CharacterSet="2"
@@ -148,7 +146,6 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib-x64"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				TargetMachine="17"
@@ -172,16 +169,13 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
 			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\2008\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfATL="0"
 			CharacterSet="2"
@@ -252,16 +246,13 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
 		<Configuration
 			Name="Release|x64"
 			OutputDirectory="bin\$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="obj\$(PlatformName)\$(ConfigurationName)"
+			IntermediateDirectory="obj\2008\$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="1"
 			UseOfATL="0"
 			CharacterSet="2"
@@ -308,7 +299,6 @@
 				Name="VCLinkerTool"
 				OutputFile="$(OutDir)\$(ProjectName)-$(PlatformName).exe"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="..\..\imports\release\lib-x64"
 				GenerateDebugInformation="true"
 				SubSystem="2"
 				OptimizeReferences="2"
@@ -332,9 +322,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -486,7 +473,118 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\conf.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\config.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\cproxy.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\dialog.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -1878,6 +1976,43 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\windows\winctrls.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\windows\windefs.c"
 					>
 					<FileConfiguration
@@ -1920,6 +2055,43 @@
 				</File>
 				<File
 					RelativePath=".\PuttySrc\windows\winhandl.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\windows\winhelp.c"
 					>
 					<FileConfiguration
 						Name="Debug|Win32"
@@ -2147,6 +2319,43 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\windows\winprint.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\windows\winproxy.c"
 					>
 					<FileConfiguration
@@ -2295,6 +2504,43 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath=".\PuttySrc\windows\winucs.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+							DisableSpecificWarnings="4996"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							PreprocessorDefinitions="_CRT_SECURE_NO_WARNINGS"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath=".\PuttySrc\windows\winx11.c"
 					>
 				</File>
@@ -2338,7 +2584,7 @@
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\SharpPlink-vs2008.vcproj"
+			RelativePath=".\SharpPlink.vcproj"
 			>
 		</File>
 	</Files>
