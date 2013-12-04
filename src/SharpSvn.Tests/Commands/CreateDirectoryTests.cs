@@ -40,7 +40,7 @@ namespace SharpSvn.Tests.Commands
 			string path = Path.Combine(this.WcPath, "foo");
 			Assert.That(Client.CreateDirectory(path));
 
-			Assert.That(this.GetSvnStatus(path), Is.EqualTo('A'), "Wrong status code");
+            Assert.That(this.GetSvnStatus(path), Is.EqualTo(SvnStatus.Added), "Wrong status code");
 		}
 
 		/// <summary>

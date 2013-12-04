@@ -191,7 +191,7 @@ namespace SharpSvn.Tests.Commands
 		{
 			string unversioned = this.CreateTextFile("unversioned.cs");
 			string added = this.CreateTextFile("added.cs");
-			this.RunCommand("svn", "add " + added);
+            Client.Add(added);
 
 			string changed = this.CreateTextFile("Form.cs");
 

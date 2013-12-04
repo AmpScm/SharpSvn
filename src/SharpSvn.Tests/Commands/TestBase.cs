@@ -28,6 +28,7 @@ using ICSharpCode.SharpZipLib.Zip;
 
 using SharpSvn;
 using SharpSvn.Tests.Commands.Utils;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -314,38 +315,21 @@ namespace SharpSvn.Tests.Commands
         /// </summary>
         /// <param name="path">The path to check</param>
         /// <returns>Same character codes as used by svn st</returns>
-        public char GetSvnStatus(string path)
+        public SvnStatus GetSvnStatus(string path)
         {
-            string output = this.RunCommand("svn", "st --non-recursive \"" + path + "\"");
+            SvnStatusArgs sa = new SvnStatusArgs();
+            sa.Depth = SvnDepth.Empty;
+            sa.AddExpectedError(SvnErrorCode.SVN_ERR_WC_PATH_NOT_FOUND);
+            Collection<SvnStatusEventArgs> results;
 
-            if (output.Trim() == String.Empty)
-                return (char)0;
-
-            string[] lines = output.Trim().Split('\n');
-            Array.Sort(lines, new StringLengthComparer());
-
-            string regexString = String.Format(@"(.).*\s{0}\s*", Regex.Escape(path));
-            Match match = Regex.Match(lines[0], regexString, RegexOptions.IgnoreCase);
-            if (match != Match.Empty)
-                return match.Groups[1].ToString()[0];
-            else
+            if (!Client.GetStatus(path, sa, out results)
+                || results.Count != 1)
             {
-                Assert.Fail("TestBase.GetSvnStatus - Regex match failed: " + output);
-                return (char)0; // not necessary, but compiler complains..
+                return SvnStatus.None;
             }
 
+            return results[0].LocalNodeStatus;
         }
-
-        private class StringLengthComparer : IComparer
-        {
-            public int Compare(object x, object y)
-            {
-                return ((string)x).Length - ((string)y).Length;
-            }
-        }
-
-
-
 
         /// <summary>
         /// Runs a command
@@ -448,7 +432,7 @@ namespace SharpSvn.Tests.Commands
         {
             get
             {
-                return (SvnNotifyEventArgs[])this.notifications.ToArray();
+                return this.notifications.ToArray();
             }
         }
 
@@ -592,7 +576,7 @@ namespace SharpSvn.Tests.Commands
         {
             foreach (FileInfo fif in new DirectoryInfo(dir).GetFiles("*", SearchOption.AllDirectories))
             {
-                if ((int)(fif.Attributes & FileAttributes.ReadOnly) != 0)
+                if ((fif.Attributes & FileAttributes.ReadOnly) != 0)
                     fif.Attributes = FileAttributes.Normal;
             }
             Directory.Delete(dir, true);

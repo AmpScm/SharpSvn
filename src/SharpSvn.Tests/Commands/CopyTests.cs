@@ -60,7 +60,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(this.Client.Copy(new SvnPathTarget(srcPath), dstPath));
 
 			Assert.That(Directory.Exists(dstPath), "Directory don't exist ");
-			Assert.That(this.GetSvnStatus(dstPath), Is.EqualTo('A'), " Status is not 'A'  ");
+            Assert.That(this.GetSvnStatus(dstPath), Is.EqualTo(SvnStatus.Added), " Status is not 'A'  ");
 
             Assert.That(Client.Commit(WcPath));
 		}
@@ -95,7 +95,7 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Copy(new SvnUriTarget(srcUri), dstPath);
 
-			Assert.That(this.GetSvnStatus(dstPath), Is.EqualTo('A'), " File is not copied  ");
+            Assert.That(this.GetSvnStatus(dstPath), Is.EqualTo(SvnStatus.Added), " File is not copied  ");
 
             Assert.That(Client.Commit(WcPath));
 		}

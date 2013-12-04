@@ -94,8 +94,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(!File.Exists(path1), "File not deleted");
             Assert.That(!File.Exists(path2), "File not deleted");
 
-            Assert.That(this.GetSvnStatus(path1), Is.EqualTo('D'), "File not deleted");
-            Assert.That(this.GetSvnStatus(path2), Is.EqualTo('D'), "File not deleted");
+            Assert.That(this.GetSvnStatus(path1), Is.EqualTo(SvnStatus.Deleted), "File not deleted");
+            Assert.That(this.GetSvnStatus(path2), Is.EqualTo(SvnStatus.Deleted), "File not deleted");
 
             Assert.That(Client.Commit(WcPath));
         }

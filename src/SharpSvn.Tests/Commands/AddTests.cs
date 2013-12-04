@@ -62,7 +62,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(st[0].LocalNodeStatus, Is.EqualTo(SvnStatus.Added));
 
             // Verify status with external command
-            Assert.That(this.GetSvnStatus(testFile), Is.EqualTo('A'), "svn st does not report the file as added");
+            Assert.That(this.GetSvnStatus(testFile), Is.EqualTo(SvnStatus.Added), "svn st does not report the file as added");
 
             Client.Configuration.LogMessageRequired = false;
             Assert.That(Client.Commit(dir));
@@ -85,11 +85,11 @@ namespace SharpSvn.Tests.Commands
             this.Client.Add(dir1, a);
 
             Assert.That(this.Notifications.Length == 1, "Too many or no notifications received. Added recursively?");
-            Assert.That(this.GetSvnStatus(dir1), Is.EqualTo('A'), "Subdirectory not added");
+            Assert.That(this.GetSvnStatus(dir1), Is.EqualTo(SvnStatus.Added), "Subdirectory not added");
 
-            Assert.That(GetSvnStatus(dir2), Is.Not.EqualTo('A'), "Recursive add");
-            Assert.That(GetSvnStatus(testFile1), Is.Not.EqualTo('A'), "Recursive add");
-            Assert.That(GetSvnStatus(testFile2), Is.Not.EqualTo('A'), "Recursive add");
+            Assert.That(GetSvnStatus(dir2), Is.Not.EqualTo(SvnStatus.Added), "Recursive add");
+            Assert.That(GetSvnStatus(testFile1), Is.Not.EqualTo(SvnStatus.Added), "Recursive add");
+            Assert.That(GetSvnStatus(testFile2), Is.Not.EqualTo(SvnStatus.Added), "Recursive add");
         }
 
         [Test]
@@ -162,10 +162,10 @@ namespace SharpSvn.Tests.Commands
 
             // enough notifications?
             Assert.That(this.Notifications.Length, Is.EqualTo(4), "Received wrong number of notifications");
-            Assert.That(this.GetSvnStatus(dir1), Is.EqualTo('A'), "Subdirectory not added");
-            Assert.That(this.GetSvnStatus(dir2), Is.EqualTo('A'), "Subsubdirectory not added");
-            Assert.That(this.GetSvnStatus(testFile1), Is.EqualTo('A'), "File in subdirectory not added");
-            Assert.That(this.GetSvnStatus(testFile2), Is.EqualTo('A'), "File in subsubdirectory not added");
+            Assert.That(this.GetSvnStatus(dir1), Is.EqualTo(SvnStatus.Added), "Subdirectory not added");
+            Assert.That(this.GetSvnStatus(dir2), Is.EqualTo(SvnStatus.Added), "Subsubdirectory not added");
+            Assert.That(this.GetSvnStatus(testFile1), Is.EqualTo(SvnStatus.Added), "File in subdirectory not added");
+            Assert.That(this.GetSvnStatus(testFile2), Is.EqualTo(SvnStatus.Added), "File in subsubdirectory not added");
         }
 
         [Test]

@@ -35,6 +35,7 @@ namespace SharpSvn.Tests
 			}
 		}
 
+        [Test, Ignore("Requires acces to specific server")]
         public void ListSsh()
         {
             using (SvnClient client = new SvnClient())

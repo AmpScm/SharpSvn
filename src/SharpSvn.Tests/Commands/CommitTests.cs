@@ -51,8 +51,8 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(info, Is.Not.Null);
 
-            char status = this.GetSvnStatus(filepath);
-            Assert.That(status, Is.EqualTo((char)0), "File not committed");
+            SvnStatus status = this.GetSvnStatus(filepath);
+            Assert.That(status, Is.EqualTo(SvnStatus.None), "File not committed");
         }
 
         /// <summary>
@@ -139,8 +139,8 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(this.Client.Commit(filepath, a));
 
-            char status = this.GetSvnStatus(filepath);
-            Assert.That(status, Is.EqualTo((char)0), "File not committed");
+            SvnStatus status = this.GetSvnStatus(filepath);
+            Assert.That(status, Is.EqualTo(SvnStatus.None), "File not committed");
 
         }
 
