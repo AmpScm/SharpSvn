@@ -73,18 +73,17 @@ namespace Errors2Enum
 
             string verHeader = "/* " + typeof(Program).Assembly.FullName + " */";
 
-            if (File.Exists(to) && File.GetLastWriteTime(to) > File.GetLastWriteTime(winerror)
+            if (File.Exists(to)
+                && File.GetLastWriteTime(to) > File.GetLastWriteTime(winerror)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(errno)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(aprerrno)
+                && File.GetLastWriteTime(to) > File.GetLastWriteTime(serfh)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Program).Assembly.CodeBase).LocalPath))
             {
                 using (StreamReader sr = File.OpenText(to))
                 {
                     if (sr.ReadLine() == verHeader)
-                    {
-                        Console.WriteLine("Result file already available; skipping generation of " + to);
-                        return;
-                    }
+                        return; // Nothing to do.
                 }
             }
 
