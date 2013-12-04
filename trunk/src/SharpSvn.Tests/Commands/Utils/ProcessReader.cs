@@ -14,123 +14,107 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// $Id$
-// Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System.IO;
 using System.Threading;
-using System.Text;
-using System.Collections;
-using System.Diagnostics;
 using System;
 
 namespace SharpSvn.Tests.Commands.Utils
 {
-	public class ProcessReader
-	{
-		public ProcessReader(StreamReader reader)
-		{
-			this.reader = reader;
-			this.queueNonEmpty = new ManualResetEvent(false);
-			this.output = new StringBuilder();
-			this.queue = new Queue();
-		}
+    public class ProcessReader
+    {
+        readonly StreamReader _processReader;
+        readonly MemoryStream _buffer;
+        readonly Thread _thread;
+        StreamReader _reader;
 
-		public void Start()
-		{
-			this.thread = new Thread(new ThreadStart(this.Read));
-			this.thread.Start();
-		}
+        public ProcessReader(StreamReader reader)
+        {
+            if (reader == null)
+                throw new ArgumentNullException("reader");
 
-		public void Wait()
-		{
-			this.thread.Join();
-		}
+            _processReader = reader;
+            _buffer = new MemoryStream();
+            _thread = new Thread(Read);
+        }
 
-		public string Output
-		{
-			get { return this.output.ToString(); }
-		}
+        public void Start()
+        {
+            _thread.Start();
+        }
 
-		/// <summary>
-		/// Whether the reader thread has exited.
-		/// </summary>
-		public bool HasExited
-		{
-			get
-			{
-				return !this.thread.IsAlive;
-			}
-		}
+        public void Wait()
+        {
+            _thread.Join();
+        }
 
-		/// <summary>
-		/// Whether the queue is empty.
-		/// </summary>
-		public bool Empty
-		{
-			get
-			{
-				lock (this.queue)
-				{
-					return this.queue.Count == 0;
-				}
-			}
-		}
+        string _outputText;
+        public string Output
+        {
+            get
+            {
+                if (_outputText == null && _reader == null)
+                {
+                    _buffer.Position = 0;
+                    _outputText = new StreamReader(_buffer).ReadToEnd();
+                }
+                return _outputText;
+            }
+        }
 
-		/// <summary>
-		/// Retrieves the 'next' line, blocking if necessary. Use in conjunction with the
-		/// WaitHandle, which will be signaled when the queue is non-empty.
-		/// </summary>
-		/// <returns></returns>
-		public string ReadLine()
-		{
-			string retval;
-			lock (this.queue)
-			{
-				Debug.WriteLine("ReadLine() waiting on event", "Ankh");
-				this.queueNonEmpty.WaitOne();
-				Debug.WriteLine("ReadLine() event signaled", "Ankh");
+        /// <summary>
+        /// Whether the reader thread has exited.
+        /// </summary>
+        public bool HasExited
+        {
+            get
+            {
+                return !_thread.IsAlive;
+            }
+        }
 
-				retval = (string)this.queue.Dequeue();
-				if (this.queue.Count == 0)
-				{
-					Debug.WriteLine("ReadLine() resetting event: queue is empty");
-					this.queueNonEmpty.Reset();
-				}
-			}
-			return retval;
-		}
+        /// <summary>
+        /// Whether the queue is empty.
+        /// </summary>
+        public bool Empty
+        {
+            get
+            {
+                return _buffer.Length == 0;
+            }
+        }
 
-		/// <summary>
-		/// Wait handle to wait on the queue being filled.
-		/// </summary>
-		public WaitHandle WaitHandle
-		{
-			get { return this.queueNonEmpty; }
-		}
+        /// <summary>
+        /// Retrieves the 'next' line, blocking if necessary. Use in conjunction with the
+        /// WaitHandle, which will be signaled when the queue is non-empty.
+        /// </summary>
+        /// <returns></returns>
+        public string ReadLine()
+        {
+            if (_reader == null)
+            {
+                _buffer.Position = 0;
+                _reader = new StreamReader(_buffer);
+            }
 
-		private void Read()
-		{
-			string line = null;
-			while ((line = reader.ReadLine()) != null)
-			{
-				this.output.Append(line + Environment.NewLine);
-				lock (this.queue)
-				{
-					this.queue.Enqueue(line);
+            return _reader.ReadLine();
+        }
 
-					// the queue should now be non-empty.
-					this.queueNonEmpty.Set();
+        private void Read()
+        {
+            StreamWriter writer = new StreamWriter(_buffer);
 
-					// yield control.
-					Thread.Sleep(0);
-				}
-			}
-		}
+            string line = null;
 
-		private Queue queue;
-		private StreamReader reader;
-		private Thread thread;
-		private StringBuilder output;
-		private ManualResetEvent queueNonEmpty;
-	}
+            while ((line = _processReader.ReadLine()) != null)
+            {
+                writer.WriteLine(line);
+            }
+
+            line = _processReader.ReadToEnd();
+            if (line != null)
+                writer.Write(line);
+
+            writer.Flush();
+        }
+    }
 }

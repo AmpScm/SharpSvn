@@ -96,7 +96,9 @@ namespace SharpSvn.Tests.Commands
         {
             using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
                 w.Write("Moo");
-            this.RunCommand("svn", "ci -m \"\" " + _wc);
+            SvnCommitArgs ca = new SvnCommitArgs();
+            ca.LogMessage = "";
+            Client.Commit(_wc, ca);
 
             this.Client.Update(this.WcPath);
 
@@ -159,7 +161,9 @@ namespace SharpSvn.Tests.Commands
                 w.Write("Moo");
             using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "AssemblyInfo.cs")))
                 w.Write("Moo");
-            this.RunCommand("svn", "ci -m \"\" " + _wc);
+            SvnCommitArgs ca = new SvnCommitArgs();
+            ca.LogMessage = "";
+            Client.Commit(_wc, ca);
 
             SvnUpdateArgs a = new SvnUpdateArgs();
             a.Depth = SvnDepth.Empty;

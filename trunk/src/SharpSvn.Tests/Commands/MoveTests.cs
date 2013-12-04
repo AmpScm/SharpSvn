@@ -59,7 +59,7 @@ namespace SharpSvn.Tests.Commands
 			Assert.That(Client.Move(srcPath, dstPath));
 
 			Assert.That(Directory.Exists(dstPath), "Directory wasn't moved");
-			Assert.That(this.GetSvnStatus(srcPath), Is.EqualTo('D'), "Status is not 'D'");
+            Assert.That(this.GetSvnStatus(srcPath), Is.EqualTo(SvnStatus.Deleted), "Status is not 'D'");
 		}
 
 		/// <summary>

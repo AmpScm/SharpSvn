@@ -61,7 +61,7 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Resolved(filePath);
 
-			Assert.That(this.GetSvnStatus(filePath), Is.EqualTo('M'), "Resolve didn't work!");
+			Assert.That(this.GetSvnStatus(filePath), Is.EqualTo(SvnStatus.Modified), "Resolve didn't work!");
 
 		}
 
@@ -76,9 +76,9 @@ namespace SharpSvn.Tests.Commands
 
 			this.Client.Resolve(this._path, SvnAccept.Merged, a);
 
-			Assert.That(this.GetSvnStatus(this._path), Is.EqualTo('M'),
+			Assert.That(this.GetSvnStatus(this._path), Is.EqualTo(SvnStatus.None),
 				" Resolve didn't work! Directory still conflicted");
-			Assert.That(this.GetSvnStatus(Path.Combine(this._path, "Form.cs")), Is.EqualTo('M'),
+			Assert.That(this.GetSvnStatus(Path.Combine(this._path, "Form.cs")), Is.EqualTo(SvnStatus.Modified),
 				"Resolve didn't work! File still conflicted");
 		}
 

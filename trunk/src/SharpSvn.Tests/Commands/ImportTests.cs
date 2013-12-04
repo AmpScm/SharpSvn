@@ -36,7 +36,7 @@ namespace SharpSvn.Tests.Commands
 		public override void SetUp()
 		{
 			base.SetUp();
-			this.notifications = new List<SvnNotifyEventArgs>();
+			notifications = new List<SvnNotifyEventArgs>();
 		}
 
 		[TearDown]
