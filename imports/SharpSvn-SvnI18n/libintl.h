@@ -27,6 +27,8 @@
 extern "C" {
 #endif
 
+#pragma warning(push)
+#pragma warning(disable: 4100) // unreferenced formal parameter
 typedef char* sharpsvn_dgettext_t(const char* domain, const char* msgid, int category);
 extern sharpsvn_dgettext_t* sharpsvn_dgettext;
 
@@ -121,6 +123,8 @@ static __forceinline void __cdecl abort()
 
 
 #endif
+
+#pragma warning(pop)
 
 
 #ifdef __cplusplus
