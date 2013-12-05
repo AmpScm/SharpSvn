@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <title>
-          SharpSvn-Daily Update - 1.8005.2698</title>
+          SharpSvn-Daily Update - 1.8005.2755</title>
 <link rel="Stylesheet" type="text/css" href="daily.css" /></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.8005.2698</h1>
+          SharpSvn-Daily Update - 1.8005.2755</h1>
 
 
 <p>
@@ -15,29 +15,84 @@
 
 
 <h2>
-          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/8017/SSvn-1.8005.2698.zip">SharpSvn 1.8005.2698</a>.
+          The latest daily build is <a href="http://sharpsvn.open.collab.net/files/documents/180/8089/SSvn-1.8005.2755.zip">SharpSvn 1.8005.2755</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/8018/SSvn-1.8005.2698-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="http://sharpsvn.open.collab.net/files/documents/180/8019/SSvnEx-1.8005.2698.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="http://sharpsvn.open.collab.net/files/documents/180/8090/SSvn-1.8005.2755-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="http://sharpsvn.open.collab.net/files/documents/180/8091/SSvnEx-1.8005.2755.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2698">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2755">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2013-12-05</td></tr>
+<tr><td> </td><td class="r"><a id="2749" href="http://sharpsvn.net/rev/?r=2749">
+            [r2749]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit.Tests/GitClientTests.cs, SharpGit/SharpGit.vcxproj, SharpGit/Plumbing/GitTag.cpp, SharpGit/UnmanagedStructs.h, SharpGit/SharpGit.vcxproj.filters, SharpGit/Plumbing/GitBranch.h, SharpGit/GitClientContext.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Fix the existing SharpGit tests to work correctly with the current version of
+LibGit2.</td></tr>
+<tr><td> </td><td class="r"><a id="2747" href="http://sharpsvn.net/rev/?r=2747">
+            [r2747]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnClient.h, Args/Write.h, Commands/Write.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Allow disabling keyword expansion and direct obtaining of properies via
+SvnClient.Write().</td></tr>
+<tr><td> </td><td class="r"><a id="2746" href="http://sharpsvn.net/rev/?r=2746">
+            [r2746]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnClient.cpp, SvnClient.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add an SvnClient.TryGetRepository() which obtains a bit more information in one
+request.</td></tr>
+<tr><td> </td><td class="r"><a id="2744" href="http://sharpsvn.net/rev/?r=2744">
+            [r2744]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/MergesMerged.h, Commands/MergesMerged.cpp, Commands/MergesEligible.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">ListMergesMerged: Allow passing a revision range.</td></tr>
+<tr><td> </td><td class="r"><a id="2742" href="http://sharpsvn.net/rev/?r=2742">
+            [r2742]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/MergesEligible.h, Commands/MergesEligible.cpp, SvnMergeInfo.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">ListMergesEligible: Enable the new in 1.8 optional source revision range.</td></tr>
+<tr><td> </td><td class="r"><a id="2733" href="http://sharpsvn.net/rev/?r=2733">
+            [r2733]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> ShSvn, tools/WerUpload</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Remove outdated projects</td></tr>
+<tr class="d"><td colspan="4">2013-12-04</td></tr>
+<tr><td> </td><td class="r"><a id="2723" href="http://sharpsvn.net/rev/?r=2723">
+            [r2723]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests:</strong> Commands/Utils/ProcessReader.cs, Commands/ResolveTests.cs, Commands/DeleteTests.cs, Commands/UpdateTests.cs, Commands/StatusTests.cs, Commands/MoveTests.cs, Commands/TestBase.cs, SvnAuthTests.cs, Commands/AddTests.cs, Commands/CommitTests.cs, Commands/CreateDirectoryTests.cs, Commands/CopyTests.cs, Commands/ImportTests.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Update the test to use less invocations of 'svn', especially where the result
+was sometimes not parsed correctly such as with status.<br />
+Remove a lot of unnecessary slowing code from the process reader that is used
+for the remaining tests.</td></tr>
+<tr><td> </td><td class="r"><a id="2722" href="http://sharpsvn.net/rev/?r=2722">
+            [r2722]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvn.vcxproj.filters, SharpSvn.vcxproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Further project file tweaks, including a setting that fixes the resource file
+generation for .Net 4.0 builds.</td></tr>
+<tr><td> </td><td class="r"><a id="2717" href="http://sharpsvn.net/rev/?r=2717">
+            [r2717]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvn.vcproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Fix precompiler header usage for VS2008 solution. Update project file to match
+VS20XY files. Fix some debug build missing flags.</td></tr>
+<tr><td> </td><td class="r"><a id="2712" href="http://sharpsvn.net/rev/?r=2712">
+            [r2712]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/ReintegrationMerge.cpp, SharpSvn/Stdafx.h, SharpSvn/WorkingCopyCommands/WorkingCopyMove.cpp, SharpSvn/SvnBase.cpp, SharpSvn/PdbTools/SvnMsfClient.cpp, SharpSvn/WorkingCopyCommands/WorkingCopyEntries.cpp, SharpSvn/LookCommands/LookChanged.cpp, SharpSvn/Delta/SvnDeltaTransform.cpp, SharpSvn/LookCommands/LookWrite.cpp, SharpSvn/SvnFsOperationRetryOverride.cpp, SharpSvn/Commands/ListChangeList.cpp, SharpSvn/SvnMergeItemCollection.cpp, SharpSvn/Commands/WorkingCopyGetVersion.cpp, SharpSvn/Commands/Status.cpp (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Cleanup build for future development using VS 2010 or later: Make more use of
+the precompiled header by moving SvnAll.h's files into stdafx.h. But make sure
+stdafx.h doesn't use namespaces as that breaks including third party projects.<br />
+Stop adding a Win32 resource to SharpSvn.dll. We assume that our new MSBuild
+task will take care of that.</td></tr>
+<tr><td> </td><td class="r"><a id="2710" href="http://sharpsvn.net/rev/?r=2710">
+            [r2710]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpPlink/SharpPlink-vs2008.vcproj, SharpPlink/SharpPlink.vcproj, SharpSvn-VS2010.sln, SharpGit/GitClient.h, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/SharpSvn.vcproj, SharpSvn-VS2012.sln, SharpGit/SharpGit.vcxproj, SharpSvn.sln, SharpSvn-VS2008.sln, SharpPlink/SharpPlink.vcxproj, SharpSvn/SharpSvn.vcxproj, SharpGit/SharpGit-VS2008.vcproj, SharpGit/SharpGit.vcproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Switch to a dual solution/project layout: Just 2008 and 2010 and later.</td></tr>
+<tr class="d"><td colspan="4">2013-12-03</td></tr>
+<tr><td> </td><td class="r"><a id="2709" href="http://sharpsvn.net/rev/?r=2709">
+            [r2709]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/nuget:</strong> SharpSvn.1.8-x86.nuspec</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Update NuGet description</td></tr>
+<tr><td> </td><td class="r"><a id="2702" href="http://sharpsvn.net/rev/?r=2702">
+            [r2702]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> NativeMethods.cs, GenerateVersionResourceFromAssembly.cs, SharpSvn.MSBuild.csproj, Install.wxs, targets/Projects/SharpSvn.vcxproj.targets, SharpSvn.MSBuild.Wix.wixproj, Properties/AssemblyInfo.cs, UpdateNativeVersionResource.cs, SharpSvn.MSBuild.snk</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add initial version of SharpSvn MSBuild hook to automatically apply win32
+version resources for MC++ assemblies.</td></tr>
 <tr class="d"><td colspan="4">2013-11-25</td></tr>
 <tr><td> </td><td class="r"><a id="2695" href="http://sharpsvn.net/rev/?r=2695">
             [r2695]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> SharpSvn.MSBuild.csproj, targets/Projects, common/ImportAfter, targets/SharpSvn.targets, common, targets/Projects/SharpSvn.vcxproj.targets, targets, Properties/AssemblyInfo.cs, common/ImportAfter/SharpSvn.ImportAfter.targets, Properties, GenerateVersionResourceFromAssembly.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add SharpSvn.MSBuild prototype.</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> targets/SharpSvn.targets, common, targets/Projects/SharpSvn.vcxproj.targets, targets, Properties/AssemblyInfo.cs, common/ImportAfter/SharpSvn.ImportAfter.targets, Properties, GenerateVersionResourceFromAssembly.cs, SharpSvn.MSBuild.csproj, targets/Projects, common/ImportAfter</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add SharpSvn.MSBuild prototype.</td></tr>
 <tr><td> </td><td class="r"><a id="2694" href="http://sharpsvn.net/rev/?r=2694">
             [r2694]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.MSBuild</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Create SharpSvn.MSBuild directory</td></tr>
