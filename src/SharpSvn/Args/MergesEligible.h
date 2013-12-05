@@ -24,6 +24,7 @@ namespace SharpSvn {
 		SvnRevisionPropertyNameCollection^ _retrieveProperties;
 		bool _logChangedPaths;
 		SvnDepth _depth;
+		SvnRevisionRange ^_range;
 	internal:
 		SvnTarget^ _sourceTarget;
 
@@ -31,6 +32,7 @@ namespace SharpSvn {
 		SvnMergesEligibleArgs()
 		{
 			_depth = SvnDepth::Infinity;
+			_range = SvnRevisionRange::None;
 		}
 
 		virtual property SvnCommandType CommandType
@@ -99,6 +101,21 @@ namespace SharpSvn {
 			void set(SvnDepth value)
 			{
 				_depth = EnumVerifier::Verify(value);
+			}
+		}
+
+		property SvnRevisionRange^ Range
+		{
+			SvnRevisionRange^ get()
+			{
+				return _range;
+			}
+			void set(SvnRevisionRange ^value)
+			{
+				if (!value)
+					_range = SvnRevisionRange::None;
+				else
+					_range = value;
 			}
 		}
 

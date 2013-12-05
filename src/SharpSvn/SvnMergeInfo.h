@@ -108,6 +108,12 @@ namespace SharpSvn {
 			else
 				return from->Reverse();
 		}
+
+	private:
+		static initonly SvnRevisionRange^ _none = gcnew SvnRevisionRange(SvnRevision::None, SvnRevision::None);
+    public:
+        static property SvnRevisionRange^ None { SvnRevisionRange^ get() { return _none; } }
+
 	};
 
 	[DebuggerDisplayAttribute("Range=r{Start}-{End}, Inheritable={Inheritable}")]
