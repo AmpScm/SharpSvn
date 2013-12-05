@@ -555,6 +555,18 @@
 			>
 		</File>
 		<File
+			RelativePath="GitClientContext.h"
+			>
+		</File>
+		<File
+			RelativePath="GitId.h"
+			>
+		</File>
+		<File
+			RelativePath="GitLibraryAttribute.h"
+			>
+		</File>
+		<File
 			RelativePath="SharpGit.snk"
 			>
 		</File>
@@ -593,6 +605,10 @@
 					UsePrecompiledHeader="1"
 				/>
 			</FileConfiguration>
+		</File>
+		<File
+			RelativePath="stdafx.h"
+			>
 		</File>
 	</Files>
 	<Globals>
