@@ -397,7 +397,7 @@ bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
 
     const char* uuidStr = nullptr;
 
-    svn_error_t* err = svn_client_get_repos_root(&uuidStr, NULL,
+    svn_error_t* err = svn_client_get_repos_root(NULL, &uuidStr,
         pool.AllocUri(uri),
         CtxHandle,
         pool.Handle, pool.Handle);
