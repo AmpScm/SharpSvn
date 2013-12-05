@@ -25,61 +25,68 @@ using namespace System::Collections::Generic;
 
 bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ leftSource, SvnUriOrigin^ rightSource, SvnWorkingCopyInstallConflictArgs^ args)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(targetPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
-	else if (!leftSource)
-		throw gcnew ArgumentNullException("leftSource");
-	else if (!rightSource)
-		throw gcnew ArgumentNullException("rightSource");
-	else if (leftSource->Target->Revision->RevisionType != SvnRevisionType::Number)
-		throw gcnew ArgumentException("Revision of left source is not set to a valid revision number", "leftSource");
-	else if (rightSource->Target->Revision->RevisionType != SvnRevisionType::Number)
-		throw gcnew ArgumentException("Revision of right source is not set to a valid revision number", "rightSource");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(targetPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
+    else if (!leftSource)
+        throw gcnew ArgumentNullException("leftSource");
+    else if (!rightSource)
+        throw gcnew ArgumentNullException("rightSource");
+    else if (leftSource->Target->Revision->RevisionType != SvnRevisionType::Number)
+        throw gcnew ArgumentException("Revision of left source is not set to a valid revision number", "leftSource");
+    else if (rightSource->Target->Revision->RevisionType != SvnRevisionType::Number)
+        throw gcnew ArgumentException("Revision of right source is not set to a valid revision number", "rightSource");
 
-	if (!args->TreeConflict)
-		throw gcnew InvalidOperationException("This SharpSvn version can only install tree conflicts. Please set "
-											  "args.TreeConflict to TRUE for compatibility with future versions that "
-											  "might support installing other types of conflicts");
+    if (!args->TreeConflict)
+        throw gcnew InvalidOperationException("This SharpSvn version can only install tree conflicts. Please set "
+                                              "args.TreeConflict to TRUE for compatibility with future versions that "
+                                              "might support installing other types of conflicts");
 
-	targetPath = SvnTools::GetNormalizedFullPath(targetPath);
+    targetPath = SvnTools::GetNormalizedFullPath(targetPath);
 
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
-	const char *path = pool.AllocDirent(targetPath);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
+    const char *path = pool.AllocAbsoluteDirent(targetPath);
 
-	svn_node_kind_t kind;
-    SVN_HANDLE(svn_wc_read_kind(&kind, CtxHandle->wc_ctx, path, FALSE, pool.Handle));
+    svn_node_kind_t kind;
+    SVN_HANDLE(svn_wc_read_kind2(&kind, CtxHandle->wc_ctx, path, TRUE /* show_deleted */,
+                                 FALSE /* show_hidden */, pool.Handle));
 
-	svn_wc_conflict_description2_t *conflict;
-	svn_wc_conflict_version_t *left_version, *right_version;
+    svn_wc_conflict_description2_t *conflict;
+    svn_wc_conflict_version_t *left_version, *right_version;
 
-	left_version = svn_wc_conflict_version_create(pool.AllocUri(leftSource->RepositoryRoot),
-												  pool.AllocRelpath(rightSource->Uri->MakeRelativeUri(leftSource->RepositoryRoot)->ToString()),
-												  (svn_revnum_t)leftSource->Target->Revision->Revision,
-												  (svn_node_kind_t)leftSource->NodeKind,
-												  pool.Handle);
+    const char *uuid;
 
-	right_version = svn_wc_conflict_version_create(pool.AllocUri(rightSource->RepositoryRoot),
-												  pool.AllocRelpath(rightSource->Uri->MakeRelativeUri(rightSource->RepositoryRoot)->ToString()),
-												  (svn_revnum_t)rightSource->Target->Revision->Revision,
-												  (svn_node_kind_t)rightSource->NodeKind,
-												  pool.Handle);
+    SVN_HANDLE(svn_client_get_repos_root(NULL, &uuid, path, CtxHandle, pool.Handle, pool.Handle));
+
+    left_version = svn_wc_conflict_version_create2(pool.AllocUri(leftSource->RepositoryRoot),
+                                                   uuid,
+                                                   pool.AllocRelpath(rightSource->Uri->MakeRelativeUri(leftSource->RepositoryRoot)->ToString()),
+                                                   (svn_revnum_t)leftSource->Target->Revision->Revision,
+                                                   (svn_node_kind_t)leftSource->NodeKind,
+                                                   pool.Handle);
+
+    right_version = svn_wc_conflict_version_create2(pool.AllocUri(rightSource->RepositoryRoot),
+                                                    uuid,
+                                                    pool.AllocRelpath(rightSource->Uri->MakeRelativeUri(rightSource->RepositoryRoot)->ToString()),
+                                                    (svn_revnum_t)rightSource->Target->Revision->Revision,
+                                                    (svn_node_kind_t)rightSource->NodeKind,
+                                                    pool.Handle);
 
 
     conflict = svn_wc_conflict_description_create_tree2(path,
-														kind,
-														(svn_wc_operation_t)args->Operation,
-														left_version,
-														right_version,
-														pool.Handle);
-	conflict->reason = (svn_wc_conflict_reason_t)args->Reason;
-	conflict->action = (svn_wc_conflict_action_t)args->Action;
+                                                        kind,
+                                                        (svn_wc_operation_t)args->Operation,
+                                                        left_version,
+                                                        right_version,
+                                                        pool.Handle);
+    conflict->reason = (svn_wc_conflict_reason_t)args->Reason;
+    conflict->action = (svn_wc_conflict_action_t)args->Action;
 
-	SVN_HANDLE(svn_wc__add_tree_conflict(CtxHandle->wc_ctx, conflict, pool.Handle));
+    SVN_HANDLE(svn_wc__add_tree_conflict(CtxHandle->wc_ctx, conflict, pool.Handle));
 
-	return true;
+    return true;
 }
