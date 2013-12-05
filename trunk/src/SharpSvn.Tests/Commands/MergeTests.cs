@@ -33,6 +33,10 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class MergeTests : TestBase
 	{
+        public MergeTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 		[Test]
 		public void RevertToBase()
 		{

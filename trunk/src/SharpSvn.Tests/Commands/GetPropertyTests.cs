@@ -35,6 +35,8 @@ namespace SharpSvn.Tests.Commands
 		public void TestPropGetOnFile()
 		{
 			string path = Path.Combine(this.WcPath, "Form.cs");
+            TouchFile(path);
+            Client.Add(path);
             Client.SetProperty(path, "foo", "bar");
 
 			string value;

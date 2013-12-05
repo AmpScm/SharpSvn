@@ -32,6 +32,11 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class ZMiscTests : TestBase
 	{
+        public ZMiscTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
 		/// <summary>
 		/// Tests the Client::UrlFromPath function.
 		/// </summary>

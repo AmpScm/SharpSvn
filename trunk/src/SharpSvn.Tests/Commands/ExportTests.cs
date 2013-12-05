@@ -31,6 +31,10 @@ namespace SharpSvn.Tests.Commands
     [TestFixture]
     public class ExportTests : TestBase
     {
+        public ExportTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
         /// <summary>
         /// Test export operation from a repository
         /// </summary>

@@ -32,6 +32,11 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class DiffTests : TestBase
 	{
+        public DiffTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
 		[Test]
 		public void TestLocalDiff()
 		{

@@ -33,6 +33,10 @@ namespace SharpSvn.Tests.Commands
     [TestFixture]
     public class CommitTests : TestBase
     {
+        public CommitTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
         /// <summary>
         /// Modifies a file in the working copy and commits the containing directory.
         /// </summary>

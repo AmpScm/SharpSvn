@@ -32,6 +32,10 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class WriteTests : TestBase
 	{
+        public WriteTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 		/// <summary>
 		/// Attemts to do a cat on a local working copy item
 		/// </summary>
@@ -135,6 +139,33 @@ namespace SharpSvn.Tests.Commands
                         Assert.That(sr.ReadLine(), Is.EqualTo(data));
                         Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
                     }
+                }
+            }
+        }
+
+        [Test]
+        public void WriteProps()
+        {
+            string data = Guid.NewGuid().ToString();
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+                string file = Path.Combine(WcPath, "WriteTest");
+                using (StreamWriter sw = File.CreateText(file))
+                {
+                    sw.WriteLine(data);
+                }
+
+                client.Add(file);
+                client.SetProperty(file, "A", "B");
+                client.Commit(file);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    SvnPropertyCollection pc;
+                    client.Write(new SvnPathTarget(file, SvnRevision.Head), ms, out pc);
+
+                    Assert.That(pc, Is.Not.Empty);
+                    Assert.That(pc["A"].StringValue, Is.EqualTo("B"));
                 }
             }
         }
