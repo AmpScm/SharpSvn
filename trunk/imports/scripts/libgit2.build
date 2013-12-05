@@ -14,6 +14,10 @@
       <arg value="-DTHREADSAFE=ON" />
     </CMake>
     
+    <FilterFile file="${libgit2Dir}/git2.${vcproj}" generated="true">
+      <filterchain refid="cmake-lib" />
+    </FilterFile>
+
     <MSBuild
           src="${libgit2Dir}/libgit2.sln"
           configuration="Debug">
@@ -23,20 +27,20 @@
     
     <MSBuild
           src="${libgit2Dir}/libgit2.sln"
-          configuration="RelWithDebInfo">
+          configuration="Release">
           
       <target value="git2" />
     </MSBuild>
     
     <copy todir="${release}/lib" if="${platform == 'win32'}">
-      <fileset basedir="${libgit2Dir}/RelWithDebInfo">
+      <fileset basedir="${libgit2Dir}/Release">
         <include name="*.lib" />
         <include name="*.pdb" />
       </fileset>
     </copy>
     
     <copy todir="${release}/lib-${platform}" unless="${platform == 'win32'}">
-      <fileset basedir="${libgit2Dir}/RelWithDebInfo">
+      <fileset basedir="${libgit2Dir}/Release">
         <include name="*.lib" />
         <include name="*.pdb" />
       </fileset>
