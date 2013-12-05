@@ -25,7 +25,9 @@
   <!-- r1542610 - Fix resource file issue -->
   <!-- r1544597, r1544600, r1544688, r1544690, r1545111, r1545122 - status direct vs ancestor -->
   <!-- r1544182 - svn_client_cat3() -->
-  <property name="subversionMerges" value="1531014,1532316,1536350,1536383,1536464,1536488,1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1535676,1544597,1544600,1544688,1544690,1545111,1545122,1544182" overwrite="false" /> 
+  <!-- r1547774 - fix symlink checkout -->
+  <!-- r1542765, r1542767, r1542774 - Sqlite 3.8 improvements -->
+  <property name="subversionMerges" value="1531014,1532316,1536350,1536383,1536464,1536488,1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1535676,1544597,1544600,1544688,1544690,1545111,1545122,1544182,1547774,1542765,1542767,1542774" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
