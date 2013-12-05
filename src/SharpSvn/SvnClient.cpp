@@ -29,543 +29,592 @@ using System::Diagnostics::CodeAnalysis::SuppressMessageAttribute;
 [module: SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode", Scope="member", Target="SharpSvn.SvnClient.#set_AdministrativeDirectoryName(System.String)")];
 
 SvnClient::SvnClient()
-: _pool(gcnew AprPool()), SvnClientContext(%_pool)
+    : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-	_clientBaton = gcnew AprBaton<SvnClient^>(this);
-	Initialize();
+    _clientBaton = gcnew AprBaton<SvnClient^>(this);
+    Initialize();
 }
 
 SvnClient::~SvnClient()
 {
-	delete _clientBaton;
+    delete _clientBaton;
 }
 
 // Allow changing the AdministrativeDirectory for users willing to take the risks involved.
 void SvnClient::AdministrativeDirectoryName::set(String^ value)
 {
-	if (String::IsNullOrEmpty(value))
-		throw gcnew ArgumentNullException("value");
+    if (String::IsNullOrEmpty(value))
+        throw gcnew ArgumentNullException("value");
 
-	AprPool pool(SmallThreadPool);
+    AprPool pool(SmallThreadPool);
 
-	SVN_THROW(svn_wc_set_adm_dir(pool.AllocString(value), pool.Handle));
+    SVN_THROW(svn_wc_set_adm_dir(pool.AllocString(value), pool.Handle));
 
-	_admDir = svn_wc_get_adm_dir(pool.Handle);
-	_administrativeDirName = Utf8_PtrToString(_admDir);
+    _admDir = svn_wc_get_adm_dir(pool.Handle);
+    _administrativeDirName = Utf8_PtrToString(_admDir);
 }
 
 struct SvnClientCallBacks
 {
-	static svn_error_t * __cdecl svn_cancel_func(void *cancel_baton);
-	static svn_error_t *__cdecl svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
-	static void __cdecl svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
-	static void __cdecl svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
+    static svn_error_t * __cdecl svn_cancel_func(void *cancel_baton);
+    static svn_error_t *__cdecl svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
+    static void __cdecl svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
+    static void __cdecl svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 
-	static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description2_t *description, void *baton, apr_pool_t *result_pool, apr_pool_t *scratch_pool);
+    static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description2_t *description, void *baton, apr_pool_t *result_pool, apr_pool_t *scratch_pool);
 };
 
 void SvnClient::Initialize()
 {
-	void* baton = (void*)_clientBaton->Handle;
+    void* baton = (void*)_clientBaton->Handle;
 
-	CtxHandle->cancel_baton = baton;
-	CtxHandle->cancel_func = &SvnClientCallBacks::svn_cancel_func;
-	CtxHandle->log_msg_baton3 = baton;
-	CtxHandle->log_msg_func3 = &SvnClientCallBacks::svn_client_get_commit_log3;
-	CtxHandle->notify_baton2 = baton;
-	CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
-	CtxHandle->progress_baton = baton;
-	CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
-	CtxHandle->conflict_baton2 = baton;
-	CtxHandle->conflict_func2 = &SvnClientCallBacks::svn_wc_conflict_resolver_func;
+    CtxHandle->cancel_baton = baton;
+    CtxHandle->cancel_func = &SvnClientCallBacks::svn_cancel_func;
+    CtxHandle->log_msg_baton3 = baton;
+    CtxHandle->log_msg_func3 = &SvnClientCallBacks::svn_client_get_commit_log3;
+    CtxHandle->notify_baton2 = baton;
+    CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
+    CtxHandle->progress_baton = baton;
+    CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
+    CtxHandle->conflict_baton2 = baton;
+    CtxHandle->conflict_func2 = &SvnClientCallBacks::svn_wc_conflict_resolver_func;
 }
 
 System::Version^ SvnClient::Version::get()
 {
-	const svn_version_t* version = svn_client_version();
+    const svn_version_t* version = svn_client_version();
 
-	return gcnew System::Version(version->major, version->minor, version->patch);
+    return gcnew System::Version(version->major, version->minor, version->patch);
 }
 
 System::Version^ SvnClient::SharpSvnVersion::get()
 {
-	return (gcnew System::Reflection::AssemblyName(SvnClient::typeid->Assembly->FullName))->Version;
+    return (gcnew System::Reflection::AssemblyName(SvnClient::typeid->Assembly->FullName))->Version;
 }
 
 void SvnClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
-	if (CurrentCommandArgs)
-		CurrentCommandArgs->RaiseOnCancel(e);
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnCancel(e);
 
-	if (e->Cancel)
-		return;
+    if (e->Cancel)
+        return;
 
-	OnCancel(e);
+    OnCancel(e);
 }
 
 void SvnClient::OnCancel(SvnCancelEventArgs^ e)
 {
-	Cancel(this, e);
+    Cancel(this, e);
 }
 
 void SvnClient::HandleClientProgress(SvnProgressEventArgs^ e)
 {
-	if (CurrentCommandArgs)
-		CurrentCommandArgs->RaiseOnProgress(e);
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnProgress(e);
 
-	OnProgress(e);
+    OnProgress(e);
 }
 
 void SvnClient::OnProgress(SvnProgressEventArgs^ e)
 {
-	Progress(this, e);
+    Progress(this, e);
 }
 
 void SvnClient::HandleClientCommitting(SvnCommittingEventArgs^ e)
 {
-	if (e->Cancel)
-		return;
+    if (e->Cancel)
+        return;
 
-	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 
-	if (commitArgs)
-		commitArgs->RaiseCommitting(e);
+    if (commitArgs)
+        commitArgs->RaiseCommitting(e);
 
-	if (e->Cancel)
-		return;
+    if (e->Cancel)
+        return;
 
-	OnCommitting(e);
+    OnCommitting(e);
 }
 
 void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
 {
-	Committing(this, e);
+    Committing(this, e);
 }
 
 void SvnClient::HandleClientCommitted(SvnCommittedEventArgs^ e)
 {
-	SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
 
-	if (commitArgs)
-		commitArgs->RaiseCommitted(e);
+    if (commitArgs)
+        commitArgs->RaiseCommitted(e);
 
-	OnCommitted(e);
+    OnCommitted(e);
 }
 
 void SvnClient::OnCommitted(SvnCommittedEventArgs^ e)
 {
-	Committed(this, e);
+    Committed(this, e);
 }
 
 void SvnClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
-	if (CurrentCommandArgs)
-		CurrentCommandArgs->RaiseOnNotify(e);
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnNotify(e);
 
-	OnNotify(e);
+    OnNotify(e);
 }
 
 void SvnClient::OnNotify(SvnNotifyEventArgs^ e)
 {
-	Notify(this, e);
+    Notify(this, e);
 }
 
 void SvnClient::HandleClientConflict(SvnConflictEventArgs^ e)
 {
-	if (e->Cancel)
-		return;
+    if (e->Cancel)
+        return;
 
-	SvnClientArgsWithConflict^ conflictArgs = dynamic_cast<SvnClientArgsWithConflict^>(CurrentCommandArgs); // C#: _currentArgs as SvnClientArgsWithConflict
+    SvnClientArgsWithConflict^ conflictArgs = dynamic_cast<SvnClientArgsWithConflict^>(CurrentCommandArgs); // C#: _currentArgs as SvnClientArgsWithConflict
 
-	if (conflictArgs)
-	{
-		conflictArgs->RaiseConflict(e);
+    if (conflictArgs)
+    {
+        conflictArgs->RaiseConflict(e);
 
-		if (e->Cancel)
-			return;
-	}
+        if (e->Cancel)
+            return;
+    }
 
-	OnConflict(e);
+    OnConflict(e);
 }
 
 void SvnClient::OnConflict(SvnConflictEventArgs^ e)
 {
-	Conflict(this, e);
+    Conflict(this, e);
 }
 
 void SvnClient::HandleClientError(SvnErrorEventArgs^ e)
 {
-	if (e->Cancel)
-		return;
+    if (e->Cancel)
+        return;
 
-	if (CurrentCommandArgs)
-	{
-		CurrentCommandArgs->RaiseOnSvnError(e);
+    if (CurrentCommandArgs)
+    {
+        CurrentCommandArgs->RaiseOnSvnError(e);
 
-		if (e->Cancel)
-			return;
-	}
+        if (e->Cancel)
+            return;
+    }
 
-	OnSvnError(e);
+    OnSvnError(e);
 }
 
 void SvnClient::OnSvnError(SvnErrorEventArgs^ e)
 {
-	SvnError(this, e);
+    SvnError(this, e);
 }
 
 void SvnClient::HandleProcessing(SvnProcessingEventArgs^ e)
 {
-	OnProcessing(e);
+    OnProcessing(e);
 }
 
 void SvnClient::OnProcessing(SvnProcessingEventArgs^ e)
 {
-	Processing(this, e);
+    Processing(this, e);
 }
 
 svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
 
-	SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
-	try
-	{
-		client->HandleClientCancel(ea);
+    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
+    try
+    {
+        client->HandleClientCancel(ea);
 
-		if (ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
+        if (ea->Cancel)
+            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
 
-		return nullptr;
-	}
-	catch(Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("Cancel function", e);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
+        return nullptr;
+    }
+    catch(Exception^ e)
+    {
+        return SvnException::CreateExceptionSvnError("Cancel function", e);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
 }
 
 svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	AprPool^ tmpPool = gcnew AprPool(pool, false);
+    AprPool^ tmpPool = gcnew AprPool(pool, false);
 
-	SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, client->CurrentCommandArgs->CommandType, tmpPool);
+    SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, client->CurrentCommandArgs->CommandType, tmpPool);
 
-	*log_msg = nullptr;
-	*tmp_file = nullptr;
+    *log_msg = nullptr;
+    *tmp_file = nullptr;
 
-	try
-	{
-		client->HandleClientCommitting(ea);
+    try
+    {
+        client->HandleClientCommitting(ea);
 
-		if (ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCommitting");
-		else if (ea->LogMessage)
-			*log_msg = tmpPool->AllocUnixString(ea->LogMessage);
-		else if (!client->_noLogMessageRequired)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
-		else
-			*log_msg = tmpPool->AllocString("");
+        if (ea->Cancel)
+            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCommitting");
+        else if (ea->LogMessage)
+            *log_msg = tmpPool->AllocUnixString(ea->LogMessage);
+        else if (!client->_noLogMessageRequired)
+            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
+        else
+            *log_msg = tmpPool->AllocString("");
 
-		return nullptr;
-	}
-	catch(Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("Commit log", e);
-	}
-	finally
-	{
-		ea->Detach(false);
+        return nullptr;
+    }
+    catch(Exception^ e)
+    {
+        return SvnException::CreateExceptionSvnError("Commit log", e);
+    }
+    finally
+    {
+        ea->Detach(false);
 
-		delete tmpPool;
-	}
+        delete tmpPool;
+    }
 }
 
 
 void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
-	AprPool aprPool(pool, false);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    AprPool aprPool(pool, false);
 
-	SvnNotifyEventArgs^ ea = gcnew SvnNotifyEventArgs(notify, client->CurrentCommandArgs->CommandType, %aprPool);
+    SvnNotifyEventArgs^ ea = gcnew SvnNotifyEventArgs(notify, client->CurrentCommandArgs->CommandType, %aprPool);
 
-	try
-	{
-		client->HandleClientNotify(ea);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
+    try
+    {
+        client->HandleClientNotify(ea);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
 }
 
 void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
 {
-	UNUSED_ALWAYS(pool);
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    UNUSED_ALWAYS(pool);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnProgressEventArgs^ ea = gcnew SvnProgressEventArgs(progress, total);
+    SvnProgressEventArgs^ ea = gcnew SvnProgressEventArgs(progress, total);
 
-	try
-	{
-		client->HandleClientProgress(ea);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
+    try
+    {
+        client->HandleClientProgress(ea);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
 }
 
 svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description2_t *description, void *baton, apr_pool_t *result_pool, apr_pool_t *scratch_pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	*result = svn_wc_create_conflict_result(svn_wc_conflict_choose_postpone, NULL, result_pool);
+    *result = svn_wc_create_conflict_result(svn_wc_conflict_choose_postpone, NULL, result_pool);
 
     AprPool resultPool(result_pool, false); // Connect to parent pool
-	AprPool scratchPool(scratch_pool, false); // Connect to parent pool
+    AprPool scratchPool(scratch_pool, false); // Connect to parent pool
 
-	SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %scratchPool);
+    SvnConflictEventArgs^ ea = gcnew SvnConflictEventArgs(description, %scratchPool);
 
-	try
-	{
-		client->HandleClientConflict(ea);
+    try
+    {
+        client->HandleClientConflict(ea);
 
-		if (ea->Cancel)
-			return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnConflict");
+        if (ea->Cancel)
+            return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnConflict");
 
-		if (ea->Choice != SvnAccept::Postpone && ea->MergedFile)
-		{
-			(*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
+        if (ea->Choice != SvnAccept::Postpone && ea->MergedFile)
+        {
+            (*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
 
-			if (ea->Choice == SvnAccept::Merged)
-				(*result)->merged_file = resultPool.AllocDirent(ea->MergedFile);
-		}
+            if (ea->Choice == SvnAccept::Merged)
+                (*result)->merged_file = resultPool.AllocDirent(ea->MergedFile);
+        }
 
-		return nullptr;
-	}
-	catch(Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("Conflict resolver", e);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
+        return nullptr;
+    }
+    catch(Exception^ e)
+    {
+        return SvnException::CreateExceptionSvnError("Conflict resolver", e);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
 }
 
 Uri^ SvnClient::GetUriFromWorkingCopy(String^ path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!SvnBase::IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!SvnBase::IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	AprPool pool(%_pool);
-	NoArgsStore store(this, %pool);
+    AprPool pool(%_pool);
+    NoArgsStore store(this, %pool);
 
-	const char* url = nullptr;
+    const char* url = nullptr;
 
     svn_error_t* err = svn_client_url_from_path2(&url, pool.AllocAbsoluteDirent(path), CtxHandle, pool.Handle, pool.Handle);
 
-	if (!err && url)
-		return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
-	else if (err)
-		svn_error_clear(err);
+    if (!err && url)
+        return Utf8_PtrToUri(url, System::IO::Directory::Exists(path) ? SvnNodeKind::Directory : SvnNodeKind::File);
+    else if (err)
+        svn_error_clear(err);
 
-	return nullptr;
+    return nullptr;
 }
 
 bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
 {
-	if (!uri)
-		throw gcnew ArgumentNullException("uri");
-	else if (!SvnBase::IsValidReposUri(uri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+    if (!uri)
+        throw gcnew ArgumentNullException("uri");
+    else if (!SvnBase::IsValidReposUri(uri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-	id = Guid::Empty;
+    id = Guid::Empty;
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
+    EnsureState(SvnContextState::AuthorizationInitialized);
 
-	AprPool pool(%_pool);
-	NoArgsStore store(this, %pool);
+    AprPool pool(%_pool);
+    NoArgsStore store(this, %pool);
 
-	const char* uuidStr = nullptr;
+    const char* uuidStr = nullptr;
 
-	svn_error_t* err = svn_client_uuid_from_url(&uuidStr, pool.AllocUri(uri), CtxHandle, pool.Handle);
+    svn_error_t* err = svn_client_get_repos_root(&uuidStr, NULL,
+        pool.AllocUri(uri),
+        CtxHandle,
+        pool.Handle, pool.Handle);
 
-	if (err || !uuidStr)
-	{
-		if (err)
-			svn_error_clear(err);
-		return false;
-	}
-	else
-	{
-		id = Guid(Utf8_PtrToString(uuidStr));
-		return true;
-	}
+    if (err || !uuidStr)
+    {
+        if (err)
+            svn_error_clear(err);
+        return false;
+    }
+    else
+    {
+        id = Guid(Utf8_PtrToString(uuidStr));
+        return true;
+    }
 }
 
 bool SvnClient::TryGetRepositoryId(String^ path, [Out] Guid% id)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!SvnBase::IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!SvnBase::IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	id = Guid::Empty;
+    Uri^ uri;
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-
-	AprPool pool(%_pool);
-	NoArgsStore store(this, %pool);
-
-	const char* uuidStr = nullptr;
-    svn_error_t *err;
-
-    err = svn_client_uuid_from_path2(&uuidStr, pool.AllocAbsoluteDirent(path),
-                                     CtxHandle, pool.Handle, pool.Handle);
-
-	if (err || !uuidStr)
-	{
-		svn_error_clear(err);
-		return false;
-	}
-
-	id = Guid(Utf8_PtrToString(uuidStr));
-	return true;
+    return TryGetRepository(path, uri, id);
 }
 
 Uri^ SvnClient::GetRepositoryRoot(Uri^ uri)
 {
-	if (!uri)
-		throw gcnew ArgumentNullException("uri");
-	else if (!SvnBase::IsValidReposUri(uri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+    if (!uri)
+        throw gcnew ArgumentNullException("uri");
+    else if (!SvnBase::IsValidReposUri(uri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-	const char* resultUrl = nullptr;
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	NoArgsStore store(this, %pool);
+    const char* resultUrl = nullptr;
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    NoArgsStore store(this, %pool);
 
-	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocUri(uri), CtxHandle, pool.Handle);
+    svn_error_t* err = svn_client_get_repos_root(&resultUrl, nullptr,
+        pool.AllocUri(uri),
+        CtxHandle, pool.Handle, pool.Handle);
 
-	if (!err && resultUrl)
-		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
-	else if (err)
-		svn_error_clear(err);
+    if (!err && resultUrl)
+        return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
+    else if (err)
+        svn_error_clear(err);
 
-	return nullptr;
+    return nullptr;
 }
 
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.GetRepositoryRoot(System.String):System.Uri")];
 
 Uri^ SvnClient::GetRepositoryRoot(String^ target)
 {
-	if (String::IsNullOrEmpty(target))
-		throw gcnew ArgumentNullException("target");
-	else if (!IsNotUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
+    if (String::IsNullOrEmpty(target))
+        throw gcnew ArgumentNullException("target");
+    else if (!IsNotUri(target))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
-	const char* resultUrl = nullptr;
+    Uri^ reposRoot;
+    Guid id;
+
+    if (TryGetRepository(target, reposRoot, id))
+        return reposRoot;
+
+    return nullptr;
+}
+
+bool SvnClient::TryGetRepository(Uri^ uri, [Out] Uri^% repositoryUrl, [Out] Guid% id)
+{
+    if (!uri)
+        throw gcnew ArgumentNullException("uri");
+    else if (!SvnBase::IsValidReposUri(uri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+
+    id = Guid::Empty;
+    repositoryUrl = nullptr;
+
+    EnsureState(SvnContextState::AuthorizationInitialized);
+
+    AprPool pool(%_pool);
+    NoArgsStore store(this, %pool);
+
+    const char* urlStr = nullptr;
+    const char* uuidStr = nullptr;
+    svn_error_t *err;
+
+    err = svn_client_get_repos_root(&urlStr, &uuidStr,
+                                    pool.AllocUri(uri),
+                                    CtxHandle, pool.Handle, pool.Handle);
+
+    if (err)
+    {
+        svn_error_clear(err);
+        return false;
+    }
+
+    repositoryUrl = Utf8_PtrToUri(urlStr, SvnNodeKind::Directory);
+    id = Guid(Utf8_PtrToString(uuidStr));
+    return true;
+}
+
+bool SvnClient::TryGetRepository(String^ path, [Out] Uri^% repositoryUrl, [Out] Guid% id)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!SvnBase::IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    id = Guid::Empty;
+    repositoryUrl = nullptr;
+
     EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	NoArgsStore store(this, %pool);
 
-	svn_error_t* err = svn_client_root_url_from_path(&resultUrl, pool.AllocDirent(target), CtxHandle, pool.Handle);
+    AprPool pool(%_pool);
+    NoArgsStore store(this, %pool);
 
-	if (!err && resultUrl)
-		return Utf8_PtrToUri(resultUrl, SvnNodeKind::Directory);
-	else if (err)
-		svn_error_clear(err);
+    const char* urlStr = nullptr;
+    const char* uuidStr = nullptr;
+    svn_error_t *err;
 
-	return nullptr;
+    err = svn_client_get_repos_root(&urlStr, &uuidStr,
+                                    pool.AllocAbsoluteDirent(path),
+                                    CtxHandle, pool.Handle, pool.Handle);
+
+    if (err)
+    {
+        svn_error_clear(err);
+        return false;
+    }
+
+    repositoryUrl = Utf8_PtrToUri(urlStr, SvnNodeKind::Directory);
+    id = Guid(Utf8_PtrToString(uuidStr));
+    return true;
 }
 
 String^ SvnClient::GetWorkingCopyRoot(String^ path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	const char* wcroot_abspath = nullptr;
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	NoArgsStore store(this, %pool);
+    const char* wcroot_abspath = nullptr;
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    NoArgsStore store(this, %pool);
 
-	svn_error_t* err = svn_client_get_wc_root(&wcroot_abspath, pool.AllocAbsoluteDirent(path), CtxHandle, pool.Handle, pool.Handle);
+    svn_error_t* err = svn_client_get_wc_root(&wcroot_abspath, pool.AllocAbsoluteDirent(path), CtxHandle, pool.Handle, pool.Handle);
 
-	if (!err && wcroot_abspath)
-		return Utf8_PathPtrToString(wcroot_abspath, %pool);
-	else if (err)
-		svn_error_clear(err);
+    if (!err && wcroot_abspath)
+        return Utf8_PathPtrToString(wcroot_abspath, %pool);
+    else if (err)
+        svn_error_clear(err);
 
-	return nullptr;
+    return nullptr;
 }
 
 void SvnClient::AddClientName(String^ name, System::Version^ version)
 {
-	if (String::IsNullOrEmpty(name))
-		throw gcnew ArgumentNullException("name");
-	else if (!version)
-		throw gcnew ArgumentNullException("version");
+    if (String::IsNullOrEmpty(name))
+        throw gcnew ArgumentNullException("name");
+    else if (!version)
+        throw gcnew ArgumentNullException("version");
 
-	for (int i = 0; i < name->Length; i++)
-	{
-		if (!wchar_t::IsLetterOrDigit(name, i) && 0 > (((String^)"._ ")->IndexOf(name[i])))
-			throw gcnew ArgumentException(SharpSvnStrings::InvalidCharacterInClientName, "name");
-	}
+    for (int i = 0; i < name->Length; i++)
+    {
+        if (!wchar_t::IsLetterOrDigit(name, i) && 0 > (((String^)"._ ")->IndexOf(name[i])))
+            throw gcnew ArgumentException(SharpSvnStrings::InvalidCharacterInClientName, "name");
+    }
 
-	if (!_clientNames->Contains(name))
-	{
-		_clientNames->Add(name);
+    if (!_clientNames->Contains(name))
+    {
+        _clientNames->Add(name);
 
-		_clientName += " " + name + "/" + version->ToString();
-	}
+        _clientName += " " + name + "/" + version->ToString();
+    }
 }
 
 const char* SvnClient::GetEolPtr(SvnLineStyle style)
 {
-	switch(style)
-	{
-	case SvnLineStyle::Default:
-	case SvnLineStyle::Native:
-		return nullptr;
-	case SvnLineStyle::CarriageReturnLinefeed:
-		return "CRLF";
-	case SvnLineStyle::Linefeed:
-		return "LF";
-	case SvnLineStyle::CarriageReturn:
-		return "CR";
-	default:
-		throw gcnew ArgumentOutOfRangeException("style");
-	}
+    switch(style)
+    {
+    case SvnLineStyle::Default:
+    case SvnLineStyle::Native:
+        return nullptr;
+    case SvnLineStyle::CarriageReturnLinefeed:
+        return "CRLF";
+    case SvnLineStyle::Linefeed:
+        return "LF";
+    case SvnLineStyle::CarriageReturn:
+        return "CR";
+    default:
+        throw gcnew ArgumentOutOfRangeException("style");
+    }
 }
 
 const char* SvnClient::GetEolValue(SvnLineStyle style)
 {
-	switch(style)
-	{
-	case SvnLineStyle::Default:
-		return nullptr;
-	case SvnLineStyle::Native:
-		return APR_EOL_STR;
-	case SvnLineStyle::CarriageReturnLinefeed:
-		return "\r\n";
-	case SvnLineStyle::Linefeed:
-		return "\n";
-	case SvnLineStyle::CarriageReturn:
-		return "\r";
-	default:
-		throw gcnew ArgumentOutOfRangeException("style");
-	}
+    switch(style)
+    {
+    case SvnLineStyle::Default:
+        return nullptr;
+    case SvnLineStyle::Native:
+        return APR_EOL_STR;
+    case SvnLineStyle::CarriageReturnLinefeed:
+        return "\r\n";
+    case SvnLineStyle::Linefeed:
+        return "\n";
+    case SvnLineStyle::CarriageReturn:
+        return "\r";
+    default:
+        throw gcnew ArgumentOutOfRangeException("style");
+    }
 }
 
 using SharpSvn::Implementation::SvnLibrary;
@@ -573,23 +622,23 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 
 static int CompareLibrary(SvnLibrary^ x, SvnLibrary^ y)
 {
-	return StringComparer::OrdinalIgnoreCase->Compare(x->Name, y->Name);
+    return StringComparer::OrdinalIgnoreCase->Compare(x->Name, y->Name);
 }
 
 ICollection<SvnLibrary^>^ SvnClient::SvnLibraries::get()
 {
-	if (_svnLibraries)
-		return _svnLibraries;
+    if (_svnLibraries)
+        return _svnLibraries;
 
-	System::Collections::Generic::List<SvnLibrary^>^ libs
-		= gcnew System::Collections::Generic::List<SvnLibrary^>();
+    System::Collections::Generic::List<SvnLibrary^>^ libs
+        = gcnew System::Collections::Generic::List<SvnLibrary^>();
 
-	for each(SvnLibraryAttribute^ i in SvnClient::typeid->Assembly->GetCustomAttributes(SvnLibraryAttribute::typeid, false))
-	{
-		libs->Add(gcnew SvnLibrary(i));
-	}
+    for each(SvnLibraryAttribute^ i in SvnClient::typeid->Assembly->GetCustomAttributes(SvnLibraryAttribute::typeid, false))
+    {
+        libs->Add(gcnew SvnLibrary(i));
+    }
 
-	libs->Sort(gcnew Comparison<SvnLibrary^>(CompareLibrary));
+    libs->Sort(gcnew Comparison<SvnLibrary^>(CompareLibrary));
 
-	return _svnLibraries = libs->AsReadOnly();
+    return _svnLibraries = libs->AsReadOnly();
 }
