@@ -61,7 +61,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
+    <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
       <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
       <Name>SharpSvn</Name>
     </ProjectReference>

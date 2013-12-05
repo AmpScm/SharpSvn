@@ -54,7 +54,7 @@
       <Project>{6374B7FA-6919-4CF1-A348-6AF76B199169}</Project>
       <Name>SharpSvn.SourceIndexer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpSvn\SharpSvn-VS2008.vcproj">
+    <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
       <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
       <Name>SharpSvn</Name>
     </ProjectReference>
