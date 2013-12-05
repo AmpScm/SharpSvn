@@ -75,10 +75,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../imports/release/debug-lib/git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
+				AdditionalDependencies="git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;ole32.dll;advapi32.dll"
+				AdditionalLibraryDirectories="..\..\imports\release\debug-lib;..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
+				DelayLoadDLLs="crypt32.dll;ole32.dll;advapi32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -162,8 +162,8 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
+				AdditionalLibraryDirectories="..\..\imports\release\debug-lib-x64;..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
+				DelayLoadDLLs="crypt32.dll;ole32.dll;advapi32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
@@ -244,10 +244,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="../../imports/release/lib/git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
+				AdditionalDependencies="git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
+				DelayLoadDLLs="crypt32.dll;ole32.dll;advapi32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="2"
@@ -328,10 +328,10 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
+				AdditionalDependencies="git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
-				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
+				DelayLoadDLLs="crypt32.dll;ole32.dll;advapi32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				RandomizedBaseAddress="2"
