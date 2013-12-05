@@ -68,7 +68,7 @@
     <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
       <!-- Visual Studio 2008 -->
       <ItemGroup>
-        <ProjectReference Include="..\SharpSvn\SharpGit.vcproj">
+        <ProjectReference Include="..\SharpGit\SharpGit.vcproj">
           <Project>{0d01253e-6359-43fc-a3c8-1a3754c4468d}</Project>
           <Name>SharpGit</Name>
           <Private>True</Private>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9,00"
 	Name="SharpGit"
 	ProjectGUID="{0D01253E-6359-43FC-A3C8-1A3754C4468D}"
 	RootNamespace="SharpGit"
@@ -11,6 +11,7 @@
 	SccProvider="SubversionScc"
 	Keyword="ManagedCProj"
 	AssemblyReferenceSearchPaths="&quot;..\..\imports\release\lib-AnyCPU&quot;"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -33,14 +34,10 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine=""
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description=" "
-				CommandLine="&#x0D;&#x0A;"
-				AdditionalDependencies=" "
-				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -63,7 +60,6 @@
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -75,17 +71,19 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
+				AdditionalDependencies="../../imports/release/debug-lib/git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;ole32.dll;advapi32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				TargetMachine="1"
 				KeyFile="SharpGit.snk"
 			/>
@@ -108,9 +106,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -124,14 +119,9 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description=" "
-				CommandLine="&#x0D;&#x0A;"
-				AdditionalDependencies=" "
-				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -155,7 +145,6 @@
 				GenerateXMLDocumentationFiles="true"
 				BrowseInformation="1"
 				WarningLevel="4"
-				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="3"
 			/>
 			<Tool
@@ -167,17 +156,19 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
+				AdditionalDependencies="git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="2"
-				AdditionalLibraryDirectories="..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
+				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
 				AssemblyDebug="1"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				TargetMachine="17"
 				KeyFile="SharpGit.snk"
 			/>
@@ -198,9 +189,6 @@
 			/>
 			<Tool
 				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCWebDeploymentTool"
 			/>
 			<Tool
 				Name="VCPostBuildEventTool"
@@ -217,14 +205,9 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description=" "
-				CommandLine="&#x0D;&#x0A;"
-				AdditionalDependencies=" "
-				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -257,16 +240,18 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="$(NoInherit) Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
+				AdditionalDependencies="../../imports/release/lib/git2.lib Advapi32.lib shell32.lib Rpcrt4.lib Mswsock.lib Crypt32.lib User32.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;..\..\imports\release\bin"
 				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				TargetMachine="1"
 				KeyFile="SharpGit.snk"
 			/>
@@ -289,9 +274,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -306,14 +288,9 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
-				Description=" "
-				CommandLine="&#x0D;&#x0A;"
-				AdditionalDependencies=" "
-				Outputs=" "
 			/>
 			<Tool
 				Name="VCXMLDataGeneratorTool"
@@ -347,7 +324,7 @@
 			<Tool
 				Name="VCPreLinkEventTool"
 				Description="Copying libraries"
-				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir).&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot; &quot;&quot;"
+				CommandLine="$(SolutionDir)Copy-Dependencies.cmd &quot;$(TargetDir)&quot; &quot;$(ConfigurationName)&quot; &quot;$(PlatformName)&quot;"
 			/>
 			<Tool
 				Name="VCLinkerTool"
@@ -357,6 +334,8 @@
 				DelayLoadDLLs="crypt32.dll;mswsock.dll;secur32.dll;user32.dll;Ole32.dll"
 				AssemblyLinkResource="$(TargetDir)SharpPlink-$(PlatformName).svnExe"
 				GenerateDebugInformation="true"
+				RandomizedBaseAddress="2"
+				DataExecutionPrevention="2"
 				TargetMachine="17"
 				KeyFile="SharpGit.snk"
 			/>
@@ -379,9 +358,6 @@
 				Name="VCAppVerifierTool"
 			/>
 			<Tool
-				Name="VCWebDeploymentTool"
-			/>
-			<Tool
 				Name="VCPostBuildEventTool"
 			/>
 		</Configuration>
@@ -390,1473 +366,233 @@
 		<AssemblyReference
 			RelativePath="System.dll"
 			AssemblyName="System, Version=2.0.0.0, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+			MinFrameworkVersion="131072"
 		/>
 	</References>
 	<Files>
 		<Filter
-			Name="Resource Files"
-			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav"
-			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
+			Name="GitClient"
 			>
 			<File
-				RelativePath=".\app.rc"
+				RelativePath="GitClient\GitAdd.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpGitStrings.h"
+				RelativePath="GitClient\GitAdd.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpGitStrings.resx"
-				SubType="Designer"
+				RelativePath="GitClient\GitCheckOut.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\SharpGitStrings.txt"
+				RelativePath="GitClient\GitCheckOut.h"
 				>
-				<FileConfiguration
-					Name="Debug|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating SharpGitStrings.h"
-						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpGitStrings.resx&#x0D;&#x0A;"
-						AdditionalDependencies="SharpGitStrings.resx"
-						Outputs="SharpGitStrings.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Debug|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating SharpGitStrings.h"
-						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpGitStrings.resx&#x0D;&#x0A;"
-						AdditionalDependencies="SharpGitStrings.resx"
-						Outputs="SharpGitStrings.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|Win32"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating SharpGitStrings.h"
-						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpGitStrings.resx&#x0D;&#x0A;"
-						AdditionalDependencies="SharpGitStrings.resx"
-						Outputs="SharpGitStrings.h"
-					/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Release|x64"
-					>
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Generating SharpGitStrings.h"
-						CommandLine="ResGen.exe /str:c++,$(RootNamespace) SharpGitStrings.resx&#x0D;&#x0A;"
-						AdditionalDependencies="SharpGitStrings.resx"
-						Outputs="SharpGitStrings.h"
-					/>
-				</FileConfiguration>
 			</File>
-			<Filter
-				Name="Subversion"
+			<File
+				RelativePath="GitClient\GitClient.cpp"
 				>
-				<File
-					RelativePath=".\SvnText\SvnText.de.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.es.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.fr.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.it.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.ja.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.ko.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.nb.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.pl.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.pt-BR.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.sv.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.zh-CN.resx"
-					SubType="Designer"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnText\SvnText.zh-TW.resx"
-					SubType="Designer"
-					>
-				</File>
-			</Filter>
+			</File>
+			<File
+				RelativePath="GitClient\GitClient.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitClientEventArgs.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitClone.cpp"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitClone.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitCommitCmd.cpp"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitCommitCmd.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitDelete.cpp"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitDelete.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitStage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitStage.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitStatus.cpp"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitStatus.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitStatusEventArgs.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitTagCmd.h"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitUnstage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="GitClient\GitUnstage.h"
+				>
+			</File>
 		</Filter>
 		<Filter
-			Name="Common"
-			Filter="h;hpp;hxx;hm;inl;inc;xsd"
-			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
+			Name="Plumbing"
 			>
 			<File
-				RelativePath=".\EventArgs\SvnEventArgs.h"
+				RelativePath="Plumbing\DiffEnumerator.h"
 				>
 			</File>
 			<File
-				RelativePath=".\SvnStreamWrapper.h"
-				>
-			</File>
-			<Filter
-				Name="Headers"
-				>
-				<File
-					RelativePath=".\AprArray.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AprBaton.h"
-					>
-				</File>
-				<File
-					RelativePath=".\AprPool.h"
-					>
-				</File>
-				<File
-					RelativePath=".\resource.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Stdafx.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnBase.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnFsOperationRetryOverride.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnLibraryAttribute.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnStatusCacheBlocker.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\AprArray.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\AprPool.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Stdafx.cpp"
-					>
-					<FileConfiguration
-						Name="Debug|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Debug|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
-						/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|x64"
-						>
-						<Tool
-							Name="VCCLCompilerTool"
-							UsePrecompiledHeader="1"
-						/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath=".\SvnAbortHandler.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnBase.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnFsOperationRetryOverride.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnLocalization.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnStatusCacheBlocker.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnStreamWrapper.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="Svn"
-			>
-			<Filter
-				Name="Headers"
-				>
-				<File
-					RelativePath=".\SvnAll.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnAuthentication.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnChangeList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientConfiguration.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientContext.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientNotifier.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnNames.h"
-					>
-				</File>
-				<File
-					RelativePath=".\UnmanagedStructs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\SvnAuthentication.Cache.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnAuthentication.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientArgs.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientConfiguration.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientContext.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientEventArgs.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClientNotifier.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnNames.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Types"
-				>
-				<File
-					RelativePath=".\SvnCommandLineArgumentCollection.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnCommitItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnDiff.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnEnums.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnErrorCodes.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnException.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnExternalItem.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnFileDiff.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnLockInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfoArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeSourcesCollection.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPathTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPropertyValue.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnUpdateResult.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnUriTarget.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnWindowsError.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\SvnWorkingCopyState.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\SvnWorkingCopyVersion.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Types Sources"
-				>
-				<File
-					RelativePath=".\SvnCommitItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnDiff.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnException.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnExternalItem.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnFileDiff.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeItemCollection.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnMergeRangeCollection.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnPropertyNames.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnTargets.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Tools Args"
-				>
-				<File
-					RelativePath=".\SvnHookArguments.h"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnTools.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Tools Sources"
-				>
-				<File
-					RelativePath=".\SvnHookArguments.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnTools.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="SvnClient"
-			>
-			<File
-				RelativePath=".\SvnClient.h"
-				>
-			</File>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\Commands\Add.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\AddToChangeList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Blame.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\CheckOut.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\CleanUp.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Commit.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Copy.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\CreateDirectory.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\CropWorkingCopy.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Delete.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Diff.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\DiffMerge.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\DiffSummary.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Export.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\FileVersions.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetAppliedMergeInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetCapabilities.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetProperty.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetRevisionProperty.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\GetSuggestedMergeSources.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Import.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Info.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\List.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\ListChangeList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Lock.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Log.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Merge.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\MergesEligible.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\MergesMerged.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Move.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Patch.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\PropertyList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\ReintegrationMerge.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Relocate.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\RemoveFromChangeList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\ReplayRevisions.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Resolve.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Revert.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\RevisionPropertyList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\SetProperty.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\SetRevisionProperty.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Status.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Switch.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Unlock.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Update.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Upgrade.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\Write.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\WriteRelated.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="EventArgs"
-				>
-				<File
-					RelativePath=".\EventArgs\SvnBlameEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnCancelEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnCommittingEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnConflictData.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnConflictEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnDiffSummaryEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnErrorEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnFileVersionEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnInfoEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnListChangeListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnLogEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnMergesEligibleEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnMergesMergedEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnNotifyEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnPatchFilterEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnProcessingEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnProgressEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnPropertyListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnReplayRevisionEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnStatusEventArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Args"
-				>
-				<File
-					RelativePath=".\Args\Add.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\AddToChangeList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Blame.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\CheckOut.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\CleanUp.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Commit.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Copy.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\CreateDirectory.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\CropWorkingCopy.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Delete.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Diff.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\DiffMerge.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\DiffSummary.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Export.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\FileVersions.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\GetAppliedMergeInfo.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\GetCapabilities.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\GetProperty.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\GetRevisionProperty.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\GetSuggestedMergeSources.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Import.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Info.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\List.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\ListChangeList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Lock.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Log.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Merge.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\MergesEligible.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\MergesMerged.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Move.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Patch.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\PropertyList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\ReintegrationMerge.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Relocate.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\RemoveFromChangeList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\ReplayRevision.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Resolve.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Revert.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\RevisionPropertyList.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\SetProperty.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\SetRevisionProperty.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Status.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Switch.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Unlock.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Update.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Upgrade.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\Write.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Args\WriteRelated.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="SvnRepositoryClient"
-			>
-			<File
-				RelativePath=".\SvnRepositoryClient.h"
-				>
-			</File>
-			<Filter
-				Name="Args"
-				>
-				<File
-					RelativePath=".\ReposArgs\CreateRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\DeleteRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\DumpRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\HotCopyRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\LoadRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\RecoverRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\SetRevisionPropertyRepository.h"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposArgs\UpgradeRepository.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="EventArgs"
-				>
-			</Filter>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\ReposCommands\CreateRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\DeleteRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\DumpRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\HotCopyRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\LoadRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\RecoverRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\SetRevisionPropertyRepository.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\SvnRepositoryClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\ReposCommands\UpgradeRepository.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="SvnLookClient"
-			>
-			<File
-				RelativePath=".\SvnLookClient.h"
-				>
-			</File>
-			<Filter
-				Name="Args"
-				>
-				<File
-					RelativePath=".\LookArgs\SvnChangedArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnChangeInfoArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnLookClientArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnLookGetPropertyArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnLookListArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnLookPropertyListArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnLookRevisionPropertyArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\LookArgs\SvnLookWriteArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="EventArgs"
-				>
-				<File
-					RelativePath=".\EventArgs\SvnChangedEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnChangeInfoEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnLookListEventArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\LookCommands\LookChanged.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\LookChangeInfo.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\LookGetProperty.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\LookGetRevisionProperty.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\LookList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\LookPropertyList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\LookWrite.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\LookCommands\SvnLookClient.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="SvnWorkingCopyClient"
-			>
-			<File
-				RelativePath=".\SvnWorkingCopyClient.h"
-				>
-			</File>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\Commands\GetWorkingCopyVersion.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyCommands\InstallConflict.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Commands\SvnWorkingCopyClient.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyEntries.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyMove.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyCommands\WorkingCopyState.cpp"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Args"
-				>
-				<File
-					RelativePath=".\Args\GetWorkingCopyVersion.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyEntries.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyInstallConflictArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyMove.h"
-					>
-				</File>
-				<File
-					RelativePath=".\WorkingCopyArgs\WorkingCopyState.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="EventArgs"
-				>
-				<File
-					RelativePath=".\EventArgs\SvnWorkingCopyEntryEventArgs.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="SvnDeltaEditor"
-			>
-			<File
-				RelativePath=".\Delta\SvnDeltaEditor.cpp"
+				RelativePath="Plumbing\GitBlob.h"
 				>
 			</File>
 			<File
-				RelativePath=".\Delta\SvnDeltaTransform.cpp"
-				>
-			</File>
-			<Filter
-				Name="Headers"
-				>
-				<File
-					RelativePath=".\Delta\DeltaDirectoryEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Delta\DeltaFileEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Delta\DeltaGlobalEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Delta\SvnDeltaEditor.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Delta\SvnDeltaNode.h"
-					>
-				</File>
-				<File
-					RelativePath=".\Delta\SvnDeltaTransform.h"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="SvnRemoteSession"
-			>
-			<File
-				RelativePath=".\SvnRemoteSession.h"
-				>
-			</File>
-			<Filter
-				Name="Args"
-				>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteCommonArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteDeletedRevisionArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteListArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteListLocksArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteLocationArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteLocationSegmentsArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteLogArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteNodeKindArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteOpenArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemotePropertiesArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteSessionArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteArgs\SvnRemoteStatArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="EventArgs"
-				>
-				<File
-					RelativePath=".\EventArgs\SvnRemoteListEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnRemoteListLockEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnRemoteLocationSegmentEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnRemoteLogEventArgs.h"
-					>
-				</File>
-				<File
-					RelativePath=".\EventArgs\SvnRemoteStatEventArgs.h"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="Sources"
-				>
-				<File
-					RelativePath=".\RemoteCommands\RemoteGetDeletedRevision.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteGetLocations.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteGetNodeKind.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteGetProperties.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteGetRepositoryId.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteGetRepositoryRoot.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteLatestRevision.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteList.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteListLocks.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteLocationSegments.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteLog.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteOpen.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteReparent.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\RemoteStat.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\ResolveRevision.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\RemoteCommands\SvnRemoteSession.cpp"
-					>
-				</File>
-			</Filter>
-		</Filter>
-		<Filter
-			Name="PdbClient"
-			>
-			<File
-				RelativePath=".\PdbTools\sbs_pdh.h"
+				RelativePath="Plumbing\GitBranch.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnMsfClient.cpp"
+				RelativePath="Plumbing\GitCommit.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnMsfClient.h"
+				RelativePath="Plumbing\GitCommit.h"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnPdbClient.cpp"
+				RelativePath="Plumbing\GitConfiguration.cpp"
 				>
 			</File>
 			<File
-				RelativePath=".\PdbTools\SvnPdbClient.h"
+				RelativePath="Plumbing\GitConfiguration.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitIndex.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitIndex.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitObject.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitObject.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitObjectDatabase.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitObjectDatabase.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitReference.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitReference.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitRepository.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitRepository.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitTag.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitTag.h"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitTree.cpp"
+				>
+			</File>
+			<File
+				RelativePath="Plumbing\GitTree.h"
 				>
 			</File>
 		</Filter>
 		<File
-			RelativePath=".\AssemblyInfo.cpp"
+			RelativePath="AssemblyInfo.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\SharpGit-VS2008.vcproj"
+			RelativePath="GitClientContext.cpp"
 			>
 		</File>
 		<File
-			RelativePath=".\SharpGit.snk"
+			RelativePath="SharpGit.snk"
 			>
+		</File>
+		<File
+			RelativePath="stdafx.cpp"
+			>
+			<FileConfiguration
+				Name="Debug|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Debug|x64"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|Win32"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
+			<FileConfiguration
+				Name="Release|x64"
+				>
+				<Tool
+					Name="VCCLCompilerTool"
+					UsePrecompiledHeader="1"
+				/>
+			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>
