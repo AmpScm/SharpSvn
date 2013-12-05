@@ -49,7 +49,9 @@ static svn_error_t *svnStreamRead(void *baton, char *buffer, apr_size_t *len)
 
 	int count = sw->Stream->Read(bytes, 0, (int)*len);
 
-	Marshal::Copy(bytes, 0, (IntPtr)buffer, count);
+	pin_ptr<const unsigned char> pBytes = &bytes[0];
+
+	memcpy(buffer, pBytes, count);
 	*len = count;
 
 	return nullptr;
@@ -69,11 +71,12 @@ static svn_error_t *svnStreamWrite(void *baton, const char *data, apr_size_t *le
 	SvnStreamWrapper^ sw = AprBaton<SvnStreamWrapper^>::Get((IntPtr)baton);
 
 	array<unsigned char>^ bytes = gcnew array<unsigned char>((int)*len);
+	pin_ptr<unsigned char> pBytes = &bytes[0];
 
-	System::Runtime::InteropServices::Marshal::Copy((IntPtr)const_cast<char*>(data), bytes, 0, bytes->Length);
+	memcpy(pBytes, data, bytes->Length);
 
 	sw->Stream->Write(bytes, 0, bytes->Length);
-    sw->_written = true;
+	sw->_written = true;
 
 	return nullptr;
 }
@@ -83,10 +86,10 @@ static svn_error_t *svnStreamClose(void *baton)
 	SvnStreamWrapper^ sw = AprBaton<SvnStreamWrapper^>::Get((IntPtr)baton);
 
 	if (sw->_written)
-    {
-        sw->_written = false;
+	{
+		sw->_written = false;
 		sw->Stream->Flush();
-    }
+	}
 
 	return nullptr;
 }
