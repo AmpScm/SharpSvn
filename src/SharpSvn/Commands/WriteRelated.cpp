@@ -179,11 +179,13 @@ bool SvnClient::WriteRelated(ICollection<SvnUriTarget^>^ targets, ICollection<St
 			const svn_ra_reporter3_t* reporter = nullptr;
 			void* report_baton = nullptr;
 
-			r = svn_ra_do_switch2(ra_session, &reporter, &report_baton,
+			r = svn_ra_do_switch3(ra_session, &reporter, &report_baton,
 				switchToRevision,
 				baseUrlFile,
 				svn_depth_empty,
 				switchUrl,
+				FALSE /* send_copyfrom_args */,
+				TRUE /* ignore_ancestry */,
 				editor,
 				editor_baton,
 				cur->Handle);
