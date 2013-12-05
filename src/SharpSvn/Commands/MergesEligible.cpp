@@ -93,7 +93,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 		args->_sourceTarget = source;
 
 		svn_error_t* r = svn_client_mergeinfo_log2(
-			FALSE,
+			FALSE /* finding_merged */,
 			target->AllocAsString(%pool),
 			target->Revision->AllocSvnRevision(%pool),
 			source->AllocAsString(%pool),
