@@ -32,6 +32,10 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class BlameTests : TestBase
 	{
+        public BlameTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 		[SetUp]
 		public override void SetUp()
 		{

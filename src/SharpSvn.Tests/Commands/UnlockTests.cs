@@ -31,6 +31,10 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class UnlockTests : TestBase
 	{
+        public UnlockTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 		[Test]
 		public void BasicUnlockTest()
 		{

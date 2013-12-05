@@ -175,6 +175,8 @@ namespace SharpSvn.Tests.Commands
             a.Depth = SvnDepth.Empty;
 
             string file = Path.Combine(this.WcPath, "AssemblyInfo.cs");
+            TouchFile(file);
+            this.Client.Add(file);
             try
             {
                 this.Client.Add(file, a);

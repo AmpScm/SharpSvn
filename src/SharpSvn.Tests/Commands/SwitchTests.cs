@@ -31,6 +31,11 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class SwitchTests : TestBase
 	{
+        public SwitchTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
 		[SetUp]
 		public override void SetUp()
 		{

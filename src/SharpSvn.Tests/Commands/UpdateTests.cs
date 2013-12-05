@@ -36,6 +36,11 @@ namespace SharpSvn.Tests.Commands
     {
         private string _wc;
 
+        public UpdateTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
         [SetUp]
         public override void SetUp()
         {

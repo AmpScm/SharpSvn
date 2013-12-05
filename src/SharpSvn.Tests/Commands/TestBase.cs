@@ -56,6 +56,7 @@ namespace SharpSvn.Tests.Commands
             string asm = this.GetType().FullName;
             this.REPOS_FILE = "repos.zip";
             this.WC_FILE = "wc.zip";
+            UseEmptyRepositoryForWc = true;
         }
 
         [TestFixtureTearDown]
@@ -411,6 +412,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
+        public bool UseEmptyRepositoryForWc { get; set; }
+
         /// <summary>
         /// The path to the working copy
         /// </summary>
@@ -419,7 +422,15 @@ namespace SharpSvn.Tests.Commands
             get
             {
                 if (_wcPath == null)
-                    ExtractWorkingCopy();
+                {
+                    if (UseEmptyRepositoryForWc)
+                    {
+                        _wcPath = GetTempDir();
+                        Client.CheckOut(GetReposUri(TestReposType.Empty), _wcPath);
+                    }
+                    else
+                        ExtractWorkingCopy();
+                }
 
                 return _wcPath;
             }

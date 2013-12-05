@@ -42,6 +42,9 @@ namespace SharpSvn.Tests.Commands
         public void TestBasicLock()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
+            TouchFile(filepath);
+            Client.Add(filepath);
+            Client.Commit(filepath);
 
             Client.Status(filepath, delegate(object sender, SvnStatusEventArgs e)
             {

@@ -32,6 +32,11 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class RevertTests : TestBase
 	{
+        public RevertTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
 		/// <summary>
 		///Attempts to revert single file.
 		/// </summary>

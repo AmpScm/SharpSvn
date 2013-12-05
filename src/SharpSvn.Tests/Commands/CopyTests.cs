@@ -31,6 +31,11 @@ namespace SharpSvn.Tests.Commands
 	[TestFixture]
 	public class CopyTests : TestBase
 	{
+        public CopyTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
 		/// <summary>
 		/// Tests copying a file in WC -> WC
 		/// </summary>

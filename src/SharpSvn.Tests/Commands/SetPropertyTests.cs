@@ -32,6 +32,11 @@ namespace SharpSvn.Tests.Commands
     [TestFixture]
     public class SetPropertyTests : TestBase
     {
+        public SetPropertyTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+
         [SetUp]
         public override void SetUp()
         {
