@@ -217,7 +217,7 @@ namespace SharpGit {
 		{
 			if (e)
 			{
-				System::Diagnostics::Debug::WriteLine("Wrapping: {0}", e);
+				System::Diagnostics::Debug::WriteLine(String::Format("Wrapping: {0}", e));
 				_ex = e;
 				return WrappedError;
 			}
