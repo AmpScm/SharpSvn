@@ -490,6 +490,14 @@ namespace SharpSvn {
         bool Write(SvnTarget^ target, Stream^ output);
         /// <summary>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</summary>
         bool Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args);
+
+        /// <summary>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</summary>
+        bool Write(SvnTarget^ target, Stream^ output, [Out] SvnPropertyCollection ^%properties);
+        /// <summary>Writes the content of specified files or URLs to a stream. (<c>svn cat</c>)</summary>
+        bool Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args, [Out] SvnPropertyCollection ^%properties);
+
+    private:
+        bool InternalWrite(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args, apr_hash_t **props, AprPool^ resultPool);
 #pragma endregion
 
     public:

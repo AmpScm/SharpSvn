@@ -26,39 +26,89 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Write(SvnTarget^ target, Stream^ output)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!output)
-		throw gcnew ArgumentNullException("output");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!output)
+        throw gcnew ArgumentNullException("output");
 
-	return Write(target, output, gcnew SvnWriteArgs());
+    return Write(target, output, gcnew SvnWriteArgs());
 }
 
 bool SvnClient::Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!output)
-		throw gcnew ArgumentNullException("output");
-	else if (!args)
-		throw gcnew ObjectDisposedException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!output)
+        throw gcnew ArgumentNullException("output");
+    else if (!args)
+        throw gcnew ObjectDisposedException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    AprPool pool(%_pool);
 
-	SvnStreamWrapper wrapper(output, false, true, %pool);
+    return InternalWrite(target, output, args, nullptr, %pool);
+}
 
-	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-	svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
+bool SvnClient::Write(SvnTarget^ target, Stream^ output, [Out] SvnPropertyCollection ^%properties)
+{
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!output)
+        throw gcnew ArgumentNullException("output");
 
-	svn_error_t *r = svn_client_cat2(
-		wrapper.Handle,
-		target->AllocAsString(%pool, true),
-		&pegRev,
-		&rev,
-		CtxHandle,
-		pool.Handle);
+    return Write(target, output, gcnew SvnWriteArgs(), properties);
+}
 
-	return args->HandleResult(this, r, target);
+bool SvnClient::Write(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args, [Out] SvnPropertyCollection ^%properties)
+{
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!output)
+        throw gcnew ArgumentNullException("output");
+    else if (!args)
+        throw gcnew ObjectDisposedException("args");
+
+    AprPool pool(%_pool);
+    apr_hash_t *props = nullptr;
+
+    properties = nullptr;
+
+    if (InternalWrite(target, output, args, &props, %pool))
+    {
+        properties = CreatePropertyDictionary(props, %pool);
+        return true;
+    }
+
+    return false;
+}
+
+
+bool SvnClient::InternalWrite(SvnTarget^ target, Stream^ output, SvnWriteArgs^ args, apr_hash_t **props, AprPool ^resultPool)
+{
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!output)
+        throw gcnew ArgumentNullException("output");
+    else if (!args)
+        throw gcnew ObjectDisposedException("args");
+
+    AprPool scratchPool(resultPool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    ArgsStore store(this, args, %scratchPool);
+
+    SvnStreamWrapper wrapper(output, false, true, %scratchPool);
+
+    svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+    svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
+
+    svn_error_t *r = svn_client_cat3(props,
+                                     wrapper.Handle,
+                                     target->AllocAsString(%scratchPool, true),
+                                     &pegRev,
+                                     &rev,
+                                     ! args->IgnoreKeywords,
+                                     CtxHandle,
+                                     resultPool->Handle,
+                                     scratchPool.Handle);
+
+    return args->HandleResult(this, r, target);
 }

@@ -21,6 +21,7 @@ namespace SharpSvn {
 	public ref class SvnWriteArgs : public SvnClientArgs
 	{
 		SvnRevision^ _revision;
+        bool _ignoreKeywords;
 	public:
 		SvnWriteArgs()
 		{
@@ -47,6 +48,18 @@ namespace SharpSvn {
 					_revision = value;
 				else
 					_revision = SvnRevision::None;
+			}
+		}
+
+        property bool IgnoreKeywords
+		{
+			bool get()
+			{
+				return _ignoreKeywords;
+			}
+			void set(bool value)
+			{
+				_ignoreKeywords = value;
 			}
 		}
 	};
