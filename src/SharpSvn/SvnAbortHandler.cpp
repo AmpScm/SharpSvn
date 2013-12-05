@@ -82,6 +82,7 @@ MessageBoxA(
 
 void __cdecl sharpsvn_abort_handler()
 {
+#ifdef _DEBUG
 	if (Environment::UserInteractive)
 	{
 		AprPool pool(SvnBase::SmallThreadPool); // Let's hope this still works.. Most abort()s in subversion are not as fatal as this
@@ -91,6 +92,7 @@ void __cdecl sharpsvn_abort_handler()
 
 		MessageBoxA(nullptr, pText, pTitle, MB_OK | MB_ICONERROR | MB_TASKMODAL);
 	}
+#endif
 
 	throw gcnew SvnThreadAbortException("Subversion raised an abort()\r\nPlease restart your application!");
 }
@@ -136,7 +138,9 @@ FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
 	if (dliNotify != dliFailLoadLib)
 		return nullptr; // Nothing we can fix
 
+#ifdef _DEBUG
 	::OutputDebugStringA("Automatic delay loading one of the SharpSvn helper DLLs failed; trying to work around\n");
+#endif
 
 	Uri^ codeBase;
 
