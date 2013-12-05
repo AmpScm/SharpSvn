@@ -92,12 +92,14 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
 
 		args->_sourceTarget = source;
 
-		svn_error_t* r = svn_client_mergeinfo_log(
+		svn_error_t* r = svn_client_mergeinfo_log2(
 			FALSE,
 			target->AllocAsString(%pool),
 			target->Revision->AllocSvnRevision(%pool),
 			source->AllocAsString(%pool),
 			source->Revision->AllocSvnRevision(%pool),
+			args->Range->StartRevision->AllocSvnRevision(%pool),
+			args->Range->EndRevision->AllocSvnRevision(%pool),
 			svnclient_eligible_log_handler,
 			(void*)_clientBaton->Handle,
 			args->RetrieveChangedPaths,
