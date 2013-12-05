@@ -48,6 +48,12 @@
       <FilterFile file="${aprDir}\include\apr.hwc">
         <filterchain>
           <replacestring from='#pragma warning(disable: 4996)' to='//# WAS: #pragma warning(disable: 4996)' />
+          <replacestring from='#if defined(_WIN32) && !defined(WIN32)'
+                           to='
+#if !defined(WINNT)
+#define WINNT
+#endif
+#if defined(_WIN32) && !defined(WIN32)' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
