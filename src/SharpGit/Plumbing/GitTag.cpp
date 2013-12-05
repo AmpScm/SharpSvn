@@ -12,6 +12,8 @@
 #include "../GitClient/GitCommitCmd.h"
 #include "../GitClient/GitTagCmd.h"
 
+#include "UnmanagedStructs.h"
+
 using namespace SharpGit;
 using namespace SharpGit::Implementation;
 using namespace SharpGit::Plumbing;
@@ -153,40 +155,40 @@ IEnumerable<GitBranch^>^ GitBranchCollection::Remote::get()
 	return GetEnumerable(GIT_BRANCH_REMOTE);
 }
 
-private ref class BranchWalkInfo
-{
-public:
-	List<GitBranch^>^ branches;
-	GitRepository^ repository;
-};
-
-static int __cdecl for_branch(const char *branch_name, git_branch_t branch_type, void *payload)
-{
-	GitRoot<BranchWalkInfo^> root(payload);
-
-	root->branches->Add(gcnew GitBranch(root->repository, GitBase::Utf8_PtrToString(branch_name), branch_type));
-
-	return 0;
-}
-
 IEnumerable<GitBranch^>^ GitBranchCollection::GetEnumerable(git_branch_t flags)
 {
 	List<GitBranch^> ^branches = gcnew List<GitBranch^>();
 	if (_repository->IsDisposed)
 		return branches->AsReadOnly();
 
-	GitRoot<BranchWalkInfo^> root(gcnew BranchWalkInfo());
-	root->branches = branches;
-	root->repository = _repository;
+    git_branch_iterator *iter;
+    int r = git_branch_iterator_new(&iter, _repository->Handle, flags);
+    if (r != 0)
+    {
+        (gcnew GitNoArgs())->HandleGitError(this, r);
+        return branches;
+    }
 
-#if 0
-	int r = git_branch_foreach(_repository->Handle, flags, for_branch, root.GetBatonValue());
-	if (r != 0)
-		branches->Clear();
+    git_reference *ref;
+    git_branch_t branch_type;
+    while (! git_branch_next(&ref, &branch_type, iter))
+    {
+        const char *name;
+        String^ nm;
 
-	return branches->AsReadOnly();
-#endif
-    throw gcnew NotImplementedException();
+        if (0 == git_branch_name(&name, ref))
+            nm = GitBase::Utf8_PtrToString(name);
+        else
+            nm = "";
+
+        GitReference ^gr = gcnew GitReference(_repository, ref);
+
+
+        branches->Add(gcnew GitBranch(_repository, nm, gr, branch_type));
+    }
+    git_branch_iterator_free(iter);
+
+    return branches->AsReadOnly();
 }
 
 bool GitBranchCollection::Create(GitCommit^ commit, String^ name)

@@ -1,7 +1,7 @@
 #include <stdafx.h>
 #include "GitClientContext.h"
 
-#include "../SharpSvn/UnmanagedStructs.h"
+#include "UnmanagedStructs.h"
 
 using namespace SharpGit;
 using namespace SharpGit::Implementation;
@@ -25,7 +25,7 @@ static GitPool::GitPool()
 		apr_allocator_max_free_set(allocator, 1); // Keep a maximum of 1 free block
 	}
 
-	svn_utf_initialize(pool);
+	svn_utf_initialize2(TRUE, pool);
 
 	git_threads_init();
 }
