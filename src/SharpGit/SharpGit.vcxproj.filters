@@ -22,6 +22,9 @@
     <Filter Include="Diff">
       <UniqueIdentifier>{1fe341df-72ad-42f0-97fb-8a872e95ed52}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GitClient\Headers">
+      <UniqueIdentifier>{76aa0d02-fe0c-4ce9-9c9f-2a120b150d4d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AssemblyInfo.cpp" />
@@ -32,9 +35,6 @@
       <Filter>GitClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="GitClientContext.cpp" />
-    <ClCompile Include="GitClient\GitStatus.cpp">
-      <Filter>GitClient</Filter>
-    </ClCompile>
     <ClCompile Include="Plumbing\GitRepository.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
@@ -47,26 +47,11 @@
     <ClCompile Include="Plumbing\GitObjectDatabase.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
-    <ClCompile Include="GitClient\GitAdd.cpp">
-      <Filter>GitClient</Filter>
-    </ClCompile>
     <ClCompile Include="Plumbing\GitTree.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
-    <ClCompile Include="GitClient\GitDelete.cpp">
-      <Filter>GitClient</Filter>
-    </ClCompile>
-    <ClCompile Include="GitClient\GitClone.cpp">
-      <Filter>GitClient</Filter>
-    </ClCompile>
-    <ClCompile Include="GitClient\GitCheckOut.cpp">
-      <Filter>GitClient</Filter>
-    </ClCompile>
     <ClCompile Include="Plumbing\GitCommit.cpp">
       <Filter>Plumbing</Filter>
-    </ClCompile>
-    <ClCompile Include="GitClient\GitCommitCmd.cpp">
-      <Filter>GitClient</Filter>
     </ClCompile>
     <ClCompile Include="Plumbing\GitReference.cpp">
       <Filter>Plumbing</Filter>
@@ -77,11 +62,29 @@
     <ClCompile Include="Plumbing\GitTag.cpp">
       <Filter>Plumbing</Filter>
     </ClCompile>
+    <ClCompile Include="GitClient\GitAdd.cpp">
+      <Filter>GitClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitCheckOut.cpp">
+      <Filter>GitClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitClone.cpp">
+      <Filter>GitClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitCommitCmd.cpp">
+      <Filter>GitClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitDelete.cpp">
+      <Filter>GitClient\Sources</Filter>
+    </ClCompile>
     <ClCompile Include="GitClient\GitStage.cpp">
-      <Filter>GitClient</Filter>
+      <Filter>GitClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="GitClient\GitStatus.cpp">
+      <Filter>GitClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="GitClient\GitUnstage.cpp">
-      <Filter>GitClient</Filter>
+      <Filter>GitClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -111,45 +114,24 @@
     <ClInclude Include="Plumbing\GitObjectDatabase.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
-    <ClInclude Include="GitClient\GitAdd.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
     <ClInclude Include="GitLibraryAttribute.h">
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\GitTree.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
-    <ClInclude Include="GitClient\GitDelete.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
     <ClInclude Include="GitId.h" />
-    <ClInclude Include="GitClient\GitClone.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
-    <ClInclude Include="GitClient\GitStatus.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
     <ClInclude Include="GitClient\GitStatusEventArgs.h">
-      <Filter>GitClient</Filter>
-    </ClInclude>
-    <ClInclude Include="GitClient\GitCheckOut.h">
       <Filter>GitClient</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\GitCommit.h">
       <Filter>Plumbing</Filter>
-    </ClInclude>
-    <ClInclude Include="GitClient\GitCommitCmd.h">
-      <Filter>GitClient</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\GitReference.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\DiffEnumerator.h">
       <Filter>Diff</Filter>
-    </ClInclude>
-    <ClInclude Include="GitClient\GitTagCmd.h">
-      <Filter>GitClient</Filter>
     </ClInclude>
     <ClInclude Include="Plumbing\GitTag.h">
       <Filter>Plumbing</Filter>
@@ -163,11 +145,32 @@
     <ClInclude Include="Plumbing\GitBranch.h">
       <Filter>Plumbing</Filter>
     </ClInclude>
+    <ClInclude Include="GitClient\GitAdd.h">
+      <Filter>GitClient\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitTagCmd.h">
+      <Filter>GitClient\Sources</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitCheckOut.h">
+      <Filter>GitClient\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitClone.h">
+      <Filter>GitClient\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitCommitCmd.h">
+      <Filter>GitClient\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitDelete.h">
+      <Filter>GitClient\Headers</Filter>
+    </ClInclude>
     <ClInclude Include="GitClient\GitStage.h">
-      <Filter>GitClient</Filter>
+      <Filter>GitClient\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="GitClient\GitStatus.h">
+      <Filter>GitClient\Headers</Filter>
     </ClInclude>
     <ClInclude Include="GitClient\GitUnstage.h">
-      <Filter>GitClient</Filter>
+      <Filter>GitClient\Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
