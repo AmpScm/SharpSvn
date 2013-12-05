@@ -302,7 +302,8 @@
   <target name="copy-licenses">
     <copy
 			file="build/${platform}/subversion/LICENSE"
-			tofile="release/licenses/Subversion-License.txt" />
+			tofile="release/licenses/Subversion-License.txt"
+			if="${buildSubversion}" />
     <copy
 			file="${aprDir}/LICENSE"
 			tofile="release/licenses/Apr-License.txt" />
