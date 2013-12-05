@@ -146,10 +146,10 @@ namespace SharpGit.Tests
                     {
                         switch (e.RelativePath)
                         {
-                            case "dir":
+                            /*case "dir":
                                 Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "dir index normal");
                                 Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.New), "dir wc normal");
-                                break;
+                                break;*/
                             case "newfile":
                                 Assert.That(e.IndexStatus, Is.EqualTo(GitStatus.Normal), "newfile index normal");
                                 Assert.That(e.WorkingDirectoryStatus, Is.EqualTo(GitStatus.Deleted), "newfile wc deleted");
@@ -171,7 +171,7 @@ namespace SharpGit.Tests
                         ticked++;
                     }), Is.True);
 
-                Assert.That(ticked, Is.EqualTo(4));
+                Assert.That(ticked, Is.EqualTo(3));
 
                 GitCloneArgs gc = new GitCloneArgs();
                 gc.Synchronous = true;
@@ -246,7 +246,7 @@ namespace SharpGit.Tests
                 ta.LogMessage = "Some message";
                 ga.Author.TimeOffsetInMinutes = 120;
                 Assert.That(commit.Tag("MyTag", ta, out id));
-                Assert.That(id, Is.EqualTo(new GitId("c7baaa514b4c05a4c140fd2623948f0ddf847952")));
+                Assert.That(id, Is.EqualTo(new GitId("30b346d4c69ebb408c5bd0f4d662b6615d09ce24")));
 
                 GitTag tag;
                 Assert.That(repo1.Lookup(id, out tag));

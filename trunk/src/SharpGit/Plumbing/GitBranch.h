@@ -39,6 +39,21 @@ namespace SharpGit {
 				_type = GIT_BRANCH_LOCAL;
 			}
 
+			GitBranch(GitRepository^ repository, String ^name, GitReference^ reference, git_branch_t type)
+			{
+				if (! repository)
+					throw gcnew ArgumentNullException("repository");
+				else if (String::IsNullOrEmpty(name))
+					throw gcnew ArgumentNullException("name");
+				else if (! reference)
+					throw gcnew ArgumentNullException("reference");
+
+				_repository = repository;
+				_name = name;
+				_reference = reference;
+				_type = type;
+			}
+
 		public:
 			property String^ Name
 			{

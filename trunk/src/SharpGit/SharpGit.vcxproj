@@ -298,6 +298,7 @@
     <ClInclude Include="Plumbing\GitTag.h" />
     <ClInclude Include="Plumbing\GitTree.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UnmanagedStructs.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpPlink\SharpPlink.vcxproj">

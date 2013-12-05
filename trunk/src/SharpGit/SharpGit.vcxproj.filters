@@ -172,5 +172,6 @@
     <ClInclude Include="GitClient\GitUnstage.h">
       <Filter>GitClient\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="UnmanagedStructs.h" />
   </ItemGroup>
 </Project>
