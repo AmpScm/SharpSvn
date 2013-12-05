@@ -58,7 +58,7 @@ namespace SharpGit {
 					if (IsDisposed)
 						return 0;
 
-					return git_tree_entrycount(Handle);
+					return (int)git_tree_entrycount(Handle);
 				}
 			}
 

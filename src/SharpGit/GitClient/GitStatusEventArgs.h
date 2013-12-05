@@ -39,7 +39,7 @@ namespace SharpGit {
 			{
 				if (!_relPath && _path)
 				{
-					int n = strlen(_path);
+					int n = (int)strlen(_path);
 
 					if (n > 0 && _path[n-1] == '/')
 						n--;
@@ -57,7 +57,7 @@ namespace SharpGit {
 			{
 				if (!_fullPath && _pool && _path && _wcPath)
 				{
-					int n = strlen(_path);
+					int n = (int)strlen(_path);
 
 					if (n > 0 && _path[n-1] == '/')
 					{
