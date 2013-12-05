@@ -69,7 +69,8 @@ static int original_isNT(void){" />
         <!-- These would be nice, but currently break compilation -->
         <!--define name="SQLITE_OMIT_ATTACH" /-->
         <!--define name="SQLITE_OMIT_VIRTUALTABLE" /-->
-        
+
+        <define name="SQLITE_WIN32_GETVERSIONEX" value="0" /><!-- Just assume NT -->        
       </defines>
       <sources basedir="${sqliteDir}">
         <include name="sqlite3.c" />
