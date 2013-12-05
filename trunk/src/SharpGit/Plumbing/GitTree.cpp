@@ -53,7 +53,7 @@ bool GitTree::Contains(String ^relPath)
 
 IEnumerator<GitTreeEntry^>^ GitTree::GetEnumerator()
 {
-	int count = git_tree_entrycount(Handle);
+	int count = (int)git_tree_entrycount(Handle);
 	array<GitTreeEntry^> ^items = gcnew array<GitTreeEntry^>(count);
 
 	for (int i = 0; i < count; i++)
