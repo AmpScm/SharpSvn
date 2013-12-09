@@ -1,4 +1,3 @@
-// $Id$
 //
 // Copyright 2008-2009 The SharpSvn Project
 //
@@ -82,7 +81,7 @@ namespace SharpSvn.Tests.Commands
 
             Client.CheckOut(repos, wc);
 
-            File.WriteAllText(file, "Line1 $Id$" + nl + "$HeadURL$" + nl + nl);
+            File.WriteAllText(file, "Line1 $Id: FileVersions.cs 2139 2012-05-19 10:21:53Z rhuijben $" + nl + "$HeadURL$" + nl + nl);
 
             Client.Add(file);
             Client.SetProperty(file, SvnPropertyNames.SvnKeywords, "Id\nHeadURL");
