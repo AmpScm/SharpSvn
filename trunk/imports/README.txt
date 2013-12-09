@@ -23,9 +23,6 @@ The scripts require the following tools: (currently used version)
 It is assumed all these tools are in the PATH and the settings for
 the 'Visual Studio Command Prompt' are loaded.
 
-All environments accept the following defines
-
-
 1) To build all the dependencies (including Subversion) as used by SharpSvn
    Open the visual studio command prompt for the right architecture,
    e.g. VS2012 x64 Cross Tools Command Prompt
