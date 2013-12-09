@@ -23,35 +23,35 @@ using namespace SharpSvn::Implementation;
 
 bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
-	return RecoverRepository(repositoryPath, gcnew SvnRecoverRepositoryArgs());
+    return RecoverRepository(repositoryPath, gcnew SvnRecoverRepositoryArgs());
 }
 
 bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRepositoryArgs^ args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t* r = svn_repos_recover4(
-		pool.AllocDirent(repositoryPath),
-		args->NonBlocking,
-		repos_notify_func,
-		_clientBaton->Handle,
-		CtxHandle->cancel_func,
-		CtxHandle->cancel_baton,
-		pool.Handle);
+    svn_error_t* r = svn_repos_recover4(
+        pool.AllocDirent(repositoryPath),
+        args->NonBlocking,
+        repos_notify_func,
+        _clientBaton->Handle,
+        CtxHandle->cancel_func,
+        CtxHandle->cancel_baton,
+        pool.Handle);
 
-	return args->HandleResult(this, r);
-}
+    return args->HandleResult(this, r);
+}}

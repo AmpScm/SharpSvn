@@ -15,73 +15,73 @@
 #pragma once
 
 namespace SharpSvn {
-	public ref class SvnExternalItem sealed : SvnBase, IEquatable<SvnExternalItem^>
-	{
-		initonly String^ _target;
-		initonly String^ _url;
-		initonly SvnRevision^ _revision;
-		initonly SvnRevision^ _pegRevision;
+    public ref class SvnExternalItem sealed : SvnBase, IEquatable<SvnExternalItem^>
+    {
+        initonly String^ _target;
+        initonly String^ _url;
+        initonly SvnRevision^ _revision;
+        initonly SvnRevision^ _pegRevision;
 
-	public:
-		SvnExternalItem(String^ targetName, String^ url);
-		SvnExternalItem(String^ targetName, Uri^ uri);
-		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ pegRevision);
-		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ pegRevision);
-		SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision);
-		SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision, SvnRevision^ pegRevision);
+    public:
+        SvnExternalItem(String^ targetName, String^ url);
+        SvnExternalItem(String^ targetName, Uri^ uri);
+        SvnExternalItem(String^ targetName, String^ url, SvnRevision^ pegRevision);
+        SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ pegRevision);
+        SvnExternalItem(String^ targetName, Uri^ uri, SvnRevision^ revision, SvnRevision^ pegRevision);
+        SvnExternalItem(String^ targetName, String^ url, SvnRevision^ revision, SvnRevision^ pegRevision);
 
-	public:
-		/// <summary>Gets the target path of the external (Where to place the external)</summary>
-		property String^ Target
-		{
-			String^ get()
-			{
-				return _target;
-			}
-		}
+    public:
+        /// <summary>Gets the target path of the external (Where to place the external)</summary>
+        property String^ Target
+        {
+            String^ get()
+            {
+                return _target;
+            }
+        }
 
-		/// <summary>Gets the absolute or relative url of the external (What to insert)</summary>
-		property String^ Reference
-		{
-			String^ get()
-			{
-				return _url;
-			}
-		}
+        /// <summary>Gets the absolute or relative url of the external (What to insert)</summary>
+        property String^ Reference
+        {
+            String^ get()
+            {
+                return _url;
+            }
+        }
 
-		property SvnRevision^ Revision
-		{
-			SvnRevision^ get()
-			{
-				return _revision;
-			}
-		}
+        property SvnRevision^ Revision
+        {
+            SvnRevision^ get()
+            {
+                return _revision;
+            }
+        }
 
-		property SvnRevision^ OperationalRevision
-		{
-			SvnRevision^ get()
-			{
-				return _pegRevision;
-			}
-		}
+        property SvnRevision^ OperationalRevision
+        {
+            SvnRevision^ get()
+            {
+                return _pegRevision;
+            }
+        }
 
-		/// <summary>Creates a string containing the external in string format. Preferring formats compatible with older clients</summary>
-		virtual String^ ToString() override;
-		/// <summary>Creates a string containing the external in string format. Optionally preferring formats compatible with older clients</summary>
-		String^ ToString(bool useCompatibleFormat);
+        /// <summary>Creates a string containing the external in string format. Preferring formats compatible with older clients</summary>
+        virtual String^ ToString() override;
+        /// <summary>Creates a string containing the external in string format. Optionally preferring formats compatible with older clients</summary>
+        String^ ToString(bool useCompatibleFormat);
 
-		/// <summary>Writes the value to the specified <see cref="System::Text::StringBuilder" /></summary>
-		void WriteTo(System::Text::StringBuilder^ sb, bool useCompatibleFormat);
+        /// <summary>Writes the value to the specified <see cref="System::Text::StringBuilder" /></summary>
+        void WriteTo(System::Text::StringBuilder^ sb, bool useCompatibleFormat);
 
-	public:
-		/// <summary>Tries to parse a single SvnExternalItem</summary>
-		static bool TryParse(String^ value, [Out]SvnExternalItem^% item);
-		/// <summary>Tries to parse a single SvnExternalItem</summary>
-		static bool TryParse(String^ value, [Out]array<SvnExternalItem^>^% items);
+    public:
+        /// <summary>Tries to parse a single SvnExternalItem</summary>
+        static bool TryParse(String^ value, [Out]SvnExternalItem^% item);
+        /// <summary>Tries to parse a single SvnExternalItem</summary>
+        static bool TryParse(String^ value, [Out]array<SvnExternalItem^>^% items);
 
-	public:
-		virtual bool Equals(Object^ other) override;
-		virtual bool Equals(SvnExternalItem^ other);
-		virtual int GetHashCode() override;
-	};
-}
+    public:
+        virtual bool Equals(Object^ other) override;
+        virtual bool Equals(SvnExternalItem^ other);
+        virtual int GetHashCode() override;
+    };
+}}

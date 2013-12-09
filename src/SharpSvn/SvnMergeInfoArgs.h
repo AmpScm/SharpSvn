@@ -16,91 +16,91 @@
 
 namespace SharpSvn {
 
-	public ref class SvnMergeDiffArgs : SvnClientArgs
-	{
-		bool _dontConsiderInheritance;
+    public ref class SvnMergeDiffArgs : SvnClientArgs
+    {
+        bool _dontConsiderInheritance;
 
-	public:
-		SvnMergeDiffArgs ()
-		{}
+    public:
+        SvnMergeDiffArgs ()
+        {}
 
-		property bool ConsiderInheritance
-		{
-			bool get()
-			{
-				return !_dontConsiderInheritance;
-			}
-			void set(bool value)
-			{
-				_dontConsiderInheritance = !value;
-			}
-		}
+        property bool ConsiderInheritance
+        {
+            bool get()
+            {
+                return !_dontConsiderInheritance;
+            }
+            void set(bool value)
+            {
+                _dontConsiderInheritance = !value;
+            }
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
 
-	public ref class SvnMergeRemoveArgs : SvnClientArgs
-	{
-		bool _dontConsiderInheritance;
+    public ref class SvnMergeRemoveArgs : SvnClientArgs
+    {
+        bool _dontConsiderInheritance;
 
-	public:
-		SvnMergeRemoveArgs ()
-		{}
+    public:
+        SvnMergeRemoveArgs ()
+        {}
 
-		property bool ConsiderInheritance
-		{
-			bool get()
-			{
-				return !_dontConsiderInheritance;
-			}
-			void set(bool value)
-			{
-				_dontConsiderInheritance = !value;
-			}
-		}
+        property bool ConsiderInheritance
+        {
+            bool get()
+            {
+                return !_dontConsiderInheritance;
+            }
+            void set(bool value)
+            {
+                _dontConsiderInheritance = !value;
+            }
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
 
-	public ref class SvnMergeIntersectArgs : SvnClientArgs
-	{
-		bool _dontConsiderInheritance;
+    public ref class SvnMergeIntersectArgs : SvnClientArgs
+    {
+        bool _dontConsiderInheritance;
 
-	public:
-		SvnMergeIntersectArgs ()
-		{}
+    public:
+        SvnMergeIntersectArgs ()
+        {}
 
-		property bool ConsiderInheritance
-		{
-			bool get()
-			{
-				return !_dontConsiderInheritance;
-			}
-			void set(bool value)
-			{
-				_dontConsiderInheritance = !value;
-			}
-		}
+        property bool ConsiderInheritance
+        {
+            bool get()
+            {
+                return !_dontConsiderInheritance;
+            }
+            void set(bool value)
+            {
+                _dontConsiderInheritance = !value;
+            }
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
 
-}
+}}

@@ -17,77 +17,77 @@
 namespace SharpSvn {
 
 
-	public ref class SvnWorkingCopyInstallConflictArgs : public SvnClientArgs
-	{
-	internal:
-		SvnUriOrigin^ _left;
-		SvnUriOrigin^ _right;
-		SvnConflictReason _reason;
-		SvnConflictAction _action;
-		SvnOperation _operation;
-		bool _installTreeConflict;
+    public ref class SvnWorkingCopyInstallConflictArgs : public SvnClientArgs
+    {
+    internal:
+        SvnUriOrigin^ _left;
+        SvnUriOrigin^ _right;
+        SvnConflictReason _reason;
+        SvnConflictAction _action;
+        SvnOperation _operation;
+        bool _installTreeConflict;
 
-	public:
-		SvnWorkingCopyInstallConflictArgs()
-		{
-		}
+    public:
+        SvnWorkingCopyInstallConflictArgs()
+        {
+        }
 
-		property bool TreeConflict
-		{
-			bool get()
-			{
-				return _installTreeConflict;
-			}
-			void set(bool value)
-			{
-				_installTreeConflict = value;
-			}
-		}
+        property bool TreeConflict
+        {
+            bool get()
+            {
+                return _installTreeConflict;
+            }
+            void set(bool value)
+            {
+                _installTreeConflict = value;
+            }
+        }
 
-		property SvnOperation Operation
-		{
-			SvnOperation get()
-			{
-				return _operation;
-			}
-			void set(SvnOperation value)
-			{
-				_operation = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnOperation Operation
+        {
+            SvnOperation get()
+            {
+                return _operation;
+            }
+            void set(SvnOperation value)
+            {
+                _operation = EnumVerifier::Verify(value);
+            }
+        }
 
-		property SvnConflictReason Reason
-		{
-			SvnConflictReason get()
-			{
-				return _reason;
-			}
-			void set(SvnConflictReason value)
-			{
-				_reason = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnConflictReason Reason
+        {
+            SvnConflictReason get()
+            {
+                return _reason;
+            }
+            void set(SvnConflictReason value)
+            {
+                _reason = EnumVerifier::Verify(value);
+            }
+        }
 
-		property SvnConflictAction Action
-		{
-			SvnConflictAction get()
-			{
-				return _action;
-			}
-			void set(SvnConflictAction value)
-			{
-				_action = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnConflictAction Action
+        {
+            SvnConflictAction get()
+            {
+                return _action;
+            }
+            void set(SvnConflictAction value)
+            {
+                _action = EnumVerifier::Verify(value);
+            }
+        }
 
-		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
-		virtual property SvnCommandType CommandType
-		{
-			SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
+        /// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
+        virtual property SvnCommandType CommandType
+        {
+            SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
 
-}
+}}

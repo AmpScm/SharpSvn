@@ -18,26 +18,26 @@
 
 namespace SharpSvn {
 
-	public ref class SvnErrorEventArgs : public SvnCancelEventArgs
-	{
-		initonly SvnException ^_exception;
-	public:
-		SvnErrorEventArgs(SvnException ^exception)
-		{
-			if (!exception)
-				throw gcnew ArgumentNullException("exception");
+    public ref class SvnErrorEventArgs : public SvnCancelEventArgs
+    {
+        initonly SvnException ^_exception;
+    public:
+        SvnErrorEventArgs(SvnException ^exception)
+        {
+            if (!exception)
+                throw gcnew ArgumentNullException("exception");
 
-			_exception = exception;
-		}
+            _exception = exception;
+        }
 
-		property SvnException^ Exception
-		{
-			SvnException^ get()
-			{
-				return _exception;
-			}
-		}
-	};
+        property SvnException^ Exception
+        {
+            SvnException^ get()
+            {
+                return _exception;
+            }
+        }
+    };
 
 
-}
+}}

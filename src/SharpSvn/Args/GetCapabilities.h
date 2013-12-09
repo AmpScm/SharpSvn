@@ -16,47 +16,47 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container for SvnClient.Blame</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnGetCapabilitiesArgs : public SvnClientArgs
-	{
-		initonly Collection<SvnCapability>^ _capabilities;
-		bool _retrieveAll;
+    /// <summary>Extended Parameter container for SvnClient.Blame</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnGetCapabilitiesArgs : public SvnClientArgs
+    {
+        initonly Collection<SvnCapability>^ _capabilities;
+        bool _retrieveAll;
 
-	public:
-		SvnGetCapabilitiesArgs()
-		{
-			_capabilities = gcnew Collection<SvnCapability>();
-		}
+    public:
+        SvnGetCapabilitiesArgs()
+        {
+            _capabilities = gcnew Collection<SvnCapability>();
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
 
-	public:
-		property bool RetrieveAllCapabilities
-		{
-			bool get()
-			{
-				return _retrieveAll;
-			}
-			void set(bool value)
-			{
-				_retrieveAll = value;
-			}
-		}
+    public:
+        property bool RetrieveAllCapabilities
+        {
+            bool get()
+            {
+                return _retrieveAll;
+            }
+            void set(bool value)
+            {
+                _retrieveAll = value;
+            }
+        }
 
-		property Collection<SvnCapability>^ Capabilities
-		{
-			Collection<SvnCapability>^ get()
-			{
-				return _capabilities;
-			}
-		}
-	};
+        property Collection<SvnCapability>^ Capabilities
+        {
+            Collection<SvnCapability>^ get()
+            {
+                return _capabilities;
+            }
+        }
+    };
 
 }

@@ -16,22 +16,22 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetRevisionPropertyList</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnRevisionPropertyListArgs : public SvnClientArgs
-	{
-	public:
-		SvnRevisionPropertyListArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetRevisionPropertyList</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnRevisionPropertyListArgs : public SvnClientArgs
+    {
+    public:
+        SvnRevisionPropertyListArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::RevisionPropertyList;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::RevisionPropertyList;
+            }
+        }
+    };
 
 }

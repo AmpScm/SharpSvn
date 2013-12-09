@@ -25,82 +25,82 @@ using namespace SharpSvn;
 
 static SvnBase::SvnBase()
 {
-	System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
+    System::Reflection::AssemblyName^ name = gcnew System::Reflection::AssemblyName(SvnBase::typeid->Assembly->FullName);
 
-	String^ platform = Environment::OSVersion->Platform.ToString();
+    String^ platform = Environment::OSVersion->Platform.ToString();
 
-	// This part is appended to something like "SVN/1.5.0 (SharpSvn:branch/1.5.X@12345) WIN32/" to form the user agent on web requests
+    // This part is appended to something like "SVN/1.5.0 (SharpSvn:branch/1.5.X@12345) WIN32/" to form the user agent on web requests
 
-	_clientName = Environment::OSVersion->Version->ToString(2) +
-		" " + name->Name + "/" + name->Version->ToString();
+    _clientName = Environment::OSVersion->Version->ToString(2) +
+        " " + name->Name + "/" + name->Version->ToString();
 
-	_clientNames->Add(platform);
-	_clientNames->Add(name->Name);
+    _clientNames->Add(platform);
+    _clientNames->Add(name->Name);
 
-	EnsureLoaded();
+    EnsureLoaded();
 }
 
 void SvnBase::EnsureLoaded()
 {
-	static volatile LONG ensurer = 0;
+    static volatile LONG ensurer = 0;
 
-	if (::InterlockedCompareExchange(&ensurer, 1, 0) < 2)
-	{
-		System::Threading::Monitor::Enter(_ensurerLock);
-		try
-		{
-			if (!_aprInitialized)
-			{
-				_aprInitialized = true;
+    if (::InterlockedCompareExchange(&ensurer, 1, 0) < 2)
+    {
+        System::Threading::Monitor::Enter(_ensurerLock);
+        try
+        {
+            if (!_aprInitialized)
+            {
+                _aprInitialized = true;
 
-				if (apr_initialize()) // First
-					throw gcnew InvalidOperationException();
+                if (apr_initialize()) // First
+                    throw gcnew InvalidOperationException();
 
-				svn_dso_initialize2(); // Before first pool
+                svn_dso_initialize2(); // Before first pool
 
-				apr_pool_t* pool = svn_pool_create(nullptr);
+                apr_pool_t* pool = svn_pool_create(nullptr);
 
-				apr_allocator_t* allocator = apr_pool_allocator_get(pool);
+                apr_allocator_t* allocator = apr_pool_allocator_get(pool);
 
-				if (allocator)
-				{
-					apr_allocator_max_free_set(allocator, 1); // Keep a maximum of 1 free block
-				}
+                if (allocator)
+                {
+                    apr_allocator_max_free_set(allocator, 1); // Keep a maximum of 1 free block
+                }
 
-				svn_utf_initialize2(TRUE, pool);
-				{
-					svn_cache_config_t settings = *svn_cache_config_get();
-					settings.cache_size = 0;
-					settings.file_handle_count = 0;
-					settings.single_threaded = FALSE;
-					svn_cache_config_set(&settings);
-				}
+                svn_utf_initialize2(TRUE, pool);
+                {
+                    svn_cache_config_t settings = *svn_cache_config_get();
+                    settings.cache_size = 0;
+                    settings.file_handle_count = 0;
+                    settings.single_threaded = FALSE;
+                    svn_cache_config_set(&settings);
+                }
 
-				if (getenv("SVN_ASP_DOT_NET_HACK"))
-				{
-					svn_wc_set_adm_dir("_svn", pool);
-				}
+                if (getenv("SVN_ASP_DOT_NET_HACK"))
+                {
+                    svn_wc_set_adm_dir("_svn", pool);
+                }
 
-				svn_ra_initialize(pool);
+                svn_ra_initialize(pool);
 
-				_admDir = svn_wc_get_adm_dir(pool);
+                _admDir = svn_wc_get_adm_dir(pool);
 
-				InstallAbortHandler();
-				InstallSslDialogHandler();
+                InstallAbortHandler();
+                InstallSslDialogHandler();
 
-				// There seems to be a race condition in loading and unloading this DLL
-				LoadLibraryA("Crypt32.dll"); // Never unload this dll
+                // There seems to be a race condition in loading and unloading this DLL
+                LoadLibraryA("Crypt32.dll"); // Never unload this dll
 
-				LONG v = ::InterlockedExchange(&ensurer, 2);
+                LONG v = ::InterlockedExchange(&ensurer, 2);
 
-				System::Diagnostics::Debug::Assert(v == 1);
-			}
-		}
-		finally
-		{
-			System::Threading::Monitor::Exit(_ensurerLock);
-		}
-	}
+                System::Diagnostics::Debug::Assert(v == 1);
+            }
+        }
+        finally
+        {
+            System::Threading::Monitor::Exit(_ensurerLock);
+        }
+    }
 }
 
 SvnBase::SvnBase()
@@ -109,193 +109,193 @@ SvnBase::SvnBase()
 
 AprPool^ SvnBase::SmallThreadPool::get()
 {
-	if (!_threadPool || !_threadPool->IsValid()) // Recreate if disposed for some reason
-		_threadPool = gcnew AprPool();
+    if (!_threadPool || !_threadPool->IsValid()) // Recreate if disposed for some reason
+        _threadPool = gcnew AprPool();
 
-	return _threadPool;
+    return _threadPool;
 }
 
 bool SvnBase::IsValidReposUri(Uri^ uri)
 {
-	if (!uri)
-		throw gcnew ArgumentNullException("uri");
+    if (!uri)
+        throw gcnew ArgumentNullException("uri");
 
-	if (!uri->IsAbsoluteUri)
-		return false;
-	else if (String::IsNullOrEmpty(uri->Scheme))
-		return false;
+    if (!uri->IsAbsoluteUri)
+        return false;
+    else if (String::IsNullOrEmpty(uri->Scheme))
+        return false;
 
-	return true;
+    return true;
 }
 
 
 bool SvnBase::IsNotUri(String ^path)
 {
-	if (String::IsNullOrEmpty(path))
-		return false;
+    if (String::IsNullOrEmpty(path))
+        return false;
 
-	// Use the same stupid algorithm subversion uses to choose between Uri's and paths
-	for (int i = 0; i < path->Length; i++)
-	{
-		wchar_t c = path[i];
-		switch(c)
-		{
-		case '\\':
-		case '/':
-			return true;
-		case ':':
-			if (i < path->Length-2)
-			{
-				if ((path[i+1] == '/') && (path[i+2] == '/'))
-					return false;
-			}
-			return true;
-		case '+':
-		case '-':
-		case '_':
-			break;
-		default:
-			if (!wchar_t::IsLetter(c))
-				return true;
-		}
-	}
-	return true;
+    // Use the same stupid algorithm subversion uses to choose between Uri's and paths
+    for (int i = 0; i < path->Length; i++)
+    {
+        wchar_t c = path[i];
+        switch(c)
+        {
+        case '\\':
+        case '/':
+            return true;
+        case ':':
+            if (i < path->Length-2)
+            {
+                if ((path[i+1] == '/') && (path[i+2] == '/'))
+                    return false;
+            }
+            return true;
+        case '+':
+        case '-':
+        case '_':
+            break;
+        default:
+            if (!wchar_t::IsLetter(c))
+                return true;
+        }
+    }
+    return true;
 }
 
 String^ SvnBase::RemoveDoubleSlashes(String^ input)
 {
-	int n;
+    int n;
 
-	while (0 <= (n = input->IndexOf("//", StringComparison::Ordinal)))
-		input = input->Remove(n, 1);
+    while (0 <= (n = input->IndexOf("//", StringComparison::Ordinal)))
+        input = input->Remove(n, 1);
 
-	return input;
+    return input;
 }
 
 static bool ContainsUpper(String^ value)
 {
-	if (String::IsNullOrEmpty(value))
-		return false;
+    if (String::IsNullOrEmpty(value))
+        return false;
 
-	for (int i = 0; i < value->Length; i++)
-		if (Char::IsUpper(value, i))
-			return true;
+    for (int i = 0; i < value->Length; i++)
+        if (Char::IsUpper(value, i))
+            return true;
 
-	return false;
+    return false;
 }
 
 [module: SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase", Scope="member", Target="SharpSvn.Implementation.SvnBase.#CanonicalizeUri(System.Uri)")];
 
 Uri^ SvnBase::CanonicalizeUri(Uri^ uri)
 {
-	if (!uri)
-		throw gcnew ArgumentNullException("uri");
-	else if (!uri->IsAbsoluteUri)
-		throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+    if (!uri)
+        throw gcnew ArgumentNullException("uri");
+    else if (!uri->IsAbsoluteUri)
+        throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
 
-	String^ path = uri->GetComponents(UriComponents::Path, UriFormat::SafeUnescaped);
+    String^ path = uri->GetComponents(UriComponents::Path, UriFormat::SafeUnescaped);
 
-	bool schemeOk = !ContainsUpper(uri->Scheme) && !ContainsUpper(uri->Host);
+    bool schemeOk = !ContainsUpper(uri->Scheme) && !ContainsUpper(uri->Host);
 
-	if (schemeOk && (path->Length == 0 || (path[path->Length -1] != '/' && path->IndexOf('\\') < 0) && !path->Contains("//"))
-        && !(uri->IsFile && (uri->IsUnc ? String::Equals("localhost", uri->Host) : Char::IsLower(uri->LocalPath, 0))))
-		return uri;
+    if (schemeOk && (path->Length == 0 || (path[path->Length -1] != '/' && path->IndexOf('\\') < 0) && !path->Contains("//"))
+    && !(uri->IsFile && (uri->IsUnc ? String::Equals("localhost", uri->Host) : Char::IsLower(uri->LocalPath, 0))))
+        return uri;
 
-	String^ components = uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped);
-	if (!schemeOk)
-	{
-		int nStart = components->IndexOf(':');
+    String^ components = uri->GetComponents(UriComponents::SchemeAndServer | UriComponents::UserInfo, UriFormat::SafeUnescaped);
+    if (!schemeOk)
+    {
+        int nStart = components->IndexOf(':');
 
-		if (nStart > 0)
-		{
-			// Subversion 1.6 will require scheme and hostname in lowercase
-			for (int i = 0; i < nStart; i++)
-				if (!Char::IsLower(components, i))
-				{
-					components = components->Substring(0, nStart)->ToLowerInvariant() + components->Substring(nStart);
-					break;
-				}
+        if (nStart > 0)
+        {
+            // Subversion 1.6 will require scheme and hostname in lowercase
+            for (int i = 0; i < nStart; i++)
+                if (!Char::IsLower(components, i))
+                {
+                    components = components->Substring(0, nStart)->ToLowerInvariant() + components->Substring(nStart);
+                    break;
+                }
 
-				int nAt = components->IndexOf('@', nStart);
+                int nAt = components->IndexOf('@', nStart);
 
-				if (nAt < 0)
-					nAt = nStart + 2;
-				else
-					nAt++;
+                if (nAt < 0)
+                    nAt = nStart + 2;
+                else
+                    nAt++;
 
-				for (int i = nAt; i < components->Length; i++)
-					if (!Char::IsLower(components, i))
-					{
-						components = components->Substring(0, nAt) + components->Substring(nAt)+1;
-						break;
-					}
-		}
-	}
+                for (int i = nAt; i < components->Length; i++)
+                    if (!Char::IsLower(components, i))
+                    {
+                        components = components->Substring(0, nAt) + components->Substring(nAt)+1;
+                        break;
+                    }
+        }
+    }
 
-	// Create a new uri with all / and \ characters at the end removed
-	Uri^ root;
-	Uri^ suffix;
+    // Create a new uri with all / and \ characters at the end removed
+    Uri^ root;
+    Uri^ suffix;
 
-	if (!Uri::TryCreate(components, UriKind::Absolute, root))
-		throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
+    if (!Uri::TryCreate(components, UriKind::Absolute, root))
+        throw gcnew ArgumentException("Invalid Uri value in scheme or server", "uri");
 
-	String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
+    String^ part = RemoveDoubleSlashes("/" + path->TrimEnd(System::IO::Path::DirectorySeparatorChar, System::IO::Path::AltDirectorySeparatorChar));
 
-	if (root->IsFile)
-	{
-		if (!root->IsUnc || root->Host == "localhost")
-		{
-			if(part->Length >= 3 && part[0] =='/' && part[2] == ':' && part[1] >= 'a' && part[1] <= 'z')
-			{
-				part = "/" + Char::ToUpperInvariant(part[1]) + part->Substring(2);
+    if (root->IsFile)
+    {
+        if (!root->IsUnc || root->Host == "localhost")
+        {
+            if(part->Length >= 3 && part[0] =='/' && part[2] == ':' && part[1] >= 'a' && part[1] <= 'z')
+            {
+                part = "/" + Char::ToUpperInvariant(part[1]) + part->Substring(2);
 
-				if(part->Length == 3)
-					part += "/";
-			}
+                if(part->Length == 3)
+                    part += "/";
+            }
 
-			if (root->IsUnc)
-                part = "//localhost/" + part->TrimStart('/');
-		}
-		else
-		{
-			part = part->TrimStart('/');
-		}
-	}
+            if (root->IsUnc)
+        part = "//localhost/" + part->TrimStart('/');
+        }
+        else
+        {
+            part = part->TrimStart('/');
+        }
+    }
 
-	if (!Uri::TryCreate(part, UriKind::Relative, suffix))
-		throw gcnew ArgumentException("Invalid Uri value in path", "uri");
+    if (!Uri::TryCreate(part, UriKind::Relative, suffix))
+        throw gcnew ArgumentException("Invalid Uri value in path", "uri");
 
-	Uri^ result;
-	if (Uri::TryCreate(root, suffix, result))
-		return result;
-	else
-		return uri;
+    Uri^ result;
+    if (Uri::TryCreate(root, suffix, result))
+        return result;
+    else
+        return uri;
 }
 
 Uri^ SvnBase::PathToUri(String^ path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
 
-	StringBuilder^ sb = gcnew StringBuilder();
-	Uri^ result;
+    StringBuilder^ sb = gcnew StringBuilder();
+    Uri^ result;
 
-	bool afterFirst = false;
+    bool afterFirst = false;
 
-	for each (String^ p in path->Split(Path::DirectorySeparatorChar, Path::AltDirectorySeparatorChar))
-	{
-		if (afterFirst)
-			sb->Append((Char)'/');
-		else
-			afterFirst = true;
+    for each (String^ p in path->Split(Path::DirectorySeparatorChar, Path::AltDirectorySeparatorChar))
+    {
+        if (afterFirst)
+            sb->Append((Char)'/');
+        else
+            afterFirst = true;
 
-		sb->Append(Uri::EscapeDataString(p));
-	}
+        sb->Append(Uri::EscapeDataString(p));
+    }
 
-	if (Uri::TryCreate(sb->ToString(), UriKind::Relative, result))
-		return result;
+    if (Uri::TryCreate(sb->ToString(), UriKind::Relative, result))
+        return result;
 
-	throw gcnew ArgumentException("Path is not convertible to uri part", "path");
+    throw gcnew ArgumentException("Path is not convertible to uri part", "path");
 }
 
 /*String^ SvnBase::CanonicalizePath(String^ path)
@@ -311,131 +311,131 @@ return path;
 
 String^ SvnBase::Utf8_PathPtrToString(const char *ptr, AprPool^ pool)
 {
-	if (!ptr || !pool)
-		return nullptr;
+    if (!ptr || !pool)
+        return nullptr;
 
-	if (!*ptr)
-		return "";
+    if (!*ptr)
+        return "";
 
-	return Utf8_PtrToString(svn_dirent_local_style(ptr, pool->Handle));
+    return Utf8_PtrToString(svn_dirent_local_style(ptr, pool->Handle));
 }
 
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr)
 {
-	if (!ptr)
-		return nullptr;
+    if (!ptr)
+        return nullptr;
 
-	if (!*ptr)
-		return "";
+    if (!*ptr)
+        return "";
 
-	return Utf8_PtrToString(ptr, (int)::strlen(ptr));
+    return Utf8_PtrToString(ptr, (int)::strlen(ptr));
 }
 
 String^ SvnBase::Utf8_PtrToString(const char *ptr, int length)
 {
-	if (!ptr || length < 0)
-		return nullptr;
+    if (!ptr || length < 0)
+        return nullptr;
 
-	if (!*ptr)
-		return "";
+    if (!*ptr)
+        return "";
 
-	return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
+    return gcnew String(ptr, 0, length, System::Text::Encoding::UTF8);
 }
 
 Uri^ SvnBase::Utf8_PtrToUri(const char *ptr, SvnNodeKind nodeKind)
 {
-	if (!ptr)
-		return nullptr;
+    if (!ptr)
+        return nullptr;
 
-	String^ url = Utf8_PtrToString(ptr);
+    String^ url = Utf8_PtrToString(ptr);
 
-	if (!url)
-		return nullptr;
-	else if (nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
-		url += "/";
+    if (!url)
+        return nullptr;
+    else if (nodeKind == SvnNodeKind::Directory && !url->EndsWith("/", StringComparison::Ordinal))
+        url += "/";
 
-	Uri^ uri;
+    Uri^ uri;
 
-	if (Uri::TryCreate(url, UriKind::Absolute, uri))
-		return uri;
-	else
-		return nullptr;
+    if (Uri::TryCreate(url, UriKind::Absolute, uri))
+        return uri;
+    else
+        return nullptr;
 }
 
 
 array<Byte>^ SvnBase::PtrToByteArray(const char* ptr, int length)
 {
-	if (!ptr || length < 0)
-		return nullptr;
+    if (!ptr || length < 0)
+        return nullptr;
 
-	array<Byte>^ bytes = gcnew array<Byte>(length);
+    array<Byte>^ bytes = gcnew array<Byte>(length);
 
-	if (length > 0)
-	{
-		pin_ptr<Byte> pBytes = &bytes[0];
+    if (length > 0)
+    {
+        pin_ptr<Byte> pBytes = &bytes[0];
 
-		memcpy(pBytes, ptr, length);
-	}
+        memcpy(pBytes, ptr, length);
+    }
 
-	return bytes;
+    return bytes;
 }
 
 Object^ SvnBase::PtrToStringOrByteArray(const char* ptr, int length)
 {
-	if (!ptr || length < 0)
-		return nullptr;
-	else if (length == 0)
-		return "";
+    if (!ptr || length < 0)
+        return nullptr;
+    else if (length == 0)
+        return "";
 
-	for(int i = 0; i < length; i++)
-	{
-		if(!ptr[i])
-		{
-			// A string that contains a 0 byte can never be valid Utf-8
-			return SvnBase::PtrToByteArray(ptr, length);
-		}
-	}
+    for(int i = 0; i < length; i++)
+    {
+        if(!ptr[i])
+        {
+            // A string that contains a 0 byte can never be valid Utf-8
+            return SvnBase::PtrToByteArray(ptr, length);
+        }
+    }
 
-	try
-	{
-		return Utf8_PtrToString(ptr, length);
-	}
-	catch(System::Text::DecoderFallbackException^)
-	{
-		return SvnBase::PtrToByteArray(ptr, length);
-	}
-	catch(ArgumentException^)
-	{
-		return SvnBase::PtrToByteArray(ptr, length);
-	}
+    try
+    {
+        return Utf8_PtrToString(ptr, length);
+    }
+    catch(System::Text::DecoderFallbackException^)
+    {
+        return SvnBase::PtrToByteArray(ptr, length);
+    }
+    catch(ArgumentException^)
+    {
+        return SvnBase::PtrToByteArray(ptr, length);
+    }
 }
 
 DateTime SvnBase::DateTimeFromAprTime(apr_time_t aprTime)
 {
-	if (aprTime == 0)
-		return DateTime::MinValue;
-	else
-	{
-		__int64 aprTimeBase = DateTime(1970,1,1).Ticks;
+    if (aprTime == 0)
+        return DateTime::MinValue;
+    else
+    {
+        __int64 aprTimeBase = DateTime(1970,1,1).Ticks;
 
-		return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Utc);
-	}
+        return System::DateTime(aprTime*10 + aprTimeBase, DateTimeKind::Utc);
+    }
 }
 
 apr_time_t SvnBase::AprTimeFromDateTime(DateTime time)
 {
-	__int64 aprTimeBase = DateTime(1970,1,1).Ticks;
+    __int64 aprTimeBase = DateTime(1970,1,1).Ticks;
 
-	if (time != DateTime::MinValue)
-		return (time.ToUniversalTime().Ticks - aprTimeBase) / 10L;
-	else
-		return 0;
+    if (time != DateTime::MinValue)
+        return (time.ToUniversalTime().Ticks - aprTimeBase) / 10L;
+    else
+        return 0;
 }
 
 static SvnHandleBase::SvnHandleBase()
 {
-	SvnBase::EnsureLoaded();
+    SvnBase::EnsureLoaded();
 }
 
 SvnHandleBase::SvnHandleBase()
@@ -445,172 +445,172 @@ SvnHandleBase::SvnHandleBase()
 ref class SvnCopyTargetMarshaller : public IItemMarshaller<SvnTarget^>
 {
 public:
-	SvnCopyTargetMarshaller()
-	{}
+    SvnCopyTargetMarshaller()
+    {}
 
-	property int ItemSize
-	{
-		virtual int get()
-		{
-			return sizeof(svn_client_copy_source_t*);
-		}
-	}
+    property int ItemSize
+    {
+        virtual int get()
+        {
+            return sizeof(svn_client_copy_source_t*);
+        }
+    }
 
-	virtual void Write(SvnTarget^ value, void* ptr, AprPool^ pool)
-	{
-		svn_client_copy_source_t **src = (svn_client_copy_source_t**)ptr;
-		*src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
+    virtual void Write(SvnTarget^ value, void* ptr, AprPool^ pool)
+    {
+        svn_client_copy_source_t **src = (svn_client_copy_source_t**)ptr;
+        *src = (svn_client_copy_source_t *)pool->AllocCleared(sizeof(svn_client_copy_source_t));
 
-        (*src)->path = value->AllocAsString(pool, true);
-		(*src)->revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
-		(*src)->peg_revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
-	}
+    (*src)->path = value->AllocAsString(pool, true);
+        (*src)->revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
+        (*src)->peg_revision = value->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(pool);
+    }
 
-	virtual SvnTarget^ Read(const void* ptr, AprPool^ pool)
-	{
-		UNUSED_ALWAYS(ptr);
-		UNUSED_ALWAYS(pool);
-		//const char** ppcStr = (const char**)ptr;
+    virtual SvnTarget^ Read(const void* ptr, AprPool^ pool)
+    {
+        UNUSED_ALWAYS(ptr);
+        UNUSED_ALWAYS(pool);
+        //const char** ppcStr = (const char**)ptr;
 
-		return nullptr;
-	}
+        return nullptr;
+    }
 };
 
 generic<typename TSvnTarget> where TSvnTarget : SvnTarget
 apr_array_header_t *SvnBase::AllocCopyArray(ICollection<TSvnTarget>^ targets, AprPool^ pool)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
 
-	for each (SvnTarget^ s in targets)
-	{
-		if (!s)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-	}
-	AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
+    for each (SvnTarget^ s in targets)
+    {
+        if (!s)
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
+    }
+    AprArray<SvnTarget^, SvnCopyTargetMarshaller^>^ aprTargets = gcnew AprArray<SvnTarget^, SvnCopyTargetMarshaller^>(targets, pool);
 
-	return aprTargets->Handle;
+    return aprTargets->Handle;
 }
 
 generic<typename T>
 array<T>^ SvnBase::ExtendArray(array<T>^ from, T value)
 {
-	array<T>^ to = gcnew array<T>(from ? from->Length + 1 : 1);
+    array<T>^ to = gcnew array<T>(from ? from->Length + 1 : 1);
 
-	if(from)
-		from->CopyTo(to, 0);
+    if(from)
+        from->CopyTo(to, 0);
 
-	to[to->Length-1] = value;
+    to[to->Length-1] = value;
 
-	return to;
+    return to;
 }
 
 generic<typename T>
 array<T>^ SvnBase::ExtendArray(array<T>^ from, array<T>^ values)
 {
-	return ExtendArray(from, safe_cast<ICollection<T>^>(values));
+    return ExtendArray(from, safe_cast<ICollection<T>^>(values));
 }
 
 generic<typename T>
 array<T>^ SvnBase::ExtendArray(array<T>^ from, ICollection<T>^ values)
 {
-	int n = 0;
-	int c = 0;
-	if (from)
-		n += from->Length;
-	if (values)
-		n += (c = values->Count);
+    int n = 0;
+    int c = 0;
+    if (from)
+        n += from->Length;
+    if (values)
+        n += (c = values->Count);
 
-	array<T>^ to = gcnew array<T>(n);
-	if (from)
-		from->CopyTo(to, 0);
-	if (values)
-		values->CopyTo(to, to->Length-c);
+    array<T>^ to = gcnew array<T>(n);
+    if (from)
+        from->CopyTo(to, 0);
+    if (values)
+        values->CopyTo(to, to->Length-c);
 
-	return to;
+    return to;
 }
 
 
 SvnPropertyCollection^ SvnBase::CreatePropertyDictionary(apr_hash_t* propHash, AprPool^ pool)
 {
-	if (!propHash)
-		throw gcnew ArgumentNullException("propHash");
-	else if (!pool)
-		throw gcnew ArgumentNullException("pool");
+    if (!propHash)
+        throw gcnew ArgumentNullException("propHash");
+    else if (!pool)
+        throw gcnew ArgumentNullException("pool");
 
-	SvnPropertyCollection^ _properties = gcnew SvnPropertyCollection();
+    SvnPropertyCollection^ _properties = gcnew SvnPropertyCollection();
 
-	for (apr_hash_index_t* hi = apr_hash_first(pool->Handle, propHash); hi; hi = apr_hash_next(hi))
-	{
-		const char* pKey;
-		apr_ssize_t keyLen;
-		const svn_string_t *propVal;
+    for (apr_hash_index_t* hi = apr_hash_first(pool->Handle, propHash); hi; hi = apr_hash_next(hi))
+    {
+        const char* pKey;
+        apr_ssize_t keyLen;
+        const svn_string_t *propVal;
 
-		apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
+        apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-		_properties->Add(SvnPropertyValue::Create(pKey, propVal, nullptr));
-	}
+        _properties->Add(SvnPropertyValue::Create(pKey, propVal, nullptr));
+    }
 
-	return _properties;
+    return _properties;
 }
 
 apr_array_header_t *SvnBase::CreateChangeListsList(ICollection<String^>^ changelists, AprPool^ pool)
 {
-	if (!pool)
-		throw gcnew ArgumentNullException("pool");
-	else if (changelists && changelists->Count > 0)
-		return AllocArray(changelists, pool);
+    if (!pool)
+        throw gcnew ArgumentNullException("pool");
+    else if (changelists && changelists->Count > 0)
+        return AllocArray(changelists, pool);
 
-	return nullptr;
+    return nullptr;
 }
 
 apr_hash_t *SvnBase::CreateRevPropList(SvnRevisionPropertyCollection^ revProps, AprPool^ pool)
 {
-	if (!pool)
-		throw gcnew ArgumentNullException("pool");
-	else if (revProps && revProps->Count)
-	{
-		apr_hash_t* items = apr_hash_make(pool->Handle);
+    if (!pool)
+        throw gcnew ArgumentNullException("pool");
+    else if (revProps && revProps->Count)
+    {
+        apr_hash_t* items = apr_hash_make(pool->Handle);
 
-		for each (SvnPropertyValue^ value in revProps)
-		{
-			const char* key = pool->AllocString(value->Key);
+        for each (SvnPropertyValue^ value in revProps)
+        {
+            const char* key = pool->AllocString(value->Key);
 
-			const svn_string_t* val = pool->AllocSvnString((array<Byte>^)value->RawValue);
+            const svn_string_t* val = pool->AllocSvnString((array<Byte>^)value->RawValue);
 
-			apr_hash_set(items, key, APR_HASH_KEY_STRING, val);
-		}
+            apr_hash_set(items, key, APR_HASH_KEY_STRING, val);
+        }
 
-		return items;
-	}
+        return items;
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 String^ SvnBase::UriToString(Uri^ value)
 {
-	if (!value)
-		return nullptr;
+    if (!value)
+        return nullptr;
 
-	if (value->IsAbsoluteUri)
-		return value->GetComponents(
-		UriComponents::SchemeAndServer |
-		UriComponents::UserInfo |
-		UriComponents::Path, UriFormat::UriEscaped);
-	else
-		return Uri::EscapeUriString(value->ToString()); // Escape back to valid uri form
+    if (value->IsAbsoluteUri)
+        return value->GetComponents(
+        UriComponents::SchemeAndServer |
+        UriComponents::UserInfo |
+        UriComponents::Path, UriFormat::UriEscaped);
+    else
+        return Uri::EscapeUriString(value->ToString()); // Escape back to valid uri form
 }
 
 String^ SvnBase::UriToCanonicalString(Uri^ value)
 {
-	if (!value)
-		return nullptr;
+    if (!value)
+        return nullptr;
 
-	String^ name = SvnBase::UriToString(CanonicalizeUri(value));
+    String^ name = SvnBase::UriToString(CanonicalizeUri(value));
 
-	if (name && name->Length && (name[name->Length-1] == '/'))
-		return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
-	else
-		return name;
+    if (name && name->Length && (name[name->Length-1] == '/'))
+        return name->TrimEnd('/'); // "svn://host:port" is canoncialized to "svn://host:port/" by the .Net Uri class
+    else
+        return name;
 }
 

@@ -16,65 +16,65 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetProperty</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnGetPropertyArgs : public SvnClientArgs
-	{
-		SvnRevision^ _revision;
-		SvnDepth _depth;
-		SvnChangeListCollection^ _changelists;
-	public:
-		SvnGetPropertyArgs()
-		{
-			_depth = SvnDepth::Empty;
-			_revision = SvnRevision::None;
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetProperty</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnGetPropertyArgs : public SvnClientArgs
+    {
+        SvnRevision^ _revision;
+        SvnDepth _depth;
+        SvnChangeListCollection^ _changelists;
+    public:
+        SvnGetPropertyArgs()
+        {
+            _depth = SvnDepth::Empty;
+            _revision = SvnRevision::None;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::GetProperty;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::GetProperty;
+            }
+        }
 
-		property SvnRevision^ Revision
-		{
-			SvnRevision^ get()
-			{
-				return _revision;
-			}
-			void set(SvnRevision^ value)
-			{
-				if (value)
-					_revision = value;
-				else
-					_revision = SvnRevision::None;
-			}
-		}
+        property SvnRevision^ Revision
+        {
+            SvnRevision^ get()
+            {
+                return _revision;
+            }
+            void set(SvnRevision^ value)
+            {
+                if (value)
+                    _revision = value;
+                else
+                    _revision = SvnRevision::None;
+            }
+        }
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		/// <summary>Gets the list of changelist-names</summary>
-		property SvnChangeListCollection^ ChangeLists
-		{
-			SvnChangeListCollection^ get()
-			{
-				if (!_changelists)
-					_changelists = gcnew SvnChangeListCollection();
-				return _changelists;
-			}
-		}
-	};
+        /// <summary>Gets the list of changelist-names</summary>
+        property SvnChangeListCollection^ ChangeLists
+        {
+            SvnChangeListCollection^ get()
+            {
+                if (!_changelists)
+                    _changelists = gcnew SvnChangeListCollection();
+                return _changelists;
+            }
+        }
+    };
 
 }

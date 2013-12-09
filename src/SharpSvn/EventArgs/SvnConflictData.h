@@ -15,385 +15,385 @@
 #pragma once
 
 namespace SharpSvn {
-	using namespace System::Collections::ObjectModel;
+    using namespace System::Collections::ObjectModel;
 
-	public ref class SvnConflictSource sealed : ISvnOrigin
-	{
-		const svn_wc_conflict_version_t *_version;
-		AprPool^ _pool;
+    public ref class SvnConflictSource sealed : ISvnOrigin
+    {
+        const svn_wc_conflict_version_t *_version;
+        AprPool^ _pool;
 
-		Uri^ _uri;
-		Uri^ _repositoryRoot;
-		Uri^ _repositoryPath;
-		initonly __int64 _revision;
-		initonly SvnNodeKind _nodeKind;
+        Uri^ _uri;
+        Uri^ _repositoryRoot;
+        Uri^ _repositoryPath;
+        initonly __int64 _revision;
+        initonly SvnNodeKind _nodeKind;
 
-	internal:
-		SvnConflictSource(const svn_wc_conflict_version_t *version, AprPool^ pool)
-		{
-			if (!version)
-				throw gcnew ArgumentNullException("version");
-			else if (!pool)
-				throw gcnew ArgumentNullException("pool");
-
-			_version = version;
-			_pool = pool;
-			_revision = version->peg_rev;
-			_nodeKind = (SvnNodeKind)version->node_kind;
-		}
-
-	public:
-		property System::Uri^ Uri
-		{
-			virtual System::Uri^ get() sealed
-			{
-				if (!_uri && _version && _version->repos_url && _version->path_in_repos && _pool)
-                    _uri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_version->repos_url, _version->path_in_repos, _pool->Handle), NodeKind);
-
-				return _uri;
-			}
-		}
-
-		property System::Uri^ RepositoryRoot
-		{
-			virtual System::Uri^ get() sealed
-			{
-				if (!_repositoryRoot && _version && _version->repos_url && _pool)
-					_repositoryRoot = SvnBase::Utf8_PtrToUri(_version->repos_url, SvnNodeKind::Directory);
-
-				return _repositoryRoot;
-			}
-		}
-
-		/// <summary>Gets the relative uri of the path inside the repository</summary>
-		/// <remarks>Does not include an initial '/'. Ends with a '/' if <see cref="NodeKind" /> is <see cref="SvnNodeKind::Directory" />.</remarks>
-		property System::Uri^ RepositoryPath
-		{
-			System::Uri^ get()
-			{
-				if (!_repositoryPath && RepositoryRoot && Uri)
-					_repositoryPath = RepositoryRoot->MakeRelativeUri(Uri);
-
-				return _repositoryPath;
-			}
-		}
-
-		/// <summary>Gets the revision of <see cref="Uri" /></summary>
-		property __int64 Revision
-		{
-			virtual __int64 get() sealed
-			{
-				return _revision;
-			}
-		}
-
-		/// <summary>Gets the <see cref="SvnNodeKind" /> of <see cref="Uri" /></summary>
-		property SvnNodeKind NodeKind
-		{
-			virtual SvnNodeKind get() sealed
-			{
-				return _nodeKind;
-			}
-		}
-
-		property SvnUriTarget^ Target
-		{
-			SvnUriTarget^ get()
-			{
-				return gcnew SvnUriTarget(Uri, Revision);
-			}
-		}
-
-		static operator SvnUriTarget^(SvnConflictSource^ value)
-		{
-			return ((Object^)value != nullptr) ? value->Target : nullptr;
-		}
-
-	private:
-		property SvnTarget^ RawTarget
-		{
-			virtual SvnTarget^ get() sealed = ISvnOrigin::Target::get
-			{
-				return Target;
-			}
-		}
-
-	public:
-		void Detach()
-		{
-			Detach(true);
-		}
-	protected public:
-		void Detach(bool keepProperties)
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					GC::KeepAlive(Uri);
-					GC::KeepAlive(RepositoryRoot);
-				}
-			}
-			finally
-			{
-				_version = nullptr;
-				_pool = nullptr;
-			}
-		}
-	};
-
-	public ref class SvnConflictData sealed
-	{
-		const svn_wc_conflict_description2_t *_description;
-		AprPool^ _pool;
-
-		initonly SvnNodeKind _nodeKind;
-		initonly bool _isBinary;
-		initonly SvnConflictAction _action;
-		initonly SvnConflictReason _reason;
-		initonly SvnConflictType _type;
-		initonly SvnOperation _operation;
-
-		String^ _propertyName;
-        String^ _fullPath;
-		String^ _path;
-		String^ _mimeType;
-
-		String^ _baseFile;
-		String^ _theirFile;
-		String^ _myFile;
-		String^ _mergedFile;
-
-		String^ _mergeResult;
-
-		SvnConflictSource^ _leftOrigin;
-		SvnConflictSource^ _rightOrigin;
-
-	internal:
-		SvnConflictData(const svn_wc_conflict_description2_t *description, AprPool^ pool)
-		{
-			if (!description)
-				throw gcnew ArgumentNullException("description");
-			else if (!pool)
-				throw gcnew ArgumentNullException("pool");
-
-			_description = description;
-			_pool = pool;
-
-			_isBinary = (description->is_binary != 0);
-			_nodeKind = (SvnNodeKind)description->node_kind;
-			_action = (SvnConflictAction)description->action;
-			_reason = (SvnConflictReason)description->reason;
-			_type = (SvnConflictType)description->kind;
-			_operation = (SvnOperation)description->operation;
-		}
-
-	public:
-		property String^ Name
-		{
-			String^ get()
-			{
-				if (!_path && _description && _description->local_abspath && _pool)
-					_path = SvnBase::Utf8_PathPtrToString(svn_dirent_basename(_description->local_abspath, NULL), _pool);
-
-				return _path;
-			}
-		}
-
-        property String^ FullPath
+    internal:
+        SvnConflictSource(const svn_wc_conflict_version_t *version, AprPool^ pool)
         {
-            String^ get()
-            {
-                if (!_fullPath && _description && _description->local_abspath && _pool)
-					_fullPath = SvnBase::Utf8_PathPtrToString(_description->local_abspath, _pool);
+            if (!version)
+                throw gcnew ArgumentNullException("version");
+            else if (!pool)
+                throw gcnew ArgumentNullException("pool");
 
-				return _fullPath;
+            _version = version;
+            _pool = pool;
+            _revision = version->peg_rev;
+            _nodeKind = (SvnNodeKind)version->node_kind;
+        }
+
+    public:
+        property System::Uri^ Uri
+        {
+            virtual System::Uri^ get() sealed
+            {
+                if (!_uri && _version && _version->repos_url && _version->path_in_repos && _pool)
+            _uri = SvnBase::Utf8_PtrToUri(svn_path_url_add_component2(_version->repos_url, _version->path_in_repos, _pool->Handle), NodeKind);
+
+                        return _uri;
             }
         }
 
-		property String^ PropertyName
-		{
-			String^ get()
-			{
-				if (!_propertyName && _description && _description->property_name)
-					_propertyName = SvnBase::Utf8_PtrToString(_description->property_name);
+        property System::Uri^ RepositoryRoot
+        {
+            virtual System::Uri^ get() sealed
+            {
+                if (!_repositoryRoot && _version && _version->repos_url && _pool)
+                    _repositoryRoot = SvnBase::Utf8_PtrToUri(_version->repos_url, SvnNodeKind::Directory);
 
-				return _propertyName;
-			}
-		}
+                return _repositoryRoot;
+            }
+        }
 
-		property String^ MimeType
-		{
-			String^ get()
-			{
-				if (!_mimeType && _description && _description->mime_type)
-					_mimeType = SvnBase::Utf8_PtrToString(_description->mime_type);
+        /// <summary>Gets the relative uri of the path inside the repository</summary>
+        /// <remarks>Does not include an initial '/'. Ends with a '/' if <see cref="NodeKind" /> is <see cref="SvnNodeKind::Directory" />.</remarks>
+        property System::Uri^ RepositoryPath
+        {
+            System::Uri^ get()
+            {
+                if (!_repositoryPath && RepositoryRoot && Uri)
+                    _repositoryPath = RepositoryRoot->MakeRelativeUri(Uri);
 
-				return _mimeType;
-			}
-		}
+                return _repositoryPath;
+            }
+        }
 
-		property String^ BaseFile
-		{
-			String^ get()
-			{
-				if (!_baseFile && _description && _description->base_abspath && _pool)
-					_baseFile = SvnBase::Utf8_PathPtrToString(_description->base_abspath, _pool);
+        /// <summary>Gets the revision of <see cref="Uri" /></summary>
+        property __int64 Revision
+        {
+            virtual __int64 get() sealed
+            {
+                return _revision;
+            }
+        }
 
-				return _baseFile;
-			}
-		}
+        /// <summary>Gets the <see cref="SvnNodeKind" /> of <see cref="Uri" /></summary>
+        property SvnNodeKind NodeKind
+        {
+            virtual SvnNodeKind get() sealed
+            {
+                return _nodeKind;
+            }
+        }
 
-		property String^ TheirFile
-		{
-			String^ get()
-			{
-				if (!_theirFile && _description && _description->their_abspath && _pool)
-					_theirFile = SvnBase::Utf8_PathPtrToString(_description->their_abspath, _pool);
+        property SvnUriTarget^ Target
+        {
+            SvnUriTarget^ get()
+            {
+                return gcnew SvnUriTarget(Uri, Revision);
+            }
+        }
 
-				return _theirFile;
-			}
-		}
+        static operator SvnUriTarget^(SvnConflictSource^ value)
+        {
+            return ((Object^)value != nullptr) ? value->Target : nullptr;
+        }
 
-		property String^ MyFile
-		{
-			String^ get()
-			{
-				if (!_myFile && _description && _description->my_abspath && _pool)
-					_myFile = SvnBase::Utf8_PathPtrToString(_description->my_abspath, _pool);
+    private:
+        property SvnTarget^ RawTarget
+        {
+            virtual SvnTarget^ get() sealed = ISvnOrigin::Target::get
+            {
+                return Target;
+            }
+        }
 
-				return _myFile;
-			}
-		}
+    public:
+        void Detach()
+        {
+            Detach(true);
+        }
+    protected public:
+        void Detach(bool keepProperties)
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    GC::KeepAlive(Uri);
+                    GC::KeepAlive(RepositoryRoot);
+                }
+            }
+            finally
+            {
+                _version = nullptr;
+                _pool = nullptr;
+            }
+        }
+    };
 
-		property String^ MergedFile
-		{
-			String^ get()
-			{
-				if (_mergeResult)
-					return _mergeResult;
+    public ref class SvnConflictData sealed
+    {
+        const svn_wc_conflict_description2_t *_description;
+        AprPool^ _pool;
 
-                if (!_mergedFile && _description && _description->merged_file && _pool)
-					_mergedFile  = SvnBase::Utf8_PathPtrToString(_description->merged_file, _pool);
+        initonly SvnNodeKind _nodeKind;
+        initonly bool _isBinary;
+        initonly SvnConflictAction _action;
+        initonly SvnConflictReason _reason;
+        initonly SvnConflictType _type;
+        initonly SvnOperation _operation;
 
-				return _mergedFile;
-			}
-			void set(String^ value)
-			{
-				if (String::IsNullOrEmpty(value) && (value != MergedFile))
-					throw gcnew InvalidOperationException("Only settable with valid filename");
+        String^ _propertyName;
+    String^ _fullPath;
+        String^ _path;
+        String^ _mimeType;
 
-				_mergeResult = value;
-			}
-		}
+        String^ _baseFile;
+        String^ _theirFile;
+        String^ _myFile;
+        String^ _mergedFile;
 
-		property bool IsBinary
-		{
-			bool get()
-			{
-				return _isBinary;
-			}
-		}
+        String^ _mergeResult;
 
-		property SvnConflictAction ConflictAction
-		{
-			SvnConflictAction get()
-			{
-				return _action;
-			}
-		}
+        SvnConflictSource^ _leftOrigin;
+        SvnConflictSource^ _rightOrigin;
 
-		property SvnConflictReason ConflictReason
-		{
-			SvnConflictReason get()
-			{
-				return _reason;
-			}
-		}
+    internal:
+        SvnConflictData(const svn_wc_conflict_description2_t *description, AprPool^ pool)
+        {
+            if (!description)
+                throw gcnew ArgumentNullException("description");
+            else if (!pool)
+                throw gcnew ArgumentNullException("pool");
 
-		property SvnConflictType ConflictType
-		{
-			SvnConflictType get()
-			{
-				return _type;
-			}
-		}
+            _description = description;
+            _pool = pool;
 
-		property SvnNodeKind NodeKind
-		{
-			SvnNodeKind get()
-			{
-				return _nodeKind;
-			}
-		}
+            _isBinary = (description->is_binary != 0);
+            _nodeKind = (SvnNodeKind)description->node_kind;
+            _action = (SvnConflictAction)description->action;
+            _reason = (SvnConflictReason)description->reason;
+            _type = (SvnConflictType)description->kind;
+            _operation = (SvnOperation)description->operation;
+        }
 
-		/// <summary>Gets the operation creating the tree conflict</summary>
-		property SvnOperation Operation
-		{
-			SvnOperation get()
-			{
-				return _operation;
-			}
-		}
+    public:
+        property String^ Name
+        {
+            String^ get()
+            {
+                if (!_path && _description && _description->local_abspath && _pool)
+                    _path = SvnBase::Utf8_PathPtrToString(svn_dirent_basename(_description->local_abspath, NULL), _pool);
 
-		property SvnConflictSource^ LeftSource
-		{
-			SvnConflictSource^ get()
-			{
-				if (!_leftOrigin && _description && _description->src_left_version && _pool)
-					_leftOrigin = gcnew SvnConflictSource(_description->src_left_version, _pool);
+                return _path;
+            }
+        }
 
-				return _leftOrigin;
-			}
-		}
+    property String^ FullPath
+    {
+        String^ get()
+        {
+        if (!_fullPath && _description && _description->local_abspath && _pool)
+                                _fullPath = SvnBase::Utf8_PathPtrToString(_description->local_abspath, _pool);
 
-		property SvnConflictSource^ RightSource
-		{
-			SvnConflictSource^ get()
-			{
-				if (!_rightOrigin && _description && _description->src_right_version && _pool)
-					_rightOrigin = gcnew SvnConflictSource(_description->src_right_version, _pool);
+                        return _fullPath;
+        }
+    }
 
-				return _rightOrigin;
-			}
-		}
+        property String^ PropertyName
+        {
+            String^ get()
+            {
+                if (!_propertyName && _description && _description->property_name)
+                    _propertyName = SvnBase::Utf8_PtrToString(_description->property_name);
 
-	public:
-		void Detach()
-		{
-			Detach(true);
-		}
+                return _propertyName;
+            }
+        }
 
-	protected public:
-		virtual void Detach(bool keepProperties)
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					GC::KeepAlive(Name);
-                    GC::KeepAlive(FullPath);
-					GC::KeepAlive(PropertyName);
-					GC::KeepAlive(MimeType);
-					GC::KeepAlive(BaseFile);
-					GC::KeepAlive(TheirFile);
-					GC::KeepAlive(MyFile);
-					GC::KeepAlive(MergedFile);
+        property String^ MimeType
+        {
+            String^ get()
+            {
+                if (!_mimeType && _description && _description->mime_type)
+                    _mimeType = SvnBase::Utf8_PtrToString(_description->mime_type);
 
-					GC::KeepAlive(LeftSource);
-					GC::KeepAlive(RightSource);
-				}
+                return _mimeType;
+            }
+        }
 
-				if (_leftOrigin)
-					_leftOrigin->Detach(keepProperties);
-				if (_rightOrigin)
-					_rightOrigin->Detach(keepProperties);
-			}
-			finally
-			{
-				_description = nullptr;
-				_pool = nullptr;
-			}
-		}
-	};
+        property String^ BaseFile
+        {
+            String^ get()
+            {
+                if (!_baseFile && _description && _description->base_abspath && _pool)
+                    _baseFile = SvnBase::Utf8_PathPtrToString(_description->base_abspath, _pool);
+
+                return _baseFile;
+            }
+        }
+
+        property String^ TheirFile
+        {
+            String^ get()
+            {
+                if (!_theirFile && _description && _description->their_abspath && _pool)
+                    _theirFile = SvnBase::Utf8_PathPtrToString(_description->their_abspath, _pool);
+
+                return _theirFile;
+            }
+        }
+
+        property String^ MyFile
+        {
+            String^ get()
+            {
+                if (!_myFile && _description && _description->my_abspath && _pool)
+                    _myFile = SvnBase::Utf8_PathPtrToString(_description->my_abspath, _pool);
+
+                return _myFile;
+            }
+        }
+
+        property String^ MergedFile
+        {
+            String^ get()
+            {
+                if (_mergeResult)
+                    return _mergeResult;
+
+        if (!_mergedFile && _description && _description->merged_file && _pool)
+                                _mergedFile  = SvnBase::Utf8_PathPtrToString(_description->merged_file, _pool);
+
+                        return _mergedFile;
+            }
+            void set(String^ value)
+            {
+                if (String::IsNullOrEmpty(value) && (value != MergedFile))
+                    throw gcnew InvalidOperationException("Only settable with valid filename");
+
+                _mergeResult = value;
+            }
+        }
+
+        property bool IsBinary
+        {
+            bool get()
+            {
+                return _isBinary;
+            }
+        }
+
+        property SvnConflictAction ConflictAction
+        {
+            SvnConflictAction get()
+            {
+                return _action;
+            }
+        }
+
+        property SvnConflictReason ConflictReason
+        {
+            SvnConflictReason get()
+            {
+                return _reason;
+            }
+        }
+
+        property SvnConflictType ConflictType
+        {
+            SvnConflictType get()
+            {
+                return _type;
+            }
+        }
+
+        property SvnNodeKind NodeKind
+        {
+            SvnNodeKind get()
+            {
+                return _nodeKind;
+            }
+        }
+
+        /// <summary>Gets the operation creating the tree conflict</summary>
+        property SvnOperation Operation
+        {
+            SvnOperation get()
+            {
+                return _operation;
+            }
+        }
+
+        property SvnConflictSource^ LeftSource
+        {
+            SvnConflictSource^ get()
+            {
+                if (!_leftOrigin && _description && _description->src_left_version && _pool)
+                    _leftOrigin = gcnew SvnConflictSource(_description->src_left_version, _pool);
+
+                return _leftOrigin;
+            }
+        }
+
+        property SvnConflictSource^ RightSource
+        {
+            SvnConflictSource^ get()
+            {
+                if (!_rightOrigin && _description && _description->src_right_version && _pool)
+                    _rightOrigin = gcnew SvnConflictSource(_description->src_right_version, _pool);
+
+                return _rightOrigin;
+            }
+        }
+
+    public:
+        void Detach()
+        {
+            Detach(true);
+        }
+
+    protected public:
+        virtual void Detach(bool keepProperties)
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    GC::KeepAlive(Name);
+            GC::KeepAlive(FullPath);
+                                GC::KeepAlive(PropertyName);
+                                GC::KeepAlive(MimeType);
+                                GC::KeepAlive(BaseFile);
+                                GC::KeepAlive(TheirFile);
+                                GC::KeepAlive(MyFile);
+                                GC::KeepAlive(MergedFile);
+
+                                GC::KeepAlive(LeftSource);
+                                GC::KeepAlive(RightSource);
+                        }
+
+                        if (_leftOrigin)
+                                _leftOrigin->Detach(keepProperties);
+                        if (_rightOrigin)
+                                _rightOrigin->Detach(keepProperties);
+            }
+            finally
+            {
+                _description = nullptr;
+                _pool = nullptr;
+            }
+        }
+    };
 }

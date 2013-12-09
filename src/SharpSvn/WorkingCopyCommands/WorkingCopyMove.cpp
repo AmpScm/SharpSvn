@@ -24,26 +24,26 @@ using namespace System::Collections::Generic;
 
 bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath)
 {
-	if (String::IsNullOrEmpty(sourcePath))
-		throw gcnew ArgumentNullException("sourcePath");
-	else if (String::IsNullOrEmpty(toPath))
-		throw gcnew ArgumentNullException("toPath");
+    if (String::IsNullOrEmpty(sourcePath))
+        throw gcnew ArgumentNullException("sourcePath");
+    else if (String::IsNullOrEmpty(toPath))
+        throw gcnew ArgumentNullException("toPath");
 
-	return Move(sourcePath, toPath, gcnew SvnWorkingCopyMoveArgs());
+    return Move(sourcePath, toPath, gcnew SvnWorkingCopyMoveArgs());
 }
 
 bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath, SvnWorkingCopyMoveArgs^ args)
 {
-	if (String::IsNullOrEmpty(sourcePath))
-		throw gcnew ArgumentNullException("sourcePath");
-	else if (String::IsNullOrEmpty(toPath))
-		throw gcnew ArgumentNullException("toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(sourcePath))
+        throw gcnew ArgumentNullException("sourcePath");
+    else if (String::IsNullOrEmpty(toPath))
+        throw gcnew ArgumentNullException("toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
     svn_error_t *r = SVN_NO_ERROR;
     const char *lock1;
@@ -57,45 +57,45 @@ bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath, SvnWorkingCo
 
     if (!strcmp(lock1, lock2))
     {
-        // The simple case: Everything in one WC.
-        lock1 = svn_dirent_get_longest_ancestor(pSrc, pDst, pool.Handle);
-        SVN_HANDLE(svn_wc__acquire_write_lock(&lock1, CtxHandle->wc_ctx, lock1, FALSE, pool.Handle, pool.Handle));
-        lock2 = NULL;
+    // The simple case: Everything in one WC.
+    lock1 = svn_dirent_get_longest_ancestor(pSrc, pDst, pool.Handle);
+    SVN_HANDLE(svn_wc__acquire_write_lock(&lock1, CtxHandle->wc_ctx, lock1, FALSE, pool.Handle, pool.Handle));
+    lock2 = NULL;
     }
     else
     {
-        if (strcmp(lock1, pSrc) != 0)
-            lock1 = svn_dirent_dirname(pSrc, pool.Handle);
-        else
-            lock1 = pSrc;
-        if (strcmp(lock2, pDst) != 0)
-            lock2 = svn_dirent_dirname(pDst, pool.Handle);
-        else
-            lock2 = pDst;
+    if (strcmp(lock1, pSrc) != 0)
+        lock1 = svn_dirent_dirname(pSrc, pool.Handle);
+    else
+        lock1 = pSrc;
+    if (strcmp(lock2, pDst) != 0)
+        lock2 = svn_dirent_dirname(pDst, pool.Handle);
+    else
+        lock2 = pDst;
 
-        SVN_HANDLE(svn_wc__acquire_write_lock(&lock1, CtxHandle->wc_ctx, lock1, FALSE, pool.Handle, pool.Handle));
+    SVN_HANDLE(svn_wc__acquire_write_lock(&lock1, CtxHandle->wc_ctx, lock1, FALSE, pool.Handle, pool.Handle));
 
-        r = svn_wc__acquire_write_lock(&lock2, CtxHandle->wc_ctx, lock2, FALSE, pool.Handle, pool.Handle);
+    r = svn_wc__acquire_write_lock(&lock2, CtxHandle->wc_ctx, lock2, FALSE, pool.Handle, pool.Handle);
 
-        if (r)
-        {
-            SVN_HANDLE(svn_error_compose_create(r, svn_wc__release_write_lock(CtxHandle->wc_ctx, lock1, pool.Handle)));
-        }
+    if (r)
+    {
+        SVN_HANDLE(svn_error_compose_create(r, svn_wc__release_write_lock(CtxHandle->wc_ctx, lock1, pool.Handle)));
+    }
     }
 
     r = svn_wc_move(
-		CtxHandle->wc_ctx,
-		pSrc,
-		pDst,
-		args->MetaDataOnly,
-		CtxHandle->cancel_func, CtxHandle->cancel_baton,
-		CtxHandle->notify_func2, CtxHandle->notify_baton2,
-		pool.Handle);
+                CtxHandle->wc_ctx,
+                pSrc,
+                pDst,
+                args->MetaDataOnly,
+                CtxHandle->cancel_func, CtxHandle->cancel_baton,
+                CtxHandle->notify_func2, CtxHandle->notify_baton2,
+                pool.Handle);
 
     if (lock1)
-        r = svn_error_compose_create(r, svn_wc__release_write_lock(CtxHandle->wc_ctx, lock1, pool.Handle));
+    r = svn_error_compose_create(r, svn_wc__release_write_lock(CtxHandle->wc_ctx, lock1, pool.Handle));
     if (lock2)
-        r = svn_error_compose_create(r, svn_wc__release_write_lock(CtxHandle->wc_ctx, lock2, pool.Handle));
+    r = svn_error_compose_create(r, svn_wc__release_write_lock(CtxHandle->wc_ctx, lock2, pool.Handle));
 
-	return args->HandleResult(this, r, sourcePath);
+    return args->HandleResult(this, r, sourcePath);
 }

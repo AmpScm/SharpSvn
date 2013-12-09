@@ -28,19 +28,19 @@ using System::IO::Path;
 ref class SvnThreadAbortException : InvalidOperationException
 {
 public:
-	SvnThreadAbortException()
-	{
-	}
+    SvnThreadAbortException()
+    {
+    }
 
-	SvnThreadAbortException(String^ message)
-		: InvalidOperationException(message)
-	{
-	}
+    SvnThreadAbortException(String^ message)
+        : InvalidOperationException(message)
+    {
+    }
 protected:
-	SvnThreadAbortException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
-		: InvalidOperationException(info, context)
-	{
-	}
+    SvnThreadAbortException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+        : InvalidOperationException(info, context)
+    {
+    }
 };
 
 /*
@@ -83,18 +83,18 @@ MessageBoxA(
 void __cdecl sharpsvn_abort_handler()
 {
 #ifdef _DEBUG
-	if (Environment::UserInteractive)
-	{
-		AprPool pool(SvnBase::SmallThreadPool); // Let's hope this still works.. Most abort()s in subversion are not as fatal as this
+    if (Environment::UserInteractive)
+    {
+        AprPool pool(SvnBase::SmallThreadPool); // Let's hope this still works.. Most abort()s in subversion are not as fatal as this
 
-		const char* pTitle = pool.AllocString(SharpSvnStrings::FatalExceptionInSubversionApi);
-		const char* pText = pool.AllocString(String::Format(SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing, Environment::StackTrace));
+        const char* pTitle = pool.AllocString(SharpSvnStrings::FatalExceptionInSubversionApi);
+        const char* pText = pool.AllocString(String::Format(SharpSvnStrings::PleaseRestartThisApplicationBeforeContinuing, Environment::StackTrace));
 
-		MessageBoxA(nullptr, pText, pTitle, MB_OK | MB_ICONERROR | MB_TASKMODAL);
-	}
+        MessageBoxA(nullptr, pText, pTitle, MB_OK | MB_ICONERROR | MB_TASKMODAL);
+    }
 #endif
 
-	throw gcnew SvnThreadAbortException("Subversion raised an abort()\r\nPlease restart your application!");
+    throw gcnew SvnThreadAbortException("Subversion raised an abort()\r\nPlease restart your application!");
 }
 
 static bool s_loaded = false, s_checked = false;
@@ -102,72 +102,72 @@ static bool s_loaded = false, s_checked = false;
 static sharpsvn_sharpsvn_check_bdb_availability_t sharpsvn_check_bdb;
 static svn_error_t* __cdecl sharpsvn_check_bdb()
 {
-	if (s_loaded)
-		return NULL;
+    if (s_loaded)
+        return NULL;
 
-	if (!s_checked)
-	{
-		s_checked = true;
+    if (!s_checked)
+    {
+        s_checked = true;
 
-		try
-		{
-			int major, minor;
-			db_version(&major, &minor, NULL);
-			s_loaded = true;
-		}
-		catch(...)
-		{}
-	}
+        try
+        {
+            int major, minor;
+            db_version(&major, &minor, NULL);
+            s_loaded = true;
+        }
+        catch(...)
+        {}
+    }
 
 
-	if (!s_loaded)
-		return svn_error_create(SVN_ERR_FS_UNKNOWN_FS_TYPE, nullptr, "Subversion filesystem driver for Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) is not installed. Can't access this repository kind.");
+    if (!s_loaded)
+        return svn_error_create(SVN_ERR_FS_UNKNOWN_FS_TYPE, nullptr, "Subversion filesystem driver for Berkeley DB (SharpSvn-DB44-20-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".dll) is not installed. Can't access this repository kind.");
 
-	return NULL;
+    return NULL;
 }
 
 static svn_error_t* __cdecl
 sharpsvn_malfunction_handler(svn_boolean_t can_return, const char *file, int line, const char *expr)
 {
-	UNUSED_ALWAYS(can_return);
-	throw gcnew SvnMalfunctionException(SvnBase::Utf8_PtrToString(expr), SvnBase::Utf8_PtrToString(file), line);
+    UNUSED_ALWAYS(can_return);
+    throw gcnew SvnMalfunctionException(SvnBase::Utf8_PtrToString(expr), SvnBase::Utf8_PtrToString(file), line);
 }
 
 FARPROC WINAPI SharpSvnDelayLoadFailure(unsigned dliNotify, PDelayLoadInfo pdli)
 {
-	if (dliNotify != dliFailLoadLib)
-		return nullptr; // Nothing we can fix
+    if (dliNotify != dliFailLoadLib)
+        return nullptr; // Nothing we can fix
 
 #ifdef _DEBUG
-	::OutputDebugStringA("Automatic delay loading one of the SharpSvn helper DLLs failed; trying to work around\n");
+    ::OutputDebugStringA("Automatic delay loading one of the SharpSvn helper DLLs failed; trying to work around\n");
 #endif
 
-	Uri^ codeBase;
+    Uri^ codeBase;
 
-	if (!Uri::TryCreate(SvnBase::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase))
-		return nullptr; // We don't know where we were loaded from
+    if (!Uri::TryCreate(SvnBase::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase))
+        return nullptr; // We don't know where we were loaded from
 
-	String^ path = SvnTools::PathCombine(Path::GetDirectoryName(SvnTools::GetNormalizedFullPath(codeBase->LocalPath)), gcnew String(pdli->szDll));
+    String^ path = SvnTools::PathCombine(Path::GetDirectoryName(SvnTools::GetNormalizedFullPath(codeBase->LocalPath)), gcnew String(pdli->szDll));
 
-	pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
+    pin_ptr<const wchar_t> pChars = PtrToStringChars(path);
 
 
-	HMODULE hMod = ::LoadLibraryW(pChars);
+    HMODULE hMod = ::LoadLibraryW(pChars);
 
-	return (FARPROC)hMod;
+    return (FARPROC)hMod;
 }
 
 #pragma unmanaged
 static bool SetHandler()
 {
-	sharpsvn_abort_t* handler = &sharpsvn_abort_handler;
+    sharpsvn_abort_t* handler = &sharpsvn_abort_handler;
 
-	InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
-	InterlockedExchangePointer((void**)&__pfnDliFailureHook2, (void*)SharpSvnDelayLoadFailure);
+    InterlockedExchangePointer((void**)&sharpsvn_sharpsvn_check_bdb_availability, (void*)sharpsvn_check_bdb);
+    InterlockedExchangePointer((void**)&__pfnDliFailureHook2, (void*)SharpSvnDelayLoadFailure);
 
-	svn_error_set_malfunction_handler(sharpsvn_malfunction_handler);
+    svn_error_set_malfunction_handler(sharpsvn_malfunction_handler);
 
-	return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
+    return (InterlockedExchangePointer((void**)&sharpsvn_abort, (void*)handler) != handler);
 }
 
 #pragma managed
@@ -177,7 +177,7 @@ static bool SetHandler()
 
 void SvnBase::InstallAbortHandler()
 {
-	SetHandler();
+    SetHandler();
 
 
 }

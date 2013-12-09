@@ -18,86 +18,86 @@
 
 namespace SharpSvn {
 
-	public ref class SvnCommittingEventArgs sealed : public SvnEventArgs
-	{
-		AprPool^ _pool;
-		const apr_array_header_t *_commitItems;
-		bool _cancel;
-		String^ _logMessage;
-		SvnCommitItemCollection^ _items;
-		initonly SvnCommandType _commandType;
+    public ref class SvnCommittingEventArgs sealed : public SvnEventArgs
+    {
+        AprPool^ _pool;
+        const apr_array_header_t *_commitItems;
+        bool _cancel;
+        String^ _logMessage;
+        SvnCommitItemCollection^ _items;
+        initonly SvnCommandType _commandType;
 
-	internal:
-		SvnCommittingEventArgs(const apr_array_header_t *commitItems, SvnCommandType commandType, AprPool^ pool)
-		{
-			if (!commitItems)
-				throw gcnew ArgumentNullException("commitItems");
-			else if (!pool)
-				throw gcnew ArgumentNullException("pool");
+    internal:
+        SvnCommittingEventArgs(const apr_array_header_t *commitItems, SvnCommandType commandType, AprPool^ pool)
+        {
+            if (!commitItems)
+                throw gcnew ArgumentNullException("commitItems");
+            else if (!pool)
+                throw gcnew ArgumentNullException("pool");
 
-			_commitItems = commitItems;
-			_pool = pool;
-			_commandType = commandType;
-		}
+            _commitItems = commitItems;
+            _pool = pool;
+            _commandType = commandType;
+        }
 
-	public:
-		property bool Cancel
-		{
-			bool get()
-			{
-				return _cancel;
-			}
-			void set(bool value)
-			{
-				_cancel = value;
-			}
-		}
+    public:
+        property bool Cancel
+        {
+            bool get()
+            {
+                return _cancel;
+            }
+            void set(bool value)
+            {
+                _cancel = value;
+            }
+        }
 
-		property String^ LogMessage
-		{
-			String^ get()
-			{
-				return _logMessage;
-			}
-			void set(String^ value)
-			{
-				_logMessage = value;
-			}
-		}
+        property String^ LogMessage
+        {
+            String^ get()
+            {
+                return _logMessage;
+            }
+            void set(String^ value)
+            {
+                _logMessage = value;
+            }
+        }
 
-		property SvnCommitItemCollection^ Items
-		{
-			SvnCommitItemCollection^ get();
-		}
+        property SvnCommitItemCollection^ Items
+        {
+            SvnCommitItemCollection^ get();
+        }
 
-		property SvnCommandType CurrentCommandType
-		{
-			SvnCommandType get()
-			{
-				return _commandType;
-			}
-		}
+        property SvnCommandType CurrentCommandType
+        {
+            SvnCommandType get()
+            {
+                return _commandType;
+            }
+        }
 
-	protected public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					if (Items)
-						for each (SvnCommitItem^ item in Items)
-						{
-							item->Detach(true);
-						}
-				}
-			}
-			finally
-			{
-				_commitItems = nullptr;
-				_pool = nullptr;
-			}
-		}
-	};
+    protected public:
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    if (Items)
+                        for each (SvnCommitItem^ item in Items)
+                        {
+                            item->Detach(true);
+                        }
+                }
+            }
+            finally
+            {
+                _commitItems = nullptr;
+                _pool = nullptr;
+            }
+        }
+    };
 
 }

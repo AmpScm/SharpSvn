@@ -16,89 +16,89 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnCreateRepositoryArgs : public SvnRepositoryClientArgs
-	{
-		bool _bdbNoFSyncCommit;
-		bool _bdbKeepLogs;
-		SvnRepositoryFileSystem _reposType;
-		SvnRepositoryCompatibility _reposCompat;
-        Nullable<System::Guid> _uuid;
+    /// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnCreateRepositoryArgs : public SvnRepositoryClientArgs
+    {
+        bool _bdbNoFSyncCommit;
+        bool _bdbKeepLogs;
+        SvnRepositoryFileSystem _reposType;
+        SvnRepositoryCompatibility _reposCompat;
+    Nullable<System::Guid> _uuid;
 
-	public:
-		SvnCreateRepositoryArgs()
-		{
-		}
-
-		property bool BerkeleyDBNoFSyncAtCommit
-		{
-			bool get()
-			{
-				return _bdbNoFSyncCommit;
-			}
-			void set(bool value)
-			{
-				_bdbNoFSyncCommit = value;
-			}
-		}
-
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-
-		property bool BerkeleyDBKeepTransactionLogs
-		{
-			bool get()
-			{
-				return _bdbKeepLogs;
-			}
-			void set(bool value)
-			{
-				_bdbKeepLogs = value;
-			}
-		}
-
-		property SvnRepositoryFileSystem RepositoryType
-		{
-			SvnRepositoryFileSystem get()
-			{
-				return _reposType;
-			}
-			void set(SvnRepositoryFileSystem value)
-			{
-				_reposType = EnumVerifier::Verify(value);
-			}
-		}
-
-		property SvnRepositoryCompatibility RepositoryCompatibility
-		{
-			SvnRepositoryCompatibility get()
-			{
-				return _reposCompat;
-			}
-			void set(SvnRepositoryCompatibility value)
-			{
-				_reposCompat = EnumVerifier::Verify(value);
-			}
-		}
-
-        /// <summary>If not <c>null</c> allows creates a repository with this UUID</summary>
-        property Nullable<Guid> RepositoryUuid
+    public:
+        SvnCreateRepositoryArgs()
         {
-            Nullable<Guid> get()
-            {
-                return _uuid;
-            }
+        }
 
-            void set(Nullable<Guid> value)
+        property bool BerkeleyDBNoFSyncAtCommit
+        {
+            bool get()
             {
-                _uuid = value;
+                return _bdbNoFSyncCommit;
+            }
+            void set(bool value)
+            {
+                _bdbNoFSyncCommit = value;
             }
         }
-	};
-}
+
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+
+        property bool BerkeleyDBKeepTransactionLogs
+        {
+            bool get()
+            {
+                return _bdbKeepLogs;
+            }
+            void set(bool value)
+            {
+                _bdbKeepLogs = value;
+            }
+        }
+
+        property SvnRepositoryFileSystem RepositoryType
+        {
+            SvnRepositoryFileSystem get()
+            {
+                return _reposType;
+            }
+            void set(SvnRepositoryFileSystem value)
+            {
+                _reposType = EnumVerifier::Verify(value);
+            }
+        }
+
+        property SvnRepositoryCompatibility RepositoryCompatibility
+        {
+            SvnRepositoryCompatibility get()
+            {
+                return _reposCompat;
+            }
+            void set(SvnRepositoryCompatibility value)
+            {
+                _reposCompat = EnumVerifier::Verify(value);
+            }
+        }
+
+    /// <summary>If not <c>null</c> allows creates a repository with this UUID</summary>
+    property Nullable<Guid> RepositoryUuid
+    {
+        Nullable<Guid> get()
+        {
+        return _uuid;
+        }
+
+        void set(Nullable<Guid> value)
+        {
+        _uuid = value;
+        }
+    }
+    };
+}}

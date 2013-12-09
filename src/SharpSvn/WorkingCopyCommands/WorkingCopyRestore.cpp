@@ -24,22 +24,22 @@ using namespace System::Collections::Generic;
 
 bool SvnWorkingCopyClient::Restore(String^ path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
 
-	return Restore(path, gcnew SvnWorkingCopyRestoreArgs());
+    return Restore(path, gcnew SvnWorkingCopyRestoreArgs());
 }
 
 bool SvnWorkingCopyClient::Restore(String^ path, SvnWorkingCopyRestoreArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
     svn_error_t *r = SVN_NO_ERROR;
     svn_boolean_t use_commit_times;
@@ -54,10 +54,10 @@ bool SvnWorkingCopyClient::Restore(String^ path, SvnWorkingCopyRestoreArgs^ args
                                    FALSE));
 
     r = svn_wc_restore(
-		CtxHandle->wc_ctx,
-		pool.AllocAbsoluteDirent(path),
-		use_commit_times,
-		pool.Handle);
+                CtxHandle->wc_ctx,
+                pool.AllocAbsoluteDirent(path),
+                use_commit_times,
+                pool.Handle);
 
-	return args->HandleResult(this, r, path);
+    return args->HandleResult(this, r, path);
 }

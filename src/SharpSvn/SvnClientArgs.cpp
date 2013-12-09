@@ -22,101 +22,101 @@ using System::Collections::Generic::List;
 
 bool SvnClientArgs::HandleResult(SvnClientContext^ client, svn_error_t *error, Object^ targets)
 {
-	// Note: client can be null if called from a not SvnClient command
-	if (!error)
-	{
-		_exception = nullptr;
-		return true;
-	}
+    // Note: client can be null if called from a not SvnClient command
+    if (!error)
+    {
+        _exception = nullptr;
+        return true;
+    }
 
-	apr_status_t err = error->apr_err;
+    apr_status_t err = error->apr_err;
 
-	_exception = SvnException::Create(error); // Releases error
+    _exception = SvnException::Create(error); // Releases error
 
-	if (err == SVN_ERR_CEASE_INVOCATION)
-		return false;
+    if (err == SVN_ERR_CEASE_INVOCATION)
+        return false;
 
-	return HandleResult(client, _exception, targets);
+    return HandleResult(client, _exception, targets);
 }
 
 bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ exception, Object ^targets)
 {
-	_exception = exception;
+    _exception = exception;
 
-	if (!_exception)
-		return true;
+    if (!_exception)
+        return true;
 
-	if (_exception->SubversionErrorCode == SVN_ERR_CEASE_INVOCATION)
-		return false;
+    if (_exception->SubversionErrorCode == SVN_ERR_CEASE_INVOCATION)
+        return false;
 
-	_exception->Targets = targets;
+    _exception->Targets = targets;
 
-	SvnClient^ svnClient = dynamic_cast<SvnClient^>(client);
+    SvnClient^ svnClient = dynamic_cast<SvnClient^>(client);
 
-	SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
+    SvnErrorEventArgs^ ea = gcnew SvnErrorEventArgs(_exception);
 
-	if (svnClient)
-	{
-		svnClient->HandleClientError(ea);
-	}
-	else
-		OnSvnError(ea);
+    if (svnClient)
+    {
+        svnClient->HandleClientError(ea);
+    }
+    else
+        OnSvnError(ea);
 
-	if (ea->Cancel)
-		return false;
+    if (ea->Cancel)
+        return false;
 
-	if (_expectedErrors && 0 <= Array::IndexOf(_expectedErrors, _exception->SvnErrorCode))
-		return false;
-	else if (_expectedErrorCategories && 0 <= Array::IndexOf(_expectedErrorCategories, _exception->SvnErrorCategory))
-		return false;
-	if (!ThrowOnCancel && _exception->SubversionErrorCode == SVN_ERR_CANCELLED)
-		return false;
-	else if (ThrowOnError)
-		throw _exception;
-	else
-		return false;
+    if (_expectedErrors && 0 <= Array::IndexOf(_expectedErrors, _exception->SvnErrorCode))
+        return false;
+    else if (_expectedErrorCategories && 0 <= Array::IndexOf(_expectedErrorCategories, _exception->SvnErrorCategory))
+        return false;
+    if (!ThrowOnCancel && _exception->SubversionErrorCode == SVN_ERR_CANCELLED)
+        return false;
+    else if (ThrowOnError)
+        throw _exception;
+    else
+        return false;
 }
 
 void SvnClientArgs::Prepare()
 {
-	LastException = nullptr;
-	_hooked = true;
-	_warnings = nullptr;
+    LastException = nullptr;
+    _hooked = true;
+    _warnings = nullptr;
 }
 
 bool SvnClientArgs::IsLastInvocationCanceled::get()
 {
-	return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
+    return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
 }
 
 void SvnClientArgs::AddExpectedError(SvnErrorCode errorCode)
 {
-	if (errorCode == SvnErrorCode::None)
-		throw gcnew ArgumentOutOfRangeException("errorCode");
+    if (errorCode == SvnErrorCode::None)
+        throw gcnew ArgumentOutOfRangeException("errorCode");
 
-	_expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCode);
+    _expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCode);
 }
 
 void SvnClientArgs::AddExpectedError(... array<SvnErrorCode>^ errorCodes)
 {
-	if (!errorCodes || !errorCodes->Length)
-		return;
+    if (!errorCodes || !errorCodes->Length)
+        return;
 
-	_expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCodes);
+    _expectedErrors = SvnBase::ExtendArray(_expectedErrors, errorCodes);
 }
 
 void SvnClientArgs::AddExpectedError(SvnErrorCategory errorCategory)
 {
-	if (errorCategory == SvnErrorCategory::None)
-		throw gcnew ArgumentOutOfRangeException("errorCategory");
+    if (errorCategory == SvnErrorCategory::None)
+        throw gcnew ArgumentOutOfRangeException("errorCategory");
 
-	_expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategory);
+    _expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategory);
 }
 
 void SvnClientArgs::AddExpectedError(... array<SvnErrorCategory>^ errorCategories)
 {
-	if (!errorCategories || !errorCategories->Length)
-		return;
+    if (!errorCategories || !errorCategories->Length)
+        return;
 
-	_expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategories);
+    _expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategories);
 }

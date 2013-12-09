@@ -22,37 +22,37 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!source)
-		throw gcnew ArgumentNullException("source");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!source)
+        throw gcnew ArgumentNullException("source");
 
-	return ReintegrationMerge(targetPath, source, gcnew SvnReintegrationMergeArgs());
+    return ReintegrationMerge(targetPath, source, gcnew SvnReintegrationMergeArgs());
 }
 
 bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnReintegrationMergeArgs^ args)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!source)
-		throw gcnew ArgumentNullException("source");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(targetPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!source)
+        throw gcnew ArgumentNullException("source");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(targetPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_merge_reintegrate(
-		source->AllocAsString(%pool),
-		source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-		pool.AllocDirent(targetPath),
-		args->DryRun,
-		args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_merge_reintegrate(
+        source->AllocAsString(%pool),
+        source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
+        pool.AllocDirent(targetPath),
+        args->DryRun,
+        args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, targetPath);
-}
+    return args->HandleResult(this, r, targetPath);
+}}

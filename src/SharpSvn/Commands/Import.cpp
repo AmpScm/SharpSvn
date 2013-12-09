@@ -28,172 +28,172 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Import(String^ path, Uri^ target)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return Import(path, target, gcnew SvnImportArgs());
+    return Import(path, target, gcnew SvnImportArgs());
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, [Out] SvnCommitResult^% result)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return Import(path, target, gcnew SvnImportArgs(), result);
+    return Import(path, target, gcnew SvnImportArgs(), result);
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnCommitResult^ result;
+    SvnCommitResult^ result;
 
-	return Import(path, target, args, result);
+    return Import(path, target, args, result);
 }
 
 bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!SvnBase::IsValidReposUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!SvnBase::IsValidReposUri(target))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
-	if (RemoteImport(path, target, args, result))
-	{
-		SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
-		aa->ThrowOnError = args->ThrowOnError;
-		aa->Depth = args->Depth;
+    if (RemoteImport(path, target, args, result))
+    {
+        SvnCheckOutArgs^ aa = gcnew SvnCheckOutArgs();
+        aa->ThrowOnError = args->ThrowOnError;
+        aa->Depth = args->Depth;
 
-		aa->AllowObstructions = true; // This is the trick
-		aa->SvnError += gcnew EventHandler<SvnErrorEventArgs^>(args, &SvnImportArgs::HandleOnSvnError);
+        aa->AllowObstructions = true; // This is the trick
+        aa->SvnError += gcnew EventHandler<SvnErrorEventArgs^>(args, &SvnImportArgs::HandleOnSvnError);
 
-		try
-		{
-			return CheckOut(gcnew SvnUriTarget(target, result->Revision), path, aa);
-		}
-		finally
-		{
-			args->LastException = aa->LastException;
-		}
-	}
-	else
-		return false;
+        try
+        {
+            return CheckOut(gcnew SvnUriTarget(target, result->Revision), path, aa);
+        }
+        finally
+        {
+            args->LastException = aa->LastException;
+        }
+    }
+    else
+        return false;
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return RemoteImport(path, target, gcnew SvnImportArgs());
+    return RemoteImport(path, target, gcnew SvnImportArgs());
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, [Out] SvnCommitResult^% result)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return RemoteImport(path, target, gcnew SvnImportArgs(), result);
+    return RemoteImport(path, target, gcnew SvnImportArgs(), result);
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnCommitResult^ result;
+    SvnCommitResult^ result;
 
-	return RemoteImport(path, target, args, result);
+    return RemoteImport(path, target, args, result);
 }
 
 static svn_error_t *
 sharpsvn_import_filter(void *baton, svn_boolean_t *filtered, const char *local_abspath, const svn_io_dirent2_t *dirent, apr_pool_t *scratch_pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	AprPool thePool(scratch_pool, false);
+    AprPool thePool(scratch_pool, false);
 
-	SvnImportArgs^ args = dynamic_cast<SvnImportArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if (!args)
-		return nullptr;
+    SvnImportArgs^ args = dynamic_cast<SvnImportArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    if (!args)
+        return nullptr;
 
-	SvnImportFilterEventArgs^ e = gcnew SvnImportFilterEventArgs(local_abspath, dirent, %thePool);
-	try
-	{
-		args->OnFilter(e);
+    SvnImportFilterEventArgs^ e = gcnew SvnImportFilterEventArgs(local_abspath, dirent, %thePool);
+    try
+    {
+        args->OnFilter(e);
 
-		*filtered = e->Filter ? TRUE : FALSE;
+        *filtered = e->Filter ? TRUE : FALSE;
 
-		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Import filter canceled operation");
-		else
-			return nullptr;
-	}
-	catch(Exception^ ex)
-	{
-		return SvnException::CreateExceptionSvnError("Import filter", ex);
-	}
-	finally
-	{
-		e->Detach(false);
-	}
+        if (e->Cancel)
+            return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Import filter canceled operation");
+        else
+            return nullptr;
+    }
+    catch(Exception^ ex)
+    {
+        return SvnException::CreateExceptionSvnError("Import filter", ex);
+    }
+    finally
+    {
+        e->Detach(false);
+    }
 }
 
 bool SvnClient::RemoteImport(String^ path, Uri^ target, SvnImportArgs^ args, [Out] SvnCommitResult^% result)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!SvnBase::IsValidReposUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!SvnBase::IsValidReposUri(target))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 
-	result = nullptr;
+    result = nullptr;
 
-	EnsureState(SvnContextState::AuthorizationInitialized, SvnExtendedState::MimeTypesLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
-	CommitResultReceiver crr(this);
+    EnsureState(SvnContextState::AuthorizationInitialized, SvnExtendedState::MimeTypesLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
+    CommitResultReceiver crr(this);
 
-	svn_error_t *r = svn_client_import5(
-		pool.AllocDirent(path),
-		pool.AllocUri(target),
-		(svn_depth_t)args->Depth,
-		args->NoIgnore,
-		args->NoAutoProps,
-		args->IgnoreUnknownNodeTypes,
-		CreateRevPropList(args->LogProperties, %pool),
-		args->HasFilter ? sharpsvn_import_filter : nullptr, (void*)_clientBaton->Handle,
-		crr.CommitCallback, crr.CommitBaton,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_import5(
+        pool.AllocDirent(path),
+        pool.AllocUri(target),
+        (svn_depth_t)args->Depth,
+        args->NoIgnore,
+        args->NoAutoProps,
+        args->IgnoreUnknownNodeTypes,
+        CreateRevPropList(args->LogProperties, %pool),
+        args->HasFilter ? sharpsvn_import_filter : nullptr, (void*)_clientBaton->Handle,
+        crr.CommitCallback, crr.CommitBaton,
+        CtxHandle,
+        pool.Handle);
 
-	result = crr.CommitResult;
+    result = crr.CommitResult;
 
-	return args->HandleResult(this, r, path);
+    return args->HandleResult(this, r, path);
 }

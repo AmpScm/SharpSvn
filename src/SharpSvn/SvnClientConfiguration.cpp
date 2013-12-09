@@ -19,41 +19,41 @@ using namespace SharpSvn::Implementation;
 
 bool SvnClientConfiguration::LogMessageRequired::get()
 {
-	return !_client->_noLogMessageRequired;
+    return !_client->_noLogMessageRequired;
 }
 void SvnClientConfiguration::LogMessageRequired::set(bool value)
 {
-	_client->_noLogMessageRequired = !value;
+    _client->_noLogMessageRequired = !value;
 }
 
 bool SvnClientConfiguration::LoadSvnMimeTypes::get()
 {
-	return !_client->_dontLoadMimeFile;
+    return !_client->_dontLoadMimeFile;
 }
 
 void SvnClientConfiguration::LoadSvnMimeTypes::set(bool value)
 {
-	_client->_dontLoadMimeFile = !value;
+    _client->_dontLoadMimeFile = !value;
 }
 
 bool SvnClientConfiguration::EnableSharpPlink::get()
 {
-	return !_client->_dontEnablePlink;
+    return !_client->_dontEnablePlink;
 }
 
 void SvnClientConfiguration::EnableSharpPlink::set(bool value)
 {
-	_client->_dontEnablePlink = !value;
+    _client->_dontEnablePlink = !value;
 }
 
 bool SvnClientConfiguration::UseSubversionDiff::get()
 {
-	return !_client->_useUserDiff;
+    return !_client->_useUserDiff;
 }
 
 void SvnClientConfiguration::UseSubversionDiff::set(bool value)
 {
-	_client->_useUserDiff = !value;
+    _client->_useUserDiff = !value;
 }
 
 SvnOverride SvnClientConfiguration::KeepAllExtensionsOnConflict::get()
@@ -68,34 +68,34 @@ void SvnClientConfiguration::KeepAllExtensionsOnConflict::set(SvnOverride value)
 
 System::Collections::Generic::IEnumerable<String^>^ SvnClientConfiguration::GlobalIgnorePattern::get()
 {
-	_client->EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(SmallThreadPool);
+    _client->EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(SmallThreadPool);
 
-	apr_array_header_t *ignores;
+    apr_array_header_t *ignores;
 
-	svn_wc_get_default_ignores(&ignores, _client->CtxHandle->config, pool.Handle);
-	List<String^>^ ignList = gcnew List<String^>();
+    svn_wc_get_default_ignores(&ignores, _client->CtxHandle->config, pool.Handle);
+    List<String^>^ ignList = gcnew List<String^>();
 
-	for (int i = 0; i < ignores->nelts; i++)
-	{
-		const char *ign = APR_ARRAY_IDX(ignores, i, const char*);
+    for (int i = 0; i < ignores->nelts; i++)
+    {
+        const char *ign = APR_ARRAY_IDX(ignores, i, const char*);
 
-		ignList->Add(Utf8_PtrToString(ign));
-	}
+        ignList->Add(Utf8_PtrToString(ign));
+    }
 
-	return ignList->AsReadOnly();
+    return ignList->AsReadOnly();
 }
 
 void SvnClientConfiguration::SetOption(String^ file, String^ section, String^ option, String^ value)
 {
     if (!file)
-		throw gcnew ArgumentNullException("file");
-	else if (!section)
-		throw gcnew ArgumentNullException("section");
-	else if (!option)
-		throw gcnew ArgumentNullException("option");
-	else if (!value)
-		throw gcnew ArgumentNullException("value");
+                throw gcnew ArgumentNullException("file");
+    else if (!section)
+        throw gcnew ArgumentNullException("section");
+    else if (!option)
+        throw gcnew ArgumentNullException("option");
+    else if (!value)
+        throw gcnew ArgumentNullException("value");
 
     _client->SetConfigurationOption(file, section, option, value);
 }

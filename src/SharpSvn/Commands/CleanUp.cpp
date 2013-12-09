@@ -24,27 +24,27 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::CleanUp(String ^path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
 
-	return CleanUp(path, gcnew SvnCleanUpArgs());
+    return CleanUp(path, gcnew SvnCleanUpArgs());
 }
 
 bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_cleanup(
-		pool.AllocDirent(path),
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_cleanup(
+        pool.AllocDirent(path),
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, path);
+    return args->HandleResult(this, r, path);
 }

@@ -25,131 +25,131 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Unlock(String^ target)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!IsNotUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!IsNotUri(target))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
-	return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
+    return Unlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
 bool SvnClient::Unlock(ICollection<String^>^ targets)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
 
-	return Unlock(targets, gcnew SvnUnlockArgs());
+    return Unlock(targets, gcnew SvnUnlockArgs());
 }
 
 bool SvnClient::Unlock(String^ target, SvnUnlockArgs^ args)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	return Unlock(NewSingleItemCollection(target), args);
+    return Unlock(NewSingleItemCollection(target), args);
 }
 
 bool SvnClient::Unlock(ICollection<String^>^ targets, SvnUnlockArgs^ args)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	for each (String^ target in targets)
-	{
-		if (String::IsNullOrEmpty(target))
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-		else if (!IsNotUri(target))
-			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targets");
-	}
+    for each (String^ target in targets)
+    {
+        if (String::IsNullOrEmpty(target))
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
+        else if (!IsNotUri(target))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targets");
+    }
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrDirentMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrDirentMarshaller^>(targets, %pool);
+    AprArray<String^, AprCStrDirentMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrDirentMarshaller^>(targets, %pool);
 
-	return UnlockInternal(aprTargets, args, %pool);
+    return UnlockInternal(aprTargets, args, %pool);
 }
 
 bool SvnClient::RemoteUnlock(Uri^ target)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return RemoteUnlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
+    return RemoteUnlock(NewSingleItemCollection(target), gcnew SvnUnlockArgs());
 }
 
 bool SvnClient::RemoteUnlock(ICollection<Uri^>^ targets)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
 
-	return RemoteUnlock(targets, gcnew SvnUnlockArgs());
+    return RemoteUnlock(targets, gcnew SvnUnlockArgs());
 }
 
 bool SvnClient::RemoteUnlock(Uri^ target, SvnUnlockArgs^ args)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	return RemoteUnlock(NewSingleItemCollection(target), args);
+    return RemoteUnlock(NewSingleItemCollection(target), args);
 }
 
 bool SvnClient::RemoteUnlock(ICollection<Uri^>^ targets, SvnUnlockArgs^ args)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
+    array<String^>^ targetStrings = gcnew array<String^>(targets->Count);
 
-	int i = 0;
-	for each (Uri^ uri in targets)
-	{
-		if (!uri)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
-		else if (!SvnBase::IsValidReposUri(uri))
-			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
+    int i = 0;
+    for each (Uri^ uri in targets)
+    {
+        if (!uri)
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "targets");
+        else if (!SvnBase::IsValidReposUri(uri))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "targets");
 
-		targetStrings[i++] = UriToCanonicalString(uri);
-	}
+        targetStrings[i++] = UriToCanonicalString(uri);
+    }
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
+    AprArray<String^, AprCStrMarshaller^>^ aprTargets = gcnew AprArray<String^, AprCStrMarshaller^>(safe_cast<ICollection<String^>^>(targetStrings), %pool);
 
-	return UnlockInternal(aprTargets, args, %pool);
+    return UnlockInternal(aprTargets, args, %pool);
 }
 
 generic<typename TMarshaller> where TMarshaller : IItemMarshaller<String^>
 bool SvnClient::UnlockInternal(AprArray<String^, TMarshaller>^ items, SvnUnlockArgs^ args, AprPool^ pool)
 {
-	if (!items)
-		throw gcnew ArgumentNullException("items");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!pool)
-		throw gcnew ArgumentNullException("pool");
+    if (!items)
+        throw gcnew ArgumentNullException("items");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!pool)
+        throw gcnew ArgumentNullException("pool");
 
-	args->Reset();
+    args->Reset();
 
-	svn_error_t* r = svn_client_unlock(
-		items->Handle,
-		args->BreakLock,
-		CtxHandle,
-		pool->Handle);
+    svn_error_t* r = svn_client_unlock(
+        items->Handle,
+        args->BreakLock,
+        CtxHandle,
+        pool->Handle);
 
-	if (r || !args->UnlockResult)
-		return args->HandleResult(this, r, nullptr);
-	else
-		return args->HandleResult(this, args->UnlockResult, nullptr);
-}
+    if (r || !args->UnlockResult)
+        return args->HandleResult(this, r, nullptr);
+    else
+        return args->HandleResult(this, args->UnlockResult, nullptr);
+}}

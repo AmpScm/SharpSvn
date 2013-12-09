@@ -19,186 +19,186 @@
 
 
 namespace SharpSvn {
-	namespace Implementation {
-        using namespace System;
-		using System::IO::Stream;
+    namespace Implementation {
+    using namespace System;
+        using System::IO::Stream;
 
-		ref class SvnStreamWrapper : public IDisposable
-		{
-			initonly AprBaton<SvnStreamWrapper^>^ _streamBaton;
-			initonly Stream^ _stream;
-			svn_stream_t* _svnStream;
-			AprPool^ _pool;
+        ref class SvnStreamWrapper : public IDisposable
+        {
+            initonly AprBaton<SvnStreamWrapper^>^ _streamBaton;
+            initonly Stream^ _stream;
+            svn_stream_t* _svnStream;
+            AprPool^ _pool;
+
+    internal:
+        bool _written;
+
+        public:
+            SvnStreamWrapper(Stream^ stream, bool enableRead, bool enableWrite, AprPool^ pool)
+            {
+                if (!stream)
+                    throw gcnew ArgumentNullException("stream");
+                else if (!enableRead && !enableWrite)
+                    throw gcnew ArgumentException("enableRead or enableWrite must be set to true");
+
+                _stream = stream;
+                _streamBaton = gcnew AprBaton<SvnStreamWrapper^>(this);
+                _pool = pool;
+
+                if (enableRead && !_stream->CanRead)
+                    throw gcnew InvalidOperationException("Can't enable reading on an unreadable stream");
+                else if (enableWrite && !_stream->CanWrite)
+                    throw gcnew InvalidOperationException("Can't enable writing on an unwritable stream");
+
+                Init(enableRead, enableWrite);
+            }
+
+            ~SvnStreamWrapper();
+
+            property svn_stream_t* Handle
+            {
+                svn_stream_t* get()
+                {
+                    _pool->Ensure();
+                    return _svnStream;
+                }
+            }
+
+        private:
+            void Init(bool enableRead, bool enableWrite);
 
         internal:
-            bool _written;
+            property Stream^ Stream
+            {
+                System::IO::Stream^ get()
+                {
+                    return _stream;
+                }
+            }
+        };
 
-		public:
-			SvnStreamWrapper(Stream^ stream, bool enableRead, bool enableWrite, AprPool^ pool)
-			{
-				if (!stream)
-					throw gcnew ArgumentNullException("stream");
-				else if (!enableRead && !enableWrite)
-					throw gcnew ArgumentException("enableRead or enableWrite must be set to true");
+        ref class SvnWrappedStream sealed : System::IO::Stream
+        {
+            svn_stream_t* _stream;
+            AprPool^ _pool;
+        internal:
+            SvnWrappedStream(svn_stream_t* stream, AprPool^ pool)
+            {
+                if (!stream)
+                    throw gcnew ArgumentNullException("stream");
+                else if (!pool)
+                    throw gcnew ArgumentNullException("pool");
 
-				_stream = stream;
-				_streamBaton = gcnew AprBaton<SvnStreamWrapper^>(this);
-				_pool = pool;
+                _pool = pool;
+                _stream = stream;
+            }
 
-				if (enableRead && !_stream->CanRead)
-					throw gcnew InvalidOperationException("Can't enable reading on an unreadable stream");
-				else if (enableWrite && !_stream->CanWrite)
-					throw gcnew InvalidOperationException("Can't enable writing on an unwritable stream");
+        public:
+            property bool CanRead
+            {
+                virtual bool get() override
+                {
+                    return true;
+                }
+            }
 
-				Init(enableRead, enableWrite);
-			}
+            property bool CanSeek
+            {
+                virtual bool get() override
+                {
+                    return false; // Only to the start?
+                }
+            }
 
-			~SvnStreamWrapper();
+            property bool CanWrite
+            {
+                virtual bool get() override
+                {
+                    return false;
+                }
+            }
 
-			property svn_stream_t* Handle
-			{
-				svn_stream_t* get()
-				{
-					_pool->Ensure();
-					return _svnStream;
-				}
-			}
+            property __int64 Length
+            {
+                virtual __int64 get() override
+                {
+                    return -1; // Length unknown
+                }
+            }
 
-		private:
-			void Init(bool enableRead, bool enableWrite);
+            property __int64 Position
+            {
+                virtual __int64 get() override
+                {
+                    return -1; // Position unknown
+                }
+                virtual void set(__int64 value) override
+                {
+                    Seek(value, System::IO::SeekOrigin::Begin);
+                }
+            }
 
-		internal:
-			property Stream^ Stream
-			{
-				System::IO::Stream^ get()
-				{
-					return _stream;
-				}
-			}
-		};
+            virtual void Flush() override
+            {
+            }
 
-		ref class SvnWrappedStream sealed : System::IO::Stream
-		{
-			svn_stream_t* _stream;
-			AprPool^ _pool;
-		internal:
-			SvnWrappedStream(svn_stream_t* stream, AprPool^ pool)
-			{
-				if (!stream)
-					throw gcnew ArgumentNullException("stream");
-				else if (!pool)
-					throw gcnew ArgumentNullException("pool");
+            virtual __int64 Seek(__int64 offset, System::IO::SeekOrigin origin) override
+            {
+                if (!_pool || !_pool->IsValid() || !_stream)
+                    throw gcnew InvalidOperationException();
+                if (origin != System::IO::SeekOrigin::Begin)
+                    throw gcnew ArgumentOutOfRangeException("origin", origin, "Only SeekOrigin.Begin is supported");
+                else if (offset != 0)
+                    throw gcnew ArgumentOutOfRangeException("offset", offset, "Only Seeking to 0 is supported");
+                else if (!_pool->IsValid())
+                    throw gcnew InvalidOperationException();
 
-				_pool = pool;
-				_stream = stream;
-			}
+                SVN_THROW(svn_stream_reset(_stream));
+                return 0;
+            }
 
-		public:
-			property bool CanRead
-			{
-				virtual bool get() override
-				{
-					return true;
-				}
-			}
+            virtual void Close() override
+            {
+                if (_stream)
+                {
+                    svn_stream_t *s = _stream;
+                    _stream = nullptr;
+                    SVN_THROW(svn_stream_close(s));
+                }
+            }
 
-			property bool CanSeek
-			{
-				virtual bool get() override
-				{
-					return false; // Only to the start?
-				}
-			}
+            virtual void SetLength(__int64 value) override
+            {
+                UNUSED_ALWAYS(value);
+                throw gcnew InvalidOperationException();
+            }
 
-			property bool CanWrite
-			{
-				virtual bool get() override
-				{
-					return false;
-				}
-			}
+            virtual int Read(array<System::Byte>^ data, int offset, int length) override
+            {
+                if (!data)
+                    throw gcnew ArgumentNullException("data");
+                else if (!_pool->IsValid() || !_stream)
+                    throw gcnew InvalidOperationException();
+                else if (offset < 0 || offset >= data->Length)
+                    throw gcnew ArgumentOutOfRangeException("offset", offset, "Offset out of range");
+                else if (length < 0 || length > data->Length || length + offset > data->Length)
+                    throw gcnew ArgumentOutOfRangeException("length", length, "Length out of range");
 
-			property __int64 Length
-			{
-				virtual __int64 get() override
-				{
-					return -1; // Length unknown
-				}
-			}
+                pin_ptr<System::Byte> pData = &data[offset];
 
-			property __int64 Position
-			{
-				virtual __int64 get() override
-				{
-					return -1; // Position unknown
-				}
-				virtual void set(__int64 value) override
-				{
-					Seek(value, System::IO::SeekOrigin::Begin);
-				}
-			}
+                apr_size_t len = length;
+                SVN_THROW(svn_stream_read(_stream, (char*)pData, &len));
 
-			virtual void Flush() override
-			{
-			}
+                return (int)len;
+            }
 
-			virtual __int64 Seek(__int64 offset, System::IO::SeekOrigin origin) override
-			{
-				if (!_pool || !_pool->IsValid() || !_stream)
-					throw gcnew InvalidOperationException();
-				if (origin != System::IO::SeekOrigin::Begin)
-					throw gcnew ArgumentOutOfRangeException("origin", origin, "Only SeekOrigin.Begin is supported");
-				else if (offset != 0)
-					throw gcnew ArgumentOutOfRangeException("offset", offset, "Only Seeking to 0 is supported");
-				else if (!_pool->IsValid())
-					throw gcnew InvalidOperationException();
-
-				SVN_THROW(svn_stream_reset(_stream));
-				return 0;
-			}
-
-			virtual void Close() override
-			{
-				if (_stream)
-				{
-					svn_stream_t *s = _stream;
-					_stream = nullptr;
-					SVN_THROW(svn_stream_close(s));
-				}
-			}
-
-			virtual void SetLength(__int64 value) override
-			{
-				UNUSED_ALWAYS(value);
-				throw gcnew InvalidOperationException();
-			}
-
-			virtual int Read(array<System::Byte>^ data, int offset, int length) override
-			{
-				if (!data)
-					throw gcnew ArgumentNullException("data");
-				else if (!_pool->IsValid() || !_stream)
-					throw gcnew InvalidOperationException();
-				else if (offset < 0 || offset >= data->Length)
-					throw gcnew ArgumentOutOfRangeException("offset", offset, "Offset out of range");
-				else if (length < 0 || length > data->Length || length + offset > data->Length)
-					throw gcnew ArgumentOutOfRangeException("length", length, "Length out of range");
-
-				pin_ptr<System::Byte> pData = &data[offset];
-
-				apr_size_t len = length;
-				SVN_THROW(svn_stream_read(_stream, (char*)pData, &len));
-
-				return (int)len;
-			}
-
-			virtual void Write(array<System::Byte>^ data, int offset, int length) override
-			{
-				UNUSED_ALWAYS(data);
-				UNUSED_ALWAYS(offset);
-				UNUSED_ALWAYS(length);
-				throw gcnew InvalidOperationException();
-			}
-		};
-	}
+            virtual void Write(array<System::Byte>^ data, int offset, int length) override
+            {
+                UNUSED_ALWAYS(data);
+                UNUSED_ALWAYS(offset);
+                UNUSED_ALWAYS(length);
+                throw gcnew InvalidOperationException();
+            }
+        };
+    }
 }

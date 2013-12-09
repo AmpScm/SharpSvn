@@ -9,27 +9,27 @@ using namespace System::Collections::Generic;
 
 bool SvnRemoteSession::Reparent(Uri^ sessionUri)
 {
-	if (!sessionUri)
-		throw gcnew ArgumentNullException("sessionUri");
+    if (!sessionUri)
+        throw gcnew ArgumentNullException("sessionUri");
 
-	return Reparent(sessionUri, gcnew SvnRemoteCommonArgs());
+    return Reparent(sessionUri, gcnew SvnRemoteCommonArgs());
 }
 
 bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteCommonArgs^ args)
 {
-	if (!sessionUri)
-		throw gcnew ArgumentNullException("sessionUri");
+    if (!sessionUri)
+        throw gcnew ArgumentNullException("sessionUri");
 
-	Ensure();
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    Ensure();
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
     const char *p_sessionUri = pool.AllocUri(sessionUri);
 
-	if (args->HandleResult(this, svn_ra_reparent(_session, p_sessionUri, pool.Handle)))
-	{
-        _sessionRoot = Utf8_PtrToUri(p_sessionUri, SvnNodeKind::Directory);
-		return true;
-	}
+    if (args->HandleResult(this, svn_ra_reparent(_session, p_sessionUri, pool.Handle)))
+    {
+    _sessionRoot = Utf8_PtrToUri(p_sessionUri, SvnNodeKind::Directory);
+        return true;
+    }
 
-	return false;
-}
+    return false;
+}}

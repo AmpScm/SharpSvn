@@ -26,136 +26,136 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Info(SvnTarget^ target, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!infoHandler)
-		throw gcnew ArgumentNullException("infoHandler");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!infoHandler)
+        throw gcnew ArgumentNullException("infoHandler");
 
-	return Info(target, gcnew SvnInfoArgs(), infoHandler);
+    return Info(target, gcnew SvnInfoArgs(), infoHandler);
 }
 
 static svn_error_t* svn_info_receiver(void *baton, const char *path, const svn_client_info2_t *info, apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	AprPool thePool(pool, false);
-	SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if (!args)
-		return nullptr;
+    AprPool thePool(pool, false);
+    SvnInfoArgs^ args = dynamic_cast<SvnInfoArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    if (!args)
+        return nullptr;
 
-	SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PathPtrToString(path, %thePool), info, %thePool);
-	try
-	{
-		args->OnInfo(e);
+    SvnInfoEventArgs^ e = gcnew SvnInfoEventArgs(SvnBase::Utf8_PathPtrToString(path, %thePool), info, %thePool);
+    try
+    {
+        args->OnInfo(e);
 
-		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Info receiver canceled operation");
-		else
-			return nullptr;
-	}
-	catch(Exception^ ex)
-	{
-		return SvnException::CreateExceptionSvnError("Info receiver", ex);
-	}
-	finally
-	{
-		e->Detach(false);
-	}
+        if (e->Cancel)
+            return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Info receiver canceled operation");
+        else
+            return nullptr;
+    }
+    catch(Exception^ ex)
+    {
+        return SvnException::CreateExceptionSvnError("Info receiver", ex);
+    }
+    finally
+    {
+        e->Detach(false);
+    }
 }
 
 bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoEventArgs^>^ infoHandler)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	// We allow a null infoHandler; the args object might just handle it itself
+    // We allow a null infoHandler; the args object might just handle it itself
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	if (infoHandler)
-		args->Info += infoHandler;
-	try
-	{
-		svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
-		svn_opt_revision_t rev = args->Revision->Or(target->GetSvnRevision(SvnRevision::None, SvnRevision::Head))->ToSvnRevision();
+    if (infoHandler)
+        args->Info += infoHandler;
+    try
+    {
+        svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
+        svn_opt_revision_t rev = args->Revision->Or(target->GetSvnRevision(SvnRevision::None, SvnRevision::Head))->ToSvnRevision();
 
-		svn_error_t* r = svn_client_info3(
-			target->AllocAsString(%pool, true),
-			&pegRev,
-			&rev,
-			(svn_depth_t)args->Depth,
-			args->RetrieveExcluded,
-			args->RetrieveActualOnly,
-			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-			svn_info_receiver,
-			(void*)_clientBaton->Handle,
-			CtxHandle,
-			pool.Handle);
+        svn_error_t* r = svn_client_info3(
+            target->AllocAsString(%pool, true),
+            &pegRev,
+            &rev,
+            (svn_depth_t)args->Depth,
+            args->RetrieveExcluded,
+            args->RetrieveActualOnly,
+            CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+            svn_info_receiver,
+            (void*)_clientBaton->Handle,
+            CtxHandle,
+            pool.Handle);
 
-		return args->HandleResult(this, r, target);
-	}
-	finally
-	{
-		if (infoHandler)
-			args->Info -= infoHandler;
-	}
+        return args->HandleResult(this, r, target);
+    }
+    finally
+    {
+        if (infoHandler)
+            args->Info -= infoHandler;
+    }
 }
 
 bool SvnClient::GetInfo(SvnTarget^ target, [Out] SvnInfoEventArgs^% info)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
+    InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
 
-	try
-	{
-		return Info(target, gcnew SvnInfoArgs(), results->Handler);
-	}
-	finally
-	{
-		if (results->Count > 0)
-			info = results[0];
-		else
-			info = nullptr;
-	}
+    try
+    {
+        return Info(target, gcnew SvnInfoArgs(), results->Handler);
+    }
+    finally
+    {
+        if (results->Count > 0)
+            info = results[0];
+        else
+            info = nullptr;
+    }
 }
 
 bool SvnClient::GetInfo(SvnTarget^ target, SvnInfoArgs^ args, [Out] Collection<SvnInfoEventArgs^>^% info)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
+    InfoItemCollection<SvnInfoEventArgs^>^ results = gcnew InfoItemCollection<SvnInfoEventArgs^>();
 
-	try
-	{
-		return Info(target, args, results->Handler);
-	}
-	finally
-	{
-		info = results;
-	}
+    try
+    {
+        return Info(target, args, results->Handler);
+    }
+    finally
+    {
+        info = results;
+    }
 }
 
 ICollection<SvnConflictData^>^ SvnInfoEventArgs::Conflicts::get()
 {
     if (!_conflicted || _conflicts || !_info || !_info->wc_info)
-        return _conflicts;
+    return _conflicts;
 
     List<SvnConflictData^>^ items = gcnew List<SvnConflictData^>();
 
-	for (int i = 0; i < _info->wc_info->conflicts->nelts; i++)
+    for (int i = 0; i < _info->wc_info->conflicts->nelts; i++)
     {
-        svn_wc_conflict_description2_t *c = APR_ARRAY_IDX(_info->wc_info->conflicts, i, svn_wc_conflict_description2_t *);
+    svn_wc_conflict_description2_t *c = APR_ARRAY_IDX(_info->wc_info->conflicts, i, svn_wc_conflict_description2_t *);
 
-        items->Add(gcnew SvnConflictData(c, _pool));
+    items->Add(gcnew SvnConflictData(c, _pool));
     }
 
     return _conflicts = items->AsReadOnly();

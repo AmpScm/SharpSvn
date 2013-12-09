@@ -19,46 +19,46 @@ using namespace SharpSvn;
 
 SvnCommittedEventArgs^ SvnCommittedEventArgs::Create(SvnClientContext^ client, const svn_commit_info_t *commitInfo, AprPool^ pool)
 {
-	if (!client)
-		throw gcnew ArgumentNullException("client");
-	else if (!pool)
-		throw gcnew ArgumentNullException("pool");
+    if (!client)
+        throw gcnew ArgumentNullException("client");
+    else if (!pool)
+        throw gcnew ArgumentNullException("pool");
 
-	if (!commitInfo || (commitInfo->revision <= 0L))
-		return nullptr;
+    if (!commitInfo || (commitInfo->revision <= 0L))
+        return nullptr;
 
-	return gcnew SvnCommittedEventArgs(commitInfo, pool);
+    return gcnew SvnCommittedEventArgs(commitInfo, pool);
 }
 
 SvnCommitResult::SvnCommitResult(const svn_commit_info_t *commitInfo, AprPool^ pool)
 {
-	if (!commitInfo)
-		throw gcnew ArgumentNullException("commitInfo");
-	else if (!pool)
-		throw gcnew ArgumentNullException("pool");
+    if (!commitInfo)
+        throw gcnew ArgumentNullException("commitInfo");
+    else if (!pool)
+        throw gcnew ArgumentNullException("pool");
 
-	_revision = commitInfo->revision;
+    _revision = commitInfo->revision;
 
-	apr_time_t when = 0;
-	svn_error_t *err = svn_time_from_cstring(&when, commitInfo->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
+    apr_time_t when = 0;
+    svn_error_t *err = svn_time_from_cstring(&when, commitInfo->date, pool->Handle); // pool is not used at this time (might be for errors in future versions)
 
-	if (!err)
-		_date = SvnBase::DateTimeFromAprTime(when);
-	else
-	{
-		svn_error_clear(err);
-		_date = DateTime::MinValue;
-	}
+    if (!err)
+        _date = SvnBase::DateTimeFromAprTime(when);
+    else
+    {
+        svn_error_clear(err);
+        _date = DateTime::MinValue;
+    }
 
-	_author = SvnBase::Utf8_PtrToString(commitInfo->author);
+    _author = SvnBase::Utf8_PtrToString(commitInfo->author);
 
-	_postCommitError = commitInfo->post_commit_err
-			? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err)->Replace("\n", Environment::NewLine)
-				->Replace("\r\r", "\r")
-			: nullptr;
+    _postCommitError = commitInfo->post_commit_err
+                    ? SvnBase::Utf8_PtrToString(commitInfo->post_commit_err)->Replace("\n", Environment::NewLine)
+                            ->Replace("\r\r", "\r")
+                    : nullptr;
 
-	if (commitInfo->repos_root)
-		_reposRoot = SvnBase::Utf8_PtrToUri(commitInfo->repos_root, SvnNodeKind::Directory);
+    if (commitInfo->repos_root)
+        _reposRoot = SvnBase::Utf8_PtrToUri(commitInfo->repos_root, SvnNodeKind::Directory);
 }
 
 SvnCommittedEventArgs::SvnCommittedEventArgs(const svn_commit_info_t *commitInfo, AprPool^ pool)
@@ -68,33 +68,33 @@ SvnCommittedEventArgs::SvnCommittedEventArgs(const svn_commit_info_t *commitInfo
 
 SvnCommitItem::SvnCommitItem(const svn_client_commit_item3_t *commitItemInfo, AprPool^ pool)
 {
-	if (!commitItemInfo)
-		throw gcnew ArgumentNullException("commitItemInfo");
+    if (!commitItemInfo)
+        throw gcnew ArgumentNullException("commitItemInfo");
 
-	_info = commitItemInfo;
-	_nodeKind = (SvnNodeKind)commitItemInfo->kind;
-	_revision = commitItemInfo->revision;
-	_copyFromRevision = commitItemInfo->copyfrom_rev;
-	_commitType = (SvnCommitTypes)commitItemInfo->state_flags;
-	_pool = pool;
+    _info = commitItemInfo;
+    _nodeKind = (SvnNodeKind)commitItemInfo->kind;
+    _revision = commitItemInfo->revision;
+    _copyFromRevision = commitItemInfo->copyfrom_rev;
+    _commitType = (SvnCommitTypes)commitItemInfo->state_flags;
+    _pool = pool;
 }
 
 void SvnCommitItem::Detach(bool keepProperties)
 {
-	try
-	{
-		if (keepProperties)
-		{
-			GC::KeepAlive(Path);
-			GC::KeepAlive(Uri);
-			GC::KeepAlive(CopyFromUri);
-			GC::KeepAlive(MovedFrom);
-		}
-	}
-	finally
-	{
-		_info = nullptr;
-		_pool = nullptr;
-	}
+    try
+    {
+        if (keepProperties)
+        {
+            GC::KeepAlive(Path);
+            GC::KeepAlive(Uri);
+            GC::KeepAlive(CopyFromUri);
+            GC::KeepAlive(MovedFrom);
+        }
+    }
+    finally
+    {
+        _info = nullptr;
+        _pool = nullptr;
+    }
 }
 

@@ -35,26 +35,26 @@ extern sharpsvn_dgettext_t* sharpsvn_dgettext;
 /* External definitions from GNU gettext 0.16.1 manual page of FreeBSD 6.3 */
 static __forceinline char* gettext(const char* msgid)
 {
-	if (sharpsvn_dgettext)
-		return (*sharpsvn_dgettext)(NULL, msgid, -1);
+    if (sharpsvn_dgettext)
+        return (*sharpsvn_dgettext)(NULL, msgid, -1);
 
-	return (char*)msgid;
+    return (char*)msgid;
 }
 
 static __forceinline char* dgettext(const char* domain, const char* msgid)
 {
-	if (sharpsvn_dgettext)
-		return (*sharpsvn_dgettext)(domain, msgid, -1);
+    if (sharpsvn_dgettext)
+        return (*sharpsvn_dgettext)(domain, msgid, -1);
 
-	return (char*)msgid;
+    return (char*)msgid;
 }
 
 static __forceinline char* dcgettext(const char* domain, const char* msgid, int category)
 {
-	if (sharpsvn_dgettext)
-		return (*sharpsvn_dgettext)(domain, msgid, category);
+    if (sharpsvn_dgettext)
+        return (*sharpsvn_dgettext)(domain, msgid, category);
 
-	return (char*)msgid;
+    return (char*)msgid;
 }
 
 static __forceinline char* dngettext(const char* domain, const char* msgid, const char* msgid_plural,
@@ -76,10 +76,10 @@ typedef struct svn_error_t* sharpsvn_sharpsvn_check_bdb_availability_t();
 extern sharpsvn_sharpsvn_check_bdb_availability_t* sharpsvn_sharpsvn_check_bdb_availability;
 static __forceinline struct svn_error_t* check_bdb_availability()
 {
-	if (sharpsvn_sharpsvn_check_bdb_availability)
-		return (*sharpsvn_sharpsvn_check_bdb_availability)();
-		
-	return NULL;
+    if (sharpsvn_sharpsvn_check_bdb_availability)
+        return (*sharpsvn_sharpsvn_check_bdb_availability)();
+
+    return NULL;
 }
 
 char * bindtextdomain (const char * domainname, const char * dirname);
@@ -93,15 +93,15 @@ extern sharpsvn_retry_loop_t* do_sharpsvn_retry;
 
 static __forceinline int __cdecl sharpsvn_retry(int n, int err, int os_err, const char *expr)
 {
-	if (do_sharpsvn_retry)
-		return (*do_sharpsvn_retry)(n, err, os_err, expr);
+    if (do_sharpsvn_retry)
+        return (*do_sharpsvn_retry)(n, err, os_err, expr);
 
-	return 1;
+    return 1;
 }
 
 #ifndef SHARPSVN_NO_ABORT
 /*// The header containing abort() */
-#include <stdlib.h> 
+#include <stdlib.h>
 
 
 #ifdef abort
@@ -113,10 +113,10 @@ static __forceinline int __cdecl sharpsvn_retry(int n, int err, int os_err, cons
 #pragma warning(disable: 4211)
 static __forceinline void __cdecl abort()
 {
-	if(sharpsvn_abort)
-		(*sharpsvn_abort)(); // Allow throwing some kind of non-terminating exception
+    if(sharpsvn_abort)
+        (*sharpsvn_abort)(); // Allow throwing some kind of non-terminating exception
 
-	sharpsvn_real_abort(); // Raise the original abort method
+    sharpsvn_real_abort(); // Raise the original abort method
 }
 
 #pragma warning(pop)

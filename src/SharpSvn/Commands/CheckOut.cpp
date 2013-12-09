@@ -25,75 +25,75 @@ using namespace SharpSvn;
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path)
 {
-	if (!url)
-		throw gcnew ArgumentNullException("url");
-	else if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+    if (!url)
+        throw gcnew ArgumentNullException("url");
+    else if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return CheckOut(url, path, gcnew SvnCheckOutArgs(), result);
+    return CheckOut(url, path, gcnew SvnCheckOutArgs(), result);
 }
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, [Out] SvnUpdateResult^% result)
 {
-	if (!url)
-		throw gcnew ArgumentNullException("url");
-	else if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+    if (!url)
+        throw gcnew ArgumentNullException("url");
+    else if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
 
-	return CheckOut(url, path, gcnew SvnCheckOutArgs(), result);
+    return CheckOut(url, path, gcnew SvnCheckOutArgs(), result);
 }
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args)
 {
-	if (!url)
-		throw gcnew ArgumentNullException("url");
-	else if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!url)
+        throw gcnew ArgumentNullException("url");
+    else if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return CheckOut(url, path, args, result);
+    return CheckOut(url, path, args, result);
 }
 
 bool SvnClient::CheckOut(SvnUriTarget^ url, String^ path, SvnCheckOutArgs^ args, [Out] SvnUpdateResult^% result)
 {
-	if (!url)
-		throw gcnew ArgumentNullException("url");
-	else if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!url)
+        throw gcnew ArgumentNullException("url");
+    else if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	if (args->Revision->RequiresWorkingCopy)
-		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
-	else if (url->Revision->RequiresWorkingCopy)
-		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "url");
+    if (args->Revision->RequiresWorkingCopy)
+        throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
+    else if (url->Revision->RequiresWorkingCopy)
+        throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "url");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_revnum_t version = 0;
+    svn_revnum_t version = 0;
 
-	svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
-	svn_opt_revision_t coRev = args->Revision->Or(url->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
+    svn_opt_revision_t pegRev = url->Revision->ToSvnRevision();
+    svn_opt_revision_t coRev = args->Revision->Or(url->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t* r = svn_client_checkout3(&version,
-		pool.AllocUri(url->Uri),
-		pool.AllocDirent(path),
-		&pegRev,
-		&coRev,
-		(svn_depth_t)args->Depth,
-		args->IgnoreExternals,
-		args->AllowObstructions,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t* r = svn_client_checkout3(&version,
+        pool.AllocUri(url->Uri),
+        pool.AllocDirent(path),
+        &pegRev,
+        &coRev,
+        (svn_depth_t)args->Depth,
+        args->IgnoreExternals,
+        args->AllowObstructions,
+        CtxHandle,
+        pool.Handle);
 
-	result = SvnUpdateResult::Create(this, args, version);
+    result = SvnUpdateResult::Create(this, args, version);
 
-	return args->HandleResult(this, r, url);
+    return args->HandleResult(this, r, url);
 }

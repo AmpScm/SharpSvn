@@ -29,19 +29,19 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetCapabilities(SvnTarget^ target, IEnumerable<SvnCapability>^ retrieve, [Out]Collection<SvnCapability>^% capabilities)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!retrieve)
-		throw gcnew ArgumentNullException("retrieve");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!retrieve)
+        throw gcnew ArgumentNullException("retrieve");
 
-	SvnGetCapabilitiesArgs^ args = gcnew SvnGetCapabilitiesArgs();
-	for each (SvnCapability c in retrieve)
-	{
-		if (!args->Capabilities->Contains(c))
-			args->Capabilities->Add(c);
-	}
+    SvnGetCapabilitiesArgs^ args = gcnew SvnGetCapabilitiesArgs();
+    for each (SvnCapability c in retrieve)
+    {
+        if (!args->Capabilities->Contains(c))
+            args->Capabilities->Add(c);
+    }
 
-	return GetCapabilities(target, args, capabilities);
+    return GetCapabilities(target, args, capabilities);
 }
 
 /*****
@@ -59,98 +59,98 @@ bool SvnClient::GetCapabilities(SvnTarget^ target, IEnumerable<SvnCapability>^ r
 
 bool SvnClient::GetCapabilities(SvnTarget^ target, SvnGetCapabilitiesArgs^ args, [Out]Collection<SvnCapability>^% capabilities)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_ra_session_t* ra_session = nullptr;
-	const char* pTarget = target->AllocAsString(%pool);
-	svn_client__pathrev_t *pathrev;
+    svn_ra_session_t* ra_session = nullptr;
+    const char* pTarget = target->AllocAsString(%pool);
+    svn_client__pathrev_t *pathrev;
 
-	svn_error_t* r;
+    svn_error_t* r;
 
-	r = svn_client__ra_session_from_path2(
-		&ra_session,
-		&pathrev,
-		pTarget,
-		nullptr,
-		target->Revision->AllocSvnRevision(%pool),
-		target->Revision->AllocSvnRevision(%pool),
-		CtxHandle,
-		pool.Handle);
+    r = svn_client__ra_session_from_path2(
+        &ra_session,
+        &pathrev,
+        pTarget,
+        nullptr,
+        target->Revision->AllocSvnRevision(%pool),
+        target->Revision->AllocSvnRevision(%pool),
+        CtxHandle,
+        pool.Handle);
 
-	if (r)
-		return args->HandleResult(this, r, target);
-	capabilities = gcnew Collection<SvnCapability>();
-	AprPool^ tmp = gcnew AprPool(%pool);
-	for each(SvnCapability c in args->RetrieveAllCapabilities ? static_cast<System::Collections::IEnumerable^>(Enum::GetValues(SvnCapability::typeid)) : args->Capabilities)
-	{
-		const char* cap;
-		switch(c)
-		{
-		case SvnCapability::Depth:
-			cap = SVN_RA_CAPABILITY_DEPTH;
-			break;
-		case SvnCapability::MergeInfo:
-			cap = SVN_RA_CAPABILITY_MERGEINFO;
-			break;
-		case SvnCapability::LogRevisionProperties:
-			cap = SVN_RA_CAPABILITY_LOG_REVPROPS;
-			break;
-		case SvnCapability::PartialReplay:
-			cap = SVN_RA_CAPABILITY_PARTIAL_REPLAY;
-			break;
-		case SvnCapability::CommitRevisionProperties:
-			cap = SVN_RA_CAPABILITY_COMMIT_REVPROPS;
-			break;
-		case SvnCapability::AtomicRevisionProperties:
-			cap = SVN_RA_CAPABILITY_ATOMIC_REVPROPS;
-			break;
-		case SvnCapability::InheritedProperties:
-			cap = SVN_RA_CAPABILITY_INHERITED_PROPS;
-			break;
-		case SvnCapability::EphemeralTxnProperties:
-			cap = SVN_RA_CAPABILITY_EPHEMERAL_TXNPROPS;
-			break;
-		case SvnCapability::GetFileRevisionsInReverse:
-			cap = SVN_RA_CAPABILITY_GET_FILE_REVS_REVERSE;
-			break;
-		case SvnCapability::None:
-			if (args->RetrieveAllCapabilities)
-				continue;
-		default:
-			throw gcnew ArgumentOutOfRangeException("args", "Invalid capability specified");
-		}
+    if (r)
+        return args->HandleResult(this, r, target);
+    capabilities = gcnew Collection<SvnCapability>();
+    AprPool^ tmp = gcnew AprPool(%pool);
+    for each(SvnCapability c in args->RetrieveAllCapabilities ? static_cast<System::Collections::IEnumerable^>(Enum::GetValues(SvnCapability::typeid)) : args->Capabilities)
+    {
+        const char* cap;
+        switch(c)
+        {
+        case SvnCapability::Depth:
+            cap = SVN_RA_CAPABILITY_DEPTH;
+            break;
+        case SvnCapability::MergeInfo:
+            cap = SVN_RA_CAPABILITY_MERGEINFO;
+            break;
+        case SvnCapability::LogRevisionProperties:
+            cap = SVN_RA_CAPABILITY_LOG_REVPROPS;
+            break;
+        case SvnCapability::PartialReplay:
+            cap = SVN_RA_CAPABILITY_PARTIAL_REPLAY;
+            break;
+        case SvnCapability::CommitRevisionProperties:
+            cap = SVN_RA_CAPABILITY_COMMIT_REVPROPS;
+            break;
+        case SvnCapability::AtomicRevisionProperties:
+            cap = SVN_RA_CAPABILITY_ATOMIC_REVPROPS;
+            break;
+        case SvnCapability::InheritedProperties:
+            cap = SVN_RA_CAPABILITY_INHERITED_PROPS;
+            break;
+        case SvnCapability::EphemeralTxnProperties:
+            cap = SVN_RA_CAPABILITY_EPHEMERAL_TXNPROPS;
+            break;
+        case SvnCapability::GetFileRevisionsInReverse:
+            cap = SVN_RA_CAPABILITY_GET_FILE_REVS_REVERSE;
+            break;
+        case SvnCapability::None:
+            if (args->RetrieveAllCapabilities)
+                continue;
+        default:
+            throw gcnew ArgumentOutOfRangeException("args", "Invalid capability specified");
+        }
 
-		if(capabilities->Contains(c))
-			continue;
+        if(capabilities->Contains(c))
+            continue;
 
-		svn_boolean_t has = 0;
+        svn_boolean_t has = 0;
 
-		r = svn_ra_has_capability(ra_session, &has, cap, tmp->Handle);
+        r = svn_ra_has_capability(ra_session, &has, cap, tmp->Handle);
 
-		if (r && r->apr_err == SVN_ERR_UNKNOWN_CAPABILITY)
-		{
-			// Some RA layers leave it to the server what they support or not.
-			// Just eat this error to have some compatibility over different versions
-			svn_error_clear(r);
-			r = nullptr;
-		}
-		else if (r)
-			return args->HandleResult(this, r, target);
-		else
+        if (r && r->apr_err == SVN_ERR_UNKNOWN_CAPABILITY)
+        {
+            // Some RA layers leave it to the server what they support or not.
+            // Just eat this error to have some compatibility over different versions
+            svn_error_clear(r);
+            r = nullptr;
+        }
+        else if (r)
+            return args->HandleResult(this, r, target);
+        else
 
-		if(has)
-		{
-			capabilities->Add(c);
-		}
-	}
+        if(has)
+        {
+            capabilities->Add(c);
+        }
+    }
 
-	return args->HandleResult(this, r, target);
+    return args->HandleResult(this, r, target);
 }
 

@@ -16,34 +16,34 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s RecoverRepository method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnUpgradeRepositoryArgs : public SvnRepositoryClientArgs
-	{
-		bool _nonBlocking;
-	public:
-		SvnUpgradeRepositoryArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s RecoverRepository method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnUpgradeRepositoryArgs : public SvnRepositoryClientArgs
+    {
+        bool _nonBlocking;
+    public:
+        SvnUpgradeRepositoryArgs()
+        {
+        }
 
-		property bool NonBlocking
-		{
-			bool get()
-			{
-				return _nonBlocking;
-			}
-			void set(bool value)
-			{
-				_nonBlocking = value;
-			}
-		}
+        property bool NonBlocking
+        {
+            bool get()
+            {
+                return _nonBlocking;
+            }
+            void set(bool value)
+            {
+                _nonBlocking = value;
+            }
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
-}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
+}}

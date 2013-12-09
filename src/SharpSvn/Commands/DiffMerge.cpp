@@ -22,57 +22,57 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!mergeFrom)
-		throw gcnew ArgumentNullException("mergeFrom");
-	else if (!mergeFrom)
-		throw gcnew ArgumentNullException("mergeTo");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!mergeFrom)
+        throw gcnew ArgumentNullException("mergeFrom");
+    else if (!mergeFrom)
+        throw gcnew ArgumentNullException("mergeTo");
 
-	return DiffMerge(targetPath, mergeFrom, mergeTo, gcnew SvnDiffMergeArgs());
+    return DiffMerge(targetPath, mergeFrom, mergeTo, gcnew SvnDiffMergeArgs());
 }
 
 bool SvnClient::DiffMerge(String^ targetPath, SvnTarget^ mergeFrom, SvnTarget^ mergeTo, SvnDiffMergeArgs^ args)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!mergeFrom)
-		throw gcnew ArgumentNullException("mergeFrom");
-	else if (!mergeFrom)
-		throw gcnew ArgumentNullException("mergeTo");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!mergeFrom)
+        throw gcnew ArgumentNullException("mergeFrom");
+    else if (!mergeFrom)
+        throw gcnew ArgumentNullException("mergeTo");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	if (!mergeFrom->Revision->IsExplicit && !dynamic_cast<SvnUriTarget^>(mergeFrom))
-		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeFrom");
-	else if (!mergeTo->Revision->IsExplicit && !dynamic_cast<SvnUriTarget^>(mergeTo))
-		throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeTo");
+    if (!mergeFrom->Revision->IsExplicit && !dynamic_cast<SvnUriTarget^>(mergeFrom))
+        throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeFrom");
+    else if (!mergeTo->Revision->IsExplicit && !dynamic_cast<SvnUriTarget^>(mergeTo))
+        throw gcnew ArgumentException(SharpSvnStrings::TargetMustContainExplicitRevision, "mergeTo");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	apr_array_header_t *merge_options = nullptr;
+    apr_array_header_t *merge_options = nullptr;
 
-	svn_opt_revision_t mergeFromRev = mergeFrom->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
-	svn_opt_revision_t mergeToRev = mergeTo->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
+    svn_opt_revision_t mergeFromRev = mergeFrom->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
+    svn_opt_revision_t mergeToRev = mergeTo->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_merge5(
-		mergeFrom->AllocAsString(%pool),
-		&mergeFromRev,
-		mergeTo->AllocAsString(%pool),
-		&mergeToRev,
-		pool.AllocDirent(targetPath),
-		(svn_depth_t)args->Depth,
-		args->IgnoreMergeInfo.HasValue ? args->IgnoreMergeInfo.Value : args->IgnoreAncestry,
-		args->IgnoreAncestry,
-		args->Force,
-		args->RecordOnly,
-		args->DryRun,
-		!args->CheckForMixedRevisions,
-		merge_options,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_merge5(
+        mergeFrom->AllocAsString(%pool),
+        &mergeFromRev,
+        mergeTo->AllocAsString(%pool),
+        &mergeToRev,
+        pool.AllocDirent(targetPath),
+        (svn_depth_t)args->Depth,
+        args->IgnoreMergeInfo.HasValue ? args->IgnoreMergeInfo.Value : args->IgnoreAncestry,
+        args->IgnoreAncestry,
+        args->Force,
+        args->RecordOnly,
+        args->DryRun,
+        !args->CheckForMixedRevisions,
+        merge_options,
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, targetPath);
+    return args->HandleResult(this, r, targetPath);
 }

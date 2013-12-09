@@ -18,80 +18,80 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient" />.ReplayRevision</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnReplayRevisionArgs : public SvnClientArgs
-	{
-		bool _retrieveContent;
-		SvnRevision^ _lowWatermarkRevision;
+    /// <summary>Extended Parameter container of <see cref="SvnClient" />.ReplayRevision</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnReplayRevisionArgs : public SvnClientArgs
+    {
+        bool _retrieveContent;
+        SvnRevision^ _lowWatermarkRevision;
 
-	internal:
-		Delta::SvnDeltaEditor^ _deltaEditor;
+    internal:
+        Delta::SvnDeltaEditor^ _deltaEditor;
 
-	public:
-		SvnReplayRevisionArgs()
-		{
-		}
+    public:
+        SvnReplayRevisionArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::ReplayRevision;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::ReplayRevision;
+            }
+        }
 
-		/// <summary>Gets or sets the maximum version the client knows about. Deltas will be
-		/// based on this version</summary>
-		property SvnRevision^ LowWatermarkRevision
-		{
-			SvnRevision^ get()
-			{
-				return _lowWatermarkRevision ? _lowWatermarkRevision : SvnRevision::Zero;
-			}
-			void set(SvnRevision^ value)
-			{
-				_lowWatermarkRevision = value;
-			}
-		}
+        /// <summary>Gets or sets the maximum version the client knows about. Deltas will be
+        /// based on this version</summary>
+        property SvnRevision^ LowWatermarkRevision
+        {
+            SvnRevision^ get()
+            {
+                return _lowWatermarkRevision ? _lowWatermarkRevision : SvnRevision::Zero;
+            }
+            void set(SvnRevision^ value)
+            {
+                _lowWatermarkRevision = value;
+            }
+        }
 
-		/// <summary>Gets or sets a boolean indicating whether to retrieve real property
-		/// and content changes. If set to false only marker changes are sent. (Changes on ""
-		/// property and empty file deltas</summary>
-		property bool RetrieveContent
-		{
-			bool get()
-			{
-				return _retrieveContent;
-			}
-			void set(bool value)
-			{
-				_retrieveContent = value;
-			}
-		}
+        /// <summary>Gets or sets a boolean indicating whether to retrieve real property
+        /// and content changes. If set to false only marker changes are sent. (Changes on ""
+        /// property and empty file deltas</summary>
+        property bool RetrieveContent
+        {
+            bool get()
+            {
+                return _retrieveContent;
+            }
+            void set(bool value)
+            {
+                _retrieveContent = value;
+            }
+        }
 
-	public:
-		DECLARE_EVENT(SvnReplayRevisionStartEventArgs^, RevisionStart);
-		DECLARE_EVENT(SvnReplayRevisionEndEventArgs^, RevisionEnd);
+    public:
+        DECLARE_EVENT(SvnReplayRevisionStartEventArgs^, RevisionStart);
+        DECLARE_EVENT(SvnReplayRevisionEndEventArgs^, RevisionEnd);
 
-	protected:
-		virtual void OnRevisionStart(SvnReplayRevisionStartEventArgs^ e)
-		{
-			RevisionStart(this, e);
-		}
+    protected:
+        virtual void OnRevisionStart(SvnReplayRevisionStartEventArgs^ e)
+        {
+            RevisionStart(this, e);
+        }
 
-		virtual void OnRevisionEnd(SvnReplayRevisionEndEventArgs^ e)
-		{
-			RevisionEnd(this, e);
-		}
-	internal:
-		void InvokeRevisionStart(SvnReplayRevisionStartEventArgs^ e)
-		{
-			OnRevisionStart(e);
-		}
-		void InvokeRevisionEnd(SvnReplayRevisionEndEventArgs^ e)
-		{
-			OnRevisionEnd(e);
-		}
-	};
+        virtual void OnRevisionEnd(SvnReplayRevisionEndEventArgs^ e)
+        {
+            RevisionEnd(this, e);
+        }
+    internal:
+        void InvokeRevisionStart(SvnReplayRevisionStartEventArgs^ e)
+        {
+            OnRevisionStart(e);
+        }
+        void InvokeRevisionEnd(SvnReplayRevisionEndEventArgs^ e)
+        {
+            OnRevisionEnd(e);
+        }
+    };
 };

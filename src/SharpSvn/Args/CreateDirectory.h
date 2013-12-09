@@ -16,49 +16,49 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::CreateDirectory(String^, SvnCreateDirectoryArgs^)" /> and <see cref="SvnClient::RemoteCreateDirectory(Uri^, SvnCreateDirectoryArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnCreateDirectoryArgs : public SvnClientArgsWithCommit
-	{
-		bool _createParents;
-	public:
-		SvnCreateDirectoryArgs()
-		{}
+    /// <summary>Extended Parameter container of <see cref="SvnClient::CreateDirectory(String^, SvnCreateDirectoryArgs^)" /> and <see cref="SvnClient::RemoteCreateDirectory(Uri^, SvnCreateDirectoryArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnCreateDirectoryArgs : public SvnClientArgsWithCommit
+    {
+        bool _createParents;
+    public:
+        SvnCreateDirectoryArgs()
+        {}
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::CreateDirectory;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::CreateDirectory;
+            }
+        }
 
-		property bool CreateParents
-		{
-			bool get()
-			{
-				return _createParents;
-			}
+        property bool CreateParents
+        {
+            bool get()
+            {
+                return _createParents;
+            }
 
-			void set(bool value)
-			{
-				_createParents = value;
-			}
-		}
+            void set(bool value)
+            {
+                _createParents = value;
+            }
+        }
 
-		[Obsolete("Naming: Use CreateParents")]
-		property bool MakeParents
-		{
-			bool get()
-			{
-				return CreateParents;
-			}
+        [Obsolete("Naming: Use CreateParents")]
+        property bool MakeParents
+        {
+            bool get()
+            {
+                return CreateParents;
+            }
 
-			void set(bool value)
-			{
-				CreateParents = value;
-			}
-		}
-	};
+            void set(bool value)
+            {
+                CreateParents = value;
+            }
+        }
+    };
 
 }

@@ -29,26 +29,26 @@ using namespace SharpSvn::Implementation;
 static svn_error_t *
 svnrepository_cancel_func(void *cancel_baton)
 {
-	SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get(cancel_baton);
+    SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get(cancel_baton);
 
-	SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
-	try
-	{
-		client->HandleClientCancel(ea);
+    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
+    try
+    {
+        client->HandleClientCancel(ea);
 
-		if (ea->Cancel)
-			return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
+        if (ea->Cancel)
+            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
 
-		return nullptr;
-	}
-	catch(Exception^ e)
-	{
-		return SvnException::CreateExceptionSvnError("Cancel function", e);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
+        return nullptr;
+    }
+    catch(Exception^ e)
+    {
+        return SvnException::CreateExceptionSvnError("Cancel function", e);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
 }
 
 void
@@ -56,81 +56,81 @@ svnrepository_notify_func(void *baton,
                           const svn_repos_notify_t *notify,
                           apr_pool_t *scratch_pool)
 {
-	SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get(baton);
+    SvnRepositoryClient^ client = AprBaton<SvnRepositoryClient^>::Get(baton);
 
-	AprPool tmpPool(scratch_pool, false);
-	SvnRepositoryNotifyEventArgs^ ea = gcnew SvnRepositoryNotifyEventArgs(notify, %tmpPool);
+    AprPool tmpPool(scratch_pool, false);
+    SvnRepositoryNotifyEventArgs^ ea = gcnew SvnRepositoryNotifyEventArgs(notify, %tmpPool);
 
-	try
-	{
-		client->HandleClientNotify(ea);
-	}
-	finally
-	{
-		ea->Detach(false);
-	}
+    try
+    {
+        client->HandleClientNotify(ea);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
 }
 
 static SvnRepositoryClient::SvnRepositoryClient()
 {
-	repos_notify_func = svnrepository_notify_func;
+    repos_notify_func = svnrepository_notify_func;
 }
 
 SvnRepositoryClient::SvnRepositoryClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-	_clientBaton = gcnew AprBaton<SvnRepositoryClient^>(this);
+    _clientBaton = gcnew AprBaton<SvnRepositoryClient^>(this);
 
-	CtxHandle->cancel_func = svnrepository_cancel_func;
-	CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
+    CtxHandle->cancel_func = svnrepository_cancel_func;
+    CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
 }
 
 SvnRepositoryClient::~SvnRepositoryClient()
 {
-	delete _clientBaton;
+    delete _clientBaton;
 }
 
 String^ SvnRepositoryClient::FindRepositoryRoot(Uri^ repositoryUri)
 {
-	if (!repositoryUri)
-		throw gcnew ArgumentNullException("repositoryUri");
+    if (!repositoryUri)
+        throw gcnew ArgumentNullException("repositoryUri");
 
-	EnsureState(SvnContextState::ConfigLoaded);
+    EnsureState(SvnContextState::ConfigLoaded);
 
-	AprPool pool(%_pool);
+    AprPool pool(%_pool);
 
-	const char* root = svn_repos_find_root_path(
-		pool.AllocUri(repositoryUri),
-		pool.Handle);
+    const char* root = svn_repos_find_root_path(
+        pool.AllocUri(repositoryUri),
+        pool.Handle);
 
-	return root ? Utf8_PtrToString(root) : nullptr;
+    return root ? Utf8_PtrToString(root) : nullptr;
 }
 
 void SvnRepositoryClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
-	if (CurrentCommandArgs)
-		CurrentCommandArgs->RaiseOnCancel(e);
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnCancel(e);
 
-	if (e->Cancel)
-		return;
+    if (e->Cancel)
+        return;
 
-	OnCancel(e);
+    OnCancel(e);
 }
 
 void SvnRepositoryClient::OnCancel(SvnCancelEventArgs^ e)
 {
-	Cancel(this, e);
+    Cancel(this, e);
 }
 
 void SvnRepositoryClient::HandleClientNotify(SvnRepositoryNotifyEventArgs^ e)
 {
-	if (CurrentCommandArgs)
-		CurrentCommandArgs->RaiseOnNotify(e);
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnNotify(e);
 
-	OnNotify(e);
+    OnNotify(e);
 }
 
 void SvnRepositoryClient::OnNotify(SvnRepositoryNotifyEventArgs^ e)
 {
-	Notify(this, e);
+    Notify(this, e);
 }

@@ -24,40 +24,40 @@ using namespace SharpSvn::Implementation;
 
 bool SvnRepositoryClient::Verify(String^ repositoryPath)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
 
-	return Verify(repositoryPath, gcnew SvnVerifyRepositoryArgs());
+    return Verify(repositoryPath, gcnew SvnVerifyRepositoryArgs());
 }
 
 bool SvnRepositoryClient::Verify(String^ repositoryPath, SvnVerifyRepositoryArgs^ args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_repos_t* repos = nullptr;
+    svn_repos_t* repos = nullptr;
 
-	SVN_HANDLE(svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle));
+    SVN_HANDLE(svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle));
 
-	svn_error_t* r = svn_repos_verify_fs2(
-		repos,
-		(svn_revnum_t)args->StartRevision,
-		(svn_revnum_t)args->EndRevision,
-		repos_notify_func,
-		_clientBaton->Handle,
-		CtxHandle->cancel_func,
-		CtxHandle->cancel_baton,
-		pool.Handle);
+    svn_error_t* r = svn_repos_verify_fs2(
+        repos,
+        (svn_revnum_t)args->StartRevision,
+        (svn_revnum_t)args->EndRevision,
+        repos_notify_func,
+        _clientBaton->Handle,
+        CtxHandle->cancel_func,
+        CtxHandle->cancel_baton,
+        pool.Handle);
 
-	return args->HandleResult(this, r);
-}
+    return args->HandleResult(this, r);
+}}

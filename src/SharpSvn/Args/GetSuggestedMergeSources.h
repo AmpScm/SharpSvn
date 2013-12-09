@@ -16,22 +16,22 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetSuggestedMergeSources method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnGetSuggestedMergeSourcesArgs : public SvnClientArgs
-	{
-	public:
-		SvnGetSuggestedMergeSourcesArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient" />'s GetSuggestedMergeSources method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnGetSuggestedMergeSourcesArgs : public SvnClientArgs
+    {
+    public:
+        SvnGetSuggestedMergeSourcesArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::GetSuggestedMergeSources;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::GetSuggestedMergeSources;
+            }
+        }
+    };
 
 }

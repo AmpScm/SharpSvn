@@ -18,26 +18,26 @@
 
 namespace SharpSvn {
 
-	public ref class SvnCancelEventArgs : public SvnEventArgs
-	{
-		bool _cancel;
+    public ref class SvnCancelEventArgs : public SvnEventArgs
+    {
+        bool _cancel;
 
-	public:
-		SvnCancelEventArgs()
-		{
-		}
+    public:
+        SvnCancelEventArgs()
+        {
+        }
 
-	public:
-		property bool Cancel
-		{
-			bool get()
-			{
-				return _cancel;
-			}
-			void set(bool value)
-			{
-				_cancel = value;
-			}
-		}
-	};
-}
+    public:
+        property bool Cancel
+        {
+            bool get()
+            {
+                return _cancel;
+            }
+            void set(bool value)
+            {
+                _cancel = value;
+            }
+        }
+    };
+}}

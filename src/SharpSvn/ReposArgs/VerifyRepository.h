@@ -16,51 +16,51 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s DeleteRepository method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnVerifyRepositoryArgs : public SvnRepositoryClientArgs
-	{
-		__int64 _startRev;
-		__int64 _endRev;
+    /// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s DeleteRepository method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnVerifyRepositoryArgs : public SvnRepositoryClientArgs
+    {
+        __int64 _startRev;
+        __int64 _endRev;
 
-	public:
-		SvnVerifyRepositoryArgs()
-		{
-			_startRev = SVN_INVALID_REVNUM;
-			_endRev = SVN_INVALID_REVNUM;
-		}
+    public:
+        SvnVerifyRepositoryArgs()
+        {
+            _startRev = SVN_INVALID_REVNUM;
+            _endRev = SVN_INVALID_REVNUM;
+        }
 
-		property __int64 StartRevision
-		{
-			__int64 get()
-			{
-				return _startRev;
-			}
-			void set(__int64 value)
-			{
-				_startRev = value;
-			}
-		}
+        property __int64 StartRevision
+        {
+            __int64 get()
+            {
+                return _startRev;
+            }
+            void set(__int64 value)
+            {
+                _startRev = value;
+            }
+        }
 
-		property __int64 EndRevision
-		{
-			__int64 get()
-			{
-				return _endRev;
-			}
-			void set(__int64 value)
-			{
-				_endRev = value;
-			}
-		}
+        property __int64 EndRevision
+        {
+            __int64 get()
+            {
+                return _endRev;
+            }
+            void set(__int64 value)
+            {
+                _endRev = value;
+            }
+        }
 
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
-}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
+}}

@@ -17,208 +17,208 @@
 namespace SharpSvn {
 
 /// <summary>Extended Parameter container of <see cref="SvnClient" />'s Diff command</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnDiffArgs : public SvnClientArgs
-	{
-		SvnDepth _depth;
-		bool _ignoreAncestry;
-		bool _noAdded;
-		bool _noDeleted;
-		bool _ignoreContentType;
-		bool _noProperties;
-		bool _propertiesOnly;
-		String^ _headerEncoding;
-		String^ _relativeFrom;
-		SvnCommandLineArgumentCollection^ _diffArguments;
-		SvnChangeListCollection^ _changelists;
-		Stream^ _errorStream;
-        bool _copiesAsAdds;
-        bool _gitFormat;
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnDiffArgs : public SvnClientArgs
+    {
+        SvnDepth _depth;
+        bool _ignoreAncestry;
+        bool _noAdded;
+        bool _noDeleted;
+        bool _ignoreContentType;
+        bool _noProperties;
+        bool _propertiesOnly;
+        String^ _headerEncoding;
+        String^ _relativeFrom;
+        SvnCommandLineArgumentCollection^ _diffArguments;
+        SvnChangeListCollection^ _changelists;
+        Stream^ _errorStream;
+    bool _copiesAsAdds;
+    bool _gitFormat;
 
-	public:
-		SvnDiffArgs()
-		{
-			_depth = SvnDepth::Infinity;
-		}
+    public:
+        SvnDiffArgs()
+        {
+            _depth = SvnDepth::Infinity;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Diff;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Diff;
+            }
+        }
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		property bool IgnoreAncestry
-		{
-			bool get()
-			{
-				return _ignoreAncestry;
-			}
-			void set(bool value)
-			{
-				_ignoreAncestry = value;
-			}
-		}
+        property bool IgnoreAncestry
+        {
+            bool get()
+            {
+                return _ignoreAncestry;
+            }
+            void set(bool value)
+            {
+                _ignoreAncestry = value;
+            }
+        }
 
-		property bool NoAdded
-		{
-			bool get()
-			{
-				return _noAdded;
-			}
-			void set(bool value)
-			{
-				_noAdded = value;
-			}
-		}
+        property bool NoAdded
+        {
+            bool get()
+            {
+                return _noAdded;
+            }
+            void set(bool value)
+            {
+                _noAdded = value;
+            }
+        }
 
-		property bool NoDeleted
-		{
-			bool get()
-			{
-				return _noDeleted;
-			}
-			void set(bool value)
-			{
-				_noDeleted = value;
-			}
-		}
+        property bool NoDeleted
+        {
+            bool get()
+            {
+                return _noDeleted;
+            }
+            void set(bool value)
+            {
+                _noDeleted = value;
+            }
+        }
 
-		property bool PropertiesOnly
-		{
-			bool get()
-			{
-				return _propertiesOnly;
-			}
-			void set(bool value)
-			{
-				_propertiesOnly = value;
-			}
-		}
+        property bool PropertiesOnly
+        {
+            bool get()
+            {
+                return _propertiesOnly;
+            }
+            void set(bool value)
+            {
+                _propertiesOnly = value;
+            }
+        }
 
-		property bool NoProperties
-		{
-			bool get()
-			{
-				return _noProperties;
-			}
-			void set(bool value)
-			{
-				_noProperties = value;
-			}
-		}
+        property bool NoProperties
+        {
+            bool get()
+            {
+                return _noProperties;
+            }
+            void set(bool value)
+            {
+                _noProperties = value;
+            }
+        }
 
-		property bool IgnoreContentType
-		{
-			bool get()
-			{
-				return _ignoreContentType;
-			}
-			void set(bool value)
-			{
-				_ignoreContentType = value;
-			}
-		}
+        property bool IgnoreContentType
+        {
+            bool get()
+            {
+                return _ignoreContentType;
+            }
+            void set(bool value)
+            {
+                _ignoreContentType = value;
+            }
+        }
 
-		//property bool
+        //property bool
 
-		property String^ HeaderEncoding
-		{
-			String^ get()
-			{
-				return _headerEncoding ? _headerEncoding : "utf-8";
-			}
-			void set(String^ value)
-			{
-				_headerEncoding = value;
-			}
-		}
+        property String^ HeaderEncoding
+        {
+            String^ get()
+            {
+                return _headerEncoding ? _headerEncoding : "utf-8";
+            }
+            void set(String^ value)
+            {
+                _headerEncoding = value;
+            }
+        }
 
-		property SvnCommandLineArgumentCollection^ DiffArguments
-		{
-			SvnCommandLineArgumentCollection^ get()
-			{
-				if (!_diffArguments)
-					_diffArguments = gcnew SvnCommandLineArgumentCollection();
+        property SvnCommandLineArgumentCollection^ DiffArguments
+        {
+            SvnCommandLineArgumentCollection^ get()
+            {
+                if (!_diffArguments)
+                    _diffArguments = gcnew SvnCommandLineArgumentCollection();
 
-				return _diffArguments;
-			}
-		}
+                return _diffArguments;
+            }
+        }
 
-		property String^ RelativeToPath
-		{
-			String^ get()
-			{
-				return _relativeFrom;
-			}
-			void set(String^ value)
-			{
-				if (String::IsNullOrEmpty(value))
-					_relativeFrom = nullptr;
-				else
-					_relativeFrom = value;
-			}
-		}
+        property String^ RelativeToPath
+        {
+            String^ get()
+            {
+                return _relativeFrom;
+            }
+            void set(String^ value)
+            {
+                if (String::IsNullOrEmpty(value))
+                    _relativeFrom = nullptr;
+                else
+                    _relativeFrom = value;
+            }
+        }
 
-		/// <summary>Gets the list of changelist-names</summary>
-		property SvnChangeListCollection^ ChangeLists
-		{
-			SvnChangeListCollection^ get()
-			{
-				if (!_changelists)
-					_changelists = gcnew SvnChangeListCollection();
-				return _changelists;
-			}
-		}
+        /// <summary>Gets the list of changelist-names</summary>
+        property SvnChangeListCollection^ ChangeLists
+        {
+            SvnChangeListCollection^ get()
+            {
+                if (!_changelists)
+                    _changelists = gcnew SvnChangeListCollection();
+                return _changelists;
+            }
+        }
 
-		property Stream^ ErrorStream
-		{
-			Stream^ get()
-			{
-				return _errorStream;
-			}
-			void set(Stream^ value)
-			{
-				_errorStream = value;
-			}
-		}
+        property Stream^ ErrorStream
+        {
+            Stream^ get()
+            {
+                return _errorStream;
+            }
+            void set(Stream^ value)
+            {
+                _errorStream = value;
+            }
+        }
 
-		property bool CopiesAsAdds
-		{
-			bool get()
-			{
-				return _copiesAsAdds;
-			}
-			void set(bool value)
-			{
-				_copiesAsAdds = value;
-			}
-		}
+        property bool CopiesAsAdds
+        {
+            bool get()
+            {
+                return _copiesAsAdds;
+            }
+            void set(bool value)
+            {
+                _copiesAsAdds = value;
+            }
+        }
 
-        property bool UseGitFormat
-		{
-			bool get()
-			{
-				return _gitFormat;
-			}
-			void set(bool value)
-			{
-				_gitFormat = value;
-			}
-		}
-	};
+    property bool UseGitFormat
+        {
+            bool get()
+            {
+                return _gitFormat;
+            }
+            void set(bool value)
+            {
+                _gitFormat = value;
+            }
+        }
+    };
 
 }

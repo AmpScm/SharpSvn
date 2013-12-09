@@ -16,21 +16,21 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s DeleteRepository method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnDeleteRepositoryArgs : public SvnRepositoryClientArgs
-	{
-	public:
-		SvnDeleteRepositoryArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s DeleteRepository method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnDeleteRepositoryArgs : public SvnRepositoryClientArgs
+    {
+    public:
+        SvnDeleteRepositoryArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
-}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
+}}

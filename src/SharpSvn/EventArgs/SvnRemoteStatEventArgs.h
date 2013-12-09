@@ -18,40 +18,40 @@
 #include "EventArgs/SvnListEventArgs.h"
 
 namespace SharpSvn {
-	namespace Remote {
+    namespace Remote {
 
-	public ref class SvnRemoteStatEventArgs : public SvnEventArgs
-	{
-		initonly SvnDirEntry^ _entry;
-	internal:
-		SvnRemoteStatEventArgs(const svn_dirent_t *dirent)
-		{
-			_entry = gcnew SvnDirEntry(dirent);
-		}
+    public ref class SvnRemoteStatEventArgs : public SvnEventArgs
+    {
+        initonly SvnDirEntry^ _entry;
+    internal:
+        SvnRemoteStatEventArgs(const svn_dirent_t *dirent)
+        {
+            _entry = gcnew SvnDirEntry(dirent);
+        }
 
-	public:
-		property SvnDirEntry^ Entry
-		{
-			SvnDirEntry^ get()
-			{
-				return _entry;
-			}
-		}
+    public:
+        property SvnDirEntry^ Entry
+        {
+            SvnDirEntry^ get()
+            {
+                return _entry;
+            }
+        }
 
-	protected public:
-		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
-		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-			}
-			finally
-			{
-				_entry->Detach(keepProperties);
-				__super::Detach(keepProperties);
-			}
-		}
-	};
+    protected public:
+        /// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
+        /// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+            }
+            finally
+            {
+                _entry->Detach(keepProperties);
+                __super::Detach(keepProperties);
+            }
+        }
+    };
 }
 }

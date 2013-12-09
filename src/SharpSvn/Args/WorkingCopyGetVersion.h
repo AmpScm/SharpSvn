@@ -16,44 +16,44 @@
 
 namespace SharpSvn {
 
-	public ref class SvnGetWorkingCopyVersionArgs : public SvnClientArgs
-	{
-		String^ _trailUrl;
-		bool _committedRevisions;
+    public ref class SvnGetWorkingCopyVersionArgs : public SvnClientArgs
+    {
+        String^ _trailUrl;
+        bool _committedRevisions;
 
-	public:
-		/// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
-		virtual property SvnCommandType CommandType
-		{
-			SvnCommandType get() override sealed
-			{
-				return SvnCommandType::GetWorkingCopyVersion;
-			}
-		}
+    public:
+        /// <summary>Gets the <see cref="SvnCommandType" /> of the command</summary>
+        virtual property SvnCommandType CommandType
+        {
+            SvnCommandType get() override sealed
+            {
+                return SvnCommandType::GetWorkingCopyVersion;
+            }
+        }
 
-	public:
-		property String^ Trail
-		{
-			String^ get()
-			{
-				return _trailUrl;
-			}
-			void set(String^ value)
-			{
-				_trailUrl = value;
-			}
-		}
+    public:
+        property String^ Trail
+        {
+            String^ get()
+            {
+                return _trailUrl;
+            }
+            void set(String^ value)
+            {
+                _trailUrl = value;
+            }
+        }
 
-		property bool UseCommittedRevisions
-		{
-			bool get()
-			{
-				return _committedRevisions;
-			}
-			void set(bool value)
-			{
-				_committedRevisions = value;
-			}
-		}
-	};
-}
+        property bool UseCommittedRevisions
+        {
+            bool get()
+            {
+                return _committedRevisions;
+            }
+            void set(bool value)
+            {
+                _committedRevisions = value;
+            }
+        }
+    };
+}}

@@ -26,82 +26,82 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!toPath)
-		throw gcnew ArgumentNullException("toPath");
-	else if (!IsNotUri(toPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!toPath)
+        throw gcnew ArgumentNullException("toPath");
+    else if (!IsNotUri(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Export(from, toPath, gcnew SvnExportArgs(), result);
+    return Export(from, toPath, gcnew SvnExportArgs(), result);
 }
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, [Out] SvnUpdateResult^% result)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!toPath)
-		throw gcnew ArgumentNullException("toPath");
-	else if (!IsNotUri(toPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!toPath)
+        throw gcnew ArgumentNullException("toPath");
+    else if (!IsNotUri(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return Export(from, toPath, gcnew SvnExportArgs(), result);
+    return Export(from, toPath, gcnew SvnExportArgs(), result);
 }
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!toPath)
-		throw gcnew ArgumentNullException("toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!toPath)
+        throw gcnew ArgumentNullException("toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Export(from, toPath, args, result);
+    return Export(from, toPath, args, result);
 }
 
 bool SvnClient::Export(SvnTarget^ from, String^ toPath, SvnExportArgs^ args, [Out] SvnUpdateResult^% result)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!toPath)
-		throw gcnew ArgumentNullException("toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!toPath)
+        throw gcnew ArgumentNullException("toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	result = nullptr;
+    result = nullptr;
 
-	svn_revnum_t resultRev = 0;
-	svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
-	svn_opt_revision_t rev = args->Revision->Or(from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head))->ToSvnRevision();
+    svn_revnum_t resultRev = 0;
+    svn_opt_revision_t pegRev = from->Revision->ToSvnRevision();
+    svn_opt_revision_t rev = args->Revision->Or(from->GetSvnRevision(SvnRevision::Working, SvnRevision::Head))->ToSvnRevision();
 
-	svn_error_t* r = svn_client_export5(
-		&resultRev,
-		from->AllocAsString(%pool),
-		pool.AllocDirent(toPath),
-		&pegRev,
-		&rev,
-		args->Overwrite,
-		args->IgnoreExternals,
-		args->IgnoreKeywords,
-		(svn_depth_t)args->Depth,
-		GetEolPtr(args->LineStyle),
-		CtxHandle,
-		pool.Handle);
+    svn_error_t* r = svn_client_export5(
+        &resultRev,
+        from->AllocAsString(%pool),
+        pool.AllocDirent(toPath),
+        &pegRev,
+        &rev,
+        args->Overwrite,
+        args->IgnoreExternals,
+        args->IgnoreKeywords,
+        (svn_depth_t)args->Depth,
+        GetEolPtr(args->LineStyle),
+        CtxHandle,
+        pool.Handle);
 
-	if (args->HandleResult(this, r, from))
-	{
-		result = SvnUpdateResult::Create(this, args, resultRev);
-		return true;
-	}
-	else
-		return false;
+    if (args->HandleResult(this, r, from))
+    {
+        result = SvnUpdateResult::Create(this, args, resultRev);
+        return true;
+    }
+    else
+        return false;
 }

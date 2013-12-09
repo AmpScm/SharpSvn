@@ -16,23 +16,23 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnWorkingCopyClient::Restore(String^,SvnWorkingCopyRestoreArgs^)" />.</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnWorkingCopyRestoreArgs : public SvnClientArgs
-	{
-		bool _commitTime;
-	public:
-		SvnWorkingCopyRestoreArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnWorkingCopyClient::Restore(String^,SvnWorkingCopyRestoreArgs^)" />.</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnWorkingCopyRestoreArgs : public SvnClientArgs
+    {
+        bool _commitTime;
+    public:
+        SvnWorkingCopyRestoreArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::WorkingCopyRestore;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::WorkingCopyRestore;
+            }
+        }
+    };
 
 }

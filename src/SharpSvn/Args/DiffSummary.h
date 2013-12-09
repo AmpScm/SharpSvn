@@ -16,96 +16,96 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container for SvnClient.DiffSummary</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnDiffSummaryArgs : public SvnClientArgs
-	{
-		bool _noticeAncestry;
-		SvnDepth _depth;
-		SvnChangeListCollection^ _changelists;
-	public:
-		SvnDiffSummaryArgs()
-		{
-			_depth = SvnDepth::Infinity;
-		}
+    /// <summary>Extended Parameter container for SvnClient.DiffSummary</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnDiffSummaryArgs : public SvnClientArgs
+    {
+        bool _noticeAncestry;
+        SvnDepth _depth;
+        SvnChangeListCollection^ _changelists;
+    public:
+        SvnDiffSummaryArgs()
+        {
+            _depth = SvnDepth::Infinity;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::DiffSummary;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::DiffSummary;
+            }
+        }
 
-	public:
-		DECLARE_EVENT(SvnDiffSummaryEventArgs^, DiffSummary);
+    public:
+        DECLARE_EVENT(SvnDiffSummaryEventArgs^, DiffSummary);
 
-	public:
-		[Obsolete("Use .DiffSummary")]
-		event EventHandler<SvnDiffSummaryEventArgs^>^ SummaryHandler
-		{
-			void add(EventHandler<SvnDiffSummaryEventArgs^>^ value)
-			{
-				DiffSummary += value;
-			}
-			void remove(EventHandler<SvnDiffSummaryEventArgs^>^ value)
-			{
-				DiffSummary -= value;
-			}
-		}
+    public:
+        [Obsolete("Use .DiffSummary")]
+        event EventHandler<SvnDiffSummaryEventArgs^>^ SummaryHandler
+        {
+            void add(EventHandler<SvnDiffSummaryEventArgs^>^ value)
+            {
+                DiffSummary += value;
+            }
+            void remove(EventHandler<SvnDiffSummaryEventArgs^>^ value)
+            {
+                DiffSummary -= value;
+            }
+        }
 
-	protected:
-		virtual void OnDiffSummary(SvnDiffSummaryEventArgs^ e)
-		{
-			DiffSummary(this, e);
-		}
+    protected:
+        virtual void OnDiffSummary(SvnDiffSummaryEventArgs^ e)
+        {
+            DiffSummary(this, e);
+        }
 
-	internal:
-		void RaiseDiffSummary(SvnDiffSummaryEventArgs^ e)
-		{
-			OnDiffSummary(e);
-		}
+    internal:
+        void RaiseDiffSummary(SvnDiffSummaryEventArgs^ e)
+        {
+            OnDiffSummary(e);
+        }
 
-	public:
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+    public:
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		property bool IgnoreAncestry
-		{
-			bool get()
-			{
-				return !_noticeAncestry;
-			}
-			void set(bool value)
-			{
-				_noticeAncestry = !value;
-			}
-		}
+        property bool IgnoreAncestry
+        {
+            bool get()
+            {
+                return !_noticeAncestry;
+            }
+            void set(bool value)
+            {
+                _noticeAncestry = !value;
+            }
+        }
 
-		/// <summary>Gets the list of changelist-names</summary>
-		property SvnChangeListCollection^ ChangeLists
-		{
-			SvnChangeListCollection^ get()
-			{
-				if (!_changelists)
-					_changelists = gcnew SvnChangeListCollection();
-				return _changelists;
-			}
-		}
+        /// <summary>Gets the list of changelist-names</summary>
+        property SvnChangeListCollection^ ChangeLists
+        {
+            SvnChangeListCollection^ get()
+            {
+                if (!_changelists)
+                    _changelists = gcnew SvnChangeListCollection();
+                return _changelists;
+            }
+        }
 
-	internal:
-		const char* _fromUri;
-		const char* _toUri;
-	};
+    internal:
+        const char* _fromUri;
+        const char* _toUri;
+    };
 
 
 }

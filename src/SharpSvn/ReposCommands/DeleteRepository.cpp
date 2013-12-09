@@ -25,30 +25,30 @@ using namespace SharpSvn::Implementation;
 
 bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return DeleteRepository(repositoryPath, gcnew SvnDeleteRepositoryArgs());
+    return DeleteRepository(repositoryPath, gcnew SvnDeleteRepositoryArgs());
 }
 
 bool SvnRepositoryClient::DeleteRepository(String^ repositoryPath, SvnDeleteRepositoryArgs^ args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t* r = svn_repos_delete(
-		pool.AllocDirent(repositoryPath),
-		pool.Handle);
+    svn_error_t* r = svn_repos_delete(
+        pool.AllocDirent(repositoryPath),
+        pool.Handle);
 
-	return args->HandleResult(this, r);
+    return args->HandleResult(this, r);
 }

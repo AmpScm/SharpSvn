@@ -24,27 +24,27 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Upgrade(String ^path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
 
-	return Upgrade(path, gcnew SvnUpgradeArgs());
+    return Upgrade(path, gcnew SvnUpgradeArgs());
 }
 
 bool SvnClient::Upgrade(String ^path, SvnUpgradeArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_upgrade(
-		pool.AllocDirent(path),
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_upgrade(
+        pool.AllocDirent(path),
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, path);
+    return args->HandleResult(this, r, path);
 }

@@ -17,128 +17,128 @@
 // Included from SvnClientEventArgs.h
 
 namespace SharpSvn {
-	ref class Delta::SvnDeltaEditor;
+    ref class Delta::SvnDeltaEditor;
 
-	public ref class SvnReplayRevisionStartEventArgs : public SvnCancelEventArgs
-	{
-		initonly __int64 _revision;
-		Delta::SvnDeltaEditor^ _editor;
-		apr_hash_t* _revProps;
-		AprPool^ _pool;
-		SvnPropertyCollection^ _revisionProperties;
+    public ref class SvnReplayRevisionStartEventArgs : public SvnCancelEventArgs
+    {
+        initonly __int64 _revision;
+        Delta::SvnDeltaEditor^ _editor;
+        apr_hash_t* _revProps;
+        AprPool^ _pool;
+        SvnPropertyCollection^ _revisionProperties;
 
-	internal:
-		SvnReplayRevisionStartEventArgs(__int64 revision, Delta::SvnDeltaEditor^ editor, apr_hash_t* revProps, AprPool^ pool)
-		{
-			_revision = revision;
-			_editor = editor;
-			_revProps = revProps;
-			_pool = pool;
-		}
-
-	public:
-		property __int64 Revision
-		{
-			__int64 get()
-			{
-				return _revision;
-			}
-		}
-		property Delta::SvnDeltaEditor^ Editor
-		{
-			Delta::SvnDeltaEditor^ get()
-			{
-				return _editor;
-			}
-			void set(Delta::SvnDeltaEditor^ value)
-			{
-				_editor = value;
-			}
-		}
-
-		property SvnPropertyCollection^ RevisionProperties
+    internal:
+        SvnReplayRevisionStartEventArgs(__int64 revision, Delta::SvnDeltaEditor^ editor, apr_hash_t* revProps, AprPool^ pool)
         {
-            SvnPropertyCollection^ get()
-            {
-                if (!_revisionProperties && _revProps && _pool)
-                    _revisionProperties = SvnBase::CreatePropertyDictionary(_revProps, _pool);
+            _revision = revision;
+            _editor = editor;
+            _revProps = revProps;
+            _pool = pool;
+        }
 
-                return _revisionProperties;
+    public:
+        property __int64 Revision
+        {
+            __int64 get()
+            {
+                return _revision;
+            }
+        }
+        property Delta::SvnDeltaEditor^ Editor
+        {
+            Delta::SvnDeltaEditor^ get()
+            {
+                return _editor;
+            }
+            void set(Delta::SvnDeltaEditor^ value)
+            {
+                _editor = value;
             }
         }
 
-	protected public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					GC::KeepAlive(RevisionProperties);
-				}
-			}
-			finally
-			{
-				_revProps = nullptr;
-				_pool = nullptr;
-
-				__super::Detach(keepProperties);
-			}
-		}
-	};
-
-	public ref class SvnReplayRevisionEndEventArgs : public SvnCancelEventArgs
-	{
-		initonly __int64 _revision;
-		apr_hash_t* _revProps;
-		AprPool^ _pool;
-		SvnPropertyCollection^ _revisionProperties;
-	internal:
-		SvnReplayRevisionEndEventArgs(__int64 revision, apr_hash_t *revProps, AprPool^ pool)
-		{
-			_revision = revision;
-			_revProps = revProps;
-			_pool = pool;
-		}
-
-	public:
-		property __int64 Revision
-		{
-			__int64 get()
-			{
-				return _revision;
-			}
-		}
-
-		property SvnPropertyCollection^ RevisionProperties
+        property SvnPropertyCollection^ RevisionProperties
+    {
+        SvnPropertyCollection^ get()
         {
-            SvnPropertyCollection^ get()
-            {
-                if (!_revisionProperties && _revProps && _pool)
-                    _revisionProperties = SvnBase::CreatePropertyDictionary(_revProps, _pool);
+        if (!_revisionProperties && _revProps && _pool)
+            _revisionProperties = SvnBase::CreatePropertyDictionary(_revProps, _pool);
 
-                return _revisionProperties;
+        return _revisionProperties;
+        }
+    }
+
+    protected public:
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    GC::KeepAlive(RevisionProperties);
+                }
+            }
+            finally
+            {
+                _revProps = nullptr;
+                _pool = nullptr;
+
+                __super::Detach(keepProperties);
+            }
+        }
+    };
+
+    public ref class SvnReplayRevisionEndEventArgs : public SvnCancelEventArgs
+    {
+        initonly __int64 _revision;
+        apr_hash_t* _revProps;
+        AprPool^ _pool;
+        SvnPropertyCollection^ _revisionProperties;
+    internal:
+        SvnReplayRevisionEndEventArgs(__int64 revision, apr_hash_t *revProps, AprPool^ pool)
+        {
+            _revision = revision;
+            _revProps = revProps;
+            _pool = pool;
+        }
+
+    public:
+        property __int64 Revision
+        {
+            __int64 get()
+            {
+                return _revision;
             }
         }
 
-	protected public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					GC::KeepAlive(RevisionProperties);
-				}
-			}
-			finally
-			{
-				_revProps = nullptr;
-				_pool = nullptr;
+        property SvnPropertyCollection^ RevisionProperties
+    {
+        SvnPropertyCollection^ get()
+        {
+        if (!_revisionProperties && _revProps && _pool)
+            _revisionProperties = SvnBase::CreatePropertyDictionary(_revProps, _pool);
 
-				__super::Detach(keepProperties);
-			}
-		}
-	};
+        return _revisionProperties;
+        }
+    }
 
-}
+    protected public:
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    GC::KeepAlive(RevisionProperties);
+                }
+            }
+            finally
+            {
+                _revProps = nullptr;
+                _pool = nullptr;
+
+                __super::Detach(keepProperties);
+            }
+        }
+    };
+
+}}

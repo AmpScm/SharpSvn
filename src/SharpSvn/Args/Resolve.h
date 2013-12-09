@@ -15,36 +15,36 @@
 #pragma once
 
 namespace SharpSvn {
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Resolved(String^, SvnResolvedArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnResolveArgs : public SvnClientArgs
-	{
-		SvnDepth _depth;
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Resolved(String^, SvnResolvedArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnResolveArgs : public SvnClientArgs
+    {
+        SvnDepth _depth;
 
-	public:
-		SvnResolveArgs()
-		{
-			_depth = SvnDepth::Empty;
-		}
+    public:
+        SvnResolveArgs()
+        {
+            _depth = SvnDepth::Empty;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Resolved;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Resolved;
+            }
+        }
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
-	};
-}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
+    };
+}}

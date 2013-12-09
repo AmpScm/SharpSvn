@@ -16,21 +16,21 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended parameter container for <see cref="SvnClient" />Cleanup</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnUpgradeArgs : public SvnClientArgs
-	{
-	public:
-		SvnUpgradeArgs()
-		{
-		}
+    /// <summary>Extended parameter container for <see cref="SvnClient" />Cleanup</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnUpgradeArgs : public SvnClientArgs
+    {
+    public:
+        SvnUpgradeArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Upgrade;
-			}
-		}
-	};
-}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Upgrade;
+            }
+        }
+    };
+}}

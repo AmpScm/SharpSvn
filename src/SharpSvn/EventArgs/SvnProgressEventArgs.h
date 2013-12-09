@@ -18,40 +18,40 @@
 
 namespace SharpSvn {
 
-	public ref class SvnProgressEventArgs sealed : public SvnEventArgs
-	{
-		initonly __int64 _progress;
-		initonly __int64 _totalProgress;
+    public ref class SvnProgressEventArgs sealed : public SvnEventArgs
+    {
+        initonly __int64 _progress;
+        initonly __int64 _totalProgress;
 
-	public:
-		SvnProgressEventArgs(__int64 progress, __int64 totalProgress)
-		{
-			_progress = progress;
-			_totalProgress = totalProgress;
-		}
+    public:
+        SvnProgressEventArgs(__int64 progress, __int64 totalProgress)
+        {
+            _progress = progress;
+            _totalProgress = totalProgress;
+        }
 
-	public:
-		property __int64 Progress
-		{
-			__int64 get()
-			{
-				return _progress;
-			}
-		}
+    public:
+        property __int64 Progress
+        {
+            __int64 get()
+            {
+                return _progress;
+            }
+        }
 
-		property __int64 TotalProgress
-		{
-			__int64 get()
-			{
-				return _totalProgress;
-			}
-		}
+        property __int64 TotalProgress
+        {
+            __int64 get()
+            {
+                return _totalProgress;
+            }
+        }
 
-		/// <summary>Serves as a hashcode for the specified type</summary>
-		virtual int GetHashCode() override
-		{
-			return _progress.GetHashCode();
-		}
-	};
+        /// <summary>Serves as a hashcode for the specified type</summary>
+        virtual int GetHashCode() override
+        {
+            return _progress.GetHashCode();
+        }
+    };
 
-}
+}}

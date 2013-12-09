@@ -16,36 +16,36 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnWorkingCopyClient::Copy(String^,String^,SvnWorkingCopyCopyArgs^)" />.</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnWorkingCopyCopyArgs : public SvnClientArgs
-	{
-		bool _metaDataOnly;
-	public:
-		SvnWorkingCopyCopyArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnWorkingCopyClient::Copy(String^,String^,SvnWorkingCopyCopyArgs^)" />.</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnWorkingCopyCopyArgs : public SvnClientArgs
+    {
+        bool _metaDataOnly;
+    public:
+        SvnWorkingCopyCopyArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::WorkingCopyCopy;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::WorkingCopyCopy;
+            }
+        }
 
-		/// <summary>Only perform a metadata update and leave the working copy as-is</summary>
-		property bool MetaDataOnly
-		{
-			bool get()
-			{
-				return _metaDataOnly;
-			}
-			void set(bool value)
-			{
-				_metaDataOnly = value;
-			}
-		}
-	};
+        /// <summary>Only perform a metadata update and leave the working copy as-is</summary>
+        property bool MetaDataOnly
+        {
+            bool get()
+            {
+                return _metaDataOnly;
+            }
+            void set(bool value)
+            {
+                _metaDataOnly = value;
+            }
+        }
+    };
 
 }

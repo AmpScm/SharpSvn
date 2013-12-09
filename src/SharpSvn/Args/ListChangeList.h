@@ -16,57 +16,57 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container for SvnClient.ListChangeList</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnListChangeListArgs : public SvnClientArgs
-	{
-		SvnDepth _depth;
-		SvnChangeListCollection^ _changelists;
-	public:
-		SvnListChangeListArgs()
-		{
-			_depth = SvnDepth::Infinity;
-		}
+    /// <summary>Extended Parameter container for SvnClient.ListChangeList</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnListChangeListArgs : public SvnClientArgs
+    {
+        SvnDepth _depth;
+        SvnChangeListCollection^ _changelists;
+    public:
+        SvnListChangeListArgs()
+        {
+            _depth = SvnDepth::Infinity;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::ListChangeList;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::ListChangeList;
+            }
+        }
 
-	public:
-		event EventHandler<SvnListChangeListEventArgs^>^ ListChangeList;
+    public:
+        event EventHandler<SvnListChangeListEventArgs^>^ ListChangeList;
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		/// <summary>Gets the list of changelist-names</summary>
-		property SvnChangeListCollection^ ChangeLists
-		{
-			SvnChangeListCollection^ get()
-			{
-				if (!_changelists)
-					_changelists = gcnew SvnChangeListCollection();
-				return _changelists;
-			}
-		}
+        /// <summary>Gets the list of changelist-names</summary>
+        property SvnChangeListCollection^ ChangeLists
+        {
+            SvnChangeListCollection^ get()
+            {
+                if (!_changelists)
+                    _changelists = gcnew SvnChangeListCollection();
+                return _changelists;
+            }
+        }
 
-	protected public:
-		virtual void OnListChangeList(SvnListChangeListEventArgs^ e)
-		{
-			ListChangeList(this, e);
-		}
-	};
+    protected public:
+        virtual void OnListChangeList(SvnListChangeListEventArgs^ e)
+        {
+            ListChangeList(this, e);
+        }
+    };
 
 }
