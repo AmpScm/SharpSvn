@@ -186,4 +186,4 @@ svn_error_t* SvnDeltaFileTransform::apply_window(svn_txdelta_window_t *window, S
     }
 
     return nullptr;
-}}
+}

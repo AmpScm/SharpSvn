@@ -167,4 +167,4 @@ bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^%
         // Fall through if no property fetched
     }
     return false;
-}}
+}

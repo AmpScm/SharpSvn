@@ -177,4 +177,4 @@ namespace SharpGit {
             }
         };
     }
-}}
+}

@@ -24,96 +24,96 @@ using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Tests Client::Resolve
-	/// </summary>
-	[TestFixture]
-	public class ResolveTests : TestBase
-	{
-		string _path;
-		[SetUp]
-		public override void SetUp()
-		{
-			base.SetUp();
-			this._path = this.GetTempFile();
-			UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), _path);
-            RawRelocate(_path, new Uri("file:///tmp/repos/"), ReposUrl);
-            Client.Upgrade(_path);
-			this.RenameAdminDirs(this._path);
-		}
+    /// <summary>
+    /// Tests Client::Resolve
+    /// </summary>
+    [TestFixture]
+    public class ResolveTests : TestBase
+    {
+        string _path;
+        [SetUp]
+        public override void SetUp()
+        {
+            base.SetUp();
+            this._path = this.GetTempFile();
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), _path);
+        RawRelocate(_path, new Uri("file:///tmp/repos/"), ReposUrl);
+        Client.Upgrade(_path);
+                    this.RenameAdminDirs(this._path);
+        }
 
-		[TearDown]
-		public override void TearDown()
-		{
-			base.TearDown();
-			RecursiveDelete(_path);
-		}
+        [TearDown]
+        public override void TearDown()
+        {
+            base.TearDown();
+            RecursiveDelete(_path);
+        }
 
-		/// <summary>
-		///Attempts to resolve a conflicted file.
-		/// </summary>
-		[Test]
-		public void TestResolveFile()
-		{
-			string filePath = Path.Combine(this._path, "Form.cs");
+        /// <summary>
+        ///Attempts to resolve a conflicted file.
+        /// </summary>
+        [Test]
+        public void TestResolveFile()
+        {
+            string filePath = Path.Combine(this._path, "Form.cs");
 
-			this.Client.Resolved(filePath);
+            this.Client.Resolved(filePath);
 
-			Assert.That(this.GetSvnStatus(filePath), Is.EqualTo(SvnStatus.Modified), "Resolve didn't work!");
+            Assert.That(this.GetSvnStatus(filePath), Is.EqualTo(SvnStatus.Modified), "Resolve didn't work!");
 
-		}
+        }
 
-		/// <summary>
-		///Attempts to resolve a conflicted directory recursively.
-		/// </summary>
-		[Test]
-		public void TestResolveDirectory()
-		{
-			SvnResolveArgs a = new SvnResolveArgs();
-			a.Depth = SvnDepth.Infinity;
+        /// <summary>
+        ///Attempts to resolve a conflicted directory recursively.
+        /// </summary>
+        [Test]
+        public void TestResolveDirectory()
+        {
+            SvnResolveArgs a = new SvnResolveArgs();
+            a.Depth = SvnDepth.Infinity;
 
-			this.Client.Resolve(this._path, SvnAccept.Merged, a);
+            this.Client.Resolve(this._path, SvnAccept.Merged, a);
 
-			Assert.That(this.GetSvnStatus(this._path), Is.EqualTo(SvnStatus.None),
-				" Resolve didn't work! Directory still conflicted");
-			Assert.That(this.GetSvnStatus(Path.Combine(this._path, "Form.cs")), Is.EqualTo(SvnStatus.Modified),
-				"Resolve didn't work! File still conflicted");
-		}
+            Assert.That(this.GetSvnStatus(this._path), Is.EqualTo(SvnStatus.None),
+                " Resolve didn't work! Directory still conflicted");
+            Assert.That(this.GetSvnStatus(Path.Combine(this._path, "Form.cs")), Is.EqualTo(SvnStatus.Modified),
+                "Resolve didn't work! File still conflicted");
+        }
 
-		[Test]
-		public void RepeatedEventHookUp_SOC_411()
-		{
-			Uri projectRoot = new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts");
+        [Test]
+        public void RepeatedEventHookUp_SOC_411()
+        {
+            Uri projectRoot = new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts");
 
-			using (var svnClient = new SvnClient())
-			{
-				for (int i = 0; i < 3; i++)
-				{
-					string workingcopy = GetTempDir();
-					Directory.CreateDirectory(workingcopy);
+            using (var svnClient = new SvnClient())
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    string workingcopy = GetTempDir();
+                    Directory.CreateDirectory(workingcopy);
 
-					svnClient.Authentication.UserNamePasswordHandlers += DoNowt;
-					try
-					{
-						SvnUpdateResult svnUpdateResult;
-                        SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
-						Assert.IsTrue(svnClient.CheckOut(projectRoot, workingcopy, ca, out svnUpdateResult));
-						Assert.IsNotNull(svnUpdateResult);
-						Assert.IsTrue(svnUpdateResult.HasRevision);
-					}
-					finally
-					{
-						svnClient.Authentication.UserNamePasswordHandlers -= DoNowt;
-					}
-				}
-			}
-		}
+                    svnClient.Authentication.UserNamePasswordHandlers += DoNowt;
+                    try
+                    {
+                        SvnUpdateResult svnUpdateResult;
+            SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
+                                    Assert.IsTrue(svnClient.CheckOut(projectRoot, workingcopy, ca, out svnUpdateResult));
+                                    Assert.IsNotNull(svnUpdateResult);
+                                    Assert.IsTrue(svnUpdateResult.HasRevision);
+                            }
+                            finally
+                            {
+                                    svnClient.Authentication.UserNamePasswordHandlers -= DoNowt;
+                            }
+                }
+            }
+        }
 
-		private void DoNowt(object sender, SvnUserNamePasswordEventArgs e)
-		{
-			Assert.Fail("Didn't expect to be called here, make sure your credentials are in the cache");
-		}
+        private void DoNowt(object sender, SvnUserNamePasswordEventArgs e)
+        {
+            Assert.Fail("Didn't expect to be called here, make sure your credentials are in the cache");
+        }
 
-	}
+    }
 
 }

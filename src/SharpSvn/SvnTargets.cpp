@@ -384,4 +384,4 @@ ICollection<SvnUriTarget^>^ SvnUriTarget::Map(IEnumerable<System::Uri^>^ uris)
     }
 
     return targets;
-}}
+}

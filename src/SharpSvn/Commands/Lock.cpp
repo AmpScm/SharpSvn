@@ -180,4 +180,4 @@ bool SvnClient::LockInternal(AprArray<String^, TMarshaller>^ items, SvnLockArgs^
         return args->HandleResult(this, r, nullptr);
     else
         return args->HandleResult(this, args->LockResult, nullptr);
-}}
+}

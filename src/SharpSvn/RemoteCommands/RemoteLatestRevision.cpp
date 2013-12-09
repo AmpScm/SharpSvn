@@ -35,4 +35,4 @@ bool SvnRemoteSession::InternalGetLatestRevision(SvnRemoteSessionArgs^ args, [Ou
     {
         revision = rev;
     }
-}}
+}

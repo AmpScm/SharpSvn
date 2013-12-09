@@ -63,4 +63,4 @@ String^ SvnPropertyNames::FormatDate(DateTime value)
     const char* rslt = svn_time_to_cstring(tm, pool.Handle);
 
     return SvnBase::Utf8_PtrToString(rslt);
-}}
+}

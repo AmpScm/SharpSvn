@@ -52,4 +52,4 @@ bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRe
         pool.Handle);
 
     return args->HandleResult(this, r);
-}}
+}

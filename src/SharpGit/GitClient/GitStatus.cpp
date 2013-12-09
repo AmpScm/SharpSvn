@@ -65,4 +65,4 @@ bool GitClient::Status(String ^path, GitStatusArgs ^args, EventHandler<GitStatus
         return false;
 
     return repo.Status(repo.MakeRelativePath(path), args, status);
-}}
+}

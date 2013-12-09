@@ -327,4 +327,4 @@ void SvnClientReporter::OnNotify(SvnNotifyEventArgs^ e)
     default:
         break;
     }
-}}
+}

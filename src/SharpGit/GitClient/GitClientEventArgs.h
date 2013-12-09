@@ -22,4 +22,4 @@ namespace SharpGit {
     };
 }
 
-#include "GitStatusEventArgs.h""
+#include "GitStatusEventArgs.h"

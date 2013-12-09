@@ -378,4 +378,4 @@ namespace SharpSvn {
         }
     };
 
-}}
+}

@@ -133,4 +133,4 @@ bool SvnRepositoryClient::DumpRepository(String^ repositoryPath, Stream^ to, Svn
         pool.Handle);
 
     return args->HandleResult(this, r);
-}}
+}

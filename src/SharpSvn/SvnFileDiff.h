@@ -330,4 +330,4 @@ namespace SharpSvn {
             bool WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs^ args);
         };
     }
-}}
+}

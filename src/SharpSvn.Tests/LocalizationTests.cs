@@ -24,97 +24,97 @@ using System.Reflection;
 
 namespace SharpSvn.Tests
 {
-	[TestFixture]
-	public class LocalizationTests
-	{
-		[Test]
-		public void TestResourceLoading()
-		{
-			Type tp = typeof(SvnClient).Assembly.GetType("SharpSvn.SharpSvnStrings", false);
+    [TestFixture]
+    public class LocalizationTests
+    {
+        [Test]
+        public void TestResourceLoading()
+        {
+            Type tp = typeof(SvnClient).Assembly.GetType("SharpSvn.SharpSvnStrings", false);
 
-			Assert.That(tp, Is.Not.Null, "SharpSvnStrings type exists in SharpSvn");
+            Assert.That(tp, Is.Not.Null, "SharpSvnStrings type exists in SharpSvn");
 
-			PropertyInfo pi = tp.GetProperty("ArgumentMustBeAValidRepositoryUri", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.GetProperty);
+            PropertyInfo pi = tp.GetProperty("ArgumentMustBeAValidRepositoryUri", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.GetProperty);
 
-			Assert.That(pi, Is.Not.Null, "ArgumentMustBeAValidRepositoryUri is a valid property on SharpSvnStrings");
+            Assert.That(pi, Is.Not.Null, "ArgumentMustBeAValidRepositoryUri is a valid property on SharpSvnStrings");
 
-			Assert.That(pi.GetValue(null, null), Is.Not.Null);
-		}
-
-
-		Exception GetNotFoundError()
-		{
-			SvnClient client = new SvnClient();
-			SvnInfoArgs a = new SvnInfoArgs();
-			a.ThrowOnError = false;
+            Assert.That(pi.GetValue(null, null), Is.Not.Null);
+        }
 
 
-			Assert.That(client.Info("c:/does/not/ever/exist/on/windows", a,
-				delegate(object sender, SvnInfoEventArgs e)
-				{
-				}), Is.False, "Should fail");
+        Exception GetNotFoundError()
+        {
+            SvnClient client = new SvnClient();
+            SvnInfoArgs a = new SvnInfoArgs();
+            a.ThrowOnError = false;
 
-			return a.LastException;
-		}
 
-		[Test]
-		public void TestGermanError()
-		{
-			Exception exDefault = GetNotFoundError();
-			Exception exGerman;
-			Exception exSpanish;
-			Exception exEnglish;
+            Assert.That(client.Info("c:/does/not/ever/exist/on/windows", a,
+                delegate(object sender, SvnInfoEventArgs e)
+                {
+                }), Is.False, "Should fail");
 
-			SvnClient.EnableSubversionLocalization();
+            return a.LastException;
+        }
 
-			Thread thread = Thread.CurrentThread;
-			CultureInfo previousCulture = CultureInfo.CurrentUICulture;
-			try
-			{
-				thread.CurrentUICulture = new CultureInfo("de-de");
+        [Test]
+        public void TestGermanError()
+        {
+            Exception exDefault = GetNotFoundError();
+            Exception exGerman;
+            Exception exSpanish;
+            Exception exEnglish;
 
-				exGerman = GetNotFoundError();
-			}
-			finally
-			{
-				thread.CurrentUICulture = previousCulture;
-			}
+            SvnClient.EnableSubversionLocalization();
 
-			try
-			{
-				thread.CurrentUICulture = new CultureInfo("es-es");
+            Thread thread = Thread.CurrentThread;
+            CultureInfo previousCulture = CultureInfo.CurrentUICulture;
+            try
+            {
+                thread.CurrentUICulture = new CultureInfo("de-de");
 
-				exSpanish = GetNotFoundError();
-			}
-			finally
-			{
-				thread.CurrentUICulture = previousCulture;
-			}
+                exGerman = GetNotFoundError();
+            }
+            finally
+            {
+                thread.CurrentUICulture = previousCulture;
+            }
 
-			try
-			{
-				thread.CurrentUICulture = new CultureInfo("en-us");
+            try
+            {
+                thread.CurrentUICulture = new CultureInfo("es-es");
 
-				exEnglish = GetNotFoundError();
-			}
-			finally
-			{
-				thread.CurrentUICulture = previousCulture;
-			}
+                exSpanish = GetNotFoundError();
+            }
+            finally
+            {
+                thread.CurrentUICulture = previousCulture;
+            }
 
-			Assert.That(exDefault, Is.Not.Null);
-			Assert.That(exGerman, Is.Not.Null);
-			Assert.That(exSpanish, Is.Not.Null);
-			Assert.That(exEnglish, Is.Not.Null);
+            try
+            {
+                thread.CurrentUICulture = new CultureInfo("en-us");
 
-			Assert.That(exEnglish.Message, Is.EqualTo(exDefault.Message));
-			Assert.That(exGerman.Message, Is.Not.EqualTo(exDefault.Message));
-			Assert.That(exSpanish.Message, Is.Not.EqualTo(exDefault.Message));
-			Assert.That(exSpanish.Message, Is.Not.EqualTo(exGerman.Message));
+                exEnglish = GetNotFoundError();
+            }
+            finally
+            {
+                thread.CurrentUICulture = previousCulture;
+            }
 
-			Assert.That(exDefault.Message.Contains("does\\not"));
-			Assert.That(exGerman.Message.Contains("does\\not"));
-			Assert.That(exSpanish.Message.Contains("does\\not"));
-		}
-	}
+            Assert.That(exDefault, Is.Not.Null);
+            Assert.That(exGerman, Is.Not.Null);
+            Assert.That(exSpanish, Is.Not.Null);
+            Assert.That(exEnglish, Is.Not.Null);
+
+            Assert.That(exEnglish.Message, Is.EqualTo(exDefault.Message));
+            Assert.That(exGerman.Message, Is.Not.EqualTo(exDefault.Message));
+            Assert.That(exSpanish.Message, Is.Not.EqualTo(exDefault.Message));
+            Assert.That(exSpanish.Message, Is.Not.EqualTo(exGerman.Message));
+
+            Assert.That(exDefault.Message.Contains("does\\not"));
+            Assert.That(exGerman.Message.Contains("does\\not"));
+            Assert.That(exSpanish.Message.Contains("does\\not"));
+        }
+    }
 }

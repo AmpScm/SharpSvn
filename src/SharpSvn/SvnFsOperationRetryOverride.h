@@ -30,4 +30,4 @@ namespace SharpSvn {
             static int RetryLoopHandler(int n, int err, int os_err, const char *expr);
         };
     }
-}}
+}

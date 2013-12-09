@@ -142,4 +142,4 @@ protected:
     public:
         bool InstallConflict(String^ targetPath, SvnUriOrigin^ leftSource, SvnUriOrigin^ rightSource, SvnWorkingCopyInstallConflictArgs^ args);
     };
-};;
+};

@@ -288,4 +288,4 @@ bool SvnClient::InternalSetProperty(Uri^ target, String^ propertyName, const svn
         pool->Handle);
 
     return args->HandleResult(this, r, target);
-}}
+}

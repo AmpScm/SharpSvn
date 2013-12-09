@@ -55,4 +55,4 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
         pool.Handle);
 
     return args->HandleResult(this, r, targetPath);
-}}
+}

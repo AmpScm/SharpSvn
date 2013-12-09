@@ -779,4 +779,4 @@ SvnDeltaNode^ SvnDeltaEditor::CreateDirectoryNode(SvnDeltaNode^ parent, String^ 
 SvnDeltaNode^ SvnDeltaEditor::CreateFileNode(SvnDeltaNode^ parent, String^ name)
 {
     return gcnew SvnDeltaNode(name, parent);
-}}
+}

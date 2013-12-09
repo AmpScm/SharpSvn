@@ -91,4 +91,4 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
     return args->HandleResult(this, r);
 
     // Pool close will close all handles
-}}
+}

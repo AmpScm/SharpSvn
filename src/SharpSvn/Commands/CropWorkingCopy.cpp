@@ -80,4 +80,4 @@ bool SvnClient::CropWorkingCopy(System::String ^path, SvnDepth toDepth, SvnCropW
         pool.Handle, pool.Handle);
 
     return args->HandleResult(this, r, path);
-}}
+}

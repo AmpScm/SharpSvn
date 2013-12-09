@@ -255,4 +255,4 @@ String^ SvnMergeItemCollection::ToString()
 Uri^ SvnMergeItemCollection::GetKeyForItem(SvnMergeItem^ item)
 {
     return item ? item->Uri : nullptr;
-}}
+}

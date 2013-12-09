@@ -60,4 +60,4 @@ bool SvnRepositoryClient::Verify(String^ repositoryPath, SvnVerifyRepositoryArgs
         pool.Handle);
 
     return args->HandleResult(this, r);
-}}
+}
