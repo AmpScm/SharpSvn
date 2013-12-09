@@ -87,4 +87,4 @@ bool SvnLookClient::GetProperty(SvnLookOrigin^ lookOrigin, String^ path, String^
     value = SvnPropertyValue::Create(pcPropName, prop, nullptr);
 
     return args->HandleResult(this, r);
-}}
+}

@@ -104,4 +104,4 @@ namespace SharpGit {
         ~GitClient();
     };
 
-}}
+}

@@ -23,22 +23,22 @@ using System.Windows.Forms;
 
 namespace SharpSvn.UI.Authentication
 {
-	/// <summary>
-	///
-	/// </summary>
-	public partial class SslServerCertificateTrustDialog : SvnUIForm
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SslServerCertificateTrustDialog"/> class.
-		/// </summary>
-		public SslServerCertificateTrustDialog()
-		{
-			InitializeComponent();
-		}
-
-        internal void SetImage(Image image)
+    /// <summary>
+    ///
+    /// </summary>
+    public partial class SslServerCertificateTrustDialog : SvnUIForm
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SslServerCertificateTrustDialog"/> class.
+        /// </summary>
+        public SslServerCertificateTrustDialog()
         {
-            panel1.BackgroundImage = image;
+            InitializeComponent();
         }
+
+    internal void SetImage(Image image)
+    {
+        panel1.BackgroundImage = image;
+    }
     }
 }

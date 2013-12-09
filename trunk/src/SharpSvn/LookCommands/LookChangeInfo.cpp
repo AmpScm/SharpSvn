@@ -263,4 +263,4 @@ bool SvnLookClient::GetChangeInfo(SvnLookOrigin^ lookOrigin, SvnChangeInfoArgs^ 
     {
         changeInfo = result->Value;
     }
-}}
+}

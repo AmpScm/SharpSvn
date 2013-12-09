@@ -23,22 +23,22 @@ using System.Windows.Forms;
 
 namespace SharpSvn.UI.Authentication
 {
-	/// <summary>
-	///
-	/// </summary>
-	public partial class UsernameDialog : SvnUIForm
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="UsernameDialog"/> class.
-		/// </summary>
-		public UsernameDialog()
-		{
-			InitializeComponent();
-		}
-
-        internal void SetImage(Image image)
+    /// <summary>
+    ///
+    /// </summary>
+    public partial class UsernameDialog : SvnUIForm
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UsernameDialog"/> class.
+        /// </summary>
+        public UsernameDialog()
         {
-            panel1.BackgroundImage = image;
+            InitializeComponent();
         }
+
+    internal void SetImage(Image image)
+    {
+        panel1.BackgroundImage = image;
+    }
     }
 }

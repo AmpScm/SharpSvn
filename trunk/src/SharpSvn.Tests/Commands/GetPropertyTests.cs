@@ -23,125 +23,125 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Summary description for PropGetTest.
-	/// </summary>
-	[TestFixture]
-	public class GetPropertyTests : TestBase
-	{
-		[Test]
-		public void TestPropGetOnFile()
-		{
-			string path = Path.Combine(this.WcPath, "Form.cs");
-            TouchFile(path);
-            Client.Add(path);
-            Client.SetProperty(path, "foo", "bar");
-
-			string value;
-			Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out value));
-
-			Assert.That(value, Is.EqualTo("bar"));
-
-			SvnPropertyValue pval;
-
-			Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out pval));
-
-			Assert.That(pval.StringValue, Is.EqualTo("bar"));
-			Assert.That(pval.Key, Is.EqualTo("foo"));
-			Assert.That(pval.Target.TargetName, Is.EqualTo(path));
-		}
-
+    /// <summary>
+    /// Summary description for PropGetTest.
+    /// </summary>
+    [TestFixture]
+    public class GetPropertyTests : TestBase
+    {
         [Test]
-        public void GetPropertyValues()
+        public void TestPropGetOnFile()
         {
-            Uri trunk = new Uri(CollabReposUri, "trunk");
-            string dir = GetTempDir();
-            Client.CheckOut(trunk, dir);
+            string path = Path.Combine(this.WcPath, "Form.cs");
+        TouchFile(path);
+        Client.Add(path);
+        Client.SetProperty(path, "foo", "bar");
 
-            SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
-            pa.Depth = SvnDepth.Infinity;
-            SvnTargetPropertyCollection pc;
-            Client.GetProperty(trunk, SvnPropertyNames.SvnEolStyle, pa, out pc);
+                    string value;
+                    Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out value));
 
-            foreach (SvnPropertyValue pv in pc)
-            {
-                SvnUriTarget ut = pv.Target as SvnUriTarget;
-                Assert.That(ut, Is.Not.Null);
-                Uri relative = trunk.MakeRelativeUri(ut.Uri);
-                Assert.That(!relative.ToString().StartsWith("/"));
-                Assert.That(!relative.ToString().StartsWith("../"));
-            }
+                    Assert.That(value, Is.EqualTo("bar"));
 
-            Client.GetProperty(dir, SvnPropertyNames.SvnEolStyle, pa, out pc);
+                    SvnPropertyValue pval;
 
-            dir += "\\";
-            foreach (SvnPropertyValue pv in pc)
-            {
-                SvnPathTarget pt = pv.Target as SvnPathTarget;
-                Assert.That(pt, Is.Not.Null);
-                Assert.That(pt.TargetPath.StartsWith(dir));
-            }
+                    Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out pval));
 
-            Assert.That(pc[dir + "index.html"], Is.Not.Null, "Can get wcroot\\index.html?");
+                    Assert.That(pval.StringValue, Is.EqualTo("bar"));
+                    Assert.That(pval.Key, Is.EqualTo("foo"));
+                    Assert.That(pval.Target.TargetName, Is.EqualTo(path));
         }
 
-		[Test]
-		public void TestNonExistentPropertyExistingFile()
-		{
-			string wc = GetTempDir();
-			Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+    [Test]
+    public void GetPropertyValues()
+    {
+        Uri trunk = new Uri(CollabReposUri, "trunk");
+        string dir = GetTempDir();
+        Client.CheckOut(trunk, dir);
 
-			SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
-			pa.ThrowOnError = false;
+        SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
+        pa.Depth = SvnDepth.Infinity;
+        SvnTargetPropertyCollection pc;
+        Client.GetProperty(trunk, SvnPropertyNames.SvnEolStyle, pa, out pc);
 
-			string value;
-			Assert.That(Client.GetProperty(Path.Combine(wc, "index.html"),
-				"new-prop", out value), Is.True,
-				"GetProperty succeeds on non existent property");
+        foreach (SvnPropertyValue pv in pc)
+        {
+        SvnUriTarget ut = pv.Target as SvnUriTarget;
+        Assert.That(ut, Is.Not.Null);
+        Uri relative = trunk.MakeRelativeUri(ut.Uri);
+        Assert.That(!relative.ToString().StartsWith("/"));
+        Assert.That(!relative.ToString().StartsWith("../"));
+        }
 
-			Assert.That(value, Is.Null, "No value available");
-		}
+        Client.GetProperty(dir, SvnPropertyNames.SvnEolStyle, pa, out pc);
 
-        [Test, ExpectedException(typeof(SvnUnversionedNodeException),
-			ExpectedMessage="no-index.html", MatchType=MessageMatch.Contains)]
-		public void TestNonExistentPropertyNonExistingFile()
-		{
-			string wc = GetTempDir();
-			Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+        dir += "\\";
+        foreach (SvnPropertyValue pv in pc)
+        {
+        SvnPathTarget pt = pv.Target as SvnPathTarget;
+        Assert.That(pt, Is.Not.Null);
+        Assert.That(pt.TargetPath.StartsWith(dir));
+        }
 
-			string value;
-			Client.GetProperty(Path.Combine(wc, "no-index.html"), "new-prop", out value);
-		}
-
-		[Test, ExpectedException(typeof(SvnInvalidNodeKindException),
-			ExpectedMessage="{632382A5-F992-4ab8-8D37-47977B190819}", MatchType=MessageMatch.Contains)]
-		public void TestNoWcProperty()
-		{
-			string value;
-			Client.GetProperty("c:/{632382A5-F992-4ab8-8D37-47977B190819}/no-file.txt", "no-prop", out value);
-		}
+        Assert.That(pc[dir + "index.html"], Is.Not.Null, "Can get wcroot\\index.html?");
+    }
 
         [Test]
-        public void TestGetOnCwd()
+        public void TestNonExistentPropertyExistingFile()
         {
             string wc = GetTempDir();
             Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
 
-            string dir = Directory.GetCurrentDirectory();
-            Directory.SetCurrentDirectory(wc);
-            try
-            {
-                string v;
-                Assert.That(Client.TryGetProperty(".", SvnPropertyNames.SvnMergeInfo, out v));
-                Assert.That(v, Is.Not.Null);
+            SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
+            pa.ThrowOnError = false;
 
-                Assert.That(Client.TryGetProperty(SvnTarget.FromString("."), SvnPropertyNames.SvnMergeInfo, out v));
-                Assert.That(v, Is.Not.Null);
-            }
-            finally
-            {
-                Directory.SetCurrentDirectory(wc);
-            }
+            string value;
+            Assert.That(Client.GetProperty(Path.Combine(wc, "index.html"),
+                "new-prop", out value), Is.True,
+                "GetProperty succeeds on non existent property");
+
+            Assert.That(value, Is.Null, "No value available");
         }
-	}
+
+    [Test, ExpectedException(typeof(SvnUnversionedNodeException),
+                    ExpectedMessage="no-index.html", MatchType=MessageMatch.Contains)]
+        public void TestNonExistentPropertyNonExistingFile()
+        {
+            string wc = GetTempDir();
+            Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+
+            string value;
+            Client.GetProperty(Path.Combine(wc, "no-index.html"), "new-prop", out value);
+        }
+
+        [Test, ExpectedException(typeof(SvnInvalidNodeKindException),
+            ExpectedMessage="{632382A5-F992-4ab8-8D37-47977B190819}", MatchType=MessageMatch.Contains)]
+        public void TestNoWcProperty()
+        {
+            string value;
+            Client.GetProperty("c:/{632382A5-F992-4ab8-8D37-47977B190819}/no-file.txt", "no-prop", out value);
+        }
+
+    [Test]
+    public void TestGetOnCwd()
+    {
+        string wc = GetTempDir();
+        Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+
+        string dir = Directory.GetCurrentDirectory();
+        Directory.SetCurrentDirectory(wc);
+        try
+        {
+        string v;
+        Assert.That(Client.TryGetProperty(".", SvnPropertyNames.SvnMergeInfo, out v));
+        Assert.That(v, Is.Not.Null);
+
+        Assert.That(Client.TryGetProperty(SvnTarget.FromString("."), SvnPropertyNames.SvnMergeInfo, out v));
+        Assert.That(v, Is.Not.Null);
+        }
+        finally
+        {
+        Directory.SetCurrentDirectory(wc);
+        }
+    }
+    }
 }

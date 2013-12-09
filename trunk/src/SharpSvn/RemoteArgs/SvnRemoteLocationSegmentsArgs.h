@@ -79,4 +79,4 @@ namespace SharpSvn {
     int _nOffset;
     };
 }
-}}
+}

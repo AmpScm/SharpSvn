@@ -30,4 +30,4 @@ bool SvnRemoteSession::GetRepositoryId(SvnRemoteCommonArgs^ args, [Out] Guid% uu
         uuid = Guid(Utf8_PtrToString(id));
 
     return true;
-}}
+}

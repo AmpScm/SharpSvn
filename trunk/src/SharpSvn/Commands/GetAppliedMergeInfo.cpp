@@ -60,4 +60,4 @@ bool SvnClient::GetAppliedMergeInfo(SvnTarget ^target, SvnGetAppliedMergeInfoArg
         mergeState = nullptr;
 
     return args->HandleResult(this, r, target) && mergeState;
-}}
+}

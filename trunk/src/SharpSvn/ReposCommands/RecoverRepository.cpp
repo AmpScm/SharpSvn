@@ -54,4 +54,4 @@ bool SvnRepositoryClient::RecoverRepository(String^ repositoryPath, SvnRecoverRe
         pool.Handle);
 
     return args->HandleResult(this, r);
-}}
+}

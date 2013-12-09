@@ -234,4 +234,4 @@ namespace SharpGit {
     {
     };
 
-}}
+}

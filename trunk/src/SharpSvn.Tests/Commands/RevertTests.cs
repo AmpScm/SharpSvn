@@ -23,66 +23,66 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Tests Client::Revert
-	/// </summary>
+    /// <summary>
+    /// Tests Client::Revert
+    /// </summary>
 
-	[TestFixture]
-	public class RevertTests : TestBase
-	{
-        public RevertTests()
+    [TestFixture]
+    public class RevertTests : TestBase
+    {
+    public RevertTests()
+    {
+        UseEmptyRepositoryForWc = false;
+    }
+
+        /// <summary>
+        ///Attempts to revert single file.
+        /// </summary>
+        [Test]
+        public void TestRevertFile()
         {
-            UseEmptyRepositoryForWc = false;
+            string filePath = Path.Combine(this.WcPath, "Form.cs");
+
+            string oldContents;
+            string newContents;
+            this.ModifyFile(out oldContents, out newContents, filePath, filePath, SvnDepth.Empty);
+
+
+            Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
+
         }
 
-		/// <summary>
-		///Attempts to revert single file.
-		/// </summary>
-		[Test]
-		public void TestRevertFile()
-		{
-			string filePath = Path.Combine(this.WcPath, "Form.cs");
+        /// <summary>
+        ///Attempts to revert the whole working copy
+        /// </summary>
+        [Test]
+        public void TestRevertDirectory()
+        {
+            string oldContents;
+            string newContents;
+            this.ModifyFile(out oldContents, out newContents, Path.Combine(this.WcPath, "Form.cs"),
+                this.WcPath, SvnDepth.Infinity);
 
-			string oldContents;
-			string newContents;
-			this.ModifyFile(out oldContents, out newContents, filePath, filePath, SvnDepth.Empty);
+            Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
 
+        }
 
-			Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
+        private void ModifyFile(out string oldContents, out string newContents, string filePath,
+            string revertPath, SvnDepth depth)
+        {
 
-		}
+            using (StreamReader reader = new StreamReader(filePath))
+                oldContents = reader.ReadToEnd();
+            using (StreamWriter writer = new StreamWriter(filePath))
+                writer.WriteLine("mooooooo");
 
-		/// <summary>
-		///Attempts to revert the whole working copy
-		/// </summary>
-		[Test]
-		public void TestRevertDirectory()
-		{
-			string oldContents;
-			string newContents;
-			this.ModifyFile(out oldContents, out newContents, Path.Combine(this.WcPath, "Form.cs"),
-				this.WcPath, SvnDepth.Infinity);
+            SvnRevertArgs a = new SvnRevertArgs();
+            a.Depth = depth;
+            this.Client.Revert(revertPath, a);
 
-			Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
+            using (StreamReader reader = new StreamReader(filePath))
+                newContents = reader.ReadToEnd();
+        }
 
-		}
-
-		private void ModifyFile(out string oldContents, out string newContents, string filePath,
-			string revertPath, SvnDepth depth)
-		{
-
-			using (StreamReader reader = new StreamReader(filePath))
-				oldContents = reader.ReadToEnd();
-			using (StreamWriter writer = new StreamWriter(filePath))
-				writer.WriteLine("mooooooo");
-
-			SvnRevertArgs a = new SvnRevertArgs();
-			a.Depth = depth;
-			this.Client.Revert(revertPath, a);
-
-			using (StreamReader reader = new StreamReader(filePath))
-				newContents = reader.ReadToEnd();
-		}
-
-	}
+    }
 }

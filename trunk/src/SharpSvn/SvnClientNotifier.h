@@ -195,4 +195,4 @@ namespace SharpSvn {
         }
     };
 
-};;
+};

@@ -69,4 +69,4 @@ bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFro
         pool.Handle);
 
     return args->HandleResult(this, r, targets);
-}}
+}

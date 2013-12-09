@@ -26,21 +26,21 @@ using SharpSvn;
 /// </summary>
 namespace SharpSvn.Tests.Commands
 {
-	[TestFixture]
-	public class GetRevisionPropertyTests : TestBase
-	{
-		/// <summary>
-		///Attempts to Get Properties on a directory in the repository represented by url.
-		/// </summary>
-		[Test]
-		public void TestRevPropGetDir()
-		{
-			this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + this.ReposUrl);
+    [TestFixture]
+    public class GetRevisionPropertyTests : TestBase
+    {
+        /// <summary>
+        ///Attempts to Get Properties on a directory in the repository represented by url.
+        /// </summary>
+        [Test]
+        public void TestRevPropGetDir()
+        {
+            this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + this.ReposUrl);
 
-			string value;
-			Assert.That(Client.GetRevisionProperty(this.ReposUrl, SvnRevision.Head, "cow", out value));
+            string value;
+            Assert.That(Client.GetRevisionProperty(this.ReposUrl, SvnRevision.Head, "cow", out value));
 
-			Assert.That(value, Is.EqualTo("moo"), "Wrong property value");
-		}
-	}
+            Assert.That(value, Is.EqualTo("moo"), "Wrong property value");
+        }
+    }
 }

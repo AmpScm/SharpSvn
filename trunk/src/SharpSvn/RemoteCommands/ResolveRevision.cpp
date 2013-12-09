@@ -58,4 +58,4 @@ bool SvnRemoteSession::InternalResolveRevision(SvnRevision^ revision, SvnRemoteS
     }
 
     return false;
-}}
+}

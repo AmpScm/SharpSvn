@@ -187,4 +187,4 @@ String^ SvnBlameEventArgs::MergedAuthor::get()
     }
 
     return _mergedAuthor;
-}}
+}

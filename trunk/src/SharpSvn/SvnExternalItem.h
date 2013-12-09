@@ -84,4 +84,4 @@ namespace SharpSvn {
         virtual bool Equals(SvnExternalItem^ other);
         virtual int GetHashCode() override;
     };
-}}
+}

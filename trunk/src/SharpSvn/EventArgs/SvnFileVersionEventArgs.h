@@ -347,4 +347,4 @@ namespace SharpSvn {
             // Keep fileProps
         }
     };
-}}
+}

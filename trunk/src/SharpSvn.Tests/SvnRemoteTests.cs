@@ -21,47 +21,47 @@ using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests
 {
-	[TestFixture]
-	public class SvnRemoteTests
-	{
-		[Test]
-		public void RemoteList()
-		{
-			SvnClient cl = new SvnClient();
-			bool found = false;
-            SvnListArgs la = new SvnListArgs();
-            la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
+    [TestFixture]
+    public class SvnRemoteTests
+    {
+        [Test]
+        public void RemoteList()
+        {
+            SvnClient cl = new SvnClient();
+            bool found = false;
+        SvnListArgs la = new SvnListArgs();
+        la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 
-			cl.List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
-			{
-				Assert.That(e.Entry, Is.Not.Null);
-				Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
-				Assert.That(e.Entry.Author, Is.Not.Null);
-				found = true;
-			});
+                    cl.List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
+                    {
+                            Assert.That(e.Entry, Is.Not.Null);
+                            Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
+                            Assert.That(e.Entry.Author, Is.Not.Null);
+                            found = true;
+                    });
 
-			Assert.That(found);
+                    Assert.That(found);
 
-			Collection<SvnListEventArgs> ee;
-            cl.GetList(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"), out ee);
-			Assert.That(ee, Is.Not.Null);
-			Assert.That(ee[0].Entry.Author, Is.Not.Null);
-		}
+                    Collection<SvnListEventArgs> ee;
+        cl.GetList(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"), out ee);
+                    Assert.That(ee, Is.Not.Null);
+                    Assert.That(ee[0].Entry.Author, Is.Not.Null);
+        }
 
-		public void TestSsh()
-		{
-			SvnClient cl = new SvnClient();
-			bool found = false;
+        public void TestSsh()
+        {
+            SvnClient cl = new SvnClient();
+            bool found = false;
 
-			cl.List(new Uri("svn+ssh://nietver.nl/home/svn/repos/openwrt"), delegate(object Sender, SvnListEventArgs e)
-			{
-				Assert.That(e.Entry, Is.Not.Null);
-				Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
-				Assert.That(e.Entry.Author, Is.Not.Null);
-				found = true;
-			});
+            cl.List(new Uri("svn+ssh://nietver.nl/home/svn/repos/openwrt"), delegate(object Sender, SvnListEventArgs e)
+            {
+                Assert.That(e.Entry, Is.Not.Null);
+                Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
+                Assert.That(e.Entry.Author, Is.Not.Null);
+                found = true;
+            });
 
-			Assert.That(found);
-		}
-	}
+            Assert.That(found);
+        }
+    }
 }

@@ -162,4 +162,4 @@ svn_error_t* SvnLookClient::open_origin(SvnLookOrigin^ lookOrigin, svn_fs_root_t
         *repos = pRepos;
 
     return SVN_NO_ERROR;
-}}
+}

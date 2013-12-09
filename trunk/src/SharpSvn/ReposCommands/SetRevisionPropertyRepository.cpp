@@ -202,4 +202,4 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
                                                                             nullptr,
                                                                             nullptr,
                                                                             subpool.Handle));
-}}
+}

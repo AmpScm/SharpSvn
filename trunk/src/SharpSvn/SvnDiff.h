@@ -123,4 +123,4 @@ namespace SharpSvn {
             void Init(SvnDiffSource<TToken>^ original, SvnDiffSource<TToken>^ modified, SvnDiffSource<TToken>^ latest, SvnDiffSource<TToken>^ ancestor);
         };
     }
-}}
+}

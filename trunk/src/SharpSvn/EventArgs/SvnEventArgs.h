@@ -57,4 +57,4 @@ namespace SharpSvn {
             return value ? value->GetHashCode() : 0;
         }
     };
-};;
+};

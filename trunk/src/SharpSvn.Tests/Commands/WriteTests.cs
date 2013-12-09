@@ -24,148 +24,148 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Tests Client::Cat
-	/// </summary>
-	[TestFixture]
-	public class WriteTests : TestBase
-	{
-        public WriteTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-		/// <summary>
-		/// Attemts to do a cat on a local working copy item
-		/// </summary>
-		[Test]
-		public void TestCatFromWorkingCopy()
-		{
-			string path = Path.Combine(this.WcPath, "Form.cs");
-
-			string clientOutput = this.RunCommand("svn", "cat " + path);
-
-			MemoryStream stream = new MemoryStream();
-			this.Client.Write(path, stream);
-
-			string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
-			Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
-				"String from wrapper not the same as string from client");
-
-		}
-
-		/// <summary>
-		/// Calls cat on a repository item
-		/// </summary>
-		[Test]
-		public void TestCatFromRepository()
-		{
-			Uri path = new Uri(this.ReposUrl, "Form.cs");
-
-			string clientOutput = this.RunCommand("svn", "cat " + path);
-
-			MemoryStream stream = new MemoryStream();
-			this.Client.Write(new SvnUriTarget(path, SvnRevision.Head), stream);
-
-			string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
-			Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
-				"String from wrapper not the same as string from client");
-		}
-
-		[Test]
-		public void TestCatPeg()
-		{
-			Uri path = new Uri(this.ReposUrl, "Form.cs");
-			Uri toPath = new Uri(this.ReposUrl, "Moo.cs");
-
-			SvnCommitResult ci;
-			this.Client.RemoteMove(path, toPath, out ci);
-
-			string clientOutput = this.RunCommand("svn",
-				string.Format("cat {0}@{1} -r {2}", toPath, ci.Revision, ci.Revision - 1));
-
-			MemoryStream stream = new MemoryStream();
-			SvnWriteArgs a = new SvnWriteArgs();
-			a.Revision = ci.Revision - 1;
-			this.Client.Write(new SvnUriTarget(toPath, ci.Revision), stream);
-
-			string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
-			Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
-				"String from wrapper not the same as string from client");
-
-		}
-
+    /// <summary>
+    /// Tests Client::Cat
+    /// </summary>
+    [TestFixture]
+    public class WriteTests : TestBase
+    {
+    public WriteTests()
+    {
+        UseEmptyRepositoryForWc = false;
+    }
+        /// <summary>
+        /// Attemts to do a cat on a local working copy item
+        /// </summary>
         [Test]
-        public void WriteTest()
+        public void TestCatFromWorkingCopy()
         {
-            string data = Guid.NewGuid().ToString();
-            using (SvnClient client = NewSvnClient(true, false))
-            {
-                string file = Path.Combine(WcPath, "WriteTest");
-                using (StreamWriter sw = File.CreateText(file))
-                {
-                    sw.WriteLine(data);
-                }
+            string path = Path.Combine(this.WcPath, "Form.cs");
 
-                client.Add(file);
-                client.AddToChangeList(file, "WriteTest-Items");
+            string clientOutput = this.RunCommand("svn", "cat " + path);
 
-                SvnCommitArgs ca = new SvnCommitArgs();
-                ca.ChangeLists.Add("WriteTest-Items");
-                client.Commit(WcPath);
+            MemoryStream stream = new MemoryStream();
+            this.Client.Write(path, stream);
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    client.Write(new SvnPathTarget(file), ms);
+            string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
+            Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
+                "String from wrapper not the same as string from client");
 
-                    ms.Position = 0;
+        }
 
-                    using (StreamReader sr = new StreamReader(ms))
-                    {
-                        Assert.That(sr.ReadLine(), Is.EqualTo(data));
-                        Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
-                    }
-                }
+        /// <summary>
+        /// Calls cat on a repository item
+        /// </summary>
+        [Test]
+        public void TestCatFromRepository()
+        {
+            Uri path = new Uri(this.ReposUrl, "Form.cs");
 
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    client.Write(new Uri(ReposUrl, "WriteTest"), ms);
+            string clientOutput = this.RunCommand("svn", "cat " + path);
 
-                    ms.Position = 0;
+            MemoryStream stream = new MemoryStream();
+            this.Client.Write(new SvnUriTarget(path, SvnRevision.Head), stream);
 
-                    using (StreamReader sr = new StreamReader(ms))
-                    {
-                        Assert.That(sr.ReadLine(), Is.EqualTo(data));
-                        Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
-                    }
-                }
-            }
+            string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
+            Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
+                "String from wrapper not the same as string from client");
         }
 
         [Test]
-        public void WriteProps()
+        public void TestCatPeg()
         {
-            string data = Guid.NewGuid().ToString();
-            using (SvnClient client = NewSvnClient(true, false))
+            Uri path = new Uri(this.ReposUrl, "Form.cs");
+            Uri toPath = new Uri(this.ReposUrl, "Moo.cs");
+
+            SvnCommitResult ci;
+            this.Client.RemoteMove(path, toPath, out ci);
+
+            string clientOutput = this.RunCommand("svn",
+                string.Format("cat {0}@{1} -r {2}", toPath, ci.Revision, ci.Revision - 1));
+
+            MemoryStream stream = new MemoryStream();
+            SvnWriteArgs a = new SvnWriteArgs();
+            a.Revision = ci.Revision - 1;
+            this.Client.Write(new SvnUriTarget(toPath, ci.Revision), stream);
+
+            string wrapperOutput = Encoding.ASCII.GetString(stream.ToArray());
+            Assert.That(wrapperOutput, Is.EqualTo(clientOutput),
+                "String from wrapper not the same as string from client");
+
+        }
+
+    [Test]
+    public void WriteTest()
+    {
+        string data = Guid.NewGuid().ToString();
+        using (SvnClient client = NewSvnClient(true, false))
+        {
+        string file = Path.Combine(WcPath, "WriteTest");
+        using (StreamWriter sw = File.CreateText(file))
+        {
+            sw.WriteLine(data);
+        }
+
+        client.Add(file);
+        client.AddToChangeList(file, "WriteTest-Items");
+
+        SvnCommitArgs ca = new SvnCommitArgs();
+        ca.ChangeLists.Add("WriteTest-Items");
+        client.Commit(WcPath);
+
+        using (MemoryStream ms = new MemoryStream())
+        {
+            client.Write(new SvnPathTarget(file), ms);
+
+            ms.Position = 0;
+
+            using (StreamReader sr = new StreamReader(ms))
             {
-                string file = Path.Combine(WcPath, "WriteTest");
-                using (StreamWriter sw = File.CreateText(file))
-                {
-                    sw.WriteLine(data);
-                }
-
-                client.Add(file);
-                client.SetProperty(file, "A", "B");
-                client.Commit(file);
-
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    SvnPropertyCollection pc;
-                    client.Write(new SvnPathTarget(file, SvnRevision.Head), ms, out pc);
-
-                    Assert.That(pc, Is.Not.Empty);
-                    Assert.That(pc["A"].StringValue, Is.EqualTo("B"));
-                }
+            Assert.That(sr.ReadLine(), Is.EqualTo(data));
+            Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
             }
         }
-	}
+
+        using (MemoryStream ms = new MemoryStream())
+        {
+            client.Write(new Uri(ReposUrl, "WriteTest"), ms);
+
+            ms.Position = 0;
+
+            using (StreamReader sr = new StreamReader(ms))
+            {
+            Assert.That(sr.ReadLine(), Is.EqualTo(data));
+            Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+            }
+        }
+        }
+    }
+
+    [Test]
+    public void WriteProps()
+    {
+        string data = Guid.NewGuid().ToString();
+        using (SvnClient client = NewSvnClient(true, false))
+        {
+        string file = Path.Combine(WcPath, "WriteTest");
+        using (StreamWriter sw = File.CreateText(file))
+        {
+            sw.WriteLine(data);
+        }
+
+        client.Add(file);
+        client.SetProperty(file, "A", "B");
+        client.Commit(file);
+
+        using (MemoryStream ms = new MemoryStream())
+        {
+            SvnPropertyCollection pc;
+            client.Write(new SvnPathTarget(file, SvnRevision.Head), ms, out pc);
+
+            Assert.That(pc, Is.Not.Empty);
+            Assert.That(pc["A"].StringValue, Is.EqualTo("B"));
+        }
+        }
+    }
+    }
 }

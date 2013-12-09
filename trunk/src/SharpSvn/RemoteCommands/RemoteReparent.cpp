@@ -32,4 +32,4 @@ bool SvnRemoteSession::Reparent(Uri^ sessionUri, SvnRemoteCommonArgs^ args)
     }
 
     return false;
-}}
+}

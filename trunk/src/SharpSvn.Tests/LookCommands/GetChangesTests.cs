@@ -26,82 +26,82 @@ namespace SharpSvn.Tests.LookCommands
     public class GetChangesTests : HookTestBase
     {
 
+    [Test]
+    public void ChangedDirs()
+    {
+        string dir = CreateRepos(TestReposType.Empty);
+        Uri uri = PathToUri(dir, true);
+        using (InstallHook(uri, SvnHookType.PreCommit, OnChangedDirs))
+        {
+        using (SvnClient cl = new SvnClient())
+        {
+            SvnCreateDirectoryArgs da = new SvnCreateDirectoryArgs();
+            da.CreateParents = true;
+            da.LogMessage = "Created!";
+            cl.RemoteCreateDirectories(
+            new Uri[]
+            {
+            new Uri(uri, "a/b/c/d/e/f"),
+            new Uri(uri, "a/b/c/d/g/h"),
+            new Uri(uri, "i/j/k"),
+            new Uri(uri, "l/m/n"),
+            new Uri(uri, "l/m/n/o/p")
+            }, da);
+        }
+        }
+    }
+
+    private void OnChangedDirs(object sender, ReposHookEventArgs e)
+    {
+        using (SvnLookClient lc = new SvnLookClient())
+        {
+        SvnChangedArgs ca = new SvnChangedArgs();
+        ca.Transaction = e.HookArgs.TransactionName;
+
+        Collection<SvnChangedEventArgs> list;
+        Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
+
+        Assert.That(list.Count, Is.EqualTo(17)); // 16 + root directory
+        Assert.That(list[0].Name, Is.EqualTo(""));
+        Assert.That(list[0].Path, Is.EqualTo("/"));
+        Assert.That(list[1].Name, Is.EqualTo("a"));
+        Assert.That(list[1].Path, Is.EqualTo("/a/"));
+        Assert.That(list[2].Name, Is.EqualTo("b"));
+        Assert.That(list[2].Path, Is.EqualTo("/a/b/"));
+        Assert.That(list[3].Name, Is.EqualTo("c"));
+        Assert.That(list[3].Path, Is.EqualTo("/a/b/c/"));
+        }
+    }
+
         [Test]
-        public void ChangedDirs()
+        public void PostCommitErrorTest()
         {
             string dir = CreateRepos(TestReposType.Empty);
             Uri uri = PathToUri(dir, true);
-            using (InstallHook(uri, SvnHookType.PreCommit, OnChangedDirs))
+            using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
             {
                 using (SvnClient cl = new SvnClient())
                 {
+                    SvnCommitResult cr;
                     SvnCreateDirectoryArgs da = new SvnCreateDirectoryArgs();
                     da.CreateParents = true;
                     da.LogMessage = "Created!";
-                    cl.RemoteCreateDirectories(
-                        new Uri[]
-                        {
-                        new Uri(uri, "a/b/c/d/e/f"),
-                        new Uri(uri, "a/b/c/d/g/h"),
-                        new Uri(uri, "i/j/k"),
-                        new Uri(uri, "l/m/n"),
-                        new Uri(uri, "l/m/n/o/p")
-                        }, da);
+                    cl.RemoteCreateDirectory(new Uri(uri, "a/b/c/d/e/f"), da, out cr);
+
+                    Assert.That(cr, Is.Not.Null);
+                    Assert.That(cr.PostCommitError.Contains(Environment.NewLine));
+                    Assert.That(cr.PostCommitError.Substring(
+                                                    cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase)
+                                                    + Environment.NewLine.Length),
+                                            Is.EqualTo("The Post Commit Warning"));
                 }
             }
         }
 
-        private void OnChangedDirs(object sender, ReposHookEventArgs e)
+        private void OnPostCommit(object sender, ReposHookEventArgs e)
         {
-            using (SvnLookClient lc = new SvnLookClient())
-            {
-                SvnChangedArgs ca = new SvnChangedArgs();
-                ca.Transaction = e.HookArgs.TransactionName;
-
-                Collection<SvnChangedEventArgs> list;
-                Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
-
-                Assert.That(list.Count, Is.EqualTo(17)); // 16 + root directory
-                Assert.That(list[0].Name, Is.EqualTo(""));
-                Assert.That(list[0].Path, Is.EqualTo("/"));
-                Assert.That(list[1].Name, Is.EqualTo("a"));
-                Assert.That(list[1].Path, Is.EqualTo("/a/"));
-                Assert.That(list[2].Name, Is.EqualTo("b"));
-                Assert.That(list[2].Path, Is.EqualTo("/a/b/"));
-                Assert.That(list[3].Name, Is.EqualTo("c"));
-                Assert.That(list[3].Path, Is.EqualTo("/a/b/c/"));
-            }
+            e.ErrorText = "The Post Commit Warning";
+            e.ExitCode = 1;
         }
-
-		[Test]
-		public void PostCommitErrorTest()
-		{
-			string dir = CreateRepos(TestReposType.Empty);
-			Uri uri = PathToUri(dir, true);
-			using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
-			{
-				using (SvnClient cl = new SvnClient())
-				{
-					SvnCommitResult cr;
-					SvnCreateDirectoryArgs da = new SvnCreateDirectoryArgs();
-					da.CreateParents = true;
-					da.LogMessage = "Created!";
-					cl.RemoteCreateDirectory(new Uri(uri, "a/b/c/d/e/f"), da, out cr);
-
-					Assert.That(cr, Is.Not.Null);
-					Assert.That(cr.PostCommitError.Contains(Environment.NewLine));
-					Assert.That(cr.PostCommitError.Substring(
-									cr.PostCommitError.IndexOf(Environment.NewLine, StringComparison.OrdinalIgnoreCase)
-									+ Environment.NewLine.Length),
-								Is.EqualTo("The Post Commit Warning"));
-				}
-			}
-		}
-
-		private void OnPostCommit(object sender, ReposHookEventArgs e)
-		{
-			e.ErrorText = "The Post Commit Warning";
-			e.ExitCode = 1;
-		}
     }
 }

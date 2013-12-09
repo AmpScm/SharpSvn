@@ -23,22 +23,22 @@ using System.Windows.Forms;
 
 namespace SharpSvn.UI.Authentication
 {
-	/// <summary>
-	///
-	/// </summary>
-	public partial class SslClientCertificatePassPhraseDialog : SvnUIForm
-	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SslClientCertificatePassPhraseDialog"/> class.
-		/// </summary>
-		public SslClientCertificatePassPhraseDialog()
-		{
-			InitializeComponent();
-		}
+    /// <summary>
+    ///
+    /// </summary>
+    public partial class SslClientCertificatePassPhraseDialog : SvnUIForm
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SslClientCertificatePassPhraseDialog"/> class.
+        /// </summary>
+        public SslClientCertificatePassPhraseDialog()
+        {
+            InitializeComponent();
+        }
 
-		private void SslClientCertificatePassPhraseDialog_Load(object sender, EventArgs e)
-		{
+        private void SslClientCertificatePassPhraseDialog_Load(object sender, EventArgs e)
+        {
 
-		}
-	}
+        }
+    }
 }

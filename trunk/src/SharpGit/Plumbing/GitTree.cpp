@@ -195,4 +195,4 @@ private:
 IEnumerable<GitTreeEntry^>^ GitTree::Descendants::get()
 {
     return gcnew GitTreeDescendantsWalker(this);
-}}
+}

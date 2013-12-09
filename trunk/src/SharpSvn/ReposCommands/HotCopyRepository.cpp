@@ -45,4 +45,4 @@ bool SvnRepositoryClient::HotCopy(String^ fromRepository, String^ toRepository, 
                                                                               CtxHandle->cancel_func,
                                                                               CtxHandle->cancel_baton,
                                                                               pool.Handle));
-}}
+}

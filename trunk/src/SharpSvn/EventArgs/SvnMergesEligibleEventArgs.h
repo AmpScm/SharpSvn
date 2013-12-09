@@ -60,4 +60,4 @@ namespace SharpSvn {
             return gcnew SvnRevisionRange(Revision-1, Revision);
         }
     };
-}}
+}
