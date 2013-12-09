@@ -25,120 +25,120 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEventArgs^>^ listHandler)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!listHandler)
-		throw gcnew ArgumentNullException("listHandler");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!listHandler)
+        throw gcnew ArgumentNullException("listHandler");
 
-	return PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
+    return PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
 }
 
 static svn_error_t *svnclient_property_list_handler(void *baton, const char *path, apr_hash_t *prop_hash, apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	SvnPropertyListArgs^ args = dynamic_cast<SvnPropertyListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	AprPool aprPool(pool, false);
-	if (!args)
-		return nullptr;
+    SvnPropertyListArgs^ args = dynamic_cast<SvnPropertyListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    AprPool aprPool(pool, false);
+    if (!args)
+        return nullptr;
 
-	SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(args->_listDirent, path, prop_hash, %aprPool);
-	try
-	{
-		args->OnPropertyList(e);
+    SvnPropertyListEventArgs^ e = gcnew SvnPropertyListEventArgs(args->_listDirent, path, prop_hash, %aprPool);
+    try
+    {
+        args->OnPropertyList(e);
 
-		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
-		else
-			return nullptr;
-	}
-	catch(Exception^ ex)
-	{
-		return SvnException::CreateExceptionSvnError("Property list receiver", ex);
-	}
-	finally
-	{
-		e->Detach(false);
-	}
+        if (e->Cancel)
+            return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
+        else
+            return nullptr;
+    }
+    catch(Exception^ ex)
+    {
+        return SvnException::CreateExceptionSvnError("Property list receiver", ex);
+    }
+    finally
+    {
+        e->Detach(false);
+    }
 }
 
 bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, EventHandler<SvnPropertyListEventArgs^>^ listHandler)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	// We allow a null listHandler; the args object might just handle it itself
+    // We allow a null listHandler; the args object might just handle it itself
     SvnRevisionType rt = target->Revision->RevisionType;
-    bool asDirent = !dynamic_cast<SvnUriTarget^>(target) 
+    bool asDirent = !dynamic_cast<SvnUriTarget^>(target)
                         && (rt == SvnRevisionType::None || rt == SvnRevisionType::Working || rt == SvnRevisionType::Base);
 
     EnsureState(asDirent ? SvnContextState::ConfigLoaded : SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
     args->_listDirent = asDirent;
 
-	if (listHandler)
-		args->PropertyList += listHandler;
-	try
-	{
-		svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
-		svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
+    if (listHandler)
+        args->PropertyList += listHandler;
+    try
+    {
+        svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
+        svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
-		svn_error_t* r = svn_client_proplist3(
-			target->AllocAsString(%pool),
-			&pegrev,
-			&rev,
-			(svn_depth_t)args->Depth,
-			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-			svnclient_property_list_handler,
-			(void*)_clientBaton->Handle,
-			CtxHandle,
-			pool.Handle);
+        svn_error_t* r = svn_client_proplist3(
+            target->AllocAsString(%pool),
+            &pegrev,
+            &rev,
+            (svn_depth_t)args->Depth,
+            CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+            svnclient_property_list_handler,
+            (void*)_clientBaton->Handle,
+            CtxHandle,
+            pool.Handle);
 
-		return args->HandleResult(this, r, target);
-	}
-	finally
-	{
-		if (listHandler)
-			args->PropertyList -= listHandler;
-	}
+        return args->HandleResult(this, r, target);
+    }
+    finally
+    {
+        if (listHandler)
+            args->PropertyList -= listHandler;
+    }
 }
 
 bool SvnClient::GetPropertyList(SvnTarget^ target, [Out] Collection<SvnPropertyListEventArgs^>^% list)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	InfoItemCollection<SvnPropertyListEventArgs^>^ results = gcnew InfoItemCollection<SvnPropertyListEventArgs^>();
+    InfoItemCollection<SvnPropertyListEventArgs^>^ results = gcnew InfoItemCollection<SvnPropertyListEventArgs^>();
 
-	try
-	{
-		return PropertyList(target, gcnew SvnPropertyListArgs(), results->Handler);
-	}
-	finally
-	{
-		list = results;
-	}
+    try
+    {
+        return PropertyList(target, gcnew SvnPropertyListArgs(), results->Handler);
+    }
+    finally
+    {
+        list = results;
+    }
 }
 
 bool SvnClient::GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] Collection<SvnPropertyListEventArgs^>^% list)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	InfoItemCollection<SvnPropertyListEventArgs^>^ results = gcnew InfoItemCollection<SvnPropertyListEventArgs^>();
+    InfoItemCollection<SvnPropertyListEventArgs^>^ results = gcnew InfoItemCollection<SvnPropertyListEventArgs^>();
 
-	try
-	{
-		return PropertyList(target, args, results->Handler);
-	}
-	finally
-	{
-		list = results;
-	}
+    try
+    {
+        return PropertyList(target, args, results->Handler);
+    }
+    finally
+    {
+        list = results;
+    }
 }

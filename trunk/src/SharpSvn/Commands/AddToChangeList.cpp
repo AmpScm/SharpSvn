@@ -22,57 +22,57 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::AddToChangeList(String^ target, String^ changeList)
 {
-	if (String::IsNullOrEmpty(target))
-		throw gcnew ArgumentNullException("target");
-	else if (String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
+    if (String::IsNullOrEmpty(target))
+        throw gcnew ArgumentNullException("target");
+    else if (String::IsNullOrEmpty(changeList))
+        throw gcnew ArgumentNullException("changeList");
 
-	return AddToChangeList(NewSingleItemCollection(target), changeList, gcnew SvnAddToChangeListArgs());
+    return AddToChangeList(NewSingleItemCollection(target), changeList, gcnew SvnAddToChangeListArgs());
 }
 
 bool SvnClient::AddToChangeList(String^ target, String^ changeList, SvnAddToChangeListArgs^ args)
 {
-	if (String::IsNullOrEmpty(target))
-		throw gcnew ArgumentNullException("target");
-	else if (String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(target))
+        throw gcnew ArgumentNullException("target");
+    else if (String::IsNullOrEmpty(changeList))
+        throw gcnew ArgumentNullException("changeList");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	return AddToChangeList(NewSingleItemCollection(target), changeList, args);
+    return AddToChangeList(NewSingleItemCollection(target), changeList, args);
 }
 
 bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeList)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-	else if (String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
+    else if (String::IsNullOrEmpty(changeList))
+        throw gcnew ArgumentNullException("changeList");
 
-	return AddToChangeList(targets, changeList, gcnew SvnAddToChangeListArgs());
+    return AddToChangeList(targets, changeList, gcnew SvnAddToChangeListArgs());
 }
 
 bool SvnClient::AddToChangeList(ICollection<String^>^ targets, String^ changeList, SvnAddToChangeListArgs^ args)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-	else if (String::IsNullOrEmpty(changeList))
-		throw gcnew ArgumentNullException("changeList");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
+    else if (String::IsNullOrEmpty(changeList))
+        throw gcnew ArgumentNullException("changeList");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
 
-	svn_error_t *r = svn_client_add_to_changelist(
-		AllocDirentArray(targets, %pool),
-		pool.AllocString(changeList),
-		(svn_depth_t)args->Depth,
-		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_add_to_changelist(
+        AllocDirentArray(targets, %pool),
+        pool.AllocString(changeList),
+        (svn_depth_t)args->Depth,
+        CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, targets);
+    return args->HandleResult(this, r, targets);
 }

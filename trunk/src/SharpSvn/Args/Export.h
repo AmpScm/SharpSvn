@@ -16,105 +16,105 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Export(SvnTarget^, String^, SvnExportArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnExportArgs : public SvnClientArgs
-	{
-		SvnDepth _depth;
-		bool _ignoreExternals;
-		bool _overwrite;
-		bool _ignoreKeywords;
-		SvnRevision^ _revision;
-		SvnLineStyle _lineStyle;
-	public:
-		SvnExportArgs()
-		{
-			_depth = SvnDepth::Infinity;
-			_revision = SvnRevision::None;
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Export(SvnTarget^, String^, SvnExportArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnExportArgs : public SvnClientArgs
+    {
+        SvnDepth _depth;
+        bool _ignoreExternals;
+        bool _overwrite;
+        bool _ignoreKeywords;
+        SvnRevision^ _revision;
+        SvnLineStyle _lineStyle;
+    public:
+        SvnExportArgs()
+        {
+            _depth = SvnDepth::Infinity;
+            _revision = SvnRevision::None;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Export;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Export;
+            }
+        }
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		property bool IgnoreExternals
-		{
-			bool get()
-			{
-				return _ignoreExternals;
-			}
-			void set(bool value)
-			{
-				_ignoreExternals = value;
-			}
-		}
+        property bool IgnoreExternals
+        {
+            bool get()
+            {
+                return _ignoreExternals;
+            }
+            void set(bool value)
+            {
+                _ignoreExternals = value;
+            }
+        }
 
-		property bool Overwrite
-		{
-			bool get()
-			{
-				return _overwrite;
-			}
-			void set(bool value)
-			{
-				_overwrite = value;
-			}
-		}
+        property bool Overwrite
+        {
+            bool get()
+            {
+                return _overwrite;
+            }
+            void set(bool value)
+            {
+                _overwrite = value;
+            }
+        }
 
-		property SvnRevision^ Revision
-		{
-			SvnRevision^ get()
-			{
-				return _revision;
-			}
-			void set(SvnRevision^ value)
-			{
-				if (value)
-					_revision = value;
-				else
-					_revision = SvnRevision::None;
-			}
-		}
+        property SvnRevision^ Revision
+        {
+            SvnRevision^ get()
+            {
+                return _revision;
+            }
+            void set(SvnRevision^ value)
+            {
+                if (value)
+                    _revision = value;
+                else
+                    _revision = SvnRevision::None;
+            }
+        }
 
-		property SvnLineStyle LineStyle
-		{
-			SvnLineStyle get()
-			{
-				return _lineStyle;
-			}
-			void set(SvnLineStyle value)
-			{
-				_lineStyle = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnLineStyle LineStyle
+        {
+            SvnLineStyle get()
+            {
+                return _lineStyle;
+            }
+            void set(SvnLineStyle value)
+            {
+                _lineStyle = EnumVerifier::Verify(value);
+            }
+        }
 
-        property bool IgnoreKeywords
-		{
-			bool get()
-			{
-				return _ignoreKeywords;
-			}
-			void set(bool value)
-			{
-				_ignoreKeywords = value;
-			}
-		}
-	};
+    property bool IgnoreKeywords
+        {
+            bool get()
+            {
+                return _ignoreKeywords;
+            }
+            void set(bool value)
+            {
+                _ignoreKeywords = value;
+            }
+        }
+    };
 
 }

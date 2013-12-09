@@ -25,128 +25,128 @@ using namespace SharpSvn;
 
 bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!to)
-		throw gcnew ArgumentNullException("to");
-	else if (!summaryHandler)
-		throw gcnew ArgumentNullException("summaryHandler");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!to)
+        throw gcnew ArgumentNullException("to");
+    else if (!summaryHandler)
+        throw gcnew ArgumentNullException("summaryHandler");
 
-	return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), summaryHandler);
+    return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), summaryHandler);
 }
 
 static svn_error_t *svn_client_diff_summarize_func_handler(const svn_client_diff_summarize_t *diff, void *baton, apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	AprPool thePool(pool, false);
+    AprPool thePool(pool, false);
 
-	SvnDiffSummaryArgs^ args = dynamic_cast<SvnDiffSummaryArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if (!args)
-		return nullptr;
+    SvnDiffSummaryArgs^ args = dynamic_cast<SvnDiffSummaryArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    if (!args)
+        return nullptr;
 
-	SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff, args->_fromUri, args->_toUri, %thePool);
-	try
-	{
-		args->RaiseDiffSummary(e);
+    SvnDiffSummaryEventArgs^ e = gcnew SvnDiffSummaryEventArgs(diff, args->_fromUri, args->_toUri, %thePool);
+    try
+    {
+        args->RaiseDiffSummary(e);
 
-		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
-		else
-			return nullptr;
-	}
-	catch(Exception^ ex)
-	{
-		return SvnException:: CreateExceptionSvnError("Diff summary receiver", ex);
-	}
-	finally
-	{
-		e->Detach(false);
-	}
+        if (e->Cancel)
+            return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Diff summary receiver canceled operation");
+        else
+            return nullptr;
+    }
+    catch(Exception^ ex)
+    {
+        return SvnException:: CreateExceptionSvnError("Diff summary receiver", ex);
+    }
+    finally
+    {
+        e->Detach(false);
+    }
 
 }
 
 
 bool SvnClient::DiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, EventHandler<SvnDiffSummaryEventArgs^>^ summaryHandler)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!to)
-		throw gcnew ArgumentNullException("to");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!to)
+        throw gcnew ArgumentNullException("to");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	if (summaryHandler)
-		args->DiffSummary += summaryHandler;
-	try
-	{
-		args->_fromUri = from->AllocAsString(%pool);
-		args->_toUri = to->AllocAsString(%pool);
+    if (summaryHandler)
+        args->DiffSummary += summaryHandler;
+    try
+    {
+        args->_fromUri = from->AllocAsString(%pool);
+        args->_toUri = to->AllocAsString(%pool);
 
-		svn_error_t *r = svn_client_diff_summarize2(
-			args->_fromUri,
-			from->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
-			args->_toUri,
-			to->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
-			(svn_depth_t)args->Depth,
-			args->IgnoreAncestry,
-			CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-			svn_client_diff_summarize_func_handler,
-			(void*)_clientBaton->Handle,
-			CtxHandle,
-			pool.Handle);
+        svn_error_t *r = svn_client_diff_summarize2(
+            args->_fromUri,
+            from->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
+            args->_toUri,
+            to->GetSvnRevision(SvnRevision::Base, SvnRevision::Head)->AllocSvnRevision(%pool),
+            (svn_depth_t)args->Depth,
+            args->IgnoreAncestry,
+            CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+            svn_client_diff_summarize_func_handler,
+            (void*)_clientBaton->Handle,
+            CtxHandle,
+            pool.Handle);
 
-		return args->HandleResult(this, r, from);
-	}
-	finally
-	{
-		if (summaryHandler)
-			args->DiffSummary -= summaryHandler;
+        return args->HandleResult(this, r, from);
+    }
+    finally
+    {
+        if (summaryHandler)
+            args->DiffSummary -= summaryHandler;
 
-		args->_fromUri = args->_toUri = nullptr;
-	}
+        args->_fromUri = args->_toUri = nullptr;
+    }
 }
 
 bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, [Out] Collection<SvnDiffSummaryEventArgs^>^% list)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!to)
-		throw gcnew ArgumentNullException("to");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!to)
+        throw gcnew ArgumentNullException("to");
 
-	InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
+    InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
 
-	try
-	{
-		return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), results->Handler);
-	}
-	finally
-	{
-		list = results;
-	}
+    try
+    {
+        return DiffSummary(from, to, gcnew SvnDiffSummaryArgs(), results->Handler);
+    }
+    finally
+    {
+        list = results;
+    }
 }
 
 bool SvnClient::GetDiffSummary(SvnTarget^ from, SvnTarget^ to, SvnDiffSummaryArgs^ args, [Out] Collection<SvnDiffSummaryEventArgs^>^% list)
 {
-	if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!to)
-		throw gcnew ArgumentNullException("to");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!to)
+        throw gcnew ArgumentNullException("to");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
+    InfoItemCollection<SvnDiffSummaryEventArgs^>^ results = gcnew InfoItemCollection<SvnDiffSummaryEventArgs^>();
 
-	try
-	{
-		return DiffSummary(from, to, args, results->Handler);
-	}
-	finally
-	{
-		list = results;
-	}
+    try
+    {
+        return DiffSummary(from, to, args, results->Handler);
+    }
+    finally
+    {
+        list = results;
+    }
 }

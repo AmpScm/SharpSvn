@@ -13,186 +13,186 @@ struct git_tree_entry {};
 
 GitTreeEntry^ GitTree::default::get(int index)
 {
-	if (index < 0)
-		throw gcnew ArgumentOutOfRangeException("index");
+    if (index < 0)
+        throw gcnew ArgumentOutOfRangeException("index");
 
-	const git_tree_entry *entry = git_tree_entry_byindex(Handle, index);
+    const git_tree_entry *entry = git_tree_entry_byindex(Handle, index);
 
-	if (! entry)
-		throw gcnew ArgumentOutOfRangeException("index");
+    if (! entry)
+        throw gcnew ArgumentOutOfRangeException("index");
 
-	return gcnew GitTreeEntry(this, entry);
+    return gcnew GitTreeEntry(this, entry);
 }
 
 GitTreeEntry^ GitTree::default::get(String ^relPath)
 {
-	if (String::IsNullOrEmpty(relPath))
-		throw gcnew ArgumentOutOfRangeException("relPath");
+    if (String::IsNullOrEmpty(relPath))
+        throw gcnew ArgumentOutOfRangeException("relPath");
 
-	GitPool pool;
+    GitPool pool;
 
-	const git_tree_entry *entry = git_tree_entry_byname(Handle, pool.AllocRelpath(relPath));
+    const git_tree_entry *entry = git_tree_entry_byname(Handle, pool.AllocRelpath(relPath));
 
-	if (! entry)
-		throw gcnew ArgumentOutOfRangeException("index");
+    if (! entry)
+        throw gcnew ArgumentOutOfRangeException("index");
 
-	return gcnew GitTreeEntry(this, entry);
+    return gcnew GitTreeEntry(this, entry);
 }
 
 bool GitTree::Contains(String ^relPath)
 {
-	if (String::IsNullOrEmpty(relPath))
-		throw gcnew ArgumentOutOfRangeException("relPath");
+    if (String::IsNullOrEmpty(relPath))
+        throw gcnew ArgumentOutOfRangeException("relPath");
 
-	GitPool pool;
+    GitPool pool;
 
-	const git_tree_entry *entry = git_tree_entry_byname(Handle, pool.AllocRelpath(relPath));
+    const git_tree_entry *entry = git_tree_entry_byname(Handle, pool.AllocRelpath(relPath));
 
-	return (entry != nullptr);
+    return (entry != nullptr);
 }
 
 IEnumerator<GitTreeEntry^>^ GitTree::GetEnumerator()
 {
-	int count = (int)git_tree_entrycount(Handle);
-	array<GitTreeEntry^> ^items = gcnew array<GitTreeEntry^>(count);
+    int count = (int)git_tree_entrycount(Handle);
+    array<GitTreeEntry^> ^items = gcnew array<GitTreeEntry^>(count);
 
-	for (int i = 0; i < count; i++)
-	{
-		items[i] = gcnew GitTreeEntry(this, git_tree_entry_byindex(Handle, i));
-	}
+    for (int i = 0; i < count; i++)
+    {
+        items[i] = gcnew GitTreeEntry(this, git_tree_entry_byindex(Handle, i));
+    }
 
-	ICollection<GitTreeEntry^>^ col = safe_cast<ICollection<GitTreeEntry^>^>(items);
-	return col->GetEnumerator();
+    ICollection<GitTreeEntry^>^ col = safe_cast<ICollection<GitTreeEntry^>^>(items);
+    return col->GetEnumerator();
 }
 
 GitTree^ GitTreeEntry::AsTree()
 {
-	if (!_thisTree && !_tree->IsDisposed && Kind == GitObjectKind::Tree)
-	{
-		const git_oid* id = git_tree_entry_id(_entry);
-		git_tree *tree;
-			
-		int r = git_tree_lookup(&tree, _tree->Repository->Handle, id);
+    if (!_thisTree && !_tree->IsDisposed && Kind == GitObjectKind::Tree)
+    {
+        const git_oid* id = git_tree_entry_id(_entry);
+        git_tree *tree;
 
-		if (!r)
-			_thisTree = gcnew GitTree(_tree->Repository, tree, this);
-	}
+        int r = git_tree_lookup(&tree, _tree->Repository->Handle, id);
 
-	return _thisTree;
+        if (!r)
+            _thisTree = gcnew GitTree(_tree->Repository, tree, this);
+    }
+
+    return _thisTree;
 }
 
 ICollection<GitTreeEntry^>^ GitTreeEntry::Children::get()
 {
-	if (!_children && !_tree->IsDisposed)
-	{
-		if (Kind == GitObjectKind::Tree)
-			_children = AsTree();
+    if (!_children && !_tree->IsDisposed)
+    {
+        if (Kind == GitObjectKind::Tree)
+            _children = AsTree();
 
-		if ((Object^)_children == nullptr)
-			_children = safe_cast<ICollection<GitTreeEntry^>^>(gcnew array<GitTreeEntry^>(0));
-	}
+        if ((Object^)_children == nullptr)
+            _children = safe_cast<ICollection<GitTreeEntry^>^>(gcnew array<GitTreeEntry^>(0));
+    }
 
-	return _children;
+    return _children;
 }
 
 IEnumerable<GitTreeEntry^>^ GitTreeEntry::Descendants::get()
 {
-	if (_thisTree)
-		return _thisTree->Descendants;
-	else if (!_tree->IsDisposed)
-	{
-		if (Kind == GitObjectKind::Tree)
-			return AsTree()->Descendants;
-		else
-			return Children; // Easy empty list
-	}
+    if (_thisTree)
+        return _thisTree->Descendants;
+    else if (!_tree->IsDisposed)
+    {
+        if (Kind == GitObjectKind::Tree)
+            return AsTree()->Descendants;
+        else
+            return Children; // Easy empty list
+    }
 
-	return nullptr;
+    return nullptr;
 }
 
 
 private ref class GitTreeDescendantsWalker sealed : IEnumerator<GitTreeEntry^>, IEnumerable<GitTreeEntry^>
 {
 private:
-	initonly GitTree^ _tree;
-	GitTreeDescendantsWalker ^_inner;
-	int _index;
-	GitTreeEntry ^_current;
-	~GitTreeDescendantsWalker()
-	{
-	}
+    initonly GitTree^ _tree;
+    GitTreeDescendantsWalker ^_inner;
+    int _index;
+    GitTreeEntry ^_current;
+    ~GitTreeDescendantsWalker()
+    {
+    }
 
 public:
-	GitTreeDescendantsWalker(GitTree ^tree)
-	{
-		if (! tree)
-			throw gcnew ArgumentNullException("tree");
+    GitTreeDescendantsWalker(GitTree ^tree)
+    {
+        if (! tree)
+            throw gcnew ArgumentNullException("tree");
 
-		_tree = tree;
-		_index = -1;
-	}
+        _tree = tree;
+        _index = -1;
+    }
 
-	virtual bool MoveNext()
-	{
-		_current = nullptr;
-		if (_inner && _inner->MoveNext())
-			return true;
+    virtual bool MoveNext()
+    {
+        _current = nullptr;
+        if (_inner && _inner->MoveNext())
+            return true;
 
-		_inner = nullptr;
+        _inner = nullptr;
 
-		int cnt = _tree->Count;
+        int cnt = _tree->Count;
 
-		if (_index + 1 >= cnt)
-			return false;
+        if (_index + 1 >= cnt)
+            return false;
 
-		_index++;
-		_current = _tree[_index];
+        _index++;
+        _current = _tree[_index];
 
-		if (_current->Kind == GitObjectKind::Tree)
-			_inner = gcnew GitTreeDescendantsWalker(_current->AsTree());
+        if (_current->Kind == GitObjectKind::Tree)
+            _inner = gcnew GitTreeDescendantsWalker(_current->AsTree());
 
-		return true;
-	}
+        return true;
+    }
 
-	virtual property GitTreeEntry^ Current
-	{
-		GitTreeEntry^ get()
-		{
-			if (!_current && _inner)
-				_current = _inner->Current;
+    virtual property GitTreeEntry^ Current
+    {
+        GitTreeEntry^ get()
+        {
+            if (!_current && _inner)
+                _current = _inner->Current;
 
-			return _current;
-		}
-	}
+            return _current;
+        }
+    }
 
-	virtual void Reset()
-	{
-		_current = nullptr;
-		_inner = nullptr;
-		_index = -1;
-	}
+    virtual void Reset()
+    {
+        _current = nullptr;
+        _inner = nullptr;
+        _index = -1;
+    }
 
 private:
-	virtual property Object^ ObjectCurrent
-	{
-		virtual Object^ get() sealed = System::Collections::IEnumerator::Current::get
-		{
-			return Current;
-		}
-	}
+    virtual property Object^ ObjectCurrent
+    {
+        virtual Object^ get() sealed = System::Collections::IEnumerator::Current::get
+        {
+            return Current;
+        }
+    }
 
-	virtual IEnumerator<GitTreeEntry^>^ GetEnumerator() sealed = IEnumerable<GitTreeEntry^>::GetEnumerator
-	{
-		return gcnew GitTreeDescendantsWalker(_tree);
-	}
+    virtual IEnumerator<GitTreeEntry^>^ GetEnumerator() sealed = IEnumerable<GitTreeEntry^>::GetEnumerator
+    {
+        return gcnew GitTreeDescendantsWalker(_tree);
+    }
 
-	virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
-	{
-		return GetEnumerator();
-	}
+    virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+    {
+        return GetEnumerator();
+    }
 };
 
 IEnumerable<GitTreeEntry^>^ GitTree::Descendants::get()
 {
-	return gcnew GitTreeDescendantsWalker(this);
-}
+    return gcnew GitTreeDescendantsWalker(this);
+}}

@@ -23,40 +23,40 @@ using namespace SharpSvn::Implementation;
 
 bool SvnLookClient::TryGetRepositoryId(SvnLookOrigin^ lookOrigin, [Out] Guid% id)
 {
-	if (!lookOrigin)
-		throw gcnew ArgumentNullException("lookOrigin");
+    if (!lookOrigin)
+        throw gcnew ArgumentNullException("lookOrigin");
 
-	return TryGetRepositoryId(lookOrigin->RepositoryPath, id);
+    return TryGetRepositoryId(lookOrigin->RepositoryPath, id);
 }
 
 bool SvnLookClient::TryGetRepositoryId(String^ repositoryPath, [Out] Guid% id)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
 
-	id = Guid::Empty;
+    id = Guid::Empty;
 
-	svn_error_t* r;
-	svn_repos_t* repos;
-	if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
-	{
-		svn_error_clear(r);
-		return false;
-	}
+    svn_error_t* r;
+    svn_repos_t* repos;
+    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+    {
+        svn_error_clear(r);
+        return false;
+    }
 
-	svn_fs_t* fs = svn_repos_fs(repos);
-	const char *uuidStr;
+    svn_fs_t* fs = svn_repos_fs(repos);
+    const char *uuidStr;
 
-	if (r = svn_fs_get_uuid(fs, &uuidStr, pool.Handle))
-	{
-		svn_error_clear(r);
-		return false;
-	}
+    if (r = svn_fs_get_uuid(fs, &uuidStr, pool.Handle))
+    {
+        svn_error_clear(r);
+        return false;
+    }
 
-	id = Guid(Utf8_PtrToString(uuidStr));
-	return true;
+    id = Guid(Utf8_PtrToString(uuidStr));
+    return true;
 }
 

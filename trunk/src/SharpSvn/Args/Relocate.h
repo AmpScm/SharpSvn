@@ -16,47 +16,47 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Relocate(String^, Uri^, Uri^, SvnRelocateArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnRelocateArgs : public SvnClientArgs
-	{
-		bool _ignoreExternals;
-	public:
-		SvnRelocateArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Relocate(String^, Uri^, Uri^, SvnRelocateArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnRelocateArgs : public SvnClientArgs
+    {
+        bool _ignoreExternals;
+    public:
+        SvnRelocateArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Relocate;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Relocate;
+            }
+        }
 
-		[Obsolete("Relocate is always recursive now")]
-		property bool NonRecursive
-		{
-			bool get()
-			{
-				return false;
-			}
-			void set(bool value)
-			{
-                UNUSED_ALWAYS(value);
-			}
-		}
+        [Obsolete("Relocate is always recursive now")]
+        property bool NonRecursive
+        {
+            bool get()
+            {
+                return false;
+            }
+            void set(bool value)
+            {
+        UNUSED_ALWAYS(value);
+            }
+        }
 
-		property bool IgnoreExternals
-		{
-			bool get()
-			{
-				return _ignoreExternals;
-			}
-			void set(bool value)
-			{
-				_ignoreExternals = value;
-			}
-		}
-	};
-}
+        property bool IgnoreExternals
+        {
+            bool get()
+            {
+                return _ignoreExternals;
+            }
+            void set(bool value)
+            {
+                _ignoreExternals = value;
+            }
+        }
+    };
+}}

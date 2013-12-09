@@ -22,10 +22,10 @@ using namespace SharpSvn;
 
 SvnException^ SvnNotifyEventArgs::Error::get()
 {
-	if (!_exception && _notify && _notify->err)
-		_exception = static_cast<SvnException^>(SvnException::Create(_notify->err, false));
+    if (!_exception && _notify && _notify->err)
+        _exception = static_cast<SvnException^>(SvnException::Create(_notify->err, false));
 
-	return _exception;
+    return _exception;
 }
 
 //Fxcop bug:
@@ -34,56 +34,56 @@ SvnException^ SvnNotifyEventArgs::Error::get()
 ref class SvnCommitItemMarshaller sealed : public IItemMarshaller<SvnCommitItem^>
 {
 public:
-	SvnCommitItemMarshaller()
-	{}
+    SvnCommitItemMarshaller()
+    {}
 
-	property int ItemSize
-	{
-		virtual int get()
-		{
-			return sizeof(svn_client_commit_item3_t*);
-		}
-	}
+    property int ItemSize
+    {
+        virtual int get()
+        {
+            return sizeof(svn_client_commit_item3_t*);
+        }
+    }
 
-	virtual void Write(SvnCommitItem^ value, void* ptr, AprPool^ pool)
-	{
-		UNUSED_ALWAYS(value);
-		UNUSED_ALWAYS(ptr);
-		UNUSED_ALWAYS(pool);
-		throw gcnew NotImplementedException();
-	}
+    virtual void Write(SvnCommitItem^ value, void* ptr, AprPool^ pool)
+    {
+        UNUSED_ALWAYS(value);
+        UNUSED_ALWAYS(ptr);
+        UNUSED_ALWAYS(pool);
+        throw gcnew NotImplementedException();
+    }
 
-	virtual SvnCommitItem^ Read(const void* ptr, AprPool^ pool)
-	{
-		UNUSED_ALWAYS(pool);
-		const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
+    virtual SvnCommitItem^ Read(const void* ptr, AprPool^ pool)
+    {
+        UNUSED_ALWAYS(pool);
+        const svn_client_commit_item3_t** ppcCommitItem = (const svn_client_commit_item3_t**)ptr;
 
-		return gcnew SvnCommitItem(*ppcCommitItem, pool);
-	}
+        return gcnew SvnCommitItem(*ppcCommitItem, pool);
+    }
 };
 
 
 
 SvnCommitItemCollection^ SvnCommittingEventArgs::Items::get()
 {
-	if (!_items && _commitItems)
-	{
-		AprArray<SvnCommitItem^, SvnCommitItemMarshaller^>^ aprItems = gcnew AprArray<SvnCommitItem^, SvnCommitItemMarshaller^>(_commitItems, _pool);
+    if (!_items && _commitItems)
+    {
+        AprArray<SvnCommitItem^, SvnCommitItemMarshaller^>^ aprItems = gcnew AprArray<SvnCommitItem^, SvnCommitItemMarshaller^>(_commitItems, _pool);
 
-		array<SvnCommitItem^>^ items = gcnew array<SvnCommitItem^>(aprItems->Count);
+        array<SvnCommitItem^>^ items = gcnew array<SvnCommitItem^>(aprItems->Count);
 
-		aprItems->CopyTo(items, 0);
+        aprItems->CopyTo(items, 0);
 
-		_items = gcnew SvnCommitItemCollection(safe_cast<IList<SvnCommitItem^>^>(items));
-	}
+        _items = gcnew SvnCommitItemCollection(safe_cast<IList<SvnCommitItem^>^>(items));
+    }
 
-	return _items;
+    return _items;
 }
 
 SvnMergeRange^ SvnNotifyEventArgs::MergeRange::get()
 {
-	if (!_mergeRange && _notify && _notify->merge_range)
-		_mergeRange = gcnew SvnMergeRange(_notify->merge_range->start, _notify->merge_range->end, _notify->merge_range->inheritable != 0);
+    if (!_mergeRange && _notify && _notify->merge_range)
+        _mergeRange = gcnew SvnMergeRange(_notify->merge_range->start, _notify->merge_range->end, _notify->merge_range->inheritable != 0);
 
-	return _mergeRange;
+    return _mergeRange;
 }

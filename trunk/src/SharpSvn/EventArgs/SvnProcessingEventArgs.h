@@ -18,30 +18,30 @@
 
 namespace SharpSvn {
 
-	public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
-	{
-		initonly SvnCommandType _commandType;
+    public ref class SvnProcessingEventArgs sealed : public SvnEventArgs
+    {
+        initonly SvnCommandType _commandType;
 
-	internal:
-		SvnProcessingEventArgs(SvnCommandType commandType)
-		{
-			_commandType = commandType;
-		}
+    internal:
+        SvnProcessingEventArgs(SvnCommandType commandType)
+        {
+            _commandType = commandType;
+        }
 
-	public:
-		property SvnCommandType CommandType
-		{
-			SvnCommandType get()
-			{
-				return _commandType;
-			}
-		}
+    public:
+        property SvnCommandType CommandType
+        {
+            SvnCommandType get()
+            {
+                return _commandType;
+            }
+        }
 
-		/// <summary>Serves as a hashcode for the specified type</summary>
-		virtual int GetHashCode() override
-		{
-			return CommandType.GetHashCode();
-		}
-	};
+        /// <summary>Serves as a hashcode for the specified type</summary>
+        virtual int GetHashCode() override
+        {
+            return CommandType.GetHashCode();
+        }
+    };
 
-}
+}}

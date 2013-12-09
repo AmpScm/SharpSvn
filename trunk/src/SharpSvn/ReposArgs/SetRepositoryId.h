@@ -16,21 +16,21 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnSetRepositoryIdArgs : public SvnRepositoryClientArgs
-	{
-	public:
-		SvnSetRepositoryIdArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnRepositoryClient" />'s CreateRepository method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnSetRepositoryIdArgs : public SvnRepositoryClientArgs
+    {
+    public:
+        SvnSetRepositoryIdArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
-}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
+}}

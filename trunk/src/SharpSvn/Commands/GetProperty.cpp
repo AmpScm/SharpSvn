@@ -27,144 +27,144 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, String^% value)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!propertyName)
-		throw gcnew ArgumentNullException("propertyName");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!propertyName)
+        throw gcnew ArgumentNullException("propertyName");
 
-	SvnTargetPropertyCollection^ result = nullptr;
-	value = nullptr;
+    SvnTargetPropertyCollection^ result = nullptr;
+    value = nullptr;
 
-	bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
+    bool ok = GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result);
 
-	if (ok && result && (result->Count > 0))
-		value = result[0]->StringValue;
+    if (ok && result && (result->Count > 0))
+        value = result[0]->StringValue;
 
-	return ok;
+    return ok;
 }
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnPropertyValue^% value)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!propertyName)
-		throw gcnew ArgumentNullException("propertyName");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!propertyName)
+        throw gcnew ArgumentNullException("propertyName");
 
-	SvnTargetPropertyCollection^ result;
-	value = nullptr;
+    SvnTargetPropertyCollection^ result;
+    value = nullptr;
 
-	if (GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result))
-	{
-		if (result->Count)
-			value = static_cast<IList<SvnPropertyValue^>^>(result)[0];
+    if (GetProperty(target, propertyName, gcnew SvnGetPropertyArgs(), result))
+    {
+        if (result->Count)
+            value = static_cast<IList<SvnPropertyValue^>^>(result)[0];
 
-		return true;
-	}
-	else
-		return false;
+        return true;
+    }
+    else
+        return false;
 }
 
 bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPropertyArgs^ args, SvnTargetPropertyCollection^% properties)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!propertyName)
-		throw gcnew ArgumentNullException("propertyName");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!propertyName)
+        throw gcnew ArgumentNullException("propertyName");
 
-	properties = nullptr;
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    properties = nullptr;
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-	svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
-	svn_revnum_t actualRev = 0;
+    svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+    svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
+    svn_revnum_t actualRev = 0;
 
-	apr_hash_t* pHash = nullptr;
+    apr_hash_t* pHash = nullptr;
 
-	const char* pName = pool.AllocString(propertyName);
+    const char* pName = pool.AllocString(propertyName);
 
-	const char *prefix = nullptr;
-	const char *targetName = target->AllocAsString(%pool);
+    const char *prefix = nullptr;
+    const char *targetName = target->AllocAsString(%pool);
 
-	if (!svn_path_is_url(targetName))
-	{
-		prefix = targetName;
+    if (!svn_path_is_url(targetName))
+    {
+        prefix = targetName;
 
-		SVN_HANDLE(svn_dirent_get_absolute(&targetName, prefix, pool.Handle));
-	}
+        SVN_HANDLE(svn_dirent_get_absolute(&targetName, prefix, pool.Handle));
+    }
 
-	svn_error_t *r = svn_client_propget5(
-		&pHash,
-		nullptr,
-		pName,
-		targetName,
-		&pegRev,
-		&rev,
-		&actualRev,
-		(svn_depth_t)args->Depth,
-		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-		CtxHandle,
-		pool.Handle,
-		pool.Handle);
+    svn_error_t *r = svn_client_propget5(
+        &pHash,
+        nullptr,
+        pName,
+        targetName,
+        &pegRev,
+        &rev,
+        &actualRev,
+        (svn_depth_t)args->Depth,
+        CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        CtxHandle,
+        pool.Handle,
+        pool.Handle);
 
-	if (pHash)
-	{
-		SvnTargetPropertyCollection^ rd = gcnew SvnTargetPropertyCollection();
+    if (pHash)
+    {
+        SvnTargetPropertyCollection^ rd = gcnew SvnTargetPropertyCollection();
 
-		for (apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
-		{
-			const char* pKey;
-			apr_ssize_t keyLen;
-			const svn_string_t *propVal;
+        for (apr_hash_index_t* hi = apr_hash_first(pool.Handle, pHash); hi ; hi = apr_hash_next(hi))
+        {
+            const char* pKey;
+            apr_ssize_t keyLen;
+            const svn_string_t *propVal;
 
-			apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
+            apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&propVal);
 
-			SvnTarget^ itemTarget;
-			if (prefix && !svn_path_is_url(pKey))
-			{
-				String^ path = Utf8_PathPtrToString(svn_dirent_join(prefix, svn_dirent_skip_ancestor(targetName, pKey), pool.Handle), %pool);
+            SvnTarget^ itemTarget;
+            if (prefix && !svn_path_is_url(pKey))
+            {
+                String^ path = Utf8_PathPtrToString(svn_dirent_join(prefix, svn_dirent_skip_ancestor(targetName, pKey), pool.Handle), %pool);
 
-				if (!String::IsNullOrEmpty(path))
-					itemTarget = path;
-				else
-					itemTarget = ".";
-			}
-			else
-				itemTarget = Utf8_PtrToUri(pKey, SvnNodeKind::Unknown);
+                if (!String::IsNullOrEmpty(path))
+                    itemTarget = path;
+                else
+                    itemTarget = ".";
+            }
+            else
+                itemTarget = Utf8_PtrToUri(pKey, SvnNodeKind::Unknown);
 
-			rd->Add(SvnPropertyValue::Create(pName, propVal, itemTarget, propertyName));
-		}
+            rd->Add(SvnPropertyValue::Create(pName, propVal, itemTarget, propertyName));
+        }
 
-		properties = rd;
-	}
+        properties = rd;
+    }
 
-	return args->HandleResult(this, r, target);
+    return args->HandleResult(this, r, target);
 }
 
 bool SvnClient::TryGetProperty(SvnTarget^ target, String^ propertyName, String^% value)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!propertyName)
-		throw gcnew ArgumentNullException("propertyName");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!propertyName)
+        throw gcnew ArgumentNullException("propertyName");
 
-	SvnTargetPropertyCollection^ result = nullptr;
-	value = nullptr;
+    SvnTargetPropertyCollection^ result = nullptr;
+    value = nullptr;
 
-	SvnGetPropertyArgs^ args = gcnew SvnGetPropertyArgs();
-	args->ThrowOnError = false;
+    SvnGetPropertyArgs^ args = gcnew SvnGetPropertyArgs();
+    args->ThrowOnError = false;
 
-	if (GetProperty(target, propertyName, args, result))
-	{
-		if (result->Count > 0)
-		{
-			value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
+    if (GetProperty(target, propertyName, args, result))
+    {
+        if (result->Count > 0)
+        {
+            value = static_cast<IList<SvnPropertyValue^>^>(result)[0]->StringValue;
 
-			return true;
-		}
+            return true;
+        }
 
-		// Fall through if no property fetched
-	}
-	return false;
-}
+        // Fall through if no property fetched
+    }
+    return false;
+}}

@@ -22,51 +22,51 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::RemoveFromChangeList(String^ target)
 {
-	if (String::IsNullOrEmpty(target))
-		throw gcnew ArgumentNullException("target");
-	else if (!IsNotUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
+    if (String::IsNullOrEmpty(target))
+        throw gcnew ArgumentNullException("target");
+    else if (!IsNotUri(target))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
-	return RemoveFromChangeList(NewSingleItemCollection(target), gcnew SvnRemoveFromChangeListArgs());
+    return RemoveFromChangeList(NewSingleItemCollection(target), gcnew SvnRemoveFromChangeListArgs());
 }
 
 bool SvnClient::RemoveFromChangeList(String^ target, SvnRemoveFromChangeListArgs^ args)
 {
-	if (String::IsNullOrEmpty(target))
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(target))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
+    if (String::IsNullOrEmpty(target))
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(target))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "target");
 
-	return RemoveFromChangeList(NewSingleItemCollection(target), args);
+    return RemoveFromChangeList(NewSingleItemCollection(target), args);
 }
 
 bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
 
-	return RemoveFromChangeList(targets, gcnew SvnRemoveFromChangeListArgs());
+    return RemoveFromChangeList(targets, gcnew SvnRemoveFromChangeListArgs());
 }
 
 bool SvnClient::RemoveFromChangeList(ICollection<String^>^ targets, SvnRemoveFromChangeListArgs^ args)
 {
-	if (!targets)
-		throw gcnew ArgumentNullException("targets");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!targets)
+        throw gcnew ArgumentNullException("targets");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_remove_from_changelists(
-		AllocDirentArray(targets, %pool),
-		(svn_depth_t)args->Depth,
-		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_remove_from_changelists(
+        AllocDirentArray(targets, %pool),
+        (svn_depth_t)args->Depth,
+        CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, targets);
-}
+    return args->HandleResult(this, r, targets);
+}}

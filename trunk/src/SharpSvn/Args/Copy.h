@@ -16,97 +16,97 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of SvnClient.Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and
-	/// <see cref="SvnClient::RemoteCopy(SvnTarget^,Uri^,SvnCopyArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnCopyArgs : public SvnClientArgsWithCommit
-	{
-		bool _makeParents;
-		bool _alwaysCopyBelow;
-		bool _ignoreExternals;
-		SvnRevision^ _revision;
+    /// <summary>Extended Parameter container of SvnClient.Copy(SvnTarget^,String^,SvnCopyArgs^)" /> and
+    /// <see cref="SvnClient::RemoteCopy(SvnTarget^,Uri^,SvnCopyArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnCopyArgs : public SvnClientArgsWithCommit
+    {
+        bool _makeParents;
+        bool _alwaysCopyBelow;
+        bool _ignoreExternals;
+        SvnRevision^ _revision;
 
-	public:
-		SvnCopyArgs()
-		{
-			_revision = SvnRevision::None;
-		}
+    public:
+        SvnCopyArgs()
+        {
+            _revision = SvnRevision::None;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Copy;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Copy;
+            }
+        }
 
-		/// <summary>Creates parent directories if required</summary>
-		property bool CreateParents
-		{
-			bool get()
-			{
-				return _makeParents;
-			}
-			void set(bool value)
-			{
-				_makeParents = value;
-			}
-		}
+        /// <summary>Creates parent directories if required</summary>
+        property bool CreateParents
+        {
+            bool get()
+            {
+                return _makeParents;
+            }
+            void set(bool value)
+            {
+                _makeParents = value;
+            }
+        }
 
-		[Obsolete("Use .CreateParents")]
-		property bool MakeParents
-		{
-			bool get()
-			{
-				return CreateParents;
-			}
-			void set(bool value)
-			{
-				CreateParents = value;
-			}
-		}
+        [Obsolete("Use .CreateParents")]
+        property bool MakeParents
+        {
+            bool get()
+            {
+                return CreateParents;
+            }
+            void set(bool value)
+            {
+                CreateParents = value;
+            }
+        }
 
-		/// <summary>Always copies the result to below the target (this behaviour is always used if multiple targets are provided)</summary>
-		property bool AlwaysCopyAsChild
-		{
-			bool get()
-			{
-				return _alwaysCopyBelow;
-			}
-			void set(bool value)
-			{
-				_alwaysCopyBelow = value;
-			}
-		}
+        /// <summary>Always copies the result to below the target (this behaviour is always used if multiple targets are provided)</summary>
+        property bool AlwaysCopyAsChild
+        {
+            bool get()
+            {
+                return _alwaysCopyBelow;
+            }
+            void set(bool value)
+            {
+                _alwaysCopyBelow = value;
+            }
+        }
 
-		/// <summary>Gets or sets a boolean that if set to true tells copy not to process
-		/// externals definitions as part of this operation.</summary>
-		property bool IgnoreExternals
-		{
-			bool get()
-			{
-				return _ignoreExternals;
-			}
-			void set(bool value)
-			{
-				_ignoreExternals = value;
-			}
-		}
+        /// <summary>Gets or sets a boolean that if set to true tells copy not to process
+        /// externals definitions as part of this operation.</summary>
+        property bool IgnoreExternals
+        {
+            bool get()
+            {
+                return _ignoreExternals;
+            }
+            void set(bool value)
+            {
+                _ignoreExternals = value;
+            }
+        }
 
-		property SvnRevision^ Revision
-		{
-			SvnRevision^ get()
-			{
-				return _revision;
-			}
-			void set(SvnRevision^ value)
-			{
-				if (value)
-					_revision = value;
-				else
-					_revision = SvnRevision::None;
-			}
-		}
-	};
+        property SvnRevision^ Revision
+        {
+            SvnRevision^ get()
+            {
+                return _revision;
+            }
+            void set(SvnRevision^ value)
+            {
+                if (value)
+                    _revision = value;
+                else
+                    _revision = SvnRevision::None;
+            }
+        }
+    };
 
 }

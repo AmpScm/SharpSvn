@@ -23,33 +23,33 @@ using namespace SharpSvn::Implementation;
 
 bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return UpgradeRepository(repositoryPath, gcnew SvnUpgradeRepositoryArgs());
+    return UpgradeRepository(repositoryPath, gcnew SvnUpgradeRepositoryArgs());
 }
 
 bool SvnRepositoryClient::UpgradeRepository(String^ repositoryPath, SvnUpgradeRepositoryArgs^ args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t* r = svn_repos_upgrade2(
-		pool.AllocDirent(repositoryPath),
-		args->NonBlocking,
-		nullptr,
-		nullptr,
-		pool.Handle);
+    svn_error_t* r = svn_repos_upgrade2(
+        pool.AllocDirent(repositoryPath),
+        args->NonBlocking,
+        nullptr,
+        nullptr,
+        pool.Handle);
 
-	return args->HandleResult(this, r);
-}
+    return args->HandleResult(this, r);
+}}

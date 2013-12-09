@@ -3,329 +3,329 @@
 #include "GitObject.h"
 
 namespace SharpGit {
-	ref class GitSignature;
+    ref class GitSignature;
 
-	namespace Plumbing {
-		ref class GitRepository;
-		ref class GitTree;
+    namespace Plumbing {
+        ref class GitRepository;
+        ref class GitTree;
 
-		public ref class GitCommit : public GitObject
-		{
-		internal:
-			GitCommit(GitRepository^ repository, git_commit *handle)
-				: GitObject(repository, reinterpret_cast<git_object*>(handle))
-			{
-			}
-				
+        public ref class GitCommit : public GitObject
+        {
+        internal:
+            GitCommit(GitRepository^ repository, git_commit *handle)
+                : GitObject(repository, reinterpret_cast<git_object*>(handle))
+            {
+            }
 
-			property git_commit* Handle
-			{
-				git_commit* get() new
-				{
-					return reinterpret_cast<git_commit*>(GitObject::Handle);
-				}
-			}
 
-		public:
-			ref class CommitParentCollection sealed : public ICollection<GitCommit^>
-			{
-				initonly GitCommit ^_commit;
+            property git_commit* Handle
+            {
+                git_commit* get() new
+                {
+                    return reinterpret_cast<git_commit*>(GitObject::Handle);
+                }
+            }
 
-			internal:
-				CommitParentCollection(GitCommit ^commit)
-				{
-					if (! commit)
-						throw gcnew ArgumentNullException("commit");
+        public:
+            ref class CommitParentCollection sealed : public ICollection<GitCommit^>
+            {
+                initonly GitCommit ^_commit;
 
-					_commit = commit;
-				}
+            internal:
+                CommitParentCollection(GitCommit ^commit)
+                {
+                    if (! commit)
+                        throw gcnew ArgumentNullException("commit");
 
-			public:
-				property int Count
-				{
-					virtual int get()
-					{
-						if (_commit->IsDisposed)
-							return 0;
+                    _commit = commit;
+                }
 
-						return git_commit_parentcount(_commit->Handle);
-					}
-				}
+            public:
+                property int Count
+                {
+                    virtual int get()
+                    {
+                        if (_commit->IsDisposed)
+                            return 0;
 
-				property GitCommit^ default[int]
-				{
-					GitCommit^ get(int index)
-					{
-						git_commit *commit;
+                        return git_commit_parentcount(_commit->Handle);
+                    }
+                }
 
-						if (index < 0)
-							throw gcnew ArgumentOutOfRangeException("index");
+                property GitCommit^ default[int]
+                {
+                    GitCommit^ get(int index)
+                    {
+                        git_commit *commit;
 
-						int r = git_commit_parent(&commit, _commit->Handle, index);
-						if (!r)
-							return gcnew GitCommit(_commit->Repository, commit);
+                        if (index < 0)
+                            throw gcnew ArgumentOutOfRangeException("index");
 
-						return nullptr;
-					}
-				}
+                        int r = git_commit_parent(&commit, _commit->Handle, index);
+                        if (!r)
+                            return gcnew GitCommit(_commit->Repository, commit);
 
-				virtual IEnumerator<GitCommit^>^ GetEnumerator()
-				{
-					array<GitCommit^>^ items = gcnew array<GitCommit^>(Count);
+                        return nullptr;
+                    }
+                }
 
-					int c = git_commit_parentcount(_commit->Handle);
+                virtual IEnumerator<GitCommit^>^ GetEnumerator()
+                {
+                    array<GitCommit^>^ items = gcnew array<GitCommit^>(Count);
 
-					for(int i = 0; i < c; i++)
-					{
-						git_commit *commit;
-						int r = git_commit_parent(&commit, _commit->Handle, i);
-						if (!r)
-							items[i] = gcnew GitCommit(_commit->Repository, commit);
-					}
+                    int c = git_commit_parentcount(_commit->Handle);
 
-					ICollection<GitCommit^>^ col = safe_cast<ICollection<GitCommit^>^>(items);
-					return col->GetEnumerator();
-				}
+                    for(int i = 0; i < c; i++)
+                    {
+                        git_commit *commit;
+                        int r = git_commit_parent(&commit, _commit->Handle, i);
+                        if (!r)
+                            items[i] = gcnew GitCommit(_commit->Repository, commit);
+                    }
 
-				property bool IsReadOnly
-				{
-					virtual bool get()
-					{
-						return true;
-					}
-				}
+                    ICollection<GitCommit^>^ col = safe_cast<ICollection<GitCommit^>^>(items);
+                    return col->GetEnumerator();
+                }
 
-				virtual bool Contains(GitCommit^ commit)
-				{
-					for each(GitCommit^ c in this)
-					{
-						if (c->Equals(commit))
-							return true;
-					}
-					return false;
-				}
+                property bool IsReadOnly
+                {
+                    virtual bool get()
+                    {
+                        return true;
+                    }
+                }
 
-			private:
-				virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
-				{
-					return GetEnumerator();
-				}
+                virtual bool Contains(GitCommit^ commit)
+                {
+                    for each(GitCommit^ c in this)
+                    {
+                        if (c->Equals(commit))
+                            return true;
+                    }
+                    return false;
+                }
 
-				virtual void Add(GitCommit^ item) sealed = ICollection<GitCommit^>::Add
-				{
-					UNUSED(item);
-					throw gcnew InvalidOperationException();
-				}
+            private:
+                virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+                {
+                    return GetEnumerator();
+                }
 
-				virtual bool Remove(GitCommit^ item) sealed = ICollection<GitCommit^>::Remove
-				{
-					UNUSED(item);
-					throw gcnew InvalidOperationException();
-				}
+                virtual void Add(GitCommit^ item) sealed = ICollection<GitCommit^>::Add
+                {
+                    UNUSED(item);
+                    throw gcnew InvalidOperationException();
+                }
 
-				virtual void Clear() sealed = ICollection<GitCommit^>::Clear
-				{
-					throw gcnew InvalidOperationException();
-				}
+                virtual bool Remove(GitCommit^ item) sealed = ICollection<GitCommit^>::Remove
+                {
+                    UNUSED(item);
+                    throw gcnew InvalidOperationException();
+                }
 
-				virtual void CopyTo(array<GitCommit^>^ toArray, int index) sealed = ICollection<GitCommit^>::CopyTo
-				{
-					for each(GitCommit^ c in this)
-					{
-						toArray[index++] = c;
-					}
-				}
-			};
+                virtual void Clear() sealed = ICollection<GitCommit^>::Clear
+                {
+                    throw gcnew InvalidOperationException();
+                }
 
-			ref class CommitParentIdCollection sealed : public ICollection<GitId^>
-			{
-				initonly GitCommit ^_commit;
+                virtual void CopyTo(array<GitCommit^>^ toArray, int index) sealed = ICollection<GitCommit^>::CopyTo
+                {
+                    for each(GitCommit^ c in this)
+                    {
+                        toArray[index++] = c;
+                    }
+                }
+            };
 
-			internal:
-				CommitParentIdCollection(GitCommit ^commit)
-				{
-					if (! commit)
-						throw gcnew ArgumentNullException("commit");
+            ref class CommitParentIdCollection sealed : public ICollection<GitId^>
+            {
+                initonly GitCommit ^_commit;
 
-					_commit = commit;
-				}
+            internal:
+                CommitParentIdCollection(GitCommit ^commit)
+                {
+                    if (! commit)
+                        throw gcnew ArgumentNullException("commit");
 
-			public:
-				property int Count
-				{
-					virtual int get()
-					{
-						if (_commit->IsDisposed)
-							return 0;
+                    _commit = commit;
+                }
 
-						return git_commit_parentcount(_commit->Handle);
-					}
-				}
+            public:
+                property int Count
+                {
+                    virtual int get()
+                    {
+                        if (_commit->IsDisposed)
+                            return 0;
 
-				property GitId^ default[int]
-				{
-					GitId^ get(int index)
-					{
-						if (index < 0)
-							throw gcnew ArgumentOutOfRangeException("index");
+                        return git_commit_parentcount(_commit->Handle);
+                    }
+                }
 
-						const git_oid *oid = git_commit_parent_id(_commit->Handle, index);
-						if (oid)
-							return gcnew GitId(oid);
+                property GitId^ default[int]
+                {
+                    GitId^ get(int index)
+                    {
+                        if (index < 0)
+                            throw gcnew ArgumentOutOfRangeException("index");
 
-						return nullptr;
-					}
-				}
+                        const git_oid *oid = git_commit_parent_id(_commit->Handle, index);
+                        if (oid)
+                            return gcnew GitId(oid);
 
-				virtual IEnumerator<GitId^>^ GetEnumerator()
-				{
-					array<GitId^>^ items = gcnew array<GitId^>(Count);
+                        return nullptr;
+                    }
+                }
 
-					int c = git_commit_parentcount(_commit->Handle);
+                virtual IEnumerator<GitId^>^ GetEnumerator()
+                {
+                    array<GitId^>^ items = gcnew array<GitId^>(Count);
 
-					for(int i = 0; i < c; i++)
-					{
-						const git_oid *oid = git_commit_parent_id(_commit->Handle, i);
-						if (oid)
-							items[i] = gcnew GitId(oid);
-					}
+                    int c = git_commit_parentcount(_commit->Handle);
 
-					ICollection<GitId^>^ col = safe_cast<ICollection<GitId^>^>(items);
+                    for(int i = 0; i < c; i++)
+                    {
+                        const git_oid *oid = git_commit_parent_id(_commit->Handle, i);
+                        if (oid)
+                            items[i] = gcnew GitId(oid);
+                    }
 
-					return col->GetEnumerator();
-				}
+                    ICollection<GitId^>^ col = safe_cast<ICollection<GitId^>^>(items);
 
-				property bool IsReadOnly
-				{
-					virtual bool get()
-					{
-						return true;
-					}
-				}
+                    return col->GetEnumerator();
+                }
 
-				virtual bool Contains(GitId^ commit)
-				{
-					for each(GitId^ c in this)
-					{
-						if (c->Equals(commit))
-							return true;
-					}
-					return false;
-				}
+                property bool IsReadOnly
+                {
+                    virtual bool get()
+                    {
+                        return true;
+                    }
+                }
 
-			private:
-				virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
-				{
-					return GetEnumerator();
-				}
+                virtual bool Contains(GitId^ commit)
+                {
+                    for each(GitId^ c in this)
+                    {
+                        if (c->Equals(commit))
+                            return true;
+                    }
+                    return false;
+                }
 
-				virtual void Add(GitId^ item) sealed = ICollection<GitId^>::Add
-				{
-					UNUSED(item);
-					throw gcnew InvalidOperationException();
-				}
+            private:
+                virtual System::Collections::IEnumerator^ GetObjectEnumerator() sealed = System::Collections::IEnumerable::GetEnumerator
+                {
+                    return GetEnumerator();
+                }
 
-				virtual bool Remove(GitId^ item) sealed = ICollection<GitId^>::Remove
-				{
-					UNUSED(item);
-					throw gcnew InvalidOperationException();
-				}
+                virtual void Add(GitId^ item) sealed = ICollection<GitId^>::Add
+                {
+                    UNUSED(item);
+                    throw gcnew InvalidOperationException();
+                }
 
-				virtual void Clear() sealed = ICollection<GitId^>::Clear
-				{
-					throw gcnew InvalidOperationException();
-				}
+                virtual bool Remove(GitId^ item) sealed = ICollection<GitId^>::Remove
+                {
+                    UNUSED(item);
+                    throw gcnew InvalidOperationException();
+                }
 
-				virtual void CopyTo(array<GitId^>^ toArray, int index) sealed = ICollection<GitId^>::CopyTo
-				{
-					for each(GitId^ c in this)
-					{
-						toArray[index++] = c;
-					}
-				}
-			};
+                virtual void Clear() sealed = ICollection<GitId^>::Clear
+                {
+                    throw gcnew InvalidOperationException();
+                }
 
-		private:
-			CommitParentCollection ^_parents;
-			CommitParentIdCollection ^_parentIds;
-			GitCommit^ _ancestor;
-			GitSignature ^_author;
-			GitSignature ^_committer;
-			String ^_logMessage;
-			GitTree^ _tree;
+                virtual void CopyTo(array<GitId^>^ toArray, int index) sealed = ICollection<GitId^>::CopyTo
+                {
+                    for each(GitId^ c in this)
+                    {
+                        toArray[index++] = c;
+                    }
+                }
+            };
 
-		public:
-			property CommitParentCollection^ Parents
-			{
-				CommitParentCollection^ get()
-				{
-					if (!_parents)
-						_parents = gcnew CommitParentCollection(this);
+        private:
+            CommitParentCollection ^_parents;
+            CommitParentIdCollection ^_parentIds;
+            GitCommit^ _ancestor;
+            GitSignature ^_author;
+            GitSignature ^_committer;
+            String ^_logMessage;
+            GitTree^ _tree;
 
-					return _parents;
-				}
-			}
+        public:
+            property CommitParentCollection^ Parents
+            {
+                CommitParentCollection^ get()
+                {
+                    if (!_parents)
+                        _parents = gcnew CommitParentCollection(this);
 
-			property CommitParentIdCollection^ ParentIds
-			{
-				CommitParentIdCollection^ get()
-				{
-					if (!_parentIds)
-						_parentIds = gcnew CommitParentIdCollection(this);
+                    return _parents;
+                }
+            }
 
-					return _parentIds;
-				}
-			}
+            property CommitParentIdCollection^ ParentIds
+            {
+                CommitParentIdCollection^ get()
+                {
+                    if (!_parentIds)
+                        _parentIds = gcnew CommitParentIdCollection(this);
 
-			/// <summary>Get the first ancestor/first parent of this commit</summary>
-			property GitCommit^ Ancestor
-			{
-				GitCommit^ get()
-				{
-					if (!_ancestor && !IsDisposed)
-					{
-						git_commit *commit;
-						int r = git_commit_parent(&commit, Handle, 0);
-						
-						if (!r)
-							_ancestor = gcnew GitCommit(Repository, commit);
-					}
+                    return _parentIds;
+                }
+            }
 
-					return _ancestor;
-				}
-			}
+            /// <summary>Get the first ancestor/first parent of this commit</summary>
+            property GitCommit^ Ancestor
+            {
+                GitCommit^ get()
+                {
+                    if (!_ancestor && !IsDisposed)
+                    {
+                        git_commit *commit;
+                        int r = git_commit_parent(&commit, Handle, 0);
 
-			/// <summary>Get an enumerator over this nodes ancestors, starting by the parent of this commit</summary>
-			property IEnumerable<GitCommit^>^ Ancestors
-			{
-				IEnumerable<GitCommit^>^ get();
-			}
+                        if (!r)
+                            _ancestor = gcnew GitCommit(Repository, commit);
+                    }
 
-			/// <summary>Get an enumerator over this nodes ancestors, starting by this node itself</summary>
-			property IEnumerable<GitCommit^>^ AncestorsAndSelf
-			{
-				IEnumerable<GitCommit^>^ get();
-			}
+                    return _ancestor;
+                }
+            }
 
-			property GitSignature^ Author
-			{
-				GitSignature ^get();
-			}
+            /// <summary>Get an enumerator over this nodes ancestors, starting by the parent of this commit</summary>
+            property IEnumerable<GitCommit^>^ Ancestors
+            {
+                IEnumerable<GitCommit^>^ get();
+            }
 
-			property GitSignature^ Committer
-			{
-				GitSignature ^get();
-			}
+            /// <summary>Get an enumerator over this nodes ancestors, starting by this node itself</summary>
+            property IEnumerable<GitCommit^>^ AncestorsAndSelf
+            {
+                IEnumerable<GitCommit^>^ get();
+            }
 
-			property String^ LogMessage
-			{
-				String^ get();
-			}
+            property GitSignature^ Author
+            {
+                GitSignature ^get();
+            }
 
-			property GitTree^ Tree
-			{
-				GitTree^ get();
-			}
-		};
-	}
+            property GitSignature^ Committer
+            {
+                GitSignature ^get();
+            }
+
+            property String^ LogMessage
+            {
+                String^ get();
+            }
+
+            property GitTree^ Tree
+            {
+                GitTree^ get();
+            }
+        };
+    }
 }

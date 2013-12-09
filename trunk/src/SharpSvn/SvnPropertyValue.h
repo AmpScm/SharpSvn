@@ -16,278 +16,278 @@
 
 namespace SharpSvn {
 
-	[System::Diagnostics::DebuggerDisplay("{Key}={StringValue}")]
-	public ref class SvnPropertyValue sealed : System::IEquatable<SvnPropertyValue^>
-	{
-		initonly String^ _key;
-		initonly String^ _strValue;
-		initonly SvnTarget^ _target;
-		array<Byte>^ _value;
+    [System::Diagnostics::DebuggerDisplay("{Key}={StringValue}")]
+    public ref class SvnPropertyValue sealed : System::IEquatable<SvnPropertyValue^>
+    {
+        initonly String^ _key;
+        initonly String^ _strValue;
+        initonly SvnTarget^ _target;
+        array<Byte>^ _value;
 
-	public:
-		SvnPropertyValue(String^ key, String^ value)
-		{
-			if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("key");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
+    public:
+        SvnPropertyValue(String^ key, String^ value)
+        {
+            if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("key");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			_key = key;
-			_strValue = value;
-		}
+            _key = key;
+            _strValue = value;
+        }
 
-		SvnPropertyValue(String^ key, array<Byte>^ value)
-		{
-			if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("key");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
+        SvnPropertyValue(String^ key, array<Byte>^ value)
+        {
+            if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("key");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			_key = key;
-			_value = value;
-		}
+            _key = key;
+            _value = value;
+        }
 
-		SvnPropertyValue(String^ key, SvnPropertyValue^ value)
-		{
-			if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("key");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
+        SvnPropertyValue(String^ key, SvnPropertyValue^ value)
+        {
+            if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("key");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			_key = key;
-			_strValue = value->_strValue;
-			_value = value->_value;
-		}
+            _key = key;
+            _strValue = value->_strValue;
+            _value = value->_value;
+        }
 
-	internal:
-		/*SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
-		{
-			if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("key");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
+    internal:
+        /*SvnPropertyValue(String^ key, String^ value, SvnTarget^ target)
+        {
+            if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("key");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			_target = target;
-			_key = key;
-			_strValue = value;
-		}*/
+            _target = target;
+            _key = key;
+            _strValue = value;
+        }*/
 
-		SvnPropertyValue(String^ key, array<Byte>^ value, SvnTarget^ target)
-		{
-			if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("key");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
+        SvnPropertyValue(String^ key, array<Byte>^ value, SvnTarget^ target)
+        {
+            if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("key");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			_target = target;
-			_key = key;
-			_value = value;
-		}
+            _target = target;
+            _key = key;
+            _value = value;
+        }
 
-	internal:
-		SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
-		{
-			if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("key");
-			else if (String::IsNullOrEmpty(key))
-				throw gcnew ArgumentNullException("value");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
+    internal:
+        SvnPropertyValue(String^ key, array<Byte>^ value, String^ strValue, SvnTarget^ target)
+        {
+            if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("key");
+            else if (String::IsNullOrEmpty(key))
+                throw gcnew ArgumentNullException("value");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			_target = target;
-			_key = key;
-			_value = value;
-			_strValue = strValue;
-		}
+            _target = target;
+            _key = key;
+            _value = value;
+            _strValue = strValue;
+        }
 
-	internal:
-		static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target)
-		{
-			if (!propertyName)
-				throw gcnew ArgumentNullException("propertyName");
+    internal:
+        static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target)
+        {
+            if (!propertyName)
+                throw gcnew ArgumentNullException("propertyName");
 
-			String^ name = SvnBase::Utf8_PtrToString(propertyName);
+            String^ name = SvnBase::Utf8_PtrToString(propertyName);
 
-			return Create(propertyName, value, target, name);
-		}
+            return Create(propertyName, value, target, name);
+        }
 
-		static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target, String^ name)
-		{
-			if (!propertyName)
-				throw gcnew ArgumentNullException("propertyName");
-			else if (!value)
-				throw gcnew ArgumentNullException("value");
-			else if (!name)
-				throw gcnew ArgumentNullException("name");
+        static SvnPropertyValue^ Create(const char* propertyName, const svn_string_t* value, SvnTarget^ target, String^ name)
+        {
+            if (!propertyName)
+                throw gcnew ArgumentNullException("propertyName");
+            else if (!value)
+                throw gcnew ArgumentNullException("value");
+            else if (!name)
+                throw gcnew ArgumentNullException("name");
 
-			Object^ val = SvnBase::PtrToStringOrByteArray(value->data, (int)value->len);
-			String^ strVal = dynamic_cast<String^>(val);
+            Object^ val = SvnBase::PtrToStringOrByteArray(value->data, (int)value->len);
+            String^ strVal = dynamic_cast<String^>(val);
 
-			if (strVal)
-			{
-				if (svn_prop_needs_translation(propertyName))
-					strVal = strVal->Replace("\n", Environment::NewLine);
+            if (strVal)
+            {
+                if (svn_prop_needs_translation(propertyName))
+                    strVal = strVal->Replace("\n", Environment::NewLine);
 
-				return gcnew SvnPropertyValue(name, SvnBase::PtrToByteArray(value->data, (int)value->len), strVal, target);
-			}
-			else
-				return gcnew SvnPropertyValue(name, safe_cast<array<Byte>^>(val), target);
-		}
+                return gcnew SvnPropertyValue(name, SvnBase::PtrToByteArray(value->data, (int)value->len), strVal, target);
+            }
+            else
+                return gcnew SvnPropertyValue(name, safe_cast<array<Byte>^>(val), target);
+        }
 
-	public:
-		/// <summary>Gets the <see cref="SvnTarget" /> the <see cref="SvnPropertyValue" /> applies to;
-		/// <c>null</c> if it applies to a revision property</summary>
-		property SvnTarget^ Target
-		{
-			SvnTarget^ get()
-			{
-				return _target;
-			}
-		}
+    public:
+        /// <summary>Gets the <see cref="SvnTarget" /> the <see cref="SvnPropertyValue" /> applies to;
+        /// <c>null</c> if it applies to a revision property</summary>
+        property SvnTarget^ Target
+        {
+            SvnTarget^ get()
+            {
+                return _target;
+            }
+        }
 
-		property String^ Key
-		{
-			String^ get()
-			{
-				return _key;
-			}
-		}
+        property String^ Key
+        {
+            String^ get()
+            {
+                return _key;
+            }
+        }
 
-		property String^ StringValue
-		{
-			String^ get()
-			{
-				return _strValue;
-			}
-		}
+        property String^ StringValue
+        {
+            String^ get()
+            {
+                return _strValue;
+            }
+        }
 
-		property ICollection<Byte>^ RawValue
-		{
-			ICollection<Byte>^ get()
-			{
-				if (!_value)
-					_value = System::Text::Encoding::UTF8->GetBytes(_strValue);
+        property ICollection<Byte>^ RawValue
+        {
+            ICollection<Byte>^ get()
+            {
+                if (!_value)
+                    _value = System::Text::Encoding::UTF8->GetBytes(_strValue);
 
-				return safe_cast<ICollection<Byte>^>(_value);
-			}
-		}
+                return safe_cast<ICollection<Byte>^>(_value);
+            }
+        }
 
-		array<Byte>^ ToByteArray()
-		{
-			ICollection<Byte>^ v = RawValue;
+        array<Byte>^ ToByteArray()
+        {
+            ICollection<Byte>^ v = RawValue;
 
-			array<Byte>^ list = gcnew array<Byte>(v->Count);
-			v->CopyTo(list, 0);
+            array<Byte>^ list = gcnew array<Byte>(v->Count);
+            v->CopyTo(list, 0);
 
-			return list;
-		}
+            return list;
+        }
 
-		virtual String^ ToString() override
-		{
-			if (StringValue)
-				return StringValue;
-			else
-				return "<raw>";
-		}
+        virtual String^ ToString() override
+        {
+            if (StringValue)
+                return StringValue;
+            else
+                return "<raw>";
+        }
 
-		virtual int GetHashCode() override
-		{
-			return Key->GetHashCode();
-		}
+        virtual int GetHashCode() override
+        {
+            return Key->GetHashCode();
+        }
 
-		virtual bool Equals(Object^ obj) override
-		{
-			SvnPropertyValue^ ob = dynamic_cast<SvnPropertyValue^>(obj);
+        virtual bool Equals(Object^ obj) override
+        {
+            SvnPropertyValue^ ob = dynamic_cast<SvnPropertyValue^>(obj);
 
-			return Equals(ob);
-		}
+            return Equals(ob);
+        }
 
-		virtual bool Equals(SvnPropertyValue^ other)
-		{
-			if (!other)
-				return false;
+        virtual bool Equals(SvnPropertyValue^ other)
+        {
+            if (!other)
+                return false;
 
-			if (!Target != !other->Target)
-				return false;
-			else if (Target && !Target->Equals(other->Target))
-				return false;
+            if (!Target != !other->Target)
+                return false;
+            else if (Target && !Target->Equals(other->Target))
+                return false;
 
-			if (!String::Equals(Key, other->Key, StringComparison::Ordinal))
-				return false;
+            if (!String::Equals(Key, other->Key, StringComparison::Ordinal))
+                return false;
 
-			return ValueEquals(other);
-		}
+            return ValueEquals(other);
+        }
 
-		bool ValueEquals(SvnPropertyValue^ other)
-		{
-			if (!other)
-				return false;
+        bool ValueEquals(SvnPropertyValue^ other)
+        {
+            if (!other)
+                return false;
 
-			if (StringValue && other->StringValue)
-				return String::Equals(StringValue, other->StringValue);
+            if (StringValue && other->StringValue)
+                return String::Equals(StringValue, other->StringValue);
 
-			if (RawValue->Count != other->RawValue->Count)
-				return false;
+            if (RawValue->Count != other->RawValue->Count)
+                return false;
 
-			System::Collections::Generic::IEnumerator<Byte>^ vMe = RawValue->GetEnumerator();
-			System::Collections::Generic::IEnumerator<Byte>^ vHe = other->RawValue->GetEnumerator();
+            System::Collections::Generic::IEnumerator<Byte>^ vMe = RawValue->GetEnumerator();
+            System::Collections::Generic::IEnumerator<Byte>^ vHe = other->RawValue->GetEnumerator();
 
-			while(vMe->MoveNext() && vHe->MoveNext())
-			{
-				if(vMe->Current != vHe->Current)
-					return false;
-			}
+            while(vMe->MoveNext() && vHe->MoveNext())
+            {
+                if(vMe->Current != vHe->Current)
+                    return false;
+            }
 
-			return true;
-		}
-	};
+            return true;
+        }
+    };
 
 
-	public ref class SvnPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<String^, SvnPropertyValue^>
-	{
-	protected:
-		virtual String^ GetKeyForItem(SvnPropertyValue^ item) override
-		{
-			if (!item)
-				return nullptr;
-			else
-				return item->Key;
-		}
+    public ref class SvnPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<String^, SvnPropertyValue^>
+    {
+    protected:
+        virtual String^ GetKeyForItem(SvnPropertyValue^ item) override
+        {
+            if (!item)
+                return nullptr;
+            else
+                return item->Key;
+        }
 
-	};
+    };
 
-	public ref class SvnRevisionPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<String^, SvnPropertyValue^>
-	{
-	protected:
-		virtual String^ GetKeyForItem(SvnPropertyValue^ item) override
-		{
-			if (!item)
-				return nullptr;
-			else
-				return item->Key;
-		}
+    public ref class SvnRevisionPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<String^, SvnPropertyValue^>
+    {
+    protected:
+        virtual String^ GetKeyForItem(SvnPropertyValue^ item) override
+        {
+            if (!item)
+                return nullptr;
+            else
+                return item->Key;
+        }
 
-	public:
-		void Add(String^ key, String^ value)
-		{
-			this->Add(gcnew SvnPropertyValue(key, value));
-		}
+    public:
+        void Add(String^ key, String^ value)
+        {
+            this->Add(gcnew SvnPropertyValue(key, value));
+        }
 
-		void Add(String^ key, array<Byte>^ value)
-		{
-			this->Add(gcnew SvnPropertyValue(key, value));
-		}
-	};
+        void Add(String^ key, array<Byte>^ value)
+        {
+            this->Add(gcnew SvnPropertyValue(key, value));
+        }
+    };
 
-	public ref class SvnTargetPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<SvnTarget^, SvnPropertyValue^>
-	{
-	protected:
-		virtual SvnTarget^ GetKeyForItem(SvnPropertyValue^ item) override
-		{
-			if (!item)
-				return nullptr;
-			else
-				return item->Target;
-		}
-	};
+    public ref class SvnTargetPropertyCollection sealed : public System::Collections::ObjectModel::KeyedCollection<SvnTarget^, SvnPropertyValue^>
+    {
+    protected:
+        virtual SvnTarget^ GetKeyForItem(SvnPropertyValue^ item) override
+        {
+            if (!item)
+                return nullptr;
+            else
+                return item->Target;
+        }
+    };
 }

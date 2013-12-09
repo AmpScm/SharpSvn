@@ -16,115 +16,115 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Merge(String^,SvnTarget^, SvnRevisionRange^, SvnMergeArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnMergeArgs : public SvnMergeBaseArgs
-	{
-		SvnDepth _depth;
-		bool _ignoreAncestry;
-		bool _force;
-		bool _recordOnly;
-		bool _dryRun;
-		bool _checkForMixedRevisions;
-		Nullable<bool> _ignoreMergeInfo;
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Merge(String^,SvnTarget^, SvnRevisionRange^, SvnMergeArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnMergeArgs : public SvnMergeBaseArgs
+    {
+        SvnDepth _depth;
+        bool _ignoreAncestry;
+        bool _force;
+        bool _recordOnly;
+        bool _dryRun;
+        bool _checkForMixedRevisions;
+        Nullable<bool> _ignoreMergeInfo;
 
-	public:
-		SvnMergeArgs()
-		{
-			_depth = SvnDepth::Unknown;
-		}
+    public:
+        SvnMergeArgs()
+        {
+            _depth = SvnDepth::Unknown;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Merge;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Merge;
+            }
+        }
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		property Nullable<bool> IgnoreMergeInfo
-		{
-			Nullable<bool> get()
-			{
-				return _ignoreMergeInfo;
-			}
-			void set(Nullable<bool> value)
-			{
-				_ignoreMergeInfo = value;
-			}
-		}
+        property Nullable<bool> IgnoreMergeInfo
+        {
+            Nullable<bool> get()
+            {
+                return _ignoreMergeInfo;
+            }
+            void set(Nullable<bool> value)
+            {
+                _ignoreMergeInfo = value;
+            }
+        }
 
-		property bool IgnoreAncestry
-		{
-			bool get()
-			{
-				return _ignoreAncestry;
-			}
-			void set(bool value)
-			{
-				_ignoreAncestry = value;
-			}
-		}
+        property bool IgnoreAncestry
+        {
+            bool get()
+            {
+                return _ignoreAncestry;
+            }
+            void set(bool value)
+            {
+                _ignoreAncestry = value;
+            }
+        }
 
-		property bool Force
-		{
-			bool get()
-			{
-				return _force;
-			}
-			void set(bool value)
-			{
-				_force = value;
-			}
-		}
+        property bool Force
+        {
+            bool get()
+            {
+                return _force;
+            }
+            void set(bool value)
+            {
+                _force = value;
+            }
+        }
 
-		property bool RecordOnly
-		{
-			bool get()
-			{
-				return _recordOnly;
-			}
-			void set(bool value)
-			{
-				_recordOnly = value;
-			}
-		}
+        property bool RecordOnly
+        {
+            bool get()
+            {
+                return _recordOnly;
+            }
+            void set(bool value)
+            {
+                _recordOnly = value;
+            }
+        }
 
-		property bool DryRun
-		{
-			bool get()
-			{
-				return _dryRun;
-			}
-			void set(bool value)
-			{
-				_dryRun = value;
-			}
-		}
+        property bool DryRun
+        {
+            bool get()
+            {
+                return _dryRun;
+            }
+            void set(bool value)
+            {
+                _dryRun = value;
+            }
+        }
 
-		property bool CheckForMixedRevisions
-		{
-			bool get()
-			{
-				return _checkForMixedRevisions;
-			}
-			void set(bool value)
-			{
-				_checkForMixedRevisions = value;
-			}
-		}
-	};
+        property bool CheckForMixedRevisions
+        {
+            bool get()
+            {
+                return _checkForMixedRevisions;
+            }
+            void set(bool value)
+            {
+                _checkForMixedRevisions = value;
+            }
+        }
+    };
 
 }

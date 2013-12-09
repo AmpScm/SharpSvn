@@ -16,22 +16,22 @@
 
 namespace SharpSvn {
 
-	public ref class SvnWorkingCopyState sealed
-	{
-		bool _isText;
-	internal:
-		SvnWorkingCopyState(bool isText)
-		{
-			_isText = isText;
-		}
+    public ref class SvnWorkingCopyState sealed
+    {
+        bool _isText;
+    internal:
+        SvnWorkingCopyState(bool isText)
+        {
+            _isText = isText;
+        }
 
-	public:
-		property bool IsTextFile
-		{
-			bool get()
-			{
-				return _isText;
-			}
-		}
-	};
-}
+    public:
+        property bool IsTextFile
+        {
+            bool get()
+            {
+                return _isText;
+            }
+        }
+    };
+}}

@@ -28,32 +28,32 @@ using namespace System::Collections::Generic;
 
 bool SvnWorkingCopyClient::GetState(String^ targetPath, [Out] SvnWorkingCopyState^% result)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!IsNotUri(targetPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!IsNotUri(targetPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
-	return GetState(targetPath, gcnew SvnWorkingCopyStateArgs(), result);
+    return GetState(targetPath, gcnew SvnWorkingCopyStateArgs(), result);
 }
 
 bool SvnWorkingCopyClient::GetState(String^ targetPath, SvnWorkingCopyStateArgs^ args, [Out] SvnWorkingCopyState^% result)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(targetPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(targetPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	const svn_string_t *value;
+    const svn_string_t *value;
 
     SVN_HANDLE(svn_wc_prop_get2(&value, CtxHandle->wc_ctx, pool.AllocAbsoluteDirent(targetPath), SVN_PROP_MIME_TYPE, pool.Handle, pool.Handle));
 
     result = gcnew SvnWorkingCopyState(!value || !svn_mime_type_is_binary(value->data));
 
-	return args->HandleResult(this, (svn_error_t*)nullptr, targetPath);
+    return args->HandleResult(this, (svn_error_t*)nullptr, targetPath);
 }

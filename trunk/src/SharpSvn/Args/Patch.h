@@ -18,86 +18,86 @@ namespace SharpSvn {
 
     ref class SvnPatchFilterEventArgs;
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient" />'s Patch command</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnPatchArgs : public SvnClientArgs
-	{
-        bool _dryRun;
-        bool _reverse;
-        int _stripCount;
-        bool _ignoreWhitespace;
-	public:
-		SvnPatchArgs()
-		{
-		}
-
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Patch;
-			}
-		}
-
+    /// <summary>Extended Parameter container of <see cref="SvnClient" />'s Patch command</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnPatchArgs : public SvnClientArgs
+    {
+    bool _dryRun;
+    bool _reverse;
+    int _stripCount;
+    bool _ignoreWhitespace;
     public:
-        property bool DryRun
+        SvnPatchArgs()
         {
-            bool get()
-            {
-                return _dryRun;
-            }
-            void set(bool value)
-            {
-                _dryRun = value;
-            }
         }
 
-        property bool Reverse
+        virtual property SvnCommandType CommandType
         {
-            bool get()
+            virtual SvnCommandType get() override sealed
             {
-                return _reverse;
-            }
-            void set(bool value)
-            {
-                _reverse = value;
-            }
-        }
-
-        property int StripCount
-        {
-            int get()
-            {
-                return _stripCount;
-            }
-            void set(int value)
-            {
-                if (value > 0)
-                    _stripCount = value;
-                else
-                    _stripCount = 0;
-            }
-        }
-
-        property bool IgnoreWhitespace
-        {
-            bool get()
-            {
-                return _ignoreWhitespace;
-            }
-            void set(bool value)
-            {
-                _ignoreWhitespace = value;
+                return SvnCommandType::Patch;
             }
         }
 
     public:
-        DECLARE_EVENT(SvnPatchFilterEventArgs^, Filter)
+    property bool DryRun
+    {
+        bool get()
+        {
+        return _dryRun;
+        }
+        void set(bool value)
+        {
+        _dryRun = value;
+        }
+    }
+
+    property bool Reverse
+    {
+        bool get()
+        {
+        return _reverse;
+        }
+        void set(bool value)
+        {
+        _reverse = value;
+        }
+    }
+
+    property int StripCount
+    {
+        int get()
+        {
+        return _stripCount;
+        }
+        void set(int value)
+        {
+        if (value > 0)
+            _stripCount = value;
+        else
+            _stripCount = 0;
+        }
+    }
+
+    property bool IgnoreWhitespace
+    {
+        bool get()
+        {
+        return _ignoreWhitespace;
+        }
+        void set(bool value)
+        {
+        _ignoreWhitespace = value;
+        }
+    }
+
+    public:
+    DECLARE_EVENT(SvnPatchFilterEventArgs^, Filter)
 
     protected public:
-		virtual void OnFilter(SvnPatchFilterEventArgs^ e)
-		{
-			Filter(this, e);
-		}
-	};
+        virtual void OnFilter(SvnPatchFilterEventArgs^ e)
+        {
+            Filter(this, e);
+        }
+    };
 }

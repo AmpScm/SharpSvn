@@ -16,35 +16,35 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::SetRevisionProperty(SvnUriTarget^,String^,SvnSetRevisionPropertyArgs^,String^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnSetRevisionPropertyArgs : public SvnClientArgs
-	{
-		bool _force;
-	public:
-		SvnSetRevisionPropertyArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient::SetRevisionProperty(SvnUriTarget^,String^,SvnSetRevisionPropertyArgs^,String^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnSetRevisionPropertyArgs : public SvnClientArgs
+    {
+        bool _force;
+    public:
+        SvnSetRevisionPropertyArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::SetRevisionProperty;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::SetRevisionProperty;
+            }
+        }
 
-		property bool Force
-		{
-			bool get()
-			{
-				return _force;
-			}
-			void set(bool value)
-			{
-				_force = value;
-			}
-		}
-	};
+        property bool Force
+        {
+            bool get()
+            {
+                return _force;
+            }
+            void set(bool value)
+            {
+                _force = value;
+            }
+        }
+    };
 
 }

@@ -22,50 +22,50 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!to)
-		throw gcnew ArgumentNullException("to");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!IsValidReposUri(from))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "from");
-	else if (!IsValidReposUri(to))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!to)
+        throw gcnew ArgumentNullException("to");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!IsValidReposUri(from))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "from");
+    else if (!IsValidReposUri(to))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
 
-	return Relocate(path, from, to, gcnew SvnRelocateArgs());
+    return Relocate(path, from, to, gcnew SvnRelocateArgs());
 }
 
 bool SvnClient::Relocate(String^ path, Uri^ from, Uri^ to, SvnRelocateArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!from)
-		throw gcnew ArgumentNullException("from");
-	else if (!to)
-		throw gcnew ArgumentNullException("to");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!IsValidReposUri(from))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "from");
-	else if (!IsValidReposUri(to))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!from)
+        throw gcnew ArgumentNullException("from");
+    else if (!to)
+        throw gcnew ArgumentNullException("to");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!IsValidReposUri(from))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "from");
+    else if (!IsValidReposUri(to))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "to");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_relocate2(
-		pool.AllocDirent(path),
-		pool.AllocUri(from),
-		pool.AllocUri(to),
-		args->IgnoreExternals,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_relocate2(
+        pool.AllocDirent(path),
+        pool.AllocUri(from),
+        pool.AllocUri(to),
+        args->IgnoreExternals,
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, path);
+    return args->HandleResult(this, r, path);
 }

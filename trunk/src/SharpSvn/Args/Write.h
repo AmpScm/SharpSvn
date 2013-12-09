@@ -16,52 +16,52 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnWriteArgs : public SvnClientArgs
-	{
-		SvnRevision^ _revision;
-        bool _ignoreKeywords;
-	public:
-		SvnWriteArgs()
-		{
-			_revision = SvnRevision::None;
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Write(SvnTarget^, Stream^, SvnWriteArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnWriteArgs : public SvnClientArgs
+    {
+        SvnRevision^ _revision;
+    bool _ignoreKeywords;
+    public:
+        SvnWriteArgs()
+        {
+            _revision = SvnRevision::None;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Write;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Write;
+            }
+        }
 
-		property SvnRevision^ Revision
-		{
-			SvnRevision^ get()
-			{
-				return _revision;
-			}
-			void set(SvnRevision^ value)
-			{
-				if (value)
-					_revision = value;
-				else
-					_revision = SvnRevision::None;
-			}
-		}
+        property SvnRevision^ Revision
+        {
+            SvnRevision^ get()
+            {
+                return _revision;
+            }
+            void set(SvnRevision^ value)
+            {
+                if (value)
+                    _revision = value;
+                else
+                    _revision = SvnRevision::None;
+            }
+        }
 
-        property bool IgnoreKeywords
-		{
-			bool get()
-			{
-				return _ignoreKeywords;
-			}
-			void set(bool value)
-			{
-				_ignoreKeywords = value;
-			}
-		}
-	};
+    property bool IgnoreKeywords
+        {
+            bool get()
+            {
+                return _ignoreKeywords;
+            }
+            void set(bool value)
+            {
+                _ignoreKeywords = value;
+            }
+        }
+    };
 
 }

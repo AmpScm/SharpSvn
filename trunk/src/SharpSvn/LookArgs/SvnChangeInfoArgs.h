@@ -18,45 +18,45 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnLookClient" />'s ChangeInfo command</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnChangeInfoArgs : public SvnLookClientArgs
-	{
-		bool _noLogChangedPaths;
-	public:
-		SvnChangeInfoArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnLookClient" />'s ChangeInfo command</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnChangeInfoArgs : public SvnLookClientArgs
+    {
+        bool _noLogChangedPaths;
+    public:
+        SvnChangeInfoArgs()
+        {
+        }
 
-		DECLARE_EVENT(SvnChangeInfoEventArgs^, ChangeInfo)
-	protected public:
-		void OnChangeInfo(SvnChangeInfoEventArgs^ e)
-		{
-			ChangeInfo(this, e);
-		}
-	public:
+        DECLARE_EVENT(SvnChangeInfoEventArgs^, ChangeInfo)
+    protected public:
+        void OnChangeInfo(SvnChangeInfoEventArgs^ e)
+        {
+            ChangeInfo(this, e);
+        }
+    public:
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
 
-	public:
-		/// <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
-		/// <remarks>Defaults to true</remarks>
-		property bool RetrieveChangedPaths
-		{
-			bool get()
-			{
-				return !_noLogChangedPaths;
-			}
-			void set(bool value)
-			{
-				_noLogChangedPaths = !value;
-			}
-		}
-	};
-}
+    public:
+        /// <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
+        /// <remarks>Defaults to true</remarks>
+        property bool RetrieveChangedPaths
+        {
+            bool get()
+            {
+                return !_noLogChangedPaths;
+            }
+            void set(bool value)
+            {
+                _noLogChangedPaths = !value;
+            }
+        }
+    };
+}}

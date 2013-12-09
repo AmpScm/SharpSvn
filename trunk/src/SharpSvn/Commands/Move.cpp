@@ -27,206 +27,206 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Move(String^ sourcePath, String^ toPath)
 {
-	if (String::IsNullOrEmpty(sourcePath))
-		throw gcnew ArgumentNullException("sourcePath");
-	else if (String::IsNullOrEmpty(toPath))
-		throw gcnew ArgumentNullException("toPath");
+    if (String::IsNullOrEmpty(sourcePath))
+        throw gcnew ArgumentNullException("sourcePath");
+    else if (String::IsNullOrEmpty(toPath))
+        throw gcnew ArgumentNullException("toPath");
 
-	return Move(NewSingleItemCollection(sourcePath), toPath, gcnew SvnMoveArgs());
+    return Move(NewSingleItemCollection(sourcePath), toPath, gcnew SvnMoveArgs());
 }
 
 bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath)
 {
-	if (!sourcePaths)
-		throw gcnew ArgumentNullException("sourcePaths");
-	else if (String::IsNullOrEmpty(toPath))
-		throw gcnew ArgumentNullException("toPath");
+    if (!sourcePaths)
+        throw gcnew ArgumentNullException("sourcePaths");
+    else if (String::IsNullOrEmpty(toPath))
+        throw gcnew ArgumentNullException("toPath");
 
-	return Move(sourcePaths, toPath, gcnew SvnMoveArgs());
+    return Move(sourcePaths, toPath, gcnew SvnMoveArgs());
 }
 
 bool SvnClient::Move(String^ sourcePath, String^ toPath, SvnMoveArgs^ args)
 {
-	if (String::IsNullOrEmpty(sourcePath))
-		throw gcnew ArgumentNullException("sourcePath");
-	else if (String::IsNullOrEmpty(toPath))
-		throw gcnew ArgumentNullException("toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(sourcePath))
+        throw gcnew ArgumentNullException("sourcePath");
+    else if (String::IsNullOrEmpty(toPath))
+        throw gcnew ArgumentNullException("toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	return Move(NewSingleItemCollection(sourcePath), toPath, args);
+    return Move(NewSingleItemCollection(sourcePath), toPath, args);
 }
 
 bool SvnClient::Move(ICollection<String^>^ sourcePaths, String^ toPath, SvnMoveArgs^ args)
 {
-	if (!sourcePaths)
-		throw gcnew ArgumentNullException("sourcePaths");
-	else if (String::IsNullOrEmpty(toPath))
-		throw gcnew ArgumentNullException("toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!sourcePaths)
+        throw gcnew ArgumentNullException("sourcePaths");
+    else if (String::IsNullOrEmpty(toPath))
+        throw gcnew ArgumentNullException("toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	for each (String^ s in sourcePaths)
-	{
-		if (String::IsNullOrEmpty(s))
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourcePaths");
-		else if (!IsNotUri(s))
-			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "sourcePaths");
-	}
+    for each (String^ s in sourcePaths)
+    {
+        if (String::IsNullOrEmpty(s))
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourcePaths");
+        else if (!IsNotUri(s))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "sourcePaths");
+    }
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_error_t *r = svn_client_move7(
-		AllocDirentArray(sourcePaths, %pool),
-		pool.AllocDirent(toPath),
-		args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
-		args->CreateParents,
-		args->AllowMixedRevisions,
-		args->MetaDataOnly,
-		nullptr,
-		nullptr, nullptr,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_move7(
+        AllocDirentArray(sourcePaths, %pool),
+        pool.AllocDirent(toPath),
+        args->AlwaysMoveAsChild || (sourcePaths->Count > 1),
+        args->CreateParents,
+        args->AllowMixedRevisions,
+        args->MetaDataOnly,
+        nullptr,
+        nullptr, nullptr,
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, sourcePaths);
+    return args->HandleResult(this, r, sourcePaths);
 }
 
 
 bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri)
 {
-	if (!sourceUri)
-		throw gcnew ArgumentNullException("sourceUri");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!SvnBase::IsValidReposUri(sourceUri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
-	else if (!SvnBase::IsValidReposUri(toUri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
+    if (!sourceUri)
+        throw gcnew ArgumentNullException("sourceUri");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!SvnBase::IsValidReposUri(sourceUri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
+    else if (!SvnBase::IsValidReposUri(toUri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	SvnCommitResult^ result = nullptr;
+    SvnCommitResult^ result = nullptr;
 
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
+    return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
 }
 
 bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri)
 {
-	if (!sourceUris)
-		throw gcnew ArgumentNullException("sourceUris");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!SvnBase::IsValidReposUri(toUri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
+    if (!sourceUris)
+        throw gcnew ArgumentNullException("sourceUris");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!SvnBase::IsValidReposUri(toUri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	SvnCommitResult^ result = nullptr;
+    SvnCommitResult^ result = nullptr;
 
-	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
+    return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
 }
 
 bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, [Out] SvnCommitResult^% result)
 {
-	if (!sourceUri)
-		throw gcnew ArgumentNullException("sourceUri");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!SvnBase::IsValidReposUri(sourceUri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
-	else if (!SvnBase::IsValidReposUri(toUri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
+    if (!sourceUri)
+        throw gcnew ArgumentNullException("sourceUri");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!SvnBase::IsValidReposUri(sourceUri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUri");
+    else if (!SvnBase::IsValidReposUri(toUri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
+    return RemoteMove(NewSingleItemCollection(sourceUri), toUri, gcnew SvnMoveArgs(), result);
 }
 
 bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, [Out] SvnCommitResult^% result)
 {
-	if (!sourceUris)
-		throw gcnew ArgumentNullException("sourceUris");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
+    if (!sourceUris)
+        throw gcnew ArgumentNullException("sourceUris");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
 
-	return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
+    return RemoteMove(sourceUris, toUri, gcnew SvnMoveArgs(), result);
 }
 
 bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args)
 {
-	if (!sourceUri)
-		throw gcnew ArgumentNullException("sourceUri");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!sourceUri)
+        throw gcnew ArgumentNullException("sourceUri");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnCommitResult^ result = nullptr;
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
+    SvnCommitResult^ result = nullptr;
+    return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
 }
 
 bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args)
 {
-	if (!sourceUris)
-		throw gcnew ArgumentNullException("sourceUris");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!sourceUris)
+        throw gcnew ArgumentNullException("sourceUris");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnCommitResult^ result = nullptr;
-	return RemoteMove(sourceUris, toUri, args, result);
+    SvnCommitResult^ result = nullptr;
+    return RemoteMove(sourceUris, toUri, args, result);
 }
 
 bool SvnClient::RemoteMove(Uri^ sourceUri, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitResult^% result)
 {
-	if (!sourceUri)
-		throw gcnew ArgumentNullException("sourceUri");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!sourceUri)
+        throw gcnew ArgumentNullException("sourceUri");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
+    return RemoteMove(NewSingleItemCollection(sourceUri), toUri, args, result);
 }
 
 bool SvnClient::RemoteMove(ICollection<Uri^>^ sourceUris, Uri^ toUri, SvnMoveArgs^ args, [Out] SvnCommitResult^% result)
 {
-	if (!sourceUris)
-		throw gcnew ArgumentNullException("sourceUris");
-	else if (!toUri)
-		throw gcnew ArgumentNullException("toUri");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!SvnBase::IsValidReposUri(toUri))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
+    if (!sourceUris)
+        throw gcnew ArgumentNullException("sourceUris");
+    else if (!toUri)
+        throw gcnew ArgumentNullException("toUri");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!SvnBase::IsValidReposUri(toUri))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "toUri");
 
-	System::Collections::Generic::List<String^>^ uris = gcnew System::Collections::Generic::List<String^>(sourceUris->Count);
+    System::Collections::Generic::List<String^>^ uris = gcnew System::Collections::Generic::List<String^>(sourceUris->Count);
 
-	for each (Uri^ u in sourceUris)
-	{
-		if (!u)
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceUris");
-		else if (!SvnBase::IsValidReposUri(u))
-			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUris");
+    for each (Uri^ u in sourceUris)
+    {
+        if (!u)
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "sourceUris");
+        else if (!SvnBase::IsValidReposUri(u))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "sourceUris");
 
-		uris->Add(UriToCanonicalString(u));
-	}
+        uris->Add(UriToCanonicalString(u));
+    }
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
-	CommitResultReceiver crr(this);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
+    CommitResultReceiver crr(this);
 
-	svn_error_t *r = svn_client_move7(
-		AllocArray(uris, %pool),
-		pool.AllocUri(toUri),
-		args->AlwaysMoveAsChild || (sourceUris->Count > 1),
-		args->CreateParents,
-		args->AllowMixedRevisions,
-		args->MetaDataOnly,
-		CreateRevPropList(args->LogProperties, %pool),
-		crr.CommitCallback, crr.CommitBaton,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_move7(
+        AllocArray(uris, %pool),
+        pool.AllocUri(toUri),
+        args->AlwaysMoveAsChild || (sourceUris->Count > 1),
+        args->CreateParents,
+        args->AllowMixedRevisions,
+        args->MetaDataOnly,
+        CreateRevPropList(args->LogProperties, %pool),
+        crr.CommitCallback, crr.CommitBaton,
+        CtxHandle,
+        pool.Handle);
 
-	result = crr.CommitResult;
+    result = crr.CommitResult;
 
-	return args->HandleResult(this, r, sourceUris);
+    return args->HandleResult(this, r, sourceUris);
 }

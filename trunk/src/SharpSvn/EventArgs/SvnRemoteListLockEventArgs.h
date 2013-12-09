@@ -18,91 +18,91 @@
 #include "EventArgs/SvnListEventArgs.h"
 
 namespace SharpSvn {
-	namespace Remote {
-	ref class SvnRemoteSession;
+    namespace Remote {
+    ref class SvnRemoteSession;
 
-	public ref class SvnRemoteListLockEventArgs : public SvnEventArgs
-	{
-		initonly String^ _reposRelpath;
-        initonly int _nOffset;
-        initonly Uri^ _sessionUri;
-        SvnLockInfo^ _lock;
-        const svn_lock_t *_lockInfo;
-        String^ _path;
-        Uri^ _uri;
-		
-	internal:
-		SvnRemoteListLockEventArgs(String^ reposRelpath, const svn_lock_t *lock_info, Uri^ sessionUri, int nOffset)
-		{
-			_reposRelpath = reposRelpath;
-            _sessionUri = sessionUri;
-            _nOffset = nOffset;
+    public ref class SvnRemoteListLockEventArgs : public SvnEventArgs
+    {
+        initonly String^ _reposRelpath;
+    initonly int _nOffset;
+    initonly Uri^ _sessionUri;
+    SvnLockInfo^ _lock;
+    const svn_lock_t *_lockInfo;
+    String^ _path;
+    Uri^ _uri;
 
-            _lockInfo = lock_info;
-		}
+    internal:
+        SvnRemoteListLockEventArgs(String^ reposRelpath, const svn_lock_t *lock_info, Uri^ sessionUri, int nOffset)
+        {
+            _reposRelpath = reposRelpath;
+        _sessionUri = sessionUri;
+        _nOffset = nOffset;
 
-	public:
-		property String^ Path
-		{
-			String^ get()
-			{
-                if (!_path)
-                    _path = _reposRelpath->Substring(_nOffset);
+        _lockInfo = lock_info;
+        }
 
-				return _path;
-			}
-		}
-
-        property String^ RepositoryPath
+    public:
+        property String^ Path
         {
             String^ get()
             {
-                return _reposRelpath;
+        if (!_path)
+            _path = _reposRelpath->Substring(_nOffset);
+
+                        return _path;
             }
         }
 
-        property System::Uri^ Uri
+    property String^ RepositoryPath
+    {
+        String^ get()
         {
-            System::Uri^ get()
-            {
-                if (!_uri && _sessionUri && Path)
-                    _uri = SvnTools::AppendPathSuffix(_sessionUri, Path);
+        return _reposRelpath;
+        }
+    }
 
-                return _uri;
+    property System::Uri^ Uri
+    {
+        System::Uri^ get()
+        {
+        if (!_uri && _sessionUri && Path)
+            _uri = SvnTools::AppendPathSuffix(_sessionUri, Path);
+
+        return _uri;
+        }
+    }
+
+        property SvnLockInfo^ Lock
+        {
+            SvnLockInfo^ get()
+            {
+                if (!_lock && _lockInfo)
+            _lock = gcnew SvnLockInfo(_lockInfo, false);
+
+        return _lock;
             }
         }
 
-		property SvnLockInfo^ Lock
-		{
-			SvnLockInfo^ get()
-			{
-				if (!_lock && _lockInfo)
-                    _lock = gcnew SvnLockInfo(_lockInfo, false);
+    protected public:
+        /// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
+        /// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+            GC::KeepAlive(Lock);
+                        }
+            }
+            finally
+            {
+        if (_lock != nullptr)
+            _lock->Detach(keepProperties);
 
-                return _lock;
-			}
-		}
-
-	protected public:
-		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
-		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-                    GC::KeepAlive(Lock);
-				}
-			}
-			finally
-			{
-                if (_lock != nullptr)
-                    _lock->Detach(keepProperties);
-
-				__super::Detach(keepProperties);
-			}
-		}
-	};
+                        __super::Detach(keepProperties);
+            }
+        }
+    };
 }
 }

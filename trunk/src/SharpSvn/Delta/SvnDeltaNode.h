@@ -15,59 +15,59 @@
 #pragma once
 
 namespace SharpSvn {
-	namespace Delta {
+    namespace Delta {
 
-		ref class SvnDeltaEventArgs;
+        ref class SvnDeltaEventArgs;
 
-		public ref class SvnDeltaNode
-		{
-			initonly SvnDeltaNode^ _parent;
-			initonly String^ _path;
-			String^ _name;
+        public ref class SvnDeltaNode
+        {
+            initonly SvnDeltaNode^ _parent;
+            initonly String^ _path;
+            String^ _name;
 
-		public:
-			SvnDeltaNode(String^ path, SvnDeltaNode^ parent)
-			{
-				if (parent && !path)
-					throw gcnew ArgumentNullException("path");
+        public:
+            SvnDeltaNode(String^ path, SvnDeltaNode^ parent)
+            {
+                if (parent && !path)
+                    throw gcnew ArgumentNullException("path");
 
-				_path = path;
-				_parent = parent;
-			}
+                _path = path;
+                _parent = parent;
+            }
 
-		public:
-			property String^ Path
-			{
-				String^ get()
-				{
-					return _path;
-				}
-			}
+        public:
+            property String^ Path
+            {
+                String^ get()
+                {
+                    return _path;
+                }
+            }
 
-			property String^ Name
-			{
-				String^ get()
-				{
-					if (!_name)
-						_name = System::IO::Path::GetFileName(Path);
+            property String^ Name
+            {
+                String^ get()
+                {
+                    if (!_name)
+                        _name = System::IO::Path::GetFileName(Path);
 
-					return _name;
-				}
-			}
+                    return _name;
+                }
+            }
 
-			property SvnDeltaNode^ ParentDirectory
-			{
-				SvnDeltaNode^ get()
-				{
-					return _parent;
-				}
-			}
+            property SvnDeltaNode^ ParentDirectory
+            {
+                SvnDeltaNode^ get()
+                {
+                    return _parent;
+                }
+            }
 
-		protected public:
-			virtual void OnClose(SvnDeltaEventArgs^ e)
-			{
-				UNUSED_ALWAYS(e);
-			}
-		};
-	};
-};
+        protected public:
+            virtual void OnClose(SvnDeltaEventArgs^ e)
+            {
+                UNUSED_ALWAYS(e);
+            }
+        };
+    };
+};;

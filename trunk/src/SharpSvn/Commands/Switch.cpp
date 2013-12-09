@@ -26,83 +26,83 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Switch(path, target, gcnew SvnSwitchArgs(), result);
+    return Switch(path, target, gcnew SvnSwitchArgs(), result);
 }
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, [Out] SvnUpdateResult^% result)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return Switch(path, target, gcnew SvnSwitchArgs(), result);
+    return Switch(path, target, gcnew SvnSwitchArgs(), result);
 }
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Switch(path, target, args, result);
+    return Switch(path, target, args, result);
 }
 
 bool SvnClient::Switch(String^ path, SvnUriTarget^ target, SvnSwitchArgs^ args, [Out] SvnUpdateResult^% result)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!target)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!target)
+        throw gcnew ArgumentNullException("args");
 
-	if (args->Revision->RequiresWorkingCopy)
-		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
-	else if (target->Revision->RequiresWorkingCopy)
-		throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "target");
+    if (args->Revision->RequiresWorkingCopy)
+        throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "args");
+    else if (target->Revision->RequiresWorkingCopy)
+        throw gcnew ArgumentException(SharpSvnStrings::RevisionTypeMustBeHeadDateOrSpecific , "target");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_revnum_t rev = 0;
-	svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
-	svn_opt_revision_t toRev = args->Revision->Or(target->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
+    svn_revnum_t rev = 0;
+    svn_opt_revision_t pegRev = target->Revision->ToSvnRevision();
+    svn_opt_revision_t toRev = args->Revision->Or(target->Revision)->Or(SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_switch3(
-		&rev,
-		pool.AllocDirent(path),
-		target->AllocAsString(%pool),
-		&pegRev,
-		&toRev,
-		(svn_depth_t)args->Depth,
-		args->KeepDepth,
-		args->IgnoreExternals,
-		args->AllowObstructions,
-		!args->VerifyAncestry,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_switch3(
+        &rev,
+        pool.AllocDirent(path),
+        target->AllocAsString(%pool),
+        &pegRev,
+        &toRev,
+        (svn_depth_t)args->Depth,
+        args->KeepDepth,
+        args->IgnoreExternals,
+        args->AllowObstructions,
+        !args->VerifyAncestry,
+        CtxHandle,
+        pool.Handle);
 
-	result = SvnUpdateResult::Create(this, args, rev);
+    result = SvnUpdateResult::Create(this, args, rev);
 
-	return args->HandleResult(this, r, path);
+    return args->HandleResult(this, r, path);
 }

@@ -23,123 +23,123 @@ using namespace SharpSvn::Implementation;
 
 bool SvnRepositoryClient::CreateRepository(String^ repositoryPath)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	return CreateRepository(repositoryPath, gcnew SvnCreateRepositoryArgs());
+    return CreateRepository(repositoryPath, gcnew SvnCreateRepositoryArgs());
 }
 
 bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepositoryArgs^ args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_repos_t* result;
+    svn_repos_t* result;
 
-	apr_hash_t *fs_config = apr_hash_make(pool.Handle);
+    apr_hash_t *fs_config = apr_hash_make(pool.Handle);
 
-	apr_hash_set(
-		fs_config,
-		SVN_FS_CONFIG_BDB_TXN_NOSYNC,
-		APR_HASH_KEY_STRING,
-		(args->BerkeleyDBNoFSyncAtCommit ? "1" : "0"));
+    apr_hash_set(
+        fs_config,
+        SVN_FS_CONFIG_BDB_TXN_NOSYNC,
+        APR_HASH_KEY_STRING,
+        (args->BerkeleyDBNoFSyncAtCommit ? "1" : "0"));
 
-	apr_hash_set(
-		fs_config,
-		SVN_FS_CONFIG_BDB_LOG_AUTOREMOVE,
-		APR_HASH_KEY_STRING,
-		(args->BerkeleyDBKeepTransactionLogs ? "0" : "1"));
+    apr_hash_set(
+        fs_config,
+        SVN_FS_CONFIG_BDB_LOG_AUTOREMOVE,
+        APR_HASH_KEY_STRING,
+        (args->BerkeleyDBKeepTransactionLogs ? "0" : "1"));
 
 
-	switch(args->RepositoryType)
-	{
-	case SvnRepositoryFileSystem::FsFs:
-		apr_hash_set(
-			fs_config,
-			SVN_FS_CONFIG_FS_TYPE,
-			APR_HASH_KEY_STRING,
-			SVN_FS_TYPE_FSFS);
-		break;
-	case SvnRepositoryFileSystem::BerkeleyDB:
-		apr_hash_set(
-			fs_config,
-			SVN_FS_CONFIG_FS_TYPE,
-			APR_HASH_KEY_STRING,
-			SVN_FS_TYPE_BDB);
-		break;
-	default:
-		break;
-	}
+    switch(args->RepositoryType)
+    {
+    case SvnRepositoryFileSystem::FsFs:
+        apr_hash_set(
+            fs_config,
+            SVN_FS_CONFIG_FS_TYPE,
+            APR_HASH_KEY_STRING,
+            SVN_FS_TYPE_FSFS);
+        break;
+    case SvnRepositoryFileSystem::BerkeleyDB:
+        apr_hash_set(
+            fs_config,
+            SVN_FS_CONFIG_FS_TYPE,
+            APR_HASH_KEY_STRING,
+            SVN_FS_TYPE_BDB);
+        break;
+    default:
+        break;
+    }
 
-	switch(args->RepositoryCompatibility)
-	{
-	case SvnRepositoryCompatibility::Subversion10:
-		// Use 1.0-1.3 format
-		apr_hash_set(
-			fs_config,
-			SVN_FS_CONFIG_PRE_1_4_COMPATIBLE,
-			APR_HASH_KEY_STRING,
-			"1");
-		// fall through
-	case SvnRepositoryCompatibility::Subversion14:
-		// Use 1.4 format
-		apr_hash_set(
-			fs_config,
-			SVN_FS_CONFIG_PRE_1_5_COMPATIBLE,
-			APR_HASH_KEY_STRING,
-			"1");
-		// fall through
-	case SvnRepositoryCompatibility::Subversion15:
-		// Use 1.5 format
-		apr_hash_set(
-			fs_config,
-			SVN_FS_CONFIG_PRE_1_6_COMPATIBLE,
-			APR_HASH_KEY_STRING,
-			"1");
-		// fall through
-	case SvnRepositoryCompatibility::Subversion16:
-		// fall through
-	case SvnRepositoryCompatibility::Subversion17:
-		// .....
-		apr_hash_set(
-			fs_config,
-			SVN_FS_CONFIG_PRE_1_8_COMPATIBLE,
-			APR_HASH_KEY_STRING,
-			"1");
-		break;
-		// fall through
-	case SvnRepositoryCompatibility::Subversion18:
-		// fall through
-	case SvnRepositoryCompatibility::Default:
-	default:
-		// Use default format
-		break;
-	}
+    switch(args->RepositoryCompatibility)
+    {
+    case SvnRepositoryCompatibility::Subversion10:
+        // Use 1.0-1.3 format
+        apr_hash_set(
+            fs_config,
+            SVN_FS_CONFIG_PRE_1_4_COMPATIBLE,
+            APR_HASH_KEY_STRING,
+            "1");
+        // fall through
+    case SvnRepositoryCompatibility::Subversion14:
+        // Use 1.4 format
+        apr_hash_set(
+            fs_config,
+            SVN_FS_CONFIG_PRE_1_5_COMPATIBLE,
+            APR_HASH_KEY_STRING,
+            "1");
+        // fall through
+    case SvnRepositoryCompatibility::Subversion15:
+        // Use 1.5 format
+        apr_hash_set(
+            fs_config,
+            SVN_FS_CONFIG_PRE_1_6_COMPATIBLE,
+            APR_HASH_KEY_STRING,
+            "1");
+        // fall through
+    case SvnRepositoryCompatibility::Subversion16:
+        // fall through
+    case SvnRepositoryCompatibility::Subversion17:
+        // .....
+        apr_hash_set(
+            fs_config,
+            SVN_FS_CONFIG_PRE_1_8_COMPATIBLE,
+            APR_HASH_KEY_STRING,
+            "1");
+        break;
+        // fall through
+    case SvnRepositoryCompatibility::Subversion18:
+        // fall through
+    case SvnRepositoryCompatibility::Default:
+    default:
+        // Use default format
+        break;
+    }
 
-	svn_error_t* r = svn_repos_create(
-		&result,
-		pool.AllocDirent(repositoryPath),
-		nullptr,
-		nullptr,
-		CtxHandle->config,
-		fs_config,
-		pool.Handle);
+    svn_error_t* r = svn_repos_create(
+        &result,
+        pool.AllocDirent(repositoryPath),
+        nullptr,
+        nullptr,
+        CtxHandle->config,
+        fs_config,
+        pool.Handle);
 
-	if (!r && args->RepositoryUuid.HasValue)
-	{
-		svn_fs_t *fs = svn_repos_fs(result);
-		r = svn_fs_set_uuid(fs, pool.AllocString(args->RepositoryUuid.ToString()), pool.Handle);
-	}
+    if (!r && args->RepositoryUuid.HasValue)
+    {
+        svn_fs_t *fs = svn_repos_fs(result);
+        r = svn_fs_set_uuid(fs, pool.AllocString(args->RepositoryUuid.ToString()), pool.Handle);
+    }
 
-	return args->HandleResult(this, r);
+    return args->HandleResult(this, r);
 }

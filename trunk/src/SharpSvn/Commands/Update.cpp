@@ -29,129 +29,129 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Update(String^ path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	SvnUpdateResult^ result;
-	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), result);
+    SvnUpdateResult^ result;
+    return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), result);
 }
 
 bool SvnClient::Update(String^ path, [Out] SvnUpdateResult^% updateResult)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), updateResult);
+    return Update(NewSingleItemCollection(path), gcnew SvnUpdateArgs(), updateResult);
 }
 
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Update(NewSingleItemCollection(path), args, result);
+    return Update(NewSingleItemCollection(path), args, result);
 }
 
 bool SvnClient::Update(String^ path, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% updateResult)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	return Update(NewSingleItemCollection(path), args, updateResult);
+    return Update(NewSingleItemCollection(path), args, updateResult);
 }
 
 bool SvnClient::Update(ICollection<String^>^ paths)
 {
-	if (!paths)
-		throw gcnew ArgumentNullException("paths");
+    if (!paths)
+        throw gcnew ArgumentNullException("paths");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Update(paths, gcnew SvnUpdateArgs(), result);
+    return Update(paths, gcnew SvnUpdateArgs(), result);
 }
 
 bool SvnClient::Update(ICollection<String^>^ paths, [Out] SvnUpdateResult^% updateResult)
 {
-	if (!paths)
-		throw gcnew ArgumentNullException("paths");
+    if (!paths)
+        throw gcnew ArgumentNullException("paths");
 
-	return Update(paths, gcnew SvnUpdateArgs(), updateResult);
+    return Update(paths, gcnew SvnUpdateArgs(), updateResult);
 }
 
 
 bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args)
 {
-	if (!paths)
-		throw gcnew ArgumentNullException("paths");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!paths)
+        throw gcnew ArgumentNullException("paths");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	SvnUpdateResult^ result;
+    SvnUpdateResult^ result;
 
-	return Update(paths, args, result);
+    return Update(paths, args, result);
 }
 
 bool SvnClient::Update(ICollection<String^>^ paths, SvnUpdateArgs^ args, [Out] SvnUpdateResult^% updateResult)
 {
-	if (!paths)
-		throw gcnew ArgumentNullException("paths");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!paths)
+        throw gcnew ArgumentNullException("paths");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	updateResult = nullptr;
+    updateResult = nullptr;
 
-	for each (String^ s in paths)
-	{
-		if (String::IsNullOrEmpty(s))
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
-		else if (!IsNotUri(s))
-			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
-	}
+    for each (String^ s in paths)
+    {
+        if (String::IsNullOrEmpty(s))
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
+        else if (!IsNotUri(s))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
+    }
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
+    AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
 
-	apr_array_header_t* revs = nullptr;
-	svn_opt_revision_t uRev = args->Revision->Or(SvnRevision::Head)->ToSvnRevision();
+    apr_array_header_t* revs = nullptr;
+    svn_opt_revision_t uRev = args->Revision->Or(SvnRevision::Head)->ToSvnRevision();
 
-	svn_error_t *r = svn_client_update4(&revs,
-		aprPaths->Handle,
-		&uRev,
-		(svn_depth_t)args->Depth,
-		args->KeepDepth,
-		args->IgnoreExternals,
-		args->AllowObstructions,
-		args->AddsAsModifications,
-		args->UpdateParents,
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_update4(&revs,
+        aprPaths->Handle,
+        &uRev,
+        (svn_depth_t)args->Depth,
+        args->KeepDepth,
+        args->IgnoreExternals,
+        args->AllowObstructions,
+        args->AddsAsModifications,
+        args->UpdateParents,
+        CtxHandle,
+        pool.Handle);
 
-	if (args->HandleResult(this, r, paths))
-	{
-		AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
+    if (args->HandleResult(this, r, paths))
+    {
+        AprArray<__int64, AprSvnRevNumMarshaller^>^ aprRevs = gcnew AprArray<__int64, AprSvnRevNumMarshaller^>(revs, %pool);
 
-		updateResult = gcnew SvnUpdateResult(paths, safe_cast<IList<__int64>^>(aprRevs->ToArray()), (paths->Count >= 1) ? aprRevs[0] : -1);
+        updateResult = gcnew SvnUpdateResult(paths, safe_cast<IList<__int64>^>(aprRevs->ToArray()), (paths->Count >= 1) ? aprRevs[0] : -1);
 
-		return true;
-	}
+        return true;
+    }
 
-	return false;
+    return false;
 }

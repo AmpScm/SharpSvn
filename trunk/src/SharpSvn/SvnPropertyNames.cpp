@@ -33,34 +33,34 @@ using System::Collections::Generic::List;
 
 bool SvnPropertyNames::TryParseDate(String^ date, [Out] DateTime% value)
 {
-	if (String::IsNullOrEmpty(date))
-		throw gcnew ArgumentNullException("date");
+    if (String::IsNullOrEmpty(date))
+        throw gcnew ArgumentNullException("date");
 
-	AprPool pool(SvnBase::SmallThreadPool);
+    AprPool pool(SvnBase::SmallThreadPool);
 
-	apr_time_t tm = 0;
-	svn_error_t* r = svn_time_from_cstring(&tm, pool.AllocString(date), pool.Handle);
+    apr_time_t tm = 0;
+    svn_error_t* r = svn_time_from_cstring(&tm, pool.AllocString(date), pool.Handle);
 
-	if (r)
-	{
-		value = DateTime::MinValue;
-		svn_error_clear(r);
-		return false;
-	}
-	else
-	{
-		value = SvnBase::DateTimeFromAprTime(tm);
+    if (r)
+    {
+        value = DateTime::MinValue;
+        svn_error_clear(r);
+        return false;
+    }
+    else
+    {
+        value = SvnBase::DateTimeFromAprTime(tm);
 
-		return true;
-	}
+        return true;
+    }
 }
 
 String^ SvnPropertyNames::FormatDate(DateTime value)
 {
-	AprPool pool(SvnBase::SmallThreadPool);
+    AprPool pool(SvnBase::SmallThreadPool);
 
-	apr_time_t tm = SvnBase::AprTimeFromDateTime(value);
-	const char* rslt = svn_time_to_cstring(tm, pool.Handle);
+    apr_time_t tm = SvnBase::AprTimeFromDateTime(value);
+    const char* rslt = svn_time_to_cstring(tm, pool.Handle);
 
-	return SvnBase::Utf8_PtrToString(rslt);
-}
+    return SvnBase::Utf8_PtrToString(rslt);
+}}

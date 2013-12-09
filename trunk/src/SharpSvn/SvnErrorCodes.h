@@ -19,11 +19,11 @@ namespace SharpSvn {
     using System::ComponentModel::DescriptionAttribute;
 
 #define SVN_ERRDEF(x,y,z)                                                                          \
-            [DescriptionAttribute(z)]                                                              \
-            [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]    \
-            [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")] \
-            [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly")]      \
-            x = x,
+        [DescriptionAttribute(z)]                                                              \
+        [SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly")]    \
+        [SuppressMessage("Microsoft.Naming", "CA1707:IdentifiersShouldNotContainUnderscores")] \
+        [SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly")]      \
+        x = x,
 
 #define SVN_ERROR_BUILD_ARRAY
 #pragma warning(disable: 4634)
@@ -44,31 +44,31 @@ namespace SharpSvn {
 /// <summary>Gets the error category of the SvnException</summary>
 public enum class SvnErrorCategory
 {
-	OperatingSystem=-1,
-	None=0,
-	Bad = CatValue(BAD),
-	Xml =CatValue(XML),
-	IO = CatValue(IO),
-	Stream = CatValue(STREAM),
-	Node = CatValue(NODE),
-	Entry = CatValue(ENTRY),
-	WorkingCopy = CatValue(WC),
-	FileSystem = CatValue(FS),
-	Repository = CatValue(REPOS),
-	RepositoryAccess = CatValue(RA),
-	RepositoryAccessDav = CatValue(RA_DAV),
-	RepositoryAccessLocal = CatValue(RA_LOCAL),
-	SvnDiff = CatValue(SVNDIFF),
-	ApacheModule = CatValue(APMOD),
-	Client = CatValue(CLIENT),
-	Misc = CatValue(MISC),
-	CommandLine = CatValue(CL),
-	RepositoryAccessSvn = CatValue(RA_SVN),
-	Authentication = CatValue(AUTHN),
-	Authorization = CatValue(AUTHZ),
-	Diff = CatValue(DIFF),
-	RepositoryAccessSerf = CatValue(RA_SERF),
-	Malfunction = CatValue(MALFUNC),
+    OperatingSystem=-1,
+    None=0,
+    Bad = CatValue(BAD),
+    Xml =CatValue(XML),
+    IO = CatValue(IO),
+    Stream = CatValue(STREAM),
+    Node = CatValue(NODE),
+    Entry = CatValue(ENTRY),
+    WorkingCopy = CatValue(WC),
+    FileSystem = CatValue(FS),
+    Repository = CatValue(REPOS),
+    RepositoryAccess = CatValue(RA),
+    RepositoryAccessDav = CatValue(RA_DAV),
+    RepositoryAccessLocal = CatValue(RA_LOCAL),
+    SvnDiff = CatValue(SVNDIFF),
+    ApacheModule = CatValue(APMOD),
+    Client = CatValue(CLIENT),
+    Misc = CatValue(MISC),
+    CommandLine = CatValue(CL),
+    RepositoryAccessSvn = CatValue(RA_SVN),
+    Authentication = CatValue(AUTHN),
+    Authorization = CatValue(AUTHZ),
+    Diff = CatValue(DIFF),
+    RepositoryAccessSerf = CatValue(RA_SERF),
+    Malfunction = CatValue(MALFUNC),
 };
 }
 

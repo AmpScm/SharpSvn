@@ -23,61 +23,61 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::Revert(String^ path)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	return Revert(path, gcnew SvnRevertArgs());
+    return Revert(path, gcnew SvnRevertArgs());
 }
 
 bool SvnClient::Revert(String^ path, SvnRevertArgs^ args)
 {
-	if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	return Revert(NewSingleItemCollection(path), args);
+    return Revert(NewSingleItemCollection(path), args);
 }
 
 bool SvnClient::Revert(ICollection<String^>^ paths)
 {
-	if (!paths)
-		throw gcnew ArgumentNullException("paths");
+    if (!paths)
+        throw gcnew ArgumentNullException("paths");
 
-	return Revert(paths, gcnew SvnRevertArgs());
+    return Revert(paths, gcnew SvnRevertArgs());
 }
 
 bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 {
-	if (!paths)
-		throw gcnew ArgumentNullException("paths");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!paths)
+        throw gcnew ArgumentNullException("paths");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	for each (String^ path in paths)
-	{
-		if (String::IsNullOrEmpty(path))
-			throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
-		else if (!IsNotUri(path))
-			throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
-	}
+    for each (String^ path in paths)
+    {
+        if (String::IsNullOrEmpty(path))
+            throw gcnew ArgumentException(SharpSvnStrings::ItemInListIsNull, "paths");
+        else if (!IsNotUri(path))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "paths");
+    }
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
+    AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
 
-	svn_error_t *r = svn_client_revert2(
-		aprPaths->Handle,
-		(svn_depth_t)args->Depth,
-		CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
-		CtxHandle,
-		pool.Handle);
+    svn_error_t *r = svn_client_revert2(
+        aprPaths->Handle,
+        (svn_depth_t)args->Depth,
+        CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        CtxHandle,
+        pool.Handle);
 
-	return args->HandleResult(this, r, paths);
+    return args->HandleResult(this, r, paths);
 }

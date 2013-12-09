@@ -23,27 +23,27 @@ using namespace SharpSvn;
 
 bool SvnRepositoryClient::SetRepositoryId(String^ repositoryPath, Guid id)
 {
-	return SetRepositoryId(repositoryPath, id, gcnew SvnSetRepositoryIdArgs());
+    return SetRepositoryId(repositoryPath, id, gcnew SvnSetRepositoryIdArgs());
 }
 
 bool SvnRepositoryClient::SetRepositoryId(String^ repositoryPath, Guid id, SvnSetRepositoryIdArgs ^args)
 {
-	if (String::IsNullOrEmpty(repositoryPath))
-		throw gcnew ArgumentNullException("repositoryPath");
-	else if (!IsNotUri(repositoryPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_repos_t* repos = nullptr;
-	svn_error_t* r;
+    svn_repos_t* repos = nullptr;
+    svn_error_t* r;
 
-	if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
-		return args->HandleResult(this, r);
+    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+        return args->HandleResult(this, r);
 
-	r = svn_fs_set_uuid(svn_repos_fs(repos), pool.AllocString(id.ToString()), pool.Handle);
+    r = svn_fs_set_uuid(svn_repos_fs(repos), pool.AllocString(id.ToString()), pool.Handle);
 
-	return args->HandleResult(this, r);
+    return args->HandleResult(this, r);
 }

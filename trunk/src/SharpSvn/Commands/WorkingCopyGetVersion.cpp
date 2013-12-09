@@ -29,41 +29,41 @@ using namespace System::Collections::Generic;
 
 bool SvnWorkingCopyClient::GetVersion(String^ targetPath, [Out] SvnWorkingCopyVersion^% version)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
 
-	return GetVersion(targetPath, gcnew SvnGetWorkingCopyVersionArgs(), version);
+    return GetVersion(targetPath, gcnew SvnGetWorkingCopyVersionArgs(), version);
 }
 
 bool SvnWorkingCopyClient::GetVersion(String^ targetPath, SvnGetWorkingCopyVersionArgs^ args, [Out] SvnWorkingCopyVersion^% version)
 {
-	if (String::IsNullOrEmpty(targetPath))
-		throw gcnew ArgumentNullException("targetPath");
-	else if (!IsNotUri(targetPath))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (String::IsNullOrEmpty(targetPath))
+        throw gcnew ArgumentNullException("targetPath");
+    else if (!IsNotUri(targetPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "targetPath");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_wc_revision_status_t *result = nullptr;
+    svn_wc_revision_status_t *result = nullptr;
 
-	svn_error_t *r = svn_wc_revision_status2(
-		&result,
-		CtxHandle->wc_ctx,
-		pool.AllocAbsoluteDirent(targetPath),
-		args->Trail ? pool.AllocString(args->Trail) : nullptr,
-		args->UseCommittedRevisions,
-		CtxHandle->cancel_func,
-		CtxHandle->cancel_baton,
-		pool.Handle, pool.Handle);
+    svn_error_t *r = svn_wc_revision_status2(
+        &result,
+        CtxHandle->wc_ctx,
+        pool.AllocAbsoluteDirent(targetPath),
+        args->Trail ? pool.AllocString(args->Trail) : nullptr,
+        args->UseCommittedRevisions,
+        CtxHandle->cancel_func,
+        CtxHandle->cancel_baton,
+        pool.Handle, pool.Handle);
 
-	if (result)
-		version = gcnew SvnWorkingCopyVersion(result->min_rev, result->max_rev, result->switched != 0, result->modified != 0, result->sparse_checkout != 0);
-	else
-		version = nullptr;
+    if (result)
+        version = gcnew SvnWorkingCopyVersion(result->min_rev, result->max_rev, result->switched != 0, result->modified != 0, result->sparse_checkout != 0);
+    else
+        version = nullptr;
 
-	return args->HandleResult(this, r, targetPath);
+    return args->HandleResult(this, r, targetPath);
 }

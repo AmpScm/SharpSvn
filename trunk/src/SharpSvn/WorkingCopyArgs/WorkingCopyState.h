@@ -16,36 +16,36 @@
 
 namespace SharpSvn {
 
-	public ref class SvnWorkingCopyStateArgs : public SvnClientArgs
-	{
-		bool _getFileData;
+    public ref class SvnWorkingCopyStateArgs : public SvnClientArgs
+    {
+        bool _getFileData;
 
-	public:
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::GetWorkingCopyInfo;
-			}
-		}
+    public:
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::GetWorkingCopyInfo;
+            }
+        }
 
-	public:
-		SvnWorkingCopyStateArgs()
-		{
-		}
+    public:
+        SvnWorkingCopyStateArgs()
+        {
+        }
 
-		property bool RetrieveFileData
-		{
-			bool get()
-			{
-				return _getFileData;
-			}
-			void set(bool value)
-			{
-				_getFileData = value;
-			}
-		}
+        property bool RetrieveFileData
+        {
+            bool get()
+            {
+                return _getFileData;
+            }
+            void set(bool value)
+            {
+                _getFileData = value;
+            }
+        }
 
-	};
+    };
 
 }

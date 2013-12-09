@@ -16,115 +16,115 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Commit(String^, SvnCommitArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnCommitArgs : public SvnClientArgsWithCommit
-	{
-		SvnDepth _depth;
-		bool _keepLocks;
-		bool _keepChangeLists;
-		SvnChangeListCollection^ _changelists;
-		bool _runTortoiseHooks;
-		bool _includeFileExternals;
-		bool _includeDirExternals;
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Commit(String^, SvnCommitArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnCommitArgs : public SvnClientArgsWithCommit
+    {
+        SvnDepth _depth;
+        bool _keepLocks;
+        bool _keepChangeLists;
+        SvnChangeListCollection^ _changelists;
+        bool _runTortoiseHooks;
+        bool _includeFileExternals;
+        bool _includeDirExternals;
 
-	public:
-		SvnCommitArgs()
-		{
-			_depth = SvnDepth::Infinity;
-		}
+    public:
+        SvnCommitArgs()
+        {
+            _depth = SvnDepth::Infinity;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Commit;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Commit;
+            }
+        }
 
-	public:
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+    public:
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-		property bool KeepLocks
-		{
-			bool get()
-			{
-				return _keepLocks;
-			}
-			void set(bool value)
-			{
-				_keepLocks = value;
-			}
-		}
+        property bool KeepLocks
+        {
+            bool get()
+            {
+                return _keepLocks;
+            }
+            void set(bool value)
+            {
+                _keepLocks = value;
+            }
+        }
 
-		/// <summary>Gets the list of changelist-names to commit</summary>
-		property SvnChangeListCollection^ ChangeLists
-		{
-			SvnChangeListCollection^ get()
-			{
-				if (!_changelists)
-					_changelists = gcnew SvnChangeListCollection();
-				return _changelists;
-			}
-		}
+        /// <summary>Gets the list of changelist-names to commit</summary>
+        property SvnChangeListCollection^ ChangeLists
+        {
+            SvnChangeListCollection^ get()
+            {
+                if (!_changelists)
+                    _changelists = gcnew SvnChangeListCollection();
+                return _changelists;
+            }
+        }
 
-		property bool KeepChangeLists
-		{
-			bool get()
-			{
-				return _keepChangeLists;
-			}
-			void set(bool value)
-			{
-				_keepChangeLists = value;
-			}
-		}
+        property bool KeepChangeLists
+        {
+            bool get()
+            {
+                return _keepChangeLists;
+            }
+            void set(bool value)
+            {
+                _keepChangeLists = value;
+            }
+        }
 
-		property bool IncludeFileExternals
-		{
-			bool get()
-			{
-				return _includeFileExternals;
-			}
-			void set(bool value)
-			{
-				_includeFileExternals = value;
-			}
-		}
+        property bool IncludeFileExternals
+        {
+            bool get()
+            {
+                return _includeFileExternals;
+            }
+            void set(bool value)
+            {
+                _includeFileExternals = value;
+            }
+        }
 
-		property bool IncludeDirectoryExternals
-		{
-			bool get()
-			{
-				return _includeDirExternals;
-			}
-			void set(bool value)
-			{
-				_includeDirExternals = value;
-			}
-		}
+        property bool IncludeDirectoryExternals
+        {
+            bool get()
+            {
+                return _includeDirExternals;
+            }
+            void set(bool value)
+            {
+                _includeDirExternals = value;
+            }
+        }
 
-		property bool RunTortoiseHooks
-		{
-			bool get()
-			{
-				return _runTortoiseHooks;
-			}
-			void set(bool value)
-			{
-				_runTortoiseHooks = value;
-			}
-		}
-	};
+        property bool RunTortoiseHooks
+        {
+            bool get()
+            {
+                return _runTortoiseHooks;
+            }
+            void set(bool value)
+            {
+                _runTortoiseHooks = value;
+            }
+        }
+    };
 
 }

@@ -18,21 +18,21 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnLookClient" />'s Property method</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnLookRevisionPropertyArgs : public SvnLookClientArgs
-	{
-	public:
-		SvnLookRevisionPropertyArgs()
-		{
-		}
+    /// <summary>Extended Parameter container of <see cref="SvnLookClient" />'s Property method</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnLookRevisionPropertyArgs : public SvnLookClientArgs
+    {
+    public:
+        SvnLookRevisionPropertyArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unknown;
-			}
-		}
-	};
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unknown;
+            }
+        }
+    };
 }

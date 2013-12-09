@@ -16,64 +16,64 @@
 
 namespace SharpSvn {
 
-	/// <summary>Extended Parameter container of <see cref="SvnClient::Unlock(String^, SvnUnlockArgs^)" /></summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnUnlockArgs : public SvnClientArgs
-	{
-		bool _breakLock;
-		SvnException^ _result;
+    /// <summary>Extended Parameter container of <see cref="SvnClient::Unlock(String^, SvnUnlockArgs^)" /></summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnUnlockArgs : public SvnClientArgs
+    {
+        bool _breakLock;
+        SvnException^ _result;
 
-	public:
-		SvnUnlockArgs()
-		{
-		}
+    public:
+        SvnUnlockArgs()
+        {
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::Unlock;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::Unlock;
+            }
+        }
 
-		property bool BreakLock
-		{
-			bool get()
-			{
-				return _breakLock;
-			}
-			void set(bool value)
-			{
-				_breakLock = value;
-			}
-		}
+        property bool BreakLock
+        {
+            bool get()
+            {
+                return _breakLock;
+            }
+            void set(bool value)
+            {
+                _breakLock = value;
+            }
+        }
 
-	internal:
-		void Reset()
-		{
-			_result = nullptr;
-		}
+    internal:
+        void Reset()
+        {
+            _result = nullptr;
+        }
 
-		virtual void RaiseOnNotify(SvnNotifyEventArgs^ e) override
-		{
-			if(!_result)
-				switch(e->Action)
-			{
-				case SvnNotifyAction::LockFailedUnlock:
-					if(e->Error)
-						_result = e->Error;
-					break;
-			}
-			__super::RaiseOnNotify(e);
-		}
+        virtual void RaiseOnNotify(SvnNotifyEventArgs^ e) override
+        {
+            if(!_result)
+                switch(e->Action)
+            {
+                case SvnNotifyAction::LockFailedUnlock:
+                    if(e->Error)
+                        _result = e->Error;
+                    break;
+            }
+            __super::RaiseOnNotify(e);
+        }
 
-		property SvnException^ UnlockResult
-		{
-			SvnException^ get()
-			{
-				return _result;
-			}
-		}
-	};
+        property SvnException^ UnlockResult
+        {
+            SvnException^ get()
+            {
+                return _result;
+            }
+        }
+    };
 
 }

@@ -18,107 +18,107 @@
 #include "EventArgs/SvnListEventArgs.h"
 
 namespace SharpSvn {
-	namespace Remote {
-	ref class SvnRemoteSession;
+    namespace Remote {
+    ref class SvnRemoteSession;
 
-	public ref class SvnRemoteListEventArgs : public SvnEventArgs, public ISvnRepositoryListItem
-	{
-		initonly String^ _name;
-		initonly SvnDirEntry^ _entry;
-		initonly __int64 _revision;
-		initonly String^ _relPath;
-		initonly System::Uri^ _sessionUri;
-		System::Uri^ _uri;
-		
-	internal:
-		SvnRemoteListEventArgs(String^ name, const svn_dirent_t *dirent, svn_revnum_t revno, Uri^ sessionUri, String^ relPath)
-		{
-			_name = name;
-			_entry = gcnew SvnDirEntry(dirent);
-			_revision = revno;
-			_relPath = relPath;
-			_sessionUri = sessionUri;
-		}
+    public ref class SvnRemoteListEventArgs : public SvnEventArgs, public ISvnRepositoryListItem
+    {
+        initonly String^ _name;
+        initonly SvnDirEntry^ _entry;
+        initonly __int64 _revision;
+        initonly String^ _relPath;
+        initonly System::Uri^ _sessionUri;
+        System::Uri^ _uri;
 
-	public:
-		property String^ Name
-		{
-			String^ get()
-			{
-				return _name;
-			}
-		}
+    internal:
+        SvnRemoteListEventArgs(String^ name, const svn_dirent_t *dirent, svn_revnum_t revno, Uri^ sessionUri, String^ relPath)
+        {
+            _name = name;
+            _entry = gcnew SvnDirEntry(dirent);
+            _revision = revno;
+            _relPath = relPath;
+            _sessionUri = sessionUri;
+        }
 
-		property __int64 RetrievedRevision
-		{
-			__int64 get()
-			{
-				return _revision;
-			}
-		}
+    public:
+        property String^ Name
+        {
+            String^ get()
+            {
+                return _name;
+            }
+        }
 
-		property String^ Path
-		{
-			String^ get()
-			{
-				return _relPath + Name;
-			}
-		}
+        property __int64 RetrievedRevision
+        {
+            __int64 get()
+            {
+                return _revision;
+            }
+        }
 
-		property System::Uri^ Uri
-		{
-			virtual System::Uri^ get() sealed
-			{
-				if (!_uri && Entry)
-				{
-					if (Path->Length == 0)
-						_uri = _sessionUri;
-					else if (Entry->NodeKind == SvnNodeKind::Directory)
-						_uri = gcnew System::Uri(_sessionUri, SvnBase::PathToUri(Path + "/"));
-					else
-						_uri = gcnew System::Uri(_sessionUri, SvnBase::PathToUri(Path));
-				}
+        property String^ Path
+        {
+            String^ get()
+            {
+                return _relPath + Name;
+            }
+        }
 
-				return _uri;
-			}
-		}
+        property System::Uri^ Uri
+        {
+            virtual System::Uri^ get() sealed
+            {
+                if (!_uri && Entry)
+                {
+                    if (Path->Length == 0)
+                        _uri = _sessionUri;
+                    else if (Entry->NodeKind == SvnNodeKind::Directory)
+                        _uri = gcnew System::Uri(_sessionUri, SvnBase::PathToUri(Path + "/"));
+                    else
+                        _uri = gcnew System::Uri(_sessionUri, SvnBase::PathToUri(Path));
+                }
 
-		property System::Uri^ BaseUri
-		{
-			System::Uri^ get()
-			{
-				return _sessionUri;
-			}
-		}
+                return _uri;
+            }
+        }
 
-		property SvnDirEntry^ Entry
-		{
-			virtual SvnDirEntry^ get() sealed
-			{
-				return _entry;
-			}
-		}
+        property System::Uri^ BaseUri
+        {
+            System::Uri^ get()
+            {
+                return _sessionUri;
+            }
+        }
 
-	protected public:
-		/// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
-		/// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-                    GC::KeepAlive(Entry);
-				}
-			}
-			finally
-			{
-                if (_entry != nullptr)
-				    _entry->Detach(keepProperties);
+        property SvnDirEntry^ Entry
+        {
+            virtual SvnDirEntry^ get() sealed
+            {
+                return _entry;
+            }
+        }
 
-				__super::Detach(keepProperties);
-			}
-		}
-	};
+    protected public:
+        /// <summary>Detaches the SvnEventArgs from the unmanaged storage; optionally keeping the property values for later use</summary>
+        /// <description>After this method is called all properties are either stored managed, or are no longer readable</description>
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+            GC::KeepAlive(Entry);
+                        }
+            }
+            finally
+            {
+        if (_entry != nullptr)
+                            _entry->Detach(keepProperties);
+
+                        __super::Detach(keepProperties);
+            }
+        }
+    };
 }
 }

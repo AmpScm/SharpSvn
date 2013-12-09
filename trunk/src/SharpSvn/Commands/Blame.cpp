@@ -24,167 +24,167 @@ using namespace SharpSvn;
 
 bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blameHandler)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!blameHandler)
-		throw gcnew ArgumentNullException("blameHandler");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!blameHandler)
+        throw gcnew ArgumentNullException("blameHandler");
 
-	return Blame(target, gcnew SvnBlameArgs(), blameHandler);
+    return Blame(target, gcnew SvnBlameArgs(), blameHandler);
 }
 
 static svn_error_t *svn_client_blame_receiver_handler3(void *baton,
-													   svn_revnum_t start_revnum,
-													   svn_revnum_t end_revnum,
-													   apr_int64_t line_no,
-													   svn_revnum_t revision,
-													   apr_hash_t *rev_props,
-													   svn_revnum_t merged_revision,
-													   apr_hash_t *merged_rev_props,
-													   const char *merged_path,
-													   const char *line,
-													   svn_boolean_t local_change,
-													   apr_pool_t *pool)
+                                                                                                           svn_revnum_t start_revnum,
+                                                                                                           svn_revnum_t end_revnum,
+                                                                                                           apr_int64_t line_no,
+                                                                                                           svn_revnum_t revision,
+                                                                                                           apr_hash_t *rev_props,
+                                                                                                           svn_revnum_t merged_revision,
+                                                                                                           apr_hash_t *merged_rev_props,
+                                                                                                           const char *merged_path,
+                                                                                                           const char *line,
+                                                                                                           svn_boolean_t local_change,
+                                                                                                           apr_pool_t *pool)
 {
-	SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 
-	AprPool thePool(pool, false);
+    AprPool thePool(pool, false);
 
-	SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-	if (!args)
-		return nullptr;
+    SvnBlameArgs^ args = dynamic_cast<SvnBlameArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
+    if (!args)
+        return nullptr;
 
-	SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, rev_props, merged_revision, merged_rev_props,
-		merged_path, line, local_change != FALSE, start_revnum, end_revnum, %thePool);
-	try
-	{
-		args->RaiseBlame(e);
+    SvnBlameEventArgs^ e = gcnew SvnBlameEventArgs(revision, line_no, rev_props, merged_revision, merged_rev_props,
+        merged_path, line, local_change != FALSE, start_revnum, end_revnum, %thePool);
+    try
+    {
+        args->RaiseBlame(e);
 
-		if (e->Cancel)
-			return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Blame receiver canceled operation");
-		else
-			return nullptr;
-	}
-	catch(Exception^ ex)
-	{
-		return SvnException::CreateExceptionSvnError("Diff summary receiver", ex);
-	}
-	finally
-	{
-		e->Detach(false);
-	}
+        if (e->Cancel)
+            return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "Blame receiver canceled operation");
+        else
+            return nullptr;
+    }
+    catch(Exception^ ex)
+    {
+        return SvnException::CreateExceptionSvnError("Diff summary receiver", ex);
+    }
+    finally
+    {
+        e->Detach(false);
+    }
 }
 
 
 bool SvnClient::Blame(SvnTarget^ target, SvnBlameArgs^ args, EventHandler<SvnBlameEventArgs^>^ blameHandler)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	if (blameHandler)
-		args->Blame += blameHandler;
-	try
-	{
-		svn_diff_file_options_t *options = svn_diff_file_options_create(pool.Handle);
+    if (blameHandler)
+        args->Blame += blameHandler;
+    try
+    {
+        svn_diff_file_options_t *options = svn_diff_file_options_create(pool.Handle);
 
-		options->ignore_space = (svn_diff_file_ignore_space_t)args->IgnoreSpacing;
-		options->ignore_eol_style = args->IgnoreLineEndings;
+        options->ignore_space = (svn_diff_file_ignore_space_t)args->IgnoreSpacing;
+        options->ignore_eol_style = args->IgnoreLineEndings;
 
-		svn_error_t *r = svn_client_blame5(
-			target->AllocAsString(%pool),
-			target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-			args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool),
-			args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool),
-			options,
-			args->IgnoreMimeType,
-			args->RetrieveMergedRevisions,
-			svn_client_blame_receiver_handler3,
-			(void*)_clientBaton->Handle,
-			CtxHandle,
-			pool.Handle);
+        svn_error_t *r = svn_client_blame5(
+            target->AllocAsString(%pool),
+            target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
+            args->Start->Or(SvnRevision::Zero)->AllocSvnRevision(%pool),
+            args->End->Or(SvnRevision::Head)->AllocSvnRevision(%pool),
+            options,
+            args->IgnoreMimeType,
+            args->RetrieveMergedRevisions,
+            svn_client_blame_receiver_handler3,
+            (void*)_clientBaton->Handle,
+            CtxHandle,
+            pool.Handle);
 
-		return args->HandleResult(this, r, target);
-	}
-	finally
-	{
-		if (blameHandler)
-			args->Blame -= blameHandler;
-	}
+        return args->HandleResult(this, r, target);
+    }
+    finally
+    {
+        if (blameHandler)
+            args->Blame -= blameHandler;
+    }
 }
 
 bool SvnClient::GetBlame(SvnTarget^ target, [Out] Collection<SvnBlameEventArgs^>^% list)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	InfoItemCollection<SvnBlameEventArgs^>^ results = gcnew InfoItemCollection<SvnBlameEventArgs^>();
+    InfoItemCollection<SvnBlameEventArgs^>^ results = gcnew InfoItemCollection<SvnBlameEventArgs^>();
 
-	try
-	{
-		return Blame(target, gcnew SvnBlameArgs(), results->Handler);
-	}
-	finally
-	{
-		list = results;
-	}
+    try
+    {
+        return Blame(target, gcnew SvnBlameArgs(), results->Handler);
+    }
+    finally
+    {
+        list = results;
+    }
 }
 
 bool SvnClient::GetBlame(SvnTarget^ target, SvnBlameArgs^ args, [Out] Collection<SvnBlameEventArgs^>^% list)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	InfoItemCollection<SvnBlameEventArgs^>^ results = gcnew InfoItemCollection<SvnBlameEventArgs^>();
+    InfoItemCollection<SvnBlameEventArgs^>^ results = gcnew InfoItemCollection<SvnBlameEventArgs^>();
 
-	try
-	{
-		return Blame(target, args, results->Handler);
-	}
-	finally
-	{
-		list = results;
-	}
+    try
+    {
+        return Blame(target, args, results->Handler);
+    }
+    finally
+    {
+        list = results;
+    }
 }
 
 String^ SvnBlameEventArgs::Author::get()
 {
-	if (!_author)
+    if (!_author)
     {
-        if (_revProps)
-            _author = _revProps->Contains(SVN_PROP_REVISION_AUTHOR) ? _revProps[SVN_PROP_REVISION_AUTHOR]->StringValue : nullptr;
-        else if (_rev_props)
-        {
-            const char *pAuthor = svn_prop_get_value(_rev_props, SVN_PROP_REVISION_AUTHOR);
+    if (_revProps)
+        _author = _revProps->Contains(SVN_PROP_REVISION_AUTHOR) ? _revProps[SVN_PROP_REVISION_AUTHOR]->StringValue : nullptr;
+    else if (_rev_props)
+    {
+        const char *pAuthor = svn_prop_get_value(_rev_props, SVN_PROP_REVISION_AUTHOR);
 
-            if (pAuthor)
-                _author = SvnBase::Utf8_PtrToString(pAuthor);
-        }
-    }				
+        if (pAuthor)
+        _author = SvnBase::Utf8_PtrToString(pAuthor);
+    }
+    }
 
-	return _author;
+    return _author;
 }
 
 String^ SvnBlameEventArgs::MergedAuthor::get()
 {
     if (!_mergedAuthor)
     {
-        if (_mergedRevProps)
-            _mergedAuthor = _mergedRevProps->Contains(SVN_PROP_REVISION_AUTHOR) ? _mergedRevProps[SVN_PROP_REVISION_AUTHOR]->StringValue : nullptr;
-        else if (_merged_rev_props)
-        {
-            const char *pAuthor = svn_prop_get_value(_merged_rev_props, SVN_PROP_REVISION_AUTHOR);
+    if (_mergedRevProps)
+        _mergedAuthor = _mergedRevProps->Contains(SVN_PROP_REVISION_AUTHOR) ? _mergedRevProps[SVN_PROP_REVISION_AUTHOR]->StringValue : nullptr;
+    else if (_merged_rev_props)
+    {
+        const char *pAuthor = svn_prop_get_value(_merged_rev_props, SVN_PROP_REVISION_AUTHOR);
 
-            if (pAuthor)
-                _mergedAuthor = SvnBase::Utf8_PtrToString(pAuthor);
-        }
-    }				
+        if (pAuthor)
+        _mergedAuthor = SvnBase::Utf8_PtrToString(pAuthor);
+    }
+    }
 
-	return _mergedAuthor;
-}
+    return _mergedAuthor;
+}}

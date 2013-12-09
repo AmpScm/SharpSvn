@@ -27,56 +27,56 @@ using namespace SharpSvn::Implementation;
 
 bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream)
 {
-	if (!lookOrigin)
-		throw gcnew ArgumentNullException("lookOrigin");
-	else if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!toStream)
-		throw gcnew ArgumentNullException("toStream");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (!lookOrigin)
+        throw gcnew ArgumentNullException("lookOrigin");
+    else if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!toStream)
+        throw gcnew ArgumentNullException("toStream");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	return Write(lookOrigin, path, toStream, gcnew SvnLookWriteArgs());
+    return Write(lookOrigin, path, toStream, gcnew SvnLookWriteArgs());
 }
 
 
 bool SvnLookClient::Write(SvnLookOrigin^ lookOrigin, String^ path, Stream^ toStream, SvnLookWriteArgs^ args)
 {
-	if (!lookOrigin)
-		throw gcnew ArgumentNullException("lookOrigin");
-	else if (String::IsNullOrEmpty(path))
-		throw gcnew ArgumentNullException("path");
-	else if (!toStream)
-		throw gcnew ArgumentNullException("toStream");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
-	else if (!IsNotUri(path))
-		throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (!lookOrigin)
+        throw gcnew ArgumentNullException("lookOrigin");
+    else if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!toStream)
+        throw gcnew ArgumentNullException("toStream");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
 
-	EnsureState(SvnContextState::ConfigLoaded);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
 
-	svn_fs_root_t* root = nullptr;
-	svn_error_t* r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool);
+    svn_fs_root_t* root = nullptr;
+    svn_error_t* r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool);
 
-	if (r)
-		return args->HandleResult(this, r);
+    if (r)
+        return args->HandleResult(this, r);
 
-	svn_stream_t* fstream;
+    svn_stream_t* fstream;
 
-	if (r = svn_fs_file_contents(&fstream, root, pool.AllocRelpath(path), pool.Handle))
-		return args->HandleResult(this, r);
+    if (r = svn_fs_file_contents(&fstream, root, pool.AllocRelpath(path), pool.Handle))
+        return args->HandleResult(this, r);
 
-	SvnStreamWrapper wrapper(toStream, false, true, %pool);
+    SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
-	r = svn_stream_copy3(
-		fstream,
-		wrapper.Handle,
-		CtxHandle->cancel_func,
-		CtxHandle->cancel_baton,
-		pool.Handle);
+    r = svn_stream_copy3(
+        fstream,
+        wrapper.Handle,
+        CtxHandle->cancel_func,
+        CtxHandle->cancel_baton,
+        pool.Handle);
 
-	return args->HandleResult(this, r);
+    return args->HandleResult(this, r);
 }
 

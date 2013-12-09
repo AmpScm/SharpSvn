@@ -26,45 +26,45 @@ using namespace System::Collections::Generic;
 
 bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, [Out]SvnMergeSourcesCollection^% mergeSources)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
 
-	return GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeSources);
+    return GetSuggestedMergeSources(target, gcnew SvnGetSuggestedMergeSourcesArgs(), mergeSources);
 }
 
 bool SvnClient::GetSuggestedMergeSources(SvnTarget ^target, SvnGetSuggestedMergeSourcesArgs^ args, [Out]SvnMergeSourcesCollection^% mergeSources)
 {
-	if (!target)
-		throw gcnew ArgumentNullException("target");
-	else if (!args)
-		throw gcnew ArgumentNullException("args");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
 
-	EnsureState(SvnContextState::AuthorizationInitialized);
-	AprPool pool(%_pool);
-	ArgsStore store(this, args, %pool);
-	mergeSources = nullptr;
+    EnsureState(SvnContextState::AuthorizationInitialized);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
+    mergeSources = nullptr;
 
-	apr_array_header_t* svnMergeSources = nullptr;
+    apr_array_header_t* svnMergeSources = nullptr;
 
-	svn_error_t* r = svn_client_suggest_merge_sources(
-		&svnMergeSources,
-		target->AllocAsString(%pool),
-		target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
-		CtxHandle,
-		pool.Handle);
+    svn_error_t* r = svn_client_suggest_merge_sources(
+        &svnMergeSources,
+        target->AllocAsString(%pool),
+        target->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
+        CtxHandle,
+        pool.Handle);
 
-	if (!r && svnMergeSources)
-	{
-		SvnMergeSourcesCollection^ sourceList = gcnew SvnMergeSourcesCollection();
+    if (!r && svnMergeSources)
+    {
+        SvnMergeSourcesCollection^ sourceList = gcnew SvnMergeSourcesCollection();
 
-		const char** sources = (const char**)svnMergeSources->elts;
-		for (int i = 0; i < svnMergeSources->nelts; i++)
-		{
-			sourceList->Add(gcnew SvnMergeSource(Utf8_PtrToUri(sources[i], SvnNodeKind::Unknown)));
-		}
+        const char** sources = (const char**)svnMergeSources->elts;
+        for (int i = 0; i < svnMergeSources->nelts; i++)
+        {
+            sourceList->Add(gcnew SvnMergeSource(Utf8_PtrToUri(sources[i], SvnNodeKind::Unknown)));
+        }
 
-		mergeSources = sourceList;
-	}
+        mergeSources = sourceList;
+    }
 
-	return args->HandleResult(this, r, target);
-}
+    return args->HandleResult(this, r, target);
+}}

@@ -18,115 +18,115 @@
 
 namespace SharpSvn {
 
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnMergesMergedArgs : public SvnClientArgs
-	{
-		SvnRevisionPropertyNameCollection^ _retrieveProperties;
-		bool _logChangedPaths;
-		SvnDepth _depth;
-        SvnRevisionRange ^_range;
-	internal:
-		SvnTarget^ _sourceTarget;
-	public:
-		SvnMergesMergedArgs()
-		{
-			_depth = SvnDepth::Infinity;
-            _range = SvnRevisionRange::None;
-		}
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnMergesMergedArgs : public SvnClientArgs
+    {
+        SvnRevisionPropertyNameCollection^ _retrieveProperties;
+        bool _logChangedPaths;
+        SvnDepth _depth;
+    SvnRevisionRange ^_range;
+    internal:
+        SvnTarget^ _sourceTarget;
+    public:
+        SvnMergesMergedArgs()
+        {
+            _depth = SvnDepth::Infinity;
+        _range = SvnRevisionRange::None;
+        }
 
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::MergesMerged;
-			}
-		}
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::MergesMerged;
+            }
+        }
 
-	public:
-		DECLARE_EVENT(SvnMergesMergedEventArgs^, MergesMerged);
+    public:
+        DECLARE_EVENT(SvnMergesMergedEventArgs^, MergesMerged);
 
-	public:
-		[Obsolete("Use .MergesMerged")]
-		event EventHandler<SvnMergesMergedEventArgs^>^ List
-		{
-			void add(EventHandler<SvnMergesMergedEventArgs^>^ value)
-			{
-				MergesMerged += value;
-			}
-			void remove(EventHandler<SvnMergesMergedEventArgs^>^ value)
-			{
-				MergesMerged -= value;
-			}
-		}
+    public:
+        [Obsolete("Use .MergesMerged")]
+        event EventHandler<SvnMergesMergedEventArgs^>^ List
+        {
+            void add(EventHandler<SvnMergesMergedEventArgs^>^ value)
+            {
+                MergesMerged += value;
+            }
+            void remove(EventHandler<SvnMergesMergedEventArgs^>^ value)
+            {
+                MergesMerged -= value;
+            }
+        }
 
-	protected public:
-		virtual void OnMergesMerged(SvnMergesMergedEventArgs^ e)
-		{
-			MergesMerged(this, e);
-		}
+    protected public:
+        virtual void OnMergesMerged(SvnMergesMergedEventArgs^ e)
+        {
+            MergesMerged(this, e);
+        }
 
-	public:
-		/// <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
-		property bool RetrieveChangedPaths
-		{
-			bool get()
-			{
-				return _logChangedPaths;
-			}
-			void set(bool value)
-			{
-				_logChangedPaths = value;
-			}
-		}
+    public:
+        /// <summary>Gets or sets a boolean indicating whether the paths changed in the revision should be provided</summary>
+        property bool RetrieveChangedPaths
+        {
+            bool get()
+            {
+                return _logChangedPaths;
+            }
+            void set(bool value)
+            {
+                _logChangedPaths = value;
+            }
+        }
 
-		/// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
-		property SvnRevisionPropertyNameCollection^ RetrieveProperties
-		{
-			SvnRevisionPropertyNameCollection^ get()
-			{
-				if (!_retrieveProperties)
-					_retrieveProperties = gcnew SvnRevisionPropertyNameCollection(false);
+        /// <summary>Gets the list of properties to retrieve. Only SVN 1.5+ repositories allow adding custom properties to this list</summary>
+        property SvnRevisionPropertyNameCollection^ RetrieveProperties
+        {
+            SvnRevisionPropertyNameCollection^ get()
+            {
+                if (!_retrieveProperties)
+                    _retrieveProperties = gcnew SvnRevisionPropertyNameCollection(false);
 
-				return _retrieveProperties;
-			}
-		}
+                return _retrieveProperties;
+            }
+        }
 
-		property SvnDepth Depth
-		{
-			SvnDepth get()
-			{
-				return _depth;
-			}
-			void set(SvnDepth value)
-			{
-				_depth = EnumVerifier::Verify(value);
-			}
-		}
+        property SvnDepth Depth
+        {
+            SvnDepth get()
+            {
+                return _depth;
+            }
+            void set(SvnDepth value)
+            {
+                _depth = EnumVerifier::Verify(value);
+            }
+        }
 
-        property SvnRevisionRange^ Range
-		{
-			SvnRevisionRange^ get()
-			{
-				return _range;
-			}
-			void set(SvnRevisionRange ^value)
-			{
-				if (!value)
-					_range = SvnRevisionRange::None;
-				else
-					_range = value;
-			}
-		}
+    property SvnRevisionRange^ Range
+        {
+            SvnRevisionRange^ get()
+            {
+                return _range;
+            }
+            void set(SvnRevisionRange ^value)
+            {
+                if (!value)
+                    _range = SvnRevisionRange::None;
+                else
+                    _range = value;
+            }
+        }
 
 
-	internal:
-		property bool RetrievePropertiesUsed
-		{
-			bool get()
-			{
-				return _retrieveProperties != nullptr;
-			}
-		}
-	};
+    internal:
+        property bool RetrievePropertiesUsed
+        {
+            bool get()
+            {
+                return _retrieveProperties != nullptr;
+            }
+        }
+    };
 
 }

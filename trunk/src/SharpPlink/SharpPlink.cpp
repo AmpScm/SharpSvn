@@ -21,33 +21,33 @@
 
 extern "C" {
 
-	extern int main(int argc, char** argv);
+    extern int main(int argc, char** argv);
 };
 
 
 int APIENTRY _tWinMain(HINSTANCE hInstance,
-					   HINSTANCE hPrevInstance,
-					   LPTSTR    lpCmdLine,
-					   int       nCmdShow)
+                                           HINSTANCE hPrevInstance,
+                                           LPTSTR    lpCmdLine,
+                                           int       nCmdShow)
 {
-	UNREFERENCED_PARAMETER(hPrevInstance);
-	UNREFERENCED_PARAMETER(lpCmdLine);
-	int nNwArgv = 0;
-	char** pNwArgv;
-	
-	_set_printf_count_output(true); // Required for disconnect message and HTTP Proxy of plink
+    UNREFERENCED_PARAMETER(hPrevInstance);
+    UNREFERENCED_PARAMETER(lpCmdLine);
+    int nNwArgv = 0;
+    char** pNwArgv;
 
-	// Subversion 1.7+ will pass -q to ssh.. just ignore this
-	pNwArgv = (char**)calloc(__argc+1, sizeof(char**));
+    _set_printf_count_output(true); // Required for disconnect message and HTTP Proxy of plink
 
-	pNwArgv[nNwArgv++] = __argv[0];
+    // Subversion 1.7+ will pass -q to ssh.. just ignore this
+    pNwArgv = (char**)calloc(__argc+1, sizeof(char**));
 
-	for(int i = 1; i < __argc; i++)
-	{
-		if (strcmp(__argv[i], "-q"))
-			pNwArgv[nNwArgv++] = __argv[i];
-	}
+    pNwArgv[nNwArgv++] = __argv[0];
 
-	return main(nNwArgv, pNwArgv);
+    for(int i = 1; i < __argc; i++)
+    {
+        if (strcmp(__argv[i], "-q"))
+            pNwArgv[nNwArgv++] = __argv[i];
+    }
+
+    return main(nNwArgv, pNwArgv);
 }
 

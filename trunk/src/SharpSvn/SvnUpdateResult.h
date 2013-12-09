@@ -15,109 +15,109 @@
 #pragma once
 
 namespace SharpSvn {
-	using namespace SharpSvn::Implementation;
-	using System::Collections::Generic::ICollection;
-	using System::Collections::Generic::IList;
-	using System::Collections::Generic::IEnumerator;
+    using namespace SharpSvn::Implementation;
+    using System::Collections::Generic::ICollection;
+    using System::Collections::Generic::IList;
+    using System::Collections::Generic::IEnumerator;
 
-	public ref class SvnUpdateResult sealed : public SvnCommandResult
-	{
-		initonly __int64 _revision;
-		initonly IDictionary<String^,SvnUpdateResult^>^ _resultMap;
-	private:
-		SvnUpdateResult(__int64 revision)
-		{
-			if (revision < 0)
-				revision = -1;
+    public ref class SvnUpdateResult sealed : public SvnCommandResult
+    {
+        initonly __int64 _revision;
+        initonly IDictionary<String^,SvnUpdateResult^>^ _resultMap;
+    private:
+        SvnUpdateResult(__int64 revision)
+        {
+            if (revision < 0)
+                revision = -1;
 
-			_revision = revision;
-		}
+            _revision = revision;
+        }
 
-	public:
-		SvnUpdateResult(IDictionary<String^, SvnUpdateResult^>^ resultMap, __int64 revision)
-		{
-			if (!resultMap)
-				throw gcnew ArgumentNullException("resultMap");
-			if (revision < 0)
-				revision = -1;
+    public:
+        SvnUpdateResult(IDictionary<String^, SvnUpdateResult^>^ resultMap, __int64 revision)
+        {
+            if (!resultMap)
+                throw gcnew ArgumentNullException("resultMap");
+            if (revision < 0)
+                revision = -1;
 
-			_revision = revision;
-			_resultMap = resultMap;
-		}
+            _revision = revision;
+            _resultMap = resultMap;
+        }
 
-	internal:
-		static SvnUpdateResult^ Create(SvnClient^ client, SvnClientArgs^ args, __int64 revision)
-		{
-			if (!client)
-				throw gcnew ArgumentNullException("client");
-			else if (!args)
-				throw gcnew ArgumentNullException("args");
+    internal:
+        static SvnUpdateResult^ Create(SvnClient^ client, SvnClientArgs^ args, __int64 revision)
+        {
+            if (!client)
+                throw gcnew ArgumentNullException("client");
+            else if (!args)
+                throw gcnew ArgumentNullException("args");
 
-			return gcnew SvnUpdateResult(revision);
-		}
+            return gcnew SvnUpdateResult(revision);
+        }
 
-	internal:
-		SvnUpdateResult(ICollection<String^>^ paths, ICollection<__int64>^ revisions, __int64 revision)
-		{
-			if (!paths)
-				throw gcnew ArgumentNullException("paths");
-			else if (!revisions)
-				throw gcnew ArgumentNullException("revisions");
-			else if (paths->Count != revisions->Count)
-				throw gcnew ArgumentException(SharpSvnStrings::PathCountDoesNotMatchRevisions, "paths");
+    internal:
+        SvnUpdateResult(ICollection<String^>^ paths, ICollection<__int64>^ revisions, __int64 revision)
+        {
+            if (!paths)
+                throw gcnew ArgumentNullException("paths");
+            else if (!revisions)
+                throw gcnew ArgumentNullException("revisions");
+            else if (paths->Count != revisions->Count)
+                throw gcnew ArgumentException(SharpSvnStrings::PathCountDoesNotMatchRevisions, "paths");
 
-			if (revision < 0)
-				revision = -1;
+            if (revision < 0)
+                revision = -1;
 
-			_revision = revision;
-			_resultMap = gcnew System::Collections::Generic::SortedList<String^, SvnUpdateResult^>();
-			IEnumerator<String^>^ ePath = paths->GetEnumerator();
-			IEnumerator<__int64>^ eRev = revisions->GetEnumerator();
+            _revision = revision;
+            _resultMap = gcnew System::Collections::Generic::SortedList<String^, SvnUpdateResult^>();
+            IEnumerator<String^>^ ePath = paths->GetEnumerator();
+            IEnumerator<__int64>^ eRev = revisions->GetEnumerator();
 
-			while (ePath->MoveNext() && eRev->MoveNext())
-			{
-				if (!(_resultMap->ContainsKey(ePath->Current)))
-					_resultMap->Add(ePath->Current, gcnew SvnUpdateResult(eRev->Current));
-			}
-		}
+            while (ePath->MoveNext() && eRev->MoveNext())
+            {
+                if (!(_resultMap->ContainsKey(ePath->Current)))
+                    _resultMap->Add(ePath->Current, gcnew SvnUpdateResult(eRev->Current));
+            }
+        }
 
-	public:
-		property bool HasRevision
-		{
-			bool get()
-			{
-				return _revision >= 0;
-			}
-		}
+    public:
+        property bool HasRevision
+        {
+            bool get()
+            {
+                return _revision >= 0;
+            }
+        }
 
-		property __int64 Revision
-		{
-			__int64 get()
-			{
-				return _revision;
-			}
-		}
+        property __int64 Revision
+        {
+            __int64 get()
+            {
+                return _revision;
+            }
+        }
 
-		property bool HasResultMap
-		{
-			bool get()
-			{
-				return (_resultMap != nullptr);
-			}
-		}
+        property bool HasResultMap
+        {
+            bool get()
+            {
+                return (_resultMap != nullptr);
+            }
+        }
 
-		property IDictionary<String^,SvnUpdateResult^>^ ResultMap
-		{
-			IDictionary<String^,SvnUpdateResult^>^ get()
-			{
-				return _resultMap;
-			}
-		}
+        property IDictionary<String^,SvnUpdateResult^>^ ResultMap
+        {
+            IDictionary<String^,SvnUpdateResult^>^ get()
+            {
+                return _resultMap;
+            }
+        }
 
-		virtual int GetHashCode() override
-		{
-			return Revision.GetHashCode();
-		}
-	};
+        virtual int GetHashCode() override
+        {
+            return Revision.GetHashCode();
+        }
+    };
 
 }

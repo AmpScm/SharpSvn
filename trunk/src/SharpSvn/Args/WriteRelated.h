@@ -16,16 +16,16 @@
 
 namespace SharpSvn {
 
-	public ref class SvnWriteRelatedArgs : public SvnClientArgs
-	{
+    public ref class SvnWriteRelatedArgs : public SvnClientArgs
+    {
 
-	public:
-		virtual property SvnCommandType CommandType
-		{
-			virtual SvnCommandType get() override sealed
-			{
-				return SvnCommandType::WriteRelated;
-			}
-		}
-	};
-}
+    public:
+        virtual property SvnCommandType CommandType
+        {
+            virtual SvnCommandType get() override sealed
+            {
+                return SvnCommandType::WriteRelated;
+            }
+        }
+    };
+}}

@@ -18,45 +18,45 @@
 
 namespace SharpSvn {
 
-	public ref class SvnRepositoryNotifyEventArgs sealed : public SvnEventArgs
-	{
-	private:
-		const svn_repos_notify_t *_notify;
-		AprPool^ _pool;
-		initonly SvnRepositoryNotifyAction _action;
+    public ref class SvnRepositoryNotifyEventArgs sealed : public SvnEventArgs
+    {
+    private:
+        const svn_repos_notify_t *_notify;
+        AprPool^ _pool;
+        initonly SvnRepositoryNotifyAction _action;
 
-	internal:
-		SvnRepositoryNotifyEventArgs(const svn_repos_notify_t *notify, AprPool^ pool)
-		{
-			_notify = notify;
-			_pool = pool;
-			_action = (SvnRepositoryNotifyAction)notify->action;
-		}
+    internal:
+        SvnRepositoryNotifyEventArgs(const svn_repos_notify_t *notify, AprPool^ pool)
+        {
+            _notify = notify;
+            _pool = pool;
+            _action = (SvnRepositoryNotifyAction)notify->action;
+        }
 
-	public:
-		property SvnRepositoryNotifyAction Action
-		{
-			SvnRepositoryNotifyAction get()
-			{
-				return _action;
-			}
-		}
+    public:
+        property SvnRepositoryNotifyAction Action
+        {
+            SvnRepositoryNotifyAction get()
+            {
+                return _action;
+            }
+        }
 
-	protected public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					// GC::KeepAlive()
-				}
-			}
-			finally
-			{
-				_notify = nullptr;
-				_pool = nullptr;
-			}
-		}
-	};
-}
+    protected public:
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    // GC::KeepAlive()
+                }
+            }
+            finally
+            {
+                _notify = nullptr;
+                _pool = nullptr;
+            }
+        }
+    };
+}}

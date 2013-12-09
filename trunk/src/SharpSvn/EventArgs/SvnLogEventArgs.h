@@ -18,446 +18,446 @@
 
 namespace SharpSvn {
 
-	public ref class SvnChangeItem sealed
-	{
-		const svn_log_changed_path2_t* _changed_path;
-		initonly String^ _path;
-		initonly SvnChangeAction _action;
-		String^ _copyFromPath;
-		initonly __int64 _copyFromRevision;
-		initonly SvnNodeKind _nodeKind;
-		Uri^ _repositoryPath;
-		initonly System::Nullable<bool> _textModified;
-		initonly System::Nullable<bool> _propsModified;
-		
-	internal:
-		SvnChangeItem(String^ path, const svn_log_changed_path2_t* changed_path)
-		{
-			if (String::IsNullOrEmpty(path))
-				throw gcnew ArgumentNullException("path");
-			else if (!changed_path)
-				throw gcnew ArgumentNullException("changed_path");
+    public ref class SvnChangeItem sealed
+    {
+        const svn_log_changed_path2_t* _changed_path;
+        initonly String^ _path;
+        initonly SvnChangeAction _action;
+        String^ _copyFromPath;
+        initonly __int64 _copyFromRevision;
+        initonly SvnNodeKind _nodeKind;
+        Uri^ _repositoryPath;
+        initonly System::Nullable<bool> _textModified;
+        initonly System::Nullable<bool> _propsModified;
 
-			_changed_path = changed_path;
-			_path = path;
-			_action = (SvnChangeAction)changed_path->action;
-			_copyFromPath = SvnBase::Utf8_PtrToString(changed_path->copyfrom_path);
-			_copyFromRevision = changed_path->copyfrom_path ? changed_path->copyfrom_rev : -1;
-			_nodeKind = (SvnNodeKind)changed_path->node_kind;
+    internal:
+        SvnChangeItem(String^ path, const svn_log_changed_path2_t* changed_path)
+        {
+            if (String::IsNullOrEmpty(path))
+                throw gcnew ArgumentNullException("path");
+            else if (!changed_path)
+                throw gcnew ArgumentNullException("changed_path");
 
-			switch (changed_path->text_modified)
-			{
-				case svn_tristate_false:
-					_textModified = false;
-					break;
-				case svn_tristate_true:
-					_textModified = true;
-					break;
-				default:
-					;
-			}
+            _changed_path = changed_path;
+            _path = path;
+            _action = (SvnChangeAction)changed_path->action;
+            _copyFromPath = SvnBase::Utf8_PtrToString(changed_path->copyfrom_path);
+            _copyFromRevision = changed_path->copyfrom_path ? changed_path->copyfrom_rev : -1;
+            _nodeKind = (SvnNodeKind)changed_path->node_kind;
 
-			switch (changed_path->props_modified)
-			{
-			case svn_tristate_false:
-				_propsModified = false;
-				break;
-			case svn_tristate_true:
-				_propsModified = true;
-				break;
-			default:
-				;
-			}
-		}
+            switch (changed_path->text_modified)
+            {
+                case svn_tristate_false:
+                    _textModified = false;
+                    break;
+                case svn_tristate_true:
+                    _textModified = true;
+                    break;
+                default:
+                    ;
+            }
 
-	public:
-		/// <summary>Gets the path inside rooted at the repository root (including initial '/')</summary>
-		property String^ Path
-		{
-			String^ get()
-			{
-				return _path;
-			}
-		}
+            switch (changed_path->props_modified)
+            {
+            case svn_tristate_false:
+                _propsModified = false;
+                break;
+            case svn_tristate_true:
+                _propsModified = true;
+                break;
+            default:
+                ;
+            }
+        }
 
-		/// <summary>Gets the relative uri of the path inside the repository</summary>
-		/// <remarks>Does not include an initial '/'. Ends with a '/' if <see cref="NodeKind" /> is <see cref="SvnNodeKind::Directory" />.</remarks>
-		property Uri^ RepositoryPath
-		{
-			Uri^ get()
-			{
-				if (!_repositoryPath && _path)
-					Uri::TryCreate(_path->Substring(1) + ((NodeKind == SvnNodeKind::Directory) ? "/" : ""), UriKind::Relative, _repositoryPath);
+    public:
+        /// <summary>Gets the path inside rooted at the repository root (including initial '/')</summary>
+        property String^ Path
+        {
+            String^ get()
+            {
+                return _path;
+            }
+        }
 
-				return _repositoryPath;
-			}
-		}
+        /// <summary>Gets the relative uri of the path inside the repository</summary>
+        /// <remarks>Does not include an initial '/'. Ends with a '/' if <see cref="NodeKind" /> is <see cref="SvnNodeKind::Directory" />.</remarks>
+        property Uri^ RepositoryPath
+        {
+            Uri^ get()
+            {
+                if (!_repositoryPath && _path)
+                    Uri::TryCreate(_path->Substring(1) + ((NodeKind == SvnNodeKind::Directory) ? "/" : ""), UriKind::Relative, _repositoryPath);
 
-		property SvnChangeAction Action
-		{
-			SvnChangeAction get()
-			{
-				return _action;
-			}
-		}
+                return _repositoryPath;
+            }
+        }
 
-		property String^ CopyFromPath
-		{
-			String^ get()
-			{
-				if (!_copyFromPath && _changed_path && _changed_path->copyfrom_path)
-					_copyFromPath = SvnBase::Utf8_PtrToString(_changed_path->copyfrom_path);
+        property SvnChangeAction Action
+        {
+            SvnChangeAction get()
+            {
+                return _action;
+            }
+        }
 
-				return _copyFromPath;
-			}
-		}
+        property String^ CopyFromPath
+        {
+            String^ get()
+            {
+                if (!_copyFromPath && _changed_path && _changed_path->copyfrom_path)
+                    _copyFromPath = SvnBase::Utf8_PtrToString(_changed_path->copyfrom_path);
 
-		property __int64 CopyFromRevision
-		{
-			__int64 get()
-			{
-				return _copyFromRevision;
-			}
-		}
+                return _copyFromPath;
+            }
+        }
 
-		/// <summary>Gets the node kind of the changed path (Only available when committed to a 1.6+ repository)</summary>
-		property SvnNodeKind NodeKind
-		{
-			SvnNodeKind get()
-			{
-				return _nodeKind;
-			}
-		}
+        property __int64 CopyFromRevision
+        {
+            __int64 get()
+            {
+                return _copyFromRevision;
+            }
+        }
 
-		/// <summary>Gets a boolean indicating whether the content of a node is modified in this revision. (Value only available for 1.7+ servers)</summary>
-		property System::Nullable<bool> ContentModified
-		{
-			System::Nullable<bool> get()			
-			{ 
-				return _textModified;
-			}
-		}
+        /// <summary>Gets the node kind of the changed path (Only available when committed to a 1.6+ repository)</summary>
+        property SvnNodeKind NodeKind
+        {
+            SvnNodeKind get()
+            {
+                return _nodeKind;
+            }
+        }
 
-		/// <summary>Gets a boolean indicating whether the versioned properties of a node are modified in this revision. (Value only available for 1.7+ servers)</summary>
-		property System::Nullable<bool> PropertiesModified
-		{
-			System::Nullable<bool> get()			
-			{ 
-				return _propsModified;
-			}
-		}
+        /// <summary>Gets a boolean indicating whether the content of a node is modified in this revision. (Value only available for 1.7+ servers)</summary>
+        property System::Nullable<bool> ContentModified
+        {
+            System::Nullable<bool> get()
+            {
+                return _textModified;
+            }
+        }
 
-		/// <summary>Serves as a hashcode for the specified type</summary>
-		virtual int GetHashCode() override
-		{
-			return CopyFromRevision.GetHashCode() ^ Path->GetHashCode();
-		}
+        /// <summary>Gets a boolean indicating whether the versioned properties of a node are modified in this revision. (Value only available for 1.7+ servers)</summary>
+        property System::Nullable<bool> PropertiesModified
+        {
+            System::Nullable<bool> get()
+            {
+                return _propsModified;
+            }
+        }
 
-		void Detach()
-		{
-			Detach(true);
-		}
+        /// <summary>Serves as a hashcode for the specified type</summary>
+        virtual int GetHashCode() override
+        {
+            return CopyFromRevision.GetHashCode() ^ Path->GetHashCode();
+        }
 
-	protected public:
-		virtual void Detach(bool keepProperties)
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					GC::KeepAlive(CopyFromPath);
-				}
-			}
-			finally
-			{
-				_changed_path = nullptr;
-			}
-		}
-	};
+        void Detach()
+        {
+            Detach(true);
+        }
 
-	namespace Implementation {
-		public ref class SvnChangeItemCollection sealed : System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>
-		{
-		internal:
-			SvnChangeItemCollection()
-			{}
-		protected:
-			virtual String^ GetKeyForItem(SvnChangeItem^ item) override
-			{
-				if (!item)
-					throw gcnew ArgumentNullException("item");
+    protected public:
+        virtual void Detach(bool keepProperties)
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    GC::KeepAlive(CopyFromPath);
+                }
+            }
+            finally
+            {
+                _changed_path = nullptr;
+            }
+        }
+    };
 
-				return item->Path;
-			}
-		};
-	}
+    namespace Implementation {
+        public ref class SvnChangeItemCollection sealed : System::Collections::ObjectModel::KeyedCollection<String^, SvnChangeItem^>
+        {
+        internal:
+            SvnChangeItemCollection()
+            {}
+        protected:
+            virtual String^ GetKeyForItem(SvnChangeItem^ item) override
+            {
+                if (!item)
+                    throw gcnew ArgumentNullException("item");
 
-	public ref class SvnLoggingEventArgs abstract : public SvnCancelEventArgs
-	{
-		svn_log_entry_t* _entry;
-		AprPool^ _pool;
+                return item->Path;
+            }
+        };
+    }
 
-		String^ _author;
-		initonly DateTime _date;
-		String^ _message;
-		initonly __int64 _revision;
-		initonly bool _nonInheritable;
-		initonly bool _subtractiveMerge;
+    public ref class SvnLoggingEventArgs abstract : public SvnCancelEventArgs
+    {
+        svn_log_entry_t* _entry;
+        AprPool^ _pool;
 
-		const char* _pcAuthor;
-		const char* _pcMessage;
-		SvnPropertyCollection^ _customProperties;
+        String^ _author;
+        initonly DateTime _date;
+        String^ _message;
+        initonly __int64 _revision;
+        initonly bool _nonInheritable;
+        initonly bool _subtractiveMerge;
 
-		SvnChangeItemCollection^ _changedPaths;
-		array<SvnChangeItem^>^ _changeItemsToDetach;
+        const char* _pcAuthor;
+        const char* _pcMessage;
+        SvnPropertyCollection^ _customProperties;
 
-	internal:
-		SvnLoggingEventArgs(svn_log_entry_t *entry, AprPool ^pool)
-		{
-			if (!entry)
-				throw gcnew ArgumentNullException("entry");
-			else if (!pool)
-				throw gcnew ArgumentNullException("pool");
+        SvnChangeItemCollection^ _changedPaths;
+        array<SvnChangeItem^>^ _changeItemsToDetach;
 
-			_entry = entry;
-			_pool = pool;
+    internal:
+        SvnLoggingEventArgs(svn_log_entry_t *entry, AprPool ^pool)
+        {
+            if (!entry)
+                throw gcnew ArgumentNullException("entry");
+            else if (!pool)
+                throw gcnew ArgumentNullException("pool");
 
-			const char* pcAuthor = nullptr;
-			const char* pcDate = nullptr;
-			const char* pcMessage = nullptr;
+            _entry = entry;
+            _pool = pool;
 
-			if (entry->revprops)
-				svn_compat_log_revprops_out(&pcAuthor, &pcDate, &pcMessage, entry->revprops);
+            const char* pcAuthor = nullptr;
+            const char* pcDate = nullptr;
+            const char* pcMessage = nullptr;
 
-			if (pcDate)
-			{
-				apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
-				svn_error_t *err = pcDate ? svn_time_from_cstring(&when, pcDate, pool->Handle) : nullptr;
+            if (entry->revprops)
+                svn_compat_log_revprops_out(&pcAuthor, &pcDate, &pcMessage, entry->revprops);
 
-				if (!err)
-					_date = SvnBase::DateTimeFromAprTime(when);
-				else
-					svn_error_clear(err);
-			}
-			else
-				_date = DateTime::MinValue;
+            if (pcDate)
+            {
+                apr_time_t when = 0; // Documentation: date must be parsable by svn_time_from_cstring()
+                svn_error_t *err = pcDate ? svn_time_from_cstring(&when, pcDate, pool->Handle) : nullptr;
 
-			_revision = entry->revision;
-			_pcAuthor = pcAuthor;
-			_pcMessage = pcMessage;
+                if (!err)
+                    _date = SvnBase::DateTimeFromAprTime(when);
+                else
+                    svn_error_clear(err);
+            }
+            else
+                _date = DateTime::MinValue;
 
-			_nonInheritable = (entry->non_inheritable != FALSE);
-			_subtractiveMerge = (entry->subtractive_merge != FALSE);
-		}
+            _revision = entry->revision;
+            _pcAuthor = pcAuthor;
+            _pcMessage = pcMessage;
 
-	public:
+            _nonInheritable = (entry->non_inheritable != FALSE);
+            _subtractiveMerge = (entry->subtractive_merge != FALSE);
+        }
 
-		property SvnChangeItemCollection^ ChangedPaths
-		{
-			SvnChangeItemCollection^  get()
-			{
-				if (!_changedPaths && _entry && _entry->changed_paths2 && _pool)
-				{
-					_changedPaths = gcnew SvnChangeItemCollection();
+    public:
 
-					for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths2); hi; hi = apr_hash_next(hi))
-					{
-						const char* pKey;
-						apr_ssize_t keyLen;
-						const svn_log_changed_path2_t *pChangeInfo;
+        property SvnChangeItemCollection^ ChangedPaths
+        {
+            SvnChangeItemCollection^  get()
+            {
+                if (!_changedPaths && _entry && _entry->changed_paths2 && _pool)
+                {
+                    _changedPaths = gcnew SvnChangeItemCollection();
 
-						apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
+                    for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths2); hi; hi = apr_hash_next(hi))
+                    {
+                        const char* pKey;
+                        apr_ssize_t keyLen;
+                        const svn_log_changed_path2_t *pChangeInfo;
 
-						SvnChangeItem^ ci = gcnew SvnChangeItem(
-							SvnBase::Utf8_PtrToString(pKey, (int)keyLen),
-							pChangeInfo);
+                        apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
 
-						_changedPaths->Add(ci);
-					}
+                        SvnChangeItem^ ci = gcnew SvnChangeItem(
+                            SvnBase::Utf8_PtrToString(pKey, (int)keyLen),
+                            pChangeInfo);
 
-					if (_changedPaths->Count)
-					{
-						_changeItemsToDetach = gcnew array<SvnChangeItem^>(_changedPaths->Count);
-						_changedPaths->CopyTo(_changeItemsToDetach, 0);
-					}
-				}
+                        _changedPaths->Add(ci);
+                    }
 
-				return _changedPaths;
-			}
-		}
+                    if (_changedPaths->Count)
+                    {
+                        _changeItemsToDetach = gcnew array<SvnChangeItem^>(_changedPaths->Count);
+                        _changedPaths->CopyTo(_changeItemsToDetach, 0);
+                    }
+                }
 
-		/// <summary>Gets the list of custom properties retrieved with the log</summary>
-		/// <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
-		property SvnPropertyCollection^ RevisionProperties
-		{
-			SvnPropertyCollection^ get()
-			{
-				if (!_customProperties && _entry && _entry->revprops && _pool)
-				{
-					_customProperties = SvnBase::CreatePropertyDictionary(_entry->revprops, _pool);
-				}
-				return _customProperties;
-			}
-		}
+                return _changedPaths;
+            }
+        }
 
-		[Obsolete("Use .RevisionProperties")]
-		property SvnPropertyCollection^ CustomProperties
-		{
-			SvnPropertyCollection^ get()
-			{
-				return RevisionProperties;
-			}
-		}
+        /// <summary>Gets the list of custom properties retrieved with the log</summary>
+        /// <remarks>Properties must be listed in SvnLogArgs.RetrieveProperties to be available here</remarks>
+        property SvnPropertyCollection^ RevisionProperties
+        {
+            SvnPropertyCollection^ get()
+            {
+                if (!_customProperties && _entry && _entry->revprops && _pool)
+                {
+                    _customProperties = SvnBase::CreatePropertyDictionary(_entry->revprops, _pool);
+                }
+                return _customProperties;
+            }
+        }
 
-		property __int64 Revision
-		{
-			__int64 get()
-			{
-				return _revision;
-			}
-		}
+        [Obsolete("Use .RevisionProperties")]
+        property SvnPropertyCollection^ CustomProperties
+        {
+            SvnPropertyCollection^ get()
+            {
+                return RevisionProperties;
+            }
+        }
 
-		property String^ Author
-		{
-			String^ get()
-			{
-				if (!_author && _pcAuthor)
-					_author = SvnBase::Utf8_PtrToString(_pcAuthor);
+        property __int64 Revision
+        {
+            __int64 get()
+            {
+                return _revision;
+            }
+        }
 
-				return _author;
-			}
-		}
+        property String^ Author
+        {
+            String^ get()
+            {
+                if (!_author && _pcAuthor)
+                    _author = SvnBase::Utf8_PtrToString(_pcAuthor);
 
-		property DateTime Time
-		{
-			DateTime get()
-			{
+                return _author;
+            }
+        }
 
-				return _date;
-			}
-		}
+        property DateTime Time
+        {
+            DateTime get()
+            {
 
-		property String^ LogMessage
-		{
-			String^ get()
-			{
-				if (!_message && _pcMessage)
-				{
-					_message = SvnBase::Utf8_PtrToString(_pcMessage);
+                return _date;
+            }
+        }
 
-					if (_message)
-					{
-						// Subversion log messages always use \n newlines
-						_message = _message->Replace("\n", Environment::NewLine);
-					}
-				}
+        property String^ LogMessage
+        {
+            String^ get()
+            {
+                if (!_message && _pcMessage)
+                {
+                    _message = SvnBase::Utf8_PtrToString(_pcMessage);
 
-				return _message;
-			}
-		}
+                    if (_message)
+                    {
+                        // Subversion log messages always use \n newlines
+                        _message = _message->Replace("\n", Environment::NewLine);
+                    }
+                }
 
-        /// <summary>MergeInfo only: Not inheritable</summary>
-		property bool NotInheritable
-		{
-			bool get()
-			{
-				return _nonInheritable;
-			}
-		}
+                return _message;
+            }
+        }
 
-		/// <summary>MergeInfo only: Subtractive merge</summary>
-		property bool SubtractiveMerge
-		{
-			bool get()
-			{
-				return _subtractiveMerge;
-			}
-		}
+    /// <summary>MergeInfo only: Not inheritable</summary>
+        property bool NotInheritable
+        {
+            bool get()
+            {
+                return _nonInheritable;
+            }
+        }
 
-
-		/// <summary>Serves as a hashcode for the specified type</summary>
-		virtual int GetHashCode() override
-		{
-			return Revision.GetHashCode();
-		}
-
-	protected public:
-		virtual void Detach(bool keepProperties) override
-		{
-			try
-			{
-				if (keepProperties)
-				{
-					// Use all properties to get them cached in .Net memory
-					GC::KeepAlive(ChangedPaths);
-					GC::KeepAlive(Author);
-					GC::KeepAlive(LogMessage);
-					GC::KeepAlive(RevisionProperties);
-				}
-
-				if (_changeItemsToDetach)
-				{
-					for each (SvnChangeItem^ i in _changeItemsToDetach)
-					{
-						i->Detach(keepProperties);
-					}
-				}
-			}
-			finally
-			{
-				_entry = nullptr;
-				_pool = nullptr;
-				_pcMessage = nullptr;
-				_pcAuthor = nullptr;
-				_changeItemsToDetach = nullptr;
-				__super::Detach(keepProperties);
-			}
-		}
-	};
+        /// <summary>MergeInfo only: Subtractive merge</summary>
+        property bool SubtractiveMerge
+        {
+            bool get()
+            {
+                return _subtractiveMerge;
+            }
+        }
 
 
-	public ref class SvnLogEventArgs : public SvnLoggingEventArgs
-	{
-		initonly Uri^ _logOrigin;
-		initonly bool _hasChildren;
-		initonly int _mergeLevel;
+        /// <summary>Serves as a hashcode for the specified type</summary>
+        virtual int GetHashCode() override
+        {
+            return Revision.GetHashCode();
+        }
 
-	internal:
-		SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, Uri^ logOrigin, AprPool ^pool)
-			: SvnLoggingEventArgs(entry, pool)
-		{
-			_hasChildren = entry->has_children ? true : false;
-			_mergeLevel = mergeLevel;
-			_logOrigin = logOrigin;
-		}
+    protected public:
+        virtual void Detach(bool keepProperties) override
+        {
+            try
+            {
+                if (keepProperties)
+                {
+                    // Use all properties to get them cached in .Net memory
+                    GC::KeepAlive(ChangedPaths);
+                    GC::KeepAlive(Author);
+                    GC::KeepAlive(LogMessage);
+                    GC::KeepAlive(RevisionProperties);
+                }
 
-	public:
-				/// <summary>Gets the log origin SharpSvn used for retrieving the log</summary>
-		property Uri^ LogOrigin
-		{
-			Uri^ get()
-			{
-				return _logOrigin;
-			}
-		}
+                if (_changeItemsToDetach)
+                {
+                    for each (SvnChangeItem^ i in _changeItemsToDetach)
+                    {
+                        i->Detach(keepProperties);
+                    }
+                }
+            }
+            finally
+            {
+                _entry = nullptr;
+                _pool = nullptr;
+                _pcMessage = nullptr;
+                _pcAuthor = nullptr;
+                _changeItemsToDetach = nullptr;
+                __super::Detach(keepProperties);
+            }
+        }
+    };
 
-		/// <summary>Set to true when the following items are merged-child items of this item.</summary>
-		property bool HasChildren
-		{
-			bool get()
-			{
-				return _hasChildren;
-			}
-		}
 
-		/// <summary>Gets the nesting level of the logs via merges</summary>
-		property int MergeLogNestingLevel
-		{
-			int get()
-			{
-				return _mergeLevel;
-			}
-		}
-	};
+    public ref class SvnLogEventArgs : public SvnLoggingEventArgs
+    {
+        initonly Uri^ _logOrigin;
+        initonly bool _hasChildren;
+        initonly int _mergeLevel;
+
+    internal:
+        SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, Uri^ logOrigin, AprPool ^pool)
+            : SvnLoggingEventArgs(entry, pool)
+        {
+            _hasChildren = entry->has_children ? true : false;
+            _mergeLevel = mergeLevel;
+            _logOrigin = logOrigin;
+        }
+
+    public:
+                /// <summary>Gets the log origin SharpSvn used for retrieving the log</summary>
+        property Uri^ LogOrigin
+        {
+            Uri^ get()
+            {
+                return _logOrigin;
+            }
+        }
+
+        /// <summary>Set to true when the following items are merged-child items of this item.</summary>
+        property bool HasChildren
+        {
+            bool get()
+            {
+                return _hasChildren;
+            }
+        }
+
+        /// <summary>Gets the nesting level of the logs via merges</summary>
+        property int MergeLogNestingLevel
+        {
+            int get()
+            {
+                return _mergeLevel;
+            }
+        }
+    };
 
 }

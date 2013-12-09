@@ -1,33 +1,33 @@
 #pragma once
 
 namespace SharpSvn {
-	namespace Implementation {
+    namespace Implementation {
 
-		using System::Collections::Generic::Stack;
+        using System::Collections::Generic::Stack;
 
-        public ref class SvnFsOperationRetryOverride : public SvnBase, System::IDisposable
-		{
-			initonly int _maxRetries;
-			initonly bool _intOnly;
-			[ThreadStatic]
-			static Stack<SvnFsOperationRetryOverride^>^ _handlers;
-			Stack<SvnFsOperationRetryOverride^>^ _onStack;
+    public ref class SvnFsOperationRetryOverride : public SvnBase, System::IDisposable
+        {
+            initonly int _maxRetries;
+            initonly bool _intOnly;
+            [ThreadStatic]
+            static Stack<SvnFsOperationRetryOverride^>^ _handlers;
+            Stack<SvnFsOperationRetryOverride^>^ _onStack;
 
-		private:
-			static SvnFsOperationRetryOverride();
-			~SvnFsOperationRetryOverride();
+        private:
+            static SvnFsOperationRetryOverride();
+            ~SvnFsOperationRetryOverride();
 
-		public:
-			SvnFsOperationRetryOverride(int maxRetries);
+        public:
+            SvnFsOperationRetryOverride(int maxRetries);
 
-		private:
-			bool OnRetryLoopInvocation(int nr, int error, int osError, const char *expr);
+        private:
+            bool OnRetryLoopInvocation(int nr, int error, int osError, const char *expr);
 
-		protected:
-			virtual bool OnRetryLoopInvocation(int nr, SharpSvn::SvnAprErrorCode aprError, SharpSvn::SvnWindowsErrorCode windowsError, String ^expr);
+        protected:
+            virtual bool OnRetryLoopInvocation(int nr, SharpSvn::SvnAprErrorCode aprError, SharpSvn::SvnWindowsErrorCode windowsError, String ^expr);
 
-		internal:
-			static int RetryLoopHandler(int n, int err, int os_err, const char *expr);
-		};
-	}
-}
+        internal:
+            static int RetryLoopHandler(int n, int err, int os_err, const char *expr);
+        };
+    }
+}}

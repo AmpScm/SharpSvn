@@ -17,257 +17,257 @@
 #include "SvnTarget.h"
 
 namespace SharpSvn {
-	using namespace System;
+    using namespace System;
 
-	public ref class SvnUriTarget sealed : public SvnTarget
-	{
-		initonly Uri^ _uri;
+    public ref class SvnUriTarget sealed : public SvnTarget
+    {
+        initonly Uri^ _uri;
 
-	public:
-		SvnUriTarget (Uri^ uri, SvnRevision^ revision)
-			: SvnTarget(revision)
-		{
-			if (!uri)
-				throw gcnew ArgumentNullException("uri");
-			else if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+    public:
+        SvnUriTarget (Uri^ uri, SvnRevision^ revision)
+            : SvnTarget(revision)
+        {
+            if (!uri)
+                throw gcnew ArgumentNullException("uri");
+            else if (!uri->IsAbsoluteUri)
+                throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+            else if (!SvnBase::IsValidReposUri(uri))
+                throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-			_uri = CanonicalizeUri(uri);
-		}
+            _uri = CanonicalizeUri(uri);
+        }
 
-		SvnUriTarget (Uri^ uri)
-			: SvnTarget(SvnRevision::None)
-		{
-			if (!uri)
-				throw gcnew ArgumentNullException("uri");
-			else if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+        SvnUriTarget (Uri^ uri)
+            : SvnTarget(SvnRevision::None)
+        {
+            if (!uri)
+                throw gcnew ArgumentNullException("uri");
+            else if (!uri->IsAbsoluteUri)
+                throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+            else if (!SvnBase::IsValidReposUri(uri))
+                throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-			_uri = CanonicalizeUri(uri);
-		}
+            _uri = CanonicalizeUri(uri);
+        }
 
-		SvnUriTarget (String^ uriString, SvnRevision^ revision)
-			: SvnTarget(revision)
-		{
-			if (String::IsNullOrEmpty(uriString))
-				throw gcnew ArgumentNullException("uriString");
+        SvnUriTarget (String^ uriString, SvnRevision^ revision)
+            : SvnTarget(revision)
+        {
+            if (String::IsNullOrEmpty(uriString))
+                throw gcnew ArgumentNullException("uriString");
 
-			System::Uri^ uri = gcnew System::Uri(uriString);
+            System::Uri^ uri = gcnew System::Uri(uriString);
 
-			if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uriString");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uriString");
+            if (!uri->IsAbsoluteUri)
+                throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uriString");
+            else if (!SvnBase::IsValidReposUri(uri))
+                throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uriString");
 
-			_uri = CanonicalizeUri(uri);
-		}
+            _uri = CanonicalizeUri(uri);
+        }
 
-		SvnUriTarget (String^ uriString)
-			: SvnTarget(SvnRevision::None)
-		{
-			if (String::IsNullOrEmpty(uriString))
-				throw gcnew ArgumentNullException("uriString");
+        SvnUriTarget (String^ uriString)
+            : SvnTarget(SvnRevision::None)
+        {
+            if (String::IsNullOrEmpty(uriString))
+                throw gcnew ArgumentNullException("uriString");
 
-			System::Uri^ uri = gcnew System::Uri(uriString);
+            System::Uri^ uri = gcnew System::Uri(uriString);
 
-			if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uriString");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uriString");
+            if (!uri->IsAbsoluteUri)
+                throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uriString");
+            else if (!SvnBase::IsValidReposUri(uri))
+                throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uriString");
 
-			_uri = CanonicalizeUri(uri);
-		}
+            _uri = CanonicalizeUri(uri);
+        }
 
 
-		SvnUriTarget (Uri^ uri, __int64 revision)
-			: SvnTarget(gcnew SvnRevision(revision))
-		{
-			if (!uri)
-				throw gcnew ArgumentNullException("uri");
-			else if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+        SvnUriTarget (Uri^ uri, __int64 revision)
+            : SvnTarget(gcnew SvnRevision(revision))
+        {
+            if (!uri)
+                throw gcnew ArgumentNullException("uri");
+            else if (!uri->IsAbsoluteUri)
+                throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+            else if (!SvnBase::IsValidReposUri(uri))
+                throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-			_uri = CanonicalizeUri(uri);
-		}
+            _uri = CanonicalizeUri(uri);
+        }
 
-		SvnUriTarget (Uri^ uri, DateTime date)
-			: SvnTarget(gcnew SvnRevision(date))
-		{
-			if (!uri)
-				throw gcnew ArgumentNullException("uri");
-			else if (!uri->IsAbsoluteUri)
-				throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
-			else if (!SvnBase::IsValidReposUri(uri))
-				throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
+        SvnUriTarget (Uri^ uri, DateTime date)
+            : SvnTarget(gcnew SvnRevision(date))
+        {
+            if (!uri)
+                throw gcnew ArgumentNullException("uri");
+            else if (!uri->IsAbsoluteUri)
+                throw gcnew ArgumentException(SharpSvnStrings::UriIsNotAbsolute, "uri");
+            else if (!SvnBase::IsValidReposUri(uri))
+                throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "uri");
 
-			_uri = CanonicalizeUri(uri);
-		}
+            _uri = CanonicalizeUri(uri);
+        }
 
-		static SvnUriTarget^ FromUri(Uri^ value)
-		{
-			if (!value)
-				throw gcnew ArgumentNullException("value");
+        static SvnUriTarget^ FromUri(Uri^ value)
+        {
+            if (!value)
+                throw gcnew ArgumentNullException("value");
 
-			return gcnew SvnUriTarget(value);
-		}
+            return gcnew SvnUriTarget(value);
+        }
 
-		static SvnUriTarget^ FromString(String^ value);
-		static SvnUriTarget^ FromString(String^ value, bool allowOperationalRevision);
+        static SvnUriTarget^ FromString(String^ value);
+        static SvnUriTarget^ FromString(String^ value, bool allowOperationalRevision);
 
-		static operator SvnUriTarget^(Uri^ value)				{ return value ? FromUri(value) : nullptr; }
-		static explicit operator SvnUriTarget^(String^ value)	{ return value ? FromString(value) : nullptr; }
-		static operator SvnUriTarget^(ISvnOrigin^ origin)		{ return origin ? gcnew SvnUriTarget(origin->Uri, origin->Target->Revision) : nullptr; }
+        static operator SvnUriTarget^(Uri^ value)                                       { return value ? FromUri(value) : nullptr; }
+        static explicit operator SvnUriTarget^(String^ value)           { return value ? FromString(value) : nullptr; }
+        static operator SvnUriTarget^(ISvnOrigin^ origin)                       { return origin ? gcnew SvnUriTarget(origin->Uri, origin->Target->Revision) : nullptr; }
 
-		property Uri^ Uri
-		{
-			System::Uri^ get()
-			{
-				return _uri;
-			}
-		}
+        property Uri^ Uri
+        {
+            System::Uri^ get()
+            {
+                return _uri;
+            }
+        }
 
-		property String^ TargetName
-		{
-			virtual String^ get() override
-			{
-				return SvnBase::UriToString(_uri);
-			}
-		}
+        property String^ TargetName
+        {
+            virtual String^ get() override
+            {
+                return SvnBase::UriToString(_uri);
+            }
+        }
 
-		property String^ FileName
-		{
-			virtual String^ get() override
-			{
-				return SvnTools::GetFileName(_uri);
-			}
-		}
+        property String^ FileName
+        {
+            virtual String^ get() override
+            {
+                return SvnTools::GetFileName(_uri);
+            }
+        }
 
-	internal:
-		virtual const char *AllocAsString(AprPool^ pool, bool absolute) override
-		{
-			UNUSED_ALWAYS(absolute);
-			return pool->AllocUri(Uri);
-		}
+    internal:
+        virtual const char *AllocAsString(AprPool^ pool, bool absolute) override
+        {
+            UNUSED_ALWAYS(absolute);
+            return pool->AllocUri(Uri);
+        }
 
-	public:
+    public:
 
-		static bool TryParse(String^ path, [Out] SvnUriTarget^% pegUri)
-		{
-			return TryParse(path, false, pegUri);
-		}
+        static bool TryParse(String^ path, [Out] SvnUriTarget^% pegUri)
+        {
+            return TryParse(path, false, pegUri);
+        }
 
-		static bool TryParse(String^ path, bool allowOperationalRevision, [Out] SvnUriTarget^% pegUri)
-		{
-			if (String::IsNullOrEmpty(path))
-				throw gcnew ArgumentNullException("path");
+        static bool TryParse(String^ path, bool allowOperationalRevision, [Out] SvnUriTarget^% pegUri)
+        {
+            if (String::IsNullOrEmpty(path))
+                throw gcnew ArgumentNullException("path");
 
-			AprPool ^pool = gcnew AprPool();
-			try
-			{
-				return TryParse(path, allowOperationalRevision, pegUri, pool);
-			}
-			finally
-			{
-				delete pool;
-			}
-		}
+            AprPool ^pool = gcnew AprPool();
+            try
+            {
+                return TryParse(path, allowOperationalRevision, pegUri, pool);
+            }
+            finally
+            {
+                delete pool;
+            }
+        }
 
-		static ICollection<SvnUriTarget^>^ Map(System::Collections::Generic::IEnumerable<System::Uri^>^ uris);
+        static ICollection<SvnUriTarget^>^ Map(System::Collections::Generic::IEnumerable<System::Uri^>^ uris);
 
-	internal:
-		void VerifyBelowRoot(System::Uri^ repositoryRoot)
-		{
-			// TODO: Throw exception if the current value is not below the repository root
-			UNUSED_ALWAYS(repositoryRoot);
-		}
+    internal:
+        void VerifyBelowRoot(System::Uri^ repositoryRoot)
+        {
+            // TODO: Throw exception if the current value is not below the repository root
+            UNUSED_ALWAYS(repositoryRoot);
+        }
 
-	internal:
-		static bool TryParse(String^ targetString, bool allowOperationalRevision, [Out] SvnUriTarget ^% target, AprPool^ pool);
+    internal:
+        static bool TryParse(String^ targetString, bool allowOperationalRevision, [Out] SvnUriTarget ^% target, AprPool^ pool);
 
-		virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
-	};
+        virtual SvnRevision^ GetSvnRevision(SvnRevision^ fileNoneValue, SvnRevision^ uriNoneValue) override;
+    };
 
-	public ref class SvnUriOrigin sealed : ISvnOrigin
-	{
-		initonly SvnUriTarget^ _target;
-		initonly System::Uri^ _repositoryRoot;
-		initonly SvnNodeKind _nodeKind;
+    public ref class SvnUriOrigin sealed : ISvnOrigin
+    {
+        initonly SvnUriTarget^ _target;
+        initonly System::Uri^ _repositoryRoot;
+        initonly SvnNodeKind _nodeKind;
 
-	public:
-		SvnUriOrigin(SvnUriTarget^ target, Uri^ repositoryRoot)
-		{
-			if (!target)
-				throw gcnew ArgumentNullException("target");
-			else if (!repositoryRoot)
-				throw gcnew ArgumentNullException("repositoryRoot");
+    public:
+        SvnUriOrigin(SvnUriTarget^ target, Uri^ repositoryRoot)
+        {
+            if (!target)
+                throw gcnew ArgumentNullException("target");
+            else if (!repositoryRoot)
+                throw gcnew ArgumentNullException("repositoryRoot");
 
-			_target->VerifyBelowRoot(repositoryRoot);
+            _target->VerifyBelowRoot(repositoryRoot);
 
-			_target = target;
-			_repositoryRoot = repositoryRoot;
-			_nodeKind = SvnNodeKind::Unknown;
-		}
+            _target = target;
+            _repositoryRoot = repositoryRoot;
+            _nodeKind = SvnNodeKind::Unknown;
+        }
 
-		SvnUriOrigin(SvnUriTarget^ target, Uri^ repositoryRoot, SvnNodeKind nodeKind)
-		{
-			if (!target)
-				throw gcnew ArgumentNullException("target");
-			else if (!repositoryRoot)
-				throw gcnew ArgumentNullException("repositoryRoot");
+        SvnUriOrigin(SvnUriTarget^ target, Uri^ repositoryRoot, SvnNodeKind nodeKind)
+        {
+            if (!target)
+                throw gcnew ArgumentNullException("target");
+            else if (!repositoryRoot)
+                throw gcnew ArgumentNullException("repositoryRoot");
 
-			_target->VerifyBelowRoot(repositoryRoot);
+            _target->VerifyBelowRoot(repositoryRoot);
 
-			_target = target;
-			_repositoryRoot = repositoryRoot;
-			_nodeKind = nodeKind;
-		}
+            _target = target;
+            _repositoryRoot = repositoryRoot;
+            _nodeKind = nodeKind;
+        }
 
-	public:
-		property SvnUriTarget^ Target
-		{
-			SvnUriTarget^ get()
-			{
-				return _target;
-			}
-		}
+    public:
+        property SvnUriTarget^ Target
+        {
+            SvnUriTarget^ get()
+            {
+                return _target;
+            }
+        }
 
-		property System::Uri^ Uri
-		{
-			virtual System::Uri^ get() sealed
-			{
-				return _target->Uri;
-			}
-		}
+        property System::Uri^ Uri
+        {
+            virtual System::Uri^ get() sealed
+            {
+                return _target->Uri;
+            }
+        }
 
-		property System::Uri^ RepositoryRoot
-		{
-			virtual System::Uri^ get() sealed
-			{
-				return _repositoryRoot;
-			}
-		}
+        property System::Uri^ RepositoryRoot
+        {
+            virtual System::Uri^ get() sealed
+            {
+                return _repositoryRoot;
+            }
+        }
 
-		property SvnNodeKind NodeKind
-		{
-			virtual SvnNodeKind get() sealed
-			{
-				return _nodeKind;
-			}
-		}
+        property SvnNodeKind NodeKind
+        {
+            virtual SvnNodeKind get() sealed
+            {
+                return _nodeKind;
+            }
+        }
 
-	private:
-		property SvnTarget^ RawTarget
-		{
-			virtual SvnTarget^ get() sealed = ISvnOrigin::Target::get
-			{
-				return _target;
-			}
-		}
-	};
+    private:
+        property SvnTarget^ RawTarget
+        {
+            virtual SvnTarget^ get() sealed = ISvnOrigin::Target::get
+            {
+                return _target;
+            }
+        }
+    };
 }
