@@ -1,4 +1,3 @@
-// $Id$
 //
 // Copyright 2008-2009 The SharpSvn Project
 //
@@ -14,7 +13,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-// $Id$
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Runtime.InteropServices;

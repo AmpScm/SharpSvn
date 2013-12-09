@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/wix/2006/wi tools/wix.xsd">
-  <!-- $Id$ -->
+  <!-- $Id: SharpSvn.wxs 2199 2012-07-25 21:43:23Z rhuijben $ -->
   <Fragment>
     <!-- When referenced installs a Win32 SharpSvn into the directory DIR_SharpSvn -->
     <ComponentGroup Id="LOCAL_SharpSvn_Win32">

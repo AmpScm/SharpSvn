@@ -1,4 +1,3 @@
-// $Id$
 //
 // Copyright 2009 The SharpSvn Project
 //
