@@ -29,15 +29,6 @@
 #include "SvnTools.h"
 
 namespace SharpSvn {
-    ref class SvnCommittingEventArgs;
-    ref class SvnCancelEventArgs;
-    ref class SvnProgressEventArgs;
-    ref class SvnLogEventArgs;
-    ref class SvnMergesEligibleEventArgs;
-    ref class SvnMergesMergedEventArgs;
-    ref class SvnNotifyEventArgs;
-    ref class SvnProcessingEventArgs;
-
     ref class SvnClientArgs;
     ref class SvnClientArgsWithCommit;
     ref class SvnClientArgsWithConflict;
@@ -65,6 +56,7 @@ namespace SharpSvn {
     ref class SvnSetPropertyArgs;
     ref class SvnGetPropertyArgs;
     ref class SvnPropertyListArgs;
+    ref class SvnInheritedPropertyListArgs;
     ref class SvnSetRevisionPropertyArgs;
     ref class SvnGetRevisionPropertyArgs;
     ref class SvnRevisionPropertyListArgs;
@@ -986,6 +978,14 @@ namespace SharpSvn {
         bool GetPropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, [Out] Collection<SvnPropertyListEventArgs^>^% list);
 #pragma endregion
 
+    public:
+        bool InheritedPropertyList(String^ path, EventHandler<SvnInheritedPropertyListEventArgs^>^ handler);
+        bool InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, EventHandler<SvnInheritedPropertyListEventArgs^>^ handler);
+
+        bool GetInheritedPropertyList(String^ path, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% listHandler);
+        bool GetInheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% listHandler);
+
+        bool TryGetInheritedProperty(String^ path, String^ propertyName, [Out] String^% value);
 
     public:
         /////////////////////////////////////////
