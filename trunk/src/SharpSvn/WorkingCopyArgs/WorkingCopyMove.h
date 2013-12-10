@@ -21,6 +21,7 @@ namespace SharpSvn {
     public ref class SvnWorkingCopyMoveArgs : public SvnClientArgs
     {
         bool _metaDataOnly;
+        bool _noMixedRevMove;
     public:
         SvnWorkingCopyMoveArgs()
         {
@@ -44,6 +45,18 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _metaDataOnly = value;
+            }
+        }
+
+        property bool AllowMixedRevisionMove
+        {
+            bool get()
+            {
+                return !_noMixedRevMove;
+            }
+            void set(bool value)
+            {
+                _noMixedRevMove = value;
             }
         }
     };

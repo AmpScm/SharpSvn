@@ -83,11 +83,12 @@ bool SvnWorkingCopyClient::Move(String^ sourcePath, String^ toPath, SvnWorkingCo
     }
     }
 
-    r = svn_wc_move(
+    r = svn_wc__move2(
                 CtxHandle->wc_ctx,
                 pSrc,
                 pDst,
                 args->MetaDataOnly,
+                args->AllowMixedRevisionMove,
                 CtxHandle->cancel_func, CtxHandle->cancel_baton,
                 CtxHandle->notify_func2, CtxHandle->notify_baton2,
                 pool.Handle);
