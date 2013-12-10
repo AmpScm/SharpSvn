@@ -91,7 +91,7 @@ bool SvnClient::GetProperty(SvnTarget^ target, String^ propertyName, SvnGetPrope
     {
         prefix = targetName;
 
-        SVN_HANDLE(svn_dirent_get_absolute(&targetName, prefix, pool.Handle));
+        targetName = target->AllocAsString(%pool, true);
     }
 
     svn_error_t *r = svn_client_propget5(
