@@ -33,9 +33,11 @@ bool SvnClient::PropertyList(SvnTarget^ target, EventHandler<SvnPropertyListEven
     return PropertyList(target, gcnew SvnPropertyListArgs(), listHandler);
 }
 
-static svn_error_t *svnclient_property_list_handler(void *baton, const char *path, apr_hash_t *prop_hash, apr_pool_t *pool)
+static svn_error_t *svnclient_property_list_handler(void *baton, const char *path, apr_hash_t *prop_hash, apr_array_header_t *inherited_props, apr_pool_t *pool)
 {
     SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
+
+    UNUSED_ALWAYS(inherited_props);
 
     SvnPropertyListArgs^ args = dynamic_cast<SvnPropertyListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
     AprPool aprPool(pool, false);
@@ -87,12 +89,13 @@ bool SvnClient::PropertyList(SvnTarget^ target, SvnPropertyListArgs^ args, Event
         svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
         svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
-        svn_error_t* r = svn_client_proplist3(
+        svn_error_t* r = svn_client_proplist4(
             target->AllocAsString(%pool),
             &pegrev,
             &rev,
             (svn_depth_t)args->Depth,
             CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+            FALSE /* inherited props */,
             svnclient_property_list_handler,
             (void*)_clientBaton->Handle,
             CtxHandle,
