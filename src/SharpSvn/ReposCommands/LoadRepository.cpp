@@ -28,7 +28,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from)
     if (String::IsNullOrEmpty(repositoryPath))
         throw gcnew ArgumentNullException("repositoryPath");
     else if (!IsNotUri(repositoryPath))
-        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
     else if (!from)
         throw gcnew ArgumentNullException("from");
 
@@ -49,7 +49,7 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
     if (String::IsNullOrEmpty(repositoryPath))
         throw gcnew ArgumentNullException("repositoryPath");
     else if (!IsNotUri(repositoryPath))
-        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "repositoryPath");
     else if (!from)
         throw gcnew ArgumentNullException("from");
     else if (!args)
@@ -75,6 +75,71 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
     r = svn_repos_load_fs4(
         repos,
         strmFrom.Handle,
+        (svn_revnum_t)args->StartRevision,
+        (svn_revnum_t)args->EndRevision,
+        (svn_repos_load_uuid)args->LoadIdType,
+        args->ImportParent ? pool.AllocRelpath(args->ImportParent) : nullptr,
+        args->RunPreCommitHook,
+        args->RunPostCommitHook,
+        args->VerifyPropertyValues,
+        repos_notify_func,
+        _clientBaton->Handle,
+        CtxHandle->cancel_func,
+        CtxHandle->cancel_baton,
+        pool.Handle);
+
+    return args->HandleResult(this, r);
+
+    // Pool close will close all handles
+}
+
+bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, String^ from)
+{
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    else if (String::IsNullOrEmpty(from))
+        throw gcnew ArgumentNullException("from");
+    else if (!IsNotUri(from))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "from");
+
+    return LoadRepository(repositoryPath, from, gcnew SvnLoadRepositoryArgs());
+}
+
+bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, String^ from, SvnLoadRepositoryArgs^ args)
+{
+    if (String::IsNullOrEmpty(repositoryPath))
+        throw gcnew ArgumentNullException("repositoryPath");
+    else if (!IsNotUri(repositoryPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "toPath");
+    else if (String::IsNullOrEmpty(from))
+        throw gcnew ArgumentNullException("from");
+    else if (!IsNotUri(from))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "from");
+    else if (!args)
+        throw gcnew ArgumentNullException("args");
+
+    EnsureState(SvnContextState::ConfigLoaded);
+    AprPool pool(%_pool);
+    ArgsStore store(this, args, %pool);
+
+    svn_repos_t* repos = nullptr;
+    svn_error_t* r;
+
+    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+        return args->HandleResult(this, r);
+
+    // Set a simple warning handler (see svnadmin/main.c), otherwise we might abort()
+    svn_fs_set_warning_func(svn_repos_fs(repos), warning_func, nullptr);
+
+    svn_stream_t *src;
+
+    SVN_HANDLE(svn_stream_open_readonly(&src, pool.AllocDirent(from), pool.Handle, pool.Handle));
+
+    r = svn_repos_load_fs4(
+        repos,
+        src,
         (svn_revnum_t)args->StartRevision,
         (svn_revnum_t)args->EndRevision,
         (svn_repos_load_uuid)args->LoadIdType,

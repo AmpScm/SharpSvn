@@ -77,6 +77,12 @@ namespace SharpSvn {
         /// <summary>Loads a repository from a file (svnadmin load)</summary>
         bool LoadRepository(String^ repositoryPath, Stream^ from, SvnLoadRepositoryArgs^ args);
 
+        /// <overloads>Loads a repository from a file (svnadmin load)</overloads>
+        /// <summary>Loads a repository from a file (svnadmin load)</summary>
+        bool LoadRepository(String^ repositoryPath, String^ from);
+        /// <summary>Loads a repository from a file (svnadmin load)</summary>
+        bool LoadRepository(String^ repositoryPath, String^ from, SvnLoadRepositoryArgs^ args);
+
         /// <overloads>Dumps a repository to a file (svnadmin dump)</overloads>
         /// <summary>Dumps a repository to a file (svnadmin dump)</summary>
         bool DumpRepository(String^ repositoryPath, Stream^ to);
