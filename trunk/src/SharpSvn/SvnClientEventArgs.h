@@ -40,6 +40,7 @@
 #include "EventArgs/SvnLookListEventArgs.h"
 #include "EventArgs/SvnFileVersionEventArgs.h"
 #include "EventArgs/SvnPatchFilterEventArgs.h"
+#include "EventArgs/SvnInheritedPropertyListEventArgs.h"
 
 #include "Args/SvnWorkingCopyState.h"
 #include "EventArgs/SvnWorkingCopyEntryEventArgs.h"

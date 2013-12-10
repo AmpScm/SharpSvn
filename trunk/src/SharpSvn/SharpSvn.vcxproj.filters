@@ -629,6 +629,12 @@
     <ClInclude Include="ReposArgs\VerifyRepository.h">
       <Filter>SvnRepositoryClient\Args</Filter>
     </ClInclude>
+    <ClInclude Include="Args\InheritedPropertyList.h">
+      <Filter>SvnClient\Args</Filter>
+    </ClInclude>
+    <ClInclude Include="EventArgs\SvnInheritedPropertyListEventArgs.h">
+      <Filter>SvnClient\EventArgs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1050,6 +1056,9 @@
     </ClCompile>
     <ClCompile Include="ReposCommands\VerifyRepository.cpp">
       <Filter>SvnRepositoryClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\InheritedPropertyList.cpp">
+      <Filter>SvnClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

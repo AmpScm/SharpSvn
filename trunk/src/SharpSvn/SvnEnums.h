@@ -65,6 +65,7 @@ namespace SharpSvn {
         Write,
         Upgrade,
         Patch,
+        InheritedPropertyList,
 
         CropWorkingCopy = 0x501,
 
