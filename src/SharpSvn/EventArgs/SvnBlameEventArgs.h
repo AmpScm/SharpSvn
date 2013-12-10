@@ -247,7 +247,7 @@ namespace SharpSvn {
         /// <summary>Serves as a hashcode for the specified type</summary>
         virtual int GetHashCode() override
         {
-            return _revision.GetHashCode();
+            return _revision.GetHashCode() ^ LineNumber.GetHashCode();
         }
 
     protected public:
@@ -259,18 +259,18 @@ namespace SharpSvn {
                 {
                     GC::KeepAlive(Line);
                     GC::KeepAlive(MergedPath);
-            GC::KeepAlive(RevisionProperties); // Includes Author
-            GC::KeepAlive(MergedRevisionProperties); // Includes MergedAuthor
-                        }
+                    GC::KeepAlive(RevisionProperties); // Includes Author
+                    GC::KeepAlive(MergedRevisionProperties); // Includes MergedAuthor
+                }
             }
             finally
             {
-        _pool = nullptr;
-                        _pcLine = nullptr;
-                        _pcMergedPath = nullptr;
-        _rev_props = nullptr;
-        _merged_rev_props = nullptr;
-                        __super::Detach(keepProperties);
+                _pool = nullptr;
+                _pcLine = nullptr;
+                _pcMergedPath = nullptr;
+                _rev_props = nullptr;
+                _merged_rev_props = nullptr;
+                __super::Detach(keepProperties);
             }
         }
     };
