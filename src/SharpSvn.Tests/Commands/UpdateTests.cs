@@ -271,7 +271,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(paths.ContainsKey(Path.Combine(dir,"alt2")));
         }
 
-        [Test, ExpectedException(typeof(SvnSystemException), ExpectedMessage = "Can't move", MatchType = MessageMatch.Contains)]
+        [Test]
         public void UpdateInUse()
         {
             string dir = GetTempDir();
@@ -280,7 +280,23 @@ namespace SharpSvn.Tests.Commands
             using (File.OpenRead(Path.Combine(dir, "index.html")))
             using (new Implementation.SvnFsOperationRetryOverride(0))
             {
-                Client.Update(Path.Combine(dir, "index.html"));
+                SvnSystemException se = null;
+                try
+                {
+                    Client.Update(Path.Combine(dir, "index.html"));
+                }
+                catch (SvnWorkingCopyException e)
+                {
+                    Assert.That(e.Message, Is.StringContaining("Failed to run the WC DB"));
+                    se = e.GetCause<SvnSystemException>();
+                }
+                catch (SvnSystemException e)
+                {
+                    se = e;
+                }
+
+                Assert.That(se, Is.Not.Null, "Have system exception");
+                Assert.That(se.Message, Is.StringContaining("Can't move"));
             }
         }
 
