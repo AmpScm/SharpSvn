@@ -124,49 +124,87 @@ namespace SharpSvn {
         // From TortoiseSvn src\TortoiseProc\ProjectProperties.h
         literal String^ BugTrackPrefix                          = "bugtraq:";
         literal String^ BugTrackLabel                           = "bugtraq:label";
-        literal String^ BugTrackMessage         = "bugtraq:message";
+        literal String^ BugTrackMessage                         = "bugtraq:message";
         literal String^ BugTrackNumber                          = "bugtraq:number";
         literal String^ BugTrackLogRegex                        = "bugtraq:logregex";
-        literal String^ BugTrackUrl                                     = "bugtraq:url";
-        literal String^ BugTrackWarnIfNoIssue           = "bugtraq:warnifnoissue";
+        literal String^ BugTrackUrl                             = "bugtraq:url";
+        literal String^ BugTrackWarnIfNoIssue                   = "bugtraq:warnifnoissue";
         literal String^ BugTrackAppend                          = "bugtraq:append";
+        literal String^ BugTrackProviderUuid                    = "bugtraq:provideruuid";
+        literal String^ BugTrackProviderUuid64                  = "bugtraq:provideruuid64";
+        literal String^ BugTrackProviderParams                  = "bugtraq:providerparams";
 
-        literal String^ TortoiseSvnPrefix                               = "tsvn:";
+        literal String^ TortoiseSvnPrefix                       = "tsvn:";
         literal String^ TortoiseSvnLogTemplate                  = "tsvn:logtemplate";
+        literal String^ TortoiseSvnLogTemplateCommit            = "tsvn:logtemplatecommit";
+        literal String^ TortoiseSvnLogTemplateBranch            = "tsvn:logtemplatebranch";
+        literal String^ TortoiseSvnLogTemplateImport            = "tsvn:logtemplateimport";
+        literal String^ TortoiseSvnLogTemplateDelete            = "tsvn:logtemplatedelete";
+        literal String^ TortoiseSvnLogTemplateMove              = "tsvn:logtemplatemove";
+        literal String^ TortoiseSvnLogTemplateMakeDirectory     = "tsvn:logtemplatemkdir";
+        literal String^ TortoiseSvnLogTemplatePropSet           = "tsvn:logtemplatepropset";
+        literal String^ TortoiseSvnLogTemplateLock              = "tsvn:logtemplatelock";
+
+        literal String^ TortoiseSvnMergeLogTemplateTitle        = "tsvn:mergelogtemplatetitle";
+        literal String^ TortoiseSvnMergeLogTemplateReverseTitle = "tsvn:mergelogtemplatereversetitle";
+        literal String^ TortoiseSvnMergeLogTemplateMessage      = "tsvn:mergelogtemplatemsg";
+
         literal String^ TortoiseSvnLogWidthLine                 = "tsvn:logwidthmarker";
         literal String^ TortoiseSvnLogMinSize                   = "tsvn:logminsize";
         literal String^ TortoiseSvnLockMsgMinSize               = "tsvn:lockmsgminsize";
         literal String^ TortoiseSvnLogFileListLang              = "tsvn:logfilelistenglish";
         literal String^ TortoiseSvnLogSummary                   = "tsvn:logsummary";
-        literal String^ TortoiseSvnProjectLanguage  = "tsvn:projectlanguage";
-        literal String^ TortoiseSvnUserFileProperty = "tsvn:userfileproperties";
-        literal String^ TortoiseSvnUserDirProperty  = "tsvn:userdirproperties";
+        literal String^ TortoiseSvnProjectLanguage              = "tsvn:projectlanguage";
+        literal String^ TortoiseSvnUserFileProperty             = "tsvn:userfileproperties";
+        literal String^ TortoiseSvnUserDirProperty              = "tsvn:userdirproperties";
         literal String^ TortoiseSvnAutoProps                    = "tsvn:autoprops";
+        literal String^ TortoiseSvnLogRevRegex                  = "tsvn:logrevregex";
 
-        literal String^ WebViewerPrefix                                 = "webviewer:";
-        literal String^ WebViewerRevision                               = "webviewer:revision";
+        literal String^ TortoiseSvnClientHookStartCommit        = "tsvn:startcommithook";
+        literal String^ TortoiseSvnClientHookCheckCommit        = "tsvn:checkcommithook";
+        literal String^ TortoiseSvnClientHookPreCommit          = "tsvn:precommithook";
+        literal String^ TortoiseSvnClientHookPostCommit         = "tsvn:postcommithook";
+        literal String^ TortoiseSvnClientHookStartUpdate        = "tsvn:startupdatehook";
+        literal String^ TortoiseSvnClientHookPreUpdate          = "tsvn:preupdatehook";
+        literal String^ TortoiseSvnClientHookPostUpdate         = "tsvn:postupdatehook";
+        literal String^ TortoiseSvnClientHookManualPreCommit    = "tsvn:manualprecommithook";
+
+        literal String^ WebViewerPrefix                         = "webviewer:";
+        literal String^ WebViewerRevision                       = "webviewer:revision";
         literal String^ WebViewerPathRevision                   = "webviewer:pathrevision";
 
         /// <summary>Gets a list of TortoiseSvn defined directory properties, which are applied recursively on all directories below the set root</summary>
         static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ TortoiseSvnDirectoryProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^>
         {
             BugTrackLabel,
-                BugTrackMessage,
-                BugTrackNumber,
-                BugTrackLogRegex,
-                BugTrackUrl,
-                BugTrackWarnIfNoIssue,
-                BugTrackAppend,
+            BugTrackMessage,
+            BugTrackNumber,
+            BugTrackLogRegex,
+            BugTrackUrl,
+            BugTrackWarnIfNoIssue,
+            BugTrackAppend,
+            BugTrackProviderUuid,
+            BugTrackProviderUuid64,
+            BugTrackProviderParams,
 
-                TortoiseSvnLogTemplate,
-                TortoiseSvnLogWidthLine,
-                TortoiseSvnLogMinSize,
-                TortoiseSvnLogFileListLang,
-                TortoiseSvnLogSummary,
-                TortoiseSvnProjectLanguage,
-                TortoiseSvnUserFileProperty,
-                TortoiseSvnUserDirProperty,
-                TortoiseSvnAutoProps
+            TortoiseSvnLogTemplate,
+            TortoiseSvnLogWidthLine,
+            TortoiseSvnLogMinSize,
+            TortoiseSvnLogFileListLang,
+            TortoiseSvnLogSummary,
+            TortoiseSvnProjectLanguage,
+            TortoiseSvnUserFileProperty,
+            TortoiseSvnUserDirProperty,
+            TortoiseSvnAutoProps,
+            TortoiseSvnLogRevRegex,
+            TortoiseSvnClientHookStartCommit,
+            TortoiseSvnClientHookCheckCommit,
+            TortoiseSvnClientHookPreCommit,
+            TortoiseSvnClientHookPostCommit,
+            TortoiseSvnClientHookStartUpdate,
+            TortoiseSvnClientHookPreUpdate,
+            TortoiseSvnClientHookPostUpdate,
+            TortoiseSvnClientHookManualPreCommit,
         }));
         // /TortoiseSvn
 
@@ -183,59 +221,61 @@ namespace SharpSvn {
         {}
 
     public:
-        literal String^ ServersCategory                                         = SVN_CONFIG_CATEGORY_SERVERS;
-        literal String^                 GroupsSection                           = SVN_CONFIG_SECTION_GROUPS;
-        literal String^                 GlobalSection                           = SVN_CONFIG_SECTION_GLOBAL;
-        literal String^                 HttpProxyHost                           = SVN_CONFIG_OPTION_HTTP_PROXY_HOST;
-        literal String^                 HttpProxyPort                           = SVN_CONFIG_OPTION_HTTP_PROXY_PORT;
-        literal String^                 HttpProxyUserName                       = SVN_CONFIG_OPTION_HTTP_PROXY_USERNAME;
-        literal String^                 HttpProxyPassword                       = SVN_CONFIG_OPTION_HTTP_PROXY_PASSWORD;
-        literal String^                 HttpProxyExceptions                     = SVN_CONFIG_OPTION_HTTP_PROXY_EXCEPTIONS;
-        literal String^                 HttpTimeout                                     = SVN_CONFIG_OPTION_HTTP_TIMEOUT;
-        literal String^                 HttpCompression                         = SVN_CONFIG_OPTION_HTTP_COMPRESSION;
+        literal String^ ServersCategory                         = SVN_CONFIG_CATEGORY_SERVERS;
+        literal String^     GroupsSection                       = SVN_CONFIG_SECTION_GROUPS;
+        literal String^     GlobalSection                       = SVN_CONFIG_SECTION_GLOBAL;
+        literal String^     HttpProxyHost                       = SVN_CONFIG_OPTION_HTTP_PROXY_HOST;
+        literal String^     HttpProxyPort                       = SVN_CONFIG_OPTION_HTTP_PROXY_PORT;
+        literal String^     HttpProxyUserName                   = SVN_CONFIG_OPTION_HTTP_PROXY_USERNAME;
+        literal String^     HttpProxyPassword                   = SVN_CONFIG_OPTION_HTTP_PROXY_PASSWORD;
+        literal String^     HttpProxyExceptions                 = SVN_CONFIG_OPTION_HTTP_PROXY_EXCEPTIONS;
+        literal String^     HttpTimeout                         = SVN_CONFIG_OPTION_HTTP_TIMEOUT;
+        literal String^     HttpCompression                     = SVN_CONFIG_OPTION_HTTP_COMPRESSION;
         /* SVN_CONFIG_OPTION_NEON_DEBUG_MASK: only available in debug builds of svn itself */
-        literal String^                 HttpAuthTypes                           = SVN_CONFIG_OPTION_HTTP_AUTH_TYPES;
-        literal String^                 HttpLibrary                                     = SVN_CONFIG_OPTION_HTTP_LIBRARY;
+        literal String^     HttpAuthTypes                       = SVN_CONFIG_OPTION_HTTP_AUTH_TYPES;
+        literal String^     HttpLibrary                         = SVN_CONFIG_OPTION_HTTP_LIBRARY;
 
-        literal String^                 HttpBulkUpdates                         = SVN_CONFIG_OPTION_HTTP_BULK_UPDATES;
-        literal String^                 HttpMaxConnections                      = SVN_CONFIG_OPTION_HTTP_MAX_CONNECTIONS;
+        literal String^     HttpBulkUpdates                     = SVN_CONFIG_OPTION_HTTP_BULK_UPDATES;
+        literal String^     HttpMaxConnections                  = SVN_CONFIG_OPTION_HTTP_MAX_CONNECTIONS;
 
-        literal String^                 SslAuthorityFiles                       = SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
-        literal String^                 SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
-        literal String^                 SslClientCertificateFile        = SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
-        literal String^                 SslClientCertificatePassword= SVN_CONFIG_OPTION_SSL_CLIENT_CERT_PASSWORD;
+        literal String^     SslAuthorityFiles                   = SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
+        literal String^     SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
+        literal String^     SslClientCertificateFile            = SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE;
+        literal String^     SslClientCertificatePassword        = SVN_CONFIG_OPTION_SSL_CLIENT_CERT_PASSWORD;
 
     public:
-        literal String^ ConfigCategory                                          = SVN_CONFIG_CATEGORY_CONFIG;
-        literal String^                 AuthSection                                     = SVN_CONFIG_SECTION_AUTH;
-        literal String^                         StorePasswords                  = SVN_CONFIG_OPTION_STORE_PASSWORDS;
-        literal String^                         StoreAuthCredentials    = SVN_CONFIG_OPTION_STORE_AUTH_CREDS;
-
-        literal String^                 HelpersSection                          = SVN_CONFIG_SECTION_HELPERS;
-        literal String^                         EditorCommand                   = SVN_CONFIG_OPTION_EDITOR_CMD;
-        literal String^                         DiffExtensions                  = SVN_CONFIG_OPTION_DIFF_EXTENSIONS;
-        literal String^                         DiffCommand                             = SVN_CONFIG_OPTION_DIFF_CMD;
-        literal String^                         Diff3Command                    = SVN_CONFIG_OPTION_DIFF3_CMD;
-        literal String^                         Diff3HasProgramArguments= SVN_CONFIG_OPTION_DIFF3_HAS_PROGRAM_ARG;
-        literal String^                         MergeToolCommand                = SVN_CONFIG_OPTION_MERGE_TOOL_CMD;
-
-        literal String^                 MiscellanySection                       = SVN_CONFIG_SECTION_MISCELLANY;
-        literal String^                         GlobalIgnores                   = SVN_CONFIG_OPTION_GLOBAL_IGNORES;
-        literal String^                         LogEncoding                             = SVN_CONFIG_OPTION_LOG_ENCODING;
-        literal String^                         UseCommitTimes                  = SVN_CONFIG_OPTION_USE_COMMIT_TIMES;
-        literal String^                         EnableAutoProps                 = SVN_CONFIG_OPTION_ENABLE_AUTO_PROPS;
-        literal String^                         NoUnlock                                = SVN_CONFIG_OPTION_NO_UNLOCK;
-        literal String^                         MimeTypesFile                   = SVN_CONFIG_OPTION_MIMETYPES_FILE;
-        literal String^                         PreservedConflictFileExtensions = SVN_CONFIG_OPTION_PRESERVED_CF_EXTS;
-        literal String^                         InteractiveConflicts    = SVN_CONFIG_OPTION_INTERACTIVE_CONFLICTS;
-
-        literal String^                 TunnelsSection                          = SVN_CONFIG_SECTION_TUNNELS;
-
-        literal String^                 AutoPropsSection                        = SVN_CONFIG_SECTION_AUTO_PROPS;
-
-        literal String^                 WorkingCopySection                      = SVN_CONFIG_SECTION_WORKING_COPY;
-        literal String^                         SqliteExclusive                 = SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE;
-        literal String^                         SqliteExclusiveClients  = SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE_CLIENTS;
+        literal String^ ConfigCategory                          = SVN_CONFIG_CATEGORY_CONFIG;
+        literal String^     AuthSection                         = SVN_CONFIG_SECTION_AUTH;
+        literal String^         StorePasswords                  = SVN_CONFIG_OPTION_STORE_PASSWORDS;
+        literal String^         StoreAuthCredentials            = SVN_CONFIG_OPTION_STORE_AUTH_CREDS;
+        literal String^         PasswordStores                  = SVN_CONFIG_OPTION_PASSWORD_STORES;
+        literal String^         ClientCertFilePrompt            = SVN_CONFIG_OPTION_SSL_CLIENT_CERT_FILE_PROMPT;
+                            
+        literal String^     HelpersSection                      = SVN_CONFIG_SECTION_HELPERS;
+        literal String^         EditorCommand                   = SVN_CONFIG_OPTION_EDITOR_CMD;
+        literal String^         DiffExtensions                  = SVN_CONFIG_OPTION_DIFF_EXTENSIONS;
+        literal String^         DiffCommand                     = SVN_CONFIG_OPTION_DIFF_CMD;
+        literal String^         Diff3Command                    = SVN_CONFIG_OPTION_DIFF3_CMD;
+        literal String^         Diff3HasProgramArguments        = SVN_CONFIG_OPTION_DIFF3_HAS_PROGRAM_ARG;
+        literal String^         MergeToolCommand                = SVN_CONFIG_OPTION_MERGE_TOOL_CMD;
+                            
+        literal String^     MiscellanySection                   = SVN_CONFIG_SECTION_MISCELLANY;
+        literal String^         GlobalIgnores                   = SVN_CONFIG_OPTION_GLOBAL_IGNORES;
+        literal String^         LogEncoding                     = SVN_CONFIG_OPTION_LOG_ENCODING;
+        literal String^         UseCommitTimes                  = SVN_CONFIG_OPTION_USE_COMMIT_TIMES;
+        literal String^         EnableAutoProps                 = SVN_CONFIG_OPTION_ENABLE_AUTO_PROPS;
+        literal String^         NoUnlock                        = SVN_CONFIG_OPTION_NO_UNLOCK;
+        literal String^         MimeTypesFile                   = SVN_CONFIG_OPTION_MIMETYPES_FILE;
+        literal String^         PreservedConflictFileExtensions = SVN_CONFIG_OPTION_PRESERVED_CF_EXTS;
+        literal String^         InteractiveConflicts            = SVN_CONFIG_OPTION_INTERACTIVE_CONFLICTS;
+                            
+        literal String^     TunnelsSection                      = SVN_CONFIG_SECTION_TUNNELS;
+                            
+        literal String^     AutoPropsSection                    = SVN_CONFIG_SECTION_AUTO_PROPS;
+                            
+        literal String^     WorkingCopySection                  = SVN_CONFIG_SECTION_WORKING_COPY;
+        literal String^         SqliteExclusive                 = SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE;
+        literal String^         SqliteExclusiveClients          = SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE_CLIENTS;
 
         static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores
             = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
