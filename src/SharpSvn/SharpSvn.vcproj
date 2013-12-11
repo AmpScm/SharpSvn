@@ -269,6 +269,7 @@
 				LargeAddressAware="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				SetChecksum="true"
 				RandomizedBaseAddress="2"
 				DataExecutionPrevention="2"
 				TargetMachine="1"
@@ -361,6 +362,7 @@
 				LargeAddressAware="2"
 				OptimizeReferences="2"
 				EnableCOMDATFolding="2"
+				SetChecksum="true"
 				RandomizedBaseAddress="2"
 				DataExecutionPrevention="2"
 				TargetMachine="17"
@@ -981,6 +983,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\Commands\InheritedPropertyList.cpp"
+					>
+				</File>
+				<File
 					RelativePath="Commands\List.cpp"
 					>
 				</File>
@@ -1133,6 +1139,10 @@
 					>
 				</File>
 				<File
+					RelativePath=".\EventArgs\SvnInheritedPropertyListEventArgs.h"
+					>
+				</File>
+				<File
 					RelativePath="EventArgs\SvnListChangeListEventArgs.h"
 					>
 				</File>
@@ -1270,6 +1280,10 @@
 				</File>
 				<File
 					RelativePath="Args\Info.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Args\InheritedPropertyList.h"
 					>
 				</File>
 				<File
