@@ -986,6 +986,7 @@ namespace SharpSvn {
         bool GetInheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% listHandler);
 
         bool TryGetInheritedProperty(String^ path, String^ propertyName, [Out] String^% value);
+        bool TryGetAllInheritedProperties(String^ path, [Out] SvnPropertyCollection^% properties);
 
     public:
         /////////////////////////////////////////
