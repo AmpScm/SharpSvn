@@ -15,10 +15,10 @@
 // Included from SvnClientArgs.h
 
 namespace SharpSvn {
+    using System::Text::StringBuilder;
 
     public ref class SvnInheritedPropertyListEventArgs : public SvnCancelEventArgs
     {
-        initonly int _index;
         Uri^ _uri;
         String^ _path;
         String^ _fullPath;
@@ -26,17 +26,23 @@ namespace SharpSvn {
 
         const char *_path_or_url;
         apr_hash_t *_propHash;
+        svn_client_ctx_t *_ctx;
+        SvnInheritedPropertyListEventArgs^ _anchor;
         AprPool^ _pool;
 
     internal:
-        SvnInheritedPropertyListEventArgs(const char *path_or_url, apr_hash_t *prop_hash, int index, AprPool^ pool)
+        SvnInheritedPropertyListEventArgs(const char *path_or_url, apr_hash_t *prop_hash, SvnInheritedPropertyListEventArgs^ anchor, svn_client_ctx_t *ctx, AprPool^ pool)
         {
             if (!path_or_url)
                 throw gcnew ArgumentNullException("path_or_url");
+            // prop_hash can be NULL for the node itself!
 
-            _index = index;
+            assert((anchor != nullptr) ^ (ctx != nullptr));
+
             _path_or_url = path_or_url;
             _propHash = prop_hash;
+            _anchor = anchor;
+            _ctx = ctx;
             _pool = pool;
         }
 
@@ -67,8 +73,39 @@ namespace SharpSvn {
         {
             System::Uri^ get()
             {
-                if (!_uri && _path_or_url && svn_path_is_url(_path_or_url))
-                    _uri = SvnBase::Utf8_PtrToUri(_path_or_url, _index ? SvnNodeKind::Directory : SvnNodeKind::Unknown);
+                if (!_uri)
+                {
+                    if (_path_or_url && svn_path_is_url(_path_or_url))
+                        _uri = SvnBase::Utf8_PtrToUri(_path_or_url, SvnNodeKind::Directory);
+                    else if (_anchor && Path && _anchor->Uri && _anchor->Path)
+                    {
+                        StringBuilder ^up = gcnew StringBuilder(64);
+                        up->Append("./");
+
+                        for(int i = Path->Length+1; i < _anchor->Path->Length; i++)
+                        {
+                            if (_anchor->Path[i] == '\\')
+                                up->Append("../");
+                        }
+                        _uri = gcnew System::Uri(_anchor->Uri, up->ToString());
+                    }
+                    else if (_path_or_url && _ctx && _pool)
+                    {
+                        const char *url_str;
+                        svn_error_t *err = svn_client_url_from_path2(&url_str,
+                                                                     _path_or_url,
+                                                                     _ctx,
+                                                                     _pool->Handle,
+                                                                     _pool->Handle);
+                        if (err || !url_str)
+                          {
+                            svn_error_clear(err);
+                            _ctx = nullptr; // Don't try again
+                          }
+                        else
+                          _uri = SvnBase::Utf8_PtrToUri(url_str, SvnNodeKind::Unknown);
+                    }
+                }
 
                 return _uri;
             }
@@ -108,6 +145,8 @@ namespace SharpSvn {
                 _path_or_url = nullptr;
                 _propHash = nullptr;
                 _pool = nullptr;
+                _ctx = nullptr;
+                _anchor = nullptr;
                 __super::Detach(keepProperties);
             }
         }

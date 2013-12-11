@@ -50,6 +50,7 @@
 
 #include <vcclr.h>
 #include <crtdbg.h>
+#include <assert.h>
 
 #pragma warning(disable: 4706) // assignment within conditional expression
 //#pragma warning(error: 4996) // Deprecated warnings

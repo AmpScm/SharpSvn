@@ -23,33 +23,27 @@ static svn_error_t *iprop_list(void *baton, const char *path, apr_hash_t *prop_h
     SvnInheritedPropertyListArgs^ args = dynamic_cast<SvnInheritedPropertyListArgs^>(client->CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
     if (!args)
         return nullptr;
+
+    SvnInheritedPropertyListEventArgs ^e_anchor = gcnew SvnInheritedPropertyListEventArgs(path, prop_hash, nullptr, client->CtxHandle, %thePool);
     try
     {
+
         if (prop_hash)
         {
-            SvnInheritedPropertyListEventArgs ^e = gcnew SvnInheritedPropertyListEventArgs(path, prop_hash, 0, %thePool);
-            try
-            {
-                args->OnList(e);
+            args->OnList(e_anchor);
 
-                if (e->Cancel)
-                    return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
-            }
-            finally
-            {
-                e->Detach(false);
-            }
+            if (e_anchor->Cancel)
+                return svn_error_create(SVN_ERR_CEASE_INVOCATION, nullptr, "List receiver canceled operation");
         }
 
         if (inherited_props)
         {
             // Properties on one or more ancestors
-            int n = 1;
             for (int i = inherited_props->nelts-1; i >= 0; i--)
             {
                 const svn_prop_inherited_item_t *pii = APR_ARRAY_IDX(inherited_props, i, const svn_prop_inherited_item_t *);
 
-                SvnInheritedPropertyListEventArgs ^e = gcnew SvnInheritedPropertyListEventArgs(pii->path_or_url, pii->prop_hash, n++, %thePool);
+                SvnInheritedPropertyListEventArgs ^e = gcnew SvnInheritedPropertyListEventArgs(pii->path_or_url, pii->prop_hash, e_anchor, nullptr, %thePool);
                 try
                 {
                     args->OnList(e);
@@ -69,6 +63,10 @@ static svn_error_t *iprop_list(void *baton, const char *path, apr_hash_t *prop_h
     catch(Exception^ ex)
     {
         return SvnException::CreateExceptionSvnError("List receiver", ex);
+    }
+    finally
+    {
+        e_anchor->Detach(false);
     }
 }
 
@@ -92,15 +90,15 @@ bool SvnClient::InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs
         svn_opt_revision_t rev  = {svn_opt_revision_unspecified};
 
         svn_error_t* r = svn_client_proplist4(pool.AllocAbsoluteDirent(path),
-                                              &rev,
-                                              &rev,
-                                              svn_depth_empty,
-                                              nullptr /* changelist */,
-                                              TRUE /* get_inherited_props */,
-                                              iprop_list,
-                                              (void*)_clientBaton->Handle,
-                                              CtxHandle,
-                                              pool.Handle);
+            &rev,
+            &rev,
+            svn_depth_empty,
+            nullptr /* changelist */,
+            TRUE /* get_inherited_props */,
+            iprop_list,
+            (void*)_clientBaton->Handle,
+            CtxHandle,
+            pool.Handle);
 
         return args->HandleResult(this, r, path);
     }
@@ -138,7 +136,74 @@ bool SvnClient::GetInheritedPropertyList(String^ path, SvnInheritedPropertyListA
     }
 }
 
+private ref class TheIPropCollector
+{
+    initonly Dictionary<String^, SvnPropertyValue^> ^_d;
+
+public:
+    TheIPropCollector()
+    {
+        _d = gcnew Dictionary<String^, SvnPropertyValue^>();
+    }
+
+public:
+    void Collect(Object ^sender, SvnInheritedPropertyListEventArgs^ e)
+    {
+        UNUSED_ALWAYS(sender);
+
+        for each(SvnPropertyValue ^v in e->Properties)
+        {
+            if (! _d->ContainsKey(v->Key))
+                _d[v->Key] = v;
+        }
+    }
+
+    SvnPropertyCollection^ GetCollection()
+    {
+        SvnPropertyCollection^ pc = gcnew SvnPropertyCollection();
+        for each(SvnPropertyValue ^v in _d->Values)
+            pc->Add(v);
+
+        return pc;
+    }
+};
+
+// This can be optimized by using more unmanaged code, but we can always do that later
+bool SvnClient::TryGetAllInheritedProperties(String^ path, [Out] SvnPropertyCollection^% properties)
+{
+    TheIPropCollector ^pc = gcnew TheIPropCollector();
+
+    SvnInheritedPropertyListArgs^ la = gcnew SvnInheritedPropertyListArgs();
+    la->ThrowOnError = false;
+    properties = nullptr;
+
+    if (InheritedPropertyList(path, la, gcnew EventHandler<SvnInheritedPropertyListEventArgs^>(pc, &TheIPropCollector::Collect)))
+    {
+        properties = pc->GetCollection();
+        return true;
+    }
+
+    return false;
+}
+
+// This can be optimized by using more unmanaged code, but we can always do that later
 bool SvnClient::TryGetInheritedProperty(String^ path, String^ propertyName, [Out] String^% value)
 {
-    throw gcnew NotImplementedException();
+    SvnPropertyCollection^ props;
+    value = nullptr;
+
+    if (TryGetAllInheritedProperties(path, props))
+    {
+        if (props->Contains(propertyName))
+        {
+            SvnPropertyValue ^pv = props[propertyName];
+
+            value = pv->StringValue;
+
+            if (value)
+                return true;
+        }
+    }
+
+    return false;
 }

@@ -42,13 +42,23 @@ namespace SharpSvn.Tests.Commands
             Assert.That(results, Is.Not.Null);
             Assert.That(results.Count, Is.EqualTo(4));
             Assert.That(results[0].Path, Is.EqualTo(SvnTools.GetNormalizedFullPath(target)), "Path 0");
+            Assert.That(results[0].Uri, Is.EqualTo(new Uri(uri, "trunk/jobs/index.html")));
             Assert.That(results[0].Properties, Is.Not.Empty);
             Assert.That(results[1].Path, Is.EqualTo(SvnTools.GetNormalizedFullPath(Path.Combine(target, ".."))), "Path 1");
+            Assert.That(results[1].Uri, Is.EqualTo(new Uri(uri, "trunk/jobs/")));
             Assert.That(results[1].Properties, Is.Not.Empty);
             Assert.That(results[2].Path, Is.EqualTo(SvnTools.GetNormalizedFullPath(Path.Combine(target, "../.."))), "Path 2");
+            Assert.That(results[2].Uri, Is.EqualTo(new Uri(uri, "trunk/")));
             Assert.That(results[2].Properties, Is.Not.Empty);
             Assert.That(results[3].Uri, Is.EqualTo(uri), "Path 3");
             Assert.That(results[3].Properties, Is.Not.Empty);
+
+            SvnPropertyCollection pc;
+            Assert.That(Client.TryGetAllInheritedProperties(Path.Combine(wc, "nop"), out pc), Is.False);
+
+            Assert.That(Client.TryGetAllInheritedProperties(Path.Combine(wc, "jobs"), out pc));
+            Assert.That(pc, Is.Not.Empty);
+            Assert.That(pc.Contains("trunk"), "Contains trunk");
         }
     }
 }
