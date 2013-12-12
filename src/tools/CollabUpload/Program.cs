@@ -91,6 +91,9 @@ namespace CollabUpload
                             if (!argAvailable)
                                 return ArgError("--host requires argument");
                             aa.Site = value.Contains(".") ? value : string.Format("{0}.open.collab.net", value);
+
+                            if (!aa.Site.Contains("://"))
+                                aa.Site = "https://" + aa.Site;
                             i++;
                             break;
                         case "--folder":
@@ -170,7 +173,7 @@ namespace CollabUpload
         {
             CookieContainer cookBox = new CookieContainer();
 
-            string requestUri = string.Format("http://{0}/servlets/ProjectDocumentAdd?folderID={1}", args.Site, args.Folder);
+            string requestUri = string.Format("{0}/servlets/ProjectDocumentAdd?folderID={1}", args.Site, args.Folder);
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(requestUri);
             wr.UserAgent = UserAgentName;
             wr.CookieContainer = cookBox;
@@ -390,7 +393,7 @@ namespace CollabUpload
             string responseUri;
             string text;
 
-            string requestUri = string.Format("http://{0}/servlets/ProjectDocumentList?folderID={1}", args.Site, args.Folder);
+            string requestUri = string.Format("{0}/servlets/ProjectDocumentList?folderID={1}", args.Site, args.Folder);
 
             wr = (HttpWebRequest)WebRequest.Create(requestUri);
             wr.UserAgent = "Mozilla/8.0 (compatible; Collab Uploader C#)";
@@ -417,7 +420,7 @@ namespace CollabUpload
 
             List<Document> docs = new List<Document>();
 
-            Uri baseUri = new Uri(string.Format("http://{0}/servlets/qq", args.Site));
+            Uri baseUri = new Uri(string.Format("{0}/servlets/qq", args.Site));
             foreach (Match m in re.Matches(text))
             {
                 string url = m.Groups["url"].Value.Trim();
@@ -454,7 +457,7 @@ namespace CollabUpload
 
         private static void DeleteFile(Args args, CookieContainer cookBox, int fileId)
         {
-            string requestUri = string.Format("http://{0}/servlets/ProjectDocumentDelete", args.Site);
+            string requestUri = string.Format("{0}/servlets/ProjectDocumentDelete", args.Site);
 
 
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(requestUri);
