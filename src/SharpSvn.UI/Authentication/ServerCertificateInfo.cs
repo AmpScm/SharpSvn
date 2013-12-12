@@ -22,7 +22,7 @@ namespace SharpSvn.UI.Authentication
     /// <summary>
     ///
     /// </summary>
-    public class ServerCertificateInfo
+    class ServerCertificateInfo
     {
         string _hostname;
 

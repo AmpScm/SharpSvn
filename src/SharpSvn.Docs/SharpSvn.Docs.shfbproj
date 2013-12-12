@@ -28,8 +28,8 @@
     <CleanIntermediates>True</CleanIntermediates>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\SharpSvn\SharpSvn.vcxproj" configuration="$(Configuration)" platform="$(Platform)" />
-      <DocumentationSource sourceFile="..\SharpSvn.UI\SharpSvn.UI.csproj" configuration="$(Configuration)" platform="$(Platform)" />
+      <DocumentationSource sourceFile="..\SharpSvn\SharpSvn.vcxproj" configuration="Release" platform="$(Platform)" />
+      <DocumentationSource sourceFile="..\SharpSvn.UI\SharpSvn.UI.csproj" configuration="Release" platform="$(Platform)" />
     </DocumentationSources>
     <CatalogName>VisualStudio11</CatalogName>
     <TocParentId>-1</TocParentId>
@@ -41,18 +41,18 @@
     <MSHelpViewerSdkLinkType>Msdn</MSHelpViewerSdkLinkType>
     <CatalogVersion>100</CatalogVersion>
     <CatalogProductId>VS</CatalogProductId>
-    <SyntaxFilters>Standard</SyntaxFilters>
+    <SyntaxFilters>CSharp, VisualBasic, CPlusPlus, FSharp</SyntaxFilters>
     <SdkLinkTarget>Blank</SdkLinkTarget>
-    <RootNamespaceContainer>False</RootNamespaceContainer>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
     <PresentationStyle>VS2010</PresentationStyle>
     <Preliminary>False</Preliminary>
     <NamingMethod>MemberName</NamingMethod>
-    <HelpTitle>SharpSvn - Subversion in a .Net friendly package</HelpTitle>
+    <HelpTitle>SharpSvn - Subversion for .Net</HelpTitle>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
     <RootNamespaceTitle>SharpSvn Namespaces</RootNamespaceTitle>
     <FeedbackEMailLinkText>SharpSVN Mailinglist</FeedbackEMailLinkText>
     <FeedbackEMailAddress>users%40sharpsvn.open.collab.net</FeedbackEMailAddress>
-    <CopyrightText>SharpSVN is %28c%29 The SharpSvn Project and availalable under the Apache License</CopyrightText>
+    <CopyrightText>SharpSVN is %28c%29 The SharpSvn Project and is available under the Apache License</CopyrightText>
     <CopyrightHref>http://sharpsvn.open.collab.net/</CopyrightHref>
   </PropertyGroup>
   <!-- There are no properties for these groups.  AnyCPU needs to appear in
