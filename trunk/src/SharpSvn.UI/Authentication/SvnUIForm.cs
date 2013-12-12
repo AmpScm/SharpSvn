@@ -24,7 +24,7 @@ namespace SharpSvn.UI.Authentication
     /// <summary>
     ///
     /// </summary>
-    public class SvnUIForm : Form
+    class SvnUIForm : Form
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SvnUIForm"/> class.

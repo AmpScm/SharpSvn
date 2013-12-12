@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace SharpSvn.UI.Authentication
 {
-	public partial class UsernamePasswordDialog : SvnUIForm
+	partial class UsernamePasswordDialog : SvnUIForm
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="UsernamePasswordDialog"/> class.

@@ -26,7 +26,7 @@ namespace SharpSvn.UI.Authentication
     /// <summary>
     ///
     /// </summary>
-    public partial class SslServerCertificateTrustDialog : SvnUIForm
+    partial class SslServerCertificateTrustDialog : SvnUIForm
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SslServerCertificateTrustDialog"/> class.
