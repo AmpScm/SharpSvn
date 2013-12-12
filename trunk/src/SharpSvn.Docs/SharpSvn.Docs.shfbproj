@@ -28,8 +28,8 @@
     <CleanIntermediates>True</CleanIntermediates>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, ProtectedInternalAsProtected, SealedProtected</VisibleItems>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\SharpSvn\SharpSvn.vcxproj" />
-      <DocumentationSource sourceFile="..\SharpSvn.UI\SharpSvn.UI.csproj" />
+      <DocumentationSource sourceFile="..\SharpSvn\SharpSvn.vcxproj" configuration="$(Configuration)" platform="$(Platform)" />
+      <DocumentationSource sourceFile="..\SharpSvn.UI\SharpSvn.UI.csproj" configuration="$(Configuration)" platform="$(Platform)" />
     </DocumentationSources>
     <CatalogName>VisualStudio11</CatalogName>
     <TocParentId>-1</TocParentId>
