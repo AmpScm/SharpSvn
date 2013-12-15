@@ -1896,16 +1896,72 @@
 				>
 			</File>
 		</Filter>
+		<Filter
+			Name="SvnMultiCommandClient"
+			>
+			<File
+				RelativePath=".\SvnMultiCommandClient.h"
+				>
+			</File>
+			<Filter
+				Name="Headers"
+				>
+				<File
+					RelativePath=".\Args\SvnRepositoryOperationArgs.h"
+					>
+				</File>
+			</Filter>
+			<Filter
+				Name="Sources"
+				>
+				<File
+					RelativePath=".\Commands\MultiOpen.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryCopy.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryCreateDirectory.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryCreateFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryDelete.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryGetNodeKind.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryMove.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositorySetProperty.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Commands\RepositoryUpdateFile.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\SvnMultiCommandClient.cpp"
+					>
+				</File>
+			</Filter>
+		</Filter>
 		<File
 			RelativePath="AssemblyInfo.cpp"
 			>
 		</File>
 		<File
 			RelativePath="SharpSvn.snk"
-			>
-		</File>
-		<File
-			RelativePath="SharpSvn.vcproj"
 			>
 		</File>
 	</Files>
