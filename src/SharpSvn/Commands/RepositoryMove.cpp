@@ -38,7 +38,7 @@ bool SvnMultiCommandClient::Move(String ^fromPath, String ^toPath, SvnRepository
         throw gcnew ArgumentNullException("args");
 
     AprPool pool(%_pool);
-    ArgsStore store(this, args);
+    McArgsStore store(this, args);
 
     SVN_HANDLE(svn_client_mtcc_add_move(pool.AllocRelpath(fromPath),
                                         pool.AllocRelpath(toPath),

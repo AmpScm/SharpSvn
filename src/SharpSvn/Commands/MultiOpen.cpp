@@ -43,7 +43,7 @@ bool SvnMultiCommandClient::Open(Uri ^sessionUri, SvnRepositoryOperationArgs ^ar
 
     EnsureState(SvnContextState::AuthorizationInitialized);
     AprPool pool(%_pool);
-    ArgsStore store(this, args, %pool);
+    McArgsStore store(this, args);
 
     svn_client_mtcc_t *mtcc;
 

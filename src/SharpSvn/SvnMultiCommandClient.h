@@ -157,17 +157,17 @@ namespace SharpSvn {
             }
         }
 
-        ref class ArgsStore sealed
+        ref class McArgsStore sealed
         {
             initonly SvnMultiCommandClient^ _client;
         public:
-            inline ArgsStore(SvnMultiCommandClient^ client, SvnClientArgs^ args)
+            inline McArgsStore(SvnMultiCommandClient^ client, SvnClientArgs^ args)
             {
                 _client = client;
                 assert(! _client->_currentArgs);
                 client->_currentArgs = args;
             }
-            inline ~ArgsStore()
+            inline ~McArgsStore()
             {
                 _client->_currentArgs = nullptr;
             }

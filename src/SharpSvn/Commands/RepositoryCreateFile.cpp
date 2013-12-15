@@ -35,7 +35,7 @@ bool SvnMultiCommandClient::CreateFile(String ^path, System::IO::Stream ^newData
         throw gcnew ArgumentNullException("args");
 
     AprPool pool(%_pool);
-    ArgsStore store(this, args);
+    McArgsStore store(this, args);
 
     SvnStreamWrapper ^wp = gcnew SvnStreamWrapper(newData, true, false, %_pool);
 

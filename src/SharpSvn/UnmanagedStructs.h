@@ -38,6 +38,9 @@ struct svn_repos_t
 struct svn_stream_t
 {};
 
+struct svn_stream_mark_t
+{};
+
 struct svn_auth_baton_t
 {};
 

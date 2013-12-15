@@ -33,7 +33,7 @@ bool SvnMultiCommandClient::GetNodeKind(String ^path, SvnRepositoryGetNodeKindAr
         throw gcnew ArgumentNullException("args");
 
     AprPool pool(%_pool);
-    ArgsStore store(this, args);
+    McArgsStore store(this, args);
 
     svn_node_kind_t node_kind;
 

@@ -100,7 +100,7 @@ bool SvnMultiCommandClient::DeleteProperty(String^ path, String^ propertyName, S
 
 bool SvnMultiCommandClient::InternalSetProperty(String^ path, String^ propertyName, const svn_string_t* value, SvnRepositorySetPropertyArgs^ args, AprPool^ pool)
 {
-    ArgsStore store(this, args);
+    McArgsStore store(this, args);
 
     SVN_HANDLE(svn_client_mtcc_add_propset(pool->AllocRelpath(path),
                                            pool->AllocString(propertyName),
