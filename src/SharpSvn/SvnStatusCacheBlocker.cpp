@@ -103,13 +103,13 @@ bool SvnStatusCacheBlocker::SendCommand(Byte cmd, String^ value)
     String ^sChannel = String::Format("\\\\.\\pipe\\TSVNCacheCommand-{0:X16}", WindowsLogonSessionId);
     pin_ptr<const wchar_t> pChannel = PtrToStringChars(sChannel);
 
-    HANDLE hPipe = CreateFile(pChannel,
-                              GENERIC_READ | GENERIC_WRITE,           // read and write access
-                              FILE_SHARE_READ | FILE_SHARE_WRITE,     // No sharing
-                              NULL,
-                              OPEN_EXISTING,
-                              FILE_FLAG_NO_BUFFERING,
-                              NULL);
+    HANDLE hPipe = CreateFileW(pChannel,
+                               GENERIC_READ | GENERIC_WRITE,           // read and write access
+                               FILE_SHARE_READ | FILE_SHARE_WRITE,     // No sharing
+                               NULL,
+                               OPEN_EXISTING,
+                               FILE_FLAG_NO_BUFFERING,
+                               NULL);
     
     if (hPipe == INVALID_HANDLE_VALUE)
         return false;

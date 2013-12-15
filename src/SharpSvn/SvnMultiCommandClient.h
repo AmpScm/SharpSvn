@@ -14,6 +14,8 @@
 
 #pragma once
 
+#undef CreateFile
+
 namespace SharpSvn {
 
     public ref class SvnRepositoryOperationBaseArgs abstract : public SvnClientArgs
