@@ -21,8 +21,24 @@
 
 using namespace SharpSvn;
 
+struct SvnMultiCommandClientCallBacks
+{
+    static void __cdecl svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
+};
+
+void SvnMultiCommandClient::Initialize()
+{
+    void* baton = (void*)_clientBaton->Handle;
+
+    CtxHandle->notify_baton2 = baton;
+    CtxHandle->notify_func2 = &SvnMultiCommandClientCallBacks::svn_wc_notify_func2;
+}
+
 SvnMultiCommandClient::~SvnMultiCommandClient()
 {
+    if (_clientBaton)
+        delete _clientBaton;
+
     if (_refs)
         _refs = nullptr;
 }
@@ -30,22 +46,35 @@ SvnMultiCommandClient::~SvnMultiCommandClient()
 SvnMultiCommandClient::SvnMultiCommandClient(SvnClient ^via)
     : _pool(via->ClientPool), SvnClientContext(%_pool, via)
 {
+    //_clientBaton = nullptr;
+    // No call to Initialize() as we just wrap the SvnClient
 }
 
 SvnMultiCommandClient::SvnMultiCommandClient()
     : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
+    _clientBaton = gcnew AprBaton<SvnMultiCommandClient^>(this);
+
+    Initialize();
 }
 
 SvnMultiCommandClient::SvnMultiCommandClient(Uri ^sessionUri)
     : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
+    _clientBaton = gcnew AprBaton<SvnMultiCommandClient^>(this);
+
+    Initialize();
+
     Open(sessionUri);
 }
 
 SvnMultiCommandClient::SvnMultiCommandClient(Uri ^sessionUri, SvnRepositoryOperationArgs ^args)
     : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
+    _clientBaton = gcnew AprBaton<SvnMultiCommandClient^>(this);
+
+    Initialize();
+
     if (!Open(sessionUri, args))
         throw (args->LastException ? static_cast<Exception^>(args->LastException)
                                    : gcnew InvalidOperationException());
@@ -118,4 +147,108 @@ bool SvnClient::RepositoryOperation(Uri ^anchor, SvnRepositoryOperationArgs ^arg
 
         return mucc.ViaCommit(result);
     }
+}
+
+
+
+void SvnMultiCommandClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool)
+{
+    SvnMultiCommandClient^ client = AprBaton<SvnMultiCommandClient^>::Get((IntPtr)baton);
+    AprPool aprPool(pool, false);
+
+    SvnNotifyEventArgs^ ea = gcnew SvnNotifyEventArgs(notify, client->CurrentCommandArgs->CommandType, %aprPool);
+
+    try
+    {
+        client->HandleClientNotify(ea);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
+}
+
+void SvnMultiCommandClient::OnCancel(SvnCancelEventArgs^ e)
+{
+    Cancel(this, e);
+}
+
+void SvnMultiCommandClient::OnProgress(SvnProgressEventArgs^ e)
+{
+    Progress(this, e);
+}
+
+void SvnMultiCommandClient::OnCommitting(SvnCommittingEventArgs^ e)
+{
+    Committing(this, e);
+}
+
+void SvnMultiCommandClient::OnCommitted(SvnCommittedEventArgs^ e)
+{
+    Committed(this, e);
+}
+
+void SvnMultiCommandClient::OnNotify(SvnNotifyEventArgs^ e)
+{
+    Notify(this, e);
+}
+
+void SvnMultiCommandClient::OnSvnError(SvnErrorEventArgs^ e)
+{
+    SvnError(this, e);
+}
+
+void SvnMultiCommandClient::OnProcessing(SvnProcessingEventArgs^ e)
+{
+    Processing(this, e);
+}
+
+void SvnMultiCommandClient::HandleClientCancel(SvnCancelEventArgs^ e)
+{
+    __super::HandleClientCancel(e);
+
+    if (! e->Cancel)
+        OnCancel(e);
+}
+
+void SvnMultiCommandClient::HandleClientProgress(SvnProgressEventArgs^ e)
+{
+    __super::HandleClientProgress(e);
+
+    OnProgress(e);
+}
+
+void SvnMultiCommandClient::HandleClientCommitting(SvnCommittingEventArgs^ e)
+{
+    __super::HandleClientCommitting(e);
+
+    if (! e->Cancel)
+        OnCommitting(e);
+}
+
+void SvnMultiCommandClient::HandleClientCommitted(SvnCommittedEventArgs^ e)
+{
+    __super::HandleClientCommitted(e);
+
+    OnCommitted(e);
+}
+
+void SvnMultiCommandClient::HandleClientNotify(SvnNotifyEventArgs^ e)
+{
+    __super::HandleClientNotify(e);
+
+    OnNotify(e);
+}
+
+void SvnMultiCommandClient::HandleClientError(SvnErrorEventArgs^ e)
+{
+    __super::HandleClientError(e);
+
+    OnSvnError(e);
+}
+
+void SvnMultiCommandClient::HandleProcessing(SvnProcessingEventArgs^ e)
+{
+    __super::HandleProcessing(e);
+    OnProcessing(e);
 }

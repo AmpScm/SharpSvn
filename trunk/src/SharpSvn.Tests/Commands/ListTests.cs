@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Diagnostics;
 using System.Reflection;
+using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -311,6 +312,8 @@ namespace SharpSvn.Tests.Commands
 
                 client.Authentication.Clear();
                 client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
+                client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
+                client.Authentication.SslAuthorityTrustHandlers += SvnAuthentication.SubversionWindowsSslAuthorityTrustHandler;
 
                 bool found = false;
                 client.List(new SvnUriTarget(new Uri(baseUri), 11888),

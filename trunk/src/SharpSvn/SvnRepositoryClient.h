@@ -174,7 +174,7 @@ namespace SharpSvn {
         }
 
     internal:
-        void HandleClientCancel(SvnCancelEventArgs^ e);
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e) override sealed;
         void HandleClientNotify(SvnRepositoryNotifyEventArgs^ e);
 
     private:

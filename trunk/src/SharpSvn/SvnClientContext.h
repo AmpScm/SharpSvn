@@ -34,6 +34,10 @@ namespace Security {
     ref class SvnCommitResult;
     ref class SvnCommittedEventArgs;
     ref class SvnClient;
+    ref class SvnCancelEventArgs;
+    ref class SvnProgressEventArgs;
+    ref class SvnCommittingEventArgs;
+    ref class SvnNotifyEventArgs;
 
     namespace Implementation
     {
@@ -266,6 +270,7 @@ namespace Security {
     /// <threadsafety static="true" instance="false"/>
     public ref class SvnClientContext : public SvnBase, public System::ComponentModel::IComponent
     {
+        AprBaton<SvnClientContext^>^ _ctxBaton;
         svn_client_ctx_t *_ctx;
         AprPool^ _pool;
         int _authCookie;
@@ -276,6 +281,9 @@ namespace Security {
 
         static initonly Object^ _plinkLock = gcnew Object();
         static String^ _plinkPath;
+
+    internal:
+        bool _noLogMessageRequired;
 
     private:
         // For SvnClient and SvnReposClient
@@ -303,9 +311,13 @@ namespace Security {
         SvnOverride _keepAllExtensionsOnConflict;
         SvnClientContext(AprPool^ pool);
         SvnClientContext(AprPool^ pool, SvnClientContext ^client);
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e);
         virtual void HandleClientError(SvnErrorEventArgs^ e);
+        virtual void HandleClientProgress(SvnProgressEventArgs^ e);
         virtual void HandleProcessing(SvnProcessingEventArgs^ e);
+        virtual void HandleClientCommitting(SvnCommittingEventArgs^ e);
         virtual void HandleClientCommitted(SvnCommittedEventArgs^ e);
+        virtual void HandleClientNotify(SvnNotifyEventArgs^ e);
 
     public:
         property bool IsCommandRunning

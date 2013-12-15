@@ -24,16 +24,29 @@ using namespace Microsoft::Win32;
 using namespace System::Diagnostics;
 using System::IO::Path;
 
+static svn_error_t * sharpsvn_cancel_func(void *cancel_baton);
+static void sharpsvn_progress_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
+static svn_error_t * sharpsvn_commit_log_func(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
+
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
     if (!pool)
         throw gcnew ArgumentNullException("pool");
+
+    _ctxBaton = gcnew AprBaton<SvnClientContext^>(this);
 
     _pool = pool;
     svn_client_ctx_t *ctx;
 
     // We manage the context hash ourselves
     SVN_THROW(svn_client_create_context2(&ctx, NULL, pool->Handle));
+
+    ctx->cancel_func = sharpsvn_cancel_func;
+    ctx->cancel_baton = _ctxBaton->Handle;
+    ctx->progress_func = sharpsvn_progress_func;
+    ctx->progress_baton = _ctxBaton->Handle;
+    ctx->log_msg_func3 = sharpsvn_commit_log_func;
+    ctx->log_msg_baton3 = _ctxBaton->Handle;
 
     ctx->client_name = pool->AllocString(SvnBase::_clientName);
 
@@ -46,6 +59,8 @@ SvnClientContext::SvnClientContext(AprPool ^pool, SvnClientContext ^client)
     if (!client)
         throw gcnew ArgumentNullException("client");
 
+    _ctxBaton = gcnew AprBaton<SvnClientContext^>(this);
+
     _pool = pool;
     _parent = client;
 
@@ -55,6 +70,7 @@ SvnClientContext::SvnClientContext(AprPool ^pool, SvnClientContext ^client)
 
 SvnClientContext::~SvnClientContext()
 {
+    delete _ctxBaton;
     _ctx = nullptr;
     _pool = nullptr;
     _parent = nullptr;
@@ -72,20 +88,35 @@ svn_client_ctx_t *SvnClientContext::CtxHandle::get()
 
 void SvnClientContext::HandleClientError(SvnErrorEventArgs^ e)
 {
-    UNUSED_ALWAYS(e);
-    /* NOOP at SvnClientContext level */
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnSvnError(e);
 }
 
 void SvnClientContext::HandleProcessing(SvnProcessingEventArgs^ e)
 {
     UNUSED_ALWAYS(e);
-    /* NOOP at SvnClientContext level */
+}
+
+void SvnClientContext::HandleClientCommitting(SvnCommittingEventArgs ^e)
+{
+    SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnClientArgsWithCommit
+
+    if (commitArgs)
+        commitArgs->RaiseOnCommitting(e);
 }
 
 void SvnClientContext::HandleClientCommitted(SvnCommittedEventArgs^ e)
 {
-    UNUSED_ALWAYS(e);
-    /* NOOP at SvnClientContext level */
+    SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnClientArgsWithCommit
+
+    if (commitArgs)
+        commitArgs->RaiseOnCommitted(e);
+}
+
+void SvnClientContext::HandleClientNotify(SvnNotifyEventArgs^ e)
+{
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnNotify(e);
 }
 
 void SvnClientContext::SetConfigurationOption(String^ file, String^ section, String^ option, String^ value)
@@ -900,4 +931,97 @@ extern "C" {
 void SvnBase::InstallSslDialogHandler()
 {
     sharpsvn_get_ui_parent_handler = sharpsvn_get_ui_parent;
+}
+
+static svn_error_t *
+sharpsvn_cancel_func(void *cancel_baton)
+{
+    SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)cancel_baton);
+
+    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
+    try
+    {
+        client->HandleClientCancel(ea);
+
+        if (ea->Cancel)
+            return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
+
+        return nullptr;
+    }
+    catch(Exception^ e)
+    {
+        return SvnException::CreateExceptionSvnError("Cancel function", e);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
+}
+
+void SvnClientContext::HandleClientCancel(SvnCancelEventArgs ^e)
+{
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnCancel(e);
+}
+
+void
+sharpsvn_progress_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
+{
+    UNUSED_ALWAYS(pool);
+    SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)baton);
+
+    SvnProgressEventArgs^ ea = gcnew SvnProgressEventArgs(progress, total);
+
+    try
+    {
+        client->HandleClientProgress(ea);
+    }
+    finally
+    {
+        ea->Detach(false);
+    }
+}
+
+void SvnClientContext::HandleClientProgress(SvnProgressEventArgs ^e)
+{
+    if (CurrentCommandArgs)
+        CurrentCommandArgs->RaiseOnProgress(e);
+}
+
+static svn_error_t* sharpsvn_commit_log_func(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
+{
+    SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)baton);
+
+    AprPool^ tmpPool = gcnew AprPool(pool, false);
+
+    SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, client->CurrentCommandArgs->CommandType, tmpPool);
+
+    *log_msg = nullptr;
+    *tmp_file = nullptr;
+
+    try
+    {
+        client->HandleClientCommitting(ea);
+
+        if (ea->Cancel)
+            return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCommitting");
+        else if (ea->LogMessage)
+            *log_msg = tmpPool->AllocUnixString(ea->LogMessage);
+        else if (!client->_noLogMessageRequired)
+            return svn_error_create(SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
+        else
+            *log_msg = tmpPool->AllocString("");
+
+        return nullptr;
+    }
+    catch(Exception^ e)
+    {
+        return SvnException::CreateExceptionSvnError("Commit log", e);
+    }
+    finally
+    {
+        ea->Detach(false);
+
+        delete tmpPool;
+    }
 }

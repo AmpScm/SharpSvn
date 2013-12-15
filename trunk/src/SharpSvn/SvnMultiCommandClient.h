@@ -41,11 +41,13 @@ namespace SharpSvn {
 
     public ref class SvnMultiCommandClient : SvnClientContext
     {
+        initonly AprBaton<SvnMultiCommandClient^>^ _clientBaton;
         AprPool _pool;
         svn_client_mtcc_t *_mtcc;
         SvnRepositoryOperationArgs ^_roArgs;
         List<System::IDisposable^>^ _refs;
 
+        void Initialize();
         ~SvnMultiCommandClient();
 
     public:
@@ -174,5 +176,75 @@ namespace SharpSvn {
                 _client->_currentArgs = nullptr;
             }
         };
+
+    public:
+        /// <summary>
+        /// Raised to allow canceling operations. The event is first
+        /// raised on the <see cref="SvnClientArgs" /> object and
+        /// then on the <see cref="SvnClient" />
+        /// </summary>
+        DECLARE_EVENT(SvnCancelEventArgs^, Cancel)
+        /// <summary>
+        /// Raised on progress. The event is first
+        /// raised on the <see cref="SvnClientArgs" /> object and
+        /// then on the <see cref="SvnClient" />
+        /// </summary>
+        DECLARE_EVENT(SvnProgressEventArgs^, Progress)
+        /// <summary>
+        /// Raised on notifications. The event is first
+        /// raised on the <see cref="SvnClientArgs" /> object and
+        /// then on the <see cref="SvnClient" />
+        /// </summary>
+        DECLARE_EVENT(SvnNotifyEventArgs^, Notify);
+        /// <summary>
+        /// Raised on progress. The event is first
+        /// raised on the <see cref="SvnClientArgsWithCommit" /> object and
+        /// then on the <see cref="SvnClient" />
+        /// </summary>
+        DECLARE_EVENT(SvnCommittingEventArgs^, Committing)
+        /// <summary>
+        /// Raised on progress. The event is first
+        /// raised on the <see cref="SvnClientArgsWithCommit" /> object and
+        /// then on the <see cref="SvnClient" />
+        /// </summary>
+        DECLARE_EVENT(SvnCommittedEventArgs^, Committed)
+
+        /// <summary>
+        /// Raised when a subversion exception occurs.
+        /// Set <see cref="SvnErrorEventArgs::Cancel" /> to true to cancel
+        /// throwing the exception
+        /// </summary>
+        DECLARE_EVENT(SvnErrorEventArgs^, SvnError)
+
+        /// <summary>
+        /// Raised just before a command is executed. This allows a listener
+        /// to cleanup before a new command is started
+        /// </summary>
+        DECLARE_EVENT(SvnProcessingEventArgs^, Processing)
+
+    protected:
+        /// <summary>Raises the <see cref="Cancel" /> event.</summary>
+        virtual void OnCancel(SvnCancelEventArgs^ e);
+        /// <summary>Raises the <see cref="Progress" /> event.</summary>
+        virtual void OnProgress(SvnProgressEventArgs^ e);
+        /// <summary>Raises the <see cref="Committing" /> event.</summary>
+        virtual void OnCommitting(SvnCommittingEventArgs^ e);
+        /// <summary>Raises the <see cref="Committing" /> event.</summary>
+        virtual void OnCommitted(SvnCommittedEventArgs^ e);
+        /// <summary>Raises the <see cref="Notify" /> event.</summary>
+        virtual void OnNotify(SvnNotifyEventArgs^ e);
+        /// <summary>Raises the <see cref="Exception" /> event.</summary>
+        virtual void OnSvnError(SvnErrorEventArgs^ e);
+        /// <summary>Raises the <see cref="Processing" /> event.</summary>
+        virtual void OnProcessing(SvnProcessingEventArgs^ e);
+
+    internal:
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e) override sealed;
+        virtual void HandleClientProgress(SvnProgressEventArgs^ e) override sealed;
+        virtual void HandleClientCommitting(SvnCommittingEventArgs^ e) override sealed;
+        virtual void HandleClientCommitted(SvnCommittedEventArgs^ e) override sealed;
+        virtual void HandleClientNotify(SvnNotifyEventArgs^ e) override sealed;
+        virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
+        virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
     };
 }

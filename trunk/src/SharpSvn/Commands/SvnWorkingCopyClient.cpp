@@ -108,8 +108,7 @@ void SvnWcClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_
 
 void SvnWorkingCopyClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnNotify(e);
+    __super::HandleClientNotify(e);
 
     OnNotify(e);
 }

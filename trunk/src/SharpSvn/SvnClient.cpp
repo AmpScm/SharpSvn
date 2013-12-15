@@ -56,10 +56,7 @@ void SvnClient::AdministrativeDirectoryName::set(String^ value)
 
 struct SvnClientCallBacks
 {
-    static svn_error_t * __cdecl svn_cancel_func(void *cancel_baton);
-    static svn_error_t *__cdecl svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
     static void __cdecl svn_wc_notify_func2(void *baton, const svn_wc_notify_t *notify, apr_pool_t *pool);
-    static void __cdecl svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 
     static svn_error_t * __cdecl svn_wc_conflict_resolver_func(svn_wc_conflict_result_t **result, const svn_wc_conflict_description2_t *description, void *baton, apr_pool_t *result_pool, apr_pool_t *scratch_pool);
 };
@@ -68,14 +65,8 @@ void SvnClient::Initialize()
 {
     void* baton = (void*)_clientBaton->Handle;
 
-    CtxHandle->cancel_baton = baton;
-    CtxHandle->cancel_func = &SvnClientCallBacks::svn_cancel_func;
-    CtxHandle->log_msg_baton3 = baton;
-    CtxHandle->log_msg_func3 = &SvnClientCallBacks::svn_client_get_commit_log3;
     CtxHandle->notify_baton2 = baton;
     CtxHandle->notify_func2 = &SvnClientCallBacks::svn_wc_notify_func2;
-    CtxHandle->progress_baton = baton;
-    CtxHandle->progress_func = &SvnClientCallBacks::svn_ra_progress_notify_func;
     CtxHandle->conflict_baton2 = baton;
     CtxHandle->conflict_func2 = &SvnClientCallBacks::svn_wc_conflict_resolver_func;
 }
@@ -94,13 +85,10 @@ System::Version^ SvnClient::SharpSvnVersion::get()
 
 void SvnClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnCancel(e);
+    __super::HandleClientCancel(e);
 
-    if (e->Cancel)
-        return;
-
-    OnCancel(e);
+    if (!e->Cancel)
+        OnCancel(e);
 }
 
 void SvnClient::OnCancel(SvnCancelEventArgs^ e)
@@ -110,8 +98,7 @@ void SvnClient::OnCancel(SvnCancelEventArgs^ e)
 
 void SvnClient::HandleClientProgress(SvnProgressEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnProgress(e);
+    __super::HandleClientProgress(e);
 
     OnProgress(e);
 }
@@ -123,18 +110,10 @@ void SvnClient::OnProgress(SvnProgressEventArgs^ e)
 
 void SvnClient::HandleClientCommitting(SvnCommittingEventArgs^ e)
 {
-    if (e->Cancel)
-        return;
+    __super::HandleClientCommitting(e);
 
-    SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-
-    if (commitArgs)
-        commitArgs->RaiseCommitting(e);
-
-    if (e->Cancel)
-        return;
-
-    OnCommitting(e);
+    if (! e->Cancel)
+        OnCommitting(e);
 }
 
 void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
@@ -144,10 +123,7 @@ void SvnClient::OnCommitting(SvnCommittingEventArgs^ e)
 
 void SvnClient::HandleClientCommitted(SvnCommittedEventArgs^ e)
 {
-    SvnClientArgsWithCommit^ commitArgs = dynamic_cast<SvnClientArgsWithCommit^>(CurrentCommandArgs); // C#: _currentArgs as SvnCommitArgs
-
-    if (commitArgs)
-        commitArgs->RaiseCommitted(e);
+    __super::HandleClientCommitted(e);
 
     OnCommitted(e);
 }
@@ -159,8 +135,7 @@ void SvnClient::OnCommitted(SvnCommittedEventArgs^ e)
 
 void SvnClient::HandleClientNotify(SvnNotifyEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnNotify(e);
+    __super::HandleClientNotify(e);
 
     OnNotify(e);
 }
@@ -195,18 +170,10 @@ void SvnClient::OnConflict(SvnConflictEventArgs^ e)
 
 void SvnClient::HandleClientError(SvnErrorEventArgs^ e)
 {
-    if (e->Cancel)
-        return;
+    __super::HandleClientError(e);
 
-    if (CurrentCommandArgs)
-    {
-        CurrentCommandArgs->RaiseOnSvnError(e);
-
-        if (e->Cancel)
-            return;
-    }
-
-    OnSvnError(e);
+    if (! e->Cancel)
+        OnSvnError(e);
 }
 
 void SvnClient::OnSvnError(SvnErrorEventArgs^ e)
@@ -216,74 +183,14 @@ void SvnClient::OnSvnError(SvnErrorEventArgs^ e)
 
 void SvnClient::HandleProcessing(SvnProcessingEventArgs^ e)
 {
+    __super::HandleProcessing(e);
+
     OnProcessing(e);
 }
 
 void SvnClient::OnProcessing(SvnProcessingEventArgs^ e)
 {
     Processing(this, e);
-}
-
-svn_error_t* SvnClientCallBacks::svn_cancel_func(void *cancel_baton)
-{
-    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)cancel_baton);
-
-    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
-    try
-    {
-        client->HandleClientCancel(ea);
-
-        if (ea->Cancel)
-            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
-
-        return nullptr;
-    }
-    catch(Exception^ e)
-    {
-        return SvnException::CreateExceptionSvnError("Cancel function", e);
-    }
-    finally
-    {
-        ea->Detach(false);
-    }
-}
-
-svn_error_t* SvnClientCallBacks::svn_client_get_commit_log3(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool)
-{
-    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
-
-    AprPool^ tmpPool = gcnew AprPool(pool, false);
-
-    SvnCommittingEventArgs^ ea = gcnew SvnCommittingEventArgs(commit_items, client->CurrentCommandArgs->CommandType, tmpPool);
-
-    *log_msg = nullptr;
-    *tmp_file = nullptr;
-
-    try
-    {
-        client->HandleClientCommitting(ea);
-
-        if (ea->Cancel)
-            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCommitting");
-        else if (ea->LogMessage)
-            *log_msg = tmpPool->AllocUnixString(ea->LogMessage);
-        else if (!client->_noLogMessageRequired)
-            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Commit canceled: A logmessage is required");
-        else
-            *log_msg = tmpPool->AllocString("");
-
-        return nullptr;
-    }
-    catch(Exception^ e)
-    {
-        return SvnException::CreateExceptionSvnError("Commit log", e);
-    }
-    finally
-    {
-        ea->Detach(false);
-
-        delete tmpPool;
-    }
 }
 
 
@@ -297,23 +204,6 @@ void SvnClientCallBacks::svn_wc_notify_func2(void *baton, const svn_wc_notify_t 
     try
     {
         client->HandleClientNotify(ea);
-    }
-    finally
-    {
-        ea->Detach(false);
-    }
-}
-
-void SvnClientCallBacks::svn_ra_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
-{
-    UNUSED_ALWAYS(pool);
-    SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
-
-    SvnProgressEventArgs^ ea = gcnew SvnProgressEventArgs(progress, total);
-
-    try
-    {
-        client->HandleClientProgress(ea);
     }
     finally
     {

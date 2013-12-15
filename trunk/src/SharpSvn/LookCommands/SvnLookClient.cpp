@@ -58,53 +58,21 @@ SvnLookOrigin::SvnLookOrigin(String^ repositoryPath, String^ transactionName)
     _transactionName = transactionName;
 }
 
-static svn_error_t *
-svnlook_cancel_func(void *cancel_baton)
-{
-    SvnLookClient^ client = AprBaton<SvnLookClient^>::Get((IntPtr)cancel_baton);
-
-    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
-    try
-    {
-        client->HandleClientCancel(ea);
-
-        if (ea->Cancel)
-            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
-
-        return nullptr;
-    }
-    catch(Exception^ e)
-    {
-        return SvnException::CreateExceptionSvnError("Cancel function", e);
-    }
-    finally
-    {
-        ea->Detach(false);
-    }
-}
-
 SvnLookClient::SvnLookClient()
 : _pool(gcnew AprPool()), SvnClientContext(%_pool)
 {
-    _clientBaton = gcnew AprBaton<SvnLookClient^>(this);
-    CtxHandle->cancel_func = svnlook_cancel_func;
-    CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
 }
 
 SvnLookClient::~SvnLookClient()
 {
-    delete _clientBaton;
 }
 
 void SvnLookClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnCancel(e);
+    __super::HandleClientCancel(e);
 
-    if (e->Cancel)
-        return;
-
-    OnCancel(e);
+    if (! e->Cancel)
+        OnCancel(e);
 }
 
 void SvnLookClient::OnCancel(SvnCancelEventArgs^ e)

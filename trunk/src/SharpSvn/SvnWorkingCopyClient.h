@@ -74,10 +74,10 @@ protected:
         virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
     internal:
-        void HandleClientCancel(SvnCancelEventArgs^ e);
-        void HandleClientNotify(SvnNotifyEventArgs^ e);
-    virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
-    virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e) override sealed;
+        virtual void HandleClientNotify(SvnNotifyEventArgs^ e) override sealed;
+        virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
+        virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
 
     public:
         /// <summary>Gets the text file status of a working copy path</summary>

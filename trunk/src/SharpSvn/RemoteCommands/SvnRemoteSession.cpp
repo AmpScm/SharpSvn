@@ -32,56 +32,9 @@ SvnRemoteSession::~SvnRemoteSession()
     delete _clientBaton;
 }
 
-static svn_error_t *
-svnremoteclient_cancel_func(void *cancel_baton)
-{
-    SvnRemoteSession^ client = AprBaton<SvnRemoteSession^>::Get((IntPtr)cancel_baton);
-
-    SvnCancelEventArgs^ ea = gcnew SvnCancelEventArgs();
-    try
-    {
-        client->HandleClientCancel(ea);
-
-        if (ea->Cancel)
-            return svn_error_create (SVN_ERR_CANCELLED, nullptr, "Operation canceled from OnCancel");
-
-        return nullptr;
-    }
-    catch(Exception^ e)
-    {
-        return SvnException::CreateExceptionSvnError("Cancel function", e);
-    }
-    finally
-    {
-        ea->Detach(false);
-    }
-}
-
-void
-svnremoteclient_progress_notify_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool)
-{
-    UNUSED_ALWAYS(pool);
-    SvnRemoteSession^ client = AprBaton<SvnRemoteSession^>::Get((IntPtr)baton);
-
-    SvnProgressEventArgs^ ea = gcnew SvnProgressEventArgs(progress, total);
-
-    try
-    {
-        client->HandleClientProgress(ea);
-    }
-    finally
-    {
-        ea->Detach(false);
-    }
-}
 
 svn_error_t * SvnRemoteSession::Init()
 {
-    CtxHandle->cancel_func = svnremoteclient_cancel_func;
-    CtxHandle->cancel_baton = (void*)_clientBaton->Handle;
-    CtxHandle->progress_func = svnremoteclient_progress_notify_func;
-    CtxHandle->progress_baton = (void*)_clientBaton->Handle;
-
     return nullptr;
 }
 
@@ -93,13 +46,10 @@ void SvnRemoteSession::Ensure()
 
 void SvnRemoteSession::HandleClientCancel(SvnCancelEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnCancel(e);
+    __super::HandleClientCancel(e);
 
-    if (e->Cancel)
-        return;
-
-    OnCancel(e);
+    if (! e->Cancel)
+        OnCancel(e);
 }
 
 void SvnRemoteSession::OnCancel(SvnCancelEventArgs^ e)
@@ -109,8 +59,7 @@ void SvnRemoteSession::OnCancel(SvnCancelEventArgs^ e)
 
 void SvnRemoteSession::HandleClientProgress(SvnProgressEventArgs^ e)
 {
-    if (CurrentCommandArgs)
-        CurrentCommandArgs->RaiseOnProgress(e);
+    __super::HandleClientProgress(e);
 
     OnProgress(e);
 }

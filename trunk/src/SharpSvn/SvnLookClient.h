@@ -83,7 +83,6 @@ namespace SharpSvn {
     /// </remarks>
     public ref class SvnLookClient : public SvnClientContext
     {
-        initonly AprBaton<SvnLookClient^>^ _clientBaton;
         AprPool _pool;
 
     public:
@@ -188,7 +187,7 @@ namespace SharpSvn {
         virtual void OnCancel(SvnCancelEventArgs^ e);
 
     internal:
-        void HandleClientCancel(SvnCancelEventArgs^ e);
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e) override sealed;
 
     private:
         svn_error_t* ProcessTree(svn_repos_node_t *node, String^ basePath, SvnChangedArgs^ args);
