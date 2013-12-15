@@ -13,10 +13,10 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-
 #include "SvnStreamWrapper.h"
 
 #include <svn_io.h>
+#include "UnmanagedStructs.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;

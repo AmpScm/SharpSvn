@@ -167,6 +167,9 @@ bool SvnBase::IsValidRelpath(String^ path)
     if (!path)
         return false;
 
+    if (path->Length == 0)
+        return true;
+
     if (path[0] == '/' || path[path->Length-1] == '/' || path->IndexOf('\\') >= 0)
         return false;
 

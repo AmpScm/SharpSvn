@@ -60,7 +60,7 @@ bool SvnMultiCommandClient::Copy(String ^fromPath, __int64 fromRev, String ^toPa
         throw gcnew ArgumentNullException("args");
 
     AprPool pool(%_pool);
-    ArgsStore store(this, args);
+    McArgsStore store(this, args);
 
     SVN_HANDLE(svn_client_mtcc_add_copy(pool.AllocRelpath(fromPath),
                                         SVN_IS_VALID_REVNUM(fromRev)

@@ -36,7 +36,7 @@ bool SvnMultiCommandClient::CreateDirectory(String ^path, SvnRepositoryCreateDir
         throw gcnew InvalidOperationException();
 
     AprPool pool(%_pool);
-    ArgsStore store(this, args);
+    McArgsStore store(this, args);
 
     SVN_HANDLE(svn_client_mtcc_add_mkdir(pool.AllocRelpath(path),
                                          _mtcc,
