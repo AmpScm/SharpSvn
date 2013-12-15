@@ -25,19 +25,23 @@ namespace SharpSvn.Tests.Commands
             using (SvnMultiCommandClient mucc = new SvnMultiCommandClient(uri))
             {
                 SvnCommitResult cr;
+                bool tick = false;
 
                 mucc.Committing += delegate(object sender, SvnCommittingEventArgs e)
                 {
                     Assert.That(e.Items, Is.Not.Empty);
-                    Assert.That(e.Items[0].Uri == new Uri(uri, "A"));
+                    Assert.That(e.Items[0].Uri, Is.EqualTo(new Uri(uri, "A/")));
+                    Assert.That(e.Items[0].NodeKind, Is.EqualTo(SvnNodeKind.Directory));
                     Assert.That(e.LogMessage, Is.Null);
 
                     e.LogMessage = "New message";
+                    tick = true;
                 };
 
                 mucc.CreateDirectory("A");
 
                 Assert.That(mucc.Commit(out cr));
+                Assert.That(tick, "Ticked");
 
                 Assert.That(cr, Is.Not.Null);
                 Assert.That(cr.Revision, Is.EqualTo(1));
