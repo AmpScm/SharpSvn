@@ -120,8 +120,6 @@ namespace SharpSvn {
         initonly AprBaton<SvnClient^>^ _clientBaton;
         static ICollection<SvnLibrary^>^ _svnLibraries;
         AprPool _pool;
-    internal:
-        bool _noLogMessageRequired;
 
     public:
         ///<summary>Initializes a new <see cref="SvnClient" /> instance with default properties</summary>
@@ -266,11 +264,11 @@ namespace SharpSvn {
         virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
     internal:
-        void HandleClientCancel(SvnCancelEventArgs^ e);
-        void HandleClientProgress(SvnProgressEventArgs^ e);
-        void HandleClientCommitting(SvnCommittingEventArgs^ e);
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e) override sealed;
+        virtual void HandleClientProgress(SvnProgressEventArgs^ e) override sealed;
+        virtual void HandleClientCommitting(SvnCommittingEventArgs^ e) override sealed;
         virtual void HandleClientCommitted(SvnCommittedEventArgs^ e) override sealed;
-        void HandleClientNotify(SvnNotifyEventArgs^ e);
+        virtual void HandleClientNotify(SvnNotifyEventArgs^ e) override sealed;
         void HandleClientConflict(SvnConflictEventArgs^ e);
         virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
         virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;

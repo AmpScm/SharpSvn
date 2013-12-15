@@ -47,7 +47,11 @@ namespace SharpSvn.Tests.Commands
         {
             Uri uri = GetReposUri(TestReposType.Empty);
             SvnCommitResult cr;
-            using (SvnMultiCommandClient mucc = new SvnMultiCommandClient(uri))
+
+            SvnRepositoryOperationArgs oa = new SvnRepositoryOperationArgs();
+            oa.LogMessage = "Everything in one revision";
+
+            using (SvnMultiCommandClient mucc = new SvnMultiCommandClient(uri, oa))
             {
                 mucc.CreateDirectory("trunk");
                 mucc.CreateDirectory("branches");
@@ -77,6 +81,14 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(props, Is.Not.Empty);
                 Assert.That(Encoding.UTF8.GetString(ms.ToArray()), Is.EqualTo("Welcome to this project"));
                 Assert.That(props.Contains("svn:eol-style"));
+
+
+                Collection<SvnLogEventArgs> la;
+                SvnLogArgs ll = new SvnLogArgs();
+                ll.Start = 1;
+                svn.GetLog(uri, ll, out la);
+                Assert.That(la, Is.Not.Empty);
+                Assert.That(la[0].LogMessage, Is.EqualTo("Everything in one revision"));
             }
         }
     }

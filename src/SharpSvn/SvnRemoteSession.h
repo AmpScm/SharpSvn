@@ -210,8 +210,8 @@ namespace SharpSvn {
         virtual void OnProcessing(SvnProcessingEventArgs^ e);
 
     internal:
-        void HandleClientCancel(SvnCancelEventArgs^ e);
-        void HandleClientProgress(SvnProgressEventArgs^ e);
+        virtual void HandleClientCancel(SvnCancelEventArgs^ e) override sealed;
+        virtual void HandleClientProgress(SvnProgressEventArgs^ e) override sealed;
 
         virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
         virtual void HandleProcessing(SvnProcessingEventArgs^ e) override sealed;
