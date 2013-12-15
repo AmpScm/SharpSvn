@@ -264,7 +264,7 @@ namespace Security {
 
     /// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
     /// <threadsafety static="true" instance="false"/>
-    public ref class SvnClientContext : public SvnBase
+    public ref class SvnClientContext : public SvnBase, public System::ComponentModel::IComponent
     {
         svn_client_ctx_t *_ctx;
         AprPool^ _pool;
@@ -272,6 +272,7 @@ namespace Security {
         SvnContextState _contextState;
         SvnExtendedState _xState;
         initonly SvnAuthentication^ _authentication;
+        SvnClientContext ^_parent;
 
         static initonly Object^ _plinkLock = gcnew Object();
         static String^ _plinkPath;
@@ -280,6 +281,7 @@ namespace Security {
         // For SvnClient and SvnReposClient
         SvnClientArgs^ _currentArgs;
         bool _keepSession;
+        System::ComponentModel::ISite ^_site;
 
     internal:
         // Used config path; used for the authentication cache
@@ -300,8 +302,10 @@ namespace Security {
         bool _useUserDiff;
         SvnOverride _keepAllExtensionsOnConflict;
         SvnClientContext(AprPool^ pool);
+        SvnClientContext(AprPool^ pool, SvnClientContext ^client);
         virtual void HandleClientError(SvnErrorEventArgs^ e);
         virtual void HandleProcessing(SvnProcessingEventArgs^ e);
+        virtual void HandleClientCommitted(SvnCommittedEventArgs^ e);
 
     public:
         property bool IsCommandRunning
@@ -331,6 +335,34 @@ namespace Security {
                 _keepSession = value;
             }
         }
+
+        property System::ComponentModel::ISite ^Site
+        {
+            virtual System::ComponentModel::ISite ^get()
+            {
+                return _site;
+            }
+            virtual void set(System::ComponentModel::ISite ^value)
+            {
+                _site = value;
+            }
+        }
+
+    private:
+        event System::EventHandler^ Disposed
+        {
+            virtual void add(System::EventHandler^ e) sealed = System::ComponentModel::IComponent::Disposed::add
+            {
+                UNUSED_ALWAYS(e);
+                throw gcnew NotImplementedException();
+            }
+            virtual void remove(System::EventHandler^ e) sealed = System::ComponentModel::IComponent::Disposed::remove
+            {
+                UNUSED_ALWAYS(e);
+                throw gcnew NotImplementedException();
+            }
+        }
+            ;// = System::ComponentModel::IComponent::Disposed;
 
     private:
         ~SvnClientContext();
@@ -431,10 +463,10 @@ namespace Security {
             SvnCommittedEventArgs^ _commitResult;
             svn_commit_callback2_t _callback;
             AprBaton<CommitResultReceiver^>^ _commitBaton;
-            SvnClient ^_client;
+            SvnClientContext ^_client;
 
         public:
-            CommitResultReceiver(SvnClient^ client);
+            CommitResultReceiver(SvnClientContext^ client);
             ~CommitResultReceiver();
 
         internal:
@@ -524,12 +556,12 @@ namespace Security {
             }
         };
 
-    void NopEventHandler(Object^ sender, EventArgs^ e)
-    {
-        UNUSED_ALWAYS(sender);
-        UNUSED_ALWAYS(e);
-        GC::KeepAlive(this); // Keep reference online
-    }
+        void NopEventHandler(Object^ sender, EventArgs^ e)
+        {
+            UNUSED_ALWAYS(sender);
+            UNUSED_ALWAYS(e);
+            GC::KeepAlive(this); // Keep reference online
+        }
     };
 
     public ref class SvnCommandResult abstract : SvnEventArgs

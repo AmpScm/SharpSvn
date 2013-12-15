@@ -76,6 +76,7 @@ namespace SharpSvn {
     ref class SvnGetAppliedMergeInfoArgs;
     ref class SvnUpgradeArgs;
     ref class SvnPatchArgs;
+    ref class SvnRepositoryOperationArgs;
 
     ref class SvnCropWorkingCopyArgs;
     ref class SvnGetCapabilitiesArgs;
@@ -97,6 +98,10 @@ namespace SharpSvn {
     ref class SvnClientReporter;
     ref class SvnWorkingCopyState;
     ref class SvnWorkingCopyVersion;
+
+    ref class SvnMultiCommandClient;
+
+    public delegate void SvnRepositoryOperationBuilder(SvnMultiCommandClient ^client);
 
     namespace Delta {
         ref class SvnDeltaEditor;
@@ -264,7 +269,7 @@ namespace SharpSvn {
         void HandleClientCancel(SvnCancelEventArgs^ e);
         void HandleClientProgress(SvnProgressEventArgs^ e);
         void HandleClientCommitting(SvnCommittingEventArgs^ e);
-        void HandleClientCommitted(SvnCommittedEventArgs^ e);
+        virtual void HandleClientCommitted(SvnCommittedEventArgs^ e) override sealed;
         void HandleClientNotify(SvnNotifyEventArgs^ e);
         void HandleClientConflict(SvnConflictEventArgs^ e);
         virtual void HandleClientError(SvnErrorEventArgs^ e) override sealed;
@@ -1235,6 +1240,12 @@ namespace SharpSvn {
         bool Patch(String^ patchFile, String^ targetDir);
         bool Patch(String^ patchFile, String^ targetDir, SvnPatchArgs^ args);
 
+    public:
+        bool RepositoryOperation(Uri ^anchor, SvnRepositoryOperationBuilder ^builder);
+        bool RepositoryOperation(Uri ^anchor, SvnRepositoryOperationArgs ^args, SvnRepositoryOperationBuilder ^builder);
+
+        bool RepositoryOperation(Uri ^anchor, SvnRepositoryOperationBuilder ^builder, [Out] SvnCommitResult^% result);
+        bool RepositoryOperation(Uri ^anchor, SvnRepositoryOperationArgs ^args, SvnRepositoryOperationBuilder ^builder, [Out] SvnCommitResult^% result);
 
 #ifdef _DEBUG
     public:
@@ -1396,6 +1407,15 @@ namespace SharpSvn {
 #pragma endregion
     private:
         ~SvnClient();
+
+    internal:
+        property AprPool^ ClientPool
+        {
+            AprPool^ get()
+            {
+                return %_pool;
+            }
+        }
     };
 }
 #include "SvnClientArgs.h"
