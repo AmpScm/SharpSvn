@@ -42,6 +42,10 @@ namespace SharpSvn {
         AprPool _pool;
         svn_client_mtcc_t *_mtcc;
         SvnRepositoryOperationArgs ^_roArgs;
+        List<System::IDisposable^>^ _refs;
+
+        ~SvnMultiCommandClient();
+
     public:
         /// <summary>Creates a new <see cref="SvnMultiCommandClient" /> completely
         /// operating like a command on the <see cref="SvnClient" /></summary>
@@ -141,5 +145,32 @@ namespace SharpSvn {
         {
             return Open(sessionUri, args);
         }
+
+    private:
+        SvnClientArgs^ _currentArgs;
+
+        property SvnClientArgs^ CurrentCommandArgs
+        {
+            SvnClientArgs^ get() new
+            {
+                return _currentArgs ? _currentArgs : __super::CurrentCommandArgs;
+            }
+        }
+
+        ref class ArgsStore sealed
+        {
+            initonly SvnMultiCommandClient^ _client;
+        public:
+            inline ArgsStore(SvnMultiCommandClient^ client, SvnClientArgs^ args)
+            {
+                _client = client;
+                assert(! _client->_currentArgs);
+                client->_currentArgs = args;
+            }
+            inline ~ArgsStore()
+            {
+                _client->_currentArgs = nullptr;
+            }
+        };
     };
 }

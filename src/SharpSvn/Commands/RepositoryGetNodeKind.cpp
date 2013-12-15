@@ -32,5 +32,18 @@ bool SvnMultiCommandClient::GetNodeKind(String ^path, SvnRepositoryGetNodeKindAr
     else if (! args)
         throw gcnew ArgumentNullException("args");
 
-    throw gcnew NotImplementedException();
+    AprPool pool(%_pool);
+    ArgsStore store(this, args);
+
+    svn_node_kind_t node_kind;
+
+    SVN_HANDLE(svn_client_mtcc_check_path(&node_kind,
+                                          pool.AllocRelpath(path),
+                                          FALSE /* check_repository */,
+                                          _mtcc,
+                                          pool.Handle));
+
+    kind = (SvnNodeKind)node_kind;
+
+    return true;
 }

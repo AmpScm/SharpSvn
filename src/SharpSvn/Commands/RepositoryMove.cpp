@@ -37,5 +37,13 @@ bool SvnMultiCommandClient::Move(String ^fromPath, String ^toPath, SvnRepository
     else if (! args)
         throw gcnew ArgumentNullException("args");
 
-    throw gcnew NotImplementedException();
+    AprPool pool(%_pool);
+    ArgsStore store(this, args);
+
+    SVN_HANDLE(svn_client_mtcc_add_move(pool.AllocRelpath(fromPath),
+                                        pool.AllocRelpath(toPath),
+                                        _mtcc,
+                                        pool.Handle));
+
+    return true;
 }

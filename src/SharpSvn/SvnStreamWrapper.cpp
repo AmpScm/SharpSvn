@@ -60,7 +60,7 @@ static svn_error_t *svnStreamRead(void *baton, char *buffer, apr_size_t *len)
 static svn_error_t *svnStreamWrite(void *baton, const char *data, apr_size_t *len)
 {
     if (*len == 0)
-    return nullptr;
+        return nullptr;
 
     // Subversion:
     //                  Handlers are obliged to complete a read or write
@@ -94,18 +94,62 @@ static svn_error_t *svnStreamClose(void *baton)
     return nullptr;
 }
 
-void SvnStreamWrapper::Init(bool enableRead, bool enableWrite)
+static svn_error_t *svnStreamMark(void *baton,
+                                  svn_stream_mark_t **mark,
+                                  apr_pool_t *pool)
+{
+    SvnStreamWrapper^ sw = AprBaton<SvnStreamWrapper^>::Get((IntPtr)baton);
+
+    __int64 *pos = (__int64 *)apr_palloc(pool, sizeof(*pos));
+
+    *pos = sw->Stream->Position;
+
+    *mark = (svn_stream_mark_t *)(void*)pos;
+
+    return SVN_NO_ERROR;
+}
+
+static svn_error_t *svnStreamSeek(void *baton,
+                                  const svn_stream_mark_t *mark)
+{
+    SvnStreamWrapper^ sw = AprBaton<SvnStreamWrapper^>::Get((IntPtr)baton);
+
+    __int64 newPos = 0;
+
+    if (mark)
+    {
+        newPos = *(const __int64*)(const void*)mark;
+    }
+
+    try
+    {
+        sw->Stream->Position = newPos;
+    }
+    catch (Exception ^ex)
+    {
+        return SvnException::CreateExceptionSvnError("Seek stream", ex);
+    }
+
+    return nullptr;
+}
+
+void SvnStreamWrapper::Init(bool enableRead, bool enableWrite, bool enableSeek)
 {
     _svnStream = svn_stream_create((void*)_streamBaton->Handle, _pool->Handle);
 
     if (!_svnStream)
         throw gcnew InvalidOperationException("Can't create svn stream");
 
-
     if (enableRead)
         svn_stream_set_read(_svnStream, svnStreamRead);
     if (enableWrite)
         svn_stream_set_write(_svnStream, svnStreamWrite);
+
+    if (enableSeek)
+    {
+        svn_stream_set_mark(_svnStream, svnStreamMark);
+        svn_stream_set_seek(_svnStream, svnStreamSeek);
+    }
 
     svn_stream_set_close(_svnStream, svnStreamClose);
 }
