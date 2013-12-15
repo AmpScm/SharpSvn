@@ -41,10 +41,23 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
     _authentication = gcnew SharpSvn::Security::SvnAuthentication(this, pool);
 }
 
+SvnClientContext::SvnClientContext(AprPool ^pool, SvnClientContext ^client)
+{
+    if (!client)
+        throw gcnew ArgumentNullException("client");
+
+    _pool = pool;
+    _parent = client;
+
+    _ctx = client->CtxHandle;
+    _authentication = client->Authentication;
+}
+
 SvnClientContext::~SvnClientContext()
 {
     _ctx = nullptr;
     _pool = nullptr;
+    _parent = nullptr;
 }
 
 svn_client_ctx_t *SvnClientContext::CtxHandle::get()
@@ -69,6 +82,12 @@ void SvnClientContext::HandleProcessing(SvnProcessingEventArgs^ e)
     /* NOOP at SvnClientContext level */
 }
 
+void SvnClientContext::HandleClientCommitted(SvnCommittedEventArgs^ e)
+{
+    UNUSED_ALWAYS(e);
+    /* NOOP at SvnClientContext level */
+}
+
 void SvnClientContext::SetConfigurationOption(String^ file, String^ section, String^ option, String^ value)
 {
     if (!file)
@@ -79,7 +98,7 @@ void SvnClientContext::SetConfigurationOption(String^ file, String^ section, Str
         throw gcnew ArgumentNullException("option");
     else if (!value)
         throw gcnew ArgumentNullException("value");
-    else if (State > SvnContextState::ConfigLoaded)
+    else if (_parent || State > SvnContextState::ConfigLoaded)
         throw gcnew InvalidOperationException();
 
     if (!String::Equals(file, SvnConfigNames::ConfigCategory)
@@ -99,6 +118,12 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 {
     if (!_pool)
         throw gcnew ObjectDisposedException("SvnClient");
+
+    if (_parent)
+    {
+        _parent->EnsureState(requiredState);
+        return;
+    }
 
     if (requiredState < State)
         return;
@@ -176,6 +201,12 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 
 void SvnClientContext::EnsureState(SvnContextState requiredState, SvnExtendedState xState)
 {
+    if (_parent)
+    {
+        _parent->EnsureState(requiredState, xState);
+        return;
+    }
+
     EnsureState(requiredState);
 
     if (0 == (int)(xState & ~_xState))
@@ -190,6 +221,9 @@ void SvnClientContext::EnsureState(SvnContextState requiredState, SvnExtendedSta
 
 void SvnClientContext::ApplyMimeTypes()
 {
+    if (_parent)
+        throw gcnew InvalidOperationException();
+
     if (0 != (int)(_xState & SvnExtendedState::MimeTypesLoaded))
         return;
 
@@ -227,6 +261,8 @@ void SvnClientContext::ApplyMimeTypes()
 
 void SvnClientContext::LoadTortoiseSvnHooks()
 {
+    if (_parent)
+        throw gcnew InvalidOperationException();
     if (0 != (int)(_xState & SvnExtendedState::TortoiseSvnHooksLoaded))
         return;
 
@@ -303,6 +339,8 @@ bool SvnClientContext::FindHook(String^ path, SvnClientHookType hookType, [Out] 
         throw gcnew InvalidOperationException();
     else if (!Enum::IsDefined(SvnClientHookType::typeid, hookType) || hookType == SvnClientHookType::Undefined)
         throw gcnew ArgumentOutOfRangeException("hookType");
+    else if (_parent)
+        throw gcnew InvalidOperationException();
 
     hook = nullptr;
 
@@ -625,6 +663,9 @@ String^ SvnClientContext::PlinkPath::get()
 
 void SvnClientContext::LoadConfiguration(String ^path, bool ensurePath)
 {
+    if (_parent)
+        throw gcnew InvalidOperationException();
+
     if (State >= SvnContextState::ConfigPrepared)
         throw gcnew InvalidOperationException("Configuration already loaded");
 
@@ -673,6 +714,9 @@ void SvnClientContext::LoadConfigurationDefault()
 
 void SvnClientContext::UseDefaultConfiguration()
 {
+    if (_parent)
+        throw gcnew InvalidOperationException();
+
     if (State >= SvnContextState::ConfigPrepared)
         throw gcnew InvalidOperationException("Configuration already loaded");
 
@@ -764,7 +808,6 @@ SvnClientContext::NoArgsStore::NoArgsStore(SvnClientContext^ client, AprPool^ po
     _lastContext = SvnClientContext::_activeContext;
     SvnClientContext::_activeContext = _client;
 
-
     try
     {
         if (! client->KeepSession && pool != nullptr)
@@ -805,7 +848,7 @@ static svn_error_t * the_commit_callback2(const svn_commit_info_t *commit_info, 
     }
 }
 
-SvnClientContext::CommitResultReceiver::CommitResultReceiver(SvnClient^ client)
+SvnClientContext::CommitResultReceiver::CommitResultReceiver(SvnClientContext^ client)
 {
     _callback = the_commit_callback2;
     _commitBaton = gcnew AprBaton<CommitResultReceiver^>(this);

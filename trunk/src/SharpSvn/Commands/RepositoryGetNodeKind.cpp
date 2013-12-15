@@ -1,4 +1,4 @@
-// Copyright 2007-2008 The SharpSvn Project
+// Copyright 2007-2009 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -12,58 +12,17 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-#pragma once
+#include "stdafx.h"
+#include "SvnMultiCommandClient.h"
 
-struct apr_allocator_t
-{};
+using namespace SharpSvn;
 
-struct apr_file_t
-{};
+bool SvnMultiCommandClient::GetNodeKind(String ^path, SvnNodeKind %kind)
+{
+    return GetNodeKind(path, gcnew SvnRepositoryGetNodeKindArgs(), kind);
+}
 
-struct apr_hash_t
-{};
-
-struct apr_pool_t
-{};
-
-struct apr_hash_index_t
-{};
-
-struct svn_auth_batton_t
-{};
-
-struct svn_repos_t
-{};
-
-struct svn_stream_t
-{};
-
-struct svn_auth_baton_t
-{};
-
-struct svn_wc_adm_access_t
-{};
-
-struct svn_config_t
-{};
-
-struct svn_fs_t
-{};
-
-struct svn_diff_t
-{};
-
-struct svn_fs_txn_t
-{};
-
-struct svn_fs_root_t
-{};
-
-struct svn_ra_session_t
-{};
-
-struct svn_wc_context_t
-{};
-
-struct svn_client_mtcc_t
-{};
+bool SvnMultiCommandClient::GetNodeKind(String ^path, SvnRepositoryGetNodeKindArgs ^args, SvnNodeKind %kind)
+{
+    throw gcnew NotImplementedException();
+}
