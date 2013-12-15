@@ -68,6 +68,8 @@ namespace SharpSvn.Tests.Commands
                 Collection<SvnListEventArgs> members;
                 svn.GetList(uri, out members);
 
+                Assert.That(members, Is.Not.Empty);
+
                 MemoryStream ms = new MemoryStream();
                 SvnPropertyCollection props;
                 svn.Write(new Uri(uri, "trunk/README"), ms, out props);
