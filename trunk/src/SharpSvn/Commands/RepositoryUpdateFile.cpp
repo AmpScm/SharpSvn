@@ -20,10 +20,22 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::UpdateFile(String ^path, System::IO::Stream ^newData)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (! newData)
+        throw gcnew ArgumentNullException("newData");
+
     return UpdateFile(path, newData, gcnew SvnRepositoryUpdateFileArgs());
 }
 
 bool SvnMultiCommandClient::UpdateFile(String ^path, System::IO::Stream ^newData, SvnRepositoryUpdateFileArgs ^args)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (! newData)
+        throw gcnew ArgumentNullException("newData");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     throw gcnew NotImplementedException();
 }

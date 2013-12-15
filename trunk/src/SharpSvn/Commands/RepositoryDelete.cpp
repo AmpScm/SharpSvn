@@ -20,10 +20,18 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::Delete(String ^path)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+
     return Delete(path, gcnew SvnRepositoryDeleteArgs());
 }
 
 bool SvnMultiCommandClient::Delete(String ^path, SvnRepositoryDeleteArgs ^args)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     throw gcnew InvalidOperationException();
 }

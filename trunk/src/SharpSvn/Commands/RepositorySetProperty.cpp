@@ -19,21 +19,43 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::SetProperty(String^ path, String^ propertyName, String^ value)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (String::IsNullOrEmpty(propertyName))
+        throw gcnew ArgumentNullException("propertyName");
+
     return SetProperty(path, propertyName, value, gcnew SvnRepositorySetPropertyArgs());
 }
 
 bool SvnMultiCommandClient::SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (String::IsNullOrEmpty(propertyName))
+        throw gcnew ArgumentNullException("propertyName");
+
     return SetProperty(path, propertyName, bytes, gcnew SvnRepositorySetPropertyArgs());
 }
 
 bool SvnMultiCommandClient::DeleteProperty(String^ path, String^ propertyName)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (String::IsNullOrEmpty(propertyName))
+        throw gcnew ArgumentNullException("propertyName");
+
     return DeleteProperty(path, propertyName, gcnew SvnRepositorySetPropertyArgs());
 }
 
 bool SvnMultiCommandClient::SetProperty(String^ path, String^ propertyName, String^ value, SvnRepositorySetPropertyArgs ^args)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (String::IsNullOrEmpty(propertyName))
+        throw gcnew ArgumentNullException("propertyName");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     AprPool pool(%_pool);
 
     return InternalSetProperty(path, propertyName, pool.AllocSvnString(value), args, %pool);
@@ -41,6 +63,13 @@ bool SvnMultiCommandClient::SetProperty(String^ path, String^ propertyName, Stri
 
 bool SvnMultiCommandClient::SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes, SvnRepositorySetPropertyArgs ^args)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (String::IsNullOrEmpty(propertyName))
+        throw gcnew ArgumentNullException("propertyName");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     AprPool pool(%_pool);
 
     array<Byte> ^byteArray = dynamic_cast<array<Byte>^>(bytes);
@@ -57,6 +86,13 @@ bool SvnMultiCommandClient::SetProperty(String^ path, String^ propertyName, ICol
 
 bool SvnMultiCommandClient::DeleteProperty(String^ path, String^ propertyName, SvnRepositorySetPropertyArgs ^args)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (String::IsNullOrEmpty(propertyName))
+        throw gcnew ArgumentNullException("propertyName");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     AprPool pool(%_pool);
 
     return InternalSetProperty(path, propertyName, nullptr, args, %pool);

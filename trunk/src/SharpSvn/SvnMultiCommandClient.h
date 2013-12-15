@@ -65,41 +65,68 @@ namespace SharpSvn {
         bool Open(Uri ^sessionUri);
         /// <summary>Opens a not previously opened  <see cref="SvnMultiCommandClient" />
         /// to the specified url</summary>
+        /// <remarks>Unlike most other operations in SharpSvn the args object is used
+        /// untile the SvnMultiCommandClient is committed or disposed</remarks>
         bool Open(Uri ^sessionUri, SvnRepositoryOperationArgs ^args);
 
     public:
+
+        /// <summary>Commits all recorded operations as a new revision.</summary>
         bool Commit();
+        /// <summary>Commits all recorded operations as a new revision.</summary>
         bool Commit([Out] SvnCommitResult ^%result);
 
     public:
+        /// <summary>Creates the specified path</summary>
         bool CreateDirectory(String ^path);
+        /// <summary>Creates the specified path</summary>
         bool CreateDirectory(String ^path, SvnRepositoryCreateDirectoryArgs ^args);
 
+        /// <summary>Deletes the specified path</summary>
         bool Delete(String ^path);
+        /// <summary>Deletes the specified path</summary>
         bool Delete(String ^path, SvnRepositoryDeleteArgs ^args);
 
+        /// <summary>Moves the specified path to the new location</summary>
         bool Move(String ^fromPath, String ^toPath);
+        /// <summary>Moves the specified path to the new location</summary>
         bool Move(String ^fromPath, String ^toPath, SvnRepositoryMoveArgs ^args);
 
+        /// <summary>Copies the specified path to the new location</summary>
         bool Copy(String ^fromPath, String ^toPath);
+        /// <summary>Copies the specified path to the new location</summary>
         bool Copy(String ^fromPath, __int64 fromRev, String ^toPath);
+        /// <summary>Copies the specified path to the new location</summary>
         bool Copy(String ^fromPath, String ^toPath, SvnRepositoryCopyArgs ^args);
+        /// <summary>Copies the specified path to the new location</summary>
         bool Copy(String ^fromPath, __int64 fromRev, String ^toPath, SvnRepositoryCopyArgs ^args);
 
+        /// <summary>Sets a property on path, which can be an added or existing node</summary>
         bool SetProperty(String^ path, String^ propertyName, String^ value);
+        /// <summary>Sets a property on path, which can be an added or existing node</summary>
         bool SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes);
+        /// <summary>Deletes a property on path, which can be an added or existing node</summary>
         bool DeleteProperty(String^ path, String^ propertyName);
+        /// <summary>Sets a property on path, which can be an added or existing node</summary>
         bool SetProperty(String^ path, String^ propertyName, String^ value, SvnRepositorySetPropertyArgs ^args);
+        /// <summary>Sets a property on path, which can be an added or existing node</summary>
         bool SetProperty(String^ path, String^ propertyName, ICollection<Byte>^ bytes, SvnRepositorySetPropertyArgs ^args);
+        /// <summary>Deletes a property on path, which can be an added or existing node</summary>
         bool DeleteProperty(String^ path, String^ propertyName, SvnRepositorySetPropertyArgs ^args);
 
+        /// <summary>Updates the file that already exists at (or was just copied/moved to) PATH</summary>
         bool UpdateFile(String ^path, System::IO::Stream ^newData);
+        /// <summary>Updates the file that already exists at (or was just copied/moved to) PATH</summary>
         bool UpdateFile(String ^path, System::IO::Stream ^newData, SvnRepositoryUpdateFileArgs ^args);
 
+        /// <summary>Adds a new file at PATH</summary>
         bool CreateFile(String ^path, System::IO::Stream ^newData);
+        /// <summary>Adds a new file at PATH</summary>
         bool CreateFile(String ^path, System::IO::Stream ^newData, SvnRepositoryCreateFileArgs ^args);
 
+        /// <summary>Gets the (new) node kind of the node at PATH</summary>
         bool GetNodeKind(String ^path, SvnNodeKind %kind);
+        /// <summary>Gets the (new) node kind of the node at PATH</summary>
         bool GetNodeKind(String ^path, SvnRepositoryGetNodeKindArgs ^args, SvnNodeKind %kind);
 
     private:

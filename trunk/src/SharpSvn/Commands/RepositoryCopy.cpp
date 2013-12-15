@@ -20,20 +20,44 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::Copy(String ^fromPath, String ^toPath)
 {
+    if (String::IsNullOrEmpty(fromPath) || ! IsValidRelpath(fromPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "fromPath");
+    else if (String::IsNullOrEmpty(toPath) || ! IsValidRelpath(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "toPath");
+
     return Copy(fromPath, SVN_INVALID_REVNUM, toPath);
 }
 
 bool SvnMultiCommandClient::Copy(String ^fromPath, __int64 fromRev, String ^toPath)
 {
+    if (String::IsNullOrEmpty(fromPath) || ! IsValidRelpath(fromPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "fromPath");
+    else if (String::IsNullOrEmpty(toPath) || ! IsValidRelpath(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "toPath");
+
     return Copy(fromPath, fromRev, toPath, gcnew SvnRepositoryCopyArgs());
 }
 
 bool SvnMultiCommandClient::Copy(String ^fromPath, String ^toPath, SvnRepositoryCopyArgs ^args)
 {
+    if (String::IsNullOrEmpty(fromPath) || ! IsValidRelpath(fromPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "fromPath");
+    else if (String::IsNullOrEmpty(toPath) || ! IsValidRelpath(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "toPath");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     return Copy(fromPath, SVN_INVALID_REVNUM, toPath, args);
 }
 
 bool SvnMultiCommandClient::Copy(String ^fromPath, __int64 fromRev, String ^toPath, SvnRepositoryCopyArgs ^args)
 {
+    if (String::IsNullOrEmpty(fromPath) || ! IsValidRelpath(fromPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "fromPath");
+    else if (String::IsNullOrEmpty(toPath) || ! IsValidRelpath(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "toPath");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     throw gcnew NotImplementedException();
 }

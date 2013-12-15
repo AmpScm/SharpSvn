@@ -19,10 +19,18 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::GetNodeKind(String ^path, SvnNodeKind %kind)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+
     return GetNodeKind(path, gcnew SvnRepositoryGetNodeKindArgs(), kind);
 }
 
 bool SvnMultiCommandClient::GetNodeKind(String ^path, SvnRepositoryGetNodeKindArgs ^args, SvnNodeKind %kind)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     throw gcnew NotImplementedException();
 }
