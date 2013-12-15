@@ -16,6 +16,7 @@
   <!-- -->
   <property name="subversionVersion" value="1.8.5" overwrite="false" />
   <property name="libgit2Version" value="0.20.0" overwrite="false" />
+  <property name="mtccMerges" value="1550758,1550765,1550783,1550799,1550806,1550807,1550816,1550831,1550840,1550848,1550938,1550940,1550967,1550972,1550981,1550974" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1498000 - Use transition based iprop handling -->
   <!-- r1531014, r1532316, r1536350, r1536383, r1536464, r1536488 - Move updates during delete -->
@@ -28,7 +29,7 @@
   <!-- r1547774 - fix symlink checkout -->
   <!-- r1542765, r1542767, r1542774 - Sqlite 3.8 improvements -->
   <!-- r1549858 - fix proplist for iprop behavior -->
-  <property name="subversionMerges" value="1531014,1532316,1536350,1536383,1536464,1536488,1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1535676,1544597,1544600,1544688,1544690,1545111,1545122,1544182,1547774,1542765,1542767,1542774,1549858" overwrite="false" /> 
+  <property name="subversionMerges" value="1531014,1532316,1536350,1536383,1536464,1536488,1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1535676,1544597,1544600,1544688,1544690,1545111,1545122,1544182,1547774,1542765,1542767,1542774,1549858,${mtccMerges}" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
