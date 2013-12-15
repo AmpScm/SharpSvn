@@ -21,6 +21,12 @@
 
 using namespace SharpSvn;
 
+SvnMultiCommandClient::~SvnMultiCommandClient()
+{
+    if (_refs)
+        _refs = nullptr;
+}
+
 SvnMultiCommandClient::SvnMultiCommandClient(SvnClient ^via)
     : _pool(via->ClientPool), SvnClientContext(%_pool, via)
 {

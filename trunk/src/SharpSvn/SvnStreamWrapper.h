@@ -50,7 +50,7 @@ namespace SharpSvn {
                 else if (enableWrite && !_stream->CanWrite)
                     throw gcnew InvalidOperationException("Can't enable writing on an unwritable stream");
 
-                Init(enableRead, enableWrite);
+                Init(enableRead, enableWrite, stream->CanSeek);
             }
 
             ~SvnStreamWrapper();
@@ -65,7 +65,7 @@ namespace SharpSvn {
             }
 
         private:
-            void Init(bool enableRead, bool enableWrite);
+            void Init(bool enableRead, bool enableWrite, bool enableSeek);
 
         internal:
             property Stream^ Stream

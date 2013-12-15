@@ -33,5 +33,12 @@ bool SvnMultiCommandClient::Delete(String ^path, SvnRepositoryDeleteArgs ^args)
     else if (! args)
         throw gcnew ArgumentNullException("args");
 
-    throw gcnew InvalidOperationException();
+        AprPool pool(%_pool);
+    ArgsStore store(this, args);
+
+    SVN_HANDLE(svn_client_mtcc_add_delete(pool.AllocRelpath(path),
+                                          _mtcc,
+                                          pool.Handle));
+
+    return true;
 }

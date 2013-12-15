@@ -98,7 +98,16 @@ bool SvnMultiCommandClient::DeleteProperty(String^ path, String^ propertyName, S
     return InternalSetProperty(path, propertyName, nullptr, args, %pool);
 }
 
-bool SvnMultiCommandClient::InternalSetProperty(String^ target, String^ propertyName, const svn_string_t* value, SvnRepositorySetPropertyArgs^ args, AprPool^ pool)
+bool SvnMultiCommandClient::InternalSetProperty(String^ path, String^ propertyName, const svn_string_t* value, SvnRepositorySetPropertyArgs^ args, AprPool^ pool)
 {
-    throw gcnew NotImplementedException();
+    ArgsStore store(this, args);
+
+    SVN_HANDLE(svn_client_mtcc_add_propset(pool->AllocRelpath(path),
+                                           pool->AllocString(propertyName),
+                                           value,
+                                           FALSE /* skip_checks */,
+                                           _mtcc,
+                                           pool->Handle));
+
+    return true;
 }

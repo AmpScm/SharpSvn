@@ -32,6 +32,15 @@ bool SvnMultiCommandClient::CreateDirectory(String ^path, SvnRepositoryCreateDir
         throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
     else if (! args)
         throw gcnew ArgumentNullException("args");
+    else if (! _mtcc)
+        throw gcnew InvalidOperationException();
 
-    throw gcnew InvalidOperationException();
+    AprPool pool(%_pool);
+    ArgsStore store(this, args);
+
+    SVN_HANDLE(svn_client_mtcc_add_mkdir(pool.AllocRelpath(path),
+                                         _mtcc,
+                                         pool.Handle));
+
+    return true;
 }

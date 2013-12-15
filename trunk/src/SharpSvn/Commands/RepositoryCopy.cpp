@@ -59,5 +59,16 @@ bool SvnMultiCommandClient::Copy(String ^fromPath, __int64 fromRev, String ^toPa
     else if (! args)
         throw gcnew ArgumentNullException("args");
 
-    throw gcnew NotImplementedException();
+    AprPool pool(%_pool);
+    ArgsStore store(this, args);
+
+    SVN_HANDLE(svn_client_mtcc_add_copy(pool.AllocRelpath(fromPath),
+                                        SVN_IS_VALID_REVNUM(fromRev)
+                                            ? (svn_revnum_t)fromRev
+                                            : SVN_INVALID_REVNUM,
+                                        pool.AllocRelpath(toPath),
+                                        _mtcc,
+                                        pool.Handle));
+
+    return true;
 }

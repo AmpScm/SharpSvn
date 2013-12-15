@@ -70,6 +70,13 @@ namespace SharpSvn {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This argument is not a valid relative path.
+        /// </summary>
+        internal: static property System::String^  ArgumentMustBeAValidRelativePath {
+            System::String^  get();
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The argument must be a valid absolute repository Uri.
         /// </summary>
         internal: static property System::String^  ArgumentMustBeAValidRepositoryUri {
@@ -571,6 +578,10 @@ namespace SharpSvn {
     
     inline System::String^  SharpSvnStrings::ArgumentMustBeAPathNotAUri::get() {
         return ResourceManager->GetString(L"ArgumentMustBeAPathNotAUri", resourceCulture);
+    }
+    
+    inline System::String^  SharpSvnStrings::ArgumentMustBeAValidRelativePath::get() {
+        return ResourceManager->GetString(L"ArgumentMustBeAValidRelativePath", resourceCulture);
     }
     
     inline System::String^  SharpSvnStrings::ArgumentMustBeAValidRepositoryUri::get() {

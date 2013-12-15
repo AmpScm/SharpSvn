@@ -13,10 +13,11 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-
 #include "SvnMultiCommandClient.h"
+#include "SvnStreamWrapper.h"
 
 using namespace SharpSvn;
+using SharpSvn::Implementation::SvnStreamWrapper;
 
 bool SvnMultiCommandClient::CreateFile(String ^path, System::IO::Stream ^newData)
 {
@@ -33,5 +34,21 @@ bool SvnMultiCommandClient::CreateFile(String ^path, System::IO::Stream ^newData
     else if (! args)
         throw gcnew ArgumentNullException("args");
 
-    throw gcnew NotImplementedException();
+    AprPool pool(%_pool);
+    ArgsStore store(this, args);
+
+    SvnStreamWrapper ^wp = gcnew SvnStreamWrapper(newData, true, false, %_pool);
+
+    if (!_refs)
+        _refs = gcnew List<System::IDisposable^>();
+
+    _refs->Add(wp);
+
+    SVN_HANDLE(svn_client_mtcc_add_add_file(pool.AllocRelpath(path),
+                                            wp->Handle,
+                                            nullptr /* checksum */,
+                                            _mtcc,
+                                            pool.Handle));
+
+    return true;
 }
