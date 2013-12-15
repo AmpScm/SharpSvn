@@ -20,10 +20,18 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::CreateDirectory(String ^path)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+
     return CreateDirectory(path, gcnew SvnRepositoryCreateDirectoryArgs());
 }
 
 bool SvnMultiCommandClient::CreateDirectory(String ^path, SvnRepositoryCreateDirectoryArgs ^args)
 {
+    if (! IsValidRelpath(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "path");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     throw gcnew InvalidOperationException();
 }

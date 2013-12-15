@@ -108,13 +108,13 @@
     <Filter Include="PdbClient">
       <UniqueIdentifier>{c28df9ee-cb4d-44e3-8c13-9ff99189044e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SvnMultiClient">
+    <Filter Include="SvnMultiCommandClient">
       <UniqueIdentifier>{3bf7dd6d-eb40-4e34-8927-f37d7a6907f1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SvnMultiClient\Args">
+    <Filter Include="SvnMultiCommandClient\Args">
       <UniqueIdentifier>{6a295576-270f-4e31-b1f3-00ee011f51f6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SvnMultiClient\Sources">
+    <Filter Include="SvnMultiCommandClient\Sources">
       <UniqueIdentifier>{ee7fe89e-bd63-4661-8a21-060726e77c2c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -645,10 +645,10 @@
       <Filter>SvnClient\EventArgs</Filter>
     </ClInclude>
     <ClInclude Include="Args\SvnRepositoryOperationArgs.h">
-      <Filter>SvnMultiClient\Args</Filter>
+      <Filter>SvnMultiCommandClient\Args</Filter>
     </ClInclude>
     <ClInclude Include="SvnMultiCommandClient.h">
-      <Filter>SvnMultiClient</Filter>
+      <Filter>SvnMultiCommandClient</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -1076,34 +1076,34 @@
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="SvnMultiCommandClient.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\MultiOpen.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryCreateDirectory.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryCreateFile.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryGetNodeKind.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryMove.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryCopy.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositorySetProperty.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryUpdateFile.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\RepositoryDelete.cpp">
-      <Filter>SvnMultiClient\Sources</Filter>
+      <Filter>SvnMultiCommandClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

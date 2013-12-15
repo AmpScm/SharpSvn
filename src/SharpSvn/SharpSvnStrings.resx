@@ -327,4 +327,7 @@
   <data name="NotifyUpdateStartedX" xml:space="preserve">
     <value>Updating '{0}':</value>
   </data>
+  <data name="ArgumentMustBeAValidRelativePath" xml:space="preserve">
+    <value>This argument is not a valid relative path</value>
+  </data>
 </root>

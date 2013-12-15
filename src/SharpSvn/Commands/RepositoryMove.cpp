@@ -20,10 +20,22 @@ using namespace SharpSvn;
 
 bool SvnMultiCommandClient::Move(String ^fromPath, String ^toPath)
 {
+    if (String::IsNullOrEmpty(fromPath) || ! IsValidRelpath(fromPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "fromPath");
+    else if (String::IsNullOrEmpty(toPath) || ! IsValidRelpath(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "toPath");
+
     return Move(fromPath, toPath, gcnew SvnRepositoryMoveArgs());
 }
 
 bool SvnMultiCommandClient::Move(String ^fromPath, String ^toPath, SvnRepositoryMoveArgs ^args)
 {
+    if (String::IsNullOrEmpty(fromPath) || ! IsValidRelpath(fromPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "fromPath");
+    else if (String::IsNullOrEmpty(toPath) || ! IsValidRelpath(toPath))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath, "toPath");
+    else if (! args)
+        throw gcnew ArgumentNullException("args");
+
     throw gcnew NotImplementedException();
 }

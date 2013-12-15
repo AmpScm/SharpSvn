@@ -162,6 +162,19 @@ bool SvnBase::IsNotUri(String ^path)
     return true;
 }
 
+bool SvnBase::IsValidRelpath(String^ path)
+{
+    if (!path)
+        return false;
+
+    if (path[0] == '/' || path[path->Length-1] == '/' || path->IndexOf('\\') >= 0)
+        return false;
+
+    // TODO: Add full verification
+
+    return true;
+}
+
 String^ SvnBase::RemoveDoubleSlashes(String^ input)
 {
     int n;

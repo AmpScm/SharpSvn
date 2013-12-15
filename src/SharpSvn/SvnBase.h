@@ -106,6 +106,7 @@ namespace SharpSvn {
             /// <summary>Gets a boolean indicating whether the path is a file path (and not a Uri)</summary>
             static bool IsNotUri(String^ path);
             static bool IsValidReposUri(Uri^ uri);
+            static bool IsValidRelpath(String^ path);
 
             static Uri^ CanonicalizeUri(Uri^ uri);
             static Uri^ PathToUri(String^ path);
