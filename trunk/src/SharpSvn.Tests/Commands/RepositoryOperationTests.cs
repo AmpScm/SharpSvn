@@ -56,6 +56,8 @@ namespace SharpSvn.Tests.Commands
                 mucc.SetProperty("", "svn:auto-props", "*.cs = svn:eol-style=native");
                 mucc.SetProperty("", "svn:global-ignores", "bin obj");
 
+                mucc.Cr
+
                 Assert.That(mucc.Commit(out cr)); // Commit r1
                 Assert.That(cr, Is.Not.Null);
             }
