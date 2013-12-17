@@ -2,28 +2,31 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn.Tests.Commands;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn.Security;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class SvnAuthTests : TestBase
     {
-    [Test]
-    public void AuthDeleteTest()
-    {
-        using (SvnClient client = new SvnClient())
+        [TestMethod]
+        public void AuthDeleteTest()
         {
-        //client.LoadConfiguration(GetTempDir());
-        foreach (SvnAuthenticationCacheItem i in client.Authentication.GetCachedItems(SvnAuthenticationCacheType.UserNamePassword))
-        {
-            GC.KeepAlive(i);
+            using (SvnClient client = new SvnClient())
+            {
+                //client.LoadConfiguration(GetTempDir());
+                foreach (SvnAuthenticationCacheItem i in client.Authentication.GetCachedItems(SvnAuthenticationCacheType.UserNamePassword))
+                {
+                    GC.KeepAlive(i);
+                }
+            }
         }
-        }
-    }
 
-        [Test]
+        [TestMethod]
         public void ListSshCredentials()
         {
             using (SvnClient client = new SvnClient())
@@ -35,20 +38,20 @@ namespace SharpSvn.Tests
             }
         }
 
-    [Test, Ignore("Requires acces to specific server")]
-    public void ListSsh()
-    {
-        using (SvnClient client = new SvnClient())
+        [TestMethod, Ignore]
+        public void ListSsh()
         {
-        bool foundOne = false;
-        client.List(new Uri("svn+ssh://vip.alh.net.qqn.nl/home/bert/repos/"), delegate(object sender, SvnListEventArgs e)
-        {
-            foundOne = true;
-        });
+            using (SvnClient client = new SvnClient())
+            {
+                bool foundOne = false;
+                client.List(new Uri("svn+ssh://vip.alh.net.qqn.nl/home/bert/repos/"), delegate(object sender, SvnListEventArgs e)
+                {
+                    foundOne = true;
+                });
 
-        Assert.That(foundOne);
+                Assert.That(foundOne);
+            }
         }
-    }
 
     }
 }

@@ -17,7 +17,10 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn.Tests.Commands;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using System.ComponentModel;
 using System.Threading;
 using System.CodeDom.Compiler;
@@ -26,7 +29,7 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.LookCommands
 {
-    [TestFixture]
+    [TestClass]
     public class VerifyTransactions : HookTestBase
     {
         void OnPreCommit(object sender, ReposHookEventArgs e)
@@ -72,10 +75,10 @@ namespace SharpSvn.Tests.LookCommands
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TestPreCommit()
         {
-            Uri uri = PathToUri(CreateRepos(TestReposType.CollabRepos), true);
+            Uri uri = CreateRepos(TestReposType.CollabRepos);
 
             using (InstallHook(uri, SvnHookType.PreCommit, OnPreCommit))
             {
@@ -108,10 +111,10 @@ namespace SharpSvn.Tests.LookCommands
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TestPostCommit()
         {
-            Uri uri = PathToUri(CreateRepos(TestReposType.CollabRepos), true);
+            Uri uri = CreateRepos(TestReposType.CollabRepos);
 
             using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
             {

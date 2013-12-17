@@ -15,15 +15,18 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using System.Collections.ObjectModel;
+using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.Commands
 {
     public class GetSuggestedMergeSourcesTests : TestBase
     {
-        [Test]
+        [TestMethod]
         public void VerifyCollabNetRepos()
         {
             string dir = GetTempDir();

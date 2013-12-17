@@ -19,15 +19,19 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class InfoTests : TestBase
     {
-        [Test]
+        [TestMethod]
         public void InfoTest()
         {
             string dir = GetTempDir();
@@ -62,7 +66,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(i, Is.EqualTo(4)); // trunk branches tags
         }
 
-        [Test]
+        [TestMethod]
         public void WcCasing()
         {
             string dir = GetTempDir();
@@ -100,7 +104,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-    [Test]
+    [TestMethod]
     public void TestSpace()
     {
         using(SvnClient client = new SvnClient())
@@ -143,7 +147,7 @@ namespace SharpSvn.Tests.Commands
         }
     }
 
-    [Test]
+    [TestMethod]
     public void WcDirMissing()
     {
         string dir = GetTempDir();
@@ -176,7 +180,7 @@ namespace SharpSvn.Tests.Commands
         Assert.That(ver.IncompleteWorkingCopy, Is.False);
     }
 
-    [Test]
+    [TestMethod]
     public void TestInfo()
     {
         Uri reposUri = GetReposUri(TestReposType.Empty);
@@ -292,7 +296,7 @@ namespace SharpSvn.Tests.Commands
         }
     }
 
-    [Test]
+    [TestMethod]
     public void InfoTest2()
     {
         using (SvnClient client = NewSvnClient(false, false))

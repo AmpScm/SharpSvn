@@ -16,21 +16,28 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using System.IO;
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
-    public class FileVersions : TestBase
+    [TestClass]
+    public class FileVersionsTests : TestBase
     {
-        [Test]
-        public void ListIndex()
+        [TestMethod]
+        public void FileVersions_ListIndex()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.DefaultBranched);
+
             bool touched = false;
             SvnFileVersionsArgs fa = new SvnFileVersionsArgs();
             fa.RetrieveProperties = true;
-            Client.FileVersions(new Uri(CollabReposUri, "trunk/index.html"),
+            Client.FileVersions(new Uri(reposUri, "trunk/README.txt"),
                 fa,
                 delegate(object sender, SvnFileVersionEventArgs e)
                 {
@@ -39,7 +46,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.Properties, Is.Not.Null, "Properties available");
 
                     Assert.That(e.RevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
-                    Assert.That(e.Properties.Contains(SvnPropertyNames.SvnEolStyle));
+//                    Assert.That(e.Properties.Contains(SvnPropertyNames.SvnEolStyle));
 
                     Assert.That(e.Revision, Is.GreaterThan(0));
                     Assert.That(e.Author, Is.Not.Null);
@@ -58,28 +65,30 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test, ExpectedException(typeof(SvnFileSystemNodeTypeException))]
-        public void ListIndexDir()
+        [TestMethod, ExpectedException(typeof(SvnFileSystemNodeTypeException))]
+        public void FileVersions_ListIndexDir()
         {
-            bool touched = false;
-            Client.FileVersions(new Uri(CollabReposUri, "trunk/"),
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.Default);
+
+            Client.FileVersions(new Uri(reposUri, "trunk/"),
                 delegate(object sender, SvnFileVersionEventArgs e)
                 {
-                    touched = true;
                 });
 
-            Assert.That(touched);
+            throw new InvalidOperationException(); // Should have failed
         }
 
-        [Test]
-        public void WalkKeywords()
+        [TestMethod]
+        public void FileVersions_WalkKeywords()
         {
-            Uri repos = GetReposUri(TestReposType.Empty);
-            string wc = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+
+            string wc = sbox.Wc;
             string file = Path.Combine(wc, "myFile.txt");
             string nl = Environment.NewLine;
-
-            Client.CheckOut(repos, wc);
 
             File.WriteAllText(file, "Line1 $Id: FileVersions.cs 2139 2012-05-19 10:21:53Z rhuijben $" + nl + "$HeadURL$" + nl + nl);
 
@@ -161,8 +170,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void WalkMe()
+        [TestMethod]
+        public void FileVersions_WalkMe()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
             SvnUriTarget me = new SvnUriTarget(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
@@ -181,8 +190,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(n, Is.EqualTo(7));
         }
 
-        [Test]
-        public void WalkChange()
+        [TestMethod]
+        public void FileVersions_WalkChange()
         {
             SvnFileVersionsArgs a = new SvnFileVersionsArgs();
             SvnUriTarget me = new SvnUriTarget(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/src/SharpSvn.Tests/Commands/FileVersions.cs"), 931);
@@ -202,8 +211,8 @@ namespace SharpSvn.Tests.Commands
         }
 
 #if DEBUG
-        [Test]
-        public void WriteRelated()
+        [TestMethod]
+        public void FileVersions_WriteRelated()
         {
             Uri reposUri = GetReposUri(TestReposType.CollabRepos);
             Dictionary<SvnUriTarget, Stream> targets = new Dictionary<SvnUriTarget,Stream>();

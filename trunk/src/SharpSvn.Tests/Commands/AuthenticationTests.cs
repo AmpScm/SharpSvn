@@ -16,7 +16,10 @@
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.IO;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 using SharpSvn;
 using SharpSvn.Security;
@@ -26,20 +29,19 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests the Authentication class.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class AuthenticationTests : TestBase
     {
-        [SetUp]
-        public override void SetUp()
+        [TestInitialize]
+        public void AuthSetup()
         {
-            base.SetUp();
             _serverTrustTicked = false;
             _userNamePasswordTicked = false;
             _userArgs = null;
         }
 
-        [Test]
-        public void TestSimpleProvider()
+        [TestMethod]
+        public void Authentication_TestSimpleProvider()
         {
             Client.Authentication.Clear();
 
@@ -80,8 +82,8 @@ namespace SharpSvn.Tests.Commands
         bool _userNamePasswordTicked;
         SvnUserNamePasswordEventArgs _userArgs;
 
-        [Test]
-        public void TestSimpleSslCert()
+        [TestMethod]
+        public void Authentication_SimpleSslCert()
         {
             using (SvnClient client = new SvnClient())
             {
@@ -112,59 +114,59 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-    [Test]
-    public void TestASFCertSafe()
-    {
-        using(SvnClient client = new SvnClient())
+        [TestMethod]
+        public void Authentication_ASFCertSafe()
         {
-        client.Authentication.Clear();
-
-        bool arrived = false;
-        SvnInfoArgs ia = new SvnInfoArgs();
-        ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
-        //ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
-        Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
-            delegate(object sender, SvnInfoEventArgs e)
+            using (SvnClient client = new SvnClient())
             {
-            arrived = true;
-            }), Is.False);
+                client.Authentication.Clear();
 
-        Assert.That(arrived, Is.False);
-        }
+                bool arrived = false;
+                SvnInfoArgs ia = new SvnInfoArgs();
+                ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
+                //ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
+                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        arrived = true;
+                    }), Is.False);
 
-        using (SvnClient client = new SvnClient())
-        {
-        client.Authentication.Clear();
-        client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
+                Assert.That(arrived, Is.False);
+            }
 
-        bool arrived = false;
-        SvnInfoArgs ia = new SvnInfoArgs();
-        //ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
-        ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
-        Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
-            delegate(object sender, SvnInfoEventArgs e)
+            using (SvnClient client = new SvnClient())
             {
-            arrived = true;
-            }), Is.False);
+                client.Authentication.Clear();
+                client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
 
-        Assert.That(arrived, Is.False);
-        }
+                bool arrived = false;
+                SvnInfoArgs ia = new SvnInfoArgs();
+                //ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
+                ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
+                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        arrived = true;
+                    }), Is.False);
 
-        using (SvnClient client = new SvnClient())
-        {
-        client.Authentication.Clear();
-        client.Authentication.SslAuthorityTrustHandlers += SvnAuthentication.SubversionWindowsSslAuthorityTrustHandler;
+                Assert.That(arrived, Is.False);
+            }
 
-        bool arrived = false;
-        Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"),
-            delegate(object sender, SvnInfoEventArgs e)
+            using (SvnClient client = new SvnClient())
             {
-            arrived = true;
-            }));
+                client.Authentication.Clear();
+                client.Authentication.SslAuthorityTrustHandlers += SvnAuthentication.SubversionWindowsSslAuthorityTrustHandler;
 
-        Assert.That(arrived);
+                bool arrived = false;
+                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"),
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        arrived = true;
+                    }));
+
+                Assert.That(arrived);
+            }
         }
-    }
 
         void Authenticator_UserNamePasswordHandlers(object sender, SharpSvn.Security.SvnUserNamePasswordEventArgs e)
         {

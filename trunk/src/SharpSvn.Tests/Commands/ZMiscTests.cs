@@ -19,7 +19,10 @@ using System.Collections;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,7 +30,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Contains tests for various Client functions that don't merit their own test fixture
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ZMiscTests : TestBase
     {
     public ZMiscTests()
@@ -38,7 +41,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Tests the Client::UrlFromPath function.
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestUrlFromDirPath()
         {
             string info = this.RunCommand("svn", "info " + this.WcPath);
@@ -48,7 +51,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(url.ToString(), Is.EqualTo(realUrl + "/"), "URL wrong");
         }
 
-        [Test]
+        [TestMethod]
         public void TestUrlFromFilePath()
         {
             string formPath = Path.Combine(this.WcPath, "Form.cs");
@@ -59,14 +62,14 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-        [Test]
+        [TestMethod]
         public void TestUrlFromUnversionedPath()
         {
             Uri url = this.Client.GetUriFromWorkingCopy(@"C:\");
             Assert.IsNull(url, "Url should be null for an unversioned path");
         }
 
-        [Test]
+        [TestMethod]
         public void TestUuidFromUrl()
         {
             Guid id;
@@ -74,7 +77,7 @@ namespace SharpSvn.Tests.Commands
         Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
         }
 
-    [Test]
+    [TestMethod]
     public void TestUuidFromPath()
     {
         Guid id;
@@ -85,7 +88,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests the cancel.
     /// </summary>
-        [Test]
+        [TestMethod]
         [ExpectedException(typeof(SvnOperationCanceledException))]
         public void TestCancel()
         {
@@ -104,7 +107,7 @@ namespace SharpSvn.Tests.Commands
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
         private static extern bool SetEnvironmentVariable(string name, string value);
 
-        [Test]
+        [TestMethod]
         public void TestChangeAdministrativeDirectoryName()
         {
             string newAdminDir = "_svn";
@@ -134,7 +137,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TestHasBinaryProp()
         {
             SvnWorkingCopyState state;
@@ -162,7 +165,7 @@ namespace SharpSvn.Tests.Commands
         /*/// <summary>
         /// Test the Client::IsIgnored method.
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestIsFileIgnored()
         {
             string ignored = this.CreateTextFile("foo.bar");
@@ -173,7 +176,7 @@ namespace SharpSvn.Tests.Commands
                 Path.Combine(this.WcPath, "Form1.cs")));
         }
 
-        [Test]
+        [TestMethod]
         public void TestIsDirectoryIgnored()
         {
             string ignored = Path.Combine(this.WcPath, "Foo");
@@ -183,7 +186,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(this.Client.IsIgnored(ignored));
         }*/
 
-        [Test]
+        [TestMethod]
         public void TestEnsureConfig()
         {
             string configDir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

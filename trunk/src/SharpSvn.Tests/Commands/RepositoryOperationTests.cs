@@ -2,15 +2,21 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class RepositoryOperationTests : TestBase
     {
-        [Test]
-        public void OpenRepositoryOperation()
+        public RepositoryOperationTests()
+        { }
+
+        [TestMethod]
+        public void RepositoryOperation_OpenDirect()
         {
             Uri uri = GetReposUri(TestReposType.Empty);
 
@@ -48,8 +54,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void OpenRepositoryOperationViaSvnClient()
+        [TestMethod]
+        public void RepositoryOperation_ViaSvnClient()
         {
             Uri uri = GetReposUri(TestReposType.Empty);
 
@@ -79,8 +85,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void SetupRepository()
+        [TestMethod]
+        public void RepositoryOperation_SetupRepository()
         {
             Uri uri = GetReposUri(TestReposType.Empty);
             SvnCommitResult cr;

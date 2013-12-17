@@ -4,15 +4,20 @@ using System.Text;
 using NUnit.Framework;
 using SharpSvn.Tests.Commands;
 using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 
 namespace SharpSvn.Tests.AdminCommands
 {
-    [TestFixture]
+    [TestClass]
     public class DumpTest : TestBase
     {
 
-        [Test]
-        public void DumpDb()
+        [TestMethod]
+        public void Dump_DumpDb()
         {
             string repos = GetTempDir();
 

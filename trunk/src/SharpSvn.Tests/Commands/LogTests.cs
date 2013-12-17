@@ -17,33 +17,34 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml;
-using NUnit.Framework;
-using SharpSvn;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 
 namespace SharpSvn.Tests.Commands
 {
     /// <summary>
     /// Tests Client::Log
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class LogTests : TestBase
     {
-        [SetUp]
-        public override void SetUp()
+        [TestInitialize]
+        public void LogSetUp()
         {
-            base.SetUp();
-
-            this.logMessages.Clear();
+            logMessages.Clear();
         }
 
-        [Test]
-        public void TestLog()
+        [TestMethod]
+        public void Log_TestLog()
         {
             ClientLogMessage[] clientLogs = this.ClientLog(this.ReposUrl);
 
@@ -61,8 +62,8 @@ namespace SharpSvn.Tests.Commands
                 clientLogs[i].CheckMatch(this.logMessages[i]);
         }
 
-        [Test]
-        public void StrangeLog()
+        [TestMethod]
+        public void Log_StrangeLog()
         {
             // With Subversion 1.5.4 this gives thousands of result values
             SvnLogArgs la = new SvnLogArgs();
@@ -86,8 +87,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(la.IsLastInvocationCanceled, "More than 100 items returned");
         }
 
-        [Test]
-        public void TestLogNonAsciiChars()
+        [TestMethod]
+        public void Log_TestLogNonAsciiChars()
         {
             this.RunCommand("svn", "propset svn:log --revprop -r 1  \" e i a  , sj\" " +
                 this.ReposUrl);
@@ -100,8 +101,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(this.logMessages[0].LogMessage, Is.EqualTo(" e i a  , sj"));
         }
 
-        [Test]
-        public void LogFromFile()
+        [TestMethod]
+        public void Log_LogFromFile()
         {
             Uri repos = this.GetReposUri(TestReposType.CollabRepos);
 
@@ -133,8 +134,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void TestLocalLogVariants()
+        [TestMethod]
+        public void Log_TestLocalLogVariants()
         {
             SvnLogArgs a = new SvnLogArgs();
             string dir = GetTempDir();
@@ -179,8 +180,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test]
-        public void TestLogSingleFile()
+        [TestMethod]
+        public void Log_TestLogSingleFile()
         {
             bool touched = false;
             SvnLogArgs a = new SvnLogArgs();
@@ -197,8 +198,8 @@ namespace SharpSvn.Tests.Commands
         }
 
 
-        [Test]
-        public void TestMultiLocalLogs()
+        [TestMethod]
+        public void Log_TestMultiLocalLogs()
         {
             bool touched = false;
             SvnLogArgs a = new SvnLogArgs();
@@ -218,8 +219,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test, Ignore]
-        public void Test14Server()
+        [TestMethod, Ignore]
+        public void Log_Test14Server()
         {
             SvnLogArgs la = new SvnLogArgs();
             la.Limit = 1;
@@ -245,8 +246,8 @@ namespace SharpSvn.Tests.Commands
             Debug.WriteLine(string.Format("Time spend: {0}", end - now));
         }
 
-        [Test]
-        public void TestMultiLogs()
+        [TestMethod]
+        public void Log_MultiLogs()
         {
             bool touched = false;
             Assert.That(Client.Log(new Uri("http://svn.apache.org/repos/asf/subversion/trunk/"),
@@ -308,16 +309,16 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test, ExpectedException(typeof(ArgumentException))]
-        public void TestNoMultiUris()
+        [TestMethod, ExpectedException(typeof(ArgumentException))]
+        public void Log_TestNoMultiUris()
         {
             Collection<SvnLogEventArgs> result;
             SvnLogArgs la = new SvnLogArgs();
             Client.GetLog(new Uri[0], la, out result);
         }
 
-        [Test]
-        public void OldLog()
+        [TestMethod]
+        public void Log_OldLog()
         {
             Uri repos = GetReposUri(TestReposType.AnkhRepos);
 
@@ -345,8 +346,8 @@ namespace SharpSvn.Tests.Commands
                 });
         }
 
-        [Test]
-        public void TestLogCreate()
+        [TestMethod]
+        public void Log_LogCreate()
         {
             SvnClient client = Client;
             string WcPath = GetTempDir();
@@ -452,8 +453,8 @@ namespace SharpSvn.Tests.Commands
 
 
 
-        [Test, ExpectedException(typeof(SvnFileSystemException))]
-        public void ExpectLogException()
+        [TestMethod, ExpectedException(typeof(SvnFileSystemException))]
+        public void Log_ExpectLogException()
         {
             using (SvnClient client = new SvnClient())
             {

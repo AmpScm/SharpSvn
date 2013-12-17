@@ -19,7 +19,11 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,16 +31,16 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::Diff
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class DiffTests : TestBase
     {
-    public DiffTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
+        public DiffTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 
-        [Test]
-        public void TestLocalDiff()
+        [TestMethod]
+        public void Diff_LocalDiff()
         {
             string form = Path.Combine(this.WcPath, "Form.cs");
 
@@ -64,8 +68,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(apiDiff, Is.EqualTo(clientDiff), "Client diff differs");
         }
 
-        [Test]
-        public void TestReposDiff()
+        [TestMethod]
+        public void Diff_ReposDiff()
         {
             string clientDiff = this.RunCommand("svn", "diff -r 1:5 " + this.ReposUrl);
 
@@ -80,16 +84,16 @@ namespace SharpSvn.Tests.Commands
             Assert.That(err, Is.EqualTo(string.Empty), "Error in diff: " + err);
 
             string apiDiff = Encoding.Default.GetString(outstream.ToArray());
-        string[] clientLines = clientDiff.Split('\n');
-        string[] apiLines = apiDiff.Split('\n');
-        Array.Sort<string>(clientLines);
-        Array.Sort<string>(apiLines);
+            string[] clientLines = clientDiff.Split('\n');
+            string[] apiLines = apiDiff.Split('\n');
+            Array.Sort<string>(clientLines);
+            Array.Sort<string>(apiLines);
 
-                    Assert.That(apiLines, Is.EqualTo(clientLines), "Diffs differ");
+            Assert.That(apiLines, Is.EqualTo(clientLines), "Diffs differ");
         }
 
-        [Test]
-        public void TestDiffBinary()
+        [TestMethod]
+        public void Diff_DiffBinary()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
             this.RunCommand("svn", "propset svn:mime-type application/octet-stream " +
@@ -134,145 +138,143 @@ namespace SharpSvn.Tests.Commands
             Assert.That(diff.IndexOf("application/octet-stream") < 0);
         }
 
-    [Test]
-    public void RunDiffTests()
-    {
-        string start = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
-        string end = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
-        string origLine = Guid.NewGuid().ToString();
-        string newLine = Guid.NewGuid().ToString();
-        using (SvnClient client = NewSvnClient(true, false))
+        [TestMethod]
+        public void Diff_RunDiffTests()
         {
-        string diffFile = Path.Combine(WcPath, "DiffTest");
-
-        using (StreamWriter sw = File.CreateText(diffFile))
-        {
-            sw.WriteLine(start);
-            sw.WriteLine(origLine);
-            sw.WriteLine(end);
-        }
-
-        client.Add(diffFile);
-        SvnCommitResult ci;
-        client.Commit(diffFile, out ci);
-
-        using (StreamWriter sw = File.CreateText(diffFile))
-        {
-            sw.WriteLine(start);
-            sw.WriteLine(newLine);
-            sw.WriteLine(end);
-        }
-
-        MemoryStream diffOutput = new MemoryStream();
-
-        client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Head), diffFile, diffOutput);
-        VerifyDiffOutput(origLine, newLine, diffOutput);
-
-        diffOutput = new MemoryStream();
-
-        client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Committed), diffFile, diffOutput);
-        VerifyDiffOutput(origLine, newLine, diffOutput);
-
-        diffOutput = new MemoryStream();
-
-        client.Diff(new Uri(ReposUrl, "DiffTest"), diffFile, diffOutput);
-        VerifyDiffOutput(origLine, newLine, diffOutput);
-
-        SvnCommitResult info;
-        client.Commit(diffFile, out info);
-
-        bool visited = false;
-        client.DiffSummary(new SvnUriTarget(ReposUrl, info.Revision - 1), ReposUrl,
-            delegate(object sender, SvnDiffSummaryEventArgs e)
+            string start = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
+            string end = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
+            string origLine = Guid.NewGuid().ToString();
+            string newLine = Guid.NewGuid().ToString();
+            using (SvnClient client = NewSvnClient(true, false))
             {
-            if (e.Path == "DiffTest")
-            {
-                Assert.That(e.DiffKind, Is.EqualTo(SvnDiffKind.Modified));
-                Assert.That(e.PropertiesChanged, Is.False);
-                visited = true;
-            }
-            });
+                string diffFile = Path.Combine(WcPath, "DiffTest");
 
-        Assert.That(visited);
+                using (StreamWriter sw = File.CreateText(diffFile))
+                {
+                    sw.WriteLine(start);
+                    sw.WriteLine(origLine);
+                    sw.WriteLine(end);
+                }
 
-        int n = 0;
+                client.Add(diffFile);
+                SvnCommitResult ci;
+                client.Commit(diffFile, out ci);
 
-        client.Blame(new SvnPathTarget(diffFile), delegate(object sender, SvnBlameEventArgs e)
-        {
-            Assert.That(e.Author, Is.EqualTo(Environment.UserName));
-            Assert.That(e.LineNumber, Is.EqualTo((long)n));
-            switch (n)
-            {
-            case 0:
-            case 1:
-            case 3:
-            case 4:
-                Assert.That(e.Revision, Is.EqualTo(ci.Revision));
-                break;
-            case 2:
-                Assert.That(e.Revision, Is.EqualTo(info.Revision));
-                break;
-            default:
-                Assert.That(false, "EOF");
-                break;
-            }
-            Assert.That(e.Line, Is.Not.Null);
-            n++;
-        });
+                using (StreamWriter sw = File.CreateText(diffFile))
+                {
+                    sw.WriteLine(start);
+                    sw.WriteLine(newLine);
+                    sw.WriteLine(end);
+                }
 
-        Assert.That(n, Is.EqualTo(5), "Blame receiver received 5 lines");
+                MemoryStream diffOutput = new MemoryStream();
 
-        string tempFile = GetTempFile();
-        using(FileStream fs = File.Create(tempFile))
-        {
-            SvnDiffArgs da = new SvnDiffArgs();
-            da.RelativeToPath = Path.GetDirectoryName(diffFile);
-            client.Diff(diffFile, new SvnRevisionRange(ci.Revision, SvnRevisionType.Head), da, fs);
-        }
+                client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Head), diffFile, diffOutput);
+                VerifyDiffOutput(origLine, newLine, diffOutput);
 
-        client.Update(diffFile, new SvnUpdateArgs { Revision = ci.Revision });
-        SvnPatchArgs pa = new SvnPatchArgs();
-        n = 0;
-        pa.Filter += delegate(object sender, SvnPatchFilterEventArgs e)
-        {
-            Assert.That(File.Exists(e.RejectPath));
-            Assert.That(File.Exists(e.ResultPath));
-            Assert.That(new FileInfo(e.RejectPath).Length, Is.EqualTo(0));
-            n++;
-        };
-        client.Patch(tempFile, Path.GetDirectoryName(diffFile), pa);
-        Assert.That(n, Is.EqualTo(1));
-        }
-    }
+                diffOutput = new MemoryStream();
 
-    private static void VerifyDiffOutput(string origLine, string newLine, Stream diffOutput)
-    {
-        diffOutput.Position = 0;
-        using (StreamReader sr = new StreamReader(diffOutput))
-        {
-        bool foundMin = false;
-        bool foundPlus = false;
+                client.Diff(new SvnPathTarget(diffFile, SvnRevisionType.Committed), diffFile, diffOutput);
+                VerifyDiffOutput(origLine, newLine, diffOutput);
 
-        string line;
+                diffOutput = new MemoryStream();
 
-        while (null != (line = sr.ReadLine()))
-        {
-            if (line.Contains(newLine))
-            {
-            Assert.That(line.StartsWith("+"));
-            foundPlus = true;
-            }
-            else if (line.Contains(origLine))
-            {
-            Assert.That(line.StartsWith("-"));
-            foundMin = true;
+                client.Diff(new Uri(ReposUrl, "DiffTest"), diffFile, diffOutput);
+                VerifyDiffOutput(origLine, newLine, diffOutput);
+
+                SvnCommitResult info;
+                client.Commit(diffFile, out info);
+
+                bool visited = false;
+                client.DiffSummary(new SvnUriTarget(ReposUrl, info.Revision - 1), ReposUrl,
+                    delegate(object sender, SvnDiffSummaryEventArgs e)
+                    {
+                        if (e.Path == "DiffTest")
+                        {
+                            Assert.That(e.DiffKind, Is.EqualTo(SvnDiffKind.Modified));
+                            Assert.That(e.PropertiesChanged, Is.False);
+                            visited = true;
+                        }
+                    });
+
+                Assert.That(visited);
+
+                int n = 0;
+
+                client.Blame(new SvnPathTarget(diffFile), delegate(object sender, SvnBlameEventArgs e)
+                {
+                    Assert.That(e.Author, Is.EqualTo(Environment.UserName));
+                    Assert.That(e.LineNumber, Is.EqualTo((long)n));
+                    switch (n)
+                    {
+                        case 0:
+                        case 1:
+                        case 3:
+                        case 4:
+                            Assert.That(e.Revision, Is.EqualTo(ci.Revision));
+                            break;
+                        case 2:
+                            Assert.That(e.Revision, Is.EqualTo(info.Revision));
+                            break;
+                        default:
+                            Assert.That(false, "EOF");
+                            break;
+                    }
+                    Assert.That(e.Line, Is.Not.Null);
+                    n++;
+                });
+
+                Assert.That(n, Is.EqualTo(5), "Blame receiver received 5 lines");
+
+                string tempFile = GetTempFile();
+                using (FileStream fs = File.Create(tempFile))
+                {
+                    SvnDiffArgs da = new SvnDiffArgs();
+                    da.RelativeToPath = Path.GetDirectoryName(diffFile);
+                    client.Diff(diffFile, new SvnRevisionRange(ci.Revision, SvnRevisionType.Head), da, fs);
+                }
+
+                client.Update(diffFile, new SvnUpdateArgs { Revision = ci.Revision });
+                SvnPatchArgs pa = new SvnPatchArgs();
+                n = 0;
+                pa.Filter += delegate(object sender, SvnPatchFilterEventArgs e)
+                {
+                    Assert.That(File.Exists(e.RejectPath));
+                    Assert.That(File.Exists(e.ResultPath));
+                    Assert.That(new FileInfo(e.RejectPath).Length, Is.EqualTo(0));
+                    n++;
+                };
+                client.Patch(tempFile, Path.GetDirectoryName(diffFile), pa);
+                Assert.That(n, Is.EqualTo(1));
             }
         }
-        Assert.That(foundMin, "Found -");
-        Assert.That(foundPlus, "Found +");
+
+        private static void VerifyDiffOutput(string origLine, string newLine, Stream diffOutput)
+        {
+            diffOutput.Position = 0;
+            using (StreamReader sr = new StreamReader(diffOutput))
+            {
+                bool foundMin = false;
+                bool foundPlus = false;
+
+                string line;
+
+                while (null != (line = sr.ReadLine()))
+                {
+                    if (line.Contains(newLine))
+                    {
+                        Assert.That(line.StartsWith("+"));
+                        foundPlus = true;
+                    }
+                    else if (line.Contains(origLine))
+                    {
+                        Assert.That(line.StartsWith("-"));
+                        foundMin = true;
+                    }
+                }
+                Assert.That(foundMin, "Found -");
+                Assert.That(foundPlus, "Found +");
+            }
         }
-    }
-
-
     }
 }

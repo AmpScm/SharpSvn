@@ -16,7 +16,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn.Delta;
 using System.IO;
 
@@ -122,11 +125,11 @@ namespace SharpSvn.Tests.Commands
 
         }
     }
-    [TestFixture]
+    [TestClass]
     public class ReplayTests : TestBase
     {
-        [Test]
-        public void ReplayCollab()
+        [TestMethod]
+        public void Replay_ReplayCollab()
         {
             MyEditor edit = new MyEditor(true, GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
@@ -134,16 +137,16 @@ namespace SharpSvn.Tests.Commands
             Client.ReplayRevisions(CollabReposUri, new SvnRevisionRange(0, 10), edit, ra);
         }
 
-        [Test]
-        public void ReplayCollabTrunk()
+        [TestMethod]
+        public void Replay_ReplayCollabTrunk()
         {
             MyEditor edit = new MyEditor(false, GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             Client.ReplayRevisions(new Uri(CollabReposUri, "trunk/"), new SvnRevisionRange(0, 10), edit, ra);
         }
 
-        [Test]
-        public void ReplaySingleRev()
+        [TestMethod]
+        public void Replay_ReplaySingleRev()
         {
             MyEditor edit = new MyEditor(false, GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();

@@ -15,47 +15,31 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using SharpSvn.Tests.Commands;
 using System.IO;
+using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+using SharpSvn.Tests.Commands;
 using SharpSvn.Diff;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
-    public class DiffTests : TestBase
+    [TestClass]
+    public class FileDiffTests : TestBase
     {
-        string indexTheir;
-        string indexMine;
-        string indexLatest;
-        string indexAncestor;
-
-        [TestFixtureSetUp]
-        public void Setup()
+        [TestMethod]
+        public void FileDiff_UniDiff()
         {
-            string dir = GetTempDir();
-            SvnUpdateResult r;
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.MergeScenario);
 
-            using (SvnClient client = new SvnClient())
-            {
-                client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir, out r);
-            }
+            string indexTheir = Path.Combine(sbox.Wc, "about\\index.html");
+            string indexMine = Path.Combine(sbox.Wc, "jobs\\index.html");
+            string indexLatest = Path.Combine(sbox.Wc, "products\\index.html");
+            string indexAncestor = Path.Combine(sbox.Wc, "support\\index.html");
 
-            indexTheir = Path.Combine(dir, "about\\index.html");
-            indexMine = Path.Combine(dir, "jobs\\index.html");
-            indexLatest = Path.Combine(dir, "products\\index.html");
-            indexAncestor = Path.Combine(dir, "support\\index.html");
-
-            Assert.That(File.Exists(indexTheir), "about\\index.html exists");
-            Assert.That(File.Exists(indexMine), "jobs\\index.html exists");
-            Assert.That(File.Exists(indexLatest), "products\\index.html exists");
-            Assert.That(File.Exists(indexAncestor), "support\\index.html exists");
-        }
-
-        [Test]
-        public void TestUniDiff()
-        {
             SvnFileDiff diff;
 
             Assert.That(SvnFileDiff.TryCreate(indexTheir, indexMine, new SvnFileDiffArgs(), out diff));
@@ -86,12 +70,6 @@ namespace SharpSvn.Tests
                     // Ok, the rest will be ok
                 }
             }
-        }
-
-        [Test]
-        public void TestUniDiff3()
-        {
-            SvnFileDiff diff;
 
             Assert.That(SvnFileDiff.TryCreate(indexTheir, indexMine, indexLatest, new SvnFileDiffArgs(), out diff));
             Assert.That(diff, Is.Not.Null);
@@ -150,12 +128,6 @@ namespace SharpSvn.Tests
                     // Ok, the rest will be ok
                 }
             }
-        }
-
-        [Test]
-        public void TestUniDiff4()
-        {
-            SvnFileDiff diff;
 
             Assert.That(SvnFileDiff.TryCreate(indexTheir, indexMine, indexLatest, indexAncestor, new SvnFileDiffArgs(), out diff));
             Assert.That(diff, Is.Not.Null);

@@ -16,15 +16,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using System.IO;
 
 using System.Runtime.InteropServices;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
-    public class PathTests
+    [TestClass]
+    public class PathTests : IHasTestContext
     {
         readonly string _casedFile;
 
@@ -46,15 +49,15 @@ namespace SharpSvn.Tests
             File.WriteAllText(_casedFile, "hi!");
         }
 
-        [TestFixtureTearDown]
+        [TestCleanup]
         public void DeleteTemp()
         {
             if (File.Exists(_casedFile))
                 File.Delete(_casedFile);
         }
 
-        [Test]
-        public void FileExists()
+        [TestMethod]
+        public void Path_FileExists()
         {
             Assert.That(File.Exists(_casedFile), "File exists");
             Assert.That(File.Exists(_casedFile.ToUpperInvariant()), "File exists in uppercase");
@@ -81,8 +84,8 @@ namespace SharpSvn.Tests
         }
 
 
-        [Test]
-        public void FixCasing()
+        [TestMethod]
+        public void Path_FixCasing()
         {
             string path = MakeLong(_casedFile.ToUpperInvariant());
 
@@ -103,8 +106,8 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetTruePath("c:\\-never-exists-"), Is.EqualTo(SvnTools.GetTruePath("C:\\-never-exists-")));
         }
 
-        [Test]
-        public void TestNormalizationTesters()
+        [TestMethod]
+        public void Path_TestNormalizationTesters()
         {
             Assert.That(SvnTools.IsNormalizedFullPath("a:\\"), Is.False, "a:\\ is not normalized");
             Assert.That(SvnTools.IsNormalizedFullPath("A:\\"), Is.True, "A:\\ is normalized");
@@ -154,8 +157,8 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsAbsolutePath(@"\server"), Is.False);
         }
 
-        [Test]
-        public void TestUriNormalization()
+        [TestMethod]
+        public void Path_TestUriNormalization()
         {
             Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos")).AbsoluteUri, Is.EqualTo("file://server/repos"));
             Assert.That(SvnTools.GetNormalizedUri(new Uri("\\\\server\\repos\\file")).AbsoluteUri, Is.EqualTo("file://server/repos/file"));
@@ -175,8 +178,8 @@ namespace SharpSvn.Tests
             //Assert.That(SvnTools.GetNormalizedUri(new Uri("f:\\repos")).AbsoluteUri, Is.EqualTo("file:///F:/repos"));
         }
 
-        [Test]
-        public void NormalizePathNormal()
+        [TestMethod]
+        public void Path_NormalizePathNormal()
         {
             PathTooLongException ptl = null;
             try
@@ -198,8 +201,8 @@ namespace SharpSvn.Tests
                 Assert.That(ptl, Is.Not.Null, "Expected error in v2.0");
         }
 
-        [Test]
-        public void NormalizePathSharp()
+        [TestMethod]
+        public void Path_NormalizePathSharp()
         {
             Assert.That(SvnTools.GetNormalizedFullPath("c:\\a\\..\\123456789012345678901234567890123456789012345678901234567890" +
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
@@ -233,7 +236,7 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
-            if (Environment.Version.Major < 4)
+            if (Environment.Version.Major < 4 || TestContext != null)
                 Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Null);
             else
                 Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Not.Null); // CWD on C:\
@@ -314,8 +317,8 @@ namespace SharpSvn.Tests
 
         }
 
-        [Test]//, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
-        public void NormalizeUnrooted()
+        [TestMethod]//, ExpectedException(typeof(PathTooLongException), MatchType = MessageMatch.Contains, ExpectedMessage = "rooted")]
+        public void Path_NormalizeUnrooted()
         {
             GC.KeepAlive(SvnTools.GetNormalizedFullPath("123456789012345678901234567890123456789012345678901234567890" +
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890" +
@@ -325,8 +328,8 @@ namespace SharpSvn.Tests
                 "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890"));
         }
 
-        [Test]
-        public void NormalizePathSharpFail()
+        [TestMethod]
+        public void Path_NormalizePathSharpFail()
         {
             string result = null;
             bool gotException = false;
@@ -351,15 +354,15 @@ namespace SharpSvn.Tests
                 Assert.That(gotException, "Got exception");
         }
 
-        [Test]
-        public void NormalizePrefixesArway()
+        [TestMethod]
+        public void Path_NormalizePrefixesArway()
         {
             Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\C:\Windows\Q"), Is.EqualTo(@"C:\Windows\Q"));
             Assert.That(SvnTools.GetNormalizedFullPath(@"\\?\UNC\server\Share\Windows\Q"), Is.EqualTo(@"\\server\Share\Windows\Q"));
         }
 
-        [Test]
-        public void TestReallyLong()
+        [TestMethod]
+        public void Path_TestReallyLong()
         {
             string temp = Path.GetTempPath() + "\\" + Guid.NewGuid() + new String('a', 200);
             temp = temp.Replace("\\\\", "\\");
@@ -401,15 +404,15 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
-        public void TryParseShouldReturnFalse()
+        [TestMethod]
+        public void Path_TryParseShouldReturnFalse()
         {
             SvnPathTarget pt;
             Assert.That(SvnPathTarget.TryParse("http://qqn.nl/2233234", out pt), Is.False);
         }
 
-        [Test]
-        public void SshUsernameTests()
+        [TestMethod]
+        public void Path_SshUsernameTests()
         {
             Assert.That(SvnTools.GetNormalizedUri(new Uri(new Uri("http://user@host.server/"), "/trunk")).AbsoluteUri, Is.EqualTo("http://user@host.server/trunk"));
 
@@ -424,8 +427,8 @@ namespace SharpSvn.Tests
             Assert.That(target2.Uri.AbsoluteUri, Is.EqualTo("http://user@host.server:123/home/user/repos"));
         }
 
-        [Test]
-        public void TestNormalizeUri()
+        [TestMethod]
+        public void Path_TestNormalizeUri()
         {
             Assert.That(SvnTools.GetNormalizedUri(new Uri("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23/")).AbsoluteUri,
                 Is.EqualTo("https://svn.apache.org/repos/asf/incubator/lucene.net/trunk/C%23"));
@@ -471,8 +474,8 @@ namespace SharpSvn.Tests
             Assert.That(SvnUriTarget.FromUri(new Uri("file://localhost/C:/Repositories/testrepo/TraceStart")).Uri.AbsoluteUri, Is.EqualTo("file://localhost/C:/Repositories/testrepo/TraceStart"));
         }
 
-        [Test]
-        public void TestPathToUri()
+        [TestMethod]
+        public void Path_TestPathToUri()
         {
             Uri root = new Uri("http://server/q/");
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("\\a b\\test")).AbsoluteUri, Is.EqualTo("http://server/a%20b/test"));
@@ -488,10 +491,11 @@ namespace SharpSvn.Tests
             Assert.That(new Uri(root, SvnTools.PathToRelativeUri("r\\c#\\test\\")).AbsoluteUri, Is.EqualTo("http://server/q/r/c%23/test/"));
         }
 
-        [Test]
-        public void UriStrangeness()
+        [TestMethod]
+        public void Path_UriStrangeness()
         {
-            if (Environment.Version.Major < 4)
+            // Somehow the behavior reverts to 2.0 like for the VS Test runner?
+            if (Environment.Version.Major < 4 || (TestContext != null))
             {
                 // This is where we wrote this test for
                 Assert.That(new Uri("http://server/file.").AbsoluteUri, Is.EqualTo("http://server/file"));
@@ -522,8 +526,8 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
-        public void SvnUriTargetConstructor()
+        [TestMethod]
+        public void Path_SvnUriTargetConstructor()
         {
             Assert.That(new SvnUriTarget("file:///C:/some/repos").Uri.OriginalString, Is.EqualTo("file:///C:/some/repos"));
             Assert.That(new SvnUriTarget("file:///c:/some/repos").Uri.OriginalString, Is.EqualTo("file:///C:/some/repos"));
@@ -535,15 +539,15 @@ namespace SharpSvn.Tests
             Assert.That(new SvnUriTarget("file://localhost/c:/some/repos/").Uri.OriginalString, Is.EqualTo("file://localhost/C:/some/repos"));
         }
 
-        [Test]
-        public void PathToUri()
+        [TestMethod]
+        public void Path_PathToUri()
         {
             Assert.That(SvnTools.LocalPathToUri(@"c:\TemP\file", false).AbsoluteUri, Is.EqualTo("file:///C:/TemP/file"));
-            //Assert.That(SvnTools.LocalPathToUri(@"\\QUAD\public\temp", false), Is.EqualTo("file://quad/public/temp"));
+            //Assert.That(SvnTools.SvnTools.LocalPathToUri(@"\\QUAD\public\temp", false), Is.EqualTo("file://quad/public/temp"));
         }
 
-        [Test]
-        public void ParsePaths()
+        [TestMethod]
+        public void Path_ParsePaths()
         {
             SvnUriTarget ut;
             SvnPathTarget pt;
@@ -579,8 +583,8 @@ namespace SharpSvn.Tests
             Assert.That(st, Is.InstanceOf(typeof(SvnPathTarget)));
         }
 
-        [Test]
-        public void UncLocalDriveTests()
+        [TestMethod]
+        public void Path_UncLocalDriveTests()
         {
             string sysDir = SvnTools.GetTruePath(System.Environment.GetFolderPath(Environment.SpecialFolder.System));
             string testPath = "\\\\" + Environment.MachineName.ToLowerInvariant() + "\\" + sysDir[0] + "$" + sysDir.Substring(2);
@@ -593,8 +597,8 @@ namespace SharpSvn.Tests
             Assert.That(new SvnPathTarget(testPath).TargetName, Is.EqualTo(testPath));
         }
 
-        [Test]
-        public void NormalizingPathsDot()
+        [TestMethod]
+        public void Path_NormalizingPathsDot()
         {
             Assert.That(SvnTools.IsNormalizedFullPath("C:\\source\\."), Is.False);
             Assert.That(SvnTools.IsNormalizedFullPath("C:\\source\\.\\"), Is.False);
@@ -614,6 +618,12 @@ namespace SharpSvn.Tests
             Assert.That(SvnPathTarget.FromString("c:\\source\\.").TargetPath, Is.EqualTo("C:\\source"));
             Assert.That(SvnPathTarget.FromString("c:\\source\\.\\").TargetPath, Is.EqualTo("C:\\source"));
             Assert.That(SvnPathTarget.FromString("c:\\source\\.\\dump").TargetPath, Is.EqualTo("C:\\source\\dump"));
+        }
+
+        public TestContext TestContext
+        {
+            get;
+            set;
         }
     }
 }

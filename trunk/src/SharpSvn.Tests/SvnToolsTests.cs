@@ -15,18 +15,22 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn.Implementation;
 using SharpSvn.Tests.Commands;
-using System.IO;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class SvnToolsTests : TestBase
     {
-        [Test]
+        [TestMethod]
         public void TestUriCanonicalization()
         {
             Assert.That(new Uri("svn://127.0.0.1:1234").ToString(), Is.EqualTo("svn://127.0.0.1:1234/"));
@@ -46,7 +50,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetFileName(new Uri("http://svn/s")), Is.EqualTo("s"));
         }
 
-        [Test]
+        [TestMethod]
         public void TestLibs()
         {
             foreach (SvnLibrary lib in SvnClient.SvnLibraries)
@@ -59,7 +63,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
+        [TestMethod]
         public void IsBelowAdmin()
         {
             string dir = GetTempDir();
@@ -92,7 +96,7 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.IsBelowManagedPath(sdsvnd), "d managed");
         }
 
-        [Test]
+        [TestMethod]
         public void SplitPaths()
         {
             string app, args;
@@ -104,7 +108,7 @@ namespace SharpSvn.Tests
             Assert.That(Path.GetFileName(app).ToLowerInvariant(), Is.EqualTo("wscript.exe"));
         }
 
-        [Test]
+        [TestMethod]
         public void Normalize800000()
         {
             for (int i = 0; i < 800000; i++)
@@ -113,7 +117,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TestGetUriFromWc()
         {
             Assert.That(SvnTools.GetUriFromWorkingCopy("C:\\"), Is.Null);

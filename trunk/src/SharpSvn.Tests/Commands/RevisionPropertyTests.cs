@@ -19,7 +19,11 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 /// <summary>
@@ -27,14 +31,14 @@ using SharpSvn;
 /// </summary>
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
-    public class SetRevisionPropertyTests : TestBase
+    [TestClass]
+    public class RevisionPropertyTests : TestBase
     {
         /// <summary>
         ///Attempts to Set Properties on a file in the repository represented by url.
         /// </summary>
-        [Test]
-        public void TestRevSetPropDir()
+        [TestMethod]
+        public void RevisionProperty_RevSetPropDir()
         {
             byte[] propval = Encoding.UTF8.GetBytes("moo");
 
@@ -44,19 +48,20 @@ namespace SharpSvn.Tests.Commands
                 "Couldn't set prop on selected Repos!");
         }
 
-        [Test]
-        public void TestSetLog()
+        [TestMethod]
+        public void RevisionProperty_SetLog()
         {
-            string reposPath = GetRepos(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.DefaultBranched);
+            string reposPath = reposUri.AbsolutePath;
 
             InstallRevpropHook(reposPath);
 
-            Uri target = PathToUri(reposPath, true);
             SvnRevision rev = 2;
 
-            Client.SetRevisionProperty(target, rev, SvnPropertyNames.SvnDate, DateTime.UtcNow.ToString("o"));
+            Client.SetRevisionProperty(reposUri, rev, SvnPropertyNames.SvnDate, DateTime.UtcNow.ToString("o"));
 
-            Client.SetRevisionProperty(target, rev, SvnPropertyNames.SvnDate, SvnPropertyNames.FormatDate(DateTime.UtcNow));
+            Client.SetRevisionProperty(new Uri(reposUri, "trunk"), rev, SvnPropertyNames.SvnDate, SvnPropertyNames.FormatDate(DateTime.UtcNow));
         }
     }
 }

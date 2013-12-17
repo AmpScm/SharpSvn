@@ -15,18 +15,19 @@
 
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
-using ICSharpCode.SharpZipLib.Zip;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using SharpSvn;
+using ICSharpCode.SharpZipLib.Zip;
 using SharpSvn.Tests.Commands.Utils;
-using System.Collections.ObjectModel;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -40,11 +41,9 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Serves as a base class for tests for NSvn::Core::Add
     /// </summary>
-    [TestFixture]
-    public class TestBase
+    public class TestBase : IHasTestContext
     {
-        List<string> pathsToDelete = new List<string>();
-        SortedList<TestReposType, string> _reposs = new SortedList<TestReposType, string>();
+        SortedList<TestReposType, Uri> _reposs = new SortedList<TestReposType, Uri>();
         Uri _reposUri;
         string _reposPath;
         string _wcPath;
@@ -57,105 +56,76 @@ namespace SharpSvn.Tests.Commands
             UseEmptyRepositoryForWc = true;
         }
 
-        [TestFixtureTearDown]
-        public virtual void TestFixtureTearDown()
-        {
-            foreach (string path in pathsToDelete)
-            {
-                RecursiveDelete(path);
-            }
-            pathsToDelete.Clear();
-            _wcPath = null;
-        }
-
         protected string GetTempDir()
         {
-            string file = Path.GetTempFileName();
-            File.Delete(file);
-            Directory.CreateDirectory(file);
-            pathsToDelete.Add(file);
-            return file;
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            return sbox.GetTempDir();
         }
 
-        protected Uri PathToUri(string path, bool endSlash)
+        protected Uri CreateRepos(TestReposType type)
         {
-            return SvnTools.LocalPathToUri(path, endSlash);
-        }
-
-        protected string CreateRepos(TestReposType type)
-        {
-            string path = GetTempDir();
-            pathsToDelete.Add(path);
-
             switch (type)
             {
                 case TestReposType.Empty:
-                    using (SvnRepositoryClient rc = new SvnRepositoryClient())
-                    {
-                        rc.CreateRepository(path);
-                        return path;
-                    }
+                    SvnSandBox sbox = new SvnSandBox(this);
+                    return sbox.CreateRepository(SandBoxRepository.Empty);
                 case TestReposType.EmptyNoMerge:
                     using (SvnRepositoryClient rc = new SvnRepositoryClient())
                     {
+                        string path = GetTempDir();
+
                         SvnCreateRepositoryArgs rca = new SvnCreateRepositoryArgs();
                         rca.RepositoryCompatibility = SvnRepositoryCompatibility.Subversion14;
                         rc.CreateRepository(path, rca);
 
-                        return path;
+                        return SvnTools.LocalPathToUri(path, true);
                     }
                 case TestReposType.CollabRepos:
-                    {
-                        SvnRepositoryClient rc = new SvnRepositoryClient();
-                        rc.CreateRepository(path);
-                        using (FileStream fs = File.OpenRead(Path.Combine(ProjectBase, "Zips/Collabnet-MT.repos")))
-                        {
-                            rc.LoadRepository(path, fs);
-                        }
-
-
-                        return path;
-                    }
+                    sbox = new SvnSandBox(this);
+                    return sbox.CreateRepository(SandBoxRepository.MergeScenario);
                 case TestReposType.AnkhRepos:
-                    {
-                        UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), path);
-                        return path;
-                    }
+                    sbox = new SvnSandBox(this);
+                    return sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
                 default:
                     throw new ArgumentException();
             }
         }
 
-        public string GetRepos(TestReposType type)
-        {
-            string dir;
-            if (!_reposs.TryGetValue(type, out dir))
-            {
-                dir = CreateRepos(type);
-                _reposs[type] = dir;
-            }
-            return dir;
-        }
-
         public Uri GetReposUri(TestReposType type)
         {
-            Uri u = PathToUri(GetRepos(type), true);
-
-            return u;
+            Uri reposUri;
+            if (!_reposs.TryGetValue(type, out reposUri))
+            {
+                reposUri = CreateRepos(type);
+                _reposs[type] = reposUri;
+            }
+            return reposUri;
         }
 
+        public string GetRepos(TestReposType type)
+        {
+            return GetReposUri(type).AbsolutePath;
+        }
+
+        [Obsolete("Please use an SBox")]
         protected Uri CollabReposUri
         {
             get { return GetReposUri(TestReposType.CollabRepos); }
         }
 
-        [SetUp]
-        public virtual void SetUp()
+        [TestInitialize]
+        public void SetUp()
         {
             this.notifications = new List<SvnNotifyEventArgs>();
             this.client = new SvnClient();
             client.Configuration.LogMessageRequired = false;
             client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
+
+            _reposPath = null;
+            _reposUri = null;
+            _wcPath = null;
+            _reposs.Clear();
         }
 
         protected SvnClient NewSvnClient(bool expectCommit, bool expectConflict)
@@ -221,29 +191,6 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [TearDown]
-        public virtual void TearDown()
-        {
-            // clean up
-            try
-            {
-                if (_reposPath != null)
-                    RecursiveDelete(_reposPath);
-                if (_wcPath != null)
-                    RecursiveDelete(_wcPath);
-            }
-            catch (Exception)
-            {
-                // swallow
-            }
-            finally
-            {
-                _reposPath = null;
-                _reposUri = null;
-                _wcPath = null;
-				_reposs.Clear();
-            }
-        }
         /// <summary>
         /// extract our test repository
         /// </summary>
@@ -254,7 +201,7 @@ namespace SharpSvn.Tests.Commands
 
             UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
 
-            _reposUri = PathToUri(_reposPath, true);
+            _reposUri = SvnTools.LocalPathToUri(_reposPath, true);
         }
 
         void ExtractWorkingCopy()
@@ -415,6 +362,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// The path to the working copy
         /// </summary>
+        [Obsolete("Please use an SandBox")]
         public string WcPath
         {
             get
@@ -469,9 +417,9 @@ namespace SharpSvn.Tests.Commands
         /// </summary>
         /// <param name="name">The name of the ifle to create</param>
         /// <returns>The path to the created text file</returns>
-        protected string CreateTextFile(string name)
+        protected static string CreateTextFile(string WcPath, string name)
         {
-            string path = Path.Combine(this.WcPath, name);
+            string path = Path.Combine(WcPath, name);
             using (StreamWriter writer = File.CreateText(path))
                 writer.Write("Hello world");
 
@@ -492,13 +440,9 @@ namespace SharpSvn.Tests.Commands
 
         protected string GetTempFile()
         {
-            // ensure we get a long path
-            StringBuilder builder = new StringBuilder(260);
-            Win32.GetLongPathName(Path.GetTempFileName(), builder, 260);
-            string tmpPath = builder.ToString();
-            File.Delete(tmpPath);
+            SvnSandBox sbox = new SvnSandBox(this);
 
-            return tmpPath;
+            return sbox.GetTempFile();
         }
 
         /// <summary>
@@ -600,5 +544,18 @@ namespace SharpSvn.Tests.Commands
         private SvnClient client;
 
         protected List<SvnNotifyEventArgs> notifications;
+
+        Microsoft.VisualStudio.TestTools.UnitTesting.TestContext _tcx;
+        public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
+        {
+            get { return _tcx;  }
+            set { _tcx = value; }
+        }
+
+        [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanup]
+        public void CleanTestData()
+        {
+            SvnSandBox.Clear();
+        }
     }
 }

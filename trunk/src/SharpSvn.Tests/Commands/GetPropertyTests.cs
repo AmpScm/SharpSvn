@@ -18,7 +18,10 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -26,10 +29,10 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Summary description for PropGetTest.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class GetPropertyTests : TestBase
     {
-        [Test]
+        [TestMethod]
         public void TestPropGetOnFile()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
@@ -51,7 +54,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(pval.Target.TargetName, Is.EqualTo(path));
         }
 
-    [Test]
+    [TestMethod]
     public void GetPropertyValues()
     {
         Uri trunk = new Uri(CollabReposUri, "trunk");
@@ -85,7 +88,7 @@ namespace SharpSvn.Tests.Commands
         Assert.That(pc[dir + "index.html"], Is.Not.Null, "Can get wcroot\\index.html?");
     }
 
-        [Test]
+        [TestMethod]
         public void TestNonExistentPropertyExistingFile()
         {
             string wc = GetTempDir();
@@ -102,8 +105,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(value, Is.Null, "No value available");
         }
 
-    [Test, ExpectedException(typeof(SvnUnversionedNodeException),
-                    ExpectedMessage="no-index.html", MatchType=MessageMatch.Contains)]
+    [TestMethod, ExpectedException(typeof(SvnUnversionedNodeException))]
         public void TestNonExistentPropertyNonExistingFile()
         {
             string wc = GetTempDir();
@@ -113,15 +115,14 @@ namespace SharpSvn.Tests.Commands
             Client.GetProperty(Path.Combine(wc, "no-index.html"), "new-prop", out value);
         }
 
-        [Test, ExpectedException(typeof(SvnInvalidNodeKindException),
-            ExpectedMessage="{632382A5-F992-4ab8-8D37-47977B190819}", MatchType=MessageMatch.Contains)]
+        [TestMethod, ExpectedException(typeof(SvnInvalidNodeKindException))]
         public void TestNoWcProperty()
         {
             string value;
             Client.GetProperty("c:/{632382A5-F992-4ab8-8D37-47977B190819}/no-file.txt", "no-prop", out value);
         }
 
-    [Test]
+    [TestMethod]
     public void TestGetOnCwd()
     {
         string wc = GetTempDir();

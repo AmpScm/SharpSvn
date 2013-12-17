@@ -16,18 +16,24 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class ListEntries : TestBase
     {
-        [Test]
-        public void WalkEntries()
+        [TestMethod]
+        public void ListEntries_WalkEntries()
         {
-            string tmpDir = GetTempDir();
-            Client.CheckOut(new Uri(CollabReposUri, "trunk/"), tmpDir);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
+            string tmpDir = sbox.Wc;
+
             using (SvnWorkingCopyClient wcc = new SvnWorkingCopyClient())
             {
                 SvnWorkingCopyEntriesArgs a = new SvnWorkingCopyEntriesArgs();
@@ -43,7 +49,6 @@ namespace SharpSvn.Tests.Commands
 
 
                 Assert.That(touched);
-
             }
         }
     }

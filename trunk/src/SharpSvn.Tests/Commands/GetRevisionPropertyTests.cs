@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 /// <summary>
@@ -26,13 +30,13 @@ using SharpSvn;
 /// </summary>
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class GetRevisionPropertyTests : TestBase
     {
         /// <summary>
         ///Attempts to Get Properties on a directory in the repository represented by url.
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestRevPropGetDir()
         {
             this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + this.ReposUrl);

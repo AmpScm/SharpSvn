@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -26,14 +30,14 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Summary description for UnlockTest.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class UnlockTests : TestBase
     {
-    public UnlockTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
-        [Test]
+        public UnlockTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
+        [TestMethod]
         public void BasicUnlockTest()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");

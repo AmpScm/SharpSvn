@@ -2,23 +2,26 @@
 using System.Collections.Generic;
 using System.Text;
 using SharpSvn.Tests.Commands;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class ExceptionTests :TestBase
     {
-        [Test]
-        public void StatusCrash()
+        [TestMethod]
+        public void Exception_StatusCrash()
         {
-            string dir = GetTempDir();
-            Client.CheckOut(new Uri(CollabReposUri, "trunk"), dir);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
 
             SvnStatusArgs sa = new SvnStatusArgs();
             sa.ThrowOnError = false;
             sa.RetrieveAllEntries = true;
-            Assert.That(Client.Status(dir, sa,
+            Assert.That(Client.Status(sbox.Wc, sa,
                 delegate(object sender, SvnStatusEventArgs e)
                 {
                     throw new InvalidOperationException();

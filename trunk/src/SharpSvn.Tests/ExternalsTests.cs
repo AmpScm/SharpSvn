@@ -16,14 +16,17 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class ExternalsTests
     {
-        [Test]
+        [TestMethod]
         public void ParseSome()
         {
             SvnExternalItem[] items;
@@ -40,7 +43,7 @@ namespace SharpSvn.Tests
             Assert.That(items[0].ToString(false), Is.EqualTo("http://sharpsvn.net/qqn dir"));
         }
 
-        [Test]
+        [TestMethod]
         public void ParseHEAD()
         {
             SvnExternalItem item;
@@ -58,7 +61,7 @@ namespace SharpSvn.Tests
             Assert.That(item.ToString(false), Is.EqualTo("-r 1 http://sharpsvn.net/qqn@124 dir"));
         }
 
-        [Test]
+        [TestMethod]
         public void ParseFail()
         {
             SvnExternalItem[] items;
@@ -111,7 +114,7 @@ namespace SharpSvn.Tests
             Assert.That(items.Length, Is.EqualTo(2));
         }
 
-        [Test]
+        [TestMethod]
         public void ParseFlat()
         {
             SvnExternalItem item;
@@ -123,7 +126,7 @@ namespace SharpSvn.Tests
             Assert.That(item.Reference, Is.EqualTo("a"));
         }
 
-        [Test]
+        [TestMethod]
         public void ParseReturn()
         {
             SvnExternalItem item;

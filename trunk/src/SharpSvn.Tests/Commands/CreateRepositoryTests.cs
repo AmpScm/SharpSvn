@@ -16,15 +16,18 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class CreateRepositoryTests : TestBase
     {
-        [Test]
-        public void CreateFsFsRepository()
+        [TestMethod]
+        public void CreateRepository_FsFs()
         {
             using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
             {
@@ -34,8 +37,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void CreateBdbRepository()
+        [TestMethod]
+        public void CreateRepository_Bdb()
         {
             using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
             {

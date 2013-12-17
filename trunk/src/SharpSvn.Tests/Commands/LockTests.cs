@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 using System.Collections.ObjectModel;
 
@@ -27,17 +31,11 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Summary description for LockTest.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class LockTests : TestBase
     {
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-        }
-
-        [Test]
-        public void TestBasicLock()
+        [TestMethod]
+        public void Lock_BasicLock()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
             TouchFile(filepath);
@@ -85,8 +83,8 @@ namespace SharpSvn.Tests.Commands
             //throw new NotImplementedException();
         }
 
-        [Test]
-        public void DualLockTest()
+        [TestMethod]
+        public void Lock_DualLock()
         {
             // Checks that sharpsvn sees a failed lock as an error (unlike the subversion c api)
             string wc1 = GetTempDir();
@@ -121,8 +119,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test, ExpectedException(typeof(SvnFileSystemLockException))]
-        public void LockCommitTest()
+        [TestMethod, ExpectedException(typeof(SvnFileSystemLockException))]
+        public void Lock_CommitTest()
         {
             string wc1 = GetTempDir();
             string wc2 = GetTempDir();
@@ -147,57 +145,85 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void ListLocks()
+        [TestMethod]
+        public void Lock_ListLocks()
         {
-            Uri trunk = new Uri(CollabReposUri, "trunk/");
-            Uri about = new Uri(trunk, "about/");
-            Uri aboutIndex = new Uri(about, "index.html");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.DefaultBranched);
 
-            Client.RemoteLock(aboutIndex, "Mine!");
+            Uri trunk = sbox.Uri;
+            Uri src = new Uri(sbox.Uri, "src/");
+            Uri srcFile1 = new Uri(src, "file1.cs");
+
+            Client.RemoteLock(srcFile1, "Mine!");
 
             Collection<SvnInfoEventArgs> lst;
             SvnInfoArgs ia = new SvnInfoArgs();
             ia.Depth = SvnDepth.Unknown;
             
-            Assert.That(Client.GetInfo(aboutIndex, ia, out lst));
+            Assert.That(Client.GetInfo(srcFile1, ia, out lst));
             Assert.That(lst.Count == 1);
             Assert.That(lst[0].Lock, Is.Not.Null, "Is locked - Unknown");
 
             ia.Depth = SvnDepth.Empty;
-            Assert.That(Client.GetInfo(aboutIndex, ia, out lst));
+            Assert.That(Client.GetInfo(srcFile1, ia, out lst));
             Assert.That(lst.Count == 1);
             Assert.That(lst[0].Lock, Is.Not.Null, "Is locked - Empty");
 
             ia.Depth = SvnDepth.Infinity;
-            Assert.That(Client.GetInfo(aboutIndex, ia, out lst));
+            Assert.That(Client.GetInfo(srcFile1, ia, out lst));
             Assert.That(lst.Count == 1);
             Assert.That(lst[0].Lock, Is.Not.Null, "Is locked - Infinity");
 
             ia.Depth = SvnDepth.Unknown;
-            Assert.That(Client.GetInfo(about, ia, out lst));
+            Assert.That(Client.GetInfo(src, ia, out lst));
             Assert.That(lst.Count, Is.EqualTo(1)); // Just the dir
 
             // And the next cases where failing because .Info() didn't pass
             // an explicit operational revision to svn_client_info2().
 
             ia.Depth = SvnDepth.Files;
-            Assert.That(Client.GetInfo(about, ia, out lst));
-            Assert.That(lst.Count, Is.EqualTo(2));
-            Assert.That(lst[1].Path.EndsWith("index.html"));
-            Assert.That(lst[1].Lock, Is.Not.Null, "Is locked - Dir - Files");
+            Assert.That(Client.GetInfo(src, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(5));
+            bool found = false;
+            foreach(SvnInfoEventArgs e in lst)
+            {
+                if (e.Path.EndsWith("file1.cs"))
+                {
+                    found = true;
+                    Assert.That(e.Lock, Is.Not.Null, "Is locked - Dir - Files");
+                }
+            }
+            Assert.That(found);
 
             ia.Depth = SvnDepth.Children;
-            Assert.That(Client.GetInfo(about, ia, out lst));
-            Assert.That(lst.Count, Is.EqualTo(2));
-            Assert.That(lst[1].Path.EndsWith("index.html"));
-            Assert.That(lst[1].Lock, Is.Not.Null, "Is locked - Dir - Children");
+            Assert.That(Client.GetInfo(src, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(5));
+            found = false;
+            foreach (SvnInfoEventArgs e in lst)
+            {
+                if (e.Path.EndsWith("file1.cs"))
+                {
+                    found = true;
+                    Assert.That(e.Lock, Is.Not.Null, "Is locked - Dir - Children");
+                }
+            }
+            Assert.That(found);
 
             ia.Depth = SvnDepth.Infinity;
-            Assert.That(Client.GetInfo(about, ia, out lst));
-            Assert.That(lst.Count, Is.EqualTo(2));
-            Assert.That(lst[1].Path.EndsWith("index.html"));
-            Assert.That(lst[1].Lock, Is.Not.Null, "Is locked - Dir - Infinity");
+            Assert.That(Client.GetInfo(src, ia, out lst));
+            Assert.That(lst.Count, Is.EqualTo(5));
+            found = false;
+            foreach (SvnInfoEventArgs e in lst)
+            {
+                if (e.Path.EndsWith("file1.cs"))
+                {
+                    found = true;
+                    Assert.That(e.Lock, Is.Not.Null, "Is locked - Dir - Infinity");
+                }
+            }
+            Assert.That(found);
+
         }
     }
 }

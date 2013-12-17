@@ -21,7 +21,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -29,19 +32,22 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// A test for Client.Relocate
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class RelocateTests : TestBase
     {
-    public RelocateTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
-
-        [Test]
-        public void SvnServeRelocate()
+        public RelocateTests()
         {
+            UseEmptyRepositoryForWc = false;
+        }
+
+        [TestMethod]
+        public void Relocate_SvnServeRelocate()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default, false);
+
             // start a svnserve process on this repos
-            Process svnserve = this.StartSvnServe(this.ReposPath.Replace('\\', '/'));
+            Process svnserve = this.StartSvnServe(sbox.RepositoryUri.AbsolutePath);
 
             try
             {
@@ -62,24 +68,24 @@ namespace SharpSvn.Tests.Commands
 
                     if (svnServeAvailable)
                         break;
-                    Thread.Sleep(3000);
+                    Thread.Sleep(100);
                 }
 
                 Assert.That(svnServeAvailable);
 
-                Assert.That(Client.Relocate(this.WcPath, ReposUrl, localUri));
+                Assert.That(Client.Relocate(sbox.Wc, sbox.RepositoryUri, localUri));
 
                 Collection<SvnInfoEventArgs> list;
                 SvnInfoArgs a = new SvnInfoArgs();
 
-                Assert.That(Client.GetInfo(WcPath, a, out list));
+                Assert.That(Client.GetInfo(sbox.Wc, a, out list));
 
                 Assert.That(list.Count, Is.GreaterThan(0));
                 Assert.That(list[0].Uri.ToString().StartsWith(localUri.ToString()));
             }
             finally
             {
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(100);
                 if (!svnserve.HasExited)
                 {
                     svnserve.Kill();

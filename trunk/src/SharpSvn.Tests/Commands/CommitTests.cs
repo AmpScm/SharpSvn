@@ -19,7 +19,11 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 using SharpSvn.Security;
 
@@ -28,7 +32,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests the Client.Commit method.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class CommitTests : TestBase
     {
         public CommitTests()
@@ -38,8 +42,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Modifies a file in the working copy and commits the containing directory.
         /// </summary>
-        [Test]
-        public void TestBasicCommit()
+        [TestMethod]
+        public void Commit_BasicCommit()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
@@ -60,8 +64,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Locks and modifies a file in the working copy and commits the containing directory keeping, and not keeping locks
         /// </summary>
-        [Test]
-        public void TestCommitWithLocks()
+        [TestMethod]
+        public void Commit_CommitWithLocks()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
@@ -91,8 +95,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(output, Is.EqualTo(String.Empty));
         }
 
-        [Test]
-        public void TestSetCustomProps()
+        [TestMethod]
+        public void Commit_SetCustomProps()
         {
             string fp = Path.Combine(WcPath, "NewFile.cs");
             Touch2(fp);
@@ -129,8 +133,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Commits a single file
         /// </summary>
-        [Test]
-        public void TestCommitFile()
+        [TestMethod]
+        public void Commit_CommitFile()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
@@ -146,8 +150,8 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-        [Test]
-        public void TestCommitWithNonAnsiCharsInLogMessage()
+        [TestMethod]
+        public void Commit_CommitWithNonAnsiCharsInLogMessage()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
@@ -180,8 +184,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Tests that a commit on an unmodified repos returns CommitInfo.Invalid.
         /// </summary>
-        [Test]
-        public void TestCommitWithNoModifications()
+        [TestMethod]
+        public void Commit_CommitWithNoModifications()
         {
             string filepath = Path.Combine(this.WcPath, "Form.cs");
             this.Client.Committing += delegate(object sender, SvnCommittingEventArgs e)
@@ -200,8 +204,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Tests that you can cancel a commit.
         /// </summary>
-        [Test]
-        public void TestCancelledCommit()
+        [TestMethod]
+        public void Commit_CancelledCommit()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
             string path2 = Path.Combine(this.WcPath, "Form2.cs");
@@ -235,8 +239,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(File.Exists(e.FullPath), "{0} does exist; path was defined as {1}", e.FullPath, e.Path);
         }
 
-        [Test]
-        public void NonRecursiveDirDelete()
+        [TestMethod]
+        public void Commit_NonRecursiveDirDelete()
         {
             string dir = GetTempDir();
             Client.CheckOut(GetReposUri(TestReposType.Empty), dir);
@@ -252,8 +256,8 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(name, ca);
         }
 
-        [Test]
-        public void WithAlternateUser()
+        [TestMethod]
+        public void Commit_WithAlternateUser()
         {
             string user = Guid.NewGuid().ToString();
 
@@ -286,8 +290,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void NonRecursiveDepthEmpty()
+        [TestMethod]
+        public void Commit_NonRecursiveDepthEmpty()
         {
             string dir = GetTempDir();
             Client.CheckOut(GetReposUri(TestReposType.Empty), dir);

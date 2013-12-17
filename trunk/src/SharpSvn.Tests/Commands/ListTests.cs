@@ -16,16 +16,18 @@
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text.RegularExpressions;
-using NUnit.Framework;
-using SharpSvn;
-using System.Net;
 using System.Collections.Generic;
-using System.Threading;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
+using System.Net;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn.Security;
 
 namespace SharpSvn.Tests.Commands
@@ -33,15 +35,15 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::List
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ListTests : TestBase
     {
         /// <summary>
         /// Compares the list from the command line client with that obtained
         /// from Client::List
         /// </summary>
-        [Test]
-        public void TestList()
+        [TestMethod]
+        public void List_TestList()
         {
             string list = this.RunCommand("svn", "list -v " + this.ReposUrl);
 
@@ -84,8 +86,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void TestRoot()
+        [TestMethod]
+        public void List_TestRoot()
         {
             using (SvnClient client = new SvnClient())
             {
@@ -97,8 +99,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void TestListReflection()
+        [TestMethod]
+        public void List_TestListReflection()
         {
             Type svnClientType = Type.GetType("SharpSvn.SvnClient, SharpSvn");
             Type svnUriTarget = Type.GetType("SharpSvn.SvnUriTarget, SharpSvn");
@@ -116,8 +118,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(list.Count, Is.GreaterThan(0));
         }
 
-        [Test]
-        public void ReadDash()
+        [TestMethod]
+        public void List_ReadDash()
         {
             string dir = GetTempDir();
             Client.CheckOut(new Uri(CollabReposUri, "trunk"), dir);
@@ -140,8 +142,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(touched);
         }
 
-        [Test]
-        public void ListSharp()
+        [TestMethod]
+        public void List_ListSharp()
         {
             using (SvnClient client = new SvnClient())
             {
@@ -159,8 +161,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test, Ignore("Don't run this as normal test")]
-        public void ParallelList()
+        [TestMethod, Ignore]
+        public void List_ParallelList()
         {
             List<IAsyncResult> handlers = new List<IAsyncResult>();
             for (int i = 0; i < 32; i++)
@@ -182,8 +184,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void ParallelLocalList()
+        [TestMethod]
+        public void List_ParallelLocalList()
         {
             Uri reposUri = new Uri(CollabReposUri, "trunk/");
             List<IAsyncResult> handlers = new List<IAsyncResult>();
@@ -206,8 +208,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void WorstLocalDir()
+        [TestMethod]
+        public void List_WorstLocalDir()
         {
             Uri uri = CollabReposUri;
             string tmp = GetTempDir();
@@ -265,8 +267,8 @@ namespace SharpSvn.Tests.Commands
                 });
         }
 
-        [Test]
-        public void ListDepth()
+        [TestMethod]
+        public void List_ListDepth()
         {
             Uri url = new Uri(CollabReposUri, "trunk/");
             string dir = GetTempDir();
@@ -301,8 +303,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void TestHash()
+        [TestMethod]
+        public void List_TestHash()
         {
             using (SvnClient client = new SvnClient())
             {
@@ -356,8 +358,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void RemoteListTest()
+        [TestMethod]
+        public void List_RemoteListTest()
         {
             using (SvnClient client = NewSvnClient(false, false))
             {
@@ -369,8 +371,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void TestLowerDrive()
+        [TestMethod]
+        public void List_TestLowerDrive()
         {
             if (!GetTempDir().Contains(":"))
                 return; // Testing on UNC share
@@ -393,7 +395,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        //[Test]
+        //[TestMethod]
         public void TestSpace()
         {
             using(SvnClient client = new SvnClient())
@@ -494,6 +496,91 @@ namespace SharpSvn.Tests.Commands
             private string path;
             private static readonly Regex Reg = new Regex(
                 @"\s+(\d+)\s+(\w+)\s+(\d+)?\s+(\w+\s\d+)\s+(?:(\d{4})|(\d\d:\d\d))\s+(\S+)");
+        }
+
+        [TestMethod]
+        public void List_ListDetails()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
+            string WcPath = sbox.Wc;
+            Uri WcUri = sbox.Uri;
+
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+
+                string oneFile = Path.Combine(WcPath, "LocalFileForTestList");
+                TouchFile(oneFile);
+                client.Add(oneFile);
+
+                SvnCommitResult ci;
+                client.Commit(WcPath, out ci);
+                SvnUpdateResult r;
+                client.Update(WcPath, out r);
+
+                Assert.That(r, Is.Not.Null);
+                Assert.That(r.HasRevision);
+                Assert.That(r.HasResultMap);
+                Assert.That(r.Revision, Is.EqualTo(ci.Revision));
+
+                bool visited = false;
+                SvnListArgs a = new SvnListArgs();
+                a.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
+
+                client.List(new SvnPathTarget(WcPath), a, delegate(object sender, SvnListEventArgs e)
+                {
+                    Assert.That(e.Entry, Is.Not.Null, "Entry set");
+                    Assert.That(e.RepositoryRoot, Is.Null, "Only valid when listing a Uri");
+
+                    if (e.Path == "LocalFileForTestList")
+                    {
+                        Assert.That(e.BasePath, Is.EqualTo("/trunk"), "Basepath");
+                        Assert.That(e.Lock, Is.Null);
+                        Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
+                        Assert.That(e.Entry.FileSize, Is.EqualTo(0));
+                        Assert.That(e.Entry.NodeKind, Is.EqualTo(SvnNodeKind.File));
+                        Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
+                        Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+                        visited = true;
+                    }
+                });
+                Assert.That(visited, Is.True, "Visited is true");
+
+
+                visited = false;
+                client.List(WcUri, a, delegate(object sender, SvnListEventArgs e)
+                {
+                    Assert.That(e.Entry, Is.Not.Null, "Entry set");
+
+                    if (e.Path == "LocalFileForTestList")
+                    {
+                        Assert.That(e.BasePath, Is.EqualTo("/trunk"), "Basepath");
+                        Assert.That(e.Lock, Is.Null);
+                        Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
+                        Assert.That(e.Entry.FileSize, Is.EqualTo(0));
+                        Assert.That(e.Entry.NodeKind, Is.EqualTo(SvnNodeKind.File));
+                        Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
+                        Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+                        visited = true;
+                    }
+                });
+                Assert.That(visited, Is.True, "Visited is true");
+
+                SvnWorkingCopyClient wcC = new SvnWorkingCopyClient();
+                SvnWorkingCopyState state;
+                Assert.That(wcC.GetState(oneFile, out state));
+
+                Assert.That(state, Is.Not.Null);
+                Assert.That(state.IsTextFile, Is.True);
+
+                client.SetProperty(oneFile, "svn:mime-type", "application/binary");
+
+                Assert.That(wcC.GetState(oneFile, out state));
+
+                Assert.That(state, Is.Not.Null);
+                Assert.That(state.IsTextFile, Is.False);
+            }
         }
     }
 }

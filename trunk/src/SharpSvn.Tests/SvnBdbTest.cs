@@ -17,17 +17,20 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn.Implementation;
 using System.Reflection;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class SvnBdbTest : Commands.TestBase
     {
 
-        [Test]
+        [TestMethod]
         public void CreateBdbRepos()
         {
 			string path = GetTempDir();
@@ -45,7 +48,7 @@ namespace SharpSvn.Tests
 			reposClient.SetRevisionProperty(path, 0, SvnPropertyNames.SvnLog, "Hahaha");
         }
 
-		[Test]
+		[TestMethod]
 		public void TestAllProps()
 		{
 			Assert.That(SvnPropertyNames.AllSvnRevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
