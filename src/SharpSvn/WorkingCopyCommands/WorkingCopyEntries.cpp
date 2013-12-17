@@ -121,6 +121,8 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
         const char* pPath = pool.AllocDirent(directory);
         svn_wc_adm_access_t* adm_access = nullptr;
 
+#pragma warning(push)
+#pragma warning(disable: 4996)
         svn_error_t* r = svn_wc_adm_open3(
             &adm_access,
             nullptr,
@@ -178,6 +180,7 @@ bool SvnWorkingCopyClient::ListEntries(String^ directory, SvnWorkingCopyEntriesA
             }
 
         }
+#pragma warning(pop)
 
         return args->HandleResult(this, r, directory);
     }

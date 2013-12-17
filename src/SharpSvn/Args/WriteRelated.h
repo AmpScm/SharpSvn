@@ -15,7 +15,7 @@
 #pragma once
 
 namespace SharpSvn {
-
+#ifdef _DEBUG
     public ref class SvnWriteRelatedArgs : public SvnClientArgs
     {
 
@@ -28,4 +28,5 @@ namespace SharpSvn {
             }
         }
     };
+#endif
 }

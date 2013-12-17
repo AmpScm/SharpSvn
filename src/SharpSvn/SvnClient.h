@@ -83,7 +83,9 @@ namespace SharpSvn {
 
     ref class SvnFileVersionsArgs;
     ref class SvnReplayRevisionArgs;
+#ifdef _DEBUG
     ref class SvnWriteRelatedArgs;
+#endif
 
     ref class SvnCreateRepositoryArgs;
     ref class SvnDeleteRepositoryArgs;
