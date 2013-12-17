@@ -152,6 +152,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <KeyFile>SharpSvn.snk</KeyFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <PreBuildEvent>
@@ -187,6 +190,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <KeyFile>SharpSvn.snk</KeyFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <PreBuildEvent>
@@ -220,6 +226,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <KeyFile>SharpSvn.snk</KeyFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <PreBuildEvent>
@@ -254,6 +263,9 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
+    <Bscmake>
+      <PreserveSbr>true</PreserveSbr>
+    </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
     <Reference Include="System">

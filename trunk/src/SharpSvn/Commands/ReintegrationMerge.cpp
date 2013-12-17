@@ -45,6 +45,8 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
     AprPool pool(%_pool);
     ArgsStore store(this, args, %pool);
 
+#pragma warning(push)
+#pragma warning(disable: 4996)
     svn_error_t *r = svn_client_merge_reintegrate(
         source->AllocAsString(%pool),
         source->GetSvnRevision(SvnRevision::Working, SvnRevision::Head)->AllocSvnRevision(%pool),
@@ -53,6 +55,7 @@ bool SvnClient::ReintegrationMerge(String^ targetPath, SvnTarget^ source, SvnRei
         args->MergeArguments ? AllocArray(args->MergeArguments, %pool) : nullptr,
         CtxHandle,
         pool.Handle);
+#pragma warning(pop)
 
     return args->HandleResult(this, r, targetPath);
 }
