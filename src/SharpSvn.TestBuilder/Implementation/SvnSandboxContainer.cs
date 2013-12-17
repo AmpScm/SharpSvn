@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Security;
 using System.Text;
 
@@ -49,7 +47,6 @@ namespace SharpSvn.TestBuilder.Implementation
             _dirsToClean.Clear();
         }
 
-        [HandleProcessCorruptedStateExceptions] 
         private void ClearDirs()
         {
             for (int i = 0; i < _dirsToClean.Count; i++)

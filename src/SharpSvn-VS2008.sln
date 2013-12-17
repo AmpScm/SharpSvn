@@ -48,6 +48,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpGit", "SharpGit\SharpG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGit.Tests", "SharpGit.Tests\SharpGit.Tests.csproj", "{7783B901-C688-41BE-A271-C517FB8DEDFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.TestBuilder", "SharpSvn.TestBuilder\SharpSvn.TestBuilder.csproj", "{691CBC4F-CC38-4342-8738-A08E48812141}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -152,6 +154,14 @@ Global
 		{7783B901-C688-41BE-A271-C517FB8DEDFF}.Release|x64.Build.0 = Release|x64
 		{7783B901-C688-41BE-A271-C517FB8DEDFF}.Release|x86.ActiveCfg = Release|x86
 		{7783B901-C688-41BE-A271-C517FB8DEDFF}.Release|x86.Build.0 = Release|x86
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x64.ActiveCfg = Debug|x64
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x64.Build.0 = Debug|x64
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x86.ActiveCfg = Debug|x86
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x86.Build.0 = Debug|x86
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x64.ActiveCfg = Release|x64
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x64.Build.0 = Release|x64
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x86.ActiveCfg = Release|x86
+		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
