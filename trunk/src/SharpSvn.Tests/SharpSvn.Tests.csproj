@@ -175,7 +175,7 @@
     <Otherwise>
       <ItemGroup>
         <ProjectReference Include="..\SharpSvn\SharpSvn.vcxproj">
-          <Project>{187ca0db-5486-423d-b9d2-1c99ed3a35f5}</Project>
+          <Project>{6dd8a600-5a7e-4b7a-91ee-86ab78f58aac}</Project>
           <Name>SharpSvn</Name>
           <Private>True</Private>
         </ProjectReference>
