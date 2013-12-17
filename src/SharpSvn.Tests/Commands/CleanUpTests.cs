@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -26,15 +30,18 @@ namespace SharpSvn.Tests.Commands
 	/// <summary>
 	/// Tests the Client::Cleanup method
 	/// </summary>
-	[TestFixture]
+	[TestClass]
 	public class CleanupTests : TestBase
 	{
-        [Test]
-        public void TestCleanup()
+        [TestMethod]
+        public void Cleanup_Basic()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
             using (SvnClient client = NewSvnClient(false, false))
             {
-                client.CleanUp(WcPath);
+                client.CleanUp(sbox.Wc);
             }
         }
 

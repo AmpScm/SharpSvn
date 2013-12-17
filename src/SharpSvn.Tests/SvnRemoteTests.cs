@@ -16,15 +16,19 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class SvnRemoteTests
     {
-        [Test]
+        [TestMethod]
         public void RemoteList()
         {
             SvnClient cl = new SvnClient();

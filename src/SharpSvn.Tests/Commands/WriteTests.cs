@@ -19,7 +19,10 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,7 +30,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::Cat
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class WriteTests : TestBase
     {
     public WriteTests()
@@ -37,7 +40,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Attemts to do a cat on a local working copy item
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestCatFromWorkingCopy()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
@@ -56,7 +59,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Calls cat on a repository item
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestCatFromRepository()
         {
             Uri path = new Uri(this.ReposUrl, "Form.cs");
@@ -71,7 +74,7 @@ namespace SharpSvn.Tests.Commands
                 "String from wrapper not the same as string from client");
         }
 
-        [Test]
+        [TestMethod]
         public void TestCatPeg()
         {
             Uri path = new Uri(this.ReposUrl, "Form.cs");
@@ -94,7 +97,7 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-    [Test]
+    [TestMethod]
     public void WriteTest()
     {
         string data = Guid.NewGuid().ToString();
@@ -141,7 +144,7 @@ namespace SharpSvn.Tests.Commands
         }
     }
 
-    [Test]
+    [TestMethod]
     public void WriteProps()
     {
         string data = Guid.NewGuid().ToString();

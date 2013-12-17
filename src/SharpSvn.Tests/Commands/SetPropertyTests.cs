@@ -19,7 +19,10 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,7 +30,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::ClientPropSet
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class SetPropertyTests : TestBase
     {
         public SetPropertyTests()
@@ -35,17 +38,11 @@ namespace SharpSvn.Tests.Commands
             UseEmptyRepositoryForWc = false;
         }
 
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-        }
-
         /// <summary>
         ///Attempts to Set Properties on a file
         /// </summary>
-        [Test]
-        public void TestSetProp()
+        [TestMethod]
+        public void SetProperty_SetProp()
         {
             string filePath = Path.Combine(this.WcPath, "Form.cs");
 
@@ -75,8 +72,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         ///Attempts to set Properties on a directory recursively.
         /// </summary>
-        [Test]
-        public void TestSetPropRecursivly()
+        [TestMethod]
+        public void SetProperty_SetRecursivly()
         {
             string filePath = Path.Combine(this.WcPath, "Form.cs");
 
@@ -104,8 +101,8 @@ namespace SharpSvn.Tests.Commands
         }
 
         //Test case to show up a bug in binary property retrieval.
-        [Test]
-        public void TestPropSetGet()
+        [TestMethod]
+        public void SetProperty_PropSetGet()
         {
             Byte[] valueToSet = { 0, 77, 73, 65, 79, 87, 0 };
             //In ASCII looks like \0MIAOW\0 where \0 is a null/zero value
@@ -125,8 +122,8 @@ namespace SharpSvn.Tests.Commands
                 "Binary property as retrieved is different to that set");
         }
 
-        [Test]
-        public void TestIgnore()
+        [TestMethod]
+        public void SetPropertyTestIgnore()
         {
             string dir = WcPath;
 
@@ -148,8 +145,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(v, Is.EqualTo("NewFile.ignored\r\n"));
         }
 
-        [Test]
-        public void SetEmtpy()
+        [TestMethod]
+        public void SetPropertySetEmtpy()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
             this.Client.SetProperty(path, "EmptyBinary", new byte[0]);

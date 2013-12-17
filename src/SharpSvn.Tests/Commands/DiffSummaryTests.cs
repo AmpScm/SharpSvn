@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class DiffSummaryTests : TestBase
     {
-        [Test]
-        public void SummarizeTrunkBranchB()
+        [TestMethod]
+        public void DiffSummary_TrunkBranchB()
         {
             SvnDiffSummaryArgs sa = new SvnDiffSummaryArgs();
             Client.DiffSummary(new Uri(CollabReposUri, "trunk"), new Uri(CollabReposUri, "branches/b"), sa,

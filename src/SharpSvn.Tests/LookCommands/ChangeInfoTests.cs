@@ -14,21 +14,20 @@
 //  limitations under the License.
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using SharpSvn.Tests.Commands;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
 using System.Collections.ObjectModel;
-using SharpSvn;
 using System.IO;
 
 namespace SharpSvn.Tests.LookCommands
 {
-    [TestFixture]
+    [TestClass]
     public class ChangeInfoTests : HookTestBase
     {
-        [Test]
-        public void GetInfoHead()
+        [TestMethod]
+        public void ChangeInfo_GetInfoHead()
         {
             using (SvnLookClient cl = new SvnLookClient())
             {
@@ -53,7 +52,7 @@ namespace SharpSvn.Tests.LookCommands
                 {
                     if (i.NodeKind != SvnNodeKind.File)
                         continue;
-                    using(MemoryStream ms = new MemoryStream())
+                    using (MemoryStream ms = new MemoryStream())
                     {
                         cl.Write(lo, i.Path, ms);
                     }
@@ -70,8 +69,8 @@ namespace SharpSvn.Tests.LookCommands
             }
         }
 
-        [Test]
-        public void BigWrite()
+        [TestMethod]
+        public void ChangeInfo_BigWrite()
         {
             Uri uri = GetReposUri(TestReposType.Empty);
             string dir = GetTempDir();
@@ -101,17 +100,17 @@ namespace SharpSvn.Tests.LookCommands
                 Assert.That(cl.GetProperty(lo, "/bigfile", "a", out b_p));
                 Assert.That(b_p, Is.EqualTo("b"));
 
-				Collection<SvnLookListEventArgs> lst;
-				cl.GetList(lo, "", out lst);
+                Collection<SvnLookListEventArgs> lst;
+                cl.GetList(lo, "", out lst);
 
-				Assert.That(lst, Is.Not.Null);
-				Assert.That(lst.Count, Is.EqualTo(1));
-				SvnLookListEventArgs r = lst[0];
+                Assert.That(lst, Is.Not.Null);
+                Assert.That(lst.Count, Is.EqualTo(1));
+                SvnLookListEventArgs r = lst[0];
 
-				Assert.That(r, Is.Not.Null);
-				Assert.That(r.Name, Is.EqualTo("bigfile"));
-				Assert.That(r.NodeKind, Is.EqualTo(SvnNodeKind.File));
-				Assert.That(r.Path, Is.EqualTo("bigfile"));
+                Assert.That(r, Is.Not.Null);
+                Assert.That(r.Name, Is.EqualTo("bigfile"));
+                Assert.That(r.NodeKind, Is.EqualTo(SvnNodeKind.File));
+                Assert.That(r.Path, Is.EqualTo("bigfile"));
             }
         }
 
@@ -130,8 +129,8 @@ namespace SharpSvn.Tests.LookCommands
             }
         }
 
-        [Test]
-        public void GetInfo12()
+        [TestMethod]
+        public void ChangeInfo_GetInfo12()
         {
             using (SvnLookClient cl = new SvnLookClient())
             {
@@ -159,8 +158,8 @@ namespace SharpSvn.Tests.LookCommands
         /// <summary>
         /// Compares the log informationj of r1-r17 of the collab repository
         /// </summary>
-        [Test]
-        public void GetInfoCompare()
+        [TestMethod]
+        public void ChangeInfo_GetInfoCompare()
         {
             string reposPath = GetRepos(TestReposType.CollabRepos);
             Uri reposUri = GetReposUri(TestReposType.CollabRepos);

@@ -16,30 +16,32 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn.Tests.Commands;
 using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.LookCommands
 {
-    [TestFixture]
+    [TestClass]
     public class GetChangesTests : HookTestBase
     {
 
-    [Test]
-    public void ChangedDirs()
-    {
-        string dir = CreateRepos(TestReposType.Empty);
-        Uri uri = PathToUri(dir, true);
-        using (InstallHook(uri, SvnHookType.PreCommit, OnChangedDirs))
+        [TestMethod]
+        public void ChangedDirs()
         {
-        using (SvnClient cl = new SvnClient())
-        {
-            SvnCreateDirectoryArgs da = new SvnCreateDirectoryArgs();
-            da.CreateParents = true;
-            da.LogMessage = "Created!";
-            cl.RemoteCreateDirectories(
-            new Uri[]
+            Uri uri = CreateRepos(TestReposType.Empty);
+            using (InstallHook(uri, SvnHookType.PreCommit, OnChangedDirs))
+            {
+                using (SvnClient cl = new SvnClient())
+                {
+                    SvnCreateDirectoryArgs da = new SvnCreateDirectoryArgs();
+                    da.CreateParents = true;
+                    da.LogMessage = "Created!";
+                    cl.RemoteCreateDirectories(
+                    new Uri[]
             {
             new Uri(uri, "a/b/c/d/e/f"),
             new Uri(uri, "a/b/c/d/g/h"),
@@ -47,37 +49,36 @@ namespace SharpSvn.Tests.LookCommands
             new Uri(uri, "l/m/n"),
             new Uri(uri, "l/m/n/o/p")
             }, da);
+                }
+            }
         }
-        }
-    }
 
-    private void OnChangedDirs(object sender, ReposHookEventArgs e)
-    {
-        using (SvnLookClient lc = new SvnLookClient())
+        private void OnChangedDirs(object sender, ReposHookEventArgs e)
         {
-        SvnChangedArgs ca = new SvnChangedArgs();
-        ca.Transaction = e.HookArgs.TransactionName;
+            using (SvnLookClient lc = new SvnLookClient())
+            {
+                SvnChangedArgs ca = new SvnChangedArgs();
+                ca.Transaction = e.HookArgs.TransactionName;
 
-        Collection<SvnChangedEventArgs> list;
-        Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
+                Collection<SvnChangedEventArgs> list;
+                Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
 
-        Assert.That(list.Count, Is.EqualTo(17)); // 16 + root directory
-        Assert.That(list[0].Name, Is.EqualTo(""));
-        Assert.That(list[0].Path, Is.EqualTo("/"));
-        Assert.That(list[1].Name, Is.EqualTo("a"));
-        Assert.That(list[1].Path, Is.EqualTo("/a/"));
-        Assert.That(list[2].Name, Is.EqualTo("b"));
-        Assert.That(list[2].Path, Is.EqualTo("/a/b/"));
-        Assert.That(list[3].Name, Is.EqualTo("c"));
-        Assert.That(list[3].Path, Is.EqualTo("/a/b/c/"));
+                Assert.That(list.Count, Is.EqualTo(17)); // 16 + root directory
+                Assert.That(list[0].Name, Is.EqualTo(""));
+                Assert.That(list[0].Path, Is.EqualTo("/"));
+                Assert.That(list[1].Name, Is.EqualTo("a"));
+                Assert.That(list[1].Path, Is.EqualTo("/a/"));
+                Assert.That(list[2].Name, Is.EqualTo("b"));
+                Assert.That(list[2].Path, Is.EqualTo("/a/b/"));
+                Assert.That(list[3].Name, Is.EqualTo("c"));
+                Assert.That(list[3].Path, Is.EqualTo("/a/b/c/"));
+            }
         }
-    }
 
-        [Test]
+        [TestMethod]
         public void PostCommitErrorTest()
         {
-            string dir = CreateRepos(TestReposType.Empty);
-            Uri uri = PathToUri(dir, true);
+            Uri uri = CreateRepos(TestReposType.Empty);
             using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
             {
                 using (SvnClient cl = new SvnClient())

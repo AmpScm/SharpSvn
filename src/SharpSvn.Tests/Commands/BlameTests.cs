@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 using System.Collections.ObjectModel;
 
@@ -27,22 +31,21 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests for the NSvn.Core.Client.Blame method.
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class BlameTests : TestBase
     {
-    public BlameTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
-        [SetUp]
-        public override void SetUp()
+        public BlameTests()
         {
-            base.SetUp();
+            UseEmptyRepositoryForWc = false;
+        }
+        [TestInitialize]
+        public void BlameSetup()
+        {
             this.blames = new ArrayList();
         }
 
-        [Test]
-        public void TestSimple()
+        [TestMethod]
+        public void Blame_BlameBasic()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
             string blame = this.RunCommand("svn", "blame -v " + path);
@@ -58,8 +61,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void TestWithEmptyEntries()
+        [TestMethod]
+        public void Blame_WithEmptyEntries()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
 
@@ -76,44 +79,42 @@ namespace SharpSvn.Tests.Commands
             Assert.That(b[0].Date, Is.EqualTo(DateTime.MinValue));
         }
 
-    [Test]
-    public void TestMore()
-    {
-        Uri uri = new Uri(GetReposUri(TestReposType.CollabRepos), "trunk/index.html");
-
-        int n = 0;
-        SvnBlameArgs ba = new SvnBlameArgs();
-        ba.Notify += delegate(object sender, SvnNotifyEventArgs e)
+        [TestMethod]
+        public void Blame_TestMore()
         {
-            Assert.That(e.Uri, Is.EqualTo(uri));
-            Assert.That(e.RevisionProperties, Is.Not.Null);
-            n++;
-        };
+            SvnSandBox sbox = new SvnSandBox(this);
+            string reposPath = sbox.CreateRepository(SandBoxRepository.MergeScenario).AbsolutePath;
+            Uri reposUri = SvnTools.LocalPathToUri(reposPath, true);
 
-        int lines = 0;
-        Client.Blame(uri, ba,
-        delegate(object sender, SvnBlameEventArgs e)
-        {
-            Assert.That(e.Author, Is.Not.Null);
-            Assert.That(e.RevisionProperties, Is.Not.Null);
-            Assert.That(e.MergedAuthor, Is.Null);
-            Assert.That(e.MergedRevisionProperties, Is.Null);
-            lines++;
-        });
+            Uri uri = new Uri(reposUri, "trunk/index.html");
 
-        Assert.That(n, Is.EqualTo(3));
-        Assert.That(lines, Is.EqualTo(32));
+            int n = 0;
+            SvnBlameArgs ba = new SvnBlameArgs();
+            ba.Notify += delegate(object sender, SvnNotifyEventArgs e)
+            {
+                Assert.That(e.Uri, Is.EqualTo(uri));
+                Assert.That(e.RevisionProperties, Is.Not.Null);
+                n++;
+            };
 
-        Collection<SvnBlameEventArgs> blames;
-        Client.GetBlame(uri, out blames);
-        Assert.That(blames.Count, Is.EqualTo(lines));
-        Assert.That(blames[0].Author, Is.Not.Null);
-        Assert.That(blames[1].RevisionProperties, Is.Not.Null);
-        Assert.That(blames[1].RevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
-        Assert.That(blames[1].RevisionProperties.Contains(SvnPropertyNames.SvnLog));
-        Assert.That(blames[1].RevisionProperties[SvnPropertyNames.SvnAuthor].StringValue, Is.Not.Null);
-        Assert.That(blames[1].RevisionProperties[SvnPropertyNames.SvnLog].StringValue, Is.Not.Null);
-    }
+            int lines = 0;
+            Client.Blame(uri, ba,
+            delegate(object sender, SvnBlameEventArgs e)
+            {
+                Assert.That(e.Author, Is.Not.Null);
+                Assert.That(e.RevisionProperties, Is.Not.Null);
+                Assert.That(e.RevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
+                Assert.That(e.RevisionProperties.Contains(SvnPropertyNames.SvnLog));
+                Assert.That(e.RevisionProperties[SvnPropertyNames.SvnAuthor].StringValue, Is.Not.Null);
+                Assert.That(e.RevisionProperties[SvnPropertyNames.SvnLog].StringValue, Is.Not.Null);
+                Assert.That(e.MergedAuthor, Is.Null);
+                Assert.That(e.MergedRevisionProperties, Is.Null);
+                lines++;
+            });
+
+            Assert.That(n, Is.EqualTo(3));
+            Assert.That(lines, Is.EqualTo(32));
+        }
 
         private void Receiver(object sender, SvnBlameEventArgs e)
         {

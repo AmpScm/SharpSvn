@@ -18,7 +18,10 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -26,7 +29,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests for the Client::Checkout method
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class DeleteTests : TestBase
     {
         public DeleteTests()
@@ -34,20 +37,8 @@ namespace SharpSvn.Tests.Commands
             UseEmptyRepositoryForWc = false;
         }
 
-        [SetUp]
-        public override void SetUp()
-        {
-            base.SetUp();
-        }
-
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-        }
-
-        [Test]
-        public void DeleteAllFiles()
+        [TestMethod]
+        public void Delete_AllFiles()
         {
             Uri uri = ReposUrl;
             string wc = GetTempDir();
@@ -84,8 +75,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Tests deleting files in a working copy
         /// </summary>
-        [Test]
-        public void TestDeleteWCFiles()
+        [TestMethod]
+        public void Delete_WCFiles()
         {
             string path1 = Path.Combine(this.WcPath, "Form.cs");
             string path2 = Path.Combine(this.WcPath, "AssemblyInfo.cs");
@@ -103,16 +94,16 @@ namespace SharpSvn.Tests.Commands
             Assert.That(Client.Commit(WcPath));
         }
 
-        [Test]
-        public void TestReplacedStatus()
+        [TestMethod]
+        public void Delete_TestReplacedStatus()
         {
-            string file = CreateTextFile("ToBeReplaced.vb");
+            string file = CreateTextFile(WcPath, "ToBeReplaced.vb");
 
             Client.Add(file);
             Assert.That(Client.Commit(WcPath));
             Client.Delete(file);
 
-            file = CreateTextFile("ToBeReplaced.vb");
+            file = CreateTextFile(WcPath, "ToBeReplaced.vb");
             Assert.That(Client.Add(file));
 
             bool reached = false;
@@ -130,8 +121,8 @@ namespace SharpSvn.Tests.Commands
         /// Tests deleting a directory in the repository
         /// </summary>
         //TODO: Implement the variable admAccessBaton
-        [Test]
-        public void TestDeleteFromRepos()
+        [TestMethod]
+        public void Delete_TestDeleteFromRepos()
         {
             Uri path1 = new Uri(this.ReposUrl, "doc");
             Uri path2 = new Uri(this.ReposUrl, "Form.cs");
@@ -148,8 +139,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(ci, Is.Not.Null, "CommitInfo is invalid");
         }
 
-        [Test]
-        public void TestForceDelete()
+        [TestMethod]
+        public void Delete_ForceDelete()
         {
             string path = Path.Combine(this.WcPath, "Form.cs");
 

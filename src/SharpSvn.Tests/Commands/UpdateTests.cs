@@ -16,20 +16,19 @@
 // Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.Collections;
-using System.IO;
-using System.Text.RegularExpressions;
-using NUnit.Framework;
-using SharpSvn;
-using System.Diagnostics;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
 
 namespace SharpSvn.Tests.Commands
 {
     /// <summary>
     /// Tests Client::Update
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class UpdateTests : TestBase
     {
         private string _wc;
@@ -39,11 +38,9 @@ namespace SharpSvn.Tests.Commands
             UseEmptyRepositoryForWc = false;
         }
 
-        [SetUp]
-        public override void SetUp()
+        [TestInitialize]
+        public void UpdateSetup()
         {
-            base.SetUp();
-
             _wc = GetTempDir();
 
             UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wc);
@@ -55,7 +52,7 @@ namespace SharpSvn.Tests.Commands
             cl.Upgrade(_wc);
         }
 
-        [Test]
+        [TestMethod]
         public void RevTests()
         {
             string dir = GetTempDir();
@@ -80,7 +77,7 @@ namespace SharpSvn.Tests.Commands
         /// Deletes a file, then calls update on the working copy to restore it
         /// from the text-base
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestDeletedFile()
         {
             string filePath = Path.Combine(this.WcPath, "Form.cs");
@@ -94,7 +91,7 @@ namespace SharpSvn.Tests.Commands
         /// Changes a file in a secondary working copy and commits. Updates the
         /// primary wc and compares
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestChangedFile()
         {
             using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
@@ -110,7 +107,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(s, Is.EqualTo("Moo"), "File not updated");
         }
 
-        [Test]
+        [TestMethod]
         public void TestObstruction()
         {
             string tmp = GetTempDir();
@@ -129,7 +126,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(obstructionFound, "Obstruction found");
         }
 
-        [Test]
+        [TestMethod]
         public void TestNotify()
         {
             int n = 0; ;
@@ -157,7 +154,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(n, Is.EqualTo(2));
         }
 
-        [Test]
+        [TestMethod]
         public void TestUpdateMultipleFiles()
         {
             using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
@@ -189,7 +186,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(s, Is.EqualTo("Moo"), "File not updated");
         }
 
-        [Test]
+        [TestMethod]
         public void TestDirObstruction()
         {
             string dir = GetTempDir();
@@ -238,7 +235,7 @@ namespace SharpSvn.Tests.Commands
                 });
         }
 
-        [Test]
+        [TestMethod]
         public void TestUpdateExternal()
         {
             Uri root = GetReposUri(TestReposType.Empty);
@@ -271,7 +268,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(paths.ContainsKey(Path.Combine(dir,"alt2")));
         }
 
-        [Test]
+        [TestMethod]
         public void UpdateInUse()
         {
             string dir = GetTempDir();
@@ -300,7 +297,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
+        [TestMethod]
         public void UpdateInUseWrite()
         {
             string dir = GetTempDir();
@@ -321,7 +318,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(skippedDenied);
         }
 
-        [Test]
+        [TestMethod]
         public void StatusReportsSparse()
         {
             string dir = GetTempDir();

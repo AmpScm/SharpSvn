@@ -12,13 +12,13 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
-
-// Copyright (c) SharpSvn Project 2008, Copyright (c) Ankhsvn 2003-2007
 using System;
 using System.IO;
 
-using NUnit.Framework;
-
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 
 using SharpSvn;
 
@@ -32,7 +32,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Attempt to add a file that is not in a vc dir.
         /// </summary>
-        [Test]
+        [TestMethod]
         [ExpectedException(typeof(SvnInvalidNodeKindException))]
         public void TestAddFileInNonVersionedDir()
         {
@@ -43,7 +43,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Attempt to commit an out of date resource.
         /// </summary>
-        /*[Test]
+        /*[TestMethod]
         [ExpectedException(typeof(ResourceOutOfDateException))]
         public void TestResourceOutOfDate()
         {

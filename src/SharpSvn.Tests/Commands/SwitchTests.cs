@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -26,7 +30,7 @@ namespace SharpSvn.Tests.Commands
     ///<summary>
     ///Test Client::Switc
     ///</summary>
-    [TestFixture]
+    [TestClass]
     public class SwitchTests : TestBase
     {
     public SwitchTests()
@@ -34,14 +38,13 @@ namespace SharpSvn.Tests.Commands
         UseEmptyRepositoryForWc = false;
     }
 
-        [SetUp]
-        public override void SetUp()
+        [TestInitialize]
+        public void SwitchSetUp()
         {
-            base.SetUp();
             this.path = Path.GetTempPath();
         }
 
-        [Test]
+        [TestMethod]
         public void PegTests()
         {
             string dir = GetTempDir();
@@ -71,7 +74,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Try to switch wc to repos/doc
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestSwitchUrl()
         {
             Uri switchUrl = new Uri(this.ReposUrl, "doc");

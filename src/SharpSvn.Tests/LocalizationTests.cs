@@ -16,7 +16,10 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 using System.Threading;
 using System.Globalization;
@@ -24,11 +27,11 @@ using System.Reflection;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class LocalizationTests
     {
-        [Test]
-        public void TestResourceLoading()
+        [TestMethod]
+        public void Localization_ResourceLoading()
         {
             Type tp = typeof(SvnClient).Assembly.GetType("SharpSvn.SharpSvnStrings", false);
 
@@ -57,8 +60,8 @@ namespace SharpSvn.Tests
             return a.LastException;
         }
 
-        [Test]
-        public void TestGermanError()
+        [TestMethod]
+        public void Localization_GermanError()
         {
             Exception exDefault = GetNotFoundError();
             Exception exGerman;

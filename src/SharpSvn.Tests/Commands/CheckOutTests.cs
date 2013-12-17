@@ -18,7 +18,11 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 using SharpSvn;
 using SharpSvn.Security;
 
@@ -27,39 +31,41 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests for the Client::Checkout method
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class CheckOutTests : TestBase
     {
-        [Test]
-        public void TestPegCheckOuts()
+        [TestMethod]
+        public void CheckOut_TestPeg()
         {
-            Uri repos = new Uri(GetReposUri(TestReposType.CollabRepos), "trunk/");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.DefaultBranched);
+            Uri trunk = new Uri(reposUri, "trunk/");
 
             SvnUpdateResult result;
-            Assert.That(Client.CheckOut(repos, GetTempDir(), out result));
+            Assert.That(Client.CheckOut(trunk, sbox.GetTempDir(), out result));
 
             Assert.That(result, Is.Not.Null);
             long head = result.Revision;
 
-            Assert.That(Client.CheckOut(new SvnUriTarget(repos, head - 10), GetTempDir(), out result));
-            Assert.That(result.Revision, Is.EqualTo(head - 10));
+            Assert.That(Client.CheckOut(new SvnUriTarget(trunk, 1), GetTempDir(), out result));
+            Assert.That(result.Revision, Is.EqualTo(1));
 
             SvnCheckOutArgs a = new SvnCheckOutArgs();
-            a.Revision = head - 5;
+            a.Revision = 1;
 
-            Assert.That(Client.CheckOut(new SvnUriTarget(repos, head - 10), GetTempDir(), a, out result));
-            Assert.That(result.Revision, Is.EqualTo(head - 5));
+            Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(reposUri, "branches/trunk-r2"), 4), sbox.GetTempDir(), a, out result));
+            Assert.That(result.Revision, Is.EqualTo(1));
 
-            Assert.That(Client.CheckOut(repos, GetTempDir(), a, out result));
-            Assert.That(result.Revision, Is.EqualTo(head - 5));
+            Assert.That(Client.CheckOut(trunk, GetTempDir(), a, out result));
+            Assert.That(result.Revision, Is.EqualTo(1));
         }
 
 
         /// <summary>
         /// Test a standard checkout operation
         /// </summary>
-        [Test]
-        public void TestBasicCheckout()
+        [TestMethod]
+        public void CheckOut_BasicCheckout()
         {
             string newWc = GetTempDir();
             SvnCheckOutArgs a = new SvnCheckOutArgs();
@@ -73,61 +79,17 @@ namespace SharpSvn.Tests.Commands
                 "Wrong status");
         }
 
-        [Test]
-        public void TestProgressEvent()
+        [TestMethod]
+        public void CheckOut_ProgressEvent()
         {
             string newWc = GetTempDir();
             SvnCheckOutArgs a = new SvnCheckOutArgs();
-            a.Progress += new EventHandler<SvnProgressEventArgs>(Client_Progress);
+            bool progressCalled = false;
+            a.Progress += delegate(object sender, SvnProgressEventArgs e) { progressCalled = true; };
             a.Depth = SvnDepth.Empty;
             this.Client.CheckOut(new Uri("http://svn.apache.org/repos/asf/subversion/"), newWc, a);
 
             Assert.That(progressCalled, "Progress delegate not called");
         }
-
-        [Test]
-        public void SerfCheckout()
-        {
-            string cfgDir = GetTempDir();
-            using (SvnClient client = new SvnClient())
-                client.LoadConfiguration(cfgDir, true);
-
-            string serversFile = Path.Combine(cfgDir, "servers");
-            string serversData = File.ReadAllText(serversFile);
-
-            foreach (string httpLibrary in new string[] { "", "serf", "neon" })
-            {
-                string servers = serversData;
-                if (!string.IsNullOrEmpty(httpLibrary))
-                    servers += Environment.NewLine + "http-library=" + httpLibrary + Environment.NewLine;
-
-                File.WriteAllText(serversFile, servers);
-                bool once = false;
-
-                using (SvnClient cl = new SvnClient())
-                {
-                    cl.LoadConfiguration(cfgDir, false);
-                    cl.Authentication.UserNamePasswordHandlers +=
-                        delegate(object sender, SvnUserNamePasswordEventArgs e)
-                        {
-                            Assert.That(!once);
-                            once = true;
-                            e.UserName = "guest";
-                            e.Password = "";
-                        };
-
-                    SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
-                    cl.CheckOut(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts"), GetTempDir(), ca);
-                    Assert.That(once, "Asked for password");
-                }
-            }
-        }
-
-        void Client_Progress(object sender, SvnProgressEventArgs args)
-        {
-            progressCalled = true;
-        }
-
-        private bool progressCalled = false;
     }
 }

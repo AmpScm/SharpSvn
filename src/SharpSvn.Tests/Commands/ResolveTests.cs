@@ -18,7 +18,10 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 using SharpSvn.Security;
 
@@ -27,33 +30,25 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::Resolve
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ResolveTests : TestBase
     {
         string _path;
-        [SetUp]
-        public override void SetUp()
+        [TestInitialize]
+        public void ResolveSetup()
         {
-            base.SetUp();
-            this._path = this.GetTempFile();
+            this._path = GetTempDir();
             UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), _path);
-        RawRelocate(_path, new Uri("file:///tmp/repos/"), ReposUrl);
-        Client.Upgrade(_path);
-                    this.RenameAdminDirs(this._path);
-        }
-
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-            RecursiveDelete(_path);
+            RawRelocate(_path, new Uri("file:///tmp/repos/"), ReposUrl);
+            Client.Upgrade(_path);
+            this.RenameAdminDirs(this._path);
         }
 
         /// <summary>
         ///Attempts to resolve a conflicted file.
         /// </summary>
-        [Test]
-        public void TestResolveFile()
+        [TestMethod]
+        public void Resolve_ResolveFile()
         {
             string filePath = Path.Combine(this._path, "Form.cs");
 
@@ -66,8 +61,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         ///Attempts to resolve a conflicted directory recursively.
         /// </summary>
-        [Test]
-        public void TestResolveDirectory()
+        [TestMethod]
+        public void Resolve_ResolveDirectory()
         {
             SvnResolveArgs a = new SvnResolveArgs();
             a.Depth = SvnDepth.Infinity;
@@ -80,10 +75,10 @@ namespace SharpSvn.Tests.Commands
                 "Resolve didn't work! File still conflicted");
         }
 
-        [Test]
-        public void RepeatedEventHookUp_SOC_411()
+        [TestMethod]
+        public void Resolve_RepeatedEventHookUp_SOC_411()
         {
-            Uri projectRoot = new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts");
+            Uri projectRoot = new Uri("https://sharpsvn.open.collab.net/svn/sharpsvn/trunk/scripts");
 
             using (var svnClient = new SvnClient())
             {
@@ -96,15 +91,15 @@ namespace SharpSvn.Tests.Commands
                     try
                     {
                         SvnUpdateResult svnUpdateResult;
-            SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
-                                    Assert.IsTrue(svnClient.CheckOut(projectRoot, workingcopy, ca, out svnUpdateResult));
-                                    Assert.IsNotNull(svnUpdateResult);
-                                    Assert.IsTrue(svnUpdateResult.HasRevision);
-                            }
-                            finally
-                            {
-                                    svnClient.Authentication.UserNamePasswordHandlers -= DoNowt;
-                            }
+                        SvnCheckOutArgs ca = new SvnCheckOutArgs() { Depth = SvnDepth.Files };
+                        Assert.IsTrue(svnClient.CheckOut(projectRoot, workingcopy, ca, out svnUpdateResult));
+                        Assert.IsNotNull(svnUpdateResult);
+                        Assert.IsTrue(svnUpdateResult.HasRevision);
+                    }
+                    finally
+                    {
+                        svnClient.Authentication.UserNamePasswordHandlers -= DoNowt;
+                    }
                 }
             }
         }

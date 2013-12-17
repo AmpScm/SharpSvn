@@ -19,7 +19,10 @@ using System.Collections;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,18 +30,20 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::PropList
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class PropListTests : TestBase
     {
-        [Test]
-        public void TestBasic()
+        [TestMethod]
+        public void PropList_BasicProplist()
         {
-            this.RunCommand("svn", "ps foo bar " + this.WcPath);
-            this.RunCommand("svn", "ps kung foo " + this.WcPath);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            Client.SetProperty(sbox.Wc, "foo", "bar");
+            Client.SetProperty(sbox.Wc, "kung", "foo");
 
             Collection<SvnPropertyListEventArgs> eList;
 
-            Assert.That(Client.GetPropertyList(new SvnPathTarget(WcPath), out eList));
+            Assert.That(Client.GetPropertyList(new SvnPathTarget(sbox.Wc), out eList));
 
             Assert.That(eList.Count, Is.EqualTo(1));
 

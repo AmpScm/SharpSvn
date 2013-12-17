@@ -15,17 +15,21 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
 using System.Collections.ObjectModel;
+using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
-    public class GetCapabilities : TestBase
+    [TestClass]
+    public class CapabilitiesTests : TestBase
     {
-        [Test]
-        public void LocalCaps()
+        [TestMethod]
+        public void Capabilities_Local()
         {
             using (SvnClient client = new SvnClient())
             {
@@ -51,8 +55,8 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [Test]
-        public void SharpCaps()
+        [TestMethod]
+        public void Capabilities_SharpCaps()
         {
             using (SvnClient client = new SvnClient())
             {
@@ -60,7 +64,7 @@ namespace SharpSvn.Tests.Commands
 
                 SvnGetCapabilitiesArgs ca = new SvnGetCapabilitiesArgs();
                 ca.RetrieveAllCapabilities = true;
-                Assert.That(client.GetCapabilities(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/"), ca, out caps));
+                Assert.That(client.GetCapabilities(new Uri("https://sharpsvn.open.collab.net/svn/sharpsvn/"), ca, out caps));
 
                 Assert.That(caps.Contains(SvnCapability.MergeInfo));
                 Assert.That(caps.Count, Is.GreaterThanOrEqualTo(5));

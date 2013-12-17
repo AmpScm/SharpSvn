@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using System.Reflection;
 using System.Collections;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class StaticVerifications
     {
-        [Test]
-        public void VerifyEnums()
+        [TestMethod]
+        public void StaticVerifications_VerifyEnums()
         {
             Assembly asm = typeof(SvnClient).Assembly;
             Hashtable ignoreTypes = new Hashtable();

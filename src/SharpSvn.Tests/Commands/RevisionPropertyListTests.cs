@@ -18,7 +18,10 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -31,7 +34,7 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         /// Sets two properties on a repos and tries to retrieve them with Client::RevPropList
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestBasic()
         {
             this.RunCommand("svn", "ps --revprop -r HEAD foo bar " + this.ReposUrl);

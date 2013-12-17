@@ -19,7 +19,10 @@ using System.Collections;
 using System.Globalization;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,11 +30,11 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests for the Revision class
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class RevisionTests
     {
-        [Test]
-        public void TestToString()
+        [TestMethod]
+        public void Revision_ToString()
         {
             SvnRevision revision = SvnRevision.Base;
             Assert.That(revision.ToString(), Is.EqualTo("BASE"));
@@ -59,36 +62,8 @@ namespace SharpSvn.Tests.Commands
             Assert.That(revision.ToString(), Is.EqualTo("42"));
         }
 
-        /// <summary>
-        /// Test the parse method.
-        /// </summary>
-        [Test]
-        public void TestParse()
-        {
-            /*this.DoTestParse( "working", Revision.Working );
-            this.DoTestParse( "unspecified", Revision.Unspecified );
-            this.DoTestParse( "head", Revision.Head );
-            this.DoTestParse( "committed", Revision.Committed );
-            this.DoTestParse( "base", Revision.Base );
-            this.DoTestParse( "previous", Revision.Previous );
-
-            Assert.That( Revision.Parse("42").ToString() , Is.EqualTo( "42"));
-
-            DateTime t = DateTime.Now;
-            Assert.That( Revision.Parse(t.ToString(), Is.EqualTo( t.ToString())).ToString() );
-
-            // this should throw
-            try
-            {
-                DateTime.Parse( "Foo" );
-                Assert.Fail( "Foo is not a valid revision" );
-            }
-            catch( FormatException )
-            {}*/
-        }
-
-        [Test]
-        public void TestSvnRevisionTypes()
+        [TestMethod]
+        public void Revision_SvnRevisionTypes()
         {
             SvnRevision r = new SvnRevision(DateTime.Now);
             Assert.That(r.RevisionType, Is.EqualTo(SvnRevisionType.Time));
@@ -107,22 +82,10 @@ namespace SharpSvn.Tests.Commands
             Assert.That(SvnRevision.Working.RevisionType, Is.EqualTo(SvnRevisionType.Working));
         }
 
-        [Test]
-        public void TestGetDateFromOtherTypeOfRevision()
+        [TestMethod]
+        public void Revision_GetDateFromOtherTypeOfRevision()
         {
             Assert.That(SvnRevision.Head.Time, Is.EqualTo(DateTime.MinValue));
         }
-
-        /*[Test]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestGetNumberFromOtherTypeOfRevision()
-        {
-            int number = Revision.Head.Number;
-        }
-
-        private void DoTestParse( string s, SvnRevision rev )
-        {
-            Assert.That( rev , Is.EqualTo( new SvnRevision(.Parse(s)));
-        }*/
     }
 }

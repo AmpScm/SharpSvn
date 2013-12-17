@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
+    [TestClass]
     public class InheritedPropertyList : TestBase
     {
 
-        [Test]
+        [TestMethod]
         public void TestIprops()
         {
             Uri uri = GetReposUri(TestReposType.CollabRepos);

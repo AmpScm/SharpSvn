@@ -17,132 +17,42 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class SvnClientTests : Commands.TestBase
     {
-
-        string _testPath;
-        public string TestPath
-        {
-            get
-            {
-                if (_testPath == null)
-                {
-                    _testPath = Path.Combine(Path.GetTempPath(), "SvnTest\\" + GetType().FullName);
-
-                    if (!Directory.Exists(_testPath))
-                        Directory.CreateDirectory(_testPath);
-                }
-                return _testPath;
-            }
-        }
-
-        string _repos;
-        string _wc;
-        string RepositoryPath
-        {
-            get
-            {
-                if (_repos == null)
-                    _repos = Path.Combine(TestPath, "repos");
-
-                return _repos;
-            }
-        }
-
-        Uri _reposUri;
-        Uri ReposUri
-        {
-            get
-            {
-                if (_reposUri == null)
-                    _reposUri = new Uri("file:///" + RepositoryPath.Replace(Path.DirectorySeparatorChar, '/') + "/");
-
-                return _reposUri;
-            }
-        }
-
-        Uri WcUri
-        {
-            get
-            {
-                return new Uri(ReposUri, "folder/");
-            }
-        }
-
-        new string WcPath
-        {
-            get
-            {
-                if (_wc == null)
-                    _wc = Path.Combine(TestPath, "wc");
-
-                return _wc;
-            }
-        }
-
-        [TestFixtureSetUp]
-        public void SetupRepository()
-        {
-            if (Directory.Exists(RepositoryPath))
-            {
-                ForcedDeleteDirectory(RepositoryPath);
-            }
-            if (Directory.Exists(WcPath))
-            {
-                ForcedDeleteDirectory(WcPath);
-            }
-            Directory.CreateDirectory(WcPath);
-
-            using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
-            {
-                SvnCreateRepositoryArgs cra = new SvnCreateRepositoryArgs();
-                cra.RepositoryCompatibility = SvnRepositoryCompatibility.Default;
-                reposClient.CreateRepository(RepositoryPath, cra);
-            }
-
-            using (SvnClient client = new SvnClient())
-            {
-                client.Configuration.LogMessageRequired = false;
-
-                client.RemoteCreateDirectory(new Uri(ReposUri, "folder"));
-
-                client.CheckOut(new Uri(ReposUri, "folder"), WcPath);
-            }
-        }
-
-        [TestFixtureTearDown]
-        public void DestroyRepository()
-        {
-#if !DEBUG
-            using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
-            {
-                reposClient.DeleteRepository(RepositoryPath);
-            }
-#endif
-        }
-
-        [Test]
+        [TestMethod]
         public void SomeGlobalTests()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
             using (SvnClient client = NewSvnClient(false, false))
             {
                 Assert.That(SvnClient.AdministrativeDirectoryName, Is.EqualTo(".svn"));
                 Assert.That(SvnClient.Version, Is.GreaterThanOrEqualTo(new Version(1, 5, 0)));
                 Assert.That(SvnClient.SharpSvnVersion, Is.GreaterThan(new Version(1, 5, 0)));
-                Assert.That(client.GetRepositoryRoot(ReposUri), Is.EqualTo(ReposUri));
-                Assert.That(client.GetRepositoryRoot(WcPath), Is.EqualTo(ReposUri));
+                Assert.That(client.GetRepositoryRoot(sbox.Uri), Is.EqualTo(sbox.RepositoryUri));
+                Assert.That(client.GetRepositoryRoot(sbox.Wc), Is.EqualTo(sbox.RepositoryUri));
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TestChangeLists()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
+            string WcPath = sbox.Wc;
+            Uri WcUri = sbox.Uri;
+
             string file1 = Path.Combine(WcPath, "ChangeListFile1");
             string file2 = Path.Combine(WcPath, "ChangeListFile2");
             string file3 = Path.Combine(WcPath, "ChangeListFile3");
@@ -230,77 +140,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
-        public void CopyTest()
-        {
-            using (SvnClient client = NewSvnClient(true, false))
-            {
-                string file = Path.Combine(WcPath, "CopyBase");
-
-                TouchFile(file);
-                client.Add(file);
-
-                client.Commit(WcPath);
-
-                client.RemoteCopy(new Uri(WcUri, "CopyBase"), new Uri(WcUri, "RemoteCopyBase"));
-                bool visited = false;
-                bool first = true;
-                client.Log(new Uri(WcUri, "RemoteCopyBase"), delegate(object sender, SvnLogEventArgs e)
-                {
-                    if (first)
-                    {
-                        first = false;
-                        foreach (SvnChangeItem i in e.ChangedPaths)
-                        {
-                            Assert.That(i.Path.EndsWith("folder/RemoteCopyBase"), "Path ends with folder/RemoteCopyBase");
-                            Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ends with folder/CopyBase");
-                            Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
-                            Assert.That(i.NodeKind, Is.EqualTo(SvnNodeKind.File));
-                        }
-                    }
-                    else
-                    {
-                        foreach (SvnChangeItem i in e.ChangedPaths)
-                        {
-                            Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.Path.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
-                            Assert.That(i.NodeKind, Is.EqualTo(SvnNodeKind.File));
-                            visited = true;
-                        }
-                    }
-                });
-                Assert.That(visited, "Visited log item");
-
-                client.Copy(new SvnPathTarget(file), Path.Combine(WcPath, "LocalCopy"));
-                client.Commit(WcPath);
-                visited = false;
-                first = true;
-                client.Log(new Uri(WcUri, "LocalCopy"), delegate(object sender, SvnLogEventArgs e)
-                {
-                    if (first)
-                    {
-                        foreach (SvnChangeItem i in e.ChangedPaths)
-                        {
-                            Assert.That(i.Path.EndsWith("folder/LocalCopy"), "Path ends with folder/LocalCopy");
-                            Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.CopyFromPath.EndsWith("folder/CopyBase"), "CopyFromPath ensd with folder/CopyBase");
-                            Assert.That(i.CopyFromRevision, Is.GreaterThan(0L));
-                        }
-                        first = false;
-                    }
-                    else
-                        foreach (SvnChangeItem i in e.ChangedPaths)
-                        {
-                            Assert.That(i.Action, Is.EqualTo(SvnChangeAction.Add));
-                            Assert.That(i.Path.EndsWith("folder/CopyBase"), "Path ends with folder/CopyBase");
-                            visited = true;
-                        }
-
-                });
-                Assert.That(visited, "Visited local log item");
-            }
-        }
+        
 
         bool ItemExists(Uri target)
         {
@@ -317,9 +157,15 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
+        [TestMethod]
         public void DeleteTest()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
+            string WcPath = sbox.Wc;
+            Uri WcUri = sbox.Uri;
+
             using (SvnClient client = NewSvnClient(true, false))
             {
                 string local = Path.Combine(WcPath, "LocalDeleteBase");
@@ -393,7 +239,7 @@ namespace SharpSvn.Tests
                     Assert.That(e.WorkingCopyInfo.PropertyRejectFile, Is.Null);
                     Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.Null);
                     Assert.That(e.WorkingCopyInfo.RepositoryId, Is.Not.EqualTo(Guid.Empty));
-                    Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(ReposUri));
+                    Assert.That(e.WorkingCopyInfo.RepositoryUri, Is.EqualTo(sbox.RepositoryUri));
                     Assert.That(e.WorkingCopyInfo.Revision, Is.EqualTo(ci.Revision));
                     Assert.That(e.WorkingCopyInfo.Schedule, Is.EqualTo(SvnSchedule.Delete));
                     Assert.That(e.WorkingCopyInfo.Uri, Is.EqualTo(new Uri(WcUri, "LocalDeleteBase")));
@@ -409,121 +255,12 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
-        public void TestExport()
-        {
-            string exportDir = Path.Combine(TestPath, "ExportTests");
-            if (Directory.Exists(exportDir))
-                ForcedDeleteDirectory(exportDir);
-
-            using (SvnClient client = NewSvnClient(true, false))
-            {
-                string file = Path.Combine(WcPath, "ExportFile");
-                TouchFile(file);
-                client.Add(file);
-
-                client.Commit(WcPath);
-
-                Assert.That(Directory.Exists(exportDir), Is.False);
-
-                client.Export(WcUri, exportDir);
-                Assert.That(Directory.Exists(exportDir), Is.True);
-                Assert.That(File.Exists(Path.Combine(exportDir, "ExportFile")));
-                Assert.That(!Directory.Exists(Path.Combine(exportDir, ".svn")));
-
-                ForcedDeleteDirectory(exportDir);
-
-                Assert.That(Directory.Exists(exportDir), Is.False);
-
-                client.Export(new SvnPathTarget(WcPath), exportDir);
-                Assert.That(Directory.Exists(exportDir), Is.True);
-                Assert.That(File.Exists(Path.Combine(exportDir, "ExportFile")));
-
-                ForcedDeleteDirectory(exportDir);
-            }
-        }
+        
 
 
-        [Test]
-        public void TestList()
-        {
-            using (SvnClient client = NewSvnClient(true, false))
-            {
+        
 
-                string oneFile = Path.Combine(WcPath, "LocalFileForTestList");
-                TouchFile(oneFile);
-                client.Add(oneFile);
-
-                SvnCommitResult ci;
-                client.Commit(WcPath, out ci);
-                SvnUpdateResult r;
-                client.Update(WcPath, out r);
-
-                Assert.That(r, Is.Not.Null);
-                Assert.That(r.HasRevision);
-                Assert.That(r.HasResultMap);
-                Assert.That(r.Revision, Is.EqualTo(ci.Revision));
-
-                bool visited = false;
-                SvnListArgs a = new SvnListArgs();
-                a.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
-
-                client.List(new SvnPathTarget(WcPath), a, delegate(object sender, SvnListEventArgs e)
-                    {
-                        Assert.That(e.Entry, Is.Not.Null, "Entry set");
-                        Assert.That(e.RepositoryRoot, Is.Null, "Only valid when listing a Uri");
-
-                        if (e.Path == "LocalFileForTestList")
-                        {
-                            Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
-                            Assert.That(e.Lock, Is.Null);
-                            Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
-                            Assert.That(e.Entry.FileSize, Is.EqualTo(0));
-                            Assert.That(e.Entry.NodeKind, Is.EqualTo(SvnNodeKind.File));
-                            Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
-                            Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-                            visited = true;
-                        }
-                    });
-                Assert.That(visited, Is.True, "Visited is true");
-
-
-                visited = false;
-                client.List(WcUri, a, delegate(object sender, SvnListEventArgs e)
-                    {
-                        Assert.That(e.Entry, Is.Not.Null, "Entry set");
-
-                        if (e.Path == "LocalFileForTestList")
-                        {
-                            Assert.That(e.BasePath, Is.EqualTo("/folder"), "Basepath = '/folder'");
-                            Assert.That(e.Lock, Is.Null);
-                            Assert.That(e.Entry.Author, Is.EqualTo(Environment.UserName));
-                            Assert.That(e.Entry.FileSize, Is.EqualTo(0));
-                            Assert.That(e.Entry.NodeKind, Is.EqualTo(SvnNodeKind.File));
-                            Assert.That(e.Entry.Revision, Is.EqualTo(ci.Revision));
-                            Assert.That(e.Entry.Time, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-                            visited = true;
-                        }
-                    });
-                Assert.That(visited, Is.True, "Visited is true");
-
-                SvnWorkingCopyClient wcC = new SvnWorkingCopyClient();
-                SvnWorkingCopyState state;
-                Assert.That(wcC.GetState(oneFile, out state));
-
-                Assert.That(state, Is.Not.Null);
-                Assert.That(state.IsTextFile, Is.True);
-
-                client.SetProperty(oneFile, "svn:mime-type", "application/binary");
-
-                Assert.That(wcC.GetState(oneFile, out state));
-
-                Assert.That(state, Is.Not.Null);
-                Assert.That(state.IsTextFile, Is.False);
-            }
-        }
-
-        [Test]
+        [TestMethod]
         public void SvnVersionRoot()
         {
             using (SvnWorkingCopyClient wcC = new SvnWorkingCopyClient())
@@ -535,7 +272,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
+        [TestMethod]
         public void HasIgnorePatterns()
         {
             SvnClient cl = new SvnClient();
@@ -546,7 +283,7 @@ namespace SharpSvn.Tests
             Assert.That(new string[] {"*.a", ".DS_Store", "*.lo"}, Is.SubsetOf(items));
         }
 
-        [Test]
+        [TestMethod]
         public void DontCanonicalizeToDotSlash()
         {
             SvnPathTarget path = new SvnPathTarget(".\\bladiebla.txt");
@@ -581,7 +318,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        [Test]
+        [TestMethod]
         public void FetchWcroot()
         {
             Assert.That(Client.GetWorkingCopyRoot(WcPath), Is.EqualTo(WcPath));

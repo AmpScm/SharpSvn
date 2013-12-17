@@ -19,7 +19,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,31 +30,23 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests for the Client::Import method
     /// </summary>
-    [TestFixture]
+    [TestClass]
     public class ImportTests : TestBase
     {
-        [SetUp]
-        public override void SetUp()
+        [TestInitialize]
+        public void ImportSetup()
         {
-            base.SetUp();
             notifications = new List<SvnNotifyEventArgs>();
         }
-
-        [TearDown]
-        public override void TearDown()
-        {
-            base.TearDown();
-        }
-
 
         /// <summary>
         /// Tests importing an unverioned file into the repository with the new entry :
         /// testfile2.txt.
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestImportFile()
         {
-            string truePath = this.CreateTextFile("testfile.txt");
+            string truePath = CreateTextFile(WcPath, "testfile.txt");
             Uri trueDstUrl = new Uri(ReposUrl, "testfile.txt");
 
             SvnImportArgs a = new SvnImportArgs();
@@ -67,11 +62,11 @@ namespace SharpSvn.Tests.Commands
         /// Tests importing an unversioned directory into the repository recursively
         /// with the new entry: newDir2.
         /// </summary>
-        [Test]
+        [TestMethod]
         public void TestImportDir()
         {
             string dir1, dir2, testFile1, testFile2;
-            this.CreateSubdirectories(out dir1, out dir2, out testFile1, out testFile2);
+            CreateSubdirectories(WcPath, out dir1, out dir2, out testFile1, out testFile2);
 
             Uri trueDstUrl = new Uri(ReposUrl + "newDir2/");
             SvnImportArgs a = new SvnImportArgs();
@@ -84,16 +79,16 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-        private void CreateSubdirectories(out string dir1, out string dir2, out string testFile1, out string testFile2)
+        static void CreateSubdirectories(string WcPath, out string dir1, out string dir2, out string testFile1, out string testFile2)
         {
-            dir1 = Path.Combine(this.WcPath, "subdir");
+            dir1 = Path.Combine(WcPath, "subdir");
             Directory.CreateDirectory(dir1);
 
             dir2 = Path.Combine(dir1, "subsubdir");
             Directory.CreateDirectory(dir2);
 
-            testFile1 = this.CreateTextFile(@"subdir\testfile.txt");
-            testFile2 = this.CreateTextFile(@"subdir\subsubdir\testfile2.txt");
+            testFile1 = CreateTextFile(WcPath, @"subdir\testfile.txt");
+            testFile2 = CreateTextFile(WcPath, @"subdir\subsubdir\testfile2.txt");
         }
     }
 

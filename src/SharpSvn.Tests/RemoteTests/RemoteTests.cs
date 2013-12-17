@@ -2,24 +2,27 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn.Remote;
 using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests.RemoteTests
 {
-    [TestFixture]
+    [TestClass]
     public class RemoteTests : TestBase
     {
-        [Test]
-        public void TestOptions()
+        [TestMethod]
+        public void Remote_TestOptions()
         {
             Assert.That(SvnRemoteSession.IsConnectionlessRepository(new Uri("http://svn.collab.net/")));
             Assert.That(SvnRemoteSession.RequiresExternalAuthorization(new Uri("http://svn.collab.net/")), Is.False);
         }
 
-        [Test]
-        public void OpenRepos()
+        [TestMethod]
+        public void Remote_OpenRepos()
         {
             using (SvnRemoteSession r = new SvnRemoteSession(CollabReposUri))
             {
@@ -58,8 +61,8 @@ namespace SharpSvn.Tests.RemoteTests
             }
         }
 
-        [Test]
-        public void RemoteListLocks()
+        [TestMethod]
+        public void Remote_ListLocks()
         {
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
@@ -89,7 +92,7 @@ namespace SharpSvn.Tests.RemoteTests
 
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
-                rs.Open(new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn"));
+                rs.Open(new Uri("https://ankhsvn.open.collab.net/svn/ankhsvn"));
 
                 int n = 0;
                 rs.ListLocks("",
@@ -103,7 +106,7 @@ namespace SharpSvn.Tests.RemoteTests
 
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
-                rs.Open(new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn/testcases"));
+                rs.Open(new Uri("https://ankhsvn.open.collab.net/svn/ankhsvn/testcases"));
 
                 int n = 0;
                 rs.ListLocks("",
@@ -116,8 +119,8 @@ namespace SharpSvn.Tests.RemoteTests
             }
         }
 
-        [Test]
-        public void RemoteList()
+        [TestMethod]
+        public void Remote_RemoteList()
         {
             DateTime start = DateTime.Now;
             using (SvnRemoteSession rc = new SvnRemoteSession())
@@ -168,8 +171,8 @@ namespace SharpSvn.Tests.RemoteTests
             Console.WriteLine(after - between);
         }
 
-        [Test]
-        public void TestLock()
+        [TestMethod]
+        public void Remote_Lock()
         {
             Uri reposUri = GetReposUri(TestReposType.CollabRepos);
             Uri toLock = new Uri(reposUri, "trunk/index.html");
@@ -211,8 +214,8 @@ namespace SharpSvn.Tests.RemoteTests
         }
 
 
-        [Test]
-        public void TestLocationSegments()
+        [TestMethod]
+        public void Remote_LocationSegments()
         {
             SvnRemoteSession rs;
             using (SvnRemoteSession rc = new SvnRemoteSession())
@@ -250,8 +253,8 @@ namespace SharpSvn.Tests.RemoteTests
             Assert.That(rs.IsDisposed);
         }
 
-        [Test]
-        public void ListFile()
+        [TestMethod]
+        public void Remote_StatFile()
         {
             using (SvnRemoteSession rc = new SvnRemoteSession())
             {
@@ -273,8 +276,8 @@ namespace SharpSvn.Tests.RemoteTests
             }
         }
 
-        [Test]
-        public void LogRanges()
+        [TestMethod]
+        public void Remote_LogRanges()
         {
             using (SvnRemoteSession rc = new SvnRemoteSession())
             using (SvnRemoteSession rc2 = new SvnRemoteSession())
@@ -296,8 +299,8 @@ namespace SharpSvn.Tests.RemoteTests
             }
         }
 
-        [Test]
-        public void CompareRanges()
+        [TestMethod]
+        public void Remote_CompareRanges()
         {
             using (SvnRemoteSession rc = new SvnRemoteSession())
             {
@@ -326,8 +329,8 @@ namespace SharpSvn.Tests.RemoteTests
             }
         }
 
-        [Test]
-        public void GetProps()
+        [TestMethod]
+        public void Remote_GetProps()
         {
             using (SvnRemoteSession rc = new SvnRemoteSession(CollabReposUri))
             {

@@ -12,26 +12,31 @@
 //  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
-
-// Copyright (c) SharpSvn Project 2008
 using System;
 using System.Collections.Generic;
 using System.Text;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
+using System.Collections.ObjectModel;
+
 
 namespace SharpSvn.Tests.Commands
 {
-    [TestFixture]
-    public class GetAppliedMergeInfoTests : TestBase
+    [TestClass]
+    public class MergeInfoTests : TestBase
     {
-        [Test]
-        public void VerifyCollabNetRepos()
+        [TestMethod]
+        public void Mergeinfo_MergesApplied()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
             // Extended version of GetSuggestedMergeSourcesTests:VerifyCollabNetRepos
-            string dir = GetTempDir();
+
             SvnAppliedMergeInfo applied;
 
-            SvnTarget me = new SvnUriTarget(new Uri(CollabReposUri, "trunk/"), 16);
+            SvnTarget me = new SvnUriTarget(new Uri(reposUri, "trunk/"), 16);
 
             Assert.That(Client.GetAppliedMergeInfo(me, out applied));
 
@@ -40,21 +45,21 @@ namespace SharpSvn.Tests.Commands
 
             foreach (SvnMergeItem mi in applied.AppliedMerges)
             {
-                if (mi.Uri == new Uri(CollabReposUri, "trunk"))
+                if (mi.Uri == new Uri(reposUri, "trunk"))
                 {
                     Assert.That(mi.MergeRanges.Count, Is.EqualTo(1));
                     Assert.That(mi.MergeRanges[0].Start, Is.EqualTo(1));
                     Assert.That(mi.MergeRanges[0].End, Is.EqualTo(2));
                     Assert.That(mi.MergeRanges[0].Inheritable, Is.True);
                 }
-                else if (mi.Uri == new Uri(CollabReposUri, "branches/a"))
+                else if (mi.Uri == new Uri(reposUri, "branches/a"))
                 {
                     Assert.That(mi.MergeRanges.Count, Is.EqualTo(1));
                     Assert.That(mi.MergeRanges[0].Start, Is.EqualTo(2));
                     Assert.That(mi.MergeRanges[0].End, Is.EqualTo(11));
                     Assert.That(mi.MergeRanges[0].Inheritable, Is.True);
                 }
-                else if (mi.Uri == new Uri(CollabReposUri, "branches/b"))
+                else if (mi.Uri == new Uri(reposUri, "branches/b"))
                 {
                     Assert.That(mi.MergeRanges.Count, Is.EqualTo(1));
                     Assert.That(mi.MergeRanges[0].Start, Is.EqualTo(9));
@@ -63,6 +68,46 @@ namespace SharpSvn.Tests.Commands
                 }
                 else
                     Assert.That(false, "Strange applied merge");
+            }
+        }
+
+        [TestMethod]
+        public void MergeInfo_MergesAvailable()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+            SvnMergeSourcesCollection msc;
+
+            SvnTarget me = new SvnUriTarget(new Uri(reposUri, "trunk/"), 16);
+            Assert.That(Client.GetSuggestedMergeSources(me, out msc));
+
+            Assert.That(msc, Is.Not.Null);
+            Assert.That(msc.Count, Is.EqualTo(3));
+            foreach (SvnMergeSource ms in msc)
+            {
+                Collection<SvnMergesEligibleEventArgs> info;
+
+                Assert.That(ms.Uri, Is.Not.Null);
+
+                Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
+                Assert.That(info, Is.Not.Null);
+
+                if (ms.Uri == new Uri(reposUri, "trunk"))
+                {
+
+                    Assert.That(info.Count, Is.EqualTo(1));
+                    Assert.That(info[0].Revision, Is.EqualTo(17L));
+                }
+                else if (ms.Uri == new Uri(reposUri, "branches/a"))
+                {
+                    Assert.That(info.Count, Is.EqualTo(0));
+                }
+                else if (ms.Uri == new Uri(reposUri, "branches/b"))
+                {
+                    Assert.That(info.Count, Is.EqualTo(0));
+                }
+                else
+                    Assert.That(false, "Strange branch found");
             }
         }
     }

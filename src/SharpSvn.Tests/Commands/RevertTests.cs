@@ -18,7 +18,10 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
@@ -27,19 +30,19 @@ namespace SharpSvn.Tests.Commands
     /// Tests Client::Revert
     /// </summary>
 
-    [TestFixture]
+    [TestClass]
     public class RevertTests : TestBase
     {
-    public RevertTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
+        public RevertTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 
         /// <summary>
         ///Attempts to revert single file.
         /// </summary>
-        [Test]
-        public void TestRevertFile()
+        [TestMethod]
+        public void Revert_RevertFile()
         {
             string filePath = Path.Combine(this.WcPath, "Form.cs");
 
@@ -55,8 +58,8 @@ namespace SharpSvn.Tests.Commands
         /// <summary>
         ///Attempts to revert the whole working copy
         /// </summary>
-        [Test]
-        public void TestRevertDirectory()
+        [TestMethod]
+        public void Revert_RevertDirectory()
         {
             string oldContents;
             string newContents;

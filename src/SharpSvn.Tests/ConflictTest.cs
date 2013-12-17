@@ -1,22 +1,24 @@
 ﻿using System;
 using System.IO;
-using NUnit.Framework;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Assert = NUnit.Framework.Assert;
+using Is = NUnit.Framework.Is;
+using SharpSvn.TestBuilder;
 using SharpSvn.Tests.Commands;
 
 namespace SharpSvn.Tests
 {
-    [TestFixture]
+    [TestClass]
     public class ConflictTest : TestBase
     {
 
-        [Test]
-        public void InstallTreeConflict()
+        [TestMethod]
+        public void Conflict_InstallTreeConflict()
         {
-            Uri repos = CollabReposUri;
-            string wcPath = GetTempDir();
-            Client.CheckOut(new SvnUriTarget(new Uri(repos, "trunk/"), 6), wcPath);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
 
-            string index = Path.Combine(wcPath, "index.html");
+            string index = Path.Combine(sbox.Wc, "README.txt");
 
             SvnInfoEventArgs before;
             Client.GetInfo(index, out before);
@@ -37,7 +39,7 @@ namespace SharpSvn.Tests
                 wcc.InstallConflict(index, conflictOrigin, conflictOrigin, ia);
             }
 
-            Client.Update(wcPath);
+            Client.Update(sbox.Wc);
 
             SvnInfoEventArgs after;
             Client.GetInfo(index, out after);
