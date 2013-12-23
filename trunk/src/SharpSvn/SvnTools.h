@@ -19,6 +19,8 @@
 
 namespace SharpSvn {
     using namespace SharpSvn::Implementation;
+    using namespace System::Collections::Generic;
+    using System::String;
 
     public ref class SvnTools sealed : SvnBase
     {
@@ -91,6 +93,12 @@ namespace SharpSvn {
         /// <summary>Gets a file:// style uri for the specified local path</summary>
         static Uri^ LocalPathToUri(String^ localPath, bool endSlash);
 
+        static bool TryGetUriAncestor(IEnumerable<System::Uri^>^ uris, [Out] System::Uri ^%ancestorUri);
+        static bool TryGetDirentAncestor(IEnumerable<String^>^ uris, [Out] System::String ^%ancestorDirent);
+        static bool TryGetRelativePathAncestor(IEnumerable<String^>^ uris, [Out] System::String ^%ancestorRelpath);
+
+    public:
+
         /// <summary>
         /// Converts a local relative path to a valid relative Uri
         /// </summary>
@@ -102,20 +110,20 @@ namespace SharpSvn {
         /// <summary>Gets the normalized directory name of path (Long path enabled version of <see cref="System::IO::Path::GetDirectoryName" />, always returning full paths)</summary>
         static String^ GetNormalizedDirectoryName(String^ path);
 
-    static String^ GetPathRoot(String^ path);
+        static String^ GetPathRoot(String^ path);
 
-    delegate String^ SplitCommandExpander(String^ from);
+        delegate String^ SplitCommandExpander(String^ from);
 
         ///
-    static bool TrySplitCommandLine(String^ command, SplitCommandExpander^ expander, [Out] String^% application, [Out] String^% arguments);
+        static bool TrySplitCommandLine(String^ command, SplitCommandExpander^ expander, [Out] String^% application, [Out] String^% arguments);
 
-    /// <summary>Invoke TrySplitCommandLine with <see cref="System::Environment::ExpandEnvironmentVariables"/> as expander</summary>
+        /// <summary>Invoke TrySplitCommandLine with <see cref="System::Environment::ExpandEnvironmentVariables"/> as expander</summary>
         static bool TrySplitCommandLine(String^ command, [Out] String^% application, [Out] String^% arguments)
-    {
-        return TrySplitCommandLine(command, gcnew SplitCommandExpander(&System::Environment::ExpandEnvironmentVariables), application, arguments);
-    }
+        {
+            return TrySplitCommandLine(command, gcnew SplitCommandExpander(&System::Environment::ExpandEnvironmentVariables), application, arguments);
+        }
 
-    static bool TryFindApplication(String^ applicationName, [Out] String^% path);
+        static bool TryFindApplication(String^ applicationName, [Out] String^% path);
 
         generic<typename T>
         where T : System::Enum
