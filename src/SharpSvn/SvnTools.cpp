@@ -1016,3 +1016,103 @@ bool SvnTools::IsEnumValueDefined(T value)
     return EnumVerifier::IsValueDefined(value);
 }
 
+bool SvnTools::TryGetUriAncestor(IEnumerable<System::Uri^>^ uris, [Out] System::Uri ^%ancestorUri)
+{
+    if (!uris)
+        throw gcnew ArgumentNullException("uris");
+
+    AprPool pool(SmallThreadPool);
+
+    const char *fin = nullptr;
+
+    for each(System::Uri^ u in uris)
+    {
+        if (!IsValidReposUri(u))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri);
+        else if (!fin)
+            fin = pool.AllocUri(u);
+        else
+            fin = svn_uri_get_longest_ancestor(pool.AllocUri(u), fin, pool.Handle);
+
+        if (!*fin)
+        {
+            ancestorUri = nullptr;
+            return false;
+        }
+    }
+
+    if (!fin)
+        ancestorUri = nullptr;
+    else
+        ancestorUri = SvnBase::Utf8_PtrToUri(fin, SvnNodeKind::Unknown);
+
+    return (fin != nullptr);
+}
+
+bool SvnTools::TryGetDirentAncestor(IEnumerable<String^>^ uris, [Out] System::String ^%ancestorDirent)
+{
+    if (!uris)
+        throw gcnew ArgumentNullException("uris");
+
+    AprPool pool(SmallThreadPool);
+
+    const char *fin = nullptr;
+
+    for each(String^ p in uris)
+    {
+        if (!IsNotUri(p))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri);
+        else if (!fin)
+            fin = pool.AllocAbsoluteDirent(p);
+        else
+            fin = svn_dirent_get_longest_ancestor(pool.AllocAbsoluteDirent(p), fin, pool.Handle);
+
+        if (!*fin)
+        {
+            ancestorDirent = nullptr;
+            return false;
+        }
+    }
+
+    if (!fin)
+        ancestorDirent = nullptr;
+    else
+        ancestorDirent = SvnBase::Utf8_PathPtrToString(fin, %pool);
+
+    return (fin != nullptr);
+}
+
+bool SvnTools::TryGetRelativePathAncestor(IEnumerable<String^>^ uris, [Out] System::String ^%ancestorRelpath)
+{
+    if (!uris)
+        throw gcnew ArgumentNullException("uris");
+
+    AprPool pool(SmallThreadPool);
+
+    const char *fin = nullptr;
+
+    for each(String^ p in uris)
+    {
+        const char *rp = pool.AllocString(p);
+
+        if (!svn_relpath_is_canonical(rp))
+            throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRelativePath);
+        else if (!fin)
+            fin = rp;
+        else
+            fin = svn_relpath_get_longest_ancestor(rp, fin, pool.Handle);
+
+        if (!*fin)
+        {
+            ancestorRelpath = nullptr;
+            return false;
+        }
+    }
+
+    if (!fin)
+        ancestorRelpath = nullptr;
+    else
+        ancestorRelpath = SvnBase::Utf8_PtrToString(fin);
+
+    return (fin != nullptr);
+}
