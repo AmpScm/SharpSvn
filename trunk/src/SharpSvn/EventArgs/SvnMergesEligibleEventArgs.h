@@ -23,7 +23,7 @@ namespace SharpSvn {
     {
         initonly SvnTarget^ _source;
     internal:
-        SvnMergesEligibleEventArgs(svn_log_entry_t *entry, SvnTarget^ source, AprPool ^pool)
+        SvnMergesEligibleEventArgs(const svn_log_entry_t *entry, SvnTarget^ source, AprPool ^pool)
             : SvnLoggingEventArgs(entry, pool)
         {
             if (!source)
