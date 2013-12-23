@@ -258,19 +258,21 @@ namespace SharpSvn {
             {
                 if (!_changedPaths && _entry && _entry->changed_paths2 && _pool)
                 {
+                    apr_array_header_t *sorted_paths;
                     _changedPaths = gcnew SvnChangeItemCollection();
 
-                    for (apr_hash_index_t* hi = apr_hash_first(_pool->Handle, _entry->changed_paths2); hi; hi = apr_hash_next(hi))
+                    /* Get an array of sorted hash keys. */
+                    sorted_paths = svn_sort__hash(_entry->changed_paths2,
+                        svn_sort_compare_items_as_paths, _pool->Handle);
+
+                    for (int i = 0; i < sorted_paths->nelts; i++)
                     {
-                        const char* pKey;
-                        apr_ssize_t keyLen;
-                        const svn_log_changed_path2_t *pChangeInfo;
+                        const svn_sort__item_t *item = &(APR_ARRAY_IDX(sorted_paths, i,
+                            svn_sort__item_t));
+                        const char *path = (const char *)item->key;
+                        const svn_log_changed_path2_t *pChangeInfo = (const svn_log_changed_path2_t *)item->value;
 
-                        apr_hash_this(hi, (const void**)&pKey, &keyLen, (void**)&pChangeInfo);
-
-                        SvnChangeItem^ ci = gcnew SvnChangeItem(
-                            SvnBase::Utf8_PtrToString(pKey, (int)keyLen),
-                            pChangeInfo);
+                        SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(path), pChangeInfo);
 
                         _changedPaths->Add(ci);
                     }
