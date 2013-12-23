@@ -24,7 +24,7 @@ namespace SharpSvn {
         initonly bool _hasChildren;
         initonly int _mergeLevel;
     internal:
-        SvnRemoteLogEventArgs(svn_log_entry_t *entry, int mergeLevel, AprPool ^pool)
+        SvnRemoteLogEventArgs(const svn_log_entry_t *entry, int mergeLevel, AprPool ^pool)
             : SvnLoggingEventArgs(entry, pool)
         {
             _hasChildren = entry->has_children ? true : false;

@@ -194,7 +194,7 @@ namespace SharpSvn {
 
     public ref class SvnLoggingEventArgs abstract : public SvnCancelEventArgs
     {
-        svn_log_entry_t* _entry;
+        const svn_log_entry_t* _entry;
         AprPool^ _pool;
 
         String^ _author;
@@ -212,7 +212,7 @@ namespace SharpSvn {
         array<SvnChangeItem^>^ _changeItemsToDetach;
 
     internal:
-        SvnLoggingEventArgs(svn_log_entry_t *entry, AprPool ^pool)
+        SvnLoggingEventArgs(const svn_log_entry_t *entry, AprPool ^pool)
         {
             if (!entry)
                 throw gcnew ArgumentNullException("entry");
@@ -425,7 +425,7 @@ namespace SharpSvn {
         initonly int _mergeLevel;
 
     internal:
-        SvnLogEventArgs(svn_log_entry_t *entry, int mergeLevel, Uri^ logOrigin, AprPool ^pool)
+        SvnLogEventArgs(const svn_log_entry_t *entry, int mergeLevel, Uri^ logOrigin, AprPool ^pool)
             : SvnLoggingEventArgs(entry, pool)
         {
             _hasChildren = entry->has_children ? true : false;

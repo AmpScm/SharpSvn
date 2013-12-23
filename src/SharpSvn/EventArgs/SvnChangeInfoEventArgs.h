@@ -20,7 +20,7 @@ namespace SharpSvn {
     {
         initonly __int64 _baseRevision;
     internal:
-        SvnChangeInfoEventArgs(svn_log_entry_t *entry, __int64 baseRevision, AprPool ^pool)
+        SvnChangeInfoEventArgs(const svn_log_entry_t *entry, __int64 baseRevision, AprPool ^pool)
             : SvnLoggingEventArgs(entry, pool)
         {
             _baseRevision = baseRevision;
