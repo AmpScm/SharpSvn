@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml"><head>
 <title>
-          SharpSvn-Daily Update - 1.8005.2799</title>
+          SharpSvn-Daily Update - 1.8005.2809</title>
 <link rel="Stylesheet" type="text/css" href="daily.css" /></head><body>
 <h1>
-          SharpSvn-Daily Update - 1.8005.2799</h1>
+          SharpSvn-Daily Update - 1.8005.2809</h1>
 
 
 <p>
@@ -15,25 +15,30 @@
 
 
 <h2>
-          The latest daily build is <a href="https://sharpsvn.open.collab.net/files/documents/180/8138/SSvn-1.8005.2799.zip">SharpSvn 1.8005.2799</a>.
+          The latest daily build is <a href="https://sharpsvn.open.collab.net/files/documents/180/8177/SSvn-1.8005.2809.zip">SharpSvn 1.8005.2809</a>.
         </h2>
 
 <p>
-          The build script also supplies an <a href="https://sharpsvn.open.collab.net/files/documents/180/8139/SSvn-1.8005.2799-x64.zip">x64 version</a> of this Win32 build and a
-          <a href="https://sharpsvn.open.collab.net/files/documents/180/8140/SSvnEx-1.8005.2799.zip">package of all binaries</a> with some extras.
+          The build script also supplies an <a href="https://sharpsvn.open.collab.net/files/documents/180/8178/SSvn-1.8005.2809-x64.zip">x64 version</a> of this Win32 build and a
+          <a href="https://sharpsvn.open.collab.net/files/documents/180/8179/SSvnEx-1.8005.2809.zip">package of all binaries</a> with some extras.
         </p>
 
 
 
 <p>
           You can find older daily releases in the <a href="http://sharpsvn.net/daily/?all=1">daily folder</a> of documents &amp; files.
-          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2799">Subversion Repository</a>.
+          The previous version of this report is still available in our <a href="http://sharpsvn.net/daily/?id=2809">Subversion Repository</a>.
         </p><p>Published daily builds will be available for at least a month after they are build.</p>
 
 
 
 <h2>Recent changes</h2>
 <table>
+<tr class="d"><td colspan="4">2013-12-17</td></tr>
+<tr><td> </td><td class="r"><a id="2803" href="http://sharpsvn.net/rev/?r=2803">
+            [r2803]
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/StatusTests.cs, SharpSvn.Tests/LocalizationTests.cs, SharpSvn.TestBuilder/Properties/AssemblyInfo.cs, SharpSvn.Tests/Commands/LockTests.cs, SharpSvn.TestBuilder/Properties, SharpSvn.Tests/Commands/AddTests.cs, SharpSvn.Tests/StaticVerifications.cs, SharpSvn.Tests/Commands/WriteTests.cs, SharpSvn.Tests/Commands/InfoTests.cs, SharpSvn.Tests/ExceptionTests.cs, SharpSvn.TestBuilder/SandBoxRepository.cs, SharpSvn.Tests/Commands/RevisionPropertyListTests.cs, SharpSvn.Tests/LookCommands/VerifyTransactions.cs, SharpSvn.Tests/Commands/GetCapabilities.cs (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Switch the SharpSvn tests to the Visual Studio test runner and a new SvnSandbox
+environment to speed up the unit tests. For now we still use the NUnit assertions.</td></tr>
 <tr class="d"><td colspan="4">2013-12-15</td></tr>
 <tr><td> </td><td class="r"><a id="2797" href="http://sharpsvn.net/rev/?r=2797">
             [r2797]
@@ -44,19 +49,19 @@ to provide public events.<br />
 Handle the event routing to argument classes from the parent class.</td></tr>
 <tr><td> </td><td class="r"><a id="2793" href="http://sharpsvn.net/rev/?r=2793">
             [r2793]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnMultiCommandClient.h, SharpSvn.Tests/Commands/RepositoryOperationTests.cs, SharpSvn/SvnStatusCacheBlocker.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Undefine the standard Windows 'CreateFile' macro before we define a function
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/RepositoryOperationTests.cs, SharpSvn/SvnStatusCacheBlocker.cpp, SharpSvn/SvnMultiCommandClient.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Undefine the standard Windows 'CreateFile' macro before we define a function
 of the same name, as we don't want to see CreateFileW as the .Net function
 name.</td></tr>
 <tr><td> </td><td class="r"><a id="2792" href="http://sharpsvn.net/rev/?r=2792">
             [r2792]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/RepositoryCreateDirectory.cpp, SharpSvn/Commands/RepositoryCopy.cpp, SharpSvn/Commands/RepositoryGetNodeKind.cpp, SharpSvn/UnmanagedStructs.h, SharpSvn/Commands/MultiOpen.cpp, SharpSvn/Commands/RepositorySetProperty.cpp, SharpSvn/SvnBase.cpp, SharpSvn/Commands/RepositoryDelete.cpp, SharpSvn/Commands/RepositoryUpdateFile.cpp, SharpSvn/SvnStreamWrapper.cpp, SharpSvn/Commands/RepositoryCreateFile.cpp, SharpSvn/SvnMultiCommandClient.h, SharpSvn/Commands/RepositoryMove.cpp, SharpSvn.Tests/Commands/RepositoryOperationTests.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Rename an internal argument store class to avoid shadowing a similar
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/MultiOpen.cpp, SharpSvn/Commands/RepositorySetProperty.cpp, SharpSvn/SvnBase.cpp, SharpSvn/Commands/RepositoryDelete.cpp, SharpSvn/Commands/RepositoryUpdateFile.cpp, SharpSvn/SvnStreamWrapper.cpp, SharpSvn/Commands/RepositoryCreateFile.cpp, SharpSvn/SvnMultiCommandClient.h, SharpSvn/Commands/RepositoryMove.cpp, SharpSvn.Tests/Commands/RepositoryOperationTests.cs, SharpSvn/Commands/RepositoryCreateDirectory.cpp, SharpSvn/Commands/RepositoryCopy.cpp, SharpSvn/Commands/RepositoryGetNodeKind.cpp, SharpSvn/UnmanagedStructs.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Rename an internal argument store class to avoid shadowing a similar
 class in an ancestor.</td></tr>
 <tr><td> </td><td class="r"><a id="2791" href="http://sharpsvn.net/rev/?r=2791">
             [r2791]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Commands/RepositoryCreateDirectory.cpp, Commands/RepositoryCopy.cpp, Commands/RepositoryGetNodeKind.cpp, SvnMultiCommandClient.cpp, Commands/RepositorySetProperty.cpp, Commands/RepositoryDelete.cpp, Commands/RepositoryUpdateFile.cpp, SharpSvnStrings.h, SvnStreamWrapper.cpp, Commands/RepositoryCreateFile.cpp, SvnMultiCommandClient.h, Commands/RepositoryMove.cpp, SvnStreamWrapper.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add implementation for SvnMultiCommandClient operations.</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnMultiCommandClient.cpp, Commands/RepositorySetProperty.cpp, Commands/RepositoryDelete.cpp, Commands/RepositoryUpdateFile.cpp, SharpSvnStrings.h, SvnStreamWrapper.cpp, Commands/RepositoryCreateFile.cpp, SvnMultiCommandClient.h, Commands/RepositoryMove.cpp, SvnStreamWrapper.h, Commands/RepositoryCreateDirectory.cpp, Commands/RepositoryCopy.cpp, Commands/RepositoryGetNodeKind.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add implementation for SvnMultiCommandClient operations.</td></tr>
 <tr><td> </td><td class="r"><a id="2787" href="http://sharpsvn.net/rev/?r=2787">
             [r2787]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/RepositorySetProperty.cpp, SharpSvn/Commands/RepositoryDelete.cpp, SharpSvn/Commands/RepositoryCreateFile.cpp, SharpSvn/Args/SvnRepositoryOperationArgs.h, SharpSvn/Commands/RepositoryMove.cpp, SharpSvn.Tests/Commands/RepositoryOperationTests.cs, SharpSvn/SvnClient.h, SharpSvn/SvnClientContext.cpp, SharpSvn/Commands/RepositoryCopy.cpp, SharpSvn/Commands/MultiOpen.cpp, SharpSvn/SharpSvn.vcxproj, SharpSvn/SvnMultiCommandClient.cpp, SharpSvn/SvnClientContext.h, SharpSvn/Commands/RepositoryUpdateFile.cpp (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add a new SvnMultiCommandClient which will soon be the SharpSvn equivalent of
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/RepositoryCreateDirectory.cpp, SharpSvn/Commands/RepositoryGetNodeKind.cpp, SharpSvn/UnmanagedStructs.h, SharpSvn/Commands/RepositorySetProperty.cpp, SharpSvn/Commands/RepositoryDelete.cpp, SharpSvn/Commands/RepositoryCreateFile.cpp, SharpSvn/Args/SvnRepositoryOperationArgs.h, SharpSvn/Commands/RepositoryMove.cpp, SharpSvn.Tests/Commands/RepositoryOperationTests.cs, SharpSvn/SvnClient.h, SharpSvn/SvnClientContext.cpp, SharpSvn/Commands/RepositoryCopy.cpp, SharpSvn/Commands/MultiOpen.cpp, SharpSvn/SharpSvn.vcxproj (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add a new SvnMultiCommandClient which will soon be the SharpSvn equivalent of
 SvnMucc.<br />
 This commit adds the necessary plumbing and placeholders for most features
 to allow fixing the build for VS 2008.</td></tr>
@@ -66,31 +71,31 @@ to allow fixing the build for VS 2008.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/tools/CollabUpload:</strong> Program.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Make upload protocol configurable, but default to https.</td></tr>
 <tr><td> </td><td class="r"><a id="2782" href="http://sharpsvn.net/rev/?r=2782">
             [r2782]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Docs, SharpSvn.UI/Authentication/SvnUIForm.cs, SharpSvn.sln, SharpSvn.UI/Authentication/SslClientCertificatePassPhraseDialog.cs, SharpSvn.UI/Authentication/SslServerCertificateTrustDialog.cs, SharpSvn.Docs/SharpSvn.Docs.shfbproj, SharpSvn.UI/Authentication/UsernameDialog.cs, SharpSvn.UI/Authentication/UsernamePasswordDialog.cs, SharpSvn.UI/Authentication/SslClientCertificateFileDialog.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Tweak project for automatic documentation generation.</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.UI/Authentication/SslClientCertificatePassPhraseDialog.cs, SharpSvn.UI/Authentication/SslServerCertificateTrustDialog.cs, SharpSvn.Docs/SharpSvn.Docs.shfbproj, SharpSvn.UI/Authentication/UsernameDialog.cs, SharpSvn.UI/Authentication/UsernamePasswordDialog.cs, SharpSvn.UI/Authentication/SslClientCertificateFileDialog.cs, SharpSvn.Docs, SharpSvn.UI/Authentication/SvnUIForm.cs, SharpSvn.sln</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Tweak project for automatic documentation generation.</td></tr>
 <tr class="d"><td colspan="4">2013-12-11</td></tr>
 <tr><td> </td><td class="r"><a id="2777" href="http://sharpsvn.net/rev/?r=2777">
             [r2777]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnNames.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add many new in Subversion 1.8/TortoiseSVN 1.8 string literals.</td></tr>
 <tr><td> </td><td class="r"><a id="2775" href="http://sharpsvn.net/rev/?r=2775">
             [r2775]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/InheritedPropertyList.cpp, SharpSvn/SharpSvn.vcxproj, SharpSvn/Stdafx.h, SharpSvn.Tests/Commands/InheritedPropertyList.cs, SharpSvn/Commands/GetProperty.cpp, SharpSvn/EventArgs/SvnInheritedPropertyListEventArgs.h, SharpSvn/SvnClient.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Complete the SvnClient.InheritedPropertyList() implementation by allowing
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/GetProperty.cpp, SharpSvn/EventArgs/SvnInheritedPropertyListEventArgs.h, SharpSvn/SvnClient.h, SharpSvn/Commands/InheritedPropertyList.cpp, SharpSvn/SharpSvn.vcxproj, SharpSvn/Stdafx.h, SharpSvn.Tests/Commands/InheritedPropertyList.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Complete the SvnClient.InheritedPropertyList() implementation by allowing
 access to the url where a property is defined. Implement
 TryGetInheritedProperty() and .TryGetAllInheritedProperties().</td></tr>
 <tr class="d"><td colspan="4">2013-12-10</td></tr>
 <tr><td> </td><td class="r"><a id="2771" href="http://sharpsvn.net/rev/?r=2771">
             [r2771]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SharpSvn.vcxproj.filters, SharpSvn.Tests/SharpSvn.Tests.csproj, SharpSvn/EventArgs/SvnInheritedPropertyListEventArgs.h, SharpSvn/SvnClientEventArgs.h, SharpSvn/SvnClient.h, SharpSvn/Args/InheritedPropertyList.h, SharpSvn/Commands/InheritedPropertyList.cpp, SharpSvn/SharpSvn.vcxproj, SharpSvn.Tests/Commands/InheritedPropertyList.cs, SharpSvn/SvnEnums.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add new SvnClient.InheritedPropertyList() command. The command is ready for
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Args/InheritedPropertyList.h, SharpSvn/Commands/InheritedPropertyList.cpp, SharpSvn/SharpSvn.vcxproj, SharpSvn.Tests/Commands/InheritedPropertyList.cs, SharpSvn/SvnEnums.h, SharpSvn/SharpSvn.vcxproj.filters, SharpSvn.Tests/SharpSvn.Tests.csproj, SharpSvn/EventArgs/SvnInheritedPropertyListEventArgs.h, SharpSvn/SvnClientEventArgs.h, SharpSvn/SvnClient.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add new SvnClient.InheritedPropertyList() command. The command is ready for
 initial testing, but the implementation is not complete yet.</td></tr>
 <tr class="d"><td colspan="4">2013-12-09</td></tr>
 <tr><td> </td><td class="r"><a id="2762" href="http://sharpsvn.net/rev/?r=2762">
             [r2762]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/LookCommands/LookChangeInfo.cpp, SharpSvn/EventArgs/SvnProgressEventArgs.h, SharpSvn/SvnHookArguments.cpp, SharpSvn.Tests/Commands/CopyTests.cs, SharpSvn.Tests/Commands/GetAvailableMergeInfoTests.cs, SharpSvn/SvnMergeInfoArgs.h, SharpSvn/SvnLibraryAttribute.h, SharpSvn/Commands/RemoveFromChangeList.cpp, SharpSvn/EventArgs/SvnEventArgs.h, SharpSvn/EventArgs/SvnBlameEventArgs.h, SharpSvn/ReposArgs/SetRevisionPropertyRepository.h, SharpSvn/LookArgs/SvnLookListArgs.h, SharpSvn/Commands/Unlock.cpp, SharpSvn/SvnExternalItem.h (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Fix final line breakage of <a href="http://sharpsvn.net/rev/?r=2760">r2760</a></td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/GetAvailableMergeInfoTests.cs, SharpSvn/SvnMergeInfoArgs.h, SharpSvn/SvnLibraryAttribute.h, SharpSvn/Commands/RemoveFromChangeList.cpp, SharpSvn/EventArgs/SvnEventArgs.h, SharpSvn/EventArgs/SvnBlameEventArgs.h, SharpSvn/ReposArgs/SetRevisionPropertyRepository.h, SharpSvn/LookArgs/SvnLookListArgs.h, SharpSvn/Commands/Unlock.cpp, SharpSvn/SvnExternalItem.h, SharpSvn.Tests/Commands/DiffSummaryTests.cs, SharpSvn/SvnLockInfo.h, SharpSvn/SvnTargets.cpp, SharpSvn/ReposArgs/UpgradeRepository.h (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Fix final line breakage of <a href="http://sharpsvn.net/rev/?r=2760">r2760</a></td></tr>
 <tr><td> </td><td class="r"><a id="2761" href="http://sharpsvn.net/rev/?r=2761">
             [r2761]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.Tests/Commands/LockTests.cs, SharpSvn/SvnTargets.cpp, SharpGit/Plumbing/GitReference.h, SharpSvn.Tests/Commands/InfoTests.cs, SharpSvn.UI/Properties/Resources.Designer.cs, SharpSvn.SourceIndexer/Tools/SourceServerToolException.cs, SharpSvn/SvnWorkingCopyClient.h, SharpSvn.Tests/Commands/RevisionPropertyListTests.cs, SharpSvn/EventArgs/SvnChangeInfoEventArgs.h, SharpSvn/SvnMergeSourcesCollection.h, SharpSvn/Commands/GetAppliedMergeInfo.cpp, SharpSvn.UI/SvnUIBindArgs.cs, SharpSvn.Tests/Commands/GetCapabilities.cs, tools/CollabUpload/WebFormWriter.cs (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add final newline when needed and remove svn:keywords</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/LookArgs/SvnLookListArgs.h, SharpSvn.Tests/Commands/UpdateTests.cs, SharpSvn/ReposEventArgs/SvnRepositoryNotifyEventArgs.h, SharpSvn/Commands/Write.cpp, SharpSvn.UI/Authentication/UsernamePasswordDialog.cs, SharpSvn/SvnTargets.cpp, SharpSvn/SvnStatusCacheBlocker.h, SharpSvn/SvnWorkingCopyClient.h, SharpSvn.Tests/Commands/RevisionTests.cs, SharpSvn.SourceIndexer/Tools/SourceServerTools.cs, SharpSvn/SvnFsOperationRetryOverride.h, tools/Po2Resx/PoParser.cs, SharpSvn.Tests/ExternalsTests.cs, SharpSvn/ReposCommands/VerifyRepository.cpp (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add final newline when needed and remove svn:keywords</td></tr>
 <tr><td> </td><td class="r"><a id="2760" href="http://sharpsvn.net/rev/?r=2760">
             [r2760]
-          </a></td><td class="a">rhuijben</td><td class="f">src/SharpGit/GitId.h, src/SharpSvn/ReposArgs/SetRepositoryId.h, src/SharpSvn/EventArgs/SvnCommittingEventArgs.h, src/SharpGit/GitClient/GitClient.h, src/SharpSvn/Args/Commit.h, src/SharpSvn/ReposCommands/SetRevisionPropertyRepository.cpp, src/SharpSvn/EventArgs/SvnLogEventArgs.h, src/SharpSvn/Commands/AddToChangeList.cpp, src/SharpSvn/Args/Relocate.h, src/SharpSvn/Commands/SvnWorkingCopyClient.cpp, src/SharpGit/GitClient/GitCheckOut.cpp, src/SharpGit/Plumbing/GitTag.cpp, src/SharpSvn/RemoteCommands/RemoteReparent.cpp, src/SharpGit/Plumbing/GitIndex.h (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Untabify all SharpSvn source files using
+          </a></td><td class="a">rhuijben</td><td class="f">src/SharpGit/GitClientContext.cpp, src/SharpSvn/RemoteArgs/SvnRemoteListLocksArgs.h, src/SharpSvn/LookCommands/LookWrite.cpp, src/SharpSvn/Delta/DeltaFileEventArgs.h, src/SharpSvn/RemoteCommands/RemoteLocationSegments.cpp, src/SharpSvn/RemoteArgs/SvnRemoteLocationSegmentsArgs.h, src/SharpSvn/Args/Copy.h, src/SharpGit/Plumbing/GitTag.h, src/SharpSvn/SvnMergeItemCollection.cpp, src/SharpSvn/ReposArgs/SetRepositoryId.h, src/SharpSvn/Commands/WorkingCopyGetVersion.cpp, src/SharpSvn/Delta/SvnDeltaNode.h, src/SharpSvn/Delta/SvnDeltaEditor.h, src/SharpSvn/Delta/DeltaGlobalEventArgs.h (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Untabify all SharpSvn source files using
 <a href="http://svn.python.org/projects/sandbox/trunk/untabify/untabify.py">http://svn.python.org/projects/sandbox/trunk/untabify/untabify.py</a><br />
 [Note from future: This script is broken for files that don't end with '\n']</td></tr>
 <tr class="d"><td colspan="4">2013-12-05</td></tr>
@@ -99,7 +104,7 @@ initial testing, but the implementation is not complete yet.</td></tr>
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SvnAbortHandler.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Conditionalize some error handling on debug support</td></tr>
 <tr><td> </td><td class="r"><a id="2749" href="http://sharpsvn.net/rev/?r=2749">
             [r2749]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit.Tests/GitClientTests.cs, SharpGit/SharpGit.vcxproj, SharpGit/Plumbing/GitTag.cpp, SharpGit/UnmanagedStructs.h, SharpGit/SharpGit.vcxproj.filters, SharpGit/Plumbing/GitBranch.h, SharpGit/GitClientContext.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Fix the existing SharpGit tests to work correctly with the current version of
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit/GitClientContext.cpp, SharpGit.Tests/GitClientTests.cs, SharpGit/SharpGit.vcxproj, SharpGit/Plumbing/GitTag.cpp, SharpGit/UnmanagedStructs.h, SharpGit/SharpGit.vcxproj.filters, SharpGit/Plumbing/GitBranch.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Fix the existing SharpGit tests to work correctly with the current version of
 LibGit2.</td></tr>
 <tr><td> </td><td class="r"><a id="2747" href="http://sharpsvn.net/rev/?r=2747">
             [r2747]
@@ -111,7 +116,7 @@ SvnClient.Write().</td></tr>
 request.</td></tr>
 <tr><td> </td><td class="r"><a id="2744" href="http://sharpsvn.net/rev/?r=2744">
             [r2744]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Commands/MergesEligible.cpp, Args/MergesMerged.h, Commands/MergesMerged.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">ListMergesMerged: Allow passing a revision range.</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/MergesMerged.h, Commands/MergesMerged.cpp, Commands/MergesEligible.cpp</td></tr><tr><td colspan="2" /><td class="l" colspan="2">ListMergesMerged: Allow passing a revision range.</td></tr>
 <tr><td> </td><td class="r"><a id="2742" href="http://sharpsvn.net/rev/?r=2742">
             [r2742]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> Args/MergesEligible.h, Commands/MergesEligible.cpp, SvnMergeInfo.h</td></tr><tr><td colspan="2" /><td class="l" colspan="2">ListMergesEligible: Enable the new in 1.8 optional source revision range.</td></tr>
@@ -121,13 +126,13 @@ request.</td></tr>
 <tr class="d"><td colspan="4">2013-12-04</td></tr>
 <tr><td> </td><td class="r"><a id="2723" href="http://sharpsvn.net/rev/?r=2723">
             [r2723]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests:</strong> Commands/CopyTests.cs, Commands/ImportTests.cs, Commands/Utils/ProcessReader.cs, Commands/ResolveTests.cs, Commands/DeleteTests.cs, Commands/UpdateTests.cs, Commands/StatusTests.cs, Commands/MoveTests.cs, Commands/TestBase.cs, SvnAuthTests.cs, Commands/AddTests.cs, Commands/CommitTests.cs, Commands/CreateDirectoryTests.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Update the test to use less invocations of 'svn', especially where the result
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.Tests:</strong> Commands/DeleteTests.cs, Commands/UpdateTests.cs, Commands/StatusTests.cs, Commands/MoveTests.cs, Commands/TestBase.cs, SvnAuthTests.cs, Commands/AddTests.cs, Commands/CommitTests.cs, Commands/CreateDirectoryTests.cs, Commands/CopyTests.cs, Commands/ImportTests.cs, Commands/Utils/ProcessReader.cs, Commands/ResolveTests.cs</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Update the test to use less invocations of 'svn', especially where the result
 was sometimes not parsed correctly such as with status.<br />
 Remove a lot of unnecessary slowing code from the process reader that is used
 for the remaining tests.</td></tr>
 <tr><td> </td><td class="r"><a id="2722" href="http://sharpsvn.net/rev/?r=2722">
             [r2722]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvn.vcxproj.filters, SharpSvn.vcxproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Further project file tweaks, including a setting that fixes the resource file
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn:</strong> SharpSvn.vcxproj, SharpSvn.vcxproj.filters</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Further project file tweaks, including a setting that fixes the resource file
 generation for .Net 4.0 builds.</td></tr>
 <tr><td> </td><td class="r"><a id="2717" href="http://sharpsvn.net/rev/?r=2717">
             [r2717]
@@ -135,26 +140,26 @@ generation for .Net 4.0 builds.</td></tr>
 VS20XY files. Fix some debug build missing flags.</td></tr>
 <tr><td> </td><td class="r"><a id="2712" href="http://sharpsvn.net/rev/?r=2712">
             [r2712]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/SvnClientConfiguration.cpp, SharpSvn/SvnFileDiff.cpp, SharpSvn/Commands/CropWorkingCopy.cpp, SharpSvn/Commands/Merge.cpp, SharpSvn/Commands/Patch.cpp, SharpSvn/Commands/SetProperty.cpp, SharpSvn/SvnClientNotifier.cpp, SharpSvn/PdbTools/SvnMsfClient.h, SharpSvn/Commands/Move.cpp, SharpSvn/LookCommands/LookGetRepositoryId.cpp, SharpSvn/Commands/Revert.cpp, SharpSvn/Commands/Diff.cpp, SharpSvn.sln, SharpSvn/RemoteCommands/ResolveRevision.cpp (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Cleanup build for future development using VS 2010 or later: Make more use of
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn/Commands/GetAppliedMergeInfo.cpp, SharpSvn/PdbTools/sbs_pdh.h, SharpSvn/SvnClientContext.h, SharpSvn/ReposCommands/DumpRepository.cpp, SharpSvn/SvnStreamWrapper.cpp, SharpSvn/RemoteCommands/RemoteGetLocations.cpp, SharpSvn/RemoteCommands/RemoteGetProperties.cpp, SharpSvn/SvnFileDiff.cpp, SharpSvn/SvnPropertyNames.cpp, SharpSvn/SvnAll.h, SharpSvn/SvnClientNotifier.cpp, SharpSvn/PdbTools/SvnMsfClient.h, SharpSvn/Commands/Move.cpp, SharpSvn/Commands/Revert.cpp (and -8 other paths)</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Cleanup build for future development using VS 2010 or later: Make more use of
 the precompiled header by moving SvnAll.h's files into stdafx.h. But make sure
 stdafx.h doesn't use namespaces as that breaks including third party projects.<br />
 Stop adding a Win32 resource to SharpSvn.dll. We assume that our new MSBuild
 task will take care of that.</td></tr>
 <tr><td> </td><td class="r"><a id="2710" href="http://sharpsvn.net/rev/?r=2710">
             [r2710]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit/SharpGit.vcxproj, SharpSvn.sln, SharpSvn-VS2008.sln, SharpPlink/SharpPlink.vcxproj, SharpSvn/SharpSvn.vcxproj, SharpGit/SharpGit-VS2008.vcproj, SharpGit/SharpGit.vcproj, SharpSvn/SvnStatusCacheBlocker.cpp, SharpPlink/SharpPlink-vs2008.vcproj, SharpPlink/SharpPlink.vcproj, SharpSvn-VS2010.sln, SharpGit/GitClient.h, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/SharpSvn.vcproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Switch to a dual solution/project layout: Just 2008 and 2010 and later.</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpGit/SharpGit-VS2008.vcproj, SharpGit/SharpGit.vcproj, SharpSvn/SvnStatusCacheBlocker.cpp, SharpPlink/SharpPlink-vs2008.vcproj, SharpPlink/SharpPlink.vcproj, SharpSvn-VS2010.sln, SharpGit/GitClient.h, SharpSvn/SharpSvn-VS2008.vcproj, SharpSvn/SharpSvn.vcproj, SharpSvn-VS2012.sln, SharpGit/SharpGit.vcxproj, SharpSvn.sln, SharpSvn-VS2008.sln, SharpPlink/SharpPlink.vcxproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Switch to a dual solution/project layout: Just 2008 and 2010 and later.</td></tr>
 <tr class="d"><td colspan="4">2013-12-03</td></tr>
 <tr><td> </td><td class="r"><a id="2709" href="http://sharpsvn.net/rev/?r=2709">
             [r2709]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/nuget:</strong> SharpSvn.1.8-x86.nuspec</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Update NuGet description</td></tr>
 <tr><td> </td><td class="r"><a id="2702" href="http://sharpsvn.net/rev/?r=2702">
             [r2702]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> Install.wxs, targets/Projects/SharpSvn.vcxproj.targets, SharpSvn.MSBuild.Wix.wixproj, Properties/AssemblyInfo.cs, UpdateNativeVersionResource.cs, SharpSvn.MSBuild.snk, NativeMethods.cs, GenerateVersionResourceFromAssembly.cs, SharpSvn.MSBuild.csproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add initial version of SharpSvn MSBuild hook to automatically apply win32
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> Properties/AssemblyInfo.cs, UpdateNativeVersionResource.cs, SharpSvn.MSBuild.snk, NativeMethods.cs, GenerateVersionResourceFromAssembly.cs, SharpSvn.MSBuild.csproj, Install.wxs, targets/Projects/SharpSvn.vcxproj.targets, SharpSvn.MSBuild.Wix.wixproj</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add initial version of SharpSvn MSBuild hook to automatically apply win32
 version resources for MC++ assemblies.</td></tr>
 <tr class="d"><td colspan="4">2013-11-25</td></tr>
 <tr><td> </td><td class="r"><a id="2695" href="http://sharpsvn.net/rev/?r=2695">
             [r2695]
-          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> Properties/AssemblyInfo.cs, common/ImportAfter/SharpSvn.ImportAfter.targets, Properties, GenerateVersionResourceFromAssembly.cs, SharpSvn.MSBuild.csproj, targets/Projects, common/ImportAfter, targets/SharpSvn.targets, common, targets/Projects/SharpSvn.vcxproj.targets, targets</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add SharpSvn.MSBuild prototype.</td></tr>
+          </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src/SharpSvn.MSBuild:</strong> common/ImportAfter, targets/SharpSvn.targets, common, targets/Projects/SharpSvn.vcxproj.targets, targets, Properties/AssemblyInfo.cs, common/ImportAfter/SharpSvn.ImportAfter.targets, Properties, GenerateVersionResourceFromAssembly.cs, SharpSvn.MSBuild.csproj, targets/Projects</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Add SharpSvn.MSBuild prototype.</td></tr>
 <tr><td> </td><td class="r"><a id="2694" href="http://sharpsvn.net/rev/?r=2694">
             [r2694]
           </a></td><td class="a">rhuijben</td><td class="f"><strong class="f-pf">src:</strong> SharpSvn.MSBuild</td></tr><tr><td colspan="2" /><td class="l" colspan="2">Create SharpSvn.MSBuild directory</td></tr>
