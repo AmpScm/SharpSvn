@@ -9,6 +9,9 @@
         <arg value="Configure" />
         <arg value="VC-WIN32" if="${platform=='win32'}" />
         <arg value="VC-WIN64A" if="${platform=='x64'}" />
+        <!-- Provide a sane, most likely secure default for loading system wide settings -->        
+        <arg value="--openssldir=C:\ProgramData\OpenSSL" />
+        <!-- Now configure more -->
         <arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
         <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
         <arg value="threads" />
