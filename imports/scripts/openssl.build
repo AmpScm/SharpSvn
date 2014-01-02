@@ -22,6 +22,7 @@
         <arg value="no-hw"/>
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
+        <arg value="-DSSL_FORBID_ENULL" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
         <arg value="--prefix=${path::get-full-path(intDir)}" />
