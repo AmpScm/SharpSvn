@@ -47,7 +47,7 @@
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
   <property name="buildLibgit2" value="true" overwrite="false" />
   <!-- -->
-  <property name="opensslVersion" value="1.0.1e" overwrite="false" />
+  <property name="opensslVersion" value="1.0.1f" overwrite="false" />
   <property name="neonVersion" value="0.30.0" overwrite="false" />
 
   <property name="aprVersion" value="1.5.0" overwrite="false" />
