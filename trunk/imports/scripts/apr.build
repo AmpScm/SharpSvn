@@ -30,10 +30,7 @@
       </foreach>
       <FilterFile file="${aprDir}\atomic\win32\apr_atomic.c">
         <filterchain>
-          <replacestring from='(apr_atomic_win32_ptr_val_fn)' to='' />
-          <replacestring from='(apr_atomic_win32_ptr_fn)' to='' />
-          <replacestring from='(apr_atomic_win32_ptr_val_val_fn)' to='' />
-          <replacestring from='(apr_atomic_win32_ptr_ptr_ptr_fn)' to='' />
+          <LineRegexReplace re='\(\(apr_atomic_win32_ptr[a-z_]*\)([^\)]*)\)' to='$1' />
         </filterchain>
       </FilterFile>
       <FilterFile file="${aprDir}\file_io\win32\open.c">
