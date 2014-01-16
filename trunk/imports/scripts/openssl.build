@@ -3,7 +3,7 @@
   <property name="opensslDir" value="build/${platform}/openssl" />
   <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
 
-  <target name="openssl-prepare" depends="extract">
+  <target name="openssl-prepare" depends="checkout">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
       <exec program="perl.exe" workingdir="${opensslDir}">
         <arg value="Configure" />
@@ -52,12 +52,14 @@
           <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
           <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
           <replacestring from=" /MT " to=" /MD " />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
         <filterchain>
           <!-- Ommit default library name -->
           <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags}" />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
