@@ -269,6 +269,24 @@
       <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
       <arg value="${aprUtilDir}" />
     </Svn>
+    
+    <Svn
+      verbose="true"
+      if="${file::exists(aprUtilDir + '/xml/expat/lib/map_osd_ebcdic_df04_1.h')}">
+      
+      <arg value="up" />
+      <arg line="--set-depth exclude" />
+      <arg line="${aprUtilDir + '/xml/expat/lib'}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      unless="${directory::exists(aprUtilDir + '/xml/expat/lib')}">
+
+      <arg value="co" />
+      <arg value="https://github.com/LuaDist/libexpat.git/tags/${expatVersion}/lib" />
+      <arg value="${aprUtilDir + '/xml/expat/lib'}" />
+    </Svn>
 
     <Svn unless="${directory::exists(platformRoot + '/serf')}">
       <arg value="co" />
