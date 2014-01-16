@@ -33,7 +33,7 @@
       </FilterFile>
       <FilterFile file="${aprUtilDir}\include\apu.hwc">
         <filterchain>
-          <replacestring from='#define APU_HAVE_DB' to='#define APU_HAVE_DB 1 // WAS: ' />
+          <replacestring from='#define APU_HAVE_DB ' to='#define APU_HAVE_DB 1 // WAS: ' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
