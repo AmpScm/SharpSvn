@@ -67,7 +67,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", sqlite" SQLITE_VERSION
     ", zlib " ZLIB_VERSION
     " and " OPENSSL_VERSION_TEXT
-    ". if available this library also uses the optional Berkeley DB " BDB_VERSION
+    ". If available this library also uses the optional Berkeley DB " BDB_VERSION
     " and our compilation of Putty's Plink)")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
