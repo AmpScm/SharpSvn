@@ -19,6 +19,7 @@
   <property name="buildNeon" value="true" overwrite="false" />
   <property name="buildSubversion" value="false" />
   <property name="buildLibgit2" value="false" />
+  <property name="buildLibssh2" value="false" />
   <property name="svnStatic" value="true" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
   <property name="svnDll" value="dll" />

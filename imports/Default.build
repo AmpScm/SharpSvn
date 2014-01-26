@@ -65,6 +65,7 @@
   <property name="httpdVersion" value="2.4.7" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
   <property name="sqliteVersion" value="3.7.17" overwrite="false" />
+  <property name="libssh2Version" value="1.4.3" overwrite="false" />
 
   <!-- Building only -->
   <property name="cmakeVersion" value="2.8.12.1" overwrite="false" />
