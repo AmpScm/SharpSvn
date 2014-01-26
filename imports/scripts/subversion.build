@@ -152,7 +152,7 @@
       <!-- Allow neon to find expat and zlib where Subversion 1.7 says it is -->
       <copy todir="${httpdDir}/srclib/apr-util/xml/expat/lib">
         <fileset basedir="${intDir}/include">
-          <include name="expat.h" />
+          <include name="expat*.h" />
         </fileset>
       </copy>
       <copy tofile="${zlibDir}/zlibstat.lib" file="${zlibDir}/zlib.lib" />
