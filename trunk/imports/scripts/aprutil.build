@@ -42,6 +42,7 @@
     <CMake workingdir="${aprUtilDir}">
       <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
       <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+      <prop name="APR_BUILD_TESTAPR" value="ON" />
       
       <prop name="APR_INCLUDE_DIR" value="${intDir}/include/apr-1" />
       <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />

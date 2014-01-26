@@ -59,6 +59,7 @@
     <CMake workingdir="${aprDir}">
       <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />        
       <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+      <prop name="APR_BUILD_TESTAPR" value="ON" />
       
       <prop name="MIN_WINDOWS_VER" value="0x0501" /><!-- Windows XP -->
       
