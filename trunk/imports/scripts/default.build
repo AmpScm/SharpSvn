@@ -97,6 +97,7 @@
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
   <include buildfile="libgit2.build" />
+  <include buildfile="libssh2.build" />
   
   
   <include buildfile="dev.build" />

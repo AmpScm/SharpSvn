@@ -58,13 +58,24 @@
     <get src="http://heanet.dl.sourceforge.net/sourceforge/scons/${sconsVersion}/scons-${sconsVersion}.zip"
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
+      
+    <get
+      src="http://www.libssh2.org/download/${libssh2Filename}"
+      dest="${downloads + libssh2Filename}"
+      unless="${file::exists(downloads + libssh2Filename)}"
+      if="${buildLibssh2}" />
+      
+    <get
+       src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
+       dest="${downloads + 'svn-book.pdf'}"
+       unless="${file::exists(downloads + 'svn-book.pdf')}"
+       if="${getSvnBook}" />
 
-    <if test="${property::exists('withSwig')}">
-      <get
-        src="http://prdownloads.sourceforge.net/swig/${swigFilename}"
-        dest="${downloads + swigFilename}"
-        unless="${file::exists(downloads + swigFilename)}" />
-    </if>
+    <get
+      src="http://prdownloads.sourceforge.net/swig/${swigFilename}"
+      dest="${downloads + swigFilename}"
+      unless="${file::exists(downloads + swigFilename)}"
+      if="${property::exists('withSwig')}" />
 
     <if test="${intl == 'gettext'}">
       <get
@@ -86,13 +97,6 @@
         src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}"
         dest="${downloads + gettextToolsIconvFilename}"
         unless="${file::exists(downloads + gettextToolsIconvFilename)}" />
-        
-      <get
-         src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
-         dest="${downloads + 'svn-book.pdf'}"
-         unless="${file::exists(downloads + 'svn-book.pdf')}"
-         if="${getSvnBook}" />
-
     </if>
 
     <if test="${javaHome != ''}">
@@ -110,6 +114,12 @@
       src="${downloads + dbFilename}" compression="gzip"
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
+      
+    <untar
+      src="${downloads + libssh2Filename}" compression="gzip"
+      dest="build/${platform}"
+      unless="${directory::exists(libssh2Dir)}"
+      if="${buildLibssh2}" />
 
     <unzip
       zipfile="${downloads + nunitFilename}"

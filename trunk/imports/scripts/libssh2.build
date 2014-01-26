@@ -1,0 +1,36 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="libssh2Dir" value="build/${platform}/libssh2-${libssh2Version}" />
+  <property name="libssh2Filename" value="libssh2-${libssh2Version}.tar.gz" />
+  <property name="buildLibssh2" value="true" overwrite="false" />
+  
+  <target name="libssh2-prepare" depends="extract" if="${buildLibssh2}">
+
+  </target>
+  
+  <target name="libssh2-build" depends="libssh2-prepare" if="${buildLibssh2}">
+    <FilterFile file="${libssh2Dir}\win32\config.mk">
+      <filterchain>
+        <LineRegexReplace re="(?&lt;=^OPENSSLINC=).*" to="${intDir}\include" />
+        <LineRegexReplace re="(?&lt;=^OPENSSLLIB=).*" to="${intDir}\lib" />
+        <LineRegexReplace re="(?&lt;=^ZLIBLIB=).*" to="${intDir}\lib" />
+        <LineRegexReplace re="(?&lt;=^LIBS=).*" to="" />
+        <LineRegexReplace re="(?&lt;=CFLAGS=)(.*)" to="/GL $1" />
+        <LineRegexReplace re="/I([^\s]*zlib[^\s]*)" to="/I${intDir}\include" />
+        <replacestring from="ws2_32.lib" to="ws2_32.lib Advapi32.lib" />
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${libssh2Dir}\src\NMakefile">
+      <filterchain>
+        <replacestring from="$(DLL)" to="$(SSHLIB)" />
+        <replacestring from="DLL=" to="SSHLIB=" />
+        <replacestring from=".dll" to=".lib" />
+        <replacestring from="$(DLLFLAGS) $(OBJECTS) $(RESOURCE) $(LIBS)" to="$(OBJECTS) $(LIBS)" />
+        <replacestring from="$(CC) -o $(SSHLIB)" to="lib /LTCG /out:$(SSHLIB)" />
+      </filterchain>
+    </FilterFile>
+    <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
+    
+    </NMake>
+  </target>
+</project>
