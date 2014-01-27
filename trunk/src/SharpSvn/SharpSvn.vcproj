@@ -1790,7 +1790,10 @@
 					RelativePath="RemoteArgs\SvnRemoteStatArgs.h"
 					>
 				</File>
-			</Filter>
+				<File
+					RelativePath="RemoteArgs\SvnRemoteWriteArgs.h"
+					>
+				</File>			</Filter>
 			<Filter
 				Name="EventArgs"
 				>
@@ -1872,6 +1875,10 @@
 				</File>
 				<File
 					RelativePath="RemoteCommands\RemoteStat.cpp"
+					>
+				</File>
+				<File
+					RelativePath="RemoteCommands\RemoteWrite.cpp"
 					>
 				</File>
 				<File
