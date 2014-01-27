@@ -10,6 +10,8 @@
 namespace SharpSvn {
     namespace Remote {
 
+    using System::IO::Stream;
+
     ref class SvnRemoteSessionArgs;
     ref class SvnRemoteCommonArgs;
 
@@ -25,6 +27,7 @@ namespace SharpSvn {
     ref class SvnRemoteLocationSegmentsArgs;
     ref class SvnRemotePropertiesArgs;
     ref class SvnRemoteDeletedRevisionArgs;
+    ref class SvnRemoteWriteArgs;
 
     ref class SvnRemoteStatEventArgs;
 
@@ -162,6 +165,21 @@ namespace SharpSvn {
     public:
         bool GetProperties(String^ relPath, [Out] SvnPropertyCollection^% properties);
         bool GetProperties(String^ relPath, SvnRemotePropertiesArgs^ args, [Out] SvnPropertyCollection^% properties);
+
+    public:
+        /// <overloads>Writes the content of specified file to a stream. (<c>svn cat</c>)</overloads>
+        /// <summary>Writes the content of specified file to a stream. (<c>svn cat</c>)</summary>
+        bool Write(String^ relPath, Stream^ output);
+        /// <summary>Writes the content of specified file to a stream. (<c>svn cat</c>)</summary>
+        bool Write(String^ relPath, Stream^ output, SvnRemoteWriteArgs^ args);
+
+        /// <summary>Writes the content of specified file to a stream. (<c>svn cat</c>)</summary>
+        bool Write(String^ relPath, Stream^ output, [Out] SvnPropertyCollection ^%properties);
+        /// <summary>Writes the content of specified file to a stream. (<c>svn cat</c>)</summary>
+        bool Write(String^ relPath, Stream^ output, SvnRemoteWriteArgs^ args, [Out] SvnPropertyCollection ^%properties);
+
+    private:
+        bool InternalWrite(String^ relPath, Stream^ output, SvnRemoteWriteArgs^ args, apr_hash_t **props, AprPool^ resultPool);
 
     public:
         static bool IsConnectionlessRepository(Uri^ uri);
