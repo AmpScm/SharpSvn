@@ -63,7 +63,7 @@
         <arg value="--with-openssl=${impBase}/openssl" />
         <arg value="--with-zlib=${zlibDir}" />
         <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
-        <arg value="--with-serf=${impBase}/serf" />
+        <arg value="--with-serf=${impBase}/serf" if="${wc.branch &gt;= '1.8.'}"/>
         <arg value="--with-sasl=${intDir}" />
         <arg value="--with-sqlite=${intDir}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
