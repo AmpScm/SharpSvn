@@ -26,6 +26,7 @@
         <include name="*.lib" />
       </fileset>
     </copy>
+    <copy tofile="${intDir}/lib/intl.lib" file="${intDir}/lib/intl3_svn.lib" />
     <if test="${platform == 'win32'}">
       <copy todir="${release}/lib">
         <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
