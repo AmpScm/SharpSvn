@@ -198,7 +198,7 @@
         <arg value="--with-swig=${path::get-full-path(swigDir)}" if="${property::exists('withSwig')}" />
         <arg value="--with-sqlite=${path::get-full-path(intDir)}" />
         <arg value="--with-junit=${junitJar}" if="${javaHome != ''}" />
-        <arg value="--enable-nls" if="${intl != 'none'}"/>
+        <arg value="--with-libintl=${intDir}" if="${intl != 'none'}" />
         <arg value="--disable-shared" if="${static or svnStatic}"/>
         <arg value="--with-static-apr" if="${static}" />
       </exec>
