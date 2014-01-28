@@ -27,6 +27,11 @@
 extern "C" {
 #endif
 
+#if 0
+/* For Subversion version detection */
+#define LIBINTL_VERSION 0x090909
+#endif
+
 #pragma warning(push)
 #pragma warning(disable: 4100) // unreferenced formal parameter
 typedef char* sharpsvn_dgettext_t(const char* domain, const char* msgid, int category);
