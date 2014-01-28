@@ -32,5 +32,16 @@
     <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
     
     </NMake>
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${libssh2Dir}">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include/libssh2" flatten="true">
+      <fileset basedir="${libssh2Dir}\include">
+        <include name="*.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
