@@ -86,7 +86,7 @@ void SvnClientArgs::Prepare()
 
 bool SvnClientArgs::IsLastInvocationCanceled::get()
 {
-    return _exception && dynamic_cast<SvnOperationCompletedException^>(_exception);
+    return _exception && _exception->GetCause<SvnOperationCanceledException^>();
 }
 
 void SvnClientArgs::AddExpectedError(SvnErrorCode errorCode)
