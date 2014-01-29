@@ -91,7 +91,7 @@ void SvnBase::EnsureLoaded()
                 // There seems to be a race condition in loading and unloading this DLL
                 LoadLibraryA("Crypt32.dll"); // Never unload this dll
 
-#if SVN_VER_MINOR > 9
+#if SVN_VER_MINOR >= 9
                 int r = libssh2_init(0);
                 if (r)
                     throw gcnew InvalidOperationException("Can't initialize libssh2");

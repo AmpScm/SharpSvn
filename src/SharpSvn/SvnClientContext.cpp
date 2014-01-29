@@ -16,7 +16,9 @@
 
 #include "SvnNames.h"
 #include "UnmanagedStructs.h"
+#if SVN_VER_MINOR >= 9
 #include "SvnSshContext.h"
+#endif
 #include <svn_config.h>
 
 using namespace SharpSvn;
@@ -1073,19 +1075,24 @@ sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
     if (!client->_sshContext)
         client->_sshContext = gcnew SvnSshContext(client);
 
-    svn_error_t *r;
-
-    r = client->_sshContext->OpenTunnel(channel,
+    try
+    {
+        client->_sshContext->OpenTunnel(channel,
                                         *close_func, *close_baton,
                                         SvnBase::Utf8_PtrToString(user),
                                         SvnBase::Utf8_PtrToString(hostname),
                                         port,
                                         %result_pool);
 
-    *request = channel;
-    *response = channel;
+        *request = channel;
+        *response = channel;
 
-    return r;
+        return SVN_NO_ERROR;
+    }
+    catch (Exception ^e)
+    {
+        return SvnException::CreateExceptionSvnError("Tunnel Creation", e);
+    }
 }
 
 

@@ -111,8 +111,13 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
         }
     }
 
+    apr_status_t status = SVN_ERR_CANCELLED;
+    SvnException^ se = dynamic_cast<SvnException^>(exception);
+    if (se)
+        status = se->SubversionErrorCode;
+
     // Use svn_error_createf to make sure the value is copied
-    return svn_error_createf(SVN_ERR_CANCELLED, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
+    return svn_error_createf(status, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
 }
 
 
