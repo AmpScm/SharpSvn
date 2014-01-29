@@ -47,7 +47,9 @@
 /* Avoid problems when first including libssh2. and then db.h */
 typedef apr_ssize_t ssize_t;
 #define ssize_t ssize_t
+#define abstract abstr
 #include <libssh2/libssh2.h>
+#undef abstract
 
 #include <serf-1/serf.h>
 

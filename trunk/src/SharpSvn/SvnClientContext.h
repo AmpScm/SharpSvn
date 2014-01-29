@@ -394,6 +394,11 @@ namespace Security {
             svn_client_ctx_t *get();
         }
 
+        property AprPool^ ContextPool
+        {
+            AprPool^ get() { return _pool; }
+        }
+
         void SetConfigurationOption(String^ file, String^ section, String^ option, String^ value);
 
     private:

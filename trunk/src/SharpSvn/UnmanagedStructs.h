@@ -29,6 +29,9 @@ struct apr_pool_t
 struct apr_hash_index_t
 {};
 
+struct apr_socket_t
+{};
+
 struct svn_auth_batton_t
 {};
 
@@ -69,4 +72,16 @@ struct svn_wc_context_t
 {};
 
 struct svn_client_mtcc_t
+{};
+
+struct _LIBSSH2_SESSION
+{};
+
+struct _LIBSSH2_KNOWNHOSTS
+{};
+
+struct _LIBSSH2_CHANNEL
+{};
+
+struct _LIBSSH2_AGENT
 {};
