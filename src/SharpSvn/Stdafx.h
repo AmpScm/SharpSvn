@@ -44,6 +44,11 @@
 #include <svn_client_mtcc.h>
 #endif
 
+/* Avoid problems when first including libssh2. and then db.h */
+typedef apr_ssize_t ssize_t;
+#define ssize_t ssize_t
+#include <libssh2/libssh2.h>
+
 #include <serf-1/serf.h>
 
 #ifndef UNUSED_ALWAYS

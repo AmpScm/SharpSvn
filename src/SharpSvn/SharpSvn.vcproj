@@ -691,6 +691,10 @@
 					>
 				</File>
 				<File
+					RelativePath="SvnSshContext.h"
+					>
+				</File>
+				<File
 					RelativePath="UnmanagedStructs.h"
 					>
 				</File>
@@ -728,6 +732,10 @@
 				</File>
 				<File
 					RelativePath="SvnNames.cpp"
+					>
+				</File>
+				<File
+					RelativePath="SvnSshContext.cpp"
 					>
 				</File>
 			</Filter>

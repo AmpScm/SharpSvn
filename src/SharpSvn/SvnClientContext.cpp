@@ -16,6 +16,7 @@
 
 #include "SvnNames.h"
 #include "UnmanagedStructs.h"
+#include "SvnSshContext.h"
 #include <svn_config.h>
 
 using namespace SharpSvn;
@@ -29,8 +30,9 @@ static void sharpsvn_progress_func(apr_off_t progress, apr_off_t total, void *ba
 static svn_error_t * sharpsvn_commit_log_func(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
 #if SVN_VER_MINOR >= 9
 static svn_boolean_t sharpsvn_check_tunnel_func(void *baton, const char *name);
-static svn_error_t * sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response, void **tunnel_context, void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool);
-static svn_error_t * sharpsvn_close_tunnel_func(void *tunnel_context, void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port);
+static svn_error_t * sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
+                                               svn_ra_close_tunnel_func_t *close_func, void **close_baton,
+                                               void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool);
 #endif
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
@@ -56,7 +58,6 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
 #if SVN_VER_MINOR >= 9
     ctx->check_tunnel_func = sharpsvn_check_tunnel_func;
     ctx->open_tunnel_func = sharpsvn_open_tunnel_func;
-    ctx->close_tunnel_func = sharpsvn_close_tunnel_func;
     ctx->tunnel_baton = _ctxBaton->Handle;
 #endif
 
@@ -1058,19 +1059,34 @@ sharpsvn_check_tunnel_func(void *baton, const char *name)
 }
 
 static svn_error_t *
-sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response, void **tunnel_context, void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool)
+sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
+                          svn_ra_close_tunnel_func_t *close_func, void **close_baton,
+                          void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool)
 {
+    AprPool result_pool(pool, false);
     SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)tunnel_baton);
+    svn_stream_t *channel;
 
-    return svn_error_create(SVN_ERR_RA_NOT_IMPLEMENTED, NULL, NULL);
+    /* Currently we only support libssh2 tunnels, so we ignore tunnel_name */
+    UNUSED_ALWAYS(tunnel_name);
+
+    if (!client->_sshContext)
+        client->_sshContext = gcnew SvnSshContext(client);
+
+    svn_error_t *r;
+
+    r = client->_sshContext->OpenTunnel(channel,
+                                        *close_func, *close_baton,
+                                        SvnBase::Utf8_PtrToString(user),
+                                        SvnBase::Utf8_PtrToString(hostname),
+                                        port,
+                                        %result_pool);
+
+    *request = channel;
+    *response = channel;
+
+    return r;
 }
 
-static svn_error_t *
-sharpsvn_close_tunnel_func(void *tunnel_context, void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port)
-{
-    SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)tunnel_baton);
-
-    return svn_error_create(SVN_ERR_RA_NOT_IMPLEMENTED, NULL, NULL);
-}
 
 #endif

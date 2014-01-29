@@ -56,7 +56,7 @@ void SvnBase::EnsureLoaded()
                 if (apr_initialize()) // First
                     throw gcnew InvalidOperationException();
 
-                svn_dso_initialize2(); // Before first pool
+                SVN_THROW(svn_dso_initialize2()); // Before first pool
 
                 apr_pool_t* pool = svn_pool_create(nullptr);
 
@@ -81,7 +81,7 @@ void SvnBase::EnsureLoaded()
                     svn_wc_set_adm_dir("_svn", pool);
                 }
 
-                svn_ra_initialize(pool);
+                SVN_THROW(svn_ra_initialize(pool));
 
                 _admDir = svn_wc_get_adm_dir(pool);
 
@@ -90,6 +90,12 @@ void SvnBase::EnsureLoaded()
 
                 // There seems to be a race condition in loading and unloading this DLL
                 LoadLibraryA("Crypt32.dll"); // Never unload this dll
+
+#if SVN_VER_MINOR > 9
+                int r = libssh2_init(0);
+                if (r)
+                    throw gcnew InvalidOperationException("Can't initialize libssh2");
+#endif
 
                 LONG v = ::InterlockedExchange(&ensurer, 2);
 
