@@ -284,6 +284,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="SharpSvnStrings.h" />
     <ClInclude Include="EventArgs\SvnEventArgs.h" />
     <ClInclude Include="SvnMultiCommandClient.h" />
+    <ClInclude Include="SvnSshContext.h" />
     <ClInclude Include="SvnStreamWrapper.h" />
     <ClInclude Include="AprArray.h" />
     <ClInclude Include="AprBaton.h" />
@@ -557,6 +558,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="SvnFsOperationRetryOverride.cpp" />
     <ClCompile Include="SvnLocalization.cpp" />
     <ClCompile Include="SvnMultiCommandClient.cpp" />
+    <ClCompile Include="SvnSshContext.cpp" />
     <ClCompile Include="SvnStatusCacheBlocker.cpp" />
     <ClCompile Include="SvnStreamWrapper.cpp" />
     <ClCompile Include="SvnAuthentication.Cache.cpp" />

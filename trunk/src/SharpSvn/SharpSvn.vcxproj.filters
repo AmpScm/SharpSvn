@@ -653,6 +653,9 @@
     <ClInclude Include="RemoteArgs\SvnRemoteWriteArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
+    <ClInclude Include="SvnSshContext.h">
+      <Filter>Svn\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1110,6 +1113,9 @@
     </ClCompile>
     <ClCompile Include="RemoteCommands\RemoteWrite.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="SvnSshContext.cpp">
+      <Filter>Svn\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -266,6 +266,8 @@ namespace Security {
         internal:
             bool Run(SvnClientContext^ ctx, SvnClientArgs^ args, ...array<String^>^ commandArgs);
         };
+
+        ref class SvnSshContext;
     }
 
     /// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
@@ -287,6 +289,7 @@ namespace Security {
 
     internal:
         bool _noLogMessageRequired;
+        SvnSshContext ^_sshContext;
 
     private:
         // For SvnClient and SvnReposClient
