@@ -316,7 +316,6 @@ namespace SharpSvn {
     };
 
     DECLARE_SVN_EXCEPTION_TYPE(SvnOperationCanceledException, SvnException);
-    DECLARE_SVN_EXCEPTION_TYPE(SvnOperationCompletedException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnBreakIterationException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnknownChangeListException, SvnException);
 
