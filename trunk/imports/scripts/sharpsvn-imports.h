@@ -73,7 +73,7 @@
 #endif
 
 #if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 9)
-#pragma comment(lib, "libsvn_fs_x-.lib")
+#pragma comment(lib, "libsvn_fs_x-1.lib")
 #endif
 
 #if (APR_MAJOR_VERSION == 0)
