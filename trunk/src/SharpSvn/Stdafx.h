@@ -37,8 +37,12 @@
 #include <svn_repos.h>
 #include <svn_sorts.h>
 #include <svn_time.h>
-#include "svn_utf.h"
+#include <svn_utf.h>
+#include <svn_version.h>
 
+#if SVN_VER_MINOR >= 9
+#include <svn_client_mtcc.h>
+#endif
 
 #include <serf-1/serf.h>
 

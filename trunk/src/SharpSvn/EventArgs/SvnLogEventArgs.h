@@ -254,38 +254,7 @@ namespace SharpSvn {
 
         property SvnChangeItemCollection^ ChangedPaths
         {
-            SvnChangeItemCollection^  get()
-            {
-                if (!_changedPaths && _entry && _entry->changed_paths2 && _pool)
-                {
-                    apr_array_header_t *sorted_paths;
-                    _changedPaths = gcnew SvnChangeItemCollection();
-
-                    /* Get an array of sorted hash keys. */
-                    sorted_paths = svn_sort__hash(_entry->changed_paths2,
-                        svn_sort_compare_items_as_paths, _pool->Handle);
-
-                    for (int i = 0; i < sorted_paths->nelts; i++)
-                    {
-                        const svn_sort__item_t *item = &(APR_ARRAY_IDX(sorted_paths, i,
-                            svn_sort__item_t));
-                        const char *path = (const char *)item->key;
-                        const svn_log_changed_path2_t *pChangeInfo = (const svn_log_changed_path2_t *)item->value;
-
-                        SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(path), pChangeInfo);
-
-                        _changedPaths->Add(ci);
-                    }
-
-                    if (_changedPaths->Count)
-                    {
-                        _changeItemsToDetach = gcnew array<SvnChangeItem^>(_changedPaths->Count);
-                        _changedPaths->CopyTo(_changeItemsToDetach, 0);
-                    }
-                }
-
-                return _changedPaths;
-            }
+            SvnChangeItemCollection^ get();
         }
 
         /// <summary>Gets the list of custom properties retrieved with the log</summary>

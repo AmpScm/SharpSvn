@@ -16,6 +16,10 @@
 
 #include "Args/Log.h"
 
+#if SVN_VER_MINOR >= 9
+#include <private/svn_sorts_private.h>
+#endif
+
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
@@ -31,6 +35,41 @@ using namespace System::Collections::Generic;
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#Log(System.String,SharpSvn.SvnLogArgs,System.EventHandler`1<SharpSvn.SvnLogEventArgs>)")];
 [module: SuppressMessage("Microsoft.Design", "CA1057:StringUriOverloadsCallSystemUriOverloads", Scope="member", Target="SharpSvn.SvnClient.#GetLog(System.String,SharpSvn.SvnLogArgs,System.Collections.ObjectModel.Collection`1<SharpSvn.SvnLogEventArgs>&)")];
 [module: SuppressMessage("Microsoft.Usage", "CA2234:PassSystemUriObjectsInsteadOfStrings", Scope="member", Target="SharpSvn.SvnClient.#Log(System.Collections.Generic.ICollection`1<System.Uri>,SharpSvn.SvnLogArgs,System.EventHandler`1<SharpSvn.SvnLogEventArgs>)")];
+
+SvnChangeItemCollection^ SvnLoggingEventArgs::ChangedPaths::get()
+{
+    if (!_changedPaths && _entry && _entry->changed_paths2 && _pool)
+    {
+        apr_array_header_t *sorted_paths;
+        _changedPaths = gcnew SvnChangeItemCollection();
+
+        /* Get an array of sorted hash keys. */
+        sorted_paths = svn_sort__hash(_entry->changed_paths2,
+            svn_sort_compare_items_as_paths, _pool->Handle);
+
+        for (int i = 0; i < sorted_paths->nelts; i++)
+        {
+            const svn_sort__item_t *item = &(APR_ARRAY_IDX(sorted_paths, i,
+                svn_sort__item_t));
+            const char *path = (const char *)item->key;
+            const svn_log_changed_path2_t *pChangeInfo = (const svn_log_changed_path2_t *)item->value;
+
+            SvnChangeItem^ ci = gcnew SvnChangeItem(SvnBase::Utf8_PtrToString(path), pChangeInfo);
+
+            _changedPaths->Add(ci);
+        }
+
+        if (_changedPaths->Count)
+        {
+            _changeItemsToDetach = gcnew array<SvnChangeItem^>(_changedPaths->Count);
+            _changedPaths->CopyTo(_changeItemsToDetach, 0);
+        }
+    }
+
+    return _changedPaths;
+}
+
+
 
 static String^ UriToStringCanonical(Uri^ value)
 {
