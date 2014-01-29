@@ -13,6 +13,9 @@
 //  limitations under the License.
 
 #include "stdafx.h"
+#define SECURITY_WIN32
+#include <Security.h>
+#include <WinCred.h>
 
 #include "SvnAuthentication.h"
 
@@ -555,11 +558,11 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
         Console::WriteLine(" - The certificate has an unknown error.");
     }
 
-    Console::WriteLine("Certificcate information:\n"
+    Console::WriteLine("Certificate information:\n"
         " - Hostname: {0}\n"
         " - Valid: from {1} until {2}\n"
         " - Issuer: {3}\n"
-        " - Fingerprint: {4}",
+        " - Fingerprint: {4}\n",
         e->CommonName,
         e->ValidFrom,
         e->ValidUntil,
@@ -703,4 +706,58 @@ Uri^ SvnAuthenticationEventArgs::RealmUri::get()
     }
 
     return _realmUri;
+}
+
+
+bool SvnAuthentication::TryGetDefaultSshUser(String ^hostname, int port, [Out] String ^%userName, bool %fromCredStore)
+{
+    String^ realm;
+
+    userName = nullptr;
+    fromCredStore = false;
+
+    if (port)
+        realm = String::Format("ssh://{0}:{1}", hostname, port);
+    else
+        realm = String::Format("ssh://{0}", hostname);
+
+    CREDENTIALW *pCred;
+
+    pin_ptr<const wchar_t> pRealm = PtrToStringChars(realm);
+    if (CredReadW(pRealm, CRED_TYPE_GENERIC, 0, &pCred))
+    {
+        if (pCred->UserName)
+            userName = gcnew String(pCred->UserName);
+
+        CredFree(pCred);
+
+        if (userName)
+        {
+            fromCredStore = true;
+            return true;
+        }
+    }
+
+    ULONG namelen;
+    if (GetUserNameEx(NameUserPrincipal, NULL, &namelen))
+    {
+        namelen++;
+        wchar_t *txt = (wchar_t *)alloca(sizeof(txt[0]) * (namelen));
+
+        if (GetUserNameEx(NameUserPrincipal, txt, &namelen))
+        {
+            txt[namelen] = 0;
+
+            wchar_t *at = wcschr(txt, '@');
+
+            if (at)
+                *at = 0;
+
+            userName = gcnew String(txt);
+            return true;
+        }
+    }
+
+    userName = "user";
+    return false;
 }
