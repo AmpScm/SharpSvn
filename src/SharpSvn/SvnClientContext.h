@@ -46,7 +46,9 @@ namespace Security {
             Initial,
             ConfigPrepared,
             ConfigLoaded,
+#if SVN_MINOR_VER < 9
             CustomRemoteConfigApplied,
+#endif
             AuthorizationInitialized,
         };
 
@@ -278,6 +280,7 @@ namespace Security {
         SvnExtendedState _xState;
         initonly SvnAuthentication^ _authentication;
         SvnClientContext ^_parent;
+        bool _customSshApplied;
 
         static initonly Object^ _plinkLock = gcnew Object();
         static String^ _plinkPath;
@@ -391,12 +394,12 @@ namespace Security {
         void SetConfigurationOption(String^ file, String^ section, String^ option, String^ value);
 
     private:
-        void ApplyCustomRemoteConfig();
-        void ApplyCustomSsh();
         void ApplyMimeTypes();
         void ApplyUserDiffConfig();
         void ApplyOverrideFlags();
         void LoadTortoiseSvnHooks();
+    internal:
+        void ApplyCustomRemoteConfig();
 
     internal:
         bool FindHook(String^ path, SvnClientHookType hookType, [Out] SvnClientHook^% hook);
