@@ -583,8 +583,7 @@ static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive)
 
     conn->PerformKeyboardInteractive(SvnBase::Utf8_PtrToString(name, name_len),
                                      SvnBase::Utf8_PtrToString(instruction, instruction_len),
-                                     num_prompts, prompts,
-                                     num_prompts, responses);
+                                     num_prompts, prompts, responses);
 }
 
 struct SharpSvn::Implementation::ssh_keybint_t
@@ -597,12 +596,30 @@ struct SharpSvn::Implementation::ssh_keybint_t
 
 void SshConnection::PerformKeyboardInteractive(String ^name, String ^instructions,
                                                int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
-                                               int num_responses, LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses)
+                                               LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses)
 {
     struct ssh_keybint_t &kbi = *_kbi;
 
     if (kbi.pCred)
     {
+        if (num_prompts == 1) // We guess that this is a password prompt...
+        {
+            kbi.pCred = kbi.pCred;
+
+            int needed = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
+                                              kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
+                                              NULL, 0, NULL, NULL);
+
+            responses[0].length = needed;
+            responses[0].text = (char*)malloc(needed);
+
+            int written = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
+                                              kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
+                                              responses[0].text, responses[0].length, NULL, NULL);
+
+            if (needed != written)
+              memset(&responses[0], sizeof(responses[0]), 0);
+        }
     }
     else
     {
