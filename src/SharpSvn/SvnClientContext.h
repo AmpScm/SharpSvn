@@ -380,7 +380,6 @@ namespace Security {
                 throw gcnew NotImplementedException();
             }
         }
-            ;// = System::ComponentModel::IComponent::Disposed;
 
     private:
         ~SvnClientContext();

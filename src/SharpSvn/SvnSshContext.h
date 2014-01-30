@@ -4,28 +4,32 @@
 #include "AprPool.h"
 
 namespace SharpSvn {
+    namespace Security {
+        ref class SvnAuthentication;
+    }
     namespace Implementation {
 
         using System::Collections::Generic::Dictionary;
-
+        using SharpSvn::Security::SvnAuthentication;
 
         private ref class SshHost sealed : IEquatable<SshHost^>
         {
             initonly String ^_user;
             initonly String ^_host;
             initonly int _port;
+            String ^_realmString;
 
         public:
             SshHost(String ^user, String ^host, int port)
             {
-                if (String::IsNullOrEmpty(user))
+                if (! user)
                     throw gcnew ArgumentNullException("user");
                 else if (String::IsNullOrEmpty(host))
                     throw gcnew ArgumentNullException("host");
 
                 _user = user;
                 _host = host;
-                _port = port;
+                _port = port ? port : 22;
             }
 
             virtual bool Equals(Object^ other) override
@@ -44,7 +48,7 @@ namespace SharpSvn {
                     return false;
 
                 return other->Host->Equals(Host)
-                    && other->User->Equals(User)
+                    && (other->User == User)
                     && other->Port.Equals(Port);
             }
 
@@ -63,6 +67,30 @@ namespace SharpSvn {
                 int get() { return _port; }
             }
 
+            property String^ RealmString
+            {
+                String^ get()
+                {
+                    if (!_realmString)
+                    {
+                        if ((Port != 22) && !String::IsNullOrEmpty(User))
+                            _realmString = String::Format("ssh://{0}@{1}:{2}", User, Host, Port);
+                        else if (!String::IsNullOrEmpty(User))
+                            _realmString = String::Format("ssh://{0}@{1}", User, Host);
+                        else if (Port != 22)
+                            _realmString = String::Format("ssh://{0}:{1}", Host, Port);
+                        else
+                            _realmString = String::Format("ssh://{0}", Host);
+                    }
+                    return _realmString;
+                }
+            }
+
+            virtual String ^ToString() override
+            {
+                return RealmString;
+            }
+
             virtual int GetHashCode() override
             {
                 return Host->GetHashCode()
@@ -70,6 +98,8 @@ namespace SharpSvn {
                     ^ 13 * Port;
             }
         };
+
+        struct ssh_keybint_t;
 
         private ref class SshConnection sealed : public SvnBase
         {
@@ -80,7 +110,7 @@ namespace SharpSvn {
             apr_socket_t *_apr_socket;
             SOCKET _socket;
             LIBSSH2_SESSION *_session;
-            LIBSSH2_KNOWNHOSTS *_knownHosts;
+            ssh_keybint_t *_kbi;
 
         public:
             SshConnection(SvnSshContext ^ctx, SshHost ^host, AprPool ^pool);
@@ -89,17 +119,22 @@ namespace SharpSvn {
 
         public:
             void OpenTunnel(svn_stream_t *&channel,
-                            svn_ra_close_tunnel_func_t &close_func,
-                            void *&close_baton,
-                            AprPool^ pool);
+                            AprPool^ resultPool,
+                            AprPool^ scratchPool);
 
         public:
             void OpenConnection(AprPool^ scratchPool);
 
         private:
-            bool DoPublicKeyAuth(AprPool^ scratchPool);
-            bool DoKeyboardInteractiveAuth(AprPool^ scratchPool);
-            bool DoPasswordAuth(AprPool^ scratchPool);
+            void VerifySshHost(AprPool ^scratchPool);
+            bool DoPublicKeyAuth(AprPool ^scratchPool);
+            bool DoKeyboardInteractiveAuth(AprPool ^scratchPool);
+            bool DoPasswordAuth(AprPool ^scratchPool);
+
+        internal:
+            void PerformKeyboardInteractive(String ^name, String ^instructions,
+                                            int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
+                                            int num_responses, LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses);
         };
 
         private ref class SvnSshContext sealed : public SvnBase
@@ -119,16 +154,24 @@ namespace SharpSvn {
                 _connections = gcnew Dictionary<SshHost^, SshConnection^>();
             }
 
-
         public:
             void OpenTunnel(svn_stream_t *&channel,
-                            svn_ra_close_tunnel_func_t &close_func,
-                            void *&close_baton,
                             String^ user,
                             String^ hostname,
                             int port,
-                            AprPool^ pool);
-        };
+                            AprPool^ resultPool,
+                            AprPool^ scratchPool);
 
+        public:
+            property String^ ConfigPath
+            {
+                String^ get() { return _ctx->_configPath; }
+            }
+
+            property SvnAuthentication^ Authentication
+            {
+                SvnAuthentication^ get() { return _ctx->Authentication; }
+            }
+        };
     }
 }

@@ -1068,6 +1068,7 @@ sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
     AprPool result_pool(pool, false);
     SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)tunnel_baton);
     svn_stream_t *channel;
+    AprPool scratchPool(%result_pool);
 
     /* Currently we only support libssh2 tunnels, so we ignore tunnel_name */
     UNUSED_ALWAYS(tunnel_name);
@@ -1077,13 +1078,17 @@ sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
 
     try
     {
-        client->_sshContext->OpenTunnel(channel,
-                                        *close_func, *close_baton,
-                                        SvnBase::Utf8_PtrToString(user),
-                                        SvnBase::Utf8_PtrToString(hostname),
-                                        port,
-                                        %result_pool);
+        String^ hostName = SvnBase::Utf8_PtrToString(hostname);
+        String^ userName = SvnBase::Utf8_PtrToString(user);
 
+        client->_sshContext->OpenTunnel(channel,
+                                        userName,
+                                        hostName, port,
+                                        %result_pool,
+                                        %scratchPool);
+
+        *close_func = NULL;
+        *close_baton = NULL;
         *request = channel;
         *response = channel;
 
