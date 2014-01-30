@@ -134,7 +134,7 @@ namespace SharpSvn {
         internal:
             void PerformKeyboardInteractive(String ^name, String ^instructions,
                                             int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
-                                            int num_responses, LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses);
+                                            LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses);
         };
 
         private ref class SvnSshContext sealed : public SvnBase
