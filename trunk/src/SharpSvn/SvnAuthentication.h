@@ -97,7 +97,7 @@ namespace SharpSvn {
             Uri^ _realmUri;
 
         internal:
-            static initonly Regex^ _reRealmUri = gcnew Regex("^\\<(?<server>[a-z]+://[^ >]+)\\> (?<realm>.*)$", RegexOptions::ExplicitCapture | RegexOptions::Singleline);
+            static initonly Regex^ _reRealmUri = gcnew Regex("^\\<(?<server>[-+a-z]+://[^ >]+)\\>( (?<realm>.*))?$", RegexOptions::ExplicitCapture | RegexOptions::Singleline);
 
         protected:
             SvnAuthenticationEventArgs(String^ realm, bool maySave)
@@ -209,6 +209,20 @@ namespace SharpSvn {
                 svn_auth_provider_object_t **ppProvider = (svn_auth_provider_object_t **)ptr;
 
                 *ppProvider = value->GetProviderPtr(pool);
+
+                if (!*ppProvider)
+                {
+                    static const svn_auth_provider_t stub_provider =
+                    {
+                      "SharpSvn-FakeType",
+                      nullptr, nullptr, nullptr
+                    };
+                    svn_auth_provider_object_t *pProvider = (svn_auth_provider_object_t *)apr_pcalloc(pool->Handle, sizeof(*pProvider));
+
+                    pProvider->vtable = &stub_provider;
+
+                    *ppProvider = pProvider;
+                }
             }
 
             virtual ISvnAuthWrapper^ Read(const void* ptr, AprPool^ pool)
@@ -723,6 +737,97 @@ namespace SharpSvn {
             };
         };
 
+#if SVN_VER_MINOR >= 9
+        [Flags]
+        public enum class SvnSshTrustFailures
+        {
+            None                    =   0,
+            UnknownServerKey        =   1,
+            ServerKeyMismatch       =   2,
+
+            MaskAllFailures         = UnknownServerKey | ServerKeyMismatch
+        };
+
+        public enum class SvnSshServerKeyType
+        {
+            None,
+            Rsa,
+            Dss
+        };
+
+        public ref class SvnSshServerTrustEventArgs : public SvnAuthenticationEventArgs
+        {
+            initonly String ^_fingerprint;
+            initonly SvnSshTrustFailures _failures;
+            initonly int _keyBits;
+            initonly SvnSshServerKeyType _keyType;
+            SvnSshTrustFailures _acceptedFailures;
+        public:
+            SvnSshServerTrustEventArgs(SvnSshServerKeyType keyType, int keyBits, String ^fingerprint, SvnSshTrustFailures failures, String ^realm, bool maySave)
+                : SvnAuthenticationEventArgs(realm, maySave)
+            {
+                if (String::IsNullOrEmpty(fingerprint))
+                    throw gcnew ArgumentNullException("fingerprint");
+
+                _keyType = keyType;
+                _keyBits = keyBits;
+                _fingerprint = fingerprint;
+                _failures = failures;
+            }
+
+        public:
+            property int KeyBits
+            {
+                int get() { return _keyBits; }
+            }
+            property SvnSshServerKeyType KeyType
+            {
+                SvnSshServerKeyType get() { return _keyType; }
+            }
+
+            property String^ Fingerprint
+            {
+                String^ get() { return _fingerprint; }
+            }
+
+            property SvnSshTrustFailures Failures
+            {
+                SvnSshTrustFailures get()
+                {
+                    return _failures;
+                }
+            }
+
+            property SvnSshTrustFailures AcceptedFailures
+            {
+                SvnSshTrustFailures get()
+                {
+                    return _acceptedFailures;
+                }
+
+                void set(SvnSshTrustFailures value)
+                {
+                    _acceptedFailures = (SvnSshTrustFailures)(value & SvnSshTrustFailures::MaskAllFailures);
+                }
+            }
+
+        internal:
+            ref class Wrapper sealed : public SvnAuthWrapper<SvnSshServerTrustEventArgs^>
+            {
+            public:
+                Wrapper(EventHandler<SvnSshServerTrustEventArgs^>^ handler, SvnAuthentication^ authentication)
+                    : SvnAuthWrapper<SvnSshServerTrustEventArgs^>(handler, authentication)
+                {
+                }
+
+                virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override
+                {
+                    return nullptr;
+                }
+            };
+        };
+#endif
+
         public ref class SvnBeforeEngineDialogEventArgs : public SvnEventArgs
         {
             IntPtr _handle;
@@ -1072,6 +1177,45 @@ namespace SharpSvn {
                 }
             }
 
+#if SVN_VER_MINOR >= 9
+            event EventHandler<SvnSshServerTrustEventArgs^>^ SshServerTrustHandlers
+            {
+                void add(EventHandler<SvnSshServerTrustEventArgs^>^ e)
+                {
+                    if (_readOnly)
+                        throw gcnew InvalidOperationException();
+                    else if (!e)
+                        return;
+
+                    ISvnAuthWrapper^ handler = gcnew SvnSshServerTrustEventArgs::Wrapper(e, this);
+
+                    if (!_wrappers->ContainsKey(e))
+                    {
+                        //_cookie++;
+                        _wrappers->Add(e, handler);
+                        _handlers->Add(handler);
+                    }
+                }
+
+                void remove(EventHandler<SvnSshServerTrustEventArgs^>^ e)
+                {
+                    if (_readOnly)
+                        throw gcnew InvalidOperationException();
+                    else if (!e)
+                        return;
+
+                    ISvnAuthWrapper^ wrapper;
+
+                    if (_wrappers->TryGetValue(e, wrapper))
+                    {
+                        //_cookie++;
+                        _wrappers->Remove(e);
+                        _handlers->Remove(wrapper);
+                    }
+                }
+            }
+#endif
+
             DECLARE_EVENT(SvnBeforeEngineDialogEventArgs^, BeforeEngineDialog)
 
         protected:
@@ -1085,6 +1229,9 @@ namespace SharpSvn {
             {
                 OnBeforeEngineDialog(e);
             }
+
+            generic<typename T> where T : SvnAuthenticationEventArgs
+            bool Run(T args, Predicate<T>^ doneFilter);
 
         public:
             /// <summary>Removes all currently registered providers and caching data</summary>

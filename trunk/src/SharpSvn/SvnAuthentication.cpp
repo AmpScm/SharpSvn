@@ -625,64 +625,55 @@ void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 void SvnAuthentication::ImpSubversionFileUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionWindowsFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslAuthorityTrustHandler(Object ^sender, SvnSslAuthorityTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    UNUSED_ALWAYS(e);
-    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
+    e->Break = true;
 }
 
 Uri^ SvnAuthenticationEventArgs::RealmUri::get()
@@ -759,5 +750,35 @@ bool SvnAuthentication::TryGetDefaultSshUser(String ^hostname, int port, [Out] S
     }
 
     userName = "user";
+    return false;
+}
+
+generic<typename T> where T : SvnAuthenticationEventArgs
+bool SvnAuthentication::Run(T args, Predicate<T> ^doneFilter)
+{
+    for each (ISvnAuthWrapper^ w in _handlers)
+    {
+        SvnAuthWrapper<T>^ ww = dynamic_cast<SvnAuthWrapper<T>^>(w);
+
+        if (!ww)
+            continue;
+
+        int repeat = ww->RetryLimit;
+        while (!args->Break && repeat-- > 0)
+        {
+            ww->Raise(args);
+
+            if (args->Cancel)
+                return false;
+
+            if (!args->Break && doneFilter(args))
+                return true;
+
+            args->Save = false;
+        }
+
+        args->Break = false;
+    }
+
     return false;
 }
