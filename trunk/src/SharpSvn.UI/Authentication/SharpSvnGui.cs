@@ -50,17 +50,21 @@ namespace SharpSvn.UI.Authentication
         /// </summary>
         /// <param name="realm">The realm.</param>
         /// <param name="format">The format.</param>
+        /// <param name="formatNoRealm">The format when no separate realm string was found</param>
         /// <returns></returns>
-        internal static string MakeDescription(string realm, string format)
+        internal static string MakeDescription(string realm, string format, string formatNoRealm)
         {
             if (null == _realmRegex)
-                _realmRegex = new Regex("^\\<(?<server>[a-z]+://[^ >]+)\\> (?<realm>.*)$", RegexOptions.ExplicitCapture | RegexOptions.Singleline);
+                _realmRegex = new Regex("^\\<(?<server>[a-z]+://[^ >]+)\\>( (?<realm>.*))?$", RegexOptions.ExplicitCapture | RegexOptions.Singleline);
 
             Match m = _realmRegex.Match(realm);
             Uri uri;
             if (m.Success && Uri.TryCreate(m.Groups[1].Value, UriKind.Absolute, out uri))
             {
-                return string.Format(format, uri, m.Groups[2].Value);
+                if (string.IsNullOrEmpty(m.Groups[2].Value))
+                    return string.Format(formatNoRealm, uri);
+                else
+                    return string.Format(format, uri, m.Groups[2].Value);
             }
             else
                 return string.Format(format, "", realm);

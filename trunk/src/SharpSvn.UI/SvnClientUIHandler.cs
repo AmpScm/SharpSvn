@@ -125,7 +125,7 @@ namespace SharpSvn.UI
             using (UsernameDialog dlg = new UsernameDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
-                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsername);
+                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsername, Strings.TheServerXRequiresAUsername);
                 dlg.descriptionBox.Visible = true;
                 dlg.rememberCheck.Enabled = e.MaySave;
 
@@ -151,7 +151,7 @@ namespace SharpSvn.UI
             if (Reinvoke(sender, e, DialogUserNamePasswordHandler))
                 return;
 
-            string description = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsernameAndPassword);
+            string description = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsernameAndPassword, Strings.TheServerXRequiresAUsernameAndPassword);
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version >= new Version(5, 1))
             {
                 // If Windows XP/Windows 2003 or higher: Use the windows password dialog
@@ -275,7 +275,7 @@ namespace SharpSvn.UI
             using (SslClientCertificateFileDialog dlg = new SslClientCertificateFileDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
-                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.ACertificateFileIsRequiredForAccessingServerXatY);
+                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.ACertificateFileIsRequiredForAccessingServerXatY, Strings.ACertificateFileIsRequiredForAccessingServerX);
                 dlg.descriptionBox.Visible = true;
                 dlg.rememberCheck.Enabled = e.MaySave;
 
@@ -300,7 +300,7 @@ namespace SharpSvn.UI
             using (SslClientCertificatePassPhraseDialog dlg = new SslClientCertificatePassPhraseDialog())
             {
                 dlg.Text = Strings.ConnectToSubversion;
-                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.ThePassPhraseForTheClientCertificateForXIsRequired);
+                dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.ThePassPhraseForTheClientCertificateForXatYIsRequired, Strings.ThePassPhraseForTheClientCertificateForXIsRequired);
                 dlg.descriptionBox.Visible = true;
                 dlg.rememberCheck.Enabled = e.MaySave;
 
