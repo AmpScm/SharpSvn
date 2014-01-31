@@ -37,19 +37,8 @@
 #include <svn_repos.h>
 #include <svn_sorts.h>
 #include <svn_time.h>
-#include <svn_utf.h>
-#include <svn_version.h>
+#include "svn_utf.h"
 
-#if SVN_VER_MINOR >= 9
-#include <svn_client_mtcc.h>
-#endif
-
-/* Avoid problems when first including libssh2. and then db.h */
-typedef apr_ssize_t ssize_t;
-#define ssize_t ssize_t
-#define abstract abstr
-#include <libssh2/libssh2.h>
-#undef abstract
 
 #include <serf-1/serf.h>
 

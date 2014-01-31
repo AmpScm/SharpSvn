@@ -46,9 +46,7 @@ namespace Security {
             Initial,
             ConfigPrepared,
             ConfigLoaded,
-#if SVN_MINOR_VER < 9
             CustomRemoteConfigApplied,
-#endif
             AuthorizationInitialized,
         };
 
@@ -266,8 +264,6 @@ namespace Security {
         internal:
             bool Run(SvnClientContext^ ctx, SvnClientArgs^ args, ...array<String^>^ commandArgs);
         };
-
-        ref class SvnSshContext;
     }
 
     /// <summary>Subversion Client Context wrapper; base class of objects using client context</summary>
@@ -282,14 +278,12 @@ namespace Security {
         SvnExtendedState _xState;
         initonly SvnAuthentication^ _authentication;
         SvnClientContext ^_parent;
-        bool _customSshApplied;
 
         static initonly Object^ _plinkLock = gcnew Object();
         static String^ _plinkPath;
 
     internal:
         bool _noLogMessageRequired;
-        SvnSshContext ^_sshContext;
 
     private:
         // For SvnClient and SvnReposClient
@@ -380,6 +374,7 @@ namespace Security {
                 throw gcnew NotImplementedException();
             }
         }
+            ;// = System::ComponentModel::IComponent::Disposed;
 
     private:
         ~SvnClientContext();
@@ -393,20 +388,15 @@ namespace Security {
             svn_client_ctx_t *get();
         }
 
-        property AprPool^ ContextPool
-        {
-            AprPool^ get() { return _pool; }
-        }
-
         void SetConfigurationOption(String^ file, String^ section, String^ option, String^ value);
 
     private:
+        void ApplyCustomRemoteConfig();
+        void ApplyCustomSsh();
         void ApplyMimeTypes();
         void ApplyUserDiffConfig();
         void ApplyOverrideFlags();
         void LoadTortoiseSvnHooks();
-    internal:
-        void ApplyCustomRemoteConfig();
 
     internal:
         bool FindHook(String^ path, SvnClientHookType hookType, [Out] SvnClientHook^% hook);

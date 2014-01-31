@@ -13,9 +13,6 @@
 //  limitations under the License.
 
 #include "stdafx.h"
-#define SECURITY_WIN32
-#include <Security.h>
-#include <WinCred.h>
 
 #include "SvnAuthentication.h"
 
@@ -558,11 +555,11 @@ void SvnAuthentication::ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslSe
         Console::WriteLine(" - The certificate has an unknown error.");
     }
 
-    Console::WriteLine("Certificate information:\n"
+    Console::WriteLine("Certificcate information:\n"
         " - Hostname: {0}\n"
         " - Valid: from {1} until {2}\n"
         " - Issuer: {3}\n"
-        " - Fingerprint: {4}\n",
+        " - Fingerprint: {4}",
         e->CommonName,
         e->ValidFrom,
         e->ValidUntil,
@@ -625,55 +622,64 @@ void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 void SvnAuthentication::ImpSubversionFileUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionWindowsFileUserNamePasswordHandler(Object ^sender, SvnUserNamePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionFileSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionFileSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 void SvnAuthentication::ImpSubversionWindowsSslAuthorityTrustHandler(Object ^sender, SvnSslAuthorityTrustEventArgs^ e)
 {
     UNUSED_ALWAYS(sender);
-    e->Break = true;
+    UNUSED_ALWAYS(e);
+    throw gcnew NotImplementedException(SharpSvnStrings::SvnAuthManagedPlaceholder);
 }
 
 Uri^ SvnAuthenticationEventArgs::RealmUri::get()
@@ -697,88 +703,4 @@ Uri^ SvnAuthenticationEventArgs::RealmUri::get()
     }
 
     return _realmUri;
-}
-
-
-bool SvnAuthentication::TryGetDefaultSshUser(String ^hostname, int port, [Out] String ^%userName, bool %fromCredStore)
-{
-    String^ realm;
-
-    userName = nullptr;
-    fromCredStore = false;
-
-    if (port)
-        realm = String::Format("ssh://{0}:{1}", hostname, port);
-    else
-        realm = String::Format("ssh://{0}", hostname);
-
-    CREDENTIALW *pCred;
-
-    pin_ptr<const wchar_t> pRealm = PtrToStringChars(realm);
-    if (CredReadW(pRealm, CRED_TYPE_GENERIC, 0, &pCred))
-    {
-        if (pCred->UserName)
-            userName = gcnew String(pCred->UserName);
-
-        CredFree(pCred);
-
-        if (userName)
-        {
-            fromCredStore = true;
-            return true;
-        }
-    }
-
-    ULONG namelen;
-    if (GetUserNameEx(NameUserPrincipal, NULL, &namelen))
-    {
-        namelen++;
-        wchar_t *txt = (wchar_t *)alloca(sizeof(txt[0]) * (namelen));
-
-        if (GetUserNameEx(NameUserPrincipal, txt, &namelen))
-        {
-            txt[namelen] = 0;
-
-            wchar_t *at = wcschr(txt, '@');
-
-            if (at)
-                *at = 0;
-
-            userName = gcnew String(txt);
-            return true;
-        }
-    }
-
-    userName = "user";
-    return false;
-}
-
-generic<typename T> where T : SvnAuthenticationEventArgs
-bool SvnAuthentication::Run(T args, Predicate<T> ^doneFilter)
-{
-    for each (ISvnAuthWrapper^ w in _handlers)
-    {
-        SvnAuthWrapper<T>^ ww = dynamic_cast<SvnAuthWrapper<T>^>(w);
-
-        if (!ww)
-            continue;
-
-        int repeat = ww->RetryLimit;
-        while (!args->Break && repeat-- > 0)
-        {
-            ww->Raise(args);
-
-            if (args->Cancel)
-                return false;
-
-            if (!args->Break && doneFilter(args))
-                return true;
-
-            args->Save = false;
-        }
-
-        args->Break = false;
-    }
-
-    return false;
 }

@@ -63,9 +63,6 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", apr-util " APU_VERSION_STRING
     ", Cyrus Sasl " SASL_VERSION
     ", eXpat " EXPAT_VERSION
-#if SVN_VER_MINOR >= 9
-    ", LibSSH2 " LIBSSH2_VERSION
-#endif
     ", serf " SERF_VERSION
     ", sqlite" SQLITE_VERSION
     ", zlib " ZLIB_VERSION
@@ -84,9 +81,6 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Apr-util", APU_VERSION_STRING)];
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("eXpat", EXPAT_VERSION)];
-#if SVN_VER_MINOR >= 9
-[assembly:SvnLibrary("LibSSH2", LIBSSH2_VERSION)]
-#endif
 [assembly:SvnLibrary("serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
@@ -116,7 +110,4 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 
 #include "../../imports/release/include/sharpsvn-imports.h"
-#if SVN_VER_MINOR >= 9
-#pragma comment(lib, "libssh2.lib")
-#endif
 [assembly:AssemblyVersionAttribute("1.7999.*")];
