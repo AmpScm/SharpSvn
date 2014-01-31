@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+  <property name="opensslDir" value="build/${platform}/openssl" />
+  <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
+
+  <target name="openssl-prepare" depends="checkout">
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
+      <exec program="perl.exe" workingdir="${opensslDir}">
+        <arg value="Configure" />
+        <arg value="VC-WIN32" if="${platform=='win32'}" />
+        <arg value="VC-WIN64A" if="${platform=='x64'}" />
+        <!-- Provide a sane, most likely secure default for loading system wide settings -->        
+        <arg value="--openssldir=C:\ProgramData\OpenSSL" />
+        <!-- Now configure more -->
+        <arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
+        <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
+        <arg value="threads" />
+        <arg value="no-asm" if="${platform=='x64'}" />
+        <arg value="no-dso"/>
+        <arg value="no-shared" />
+        <arg value="no-krb5"/>
+        <arg value="no-hw"/>
+        <arg value="enable-tlsext" />
+        <arg value="enable-capieng" />
+        <arg value="-DSSL_FORBID_ENULL" />
+        <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
+        <arg value="-DOPENSSL_CAPIENG_DIALOG" />
+        <arg value="--prefix=${path::get-full-path(intDir)}" />
+      </exec>
+    </OnceBlock>
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
+      <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='win32'}">
+        <arg line="/c ms\do_nasm.bat" />
+      </exec>
+      <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
+        <arg line="/c ms\do_win64a.bat" />
+      </exec>
+      <FilterFile file="${opensslDir}/ms/libeay32.def" unless="${static}">
+        <filterchain>
+          <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/ssleay32.def" unless="${static}">
+        <filterchain>
+          <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}">
+        <filterchain>
+          <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
+          <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
+          <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
+          <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
+          <replacestring from=" /MT " to=" /MD " />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
+        <filterchain>
+          <!-- Ommit default library name -->
+          <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags}" />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
+        <filterchain>
+          <replacestring from='static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' to='
+
+#pragma comment(lib, "crypt32.lib")
+typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
+extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
+sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler = NULL;
+static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
+          <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL; 
+            if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/crypto/rand/rand_win.c">
+        <filterchain>
+          <!-- If OpenSSL already used a *good* source for entropy, such as most likely
+               CryptoAPI, don't start asking for kernel objects for up to 1 second, which might
+               be very expensive on x64 where that many objects exist.
+               
+               BUT ONLY if we have GOOD entropy, or we introduce a huge security problem.
+               
+               ### The CryptoAPI random generator should be 'safe enough' on XP SP3 and later.
+               (src: Wikipedia) Should we check for that or trust the rest of the data?
+          -->
+          <replacestring from="BYTE buf[64];" to="BYTE buf[4*64];" /><!-- Ask more entropy -->
+          <replacestring from="RAND_add(buf, sizeof(buf), 0);" to="RAND_add(buf, sizeof(buf), sizeof(buf) / 4.0); /* SharpSvn */" />
+          <replacestring from="if (kernel)" to="if (good &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
+          <replacestring from="!defined(OPENSSL_SYS_WIN32_CYGWIN)" to="0 &amp;&amp; ! defined(OPENSSL_SYS_WIN32_CYGWIN)" />
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+  </target>
+  <target name="openssl-build" depends="openssl-prepare">
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">    
+      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" if="${static}">
+        <arg value="install" />
+      </NMake>
+      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" unless="${static}">
+        <arg value="install" />
+      </NMake>
+      <copy todir="${intDir}/bin" unless="${static}">
+        <fileset basedir="${opensslDir}/out32dll">
+          <include name="libeay32.pdb" />
+          <include name="ssleay32.pdb" />
+        </fileset>
+      </copy>
+    </OnceBlock>
+    <copy todir="${release}/include">
+      <fileset basedir="${intDir}/include">
+        <include name="openssl/**" />
+      </fileset>
+    </copy>
+  </target>
+</project>

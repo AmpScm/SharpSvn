@@ -1,0 +1,43 @@
+﻿  /* CSS layout */
+body {
+	margin: 0;
+	padding: 0;
+}
+
+#masthead {
+	font-family: "segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	font-size: x-large;
+	font-weight: bold;
+}
+
+#container {
+	min-width: 600px;
+}
+
+#page_content {
+	margin-left: 20px;
+}
+
+#footer {
+	clear: both;
+}
+
+.subHeadings {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana;
+	font-size: large;
+	font-weight: bold;
+}
+
+.regularText {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana;
+	font-size: medium;
+}
+
+.code {
+	font-family: "courier New", Courier, monospace;
+}
+
+.tableHeadings {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana;
+	background-color: #C0C0C0;
+}

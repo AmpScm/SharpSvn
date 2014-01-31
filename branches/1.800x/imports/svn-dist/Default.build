@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<project basedir="." default="build-svn-dist">
+  <property name="subversionMerges" value="r1493272,r1534149,r1535532,r1535676,1541635,1542610,1547774,1542765,1542767,1542774" overwrite="false" />
+
+  <property name="svnBuildType" value="tag" overwrite="false" />
+  <!--property name="subversionVersion" value="1.7.0" overwrite="false" /-->
+  
+  <property name="static" value="false" />
+  <property name="downloads" value="../downloads/" />
+  <property name="dllPrefix" value="SlikSvn-" />
+  <property name="intl" value="gettext" />
+  <property name="svnBuildName" value="SlikSvn" />
+  <property name="svnAddSharpSvn" value="false" />
+  <property name="applyMerges" value="false" />
+  <property name="applyPatches" value="false" />
+  <property name="enableAprCrypto" value="false" />
+  <property name="svnDll" value="dll" />
+  <property name="buildLibgit2" value="false" />
+  <property name="buildJavaHL" value="true" />
+  <property name="ltcg" value="true" />
+  <property name="getSvnBook" value="true" />
+  
+  <include buildfile="../Default.build" />
+  
+  
+<target name="build-svn-dist" depends="build">
+	<delete>
+	
+		<fileset basedir="dist-${platform}">
+			<include name="**" />
+		</fileset>
+	</delete>
+		
+	<mkdir dir="dist-${platform}" />
+	<copy todir="dist-${platform}/bin" flatten="true">
+		<fileset basedir="${svnBase}\release">
+			<include name="**/*.exe" />
+			<include name="**/*.dll" />
+			<exclude name="**/*test*" />
+		</fileset>
+	</copy>
+	<move file="dist-${platform}/bin/SlikSvn-libsvnjavahl-1.dll"
+	      tofile="dist-${platform}/bin/libsvnjavahl-1.dll" />
+  <copy file="${downloads}/svn-book.pdf" tofile="dist-${platform}/svn-book.pdf" />
+	<property name="releasenotesFile" value="${string::substring(subversionVersion, 0, 3)}.html" />
+	<Svn>
+    <arg line="export --force http://svn.apache.org/repos/asf/subversion/site/publish/docs/release-notes/${releasenotesFile}" />
+    <arg value="${release}/ReleaseNotes.html" />
+	</Svn>
+	<copy todir="dist-${platform}/bin" flatten="true">
+		<fileset>
+			<include name="${intDir}/bin/${dllPrefix}*.dll" />
+			<include name="${gettextDir}/bin/${platform}/release/*.dll" />
+		</fileset>
+	</copy>
+	<copy todir="dist-${platform}/share">
+    <fileset basedir="${release}/share">
+      <include name="**" />
+    </fileset>
+  </copy>
+  <copy 
+    file="${svnBase}/CHANGES"
+    tofile="dist-${platform}/CHANGES.txt" />
+  <copy
+    file="${release}/ReleaseNotes.html"
+    tofile="dist-${platform}/ReleaseNotes.html" />
+
+  <mkdir dir="dist-${platform}" />
+  <zip zipfile="dist-${platform}/Symbols-Subversion-${subversionVersion}-${platform}.zip" flatten="true" ziplevel="9">
+    <fileset>
+      <include name="${intDir}/lib/*.pdb" />
+      <include name="${intDir}/bin/*.pdb" />
+      <include name="${svnBase}/release/**/*.pdb" />
+    </fileset>
+  </zip>
+</target>
+</project>

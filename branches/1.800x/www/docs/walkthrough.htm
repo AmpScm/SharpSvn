@@ -1,0 +1,1681 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+
+<head runat="server">
+<meta content="en-us" http-equiv="Content-Language" />
+<title>Getting Started With the SharpSVN API</title>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+<link href="mainstyles.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.auto-style3 {
+	font-family: "Segoe UI", Tahoma, Geneva, Verdana;
+	font-size: medium;
+	font-weight: normal;
+}
+</style>
+<link href="../../My%20Web%20Sites/SharpSvnDocs/mainstyles.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="masthead">
+	SharpSvn Tutorial</div>
+<div id="container">
+	<div>
+		<p class="subHeadings">Table Of Contents</p>
+		<ul>
+			<li>
+			<p class="regularText"><a href="#Prerequisites">Introduction and Prerequisites</a></p>
+			</li>
+			<li>
+			<p class="regularText"><a href="#Setting_the_project_up">Setting the project up</a></p>
+			</li>
+			<li>
+			<p class="auto-style2">
+			<a class="regularText" href="#Getting_Started_With_the_SharpSVN_API">Getting Started With the SharpSVN API</a></p>
+			</li>
+			<li>
+			<p class="regularText">
+			<a href="#Using_SvnClient_to_Perform_Some_Common_SVN_Operations">Using the SvnClient Class to Perform Some Common SVN operations</a></p>
+			<ul>
+				<li>
+				<p class="regularText"><a href="#svn_checkout">svn checkout</a></p>
+				</li>
+				<li>
+				<p class="regularText"><a href="#svn_commit">svn commit</a></p>
+				</li>
+				<li>
+				<p class="regularText"><a href="#svn_proplist">svn proplist</a></p>
+				</li>
+				<li>
+				<p class="regularText"><a href="#svn_propset">svn propset</a></p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText"><a href="#Getting_Help">Getting Help</a></p>
+			</li>
+		</ul>
+		<p class="subHeadings"> <a name="Prerequisites"> Introduction and Prerequisites</a></p>
+		<p class="regularText">This tutorial is meant to serve as a &quot;getting 
+		started&quot; type of guide to the SharpSvn API.&nbsp; It does not cover 
+		every aspect of SharpSvn but rather serves as a foothold so you can 
+		begin 
+		writing useful code rather than spending hours experimenting just to 
+		understand the basics.&nbsp; It should teach you how to use some of the 
+		most important classes/methods in the API.&nbsp; Additionaly, after 
+		reading through this tutorial it is my hope that you will have a sense 
+		of where to turn if you should happen to get stuck.<br />
+		<br />
+		This walkthrough assumes a few things.&nbsp; 
+		First, it assumes that you know the basics of how to work with an SVN 
+		repository.&nbsp; Second, it assumes that you have a working SVN 
+		repository to test against.&nbsp; If either of these items are not true 
+		then you may have some difficulty following along.&nbsp; An excellent 
+		place to get started with Subversion is by reading through the official 
+		documentation at
+		<a href="http://svnbook.red-bean.com/en/1.4/svn-book.html">
+		http://svnbook.red-bean.com/en/1.4/svn-book.html</a>.<br />
+		<br />
+		Something else you should know before getting started is that this 
+		tutorial uses Visual Studio 2010, Visual C#, and version 4.0 of the .NET 
+		framework.&nbsp; You may still be able to follow along as long as you 
+		can translate what is going on here to older versions of Visual 
+		Studio/.NET languages.&nbsp; I have tried to avoid using any .NET 4.0 
+		specifics here to make any such translations relatively painless.<br />
+		<br />
+		Finally, if you have any questions/comments/corrections please let me 
+		know.&nbsp; I can be contacted at bctello&lt;the number eight&gt; at gmail dot 
+		com.</p>
+		<h3 class="subHeadings">
+		<a class="subHeadings" name="Setting_the_project_up">Setting the Project 
+		Up</a></h3>
+		<p class="regularText">So to get started we will walk through 
+		setting up a windows forms project to access the SharpSvn API.&nbsp; 
+		Although I&#39;m sure that most of the individuals reading this 
+		documentation are well aware of how to set up a project in Visual Studio 
+		I will be walking through it anyways to ensure everyone is on the same 
+		page.</p>
+		<ol>
+			<li>
+			<p class="regularText">Open Visual Studio and select 
+			File-&gt;New-&gt;Project.&nbsp; In the &#39;New Project&#39; dialog, select Visual 
+			C# under the &#39;Installed Templates&#39; menu and Windows Forms 
+			Application from the center menu.</p>
+			</li>
+			<li>
+			<p class="regularText">In the &#39;Name&#39; field type MySVNClient.</p>
+			</li>
+			<li>
+			<p class="regularText">In the &#39;Solution&#39; pulldown select &#39;Create new 
+			solution&#39;.&nbsp; What you have now should look something like this:<br />
+			<img alt="Setting up the project." height="330" src="images/projectSetup.jpg" width="478" /></p>
+			</li>
+			<li>
+			<p class="regularText">Click OK.</p>
+			</li>
+		</ol>
+		<h3 class="auto-style3">Now you are going to need to import the SharpSVN 
+		assemblies into your project which will give you access to all of the 
+		datatypes and methods available in the SharpSVN API.</h3>
+		<ol>
+			<li class="regularText">Download the appropriate SharpSVN binaries 
+			package from <span class="style3">
+			<a href="http://sharpsvn.open.collab.net">
+			http://sharpsvn.open.collab.net</a>.&nbsp; The various packages are located under 
+			the &#39;Download and Support&#39; tab.</span></li>
+			<li class="regularText">Unzip the package onto your hard drive.&nbsp; 
+			This will create a directory named &quot;SharpSVN.&quot;</li>
+			<li class="regularText">Open your project in Visual Studio.</li>
+			<li class="regularText">In the Solution Explorer expand the node 
+			corresponding to your project and right click the &quot;References&quot; 
+			sub-folder.&nbsp; Click &#39;Add Reference...&#39;<br />
+			<br />
+			<img alt="Right clicking the References folder" height="346" src="images/addReference.jpg" width="465" /></li>
+			<li class="regularText">Now in the &#39;Add Reference&#39; dialog which 
+			appears, click the Browse tab and browse to the unzipped &quot;SharpSvn&quot; folder.&nbsp; In that folder you will find the DLL files that you 
+			will need to access the SharpSVN methods.</li>
+			<li class="regularText">Select &#39;SharpSvn.dll&#39; and click 
+			&#39;OK&#39;.<br />
+			<img alt="Selecting the DLL file." height="446" src="images/browseDlls.jpg" width="561" /><br />
+			</li>
+		</ol>
+		<p class="regularText">You now have access to everything in the SharpSVN 
+		namespace and some extra goodies (which we won&#39;t be dealing with here) as well.&nbsp; If you want to see 
+		everything that you can now access, just open up the Object Browser by 
+		clicking View-&gt;Object Browser and right clicking the arrow next to the 
+		SharpSvn node.<br />
+		<img alt="seeing what's in the SharpSVN assembly" height="273" src="images/objectBrowser.jpg" width="239" /><br />
+		As you can see, there are several other namespaces included in the 
+		SharpSvn assembly but we will not be using them for this walkthrough.</p>
+		<p class="regularText">As a final setup step in getting this project set 
+		up, we will get the main form laid out properly.</p>
+		<ol>
+			<li>
+			<p class="regularText">Open the form &#39;Form1&#39; in design view.&nbsp; At 
+			this point all you should see is a blank form with the title Form1.</p>
+			</li>
+			<li>
+			<p class="regularText">In the Solution Explorer rename Form1.cs to 
+			SvnClient.cs</p>
+			</li>
+			<li>
+			<p class="regularText">Change the properties of the form as follows:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name: </strong>SvnClient</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>SVN Client</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>325,120</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Add a label to the form with the following 
+			properties:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name: </strong>lblPrompt</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>38,9</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Select an SVN 
+				command to run and then click &#39;Go&#39;.</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Add a ComboBox to the form and change it&#39;s 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name: </strong>cbCmdList</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>92,25</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>121,21</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Add two buttons to the form and set their 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name (first button):</strong> 
+				btnGo</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>81,52</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>44,23</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Go</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (second button): </strong>
+				btnQuit</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>149,52</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>75,23</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Quit</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Now double click the &#39;Quit&#39; button which 
+			should bring you into the 
+			btnQuit_Click method.&nbsp; In the body of the function type:</p>
+			<ul>
+				<li>
+				<p class="code">Application.Exit();</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">You should now have a form which looks 
+			similar to the image below.&nbsp; It doesn&#39;t have to look exactly 
+			the same but if you want to be able to copy and paste the code in 
+			this walkthrough you should at least make sure the names of your 
+			controls match what has been listed above.<br />
+			<img alt="An image of the baseline client." height="128" src="images/baselineClient.jpg" width="331" /></p>
+			</li>
+			<li>
+			<p class="regularText">Save your project, make sure it builds, and 
+			that the Quit button actually closes the application.</p>
+			</li>
+		</ol>
+		<p class="subHeadings"><a name="Getting_Started_With_the_SharpSVN_API">
+		Getting Started With the SharpSVN API</a></p>
+		<p class="regularText">Now that you have the baseline form for our demo 
+		project set up we can get to working with the API.&nbsp; The first thing you 
+		need to know is that the SharpSvn 
+		namespace contains most of the types you will need to write a basic 
+		client.&nbsp; If you have added the SharpSvn.dll assembly to your 
+		project as outlined above, you can access the SharpSvn namespace by 
+		simply typing <span class="code">using SharpSvn; </span>
+		<span class="regularText">at the top of your code files.<br />
+		<img alt="Adding the using statement." height="250" src="images/usingStatement.jpg" width="321" />
+		</span></p>
+		<p class="regularText">The second thing you need to know is that the
+		SharpSvn.SvnClient 
+		class encapsulates the functionality of a Subversion client.&nbsp; If 
+		there is something that you can do with a Subversion client program then 
+		it is likely something you can do via some function in the SvnClient 
+		class.&nbsp; From this point on our demo program is going to proceed by 
+		walking through how to perform some of the basic functions of an svn 
+		client application by using the SvnClient class.&nbsp; </p>
+		<p class="auto-style2"><span class="subHeadings">
+		<a name="Using_SvnClient_to_Perform_Some_Common_SVN_Operations">Using 
+		SvnClient to Perform Some Common SVN Operations</a></span></p>
+		<p class="auto-style2"><strong class="subHeadings"><a name="svn_checkout">svn checkout</a></strong></p>
+		<p class="regularText">The first example is how to perform the svn 
+		checkout operation using the SharpSvn method
+		SvnClient.CheckOut. We&#39;ll start by creating a new form which will 
+		have fields into which the user can type data for the &#39;svn checkout&#39; 
+		operation.&nbsp; It will also have a button labeled &#39;checkout&#39; which 
+		will gather all of the user specified data and perform the actual 
+		checkout.</p>
+		<ol>
+			<li>
+			<p class="regularText">In Visual Studio, click Project-&gt;Add Windows 
+			Form... </p>
+			</li>
+			<li>
+			<p class="regularText">In the &#39;Add New Item&#39; dialog which appears, 
+			make sure that &#39;Windows Form&#39; is selected and enter &#39;frmCheckout.cs&#39; 
+			in the &#39;Name:&#39; field</p>
+			</li>
+			<li>
+			<p class="regularText">Click &#39;Add&#39;</p>
+			</li>
+			<li>
+			<p class="regularText">Add three labels to the form:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name (first label): </strong>lblRepoURI</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>13, 12</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Repository URI:</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (second label): </strong>
+				lblLocalPath</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>13, 44</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Local Path</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (third label): </strong>lblRevision</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>12,47</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Revision:</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Add three text boxes to the form:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name (first text box): </strong>tbRepoURI</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>102, 12</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>247,20</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (second text box): </strong>
+				tbLocalPath</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location:</strong> 102, 44</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>247, 20</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (third text box): </strong>tbRevision</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>102, 71</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>75,20</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Add two buttons to the form:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name (first button): </strong>btnCheckout</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>102, 97</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Checkout</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (second button): </strong>btnCancel</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>183, 97</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Cancel</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Now set the properties of frmCheckout itself 
+			as follows:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>CancelButton: </strong>btnCancel</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>377, 172</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>svn checkout</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">The new form should look something like this:<br />
+			<img alt="The checkout form" height="176" src="images/checkoutForm.jpg" width="381" /></p>
+			</li>
+			<li>
+			<p class="regularText">Now open the SvnClient form and click the 
+			ComboBox cbCmdList.</p>
+			</li>
+			<li>
+			<p class="regularText">In the properties window for cbCmdList open 
+			the &#39;Items&#39; collection editor.</p>
+			</li>
+			<li>
+			<p class="regularText">Enter the string &#39;svn checkout&#39; on its own 
+			line and click OK.</p>
+			</li>
+			<li>
+			<p class="regularText">Double click the &#39;Go&#39; button which should 
+			bring you to the code editor for the method btnGo_Click().</p>
+			</li>
+			<li>
+			<p class="regularText">Change the btnGo_Click method so it matches 
+			the following code:<br />
+			<br />
+			<span class="code">private void btnGo_Click(object sender, 
+				EventArgs e)<br /></span>{<span class="code"><br />&nbsp;&nbsp;&nbsp; 
+			<strong>object command = cbCmdList.SelectedItem;<br />&nbsp;&nbsp;&nbsp; if(command == null) //If the combo box was empty<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MessageBox.Show(&quot;Please select an SVN 
+				command from the pull down menu.&quot;);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;<br />&nbsp;&nbsp;&nbsp; }<br />&nbsp;&nbsp;&nbsp; switch (command.ToString())<br />&nbsp;&nbsp;&nbsp; {<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case &quot;svn checkout&quot;: //Open the svn 
+				checkout box<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; frmCheckout 
+				checkOutFrm = new frmCheckout();<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				checkOutFrm.ShowDialog();<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; default: //User probably typed 
+				something invalid<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				MessageBox.Show(&quot;Please select a valid SVN command from the pull 
+				down menu.&quot;);<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break;<br />&nbsp;&nbsp;&nbsp; }</strong><br />
+			</span>}</p>
+			</li>
+			<li>
+			<p class="regularText">Now save and run your project.&nbsp; Select 
+			&#39;svn checkout&#39; from the combo box on the main form, click &#39;Go&#39; and 
+			make sure it opens the &#39;svn checkout&#39; form.</p>
+			</li>
+			<li>
+			<p class="regularText">Now that we have the checkout form laid out 
+			and working the way we want, we can add some SVN functionality to it 
+			(finally!).&nbsp; Start by opening the frmCheckout.cs form in design 
+			view and double clicking the &#39;Checkout&#39; button.&nbsp; This should 
+			bring you to the code editor.</p>
+			</li>
+			<li>
+			<p class="regularText">At the top of the code for frmCheckout type</p>
+			<ul>
+				<li>
+				<p class="code">&nbsp;using SharpSvn;</p>
+				</li>
+			</ul>
+			</li>
+			<li>
+			<p class="regularText">Change the method btnCheckout_Click() so that 
+			it looks like the following:<br />
+&nbsp;<br />
+			<span class="code">private void btnCheckout_Click(object sender, 
+			EventArgs e)<br />
+			</span>{<span class="code"><br />
+			<br />
+&nbsp;&nbsp;&nbsp; <strong>if (tbLocalPath.Text.Length == 0|| tbRepoURI.Text.Length == 0)<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MessageBox.Show(&quot;The &#39;Repository URI&#39; 
+			and &#39;Local Path&#39; fields cannot be empty.&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;<br />
+&nbsp;&nbsp;&nbsp; }<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //SvnUpdateResult provides info about what happened during a 
+			checkout<br />
+&nbsp;&nbsp;&nbsp; SvnUpdateResult result;<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //we will use this to tell CheckOut() which revision to fetch<br />
+&nbsp;&nbsp;&nbsp; long revision;<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //SvnCheckoutArgs wraps all of the options for the &#39;svn 
+			checkout&#39; function<br />
+&nbsp;&nbsp;&nbsp; SvnCheckOutArgs args = new SvnCheckOutArgs();<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //path is the path where the local working copy will end up<br />
+&nbsp;&nbsp;&nbsp; string path = tbLocalPath.Text;<br />
+			<br />
+&nbsp;&nbsp;&nbsp; if (long.TryParse(tbRevision.Text,out revision))<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //set the revision number if the user 
+			entered a valid number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args.Revision = new 
+			SvnRevision(revision);<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; //if args.Revision is not set, it defaults to fetch the HEAD 
+			revision.<br />
+&nbsp;&nbsp;&nbsp; else MessageBox.Show(&quot;Invalid Revision number, defaulting to 
+			HEAD&quot;);<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //the using statement is necessary to ensure we are freeing 
+			up resources<br />
+&nbsp;&nbsp;&nbsp; using (SvnClient client = new SvnClient())<br />
+&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			//SvnUriTarget is a wrapper class for SVN repository URIs<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SvnUriTarget 
+			target = new SvnUriTarget(tbRepoURI.Text);<br />
+			<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //this is the 
+			where &#39;svn checkout&#39; actually happens.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if 
+			(client.CheckOut(target, path, args, out result))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(&quot;Successfully checked out revision &quot; + 
+			result.Revision + &quot;.&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (SvnException se)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(se.Message,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;svn checkout 
+			error&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (UriFormatException ufe)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(ufe.Message,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;svn checkout 
+			error&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; }</strong><br />
+			</span>}<span class="code"><br />
+			<br />
+			</span><span class="regularText">This is the actual code which 
+			performs the checkout operation so lets take a moment to make sure 
+			we understand what&#39;s going on here.&nbsp; <br />
+			<br />
+			First, the method it all centers around is
+			SvnClient.CheckOut().&nbsp; Notice that the overload we have 
+			used here takes four 
+			arguments.&nbsp; The first argument is an
+			SvnUriTarget which is a wrapper class which converts standard 
+			URI&#39;s to a format that the Subversion libraries can use.&nbsp; The 
+			second is a string which should be a valid path on the local 
+			machine.&nbsp; This is the path to which the working copy will be 
+			checked out.&nbsp; The third argument is of type
+			SvnCheckoutArgs which is a wrapper class for the arguments to 
+			the &#39;svn checkout&#39; function.&nbsp; Notice how we specified which 
+			revision we wanted to checkout by modifying the revision property of
+			<em>args</em> and then passing it as the third argument to
+			CheckOut().&nbsp; Many of the functions in SharpSVN have their 
+			own argument classes that are used in the same manner.&nbsp; The 
+			final argument is an output argument of type SvnUpdateResult.&nbsp; 
+			This class can provide you with basic information about what 
+			happened during a &#39;svn checkout&#39; operation.&nbsp; Again, several of 
+			the SharpSVN methods have similar result types which can be used to 
+			retrieve information about the result of a method call.<br />
+			<br />
+			The CheckOut method has several different overloads which require 
+			fewer arguments in case you decide you don&#39;t need one of them for 
+			some reason.&nbsp; CheckOut(4) has been shown here because it is the 
+			overload with the highest arity so knowing how to use this version 
+			means you can use all of them.<br />
+			<br />
+			The next item of interest is the </span><span class="code">
+			using(SvnClient client = new SvnClient()) </span>
+			block<span class="regularText">.&nbsp; We need to include this to 
+			ensure that any memory/network connections which get allocated to
+			<em>client</em> are freed up as quickly as possible.&nbsp; What it 
+			does, for those who are unfamiliar with </span><span class="code">
+			using</span><span class="regularText"> statements is defines a 
+			limited scope during which <em>client</em> will exist.&nbsp; Once 
+			the </span><span class="code">using</span><span class="regularText"> 
+			block is exited, <em>client</em> goes out of scope and is 
+			immediately disposed of via a call to Dispose().<br />
+			<br />
+			Finally, notice that we are catching the SvnException class here.&nbsp; 
+			There are a considerable number of different Exception classes in 
+			SharpSVN but this one is the base class for all of them.&nbsp; It 
+			gives you access to high level diagnostic information such as human 
+			readable error messages, operating system error codes, and even the 
+			error codes generated by the native subversion libraries that 
+			SharpSVN runs on top of.&nbsp; If you need more specific 
+			information, you should look to the more specific exception classes.&nbsp; 
+			We will not be going over those here however.</span></p>
+			</li>
+			<li>
+			<p class="regularText">Now go ahead and save your project and make 
+			sure that it builds.&nbsp; Run the project in Debug mode, select 
+			&#39;svn checkout&#39; and click &#39;Go&#39;<br />
+			<br />
+			<strong>HINT: </strong>If you are like me and running this project 
+			in Visual Studio 2010 with the .NET 4.0 framework, you likely just 
+			encountered a nasty FileLoadException saying something like <em>
+			&quot;Mixed mode assembly is built against version &#39;v2.0.50727&#39; of the 
+			runtime and cannot be loaded in the 4.0 runtime without additional 
+			configuration information.&quot;&nbsp; </em>To fix this, you need to 
+			create an XML configuration file telling Visual Studio to make the 
+			runtime .NET 2.0 compatible.&nbsp;&nbsp; This file needs to be 
+			called MySvnClient.exe.config and should be saved to your projects 
+			debug/bin folder.&nbsp; For example, on my machine I have to save it 
+			as <br />
+			<br />
+			C:\Users\Brady\My 
+			Documents\Visual Studio 
+			2010\Projects\MySvnClient\MySvnClient\bin\Debug\MySvnClient.exe.config<br />
+			<br />
+			The content of this file should be as follows:<br />
+			<br />
+			<span class="code">&lt;configuration&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;startup useLegacyV2RuntimeActivationPolicy=&quot;true&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;supportedRuntime version=&quot;v4.0&quot;/&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;/startup&gt;<br />
+			&lt;/configuration&gt;<br />
+			<br />
+			</span><span class="regularText">Now restart the SvnClient 
+			application.&nbsp; Select &#39;svn checkout&#39; and click &#39;Go&#39; again and 
+			you should not receive that exception any longer.</span><br /></p>
+			</li>
+			<li>
+			<p class="regularText">Once you have the svn checkout form 
+			displayed, enter a valid SVN repository URI in the top text box and 
+			a valid local path in the middle text box (SharpSvn will create a 
+			directory if it doesn&#39;t exist).&nbsp; Click Checkout.</p>
+			</li>
+			<li>
+			<p class="regularText">Click &#39;OK&#39; in the box informing you that the 
+			HEAD revision will be checked out.</p>
+			</li>
+			<li>
+			<p class="regularText">Depending on the size of your repository 
+			there may be a delay but once all the files have been downloaded and 
+			checked out, you will receive a confirmation window telling you 
+			which revision was checked out.&nbsp; Navigating to the path you 
+			entered should confirm that the files have all been downloaded 
+			succesfully!</p>
+			</li>
+		</ol>
+		<p class="regularText"><strong><a name="svn_commit">svn commit</a></strong></p>
+		<p class="regularText">To demonstrate how to use SvnClient.Commit 
+		we will be adding another form to the MySvnClient program.&nbsp; This form 
+		will also gather data from the user and then perform the commit 
+		operation once a &#39;commit&#39; button is clicked.</p>
+		<ol>
+			<li class="regularText">
+			<p class="auto-style2">Lets start adding the new form to our project 
+			by clicking Project-&gt;Add Windows Form...&nbsp; Now make sure that 
+			&#39;Windows Form&#39; is selected and name it frmCommit.cs.&nbsp; Click 
+			&#39;OK&#39;</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add an OpenFileDialog to the form and set its 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name: </strong>ofdFileSelector</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>CheckFileExists: </strong>True</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>CheckPathExists: </strong>True</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>FileName: </strong>&quot;&quot;</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add two labels to the form and set their 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first label):</strong> 
+				lblFileName</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>12, 20</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>File:</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second label): </strong>
+				lblMessage</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>12, 42</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Message:</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add two text boxes to the form and set their 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first text box): </strong>
+				tbFileName</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>71, 13</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>238, 20</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second text box): </strong>
+				tbMessage</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>71, 39</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>319,20</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add three buttons to the form and set their 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first button): </strong>
+				btnBrowse</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>315, 12</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Browse...</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second button): </strong>
+				btnCommit</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>109,65</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Commit</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (third button): </strong>
+				btnCancel</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>206, 65</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Cancel</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Set the properties of frmCommit itself as 
+			follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>CancelButton: </strong>btnCancel</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>418, 138</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Svn Commit</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">That is the entire layout for the checkout 
+			form.&nbsp; It should look something like this:<br />
+			<img alt="The basic commit form" height="144" src="images/CommitForm.jpg" width="423" /></p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Now that you have the layout done lets add 
+			the commit form to our list of svn commands in the main form.&nbsp; 
+			Open SvnClient.cs in the design window and open the Items property 
+			editor for the ComboBox cbCmdList.</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">On its own line type:<br />
+			<br />
+			svn commit<br />
+			<br />
+			and click &#39;OK&#39;</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Double click the &#39;Go&#39; button to bring you 
+			back to the btnGo_Click method.</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">In the switch statement you are going to add 
+			some code between the &quot;svn checkout&quot; case and the default case.&nbsp; 
+			The final code should look&nbsp; like the following (new code 
+			displayed in bold font and old code shortened to ... for brevity):<br />
+			<br />
+			<span class="code">case &quot;svn checkout&quot;: //Open the svn checkout form<br />
+&nbsp;&nbsp;&nbsp; ...<br />
+			<strong>case &quot;svn commit&quot;: //Open the svn commit form<br />
+&nbsp;&nbsp;&nbsp; frmCommit commitForm = new frmCommit();<br />
+&nbsp;&nbsp;&nbsp; commitForm.ShowDialog();<br />
+&nbsp;&nbsp;&nbsp; break;</strong><br />
+			default:<br />
+&nbsp;&nbsp;&nbsp; ...</span></p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Save your project, run it, and make sure that 
+			you can get to the new commit form from the main form.&nbsp; Quit 
+			the program.</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Open up frmCommit in design view and double 
+			click the &#39;Browse...&#39; button to bring you to the code for the 
+			btnBrowse_Click method.</p>
+			</li>
+			<li>
+			<p class="auto-style2">&nbsp;<span class="regularText">Add this code as the body of 
+			btnBrowse_Click()</span><br />
+			<br />
+			<span class="code">if (ofdFileSelector.ShowDialog() == 
+			DialogResult.OK)<br />
+			</span>{<span class="code"><br />
+&nbsp;&nbsp;&nbsp; tbFileName.Text = ofdFileSelector.FileName;<br />
+			</span>}</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Bring frmCommit back up in design view and 
+			double click the &#39;Commit&#39; button to bring up the code for the 
+			btnCommit_Click method.&nbsp; Now we are going to be inserting the 
+			code that will actually be committing our repository. </p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">The first thing we are going to do is add 
+			another assembly to our project.&nbsp; The assembly name is 
+			SharpSvn.UI.&nbsp; It is important to us because it contains the
+			SharpSvn.UI namespace.&nbsp; 
+			This namespace contains code that makes handling authentication 
+			extremely easy.&nbsp; To add the assembly, follow the same steps you 
+			used to add the SharpSvn.dll assembly but instead of choosing 
+			SharpSvn.dll, choose SharpSvn.UI.dll instead (they should be in the 
+			same directory).</p>
+			</li>
+			<li>
+			<p class="auto-style2"><span class="regularText">At the top of the code for frmCommit.cs add 
+			the following two lines of code:</span><br />
+			<span class="code"><br />
+			using SharpSvn;<br />
+			using SharpSvn.UI;</span></p>
+			</li>
+			<li>
+			<p class="auto-style2"><span class="regularText">Now go back to the body of the 
+			btnCommit_Click method and add the code shown in bold below:</span><br />
+			<br />
+			<span class="code">&nbsp;private void btnCommit_Click(object sender, 
+			EventArgs e)<br />
+			</span>{<span class="code"><br />
+			<strong>&nbsp;&nbsp;&nbsp; if (tbFileName.Text.Length == 0)<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MessageBox.Show(&quot;Please enter a valid 
+			filename in the &#39;File:&#39; box&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;<br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+			<br />
+&nbsp;&nbsp;&nbsp; //This object allows us to provide options for &#39;svn commit&#39;<br />
+&nbsp;&nbsp;&nbsp; SvnCommitArgs args = new SvnCommitArgs();<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //This is how you specify a commit message.<br />
+&nbsp;&nbsp;&nbsp; args.LogMessage = tbMessage.Text;<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //This is where results for &#39;svn commit&#39; are stored<br />
+&nbsp;&nbsp;&nbsp; SvnCommitResult result;<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //again, remember to include the using statement with 
+			SvnClients<br />
+&nbsp;&nbsp;&nbsp; using (SvnClient client = new SvnClient())<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Bind allows 
+			the client to prompt the user for authentication info.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			SvnUI.Bind(client, this);<br />
+			<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //This method 
+			is the equivalent of &#39;svn commit&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			client.Commit(tbFileName.Text, args, out result);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(result != 
+			null)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(&quot;Successfully commited revision &quot; + 
+			result.Revision);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(&quot;No changes have been made to working copy since it 
+			was checked out.&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (SvnException se)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(se.Message + &quot;Error: &quot; + se.SvnErrorCode + 
+			Environment.NewLine,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;svn commit 
+			error&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><br />
+			</span>}<br />
+			<br />
+			<span class="regularText">As before lets take a moment to step through this code and make sure 
+			that we understand everything that&#39;s going on here.<br />
+			<br />
+			The first thing to notice is the
+			SvnCommitArgs class.&nbsp; Just like
+			SvnCheckoutArgs, this class allows you to specify options to the 
+			&#39;svn commit&#39; command.&nbsp; In this example we are specifying the 
+			commit message by setting the LogMessage property of <em>args</em> 
+			before using it as an argument to
+			Commit.&nbsp; <br />
+			<br />
+			Also, notice that we are again using a class which allows us to 
+			analyze the results of a commit operation (SvnCommitResult).&nbsp; 
+			If you are curious as to why we are checking whether or not <em>
+			result</em> is null after the call to
+			Commit it is because <em>result</em> is only initialized by
+			Commit if there is at least one file which needs to be 
+			committed.&nbsp; In other words, if your working copy has not been 
+			changed since you checked it out, Subversion/SharpSVN does not 
+			waste time sending anything over the network and thus nothing is 
+			changed in the repository.&nbsp; SharpSvn indicates an unchanged 
+			repository by leaving <em>result</em> uninitialized.<br />
+			<br />
+			One of the big things to take away from this example is the call to
+			SvnUI.Bind.&nbsp; 
+			This method is helpful because it makes authentication so easy.&nbsp; 
+			All you have to do is call
+			Bind on 
+			an SvnClient 
+			and a Windows form before any call which could require 
+			authentication and automagically you have nice little 
+			username/password windows which pop up whenever you need to provide 
+			credentials.&nbsp; This function also gives you the ability to use 
+			SSL certificates but we wont be getting into that here.<br />
+			<br />
+			Finally, the call to
+			client.Commit is what actually executes the &#39;svn commit&#39; 
+			operation.&nbsp; Again, we use the catch all
+			SvnException for error handling but feel free to use some of the 
+			more specific exception types if that does not fit your needs.</span></p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Now save your project, run it, open the svn 
+			commit window and make sure you can perform a commit to your 
+			repository.</p>
+			</li>
+		</ol>
+		<p class="regularText"><strong><a name="svn_proplist">svn proplist</a></strong></p>
+		<p class="regularText">Getting the list of SVN properties for a given 
+		node can be useful so lets work on an example of how to do that using 
+		SharpSVN.&nbsp; Again we will demonstrate this functionality by adding 
+		&#39;svn proplist&#39; as a command to our MySvnClient program.&nbsp; We will be 
+		creating a new form which asks the user to specify a file.&nbsp; Once 
+		the user clicks a &#39;Get Properties&#39; button, all of the SVN properties for 
+		that node will be listed in a ListView control for all to see.</p>
+		<ol>
+			<li class="regularText">
+			<p class="auto-style2">Once again lets start off with adding a new 
+			form to the MySvnClient project.&nbsp; Click Project-&gt;Add Windows 
+			Form... Make sure that &#39;Windows Form&#39; is selected, name it 
+			frmPropList.cs and click &#39;OK&#39;.</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Open frmPropList.cs in the design view and 
+			add a ListView control with the following properties:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name: </strong>lvProps</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Columns: </strong></p>
+				<ul>
+					<li>
+					<p class="auto-style2">Add a column named chFilePath with 
+					Text set to &quot;File&quot; and Width set to -2</p>
+					</li>
+					<li>
+					<p class="auto-style2">Add a column named chPropName with 
+					Text set to &quot;Name&quot; and Width set to -2</p>
+					</li>
+					<li>
+					<p class="auto-style2">Add a column name chPropValue with 
+					Text set to &quot;Value&quot; and Width set to -2</p>
+					</li>
+				</ul>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>12, 88</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>369, 164</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>View: </strong>Details</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add a CheckBox to the form with the following 
+			properties:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name: </strong>cbRecurse</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>13, 44</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Recurse into 
+				Directories?</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add two Label controls to the form and set 
+			their properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first label): </strong>
+				lblFileURI</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>10, 13</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>File URI:</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second label): </strong>
+				lblProperties</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>13, 72</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Properties:</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add a text box to the form and set its 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name: </strong>tbFileURI</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>64, 12</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>318, 20</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add two buttons to the form and set their 
+			properties as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first button): </strong>
+				btnGetProps</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>216, 40</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Get Properties</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second button): </strong>
+				btnCancel</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>306, 40</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Cancel</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Finally set the properties of frmPropList 
+			itself as follows:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>CancelButton: </strong>btnCancel</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>417, 296</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>svn proplist</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2"><span class="regularText">Now that the form is laid out it should look 
+			something like the following:<br />
+			</span>
+			<img alt="The completed proplist form" height="305" src="images/proplistForm.jpg" width="420" /></p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2"><span class="regularText">Open SvnClient.cs in the code editor and 
+			update the switch statement in the btnGo_click method as follows:</span><br />
+			<br />
+			<span class="code">case &quot;svn checkout&quot;: //Open the svn checkout form<br />
+&nbsp;&nbsp;&nbsp; ...<br />
+			<strong>case &quot;svn proplist&quot;: //Open the svn proplist form<br />
+&nbsp;&nbsp;&nbsp; frmPropList propListForm = new frmPropList();<br />
+&nbsp;&nbsp;&nbsp; propListForm.ShowDialog();<br />
+&nbsp;&nbsp;&nbsp; break;</strong><br />
+			default:<br />
+&nbsp;&nbsp;&nbsp; ...</span></p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Save your project and run it.&nbsp; Select 
+			&#39;svn proplist&#39; from the pulldown menu and click &#39;Go&#39; make sure that 
+			the proplist window opens.&nbsp; Quit the application.</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Open frmPropList in the design view and 
+			double click the &#39;Get Properties&#39; button to enter the method 
+			btnGetProps_Click().</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2"><span class="regularText">Modify btnGetProps_Click as follows (don&#39;t 
+			forget to add the using SharpSvn statement 
+			at the top of the code):<br />
+&nbsp;&nbsp;<br />
+			</span>
+			<span class="code">private void btnGetProps_Click(object sender, 
+			EventArgs e)<br />
+			</span>{<span class="code"><br />
+			<strong>&nbsp;&nbsp;&nbsp; if (tbFileURI.Text.Length == 0)<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MessageBox.Show(&quot;Please enter a valid 
+			file URI in the &#39;File URI:&#39; box.&quot;);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return;<br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+			<br />
+&nbsp;&nbsp;&nbsp; //Clear out the list view for the next list of properties<br />
+&nbsp;&nbsp;&nbsp; lvProps.Items.Clear();<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //This will be the target file from which we are retrieving 
+			properties<br />
+&nbsp;&nbsp;&nbsp;&nbsp; SvnTarget tgt = SvnTarget.FromString(tbFileURI.Text);<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //This collection will contain property collections for each 
+			node<br />
+&nbsp;&nbsp;&nbsp; 
+			System.Collections.ObjectModel.Collection&lt;SvnPropertyListEventArgs&gt; 
+			proplist;<br />
+			<br />
+&nbsp;&nbsp;&nbsp; //This is where we can specify arguments to svn proplist<br />
+&nbsp;&nbsp;&nbsp; SvnPropertyListArgs args = new SvnPropertyListArgs();<br />
+			<br />
+&nbsp;&nbsp;&nbsp; if (cbRecurse.Checked == true)<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //This will cause GetPropertyList to 
+			get properties recursively.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; args.Depth = SvnDepth.Infinity;<br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+			<br />
+&nbsp;&nbsp;&nbsp; using (SvnClient client = new SvnClient())<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //This method 
+			is what executes svn proplist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			client.GetPropertyList(tgt, args, out proplist);<br />
+			<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Each 
+			SvnPropertyListEventArgs represents the prop. set for a node<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foreach 
+			(SvnPropertyListEventArgs node in proplist)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+			</span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			//Each SvnPropertyValue represents a single name/value property pair<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			foreach (SvnPropertyValue propVal in node.Properties)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			ListViewItem entry = new ListViewItem(node.Path);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			entry.SubItems.Add(propVal.Key);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			entry.SubItems.Add(propVal.StringValue);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			lvProps.Items.Add(entry);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			</strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+			</span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //refresh the 
+			column sizes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for (int i = 
+			0; i &lt; 3; i++) lvProps.Columns[i].Width = -2; <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (SvnException se)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(se.Message + Environment.NewLine + <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Error:&quot; + 
+			se.SvnErrorCode,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;svn proplist 
+			error&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><br />
+			</span>}&nbsp; <br />
+			<br />
+			<span class="regularText">The first new thing that worth mentioning 
+			in this example is the use of the SvnTarget 
+			class.&nbsp; SvnTarget is actually the abstract superclass for two concrete 
+			classes SvnPathTarget and SvnUriTarget, the former being SharpSvn&#39;s 
+			representation of a local file path and the latter being SharpSvn&#39;s 
+			representation of a remote URI.&nbsp; Any method which takes an 
+			SvnTarget as an argument can take either of those two classes but 
+			the trick is to use SvnTarget&#39;s FromString method which creates the 
+			appropriate type for you based on the format of its input string.&nbsp; 
+			For example if you say</span><span class="code"> <br />
+			<br />
+			SvnTarget target = 
+			SvnTarget.FromString(&quot;http://myproj.googlecode.com/svn/trunk/helloworld.c&quot;);</span><br />
+			<br />
+			<span class="regularText">then FromString would create an SvnTarget that can be used as a URI.&nbsp; 
+			On the other hand if you typed </span> <span class="code"><br />
+			<br />
+			SvnTarget target = SvnTarget.FromString(@&quot;C:\myproj.helloworld.c&quot;);</span><br />
+			<br />
+			<span class="regularText">then you would get an SvnTarget that can be used as a local file 
+			path.</span><br />
+			<br />
+			<span class="regularText">Next we should talk about the output Collection of
+			SvnPropertyListEventArgs named <em>proplist</em>.&nbsp; When you 
+			run
+			GetPropertyList (the method which executes svn proplist), this 
+			collection is populated with one
+			SvnPropertyListEventArgs instance for each node which has 
+			properties to report.&nbsp; This instance holds the entire property 
+			set for its corresponding node.&nbsp; Therefore, if you run the 
+			method against a single node you will only ever get a single item in
+			<em>proplist</em>.&nbsp; So how do you add additional nodes to your 
+			property query?&nbsp; By recursion of course!&nbsp; The way you 
+			normally tell functions in SharpSvn to recurse into directory nodes 
+			is by setting <em>args.Depth</em> 
+			to some member of the<em> svnDepth</em> enumeration.&nbsp; For 
+			instance, in this example we have set it to <em>svnDepth.Infinity</em> 
+			which tells the GetPropertyList function to fully recurse into all 
+			directories.&nbsp;
+			GetPropertyList will now dive into all directories, adding a new 
+			entry to <em>proplist </em>for each file on the way.&nbsp; 
+			Once you have your fully populated <em>proplist</em> you can go through each
+			SvnPropertyListEventArgs and grab its property set.&nbsp; Once 
+			you have the property set you can pull each key/value pair.&nbsp; 
+			It&#39;s pretty confusing but if you study the two foreach loops 
+			above for 
+			long enough you will see that what you are dealing with is 
+			essentially a collection of collections.</span></p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Save your project and run it.&nbsp; Select 
+			svn proplist from the pulldown menu.&nbsp; Click &#39;Go&#39;.&nbsp; Enter a 
+			directory from your working copy or a repository into the &#39;File 
+			URI:&#39; box and click &#39;Get Properties&#39;.&nbsp; Click the &#39;Recurse into 
+			directories&#39; check box and click &#39;Get Properties&#39; again.&nbsp; Make 
+			sure that the list view is populated with all the file properties 
+			beneath the directory you entered (if you haven&#39;t defined any svn 
+			properties for you repository you will need to do so before you see 
+			anything here).<br />
+			</p>
+			</li>
+		</ol>
+		<p class="regularText"><strong><a name="svn_propset">svn propset</a></strong></p>
+		<p class="regularText">The final example will show you how to set SVN 
+		properties on a node in a repository.&nbsp; The function call which does 
+		this is 
+		SvnClient.SetProperty.&nbsp; The interesting thing about this 
+		function is that, just like the &#39;svn propset&#39; command, it allows you to 
+		set a property to either a string value or the raw bytes from a file.&nbsp; 
+		We will demonstrate how to do both here.&nbsp; Again, we will be adding a form to our 
+		project to demonstrate the use of the method.&nbsp; </p>
+		<ol>
+			<li class="regularText">
+			<p class="auto-style2">Start by adding the new form to the project.&nbsp; 
+			Click Project-&gt;Add Windows Form... </p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Make sure that &#39;Windows Form&#39; is selected, 
+			name the new form frmPropSet.cs and click &#39;OK&#39;</p>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add an OpenFileDialog to the form:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name: </strong>ofdOpenFile</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>FileName: </strong>&quot;&quot;</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add two labels to the form:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first Label): </strong>
+				lblFilePath</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>9, 19</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>File Path</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second label): </strong>
+				lblPropName</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>9, 46</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Property Name:</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add two RadioButton controls to the form:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first RadioButton):
+				</strong>rbTextValue</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>12, 75</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Checked: </strong>True</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Enter a text 
+				value:</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second RadioButton):
+				</strong>rbFileValue</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>12, 101</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Text: </strong>Import value from 
+				file:</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="auto-style2">Add four TextBox controls to the form:</p>
+			<ul>
+				<li>
+				<p class="auto-style2"><strong>Name (first TextBox): </strong>
+				tbFilePath</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>140, 12</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>286, 20</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (second TextBox): </strong>
+				tbPropName</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>140, 39</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>286, 20</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (third TextBox): </strong>
+				tbTextValue</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>140, 65</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Size: </strong>286, 20</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Name (fourth TextBox): </strong>
+				tbFileValue</p>
+				</li>
+				<li>
+				<p class="auto-style2"><strong>Location: </strong>140, 97</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>286, 20</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Now add three Button controls to the form.</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>Name (first button): </strong>
+				btnPropSet</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>197, 125</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Set Property</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (second button): </strong>
+				btnClose</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>291, 125</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Close</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Name (third button): </strong>
+				btnBrowse</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Location: </strong>432, 95</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>Browse</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Now set the properties of the form itself:</p>
+			<ul>
+				<li>
+				<p class="regularText"><strong>CancelButton: </strong>btnClose</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Size: </strong>531, 196</p>
+				</li>
+				<li>
+				<p class="regularText"><strong>Text: </strong>svn propset</p>
+				</li>
+			</ul>
+			</li>
+			<li class="regularText">
+			<p class="regularText">The final form should look something like 
+			this:<br />
+			<img alt="The final propset form" height="199" src="images/PropsetForm.jpg" width="536" /></p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Double click the Browse button to open the 
+			editor in the btnBrowse_Click method.&nbsp; Change the code in 
+			btnBrowse_Click as follows:<br />
+			<br />
+			<span class="code">&nbsp;private void btnBrowse_Click(object sender, 
+			EventArgs e)<br />
+			</span>{<span class="code"><br />
+			<strong>&nbsp;&nbsp;&nbsp; if (ofdOpenFile.ShowDialog() == 
+			DialogResult.OK)<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tbFileValue.Text = 
+			ofdOpenFile.FileName;<br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><br />
+			</span>}</p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Open SvnClient.cs in design view and open the 
+			collection editor for the Items property of cbCmdList.</p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">On its own line add the string:<br />
+			<br />
+			svn propset<br />
+			<br />
+			and click &#39;OK&#39;</p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Double click the &#39;Go&#39; button to open up its 
+			Click event handler.&nbsp; Add a new case to the switch statement as 
+			follows:<br />
+			<br />
+			<span class="code">case &quot;svn checkout&quot;: //Open the svn checkout form<br />
+&nbsp;&nbsp;&nbsp; ...<br />
+			<strong>case &quot;svn propset&quot;:<br />
+&nbsp;&nbsp;&nbsp; frmPropSet propSetForm = new frmPropSet();<br />
+&nbsp;&nbsp;&nbsp; propSetForm.ShowDialog();<br />
+&nbsp;&nbsp;&nbsp; break;</strong><br />
+			default:<br />
+&nbsp;&nbsp;&nbsp; ...</span></p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Save your project, run it and make sure that 
+			selecting &quot;svn proplist&quot; from the main menu opens our new form.&nbsp; 
+			Make sure that the &#39;Browse&#39; button opens the OpenFileDialog.&nbsp; 
+			Make sure that selecting a file from the OpenFileDialog populates 
+			the bottom text box with the correct file path.&nbsp; Quit the 
+			application.</p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Open frmPropSet.cs in the code editor and add 
+			the following two using statements to the top of the code:<br />
+			<br />
+			<span class="code">using System.IO;<br />
+			using SharpSvn;</span></p>
+			</li>
+			<li class="regularText">
+			<p class="regularText">Open frmPropSet.cs in design view and double 
+			click the &#39;Set Property&#39; button to create the method 
+			btnPropSet_Click().&nbsp; Edit the method as follows:<br />
+			<br />
+			<span class="code">&nbsp;private void btnPropSet_Click(object 
+			sender, EventArgs e)<br />
+			</span>{<span class="code"><br />
+			<strong>&nbsp;&nbsp;&nbsp; using (SvnClient client = new 
+			SvnClient())<br />
+&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; try<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //if using a 
+			file value, copy file to a buffer before setting prop.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if 
+			(rbFileValue.Checked)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+			</span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			//Arrays implement the Generic ICollection interface<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			byte[] buffer = File.ReadAllBytes(tbFileValue.Text);<br />
+			<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			//this is the call which executes svn propset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			client.SetProperty(tbFilePath.Text, tbPropName.Text, buffer);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(&quot;Added property &#39;&quot; + tbPropName.Text +<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			&quot;&#39; to file &quot; + tbFilePath.Text);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+			</span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //otherwise 
+			we are using a raw string value<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+			</span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			//this is the call which executes svn propset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			client.SetProperty(tbFilePath.Text, tbPropName.Text, 
+			tbTextValue.Text);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(&quot;Added property &#39;&quot; + tbPropName.Text +<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			&quot;&#39; to file &quot; + tbFilePath.Text);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>
+			</span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (SvnException se)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(se.Message, &quot;Error adding new property.&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (FileNotFoundException fnfe)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(fnfe.Message,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Invalid file 
+			name&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; catch (Exception ex)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>{<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBox.Show(ex.Message,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Error&quot;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxButtons.OK,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+			MessageBoxIcon.Error);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><strong><br />
+&nbsp;&nbsp;&nbsp; </strong></span>}<span class="code"><br />
+			</span>}<br />
+			<br />
+			This example lets you select whether to use a string or the bytes 
+			from a file as a property value.&nbsp; Obviously this is a great 
+			feature because you don&#39;t have to type large property values by 
+			hand.<br />
+			<br />
+			The<a href="namespaces/SharpSvnNSclasses/svnCliMembs/SetProperty.aspx"> 
+			SetProperty </a>function has overloads which take an argument class 
+			SvnSetPropertyArgs which operates similarly to the argument classes 
+			from the last three examples.</p>
+			</li>
+		</ol>
+		<p class="regularText">So that&#39;s the &nbsp;end of the walkthrough.&nbsp; 
+		Hopefully it will give you a good idea of how to use the basic 
+		classes/methods in the SharpSvn API.</p>
+		<p class="subHeadings"><a name="Getting_Help">Getting Help</a></p>
+		<p class="regularText">If you ever need help with the SharpSvn project 
+		and you can&#39;t find an answer to your question in this walkthrough, you 
+		will be happy to know that there is help available through the SharpSvn 
+		community.&nbsp; So where can you find this help?&nbsp; First, you 
+		should look through the SharpSvn wiki on
+		<a href="http://sharpsvn.open.collab.net">
+		http://sharpsvn.open.collab.net</a> to make sure the answer has not 
+		already been posted.&nbsp; If the answer isn&#39;t already there, sign up 
+		for a CollabNet account and post a question yourself.&nbsp; I have found 
+		that the API developers are pretty good at responding in a timely 
+		manner.&nbsp; Another 
+		option is to sign onto the IRC channel #ankhsvn and talk to some of the 
+		nice folks on the AnkhSvn project.&nbsp; AnkhSvn is a plugin for Visual 
+		Studio which gives you access to all the functionality of an SVN client 
+		right from the IDE.&nbsp; It is important to you because it uses 
+		SharpSvn so most of the AnkhSvn developers are SharpSvn wizards!&nbsp; Additionally a couple of the folks who run the SharpSvn 
+		project are signed on to #ankhsvn pretty regularly.&nbsp; What this 
+		means is if you can&#39;t get an answer from #ankhsvn it likely can&#39;t be done.&nbsp;
+		<br />
+		<br />
+		Please bear in mind however that SharpSvn is an open source project 
+		which means that there are folks from all over the world working on it.&nbsp; 
+		If you don&#39;t get an answer right away, please be patient, you will 
+		get helped.</p>
+	</div>
+</div>
+
+<p id="footer" class="regularText">Documentation written by Brady Tello.&nbsp; 
+All code examples can be used freely.&nbsp; Contact bctello&lt;the number eight&gt; at 
+gmail dot com with comments/suggestions/corrections. </p>
+</body>
+
+</html>

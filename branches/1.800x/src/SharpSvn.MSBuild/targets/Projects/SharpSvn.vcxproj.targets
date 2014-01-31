@@ -1,0 +1,20 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="UpdateNativeVersionResource" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+
+  <Target Name="SharpSvnPostLink"
+          AfterTargets="Link;LinkEmbedManifest;Manifest"
+          Condition="'$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
+
+    <UpdateNativeVersionResource
+      Source          ="%(Link.OutputFile)"
+      TempDir         ="$(IntDir)SharpSvn.Targets"
+      SourceUpdated   ="$(SharpSvnUpdatedResource)"
+      KeyContainer    ="%(Link.KeyContainer)"
+      KeyFile         ="$(LinkKeyFile)"
+
+      Condition="%(Link.OutputFile) != ''"/>
+  </Target>
+
+
+</Project>

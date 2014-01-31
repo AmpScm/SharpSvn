@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<project basedir="." default="help">
+  <property name="svnBuildType" value="tag" overwrite="false" />
+  <property name="libgit2BuildType" value="tag" overwrite="false" />
+  <property name="serfBuildType" value="tag" />
+  <property name="libgit2BuildType" value="tag" overwrite="false" />
+  <property name="httpdBuildType" value="tag" overwrite="false" />
+  
+  <property name="guessedPlatform" value="win32" />
+  <if test="${environment::variable-exists('LIB')}">
+    <property name="guessedPlatform" value="x64" if="${string::contains(string::to-upper(environment::get-variable('LIB')),'LIB\AMD64')}" />
+  </if>
+
+  <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
+
+  <!-- -->
+  <property name="subversionVersion" value="1.8.5" overwrite="false" />
+  <property name="libgit2Version" value="0.20.0" overwrite="false" />
+  <property name="mtccMerges" value="1550758,1550765,1550783,1550799,1550806,1550807,1550816,1550831,1550840,1550848,1550938,1550940,1550967,1550972,1550981,1550974,1551032,1551085" />
+  <!-- r1493272 - Fix blame performance issue -->
+  <!-- r1498000 - Use transition based iprop handling -->
+  <!-- r1531014, r1532316, r1536350, r1536383, r1536464, r1536488 - Move updates during delete -->
+  <!-- r1534149 - Properly handle certificate chains -->
+  <!-- r1535532 - Properly use multiple ssl accept providers -->
+  <!-- r1538812, r1538925, r1538928, r1538939 - Move original deleted -->
+  <!-- r1542610 - Fix resource file issue -->
+  <!-- r1544597, r1544600, r1544688, r1544690, r1545111, r1545122 - status direct vs ancestor -->
+  <!-- r1544182 - svn_client_cat3() -->
+  <!-- r1547774 - fix symlink checkout -->
+  <!-- r1542765, r1542767, r1542774 - Sqlite 3.8 improvements -->
+  <!-- r1549858 - fix proplist for iprop behavior -->
+  <!-- r1541638, r1545302 - Auto relocate for ! repos root -->
+  <!-- r1551524, r1551579 - Obtain lock correctly for moves to/from sub working copies -->
+  <!-- r1553101, r1553105, r1553113 - svn log performance -->
+  <property name="subversionMerges" value="1531014,1532316,1536350,1536383,1536464,1536488,1493272,1498000,1534149,1535532,1538812,1538925,1538928,1538939,1535676,1544597,1544600,1544688,1544690,1545111,1545122,1544182,1547774,1542765,1542767,1542774,1549858,1541638,1545302,1551524,1551579,1553101,1553105,1553113,${mtccMerges}" overwrite="false" /> 
+  <property name="subversionMergeBranches" value="" overwrite="false" />
+  <property name="svnAddSharpSvn" value="true" overwrite="false" />  
+  <property name="aprMerges" value="" overwrite="false" />
+  <property name="aprutilMerges" value="" overwrite="false" />
+  <property name="neonMerges" value="" overwrite="false" />
+  <!-- r2183-r2186          - Return connection timeouts as a specific error -->
+  <!-- r2254                - Possible bucket leak in cancel scenarios -->
+  <!-- r2258                - Report failed auth as failed requests -->
+  <!-- r2263                - SSL init race -->
+  <property name="serfMerges" value="2183-2186,2254,2258,2263" overwrite="false" />
+
+  <!-- -->
+  <property name="libgit2Version" value="0.19.0" overwrite="false" />
+  <property name="buildLibgit2" value="true" overwrite="false" />
+  <!-- -->
+  <property name="opensslVersion" value="1.0.1f" overwrite="false" />
+  <property name="neonVersion" value="0.30.0" overwrite="false" />
+
+  <property name="aprVersion" value="1.5.0" overwrite="false" />
+  <property name="aprUtilVersion" value="1.5.3" overwrite="false" />
+  <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
+  <property name="dbVersion" value="4.4.20" overwrite="false" />
+  <property name="expatVersion" value="2.0.1" overwrite="false" />
+  <property name="zlibVersion" value="1.2.8" overwrite="false" />
+  <property name="serfVersion" value="1.3.3" overwrite="false" />
+  <property name="saslVersion" value="2.1.25" overwrite="false" />
+  <property name="swigVersion" value="2.0.11" overwrite="false" />
+  <property name="nasmVersion" value="2.10.01" overwrite="false" />
+  <property name="pcreVersion" value="8.33" overwrite="false" />
+  <property name="httpdVersion" value="2.4.7" overwrite="false" />
+  <property name="gettextVersion" value="0.18.3" overwrite="false" />
+  <property name="sqliteVersion" value="3.7.17" overwrite="false" />
+  <property name="libssh2Version" value="1.4.3" overwrite="false" />
+
+  <!-- Building only -->
+  <property name="cmakeVersion" value="2.8.12.1" overwrite="false" />
+  <property name="sconsVersion" value="2.3.0" overwrite="false" />
+  
+  <!-- For testcase -->
+  <property name="nunitVersion" value="2.6.2" overwrite="false" />
+  <property name="sharpZipVersion" value="0860" overwrite="false" />
+  <property name="junitVersion" value="4.8.1" overwrite="false" />
+
+  <!-- Prefer http or https -->
+  <property name="httpOrHttps" value="http" />
+
+  <!-- Prefix to use for dependency DLL's -->
+  <property name="dllPrefix" value="SharpSvn-" overwrite="false" />
+  <property name="svnDll" value="svnDll" overwrite="false" />
+
+  <property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 9.0\VC" />
+  <property name="buildJavaHL" value="false" overwrite="false" />
+
+  <include buildfile="scripts/default.build" />
+
+  <target name="help">
+    <echo>
+      The following targets are defined
+      - build      - Build all
+      - clean      - Clean all
+      - distclean  - Clean all + clean downloads
+      - clean-svn  - Clean+Update subversion
+
+      Use nant /D:platform=x64 to build/clean the x64 binaries if autodetect fails
+
+      The following targets try to start nant within the specified context using vcvars.cmd
+      - x86
+      - x64
+    </echo>
+  </target>
+</project>

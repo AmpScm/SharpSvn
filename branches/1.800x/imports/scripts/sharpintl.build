@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="intl" value="sharpsvn" overwrite="false" />
+  <property name="svnBuildName" value="SharpSvn" overwrite="false" />
+
+  <target name="sharpintl-prepare" if="${intl=='sharpsvn'}">
+  </target>
+
+  <target name="sharpintl-build" depends="sharpintl-prepare" if="${intl=='sharpsvn'}">
+    <property name="i18proj" value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2005.vcproj" if="${VSversion == '2005'}" />
+    <property name="i18proj" value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcproj" unless="${VSversion == '2005'}" />
+    
+    <OnceBlock file="build/sharpintl-${platform}.build" if="${buildSubversion}">
+      <VCBuild src="${i18proj}" unless="${vcxproj}" />
+
+      <VCUpgrade src="${i18proj}" if="${vcxproj}" />    
+      <move if="${vcxproj}"
+            file="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcxproj"
+            tofile="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcxproj" overwrite="true" />
+      <MSBuild src="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcxproj" if="${vcxproj}" />
+    </OnceBlock>
+
+    <copy todir="${intDir}/include" file="SharpSvn-SvnI18n/libintl.h" />
+    <copy todir="${intDir}/lib">
+      <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy tofile="${intDir}/lib/intl.lib" file="${intDir}/lib/intl3_svn.lib" />
+    <if test="${platform == 'win32'}">
+      <copy todir="${release}/lib">
+        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+          <include name="*.lib" />
+        </fileset>
+      </copy>
+    </if>
+    <if test="${platform == 'x64'}">
+      <copy todir="${release}/lib-x64">
+        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+          <include name="*.lib" />
+        </fileset>
+      </copy>
+    </if>
+  </target>
+</project>
