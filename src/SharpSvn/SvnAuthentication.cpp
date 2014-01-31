@@ -774,6 +774,9 @@ bool SvnAuthentication::Run(T args, Predicate<T> ^doneFilter)
             if (!args->Break && doneFilter(args))
                 return true;
 
+            if (args->Cancel)
+                return false; // Allow filter to cancel too.
+
             args->Save = false;
         }
 
