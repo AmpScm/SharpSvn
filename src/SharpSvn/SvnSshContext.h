@@ -6,6 +6,7 @@
 namespace SharpSvn {
     namespace Security {
         ref class SvnAuthentication;
+        ref class SvnUserNamePasswordEventArgs;
     }
     namespace Implementation {
 
@@ -110,6 +111,7 @@ namespace SharpSvn {
             apr_socket_t *_apr_socket;
             SOCKET _socket;
             LIBSSH2_SESSION *_session;
+        internal:
             ssh_keybint_t *_kbi;
 
         public:
@@ -119,8 +121,7 @@ namespace SharpSvn {
 
         public:
             void OpenTunnel(svn_stream_t *&channel,
-                            AprPool^ resultPool,
-                            AprPool^ scratchPool);
+                            AprPool^ resultPool);
 
         public:
             void OpenConnection(AprPool^ scratchPool);
@@ -135,6 +136,9 @@ namespace SharpSvn {
             void PerformKeyboardInteractive(String ^name, String ^instructions,
                                             int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
                                             LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses);
+
+            bool TryKeyboardInteractive(SvnUserNamePasswordEventArgs ^e);
+            void ClosedTunnel();
         };
 
         private ref class SvnSshContext sealed : public SvnBase
