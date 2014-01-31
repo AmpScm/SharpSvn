@@ -737,9 +737,28 @@ bool SshConnection::TryKeyboardInteractive(SvnUserNamePasswordEventArgs ^e)
                                                   strlen(username),
                                                   sharpsvn_ssh_keyboard_interactive))
     {
+        // Success!
+
+        // Let's store the credentials for the current 'Windows Session'
+        // even when not requesting to save to avoid asking over and over again.
+        CREDENTIALW cred;
+        memset(&cred, sizeof(cred), 0);
+
+        pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+        pin_ptr<const wchar_t> pPassword = PtrToStringChars(e->Password);
+
+        cred.Type = CRED_TYPE_GENERIC;
+        cred.TargetName = const_cast<wchar_t*>(pRealm);
+        cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
+        cred.CredentialBlobSize = sizeof(wchar_t) * wcslen(pPassword);
+
         if (e->Save && e->MaySave)
-        {
-        }
+            cred.Persist = CRED_PERSIST_ENTERPRISE;
+        else
+            cred.Persist = CRED_PERSIST_SESSION;
+
+        CredWriteW(&cred, 0); // Ignore failures
+
         return true;
     }
 
