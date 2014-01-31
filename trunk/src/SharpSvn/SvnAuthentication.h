@@ -299,6 +299,7 @@ namespace SharpSvn {
             initonly String ^_initialUserName;
             String ^_username;
             String ^_password;
+            bool _allowEditUser;
         public:
             SvnUserNamePasswordEventArgs(String^ initialUserName, String^ realm, bool maySave)
                 : SvnAuthenticationEventArgs(realm, maySave)
@@ -306,6 +307,15 @@ namespace SharpSvn {
                 _initialUserName = initialUserName;
                 _username = initialUserName ? initialUserName : "";
                 _password = "";
+            }
+
+            SvnUserNamePasswordEventArgs(String^ initialUserName, String^ realm, bool maySave, bool allowEditUser)
+                : SvnAuthenticationEventArgs(realm, maySave)
+            {
+                _initialUserName = initialUserName;
+                _username = initialUserName ? initialUserName : "";
+                _password = "";
+                _allowEditUser = allowEditUser;
             }
 
             /// <summary>Default username; can be NULL</summary>
@@ -326,7 +336,17 @@ namespace SharpSvn {
                 }
                 void set(String ^value)
                 {
-                    _username = value ? value : "";
+                    if (_allowEditUser)
+                        _username = value ? value : "";
+                }
+            }
+
+            /// <summary>Gets a boolean indicating whether editing the username is allowed</summary>
+            property bool CanEditUserName
+            {
+                bool get()
+                {
+                    return _allowEditUser;
                 }
             }
 
