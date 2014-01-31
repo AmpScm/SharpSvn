@@ -207,8 +207,6 @@ namespace SharpSvn.UI
             int flags = (int)NativeMethods.CREDUI_FLAGS.GENERIC_CREDENTIALS | (int)NativeMethods.CREDUI_FLAGS.ALWAYS_SHOW_UI | (int)NativeMethods.CREDUI_FLAGS.DO_NOT_PERSIST;
             if (e.MaySave)
                 flags |= (int)NativeMethods.CREDUI_FLAGS.SHOW_SAVE_CHECK_BOX;
-            if (!e.CanEditUserName)
-                flags |= (int)NativeMethods.CREDUI_FLAGS.KEEP_USERNAME;
 
             switch (NativeMethods.CredUIPromptForCredentials(ref info, e.Realm, IntPtr.Zero, 0, sbUserName, 1024, sbPassword, 1024, ref dlgSave,
                 (NativeMethods.CREDUI_FLAGS)flags))
