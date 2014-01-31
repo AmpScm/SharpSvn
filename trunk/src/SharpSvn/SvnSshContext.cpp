@@ -292,8 +292,8 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
     }
     else if (key_type == LIBSSH2_HOSTKEY_TYPE_DSS)
     {
-        const char *fp, *mod, *p;
-        size_t fp_sz, mod_sz, p_sz;
+        const char *fp, *p;
+        size_t fp_sz, p_sz;
 
         fp = hostkey;
         fp_sz = key_sz;
@@ -572,6 +572,17 @@ bool SshConnection::DoPublicKeyAuth(AprPool^ scratchPool)
     }
 }
 
+struct SharpSvn::Implementation::ssh_keybint_t
+{
+    apr_pool_t *pool;
+
+    CREDENTIALW *pCred; // For first attempt
+    int nPrompts;
+    bool withEcho;
+
+    gcroot<SvnUserNamePasswordEventArgs^> current;
+};
+
 static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive)
   // void sharpsvn_ssh_keyboard_interactive(const char* name, int name_len,
   //                                        const char* instruction, int instruction_len,
@@ -581,48 +592,51 @@ static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive)
 {
     SshConnection ^conn = AprBaton<SshConnection^>::Get((IntPtr)*abstract);
 
+    struct ssh_keybint_t &kbi = *conn->_kbi;
+    kbi.nPrompts = num_prompts;
+
+    if (num_prompts > 1 && prompts[0].echo)
+        kbi.withEcho = true;
+
     conn->PerformKeyboardInteractive(SvnBase::Utf8_PtrToString(name, name_len),
                                      SvnBase::Utf8_PtrToString(instruction, instruction_len),
                                      num_prompts, prompts, responses);
 }
 
-struct SharpSvn::Implementation::ssh_keybint_t
+static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive_from_cache)
+  // void sharpsvn_ssh_keyboard_interactive(const char* name, int name_len,
+  //                                        const char* instruction, int instruction_len,
+  //                                        int num_prompts,
+  //                                        const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
+  //                                        LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses, void **abstract)
 {
-    apr_pool_t *pool;
-    const char *username;
+    UNUSED_ALWAYS(name);
+    UNUSED_ALWAYS(name_len);
+    UNUSED_ALWAYS(instruction);
+    UNUSED_ALWAYS(instruction_len);
+    SshConnection ^conn = AprBaton<SshConnection^>::Get((IntPtr)*abstract);
 
-    CREDENTIALW *pCred; // For first attempt
-};
+    struct ssh_keybint_t &kbi = *conn->_kbi;
+    kbi.nPrompts = num_prompts;
 
-void SshConnection::PerformKeyboardInteractive(String ^name, String ^instructions,
-                                               int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
-                                               LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses)
-{
-    struct ssh_keybint_t &kbi = *_kbi;
+    if (num_prompts > 1 && prompts[0].echo)
+        kbi.withEcho = true;
 
-    if (kbi.pCred)
+    if (num_prompts == 1) // We guess that this is a password prompt...
     {
-        if (num_prompts == 1) // We guess that this is a password prompt...
-        {
-            kbi.pCred = kbi.pCred;
+        int needed = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
+                                          kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
+                                          NULL, 0, NULL, NULL);
 
-            int needed = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
-                                              kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
-                                              NULL, 0, NULL, NULL);
+        responses[0].length = needed;
+        responses[0].text = (char*)calloc(needed+1, 1);
 
-            responses[0].length = needed;
-            responses[0].text = (char*)malloc(needed);
+        int written = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
+                                          kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
+                                          responses[0].text, responses[0].length, NULL, NULL);
 
-            int written = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
-                                              kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
-                                              responses[0].text, responses[0].length, NULL, NULL);
-
-            if (needed != written)
-              memset(&responses[0], sizeof(responses[0]), 0);
-        }
-    }
-    else
-    {
+        if (needed != written)
+          memset(&responses[0], sizeof(responses[0]), 0);
     }
 }
 
@@ -635,33 +649,41 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
     try
     {
         String ^realm = _host->RealmString;
+        const char *username = scratchPool->AllocString(_host->User);
         CREDENTIALW *pCred;
         int rc;
 
         kbi.pool = scratchPool->Handle;
-        kbi.username = scratchPool->AllocString(_host->User);
+        
+        kbi.nPrompts = -1;
 
         pin_ptr<const wchar_t> pRealm = PtrToStringChars(realm);
         if (CredReadW(pRealm, CRED_TYPE_GENERIC, 0, &pCred))
         {
             kbi.pCred = pCred;
 
-            rc = libssh2_userauth_keyboard_interactive_ex(_session, kbi.username,
-                                                          strlen(kbi.username),
-                                                          sharpsvn_ssh_keyboard_interactive);
+            rc = libssh2_userauth_keyboard_interactive_ex(_session, username, strlen(username),
+                                                          sharpsvn_ssh_keyboard_interactive_from_cache);
 
             kbi.pCred = nullptr;
 
             CredFree(pCred);
 
-            if (rc)
+            if (!rc)
                 return true; // Succeeded
 
             // Authentication failed... Delete failed credentials
 
-            CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
+            //CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
         }
 
+        SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_host->User,
+                                                                              L'<' + _host->RealmString + L'>',
+                                                                              true, false);
+        if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNamePasswordEventArgs^>(this, &SshConnection::TryKeyboardInteractive)))
+        {
+            return true;
+        }
 
         return false;
     }
@@ -669,6 +691,61 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
     {
         _kbi = nullptr;
     }
+}
+
+void SshConnection::PerformKeyboardInteractive(String ^name, String ^instructions,
+                                               int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
+                                               LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses)
+{
+    struct ssh_keybint_t &kbi = *_kbi;
+
+    if (kbi.current && num_prompts >= 1 && !prompts[0].echo)
+    {
+        AprPool scratchPool(%_pool);
+
+        const char *password = scratchPool.AllocString(kbi.current->Password);
+
+        responses[0].text = _strdup(password);
+        responses[0].length = strlen(password);
+    }
+}
+
+
+bool SshConnection::TryKeyboardInteractive(SvnUserNamePasswordEventArgs ^e)
+{
+    struct ssh_keybint_t &kbi = *_kbi;
+
+    if (kbi.nPrompts >= 0 && kbi.nPrompts != 1)
+    {
+        e->Cancel = true;
+        return false;
+    }
+
+    if (! e->Password)
+    {
+        e->UserName = e->InitialUserName;
+        e->Password = "";
+        return false;
+    }
+
+    AprPool scratchPool(%_pool);
+
+    kbi.current = e;
+    const char *username = scratchPool.AllocString(e->UserName);
+
+    if (!libssh2_userauth_keyboard_interactive_ex(_session, username,
+                                                  strlen(username),
+                                                  sharpsvn_ssh_keyboard_interactive))
+    {
+        if (e->Save && e->MaySave)
+        {
+        }
+        return true;
+    }
+
+    e->UserName = e->InitialUserName ? e->InitialUserName : "";
+    e->Password = "";
+    return false;
 }
 
 bool SshConnection::DoPasswordAuth(AprPool^ scratchPool)
@@ -681,6 +758,7 @@ struct ssh_baton
 {
     LIBSSH2_CHANNEL *channel;
     svn_boolean_t read_once;
+    void *connection_baton;
 };
 
 static svn_error_t * ssh_read(void *baton, char *data, apr_size_t *len)
@@ -763,12 +841,15 @@ static svn_error_t * ssh_close(void *baton)
     if (!libssh2_channel_close(ssh->channel))
         libssh2_channel_wait_closed(ssh->channel);
 
+    SshConnection ^conn = AprBaton<SshConnection^>::Get((IntPtr)ssh->connection_baton);
+
+    conn->ClosedTunnel();
+
     return SVN_NO_ERROR;
 }
 
 void SshConnection::OpenTunnel(svn_stream_t *&channel,
-                               AprPool ^resultPool,
-                               AprPool ^scratchPool)
+                               AprPool ^resultPool)
 {
     LIBSSH2_CHANNEL *ssh_channel = libssh2_channel_open_session(_session);
 
@@ -782,12 +863,17 @@ void SshConnection::OpenTunnel(svn_stream_t *&channel,
 
     ssh_baton *ch = (ssh_baton*)resultPool->AllocCleared(sizeof(*ch));
     ch->channel = ssh_channel;
+    ch->connection_baton = _connBaton->Handle;
 
     channel = svn_stream_create(ch, resultPool->Handle);
 
     svn_stream_set_write(channel, ssh_write);
     svn_stream_set_read2(channel, ssh_read, NULL);
     svn_stream_set_close(channel, ssh_close);
+}
+
+void SshConnection::ClosedTunnel()
+{
 }
 
 void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
@@ -806,6 +892,6 @@ void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
         _connections[host] = connection;
     }
 
-    return connection->OpenTunnel(channel, resultPool, scratchPool);
+    return connection->OpenTunnel(channel, resultPool);
 }
 #endif
