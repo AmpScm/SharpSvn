@@ -919,8 +919,6 @@ namespace SharpSvn {
             /// <summary>Retrieves an authorization baton allocated in the specified pool; containing the current authorization settings</summary>
             svn_auth_baton_t *GetAuthorizationBaton(int% cookie);
 
-            bool TryGetDefaultSshUser(String ^hostname, int port, [Out] String ^%userName, bool %fromCredStore);
-
         private:
             static apr_hash_t* get_cache(svn_auth_baton_t* baton);
             static apr_hash_t* clone_credentials(apr_hash_t *from, apr_hash_t *to, AprPool^ pool);

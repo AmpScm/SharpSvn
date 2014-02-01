@@ -11,6 +11,7 @@ namespace SharpSvn {
     namespace Implementation {
 
         using System::Collections::Generic::Dictionary;
+        using System::Collections::Generic::List;
         using SharpSvn::Security::SvnAuthentication;
 
         private ref class SshHost sealed : IEquatable<SshHost^>
@@ -23,13 +24,11 @@ namespace SharpSvn {
         public:
             SshHost(String ^user, String ^host, int port)
             {
-                if (! user)
-                    throw gcnew ArgumentNullException("user");
-                else if (String::IsNullOrEmpty(host))
+                if (String::IsNullOrEmpty(host))
                     throw gcnew ArgumentNullException("host");
 
-                _user = user;
-                _host = host;
+                _user = String::IsNullOrEmpty(user) ? "" : user;
+                _host = host->ToLowerInvariant(); // DNS is case insensitive and defaults to lowercase
                 _port = port ? port : 22;
             }
 
@@ -49,7 +48,7 @@ namespace SharpSvn {
                     return false;
 
                 return other->Host->Equals(Host)
-                    && (other->User == User)
+                    && other->User->Equals(User)
                     && other->Port.Equals(Port);
             }
 
@@ -108,9 +107,13 @@ namespace SharpSvn {
             initonly SshHost ^_host;
             AprPool _pool;
             initonly AprBaton<SshConnection^>^ _connBaton;
+            apr_sockaddr_t *_sockAddr;
             apr_socket_t *_apr_socket;
             SOCKET _socket;
             LIBSSH2_SESSION *_session;
+            String^ _hostKeyBase64;
+            String^ _username;
+            bool _saveuserWhenNoPassword;
         internal:
             ssh_keybint_t *_kbi;
 
@@ -120,6 +123,12 @@ namespace SharpSvn {
             !SshConnection();
 
         public:
+            property SshHost ^ Host
+            {
+                SshHost ^ get() { return _host; }
+            }
+
+        public:
             void OpenTunnel(svn_stream_t *&channel,
                             AprPool^ resultPool);
 
@@ -127,10 +136,14 @@ namespace SharpSvn {
             void OpenConnection(AprPool^ scratchPool);
 
         private:
+            void ResolveAddress(AprPool^ scratchPool);
+            void OpenSocket(AprPool^ scratchPool);
             void VerifySshHost(AprPool ^scratchPool);
             bool DoPublicKeyAuth(AprPool ^scratchPool);
             bool DoKeyboardInteractiveAuth(AprPool ^scratchPool);
             bool DoPasswordAuth(AprPool ^scratchPool);
+
+            void SwitchUsername(String ^toUser, AprPool ^scratchPool);
 
         internal:
             void PerformKeyboardInteractive(String ^name, String ^instructions,
@@ -146,6 +159,7 @@ namespace SharpSvn {
             AprPool _pool;
             initonly SvnClientContext ^_ctx;
             initonly Dictionary<SshHost^, SshConnection^>^ _connections;
+            initonly List<SshConnection^>^ _conns;
 
         public:
             SvnSshContext(SvnClientContext^ ctx)
@@ -156,6 +170,7 @@ namespace SharpSvn {
                 _ctx = ctx;
 
                 _connections = gcnew Dictionary<SshHost^, SshConnection^>();
+                _conns = gcnew List<SshConnection^>();
             }
 
         public:
@@ -175,6 +190,25 @@ namespace SharpSvn {
             property SvnAuthentication^ Authentication
             {
                 SvnAuthentication^ get() { return _ctx->Authentication; }
+            }
+
+        public:
+            void Unhook(SshConnection ^connection, bool full)
+            {
+                SshConnection^ other;
+
+                if (_connections->TryGetValue(connection->Host, other))
+                {
+                    if (other == connection)
+                    {
+                        _connections->Remove(connection->Host);
+                        // But don't remove connection from _conns until
+                        // all streams are closed!
+                    }
+                }
+
+                if (full)
+                    _conns->Remove(connection);
             }
         };
     }
