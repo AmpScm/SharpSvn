@@ -1,10 +1,15 @@
 #include "Stdafx.h"
+
+#define SECURITY_WIN32
+#include <Security.h>
+#include <WinCred.h>
+
 #if SVN_VER_MINOR >= 9
 #include <apr_portable.h>
 #include "SvnSshContext.h"
 #include "SvnAuthentication.h"
 #include "UnmanagedStructs.h"
-#include <WinCred.h>
+
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
@@ -26,6 +31,9 @@ SshConnection::SshConnection(SvnSshContext ^ctx, SshHost ^host, AprPool ^inPool)
 
     //* tell libssh2 we want it all done blocking (=default for libssh2)
     libssh2_session_set_blocking(_session, 1);
+
+    _apr_socket = NULL;
+    _socket = INVALID_SOCKET;
 }
 
 SshConnection::~SshConnection()
@@ -127,86 +135,155 @@ static String^ BigNumToString(const char *data, size_t length, int *bits=NULL)
     return sb->ToString();
 }
 
+void SshConnection::ResolveAddress(AprPool^ scratchPool)
+{
+    const char *hostname = scratchPool->AllocString(_host->Host);
+
+    apr_sockaddr_t *sa;
+    apr_socket_t *sock;
+    apr_status_t status;
+    int family = APR_INET;
+
+    /* Make sure we have IPV6 support first before giving apr_sockaddr_info_get
+    APR_UNSPEC, because it may give us back an IPV6 address even if we can't
+    create IPV6 sockets.  */
+
+    status = apr_socket_create(&sock, APR_INET6, SOCK_STREAM, APR_PROTO_TCP,
+        scratchPool->Handle);
+    if (status == 0)
+    {
+        apr_socket_close(sock);
+        family = APR_UNSPEC;
+    }
+
+    /* Resolve the hostname. */
+    status = apr_sockaddr_info_get(&sa, hostname, family,
+        (apr_port_t)_host->Port, 0, _pool.Handle);
+    if (status)
+        SVN_THROW(svn_error_wrap_apr(status, NULL));
+
+    _sockAddr = sa;
+}
+
+void SshConnection::OpenSocket(AprPool^ scratchPool)
+{
+    const char *hostname = scratchPool->AllocString(_host->Host);
+    apr_socket_t *sock;
+    apr_status_t status;
+
+    /* Iterate through the returned list of addresses attempting to
+    * connect to each in turn. */
+    do
+    {
+        /* Create the socket. */
+        status = apr_socket_create(&sock, _sockAddr->family, SOCK_STREAM, APR_PROTO_TCP,
+            _pool.Handle);
+
+        if (status == APR_SUCCESS)
+        {
+            status = apr_socket_connect(sock, _sockAddr);
+            if (status != APR_SUCCESS)
+                apr_socket_close(sock);
+        }
+        _sockAddr = _sockAddr->next;
+    } while (status != APR_SUCCESS && _sockAddr);
+
+    if (status)
+        SVN_THROW(
+        svn_error_wrap_apr(status, "Can't connect to host '%s'", hostname));
+
+    /* Enable TCP keep-alives on the socket so we time out when
+      * the connection breaks due to network-layer problems.
+      * If the peer has dropped the connection due to a network partition
+      * or a crash, or if the peer no longer considers the connection
+      * valid because we are behind a NAT and our public IP has changed,
+      * it will respond to the keep-alive probe with a RST instead of an
+      * acknowledgment segment, which will cause svn to abort the session
+      * even while it is currently blocked waiting for data from the peer.
+      * See issue #3347. */
+    status = apr_socket_opt_set(sock, APR_SO_KEEPALIVE, 1);
+    if (status)
+    {
+        /* It's not a fatal error if we cannot enable keep-alives. */
+    }
+
+    _apr_socket = sock;
+    SOCKET win_socket;
+    apr_os_sock_get(&win_socket, sock);
+    _socket = win_socket;
+}
+
+static bool TryUserName(SvnUserNameEventArgs^ e)
+{
+    return !String::IsNullOrEmpty(e->UserName);
+}
 
 void SshConnection::OpenConnection(AprPool^ scratchPool)
 {
-    const char *hostname = scratchPool->AllocString(_host->Host);
-    const char *username = scratchPool->AllocString(_host->User);
-
-    {
-        apr_sockaddr_t *sa;
-        apr_status_t status;
-        int family = APR_INET;
-        apr_socket_t *sock;
-
-        /* Make sure we have IPV6 support first before giving apr_sockaddr_info_get
-        APR_UNSPEC, because it may give us back an IPV6 address even if we can't
-        create IPV6 sockets.  */
-
-        status = apr_socket_create(&sock, APR_INET6, SOCK_STREAM, APR_PROTO_TCP,
-            _pool.Handle);
-        if (status == 0)
-        {
-            apr_socket_close(sock);
-            family = APR_UNSPEC;
-        }
-
-        /* Resolve the hostname. */
-        status = apr_sockaddr_info_get(&sa, hostname, family,
-            (apr_port_t)_host->Port, 0, _pool.Handle);
-        if (status)
-            SVN_THROW(svn_error_wrap_apr(status, NULL));
-
-        /* Iterate through the returned list of addresses attempting to
-        * connect to each in turn. */
-        do
-        {
-            /* Create the socket. */
-            status = apr_socket_create(&sock, sa->family, SOCK_STREAM, APR_PROTO_TCP,
-                _pool.Handle);
-
-            if (status == APR_SUCCESS)
-            {
-                status = apr_socket_connect(sock, sa);
-                if (status != APR_SUCCESS)
-                    apr_socket_close(sock);
-            }
-            sa = sa->next;
-        } while (status != APR_SUCCESS && sa);
-
-        if (status)
-            SVN_THROW(
-            svn_error_wrap_apr(status, "Can't connect to host '%s'", hostname));
-
-        /* Enable TCP keep-alives on the socket so we time out when
-         * the connection breaks due to network-layer problems.
-         * If the peer has dropped the connection due to a network partition
-         * or a crash, or if the peer no longer considers the connection
-         * valid because we are behind a NAT and our public IP has changed,
-         * it will respond to the keep-alive probe with a RST instead of an
-         * acknowledgment segment, which will cause svn to abort the session
-         * even while it is currently blocked waiting for data from the peer.
-         * See issue #3347. */
-        status = apr_socket_opt_set(sock, APR_SO_KEEPALIVE, 1);
-        if (status)
-        {
-            /* It's not a fatal error if we cannot enable keep-alives. */
-        }
-
-        _apr_socket = sock;
-        SOCKET win_socket;
-        apr_os_sock_get(&win_socket, sock);
-        _socket = win_socket;
-    }
-
+    ResolveAddress(scratchPool);
+    OpenSocket(scratchPool);
     VerifySshHost(scratchPool);
 
+    _username = _host->User;
+
+    pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+    CREDENTIALW *pCred;
+
+    // Allow overriding the username, even when using "user@server" connection
+    if (CredReadW(pRealm, CRED_TYPE_GENERIC, 0, &pCred))
+    {
+        if (pCred->UserName && *pCred->UserName)
+          _username = gcnew String(pCred->UserName);
+
+        CredFree(pCred);
+    }
+    if (String::IsNullOrEmpty(_username))
+    {
+        wchar_t *win_name = nullptr;
+        ULONG namelen;
+        if (GetUserNameExW(NameUserPrincipal, NULL, &namelen))
+        {
+            namelen++;
+            win_name = (wchar_t *)scratchPool->Alloc(namelen * sizeof(wchar_t));
+
+            if (GetUserNameExW(NameUserPrincipal, win_name, &namelen))
+            {
+                win_name[namelen] = 0;
+
+                wchar_t *w_at = wcschr(win_name, L'@');
+                if (w_at)
+                    *w_at = L'\0';
+            }
+            else
+                win_name = nullptr;
+        }
+
+        if (win_name)
+            _username = gcnew String(win_name);
+
+        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(L'<' + _host->RealmString + L'>', true);
+        ee->UserName = _username;
+
+        if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNameEventArgs^>(&TryUserName)))
+        {
+            _username = ee->UserName;
+            _saveuserWhenNoPassword = ee->Save;
+        }
+    }
+
+
+    if (String::IsNullOrEmpty(_username))
+    {
+    }
+
+    const char *username = scratchPool->AllocString(_username);
     {
         const char *authTypes = libssh2_userauth_list(_session, username, strlen(username));
         bool authenticated = FALSE;
 
         char *next = apr_pstrdup(scratchPool->Handle, authTypes);
 
+        // NOTE: _session might change while authenticating to switch username.
         while (*next && !libssh2_userauth_authenticated(_session))
         {
             char *end = strchr(next, ',');
@@ -233,6 +310,38 @@ void SshConnection::OpenConnection(AprPool^ scratchPool)
 
     throw gcnew SvnRepositoryIOException(
         svn_error_create(SVN_ERR_RA_CANNOT_CREATE_TUNNEL, NULL, "Authentication failed"));
+}
+
+void SshConnection::SwitchUsername(String ^toUser, AprPool ^scratchPool)
+{
+    // SSH doesn't allow switching user after using a specific user... which
+    // we already did when determining authentication methods...
+
+    // This will log a failed authentication attempt on the server.
+    // but then... the user shouldn't have switched users.
+
+    if (_session)
+    {
+        libssh2_session_free(_session);
+        _session = nullptr;
+    }
+    if (_apr_socket)
+    {
+        apr_socket_close(_apr_socket);
+        _apr_socket = nullptr;
+        _socket = INVALID_SOCKET;
+    }
+
+    _session = libssh2_session_init_ex(nullptr, nullptr, nullptr, _connBaton->Handle);
+
+    //* tell libssh2 we want it all done blocking (=default for libssh2)
+    libssh2_session_set_blocking(_session, 1);
+
+    OpenSocket(scratchPool); // Create socket connection
+    VerifySshHost(scratchPool); // Verify hostkey (shortcut for exact match like here)
+
+    // If nothing failed by now, we properly switched users...
+    _username = toUser;
 }
 
 static bool FingerPrintAccepted(SvnSshServerTrustEventArgs ^e)
@@ -263,6 +372,34 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
 
     if (!hostkey)
         throw gcnew InvalidOperationException("SSH server didn't hand us an hostkey!");
+
+    String ^hostKeyBase64;
+    {
+        array<Byte> ^hostKey = gcnew array<Byte>(key_sz);
+        pin_ptr<Byte> pHostKey = &hostKey[0];
+        memcpy(pHostKey, hostkey, key_sz);
+
+        hostKeyBase64 = System::Convert::ToBase64String(hostKey);
+    }
+
+    if (hostKeyBase64 == _hostKeyBase64)
+    {
+        return; // Already verified! -> Reconnecting for authentication attempt with different user
+    }
+    else
+    {
+        if (_hostKeyBase64)
+            hostMismatch = true;
+
+        _hostKeyBase64 = hostKeyBase64;
+    }
+
+    /*
+    else
+    {
+        _ctx->Unhook(this, false);
+        throw gcnew InvalidOperationException("Hostkey unexpectedly changed - Security Breached?");
+    }*/
 
     String ^puttyRealm;
     String ^puttyValue;
@@ -528,7 +665,7 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
 
 bool SshConnection::DoPublicKeyAuth(AprPool^ scratchPool)
 {
-    const char *username = scratchPool->AllocString(_host->User);
+    const char *username = scratchPool->AllocString(_username);
 
     LIBSSH2_AGENT *agent = libssh2_agent_init(_session);
     bool connected = false;
@@ -649,7 +786,7 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
     try
     {
         String ^realm = _host->RealmString;
-        const char *username = scratchPool->AllocString(_host->User);
+        const char *username = scratchPool->AllocString(_username);
         CREDENTIALW *pCred;
         int rc;
 
@@ -674,12 +811,13 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
 
             // Authentication failed... Delete failed credentials
 
-            //CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
+            CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
         }
 
+        bool maySave = Environment::UserInteractive; // Or the CredStore is unavailable
         SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_host->User,
                                                                               L'<' + _host->RealmString + L'>',
-                                                                              true, false);
+                                                                              maySave);
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNamePasswordEventArgs^>(this, &SshConnection::TryKeyboardInteractive)))
         {
             return true;
@@ -703,7 +841,12 @@ void SshConnection::PerformKeyboardInteractive(String ^name, String ^instruction
     {
         AprPool scratchPool(%_pool);
 
-        const char *password = scratchPool.AllocString(kbi.current->Password);
+        const char *password;
+
+        if (kbi.current->Password)
+            password = scratchPool.AllocString(kbi.current->Password);
+        else
+            password = "";
 
         responses[0].text = _strdup(password);
         responses[0].length = strlen(password);
@@ -721,17 +864,13 @@ bool SshConnection::TryKeyboardInteractive(SvnUserNamePasswordEventArgs ^e)
         return false;
     }
 
-    if (! e->Password)
-    {
-        e->UserName = e->InitialUserName;
-        e->Password = "";
-        return false;
-    }
-
     AprPool scratchPool(%_pool);
 
+    if (e->UserName != _username)
+        SwitchUsername(e->UserName, %scratchPool);
+
     kbi.current = e;
-    const char *username = scratchPool.AllocString(e->UserName);
+    const char *username = scratchPool.AllocString(_username);
 
     if (!libssh2_userauth_keyboard_interactive_ex(_session, username,
                                                   strlen(username),
@@ -899,7 +1038,7 @@ void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
                                String ^user, String ^hostname, int port,
                                AprPool ^resultPool, AprPool ^scratchPool)
 {
-    SshHost ^host = gcnew SshHost(user ? user : "", hostname, port);
+    SshHost ^host = gcnew SshHost(user, hostname, port);
     SshConnection ^connection;
 
     if (!_connections->TryGetValue(host, connection))
@@ -909,6 +1048,7 @@ void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
         connection->OpenConnection(scratchPool);
 
         _connections[host] = connection;
+        _conns->Add(connection);
     }
 
     return connection->OpenTunnel(channel, resultPool);
