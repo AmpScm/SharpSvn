@@ -170,6 +170,14 @@ namespace SharpSvn {
                     _break = value;
                 }
             }
+
+        protected public:
+            virtual void Clear()
+            {
+                _break = false;
+                _cancel = false;
+                _save = false;
+            }
         };
 
         ref class SvnAuthentication;
@@ -354,17 +362,43 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                _username = _initialUserName ? _initialUserName : "";
+                _password = "";
+            }
         };
 
         public ref class SvnUserNameEventArgs : public SvnAuthenticationEventArgs
         {
             String ^_username;
+            String ^_initialUserName;
         public:
+            SvnUserNameEventArgs(String^ initialUserName, String^ realm, bool maySave)
+                : SvnAuthenticationEventArgs(realm, maySave)
+            {
+                _initialUserName = initialUserName;
+                _username = initialUserName ? initialUserName : "";
+            }
+
             SvnUserNameEventArgs(String^ realm, bool maySave)
                 : SvnAuthenticationEventArgs(realm, maySave)
             {
                 _username = "";
             }
+
+            /// <summary>Default username; can be NULL</summary>
+            property String^ InitialUserName
+            {
+                String^ get()
+                {
+                    return _initialUserName;
+                }
+            }
+
 
             /// <summary>The username to authorize with</summary>
             property String^ UserName
@@ -390,6 +424,13 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                _username = _initialUserName ? _initialUserName : "";
+            }
         };
 
         [Flags]
@@ -538,6 +579,13 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                //_acceptedFailures = SvnCertificateTrustFailures::None;
+            }
         };
 
         public ref class SvnSslServerTrustEventArgs : public SvnAuthenticationEventArgs
@@ -665,6 +713,13 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                _acceptedFailures = SvnCertificateTrustFailures::None;
+            }
         };
 
         public ref class SvnSslClientCertificateEventArgs : public SvnAuthenticationEventArgs
@@ -700,6 +755,13 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                _certificateFile = nullptr;
+            }
         };
 
         public ref class SvnSslClientCertificatePasswordEventArgs : public SvnAuthenticationEventArgs
@@ -709,6 +771,7 @@ namespace SharpSvn {
             SvnSslClientCertificatePasswordEventArgs(String^ realm, bool maySave)
                 : SvnAuthenticationEventArgs(realm, maySave)
             {
+                _password = "";
             }
 
             /// <summary>The password to authorize with</summary>
@@ -735,9 +798,15 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                _password = "";
+            }
         };
 
-#if SVN_VER_MINOR >= 9
         [Flags]
         public enum class SvnSshTrustFailures
         {
@@ -825,8 +894,13 @@ namespace SharpSvn {
                     return nullptr;
                 }
             };
+        protected public:
+            virtual void Clear() override
+            {
+                __super::Clear();
+                _acceptedFailures = SvnSshTrustFailures::None;
+            }
         };
-#endif
 
         public ref class SvnBeforeEngineDialogEventArgs : public SvnEventArgs
         {
@@ -1175,7 +1249,6 @@ namespace SharpSvn {
                 }
             }
 
-#if SVN_VER_MINOR >= 9
             event EventHandler<SvnSshServerTrustEventArgs^>^ SshServerTrustHandlers
             {
                 void add(EventHandler<SvnSshServerTrustEventArgs^>^ e)
@@ -1212,7 +1285,6 @@ namespace SharpSvn {
                     }
                 }
             }
-#endif
 
             DECLARE_EVENT(SvnBeforeEngineDialogEventArgs^, BeforeEngineDialog)
 
