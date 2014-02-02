@@ -434,7 +434,7 @@ void AprPool::KeepAlive(Object^ obj)
 
     PoolAliveRef* r = new PoolAliveRef(obj, false);
 
-    apr_pool_cleanup_register(Handle, reinterpret_cast<const void*>(r), PoolAliveRef::Cleanup, PoolAliveRef::Cleanup);
+    apr_pool_cleanup_register(Handle, reinterpret_cast<const void*>(r), PoolAliveRef::Cleanup, apr_pool_cleanup_null);
 }
 
 void AprPool::KeepAlive(IDisposable^ obj, bool disposeOnCleanup)
@@ -446,5 +446,5 @@ void AprPool::KeepAlive(IDisposable^ obj, bool disposeOnCleanup)
 
     PoolAliveRef* r = new PoolAliveRef(obj, disposeOnCleanup);
 
-    apr_pool_cleanup_register(Handle, reinterpret_cast<const void*>(r), PoolAliveRef::Cleanup, PoolAliveRef::Cleanup);
+    apr_pool_cleanup_register(Handle, reinterpret_cast<const void*>(r), PoolAliveRef::Cleanup, apr_pool_cleanup_null);
 }
