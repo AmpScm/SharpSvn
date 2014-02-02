@@ -58,7 +58,7 @@ public:
         _id = _idValue;
         _exception = ex;
 
-        apr_pool_cleanup_register(pool, this, cleanup_handler, cleanup_handler);
+        apr_pool_cleanup_register(pool, this, cleanup_handler, apr_pool_cleanup_null);
 
         _exception = ex;
     }
