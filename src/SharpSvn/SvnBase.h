@@ -147,10 +147,10 @@ namespace SharpSvn {
 
             static array<char>^ _invalidCharMap;
 
-        static property array<char>^ InvalidCharMap
-        {
-        array<char>^ get();
-        }
+            static property array<char>^ InvalidCharMap
+            {
+                array<char>^ get();
+            }
 
         static void GenerateInvalidCharMap();
         };

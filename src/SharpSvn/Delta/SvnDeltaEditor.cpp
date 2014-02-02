@@ -738,7 +738,7 @@ bool SvnDeltaEditor::AllocEditor(const svn_delta_editor_t** editor, void** baton
     base_baton* bt = (base_baton*)pool->AllocCleared(sizeof(base_baton));
     *baton = bt;
 
-    apr_pool_cleanup_register(pool->Handle, bt, sharpsvn_delta::delta_editor_cleanup, sharpsvn_delta::delta_editor_cleanup);
+    apr_pool_cleanup_register(pool->Handle, bt, sharpsvn_delta::delta_editor_cleanup, apr_pool_cleanup_null);
 
     bt->root = new root_baton(this);
 
