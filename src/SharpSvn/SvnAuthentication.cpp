@@ -102,6 +102,7 @@ void SvnAuthentication::AddConsoleHandlers()
     SslServerTrustHandlers					+= ConsoleSslServerTrustHandler;
     SslClientCertificateHandlers			+= ConsoleSslClientCertificateHandler;
     SslClientCertificatePasswordHandlers	+= ConsoleSslClientCertificatePasswordHandler;
+    SshServerTrustHandlers					+= ConsoleSshServerTrustHandler;
 }
 
 /// <summary>Retrieves an authorization baton allocated in the specified pool; containing the current authorization settings</summary>
@@ -617,6 +618,60 @@ void SvnAuthentication::ImpConsoleSslClientCertificatePasswordHandler(Object ^se
 
     e->Password = ReadPassword();
     Console::WriteLine();
+}
+
+void SvnAuthentication::ImpConsoleSshServerTrustHandler(Object ^sender, SvnSshServerTrustEventArgs^ e)
+{
+UNUSED_ALWAYS(sender);
+    Console::WriteLine("Error validating server certificate for '{0}':", e->Realm);
+
+    if (SvnSshTrustFailures::None != (e->Failures & SvnSshTrustFailures::UnknownServerKey))
+    {
+        Console::WriteLine(" - The certificate is not issued by a trusted authority. Use the\n"
+            "   fingerprint to validate the certificate manually!");
+    }
+    if (SvnSshTrustFailures::None != (e->Failures & SvnSshTrustFailures::ServerKeyMismatch))
+    {
+        Console::WriteLine(" - The hostkey does not match the cached information.");
+    }
+
+    Console::WriteLine("Certificate information:\n"
+        " - Keytype: {0}\n"
+        " - Fingerprint: {1}\n",
+        e->KeyType,
+        e->Fingerprint);
+
+    try
+    {
+        bool breakOut = false;
+        while (!breakOut)
+        {
+            Console::Write("(R)eject, accept (t)emporarily or accept (p)ermanently? ");
+
+            ConsoleKeyInfo^ki = Console::ReadKey();
+            Console::WriteLine();
+
+            switch(ki->Key)
+            {
+            case ConsoleKey::Escape:
+            case ConsoleKey::R:
+                breakOut = true;
+                break;
+            case ConsoleKey::P:
+                e->AcceptedFailures = e->Failures;
+                e->Save = e->MaySave;
+                return;
+            case ConsoleKey::T:
+                e->AcceptedFailures = e->Failures;
+                return;
+            }
+        }
+        e->Break = true;
+    }
+    finally
+    {
+        Console::WriteLine();
+    }
 }
 
 void SvnAuthentication::ImpSubversionFileUserNameHandler(Object ^sender, SvnUserNameEventArgs^ e)
