@@ -16,9 +16,7 @@
 
 #include "Args/Log.h"
 
-#if SVN_VER_MINOR >= 9
 #include <private/svn_sorts_private.h>
-#endif
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
