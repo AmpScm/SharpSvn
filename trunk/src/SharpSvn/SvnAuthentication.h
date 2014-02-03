@@ -1459,6 +1459,7 @@ namespace SharpSvn {
             static void ImpConsoleSslServerTrustHandler(Object ^sender, SvnSslServerTrustEventArgs^ e);
             static void ImpConsoleSslClientCertificateHandler(Object ^sender, SvnSslClientCertificateEventArgs^ e);
             static void ImpConsoleSslClientCertificatePasswordHandler(Object ^sender, SvnSslClientCertificatePasswordEventArgs^ e);
+            static void ImpConsoleSshServerTrustHandler(Object ^sender, SvnSshServerTrustEventArgs^ e);
 
         public:
             /// <summary>Console based UserNameHandler implementation</summary>
@@ -1489,6 +1490,12 @@ namespace SharpSvn {
             static property EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ ConsoleSslClientCertificatePasswordHandler
             {
                 EventHandler<SvnSslClientCertificatePasswordEventArgs^>^ get() { return gcnew EventHandler<SvnSslClientCertificatePasswordEventArgs^>(ImpConsoleSslClientCertificatePasswordHandler); }
+            }
+
+            /// <summary>Console based SslServerTrust implementation</summary>
+            static property EventHandler<SvnSshServerTrustEventArgs^>^ ConsoleSshServerTrustHandler
+            {
+                EventHandler<SvnSshServerTrustEventArgs^>^ get() { return gcnew EventHandler<SvnSshServerTrustEventArgs^>(ImpConsoleSshServerTrustHandler); }
             }
         };
     }
