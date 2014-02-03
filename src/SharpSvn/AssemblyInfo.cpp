@@ -63,15 +63,13 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", apr-util " APU_VERSION_STRING
     ", Cyrus Sasl " SASL_VERSION
     ", eXpat " EXPAT_VERSION
-#if SVN_VER_MINOR >= 9
     ", LibSSH2 " LIBSSH2_VERSION
-#endif
     ", serf " SERF_VERSION
     ", sqlite" SQLITE_VERSION
     ", zlib " ZLIB_VERSION
     " and " OPENSSL_VERSION_TEXT
     ". If available this library also uses the optional Berkeley DB " BDB_VERSION
-    " and our compilation of Putty's Plink)")];
+    ".")];
 [assembly:AssemblyConfigurationAttribute("")];
 [assembly:AssemblyCompanyAttribute("SharpSvn Project")];
 [assembly:AssemblyProductAttribute("SharpSvn")];
@@ -84,15 +82,12 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Apr-util", APU_VERSION_STRING)];
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("eXpat", EXPAT_VERSION)];
-#if SVN_VER_MINOR >= 9
 [assembly:SvnLibrary("LibSSH2", LIBSSH2_VERSION)]
-#endif
 [assembly:SvnLibrary("serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix = true)];
 [assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked = true, Optional = true)];
-[assembly:SvnLibrary("SharpPlink", "", DynamicallyLinked = true, UseSharpSvnVersion = true, Optional = true)];
 
 //
 // Version information for an assembly consists of the following four values:
@@ -116,7 +111,5 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 
 #include "../../imports/release/include/sharpsvn-imports.h"
-#if SVN_VER_MINOR >= 9
 #pragma comment(lib, "libssh2.lib")
-#endif
-[assembly:AssemblyVersionAttribute("1.7999.*")];
+[assembly:AssemblyVersionAttribute("1.8999.*")];
