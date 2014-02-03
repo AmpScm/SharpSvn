@@ -237,7 +237,8 @@ static bool TryUserName(SvnUserNameEventArgs^ e)
     return !String::IsNullOrEmpty(e->UserName);
 }
 
-void SshConnection::OpenConnection(AprPool^ scratchPool)
+void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_baton,
+                                   AprPool^ scratchPool)
 {
     ResolveAddress(scratchPool);
     OpenSocket(scratchPool);
@@ -1079,15 +1080,41 @@ bool SshConnection::TryPassword(SvnUserNamePasswordEventArgs ^e)
 
 struct ssh_baton
 {
+    SOCKET socket;
     LIBSSH2_CHANNEL *channel;
     LIBSSH2_SESSION *session;
+
     svn_boolean_t read_once;
     void *connection_baton;
+
+    svn_cancel_func_t cancel_func;
+    void *cancel_baton;
 };
 
 static svn_error_t * ssh_read(void *baton, char *data, apr_size_t *len)
 {
     ssh_baton *ssh = (ssh_baton*)baton;
+
+    if (ssh->cancel_func)
+    {
+        FD_SET read_set, error_set;
+        TIMEVAL tv = {0, 250000}; // 0.25 sec
+
+        FD_ZERO(&read_set);
+        FD_ZERO(&error_set);
+        FD_SET(ssh->socket, &read_set);
+        FD_SET(ssh->socket, &error_set);
+        while (0 == select(1, &read_set, NULL, &error_set, &tv))
+        {
+            if (ssh->cancel_func)
+              SVN_ERR(ssh->cancel_func(ssh->cancel_baton));
+
+            FD_ZERO(&read_set);
+            FD_ZERO(&error_set);
+            FD_SET(ssh->socket, &read_set);
+            FD_SET(ssh->socket, &error_set);
+        }
+    }
 
     ssize_t nBytes;
     int rc = 0;
@@ -1178,6 +1205,7 @@ static svn_error_t * ssh_close(void *baton)
 }
 
 void SshConnection::OpenTunnel(svn_stream_t *&channel,
+                               svn_cancel_func_t cancel_func, void * cancel_baton,
                                AprPool ^resultPool)
 {
     LIBSSH2_CHANNEL *ssh_channel = libssh2_channel_open_session(_session);
@@ -1191,9 +1219,12 @@ void SshConnection::OpenTunnel(svn_stream_t *&channel,
         throw gcnew SvnSshException(GetSessionError());
 
     ssh_baton *ch = (ssh_baton*)resultPool->AllocCleared(sizeof(*ch));
+    ch->socket = _socket;
     ch->channel = ssh_channel;
     ch->session = _session;
     ch->connection_baton = _connBaton->Handle;
+    ch->cancel_func = cancel_func;
+    ch->cancel_baton = cancel_baton;
 
     channel = svn_stream_create(ch, resultPool->Handle);
 
@@ -1234,6 +1265,7 @@ void SshConnection::OperationCompleted(bool keepSessions)
 
 void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
                                String ^user, String ^hostname, int port,
+                               svn_cancel_func_t cancel_func, void *cancel_baton,
                                AprPool ^resultPool, AprPool ^scratchPool)
 {
     SshHost ^host = gcnew SshHost(user, hostname, port);
@@ -1243,12 +1275,12 @@ void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
     {
         connection = gcnew SshConnection(this, host, %_pool);
 
-        connection->OpenConnection(scratchPool);
+        connection->OpenConnection(cancel_func, cancel_baton, scratchPool);
 
         _connections[host] = connection;
     }
 
-    return connection->OpenTunnel(channel, resultPool);
+    return connection->OpenTunnel(channel, cancel_func, cancel_baton, resultPool);
 }
 
 void SvnSshContext::OperationCompleted(bool keepSessions)
