@@ -891,6 +891,7 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override
                 {
+                    UNUSED_ALWAYS(pool);
                     return nullptr;
                 }
             };

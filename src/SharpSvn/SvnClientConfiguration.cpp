@@ -36,14 +36,27 @@ void SvnClientConfiguration::LoadSvnMimeTypes::set(bool value)
     _client->_dontLoadMimeFile = !value;
 }
 
-bool SvnClientConfiguration::EnableSharpPlink::get()
+bool SvnClientConfiguration::DisableBuiltinSsh::get()
 {
-    return !_client->_dontEnablePlink;
+    return _client->_disableBuiltinSsh;
 }
 
-void SvnClientConfiguration::EnableSharpPlink::set(bool value)
+void SvnClientConfiguration::DisableBuiltinSsh::set(bool value)
 {
-    _client->_dontEnablePlink = !value;
+    _client->_disableBuiltinSsh = value;
+}
+
+String^ SvnClientConfiguration::FallbackSshClient::get()
+{
+    return _client->_fallbackSshClient;
+}
+
+void SvnClientConfiguration::FallbackSshClient::set(String ^value)
+{
+    if (!value)
+        _client->_fallbackSshClient = nullptr;
+    else
+        _client->_fallbackSshClient = SvnTools::GetNormalizedFullPath(value);
 }
 
 bool SvnClientConfiguration::UseSubversionDiff::get()

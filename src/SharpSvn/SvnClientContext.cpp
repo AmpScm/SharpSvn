@@ -30,12 +30,10 @@ using System::IO::Path;
 static svn_error_t * sharpsvn_cancel_func(void *cancel_baton);
 static void sharpsvn_progress_func(apr_off_t progress, apr_off_t total, void *baton, apr_pool_t *pool);
 static svn_error_t * sharpsvn_commit_log_func(const char **log_msg, const char **tmp_file, const apr_array_header_t *commit_items, void *baton, apr_pool_t *pool);
-#if SVN_VER_MINOR >= 9
 static svn_boolean_t sharpsvn_check_tunnel_func(void *baton, const char *name);
 static svn_error_t * sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
                                                svn_ra_close_tunnel_func_t *close_func, void **close_baton,
                                                void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool);
-#endif
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
@@ -57,11 +55,9 @@ SvnClientContext::SvnClientContext(AprPool ^pool)
     ctx->log_msg_func3 = sharpsvn_commit_log_func;
     ctx->log_msg_baton3 = _ctxBaton->Handle;
 
-#if SVN_VER_MINOR >= 9
     ctx->check_tunnel_func = sharpsvn_check_tunnel_func;
     ctx->open_tunnel_func = sharpsvn_open_tunnel_func;
     ctx->tunnel_baton = _ctxBaton->Handle;
-#endif
 
     ctx->client_name = pool->AllocString(SvnBase::_clientName);
 
@@ -171,9 +167,6 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
         return;
     }
 
-    if (requiredState < State)
-        return;
-
     if (State < SvnContextState::ConfigPrepared && requiredState >= SvnContextState::ConfigPrepared)
     {
         LoadConfigurationDefault();
@@ -202,15 +195,6 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 
         _contextState = SvnContextState::ConfigLoaded;
     }
-
-#if SVN_MINOR_VER < 9
-    if (requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
-    {
-        ApplyCustomRemoteConfig();
-
-        System::Diagnostics::Debug::Assert(State == SvnContextState::CustomRemoteConfigApplied);
-    }
-#endif
 
     if (requiredState >= SvnContextState::AuthorizationInitialized)
     {
@@ -543,40 +527,6 @@ void SvnClientContext::ApplyOverrideFlags()
     }
 }
 
-
-static String^ ReadRegKey(RegistryKey^ key, String^ path, String^ name)
-{
-    if (!key)
-        throw gcnew ArgumentNullException("key");
-    else if(String::IsNullOrEmpty(path))
-        throw gcnew ArgumentNullException("path");
-
-    RegistryKey^ rk = nullptr;
-    try
-    {
-        rk = key->OpenSubKey(path, false);
-
-        if (!rk)
-            return nullptr;
-
-        String^ v = dynamic_cast<String^>(rk->GetValue(name, nullptr));
-
-        if (!String::IsNullOrEmpty(v) && !String::IsNullOrEmpty(v->Trim()))
-            return v;
-    }
-    catch (System::Security::SecurityException^)
-    {}
-    catch (UnauthorizedAccessException^)
-    {}
-    finally
-    {
-        if (rk)
-            delete rk;
-    }
-
-    return nullptr;
-}
-
 void SvnClientContext::ApplyCustomRemoteConfig()
 {
     // Look for a custom SSH client; Windows most common SVN client uses their own setting, so we should to :(
@@ -587,31 +537,11 @@ void SvnClientContext::ApplyCustomRemoteConfig()
         return;
 
     _customSshApplied = true;
+    _useBuiltinSsh = false;
 
     svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
 
-    if (!cfg)
-        return;
-
-    String^ customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
-
-    if (!customSshConfig)
-        customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
-
-    if (!customSshConfig)
-        customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\TortoiseSVN", "SSH");
-
-    if (!customSshConfig)
-        customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");
-
-    if (customSshConfig)
-    {
-        // allocate in Ctx pool!
-        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig->Replace('\\', '/')));
-        return;
-    }
-
-    if (_dontEnablePlink)
+    if (!cfg || (_disableBuiltinSsh && !_fallbackSshClient))
         return;
 
     AprPool pool(_pool);
@@ -624,7 +554,7 @@ void SvnClientContext::ApplyCustomRemoteConfig()
     if (!cfg)
         return;
 
-    svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh");
+    svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh -q");
 
     if (val && val[0] == '$')
     {
@@ -652,60 +582,35 @@ void SvnClientContext::ApplyCustomRemoteConfig()
         wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
         LPWSTR pFile = nullptr;
 
-        if (strcmp(val, "ssh"))
-            return; // Something was configured, use it!
+        if (strcmp(val, "ssh") && strncmp(val, "ssh ", 4))
+            return; // Something non-standard was configured, use it!
 
         if (SearchPathW(nullptr, L"ssh", L".exe", 1000, buffer, &pFile) && pFile)
         {
             return; // ssh.exe exists. Use it!
         }
     }
-    // Ok: registry unset, setting invalid. Let's set our own plink handler
 
-    String^ plinkPath = PlinkPath;
 
-    if (plinkPath)
+    // Ok: registry unset, setting invalid. Let's set our handler
+    if (!_disableBuiltinSsh)
     {
-        // Allocate in Ctx pool
-        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(plinkPath));
+        _useBuiltinSsh = true;
+        return;
     }
 
-#if SVN_MINOR_VER < 9
-    _contextState = SvnContextState::CustomRemoteConfigApplied;
-#endif
-}
+    String^ app = _fallbackSshClient;
 
-String^ SvnClientContext::PlinkPath::get()
-{
-    Monitor::Enter(_plinkLock);
-    try
+    if (app && System::IO::File::Exists(app))
     {
-        if (!_plinkPath)
-        {
-            _plinkPath = "";
-            Uri^ codeBase;
+        String ^p = app;
 
-            if (Uri::TryCreate(SvnClientContext::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase) && (codeBase->IsUnc || codeBase->IsFile))
-            {
-                String^ path = SvnTools::GetNormalizedFullPath(codeBase->LocalPath);
+        p = p->Replace('\\', '/');
 
-                path = SvnTools::PathCombine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
+        if (p->Contains(" "))
+            p = "\"" + p + "\"";
 
-                if (System::IO::File::Exists(path))
-                {
-                    _plinkPath = path->Replace(System::IO::Path::DirectorySeparatorChar, '/');
-
-                    if (_plinkPath->Contains(" "))
-                        _plinkPath = "\"" + _plinkPath + "\"";
-                }
-            }
-        }
-
-        return String::IsNullOrEmpty(_plinkPath) ? nullptr : _plinkPath;
-    }
-    finally
-    {
-        Monitor::Exit(_plinkLock);
+        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(p));
     }
 }
 
@@ -841,6 +746,10 @@ SvnClientContext::ArgsStore::~ArgsStore()
 
     svn_client_ctx_t *ctx = _client->CtxHandle;
     ctx->wc_ctx = _wc_ctx;
+
+    SvnSshContext ^ssh = _client->_sshContext;
+    if (ssh)
+        ssh->OperationCompleted(_client->KeepSession);
 }
 
 SvnClientContext::NoArgsStore::NoArgsStore(SvnClientContext^ client, AprPool^ pool)
@@ -875,6 +784,10 @@ SvnClientContext::NoArgsStore::~NoArgsStore()
 
     svn_client_ctx_t *ctx = _client->CtxHandle;
     ctx->wc_ctx = _wc_ctx;
+
+    SvnSshContext ^ssh = _client->_sshContext;
+    if (ssh)
+        ssh->OperationCompleted(_client->KeepSession);
 }
 
 static svn_error_t * the_commit_callback2(const svn_commit_info_t *commit_info, void *baton, apr_pool_t *pool)
@@ -1043,19 +956,20 @@ static svn_error_t* sharpsvn_commit_log_func(const char **log_msg, const char **
     }
 }
 
-#if SVN_VER_MINOR >= 9
 static svn_boolean_t
 sharpsvn_check_tunnel_func(void *baton, const char *name)
 {
     SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)baton);
 
     if (! strcmp(name, "ssh"))
+    {
         client->ApplyCustomRemoteConfig();
 
-#ifdef _DEBUG
-    if (! strcmp(name, "libssh2"))
+        if (client->_useBuiltinSsh)
+            return true;
+    }
+    else if (! strcmp(name, "builtin-ssh") || ! strcmp(name, "libssh2"))
         return true;
-#endif
 
     return false;
 }
@@ -1096,9 +1010,6 @@ sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
     }
     catch (Exception ^e)
     {
-        return SvnException::CreateExceptionSvnError("Tunnel Creation", e);
+        return SvnException::CreateSvnError(e);
     }
 }
-
-
-#endif

@@ -94,21 +94,7 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
 
     if (exception)
     {
-        svn_error_t *creator = svn_error_create(_abusedErrorCode, nullptr, "{Managed Exception Blob}");
-
-        if (creator->pool)
-        {
-            char ptrBuffer[2*sizeof(void*) + 4]; // Should be enough for a ptr
-
-            SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
-
-            if (0 < sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex))
-            {
-                char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
-
-                innerError = svn_error_create(_abusedErrorCode, creator, forwardData);
-            }
-        }
+        innerError = CreateSvnError(exception);
     }
 
     apr_status_t status = SVN_ERR_CANCELLED;
@@ -117,7 +103,31 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
         status = se->SubversionErrorCode;
 
     // Use svn_error_createf to make sure the value is copied
-    return svn_error_createf(status, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
+    return svn_error_createf(status, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation cancelled. Exception occured in {0}", origin)));
+}
+
+svn_error_t* SvnException::CreateSvnError(Exception^ exception)
+{
+    if (!exception)
+        throw gcnew ArgumentNullException("exception");
+
+    svn_error_t *creator = svn_error_create(_abusedErrorCode, nullptr, "{Managed Exception Blob}");
+
+    if (creator->pool)
+    {
+        char ptrBuffer[2*sizeof(void*) + 4]; // Should be enough for a ptr
+
+        SvnExceptionContainer *ex = new SvnExceptionContainer(exception, creator->pool);
+
+        if (0 < sprintf_s(ptrBuffer, sizeof(ptrBuffer), "%p", (void*)ex))
+        {
+            char* forwardData = apr_pstrcat(creator->pool, MANAGED_EXCEPTION_PREFIX, ptrBuffer, NULL);
+
+            return svn_error_create(_abusedErrorCode, creator, forwardData);
+        }
+    }
+
+    return svn_error_create(SVN_ERR_BASE, NULL, NULL);
 }
 
 
@@ -378,8 +388,10 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
         case SVN_ERR_SVNDIFF_INVALID_OPS:
         case SVN_ERR_SVNDIFF_UNEXPECTED_END:
         case SVN_ERR_SVNDIFF_INVALID_COMPRESSED_DATA:
-        case SVN_ERR_DIFF_DATASOURCE_MODIFIED:
             return gcnew SvnDiffException(error);
+
+        case SVN_ERR_DIFF_DATASOURCE_MODIFIED:
+            return gcnew SvnNodeDiffException(error);
 
         case SVN_ERR_CLIENT_RA_ACCESS_REQUIRED:
         case SVN_ERR_CLIENT_BAD_REVISION:
@@ -462,9 +474,39 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
             return gcnew SvnReservedNameUsedException(error);
 
         default:
-            if (APR_STATUS_IS_ENOSPC(error->apr_err))
+            if (error->apr_err >= SVN_ERR_BAD_CATEGORY_START
+                && error->apr_err < (SVN_ERR_MALFUNC_CATEGORY_START + SVN_ERR_CATEGORY_SIZE))
+            {
+                if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_BAD_CATEGORY_START)) return gcnew SvnFormatException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_XML_CATEGORY_START)) return gcnew SvnXmlException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_IO_CATEGORY_START)) return gcnew SvnIOException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_STREAM_CATEGORY_START)) return gcnew SvnStreamException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_NODE_CATEGORY_START)) return gcnew SvnNodeException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_ENTRY_CATEGORY_START)) return gcnew SvnEntryException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_WC_CATEGORY_START)) return gcnew SvnWorkingCopyException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_FS_CATEGORY_START)) return gcnew SvnFileSystemException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_REPOS_CATEGORY_START)) return gcnew SvnRepositoryException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_RA_CATEGORY_START)) return gcnew SvnRepositoryIOException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_RA_DAV_CATEGORY_START)) return gcnew SvnRepositoryIOException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_RA_LOCAL_CATEGORY_START)) return gcnew SvnRepositoryIOException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_SVNDIFF_CATEGORY_START)) return gcnew SvnDiffException(error);
+                //else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_APMOD_CATEGORY_START)) return gcnew SvnException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_CLIENT_CATEGORY_START)) return gcnew SvnClientException(error);
+                //else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_MISC_CATEGORY_START)) return gcnew SvnException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_CL_CATEGORY_START)) return gcnew SvnClientException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_RA_SVN_CATEGORY_START)) return gcnew SvnRepositoryIOException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_AUTHN_CATEGORY_START)) return gcnew SvnAuthenticationException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_AUTHZ_CATEGORY_START)) return gcnew SvnAuthorizationException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_DIFF_CATEGORY_START)) return gcnew SvnNodeDiffException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_RA_SERF_CATEGORY_START)) return gcnew SvnRepositoryIOException(error);
+                else // (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_MALFUNC_CATEGORY_START)) return gcnew SvnException(error);
+                  return gcnew SvnException(error);
+            }
+            else if (APR_STATUS_IS_ENOSPC(error->apr_err))
                 return gcnew SvnDiskFullException(error);
-            if (error->apr_err >= APR_OS_START_SYSERR || error->apr_err < APR_OS_START_ERROR)
+            else if (error->apr_err >= SERF_ERROR_START && error->apr_err < (SERF_ERROR_START + SERF_ERROR_RANGE))
+                return gcnew SvnSerfException(error);
+            else if (error->apr_err >= APR_OS_START_SYSERR || error->apr_err < APR_OS_START_ERROR)
                 return gcnew SvnSystemException(error);
             else
                 return gcnew SvnException(error);

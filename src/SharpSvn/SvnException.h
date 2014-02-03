@@ -44,6 +44,7 @@ namespace SharpSvn {
         static SvnException^ Create(svn_error_t *error);
         static Exception^ Create(svn_error_t *error, bool clearError);
         static svn_error_t* CreateExceptionSvnError(String^ origin, Exception^ exception);
+        static svn_error_t* CreateSvnError(Exception^ exception);
 
     private protected:
         SvnException(svn_error_t *error)
@@ -341,11 +342,14 @@ namespace SharpSvn {
     DECLARE_SVN_EXCEPTION_TYPE(SvnAuthenticationException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnAuthorizationException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnDiffException, SvnException);
+    DECLARE_SVN_EXCEPTION_TYPE(SvnNodeDiffException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnClientApiException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnDiskFullException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnIllegalTargetException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnObstructedUpdateException, SvnWorkingCopyException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnInvalidNodeKindException, SvnWorkingCopyException);
+    DECLARE_SVN_EXCEPTION_TYPE(SvnSerfException, SvnException);
+    DECLARE_SVN_EXCEPTION_TYPE(SvnSshException, SvnException);
 
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnsupportedFeatureException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnknownCapabilityException, SvnException);

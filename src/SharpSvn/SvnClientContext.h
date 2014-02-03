@@ -46,9 +46,6 @@ namespace Security {
             Initial,
             ConfigPrepared,
             ConfigLoaded,
-#if SVN_MINOR_VER < 9
-            CustomRemoteConfigApplied,
-#endif
             AuthorizationInitialized,
         };
 
@@ -284,9 +281,6 @@ namespace Security {
         SvnClientContext ^_parent;
         bool _customSshApplied;
 
-        static initonly Object^ _plinkLock = gcnew Object();
-        static String^ _plinkPath;
-
     internal:
         bool _noLogMessageRequired;
         SvnSshContext ^_sshContext;
@@ -312,9 +306,15 @@ namespace Security {
 
     internal:
         bool _dontLoadMimeFile;
-        bool _dontEnablePlink;
+        bool _disableBuiltinSsh;
+        String^ _fallbackSshClient;
         bool _useUserDiff;
         SvnOverride _keepAllExtensionsOnConflict;
+
+    internal:
+        bool _useBuiltinSsh;
+
+    internal:
         SvnClientContext(AprPool^ pool);
         SvnClientContext(AprPool^ pool, SvnClientContext ^client);
         virtual void HandleClientCancel(SvnCancelEventArgs^ e);
@@ -434,12 +434,6 @@ namespace Security {
             {
                 return _contextState;
             }
-        }
-
-        /// <summary>Gets the path to SharpSvn's plink. The path is encoded to be safe for subversion configuration settings</summary>
-        static property String^ PlinkPath
-        {
-            String^ get();
         }
 
     public:
