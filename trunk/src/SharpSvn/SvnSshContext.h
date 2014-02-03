@@ -133,10 +133,12 @@ namespace SharpSvn {
 
         public:
             void OpenTunnel(svn_stream_t *&channel,
+                            svn_cancel_func_t cancel_func, void * cancel_baton,
                             AprPool^ resultPool);
 
         public:
-            void OpenConnection(AprPool^ scratchPool);
+            void OpenConnection(svn_cancel_func_t cancel_func, void * cancel_baton,
+                                AprPool^ scratchPool);
             bool IsConnected();
             void OperationCompleted(bool keepSessions);
 
@@ -184,6 +186,8 @@ namespace SharpSvn {
                             String^ user,
                             String^ hostname,
                             int port,
+                            svn_cancel_func_t cancel_func,
+                            void *cancel_baton,
                             AprPool^ resultPool,
                             AprPool^ scratchPool);
 

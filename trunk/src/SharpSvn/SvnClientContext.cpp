@@ -33,7 +33,10 @@ static svn_error_t * sharpsvn_commit_log_func(const char **log_msg, const char *
 static svn_boolean_t sharpsvn_check_tunnel_func(void *baton, const char *name);
 static svn_error_t * sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
                                                svn_ra_close_tunnel_func_t *close_func, void **close_baton,
-                                               void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool);
+                                               void *tunnel_baton, const char *tunnel_name,
+                                               const char *user, const char *hostname, int port,
+                                               svn_cancel_func_t cancel_func, void *cancel_baton,
+                                               apr_pool_t *pool);
 
 SvnClientContext::SvnClientContext(AprPool ^pool)
 {
@@ -977,7 +980,10 @@ sharpsvn_check_tunnel_func(void *baton, const char *name)
 static svn_error_t *
 sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
                           svn_ra_close_tunnel_func_t *close_func, void **close_baton,
-                          void *tunnel_baton, const char *tunnel_name, const char *user, const char *hostname, int port, apr_pool_t *pool)
+                          void *tunnel_baton, const char *tunnel_name,
+                          const char *user, const char *hostname, int port,
+                          svn_cancel_func_t cancel_func, void *cancel_baton,
+                          apr_pool_t *pool)
 {
     AprPool result_pool(pool, false);
     SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)tunnel_baton);
@@ -998,8 +1004,8 @@ sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
         client->_sshContext->OpenTunnel(channel,
                                         userName,
                                         hostName, port,
-                                        %result_pool,
-                                        %scratchPool);
+                                        cancel_func, cancel_baton,
+                                        %result_pool, %scratchPool);
 
         *close_func = NULL;
         *close_baton = NULL;
