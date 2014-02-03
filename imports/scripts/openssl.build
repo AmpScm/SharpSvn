@@ -16,10 +16,11 @@
         <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
         <arg value="threads" />
         <arg value="no-asm" if="${platform=='x64'}" />
-        <arg value="no-dso"/>
+        <arg value="no-dso" />
         <arg value="no-shared" />
-        <arg value="no-krb5"/>
-        <arg value="no-hw"/>
+        <arg value="no-krb5" />
+        <arg value="no-hw" />
+        <arg value="no-gost" />
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
         <arg value="-DSSL_FORBID_ENULL" />
