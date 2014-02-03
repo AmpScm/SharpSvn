@@ -137,7 +137,7 @@ namespace SharpSvn.UI
 
                 if (r != DialogResult.OK)
                 {
-                    e.Cancel = e.Break = true;
+                    e.Break = true;
                     return;
                 }
 
@@ -180,9 +180,7 @@ namespace SharpSvn.UI
 
                 if (r != DialogResult.OK)
                 {
-                    e.Save = dlg.rememberCheck.Checked;
-                    e.UserName = e.Password = null;
-                    e.Cancel = e.Break = true;
+                    e.Break = true;
                     return;
                 }
 
@@ -218,10 +216,7 @@ namespace SharpSvn.UI
                     e.Save = e.MaySave && dlgSave;
                     break;
                 case NativeMethods.CredUIReturnCodes.ERROR_CANCELLED:
-                    e.UserName = null;
-                    e.Password = null;
-                    e.Save = false;
-                    e.Cancel = e.Break = true;
+                    e.Break = true;
                     break;
             }
         }
@@ -264,7 +259,7 @@ namespace SharpSvn.UI
                     return;
                 }
                 else
-                    e.Cancel = e.Break = true;
+                    e.Cancel = true; // Abort setup
             }
         }
 
@@ -355,7 +350,7 @@ namespace SharpSvn.UI
 
                 if (r != DialogResult.OK)
                 {
-                    e.Cancel = e.Break = true;
+                    e.Break = true;
                     return;
                 }
 
@@ -380,7 +375,7 @@ namespace SharpSvn.UI
 
                 if (r != DialogResult.OK)
                 {
-                    e.Cancel = e.Break = true;
+                    e.Break = true;
                     return;
                 }
 
