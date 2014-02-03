@@ -114,6 +114,9 @@ namespace SharpSvn {
             String^ _hostKeyBase64;
             String^ _username;
             bool _saveuserWhenNoPassword;
+            int _nTunnels;
+            bool _closeOnIdle;
+
         internal:
             ssh_keybint_t *_kbi;
 
@@ -134,6 +137,8 @@ namespace SharpSvn {
 
         public:
             void OpenConnection(AprPool^ scratchPool);
+            bool IsConnected();
+            void OperationCompleted(bool keepSessions);
 
         private:
             void ResolveAddress(AprPool^ scratchPool);
@@ -145,12 +150,15 @@ namespace SharpSvn {
 
             void SwitchUsername(String ^toUser, AprPool ^scratchPool);
 
+            svn_error_t *GetSessionError();
+
         internal:
             void PerformKeyboardInteractive(String ^name, String ^instructions,
                                             int num_prompts, const LIBSSH2_USERAUTH_KBDINT_PROMPT* prompts,
                                             LIBSSH2_USERAUTH_KBDINT_RESPONSE* responses);
 
             bool TryKeyboardInteractive(SvnUserNamePasswordEventArgs ^e);
+            bool TryPassword(SvnUserNamePasswordEventArgs ^e);
             void ClosedTunnel();
         };
 
@@ -159,7 +167,6 @@ namespace SharpSvn {
             AprPool _pool;
             initonly SvnClientContext ^_ctx;
             initonly Dictionary<SshHost^, SshConnection^>^ _connections;
-            initonly List<SshConnection^>^ _conns;
 
         public:
             SvnSshContext(SvnClientContext^ ctx)
@@ -170,7 +177,6 @@ namespace SharpSvn {
                 _ctx = ctx;
 
                 _connections = gcnew Dictionary<SshHost^, SshConnection^>();
-                _conns = gcnew List<SshConnection^>();
             }
 
         public:
@@ -193,7 +199,7 @@ namespace SharpSvn {
             }
 
         public:
-            void Unhook(SshConnection ^connection, bool full)
+            void Unhook(SshConnection ^connection)
             {
                 SshConnection^ other;
 
@@ -206,10 +212,9 @@ namespace SharpSvn {
                         // all streams are closed!
                     }
                 }
-
-                if (full)
-                    _conns->Remove(connection);
             }
+
+            void OperationCompleted(bool keepSessions);
         };
     }
 }

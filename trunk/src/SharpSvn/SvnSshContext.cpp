@@ -4,7 +4,6 @@
 #include <Security.h>
 #include <WinCred.h>
 
-#if SVN_VER_MINOR >= 9
 #include <apr_portable.h>
 #include "SvnSshContext.h"
 #include "SvnAuthentication.h"
@@ -133,6 +132,26 @@ static String^ BigNumToString(const char *data, size_t length, int *bits=NULL)
     }
 
     return sb->ToString();
+}
+
+static svn_error_t *get_session_error(LIBSSH2_SESSION *session)
+{
+  if (session)
+  {
+      char *msg = NULL;
+      int err = libssh2_session_last_error(session, &msg, NULL, FALSE);
+
+      if (err && msg)
+          return svn_error_createf(SVN_ERR_RA_SVN_IO_ERROR, NULL,
+                                   "SSH%03d: %s", -err, msg);
+  }
+
+  return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, NULL, NULL);
+}
+
+svn_error_t *SshConnection::GetSessionError()
+{
+    return get_session_error(_session);
 }
 
 void SshConnection::ResolveAddress(AprPool^ scratchPool)
@@ -344,6 +363,22 @@ void SshConnection::SwitchUsername(String ^toUser, AprPool ^scratchPool)
     _username = toUser;
 }
 
+bool SshConnection::IsConnected()
+{
+    if (_socket != INVALID_SOCKET)
+      {
+          int ret;
+          int len = sizeof(ret);
+
+          if (!getsockopt(_socket, SOL_SOCKET, SO_ERROR, (char*)&ret, &len))
+          {
+              return !ret; // No error
+          }
+      }
+
+    return false;
+}
+
 static bool FingerPrintAccepted(SvnSshServerTrustEventArgs ^e)
 {
     return !((int)e->Failures & ~(int)e->AcceptedFailures);
@@ -358,8 +393,7 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
 
     if (rc)
     {
-        throw gcnew SvnRepositoryIOException(
-                svn_error_create(SVN_ERR_RA_CANNOT_CREATE_TUNNEL, NULL, NULL));
+        throw gcnew SvnSshException(GetSessionError());
     }
 
     bool hostMismatch = false;
@@ -393,13 +427,6 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
 
         _hostKeyBase64 = hostKeyBase64;
     }
-
-    /*
-    else
-    {
-        _ctx->Unhook(this, false);
-        throw gcnew InvalidOperationException("Hostkey unexpectedly changed - Security Breached?");
-    }*/
 
     String ^puttyRealm;
     String ^puttyValue;
@@ -740,6 +767,34 @@ static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive)
                                      num_prompts, prompts, responses);
 }
 
+static char *AllocCredentials(unsigned *length, LPBYTE credentialBlob, DWORD credentialBlobSize, AprPool ^pool)
+{
+  int needed = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)credentialBlob,
+                                   credentialBlobSize / sizeof(wchar_t),
+                                   NULL, 0, NULL, NULL);
+
+  char *result;
+
+  if (!pool)
+      result = (char*)calloc(needed+1, 1); // will be freed with free()
+  else
+      result = (char*)pool->AllocCleared(needed+1);
+
+  int written = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)credentialBlob,
+                                    credentialBlobSize / sizeof(wchar_t),
+                                    result, needed, NULL, NULL);
+
+  if (needed != written)
+  {
+      memset(result, needed, 0);
+      length = 0;
+  }
+  else
+      *length = needed;
+
+  return result;
+}
+
 static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive_from_cache)
   // void sharpsvn_ssh_keyboard_interactive(const char* name, int name_len,
   //                                        const char* instruction, int instruction_len,
@@ -761,19 +816,7 @@ static LIBSSH2_USERAUTH_KBDINT_RESPONSE_FUNC(sharpsvn_ssh_keyboard_interactive_f
 
     if (num_prompts == 1) // We guess that this is a password prompt...
     {
-        int needed = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
-                                          kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
-                                          NULL, 0, NULL, NULL);
-
-        responses[0].length = needed;
-        responses[0].text = (char*)calloc(needed+1, 1);
-
-        int written = WideCharToMultiByte(CP_UTF8, 0, (const wchar_t*)kbi.pCred->CredentialBlob,
-                                          kbi.pCred->CredentialBlobSize / sizeof(wchar_t),
-                                          responses[0].text, responses[0].length, NULL, NULL);
-
-        if (needed != written)
-          memset(&responses[0], sizeof(responses[0]), 0);
+        responses[0].text = AllocCredentials(&responses[0].length, kbi.pCred->CredentialBlob, kbi.pCred->CredentialBlobSize, nullptr);
     }
 }
 
@@ -797,21 +840,31 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
         pin_ptr<const wchar_t> pRealm = PtrToStringChars(realm);
         if (CredReadW(pRealm, CRED_TYPE_GENERIC, 0, &pCred))
         {
-            kbi.pCred = pCred;
+            bool del;
+            if (pCred->CredentialBlob)
+            {
+                kbi.pCred = pCred;
+                rc = libssh2_userauth_keyboard_interactive_ex(_session, username, strlen(username),
+                                                              sharpsvn_ssh_keyboard_interactive_from_cache);
 
-            rc = libssh2_userauth_keyboard_interactive_ex(_session, username, strlen(username),
-                                                          sharpsvn_ssh_keyboard_interactive_from_cache);
-
-            kbi.pCred = nullptr;
+                kbi.pCred = nullptr;
+                del = (rc != 0);
+            }
+            else
+            {
+                rc = 1; // Trigger failure
+                del = false;
+            }
 
             CredFree(pCred);
 
             if (!rc)
                 return true; // Succeeded
-
-            // Authentication failed... Delete failed credentials
-
-            CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
+            else if (del)
+            {
+                // Authentication failed... Delete failed credentials
+                CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
+            }
         }
 
         bool maySave = Environment::UserInteractive; // Or the CredStore is unavailable
@@ -820,6 +873,26 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
                                                                               maySave);
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNamePasswordEventArgs^>(this, &SshConnection::TryKeyboardInteractive)))
         {
+            // Let's store the credentials for the current 'Windows Session'
+            // even when not requesting to save to avoid asking over and over again.
+            CREDENTIALW cred;
+            memset(&cred, sizeof(cred), 0);
+
+            pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+            pin_ptr<const wchar_t> pPassword = PtrToStringChars(ee->Password);
+
+            cred.Type = CRED_TYPE_GENERIC;
+            cred.TargetName = const_cast<wchar_t*>(pRealm);
+            cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
+            cred.CredentialBlobSize = sizeof(wchar_t) * wcslen(pPassword);
+
+            if (ee->Save && ee->MaySave)
+                cred.Persist = CRED_PERSIST_ENTERPRISE;
+            else
+                cred.Persist = CRED_PERSIST_SESSION;
+
+            CredWriteW(&cred, 0); // Ignore failures
+
             return true;
         }
 
@@ -866,55 +939,148 @@ bool SshConnection::TryKeyboardInteractive(SvnUserNamePasswordEventArgs ^e)
 
     AprPool scratchPool(%_pool);
 
-    if (e->UserName != _username)
-        SwitchUsername(e->UserName, %scratchPool);
-
     kbi.current = e;
-    const char *username = scratchPool.AllocString(_username);
+    const char *username = scratchPool.AllocString(e->UserName);
+
+    if (e->UserName != _username)
+    {
+        // Some (most?) OpenSSH versions don't support changing usernames once
+        // one username is tried... Let's try once and then reconnect with the
+        // new name
+
+        if (!libssh2_userauth_keyboard_interactive_ex(_session, username,
+                                                      strlen(username),
+                                                      sharpsvn_ssh_keyboard_interactive))
+        {
+            _username = e->UserName;
+            return true; // Success!
+        }
+
+        SwitchUsername(e->UserName, %scratchPool);
+    }
 
     if (!libssh2_userauth_keyboard_interactive_ex(_session, username,
                                                   strlen(username),
                                                   sharpsvn_ssh_keyboard_interactive))
     {
-        // Success!
-
-        // Let's store the credentials for the current 'Windows Session'
-        // even when not requesting to save to avoid asking over and over again.
-        CREDENTIALW cred;
-        memset(&cred, sizeof(cred), 0);
-
-        pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
-        pin_ptr<const wchar_t> pPassword = PtrToStringChars(e->Password);
-
-        cred.Type = CRED_TYPE_GENERIC;
-        cred.TargetName = const_cast<wchar_t*>(pRealm);
-        cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
-        cred.CredentialBlobSize = sizeof(wchar_t) * wcslen(pPassword);
-
-        if (e->Save && e->MaySave)
-            cred.Persist = CRED_PERSIST_ENTERPRISE;
-        else
-            cred.Persist = CRED_PERSIST_SESSION;
-
-        CredWriteW(&cred, 0); // Ignore failures
-
-        return true;
+        return true; // Success!
     }
 
-    e->UserName = e->InitialUserName ? e->InitialUserName : "";
-    e->Password = "";
     return false;
 }
 
 bool SshConnection::DoPasswordAuth(AprPool^ scratchPool)
 {
-    // ### TODO: Use libssh2_userauth_password_ex
+      String ^realm = _host->RealmString;
+      const char *username = scratchPool->AllocString(_username);
+      CREDENTIALW *pCred;
+      int rc;
+
+      pin_ptr<const wchar_t> pRealm = PtrToStringChars(realm);
+      if (CredReadW(pRealm, CRED_TYPE_GENERIC, 0, &pCred))
+      {
+          bool del;
+          if (pCred->CredentialBlob)
+          {
+              unsigned len;
+              const char *pw = AllocCredentials(&len, pCred->CredentialBlob, pCred->CredentialBlobSize, scratchPool);
+              rc = libssh2_userauth_password_ex(_session,
+                                                username, strlen(username),
+                                                pw, len,
+                                                NULL);
+
+              del = (rc != 0);
+          }
+          else
+          {
+              rc = 1; // Trigger failure
+              del = false;
+          }
+
+          CredFree(pCred);
+
+          if (!rc)
+              return true; // Succeeded
+          else if (del)
+          {
+              // Authentication failed... Delete failed credentials
+              CredDelete(pRealm, CRED_TYPE_GENERIC, 0);
+          }
+      }
+
+      bool maySave = Environment::UserInteractive; // Or the CredStore is unavailable
+      SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_host->User,
+                                                                            L'<' + _host->RealmString + L'>',
+                                                                            maySave);
+      if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNamePasswordEventArgs^>(this, &SshConnection::TryPassword)))
+      {
+          // Let's store the credentials for the current 'Windows Session'
+          // even when not requesting to save to avoid asking over and over again.
+          CREDENTIALW cred;
+          memset(&cred, sizeof(cred), 0);
+
+          pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+          pin_ptr<const wchar_t> pPassword = PtrToStringChars(ee->Password);
+
+          cred.Type = CRED_TYPE_GENERIC;
+          cred.TargetName = const_cast<wchar_t*>(pRealm);
+          cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
+          cred.CredentialBlobSize = sizeof(wchar_t) * wcslen(pPassword);
+
+          if (ee->Save && ee->MaySave)
+              cred.Persist = CRED_PERSIST_ENTERPRISE;
+          else
+              cred.Persist = CRED_PERSIST_SESSION;
+
+          CredWriteW(&cred, 0); // Ignore failures
+
+          return true;
+      }
+
+      return false;
+}
+
+bool SshConnection::TryPassword(SvnUserNamePasswordEventArgs ^e)
+{
+    AprPool scratchPool(%_pool);
+
+    const char *username = scratchPool.AllocString(e->UserName);
+    const char *password = scratchPool.AllocString(e->Password);
+
+    if (e->UserName != _username)
+    {
+        // Some (most?) OpenSSH versions don't support changing usernames once
+        // one username is tried... Let's try once and then reconnect with the
+        // new name
+
+        if (!libssh2_userauth_password_ex(_session,
+                                          username, strlen(username),
+                                          password, strlen(password),
+                                          NULL))
+        {
+            _username = e->UserName;
+            return true; // Success!
+        }
+
+        SwitchUsername(e->UserName, %scratchPool);
+    }
+
+    if (!libssh2_userauth_password_ex(_session,
+                                      username, strlen(username),
+                                      password, strlen(password),
+                                      NULL))
+    {
+        return true; // Success!
+    }
+
     return false;
 }
+
 
 struct ssh_baton
 {
     LIBSSH2_CHANNEL *channel;
+    LIBSSH2_SESSION *session;
     svn_boolean_t read_once;
     void *connection_baton;
 };
@@ -924,10 +1090,11 @@ static svn_error_t * ssh_read(void *baton, char *data, apr_size_t *len)
     ssh_baton *ssh = (ssh_baton*)baton;
 
     ssize_t nBytes;
+    int rc = 0;
 
     while (0 == (nBytes = libssh2_channel_read(ssh->channel, data, *len)))
     {
-        int rc = libssh2_channel_eof(ssh->channel);
+        rc = libssh2_channel_eof(ssh->channel);
 
         if (rc != 0)
             break;
@@ -947,7 +1114,8 @@ static svn_error_t * ssh_read(void *baton, char *data, apr_size_t *len)
                 else
                     buffer[sizeof(buffer)-1] = 0;
 
-                return svn_error_createf(APR_EOF, NULL,
+                return svn_error_createf(SVN_ERR_RA_SVN_IO_ERROR,
+                                         rc ? get_session_error(ssh->session) : NULL,
                                          "libssh2 exec failed:\n%s",
                                          buffer);
             }
@@ -966,7 +1134,10 @@ static svn_error_t * ssh_read(void *baton, char *data, apr_size_t *len)
         return SVN_NO_ERROR;
     }
 
-    return svn_error_create(APR_EOF, NULL, NULL);
+    if (rc)
+        return get_session_error(ssh->session);
+    else
+        return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, NULL, NULL);
 }
 
 static svn_error_t * ssh_write(void *baton, const char *data, apr_size_t *len)
@@ -982,7 +1153,7 @@ static svn_error_t * ssh_write(void *baton, const char *data, apr_size_t *len)
         if (nBytes < 0)
         {
             *len = *len - to_write;
-            return svn_error_create(APR_EOF, NULL, NULL);
+            return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, NULL, NULL);
         }
 
         to_write -= nBytes;
@@ -1012,15 +1183,16 @@ void SshConnection::OpenTunnel(svn_stream_t *&channel,
     LIBSSH2_CHANNEL *ssh_channel = libssh2_channel_open_session(_session);
 
     if (!ssh_channel)
-        throw gcnew InvalidOperationException("Can't create channel");
+        throw gcnew SvnSshException(GetSessionError());
 
     int rc = libssh2_channel_exec(ssh_channel, "svnserve -t");
 
     if (rc)
-        throw gcnew InvalidOperationException("Exec failed");
+        throw gcnew SvnSshException(GetSessionError());
 
     ssh_baton *ch = (ssh_baton*)resultPool->AllocCleared(sizeof(*ch));
     ch->channel = ssh_channel;
+    ch->session = _session;
     ch->connection_baton = _connBaton->Handle;
 
     channel = svn_stream_create(ch, resultPool->Handle);
@@ -1028,10 +1200,36 @@ void SshConnection::OpenTunnel(svn_stream_t *&channel,
     svn_stream_set_write(channel, ssh_write);
     svn_stream_set_read2(channel, ssh_read, NULL);
     svn_stream_set_close(channel, ssh_close);
+
+    resultPool->KeepAlive(this);
+
+    _nTunnels++;
 }
 
 void SshConnection::ClosedTunnel()
 {
+    _nTunnels--;
+
+    if (!_nTunnels && _closeOnIdle)
+    {
+        if (_session)
+            libssh2_session_disconnect_ex(_session, SSH_DISCONNECT_BY_APPLICATION, "Thanks!", "");
+
+        delete this;
+    }
+}
+
+void SshConnection::OperationCompleted(bool keepSessions)
+{
+    UNUSED_ALWAYS(keepSessions);
+    _closeOnIdle = true;
+
+    if (!_nTunnels)
+    {
+        if (_session)
+            libssh2_session_disconnect_ex(_session, SSH_DISCONNECT_BY_APPLICATION, "Thanks!", "");
+        delete this;
+    }
 }
 
 void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
@@ -1041,16 +1239,28 @@ void SvnSshContext::OpenTunnel(svn_stream_t *&channel,
     SshHost ^host = gcnew SshHost(user, hostname, port);
     SshConnection ^connection;
 
-    if (!_connections->TryGetValue(host, connection))
+    if (!_connections->TryGetValue(host, connection) || !connection->IsConnected())
     {
         connection = gcnew SshConnection(this, host, %_pool);
 
         connection->OpenConnection(scratchPool);
 
         _connections[host] = connection;
-        _conns->Add(connection);
     }
 
     return connection->OpenTunnel(channel, resultPool);
 }
-#endif
+
+void SvnSshContext::OperationCompleted(bool keepSessions)
+{
+    if (keepSessions)
+        return;
+
+    List<SshConnection^> ^conns = gcnew List<SshConnection^>(_connections->Values);
+    _connections->Clear();
+
+    for each (SshConnection^ c in conns)
+      {
+          c->OperationCompleted(keepSessions);
+      }
+}

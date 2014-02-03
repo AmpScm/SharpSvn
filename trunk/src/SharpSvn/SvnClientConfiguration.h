@@ -50,15 +50,27 @@ namespace SharpSvn {
             void set(bool value);
         }
 
-        /// <summary>Gets or sets a boolean indicating whether to enable the SharpPlink handler when no other valid
-        /// handler for svn+ssh:// is registered</summary>
-        /// <remarks>The default value of this property is true; this matches the behaviour of TortoiseSvn</remarks>
-        /// <value>true if enabling SharpPlink on the first repository request, otherwise false</value>
+        /// <summary>This property used to get a boolean indicating whether to enable the SharpPlink handler when no
+        /// other valid handler for svn+ssh:// was registered. It is now mapped to the inverse of <see cref-"EnableSharpPlink" /></summary>
         [System::ComponentModel::DefaultValue((System::Boolean)true)]
+        [Obsolete("Use .DisableBuiltinSsh and/or .FallbackSshClient as the direct SharpPlink support in SharpSvn for Subversion <= 1.8.x has been replaced with LibSSH2")]
         property bool EnableSharpPlink
+        {
+            bool get()  { return !DisableBuiltinSsh; }
+            void set(bool value) { DisableBuiltinSsh = !value; }
+        }
+
+        /// <summary>
+        property bool DisableBuiltinSsh
         {
             bool get();
             void set(bool value);
+        }
+
+        property String^ FallbackSshClient
+        {
+            String ^ get();
+            void set(String ^value);
         }
 
         /// <summary>Gets or sets a boolean indicating whether to always use the subversion integrated diff library
