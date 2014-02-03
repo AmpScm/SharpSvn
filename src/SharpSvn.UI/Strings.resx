@@ -126,6 +126,37 @@
   <data name="ConnectToSubversion" xml:space="preserve">
     <value>Connect to Subversion</value>
   </data>
+  <data name="SshCertificateMismatch" xml:space="preserve">
+    <value>WARNING - POTENTIAL SECURITY BREACH!
+
+The server's host key does not match what has been cached. This means that either the server administrator has changed the host key, or you have actually connected to another computer pretending to be the server.
+
+The new {0} key fingerprint is:
+{1}
+
+If you were expecting this change and trust the new key, choose YES.
+If you want to carry on connecting but without updating the cache, choose NO.
+
+If you want to abandon the connection completely, press CANCEL.
+
+Choosing CANCEL is the ONLY guaranteed safe choice.</value>
+  </data>
+  <data name="SshCertificateMismatchCaption" xml:space="preserve">
+    <value>Update cached host key?</value>
+  </data>
+  <data name="SshCertificateUnknown" xml:space="preserve">
+    <value>The server's host key is not cached in the registry. You have no guarantee that the server is the computer you think it is.
+
+The server's {0} key fingerprint is:
+{1}
+
+If you trust this host, choose YES to add the key to the cache and carry on connecting.
+If you want to carry on connecting just once, without adding the key to the cache,
+choose NO. If you do not want to connect at all, choose Cancel.</value>
+  </data>
+  <data name="SshCertificateUnknownCaption" xml:space="preserve">
+    <value>Store key in cache?</value>
+  </data>
   <data name="ThePassPhraseForTheClientCertificateForXatYIsRequired" xml:space="preserve">
     <value>The certificate for server {0} at {1} requires a passphrase.</value>
   </data>

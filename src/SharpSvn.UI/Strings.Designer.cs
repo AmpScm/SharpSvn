@@ -88,6 +88,60 @@ namespace SharpSvn.UI {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to WARNING - POTENTIAL SECURITY BREACH!
+        ///
+        ///The server&apos;s host key does not match what has been cached. This means that either the server administrator has changed the host key, or you have actually connected to another computer pretending to be the server.
+        ///
+        ///The new {0} key fingerprint is:
+        ///{1}
+        ///
+        ///If you were expecting this change and trust the new key, choose YES.
+        ///If you want to carry on connecting but without updating the cache, choose NO.
+        ///
+        ///If you want to abandon the connection completely, press CANCEL.
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SshCertificateMismatch {
+            get {
+                return ResourceManager.GetString("SshCertificateMismatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update cached host key?.
+        /// </summary>
+        internal static string SshCertificateMismatchCaption {
+            get {
+                return ResourceManager.GetString("SshCertificateMismatchCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The server&apos;s host key is not cached in the registry. You have no guarantee that the server is the computer you think it is.
+        ///
+        ///The server&apos;s {0} key fingerprint is:
+        ///{1}
+        ///
+        ///If you trust this host, choose YES to add the key to the cache and carry on connecting.
+        ///If you want to carry on connecting just once, without adding the key to the cache,
+        ///choose NO. If you do not want to connect at all, choose Cancel..
+        /// </summary>
+        internal static string SshCertificateUnknown {
+            get {
+                return ResourceManager.GetString("SshCertificateUnknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Store key in cache?.
+        /// </summary>
+        internal static string SshCertificateUnknownCaption {
+            get {
+                return ResourceManager.GetString("SshCertificateUnknownCaption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The certificate for server {0} at {1} requires a passphrase..
         /// </summary>
         internal static string ThePassPhraseForTheClientCertificateForXatYIsRequired {

@@ -81,11 +81,12 @@ namespace SharpSvn.UI
             if (!args.AutoScaleBaseSize.IsEmpty)
                 AutoScaleBaseSize = args.AutoScaleBaseSize;
 
-            svnClient.Authentication.UserNameHandlers += new EventHandler<SharpSvn.Security.SvnUserNameEventArgs>(DialogUserNameHandler);
-            svnClient.Authentication.UserNamePasswordHandlers += new EventHandler<SharpSvn.Security.SvnUserNamePasswordEventArgs>(DialogUserNamePasswordHandler);
-            svnClient.Authentication.SslClientCertificateHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificateEventArgs>(DialogSslClientCertificateHandler);
-            svnClient.Authentication.SslClientCertificatePasswordHandlers += new EventHandler<SharpSvn.Security.SvnSslClientCertificatePasswordEventArgs>(DialogSslClientCertificatePasswordHandler);
-            svnClient.Authentication.SslServerTrustHandlers += new EventHandler<SharpSvn.Security.SvnSslServerTrustEventArgs>(DialogSslServerTrustHandler);
+            svnClient.Authentication.UserNameHandlers += DialogUserNameHandler;
+            svnClient.Authentication.UserNamePasswordHandlers += DialogUserNamePasswordHandler;
+            svnClient.Authentication.SslClientCertificateHandlers += DialogSslClientCertificateHandler;
+            svnClient.Authentication.SslClientCertificatePasswordHandlers += DialogSslClientCertificatePasswordHandler;
+            svnClient.Authentication.SslServerTrustHandlers += DialogSslServerTrustHandler;
+            svnClient.Authentication.SshServerTrustHandlers += DialogSshServerTrustHandlers;
             svnClient.Authentication.BeforeEngineDialog += new EventHandler<SharpSvn.Security.SvnBeforeEngineDialogEventArgs>(BeforeEngineDialog);
         }
 
@@ -264,6 +265,77 @@ namespace SharpSvn.UI
                 }
                 else
                     e.Cancel = e.Break = true;
+            }
+        }
+
+        void DialogSshServerTrustHandlers(object sender, SvnSshServerTrustEventArgs e)
+        {
+            if (Reinvoke(sender, e, DialogSshServerTrustHandlers))
+                return;
+
+            StringBuilder sb = new StringBuilder();
+
+            switch (e.KeyType)
+            {
+                case SvnSshServerKeyType.Dss:
+                    sb.Append("ssh-dds ");
+                    break;
+                case SvnSshServerKeyType.Rsa:
+                    sb.Append("ssh-rsa ");
+                    break;
+                default:
+                    sb.Append(e.KeyType);
+                    sb.Append(" ");
+                    break;
+            }
+            if (e.KeyBits >= 0)
+                sb.AppendFormat("{0} ", e.KeyBits);
+
+            for (int i = 0; i < e.Fingerprint.Length; i++)
+            {
+                sb.Append(e.Fingerprint[i]);
+                if (i % 2 == 1)
+                    sb.Append(':');
+            }
+
+            string caption, txt;
+            MessageBoxDefaultButton defaultButton = MessageBoxDefaultButton.Button2;
+            MessageBoxIcon icon = MessageBoxIcon.Warning;
+
+            if (0 != (e.Failures & SvnSshTrustFailures.ServerKeyMismatch))
+            {
+                caption = Strings.SshCertificateMismatchCaption;
+                txt = string.Format(Strings.SshCertificateMismatch, e.KeyType, sb);
+                defaultButton = MessageBoxDefaultButton.Button3; // Cancel
+            }
+            else
+            {
+                caption = Strings.SshCertificateUnknownCaption;
+                txt = string.Format(Strings.SshCertificateUnknown, e.KeyType, sb);
+                defaultButton = MessageBoxDefaultButton.Button2; // No
+            }
+
+            DialogResult dr;
+
+            if (_window != null)
+                dr = MessageBox.Show(_window, txt, caption, MessageBoxButtons.YesNoCancel, icon, defaultButton);
+            else
+                dr = MessageBox.Show(txt, caption, MessageBoxButtons.YesNoCancel, icon, defaultButton);
+
+            switch (dr)
+            {
+                case DialogResult.Yes:
+                    e.AcceptedFailures = e.Failures;
+                    e.Save = e.MaySave;
+                    break;
+                case DialogResult.No:
+                    e.AcceptedFailures = e.Failures;
+                    e.Save = false;
+                    break;
+                case DialogResult.Cancel:
+                default:
+                    e.Cancel = true;
+                    break;
             }
         }
 
