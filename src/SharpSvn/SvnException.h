@@ -290,6 +290,50 @@ namespace SharpSvn {
         }
     };
 
+    [Serializable]
+    public ref class SvnSshException sealed : SvnException
+    {
+    internal:
+        static const apr_status_t _svnSshExceptionBase = SVN_ERR_BAD_CATEGORY_START + (40 * SVN_ERR_CATEGORY_SIZE);
+
+#define SSH2TOSVNERROR(x) (SvnSshException::_svnSshExceptionBase - x)
+
+        SvnSshException(svn_error_t *error)
+            : SvnException(error)
+        {}
+
+    public:
+        SvnSshException()
+        {
+        }
+
+        SvnSshException(String^ message)
+            : SvnException(message)
+        {
+        }
+
+        SvnSshException(String^ message, Exception^ inner)
+            : SvnException(message, inner)
+        {
+        }
+
+    public:
+         /// <summary>Gets the raw subversion error code casted to a <see cref="SharpSvn::SvnErrorCode" /></summary>
+        property SharpSvn::SvnSshErrorCode SshErrorCode
+        {
+            SharpSvn::SvnSshErrorCode get()
+            {
+                return (SharpSvn::SvnSshErrorCode) - (SubversionErrorCode-_svnSshExceptionBase);
+            }
+        }
+
+    protected:
+        SvnSshException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
+            : SvnException(info, context)
+        {
+        }
+    };
+
     //////////// Generic Subversion exception wrappers
 
 #define DECLARE_SVN_EXCEPTION_TYPE(type, parentType)                                    \
@@ -349,7 +393,6 @@ namespace SharpSvn {
     DECLARE_SVN_EXCEPTION_TYPE(SvnObstructedUpdateException, SvnWorkingCopyException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnInvalidNodeKindException, SvnWorkingCopyException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnSerfException, SvnException);
-    DECLARE_SVN_EXCEPTION_TYPE(SvnSshException, SvnException);
 
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnsupportedFeatureException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnknownCapabilityException, SvnException);

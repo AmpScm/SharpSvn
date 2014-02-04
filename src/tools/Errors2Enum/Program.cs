@@ -10,9 +10,9 @@ namespace Errors2Enum
     {
         static void Main(string[] args)
         {
-            if (args.Length != 5)
+            if (args.Length != 6)
             {
-                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <apr_errno.h> <serf.h> <outputfile>");
+                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <apr_errno.h> <serf.h> <libssh2.h> <outputfile>");
                 foreach (string s in args)
                 {
                     Console.Error.WriteLine("'" + s + "'");
@@ -27,7 +27,8 @@ namespace Errors2Enum
             string errno = Path.Combine(vcPath, "include\\errno.h");
             string aprerrno = Path.GetFullPath(args[2]);
             string serfh = Path.GetFullPath(args[3]);
-            string to = Path.GetFullPath(args[4]);
+            string libssh2h = Path.GetFullPath(args[4]);
+            string to = Path.GetFullPath(args[5]);
 
             if (!File.Exists(winerror))
                 winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
@@ -78,6 +79,7 @@ namespace Errors2Enum
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(errno)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(aprerrno)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(serfh)
+                && File.GetLastWriteTime(to) > File.GetLastWriteTime(libssh2h)
                 && File.GetLastWriteTime(to) > File.GetLastWriteTime(new Uri(typeof(Program).Assembly.CodeBase).LocalPath))
             {
                 using (StreamReader sr = File.OpenText(to))
@@ -91,6 +93,7 @@ namespace Errors2Enum
             using (StreamReader header = File.OpenText(winerror))
             using (StreamReader aprheader = File.OpenText(aprerrno))
             using (StreamReader serfheader = File.OpenText(serfh))
+            using (StreamReader libssh2 = File.OpenText(libssh2h))
             using (StreamReader syserrs = File.OpenText(errno))
             {
                 r.WriteLine(verHeader);
@@ -114,10 +117,17 @@ namespace Errors2Enum
                 WriteAprEnumBody(aprheader, r, true, null, defined);
                 WriteAprEnumBody(syserrs, r, false, null, defined);
                 WriteAprEnumBody(serfheader, r, true, "SERF_ERROR_", defined);
-
                 r.WriteLine("};");
+                r.WriteLine("");
+
+                r.WriteLine("/// <summary>Generated mapping from libssh2.h</summary>");
+                r.WriteLine("public enum class SvnSshErrorCode {");
+                WriteAprEnumBody(libssh2, r, true, "LIBSSH2_ERROR_", defined);
+                r.WriteLine("};");
+
                 r.WriteLine();
                 r.WriteLine("} /* SharpSvn */");
+                r.WriteLine();
             }
         }
 
@@ -276,7 +286,12 @@ namespace Errors2Enum
                 if (defined.ContainsKey(name))
                     continue;
 
-                defined[name] = name;
+                string value = direct ? line.Substring(nameEnd + 1).Trim() : oname;
+
+                if (defined.ContainsKey(value))
+                    value = defined[value];
+
+                defined[name] = value;
 
                 if (direct)
                 {
@@ -298,7 +313,7 @@ namespace Errors2Enum
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
 
-                    r.WriteLine("\t{0} = (int){1},", name, line.Substring(nameEnd + 1).Trim());
+                    r.WriteLine("\t{0} = (int){1},", name, value);
 
                     r.WriteLine("#ifdef SVN_DEF_" + name);
                     r.WriteLine("# define " + name + " ((apr_status_t)::SharpSvn::SvnAprErrorCode::" + name + ")");
@@ -314,7 +329,7 @@ namespace Errors2Enum
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1707:IdentifiersShouldNotContainUnderscores\")]");
                     r.WriteLine("[System::Diagnostics::CodeAnalysis::SuppressMessage(\"Microsoft.Naming\", \"CA1709:IdentifiersShouldBeCasedCorrectly\")]");
                     r.WriteLine("[System::ComponentModel::DescriptionAttribute(\"System error " + Escape(oname) + "\")]");
-                    r.WriteLine("\t{0} = (int){1},", name, oname);
+                    r.WriteLine("\t{0} = (int){1},", name, value);
                 }
             }
         }

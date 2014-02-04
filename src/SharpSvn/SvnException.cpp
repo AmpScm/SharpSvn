@@ -499,6 +499,7 @@ Exception^ SvnException::Create(svn_error_t *error, bool clearError)
                 else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_AUTHZ_CATEGORY_START)) return gcnew SvnAuthorizationException(error);
                 else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_DIFF_CATEGORY_START)) return gcnew SvnNodeDiffException(error);
                 else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_RA_SERF_CATEGORY_START)) return gcnew SvnRepositoryIOException(error);
+                else if (SVN_ERROR_IN_CATEGORY(error->apr_err, SvnSshException::_svnSshExceptionBase)) return gcnew SvnSshException(error);
                 else // (SVN_ERROR_IN_CATEGORY(error->apr_err, SVN_ERR_MALFUNC_CATEGORY_START)) return gcnew SvnException(error);
                   return gcnew SvnException(error);
             }

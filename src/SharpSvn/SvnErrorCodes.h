@@ -73,6 +73,7 @@ public enum class SvnErrorCategory
 }
 
 #undef WSABASEERR // Enable including winsock errors
+#undef LIBSSH2_H_GEN
 #include "SvnWindowsError.h"
 
 #undef INET_E_INVALID_URL
