@@ -142,8 +142,15 @@ static svn_error_t *get_session_error(LIBSSH2_SESSION *session)
       int err = libssh2_session_last_error(session, &msg, NULL, FALSE);
 
       if (err && msg)
-          return svn_error_createf(SVN_ERR_RA_SVN_IO_ERROR, NULL,
+      {
+          apr_status_t status;
+          if (err < 0 && err > - SVN_ERR_CATEGORY_SIZE)
+              status = SSH2TOSVNERROR(err);
+          else
+              status = SVN_ERR_RA_SVN_IO_ERROR;
+          return svn_error_createf(status, NULL,
                                    "SSH%03d: %s", -err, msg);
+      }
   }
 
   return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, NULL, NULL);
@@ -1162,7 +1169,7 @@ static svn_error_t * ssh_read(void *baton, char *data, apr_size_t *len)
     }
 
     if (rc)
-        return get_session_error(ssh->session);
+        return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, get_session_error(ssh->session), NULL);
     else
         return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, NULL, NULL);
 }
@@ -1177,10 +1184,10 @@ static svn_error_t * ssh_write(void *baton, const char *data, apr_size_t *len)
     {
         ssize_t nBytes = libssh2_channel_write(ssh->channel, data, to_write);
 
-        if (nBytes < 0)
+        if (nBytes <= 0)
         {
             *len = *len - to_write;
-            return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, NULL, NULL);
+            return svn_error_create(SVN_ERR_RA_SVN_IO_ERROR, get_session_error(ssh->session), NULL);
         }
 
         to_write -= nBytes;
