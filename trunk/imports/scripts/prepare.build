@@ -60,12 +60,6 @@
       unless="${file::exists(downloads + sconsFilename)}" />
       
     <get
-      src="http://www.libssh2.org/download/${libssh2Filename}"
-      dest="${downloads + libssh2Filename}"
-      unless="${file::exists(downloads + libssh2Filename)}"
-      if="${buildLibssh2}" />
-      
-    <get
        src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
        dest="${downloads + 'svn-book.pdf'}"
        unless="${file::exists(downloads + 'svn-book.pdf')}"
@@ -325,6 +319,13 @@
       <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
       <arg value="${saslDir}" />
     </Svn>
+    
+    <Svn unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}" />
+      <arg value="co" />
+      <arg value="https://github.com/rhuijben/libssh2/tags/libssh2-${libssh2Version}" />
+      <arg value="${libssh2Dir}" />
+    </Svn>
+
   </target>
 
   <target name="copy-licenses">
