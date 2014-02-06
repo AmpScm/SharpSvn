@@ -113,9 +113,10 @@ namespace SharpSvn {
             LIBSSH2_SESSION *_session;
             String^ _hostKeyBase64;
             String^ _username;
-            bool _saveuserWhenNoPassword;
             int _nTunnels;
             bool _closeOnIdle;
+            svn_cancel_func_t _cancel_func;
+            void *_cancel_baton;
 
         internal:
             ssh_keybint_t *_kbi;
@@ -146,7 +147,7 @@ namespace SharpSvn {
             void ResolveAddress(AprPool^ scratchPool);
             void OpenSocket(AprPool^ scratchPool);
             void VerifySshHost(AprPool ^scratchPool);
-            bool DoPublicKeyAuth(AprPool ^scratchPool);
+            bool DoPublicKeyAuth(bool keepUser, bool storeUser, AprPool ^scratchPool);
             bool DoKeyboardInteractiveAuth(AprPool ^scratchPool);
             bool DoPasswordAuth(AprPool ^scratchPool);
 
