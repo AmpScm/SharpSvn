@@ -109,12 +109,6 @@
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
       
-    <untar
-      src="${downloads + libssh2Filename}" compression="gzip"
-      dest="build/${platform}"
-      unless="${directory::exists(libssh2Dir)}"
-      if="${buildLibssh2}" />
-
     <unzip
       zipfile="${downloads + nunitFilename}"
       todir="build"
@@ -320,7 +314,7 @@
       <arg value="${saslDir}" />
     </Svn>
     
-    <Svn unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}" />
+    <Svn unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
       <arg value="co" />
       <arg value="https://github.com/rhuijben/libssh2/tags/libssh2-${libssh2Version}" />
       <arg value="${libssh2Dir}" />

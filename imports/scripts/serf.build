@@ -20,10 +20,10 @@
           </items>
         </in>
         <do>
-          <Svn verbose="true">
+          <Svn>
             <arg value="patch" />
             <arg value="${patch}" />
-            <arg value="${aprDir}" />
+            <arg value="${serfDir}" />
           </Svn>
         </do>
       </foreach>

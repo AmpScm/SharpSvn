@@ -1,11 +1,25 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="libssh2Dir" value="build/${platform}/libssh2-${libssh2Version}" />
-  <property name="libssh2Filename" value="libssh2-${libssh2Version}.tar.gz" />
+  <property name="libssh2Dir" value="build/${platform}/libssh2" />
   <property name="buildLibssh2" value="true" overwrite="false" />
   
-  <target name="libssh2-prepare" depends="extract" if="${buildLibssh2}">
-
+  <target name="libssh2-prepare" depends="checkout" if="${buildLibssh2}">
+    <OnceBlock file="build/libssh2_${platform}.patched">
+      <foreach item="File" property="patch" if="${applyPatches}">
+        <in>
+          <items basedir="${downloads}/../patches/libssh2">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${libssh2Dir}" />
+          </Svn>
+        </do>
+      </foreach>
+    </OnceBlock>
   </target>
   
   <target name="libssh2-build" depends="libssh2-prepare" if="${buildLibssh2}">
@@ -23,10 +37,16 @@
     <FilterFile file="${libssh2Dir}\src\NMakefile">
       <filterchain>
         <replacestring from="$(DLL)" to="$(SSHLIB)" />
+        <replacestring from=") $(RESOURCE)" to=")" />
         <replacestring from="DLL=" to="SSHLIB=" />
         <replacestring from=".dll" to=".lib" />
         <replacestring from="$(DLLFLAGS) $(OBJECTS) $(RESOURCE) $(LIBS)" to="$(OBJECTS) $(LIBS)" />
         <replacestring from="$(CC) -o $(SSHLIB)" to="lib /LTCG /out:$(SSHLIB)" />
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${libssh2Dir}\include\libssh2.h">
+      <filterchain>
+        <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' />
       </filterchain>
     </FilterFile>
     <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
