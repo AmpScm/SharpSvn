@@ -205,6 +205,9 @@ void SshConnection::OpenSocket(AprPool^ scratchPool)
         status = apr_socket_create(&sock, _sockAddr->family, SOCK_STREAM, APR_PROTO_TCP,
             _pool.Handle);
 
+        if (_cancel_func)
+          SVN_THROW(_cancel_func(_cancel_baton));
+
         if (status == APR_SUCCESS)
         {
             status = apr_socket_connect(sock, _sockAddr);
@@ -247,11 +250,16 @@ static bool TryUserName(SvnUserNameEventArgs^ e)
 void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_baton,
                                    AprPool^ scratchPool)
 {
+    _cancel_func = cancel_func;
+    _cancel_baton = cancel_baton;
+
     ResolveAddress(scratchPool);
     OpenSocket(scratchPool);
     VerifySshHost(scratchPool);
 
     _username = _host->User;
+    bool keepUserWhenNoPassword = false;
+    bool saveUserWhenNoPassword = false;
 
     pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
     CREDENTIALW *pCred;
@@ -288,13 +296,15 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
         if (win_name)
             _username = gcnew String(win_name);
 
-        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(L'<' + _host->RealmString + L'>', true);
+        bool maySave = Environment::UserInteractive;
+        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(L'<' + _host->RealmString + L'>', maySave);
         ee->UserName = _username;
 
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNameEventArgs^>(&TryUserName)))
         {
             _username = ee->UserName;
-            _saveuserWhenNoPassword = ee->Save;
+            keepUserWhenNoPassword = true;
+            saveUserWhenNoPassword = ee->Save;
         }
     }
 
@@ -318,8 +328,11 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
             if (end)
                 *end = '\0';
 
+            if (_cancel_func)
+                SVN_THROW(_cancel_func(_cancel_baton));
+
             if (! strcmp(next, "publickey"))
-                authenticated = DoPublicKeyAuth(scratchPool);
+                authenticated = DoPublicKeyAuth(keepUserWhenNoPassword, saveUserWhenNoPassword, scratchPool);
             else if (! strcmp(next, "keyboard-interactive"))
                 authenticated = DoKeyboardInteractiveAuth(scratchPool);
             else if (! strcmp(next, "password")) // Verify
@@ -396,6 +409,9 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
 {
     const char *hostname = scratchPool->AllocString(_host->Host);
 
+    if (_cancel_func)
+        SVN_THROW(_cancel_func(_cancel_baton));
+
     int rc;
     rc = libssh2_session_handshake(_session, _socket);
 
@@ -403,6 +419,9 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
     {
         throw gcnew SvnSshException(GetSessionError());
     }
+
+    if (_cancel_func)
+        SVN_THROW(_cancel_func(_cancel_baton));
 
     bool hostMismatch = false;
 
@@ -698,7 +717,7 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
     }
 }
 
-bool SshConnection::DoPublicKeyAuth(AprPool^ scratchPool)
+bool SshConnection::DoPublicKeyAuth(bool keepUser, bool storeUser, AprPool^ scratchPool)
 {
     const char *username = scratchPool->AllocString(_username);
 
@@ -727,7 +746,26 @@ bool SshConnection::DoPublicKeyAuth(AprPool^ scratchPool)
                 }
 
                 if (!libssh2_agent_userauth(agent, username, identity))
+                {
+                    if (keepUser || storeUser)
+                    {
+                        // Store just the username to avoid prompting again
+                        CREDENTIALW cred;
+                        memset(&cred, sizeof(cred), 0);
+
+                        pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+                        pin_ptr<const wchar_t> pUserName = PtrToStringChars(_username);
+
+                        cred.Type = CRED_TYPE_GENERIC;
+                        cred.TargetName = const_cast<wchar_t*>(pRealm);
+                        cred.UserName = const_cast<wchar_t*>(pUserName);
+
+                        cred.Persist = storeUser ? CRED_PERSIST_ENTERPRISE : CRED_PERSIST_SESSION;
+
+                        CredWriteW(&cred, 0); // Ignore failures
+                    }
                     return true;
+                }
             }
         }
 
@@ -876,7 +914,7 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
         }
 
         bool maySave = Environment::UserInteractive; // Or the CredStore is unavailable
-        SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_host->User,
+        SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_username,
                                                                               L'<' + _host->RealmString + L'>',
                                                                               maySave);
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNamePasswordEventArgs^>(this, &SshConnection::TryKeyboardInteractive)))
@@ -887,10 +925,13 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
             memset(&cred, sizeof(cred), 0);
 
             pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+            pin_ptr<const wchar_t> pUserName = PtrToStringChars(_username);
             pin_ptr<const wchar_t> pPassword = PtrToStringChars(ee->Password);
 
             cred.Type = CRED_TYPE_GENERIC;
             cred.TargetName = const_cast<wchar_t*>(pRealm);
+            cred.UserName = const_cast<wchar_t*>(pUserName);
+
             cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
             cred.CredentialBlobSize = sizeof(wchar_t) * wcslen(pPassword);
 
@@ -1017,7 +1058,7 @@ bool SshConnection::DoPasswordAuth(AprPool^ scratchPool)
       }
 
       bool maySave = Environment::UserInteractive; // Or the CredStore is unavailable
-      SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_host->User,
+      SvnUserNamePasswordEventArgs^ ee = gcnew SvnUserNamePasswordEventArgs(_username,
                                                                             L'<' + _host->RealmString + L'>',
                                                                             maySave);
       if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNamePasswordEventArgs^>(this, &SshConnection::TryPassword)))
@@ -1028,10 +1069,13 @@ bool SshConnection::DoPasswordAuth(AprPool^ scratchPool)
           memset(&cred, sizeof(cred), 0);
 
           pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+          pin_ptr<const wchar_t> pUserName = PtrToStringChars(_username);
           pin_ptr<const wchar_t> pPassword = PtrToStringChars(ee->Password);
 
           cred.Type = CRED_TYPE_GENERIC;
           cred.TargetName = const_cast<wchar_t*>(pRealm);
+          cred.UserName = const_cast<wchar_t*>(pUserName);
+
           cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
           cred.CredentialBlobSize = sizeof(wchar_t) * wcslen(pPassword);
 
