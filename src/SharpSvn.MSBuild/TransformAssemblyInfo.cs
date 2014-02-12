@@ -165,8 +165,33 @@ namespace SharpSvn.MSBuild
                         parser.WriteAttribute(sw, typeof(AssemblyTitleAttribute), SetTitle);
                 }
 
-                // TODO: Compare tmp with dest and only copy when changed
-                File.Copy(tmp, dest, true);
+                if (File.Exists(dest))
+                {
+                    bool same = false;
+                    using (StreamReader f1 = File.OpenText(dest))
+                    using (StreamReader f2 = File.OpenText(tmp))
+                    {
+                        string line;
+
+                        while (f1.ReadLine() == (line = f2.ReadLine()))
+                        {
+                            if (line == null)
+                            {
+                                same = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (same)
+                    {
+                        File.Delete(tmp);
+                        return true;
+                    }
+
+                    File.Delete(dest);
+                }
+                File.Move(tmp, dest);
             }
             return true;
         }
