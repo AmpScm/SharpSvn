@@ -5,6 +5,21 @@
     <SharpSvnIncluded>true</SharpSvnIncluded>
     <SharpSvnEnabled Condition="$(SharpSvnEnabled) == ''">true</SharpSvnEnabled>
   </PropertyGroup>
+  <PropertyGroup>
+    <SharpSvnPatchAssemblyInfo
+            Condition="$(SharpSvnPatchAssemblyInfo) == ''
+                       and $(SharpSvnEnabled) != 'false'
+                       and (  $(ForceAssemblyVersion)              != '' or
+                              $(ForceAssemblyFileVersion)          != '' or
+                              $(ForceAssemblyInformationalVersion) != '' or
+                              $(ForceAssemblyCopyright)            != '' or
+                              $(ForceAssemblyCompany)              != '' or
+                              $(ForceAssemblyTrademark)            != '' or
+                              $(ForceAssemblyConfiguration)        != '' or
+                              $(ForceAssemblyProduct)              != '' or
+                              $(ForceAssemblyTitle)                != '')">true</SharpSvnPatchAssemblyInfo>
+    <SharpSvnPatchAssemblyInfo Condition="$(SharpSvnPatchAssemblyInfo) == ''">false</SharpSvnPatchAssemblyInfo>
+  </PropertyGroup>
 
   <ImportGroup Condition="$(SharpSvnEnabled) != 'false'">
     <Import Project="$(SharpSvnTargetsDir)\SharpSvn.common.targets"

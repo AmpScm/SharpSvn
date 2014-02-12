@@ -60,15 +60,15 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities" />
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileParsers\CppParser.cs" />
+    <Compile Include="FileParsers\CSharpParser.cs" />
+    <Compile Include="FileParsers\LanguageParser.cs" />
+    <Compile Include="TransformAssemblyInfo.cs" />
     <Compile Include="UpdateNativeVersionResource.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,6 +76,7 @@
   <ItemGroup>
     <None Include="common\ImportAfter\SharpSvn.ImportAfter.targets" />
     <None Include="SharpSvn.MSBuild.snk" />
+    <None Include="targets\Projects\SharpSvn.csproj.targets" />
     <None Include="targets\Projects\SharpSvn.vcxproj.targets" />
     <None Include="targets\SharpSvn.targets" />
   </ItemGroup>
