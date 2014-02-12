@@ -122,6 +122,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,6 +144,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -162,6 +164,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -185,6 +188,7 @@
       <PrecompiledHeader />
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -712,6 +716,25 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="PuttySrc\dialog.h" />
+    <ClInclude Include="PuttySrc\int64.h" />
+    <ClInclude Include="PuttySrc\ldisc.h" />
+    <ClInclude Include="PuttySrc\misc.h" />
+    <ClInclude Include="PuttySrc\network.h" />
+    <ClInclude Include="PuttySrc\pgssapi.h" />
+    <ClInclude Include="PuttySrc\proxy.h" />
+    <ClInclude Include="PuttySrc\psftp.h" />
+    <ClInclude Include="PuttySrc\putty.h" />
+    <ClInclude Include="PuttySrc\puttymem.h" />
+    <ClInclude Include="PuttySrc\puttyps.h" />
+    <ClInclude Include="PuttySrc\resource.h" />
+    <ClInclude Include="PuttySrc\sftp.h" />
+    <ClInclude Include="PuttySrc\ssh.h" />
+    <ClInclude Include="PuttySrc\sshgss.h" />
+    <ClInclude Include="PuttySrc\sshgssc.h" />
+    <ClInclude Include="PuttySrc\storage.h" />
+    <ClInclude Include="PuttySrc\terminal.h" />
+    <ClInclude Include="PuttySrc\tree234.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SharpPlink.h" />
     <ClInclude Include="stdafx.h" />

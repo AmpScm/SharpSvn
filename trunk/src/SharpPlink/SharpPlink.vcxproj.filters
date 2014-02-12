@@ -233,6 +233,63 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PuttySrc\dialog.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\int64.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\ldisc.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\misc.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\network.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\pgssapi.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\proxy.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\psftp.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\putty.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\puttymem.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\puttyps.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\resource.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\sftp.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\ssh.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\sshgss.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\sshgssc.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\storage.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\terminal.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\tree234.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="SharpPlink.ico">
