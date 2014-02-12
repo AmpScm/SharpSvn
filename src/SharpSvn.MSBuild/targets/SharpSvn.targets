@@ -10,14 +10,21 @@
             Condition="$(SharpSvnPatchAssemblyInfo) == ''
                        and $(SharpSvnEnabled) != 'false'
                        and (  $(ForceAssemblyVersion)              != '' or
+                              $(ForceOnlyAssemblyVersion)          != '' or
                               $(ForceAssemblyFileVersion)          != '' or
                               $(ForceAssemblyInformationalVersion) != '' or
+                              $(ForceSatelliteContractVersion)     != '' or
+                              $(ForceComCompatibleVersion)         != '' or
                               $(ForceAssemblyCopyright)            != '' or
                               $(ForceAssemblyCompany)              != '' or
                               $(ForceAssemblyTrademark)            != '' or
                               $(ForceAssemblyConfiguration)        != '' or
+                              $(ForceAssemblyDescription)          != '' or
                               $(ForceAssemblyProduct)              != '' or
-                              $(ForceAssemblyTitle)                != '')">true</SharpSvnPatchAssemblyInfo>
+                              $(ForceAssemblyTitle)                != '' or
+                              $(ForceCLSCompliant)                 != '' or
+                              $(ForceComVisible)                   != '' or
+                              $(ForceNeutralResourceLanguage)      != '')">true</SharpSvnPatchAssemblyInfo>
     <SharpSvnPatchAssemblyInfo Condition="$(SharpSvnPatchAssemblyInfo) == ''">false</SharpSvnPatchAssemblyInfo>
   </PropertyGroup>
 

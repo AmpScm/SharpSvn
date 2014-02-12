@@ -37,20 +37,30 @@
     </ItemGroup>
 
     <TransformAssemblyInfo
-      Language                ="cpp"
+      Language                   ="cpp"
 
-      Sources                 ="@(AssemblyInfoFile)"
+      Sources                    ="@(AssemblyInfoFile)"
 
-      SetVersion              ="$(ForceAssemblyVersion)"
-      SetFileVersion          ="$(ForceAssemblyFileVersion)"
-      SetInformationalVersion ="$(ForceAssemblyInformationalVersion)"
-      SetCopyright            ="$(ForceAssemblyCopyright)"
-      SetCompany              ="$(ForceAssemblyCompany)"
-      SetTrademark            ="$(ForceAssemblyTrademark)"
-      SetConfiguration        ="$(ForceAssemblyConfiguration)"
+      SetVersion                 ="$(ForceAssemblyVersion)"
 
-      SetProduct              ="$(ForceAssemblyProduct)"
-      SetTitle                ="$(ForceAssemblyTitle)"
+      SetOnlyAssemblyVersion     ="$(ForceOnlyAssemblyVersion)"
+      SetFileVersion             ="$(ForceAssemblyFileVersion)"
+      SetInformationalVersion    ="$(ForceAssemblyInformationalVersion)"
+      SetSatelliteContractVersion="$(ForceSatelliteContractVersion)"
+      SetComCompatibleVersion    ="$(ForceComCompatibleVersion)"
+
+      SetCopyright               ="$(ForceAssemblyCopyright)"
+      SetCompany                 ="$(ForceAssemblyCompany)"
+      SetTrademark               ="$(ForceAssemblyTrademark)"
+      SetConfiguration           ="$(ForceAssemblyConfiguration)"
+      SetDescription             ="$(ForceAssemblyDescription)"
+
+      SetProduct                 ="$(ForceAssemblyProduct)"
+      SetTitle                   ="$(ForceAssemblyTitle)"
+
+      SetCLSCompliant            ="$(ForceCLSCompliant)"
+      SetComVisible              ="$(ForceComVisible)"
+      SetNeutralResourceLanguage ="$(ForceNeutralResourceLanguage)"
       >
 
       <Output TaskParameter="FilesWritten" ItemName="FileWrites"/>
