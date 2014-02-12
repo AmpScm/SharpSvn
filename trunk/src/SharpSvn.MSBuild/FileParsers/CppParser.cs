@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SharpSvn.MSBuild.FileParsers
 {
-    sealed class CppParser : LanguageParser
+    sealed class CppParser : BaseLanguageParser
     {
         readonly List<Regex> Filters = new List<Regex>();
         public override void WriteComment(System.IO.StreamWriter sw, string text)
@@ -72,13 +73,31 @@ namespace SharpSvn.MSBuild.FileParsers
             get { return @"\(([^""@)]|""([^\\""]|\\.)*"")*\)"; }
         }
 
-        public override void WriteAttribute(System.IO.StreamWriter sw, Type type, string value)
+        protected override void StartAttribute(StreamWriter sw, Type type)
         {
             sw.Write("[assembly: ::");
             sw.Write(type.FullName.Replace(".", "::"));
-            sw.Write("(\"");
+            sw.Write("(");
+        }
+
+        protected override void EndAttribute(StreamWriter sw)
+        {
+            sw.WriteLine(")];");
+        }
+
+        public override void WriteAttribute(StreamWriter sw, Type type, string value)
+        {
+            StartAttribute(sw, type);
+            sw.Write("\"");
             sw.Write(value.Replace("\\", "\\\\").Replace("\"", "\\\""));
             sw.WriteLine("\")];");
+        }
+
+        public override void WriteAttribute(StreamWriter sw, Type type, bool value)
+        {
+            StartAttribute(sw, type);
+            sw.Write(value ? "true" : "false");
+            EndAttribute(sw);
         }
     }
 }

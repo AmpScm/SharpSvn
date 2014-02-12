@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SharpSvn.MSBuild.FileParsers
 {
-    sealed class VBParser : LanguageParser
+    sealed class VBParser : BaseLanguageParser
     {
         readonly List<Regex> Filters = new List<Regex>();
         public override void WriteComment(System.IO.StreamWriter sw, string text)
@@ -73,6 +73,18 @@ namespace SharpSvn.MSBuild.FileParsers
             get { return @"\(([^"")]|""([^""]|"""")*"")*\)"; }
         }
 
+        protected override void StartAttribute(System.IO.StreamWriter sw, Type type)
+        {
+            sw.Write("<Assembly: Global.");
+            sw.Write(type.FullName);
+            sw.Write("(");
+        }
+
+        protected override void EndAttribute(System.IO.StreamWriter sw)
+        {
+            sw.WriteLine(")>");
+        }
+
         public override void WriteAttribute(System.IO.StreamWriter sw, Type type, string value)
         {
             sw.Write("<Assembly: Global.");
@@ -80,6 +92,20 @@ namespace SharpSvn.MSBuild.FileParsers
             sw.Write("(\"");
             sw.Write(value.Replace("\"", "\"\""));
             sw.WriteLine("\")>");
+        }
+
+        public override void WriteAttribute(System.IO.StreamWriter sw, Type type, bool value)
+        {
+            sw.Write("<Assembly: Global.");
+            sw.Write(type.FullName);
+            sw.Write("(");
+            sw.Write(value ? "True" : "False");
+            sw.WriteLine(")>");
+        }
+
+        public override string CopyrightEscape(string from)
+        {
+            return (from ?? "").Replace("(c)", "©");
         }
     }
 }
