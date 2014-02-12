@@ -23,7 +23,11 @@
             </items>
           </in>
           <do>
-            <ApplyPatch patchFile="${patch}" toDir="${svnBase}" />
+            <Svn>
+              <arg value="patch" />
+              <arg value="${patch}" />
+              <arg value="${svnBase}" />
+            </Svn>
           </do>
         </foreach>
         
