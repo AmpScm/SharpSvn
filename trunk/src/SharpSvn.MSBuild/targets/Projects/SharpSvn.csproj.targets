@@ -1,24 +1,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <SharpSvnUpdateVersionResource Condition="$(SharpSvnUpdateVersionResource) == ''">true</SharpSvnUpdateVersionResource>
-  </PropertyGroup>
 
-  <UsingTask TaskName="UpdateNativeVersionResource" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
   <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
-
-  <Target Name="SharpSvnPostLink"
-          AfterTargets="Link;LinkEmbedManifest;Manifest"
-          Condition="'$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
-
-    <UpdateNativeVersionResource
-      Source          ="%(Link.OutputFile)"
-      TempDir         ="$(IntermediateOutputPath)_SharpSvn\Res"
-      SourceUpdated   ="$(SharpSvnUpdatedResource)"
-      KeyContainer    ="%(Link.KeyContainer)"
-      KeyFile         ="$(LinkKeyFile)"
-
-      Condition="%(Link.OutputFile) != ''"/>
-  </Target>
 
   <Target Name="SharpSvnPatchAssemblyInfoFile"
           AfterTargets="BuildGenerateSources"
@@ -26,7 +8,9 @@
           Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true'">
 
     <ItemGroup>
-      <AssemblyInfoFile Include="@(ClCompile->'$(IntermediateOutputPath)_SharpSvn\%(Filename)%(Extension)')" Condition="'%(filename)' == 'AssemblyInfo'">
+      <AssemblyInfoFile
+            Include="@(Compile->'$(IntermediateOutputPath)_SharpSvn\)%(Filename)%(Extension)')"
+            Condition="'%(filename)' == 'AssemblyInfo'">
         <InfoIdentity>%(Identity)</InfoIdentity>
         <InfoSource>%(FullPath)</InfoSource>
       </AssemblyInfoFile>
@@ -37,7 +21,7 @@
     </ItemGroup>
 
     <TransformAssemblyInfo
-      Language                ="cpp"
+      Language                ="csharp"
 
       Sources                 ="@(AssemblyInfoFile)"
 

@@ -4,6 +4,14 @@
     <Package Description="SharpSvn MSBuild Extension" Compressed="yes" Languages="1033"/>
     <Media Id="1" Cabinet="ssvnmsbd.cab" EmbedCab="yes"  />
 
+    <Upgrade Id="D073FDC5-26F6-4B07-AE82-F0EC42B7BBD3">
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.1.0.0" Maximum="0.9.0.0" IncludeMinimum="yes" IncludeMaximum="yes"/>
+    </Upgrade>
+
+    <MajorUpgrade
+      Schedule="afterInstallInitialize"
+      DowngradeErrorMessage="Unable to install because a newer version is already installed." />
+
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
         <Directory Id="MSBuild" Name="MSBuild">
@@ -18,6 +26,9 @@
             <Directory Id="MSBuild_SharpSvn_Project" Name="Projects">
               <Component Id="vcxproj_targets" Guid="6D58BED8-6D25-4B11-989B-3FF83E18BD5A">
                 <File Name="SharpSvn.vcxproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
+              </Component>
+              <Component Id="csproj_targets" Guid="3EA8FECD-75B9-4930-8BF4-8C9E38F60408">
+                <File Name="SharpSvn.csproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
               </Component>
             </Directory>
           </Directory>
@@ -37,6 +48,7 @@
     <Feature Id="Main" TypicalDefault="install" Level="1">
       <ComponentRef Id="sharpsvn_targets"/>
       <ComponentRef Id="vcxproj_targets"/>
+      <ComponentRef Id="csproj_targets"/>
       <ComponentRef Id="SharpSvnMSBuild_dll"/>
       <ComponentRef Id="sharpsvn_hook_40"/>
     </Feature>
