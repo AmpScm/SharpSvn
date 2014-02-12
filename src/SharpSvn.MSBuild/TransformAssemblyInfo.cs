@@ -179,6 +179,8 @@ namespace SharpSvn.MSBuild
                     return new CppParser();
                 case MSBuild.Language.csharp:
                     return new CSharpParser();
+                case MSBuild.Language.vb:
+                    return new VBParser();
                 default:
                     throw new NotImplementedException("Unimplemented language");
             }

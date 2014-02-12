@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileParsers\CppParser.cs" />
+    <Compile Include="FileParsers\VBParser.cs" />
     <Compile Include="FileParsers\CSharpParser.cs" />
     <Compile Include="FileParsers\LanguageParser.cs" />
     <Compile Include="TransformAssemblyInfo.cs" />
@@ -76,6 +77,7 @@
   <ItemGroup>
     <None Include="common\ImportAfter\SharpSvn.ImportAfter.targets" />
     <None Include="SharpSvn.MSBuild.snk" />
+    <None Include="targets\Projects\SharpSvn.vbproj.targets" />
     <None Include="targets\Projects\SharpSvn.csproj.targets" />
     <None Include="targets\Projects\SharpSvn.vcxproj.targets" />
     <None Include="targets\SharpSvn.targets" />

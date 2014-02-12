@@ -30,6 +30,9 @@
               <Component Id="csproj_targets" Guid="3EA8FECD-75B9-4930-8BF4-8C9E38F60408">
                 <File Name="SharpSvn.csproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
               </Component>
+              <Component Id="vbproj_targets" Guid="94FF2C1E-57DE-4A52-90FD-97BCF8EBFCAE">
+                <File Name="SharpSvn.vbproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
+              </Component>
             </Directory>
           </Directory>
           <Directory Id="MSBuild_40" Name="4.0">
@@ -49,6 +52,7 @@
       <ComponentRef Id="sharpsvn_targets"/>
       <ComponentRef Id="vcxproj_targets"/>
       <ComponentRef Id="csproj_targets"/>
+      <ComponentRef Id="vbproj_targets"/>
       <ComponentRef Id="SharpSvnMSBuild_dll"/>
       <ComponentRef Id="sharpsvn_hook_40"/>
     </Feature>

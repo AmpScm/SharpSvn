@@ -21,7 +21,7 @@
     </ItemGroup>
 
     <TransformAssemblyInfo
-      Language                ="csharp"
+      Language                ="vb"
 
       Sources                 ="@(AssemblyInfoFile)"
 
