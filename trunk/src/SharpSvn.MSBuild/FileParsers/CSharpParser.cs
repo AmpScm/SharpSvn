@@ -37,17 +37,16 @@ namespace SharpSvn.MSBuild.FileParsers
 
         private string ConstructRegex(Type type)
         {
-            return @"^\s*\[\s*assembly\s*:\s*" +ConstructNameRegex(type);// +@"\s*(" + ArgumentsRegex + @"\s*)?\]";
+            return @"^\s*\[\s*assembly\s*:\s*" +ConstructNameRegex(type) + @"\s*(" + ArgumentsRegex + @"\s*)?\]";
         }
 
         private string ConstructNameRegex(Type type)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(@"(::\s*)?");
-
             string[] parts = type.FullName.Split('.');
 
             sb.Append('(', parts.Length-1);
+            sb.Append(@"(global\s*::\s*)?");
             for (int i = 0; i < parts.Length-1; i++)
             {
                 sb.Append(Regex.Escape(parts[i]));
@@ -69,12 +68,12 @@ namespace SharpSvn.MSBuild.FileParsers
 
         private string ArgumentsRegex
         {
-            get { return @"\(([^""@)]|""([^\\""]|\\.)*""|@""([^""]|"""")"")*\)"; }
+            get { return @"\(([^""@)]|""([^\\""]|\\.)*""|@""([^""]|"""")*"")*\)"; }
         }
 
         public override void WriteAttribute(System.IO.StreamWriter sw, Type type, string value)
         {
-            sw.Write("[assembly: ::");
+            sw.Write("[assembly: global::");
             sw.Write(type.FullName);
             sw.Write("(@\"");
             sw.Write(value.Replace("\"", "\"\""));
