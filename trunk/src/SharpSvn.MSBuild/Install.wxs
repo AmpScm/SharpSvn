@@ -39,7 +39,16 @@
             <Directory Id="MSBuild_40_Common" Name="Microsoft.Common.Targets" FileSource="common">
               <Directory Id="MSBuild_40_Common_ImportAfter" Name="ImportAfter">
                 <Component Id="sharpsvn_hook_40" Guid="7B98F726-12A7-47D9-A587-6C743E698EC3">
-                  <File Name="SharpSvn.ImportAfter.targets" Vital="yes" Checksum="yes" KeyPath="yes" />
+                  <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_40" Vital="yes" Checksum="yes" KeyPath="yes" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
+          <Directory Id="MSBuild_120" Name="12.0">
+            <Directory Id="MSBuild_120_Common" Name="Microsoft.Common.Targets" FileSource="common">
+              <Directory Id="MSBuild_120_Common_ImportAfter" Name="ImportAfter">
+                <Component Id="sharpsvn_hook_120" Guid="54E02173-76A8-4BE7-A9FF-2629AAC52192">
+                  <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_120" Vital="yes" Checksum="yes" KeyPath="yes" />
                 </Component>
               </Directory>
             </Directory>
@@ -55,6 +64,7 @@
       <ComponentRef Id="vbproj_targets"/>
       <ComponentRef Id="SharpSvnMSBuild_dll"/>
       <ComponentRef Id="sharpsvn_hook_40"/>
+      <ComponentRef Id="sharpsvn_hook_120"/>
     </Feature>
   </Product>
 </Wix>
