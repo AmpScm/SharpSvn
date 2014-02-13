@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
 		Copy-Dependencies.cmd = Copy-Dependencies.cmd
@@ -23,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.UI", "SharpSvn.UI\SharpSvn.UI.csproj", "{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn", "SharpSvn\SharpSvn.vcxproj", "{6DD8A600-5A7E-4B7A-91EE-86AB78F58AAC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {0CC79A1A-463D-40BB-91E0-3B1391B519C6}
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0} = {80CA13E9-790A-4DC3-A45A-EDF6996D82D0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Tests", "SharpSvn.Tests\SharpSvn.Tests.csproj", "{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -52,6 +58,8 @@ EndProject
 Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "SharpSvn.Docs", "SharpSvn.Docs\SharpSvn.Docs.shfbproj", "{FEC53C23-3A30-4346-9EB1-45F4F95FD47B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.TestBuilder", "SharpSvn.TestBuilder\SharpSvn.TestBuilder.csproj", "{691CBC4F-CC38-4342-8738-A08E48812141}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.PdbAnnotate", "SharpSvn.PdbAnnotate\SharpSvn.PdbAnnotate.csproj", "{3645E16F-6B5A-43D7-A81D-77E681E9A636}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -173,6 +181,14 @@ Global
 		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x64.Build.0 = Release|x64
 		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x86.ActiveCfg = Release|x86
 		{691CBC4F-CC38-4342-8738-A08E48812141}.Release|x86.Build.0 = Release|x86
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Debug|x64.ActiveCfg = Debug|x64
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Debug|x64.Build.0 = Debug|x64
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Debug|x86.ActiveCfg = Debug|x86
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Debug|x86.Build.0 = Debug|x86
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x64.ActiveCfg = Release|x64
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x64.Build.0 = Release|x64
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x86.ActiveCfg = Release|x86
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -184,6 +200,7 @@ Global
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC} = {CAD0027C-F0F4-4F04-8D9A-6D94DFC401D8}
 		{C1B994B4-4F00-4F99-AE3D-EFEDBD8CD33D} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 		{F1ED9F1C-BC63-4FDF-84D4-6194228C9101} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
+		{3645E16F-6B5A-43D7-A81D-77E681E9A636} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1
