@@ -100,8 +100,6 @@ namespace SharpSvn.PdbAnnotate.Engine
                 if (!sf.IsResolved || sf.NoSourceAvailable)
                     continue;
 
-                Console.Error.WriteLine("Writing: {0}", sf.FullName);
-
                 sw.Write(sf.FullName);
                 sw.Write('*');
 

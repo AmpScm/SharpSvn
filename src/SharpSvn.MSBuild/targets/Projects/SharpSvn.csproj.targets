@@ -62,6 +62,11 @@
     <PdbSourceAnnotate
           Sources="@(_DebugSymbolsIntermediatePath)"
           ToolPath="$(SharpSvnTargetsDir)\bin" />
+
+    <Copy SourceFiles="@(_DebugSymbolsIntermediatePath)"
+          DestinationFolder="$(IntermediateOutputPath)_SharpSvn">
+      <Output TaskParameter="CopiedFiles" ItemName="FileWrites"/>
+    </Copy>
   </Target>
 
 </Project>

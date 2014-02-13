@@ -68,4 +68,14 @@
     </TransformAssemblyInfo>
   </Target>
 
+  <Target Name="SharpSvnAnnotateSymbols"
+          AfterTargets="Link;LinkEmbedManifest;Manifest;SharpSvnPostLink"
+          Condition="$(AnnotatePdbFile) == 'true'">
+
+    <PdbSourceAnnotate
+          Condition="%(Link.GenerateDebugInformation) == 'true'"
+          Sources="%(Link.ProgramDatabaseFile)"
+          ToolPath="$(SharpSvnTargetsDir)\bin" />
+  </Target>
+  
 </Project>
