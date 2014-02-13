@@ -444,7 +444,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="EventArgs\SvnRemoteLocationSegmentEventArgs.h" />
     <ClInclude Include="EventArgs\SvnRemoteLogEventArgs.h" />
     <ClInclude Include="EventArgs\SvnRemoteStatEventArgs.h" />
-    <ClInclude Include="PdbTools\SvnPdbClient.h" />
     <ClInclude Include="EventArgs\SvnImportFilterEventArgs.h" />
     <ClInclude Include="ReposArgs\SetRepositoryId.h" />
     <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h" />
@@ -669,13 +668,11 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="RemoteCommands\RemoteStat.cpp" />
     <ClCompile Include="RemoteCommands\ResolveRevision.cpp" />
     <ClCompile Include="RemoteCommands\SvnRemoteSession.cpp" />
-    <ClCompile Include="PdbTools\SvnPdbClient.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PdbTools\dia2.tlb" />
     <None Include="SharpSvn.snk" />
     <None Include="SharpSvn.vcproj" />
   </ItemGroup>

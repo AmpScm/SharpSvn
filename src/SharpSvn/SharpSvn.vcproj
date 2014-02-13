@@ -1896,18 +1896,6 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="PdbClient"
-			>
-			<File
-				RelativePath="PdbTools\SvnPdbClient.cpp"
-				>
-			</File>
-			<File
-				RelativePath="PdbTools\SvnPdbClient.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="SvnMultiCommandClient"
 			>
 			<File
