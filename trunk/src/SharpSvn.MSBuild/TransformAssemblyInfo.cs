@@ -99,10 +99,7 @@ namespace SharpSvn.MSBuild
         }
 
         public Microsoft.Build.Framework.ITaskHost HostObject
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         public bool Execute()
         {
