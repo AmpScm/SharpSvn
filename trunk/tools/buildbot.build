@@ -2,7 +2,7 @@
 <project basedir=".." default="buildbot">
   <!-- This nant script is used by the SharpSvn buildbot -->
   
-  <if test="{property::exists('build.include')}">
+  <if test="${property::exists('build.include')}">
     <include buildfile="${build.include}" />
   </if>
   
