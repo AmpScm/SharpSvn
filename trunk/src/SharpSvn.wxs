@@ -5,13 +5,17 @@
     <!-- When referenced installs a Win32 SharpSvn into the directory DIR_SharpSvn -->
     <ComponentGroup Id="LOCAL_SharpSvn_Win32">
       <ComponentRef Id="C_LOCAL_SharpSvn.dll" />
+      <?ifndef SharpSvn_NoPlink?>
       <ComponentRef Id="C_LOCAL_SharpPlink_Win32.svnExe" />
+      <?endif?>
       <?ifndef SharpSvn_NoDB?>
       <ComponentRef Id="C_LOCAL_SharpSvn_DB44_20_win32.svnDll" />
       <?endif?>
       <?ifdef SharpSvn_Pdb?>
       <ComponentRef Id="C_LOCAL_SharpSvn.pdb" />
+      <?ifndef SharpSvn_NoPlink?>
       <ComponentRef Id="C_LOCAL_SharpPlink_Win32.pdb" />
+      <?endif?>
       <?endif?>
       <?ifndef SharpSvn_NoXml?>
       <ComponentRef Id="C_LOCAL_SharpSvn.xml" />
@@ -19,13 +23,6 @@
       <?ifndef SharpSvn_NoResources?>
       <!-- TODO: Add resource dll's -->
       <?endif?>
-    </ComponentGroup>
-  </Fragment>
-  <Fragment>
-    <!-- When referenced installs SharpSvn into the GAC -->
-    <ComponentGroup Id="GAC_SharpSvn_Win32">
-      <!-- Not implemented yet -->
-      <ComponentRef Id="C_GAC_SharpSvn" />
     </ComponentGroup>
   </Fragment>
   <Fragment>
@@ -43,12 +40,22 @@
       <?endif?>
     </ComponentGroup>
   </Fragment>
+  <?ifdef SharpSvn.TargetDir?>
+  <?define SharpSvnBinDir=$(var.SharpSvn.TargetDir)?>
+  <?else?>
+  <?define SharpSvnBinDir=$(sys.SOURCEFILEDIR)?>
+  <?endif?>
   <Fragment>
     <!-- Always installed items -->
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.dll" Guid="32EB117A-B450-4137-B453-072D03DAECB1">
         <File Id="CF_LOCAL_SharpSvn.dll" Name="SharpSvn.dll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <!-- Plink is required for <= 1.800x -->
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpPlink_Win32.svnExe" Guid="34F616E9-637E-44F0-9416-F79325560FDE">
         <File Id="CF_LOCAL_SharpPlink_Win32.svnExe" Name="SharpPlink-Win32.svnExe" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
@@ -56,14 +63,14 @@
   </Fragment>
   <Fragment>
     <!-- BDB is optional (BDB repository format support is disabled if not available) -->
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn_DB44_20_win32.svnDll" Guid="17EC4369-1FBD-4345-A865-AB08B99D33FF">
         <File Id="CF_LOCAL_SharpSvn_DB44_20_win32.svnDll" Name="SharpSvn-DB44-20-win32.svnDll" Vital="yes" KeyPath="yes" Checksum="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.pdb" Guid="F38A631A-F9DE-4A4C-B4DD-2C94FA4A7E1F">
         <File Id="CF_LOCAL_SharpSvn.pdb" Name="SharpSvn.pdb" KeyPath="yes" />
       </Component>
@@ -73,28 +80,28 @@
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.xml" Guid="79440517-DF55-459A-93D6-B3A59D976072">
         <File Id="CF_LOCAL_SharpSvn.xml" Name="SharpSvn.xml" KeyPath="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.UI.dll" Guid="19505234-2C62-4785-B12B-D4891966A87E">
         <File Id="CF_LOCAL_SharpSvn.UI.dll" Name="SharpSvn.UI.dll" Vital="yes" KeyPath="yes" Checksum="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.UI.pdb" Guid="4DC97A6D-5BF8-4FBC-A525-698A4466C5ED">
         <File Id="CF_LOCAL_SharpSvn.UI.pdb" Name="SharpSvn.UI.pdb" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
   <Fragment>
-    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(sys.SOURCEFILEDIR)">
+    <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.UI.xml" Guid="FDBDAF00-1FCB-4A44-8E97-3ED6766B626B">
         <File Id="CF_LOCAL_SharpSvn.UI.xml" Name="SharpSvn.UI.xml" KeyPath="yes"/>
       </Component>

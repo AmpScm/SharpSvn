@@ -5,6 +5,7 @@
 
   <UsingTask TaskName="UpdateNativeVersionResource" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
   <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+  <UsingTask TaskName="PdbSourceAnnotate" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
 
   <Target Name="SharpSvnPostLink"
           AfterTargets="Link;LinkEmbedManifest;Manifest"

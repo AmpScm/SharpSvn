@@ -5,10 +5,9 @@
     <SharpSvnIncluded>true</SharpSvnIncluded>
     <SharpSvnEnabled Condition="$(SharpSvnEnabled) == ''">true</SharpSvnEnabled>
   </PropertyGroup>
-  <PropertyGroup>
+  <PropertyGroup Condition="$(SharpSvnEnabled) != 'false'">
     <SharpSvnPatchAssemblyInfo
             Condition="$(SharpSvnPatchAssemblyInfo) == ''
-                       and $(SharpSvnEnabled) != 'false'
                        and (  $(ForceAssemblyVersion)              != '' or
                               $(ForceOnlyAssemblyVersion)          != '' or
                               $(ForceAssemblyFileVersion)          != '' or
@@ -26,6 +25,7 @@
                               $(ForceComVisible)                   != '' or
                               $(ForceNeutralResourceLanguage)      != '')">true</SharpSvnPatchAssemblyInfo>
     <SharpSvnPatchAssemblyInfo Condition="$(SharpSvnPatchAssemblyInfo) == ''">false</SharpSvnPatchAssemblyInfo>
+    <AnnotatePdbFile Condition="$(AnnotatePdbFile) == ''">false</AnnotatePdbFile>
   </PropertyGroup>
 
   <ImportGroup Condition="$(SharpSvnEnabled) != 'false'">

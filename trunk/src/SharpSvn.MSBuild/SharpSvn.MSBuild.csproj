@@ -69,6 +69,7 @@
     <Compile Include="FileParsers\CppParser.cs" />
     <Compile Include="FileParsers\VBParser.cs" />
     <Compile Include="FileParsers\CSharpParser.cs" />
+    <Compile Include="PdbSourceAnnotate.cs" />
     <Compile Include="TransformAssemblyInfo.cs" />
     <Compile Include="UpdateNativeVersionResource.cs" />
     <Compile Include="NativeMethods.cs" />

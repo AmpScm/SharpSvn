@@ -19,28 +19,52 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants>Debug;SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug</DefineConstants>
+    <DefineConstants>Debug;SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <DefineConstants>SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Install.wxs" />
+    <Compile Include="..\SharpSvn.wxs">
+      <Link>SharpSvn.wxs</Link>
+    </Compile>
+    <Compile Include="..\SharpSvn.PdbAnnotate\SharpSvn.PdbAnnotate.wxs">
+      <Link>SharpSvn.PdbAnnotate.wxs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SharpSvn.MSBuild\SharpSvn.MSBuild.csproj">
       <Name>SharpSvn.MSBuild</Name>
       <Project>{f1ed9f1c-bc63-4fdf-84d4-6194228c9101}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpSvn.PdbAnnotate\SharpSvn.PdbAnnotate.csproj">
+      <Name>SharpSvn.PdbAnnotate</Name>
+      <Project>{3645e16f-6b5a-43d7-a81d-77e681e9a636}</Project>
+      <Private>True</Private>
+      <DoNotHarvest>True</DoNotHarvest>
+      <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
+      <RefTargetDir>INSTALLFOLDER</RefTargetDir>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpSvn\SharpSvn.vcxproj">
+      <Name>SharpSvn</Name>
+      <Project>{6dd8a600-5a7e-4b7a-91ee-86ab78f58aac}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
