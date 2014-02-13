@@ -6,7 +6,19 @@
     <include buildfile="${build.include}" />
   </if>
   
-  <target name="build">
+  <target name="prepare">
+    <exec program="svn.exe" output=".svn-info"><arg line="info . --xml" /></exec>
+    <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
+    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
+    <exec program="svn.exe">
+      <arg line="checkout ${svn_url}" unless="${directory::exists('40')}" />
+      <arg line="update"                  if="${directory::exists('40')}" />
+      <arg line="-r ${svn_rev}" />
+    </exec>
+    
+  </target>
+  
+  <target name="build" depends="prepare">
   </target>
   
   <target name="package">
