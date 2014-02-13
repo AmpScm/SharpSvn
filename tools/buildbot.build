@@ -2,6 +2,8 @@
 <project basedir=".." default="build">
   <!-- This nant script is used by the SharpSvn buildbot -->
   
+  <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
+  
   <if test="${property::exists('build.include')}">
     <include buildfile="${build.include}" />
   </if>
@@ -19,6 +21,37 @@
   </target>
   
   <target name="build" depends="prepare">
+  
+    <!-- ### TODO: Force clean rebuild if imports\default.build changed -->
+  
+    <exec program="cmd.exe" workingdir="imports">
+      <arg line="/s /c" />
+      <arg line='"${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86' />
+      <arg value="&amp;&amp;" />
+      <arg line='"${nant.filename}" build' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports">
+      <arg line="/s /c" />
+      <arg line='"${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86_amd64' />
+      <arg value="&amp;&amp;" />
+      <arg line='"${nant.filename}" build' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports\40">
+      <arg line="/s /c" />
+      <arg line='"${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86' />
+      <arg value="&amp;&amp;" />
+      <arg line='"${nant.filename}" build' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports\40">
+      <arg line="/s /c" />
+      <arg line='"${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64' />
+      <arg value="&amp;&amp;" />
+      <arg line='"${nant.filename}" build' />
+    </exec>
+    
   </target>
   
   <target name="package">
