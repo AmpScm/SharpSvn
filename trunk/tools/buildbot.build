@@ -22,13 +22,19 @@
   </target>
   
   <target name="build" depends="prepare">
-  
-    <!-- ### TODO: Force clean rebuild if imports\default.build changed -->
-    <if test="false">
+    <exec program="svn.exe" output=".svn-info"><arg line="info imports --xml" /></exec>
+    <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
+    
+    
+    <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
+    <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
       <exec program="cmd.exe">
-        <arg line="/c rmdir imports\build imports\release 40\imports\build 40\imports\release /s /q" />
+        <arg line="/c echo remove" />
+        <!--"rmdir imports\build imports\release 40\imports\build 40\imports\release /s /q" /-->
       </exec>
     </if>
+    <mkdir dir="imports/build" />
+    <echo file="imports/build/.imports-rev" message="${imports-rev}" />
   
     <exec program="cmd.exe" workingdir="imports">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
