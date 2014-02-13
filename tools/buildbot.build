@@ -40,12 +40,12 @@
       <arg line='"${nantExe}" build"' />
     </exec>
     
-    <exec program="cmd.exe" workingdir="imports\40">
+    <exec program="cmd.exe" workingdir="40\imports">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
     
-    <exec program="cmd.exe" workingdir="imports\40">
+    <exec program="cmd.exe" workingdir="40\imports">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
