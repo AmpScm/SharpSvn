@@ -455,51 +455,51 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <EmbeddedResource Include="SharpSvnStrings.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.de.resx">
+    <EmbeddedResource Include="SvnText\SvnText.de.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.es.resx">
+    <EmbeddedResource Include="SvnText\SvnText.es.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.fr.resx">
+    <EmbeddedResource Include="SvnText\SvnText.fr.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.it.resx">
+    <EmbeddedResource Include="SvnText\SvnText.it.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.ja.resx">
+    <EmbeddedResource Include="SvnText\SvnText.ja.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.ko.resx">
+    <EmbeddedResource Include="SvnText\SvnText.ko.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.nb.resx">
+    <EmbeddedResource Include="SvnText\SvnText.nb.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.pl.resx">
+    <EmbeddedResource Include="SvnText\SvnText.pl.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.pt-BR.resx">
+    <EmbeddedResource Include="SvnText\SvnText.pt-BR.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.sv.resx">
+    <EmbeddedResource Include="SvnText\SvnText.sv.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.zh-CN.resx">
+    <EmbeddedResource Include="SvnText\SvnText.zh-CN.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.zh-TW.resx">
+    <EmbeddedResource Include="SvnText\SvnText.zh-TW.resx" Condition="'$(PlatformToolset)' != 'v90'">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
