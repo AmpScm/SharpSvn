@@ -22,7 +22,7 @@
   </target>
   
   <target name="build" depends="prepare">
-    <exec program="svn.exe" output=".svn-info"><arg line="info\default.build --xml" /></exec>
+    <exec program="svn.exe" output=".svn-info"><arg line="info imports\default.build --xml" /></exec>
     <xmlpeek file=".svn-info" xpath="/info/entry/commit/@revision" property="imports-rev" />
     
     
