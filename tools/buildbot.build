@@ -13,7 +13,7 @@
     <exec program="svn.exe">
       <arg line="checkout ${svn_url}" unless="${directory::exists('40')}" />
       <arg line="update"                  if="${directory::exists('40')}" />
-      <arg line="-r ${svn_rev}" />
+      <arg line="-r ${svn_rev} 40/" />      
     </exec>
     
   </target>
