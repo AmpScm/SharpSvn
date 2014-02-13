@@ -51,7 +51,7 @@ namespace SharpSvn {
         }
 
         /// <summary>This property used to get a boolean indicating whether to enable the SharpPlink handler when no
-        /// other valid handler for svn+ssh:// was registered. It is now mapped to the inverse of <see cref-"DisableBuiltinSsh" /></summary>
+        /// other valid handler for svn+ssh:// was registered. It is now mapped to the inverse of <see cref="DisableBuiltinSsh" /></summary>
         [System::ComponentModel::DefaultValue((System::Boolean)true)]
         [Obsolete("Use .DisableBuiltinSsh and/or .FallbackSshClient as the direct SharpPlink support in SharpSvn for Subversion <= 1.8.x has been replaced with LibSSH2")]
         property bool EnableSharpPlink
