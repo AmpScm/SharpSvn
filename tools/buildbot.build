@@ -24,6 +24,11 @@
   <target name="build" depends="prepare">
   
     <!-- ### TODO: Force clean rebuild if imports\default.build changed -->
+    <if test="false">
+      <exec program="cmd.exe">
+        <arg line="/c rmdir imports\build imports\release 40\imports\build 40\imports\release /s /q" />
+      </exec>
+    </if>
   
     <exec program="cmd.exe" workingdir="imports">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
@@ -33,7 +38,6 @@
     <exec program="cmd.exe" workingdir="imports">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
-      <arg line='""${nantExe}" build"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\40">
