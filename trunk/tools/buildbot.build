@@ -14,9 +14,9 @@
     <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
     <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
     <exec program="svn.exe">
-      <arg line="checkout ${svn_url}" unless="${directory::exists('40')}" />
-      <arg line="update"                  if="${directory::exists('40')}" />
-      <arg line="-r ${svn_rev} 40/" />      
+      <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
+      <arg line="update"                  if="${directory::exists('v40')}" />
+      <arg line="-r ${svn_rev} v40/" />      
     </exec>
     
   </target>
@@ -29,8 +29,7 @@
     <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
     <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
       <exec program="cmd.exe">
-        <arg line="/c echo remove" />
-        <!--"rmdir imports\build imports\release 40\imports\build 40\imports\release /s /q" /-->
+        <arg line="/c rmdir imports\build imports\release 40\imports\build 40\imports\release /s /q" />
       </exec>
     </if>
     <mkdir dir="imports/build" />
