@@ -105,9 +105,6 @@
     <Filter Include="SvnRemoteSession\Sources">
       <UniqueIdentifier>{eab46f51-216d-4d88-abdd-27b1bd1b9a8a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PdbClient">
-      <UniqueIdentifier>{c28df9ee-cb4d-44e3-8c13-9ff99189044e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SvnMultiCommandClient">
       <UniqueIdentifier>{3bf7dd6d-eb40-4e34-8927-f37d7a6907f1}</UniqueIdentifier>
     </Filter>
@@ -611,9 +608,6 @@
     <ClInclude Include="EventArgs\SvnRemoteStatEventArgs.h">
       <Filter>SvnRemoteSession\EventArgs</Filter>
     </ClInclude>
-    <ClInclude Include="PdbTools\SvnPdbClient.h">
-      <Filter>PdbClient</Filter>
-    </ClInclude>
     <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h">
       <Filter>SvnWorkingCopyClient\Args</Filter>
     </ClInclude>
@@ -1050,9 +1044,6 @@
     <ClCompile Include="RemoteCommands\SvnRemoteSession.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="PdbTools\SvnPdbClient.cpp">
-      <Filter>PdbClient</Filter>
-    </ClCompile>
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp">
       <Filter>SvnWorkingCopyClient\Sources</Filter>
@@ -1121,9 +1112,6 @@
   <ItemGroup>
     <None Include="SharpSvn.snk" />
     <None Include="SharpSvn.vcproj" />
-    <None Include="PdbTools\dia2.tlb">
-      <Filter>PdbClient</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="SharpSvnStrings.txt" />
