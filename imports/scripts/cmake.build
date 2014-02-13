@@ -44,9 +44,9 @@
                          
     <replacestring from='&lt;/Midl&gt;'
                      to='&lt;/Midl&gt;
-    &lt;Lib&gt;
-      &lt;TargetMachine&gt;MachineX64&lt;/TargetMachine&gt;
-    &lt;/Lib&gt;' if="${vcxproj and platform=='x64'}" />
+                         &lt;Lib&gt;
+                           &lt;TargetMachine&gt;MachineX64&lt;/TargetMachine&gt;
+                         &lt;/Lib&gt;' if="${vcxproj and platform=='x64'}" />
   </filterchain>
   
   <filterchain id="cmake-link">
