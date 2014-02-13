@@ -1,12 +1,17 @@
 <?xml version="1.0" ?>
-<project basedir=".." default="buildbot">
+<project basedir=".." default="build">
   <!-- This nant script is used by the SharpSvn buildbot -->
   
   <if test="${property::exists('build.include')}">
     <include buildfile="${build.include}" />
   </if>
   
-  <target name="buildbot">
+  <target name="build">
   </target>
-
+  
+  <target name="package">
+  </target>
+  
+  <target name="buildbot-build" depends="build"></target>
+  <target name="buildbot-package" depends="build,package"></target>
 </project>
