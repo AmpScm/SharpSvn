@@ -28,12 +28,10 @@
     
     <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
     <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
-      <exec program="cmd.exe">
-        <arg line="/c rmdir imports\build imports\release 40\imports\build 40\imports\release /s /q" />
+      <exec program="cmd.exe" failonerror="false">
+        <arg line="/c rmdir imports\build imports\release v40\imports\build v40\imports\release /s /q" />
       </exec>
     </if>
-    <mkdir dir="imports/build" />
-    <echo file="imports/build/.imports-rev" message="${imports-rev}" />
   
     <exec program="cmd.exe" workingdir="imports">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
@@ -54,7 +52,8 @@
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
-    
+
+    <echo file="imports/build/.imports-rev" message="${imports-rev}" />    
   </target>
   
   <target name="package">
