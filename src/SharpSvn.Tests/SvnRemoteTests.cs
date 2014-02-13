@@ -52,12 +52,25 @@ namespace SharpSvn.Tests
                     Assert.That(ee[0].Entry.Author, Is.Not.Null);
         }
 
+        [TestMethod]
         public void TestSsh()
         {
             SvnClient cl = new SvnClient();
             bool found = false;
 
-            cl.List(new Uri("svn+ssh://nietver.nl/home/svn/repos/openwrt"), delegate(object Sender, SvnListEventArgs e)
+            //cl.KeepSession = true;
+
+            cl.Authentication.SshServerTrustHandlers += delegate(object sender, Security.SvnSshServerTrustEventArgs e)
+                    {
+                        e.AcceptedFailures = e.Failures;
+                    };
+
+            cl.Authentication.UserNameHandlers += delegate(object sender, Security.SvnUserNameEventArgs e)
+                    {
+                        e.UserName = "bert";
+                        e.Save = true;
+                    };
+            cl.List(new Uri("svn+libssh2://vip/home/svn/repos/ankh-test"), delegate(object Sender, SvnListEventArgs e)
             {
                 Assert.That(e.Entry, Is.Not.Null);
                 Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
@@ -66,6 +79,47 @@ namespace SharpSvn.Tests
             });
 
             Assert.That(found);
+
+            found = false;
+
+            cl.List(new Uri("svn+libssh2://bert@vip/home/svn/repos/ankh-test"), delegate(object Sender, SvnListEventArgs e)
+            {
+                Assert.That(e.Entry, Is.Not.Null);
+                Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
+                Assert.That(e.Entry.Author, Is.Not.Null);
+                found = true;
+            });
+
+            Assert.That(found);
+        }
+
+        void Authentication_SshServerTrustHandlers(object sender, Security.SvnSshServerTrustEventArgs e)
+        {
+            e.AcceptedFailures = e.Failures;
+        }
+
+        [TestMethod]
+        public void TestSshConnectError()
+        {
+            SvnClient cl = new SvnClient();
+            SvnRepositoryIOException rio = null;
+            try
+            {
+                cl.Info(new Uri("svn+builtin-ssh://sharpsvn.open.collab.net:80"),
+                    delegate(object Sender, SvnInfoEventArgs e)
+                    { });
+            }
+            catch (SvnRepositoryIOException e)
+            {
+                rio = e;
+            }
+
+            Assert.That(rio, Is.Not.Null);
+
+            SvnSshException sshEx = rio.GetCause<SvnSshException>();
+
+            Assert.That(sshEx, Is.Not.Null);
+            Assert.That(sshEx.SshErrorCode, Is.EqualTo(SvnSshErrorCode.LIBSSH2_ERROR_SOCKET_DISCONNECT));
         }
     }
 }
