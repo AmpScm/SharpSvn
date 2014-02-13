@@ -3,6 +3,8 @@
   <PropertyGroup Label="PlatformFix">
     <!-- To allow including project in Sandcastle Helpfile Builder tools -->
     <Platform Condition="'$(Platform)' == 'x86'">Win32</Platform>
+    <!-- To allow building using VS2010 with the VS2008 toolset -->
+    <TargetFrameworkVersion Condition="'$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -682,22 +684,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <Private>false</Private>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyLocal>true</CopyLocal>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
-    <ProjectReference Include="..\tools\Errors2Enum\Errors2Enum.csproj">
-      <Project>{80ca13e9-790a-4dc3-a45a-edf6996d82d0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
-    <ProjectReference Include="..\tools\Po2Resx\Po2Resx.csproj">
-      <Project>{0cc79a1a-463d-40bb-91e0-3b1391b519c6}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
