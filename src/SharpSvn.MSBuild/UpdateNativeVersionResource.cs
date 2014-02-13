@@ -13,49 +13,28 @@ namespace SharpSvn.MSBuild
     public class UpdateNativeVersionResource : ITask
     {
         public Microsoft.Build.Framework.IBuildEngine BuildEngine
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         [Required]
         public ITaskItem Source
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         [Required]
         public string TempDir
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         public string KeyContainer
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         public ITaskItem KeyFile
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         [Output]
         public bool SourceUpdated
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         public Microsoft.Build.Framework.ITaskHost HostObject
-        {
-            get;
-            set;
-        }
+        { get; set; }
 
         public bool Execute()
         {
