@@ -27,7 +27,7 @@ using System.Resources;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SharpSvn Project - http://sharpsvn.net/")]
 [assembly: AssemblyProduct("SharpSvn.UI")]
-[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2013")]
+[assembly: AssemblyCopyrightAttribute("Copyright © SharpSvn Project 2007-2014")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -36,6 +36,7 @@ using System.Resources;
 // COM, set the ComVisible attribute to true on that type.
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
+[assembly: NeutralResourcesLanguageAttribute("en-US")]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("7ca9bb43-4163-41f6-a094-b300679e08ef")]
@@ -49,5 +50,4 @@ using System.Resources;
 //
 // You can specify all the values or you can default the Revision and Build Numbers
 // by using the '*' as shown below:
-[assembly: NeutralResourcesLanguageAttribute("en")]
-[assembly:AssemblyVersionAttribute("1.6012.1576.9657")] 
+[assembly:AssemblyVersionAttribute("1.8999.*")] 

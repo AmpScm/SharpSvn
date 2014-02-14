@@ -5,9 +5,8 @@ using System.Text.RegularExpressions;
 
 namespace SharpSvn.MSBuild.FileParsers
 {
-    sealed class CSharpParser : BaseLanguageParser
+    sealed class CSharpParser : LanguageParser
     {
-        readonly List<Regex> Filters = new List<Regex>();
         public override void WriteComment(System.IO.StreamWriter sw, string text)
         {
             sw.Write("// ");
@@ -21,29 +20,29 @@ namespace SharpSvn.MSBuild.FileParsers
             if (!trimmed.StartsWith("["))
                 return false;
 
-            foreach(Regex re in Filters)
+            foreach (AttributeRegex ar in AttrMap.Values)
             {
-                if (re.Match(line).Success)
-                    return true;
+                if (ar.Matches(line))
+                    return ar.KeepExisting;
             }
 
             return false;
         }
 
-        public override void AddAttribute(Type type)
+        protected override void AddAttribute(Type attributeType)
         {
-            Filters.Add(new Regex(ConstructRegex(type), RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture));
+            AttrMap[attributeType] = new AttributeRegex(attributeType,  ConstructRegex(attributeType), RegexOptions.None);
         }
 
-        private string ConstructRegex(Type type)
+        private string ConstructRegex(Type attributeType)
         {
-            return @"^\s*\[\s*assembly\s*:\s*" +ConstructNameRegex(type) + @"\s*(" + ArgumentsRegex + @"\s*)?\]";
+            return @"^\s*\[\s*assembly\s*:\s*" +ConstructNameRegex(attributeType) + @"\s*(" + ArgumentsRegex + @"\s*)?\]";
         }
 
-        private string ConstructNameRegex(Type type)
+        private string ConstructNameRegex(Type attributeType)
         {
             StringBuilder sb = new StringBuilder();
-            string[] parts = type.FullName.Split('.');
+            string[] parts = attributeType.FullName.Split('.');
 
             sb.Append('(', parts.Length-1);
             sb.Append(@"(global\s*::\s*)?");
@@ -71,10 +70,10 @@ namespace SharpSvn.MSBuild.FileParsers
             get { return @"\(([^""@)]|""([^\\""]|\\.)*""|@""([^""]|"""")*"")*\)"; }
         }
 
-        protected override void StartAttribute(System.IO.StreamWriter sw, Type type)
+        protected override void StartAttribute(System.IO.StreamWriter sw, Type attributeType)
         {
             sw.Write("[assembly: global::");
-            sw.Write(type.FullName);
+            sw.Write(attributeType.FullName);
             sw.Write("(");
         }
 
@@ -83,17 +82,17 @@ namespace SharpSvn.MSBuild.FileParsers
             sw.WriteLine(")]");
         }
 
-        public override void WriteAttribute(System.IO.StreamWriter sw, Type type, string value)
+        protected override void WriteAttribute(System.IO.StreamWriter sw, Type attributeType, string value)
         {
-            StartAttribute(sw, type);
+            StartAttribute(sw, attributeType);
             sw.Write("@\"");
             sw.Write(value.Replace("\"", "\"\""));
             sw.WriteLine("\")]");
         }
 
-        public override void WriteAttribute(System.IO.StreamWriter sw, Type type, bool value)
+        protected override void WriteAttribute(System.IO.StreamWriter sw, Type attributeType, bool value)
         {
-            StartAttribute(sw, type);
+            StartAttribute(sw, attributeType);
             sw.Write(value ? "true" : "false");
             EndAttribute(sw);
         }
