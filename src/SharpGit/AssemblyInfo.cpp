@@ -79,7 +79,7 @@ using SharpGit::Implementation::GitLibraryAttribute;
 #pragma comment(lib, "Version.lib")
 
 //#include "../../imports/release/include/sharpsvn-imports.h"
-[assembly:AssemblyVersionAttribute("0.1700.1.1")]; 
+[assembly:AssemblyVersionAttribute("0.2000.*")]; 
 
 #pragma comment(lib, "intl3_svn.lib")
 #pragma comment(lib, "xml.lib")

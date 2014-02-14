@@ -13,7 +13,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System;
 using System.Reflection;
+using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -32,7 +34,10 @@ using System.Runtime.InteropServices;
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
 // COM, set the ComVisible attribute to true on that type.
+[assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
+[assembly: NeutralResourcesLanguageAttribute("en-US")]
+
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid("74643e4d-c78c-41d1-a973-d0bfa1a739a8")]
@@ -46,6 +51,4 @@ using System.Runtime.InteropServices;
 //
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.8999.*")]

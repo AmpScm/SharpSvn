@@ -6,9 +6,8 @@ using System.Text.RegularExpressions;
 
 namespace SharpSvn.MSBuild.FileParsers
 {
-    sealed class CppParser : BaseLanguageParser
+    sealed class CppParser : LanguageParser
     {
-        readonly List<Regex> Filters = new List<Regex>();
         public override void WriteComment(System.IO.StreamWriter sw, string text)
         {
             sw.Write("// ");
@@ -22,18 +21,18 @@ namespace SharpSvn.MSBuild.FileParsers
             if (!trimmed.StartsWith("["))
                 return false;
 
-            foreach (Regex re in Filters)
+            foreach (AttributeRegex ar in AttrMap.Values)
             {
-                if (re.Match(line).Success)
-                    return true;
+                if (ar.Matches(line))
+                    return ar.KeepExisting;
             }
 
             return false;
         }
 
-        public override void AddAttribute(Type type)
+        protected override void AddAttribute(Type attributeType)
         {
-            Filters.Add(new Regex(ConstructRegex(type), RegexOptions.CultureInvariant | RegexOptions.Singleline | RegexOptions.ExplicitCapture));
+            AttrMap[attributeType] = new AttributeRegex(attributeType, ConstructNameRegex(attributeType), RegexOptions.None);
         }
 
         private string ConstructRegex(Type type)
@@ -85,17 +84,17 @@ namespace SharpSvn.MSBuild.FileParsers
             sw.WriteLine(")];");
         }
 
-        public override void WriteAttribute(StreamWriter sw, Type type, string value)
+        protected override void WriteAttribute(StreamWriter sw, Type attributeType, string value)
         {
-            StartAttribute(sw, type);
+            StartAttribute(sw, attributeType);
             sw.Write("\"");
             sw.Write(value.Replace("\\", "\\\\").Replace("\"", "\\\""));
             sw.WriteLine("\")];");
         }
 
-        public override void WriteAttribute(StreamWriter sw, Type type, bool value)
+        protected override void WriteAttribute(StreamWriter sw, Type attributeType, bool value)
         {
-            StartAttribute(sw, type);
+            StartAttribute(sw, attributeType);
             sw.Write(value ? "true" : "false");
             EndAttribute(sw);
         }
