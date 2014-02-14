@@ -115,8 +115,8 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
         <include name="openssl/**" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/openssl-${opensslVersion}/out32" if="${static != 'true'}">
-      <fileset basedir="build/${platform}/openssl-${opensslVersion}/out32dll">
+    <copy todir="build/${platform}/openssl/out32" if="${static != 'true'}">
+      <fileset basedir="build/${platform}/openssl/out32dll">
         <include name="*.lib" />
         <include name="*.exp" />
         <include name="*.pdb" />
@@ -133,12 +133,12 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
       </fileset>
     </copy>
     <copy todir="${release}/bin" flatten="true">
-      <fileset basedir="build/win32/openssl-${opensslVersion}/out32dll">
+      <fileset basedir="build/win32/openssl/out32dll">
         <include name="*.dll" />
       </fileset>
     </copy>
     <copy todir="${release}/bin/x64" flatten="true">
-      <fileset basedir="build/x64/openssl-${opensslVersion}/out32dll">
+      <fileset basedir="build/x64/openssl/out32dll">
         <include name="*.dll" />
       </fileset>
     </copy>
