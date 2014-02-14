@@ -34,11 +34,11 @@ namespace SharpSvn {
         initonly bool _localChange;
         initonly __int64 _startRevnum;
         initonly __int64 _endRevnum;
-    apr_hash_t *_rev_props;
-    apr_hash_t *_merged_rev_props;
-    AprPool ^_pool;
-    SvnPropertyCollection^ _revProps;
-    SvnPropertyCollection^ _mergedRevProps;
+        apr_hash_t *_rev_props;
+        apr_hash_t *_merged_rev_props;
+        AprPool ^_pool;
+        SvnPropertyCollection^ _revProps;
+        SvnPropertyCollection^ _mergedRevProps;
 
     internal:
         SvnBlameEventArgs(__int64 revision, __int64 lineNr, apr_hash_t *rev_props,
