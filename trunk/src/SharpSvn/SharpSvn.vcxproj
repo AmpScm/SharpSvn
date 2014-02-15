@@ -5,6 +5,7 @@
     <Platform Condition="'$(Platform)' == 'x86'">Win32</Platform>
     <!-- To allow building using VS2010 with the VS2008 toolset -->
     <TargetFrameworkVersion Condition="'$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
+    <SDK35ToolsPath Condition="'$(SDK35ToolsPath)='='' and '$(PlatformToolset)' == 'v90'">c:\Program Files\Microsoft SDKs\Windows\v6.0A\Bin</SDK35ToolsPath>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -146,7 +147,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;oleaut32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX86</TargetMachine>
@@ -184,7 +185,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;oleaut32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AssemblyDebug>true</AssemblyDebug>
       <TargetMachine>MachineX64</TargetMachine>
@@ -220,7 +221,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;oleaut32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX86</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
@@ -256,7 +257,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <Link>
       <AdditionalDependencies>Advapi32.lib;shell32.lib;Rpcrt4.lib;Mswsock.lib;Crypt32.lib;User32.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;..\..\imports\release\lib-AnyCPU;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;oleaut32.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
+      <DelayLoadDLLs>SharpSvn-DB44-20-$(Platform).svnDll;advapi32.dll;crypt32.dll;mswsock.dll;rpcrt4.dll;secur32.dll;user32.dll;version.dll;ws2_32.dll;%(DelayLoadDLLs)</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <TargetMachine>MachineX64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
@@ -456,51 +457,51 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <EmbeddedResource Include="SharpSvnStrings.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.de.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.de.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.es.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.es.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.fr.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.fr.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.it.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.it.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.ja.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.ja.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.ko.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.ko.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.nb.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.nb.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.pl.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.pl.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.pt-BR.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.pt-BR.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.sv.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.sv.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.zh-CN.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.zh-CN.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="SvnText\SvnText.zh-TW.resx" Condition="'$(PlatformToolset)' != 'v90'">
+    <EmbeddedResource Include="SvnText\SvnText.zh-TW.resx">
       <SubType>Designer</SubType>
       <LogicalName>SharpSvn.%(Filename).resources</LogicalName>
     </EmbeddedResource>
