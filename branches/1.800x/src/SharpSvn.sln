@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30110.0
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
 		Copy-Dependencies.cmd = Copy-Dependencies.cmd
@@ -23,6 +25,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.UI", "SharpSvn.UI\SharpSvn.UI.csproj", "{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn", "SharpSvn\SharpSvn.vcxproj", "{6DD8A600-5A7E-4B7A-91EE-86AB78F58AAC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {0CC79A1A-463D-40BB-91E0-3B1391B519C6}
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0} = {80CA13E9-790A-4DC3-A45A-EDF6996D82D0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Tests", "SharpSvn.Tests\SharpSvn.Tests.csproj", "{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}"
 	ProjectSection(ProjectDependencies) = postProject
