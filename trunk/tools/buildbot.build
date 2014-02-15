@@ -20,6 +20,9 @@
       <arg line="-r ${svn_rev} v40/" />      
     </exec>
     
+    <delete dir="release" if="${directory::exists('release')}" />
+    <mkdir dir="release" />
+    
   </target>
   
   <target name="build" depends="prepare">
@@ -84,10 +87,73 @@
     <if test="${property::exists('CCNetNumericLabel')}">
       <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
 </echo>
+
+      <echo append="false" file="_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
     </if>    
   </target>
   
   <target name="package">
+    <zip zipfile="release/SharpSvn-${CCNetNumericLabel}.zip" if="${property::exists('CCNetNumericLabel')}">
+      <fileset basedir="release">
+        <include name="_*_.txt" />
+      </fileset>
+      
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release" prefix="net20/x86">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.xml" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.xml" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="**/*.dll" />
+      </fileset>
+      <fileset basedir="imports/release/bin" prefix="net20/x86">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+      
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/x64">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.xml" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.xml" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="**/*.dll" />
+      </fileset>
+      <fileset basedir="imports/release/bin" prefix="net20/x64">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release" prefix="net40/x86">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.xml" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.xml" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="**/*.dll" />
+      </fileset>
+      <fileset basedir="v40/imports/release/bin" prefix="net40/x86">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release" prefix="net40/x64">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.xml" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.xml" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="**/*.dll" />
+      </fileset>
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+    </zip>  
   </target>
   
   <target name="buildbot-build" depends="build"></target>
