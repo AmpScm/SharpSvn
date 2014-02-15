@@ -155,7 +155,7 @@
     </zip>
 
     <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.zip" />
-    <move file="release\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.zip" todir="D:\artifacts\${CCNetProject}" />
+    <move file="release\${CCNetProject}-${CCNetNumericLabel}.zip" todir="D:\artifacts\${CCNetProject}" />
   </target>
   
   <mkdir dir="D:\artifacts\${CCNetProject}" />
