@@ -57,7 +57,7 @@
           <items>
             <include name="${aprDir}/**/*.dsp" />
             <include name="${aprUtilDir}/**/*.dsp" />
-            <include name="${httpdDir}/**/*.dsp" if="${buildHttpd == 'true'}" />
+            <include name="${httpdDir}/**/*.dsp" if="${buildHttpd}" />
           </items>
         </in>
         <do>
@@ -76,7 +76,8 @@
           <items>
             <include name="${aprDir}/**/*.vcproj" />
             <include name="${aprUtilDir}/**/*.vcproj" />
-            <include name="${httpdDir}/**/*.vcproj" if="${buildHttpd == 'true'}" />
+            <include name="${aprIconvDir}/**/*.vcproj" if="${buildHttpd}" />
+            <include name="${httpdDir}/**/*.vcproj" if="${buildHttpd}" />
           </items>
         </in>
         <do>
@@ -133,8 +134,8 @@
               <!-- Fix crypto compilation -->
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib"' if="${static!='true' and enableAprCrypto}" />
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib"' if="${static=='true' and enableAprCrypto}" />
-              <replacestring from='AdditionalLibraryDirectories="' to='AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll;' if="${static!='true' and string::contains(vcproj, 'crypto_openssl.vcproj'))}" />
-              <replacestring from='AdditionalLibraryDirectories="' to='AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)};' if="${static=='true' and string::contains(vcproj, 'crypto_openssl.vcproj'))}" />
+              <replacestring from='AdditionalLibraryDirectories="' to='AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll;' if="${static!='true' and string::contains(vcproj, 'crypto_openssl.vcproj')}" />
+              <replacestring from='AdditionalLibraryDirectories="' to='AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)};' if="${static=='true' and string::contains(vcproj, 'crypto_openssl.vcproj')}" />
               <!-- Fix crypto inside apr-util -->
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib libapr-1.lib libaprutil-1.lib" AdditionalLibraryDirectories="..;${path::get-full-path(opensslDir)}/out32dll"' if="${static!='true' and enableAprCrypto and string::contains(vcproj, 'util.vcproj')}" />
               <replacestring from='libeay32.lib ssleay32.lib"' to='libeay32.lib ssleay32.lib apr-1.lib aprutil-1.lib zlib.lib Crypt32.lib" AdditionalLibraryDirectories="..;${path::get-full-path(releaseLib)}"' if="${static=='true' and enableAprCrypto and string::contains(vcproj, 'util.vcproj')}" />
