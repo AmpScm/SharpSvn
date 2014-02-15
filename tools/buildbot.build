@@ -59,10 +59,9 @@
     <exec program="svn.exe" output=".svn-info-svn"><arg line="info imports\build\win32\subversion --xml" /></exec>
     <xmlpeek file=".svn-info-svn" xpath="/info/entry/relative-url" property="svn-tag" />
     <property name="svn-tag" value="${path::get-file-name(svn-tag)}" />
-    <property name="svn-ver" value="${string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.')}" />
+    <property name="svn-ver" value="${string::replace(string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.'), '.x', '.0')}" />
     <choose>
-      <when test="${svn-tag == 'trunk' or string::contains(svn-tag, '.x')}">
-        <!-- TODO: Obtain from version file or some other way -->
+      <when test="${svn-tag == 'trunk'>
         <property name="versionBase" value="1.55555" />
       </when>
       <when test="${svn-tag != svn-ver}">
