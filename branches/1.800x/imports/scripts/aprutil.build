@@ -39,50 +39,52 @@
     </OnceBlock>
   </target>
   <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build">
-    <CMake workingdir="${aprUtilDir}">
-      <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
-      <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
-      <prop name="APR_BUILD_TESTAPR" value="ON" />
+    <OnceBlock file="build/aprutil-${aprVersion}-${platform}.build">
+      <CMake workingdir="${aprUtilDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+        <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+        <prop name="APR_BUILD_TESTAPR" value="ON" />
+        
+        <prop name="APR_INCLUDE_DIR" value="${intDir}/include/apr-1" />
+        <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />
+        <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+        <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
+        
+        <prop name="APU_HAVE_CRYPTO" value="ON" />
+        <prop name="APR_HAS_LDAP" value="OFF" />
+        <prop name="APU_HAVE_ODBC" value="OFF" />
+      </CMake>
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}" generated="true">
+        <filterchain>
+          <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
+        </filterchain>
+      </FilterFile>
       
-      <prop name="APR_INCLUDE_DIR" value="${intDir}/include/apr-1" />
-      <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />
-      <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
-      <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
+      <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}/libexpat.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" generated="true">
+        <filterchain refid="cmake-link" />      
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true">
+        <filterchain refid="cmake-link" />      
+      </FilterFile>
       
-      <prop name="APU_HAVE_CRYPTO" value="ON" />
-      <prop name="APR_HAS_LDAP" value="OFF" />
-      <prop name="APU_HAVE_ODBC" value="OFF" />
-    </CMake>
-    <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}" generated="true">
-      <filterchain>
-        <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
-      </filterchain>
-    </FilterFile>
-    
-    <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
-      <filterchain refid="cmake-lib" />
-    </FilterFile>
-    <FilterFile file="${aprUtilDir}/libexpat.${vcproj}" generated="true">
-      <filterchain refid="cmake-lib" />
-    </FilterFile>
-    <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" generated="true">
-      <filterchain refid="cmake-link" />      
-    </FilterFile>
-    <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true">
-      <filterchain refid="cmake-link" />      
-    </FilterFile>
-    
-    <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
-      <filterchain>
-        <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' if="${vcxproj}" />
-      </filterchain>
-    </FilterFile>
+      <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
+        <filterchain>
+          <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' if="${vcxproj}" />
+        </filterchain>
+      </FilterFile>
 
-    <MSBuild src="${aprUtilDir}/APR-Util.sln">
-      <target value="aprutil-1" />
-      <target value="libaprutil-1" />
-      <target value="apr_crypto_openssl-1" />
-    </MSBuild>
+      <MSBuild src="${aprUtilDir}/APR-Util.sln">
+        <target value="aprutil-1" />
+        <target value="libaprutil-1" />
+        <target value="apr_crypto_openssl-1" />
+      </MSBuild>
+    </OnceBlock>
 
     <copy todir="${intDir}/lib" flatten="true">
       <fileset basedir="${aprUtilDir}/Release">
