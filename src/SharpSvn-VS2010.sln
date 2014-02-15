@@ -23,6 +23,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.UI", "SharpSvn.UI\SharpSvn.UI.csproj", "{E929A4D4-6C65-4D00-9432-E082169BDDC3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SharpSvn", "SharpSvn\SharpSvn.vcxproj", "{A3166809-1484-4442-BF75-5FB0E8356381}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0CC79A1A-463D-40BB-91E0-3B1391B519C6} = {0CC79A1A-463D-40BB-91E0-3B1391B519C6}
+		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0} = {80CA13E9-790A-4DC3-A45A-EDF6996D82D0}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.Tests", "SharpSvn.Tests\SharpSvn.Tests.csproj", "{6D9F8C0B-E3DA-4FB6-BBF9-FB57791B469D}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -40,10 +44,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Errors2Enum", "tools\Errors2Enum\Errors2Enum.csproj", "{80CA13E9-790A-4DC3-A45A-EDF6996D82D0}"
 EndProject
 Global
-	GlobalSection(SubversionScc) = preSolution
-		Svn-Managed = True
-		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
 		Debug|x64 = Debug|x64
@@ -158,6 +158,10 @@ Global
 		{3A1D7085-4B6A-4D47-9FA6-B2A63CDD6595} = {7B4B080F-80E3-4907-87E4-8038F2470696}
 		{80CA13E9-790A-4DC3-A45A-EDF6996D82D0} = {7B4B080F-80E3-4907-87E4-8038F2470696}
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC} = {CAD0027C-F0F4-4F04-8D9A-6D94DFC401D8}
+	EndGlobalSection
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1
