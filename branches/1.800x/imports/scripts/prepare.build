@@ -59,12 +59,7 @@
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
       
-    <get
-      src="http://www.libssh2.org/download/${libssh2Filename}"
-      dest="${downloads + libssh2Filename}"
-      unless="${file::exists(downloads + libssh2Filename)}"
-      if="${buildLibssh2}" />
-      
+     
     <get
        src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
        dest="${downloads + 'svn-book.pdf'}"
@@ -115,12 +110,6 @@
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
       
-    <untar
-      src="${downloads + libssh2Filename}" compression="gzip"
-      dest="build/${platform}"
-      unless="${directory::exists(libssh2Dir)}"
-      if="${buildLibssh2}" />
-
     <unzip
       zipfile="${downloads + nunitFilename}"
       todir="build"
