@@ -23,35 +23,37 @@
   </target>
   
   <target name="libssh2-build" depends="libssh2-prepare" if="${buildLibssh2}">
-    <FilterFile file="${libssh2Dir}\win32\config.mk">
-      <filterchain>
-        <LineRegexReplace re="(?&lt;=^OPENSSLINC=).*" to="${intDir}\include" />
-        <LineRegexReplace re="(?&lt;=^OPENSSLLIB=).*" to="${intDir}\lib" />
-        <LineRegexReplace re="(?&lt;=^ZLIBLIB=).*" to="${intDir}\lib" />
-        <LineRegexReplace re="(?&lt;=^LIBS=).*" to="" />
-        <LineRegexReplace re="(?&lt;=CFLAGS=)(.*)" to="/GL $1" />
-        <LineRegexReplace re="/I([^\s]*zlib[^\s]*)" to="/I${intDir}\include" />
-        <replacestring from="ws2_32.lib" to="ws2_32.lib Advapi32.lib" />
-      </filterchain>
-    </FilterFile>
-    <FilterFile file="${libssh2Dir}\src\NMakefile">
-      <filterchain>
-        <replacestring from="$(DLL)" to="$(SSHLIB)" />
-        <replacestring from=") $(RESOURCE)" to=")" />
-        <replacestring from="DLL=" to="SSHLIB=" />
-        <replacestring from=".dll" to=".lib" />
-        <replacestring from="$(DLLFLAGS) $(OBJECTS) $(RESOURCE) $(LIBS)" to="$(OBJECTS) $(LIBS)" />
-        <replacestring from="$(CC) -o $(SSHLIB)" to="lib /LTCG /out:$(SSHLIB)" />
-      </filterchain>
-    </FilterFile>
-    <FilterFile file="${libssh2Dir}\include\libssh2.h">
-      <filterchain>
-        <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' />
-      </filterchain>
-    </FilterFile>
-    <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
-    
-    </NMake>
+    <OnceBlock file="build/libssh2-${libssh2Version}.build">
+      <FilterFile file="${libssh2Dir}\win32\config.mk">
+        <filterchain>
+          <LineRegexReplace re="(?&lt;=^OPENSSLINC=).*" to="${intDir}\include" />
+          <LineRegexReplace re="(?&lt;=^OPENSSLLIB=).*" to="${intDir}\lib" />
+          <LineRegexReplace re="(?&lt;=^ZLIBLIB=).*" to="${intDir}\lib" />
+          <LineRegexReplace re="(?&lt;=^LIBS=).*" to="" />
+          <LineRegexReplace re="(?&lt;=CFLAGS=)(.*)" to="/GL $1" />
+          <LineRegexReplace re="/I([^\s]*zlib[^\s]*)" to="/I${intDir}\include" />
+          <replacestring from="ws2_32.lib" to="ws2_32.lib Advapi32.lib" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${libssh2Dir}\src\NMakefile">
+        <filterchain>
+          <replacestring from="$(DLL)" to="$(SSHLIB)" />
+          <replacestring from=") $(RESOURCE)" to=")" />
+          <replacestring from="DLL=" to="SSHLIB=" />
+          <replacestring from=".dll" to=".lib" />
+          <replacestring from="$(DLLFLAGS) $(OBJECTS) $(RESOURCE) $(LIBS)" to="$(OBJECTS) $(LIBS)" />
+          <replacestring from="$(CC) -o $(SSHLIB)" to="lib /LTCG /out:$(SSHLIB)" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${libssh2Dir}\include\libssh2.h">
+        <filterchain>
+          <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' />
+        </filterchain>
+      </FilterFile>
+      <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
+      
+      </NMake>
+    </OnceBlock>
     <copy todir="${intDir}/lib" flatten="true">
       <fileset basedir="${libssh2Dir}">
         <include name="*.lib" />
