@@ -18,6 +18,9 @@
       <import namespace="System.Xml.XPath"/>
       <import namespace="System.Text.RegularExpressions" />
       <import namespace="System.Diagnostics"/>
+      <import namespace="NAnt.Core.Types"/>
+      <import namespace="NAnt.Core.Filters"/>
+      <import namespace="NAnt.Core.Util"/>
     </imports>
     <code>
       <![CDATA[			
