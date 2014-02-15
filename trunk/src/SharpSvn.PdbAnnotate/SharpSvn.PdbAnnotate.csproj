@@ -72,12 +72,34 @@
     <Compile Include="Engine\SourceServerIndexer.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SharpSvn\SharpSvn.vcxproj">
-      <Project>{6dd8a600-5a7e-4b7a-91ee-86ab78f58aac}</Project>
-      <Name>SharpSvn</Name>
-    </ProjectReference>
-  </ItemGroup>
+  <Choose>
+    <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
+      <!-- Visual Studio 2008 -->
+      <ItemGroup>
+        <ProjectReference Include="..\SharpSvn\SharpSvn.vcproj">
+          <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+          <Name>SharpSvn</Name>
+          <Private>True</Private>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\SharpSvn\SharpSvn.vcxproj">
+          <Project>{A3166809-1484-4442-BF75-5FB0E8356381}</Project>
+          <Name>SharpSvn</Name>
+          <Private>True</Private>
+        </ProjectReference>
+      </ItemGroup>
+      <PropertyGroup>
+        <TargetFrameworkVersion Condition="'$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
+        <TargetFrameworkVersion Condition="'$(PlatformToolset)' != 'v90'">v4.0</TargetFrameworkVersion>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <Content Include="pdbstr.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
