@@ -121,7 +121,7 @@
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.xml" />
         <include name="SharpSvn.UI.pdb" />
-        <include name="**/*.dll" />
+        <include name="*/*.resources.dll" />
       </fileset>
 
       <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release" prefix="net40/x86">
@@ -148,7 +148,7 @@
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.xml" />
         <include name="SharpSvn.UI.pdb" />
-        <include name="**/*.dll" />
+        <include name="*/*.resources.dll" />
       </fileset>
     </zip>
 
