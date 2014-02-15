@@ -30,26 +30,28 @@
     </OnceBlock>
   </target>
   <target name="serf-build" depends="serf-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
-    <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
-        if="${file::exists(serfDir + '/SConstruct')}">
-      <environment>
-        <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
-        <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
-                                       + environment::get-variable('PATH') }" />
-      </environment>
-      <arg value="PREFIX=${intDir}" />
-      <arg value="LIBDIR=${intDir}/lib" />
-      <arg value="OPENSSL=${intDir}" />
-      <arg value="ZLIB=${intDir}" />
-      <arg value="APR=${intDir}" />
-      <arg value="APU=${intDir}" />
-      <arg value="SOURCE_LAYOUT=no" />
-      <arg value="DEBUG=yes" if="${serfDebug}" />
-      <arg value="TARGET_ARCH=${platform}" />
-      <arg value="MSVC_VERSION=${sconsVSVersion}" />
-      <arg value="APR_STATIC=yes" if="${static}" />
-      <arg value="install" />
-    </exec>
+    <OnceBlock file="build/serf-${serfVersion}_${platform}.build">
+      <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+          if="${file::exists(serfDir + '/SConstruct')}">
+        <environment>
+          <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+          <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                         + environment::get-variable('PATH') }" />
+        </environment>
+        <arg value="PREFIX=${intDir}" />
+        <arg value="LIBDIR=${intDir}/lib" />
+        <arg value="OPENSSL=${intDir}" />
+        <arg value="ZLIB=${intDir}" />
+        <arg value="APR=${intDir}" />
+        <arg value="APU=${intDir}" />
+        <arg value="SOURCE_LAYOUT=no" />
+        <arg value="DEBUG=yes" if="${serfDebug}" />
+        <arg value="TARGET_ARCH=${platform}" />
+        <arg value="MSVC_VERSION=${sconsVSVersion}" />
+        <arg value="APR_STATIC=yes" if="${static}" />
+        <arg value="install" />
+      </exec>
+    </OnceBlock>
   </target>
   <target name="serf-clean">
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
