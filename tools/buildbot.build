@@ -61,7 +61,7 @@
     <property name="svn-tag" value="${path::get-file-name(svn-tag)}" />
     <property name="svn-ver" value="${string::replace(string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.'), '.x', '.0')}" />
     <choose>
-      <when test="${svn-tag == 'trunk'>
+      <when test="${svn-tag == 'trunk'}">
         <property name="versionBase" value="1.55555" />
       </when>
       <when test="${svn-tag != svn-ver}">
