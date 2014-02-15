@@ -3,7 +3,7 @@
   <property name="httpdDir" value="${buildRoot}/httpd" />
   <property name="aprIconvDir" value="${httpdDir}/srclib/apr-iconv" />
 
-  <target name="build-httpd" depends="build-apr" if="${buildHttpd=='true'}">
+  <target name="build-httpd" depends="build-apr" if="${buildHttpd}">
     <if test="${platform != 'win32'}">
       <fail message="Building apache is currently only supported for platform win32" />
     </if>
@@ -36,6 +36,15 @@
         <arg value="/t:mod_log_config" />
       </MSBuild>
     </OnceBlock>
+
+    <copy todir="${httpdDir}/include" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="ap_config_layout.h" />
+        <include name="os/win32/os.h" />
+        <include name="modules/*/mod_*.h" />
+        <include name="modules/dav/*/mod_*.h" />
+      </fileset>
+    </copy>
 
     <!-- Enable compiling subversion in debug mode -->    
     <copy todir="${httpdDir}/Debug" flatten="true">
