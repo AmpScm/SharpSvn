@@ -5,7 +5,9 @@
     <Platform Condition="'$(Platform)' == 'x86'">Win32</Platform>
     <!-- To allow building using VS2010 with the VS2008 toolset -->
     <TargetFrameworkVersion Condition="'$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
-    <SDK35ToolsPath Condition="'$(SDK35ToolsPath)'=='' and '$(PlatformToolset)' == 'v90'">c:\Program Files\Microsoft SDKs\Windows\v6.0A\Bin</SDK35ToolsPath>
+    <!-- Somehow these aren't initialized correctly in VS2010. They should be loaded based on the ToolsVersion -->
+    <SDK35ToolsPath Condition="'$(SDK35ToolsPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\WinSDK-NetFx35Tools-x86@InstallationFolder)</SDK35ToolsPath>
+    <SDK40ToolsPath Condition="'$(SDK40ToolsPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\WinSDK-NetFx40Tools-x86@InstallationFolder)</SDK40ToolsPath>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
