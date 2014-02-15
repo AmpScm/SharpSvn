@@ -27,7 +27,7 @@ namespace SharpSvn.MSBuild.FileParsers
             if (_re.Match(input).Success)
             {
                 Found = true;
-                return true;
+                return !KeepExisting;
             }
             return false;
         }
@@ -77,7 +77,7 @@ namespace SharpSvn.MSBuild.FileParsers
 
             if (AttrMap.TryGetValue(attributeType, out ar))
             {
-                ar.KeepExisting = false;
+                ar.KeepExisting = keepExisting;
             }
         }
 
