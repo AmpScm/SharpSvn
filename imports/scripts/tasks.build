@@ -16,6 +16,7 @@
       <import namespace="ICSharpCode.SharpZipLib.BZip2"/>
       <import namespace="System.Xml"/>
       <import namespace="System.Xml.XPath"/>
+      <import namespace="System.Text.RegularExpressions" />
       <import namespace="System.Diagnostics"/>
     </imports>
     <code>
@@ -395,6 +396,75 @@ public class ApplyPatch : NAnt.Core.Tasks.ExternalProgramBase
     {
         get { return string.Format("-f --unified \"--input={0}\" --strip={1} -d \"{2}\"", _patchFile.FullName, _strip, _toDir.FullName); }
     }
+}
+
+[ElementName("LineRegexReplace")]
+public class LineRegexReplace : Filter
+{
+  string _regex;
+  string _to;
+  ChainableReader _from;
+  
+  [TaskAttribute("re", Required=true)]
+  public string Re
+  {
+      get { return _regex; }
+      set { _regex = value; }
+  }
+  
+  [TaskAttribute("to", Required=true)]
+  public string To
+  {
+      get { return _to; }
+      set { _to = value; }
+  }
+  
+  public override void Chain(ChainableReader chainedReader)
+  {
+      base.Chain(chainedReader);
+      _from = chainedReader;
+  }
+  
+  public override int Peek()
+  {
+      throw new NotImplementedException();
+  }
+      
+  string _next;
+  int _iNext;
+  Regex _re;
+  public override int Read()
+  {
+      if (_next != null && ++_iNext < _next.Length)
+      {
+          return _next[_iNext];
+      }
+      
+      _next = null;
+      _iNext = 0;
+      
+      StringBuilder sb = new StringBuilder();
+      int c;
+      
+      while (-1 != (c = _from.Read()))
+      {
+          sb.Append((char)c);
+          if (c == '\n')
+              break;
+      }
+      
+      if (c == -1 && sb.Length == 0)
+          return -1;
+          
+      if (_re == null)
+          _re = new Regex(_regex);
+      
+      _next = _re.Replace(sb.ToString(), _to);
+      if (_next.Length > 0)
+         return _next[0];      
+      else
+         return Read(); // Recurse
+  }  
 }
 
 ]]>
