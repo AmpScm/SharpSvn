@@ -102,10 +102,6 @@
         <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
-        <include name="SharpSvn.UI.dll" />
-        <include name="SharpSvn.UI.xml" />
-        <include name="SharpSvn.UI.pdb" />
-        <include name="**/*.dll" />
       </fileset>
       <fileset basedir="imports/release/bin" prefix="net20/x86">
         <include name="SharpSvn-*-win32.*" />
@@ -116,13 +112,16 @@
         <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
+      </fileset>
+      <fileset basedir="imports/release/bin" prefix="net20/x64">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+      
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/anycpu">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.xml" />
         <include name="SharpSvn.UI.pdb" />
         <include name="**/*.dll" />
-      </fileset>
-      <fileset basedir="imports/release/bin" prefix="net20/x64">
-        <include name="SharpSvn-*-x64.*" />
       </fileset>
 
       <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release" prefix="net40/x86">
@@ -130,10 +129,6 @@
         <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
-        <include name="SharpSvn.UI.dll" />
-        <include name="SharpSvn.UI.xml" />
-        <include name="SharpSvn.UI.pdb" />
-        <include name="**/*.dll" />
       </fileset>
       <fileset basedir="v40/imports/release/bin" prefix="net40/x86">
         <include name="SharpSvn-*-win32.*" />
@@ -144,13 +139,16 @@
         <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
+      </fileset>
+      <fileset basedir="v40/imports/release/bin" prefix="net40/x64">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+      
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release" prefix="net40/anycpu">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.xml" />
         <include name="SharpSvn.UI.pdb" />
         <include name="**/*.dll" />
-      </fileset>
-      <fileset basedir="v40/imports/release/bin" prefix="net40/x64">
-        <include name="SharpSvn-*-x64.*" />
       </fileset>
     </zip>
 
