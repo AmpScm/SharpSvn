@@ -9,7 +9,7 @@
 
   <Target Name="SharpSvnPostLink"
           AfterTargets="Link;LinkEmbedManifest;Manifest"
-          Condition="'$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
+          Condition="'@(Link)' != '' and '$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
 
     <UpdateNativeVersionResource
       Source          ="%(Link.OutputFile)"
