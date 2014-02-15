@@ -25,10 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Z-Tools", "Z-Tools", "{AC72
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Po2Resx", "tools\Po2Resx\Po2Resx.csproj", "{0CC79A1A-463D-40BB-91E0-3B1391B519C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.SourceIndexer", "SharpSvn.SourceIndexer\SharpSvn.SourceIndexer.csproj", "{6374B7FA-6919-4CF1-A348-6AF76B199169}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.SourceIndexer.Tests", "SharpSvn.SourceIndexer.Tests\SharpSvn.SourceIndexer.Tests.csproj", "{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Contrib", "Contrib", "{1072518C-0971-4951-B623-D32FB83831AD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CollabUpload", "tools\CollabUpload\CollabUpload.csproj", "{4EE15935-6CDA-48DD-9C5D-79FF130111CC}"
@@ -86,18 +82,6 @@ Global
 		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x64.Build.0 = Release|Any CPU
 		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x86.ActiveCfg = Release|Any CPU
 		{0CC79A1A-463D-40BB-91E0-3B1391B519C6}.Release|x86.Build.0 = Release|Any CPU
-		{6374B7FA-6919-4CF1-A348-6AF76B199169}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{6374B7FA-6919-4CF1-A348-6AF76B199169}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{6374B7FA-6919-4CF1-A348-6AF76B199169}.Debug|x86.Build.0 = Debug|Any CPU
-		{6374B7FA-6919-4CF1-A348-6AF76B199169}.Release|x64.ActiveCfg = Release|Any CPU
-		{6374B7FA-6919-4CF1-A348-6AF76B199169}.Release|x86.ActiveCfg = Release|Any CPU
-		{6374B7FA-6919-4CF1-A348-6AF76B199169}.Release|x86.Build.0 = Release|Any CPU
-		{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}.Debug|x86.Build.0 = Debug|Any CPU
-		{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}.Release|x64.ActiveCfg = Release|Any CPU
-		{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}.Release|x86.ActiveCfg = Release|Any CPU
-		{25B51D2F-AE5D-4B0D-A0EB-949EDECCAD2E}.Release|x86.Build.0 = Release|Any CPU
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC}.Debug|x64.Build.0 = Debug|Any CPU
 		{4EE15935-6CDA-48DD-9C5D-79FF130111CC}.Debug|x86.ActiveCfg = Debug|Any CPU
