@@ -1,5 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="PlatformFix">
+    <!-- To allow including project in Sandcastle Helpfile Builder tools -->
+    <Platform Condition="'$(Platform)' == 'x86'">Win32</Platform>
+    <!-- To allow building using VS2010 with the VS2008 toolset -->
+    <TargetFrameworkVersion Condition="'$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
+  </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>

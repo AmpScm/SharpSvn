@@ -3,6 +3,11 @@
   <PropertyGroup Label="PlatformFix">
     <!-- To allow including project in Sandcastle Helpfile Builder tools -->
     <Platform Condition="'$(Platform)' == 'x86'">Win32</Platform>
+    <!-- To allow building using VS2010 with the VS2008 toolset -->
+    <TargetFrameworkVersion Condition="'$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
+    <!-- Somehow these aren't initialized correctly in VS2010. They should be loaded based on the ToolsVersion -->
+    <SDK35ToolsPath Condition="'$(SDK35ToolsPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\WinSDK-NetFx35Tools-x86@InstallationFolder)</SDK35ToolsPath>
+    <SDK40ToolsPath Condition="'$(SDK40ToolsPath)'==''">$(Registry:HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Microsoft SDKs\Windows\v7.0A\WinSDK-NetFx40Tools-x86@InstallationFolder)</SDK40ToolsPath>
   </PropertyGroup>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -151,6 +156,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <TargetMachine>MachineX86</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -225,6 +231,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <TargetMachine>MachineX86</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -261,7 +268,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <TargetMachine>MachineX64</TargetMachine>
       <KeyFile>SharpSvn.snk</KeyFile>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <ImageHasSafeExceptionHandlers>true</ImageHasSafeExceptionHandlers>
     </Link>
     <Bscmake>
       <PreserveSbr>true</PreserveSbr>
@@ -447,7 +453,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="EventArgs\SvnRemoteLocationSegmentEventArgs.h" />
     <ClInclude Include="EventArgs\SvnRemoteLogEventArgs.h" />
     <ClInclude Include="EventArgs\SvnRemoteStatEventArgs.h" />
-    <ClInclude Include="PdbTools\SvnPdbClient.h" />
     <ClInclude Include="EventArgs\SvnImportFilterEventArgs.h" />
     <ClInclude Include="ReposArgs\SetRepositoryId.h" />
     <ClInclude Include="WorkingCopyArgs\WorkingCopyCopy.h" />
@@ -671,13 +676,11 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="RemoteCommands\RemoteStat.cpp" />
     <ClCompile Include="RemoteCommands\ResolveRevision.cpp" />
     <ClCompile Include="RemoteCommands\SvnRemoteSession.cpp" />
-    <ClCompile Include="PdbTools\SvnPdbClient.cpp" />
     <ClCompile Include="AssemblyInfo.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyCopy.cpp" />
     <ClCompile Include="WorkingCopyCommands\WorkingCopyRestore.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PdbTools\dia2.tlb" />
     <None Include="SharpSvn.snk" />
     <None Include="SharpSvn.vcproj" />
   </ItemGroup>
@@ -687,22 +690,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
       <Private>false</Private>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <CopyLocal>true</CopyLocal>
-      <LinkLibraryDependencies>false</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
-    <ProjectReference Include="..\tools\Errors2Enum\Errors2Enum.csproj">
-      <Project>{80ca13e9-790a-4dc3-a45a-edf6996d82d0}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-      <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
-    </ProjectReference>
-    <ProjectReference Include="..\tools\Po2Resx\Po2Resx.csproj">
-      <Project>{0cc79a1a-463d-40bb-91e0-3b1391b519c6}</Project>
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <Private>false</Private>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
       <UseLibraryDependencyInputs>false</UseLibraryDependencyInputs>
     </ProjectReference>
