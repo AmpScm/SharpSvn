@@ -22,7 +22,6 @@
     
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
-    
   </target>
   
   <target name="build" depends="prepare">
@@ -92,8 +91,8 @@
     </if>    
   </target>
   
-  <target name="package">
-    <zip zipfile="release/SharpSvn-${CCNetNumericLabel}.zip" if="${property::exists('CCNetNumericLabel')}">
+  <target name="package" if="${property::exists('CCNetNumericLabel')}">
+    <zip zipfile="release\${CCNetProject}-${CCNetNumericLabel}.zip">
       <fileset basedir="release">
         <include name="_*_.txt" />
       </fileset>
@@ -150,12 +149,16 @@
         <include name="SharpSvn.UI.pdb" />
         <include name="**/*.dll" />
       </fileset>
-      <fileset basedir="v40/imports/release/bin">
+      <fileset basedir="v40/imports/release/bin" prefix="net40/x64">
         <include name="SharpSvn-*-x64.*" />
       </fileset>
-    </zip>  
+    </zip>
+
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.zip" />
+    <move file="release\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.zip" todir="D:\artifacts\${CCNetProject}" />
   </target>
   
+  <mkdir dir="D:\artifacts\${CCNetProject}" />
   <target name="buildbot-build" depends="build"></target>
   <target name="buildbot-package" depends="build,package"></target>
 </project>
