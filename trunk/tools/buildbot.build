@@ -72,7 +72,7 @@
         <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))-1) * 1000 + 990 + int::parse(v)}" />
       </when>
       <otherwise>
-        <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))-1) * 1000 + version::get-build(version::parse(svn-ver)))}" />
+        <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))-1) * 1000 + version::get-build(version::parse(svn-ver))}" />
       </otherwise>
     </choose>
 
