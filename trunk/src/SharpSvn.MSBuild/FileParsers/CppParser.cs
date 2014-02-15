@@ -24,7 +24,7 @@ namespace SharpSvn.MSBuild.FileParsers
             foreach (AttributeRegex ar in AttrMap.Values)
             {
                 if (ar.Matches(line))
-                    return ar.KeepExisting;
+                    return true;
             }
 
             return false;
