@@ -11,6 +11,7 @@
       <ComponentRef Id="C_SSVNLICENSE_Serf" />
       <ComponentRef Id="C_SSVNLICENSE_SharpSvn" />
       <ComponentRef Id="C_SSVNLICENSE_Subversion" />
+      <ComponentRef Id="C_SSVNLICENSE_ZLib" />
     </ComponentGroup>
   </Fragment>
   <Fragment>
@@ -49,6 +50,9 @@
       </Component>
       <Component Id="C_SSVNLICENSE_Subversion" Guid="F54C1220-3835-4262-9193-FDC31055BD95">
         <File Id="CF_SSVNLICENSE_Subversion" Name="Subversion-License.txt" Vital="yes" KeyPath="yes"/>
+      </Component>
+      <Component Id="CSSSVNLICENSE_ZLib" Guid="B26E4697-80B7-4FF8-9549-0C5F0449FF15">
+        <File Id="CF_SSVNLICENSE_ZLib" Name="ZLib.txt" Vital="yes" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
