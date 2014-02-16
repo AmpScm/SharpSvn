@@ -178,8 +178,8 @@
     </exec>
 
     <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.7z" />
-    <move file="release\${CCNetProject}-${CCNetNumericLabel}.7z" todir="D:\artifacts\${CCNetProject}" />
-
+    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${CCNetNumericLabel}.7z"  />
+    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${CCNetNumericLabel}.7z" />
   </target>
   
   <mkdir dir="D:\artifacts\${CCNetProject}" />
