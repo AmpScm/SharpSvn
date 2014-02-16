@@ -102,7 +102,19 @@
     <copy file="release/SharpSvn.xml" todir="release/net40/x86" />
     <copy file="release/SharpSvn.xml" todir="release/net40/x64" />
     <delete file="release/SharpSvn.xml" />
-        
+
+    <copy todir="release">
+      <fileset basedir="src">
+        <include name="SharpSvn.wxs" />
+      </fileset>
+    </copy>
+    
+    <copy todir="release/licenses">
+      <fileset basedir="imports/release/licenses">
+        <include name="*.txt" />
+      </fileset>
+    </copy>
+
     <copy todir="release/net20/x86">
       <fileset basedir="src/SharpSvn.UI/bin/x86/release">
         <include name="SharpSvn.dll" />
