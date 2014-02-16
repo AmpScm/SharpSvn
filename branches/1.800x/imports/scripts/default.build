@@ -96,7 +96,6 @@
   <include buildfile="subversion.build" />
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
-  <include buildfile="libgit2.build" />
   
   
   <include buildfile="dev.build" />
@@ -146,7 +145,7 @@
     </exec>
   </target>
 
-  <target name="build" depends="download,extract,checkout, svn-build, libgit2-build, copy-result">
+  <target name="build" depends="download,extract,checkout, svn-build, copy-result">
 
   </target>
 
