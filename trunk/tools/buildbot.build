@@ -93,7 +93,7 @@
   
   <target name="package" if="${property::exists('CCNetNumericLabel')}">
     <copy todir="release" file="src/SharpSvn.UI/bin/x86/release/SharpSvn.UI.xml" />
-    <style style="release/SharpSvn-Xml-filter.xsl"
+    <style style="tools/SharpSvn-Xml-filter.xsl"
         in="src/SharpSvn.UI/bin/x86/release/SharpSvn.xml"
         out="release/SharpSvn.xml" />
     <zip zipfile="release\${CCNetProject}-${CCNetNumericLabel}.zip" ziplevel="9">
