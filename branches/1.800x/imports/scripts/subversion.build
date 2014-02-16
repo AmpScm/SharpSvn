@@ -6,16 +6,8 @@
   <property name="subversionMergeBranches" value="" overwrite="false" />
 
   <target name="svn-prepare" depends="bdb-build, zlib-build, openssl-build, gettext-build, sqlite-build, sasl-build, sharpintl-build">
-    <if test="${buildSubversion}">
-      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
-        <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
-           if="${string::get-length(subversionMergeBranches) &gt; 0}">
-          <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
-            <arg value="merge" />
-            <arg line="^/subversion/${branch}" />
-            <arg value="${svnBase}" />
-          </Svn>
-        </foreach>
+  
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged" if="${buildSubversion}">
         <foreach item="File" property="patch" if="${applyPatches}">
           <in>
             <items basedir="${downloads}/../patches/subversion">
@@ -51,21 +43,20 @@
                              to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
           </filterchain>
         </FilterFile>
-      </OnceBlock>
       
-      <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcproj.ezt" if="${(not static) and (dllPrefix != '')}">
-        <filterchain>
-          <replacestring from='$(OutDir)\[target.output_name]'
-                         to='$(OutDir)\[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name]' />
-        </filterchain>
-      </FilterFile>
-      <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcxproj.ezt" if="${(not static) and (dllPrefix != '')}">
-        <filterchain>
-          <replacestring from='[target.output_name_without_ext]'
-                         to='[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name_without_ext]' />
-        </filterchain>
-      </FilterFile>
-    </if>
+        <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcproj.ezt" if="${(not static) and (dllPrefix != '')}">
+          <filterchain>
+            <replacestring from='$(OutDir)\[target.output_name]'
+                           to='$(OutDir)\[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name]' />
+          </filterchain>
+        </FilterFile>
+        <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcxproj.ezt" if="${(not static) and (dllPrefix != '')}">
+          <filterchain>
+            <replacestring from='[target.output_name_without_ext]'
+                           to='[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name_without_ext]' />
+          </filterchain>
+        </FilterFile>
+    </OnceBlock>
   </target>
   
   <target name="svn-compat">

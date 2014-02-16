@@ -175,7 +175,7 @@
       <arg value="${svnBase}" />
     </Svn>
 
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged" if="${buildSubversion}">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged" if="${buildSubversion}">
       <Svn>
         <arg value="revert" />
         <arg value="-R" />
@@ -197,6 +197,15 @@
           <arg value="http://svn.apache.org/repos/asf/subversion/trunk/" />
           <arg value="${svnBase}" />
         </Svn>
+      </foreach>
+      
+      <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
+           if="${string::get-length(subversionMergeBranches) &gt; 0}">
+          <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+            <arg value="merge" />
+            <arg line="^/subversion/${branch}" />
+            <arg value="${svnBase}" />
+          </Svn>
       </foreach>
     </OnceBlock>
 
