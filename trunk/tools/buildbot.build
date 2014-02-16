@@ -88,7 +88,8 @@
       <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
 </echo>
 
-      <echo append="false" file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
+      <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
+      <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
     </if>    
   </target>
   
@@ -115,6 +116,12 @@
       </fileset>
     </copy>
 
+    <copy todir="release/resources">
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
+        <include name="*/*.resources.dll" />
+      </fileset>
+    </copy>
+
     <copy todir="release/net20/x86">
       <fileset basedir="src/SharpSvn.UI/bin/x86/release">
         <include name="SharpSvn.dll" />
@@ -123,7 +130,6 @@
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
-        <include name="*/*.resources.dll" />
       </fileset>
     </copy>
     <copy todir="release/net20/x86">
@@ -140,7 +146,6 @@
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
-        <include name="*/*.resources.dll" />
       </fileset>
     </copy>
     <copy todir="release/net20/x64">
@@ -157,7 +162,6 @@
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
-        <include name="*/*.resources.dll" />
       </fileset>
     </copy>
     <copy todir="release/net40/x86">
@@ -174,7 +178,6 @@
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
-        <include name="*/*.resources.dll" />
       </fileset>
     </copy>
     <copy todir="release/net40/x64">
