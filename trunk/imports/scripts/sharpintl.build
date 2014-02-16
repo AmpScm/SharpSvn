@@ -21,7 +21,7 @@
     </OnceBlock>
 
     <copy todir="${intDir}/include">
-      <fileset basedir="SharpSvn-SvnI18n"
+      <fileset basedir="SharpSvn-SvnI18n">
         <include name="libintl.h" />
       </fileset>
     </copy>
@@ -31,19 +31,17 @@
       </fileset>
     </copy>
     <copy tofile="${intDir}/lib/intl.lib" file="${intDir}/lib/intl3_svn.lib" />
-    <if test="${platform == 'win32'}">
-      <copy todir="${release}/lib">
-        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-          <include name="*.lib" />
-        </fileset>
-      </copy>
-    </if>
-    <if test="${platform == 'x64'}">
-      <copy todir="${release}/lib-x64">
-        <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
-          <include name="*.lib" />
-        </fileset>
-      </copy>
-    </if>
+
+    <copy todir="${release}/lib" if="${platform == 'win32'}">
+      <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+
+    <copy todir="${release}/lib-x64" if="${platform == 'x64'}">
+      <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
   </target>
 </project>
