@@ -24,11 +24,10 @@
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
-  <!-- r2183-r2186          - Return connection timeouts as a specific error -->
+  <!-- r2184-r2186          - Return connection timeouts as a specific error -->
   <!-- r2254                - Possible bucket leak in cancel scenarios -->
   <!-- r2258                - Report failed auth as failed requests -->
-  <!-- r2263                - SSL init race -->
-  <property name="serfMerges" value="2183-2186,2254,2258,2263" overwrite="false" />
+  <property name="serfMerges" value="2184-2186,2254,2258" overwrite="false" />
 
   <!-- -->
   <property name="libgit2Version" value="0.19.0" overwrite="false" />
