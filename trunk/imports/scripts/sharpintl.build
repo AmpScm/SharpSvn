@@ -20,7 +20,11 @@
       <MSBuild src="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcxproj" if="${vcxproj}" />
     </OnceBlock>
 
-    <copy todir="${intDir}/include" file="SharpSvn-SvnI18n/libintl.h" />
+    <copy todir="${intDir}/include">
+      <fileset basedir="SharpSvn-SvnI18n"
+        <include name="libintl.h" />
+      </fileset>
+    </copy>
     <copy todir="${intDir}/lib">
       <fileset basedir="SharpSvn-SvnI18n/bin/${platform}/release">
         <include name="*.lib" />
