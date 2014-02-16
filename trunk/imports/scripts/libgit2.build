@@ -3,34 +3,36 @@
   <property name="libgit2Dir" value="${buildRoot}/${platform}/libgit2" />
 
   <target name="libgit2-build" depends="download,extract,checkout" if="${buildLibgit2}">
-    <mkdir dir="${libgit2Dir}/build" />
-  
-    <CMake workingdir="${libgit2Dir}">
-      <arg value="-DBUILD_SHARED_LIBS=OFF" />
-      <arg value="-DBUILD_CLAR=OFF" />
-      <arg value="-DBUILD_EXAMPLES=OFF" />
-      <arg value="-DSTATIC_CRT=OFF" />
-      <arg value="-DSTDCALL=OFF" />
-      <arg value="-DTHREADSAFE=ON" />
-    </CMake>
+    <OnceBlock file="build/libgit2-${libgit2Version}_${platform}.build">
+      <mkdir dir="${libgit2Dir}/build" />
     
-    <FilterFile file="${libgit2Dir}/git2.${vcproj}" generated="true">
-      <filterchain refid="cmake-lib" />
-    </FilterFile>
+      <CMake workingdir="${libgit2Dir}">
+        <arg value="-DBUILD_SHARED_LIBS=OFF" />
+        <arg value="-DBUILD_CLAR=OFF" />
+        <arg value="-DBUILD_EXAMPLES=OFF" />
+        <arg value="-DSTATIC_CRT=OFF" />
+        <arg value="-DSTDCALL=OFF" />
+        <arg value="-DTHREADSAFE=ON" />
+      </CMake>
+      
+      <FilterFile file="${libgit2Dir}/git2.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
 
-    <MSBuild
-          src="${libgit2Dir}/libgit2.sln"
-          configuration="Debug">
-          
-      <target value="git2" />
-    </MSBuild>
-    
-    <MSBuild
-          src="${libgit2Dir}/libgit2.sln"
-          configuration="Release">
-          
-      <target value="git2" />
-    </MSBuild>
+      <MSBuild
+            src="${libgit2Dir}/libgit2.sln"
+            configuration="Debug">
+            
+        <target value="git2" />
+      </MSBuild>
+      
+      <MSBuild
+            src="${libgit2Dir}/libgit2.sln"
+            configuration="Release">
+            
+        <target value="git2" />
+      </MSBuild>
+    </OnceBlock>
     
     <copy todir="${release}/lib" if="${platform == 'win32'}">
       <fileset basedir="${libgit2Dir}/Release">
