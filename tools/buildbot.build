@@ -92,14 +92,18 @@
   </target>
   
   <target name="package" if="${property::exists('CCNetNumericLabel')}">
-    <zip zipfile="release\${CCNetProject}-${CCNetNumericLabel}.zip">
+    <copy todir="release" file="src/SharpSvn.UI/bin/x86/release/SharpSvn.UI.xml" />
+    <style style="release/SharpSvn-Xml-filter.xsl"
+        in="src/SharpSvn.UI/bin/x86/release/SharpSvn.xml"
+        out="release/SharpSvn.xml" />
+    <zip zipfile="release\${CCNetProject}-${CCNetNumericLabel}.zip" ziplevel="9">
       <fileset basedir="release">
         <include name="_*_.txt" />
+        <include name="*.xml" />
       </fileset>
       
       <fileset basedir="src/SharpSvn.UI/bin/x86/release" prefix="net20/x86">
         <include name="SharpSvn.dll" />
-        <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
       </fileset>
@@ -109,7 +113,6 @@
       
       <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/x64">
         <include name="SharpSvn.dll" />
-        <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
       </fileset>
@@ -119,14 +122,12 @@
       
       <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/anycpu">
         <include name="SharpSvn.UI.dll" />
-        <include name="SharpSvn.UI.xml" />
         <include name="SharpSvn.UI.pdb" />
         <include name="*/*.resources.dll" />
       </fileset>
 
       <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release" prefix="net40/x86">
         <include name="SharpSvn.dll" />
-        <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
       </fileset>
@@ -136,7 +137,6 @@
 
       <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release" prefix="net40/x64">
         <include name="SharpSvn.dll" />
-        <include name="SharpSvn.xml" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
       </fileset>
@@ -146,7 +146,6 @@
       
       <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release" prefix="net40/anycpu">
         <include name="SharpSvn.UI.dll" />
-        <include name="SharpSvn.UI.xml" />
         <include name="SharpSvn.UI.pdb" />
         <include name="*/*.resources.dll" />
       </fileset>
