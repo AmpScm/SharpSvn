@@ -4,6 +4,7 @@
   
   <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
   <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
+  <property name="7zExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
   <property name="buildImports" value="true" overwrite="false" />
   
   <if test="${property::exists('build.include')}">
@@ -96,63 +97,86 @@
     <style style="tools/SharpSvn-Xml-filter.xsl"
         in="src/SharpSvn.UI/bin/x86/release/SharpSvn.xml"
         out="release/SharpSvn.xml" />
-    <zip zipfile="release\${CCNetProject}-${CCNetNumericLabel}.zip" ziplevel="9">
-      <fileset basedir="release">
-        <include name="_*_.txt" />
-        <include name="*.xml" />
-      </fileset>
-      
-      <fileset basedir="src/SharpSvn.UI/bin/x86/release" prefix="net20/x86">
+        
+    <copy src="release/SharpSvn.xml" todir="release/net20/x86" />
+    <copy src="release/SharpSvn.xml" todir="release/net20/x64" />
+    <copy src="release/SharpSvn.xml" todir="release/net40/x86" />
+    <copy src="release/SharpSvn.xml" todir="release/net40/x64" />
+    <delete file="release/SharpSvn.xml" />
+        
+    <copy todir="release/net20/x86">
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
-      </fileset>
-      <fileset basedir="imports/release/bin" prefix="net20/x86">
-        <include name="SharpSvn-*-win32.*" />
-      </fileset>
-      
-      <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/x64">
-        <include name="SharpSvn.dll" />
-        <include name="SharpSvn.pdb" />
-        <include name="SharpPlink-x64.svnExe" />
-      </fileset>
-      <fileset basedir="imports/release/bin" prefix="net20/x64">
-        <include name="SharpSvn-*-x64.*" />
-      </fileset>
-      
-      <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/anycpu">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="*/*.resources.dll" />
       </fileset>
-
-      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release" prefix="net40/x86">
-        <include name="SharpSvn.dll" />
-        <include name="SharpSvn.pdb" />
-        <include name="SharpPlink-Win32.svnExe" />
-      </fileset>
-      <fileset basedir="v40/imports/release/bin" prefix="net40/x86">
+    </copy>
+    <copy todir="release/net20/x86">
+      <fileset basedir="imports/release/bin">
         <include name="SharpSvn-*-win32.*" />
       </fileset>
-
-      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release" prefix="net40/x64">
+    </copy>
+      
+    <copy todir="net20/x64">
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
-      </fileset>
-      <fileset basedir="v40/imports/release/bin" prefix="net40/x64">
-        <include name="SharpSvn-*-x64.*" />
-      </fileset>
-      
-      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release" prefix="net40/anycpu">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="*/*.resources.dll" />
       </fileset>
-    </zip>
+    </copy>
+    <copy todir="net20/x64">
+      <fileset basedir="imports/release/bin">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+    </copy>
 
-    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.zip" />
-    <move file="release\${CCNetProject}-${CCNetNumericLabel}.zip" todir="D:\artifacts\${CCNetProject}" />
+    <copy todir="net40/x86">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="*/*.resources.dll" />
+      </fileset>
+    </copy>
+    <copy todir="net40/x86">
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+    </copy>
+
+    <copy todir="net40/x64">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="*/*.resources.dll" />
+      </fileset>
+    </copy>
+    <copy todir="net40/x64">
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+    </copy>
+
+    <exec program="${7zExe}">
+      <arg line="a -y" />
+      <arg value="release\${CCNetProject}-${CCNetNumericLabel}.zip" />
+      <arg value="release" />
+    </exec>
+
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.7z" />
+    <move file="release\${CCNetProject}-${CCNetNumericLabel}.7z" todir="D:\artifacts\${CCNetProject}" />
+
   </target>
   
   <mkdir dir="D:\artifacts\${CCNetProject}" />
