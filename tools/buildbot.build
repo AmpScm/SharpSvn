@@ -4,7 +4,7 @@
   
   <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
   <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
-  <property name="7zExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
+  <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
   <property name="buildImports" value="true" overwrite="false" />
   
   <if test="${property::exists('build.include')}">
@@ -168,7 +168,7 @@
       </fileset>
     </copy>
 
-    <exec program="${7zExe}">
+    <exec program="${sevenZipExe}">
       <arg line="a -y" />
       <arg value="release\${CCNetProject}-${CCNetNumericLabel}.zip" />
       <arg value="release" />
