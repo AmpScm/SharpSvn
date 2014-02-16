@@ -1,9 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir="." default="help">
   <property name="svnBuildType" value="tag" overwrite="false" />
-  <property name="libgit2BuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
-  <property name="libgit2BuildType" value="tag" overwrite="false" />
   <property name="httpdBuildType" value="tag" overwrite="false" />
   
   <property name="guessedPlatform" value="win32" />
@@ -15,7 +13,6 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.8.5" overwrite="false" />
-  <property name="libgit2Version" value="0.20.0" overwrite="false" />
   <property name="mtccMerges" value="1550758,1550765,1550783,1550799,1550806,1550807,1550816,1550831,1550840,1550848,1550938,1550940,1550967,1550972,1550981,1550974,1551032,1551085" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1498000 - Use transition based iprop handling -->
@@ -44,9 +41,6 @@
   <!-- r2263                - SSL init race -->
   <property name="serfMerges" value="2183-2186,2254,2258,2263" overwrite="false" />
 
-  <!-- -->
-  <property name="libgit2Version" value="0.19.0" overwrite="false" />
-  <property name="buildLibgit2" value="true" overwrite="false" />
   <!-- -->
   <property name="opensslVersion" value="1.0.1f" overwrite="false" />
   <property name="neonVersion" value="0.30.0" overwrite="false" />
