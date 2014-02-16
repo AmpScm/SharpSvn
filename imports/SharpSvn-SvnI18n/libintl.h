@@ -1,6 +1,4 @@
-// $Id$
-//
-// Copyright 2008-2009 The SharpSvn Project
+// Copyright 2008-2014 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
 //  you may not use this file except in compliance with the License.
@@ -14,7 +12,7 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-/* $Id$ */
+/* $Id: libintl.h 2837 2014-01-28 23:13:21Z rhuijben $ */
 /* SharpSvn gettext lookalike to allow Subversion to think it uses gettext */
 
 #pragma once

@@ -1,4 +1,4 @@
-// $Id$
+// $Id: intl3_svn.cpp 1342 2009-08-11 18:53:20Z rhuijben $
 //
 // Copyright 2008-2009 The SharpSvn Project
 //
