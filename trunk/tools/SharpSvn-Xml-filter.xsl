@@ -4,7 +4,9 @@
     <xsl:template match="/doc">
       <doc>
         <assembly>
-          <xsl:value-of select="normalize-space(assembly)"/>
+          <name>
+          <xsl:value-of select="normalize-space(translate(assembly,'&quot;',''))"/>
+          </name>
         </assembly>
         <members>
           <xsl:for-each select="members/member[contains(@name, ':SharpSvn.') and not(contains(@name, ':SharpSvn.Implementation'))]">
