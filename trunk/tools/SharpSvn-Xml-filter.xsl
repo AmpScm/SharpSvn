@@ -9,7 +9,7 @@
           </name>
         </assembly>
         <members>
-          <xsl:for-each select="members/member[contains(@name, ':SharpSvn.') and not(contains(@name, ':SharpSvn.Implementation'))]">
+          <xsl:for-each select="members/member[contains(@name, ':SharpSvn.')]">
             <member name="{@name}">
               <xsl:copy-of select="*"/>
               <xsl:if test="starts-with(@name, 'T:') and not(threadsafety)">
