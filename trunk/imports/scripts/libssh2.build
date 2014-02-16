@@ -23,7 +23,7 @@
   </target>
   
   <target name="libssh2-build" depends="libssh2-prepare" if="${buildLibssh2}">
-    <OnceBlock file="build/libssh2-${libssh2Version}.build">
+    <OnceBlock file="build/libssh2-${libssh2Version}_${platform}.build">
       <FilterFile file="${libssh2Dir}\win32\config.mk">
         <filterchain>
           <LineRegexReplace re="(?&lt;=^OPENSSLINC=).*" to="${intDir}\include" />
