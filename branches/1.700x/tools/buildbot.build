@@ -12,6 +12,8 @@
   
   <target name="prepare">
     
+    <delete dir="release" if="${directory::exists('release')}" />
+    <mkdir dir="release" />
   </target>
   
   <target name="build" depends="prepare">
@@ -66,12 +68,50 @@
     <if test="${property::exists('CCNetNumericLabel')}">
       <echo append="true" file="msbuildprops.txt">/P:ForceAssemblyVersion="${versionBase}.${checkout-rev}.${CCNetNumericLabel}"
 </echo>
+
+      <echo append="false" file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
     </if>    
   </target>
   
-  <target name="package">
+  <target name="package" if="${property::exists('CCNetNumericLabel')}">
+    <zip zipfile="release\${CCNetProject}-${CCNetNumericLabel}.zip">
+      <fileset basedir="release">
+        <include name="_*_.txt" />
+      </fileset>
+      
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release" prefix="net20/x86">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.xml" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+      </fileset>
+      <fileset basedir="imports/release/bin" prefix="net20/x86">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+      
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/x64">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.xml" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+      </fileset>
+      <fileset basedir="imports/release/bin" prefix="net20/x64">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+      
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release" prefix="net20/anycpu">
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.xml" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="*/*.resources.dll" />
+      </fileset>
+    </zip>
+
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${CCNetNumericLabel}.zip" />
+    <move file="release\${CCNetProject}-${CCNetNumericLabel}.zip" todir="D:\artifacts\${CCNetProject}" />
   </target>
   
+  <mkdir dir="D:\artifacts\${CCNetProject}" />
   <target name="buildbot-build" depends="build"></target>
   <target name="buildbot-package" depends="build,package"></target>
 </project>
