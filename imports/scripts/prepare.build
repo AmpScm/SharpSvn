@@ -352,6 +352,10 @@
     <copy
 			file="${zlibDir}/README"
 			tofile="release/licenses/ZLib-License.txt" />
+    <copy if="${buildLibssh2}"
+		  file="${libssh2Dir}/COPYING"
+		  tofile="release/licenses/LibSSH2.txt" />
+
     <copy
 			file="${sharpSvnDir}/LICENSE.txt"
 			tofile="release/licenses/SharpSvn-License.txt"
