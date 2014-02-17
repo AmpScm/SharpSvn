@@ -111,6 +111,11 @@
     </copy>
     
     <copy todir="release/licenses">
+      <fileset basedir="imports/scripts">
+        <include name="SharpSvn-Licenses.wxs" />
+      </fileset>
+    </copy>
+    <copy todir="release/licenses">
       <fileset basedir="imports/release/licenses">
         <include name="*.txt" />
       </fileset>
