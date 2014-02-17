@@ -89,7 +89,7 @@
 </echo>
 
       <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
-      <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt" />
+      <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
     </if>    
   </target>
   
