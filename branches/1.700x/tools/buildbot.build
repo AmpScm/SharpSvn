@@ -82,8 +82,6 @@
         
     <copy file="release/SharpSvn.xml" todir="release/net20/x86" />
     <copy file="release/SharpSvn.xml" todir="release/net20/x64" />
-    <copy file="release/SharpSvn.xml" todir="release/net40/x86" />
-    <copy file="release/SharpSvn.xml" todir="release/net40/x64" />
     <delete file="release/SharpSvn.xml" />
 
     <copy todir="release">
