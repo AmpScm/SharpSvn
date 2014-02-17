@@ -12,7 +12,7 @@
       <arg value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcproj" if="${VSversion == '2008'}" />      
     </VCBuild>
     <copy todir="${intDir}/include">
-      <fileset basedir="SharpSvn-SvnI18n"
+      <fileset basedir="SharpSvn-SvnI18n">
         <include name="libintl.h" />
       </fileset>
     </copy>
