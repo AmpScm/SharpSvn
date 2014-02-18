@@ -49,6 +49,7 @@
         <arg value="--disable-shared"             if="${(static=='true') or (svnStatic=='true')}"/>
         <arg value="--with-static-apr"            if="${((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
         <arg value="--with-static-openssl"        if="${((static=='true') or (svnStatic=='true')) and botBuild == 'false'}" />
+        <arg value="-DSVN_SQLITE_REVERSE_UNORDERED_SELECTS" />
       </exec>
     </if>
     <if test="${wc.branch &lt; '1.9.'}">
