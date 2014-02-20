@@ -14,14 +14,25 @@
     <tags>Subversion Svn SharpSvn</tags>
   </metadata>
   <files>
-    <file src="SharpSvn\SharpSvn.dll" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.xml" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn-*-win32.svnDll" target="lib\net20" />
-    <file src="SharpSvn\Sharp*-win32.svnExe" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.pdb" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.UI.dll" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.UI.xml" target="lib\net20" />
-    <file src="SharpSvn\SharpSvn.UI.pdb" target="lib\net20" />
-    <file src="SharpSvn\**\SharpSvn.resources.dll" target="lib\net20" />
+    <!-- DotNet 2.0 compatible version -->
+    <file src="net20/x86/SharpSvn.dll" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.xml" target="lib/net20" />
+    <file src="net20/x86/SharpSvn-*-x64.svnDll" target="lib/net20" />
+    <file src="net20/x86/Sharp*-x64.svnExe" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.pdb" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.UI.dll" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.UI.xml" target="lib/net20" />
+    <file src="net20/x86/SharpSvn.UI.pdb" target="lib/net20" />
+    <file src="net20/x86/**/*.resources.dll" target="lib/net20" />
+    <!-- DotNet 4.0+ version -->
+    <file src="net40/x86/SharpSvn.dll" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.xml" target="lib/net40" />
+    <file src="net40/x86/SharpSvn-*-x64.svnDll" target="lib/net40" />
+    <file src="net40/x86/Sharp*-x64.svnExe" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.pdb" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.UI.dll" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.UI.xml" target="lib/net40" />
+    <file src="net40/x86/SharpSvn.UI.pdb" target="lib/net40" />
+    <file src="net40/x86/**/*.resources.dll" target="lib/net40" />
   </files>
 </package>
