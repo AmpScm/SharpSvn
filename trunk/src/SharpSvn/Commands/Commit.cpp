@@ -180,7 +180,9 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
                                                         ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
                                                         msgFile,
                                                         commonPath))
-            return false;
+        {
+            return args->HandleResult(this, gcnew SvnClientHookException("TortoiseSVN Client hook 'pre-commit' rejected commit"));
+        }
     }
 
     svn_error_t *r = svn_client_commit6(
@@ -230,7 +232,9 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
                                                          (result ? result->Revision : -1).ToString(CultureInfo::InvariantCulture),
                                                          errFile,
                                                          commonPath))
-            return false;
+          {
+            return args->HandleResult(this, gcnew SvnClientHookException("TortoiseSVN Client hook 'post-commit' failed"));
+          }
     }
 
     return args->HandleResult(this, r, paths);

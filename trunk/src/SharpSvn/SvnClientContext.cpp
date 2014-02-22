@@ -336,8 +336,21 @@ void SvnClientContext::LoadTortoiseSvnHooks()
 
     List<SvnClientHook^>^ hooks = gcnew List<SvnClientHook^>();
 
-    const int hookItems = 5;
-    for (int i = 0; i < hookVals->Length; i += hookItems)
+    int hookItems = 5;
+
+    // Somehow TortoiseSVN changed the format without a proper way to detect this..
+    // Let's look at the first item of the next set (old protocol) and 'guess' that
+    // the items are longer when we find such an item
+    //
+    // TortoiseSVN has an 'intermediate' format where the
+    if (hookVals->Length > 5 && (String::Equals("enforce", hookVals[5], StringComparison::OrdinalIgnoreCase)
+                                 || String::Equals("ask", hookVals[5], StringComparison::OrdinalIgnoreCase)))
+      hookItems = 6;
+
+    SvnClientHook ^lastHook = nullptr;
+
+    int i;
+    for (i = 0; i < hookVals->Length; i += hookItems)
     {
         if (i + hookItems >= hookVals->Length)
             break;
@@ -347,8 +360,24 @@ void SvnClientContext::LoadTortoiseSvnHooks()
         String^ hookCmd = hookVals[i+2]->Trim();
         String^ hookWait = hookVals[i+3]->Trim();
         String^ hookShow = hookVals[i+4]->Trim();
+        bool enforce = (hookItems > 5) && String::Equals("enforce", hookVals[i+5], StringComparison::OrdinalIgnoreCase);
 
         SvnClientHookType type = SvnClientHook::GetHookType(hookType);
+
+        if (type == SvnClientHookType::Undefined)
+        {
+            // Wow, what a nice way to extend the format...
+            // these flags really apply to the previous hook, but there
+            // is no separation marker in the intermediate format...
+            if (hookType->StartsWith("enforce", StringComparison::OrdinalIgnoreCase))
+            {
+                hookType = hookType->Substring(7);
+                if (lastHook)
+                    lastHook->Enforce = true;
+            }
+
+            type = SvnClientHook::GetHookType(hookType);
+        }
 
         if (type == SvnClientHookType::Undefined)
             continue;
@@ -358,8 +387,13 @@ void SvnClientContext::LoadTortoiseSvnHooks()
         bool wait = String::Equals("true", hookWait, StringComparison::OrdinalIgnoreCase);
         bool show = String::Equals("show", hookShow, StringComparison::OrdinalIgnoreCase);
 
-        hooks->Add(gcnew SvnClientHook(type, hookDir, hookCmd, wait, show));
+        lastHook = gcnew SvnClientHook(type, hookDir, hookCmd, wait, show, enforce);
+        hooks->Add(lastHook);
     }
+
+    if (lastHook && i < hookVals->Length && hookVals[i] == "enforce")
+        lastHook->Enforce = true;
+
     hooks->Sort();
     hooks->Reverse();
     _tsvnHooks = hooks->ToArray();
