@@ -129,6 +129,7 @@ namespace Security {
             PreUpdate,
             PostUpdate,
             PreConnect,
+            ManualPreCommit,
         };
 
         ref class SvnClientHook sealed : IComparable<SvnClientHook^>, IEquatable<SvnClientHook^>, IComparable
@@ -138,9 +139,10 @@ namespace Security {
             initonly String^ _cmd;
             initonly bool _wait;
             initonly bool _show;
+            bool _enforce;
 
         public:
-            SvnClientHook(SvnClientHookType type, String^ dir, String^ cmd, bool wait, bool show)
+            SvnClientHook(SvnClientHookType type, String^ dir, String^ cmd, bool wait, bool show, bool enforce)
             {
                 if (!dir)
                     throw gcnew ArgumentNullException("dir");
@@ -152,6 +154,7 @@ namespace Security {
                 _cmd = cmd;
                 _wait = wait;
                 _show = show;
+                _enforce = enforce;
             }
 
             property SvnClientHookType Type
@@ -194,6 +197,18 @@ namespace Security {
                 }
             }
 
+            property bool Enforce
+            {
+                bool get()
+                {
+                    return _enforce;
+                }
+                void set(bool value)
+                {
+                    _enforce = value;
+                }
+            }
+
         private:
         /* This order matches the ordering of SvnClientHookTypes */
             static initonly array<String^>^ _hookTypes = gcnew array<String^>
@@ -205,6 +220,7 @@ namespace Security {
                 "pre_update_hook",
                 "post_update_hook",
                 "pre_connect_hook",
+                "manual_precommit_hook",
             };
 
         internal:
