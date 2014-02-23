@@ -2,6 +2,7 @@
 <package >
   <metadata>
     <id>SharpSvn.1.9-x64</id>
+    <title>SharpSvn 1.9-x64</title>
     <version>$version$</version>
     <authors>SharpSvn Project</authors>
     <owners>SharpSvn Project</owners>
