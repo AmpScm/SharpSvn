@@ -58,7 +58,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 // associated with an assembly.
 //
 [assembly:AssemblyTitleAttribute("SharpSvn - Subversion for .Net 2.0-3.5 and 4.0")];
-[assembly:AssemblyDescriptionAttribute("SharpSvn (Compiled statically with subversion " SVN_VER_NUMBER
+[assembly:AssemblyDescriptionAttribute("SharpSvn, compiled statically with subversion " SVN_VER_NUMBER
     ", apr " APR_VERSION_STRING
     ", apr-util " APU_VERSION_STRING
     ", Cyrus Sasl " SASL_VERSION
