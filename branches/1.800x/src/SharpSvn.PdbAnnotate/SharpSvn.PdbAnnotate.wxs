@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/wix/2006/wi ../tools/wix.xsd">
+  <Fragment>
+    <ComponentGroup Id="LOCAL_SharpSvn.PdbAnnotate">
+      <ComponentGroupRef Id="LOCAL_SharpSvn_Win32" />
+      <ComponentRef Id="C_LOCAL_SharpSvn.PdbAnnotate.exe"/>
+      <ComponentRef Id="C_LOCAL_srctool.exe"/>
+      <ComponentRef Id="C_LOCAL_pdbstr.exe"/>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <DirectoryRef Id="DIR_SharpSvnPdbAnnotate" FileSource="$(var.SharpSvn.PdbAnnotate.TargetDir)">
+      <Directory Id="DIR_SharpSvn" />
+      <Component Id="C_LOCAL_SharpSvn.PdbAnnotate.exe">
+        <File Name="SharpSvn.PdbAnnotate.exe" Vital="yes" KeyPath="yes" Checksum="yes" />
+      </Component>
+      <Component Id="C_LOCAL_pdbstr.exe">
+        <File Name="pdbstr.exe" Vital="yes" KeyPath="yes" Checksum="yes" />
+      </Component>
+      <Component Id="C_LOCAL_srctool.exe">
+        <File Name="srctool.exe" Vital="yes" KeyPath="yes" Checksum="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+</Wix>
