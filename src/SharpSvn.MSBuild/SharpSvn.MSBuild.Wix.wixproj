@@ -20,21 +20,25 @@
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>Debug;SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug;SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Platform)\$(Configuration)\</IntermediateOutputPath>
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\msi\$(Platform)\$(Configuration)\</OutputPath>
     <IntermediateOutputPath>obj\msi\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <DefineConstants>SharpSvn_NoXml;SharpSvn_NoPlink;SharpSvn_NoDB</DefineConstants>
+    <SuppressValidation>True</SuppressValidation>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Install.wxs" />
