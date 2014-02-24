@@ -73,14 +73,6 @@
   <target name="svn-merge" depends="checkout">
     <if test="${buildSubversion != 'false'}">
       <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
-        <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
-           if="${string::get-length(subversionMergeBranches) &gt; 0}">
-          <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
-            <arg value="merge" />
-            <arg line="^/subversion/${branch}" />
-            <arg value="${svnBase}" />
-          </Svn>
-        </foreach>
         <if test="${applyMerges}">
           <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn == 'true'}">
             /* Appended by sharpsvn/imports/scripts/build-subversion.build */

@@ -19,7 +19,8 @@
   <!-- r1396285 - Potential crash in Window password cache handling -->
   <property name="subversionMerges" value="1156080,1302450,1304407,1304439,1380295,1396285" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
-  <property name="subversionMergeBranches" value="branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
+  <!-- r1542765 - Add Sqlite indexes -->
+  <property name="subversionMergeBranches" value="branches/1.7.x-r1542765;branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
