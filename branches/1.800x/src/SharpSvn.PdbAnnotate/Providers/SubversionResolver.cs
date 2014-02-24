@@ -108,7 +108,7 @@ namespace SharpSvn.PdbAnnotate.Providers
         public override void WriteEnvironment(StreamWriter writer)
         {
             writer.Write(Id);
-            writer.WriteLine(@"__TRG=%targ%\%var7%%fnbksl%(%var4%)\%var5%\%fnfile%(%var4%)");
+            writer.WriteLine(@"__TRG=%targ%\%var7%\%fnbksl%(%var4%)\%var5%\%fnfile%(%var4%)");
             writer.Write(Id);
             writer.Write("__CMD=svn.exe export \"%var3%%var4%@%var6%\" \"%");
             writer.Write(Id);
@@ -179,11 +179,18 @@ namespace SharpSvn.PdbAnnotate.Providers
 
             if (!string.IsNullOrEmpty(reposUri.AbsolutePath))
             {
-                sb.Append(reposUri.AbsolutePath.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar).Replace(":", ""));
+                sb.Append(reposUri.AbsolutePath);
             }
 
-            if (sb[sb.Length - 1] != Path.DirectorySeparatorChar)
-                sb.Append(Path.DirectorySeparatorChar);
+            sb.Replace(Path.AltDirectorySeparatorChar, Path.DirectorySeparatorChar);
+            sb.Replace(":", null);
+            sb.Replace("<", null);
+            sb.Replace(">", null);
+            sb.Replace(@"\\", @"\");
+            sb.Replace("//", "/");
+
+            while (sb.Length > 0 && sb[sb.Length - 1] == Path.DirectorySeparatorChar)
+                sb.Length -= 1;
 
             return sb.ToString();
         }
