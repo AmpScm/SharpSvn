@@ -60,15 +60,17 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities" />
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileParsers\BaseLanguageParser.cs" />
+    <Compile Include="FileParsers\CppParser.cs" />
+    <Compile Include="FileParsers\VBParser.cs" />
+    <Compile Include="FileParsers\CSharpParser.cs" />
+    <Compile Include="PdbSourceAnnotate.cs" />
+    <Compile Include="TransformAssemblyInfo.cs" />
     <Compile Include="UpdateNativeVersionResource.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -76,10 +78,12 @@
   <ItemGroup>
     <None Include="common\ImportAfter\SharpSvn.ImportAfter.targets" />
     <None Include="SharpSvn.MSBuild.snk" />
+    <None Include="targets\Projects\SharpSvn.vbproj.targets" />
+    <None Include="targets\Projects\SharpSvn.csproj.targets" />
     <None Include="targets\Projects\SharpSvn.vcxproj.targets" />
     <None Include="targets\SharpSvn.targets" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
