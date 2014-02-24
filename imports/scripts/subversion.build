@@ -5,57 +5,47 @@
   <property name="svnBase" value="${platformRoot}/subversion" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
 
-  <target name="svn-prepare" depends="bdb-build, zlib-build, openssl-build, gettext-build, sqlite-build, sasl-build, libssh2-build, sharpintl-build">
-    <if test="${buildSubversion}">
-      <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged">
-        <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
-           if="${string::get-length(subversionMergeBranches) &gt; 0}">
-          <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
-            <arg value="merge" />
-            <arg line="^/subversion/${branch}" />
+  <target name="svn-prepare" depends="checkout, bdb-build, zlib-build, openssl-build, gettext-build, sqlite-build, sasl-build, libssh2-build, sharpintl-build">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${buildSubversion">
+      <foreach item="File" property="patch" if="${applyPatches}">
+        <in>
+          <items basedir="${downloads}/../patches/subversion">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
             <arg value="${svnBase}" />
           </Svn>
-        </foreach>
-        <foreach item="File" property="patch" if="${applyPatches}">
-          <in>
-            <items basedir="${downloads}/../patches/subversion">
-              <include name="*.patch" />
-            </items>
-          </in>
-          <do>
-            <Svn>
-              <arg value="patch" />
-              <arg value="${patch}" />
-              <arg value="${svnBase}" />
-            </Svn>
-          </do>
-        </foreach>
+        </do>
+      </foreach>
+      
+      <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn and applyMerges}">
+        /* Appended by sharpsvn/imports/scripts/build-subversion.build */
+        apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
+        {
+        if (!auth_baton)
+        return NULL;
+
+        return auth_baton->creds_cache;
+        }
+      </echo>
+
+      <FilterFile file="${svnBase}/subversion/libsvn_fs_base/fs.c" if="${svnAddSharpSvn and applyMerges}">
+        <filterchain>
+          <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
+                   to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
+        </filterchain>
+      </FilterFile>
         
-        <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn and applyMerges}">
-          /* Appended by sharpsvn/imports/scripts/build-subversion.build */
-          apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
-          {
-          if (!auth_baton)
-          return NULL;
-
-          return auth_baton->creds_cache;
-          }
-        </echo>
-
-        <FilterFile file="${svnBase}/subversion/libsvn_fs_base/fs.c" if="${svnAddSharpSvn and applyMerges}">
-          <filterchain>
-            <replacestring from='if (loader_version->major != SVN_VER_MAJOR)'
-                     to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
-          </filterchain>
-        </FilterFile>
-          
-        <FilterFile file="${svnBase}/subversion/libsvn_subr/io.c" if="${svnAddSharpSvn and applyMerges}">
-          <filterchain>
-            <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
-                             to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
-          </filterchain>
-        </FilterFile>
-      </OnceBlock>
+      <FilterFile file="${svnBase}/subversion/libsvn_subr/io.c" if="${svnAddSharpSvn and applyMerges}">
+        <filterchain>
+          <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
+                           to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
+        </filterchain>
+      </FilterFile>
       
       <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcproj.ezt" if="${(not static) and (dllPrefix != '')}">
         <filterchain>
@@ -69,7 +59,7 @@
                          to='[is target.output_ext ".dll"]${dllPrefix}[end][target.output_name_without_ext]' />
         </filterchain>
       </FilterFile>
-    </if>
+    </OnceBlock>
   </target>
   
   <target name="svn-compat">

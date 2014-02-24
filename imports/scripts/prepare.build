@@ -197,6 +197,14 @@
           <arg value="${svnBase}" />
         </Svn>
       </foreach>
+      <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
+         if="${string::get-length(subversionMergeBranches) &gt; 0}">
+        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+          <arg value="merge" />
+          <arg line="^/subversion/${branch}" />
+          <arg value="${svnBase}" />
+        </Svn>
+      </foreach>
     </OnceBlock>
 
     <Svn
