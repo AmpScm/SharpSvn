@@ -6,6 +6,7 @@
   <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
   <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
   <property name="buildImports" value="true" overwrite="false" />
+  <property name="svnDist" value="false" overwrite="false" />
   
   <if test="${property::exists('build.include')}">
     <include buildfile="${build.include}" />
@@ -15,7 +16,7 @@
     <exec program="svn.exe" output=".svn-info"><arg line="info . --xml" /></exec>
     <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
     <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
-    <exec program="svn.exe">
+    <exec program="svn.exe" unless="${svnDist}">
       <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
       <arg line="update"                  if="${directory::exists('v40')}" />
       <arg line="-r ${svn_rev} v40/" />      
@@ -33,29 +34,40 @@
     <loadfile file="imports/build/.imports-rev" property="last-rev" if="${file::exists('imports/build/.imports-rev')}" />
     <if test="${property::exists('last-rev') and (last-rev != imports-rev)}">
       <exec program="cmd.exe" failonerror="false">
-        <arg line="/c rmdir imports\build imports\release v40\imports\build v40\imports\release /s /q" />
+        <arg line="/c rmdir imports\build imports\release imports\svn-dist\build imports\svn-dist\release v40\imports\build v40\imports\release /s /q" />
       </exec>
     </if>
   
-    <exec program="cmd.exe" workingdir="imports" if="${buildImports}">
+    <exec program="cmd.exe" workingdir="imports" if="${buildImports}" unless="${svnDist}">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
     
-    <exec program="cmd.exe" workingdir="imports" if="${buildImports}">
+    <exec program="cmd.exe" workingdir="imports" if="${buildImports}" unless="${svnDist}">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
     
-    <exec program="cmd.exe" workingdir="v40\imports" if="${buildImports}">
+    <exec program="cmd.exe" workingdir="v40\imports" if="${buildImports}" unless="${svnDist}">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
     
-    <exec program="cmd.exe" workingdir="v40\imports" if="${buildImports}">
+    <exec program="cmd.exe" workingdir="v40\imports" if="${buildImports}" unless="${svnDist}">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
       <arg line='"${nantExe}" build"' />
     </exec>
+
+    <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='"${nantExe}" build-svn-dist"' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
+      <arg line='"${nantExe}" build-svn-dist"' />
+    </exec>
+
 
     <echo file="imports/build/.imports-rev" message="${imports-rev}" />
 
@@ -198,6 +210,30 @@
         <include name="SharpSvn-*-x64.*" />
       </fileset>
     </copy>
+
+    <exec program="${sevenZipExe}">
+      <arg line="a -y" />
+      <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+      <arg value="release" />
+    </exec>
+
+    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
+    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
+    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
+  </target>
+  
+  <target name="clean-imports">
+  </target>
+  
+  <target name="package-svndist" if="${property::exists('CCNetNumericLabel')}">
+    <property name="artifactLabel" value="${CCNetNumericLabel}" />
+    
+    <if test="${file::exists('release/ver.txt')}">
+      <loadfile file="release/ver.txt" property="sliksvnVersion" />
+
+      <property name="artifactLabel" value="${sliksvnVersion}" />      
+    </if>
+
 
     <exec program="${sevenZipExe}">
       <arg line="a -y" />
