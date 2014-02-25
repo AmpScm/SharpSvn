@@ -6,7 +6,7 @@
   <property name="subversionMergeBranches" value="" overwrite="false" />
 
   <target name="svn-prepare" depends="checkout, bdb-build, zlib-build, openssl-build, gettext-build, sqlite-build, sasl-build, libssh2-build, sharpintl-build">
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${buildSubversion">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.patched" if="${buildSubversion}">
       <foreach item="File" property="patch" if="${applyPatches}">
         <in>
           <items basedir="${downloads}/../patches/subversion">
