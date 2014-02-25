@@ -90,6 +90,18 @@
         <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))) * 1000 + version::get-build(version::parse(svn-ver))}" />
       </otherwise>
     </choose>
+    
+    <if test="${SvnDist}">
+      <property name="versionBase" value="1.${version::get-minor(version::parse(svn-ver))}" />
+      <choose>
+        <when test="${svn-tag == svn-ver}">
+          <property name="checkout-rev" value="${version::get-build(version::parse(svn-ver))}" />
+        </when>
+        <otherwise>
+          <property name="checkout-rev" value="0" />      
+        </otherwise>
+      </choose>
+    </if>
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
 /P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This code and its source is licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
