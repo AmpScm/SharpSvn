@@ -71,7 +71,11 @@
 
     <echo file="imports/build/.imports-rev" message="${imports-rev}" />
 
-    <exec program="svn.exe" output=".svn-info-svn"><arg line="info imports\build\win32\subversion --xml" /></exec>
+    <exec program="svn.exe" output=".svn-info-svn">
+      <arg line="info --xml" />
+      <arg value="imports\build\win32\subversion" unless="${svnDist}" />
+      <arg value="imports\svn-dist\build\win32\subversion" if="${svnDist}" />
+    </exec>
     <xmlpeek file=".svn-info-svn" xpath="/info/entry/relative-url" property="svn-tag" />
     <property name="svn-tag" value="${path::get-file-name(svn-tag)}" />
     <property name="svn-ver" value="${string::replace(string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.'), '.x', '.0')}" />
