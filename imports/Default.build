@@ -18,7 +18,8 @@
   <property name="libgit2Version" value="0.20.0" overwrite="false" />
   <!-- r1568180 - Fix svn-populate-node-origins-index compilation -->
   <!-- r1568349 - Serf subjectAltNames fix -->
-  <property name="subversionMerges" value="1568180,1568349" overwrite="false" /> 
+  <!-- r1571671 - Fix libintl linkage -->
+  <property name="subversionMerges" value="1568180,1568349,1571671" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
