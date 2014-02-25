@@ -91,7 +91,7 @@
       </otherwise>
     </choose>
     
-    <if test="${SvnDist}">
+    <if test="${svnDist}">
       <property name="versionBase" value="1.${version::get-minor(version::parse(svn-ver))}" />
       <choose>
         <when test="${svn-tag == svn-ver}">
