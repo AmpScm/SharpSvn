@@ -269,6 +269,8 @@ public class MSBuild : NAnt.Core.Tasks.ExternalProgramBase
             if (NoLogo)
               sb.Append(" /nologo");
               
+            sb.AppendFormat(" /P:AnnotatePdbFile=true");
+              
             if (!string.IsNullOrEmpty(Configuration))
               sb.AppendFormat(" \"/P:Configuration={0}\"", Configuration);
               
