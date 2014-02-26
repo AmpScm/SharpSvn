@@ -2,7 +2,7 @@
 <project basedir="." default="build">
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="libgit2BuildType" value="tag" overwrite="false" />
-  <property name="serfBuildType" value="tag" />
+  <property name="serfBuildType" value="tag" overwrite="false" />
   <property name="libgit2BuildType" value="tag" overwrite="false" />
   <property name="httpdBuildType" value="tag" overwrite="false" />
   
