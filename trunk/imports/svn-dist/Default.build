@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir="." default="build-svn-dist">
-  <property name="subversionMerges" value="1568180,1568349,1571671,1571711" overwrite="false" />
+  <!--property name="subversionMerges" value="" overwrite="false" /-->
 
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="trunk" overwrite="false" />

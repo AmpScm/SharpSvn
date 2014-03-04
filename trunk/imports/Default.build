@@ -14,13 +14,9 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.9.0-alpha1" overwrite="false" />
+  <property name="subversionVersion" value="1.9.0-alpha2" overwrite="false" />
   <property name="libgit2Version" value="0.20.0" overwrite="false" />
-  <!-- r1568180 - Fix svn-populate-node-origins-index compilation -->
-  <!-- r1568349 - Serf subjectAltNames fix -->
-  <!-- r1571671 - Fix libintl linkage -->
-  <!-- r1571711 - Fix libintl in javahl -->
-  <property name="subversionMerges" value="1568180,1568349,1571671,1571711" overwrite="false" /> 
+  <property name="subversionMerges" value="" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
