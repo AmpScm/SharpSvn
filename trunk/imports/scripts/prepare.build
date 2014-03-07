@@ -304,7 +304,7 @@
 
     <Svn unless="${directory::exists(sqliteDir)}">
       <arg value="co" />
-      <arg value="https://sharpsvn.open.collab.net/svn/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
+      <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
     </Svn>
 
