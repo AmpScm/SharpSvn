@@ -247,9 +247,31 @@
     <if test="${file::exists('release/ver.txt')}">
       <loadfile file="release/ver.txt" property="sliksvnVersion" />
 
-      <property name="artifactLabel" value="${sliksvnVersion}" />      
+      <property name="artifactLabel" value="${sliksvnVersion}" />
+      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion))}.${version::get-build(version::parse(sliksvnVersion))}" />
     </if>
+    
+    <delete>
+      <fileset basedir="imports\svn-dist\wix\bin">
+        <include name="*.msi" />        
+      </fileset>
+    </delete>
 
+    <exec program="cmd.exe" workingdir="imports\svn-dist">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='msbuild wix\SlikSvn.msi /p:Configuration=Release /p:Platform=x86 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel}"' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="imports\svn-dist">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='msbuild wix\SlikSvn.msi /p:Configuration=Release /p:Platform=x64 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel}"' />
+    </exec>
+    
+    <copy todir="release" flatten="true">
+      <fileset basedir="imports\svn-dist\wix\bin">
+        <include name="*-Subversion-${svnVersion}*.msi" />
+      </fileset>
+    </copy>
 
     <exec program="${sevenZipExe}">
       <arg line="a -y" />
