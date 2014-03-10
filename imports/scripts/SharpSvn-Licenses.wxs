@@ -38,9 +38,6 @@
       <Component Id="C_SSVNLICENSE_Cyrus_Sasl" Guid="A14954AB-3D8E-499A-80A9-D74407844058">
         <File Id="CF_SSVNLICENSE_Cyrus_Sasl" Name="Cyrus-Sasl-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
-      <Component Id="C_SSVNLICENSE_LibSSH2" Guid="727FAB37-9CCD-46B6-814A-CD7F5114CDC3">
-        <File Id="CF_SSVNLICENSE_LibSSH2" Name="LibSSH2.txt" Vital="yes" KeyPath="yes"/>
-      </Component>
       <Component Id="C_SSVNLICENSE_OpenSsl" Guid="A0CCDA71-2C18-4617-90BA-FC5B761E8252">
         <File Id="CF_SSVNLICENSE_OpenSsl" Name="OpenSsl-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
@@ -55,6 +52,13 @@
       </Component>
       <Component Id="C_SSVNLICENSE_ZLib" Guid="B26E4697-80B7-4FF8-9549-0C5F0449FF15">
         <File Id="CF_SSVNLICENSE_ZLib" Name="ZLib.txt" Vital="yes" KeyPath="yes"/>
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <Fragment>
+    <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
+      <Component Id="C_SSVNLICENSE_LibSSH2" Guid="727FAB37-9CCD-46B6-814A-CD7F5114CDC3">
+        <File Id="CF_SSVNLICENSE_LibSSH2" Name="LibSSH2.txt" Vital="yes" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
