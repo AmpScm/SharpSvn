@@ -259,12 +259,12 @@
 
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.msi /p:Configuration=Release /p:Platform=x86 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel}"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel}"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.msi /p:Configuration=Release /p:Platform=x64 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel}"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel}"' />
     </exec>
     
     <copy todir="release" flatten="true">
