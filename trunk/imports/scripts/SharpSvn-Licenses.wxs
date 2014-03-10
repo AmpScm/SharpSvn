@@ -52,7 +52,7 @@
         <File Id="CF_SSVNLICENSE_Subversion" Name="Subversion-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_ZLib" Guid="B26E4697-80B7-4FF8-9549-0C5F0449FF15">
-        <File Id="CF_SSVNLICENSE_ZLib" Name="ZLib.txt" Vital="yes" KeyPath="yes"/>
+        <File Id="CF_SSVNLICENSE_ZLib" Name="ZLib-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
