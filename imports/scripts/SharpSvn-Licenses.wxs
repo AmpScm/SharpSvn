@@ -17,6 +17,7 @@
   <Fragment>
     <ComponentGroup Id="SharpSvn_LICENSES">
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
+      <ComponentRef Id="C_SSVNLICENSE_LibSSH2" />
     </ComponentGroup>
   </Fragment>
   <Fragment>
