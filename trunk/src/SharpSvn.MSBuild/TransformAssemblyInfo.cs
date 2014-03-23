@@ -17,7 +17,8 @@ namespace SharpSvn.MSBuild
         Unknown,
         cpp,
         csharp,
-        vb
+        vb,
+        fsharp,
     }
 
     public class TransformAssemblyInfo : ITask
@@ -265,6 +266,8 @@ namespace SharpSvn.MSBuild
                     return new CSharpParser();
                 case MSBuild.Language.vb:
                     return new VBParser();
+                case MSBuild.Language.fsharp:
+                    return new FSharpParser();
                 default:
                     throw new NotImplementedException("Unimplemented language");
             }
