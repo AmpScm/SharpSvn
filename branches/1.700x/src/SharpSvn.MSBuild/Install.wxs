@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.microsoft.com/wix/2006/wi ../tools/wix.xsd">
+  <Product Name="SharpSvn MSBuild Extension" Manufacturer="SharpSvn Project" Id="*" Language="1033" Version="0.9" UpgradeCode="D073FDC5-26F6-4B07-AE82-F0EC42B7BBD3">
+    <Package Description="SharpSvn MSBuild Extension" Compressed="yes" Languages="1033"/>
+    <Media Id="1" Cabinet="ssvnmsbd.cab" EmbedCab="yes"  />
+
+    <Upgrade Id="D073FDC5-26F6-4B07-AE82-F0EC42B7BBD3">
+      <UpgradeVersion Property="PREVIOUSVERSIONINSTALLED" Minimum="0.1.0.0" Maximum="0.9.0.0" IncludeMinimum="yes" IncludeMaximum="yes"/>
+    </Upgrade>
+
+    <MajorUpgrade
+      Schedule="afterInstallInitialize"
+      DowngradeErrorMessage="Unable to install because a newer version is already installed." />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
+        <Directory Id="MSBuild" Name="MSBuild">
+          <Directory Id="MSBuild_SharpSvn" Name="SharpSvn" FileSource="targets">
+            <Component Id="sharpsvn_targets" Guid="8846C887-6353-4D5A-BA53-F4781A785BC4">
+              <File Name="SharpSvn.targets" Vital="yes" Checksum="yes" />
+            </Component>
+            <Component Id="SharpSvnMSBuild_dll" Guid="783D0F89-F894-4B97-A3F9-E5D7CA678CE3">
+              <File Name="SharpSvn.MSBuild.dll" Vital="yes" Checksum="yes" KeyPath="yes"
+                    Source="$(var.SharpSvn.MSBuild.TargetDir)\SharpSvn.MSBuild.dll"/>
+            </Component>
+            <Directory Id="DIR_SharpSvnPdbAnnotate" Name="bin" />
+            <Directory Id="MSBuild_SharpSvn_Project" Name="Projects">
+              <Component Id="vcxproj_targets" Guid="6D58BED8-6D25-4B11-989B-3FF83E18BD5A">
+                <File Name="SharpSvn.vcxproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
+              </Component>
+              <Component Id="csproj_targets" Guid="3EA8FECD-75B9-4930-8BF4-8C9E38F60408">
+                <File Name="SharpSvn.csproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
+              </Component>
+              <Component Id="vbproj_targets" Guid="94FF2C1E-57DE-4A52-90FD-97BCF8EBFCAE">
+                <File Name="SharpSvn.vbproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
+              </Component>
+              <Component Id="fsproj_targets" Guid="A1B6FEE6-46DF-49C2-AA75-D0B198187EB5">
+                <File Name="SharpSvn.fsproj.targets" Vital="yes" Checksum="yes" KeyPath="yes"/>
+              </Component>
+            </Directory>
+          </Directory>
+          <Directory Id="MSBuild_40" Name="4.0">
+            <Directory Id="MSBuild_40_Common" Name="Microsoft.Common.Targets" FileSource="common">
+              <Directory Id="MSBuild_40_Common_ImportAfter" Name="ImportAfter">
+                <Component Id="sharpsvn_hook_40" Guid="7B98F726-12A7-47D9-A587-6C743E698EC3">
+                  <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_40" Vital="yes" Checksum="yes" KeyPath="yes" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
+          <Directory Id="MSBuild_120" Name="12.0">
+            <Directory Id="MSBuild_120_Common" Name="Microsoft.Common.Targets" FileSource="common">
+              <Directory Id="MSBuild_120_Common_ImportAfter" Name="ImportAfter">
+                <Component Id="sharpsvn_hook_120" Guid="54E02173-76A8-4BE7-A9FF-2629AAC52192">
+                  <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_120" Vital="yes" Checksum="yes" KeyPath="yes" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <Feature Id="Main" TypicalDefault="install" Level="1">
+      <ComponentRef Id="sharpsvn_targets"/>
+      <ComponentRef Id="vcxproj_targets"/>
+      <ComponentRef Id="csproj_targets"/>
+      <ComponentRef Id="vbproj_targets"/>
+      <ComponentRef Id="fsproj_targets"/>
+      <ComponentRef Id="SharpSvnMSBuild_dll"/>
+      <ComponentRef Id="sharpsvn_hook_40"/>
+      <ComponentRef Id="sharpsvn_hook_120"/>
+      <ComponentGroupRef Id="LOCAL_SharpSvn.PdbAnnotate"/>
+    </Feature>
+  </Product>
+</Wix>

@@ -1,0 +1,9 @@
+﻿<!-- SharpSvn.net ImportAfter Targets -->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SharpSvnTargetsDir Condition="$(SharpSvnTargetsDir) == ''">$(MSBuildExtensionsPath)\SharpSvn</SharpSvnTargetsDir>
+    <SharpSvnTargetsFile>$(SharpSvnTargetsDir)\SharpSvn.targets</SharpSvnTargetsFile>
+  </PropertyGroup>
+
+  <Import Condition="$(SharpSvnIncluded) != 'true' and Exists('$(SharpSvnTargetsFile)')" Project="$(SharpSvnTargetsFile)" />
+</Project>
