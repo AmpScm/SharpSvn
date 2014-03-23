@@ -76,8 +76,8 @@
       <arg value="imports\build\win32\subversion" unless="${svnDist}" />
       <arg value="imports\svn-dist\build\win32\subversion" if="${svnDist}" />
     </exec>
-    <xmlpeek file=".svn-info-svn" xpath="/info/entry/relative-url" property="svn-tag" />
-    <property name="svn-tag" value="${path::get-file-name(svn-tag)}" />
+    <xmlpeek file=".svn-info-svn" xpath="/info/entry/url" property="svn-tag" />
+    <property name="svn-tag" value="${path::get-file-name(string::replace(svn-tag,'://', '/'))}" />
     <property name="svn-ver" value="${string::replace(string::replace(string::replace(string::replace(svn-tag, '-alpha', '.'), '-beta', '.'),'-rc', '.'), '.x', '.0')}" />
     <choose>
       <when test="${svn-tag == 'trunk'}">
