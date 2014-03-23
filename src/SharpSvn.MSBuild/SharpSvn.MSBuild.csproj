@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="FileParsers\BaseLanguageParser.cs" />
     <Compile Include="FileParsers\CppParser.cs" />
+    <Compile Include="FileParsers\FSharpParser.cs" />
     <Compile Include="FileParsers\VBParser.cs" />
     <Compile Include="FileParsers\CSharpParser.cs" />
     <Compile Include="PdbSourceAnnotate.cs" />
@@ -78,10 +79,16 @@
   <ItemGroup>
     <None Include="common\ImportAfter\SharpSvn.ImportAfter.targets" />
     <None Include="SharpSvn.MSBuild.snk" />
+    <None Include="targets\Projects\SharpSvn.fsproj.targets" />
     <None Include="targets\Projects\SharpSvn.vbproj.targets" />
     <None Include="targets\Projects\SharpSvn.csproj.targets" />
     <None Include="targets\Projects\SharpSvn.vcxproj.targets" />
     <None Include="targets\SharpSvn.targets" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Install.wxs">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
