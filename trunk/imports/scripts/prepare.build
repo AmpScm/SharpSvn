@@ -308,14 +308,6 @@
       <arg value="${sqliteDir}" />
     </Svn>
 
-    <Svn unless="${directory::exists(libgit2Dir)}" if="${buildLibgit2}" >
-      <arg value="co" />
-      <arg value="https://github.com/libgit2/libgit2.git/trunk/" if="${libgit2BuildType == 'trunk'}" />
-      <arg value="https://github.com/libgit2/libgit2.git/tags/v${libgit2Version}/" if="${libgit2BuildType == 'tag'}" />
-      <arg value="https://github.com/libgit2/libgit2.git/branches/${libgit2Version}/" if="${libgit2BuildType == 'branch'}" />
-      <arg value="${libgit2Dir}" />
-    </Svn>
-    
     <Svn unless="${directory::exists(saslDir)}">
       <arg value="co" />
       <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
