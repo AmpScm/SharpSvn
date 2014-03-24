@@ -108,7 +108,7 @@
     </if>
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
-/P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This code and its source is licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
+/P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This product and its sourcecode are licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
 /P:ForceAssemblyCompany="SharpSvn - http://sharpsvn.net/"
 /P:ForceAssemblyProduct="SharpSvn - Subversion support for .Net"
 </echo>
