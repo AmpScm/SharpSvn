@@ -31,7 +31,7 @@ namespace CollabUpload
         class Args
         {
             public string Site;
-            public int Folder;
+            public int Folder = -1;
 
             public string UserName;
             public string Password;
@@ -42,6 +42,7 @@ namespace CollabUpload
             public string Result;
             public int MaxUploads;
             public TimeSpan Keep;
+            public bool List;
 
             public readonly List<string> Files = new List<string>();
         }
@@ -112,6 +113,9 @@ namespace CollabUpload
                                 return ArgError("--password requires argument");
                             aa.Password = value;
                             i++;
+                            break;
+                        case "--list":
+                            aa.List = true;
                             break;
                         case "--name":
                             if (!argAvailable)
@@ -246,6 +250,14 @@ namespace CollabUpload
                 }
             }
 
+            if (args.List)
+            {
+                foreach(Document doc in GetDocumentList(args, cookBox))
+                {
+                    Console.WriteLine(doc.DownloadUri.AbsoluteUri);
+                }
+            }
+
             if (args.MaxUploads > 0 || args.Keep != TimeSpan.Zero)
             {
                 List<Document> docs = GetDocumentList(args, cookBox);
@@ -321,7 +333,7 @@ namespace CollabUpload
                 XmlReaderSettings xs = new XmlReaderSettings();
                 xs.ValidationFlags = System.Xml.Schema.XmlSchemaValidationFlags.None;
                 xs.ValidationType = ValidationType.None;
-                xs.ProhibitDtd = false;
+                xs.DtdProcessing = DtdProcessing.Ignore;
 
                 int nS = text.IndexOf("<html");
 
@@ -452,7 +464,14 @@ namespace CollabUpload
                 docs.Add(d);
             }
 
+            docs.Sort(SortDocs);
+
             return docs;
+        }
+
+        private static int SortDocs(Document x, Document y)
+        {
+            return x.Date.CompareTo(y.Date);
         }
 
         private static void DeleteFile(Args args, CookieContainer cookBox, int fileId)
