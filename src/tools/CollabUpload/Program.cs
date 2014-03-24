@@ -333,7 +333,7 @@ namespace CollabUpload
                 XmlReaderSettings xs = new XmlReaderSettings();
                 xs.ValidationFlags = System.Xml.Schema.XmlSchemaValidationFlags.None;
                 xs.ValidationType = ValidationType.None;
-                xs.DtdProcessing = DtdProcessing.Ignore;
+                xs.ProhibitDtd = false;
 
                 int nS = text.IndexOf("<html");
 
