@@ -124,7 +124,7 @@ namespace SharpSvn.Tests.Commands
                 bool arrived = false;
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
-                //ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
+                ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_CANNOT_CREATE_SESSION);
                 Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
                     delegate(object sender, SvnInfoEventArgs e)
                     {
@@ -132,30 +132,15 @@ namespace SharpSvn.Tests.Commands
                     }), Is.False);
 
                 Assert.That(arrived, Is.False);
-            }
-
-            using (SvnClient client = new SvnClient())
-            {
-                client.Authentication.Clear();
-                client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
-
-                bool arrived = false;
-                SvnInfoArgs ia = new SvnInfoArgs();
-                //ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
-                ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_SERF_SSL_CERT_UNTRUSTED);
-                Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
-                    delegate(object sender, SvnInfoEventArgs e)
-                    {
-                        arrived = true;
-                    }), Is.False);
-
-                Assert.That(arrived, Is.False);
+                Assert.That(ia.LastException, Is.Not.Null, "Has exception");
+                Assert.That(ia.LastException.ContainsError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER), "Right error code in chain");
             }
 
             using (SvnClient client = new SvnClient())
             {
                 client.Authentication.Clear();
                 client.Authentication.SslAuthorityTrustHandlers += SvnAuthentication.SubversionWindowsSslAuthorityTrustHandler;
+                client.Authentication.SslServerTrustHandlers += SvnAuthentication.SubversionWindowsSslServerTrustHandler;
 
                 bool arrived = false;
                 Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"),

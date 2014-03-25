@@ -199,6 +199,32 @@ namespace SharpSvn {
             return (T)GetCause(T::typeid);
         }
 
+        bool ContainsError(SharpSvn::SvnErrorCode code)
+        {
+            Exception^ e = this;
+
+            while (e)
+            {
+                SvnException ^svnEx = dynamic_cast<SvnException ^>(e);
+                if (svnEx && svnEx->SvnErrorCode == code)
+                    return true;
+
+                e = e->InnerException;
+            }
+
+            return false;
+        }
+
+        bool ContainsError(SvnAprErrorCode code)
+        {
+            return ContainsError((SharpSvn::SvnErrorCode)(int)code);
+        }
+
+        bool ContainsError(SvnWindowsErrorCode code)
+        {
+            return ContainsError((SharpSvn::SvnErrorCode)APR_FROM_OS_ERROR((int)code));
+        }
+
     public:
         property String^ File
         {
