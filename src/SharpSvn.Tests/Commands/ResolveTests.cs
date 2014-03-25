@@ -78,7 +78,7 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Resolve_RepeatedEventHookUp_SOC_411()
         {
-            Uri projectRoot = new Uri("https://ctf.open.collab.net/svn/repos/sharpsvntrunk/scripts");
+            Uri projectRoot = new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/scripts");
 
             using (var svnClient = new SvnClient())
             {
