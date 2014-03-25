@@ -236,10 +236,8 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
-            if (Environment.Version.Major < 4 || TestContext != null)
-                Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Null);
-            else
-                Assert.That(SvnTools.GetNormalizedDirectoryName("C:"), Is.Not.Null); // CWD on C:\
+            string drive = Environment.CurrentDirectory.Substring(0, 2).ToLowerInvariant();
+            Assert.That(SvnTools.GetNormalizedDirectoryName(drive), Is.EqualTo(drive.ToUpperInvariant()+Path.GetDirectoryName(Environment.CurrentDirectory).Substring(2))); // CWD on current drive
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("C:\\\\"), Is.Null);
             Assert.That(SvnTools.GetNormalizedDirectoryName("c:\\a"), Is.EqualTo("C:\\"));
