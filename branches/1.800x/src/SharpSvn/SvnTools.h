@@ -108,6 +108,7 @@ namespace SharpSvn {
         static String^ GetFileName(Uri^ target);
 
         /// <summary>Gets the normalized directory name of path (Long path enabled version of <see cref="System::IO::Path::GetDirectoryName" />, always returning full paths)</summary>
+        /// <returns>Directory information for path, or null if path denotes a root directory or is null. Returns String.Empty if path does not contain directory information.</returns>
         static String^ GetNormalizedDirectoryName(String^ path);
 
         static String^ GetPathRoot(String^ path);
