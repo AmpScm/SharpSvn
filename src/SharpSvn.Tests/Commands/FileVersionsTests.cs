@@ -51,7 +51,7 @@ namespace SharpSvn.Tests.Commands
                     Assert.That(e.Revision, Is.GreaterThan(0));
                     Assert.That(e.Author, Is.Not.Null);
                     Assert.That(e.LogMessage, Is.Not.Null);
-                    Assert.That(e.Time, Is.LessThan(DateTime.Now));
+                    Assert.That(e.Time, Is.LessThan(DateTime.UtcNow).And.GreaterThan(DateTime.UtcNow - new TimeSpan(0,0,2,0)));
 
                     using (StreamReader sr = new StreamReader(e.GetContentStream()))
                     {
