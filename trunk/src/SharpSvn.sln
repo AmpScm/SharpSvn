@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
@@ -149,10 +149,6 @@ Global
 		{C1B994B4-4F00-4F99-AE3D-EFEDBD8CD33D}.Release|x64.Build.0 = Release|x64
 		{C1B994B4-4F00-4F99-AE3D-EFEDBD8CD33D}.Release|x86.ActiveCfg = Release|x86
 		{C1B994B4-4F00-4F99-AE3D-EFEDBD8CD33D}.Release|x86.Build.0 = Release|x86
-		{FEC53C23-3A30-4346-9EB1-45F4F95FD47B}.Debug|x64.ActiveCfg = Debug|x86
-		{FEC53C23-3A30-4346-9EB1-45F4F95FD47B}.Debug|x86.ActiveCfg = Debug|x86
-		{FEC53C23-3A30-4346-9EB1-45F4F95FD47B}.Release|x64.ActiveCfg = Release|x86
-		{FEC53C23-3A30-4346-9EB1-45F4F95FD47B}.Release|x86.ActiveCfg = Release|x86
 		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x64.ActiveCfg = Debug|x64
 		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x64.Build.0 = Debug|x64
 		{691CBC4F-CC38-4342-8738-A08E48812141}.Debug|x86.ActiveCfg = Debug|x86
