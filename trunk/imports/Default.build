@@ -14,7 +14,9 @@
   <!-- -->
   <property name="subversionVersion" value="1.9.0-alpha2" overwrite="false" />
   <!-- r1575018              - Properly store author when retrieving directory entries -->
-  <property name="subversionMerges" value="1575018" overwrite="false" /> 
+  <!-- r1580816              - Allocate dirent properly (old ra_svn) -->
+  <!-- r1581401              - Cleanup after BDB create error -->
+  <property name="subversionMerges" value="1575018,1580816,1581401" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
