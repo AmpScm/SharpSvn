@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace SharpSvn.MSBuild.FileParsers
 {
-    sealed class CSharpParser : LanguageParser
+    class FSharpParser : LanguageParser
     {
         public override void WriteComment(System.IO.StreamWriter sw, string text)
         {
@@ -31,12 +31,12 @@ namespace SharpSvn.MSBuild.FileParsers
 
         protected override void AddAttribute(Type attributeType)
         {
-            AttrMap[attributeType] = new AttributeRegex(attributeType,  ConstructRegex(attributeType), RegexOptions.None);
+            AttrMap[attributeType] = new AttributeRegex(attributeType, ConstructRegex(attributeType), RegexOptions.None);
         }
 
         private string ConstructRegex(Type attributeType)
         {
-            return @"^\s*\[\s*assembly\s*:\s*" +ConstructNameRegex(attributeType) + @"\s*(" + ArgumentsRegex + @"\s*)?\]";
+            return @"^\s*\[\s*\<\s*assembly\s*:\s*" + ConstructNameRegex(attributeType) + @"\s*(" + ArgumentsRegex + @"\s*)?\>\s*\]";
         }
 
         private string ConstructNameRegex(Type attributeType)
@@ -44,15 +44,15 @@ namespace SharpSvn.MSBuild.FileParsers
             StringBuilder sb = new StringBuilder();
             string[] parts = attributeType.FullName.Split('.');
 
-            sb.Append('(', parts.Length-1);
-            sb.Append(@"(global\s*::\s*)?");
-            for (int i = 0; i < parts.Length-1; i++)
+            sb.Append('(', parts.Length - 1);
+            sb.Append(@"(global\s*\.\s*)?");
+            for (int i = 0; i < parts.Length - 1; i++)
             {
                 sb.Append(Regex.Escape(parts[i]));
                 sb.Append(@"\s*\.\s*)?");
             }
 
-            string name = parts[parts.Length-1];
+            string name = parts[parts.Length - 1];
 
             if (name.EndsWith("Attribute"))
             {
@@ -72,14 +72,17 @@ namespace SharpSvn.MSBuild.FileParsers
 
         protected override void StartAttribute(System.IO.StreamWriter sw, Type attributeType)
         {
-            sw.Write("[assembly: global::");
+            sw.Write("[<assembly: global.");
             sw.Write(attributeType.FullName);
             sw.Write("(");
         }
 
         protected override void EndAttribute(System.IO.StreamWriter sw)
         {
-            sw.WriteLine(")]");
+            sw.WriteLine(")>]");
+
+            // In F# attributes are always applied to something. So add 'something'
+            sw.WriteLine("()");
         }
 
         protected override void WriteAttribute(System.IO.StreamWriter sw, Type attributeType, string value)
