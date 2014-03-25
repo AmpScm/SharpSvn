@@ -194,6 +194,7 @@
         <arg value="--with-libintl=${intDir}" if="${intl != 'none'}" />
         <arg value="--disable-shared" if="${static or svnStatic}"/>
         <arg value="--with-static-apr" if="${static}" />
+        <arg line="-D SVN_HI_RES_SLEEP_MS=1" if="${static}" />
       </exec>
       <!-- The ZLib build has already completed -->
 
