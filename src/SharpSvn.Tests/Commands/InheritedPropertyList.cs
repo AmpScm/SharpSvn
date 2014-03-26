@@ -16,8 +16,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestIprops()
         {
-            Uri uri = GetReposUri(TestReposType.CollabRepos);
-            string wc = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+            string wc = sbox.Wc;
 
             SvnSetPropertyArgs pa = new SvnSetPropertyArgs();
             pa.BaseRevision = 17;

@@ -37,7 +37,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Lock_BasicLock()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
+            string filepath = Path.Combine(WcPath, "Form.cs");
             TouchFile(filepath);
             Client.Add(filepath);
             Client.Commit(filepath);

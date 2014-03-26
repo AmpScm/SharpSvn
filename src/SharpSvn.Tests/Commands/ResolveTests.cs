@@ -24,6 +24,7 @@ using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 using SharpSvn;
 using SharpSvn.Security;
+using SharpSvn.Tests.LookCommands;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -33,29 +34,25 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class ResolveTests : TestBase
     {
-        string _path;
-        [TestInitialize]
-        public void ResolveSetup()
-        {
-            this._path = GetTempDir();
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), _path);
-            RawRelocate(_path, new Uri("file:///tmp/repos/"), ReposUrl);
-            Client.Upgrade(_path);
-            this.RenameAdminDirs(this._path);
-        }
-
         /// <summary>
         ///Attempts to resolve a conflicted file.
         /// </summary>
         [TestMethod]
         public void Resolve_ResolveFile()
         {
-            string filePath = Path.Combine(this._path, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), sbox.Wc);
+            RawRelocate(sbox.Wc, new Uri("file:///tmp/repos/"), ReposUrl);
+            Client.Upgrade(sbox.Wc);
+            RenameAdminDirs(sbox.Wc);
+
+            string filePath = Path.Combine(sbox.Wc, "Form.cs");
 
             this.Client.Resolved(filePath);
 
             Assert.That(this.GetSvnStatus(filePath), Is.EqualTo(SvnStatus.Modified), "Resolve didn't work!");
-
         }
 
         /// <summary>
@@ -64,27 +61,36 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Resolve_ResolveDirectory()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/conflictwc.zip"), sbox.Wc);
+            RawRelocate(sbox.Wc, new Uri("file:///tmp/repos/"), ReposUrl);
+            Client.Upgrade(sbox.Wc);
+            RenameAdminDirs(sbox.Wc);
+
             SvnResolveArgs a = new SvnResolveArgs();
             a.Depth = SvnDepth.Infinity;
 
-            this.Client.Resolve(this._path, SvnAccept.Merged, a);
+            this.Client.Resolve(sbox.Wc, SvnAccept.Merged, a);
 
-            Assert.That(this.GetSvnStatus(this._path), Is.EqualTo(SvnStatus.None),
+            Assert.That(this.GetSvnStatus(sbox.Wc), Is.EqualTo(SvnStatus.None),
                 " Resolve didn't work! Directory still conflicted");
-            Assert.That(this.GetSvnStatus(Path.Combine(this._path, "Form.cs")), Is.EqualTo(SvnStatus.Modified),
+            Assert.That(this.GetSvnStatus(Path.Combine(sbox.Wc, "Form.cs")), Is.EqualTo(SvnStatus.Modified),
                 "Resolve didn't work! File still conflicted");
         }
 
         [TestMethod]
         public void Resolve_RepeatedEventHookUp_SOC_411()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
             Uri projectRoot = new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/scripts");
 
             using (var svnClient = new SvnClient())
             {
                 for (int i = 0; i < 3; i++)
                 {
-                    string workingcopy = GetTempDir();
+                    string workingcopy = sbox.GetTempDir();
                     Directory.CreateDirectory(workingcopy);
 
                     svnClient.Authentication.UserNamePasswordHandlers += DoNowt;

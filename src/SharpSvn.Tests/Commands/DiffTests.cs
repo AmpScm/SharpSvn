@@ -42,7 +42,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Diff_LocalDiff()
         {
-            string form = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string form = Path.Combine(WcPath, "Form.cs");
 
 
             using (StreamWriter w = new StreamWriter(form, false))
@@ -71,7 +75,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Diff_ReposDiff()
         {
-            string clientDiff = this.RunCommand("svn", "diff -r 1:5 " + this.ReposUrl);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+            string clientDiff = this.RunCommand("svn", "diff -r 1:5 " + ReposUrl);
 
             MemoryStream outstream = new MemoryStream();
             MemoryStream errstream = new MemoryStream();
@@ -95,7 +101,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Diff_DiffBinary()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
             this.RunCommand("svn", "propset svn:mime-type application/octet-stream " +
                 path);
             this.RunCommand("svn", "ci -m '' " + path);
@@ -141,6 +151,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Diff_RunDiffTests()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty, false);
+            string WcPath = sbox.Wc;
+
             string start = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
             string end = Guid.NewGuid().ToString() + Environment.NewLine + Guid.NewGuid().ToString();
             string origLine = Guid.NewGuid().ToString();
@@ -179,14 +193,14 @@ namespace SharpSvn.Tests.Commands
 
                 diffOutput = new MemoryStream();
 
-                client.Diff(new Uri(ReposUrl, "DiffTest"), diffFile, diffOutput);
+                client.Diff(new Uri(sbox.RepositoryUri, "DiffTest"), diffFile, diffOutput);
                 VerifyDiffOutput(origLine, newLine, diffOutput);
 
                 SvnCommitResult info;
                 client.Commit(diffFile, out info);
 
                 bool visited = false;
-                client.DiffSummary(new SvnUriTarget(ReposUrl, info.Revision - 1), ReposUrl,
+                client.DiffSummary(new SvnUriTarget(sbox.RepositoryUri, info.Revision - 1), sbox.RepositoryUri,
                     delegate(object sender, SvnDiffSummaryEventArgs e)
                     {
                         if (e.Path == "DiffTest")

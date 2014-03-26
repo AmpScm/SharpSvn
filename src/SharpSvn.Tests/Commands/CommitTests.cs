@@ -45,7 +45,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_BasicCommit()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filepath = Path.Combine(WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
                 w.Write("Moo");
 
@@ -53,7 +57,7 @@ namespace SharpSvn.Tests.Commands
 
 
 
-            Assert.That(this.Client.Commit(this.WcPath, out info));
+            Assert.That(this.Client.Commit(WcPath, out info));
 
             Assert.That(info, Is.Not.Null);
 
@@ -67,7 +71,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_CommitWithLocks()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filepath = Path.Combine(WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
                 w.Write("Moo");
 
@@ -78,7 +86,7 @@ namespace SharpSvn.Tests.Commands
             SvnCommitArgs a = new SvnCommitArgs();
             a.KeepLocks = true;
 
-            Assert.That(this.Client.Commit(this.WcPath, a, out info));
+            Assert.That(this.Client.Commit(WcPath, a, out info));
             Assert.IsNotNull(info);
 
             char locked = this.RunCommand("svn", "status " + filepath)[5];
@@ -98,6 +106,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_SetCustomProps()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             string fp = Path.Combine(WcPath, "NewFile.cs");
             Touch2(fp);
             Client.Add(fp);
@@ -111,7 +123,7 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(WcPath, ca, out cr);
 
             string value;
-            Client.GetRevisionProperty(ReposUrl, cr.Revision, "my:prop", out value);
+            Client.GetRevisionProperty(sbox.RepositoryUri, cr.Revision, "my:prop", out value);
 
             Assert.That(value, Is.EqualTo("PropValue"));
 
@@ -136,7 +148,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_CommitFile()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filepath = Path.Combine(WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
                 w.Write("Moo");
 
@@ -153,14 +169,18 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_CommitWithNonAnsiCharsInLogMessage()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filepath = Path.Combine(WcPath, "Form.cs");
             using (StreamWriter w = new StreamWriter(filepath))
                 w.Write("Moo");
 
             SvnCommitArgs a = new SvnCommitArgs();
             a.LogMessage = " ¥ · £ · € · $ · ¢ · ₡ · ₢ · ₣ · ₤ · ₥ · ₦ · ₧ · ₨ · ₩ · ₪ · ₫ · ₭ · ₮ · ₯";
 
-            Assert.That(Client.Commit(this.WcPath, a));
+            Assert.That(Client.Commit(WcPath, a));
 
             SvnLogArgs la = new SvnLogArgs();
             la.Start = SvnRevision.Head;
@@ -187,7 +207,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_CommitWithNoModifications()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filepath = Path.Combine(WcPath, "Form.cs");
             this.Client.Committing += delegate(object sender, SvnCommittingEventArgs e)
             {
                 Assert.That(e.Items.Count, Is.EqualTo(1), "Wrong number of commit items");
@@ -207,8 +231,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_CancelledCommit()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
-            string path2 = Path.Combine(this.WcPath, "Form2.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
+            string path2 = Path.Combine(WcPath, "Form2.cs");
             File.WriteAllText(path, "MOO");
             File.WriteAllText(path2, "MOO2");
             Client.Add(path2);
@@ -242,8 +270,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_NonRecursiveDirDelete()
         {
-            string dir = GetTempDir();
-            Client.CheckOut(GetReposUri(TestReposType.Empty), dir);
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            string dir = sbox.GetTempDir();
+            Client.CheckOut(sbox.CreateRepository(SandBoxRepository.Empty), dir);
 
             string name = Path.Combine(dir, "sd");
 
@@ -259,13 +289,13 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_WithAlternateUser()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
             string user = Guid.NewGuid().ToString();
 
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
             using (SvnClient client = new SvnClient())
             {
-                client.CheckOut(GetReposUri(TestReposType.Empty), dir);
-
                 client.Authentication.Clear();
                 client.Configuration.LogMessageRequired = false;
 
@@ -293,8 +323,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Commit_NonRecursiveDepthEmpty()
         {
-            string dir = GetTempDir();
-            Client.CheckOut(GetReposUri(TestReposType.Empty), dir);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string dir = sbox.Wc;
 
             string name = Path.Combine(dir, "sd");
             string f = Path.Combine(name, "f");

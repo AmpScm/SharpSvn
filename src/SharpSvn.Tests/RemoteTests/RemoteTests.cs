@@ -67,7 +67,8 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_ListLocks()
         {
-            Uri tmpRepos = GetReposUri(TestReposType.GreekRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri tmpRepos = sbox.CreateRepository(SandBoxRepository.Greek);
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
                 rs.Open(tmpRepos);
@@ -167,7 +168,8 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_Lock()
         {
-            Uri reposUri = GetReposUri(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
             Uri toLock = new Uri(reposUri, "trunk/index.html");
             Client.RemoteLock(toLock, "");
 
@@ -210,10 +212,12 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_LocationSegments()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+
             SvnRemoteSession rs;
             using (SvnRemoteSession rc = new SvnRemoteSession())
             {
-                Uri root = GetReposUri(TestReposType.CollabRepos);
+                Uri root = sbox.CreateRepository(SandBoxRepository.MergeScenario);
                 rc.Open(root);
                 int n = 0;
                 rc.LocationSegments("branches/b/about/index.html",

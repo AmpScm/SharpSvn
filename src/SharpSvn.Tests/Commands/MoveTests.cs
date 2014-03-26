@@ -43,8 +43,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Move_MoveWCFile()
         {
-            string srcPath = Path.Combine(this.WcPath, "Form.cs");
-            string dstPath = Path.Combine(this.WcPath, "renamedForm.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string srcPath = Path.Combine(WcPath, "Form.cs");
+            string dstPath = Path.Combine(WcPath, "renamedForm.cs");
 
             Assert.That(Client.Move(srcPath, dstPath));
 
@@ -59,8 +63,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Move_MoveWCDir()
         {
-            string srcPath = Path.Combine(this.WcPath, @"bin\Debug");
-            string dstPath = Path.Combine(this.WcPath, @"renamedDebug");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string srcPath = Path.Combine(WcPath, @"bin\Debug");
+            string dstPath = Path.Combine(WcPath, @"renamedDebug");
 
             Assert.That(Client.Move(srcPath, dstPath));
 
@@ -74,8 +82,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Move_MoveReposFile()
         {
-            Uri srcPath = new Uri(this.ReposUrl, "Form.cs");
-            Uri dstPath = new Uri(this.ReposUrl, "renamedForm");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = new Uri(sbox.CreateRepository(SandBoxRepository.AnkhSvnCases), "trunk/");
+            Uri srcPath = new Uri(ReposUrl, "Form.cs");
+            Uri dstPath = new Uri(ReposUrl, "renamedForm");
 
             SvnCommitResult ci;
 
@@ -83,7 +93,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(ci, Is.Not.Null);
 
-            String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
+            String cmd = this.RunCommand("svn", "list " + ReposUrl);
             Assert.That(cmd.IndexOf("Form.cs") == -1, "File wasn't moved");
             Assert.That(cmd.IndexOf("renamedForm") >= 0, "Moved file doens't exist");
         }
@@ -106,7 +116,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Move_BasicMove()
         {
-            string TestPath = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+            Uri ReposUrl = sbox.RepositoryUri;
+
+            string TestPath = sbox.GetTempDir();
 
             using (SvnClient client = NewSvnClient(true, false))
             {
@@ -140,6 +155,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Move_MoveAndEdit()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             using (SvnClient client = NewSvnClient(true, false))
             {
                 string file = Path.Combine(WcPath, "LMB");
@@ -160,6 +179,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Move_MultiMove()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             using (SvnClient client = NewSvnClient(true, false))
             {
                 string ren1 = Path.Combine(WcPath, "ren-1");

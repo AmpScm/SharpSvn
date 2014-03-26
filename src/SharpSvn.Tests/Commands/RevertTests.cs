@@ -44,7 +44,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Revert_RevertFile()
         {
-            string filePath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filePath = Path.Combine(WcPath, "Form.cs");
 
             string oldContents;
             string newContents;
@@ -61,10 +65,14 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Revert_RevertDirectory()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
             string oldContents;
             string newContents;
-            this.ModifyFile(out oldContents, out newContents, Path.Combine(this.WcPath, "Form.cs"),
-                this.WcPath, SvnDepth.Infinity);
+            this.ModifyFile(out oldContents, out newContents, Path.Combine(WcPath, "Form.cs"),
+                WcPath, SvnDepth.Infinity);
 
             Assert.That(newContents, Is.EqualTo(oldContents), "File not reverted");
 

@@ -66,7 +66,8 @@ namespace SharpSvn.Tests
         [TestMethod]
         public void IsBelowAdmin()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            string dir = sbox.GetTempDir();
 
             Assert.That(!SvnTools.IsBelowManagedPath(dir), "Temp is not managed");
 

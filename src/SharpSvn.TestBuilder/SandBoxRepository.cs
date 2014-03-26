@@ -12,5 +12,6 @@ namespace SharpSvn.TestBuilder
         Greek,
         MergeScenario,
         AnkhSvnCases,
+        EmptyNoMerge,
     }
 }

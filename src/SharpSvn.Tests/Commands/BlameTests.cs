@@ -47,7 +47,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Blame_BlameBasic()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
             string blame = this.RunCommand("svn", "blame -v " + path);
             Blame[] cmdline = this.ParseCommandLineBlame(blame);
 
@@ -64,7 +68,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Blame_WithEmptyEntries()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
 
             SvnBlameArgs a = new SvnBlameArgs();
             a.Start = SvnRevision.Head;

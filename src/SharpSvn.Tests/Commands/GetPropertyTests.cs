@@ -35,61 +35,65 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestPropGetOnFile()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
-        TouchFile(path);
-        Client.Add(path);
-        Client.SetProperty(path, "foo", "bar");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
 
-                    string value;
-                    Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out value));
+            string path = Path.Combine(WcPath, "Form.cs");
+            TouchFile(path);
+            Client.Add(path);
+            Client.SetProperty(path, "foo", "bar");
 
-                    Assert.That(value, Is.EqualTo("bar"));
+            string value;
+            Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out value));
 
-                    SvnPropertyValue pval;
+            Assert.That(value, Is.EqualTo("bar"));
 
-                    Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out pval));
+            SvnPropertyValue pval;
 
-                    Assert.That(pval.StringValue, Is.EqualTo("bar"));
-                    Assert.That(pval.Key, Is.EqualTo("foo"));
-                    Assert.That(pval.Target.TargetName, Is.EqualTo(path));
+            Assert.That(Client.GetProperty(new SvnPathTarget(path), "foo", out pval));
+
+            Assert.That(pval.StringValue, Is.EqualTo("bar"));
+            Assert.That(pval.Key, Is.EqualTo("foo"));
+            Assert.That(pval.Target.TargetName, Is.EqualTo(path));
         }
 
-    [TestMethod]
-    public void GetPropertyValues()
-    {
-        SvnSandBox sbox = new SvnSandBox(this);
-        Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
-
-        Uri trunk = new Uri(CollabReposUri, "trunk");
-        string dir = GetTempDir();
-        Client.CheckOut(trunk, dir);
-
-        SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
-        pa.Depth = SvnDepth.Infinity;
-        SvnTargetPropertyCollection pc;
-        Client.GetProperty(trunk, SvnPropertyNames.SvnEolStyle, pa, out pc);
-
-        foreach (SvnPropertyValue pv in pc)
+        [TestMethod]
+        public void GetPropertyValues()
         {
-        SvnUriTarget ut = pv.Target as SvnUriTarget;
-        Assert.That(ut, Is.Not.Null);
-        Uri relative = trunk.MakeRelativeUri(ut.Uri);
-        Assert.That(!relative.ToString().StartsWith("/"));
-        Assert.That(!relative.ToString().StartsWith("../"));
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            Uri trunk = new Uri(CollabReposUri, "trunk");
+            string dir = sbox.GetTempDir();
+            Client.CheckOut(trunk, dir);
+
+            SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
+            pa.Depth = SvnDepth.Infinity;
+            SvnTargetPropertyCollection pc;
+            Client.GetProperty(trunk, SvnPropertyNames.SvnEolStyle, pa, out pc);
+
+            foreach (SvnPropertyValue pv in pc)
+            {
+                SvnUriTarget ut = pv.Target as SvnUriTarget;
+                Assert.That(ut, Is.Not.Null);
+                Uri relative = trunk.MakeRelativeUri(ut.Uri);
+                Assert.That(!relative.ToString().StartsWith("/"));
+                Assert.That(!relative.ToString().StartsWith("../"));
+            }
+
+            Client.GetProperty(dir, SvnPropertyNames.SvnEolStyle, pa, out pc);
+
+            dir += "\\";
+            foreach (SvnPropertyValue pv in pc)
+            {
+                SvnPathTarget pt = pv.Target as SvnPathTarget;
+                Assert.That(pt, Is.Not.Null);
+                Assert.That(pt.TargetPath.StartsWith(dir));
+            }
+
+            Assert.That(pc[dir + "index.html"], Is.Not.Null, "Can get wcroot\\index.html?");
         }
-
-        Client.GetProperty(dir, SvnPropertyNames.SvnEolStyle, pa, out pc);
-
-        dir += "\\";
-        foreach (SvnPropertyValue pv in pc)
-        {
-        SvnPathTarget pt = pv.Target as SvnPathTarget;
-        Assert.That(pt, Is.Not.Null);
-        Assert.That(pt.TargetPath.StartsWith(dir));
-        }
-
-        Assert.That(pc[dir + "index.html"], Is.Not.Null, "Can get wcroot\\index.html?");
-    }
 
         [TestMethod]
         public void TestNonExistentPropertyExistingFile()
@@ -110,7 +114,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(value, Is.Null, "No value available");
         }
 
-    [TestMethod, ExpectedException(typeof(SvnUnversionedNodeException))]
+        [TestMethod, ExpectedException(typeof(SvnUnversionedNodeException))]
         public void TestNonExistentPropertyNonExistingFile()
         {
             SvnSandBox sbox = new SvnSandBox(this);
@@ -130,30 +134,30 @@ namespace SharpSvn.Tests.Commands
             Client.GetProperty("c:/{632382A5-F992-4ab8-8D37-47977B190819}/no-file.txt", "no-prop", out value);
         }
 
-    [TestMethod]
-    public void TestGetOnCwd()
-    {
-        SvnSandBox sbox = new SvnSandBox(this);
-        Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
-
-        string wc = sbox.Wc;
-        Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
-
-        string dir = Directory.GetCurrentDirectory();
-        Directory.SetCurrentDirectory(wc);
-        try
+        [TestMethod]
+        public void TestGetOnCwd()
         {
-        string v;
-        Assert.That(Client.TryGetProperty(".", SvnPropertyNames.SvnMergeInfo, out v));
-        Assert.That(v, Is.Not.Null);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-        Assert.That(Client.TryGetProperty(SvnTarget.FromString("."), SvnPropertyNames.SvnMergeInfo, out v));
-        Assert.That(v, Is.Not.Null);
+            string wc = sbox.Wc;
+            Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
+
+            string dir = Directory.GetCurrentDirectory();
+            Directory.SetCurrentDirectory(wc);
+            try
+            {
+                string v;
+                Assert.That(Client.TryGetProperty(".", SvnPropertyNames.SvnMergeInfo, out v));
+                Assert.That(v, Is.Not.Null);
+
+                Assert.That(Client.TryGetProperty(SvnTarget.FromString("."), SvnPropertyNames.SvnMergeInfo, out v));
+                Assert.That(v, Is.Not.Null);
+            }
+            finally
+            {
+                Directory.SetCurrentDirectory(wc);
+            }
         }
-        finally
-        {
-        Directory.SetCurrentDirectory(wc);
-        }
-    }
     }
 }

@@ -107,7 +107,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestEntry()
         {
-            string form = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string form = Path.Combine(WcPath, "Form.cs");
             this.RunCommand("svn", "lock " + form);
 
             string output = this.RunCommand("svn", "info " + form);
@@ -126,6 +130,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CheckRemoteStatus()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            string WcPath = sbox.Wc;
+
             string dir = WcPath;
 
             SvnStatusArgs sa = new SvnStatusArgs();
@@ -138,6 +146,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CheckLocalRemoteStatus()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            string WcPath = sbox.Wc;
+
             string dir = WcPath;
 
             SvnStatusArgs sa = new SvnStatusArgs();
@@ -200,13 +212,17 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestSingleStatus()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
             string unversioned = CreateTextFile(WcPath, "unversioned.cs");
             string added = CreateTextFile(WcPath, "added.cs");
             Client.Add(added);
 
             string changed = CreateTextFile(WcPath, "Form.cs");
 
-            string propChange = Path.Combine(this.WcPath, "App.ico");
+            string propChange = Path.Combine(WcPath, "App.ico");
 
             SvnStatusEventArgs status = SingleStatus(Client, unversioned);
             Assert.That(status.LocalContentStatus, Is.EqualTo(SvnStatus.NotVersioned),
@@ -230,7 +246,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestSingleStatusNonExistentPath()
         {
-            string doesntExist = Path.Combine(this.WcPath, "doesnt.exist");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
+            string doesntExist = Path.Combine(WcPath, "doesnt.exist");
             SvnStatusEventArgs status = SingleStatus(Client, doesntExist);
             Assert.That(status, Is.Null);
         }
@@ -248,12 +268,16 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestSingleStatusNodeKind()
         {
-            string file = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string file = Path.Combine(WcPath, "Form.cs");
             Assert.That(SingleStatus(Client, file).NodeKind, Is.EqualTo(SvnNodeKind.File));
             Assert.That(Path.GetFileName(SingleStatus(Client, file).Path), Is.EqualTo("Form.cs"));
 
-            SvnStatusEventArgs dir = SingleStatus(Client, this.WcPath);
-            Assert.That(SingleStatus(Client, this.WcPath).NodeKind, Is.EqualTo(SvnNodeKind.Directory));
+            SvnStatusEventArgs dir = SingleStatus(Client, WcPath);
+            Assert.That(SingleStatus(Client, WcPath).NodeKind, Is.EqualTo(SvnNodeKind.Directory));
         }
 
 
@@ -261,7 +285,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void LockSingleStatusIsNullForUnlocked()
         {
-            string form = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string form = Path.Combine(WcPath, "Form.cs");
             SvnStatusEventArgs status1 = SingleStatus(Client, form);
             Assert.IsNull(status1.LocalLock);
         }
@@ -269,7 +297,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void LocalLockSingleStatus()
         {
-            string form = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string form = Path.Combine(WcPath, "Form.cs");
             this.RunCommand("svn", "lock -m test " + form);
 
             SvnStatusEventArgs s = SingleStatus(Client, form);
@@ -282,7 +314,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void LocalLockStatus()
         {
-            string form = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string form = Path.Combine(WcPath, "Form.cs");
             this.RunCommand("svn", "lock -m test " + form);
 
             SvnStatusArgs sa = new SvnStatusArgs();
@@ -300,6 +336,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void WcStatusTest()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             using (SvnClient client = NewSvnClient(false, false))
             {
                 string file = Path.Combine(WcPath, "WcStatusTest");
@@ -318,6 +358,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod, Obsolete]
         public void MoreStatusTestsObsolete()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases, false);
+            string WcPath = sbox.Wc;
+            Uri ReposUrl = sbox.RepositoryUri;
+
             using (SvnClient client = NewSvnClient(true, false))
             {
                 client.Update(WcPath);
@@ -610,6 +655,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void MoreStatusTests()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty, false);
+            string WcPath = sbox.Wc;
+            Uri ReposUrl = sbox.RepositoryUri;
+
             using (SvnClient client = NewSvnClient(true, false))
             {
                 client.Update(WcPath);
@@ -906,13 +956,16 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void StatusDelayTest()
         {
-            string tmp1Dir = GetTempDir();
-            string tmp2Dir = GetTempDir();
-            string tmp3Dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            string tmp1Dir = sbox.GetTempDir();
+            string tmp2Dir = sbox.GetTempDir();
+            string tmp3Dir = sbox.GetTempDir();
 
-            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp1Dir);
-            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp2Dir);
-            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp3Dir);
+            Uri emptyUri = sbox.CreateRepository(SandBoxRepository.Empty);
+
+            Client.CheckOut(emptyUri, tmp1Dir);
+            Client.CheckOut(emptyUri, tmp2Dir);
+            Client.CheckOut(emptyUri, tmp3Dir);
 
             StringBuilder lotOfData = new StringBuilder();
             lotOfData.Append('Y', 1024 * 1024);
@@ -995,9 +1048,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CheckOverrideWorking()
         {
-            string tmp2Dir = GetTempDir();
-
-            Client.CheckOut(GetReposUri(TestReposType.Empty), tmp2Dir);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string tmp2Dir = sbox.Wc;
 
             StringBuilder lotOfData = new StringBuilder();
             lotOfData.Append('Y', 1024 * 1024);
@@ -1038,7 +1091,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RepositoryLockStatus()
         {
-            string form = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string form = Path.Combine(WcPath, "Form.cs");
             Client.Lock(form, "test");
 
             SvnStatusArgs sa = new SvnStatusArgs() { RetrieveRemoteStatus = true };
@@ -1056,8 +1113,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestStatusResult()
         {
-            Uri repos = GetReposUri(TestReposType.Empty);
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri repos = sbox.CreateRepository(SandBoxRepository.Empty);
+            string dir = sbox.GetTempDir();
 
             SvnStatusArgs sa = new SvnStatusArgs { Depth = SvnDepth.Children, ThrowOnError = false };
 

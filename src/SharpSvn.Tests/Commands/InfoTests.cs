@@ -37,7 +37,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
             Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
             SvnUpdateResult r;
 
             Client.CheckOut(CollabReposUri, dir, out r);
@@ -109,218 +109,222 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-    [TestMethod]
-    public void TestSpace()
-    {
-        using(SvnClient client = new SvnClient())
+        [TestMethod]
+        public void TestSpace()
         {
-        Uri uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt#aaa");
-
-        string s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
-        Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
-
-        SvnUriTarget ut = new SvnUriTarget(uri);
-
-        Assert.That(ut.TargetName, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
-
-        uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder with spaces/test.txt#aaa");
-
-        s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
-        Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
-
-        /*SvnInfoEventArgs ie;
-        client.GetInfo(new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"), out ie);
-
-        Assert.That(ie, Is.Not.Null);*/
-        }
-    }
-
-    public void TestDash()
-    {
-        using (SvnClient client = new SvnClient())
-        {
-        Uri uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test%23.txt");
-
-        string txt = "file/a/%23ABC";
-
-        Assert.That(Uri.UnescapeDataString(txt), Is.EqualTo("file/a/#ABC"));
-
-        SvnInfoEventArgs ie;
-        client.GetInfo(uri, out ie);
-
-        Assert.That(ie, Is.Not.Null);
-        }
-    }
-
-    [TestMethod]
-    public void WcDirMissing()
-    {
-        SvnSandBox sbox = new SvnSandBox(this);
-        Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
-        string dir = sbox.Wc;
-        SvnUpdateResult r;
-
-        Assert.That(Client.CheckOut(CollabReposUri, dir, out r));
-
-        Directory.Move(Path.Combine(dir, "trunk"), Path.Combine(dir, "banaan"));
-
-        SvnInfoEventArgs iaParent;
-        SvnInfoEventArgs iaTrunk;
-
-        Client.GetInfo(dir, out iaParent);
-        Client.GetInfo(Path.Combine(dir, "trunk"), out iaTrunk);
-
-        Assert.That(iaParent.FullPath, Is.EqualTo(dir));
-        Assert.That(iaTrunk.FullPath, Is.Not.EqualTo(dir));
-        //Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
-
-        SvnWorkingCopyVersion ver;
-        SvnWorkingCopyClient wcC = new SvnWorkingCopyClient();
-
-        Assert.That(wcC.GetVersion(dir, out ver));
-        Assert.That(ver, Is.Not.Null);
-
-        Assert.That(ver.Modified, Is.True);
-        Assert.That(ver.Switched, Is.False);
-        Assert.That(ver.Start, Is.EqualTo(17));
-        Assert.That(ver.End, Is.EqualTo(17));
-        Assert.That(ver.IncompleteWorkingCopy, Is.False);
-    }
-
-    [TestMethod]
-    public void TestInfo()
-    {
-        Uri reposUri = GetReposUri(TestReposType.Empty);
-        Uri WcUri = reposUri;
-        string wc = GetTempDir();
-        using (SvnClient client = NewSvnClient(true, false))
-        {
-        client.CheckOut(reposUri, wc);
-
-        string file = Path.Combine(wc, "InfoFile");
-        TouchFile(file);
-        client.Add(file);
-
-        bool visited = false;
-        client.Info(file, delegate(object sender, SvnInfoEventArgs e)
-        {
-            Assert.That(e.ChangeList, Is.Null);
-            Assert.That(e.Checksum, Is.Null);
-            Assert.That(e.ConflictNew, Is.Null);
-            Assert.That(e.ConflictOld, Is.Null);
-            Assert.That(e.ConflictWork, Is.Null);
-            Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
-            Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
-            Assert.That(e.CopyFromUri, Is.Null);
-            Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
-            Assert.That(e.FullPath, Is.EqualTo(file));
-            Assert.That(e.HasLocalInfo, Is.True);
-            Assert.That(e.LastChangeAuthor, Is.Null);
-            Assert.That(e.LastChangeTime, Is.EqualTo(DateTime.MinValue));
-            Assert.That(e.LastChangeRevision, Is.EqualTo(-1L), "Not committed yet; LastChangeRevision = -1"); // Not committed yet
-            Assert.That(e.Lock, Is.Null);
-            Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
-            Assert.That(e.Path, Is.Not.Null);
-            Assert.That(e.PropertyEditFile, Is.Null);
-            //Assert.That(e.PropertyTime, Is.EqualTo(DateTime.MinValue));
-            Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
-            Assert.That(e.RepositorySize, Is.EqualTo(-1L));
-            Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri), "Repository valid");
-            Assert.That(e.Revision, Is.LessThanOrEqualTo(0L), "Not committed yet");
-            Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Add));
-            Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
-            Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
-            visited = true;
-        });
-        Assert.That(visited);
-
-        SvnCommitResult commitData;
-        client.Commit(wc, out commitData);
-        visited = false;
-        client.Info(file, delegate(object sender, SvnInfoEventArgs e)
+            using (SvnClient client = new SvnClient())
             {
-            Assert.That(e.ChangeList, Is.Null);
-            Assert.That(e.Checksum, Is.EqualTo("da39a3ee5e6b4b0d3255bfef95601890afd80709"));
-            Assert.That(e.ConflictNew, Is.Null);
-            Assert.That(e.ConflictOld, Is.Null);
-            Assert.That(e.ConflictWork, Is.Null);
-            Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-            Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
-            Assert.That(e.CopyFromUri, Is.Null);
-            Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
-            Assert.That(e.FullPath, Is.EqualTo(file));
-            Assert.That(e.HasLocalInfo, Is.True);
-            Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-            Assert.That(e.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-            Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
-            Assert.That(e.Lock, Is.Null);
-            Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
-            Assert.That(e.Path, Is.Not.Null);
-            Assert.That(e.PropertyEditFile, Is.Null);
-            //Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime)); // Not static, might change
-            Assert.That(e.RepositorySize, Is.EqualTo(-1L));
-            Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
-            Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-            Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Normal));
-            Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
-            Assert.That(e.WorkingCopySize, Is.EqualTo(0L));
-            visited = true;
-            });
-        Assert.That(visited);
+                Uri uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt#aaa");
 
-        visited = false;
-        client.Info(new Uri(WcUri, "InfoFile"), delegate(object sender, SvnInfoEventArgs e)
-        {
-            Assert.That(e.ChangeList, Is.Null);
-            Assert.That(e.Checksum, Is.Null);
-            Assert.That(e.ConflictNew, Is.Null);
-            Assert.That(e.ConflictOld, Is.Null);
-            Assert.That(e.ConflictWork, Is.Null);
-            Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
-            Assert.That(e.CopyFromRevision, Is.LessThanOrEqualTo(0L));
-            Assert.That(e.CopyFromUri, Is.Null);
-            Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
-            Assert.That(e.FullPath, Is.Null);
-            Assert.That(e.HasLocalInfo, Is.False);
-            Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
-            Assert.That(e.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
-            Assert.That(e.LastChangeTime, Is.LessThan(DateTime.UtcNow + new TimeSpan(0, 5, 0)));
-            Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
-            Assert.That(e.Lock, Is.Null);
-            Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
-            Assert.That(e.Path, Is.Not.Null);
-            Assert.That(e.PropertyEditFile, Is.Null);
-            //Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime));
-            Assert.That(e.RepositorySize, Is.EqualTo(0L));
-            Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
-            Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
-            Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Normal));
-            Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
-            Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
-            visited = true;
-        });
-        Assert.That(visited);
+                string s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
+                Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
+
+                SvnUriTarget ut = new SvnUriTarget(uri);
+
+                Assert.That(ut.TargetName, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
+
+                uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder with spaces/test.txt#aaa");
+
+                s = uri.GetComponents(UriComponents.SchemeAndServer | UriComponents.UserInfo | UriComponents.Path, UriFormat.UriEscaped);
+                Assert.That(s, Is.EqualTo("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"));
+
+                /*SvnInfoEventArgs ie;
+                client.GetInfo(new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test.txt"), out ie);
+
+                Assert.That(ie, Is.Not.Null);*/
+            }
         }
-    }
 
-    [TestMethod]
-    public void InfoTest2()
-    {
-        using (SvnClient client = NewSvnClient(false, false))
+        public void TestDash()
         {
-        Collection<SvnInfoEventArgs> items;
-        client.GetInfo(ReposUrl, new SvnInfoArgs(), out items);
+            using (SvnClient client = new SvnClient())
+            {
+                Uri uri = new Uri("http://sharpsvn.googlecode.com/svn/trunk/tests/folder%20with%20spaces/test%23.txt");
 
-        Assert.That(items, Is.Not.Null, "Items retrieved");
-        Assert.That(items.Count, Is.EqualTo(1), "1 info item");
+                string txt = "file/a/%23ABC";
 
-        string fileName = SvnTools.GetFileName(ReposUrl);
+                Assert.That(Uri.UnescapeDataString(txt), Is.EqualTo("file/a/#ABC"));
 
-        SvnInfoEventArgs info = items[0];
-        Assert.That(info.Uri.AbsoluteUri, Is.EqualTo(ReposUrl.AbsoluteUri), "Repository uri matches");
-        Assert.That(info.HasLocalInfo, Is.False, "No WC info");
-        Assert.That(info.Path, Is.EqualTo(Path.GetFileName(ReposPath)), "Path is end of folder name");
+                SvnInfoEventArgs ie;
+                client.GetInfo(uri, out ie);
+
+                Assert.That(ie, Is.Not.Null);
+            }
         }
-    }
+
+        [TestMethod]
+        public void WcDirMissing()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+            string dir = sbox.Wc;
+            SvnUpdateResult r;
+
+            Assert.That(Client.CheckOut(CollabReposUri, dir, out r));
+
+            Directory.Move(Path.Combine(dir, "trunk"), Path.Combine(dir, "banaan"));
+
+            SvnInfoEventArgs iaParent;
+            SvnInfoEventArgs iaTrunk;
+
+            Client.GetInfo(dir, out iaParent);
+            Client.GetInfo(Path.Combine(dir, "trunk"), out iaTrunk);
+
+            Assert.That(iaParent.FullPath, Is.EqualTo(dir));
+            Assert.That(iaTrunk.FullPath, Is.Not.EqualTo(dir));
+            //Assert.That(iaParent.Uri, Is.EqualTo(iaTrunk.Uri));
+
+            SvnWorkingCopyVersion ver;
+            SvnWorkingCopyClient wcC = new SvnWorkingCopyClient();
+
+            Assert.That(wcC.GetVersion(dir, out ver));
+            Assert.That(ver, Is.Not.Null);
+
+            Assert.That(ver.Modified, Is.True);
+            Assert.That(ver.Switched, Is.False);
+            Assert.That(ver.Start, Is.EqualTo(17));
+            Assert.That(ver.End, Is.EqualTo(17));
+            Assert.That(ver.IncompleteWorkingCopy, Is.False);
+        }
+
+        [TestMethod]
+        public void TestInfo()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.Empty);
+            Uri WcUri = reposUri;
+            string wc = sbox.Wc;
+            using (SvnClient client = NewSvnClient(true, false))
+            {
+                client.CheckOut(reposUri, wc);
+
+                string file = Path.Combine(wc, "InfoFile");
+                TouchFile(file);
+                client.Add(file);
+
+                bool visited = false;
+                client.Info(file, delegate(object sender, SvnInfoEventArgs e)
+                {
+                    Assert.That(e.ChangeList, Is.Null);
+                    Assert.That(e.Checksum, Is.Null);
+                    Assert.That(e.ConflictNew, Is.Null);
+                    Assert.That(e.ConflictOld, Is.Null);
+                    Assert.That(e.ConflictWork, Is.Null);
+                    Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
+                    Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
+                    Assert.That(e.CopyFromUri, Is.Null);
+                    Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
+                    Assert.That(e.FullPath, Is.EqualTo(file));
+                    Assert.That(e.HasLocalInfo, Is.True);
+                    Assert.That(e.LastChangeAuthor, Is.Null);
+                    Assert.That(e.LastChangeTime, Is.EqualTo(DateTime.MinValue));
+                    Assert.That(e.LastChangeRevision, Is.EqualTo(-1L), "Not committed yet; LastChangeRevision = -1"); // Not committed yet
+                    Assert.That(e.Lock, Is.Null);
+                    Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
+                    Assert.That(e.Path, Is.Not.Null);
+                    Assert.That(e.PropertyEditFile, Is.Null);
+                    //Assert.That(e.PropertyTime, Is.EqualTo(DateTime.MinValue));
+                    Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
+                    Assert.That(e.RepositorySize, Is.EqualTo(-1L));
+                    Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri), "Repository valid");
+                    Assert.That(e.Revision, Is.LessThanOrEqualTo(0L), "Not committed yet");
+                    Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Add));
+                    Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
+                    Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
+                    visited = true;
+                });
+                Assert.That(visited);
+
+                SvnCommitResult commitData;
+                client.Commit(wc, out commitData);
+                visited = false;
+                client.Info(file, delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        Assert.That(e.ChangeList, Is.Null);
+                        Assert.That(e.Checksum, Is.EqualTo("da39a3ee5e6b4b0d3255bfef95601890afd80709"));
+                        Assert.That(e.ConflictNew, Is.Null);
+                        Assert.That(e.ConflictOld, Is.Null);
+                        Assert.That(e.ConflictWork, Is.Null);
+                        Assert.That(e.ContentTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+                        Assert.That(e.CopyFromRevision, Is.EqualTo(-1L));
+                        Assert.That(e.CopyFromUri, Is.Null);
+                        Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
+                        Assert.That(e.FullPath, Is.EqualTo(file));
+                        Assert.That(e.HasLocalInfo, Is.True);
+                        Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
+                        Assert.That(e.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+                        Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
+                        Assert.That(e.Lock, Is.Null);
+                        Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
+                        Assert.That(e.Path, Is.Not.Null);
+                        Assert.That(e.PropertyEditFile, Is.Null);
+                        //Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime)); // Not static, might change
+                        Assert.That(e.RepositorySize, Is.EqualTo(-1L));
+                        Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
+                        Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
+                        Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Normal));
+                        Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
+                        Assert.That(e.WorkingCopySize, Is.EqualTo(0L));
+                        visited = true;
+                    });
+                Assert.That(visited);
+
+                visited = false;
+                client.Info(new Uri(WcUri, "InfoFile"), delegate(object sender, SvnInfoEventArgs e)
+                {
+                    Assert.That(e.ChangeList, Is.Null);
+                    Assert.That(e.Checksum, Is.Null);
+                    Assert.That(e.ConflictNew, Is.Null);
+                    Assert.That(e.ConflictOld, Is.Null);
+                    Assert.That(e.ConflictWork, Is.Null);
+                    Assert.That(e.ContentTime, Is.EqualTo(DateTime.MinValue));
+                    Assert.That(e.CopyFromRevision, Is.LessThanOrEqualTo(0L));
+                    Assert.That(e.CopyFromUri, Is.Null);
+                    Assert.That(e.Depth, Is.EqualTo(SvnDepth.Unknown));
+                    Assert.That(e.FullPath, Is.Null);
+                    Assert.That(e.HasLocalInfo, Is.False);
+                    Assert.That(e.LastChangeAuthor, Is.EqualTo(Environment.UserName));
+                    Assert.That(e.LastChangeTime, Is.GreaterThan(DateTime.UtcNow - new TimeSpan(0, 5, 0)));
+                    Assert.That(e.LastChangeTime, Is.LessThan(DateTime.UtcNow + new TimeSpan(0, 5, 0)));
+                    Assert.That(e.LastChangeRevision, Is.EqualTo(commitData.Revision));
+                    Assert.That(e.Lock, Is.Null);
+                    Assert.That(e.NodeKind, Is.EqualTo(SvnNodeKind.File));
+                    Assert.That(e.Path, Is.Not.Null);
+                    Assert.That(e.PropertyEditFile, Is.Null);
+                    //Assert.That(e.PropertyTime, Is.EqualTo(e.ContentTime));
+                    Assert.That(e.RepositorySize, Is.EqualTo(0L));
+                    Assert.That(e.RepositoryRoot, Is.EqualTo(reposUri));
+                    Assert.That(e.Revision, Is.EqualTo(commitData.Revision));
+                    Assert.That(e.Schedule, Is.EqualTo(SvnSchedule.Normal));
+                    Assert.That(e.Uri, Is.EqualTo(new Uri(WcUri, "InfoFile")));
+                    Assert.That(e.WorkingCopySize, Is.EqualTo(-1L));
+                    visited = true;
+                });
+                Assert.That(visited);
+            }
+        }
+
+        [TestMethod]
+        public void InfoTest2()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Default);
+
+            using (SvnClient client = NewSvnClient(false, false))
+            {
+                Collection<SvnInfoEventArgs> items;
+                client.GetInfo(ReposUrl, new SvnInfoArgs(), out items);
+
+                Assert.That(items, Is.Not.Null, "Items retrieved");
+                Assert.That(items.Count, Is.EqualTo(1), "1 info item");
+
+                string fileName = SvnTools.GetFileName(ReposUrl);
+
+                SvnInfoEventArgs info = items[0];
+                Assert.That(info.Uri.AbsoluteUri, Is.EqualTo(ReposUrl.AbsoluteUri), "Repository uri matches");
+                Assert.That(info.HasLocalInfo, Is.False, "No WC info");
+                Assert.That(info.Path, Is.EqualTo(Path.GetFileName(ReposUrl.LocalPath.TrimEnd('\\'))), "Path is end of folder name");
+            }
+        }
     }
 }

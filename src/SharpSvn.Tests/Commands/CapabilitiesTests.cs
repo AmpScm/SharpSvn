@@ -31,6 +31,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Capabilities_Local()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri emptyUri = sbox.CreateRepository(SandBoxRepository.Empty);
+            Uri emptyNoMergeUri = sbox.CreateRepository(SandBoxRepository.EmptyNoMerge);
+
+
             using (SvnClient client = new SvnClient())
             {
                 Collection<SvnCapability> caps;
@@ -38,19 +43,19 @@ namespace SharpSvn.Tests.Commands
                 aa.RetrieveAllCapabilities = true;
 
                 IEnumerable<SvnCapability> rCaps = new SvnCapability[] { SvnCapability.MergeInfo };
-                Assert.That(client.GetCapabilities(GetReposUri(TestReposType.Empty), rCaps, out caps));
+                Assert.That(client.GetCapabilities(emptyUri, rCaps, out caps));
 
                 Assert.That(caps.Contains(SvnCapability.MergeInfo));
 
-                Assert.That(client.GetCapabilities(GetReposUri(TestReposType.EmptyNoMerge), rCaps, out caps));
+                Assert.That(client.GetCapabilities(emptyNoMergeUri, rCaps, out caps));
 
                 Assert.That(!caps.Contains(SvnCapability.MergeInfo));
                 Assert.That(caps.Count, Is.EqualTo(0));
                 
-                Assert.That(client.GetCapabilities(GetReposUri(TestReposType.EmptyNoMerge), aa, out caps));
+                Assert.That(client.GetCapabilities(emptyNoMergeUri, aa, out caps));
                 Assert.That(caps.Count, Is.GreaterThanOrEqualTo(5));
 
-                Assert.That(client.GetCapabilities(GetReposUri(TestReposType.Empty), aa, out caps));
+                Assert.That(client.GetCapabilities(emptyUri, aa, out caps));
                 Assert.That(caps.Count, Is.GreaterThanOrEqualTo(6));
             }
         }

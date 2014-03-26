@@ -33,7 +33,8 @@ namespace SharpSvn.Tests
         [TestMethod]
         public void CreateBdbRepos()
         {
-			string path = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            string path = sbox.GetTempDir();
 
             SvnRepositoryClient reposClient = new SvnRepositoryClient();
 
@@ -43,16 +44,16 @@ namespace SharpSvn.Tests
 
             Assert.That(File.Exists(Path.Combine(path, "db/DB_CONFIG")));
 
-			reposClient.HotCopy(path, GetTempDir());
+            reposClient.HotCopy(path, sbox.GetTempDir());
 
-			reposClient.SetRevisionProperty(path, 0, SvnPropertyNames.SvnLog, "Hahaha");
+            reposClient.SetRevisionProperty(path, 0, SvnPropertyNames.SvnLog, "Hahaha");
         }
 
-		[TestMethod]
-		public void TestAllProps()
-		{
-			Assert.That(SvnPropertyNames.AllSvnRevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
-			Assert.That(SvnPropertyNames.TortoiseSvnDirectoryProperties.Contains(SvnPropertyNames.TortoiseSvnLogMinSize));
-		}
+        [TestMethod]
+        public void TestAllProps()
+        {
+            Assert.That(SvnPropertyNames.AllSvnRevisionProperties.Contains(SvnPropertyNames.SvnAuthor));
+            Assert.That(SvnPropertyNames.TortoiseSvnDirectoryProperties.Contains(SvnPropertyNames.TortoiseSvnLogMinSize));
+        }
     }
 }

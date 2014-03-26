@@ -32,25 +32,9 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class UpdateTests : TestBase
     {
-        private string _wc;
-
         public UpdateTests()
         {
             UseEmptyRepositoryForWc = false;
-        }
-
-        [TestInitialize]
-        public void UpdateSetup()
-        {
-            _wc = GetTempDir();
-
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wc);
-            this.RenameAdminDirs(_wc);
-
-            RawRelocate(_wc, new Uri("file:///tmp/repos/"), ReposUrl);
-
-            SvnClient cl = new SvnClient(); // Fix working copy to real location
-            cl.Upgrade(_wc);
         }
 
         [TestMethod]
@@ -84,9 +68,13 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestDeletedFile()
         {
-            string filePath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filePath = Path.Combine(WcPath, "Form.cs");
             File.Delete(filePath);
-            this.Client.Update(this.WcPath);
+            this.Client.Update(WcPath);
 
             Assert.That(File.Exists(filePath), "File not restored after update");
         }
@@ -98,15 +86,19 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestChangedFile()
         {
-            using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            using (StreamWriter w = new StreamWriter(Path.Combine(WcPath, "Form.cs")))
                 w.Write("Moo");
             SvnCommitArgs ca = new SvnCommitArgs();
             ca.LogMessage = "";
-            Client.Commit(_wc, ca);
+            Client.Commit(WcPath, ca);
 
-            this.Client.Update(this.WcPath);
+            this.Client.Update(WcPath);
 
-            string s = File.ReadAllText(Path.Combine(this.WcPath, "Form.cs"));
+            string s = File.ReadAllText(Path.Combine(WcPath, "Form.cs"));
 
             Assert.That(s, Is.EqualTo("Moo"), "File not updated");
         }
@@ -136,6 +128,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestNotify()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
             int n = 0; ;
             SvnUpdateArgs ua = new SvnUpdateArgs();
             ua.Notify += delegate(object sender, SvnNotifyEventArgs e)
@@ -164,13 +160,17 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestUpdateMultipleFiles()
         {
-            using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "Form.cs")))
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            using (StreamWriter w = new StreamWriter(Path.Combine(WcPath, "Form.cs")))
                 w.Write("Moo");
-            using (StreamWriter w = new StreamWriter(Path.Combine(_wc, "AssemblyInfo.cs")))
+            using (StreamWriter w = new StreamWriter(Path.Combine(WcPath, "AssemblyInfo.cs")))
                 w.Write("Moo");
             SvnCommitArgs ca = new SvnCommitArgs();
             ca.LogMessage = "";
-            Client.Commit(_wc, ca);
+            Client.Commit(WcPath, ca);
 
             SvnUpdateArgs a = new SvnUpdateArgs();
             a.Depth = SvnDepth.Empty;
@@ -178,17 +178,17 @@ namespace SharpSvn.Tests.Commands
             SvnUpdateResult result;
 
             Assert.That(Client.Update(new string[]{
-                                                             Path.Combine( this.WcPath, "Form.cs" ),
-                                                             Path.Combine( this.WcPath, "AssemblyInfo.cs" )
+                                                             Path.Combine( WcPath, "Form.cs" ),
+                                                             Path.Combine( WcPath, "AssemblyInfo.cs" )
                                                          }, a, out result));
             Assert.That(result.ResultMap.Count, Is.EqualTo(2));
 
             string s;
-            using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "Form.cs")))
+            using (StreamReader r = new StreamReader(Path.Combine(WcPath, "Form.cs")))
                 s = r.ReadToEnd();
             Assert.That(s, Is.EqualTo("Moo"), "File not updated");
 
-            using (StreamReader r = new StreamReader(Path.Combine(this.WcPath, "AssemblyInfo.cs")))
+            using (StreamReader r = new StreamReader(Path.Combine(WcPath, "AssemblyInfo.cs")))
                 s = r.ReadToEnd();
             Assert.That(s, Is.EqualTo("Moo"), "File not updated");
         }
@@ -196,10 +196,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestDirObstruction()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            string dir = sbox.GetTempDir();
             string sd = Path.Combine(dir, "NewDir");
             SvnUpdateResult ur;
-            Client.CheckOut(GetReposUri(TestReposType.Empty), dir, out ur);
+            Client.CheckOut(sbox.CreateRepository(SandBoxRepository.Empty), dir, out ur);
 
             Client.CreateDirectory(sd);
             Client.Commit(dir);
@@ -245,16 +247,17 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestUpdateExternal()
         {
-            Uri root = GetReposUri(TestReposType.Empty);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri root = sbox.CreateRepository(SandBoxRepository.Empty);
             Uri trunk = new Uri(root, "trunk/");
             Uri alt = new Uri(root, "alt/");
             Client.RemoteCreateDirectory(trunk);
             Client.RemoteCreateDirectory(alt);
 
-            string dir = GetTempDir();
+            string dir = sbox.GetTempDir();
             Client.CheckOut(trunk, dir);
             Client.SetProperty(dir, SvnPropertyNames.SvnExternals,
-                                string.Format(  "alt1 {0}\r\n" +
+                                string.Format("alt1 {0}\r\n" +
                                 "alt2 {0}\n" +
                                 "alt3 {0}", alt));
 
@@ -272,7 +275,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(paths.Count, Is.EqualTo(3));
 
-            Assert.That(paths.ContainsKey(Path.Combine(dir,"alt2")));
+            Assert.That(paths.ContainsKey(Path.Combine(dir, "alt2")));
         }
 
         [TestMethod]
@@ -346,14 +349,14 @@ namespace SharpSvn.Tests.Commands
             Client.Update(Path.Combine(dir, "jobs\\index.html"), new SvnUpdateArgs { Depth = SvnDepth.Exclude, KeepDepth = true });
 
             Collection<SvnStatusEventArgs> list;
-            
+
             Client.GetStatus(dir, out list);
             Assert.That(list.Count, Is.EqualTo(0));
 
-            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus=true}, out list);
+            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus = true }, out list);
             Assert.That(list.Count, Is.EqualTo(0));
 
-            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus = true, KeepDepth=true }, out list);
+            Client.GetStatus(dir, new SvnStatusArgs { RetrieveRemoteStatus = true, KeepDepth = true }, out list);
             Assert.That(list.Count, Is.EqualTo(11));
 
             int nAdded = 0;

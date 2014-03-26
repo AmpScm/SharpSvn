@@ -38,8 +38,13 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RevProp_TestBasic()
         {
-            this.RunCommand("svn", "ps --revprop -r HEAD foo bar " + this.ReposUrl);
-            this.RunCommand("svn", "ps --revprop -r HEAD kung foo " + this.ReposUrl);
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
+            InstallRevpropHook(ReposUrl);
+
+            this.RunCommand("svn", "ps --revprop -r HEAD foo bar " + ReposUrl);
+            this.RunCommand("svn", "ps --revprop -r HEAD kung foo " + ReposUrl);
 
             SvnPropertyCollection spc;
             Assert.That(Client.GetRevisionPropertyList(ReposUrl, SvnRevision.Head, out spc));

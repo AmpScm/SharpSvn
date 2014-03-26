@@ -44,10 +44,6 @@ namespace SharpSvn.Tests.Commands
     /// </summary>
     public class TestBase : IHasTestContext
     {
-        SortedList<TestReposType, Uri> _reposs = new SortedList<TestReposType, Uri>();
-        Uri _reposUri;
-        string _reposPath;
-        string _wcPath;
         private SvnClient client;
 
         public TestBase()
@@ -56,59 +52,11 @@ namespace SharpSvn.Tests.Commands
             UseEmptyRepositoryForWc = true;
         }
 
-        protected string GetTempDir()
+        protected void InstallRevpropHook(Uri repositoryUrl)
         {
-            SvnSandBox sbox = new SvnSandBox(this);
+            string bat = Path.ChangeExtension(SvnHookArguments.GetHookFileName(repositoryUrl.LocalPath, SvnHookType.PreRevPropChange), ".bat");
 
-            return sbox.GetTempDir();
-        }
-
-        protected Uri CreateRepos(TestReposType type)
-        {
-            switch (type)
-            {
-                case TestReposType.Empty:
-                    SvnSandBox sbox = new SvnSandBox(this);
-                    return sbox.CreateRepository(SandBoxRepository.Empty);
-                case TestReposType.EmptyNoMerge:
-                    using (SvnRepositoryClient rc = new SvnRepositoryClient())
-                    {
-                        string path = GetTempDir();
-
-                        SvnCreateRepositoryArgs rca = new SvnCreateRepositoryArgs();
-                        rca.RepositoryCompatibility = SvnRepositoryCompatibility.Subversion14;
-                        rc.CreateRepository(path, rca);
-
-                        return SvnTools.LocalPathToUri(path, true);
-                    }
-                case TestReposType.CollabRepos:
-                    sbox = new SvnSandBox(this);
-                    return sbox.CreateRepository(SandBoxRepository.MergeScenario);
-                case TestReposType.AnkhRepos:
-                    sbox = new SvnSandBox(this);
-                    return sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
-                case TestReposType.GreekRepos:
-                    sbox = new SvnSandBox(this);
-                    return sbox.CreateRepository(SandBoxRepository.Greek);
-                default:
-                    throw new ArgumentException();
-            }
-        }
-
-        public Uri GetReposUri(TestReposType type)
-        {
-            Uri reposUri;
-            if (!_reposs.TryGetValue(type, out reposUri))
-            {
-                reposUri = CreateRepos(type);
-                _reposs[type] = reposUri;
-            }
-            return reposUri;
-        }
-
-        public string GetRepos(TestReposType type)
-        {
-            return GetReposUri(type).AbsolutePath;
+            File.WriteAllText(bat, "exit 0");
         }
 
         [TestInitialize]
@@ -117,11 +65,6 @@ namespace SharpSvn.Tests.Commands
             this.client = new SvnClient();
             client.Configuration.LogMessageRequired = false;
             client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
-
-            _reposPath = null;
-            _reposUri = null;
-            _wcPath = null;
-            _reposs.Clear();
         }
 
         protected SvnClient NewSvnClient(bool expectCommit, bool expectConflict)
@@ -167,36 +110,6 @@ namespace SharpSvn.Tests.Commands
                         e.FullPath, e.Path, Environment.CurrentDirectory, e.Action, e.CommandType);
                 }
             }
-        }
-
-        /// <summary>
-        /// extract our test repository
-        /// </summary>
-        void ExtractRepos()
-        {
-            if (_reposPath == null)
-                _reposPath = GetTempDir();
-
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
-
-            _reposUri = SvnTools.LocalPathToUri(_reposPath, true);
-        }
-
-        void ExtractWorkingCopy()
-        {
-            if (ReposUrl == null)
-                ExtractRepos();
-
-            System.Diagnostics.Debug.Assert(Directory.Exists(ReposPath));
-
-            this._wcPath = GetTempDir();
-
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wcPath);
-            RawRelocate(_wcPath, new Uri("file:///tmp/repos/"), ReposUrl);
-            this.RenameAdminDirs(_wcPath);
-
-            SvnClient cl = new SvnClient(); // Fix working copy to real location
-            cl.Upgrade(_wcPath);
         }
 
         protected static void RawRelocate(string wc, Uri from, Uri to)
@@ -303,62 +216,7 @@ namespace SharpSvn.Tests.Commands
 
 
 
-        /// <summary>
-        /// The fully qualified URI to the repository
-        /// </summary>
-        public Uri ReposUrl
-        {
-            get
-            {
-                if (_reposUri == null)
-                    ExtractRepos();
-
-                System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
-
-                return _reposUri;
-            }
-        }
-
-        /// <summary>
-        /// The path to the repository
-        /// </summary>
-        public string ReposPath
-        {
-            get
-            {
-                if (_reposPath == null)
-                    ExtractRepos();
-
-                System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
-
-                return _reposPath;
-            }
-        }
-
         public bool UseEmptyRepositoryForWc { get; set; }
-
-        /// <summary>
-        /// The path to the working copy
-        /// </summary>
-        [Obsolete("Please use an SandBox")]
-        public string WcPath
-        {
-            get
-            {
-                if (_wcPath == null)
-                {
-                    if (UseEmptyRepositoryForWc)
-                    {
-                        _wcPath = GetTempDir();
-                        Client.CheckOut(GetReposUri(TestReposType.Empty), _wcPath);
-                    }
-                    else
-                        ExtractWorkingCopy();
-                }
-
-                return _wcPath;
-            }
-        }
 
         /// <summary>
         /// The client object.

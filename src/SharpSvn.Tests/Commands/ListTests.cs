@@ -45,7 +45,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_TestList()
         {
-            string list = this.RunCommand("svn", "list -v " + this.ReposUrl);
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+            string list = this.RunCommand("svn", "list -v " + ReposUrl);
 
             // clean out whitespace
             string[] entries = Regex.Split(list, @"\r\n");
@@ -105,11 +108,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_TestListReflection()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
             Type svnClientType = Type.GetType("SharpSvn.SvnClient, SharpSvn");
             Type svnUriTarget = Type.GetType("SharpSvn.SvnUriTarget, SharpSvn");
 
             object client = Activator.CreateInstance(svnClientType);
-            object target = Activator.CreateInstance(svnUriTarget, GetReposUri(TestReposType.CollabRepos));
+            object target = Activator.CreateInstance(svnUriTarget, sbox.CreateRepository(SandBoxRepository.MergeScenario));
 
             object[] args = new object[] { target, null };
 
@@ -224,7 +228,7 @@ namespace SharpSvn.Tests.Commands
             Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
             Uri uri = CollabReposUri;
-            string tmp = GetTempDir();
+            string tmp = sbox.GetTempDir();
 
             Client.CheckOut(uri, tmp);
 
@@ -376,6 +380,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_RemoteListTest()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Greek);
+
             using (SvnClient client = NewSvnClient(false, false))
             {
                 Collection<SvnListEventArgs> items;
@@ -389,8 +396,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_TestLowerDrive()
         {
-            if (!GetTempDir().Contains(":"))
+            SvnSandBox sbox = new SvnSandBox(this);
+            string tmpDir = sbox.GetTempDir();
+            if (tmpDir.Contains(":"))
                 return; // Testing on UNC share
+
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Greek);
 
             using (SvnClient client = NewSvnClient(false, false))
             {

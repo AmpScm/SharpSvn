@@ -61,7 +61,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Export_ExportWc()
         {
-            string wc = Path.Combine(GetTempDir(), "wc");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+            string wc = Path.Combine(sbox.GetTempDir(), "wc");
 
             string formresx = Path.Combine(WcPath, "Form.resx");
             File.WriteAllText(formresx, "Replaced Data!");
@@ -79,7 +82,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Export_ExportNonRecursive()
         {
-            string wc = Path.Combine(GetTempDir(), "wc");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string wc = Path.Combine(sbox.GetTempDir(), "wc");
             SvnExportArgs a = new SvnExportArgs();
             a.Depth = SvnDepth.Empty;
             SvnUpdateResult r;
