@@ -24,6 +24,17 @@
     
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
+    
+    <foreach item="Folder" property="dir">
+      <in>
+        <items basedir=".">
+          <include name="Jenkins_*_*" />
+        </items>
+      </in>
+      <do>
+        <delete dir="${dir}" />
+      </do>
+    </foreach>
   </target>
   
   <target name="build" depends="prepare">
