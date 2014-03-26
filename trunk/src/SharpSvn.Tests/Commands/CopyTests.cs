@@ -43,8 +43,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Copy_WCWCFile()
         {
-            string srcPath = Path.Combine(this.WcPath, "Form.cs");
-            string dstPath = Path.Combine(this.WcPath, "renamedForm.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string srcPath = Path.Combine(WcPath, "Form.cs");
+            string dstPath = Path.Combine(WcPath, "renamedForm.cs");
 
             Assert.That(Client.Copy(new SvnPathTarget(srcPath, SvnRevision.Head), dstPath));
 
@@ -60,8 +64,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Copy_WCWCDir()
         {
-            string srcPath = Path.Combine(this.WcPath, @"bin\Debug");
-            string dstPath = Path.Combine(this.WcPath, @"copyDebug");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string srcPath = Path.Combine(WcPath, @"bin\Debug");
+            string dstPath = Path.Combine(WcPath, @"copyDebug");
 
             Assert.That(this.Client.Copy(new SvnPathTarget(srcPath), dstPath));
 
@@ -77,8 +85,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Copy_WCReposDir()
         {
-            string srcPath = Path.Combine(this.WcPath, @"bin\Debug");
-            Uri dstPath = new Uri(this.ReposUrl, "copyDebug/");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string srcPath = Path.Combine(WcPath, @"bin\Debug");
+            Uri dstPath = new Uri(sbox.RepositoryUri, "copyDebug/");
 
             SvnCommitResult ci;
 
@@ -86,7 +98,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(ci, Is.Not.Null);
 
-            String cmd = this.RunCommand("svn", "list " + this.ReposUrl.ToString());
+            String cmd = this.RunCommand("svn", "list " + sbox.RepositoryUri.AbsoluteUri);
             Assert.That(cmd.IndexOf("copyDebug") >= 0, "File wasn't copied");
         }
 
@@ -96,8 +108,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Copy_ReposWCFile()
         {
-            Uri srcUri = new Uri(this.ReposUrl, "Form.cs");
-            string dstPath = Path.Combine(this.WcPath, "copyForm");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases, false);
+            string WcPath = sbox.Wc;
+
+            Uri srcUri = new Uri(sbox.RepositoryUri, "trunk/Form.cs");
+            string dstPath = Path.Combine(WcPath, "copyForm");
 
             this.Client.Copy(new SvnUriTarget(srcUri), dstPath);
 
@@ -109,7 +125,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Copy_ReposToWcWithParents()
         {
-            Uri srcUri = new Uri(this.ReposUrl, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            Uri srcUri = new Uri(sbox.RepositoryUri, "trunk/Form.cs");
             SvnCopyArgs ca = new SvnCopyArgs();
             ca.CreateParents = true;
             Client.Copy(srcUri, Path.Combine(WcPath, "dir/sub/with/more/levels"), ca);
@@ -121,15 +141,18 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Copy_ReposReposFile()
         {
-            Uri srcUri = new Uri(this.ReposUrl, "Form.cs");
-            Uri dstUri = new Uri(this.ReposUrl, "copyForm");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = new Uri(sbox.CreateRepository(SandBoxRepository.AnkhSvnCases), "trunk/");
+
+            Uri srcUri = new Uri(ReposUrl, "Form.cs");
+            Uri dstUri = new Uri(ReposUrl, "copyForm");
 
             SvnCommitResult ci;
 
             Assert.That(Client.RemoteCopy(srcUri, dstUri, out ci));
             Assert.That(ci, Is.Not.Null);
 
-            String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
+            String cmd = this.RunCommand("svn", "list " + ReposUrl);
             Assert.That(cmd.IndexOf("Form.cs") >= 0, "File wasn't copied");
             Assert.That(cmd.IndexOf("copyForm") >= 0, "Copied file doesn't exist");
         }

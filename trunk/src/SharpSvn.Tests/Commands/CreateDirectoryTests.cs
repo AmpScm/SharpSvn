@@ -54,6 +54,8 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CreateDirectory_MakeRepositoryDir()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
             Uri url = new Uri(ReposUrl, "mooNewDirectory/");
 
             Assert.That(Client.RemoteCreateDirectory(url));
@@ -66,12 +68,14 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CreateDirectory_CreateTrunk()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
             using (SvnClient client = NewSvnClient(true, false))
             {
                 Uri trunkUri = new Uri(ReposUrl, "trunk/");
                 client.RemoteCreateDirectory(trunkUri);
 
-                string trunkPath = GetTempDir();
+                string trunkPath = sbox.Wc;
 
                 client.CheckOut(trunkUri, trunkPath);
 

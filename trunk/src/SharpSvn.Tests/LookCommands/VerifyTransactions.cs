@@ -78,11 +78,12 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void TestPreCommit()
         {
-            Uri uri = CreateRepos(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
             using (InstallHook(uri, SvnHookType.PreCommit, OnPreCommit))
             {
-                string dir = GetTempDir();
+                string dir = sbox.GetTempDir();
                 Client.CheckOut(new Uri(uri, "trunk/"), dir);
 
                 string pre = Path.Combine(dir, "Pre.txt");
@@ -114,11 +115,12 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void TestPostCommit()
         {
-            Uri uri = CreateRepos(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
             using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
             {
-                string dir = GetTempDir();
+                string dir = sbox.GetTempDir();
                 Client.CheckOut(new Uri(uri, "trunk/"), dir);
 
                 TouchFile(Path.Combine(dir, "Post.txt"));

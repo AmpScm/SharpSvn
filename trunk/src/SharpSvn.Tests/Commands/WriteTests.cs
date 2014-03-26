@@ -33,17 +33,21 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class WriteTests : TestBase
     {
-    public WriteTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
+        public WriteTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
         /// <summary>
         /// Attemts to do a cat on a local working copy item
         /// </summary>
         [TestMethod]
         public void TestCatFromWorkingCopy()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
 
             string clientOutput = this.RunCommand("svn", "cat " + path);
 
@@ -62,7 +66,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestCatFromRepository()
         {
-            Uri path = new Uri(this.ReposUrl, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = new Uri(sbox.CreateRepository(SandBoxRepository.AnkhSvnCases), "trunk/");
+
+            Uri path = new Uri(ReposUrl, "Form.cs");
 
             string clientOutput = this.RunCommand("svn", "cat " + path);
 
@@ -77,8 +84,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestCatPeg()
         {
-            Uri path = new Uri(this.ReposUrl, "Form.cs");
-            Uri toPath = new Uri(this.ReposUrl, "Moo.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = new Uri(sbox.CreateRepository(SandBoxRepository.AnkhSvnCases), "trunk/");
+
+            Uri path = new Uri(reposUri, "Form.cs");
+            Uri toPath = new Uri(reposUri, "Moo.cs");
 
             SvnCommitResult ci;
             this.Client.RemoteMove(path, toPath, out ci);
@@ -97,78 +107,86 @@ namespace SharpSvn.Tests.Commands
 
         }
 
-    [TestMethod]
-    public void WriteTest()
-    {
-        string data = Guid.NewGuid().ToString();
-        using (SvnClient client = NewSvnClient(true, false))
+        [TestMethod]
+        public void WriteTest()
         {
-        string file = Path.Combine(WcPath, "WriteTest");
-        using (StreamWriter sw = File.CreateText(file))
-        {
-            sw.WriteLine(data);
-        }
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
 
-        client.Add(file);
-        client.AddToChangeList(file, "WriteTest-Items");
-
-        SvnCommitArgs ca = new SvnCommitArgs();
-        ca.ChangeLists.Add("WriteTest-Items");
-        client.Commit(WcPath);
-
-        using (MemoryStream ms = new MemoryStream())
-        {
-            client.Write(new SvnPathTarget(file), ms);
-
-            ms.Position = 0;
-
-            using (StreamReader sr = new StreamReader(ms))
+            string data = Guid.NewGuid().ToString();
+            using (SvnClient client = NewSvnClient(true, false))
             {
-            Assert.That(sr.ReadLine(), Is.EqualTo(data));
-            Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+                string file = Path.Combine(WcPath, "WriteTest");
+                using (StreamWriter sw = File.CreateText(file))
+                {
+                    sw.WriteLine(data);
+                }
+
+                client.Add(file);
+                client.AddToChangeList(file, "WriteTest-Items");
+
+                SvnCommitArgs ca = new SvnCommitArgs();
+                ca.ChangeLists.Add("WriteTest-Items");
+                client.Commit(WcPath);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    client.Write(new SvnPathTarget(file), ms);
+
+                    ms.Position = 0;
+
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        Assert.That(sr.ReadLine(), Is.EqualTo(data));
+                        Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+                    }
+                }
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    client.Write(new Uri(sbox.RepositoryUri, "WriteTest"), ms);
+
+                    ms.Position = 0;
+
+                    using (StreamReader sr = new StreamReader(ms))
+                    {
+                        Assert.That(sr.ReadLine(), Is.EqualTo(data));
+                        Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+                    }
+                }
             }
         }
 
-        using (MemoryStream ms = new MemoryStream())
+        [TestMethod]
+        public void WriteProps()
         {
-            client.Write(new Uri(ReposUrl, "WriteTest"), ms);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
 
-            ms.Position = 0;
-
-            using (StreamReader sr = new StreamReader(ms))
+            string data = Guid.NewGuid().ToString();
+            using (SvnClient client = NewSvnClient(true, false))
             {
-            Assert.That(sr.ReadLine(), Is.EqualTo(data));
-            Assert.That(sr.ReadToEnd(), Is.EqualTo(""));
+                string file = Path.Combine(WcPath, "WriteTest");
+                using (StreamWriter sw = File.CreateText(file))
+                {
+                    sw.WriteLine(data);
+                }
+
+                client.Add(file);
+                client.SetProperty(file, "A", "B");
+                client.Commit(file);
+
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    SvnPropertyCollection pc;
+                    client.Write(new SvnPathTarget(file, SvnRevision.Head), ms, out pc);
+
+                    Assert.That(pc, Is.Not.Empty);
+                    Assert.That(pc["A"].StringValue, Is.EqualTo("B"));
+                }
             }
         }
-        }
-    }
-
-    [TestMethod]
-    public void WriteProps()
-    {
-        string data = Guid.NewGuid().ToString();
-        using (SvnClient client = NewSvnClient(true, false))
-        {
-        string file = Path.Combine(WcPath, "WriteTest");
-        using (StreamWriter sw = File.CreateText(file))
-        {
-            sw.WriteLine(data);
-        }
-
-        client.Add(file);
-        client.SetProperty(file, "A", "B");
-        client.Commit(file);
-
-        using (MemoryStream ms = new MemoryStream())
-        {
-            SvnPropertyCollection pc;
-            client.Write(new SvnPathTarget(file, SvnRevision.Head), ms, out pc);
-
-            Assert.That(pc, Is.Not.Empty);
-            Assert.That(pc["A"].StringValue, Is.EqualTo("B"));
-        }
-        }
-    }
     }
 }

@@ -45,9 +45,13 @@ namespace SharpSvn.Tests.Misc
         [TestMethod]
         public void TestUrlFromDirPath()
         {
-            string info = this.RunCommand("svn", "info " + this.WcPath);
-            string realUrl = this.GetUrl(this.WcPath);
-            Uri url = this.Client.GetUriFromWorkingCopy(this.WcPath);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            string WcPath = sbox.Wc;
+
+            string info = this.RunCommand("svn", "info " + WcPath);
+            string realUrl = this.GetUrl(WcPath);
+            Uri url = this.Client.GetUriFromWorkingCopy(WcPath);
 
             Assert.That(url.ToString(), Is.EqualTo(realUrl + "/"), "URL wrong");
         }
@@ -55,7 +59,11 @@ namespace SharpSvn.Tests.Misc
         [TestMethod]
         public void TestUrlFromFilePath()
         {
-            string formPath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string formPath = Path.Combine(WcPath, "Form.cs");
             string realUrl = this.GetUrl(formPath);
             Uri url = this.Client.GetUriFromWorkingCopy(formPath);
 
@@ -73,17 +81,29 @@ namespace SharpSvn.Tests.Misc
         [TestMethod]
         public void TestUuidFromUrl()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri repositoryUri = sbox.CreateRepository(SandBoxRepository.Empty);
             Guid id;
-            Assert.That(this.Client.TryGetRepositoryId(this.ReposUrl, out id));
-            Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
+
+            Guid newId = Guid.NewGuid();
+
+            new SvnRepositoryClient().SetRepositoryId(repositoryUri.AbsolutePath, newId);
+
+            Assert.That(this.Client.TryGetRepositoryId(repositoryUri, out id));
+            Assert.That(id, Is.EqualTo(newId), "UUID wrong");
         }
 
         [TestMethod]
         public void TestUuidFromPath()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+
+            string WcPath = sbox.Wc;
+
             Guid id;
-            Assert.That(this.Client.TryGetRepositoryId(this.WcPath, out id));
-            Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
+            Assert.That(this.Client.TryGetRepositoryId(WcPath, out id));
+            Assert.That(id, Is.Not.EqualTo(Guid.Empty), "UUID wrong");
         }
 
         /// <summary>
@@ -121,6 +141,9 @@ namespace SharpSvn.Tests.Misc
         [TestMethod]
         public void TestChangeAdministrativeDirectoryName()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+
             string newAdminDir = "_svn";
             PropertyInfo pi = typeof(SvnClient).GetProperty("AdministrativeDirectoryName", BindingFlags.SetProperty | BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
 
@@ -132,8 +155,8 @@ namespace SharpSvn.Tests.Misc
                 Assert.That(SvnClient.AdministrativeDirectoryName, Is.EqualTo(newAdminDir),
                     "Admin directory name should now be " + newAdminDir);
 
-                string newwc = GetTempDir();
-                this.Client.CheckOut(this.ReposUrl, newwc);
+                string newwc = sbox.GetTempDir();
+                this.Client.CheckOut(sbox.RepositoryUri, newwc);
 
                 Assert.That(Directory.Exists(Path.Combine(newwc, newAdminDir)),
                     "Admin directory with new name not found");
@@ -151,22 +174,26 @@ namespace SharpSvn.Tests.Misc
         [TestMethod]
         public void TestHasBinaryProp()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
             SvnWorkingCopyState state;
             SvnWorkingCopyStateArgs a = new SvnWorkingCopyStateArgs();
             a.RetrieveFileData = true;
 
             SvnWorkingCopyClient wcc = new SvnWorkingCopyClient();
-            wcc.GetState(Path.Combine(this.WcPath, "Form.cs"), out state);
+            wcc.GetState(Path.Combine(WcPath, "Form.cs"), out state);
 
             // first on a file
             Assert.That(state.IsTextFile);
 
-            wcc.GetState(Path.Combine(this.WcPath, "App.ico"), out state);
+            wcc.GetState(Path.Combine(WcPath, "App.ico"), out state);
 
             Assert.That(state.IsTextFile, Is.False);
 
 
-            wcc.GetState(this.WcPath, out state);
+            wcc.GetState(WcPath, out state);
 
             // check what happens for a dir
             //Assert.IsFalse(state.IsTextFile);

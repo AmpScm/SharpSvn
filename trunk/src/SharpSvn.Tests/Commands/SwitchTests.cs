@@ -80,10 +80,14 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestSwitchUrl()
         {
-            Uri switchUrl = new Uri(this.ReposUrl, "doc");
-            string checkFile = Path.Combine(this.WcPath, "text_r5.txt");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
 
-            this.Client.Switch(this.WcPath, switchUrl);
+            Uri switchUrl = new Uri(sbox.RepositoryUri, "trunk/doc");
+            string checkFile = Path.Combine(WcPath, "text_r5.txt");
+
+            this.Client.Switch(WcPath, switchUrl);
             Assert.That(File.Exists(checkFile), "Didn't switch to repos/doc");
 
         }

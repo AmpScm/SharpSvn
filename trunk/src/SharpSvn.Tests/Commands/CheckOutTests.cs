@@ -25,6 +25,7 @@ using SharpSvn.TestBuilder;
 
 using SharpSvn;
 using SharpSvn.Security;
+using SharpSvn.Tests.LookCommands;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -47,7 +48,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(result, Is.Not.Null);
             long head = result.Revision;
 
-            Assert.That(Client.CheckOut(new SvnUriTarget(trunk, 1), GetTempDir(), out result));
+            Assert.That(Client.CheckOut(new SvnUriTarget(trunk, 1), sbox.GetTempDir(), out result));
             Assert.That(result.Revision, Is.EqualTo(1));
 
             SvnCheckOutArgs a = new SvnCheckOutArgs();
@@ -56,7 +57,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(reposUri, "branches/trunk-r2"), 4), sbox.GetTempDir(), a, out result));
             Assert.That(result.Revision, Is.EqualTo(1));
 
-            Assert.That(Client.CheckOut(trunk, GetTempDir(), a, out result));
+            Assert.That(Client.CheckOut(trunk, sbox.GetTempDir(), a, out result));
             Assert.That(result.Revision, Is.EqualTo(1));
         }
 
@@ -67,9 +68,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CheckOut_BasicCheckout()
         {
-            string newWc = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+            string newWc = sbox.Wc;
             SvnCheckOutArgs a = new SvnCheckOutArgs();
-            this.Client.CheckOut(this.ReposUrl, newWc, a);
+            this.Client.CheckOut(new Uri(ReposUrl, "trunk/"), newWc, a);
 
             Assert.That(File.Exists(Path.Combine(newWc, "Form.cs")),
                 "Checked out file not there");
@@ -82,7 +85,8 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CheckOut_ProgressEvent()
         {
-            string newWc = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            string newWc = sbox.GetTempDir();
             SvnCheckOutArgs a = new SvnCheckOutArgs();
             bool progressCalled = false;
             a.Progress += delegate(object sender, SvnProgressEventArgs e) { progressCalled = true; };

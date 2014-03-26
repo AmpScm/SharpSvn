@@ -134,7 +134,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
             Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-            MyEditor edit = new MyEditor(true, GetTempDir());
+            MyEditor edit = new MyEditor(true, sbox.GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             ra.RetrieveContent = true;
             Client.ReplayRevisions(CollabReposUri, new SvnRevisionRange(0, 10), edit, ra);
@@ -146,7 +146,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
             Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-            MyEditor edit = new MyEditor(false, GetTempDir());
+            MyEditor edit = new MyEditor(false, sbox.GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             Client.ReplayRevisions(new Uri(CollabReposUri, "trunk/"), new SvnRevisionRange(0, 10), edit, ra);
         }
@@ -157,7 +157,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
             Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-            MyEditor edit = new MyEditor(false, GetTempDir());
+            MyEditor edit = new MyEditor(false, sbox.GetTempDir());
             SvnReplayRevisionArgs ra = new SvnReplayRevisionArgs();
             ra.RevisionStart += new EventHandler<SvnReplayRevisionStartEventArgs>(ra_RevisionStart);
             ra.RevisionEnd += new EventHandler<SvnReplayRevisionEndEventArgs>(ra_RevisionEnd);

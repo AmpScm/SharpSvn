@@ -20,6 +20,7 @@ using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
 using System.Collections.ObjectModel;
 using System.IO;
+using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.LookCommands
 {
@@ -29,12 +30,13 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void ChangeInfo_GetInfoHead()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
             using (SvnLookClient cl = new SvnLookClient())
             {
                 SvnChangeInfoEventArgs r;
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
 
-                SvnLookOrigin lo = new SvnLookOrigin(GetRepos(TestReposType.CollabRepos));
+                SvnLookOrigin lo = new SvnLookOrigin(sbox.CreateRepository(SandBoxRepository.MergeScenario).LocalPath);
                 Assert.That(cl.GetChangeInfo(lo, ia, out r));
 
                 Assert.That(r, Is.Not.Null);
@@ -72,8 +74,9 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void ChangeInfo_BigWrite()
         {
-            Uri uri = GetReposUri(TestReposType.Empty);
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.Empty);
+            string dir = sbox.Wc;
             Client.CheckOut(uri, dir);
 
             string file = Path.Combine(dir, "bigfile");
@@ -89,7 +92,7 @@ namespace SharpSvn.Tests.LookCommands
             {
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
 
-                SvnLookOrigin lo = new SvnLookOrigin(GetRepos(TestReposType.Empty));
+                SvnLookOrigin lo = new SvnLookOrigin(uri.LocalPath);
 
                 using (MemoryStream ms = new MemoryStream())
                 {
@@ -132,12 +135,13 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void ChangeInfo_GetInfo12()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
             using (SvnLookClient cl = new SvnLookClient())
             {
                 SvnChangeInfoEventArgs r;
                 SvnChangeInfoArgs ia = new SvnChangeInfoArgs();
 
-                SvnLookOrigin origin = new SvnLookOrigin(GetRepos(TestReposType.CollabRepos), 12);
+                SvnLookOrigin origin = new SvnLookOrigin(sbox.CreateRepository(SandBoxRepository.MergeScenario).LocalPath, 12);
                 //ia.RetrieveChangedPaths = false; // Will fail if true
 
                 Assert.That(cl.GetChangeInfo(origin, ia, out r));
@@ -161,8 +165,9 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void ChangeInfo_GetInfoCompare()
         {
-            string reposPath = GetRepos(TestReposType.CollabRepos);
-            Uri reposUri = GetReposUri(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+            string reposPath = reposUri.LocalPath;
 
             using (SvnClient cl = new SvnClient())
             {

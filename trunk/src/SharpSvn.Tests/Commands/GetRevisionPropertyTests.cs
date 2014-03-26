@@ -39,10 +39,14 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestRevPropGetDir()
         {
-            this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + this.ReposUrl);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+            InstallRevpropHook(ReposUrl);
+
+            this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + ReposUrl);
 
             string value;
-            Assert.That(Client.GetRevisionProperty(this.ReposUrl, SvnRevision.Head, "cow", out value));
+            Assert.That(Client.GetRevisionProperty(ReposUrl, SvnRevision.Head, "cow", out value));
 
             Assert.That(value, Is.EqualTo("moo"), "Wrong property value");
         }

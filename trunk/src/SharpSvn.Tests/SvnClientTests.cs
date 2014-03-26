@@ -321,6 +321,10 @@ namespace SharpSvn.Tests
         [TestMethod]
         public void FetchWcroot()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             Assert.That(Client.GetWorkingCopyRoot(WcPath), Is.EqualTo(WcPath));
         }
     }

@@ -29,23 +29,27 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CreateRepository_FsFs()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+
             using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
             {
                 SvnCreateRepositoryArgs cra = new SvnCreateRepositoryArgs();
                 cra.RepositoryCompatibility = SvnRepositoryCompatibility.Default;
-                reposClient.CreateRepository(GetTempDir(), cra);
+                reposClient.CreateRepository(sbox.GetTempDir(), cra);
             }
         }
 
         [TestMethod]
         public void CreateRepository_Bdb()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+
             using (SvnRepositoryClient reposClient = new SvnRepositoryClient())
             {
                 SvnCreateRepositoryArgs cra = new SvnCreateRepositoryArgs();
                 cra.RepositoryType = SvnRepositoryFileSystem.BerkeleyDB;
                 cra.RepositoryCompatibility = SvnRepositoryCompatibility.Default;
-                reposClient.CreateRepository(GetTempDir(), cra);
+                reposClient.CreateRepository(sbox.GetTempDir(), cra);
             }
         }
     }

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NUnit.Framework;
+using SharpSvn.TestBuilder;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
 
@@ -18,7 +19,8 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RepositoryOperation_OpenDirect()
         {
-            Uri uri = GetReposUri(TestReposType.Empty);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.Empty);
 
             using (SvnMultiCommandClient mucc = new SvnMultiCommandClient(uri))
             {
@@ -57,7 +59,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RepositoryOperation_ViaSvnClient()
         {
-            Uri uri = GetReposUri(TestReposType.Empty);
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri uri = sbox.CreateRepository(SandBoxRepository.Empty);
 
             using (SvnClient svn = new SvnClient())
             {
@@ -88,7 +92,8 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RepositoryOperation_SetupRepository()
         {
-            Uri uri = GetReposUri(TestReposType.Empty);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.Empty);
             SvnCommitResult cr;
 
             SvnRepositoryOperationArgs oa = new SvnRepositoryOperationArgs();

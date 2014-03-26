@@ -46,7 +46,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_TestLog()
         {
-            ClientLogMessage[] clientLogs = this.ClientLog(this.ReposUrl);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+            ClientLogMessage[] clientLogs = this.ClientLog(ReposUrl);
 
             //the client prints them in a reverse order by default
             Array.Reverse(clientLogs);
@@ -54,7 +56,7 @@ namespace SharpSvn.Tests.Commands
             a.Range = new SvnRevisionRange(1, SvnRevision.Head);
             a.RetrieveChangedPaths = false;
 
-            this.Client.Log(this.ReposUrl, a, LogCallback);
+            this.Client.Log(ReposUrl, a, LogCallback);
 
             Assert.That(this.logMessages.Count, Is.EqualTo(clientLogs.Length),
                 "Number of log entries differs");
@@ -90,13 +92,16 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_TestLogNonAsciiChars()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Default);
+            InstallRevpropHook(ReposUrl);
             this.RunCommand("svn", "propset svn:log --revprop -r 1  \" e i a  , sj\" " +
-                this.ReposUrl);
+                ReposUrl);
 
             SvnLogArgs a = new SvnLogArgs();
             a.Range = new SvnRevisionRange(1, 1);
 
-            this.Client.Log(this.ReposUrl, a, LogCallback);
+            this.Client.Log(ReposUrl, a, LogCallback);
             Assert.That(this.logMessages.Count, Is.EqualTo(1));
             Assert.That(this.logMessages[0].LogMessage, Is.EqualTo(" e i a  , sj"));
         }
@@ -104,9 +109,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_LogFromFile()
         {
-            Uri repos = this.GetReposUri(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri repos = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
 
             using (SvnClient client = new SvnClient())
             {
@@ -329,11 +335,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_OldLog()
         {
-            Uri repos = GetReposUri(TestReposType.AnkhRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            Uri repos = sbox.RepositoryUri;
 
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
 
-            Client.CheckOut(repos, dir);
             string file;
             File.WriteAllText(file = Path.Combine(dir, "qwqwqw.q"),"fds gsdfgsfdgdsf");
             Client.Add(file);

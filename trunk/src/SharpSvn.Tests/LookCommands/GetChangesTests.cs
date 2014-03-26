@@ -32,7 +32,8 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void ChangedDirs()
         {
-            Uri uri = CreateRepos(TestReposType.Empty);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.Empty);
             using (InstallHook(uri, SvnHookType.PreCommit, OnChangedDirs))
             {
                 using (SvnClient cl = new SvnClient())
@@ -78,7 +79,8 @@ namespace SharpSvn.Tests.LookCommands
         [TestMethod]
         public void PostCommitErrorTest()
         {
-            Uri uri = CreateRepos(TestReposType.Empty);
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri uri = sbox.CreateRepository(SandBoxRepository.Empty);
             using (InstallHook(uri, SvnHookType.PostCommit, OnPostCommit))
             {
                 using (SvnClient cl = new SvnClient())

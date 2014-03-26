@@ -214,7 +214,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void FileVersions_WriteRelated()
         {
-            Uri reposUri = GetReposUri(TestReposType.CollabRepos);
+            SvnSandBox sbox = new SvnSandBox(this);
+
+            Uri reposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
             Dictionary<SvnUriTarget, Stream> targets = new Dictionary<SvnUriTarget,Stream>();
             Uri fileUri = new Uri(reposUri, "trunk/index.html");
 

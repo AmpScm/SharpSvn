@@ -40,6 +40,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestImportFile()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             string truePath = CreateTextFile(WcPath, "testfile.txt");
             Uri trueDstUrl = new Uri(ReposUrl, "testfile.txt");
 
@@ -48,7 +52,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(Client.RemoteImport(truePath, trueDstUrl, a));
 
-            String cmd = this.RunCommand("svn", "list " + this.ReposUrl.ToString());
+            String cmd = this.RunCommand("svn", "list " + ReposUrl.ToString());
             Assert.That(cmd.IndexOf("testfile.txt") >= 0, "File wasn't imported ");
         }
 
@@ -59,6 +63,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestImportDir()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            string WcPath = sbox.Wc;
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
+
             string dir1, dir2, testFile1, testFile2;
             CreateSubdirectories(WcPath, out dir1, out dir2, out testFile1, out testFile2);
 
@@ -68,7 +76,7 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(Client.Import(dir1, trueDstUrl, a));
 
-            String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
+            String cmd = this.RunCommand("svn", "list " + ReposUrl);
             Assert.That(cmd.IndexOf("newDir2") >= 0, "File wasn't imported");
 
         }

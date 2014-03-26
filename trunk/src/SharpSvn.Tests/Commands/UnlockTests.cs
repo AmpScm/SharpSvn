@@ -40,7 +40,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void BasicUnlockTest()
         {
-            string filepath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Greek);
+            string WcPath = sbox.Wc;
+
+
+            string filepath = Path.Combine(WcPath, "iota");
 
             this.RunCommand("svn", "lock " + filepath);
 

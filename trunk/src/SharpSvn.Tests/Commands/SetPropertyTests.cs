@@ -44,7 +44,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void SetProperty_SetProp()
         {
-            string filePath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filePath = Path.Combine(WcPath, "Form.cs");
 
             byte[] propval = Encoding.UTF8.GetBytes("baa");
 
@@ -75,7 +79,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void SetProperty_SetRecursivly()
         {
-            string filePath = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string filePath = Path.Combine(WcPath, "Form.cs");
 
             byte[] propval = Encoding.UTF8.GetBytes("baa");
             bool ticked = false;
@@ -91,7 +99,7 @@ namespace SharpSvn.Tests.Commands
             if (SvnClient.Version >= new Version(1, 6))
                 Assert.That(ticked, Is.True);
 
-            Assert.That(this.RunCommand("svn", "propget moo " + this.WcPath).Trim(), Is.EqualTo("baa"),
+            Assert.That(this.RunCommand("svn", "propget moo " + WcPath).Trim(), Is.EqualTo("baa"),
                 "PropSet didn't work on directory!");
 
             Assert.That(this.RunCommand("svn", "propget moo " + filePath).Trim(), Is.EqualTo("baa"),
@@ -104,11 +112,15 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void SetProperty_PropSetGet()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
             Byte[] valueToSet = { 0, 77, 73, 65, 79, 87, 0 };
             //In ASCII looks like \0MIAOW\0 where \0 is a null/zero value
             // as used for terminating c style strings
 
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            string path = Path.Combine(WcPath, "Form.cs");
             this.Client.SetProperty(path, "TestBinaryCat", valueToSet);
             SvnPropertyValue ret;
             Assert.That(Client.GetProperty(new SvnPathTarget(path),
@@ -125,6 +137,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void SetPropertyTestIgnore()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             string dir = WcPath;
 
             TouchFile(Path.Combine(WcPath,"NewFile.ignored"));
@@ -148,7 +164,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void SetPropertySetEmtpy()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
             this.Client.SetProperty(path, "EmptyBinary", new byte[0]);
         }
     }

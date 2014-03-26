@@ -115,7 +115,11 @@ namespace SharpSvn.TestBuilder
             {
                 rc.UseDefaultConfiguration(); // Don't load config
 
-                rc.CreateRepository(dir);
+                SvnCreateRepositoryArgs cra = new SvnCreateRepositoryArgs();
+
+                if (type == SandBoxRepository.EmptyNoMerge)
+                    cra.RepositoryCompatibility = SvnRepositoryCompatibility.Subversion14;
+                rc.CreateRepository(dir, cra);
 
                 Uri uri = SvnTools.LocalPathToUri(dir, false);
 
@@ -252,7 +256,7 @@ namespace SharpSvn.TestBuilder
                         mucc.CreateDirectory("trunk");
                         mucc.CreateFile("trunk/App.ico", StringToFile("icon\n"));
                         mucc.CreateFile("trunk/AssemblyInfo.cs", StringToFile("AssemblyInfo.cs"));
-                        mucc.CreateFile("trunk/Form.cs", StringToFile("Form.cs\n"));
+                        mucc.CreateFile("trunk/Form.cs", StringToFile("Form.cs\r\n"));
                         mucc.CreateFile("trunk/Form.resx", StringToFile("Form.resx\n"));
                         mucc.CreateFile("trunk/GoogleOne.csproj", StringToFile("GoogleOne.csproj\n"));
                         mucc.CreateFile("trunk/GoogleOne.csproj.user", StringToFile("GoogleOne.csproj.user\n"));
@@ -287,25 +291,25 @@ namespace SharpSvn.TestBuilder
                     delegate(SvnMultiCommandClient mucc)
                     {
                         mucc.CreateDirectory("trunk/doc");
-                        mucc.CreateFile("trunk/doc/text.txt", StringToFile("Hello\n"));
+                        mucc.CreateFile("trunk/doc/text.txt", StringToFile("Hello\r\n"));
                     });
 
                 client.RepositoryOperation(uri,
                     delegate(SvnMultiCommandClient mucc)
                     {
-                        mucc.CreateFile("trunk/doc/text_r3.txt", StringToFile("Hei\n"));
+                        mucc.CreateFile("trunk/doc/text_r3.txt", StringToFile("Hei\r\n"));
                     });
 
                 client.RepositoryOperation(uri,
                     delegate(SvnMultiCommandClient mucc)
                     {
-                        mucc.CreateFile("trunk/doc/text_r4.txt", StringToFile("Hay\n"));
+                        mucc.CreateFile("trunk/doc/text_r4.txt", StringToFile("Hay\r\n"));
                     });
 
                 client.RepositoryOperation(uri,
                     delegate(SvnMultiCommandClient mucc)
                     {
-                        mucc.CreateFile("trunk/doc/text_r5.txt", StringToFile("Bye\n"));
+                        mucc.CreateFile("trunk/doc/text_r5.txt", StringToFile("Bye\r\n"));
                     });
 
                 client.RepositoryOperation(uri,

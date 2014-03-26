@@ -33,7 +33,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
             Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
 
-            string dir = GetTempDir();
+            string dir = sbox.GetTempDir();
             SvnMergeSourcesCollection msc;
 
             SvnTarget me = new SvnUriTarget(new Uri(CollabReposUri, "trunk/"), 16);

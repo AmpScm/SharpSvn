@@ -40,11 +40,15 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RevisionProperty_RevSetPropDir()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
+            InstallRevpropHook(ReposUrl);
+
             byte[] propval = Encoding.UTF8.GetBytes("moo");
 
             this.Client.SetRevisionProperty(ReposUrl, SvnRevision.Head, "cow", propval);
 
-            Assert.That(this.RunCommand("svn", "propget cow --revprop -r head " + this.ReposUrl).Trim(), Is.EqualTo("moo"),
+            Assert.That(this.RunCommand("svn", "propget cow --revprop -r head " + ReposUrl).Trim(), Is.EqualTo("moo"),
                 "Couldn't set prop on selected Repos!");
         }
 

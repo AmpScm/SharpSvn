@@ -17,7 +17,8 @@ namespace SharpSvn.Tests.AdminCommands
         [TestMethod]
         public void Dump_DumpDb()
         {
-            string repos = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            string repos = sbox.GetTempDir();
 
             using (SvnRepositoryClient cl = new SvnRepositoryClient())
             {

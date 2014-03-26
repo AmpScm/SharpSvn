@@ -24,6 +24,7 @@ using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 using System.Collections.Generic;
+using SharpSvn.Tests.LookCommands;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -97,7 +98,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestAddWithParents()
         {
-            string dir = WcPath;
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string dir = sbox.Wc;
 
             string file = Path.Combine(dir, "a/b/d/e/f");
 
@@ -131,8 +134,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestAddStupid()
         {
-            string wc = GetTempDir();
-            Client.CheckOut(ReposUrl, wc);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+
+            string wc = sbox.Wc;
 
             string dir = Path.Combine(wc, "1");
             Directory.CreateDirectory(dir);
@@ -153,6 +158,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Add_AddDirectoryRecursively()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            string WcPath = sbox.Wc;
+
             string dir1, dir2, testFile1, testFile2;
             CreateSubdirectories(WcPath, out dir1, out dir2, out testFile1, out testFile2);
 
@@ -196,10 +205,14 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Add_AddWithForce()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            string WcPath = sbox.Wc;
+
             SvnAddArgs a = new SvnAddArgs();
             a.Depth = SvnDepth.Empty;
 
-            string file = Path.Combine(this.WcPath, "AssemblyInfo.cs");
+            string file = Path.Combine(WcPath, "AssemblyInfo.cs");
             TouchFile(file);
             this.Client.Add(file);
             try
@@ -220,10 +233,13 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Add_AddFileWithNonAsciiFilename()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            string WcPath = sbox.Wc;
             SvnAddArgs a = new SvnAddArgs();
             a.Depth = SvnDepth.Infinity;
 
-            string newFile = Path.Combine(this.WcPath, "eia.");
+            string newFile = Path.Combine(WcPath, "eia.");
             File.Create(newFile).Close();
             this.Client.Add(newFile, a);
         }
@@ -244,6 +260,92 @@ namespace SharpSvn.Tests.Commands
             Client.Add(subdir, aa);
 
             Client.Commit(sbox.Wc);
+        }
+
+        string _wcPath;
+        Uri _reposUrl;
+
+        /// <summary>
+        /// The path to the working copy
+        /// </summary>
+        [Obsolete("Please use an SandBox")]
+        string WcPath
+        {
+            get
+            {
+                if (_wcPath == null)
+                {
+                    ExtractWorkingCopy();
+                }
+
+                return _wcPath;
+            }
+        }
+
+        Uri _reposUri;
+        string _reposPath;
+        /// <summary>
+        /// The fully qualified URI to the repository
+        /// </summary>
+        [Obsolete]
+        public Uri ReposUrl
+        {
+            get
+            {
+                if (_reposUri == null)
+                    ExtractRepos();
+
+                System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
+
+                return _reposUri;
+            }
+        }
+
+        [Obsolete]
+        void ExtractWorkingCopy()
+        {
+            if (ReposUrl == null)
+                ExtractRepos();
+
+            System.Diagnostics.Debug.Assert(Directory.Exists(ReposPath));
+
+            this._wcPath = new SvnSandBox(this).GetTempDir();
+
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wcPath);
+            RawRelocate(_wcPath, new Uri("file:///tmp/repos/"), ReposUrl);
+            this.RenameAdminDirs(_wcPath);
+
+            SvnClient cl = new SvnClient(); // Fix working copy to real location
+            cl.Upgrade(_wcPath);
+        }
+
+        /// <summary>
+        /// The path to the repository
+        /// </summary>
+        public string ReposPath
+        {
+            get
+            {
+                if (_reposPath == null)
+                    ExtractRepos();
+
+                System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
+
+                return _reposPath;
+            }
+        }
+
+        /// <summary>
+        /// extract our test repository
+        /// </summary>
+        void ExtractRepos()
+        {
+            if (_reposPath == null)
+                _reposPath = new SvnSandBox(this).GetTempDir();
+
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
+
+            _reposUri = SvnTools.LocalPathToUri(_reposPath, true);
         }
 
         [TestMethod]
@@ -276,10 +378,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(!File.Exists(file));
 
             da.ThrowOnError = false; // This throws an error in 1.5 but succeeds anyway
-            bool ok = Client.Delete(file, da);
-
-            Assert.That(ok, "This should succeed in 1.7+");
-
+            Assert.That(Client.Delete(file, da), "This should succeed in 1.7+");
 
             file += ".3";
 
@@ -296,7 +395,7 @@ namespace SharpSvn.Tests.Commands
             Client.Status(dir,
             delegate(object sender, SvnStatusEventArgs e)
             {
-                Assert.That(false, "Nothing modified");
+                Assert.Fail("Nothing modified");
             });
         }
 

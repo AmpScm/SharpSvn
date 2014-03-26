@@ -40,10 +40,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Delete_AllFiles()
         {
-            Uri uri = ReposUrl;
-            string wc = GetTempDir();
-
-            Client.CheckOut(uri, wc);
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+            Uri uri = sbox.RepositoryUri;
+            string wc = sbox.Wc;
 
             for (int i = 0; i < 10; i++)
             {
@@ -78,8 +78,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Delete_WCFiles()
         {
-            string path1 = Path.Combine(this.WcPath, "Form.cs");
-            string path2 = Path.Combine(this.WcPath, "AssemblyInfo.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path1 = Path.Combine(WcPath, "Form.cs");
+            string path2 = Path.Combine(WcPath, "AssemblyInfo.cs");
 
             SvnDeleteArgs a = new SvnDeleteArgs();
 
@@ -97,6 +101,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Delete_TestReplacedStatus()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Empty);
+            string WcPath = sbox.Wc;
+
             string file = CreateTextFile(WcPath, "ToBeReplaced.vb");
 
             Client.Add(file);
@@ -124,15 +132,17 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Delete_TestDeleteFromRepos()
         {
-            Uri path1 = new Uri(this.ReposUrl, "doc");
-            Uri path2 = new Uri(this.ReposUrl, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+            Uri path1 = new Uri(ReposUrl, "trunk/doc");
+            Uri path2 = new Uri(ReposUrl, "trunk/Form.cs");
 
             SvnCommitResult ci;
             SvnDeleteArgs a = new SvnDeleteArgs();
 
             Assert.That(Client.RemoteDelete(new Uri[] { path1, path2 }, a, out ci));
 
-            String cmd = this.RunCommand("svn", "list " + this.ReposUrl);
+            String cmd = this.RunCommand("svn", "list " + ReposUrl);
             Assert.That(cmd.IndexOf("doc") == -1, "Directory wasn't deleted ");
             Assert.That(cmd.IndexOf("Form.cs") == -1, "Directory wasn't deleted");
 
@@ -142,7 +152,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Delete_ForceDelete()
         {
-            string path = Path.Combine(this.WcPath, "Form.cs");
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+            string WcPath = sbox.Wc;
+
+            string path = Path.Combine(WcPath, "Form.cs");
 
             // modify the file
             using (StreamWriter writer = new StreamWriter(path, true))
