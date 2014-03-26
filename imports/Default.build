@@ -14,10 +14,11 @@
   <!-- -->
   <property name="subversionVersion" value="1.9.0-alpha2" overwrite="false" />
   <!-- r1575018                - Properly store author when retrieving directory entries -->
-  <!-- 1575319,1576313,1575322 - Resolve segfault on early close of first serf request -->
+  <!-- 1575319,1575322,1576313 - Resolve segfault on early close of first serf request -->
   <!-- r1580816                - Allocate dirent properly (old ra_svn) -->
   <!-- r1581401                - Cleanup after BDB create error -->
-  <property name="subversionMerges" value="1575018,1575319,1576313,1575322,1580816,1581401" overwrite="false" /> 
+  <!-- r1581605                - Improve error message on file install failure -->
+  <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
