@@ -34,11 +34,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class DiffTests : TestBase
     {
-        public DiffTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-
         [TestMethod]
         public void Diff_LocalDiff()
         {

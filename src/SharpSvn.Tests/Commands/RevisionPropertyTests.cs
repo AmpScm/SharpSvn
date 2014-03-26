@@ -42,7 +42,7 @@ namespace SharpSvn.Tests.Commands
         {
             SvnSandBox sbox = new SvnSandBox(this);
             Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
-            InstallRevpropHook(ReposUrl);
+            sbox.InstallRevpropHook(ReposUrl);
 
             byte[] propval = Encoding.UTF8.GetBytes("moo");
 

@@ -41,7 +41,7 @@ namespace SharpSvn.Tests.Commands
             SvnSandBox sbox = new SvnSandBox(this);
 
             Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Empty);
-            InstallRevpropHook(ReposUrl);
+            sbox.InstallRevpropHook(ReposUrl);
 
             this.RunCommand("svn", "ps --revprop -r HEAD foo bar " + ReposUrl);
             this.RunCommand("svn", "ps --revprop -r HEAD kung foo " + ReposUrl);

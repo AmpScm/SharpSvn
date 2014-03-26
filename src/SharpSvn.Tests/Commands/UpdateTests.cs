@@ -32,11 +32,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class UpdateTests : TestBase
     {
-        public UpdateTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-
         [TestMethod]
         public void RevTests()
         {

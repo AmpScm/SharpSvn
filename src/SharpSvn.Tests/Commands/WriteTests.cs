@@ -33,10 +33,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class WriteTests : TestBase
     {
-        public WriteTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
         /// <summary>
         /// Attemts to do a cat on a local working copy item
         /// </summary>

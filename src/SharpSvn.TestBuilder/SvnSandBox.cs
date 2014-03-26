@@ -212,7 +212,7 @@ namespace SharpSvn.TestBuilder
                     {
                         mucc.CreateDirectory("trunk");
 
-                        foreach(string[] kv in new string[][] { 
+                        foreach (string[] kv in new string[][] { 
                             new string[] { "iota",         "This is the file 'iota'.\n" },
                             new string[] { "A",            null },
                             new string[] { "A/mu",         "This is the file 'mu'.\n" },
@@ -245,7 +245,7 @@ namespace SharpSvn.TestBuilder
 
         private void BuildAnkhCases(Uri uri)
         {
-            using(SvnClient client = new SvnClient())
+            using (SvnClient client = new SvnClient())
             {
                 client.UseDefaultConfiguration();
                 client.Configuration.LogMessageRequired = false;
@@ -319,6 +319,14 @@ namespace SharpSvn.TestBuilder
                     });
             }
         }
+
+        public void InstallRevpropHook(Uri repositoryUrl)
+        {
+            string bat = Path.ChangeExtension(SvnHookArguments.GetHookFileName(repositoryUrl.LocalPath, SvnHookType.PreRevPropChange), ".bat");
+
+            File.WriteAllText(bat, "exit 0");
+        }
+
 
         /// <summary>
         /// 

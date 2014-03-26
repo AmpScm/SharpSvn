@@ -33,10 +33,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class UnlockTests : TestBase
     {
-        public UnlockTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
         [TestMethod]
         public void BasicUnlockTest()
         {

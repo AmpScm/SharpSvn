@@ -94,7 +94,7 @@ namespace SharpSvn.Tests.Commands
         {
             SvnSandBox sbox = new SvnSandBox(this);
             Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.Default);
-            InstallRevpropHook(ReposUrl);
+            sbox.InstallRevpropHook(ReposUrl);
             this.RunCommand("svn", "propset svn:log --revprop -r 1  \" e i a  , sj\" " +
                 ReposUrl);
 
@@ -242,19 +242,19 @@ namespace SharpSvn.Tests.Commands
 
             DateTime now = DateTime.UtcNow;
 
-            for(int i = 0; i < 20; i++)
-            Assert.That(Client.Log(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn"), la,
-                delegate(object sender, SvnLogEventArgs e)
-                {
-                    e.Cancel = true;
-                    Assert.That(e.MergeLogNestingLevel, Is.EqualTo(0));
-                    Assert.That(e.Revision, Is.GreaterThan(3000L));
-                    Assert.That(e.LogMessage, Is.Not.Null);
-                    Assert.That(e.Time, Is.GreaterThan(new DateTime(2008, 01, 01)));
-                    Assert.That(e.Author, Is.Not.Null);
-                    Assert.That(e.ChangedPaths, Is.Not.Null);
-                    Assert.That(e.LogOrigin, Is.Null);
-                }), Is.False);
+            for (int i = 0; i < 20; i++)
+                Assert.That(Client.Log(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn"), la,
+                    delegate(object sender, SvnLogEventArgs e)
+                    {
+                        e.Cancel = true;
+                        Assert.That(e.MergeLogNestingLevel, Is.EqualTo(0));
+                        Assert.That(e.Revision, Is.GreaterThan(3000L));
+                        Assert.That(e.LogMessage, Is.Not.Null);
+                        Assert.That(e.Time, Is.GreaterThan(new DateTime(2008, 01, 01)));
+                        Assert.That(e.Author, Is.Not.Null);
+                        Assert.That(e.ChangedPaths, Is.Not.Null);
+                        Assert.That(e.LogOrigin, Is.Null);
+                    }), Is.False);
 
             DateTime end = DateTime.UtcNow;
 
@@ -342,14 +342,14 @@ namespace SharpSvn.Tests.Commands
             string dir = sbox.Wc;
 
             string file;
-            File.WriteAllText(file = Path.Combine(dir, "qwqwqw.q"),"fds gsdfgsfdgdsf");
+            File.WriteAllText(file = Path.Combine(dir, "qwqwqw.q"), "fds gsdfgsfdgdsf");
             Client.Add(file);
             Client.Commit(file);
 
             Client.Log(repos,
                 delegate(object sender, SvnLogEventArgs e)
                 {
-                    if(e.Revision != 0)
+                    if (e.Revision != 0)
                         foreach (SvnChangeItem ci in e.ChangedPaths)
                         {
                             SvnNodeKind expected;

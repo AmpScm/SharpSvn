@@ -35,10 +35,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class StatusTests : TestBase
     {
-        public StatusTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
 
         /// <summary>Compares the status from Client::Status with the output from
         /// commandline client</summary>
