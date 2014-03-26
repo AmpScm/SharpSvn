@@ -64,9 +64,10 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_ListLocks()
         {
+            Uri tmpRepos = GetReposUri(TestReposType.GreekRepos);
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
-                rs.Open(GetReposUri(TestReposType.Empty));
+                rs.Open(tmpRepos);
 
                 int n = 0;
                 rs.ListLocks("",
@@ -78,44 +79,33 @@ namespace SharpSvn.Tests.RemoteTests
                 Assert.That(n, Is.EqualTo(0));
             }
 
-            using (SvnRemoteSession rs = new SvnRemoteSession())
+            using(SvnClient cl = new SvnClient())
             {
-                rs.Open(new Uri("http://svn.apache.org/repos/asf"));
-
-                int n = 0;
-                rs.ListLocks("",
-                    delegate(object sender, SvnRemoteListLockEventArgs e)
-                    {
-                        n++;
-                    });
+                cl.RemoteLock(new Uri(tmpRepos, "trunk/iota"), "");
+                cl.RemoteLock(new Uri(tmpRepos, "trunk/A/D/gamma"), "");
             }
 
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
-                rs.Open(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn"));
+                rs.Open(tmpRepos);
 
                 int n = 0;
-                rs.ListLocks("",
+                rs.ListLocks("trunk/A",
                     delegate(object sender, SvnRemoteListLockEventArgs e)
                     {
                         n++;
                     });
 
                 Assert.That(n, Is.EqualTo(1));
-            }
 
-            using (SvnRemoteSession rs = new SvnRemoteSession())
-            {
-                rs.Open(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn/testcases"));
-
-                int n = 0;
-                rs.ListLocks("",
+                n = 0;
+                rs.ListLocks("trunk",
                     delegate(object sender, SvnRemoteListLockEventArgs e)
                     {
                         n++;
                     });
 
-                Assert.That(n, Is.EqualTo(1));
+                Assert.That(n, Is.EqualTo(2));
             }
         }
 
