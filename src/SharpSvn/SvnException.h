@@ -199,7 +199,7 @@ namespace SharpSvn {
             return (T)GetCause(T::typeid);
         }
 
-        bool ContainsError(SharpSvn::SvnErrorCode code)
+        SvnException^ GetCause(SharpSvn::SvnErrorCode code)
         {
             Exception^ e = this;
 
@@ -207,22 +207,37 @@ namespace SharpSvn {
             {
                 SvnException ^svnEx = dynamic_cast<SvnException ^>(e);
                 if (svnEx && svnEx->SvnErrorCode == code)
-                    return true;
+                    return svnEx;
 
                 e = e->InnerException;
             }
 
-            return false;
+            return nullptr;
+        }
+
+        SvnException^ GetCause(SvnAprErrorCode code)
+        {
+            return GetCause((SharpSvn::SvnErrorCode)(int)code);
+        }
+
+        SvnException^ GetCause(SvnWindowsErrorCode code)
+        {
+            return GetCause((SharpSvn::SvnErrorCode)APR_FROM_OS_ERROR((int)code));
+        }
+
+        bool ContainsError(SharpSvn::SvnErrorCode code)
+        {
+            return GetCause(code) != nullptr;
         }
 
         bool ContainsError(SvnAprErrorCode code)
         {
-            return ContainsError((SharpSvn::SvnErrorCode)(int)code);
+            return GetCause(code) != nullptr;
         }
 
         bool ContainsError(SvnWindowsErrorCode code)
         {
-            return ContainsError((SharpSvn::SvnErrorCode)APR_FROM_OS_ERROR((int)code));
+            return GetCause(code) != nullptr;
         }
 
         bool ContainsError(... array<SharpSvn::SvnErrorCode> ^codes)
