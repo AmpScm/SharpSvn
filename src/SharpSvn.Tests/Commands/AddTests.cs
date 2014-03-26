@@ -262,96 +262,23 @@ namespace SharpSvn.Tests.Commands
             Client.Commit(sbox.Wc);
         }
 
-        string _wcPath;
-        Uri _reposUrl;
-
-        /// <summary>
-        /// The path to the working copy
-        /// </summary>
-        [Obsolete("Please use an SandBox")]
-        string WcPath
-        {
-            get
-            {
-                if (_wcPath == null)
-                {
-                    ExtractWorkingCopy();
-                }
-
-                return _wcPath;
-            }
-        }
-
-        Uri _reposUri;
-        string _reposPath;
-        /// <summary>
-        /// The fully qualified URI to the repository
-        /// </summary>
-        [Obsolete]
-        public Uri ReposUrl
-        {
-            get
-            {
-                if (_reposUri == null)
-                    ExtractRepos();
-
-                System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
-
-                return _reposUri;
-            }
-        }
-
-        [Obsolete]
-        void ExtractWorkingCopy()
-        {
-            if (ReposUrl == null)
-                ExtractRepos();
-
-            System.Diagnostics.Debug.Assert(Directory.Exists(ReposPath));
-
-            this._wcPath = new SvnSandBox(this).GetTempDir();
-
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wcPath);
-            RawRelocate(_wcPath, new Uri("file:///tmp/repos/"), ReposUrl);
-            this.RenameAdminDirs(_wcPath);
-
-            SvnClient cl = new SvnClient(); // Fix working copy to real location
-            cl.Upgrade(_wcPath);
-        }
-
-        /// <summary>
-        /// The path to the repository
-        /// </summary>
-        public string ReposPath
-        {
-            get
-            {
-                if (_reposPath == null)
-                    ExtractRepos();
-
-                System.Diagnostics.Debug.Assert(Directory.Exists(_reposPath));
-
-                return _reposPath;
-            }
-        }
-
-        /// <summary>
-        /// extract our test repository
-        /// </summary>
-        void ExtractRepos()
-        {
-            if (_reposPath == null)
-                _reposPath = new SvnSandBox(this).GetTempDir();
-
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), _reposPath);
-
-            _reposUri = SvnTools.LocalPathToUri(_reposPath, true);
-        }
-
         [TestMethod]
         public void Add_AddAndDelete()
         {
             SvnSandBox sbox = new SvnSandBox(this);
+
+            string wcPath = sbox.GetTempDir();
+
+            string reposDir = sbox.GetTempDir();
+            Uri reposUri = SvnTools.LocalPathToUri(reposDir, true);
+
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), reposDir);
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), wcPath);
+            RawRelocate(wcPath, new Uri("file:///tmp/repos/"), reposUri);
+            this.RenameAdminDirs(wcPath);
+
+            Client.Upgrade(wcPath);
+
             sbox.Create(SandBoxRepository.Default);
 
             Uri uri = sbox.RepositoryUri;
@@ -372,7 +299,7 @@ namespace SharpSvn.Tests.Commands
             TouchFile(file);
             Client.Add(file);
 
-            Client.Commit(WcPath);
+            Client.Commit(wcPath);
 
             File.Delete(file);
             Assert.That(!File.Exists(file));
