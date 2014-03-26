@@ -29,13 +29,14 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Tests Client::RevPropList
     /// </summary>
+    [TestClass]
     public class RevPropListTests : TestBase
     {
         /// <summary>
         /// Sets two properties on a repos and tries to retrieve them with Client::RevPropList
         /// </summary>
         [TestMethod]
-        public void TestBasic()
+        public void RevProp_TestBasic()
         {
             this.RunCommand("svn", "ps --revprop -r HEAD foo bar " + this.ReposUrl);
             this.RunCommand("svn", "ps --revprop -r HEAD kung foo " + this.ReposUrl);

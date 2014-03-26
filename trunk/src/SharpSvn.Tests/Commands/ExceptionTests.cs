@@ -27,6 +27,7 @@ namespace SharpSvn.Tests.Commands
     /// <summary>
     /// Summary description for ExceptionTest.
     /// </summary>
+    [TestClass]
     public class ExceptionTests : TestBase
     {
         /// <summary>
