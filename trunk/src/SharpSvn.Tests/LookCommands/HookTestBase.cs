@@ -162,7 +162,7 @@ namespace SharpSvn.Tests.LookCommands
                                 while (null != (line = fs.ReadLine()))
                                     argCollection.Add(line);
                             }
-                            string stdinText = File.ReadAllText(stdin);
+                            string stdinText = RetriedReadAllText(stdin);
 
                             File.Delete(args);
                             File.Delete(stdin);
@@ -214,6 +214,21 @@ namespace SharpSvn.Tests.LookCommands
             File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
 
             return stopper;
+        }
+
+        private string RetriedReadAllText(string path)
+        {
+            for(int i = 0; i < 10; i++)
+                try
+                {
+                    return File.ReadAllText(path);
+                }
+                catch(IOException)
+                {
+                    Thread.Sleep(500 * i);
+                }
+
+            return null;
         }
 
         protected string Configuration
