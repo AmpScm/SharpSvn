@@ -69,8 +69,7 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(e.LocalLock.Owner, Is.EqualTo(Environment.UserName));
                 Assert.That(e.LocalLock.Token, Is.Not.Null);
                 Assert.That(e.LocalLock.Comment, Is.EqualTo(comment));
-                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.LessThan(DateTime.Now));
-                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.GreaterThan(DateTime.Now - new TimeSpan(0,0,20)));
+                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.LessThanOrEqualTo(DateTime.Now).And.GreaterThan(DateTime.Now - new TimeSpan(0,0,20)));
                 gotIn = true;
             });
 
@@ -119,7 +118,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [TestMethod, ExpectedException(typeof(SvnFileSystemLockException))]
+        [TestMethod]
         public void Lock_CommitTest()
         {
             string wc1 = GetTempDir();
@@ -138,10 +137,12 @@ namespace SharpSvn.Tests.Commands
             try
             {
                 Client.Commit(index2);
+
+                Assert.Fail("Commit should have failed");
             }
-            catch (SvnFileSystemException)
+            catch (SvnException e)
             {
-                throw;
+                Assert.That(e.GetCause<SvnFileSystemLockException>(), Is.Not.Null, "Caused by lock error");
             }
         }
 

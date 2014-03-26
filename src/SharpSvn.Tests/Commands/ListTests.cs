@@ -150,11 +150,11 @@ namespace SharpSvn.Tests.Commands
                 Client.Authentication.Clear();
                 Client.Authentication.DefaultCredentials = new NetworkCredential("guest", "");
 
-                client.List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"),
+                client.List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk"),
                     delegate(object sender, SvnListEventArgs e)
                     {
-                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/")));
-                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/")));
+                        Assert.That(e.RepositoryRoot, Is.EqualTo(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/")));
+                        Assert.That(e.BaseUri, Is.EqualTo(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/")));
                         Assert.That(e.BasePath, Is.EqualTo("/trunk"));
                     });
 
@@ -171,7 +171,7 @@ namespace SharpSvn.Tests.Commands
                 EventHandler eh = delegate
                 {
                     Trace.WriteLine("Starting job" + n.ToString());
-                    new SvnClient().List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/src/SharpSvn"),
+                    new SvnClient().List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/src/SharpSvn"),
                         delegate { });
                 };
 
@@ -308,8 +308,8 @@ namespace SharpSvn.Tests.Commands
         {
             using (SvnClient client = new SvnClient())
             {
-                Uri reposUri = new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn/");
-                string baseUri = "http://ankhsvn.open.collab.net/svn/ankhsvn/testcases/trunk/WorstCase/AllTypesSolution/";
+                Uri reposUri = new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn/");
+                string baseUri = "https://ctf.open.collab.net/svn/repos/ankhsvn/testcases/trunk/WorstCase/AllTypesSolution/";
                 string exUri = baseUri + "%e3%83%97%e3%83%ad%e3%82%b0%e3%83%a9%e3%83%9f%e3%83%b3%e3%82%b0%23Silverlight/";
 
                 client.Authentication.Clear();

@@ -179,6 +179,9 @@ namespace SharpSvn.TestBuilder
                     case SandBoxRepository.AnkhSvnCases:
                         BuildAnkhCases(uri);
                         break;
+                    case SandBoxRepository.Greek:
+                        BuildGreek(uri);
+                        break;
                     default:
                         break;
                 }
@@ -191,6 +194,50 @@ namespace SharpSvn.TestBuilder
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(data));
         }
+
+        private void BuildGreek(System.Uri uri)
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                client.UseDefaultConfiguration();
+                client.Configuration.LogMessageRequired = false;
+
+                client.RepositoryOperation(uri,
+                    delegate(SvnMultiCommandClient mucc)
+                    {
+                        mucc.CreateDirectory("trunk");
+
+                        foreach(string[] kv in new string[][] { 
+                            new string[] { "iota",         "This is the file 'iota'.\n" },
+                            new string[] { "A",            null },
+                            new string[] { "A/mu",         "This is the file 'mu'.\n" },
+                            new string[] { "A/B",          null },
+                            new string[] { "A/B/lambda",   "This is the file 'lambda'.\n" },
+                            new string[] { "A/B/E",        null },
+                            new string[] { "A/B/E/alpha",  "This is the file 'alpha'.\n" },
+                            new string[] { "A/B/E/beta",   "This is the file 'beta'.\n" },
+                            new string[] { "A/B/F",        null },
+                            new string[] { "A/C",          null },
+                            new string[] { "A/D",          null },
+                            new string[] { "A/D/gamma",    "This is the file 'gamma'.\n" },
+                            new string[] { "A/D/G",        null },
+                            new string[] { "A/D/G/pi",     "This is the file 'pi'.\n" },
+                            new string[] { "A/D/G/rho",    "This is the file 'rho'.\n" },
+                            new string[] { "A/D/G/tau",    "This is the file 'tau'.\n" },
+                            new string[] { "A/D/H",        null },
+                            new string[] { "A/D/H/chi",    "This is the file 'chi'.\n" },
+                            new string[] { "A/D/H/psi",    "This is the file 'psi'.\n" },
+                            new string[] { "A/D/H/omega",  "This is the file 'omega'.\n" }})
+                        {
+                            if (string.IsNullOrEmpty(kv[1]))
+                                mucc.CreateDirectory("trunk/" + kv[0]);
+                            else
+                                mucc.CreateFile("trunk/" + kv[0], StringToFile(kv[1]));
+                        }
+                    });
+            }
+        }
+
         private void BuildAnkhCases(Uri uri)
         {
             using(SvnClient client = new SvnClient())
