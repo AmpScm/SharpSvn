@@ -119,7 +119,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [TestMethod, ExpectedException(typeof(SvnFileSystemLockException))]
+        [TestMethod]
         public void Lock_CommitTest()
         {
             string wc1 = GetTempDir();
@@ -138,10 +138,12 @@ namespace SharpSvn.Tests.Commands
             try
             {
                 Client.Commit(index2);
+
+                Assert.Fail("Commit should have failed");
             }
-            catch (SvnFileSystemException)
+            catch (SvnException e)
             {
-                throw;
+                Assert.That(e.GetCause<SvnFileSystemLockException>(), Is.Not.Null, "Caused by lock error");
             }
         }
 
