@@ -35,11 +35,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class RelocateTests : TestBase
     {
-        public RelocateTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-
         [TestMethod]
         public void Relocate_SvnServeRelocate()
         {

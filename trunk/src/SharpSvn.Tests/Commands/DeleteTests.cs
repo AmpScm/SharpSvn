@@ -32,11 +32,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class DeleteTests : TestBase
     {
-        public DeleteTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-
         [TestMethod]
         public void Delete_AllFiles()
         {

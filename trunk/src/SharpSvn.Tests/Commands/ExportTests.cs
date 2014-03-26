@@ -33,10 +33,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class ExportTests : TestBase
     {
-        public ExportTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
         /// <summary>
         /// Test export operation from a repository
         /// </summary>

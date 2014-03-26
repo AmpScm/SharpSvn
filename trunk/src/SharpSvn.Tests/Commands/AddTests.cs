@@ -266,19 +266,6 @@ namespace SharpSvn.Tests.Commands
         public void Add_AddAndDelete()
         {
             SvnSandBox sbox = new SvnSandBox(this);
-
-            string wcPath = sbox.GetTempDir();
-
-            string reposDir = sbox.GetTempDir();
-            Uri reposUri = SvnTools.LocalPathToUri(reposDir, true);
-
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips\\repos.zip"), reposDir);
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), wcPath);
-            RawRelocate(wcPath, new Uri("file:///tmp/repos/"), reposUri);
-            this.RenameAdminDirs(wcPath);
-
-            Client.Upgrade(wcPath);
-
             sbox.Create(SandBoxRepository.Default);
 
             Uri uri = sbox.RepositoryUri;
@@ -298,8 +285,6 @@ namespace SharpSvn.Tests.Commands
 
             TouchFile(file);
             Client.Add(file);
-
-            Client.Commit(wcPath);
 
             File.Delete(file);
             Assert.That(!File.Exists(file));
@@ -324,6 +309,7 @@ namespace SharpSvn.Tests.Commands
             {
                 Assert.Fail("Nothing modified");
             });
+
         }
 
         static void CreateSubdirectories(string within, out string dir1, out string dir2, out string testFile1, out string testFile2)

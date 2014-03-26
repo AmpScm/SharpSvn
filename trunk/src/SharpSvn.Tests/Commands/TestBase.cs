@@ -49,14 +49,6 @@ namespace SharpSvn.Tests.Commands
         public TestBase()
         {
             string asm = this.GetType().FullName;
-            UseEmptyRepositoryForWc = true;
-        }
-
-        protected void InstallRevpropHook(Uri repositoryUrl)
-        {
-            string bat = Path.ChangeExtension(SvnHookArguments.GetHookFileName(repositoryUrl.LocalPath, SvnHookType.PreRevPropChange), ".bat");
-
-            File.WriteAllText(bat, "exit 0");
         }
 
         [TestInitialize]
@@ -111,20 +103,6 @@ namespace SharpSvn.Tests.Commands
                 }
             }
         }
-
-        protected static void RawRelocate(string wc, Uri from, Uri to)
-        {
-            foreach (DirectoryInfo adm_dir in new DirectoryInfo(wc).GetDirectories(".svn", SearchOption.AllDirectories))
-            {
-                string entries = Path.Combine(adm_dir.FullName, "entries");
-                string txt = File.ReadAllText(entries).Replace(from.AbsoluteUri.TrimEnd('/'), to.AbsoluteUri.TrimEnd('/'));
-
-                File.SetAttributes(entries, FileAttributes.Normal);
-                File.WriteAllText(entries, txt);
-                File.SetAttributes(entries, FileAttributes.ReadOnly);
-            }
-        }
-
 
         public static string ProjectBase
         {
@@ -213,10 +191,6 @@ namespace SharpSvn.Tests.Commands
             string[] lines = Regex.Split(outreader.Output, @"\r?\n");
             return String.Join(Environment.NewLine, lines);
         }
-
-
-
-        public bool UseEmptyRepositoryForWc { get; set; }
 
         /// <summary>
         /// The client object.
@@ -315,7 +289,7 @@ namespace SharpSvn.Tests.Commands
 
                     if (imports.Exists)
                     {
-                        foreach(FileInfo f in imports.GetFiles("*.svnDll", SearchOption.AllDirectories))
+                        foreach (FileInfo f in imports.GetFiles("*.svnDll", SearchOption.AllDirectories))
                         {
                             File.Copy(f.FullName, Path.Combine(dir, f.Name));
                         }
@@ -331,7 +305,7 @@ namespace SharpSvn.Tests.Commands
         Microsoft.VisualStudio.TestTools.UnitTesting.TestContext _tcx;
         public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
         {
-            get { return _tcx;  }
+            get { return _tcx; }
             set
             {
                 _tcx = value;

@@ -34,10 +34,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class BlameTests : TestBase
     {
-        public BlameTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
         [TestInitialize]
         public void BlameSetup()
         {

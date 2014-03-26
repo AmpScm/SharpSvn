@@ -35,10 +35,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class CommitTests : TestBase
     {
-        public CommitTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
         /// <summary>
         /// Modifies a file in the working copy and commits the containing directory.
         /// </summary>
@@ -351,7 +347,6 @@ namespace SharpSvn.Tests.Commands
 
                 Assert.That(lst.Count, Is.EqualTo(1));
             }
-
 
             SvnCommitArgs ca = new SvnCommitArgs();
             ca.Depth = SvnDepth.Empty;

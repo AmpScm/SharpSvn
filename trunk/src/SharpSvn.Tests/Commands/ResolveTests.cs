@@ -115,6 +115,20 @@ namespace SharpSvn.Tests.Commands
             Assert.Fail("Didn't expect to be called here, make sure your credentials are in the cache");
         }
 
+        protected static void RawRelocate(string wc, Uri from, Uri to)
+        {
+            foreach (DirectoryInfo adm_dir in new DirectoryInfo(wc).GetDirectories(".svn", SearchOption.AllDirectories))
+            {
+                string entries = Path.Combine(adm_dir.FullName, "entries");
+                string txt = File.ReadAllText(entries).Replace(from.AbsoluteUri.TrimEnd('/'), to.AbsoluteUri.TrimEnd('/'));
+
+                File.SetAttributes(entries, FileAttributes.Normal);
+                File.WriteAllText(entries, txt);
+                File.SetAttributes(entries, FileAttributes.ReadOnly);
+            }
+        }
+
+
     }
 
 }

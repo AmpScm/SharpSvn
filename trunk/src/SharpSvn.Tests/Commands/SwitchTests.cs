@@ -33,11 +33,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class SwitchTests : TestBase
     {
-    public SwitchTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
-
         [TestInitialize]
         public void SwitchSetUp()
         {
@@ -60,7 +55,7 @@ namespace SharpSvn.Tests.Commands
             Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/a")), out result));
             Assert.That(result.Revision, Is.EqualTo(head));
 
-            Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/c"), head-3), out result));
+            Assert.That(Client.Switch(dir, new SvnUriTarget(new Uri(CollabReposUri, "branches/c"), head - 3), out result));
             Assert.That(result.Revision, Is.EqualTo(head - 3));
 
             SvnSwitchArgs sa = new SvnSwitchArgs();

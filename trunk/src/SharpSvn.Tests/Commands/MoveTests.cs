@@ -32,11 +32,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class MoveTests : TestBase
     {
-        public MoveTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-
         /// <summary>
         /// Tests moving a file in WC
         /// </summary>

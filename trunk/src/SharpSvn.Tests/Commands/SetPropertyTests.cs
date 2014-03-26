@@ -33,11 +33,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class SetPropertyTests : TestBase
     {
-        public SetPropertyTests()
-        {
-            UseEmptyRepositoryForWc = false;
-        }
-
         /// <summary>
         ///Attempts to Set Properties on a file
         /// </summary>
@@ -143,7 +138,7 @@ namespace SharpSvn.Tests.Commands
 
             string dir = WcPath;
 
-            TouchFile(Path.Combine(WcPath,"NewFile.ignored"));
+            TouchFile(Path.Combine(WcPath, "NewFile.ignored"));
             TouchFile(Path.Combine(WcPath, "NewFile"));
 
             string v;

@@ -41,7 +41,7 @@ namespace SharpSvn.Tests.Commands
         {
             SvnSandBox sbox = new SvnSandBox(this);
             Uri ReposUrl = sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
-            InstallRevpropHook(ReposUrl);
+            sbox.InstallRevpropHook(ReposUrl);
 
             this.RunCommand("svn", "ps --revprop -r HEAD cow moo " + ReposUrl);
 
