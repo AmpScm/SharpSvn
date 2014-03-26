@@ -281,6 +281,7 @@ namespace SharpSvn.Tests.Commands
                 try
                 {
                     Client.Update(Path.Combine(dir, "index.html"));
+                    Assert.Fail("Should have failed");
                 }
                 catch (SvnWorkingCopyException e)
                 {
