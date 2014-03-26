@@ -94,6 +94,7 @@ namespace SharpSvn.TestBuilder
                     case SandBoxRepository.DefaultBranched:
                     case SandBoxRepository.MergeScenario:
                     case SandBoxRepository.AnkhSvnCases:
+                    case SandBoxRepository.Greek:
                         _uri = new Uri(_repositoryUri, "trunk/");
                         break;
                 }

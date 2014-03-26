@@ -30,6 +30,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void MergeSources_VerifyCollabNetRepos()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             string dir = GetTempDir();
             SvnMergeSourcesCollection msc;
 

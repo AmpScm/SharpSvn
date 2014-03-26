@@ -21,8 +21,9 @@ using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 
 using SharpSvn;
+using SharpSvn.Tests.Commands;
 
-namespace SharpSvn.Tests.Commands
+namespace SharpSvn.Tests.Misc
 {
     /// <summary>
     /// Summary description for ExceptionTest.

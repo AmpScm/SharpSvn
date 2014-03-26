@@ -137,8 +137,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_TestLocalLogVariants()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             SvnLogArgs a = new SvnLogArgs();
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
 
             bool touched = false;
@@ -183,9 +186,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_TestLogSingleFile()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             bool touched = false;
             SvnLogArgs a = new SvnLogArgs();
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
             touched = false;
 
@@ -201,9 +207,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_TestMultiLocalLogs()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             bool touched = false;
             SvnLogArgs a = new SvnLogArgs();
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk/"), dir);
             touched = false;
             Client.Log(new string[]
@@ -349,29 +358,30 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Log_LogCreate()
         {
-            SvnClient client = Client;
-            string WcPath = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string WcPath = sbox.Wc;
             Uri WcUri = new Uri(CollabReposUri, "trunk/");
 
             Client.CheckOut(WcUri, WcPath);
 
-
             string logFile = Path.Combine(WcPath, "LogTestFileBase");
             TouchFile(logFile);
-            client.Add(logFile);
+            Client.Add(logFile);
             SvnCommitArgs a = new SvnCommitArgs();
             a.LogMessage = "Commit 1\rWith\nSome\r\nRandom\n\rNewlines\nAdded\n\r\n";
-            client.Commit(WcPath, a);
+            Client.Commit(WcPath, a);
 
             File.AppendAllText(logFile, Guid.NewGuid().ToString());
             a.LogMessage = "Commit 2";
-            client.SetProperty(logFile, "TestProperty", "TestValue");
-            client.Commit(WcPath, a);
+            Client.SetProperty(logFile, "TestProperty", "TestValue");
+            Client.Commit(WcPath, a);
 
             string renamedLogFile = Path.Combine(WcPath, "LogTestFileDest");
-            client.Move(logFile, renamedLogFile);
+            Client.Move(logFile, renamedLogFile);
             a.LogMessage = "Commit 3" + Environment.NewLine + "With newline";
-            client.Commit(WcPath, a);
+            Client.Commit(WcPath, a);
 
             int n = 0;
             SvnLogArgs la = new SvnLogArgs();
@@ -442,12 +452,12 @@ namespace SharpSvn.Tests.Commands
                 n++;
             };
 
-            client.Log(new Uri(WcUri, "LogTestFileDest"), verify);
+            Client.Log(new Uri(WcUri, "LogTestFileDest"), verify);
             Assert.That(n, Is.EqualTo(3));
 
             n = 0;
 
-            client.Log(Path.Combine(WcPath, "LogTestFileDest"), verify);
+            Client.Log(Path.Combine(WcPath, "LogTestFileDest"), verify);
             Assert.That(n, Is.EqualTo(3));
         }
 

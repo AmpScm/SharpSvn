@@ -115,7 +115,8 @@ namespace SharpSvn.Tests.Commands
                 TouchFile(file);
                 client.Add(file);
 
-                TouchFile(Path.Combine(TestPath, "MoveTestImport/RemoteMoveBase"), true);
+                Directory.CreateDirectory(Path.Combine(TestPath, "MoveTestImport"));
+                TouchFile(Path.Combine(TestPath, "MoveTestImport/RemoteMoveBase"));
 
                 client.RemoteImport(Path.Combine(TestPath, "MoveTestImport"), new Uri(ReposUrl, "RemoteMoveBase"));
 

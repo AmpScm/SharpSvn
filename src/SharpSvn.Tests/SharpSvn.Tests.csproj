@@ -37,7 +37,6 @@
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x64</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
-
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -72,7 +71,7 @@
   <ItemGroup>
     <Compile Include="AdminCommands\DumpTest.cs" />
     <Compile Include="Commands\AddTests.cs" />
-    <Compile Include="Commands\AuthenticationTests.cs" />
+    <Compile Include="Misc\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
     <Compile Include="Commands\DiffSummaryTests.cs" />
     <Compile Include="Commands\CapabilitiesTests.cs" />
@@ -84,7 +83,7 @@
     <Compile Include="Commands\CreateRepositoryTests.cs" />
     <Compile Include="Commands\DeleteTests.cs" />
     <Compile Include="Commands\DiffTests.cs" />
-    <Compile Include="Commands\ExceptionTests.cs" />
+    <Compile Include="Misc\ExceptionTests.cs" />
     <Compile Include="Commands\ExportTests.cs" />
     <Compile Include="Commands\FileVersionsTests.cs" />
     <Compile Include="Commands\MergeInfoTests.cs" />
@@ -134,7 +133,7 @@
     <None Include="Zips\repos.zip" />
     <None Include="Zips\wc.zip" />
     <Compile Include="Commands\WriteTests.cs" />
-    <Compile Include="Commands\ZMiscTests.cs">
+    <Compile Include="Misc\ZMiscTests.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FileDiffTests.cs" />

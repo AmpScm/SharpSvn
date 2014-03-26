@@ -89,6 +89,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_TestRoot()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             using (SvnClient client = new SvnClient())
             {
                 client.List(CollabReposUri, delegate(object sender, SvnListEventArgs e)
@@ -121,7 +124,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_ReadDash()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string dir = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk"), dir);
 
             string file = Path.Combine(dir, "File#Dash");
@@ -187,6 +193,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_ParallelLocalList()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             Uri reposUri = new Uri(CollabReposUri, "trunk/");
             List<IAsyncResult> handlers = new List<IAsyncResult>();
             for (int i = 0; i < 128; i++)
@@ -211,6 +220,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_WorstLocalDir()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             Uri uri = CollabReposUri;
             string tmp = GetTempDir();
 
@@ -270,8 +282,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void List_ListDepth()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             Uri url = new Uri(CollabReposUri, "trunk/");
-            string dir = GetTempDir();
+            string dir = sbox.Wc;
             Client.CheckOut(url, dir);
 
             foreach (SvnDepth d in new SvnDepth[] { SvnDepth.Infinity, SvnDepth.Children, SvnDepth.Files, SvnDepth.Empty })

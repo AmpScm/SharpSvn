@@ -24,8 +24,9 @@ using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 using SharpSvn;
+using SharpSvn.Tests.Commands;
 
-namespace SharpSvn.Tests.Commands
+namespace SharpSvn.Tests.Misc
 {
     /// <summary>
     /// Contains tests for various Client functions that don't merit their own test fixture
@@ -33,10 +34,10 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class ZMiscTests : TestBase
     {
-    public ZMiscTests()
-    {
-        UseEmptyRepositoryForWc = false;
-    }
+        public ZMiscTests()
+        {
+            UseEmptyRepositoryForWc = false;
+        }
 
         /// <summary>
         /// Tests the Client::UrlFromPath function.
@@ -74,34 +75,44 @@ namespace SharpSvn.Tests.Commands
         {
             Guid id;
             Assert.That(this.Client.TryGetRepositoryId(this.ReposUrl, out id));
-        Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
+            Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
         }
 
-    [TestMethod]
-    public void TestUuidFromPath()
-    {
-        Guid id;
-        Assert.That(this.Client.TryGetRepositoryId(this.WcPath, out id));
-        Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
-    }
+        [TestMethod]
+        public void TestUuidFromPath()
+        {
+            Guid id;
+            Assert.That(this.Client.TryGetRepositoryId(this.WcPath, out id));
+            Assert.That(id.ToString(), Is.EqualTo("c05fa231-13bb-1140-932e-d33687eeb1a3"), "UUID wrong");
+        }
 
-    /// <summary>
-    /// Tests the cancel.
-    /// </summary>
+        /// <summary>
+        /// Tests the cancel.
+        /// </summary>
         [TestMethod]
         [ExpectedException(typeof(SvnOperationCanceledException))]
         public void TestCancel()
         {
             //this.Client.AuthBaton.Add( AuthenticationProvider.GetUsernameProvider() );
-            this.Client.Cancel += new EventHandler<SvnCancelEventArgs>(this.Cancel);
+            SvnSandBox sbox = new SvnSandBox(this);
 
-            this.Client.Update(this.WcPath);
+            int cancels = 0;
 
-            Assert.That(this.cancels > 0, "No cancellation callbacks");
+            EventHandler<SvnCancelEventArgs> cancelHandler = delegate(object sender, SvnCancelEventArgs e)
+            {
+                cancels++;
+            };
 
-            this.Client.Cancel -= new EventHandler<SvnCancelEventArgs>(this.Cancel);
-            this.Client.Cancel += new EventHandler<SvnCancelEventArgs>(this.ReallyCancel);
-            this.Client.Update(this.WcPath);
+            Client.Cancel += cancelHandler;
+
+            Assert.That(Client.CheckOut(sbox.CreateRepository(SandBoxRepository.Greek), sbox.Wc));
+            Assert.That(cancels, Is.GreaterThan(0), "No cancellation callbacks");
+
+            Client.Cancel -= new EventHandler<SvnCancelEventArgs>(cancelHandler);
+            Client.Cancel += delegate(object sender, SvnCancelEventArgs e) { e.Cancel = true; cancels = -1; };
+
+            Assert.That(Client.Update(sbox.Wc), Is.False);
+            Assert.That(cancels, Is.EqualTo(-1));
         }
 
         [System.Runtime.InteropServices.DllImport("kernel32.dll")]
@@ -144,21 +155,21 @@ namespace SharpSvn.Tests.Commands
             SvnWorkingCopyStateArgs a = new SvnWorkingCopyStateArgs();
             a.RetrieveFileData = true;
 
-        SvnWorkingCopyClient wcc = new SvnWorkingCopyClient();
-                    wcc.GetState(Path.Combine(this.WcPath, "Form.cs"), out state);
+            SvnWorkingCopyClient wcc = new SvnWorkingCopyClient();
+            wcc.GetState(Path.Combine(this.WcPath, "Form.cs"), out state);
 
-                    // first on a file
-                    Assert.That(state.IsTextFile);
+            // first on a file
+            Assert.That(state.IsTextFile);
 
-                    wcc.GetState(Path.Combine(this.WcPath, "App.ico"), out state);
+            wcc.GetState(Path.Combine(this.WcPath, "App.ico"), out state);
 
-                    Assert.That(state.IsTextFile, Is.False);
+            Assert.That(state.IsTextFile, Is.False);
 
 
-                    wcc.GetState(this.WcPath, out state);
+            wcc.GetState(this.WcPath, out state);
 
-                    // check what happens for a dir
-                    //Assert.IsFalse(state.IsTextFile);
+            // check what happens for a dir
+            //Assert.IsFalse(state.IsTextFile);
 
         }
 
@@ -216,19 +227,5 @@ namespace SharpSvn.Tests.Commands
             string info = this.RunCommand("svn", "info " + path);
             return Regex.Match(info, @"URL: (.*)", RegexOptions.IgnoreCase).Groups[1].ToString().Trim();
         }
-
-        private void Cancel(object sender, SvnCancelEventArgs args)
-        {
-            this.cancels++;
-            args.Cancel = false;
-        }
-
-        private void ReallyCancel(object sender, SvnCancelEventArgs args)
-        {
-            this.cancels++;
-            args.Cancel = true;
-        }
-
-        private int cancels = 0;
     }
 }

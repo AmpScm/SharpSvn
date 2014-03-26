@@ -95,5 +95,23 @@ namespace SharpSvn.Tests.Commands
         }
 
 
+        /// <summary>
+        /// Starts a svnserve instance.
+        /// </summary>
+        /// <param name="root">The root directory to use for svnserve.</param>
+        /// <returns></returns>
+        protected Process StartSvnServe(string root)
+        {
+            ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svnserve.exe")),
+                String.Format("--daemon --root {0} --listen-host 127.0.0.1 --listen-port {1}", root,
+                PortNumber));
+
+            psi.CreateNoWindow = true;
+            psi.UseShellExecute = false;
+
+            return Process.Start(psi);
+        }
+
+        protected static readonly int PortNumber = 7777 + new Random().Next(5000);
     }
 }

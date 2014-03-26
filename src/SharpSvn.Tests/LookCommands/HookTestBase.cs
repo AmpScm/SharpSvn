@@ -215,5 +215,18 @@ namespace SharpSvn.Tests.LookCommands
 
             return stopper;
         }
+
+        protected string Configuration
+        {
+            get
+            {
+#if DEBUG
+                return "DEBUG";
+#else
+                return "RELEASE";
+#endif
+            }
+        }
+
     }
 }

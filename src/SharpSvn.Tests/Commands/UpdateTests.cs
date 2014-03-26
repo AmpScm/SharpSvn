@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SharpSvn.TestBuilder;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
 
@@ -55,7 +56,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void RevTests()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string dir = sbox.Wc;
 
             SvnUpdateResult result;
             Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk")), dir, out result));
@@ -110,7 +114,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestObstruction()
         {
-            string tmp = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string tmp = sbox.Wc;
             Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk/"), 2), tmp);
             File.WriteAllText(Path.Combine(tmp, "products/medium.html"), "q");
             SvnUpdateArgs ua = new SvnUpdateArgs();
@@ -271,7 +278,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void UpdateInUse()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string dir = sbox.Wc;
             Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk"), 1), dir);
 
             using (File.OpenRead(Path.Combine(dir, "index.html")))
@@ -301,7 +311,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void UpdateInUseWrite()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string dir = sbox.Wc;
             bool skippedDenied = false;
             Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk"), 1), dir);
             Client.Notify += delegate(object sender, SvnNotifyEventArgs e)
@@ -322,7 +335,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void StatusReportsSparse()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string dir = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk"), dir);
 
             Client.Update(Path.Combine(dir, "products"), new SvnUpdateArgs { Depth = SvnDepth.Empty, KeepDepth = true });

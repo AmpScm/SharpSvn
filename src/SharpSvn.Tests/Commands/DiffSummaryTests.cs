@@ -15,6 +15,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void DiffSummary_TrunkBranchB()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             SvnDiffSummaryArgs sa = new SvnDiffSummaryArgs();
             Client.DiffSummary(new Uri(CollabReposUri, "trunk"), new Uri(CollabReposUri, "branches/b"), sa,
                 delegate(object sender, SvnDiffSummaryEventArgs e)

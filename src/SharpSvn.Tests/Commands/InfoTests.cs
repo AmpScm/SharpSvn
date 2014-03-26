@@ -34,6 +34,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void InfoTest()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             string dir = GetTempDir();
             SvnUpdateResult r;
 
@@ -69,7 +72,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void WcCasing()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+            string dir = sbox.Wc;
             SvnUpdateResult r;
 
             Assert.That(Client.CheckOut(CollabReposUri, dir, out r));
@@ -150,7 +155,9 @@ namespace SharpSvn.Tests.Commands
     [TestMethod]
     public void WcDirMissing()
     {
-        string dir = GetTempDir();
+        SvnSandBox sbox = new SvnSandBox(this);
+        Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+        string dir = sbox.Wc;
         SvnUpdateResult r;
 
         Assert.That(Client.CheckOut(CollabReposUri, dir, out r));

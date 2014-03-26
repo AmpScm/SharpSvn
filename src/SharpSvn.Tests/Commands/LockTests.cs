@@ -85,9 +85,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Lock_DualLock()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             // Checks that sharpsvn sees a failed lock as an error (unlike the subversion c api)
-            string wc1 = GetTempDir();
-            string wc2 = GetTempDir();
+            string wc1 = sbox.Wc;
+            string wc2 = sbox.GetTempDir("2");
             Uri repos = new Uri(CollabReposUri, "trunk/");
 
             Client.CheckOut(repos, wc1);
@@ -121,8 +124,11 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void Lock_CommitTest()
         {
-            string wc1 = GetTempDir();
-            string wc2 = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string wc1 = sbox.Wc;
+            string wc2 = sbox.GetTempDir("WC2");
             Uri repos = new Uri(CollabReposUri, "trunk/");
 
             Client.CheckOut(repos, wc1);
