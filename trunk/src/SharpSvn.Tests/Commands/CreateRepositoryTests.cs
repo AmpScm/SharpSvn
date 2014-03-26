@@ -37,7 +37,7 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        [TestMethod,Ignore]
+        [TestMethod]
         public void CreateRepository_Bdb()
         {
             using (SvnRepositoryClient reposClient = new SvnRepositoryClient())

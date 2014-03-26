@@ -539,6 +539,41 @@ namespace SharpSvn.Tests.Commands
             Directory.Delete(dir, true);
         }
 
+        static bool _checkedBDB;
+        static void EnsureBDBAvailability(Microsoft.VisualStudio.TestTools.UnitTesting.TestContext value)
+        {
+            if (_checkedBDB)
+                return;
+
+            _checkedBDB = true;
+
+            string dir = Path.GetDirectoryName(new Uri(typeof(TestBase).Assembly.CodeBase).LocalPath);
+
+            string bdbX86 = "SharpSvn-DB44-20-win32.svnDll";
+            string bdbX64 = "SharpSvn-DB44-20-x64.svnDll";
+
+            if (!File.Exists(Path.Combine(dir, bdbX86)) && !File.Exists(Path.Combine(dir, bdbX64)))
+            {
+                string pd = dir;
+
+                while (pd != null)
+                {
+                    DirectoryInfo imports = new DirectoryInfo(Path.Combine(pd, "imports/release"));
+
+                    if (imports.Exists)
+                    {
+                        foreach(FileInfo f in imports.GetFiles("*.svnDll", SearchOption.AllDirectories))
+                        {
+                            File.Copy(f.FullName, Path.Combine(dir, f.Name));
+                        }
+                        return;
+                    }
+
+                    pd = Path.GetDirectoryName(pd);
+                }
+
+            }
+        }
 
         protected readonly string REPOS_FILE;
         private const string REPOS_NAME = "repos";
@@ -553,7 +588,11 @@ namespace SharpSvn.Tests.Commands
         public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
         {
             get { return _tcx;  }
-            set { _tcx = value; }
+            set
+            {
+                _tcx = value;
+                EnsureBDBAvailability(value);
+            }
         }
 
         [Microsoft.VisualStudio.TestTools.UnitTesting.ClassCleanup]
