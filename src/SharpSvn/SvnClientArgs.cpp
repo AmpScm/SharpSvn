@@ -69,6 +69,9 @@ bool SvnClientArgs::HandleResult(SvnClientContext^ client, SvnException^ excepti
         return false;
     else if (_expectedErrorCategories && 0 <= Array::IndexOf(_expectedErrorCategories, _exception->SvnErrorCategory))
         return false;
+    else if (_expectedCauses && _exception->ContainsError(_expectedCauses))
+        return false;
+
     if (!ThrowOnCancel && _exception->SubversionErrorCode == SVN_ERR_CANCELLED)
         return false;
     else if (ThrowOnError)
