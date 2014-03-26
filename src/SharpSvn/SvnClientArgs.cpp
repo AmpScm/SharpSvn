@@ -123,3 +123,19 @@ void SvnClientArgs::AddExpectedError(... array<SvnErrorCategory>^ errorCategorie
 
     _expectedErrorCategories = SvnBase::ExtendArray(_expectedErrorCategories, errorCategories);
 }
+
+void SvnClientArgs::AddExpectedCause(SvnErrorCode errorCode)
+{
+    if (errorCode == SvnErrorCode::None)
+        throw gcnew ArgumentOutOfRangeException("errorCode");
+
+    _expectedCauses = SvnBase::ExtendArray(_expectedErrors, errorCode);
+}
+
+void SvnClientArgs::AddExpectedCause(... array<SvnErrorCode>^ errorCodes)
+{
+    if (!errorCodes || !errorCodes->Length)
+        return;
+
+    _expectedCauses = SvnBase::ExtendArray(_expectedErrors, errorCodes);
+}
