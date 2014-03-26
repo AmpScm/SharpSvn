@@ -24,10 +24,11 @@ using SharpSvn.TestBuilder;
 
 namespace SharpSvn.Tests.Commands
 {
+    [TestClass]
     public class GetSuggestedMergeSourcesTests : TestBase
     {
         [TestMethod]
-        public void VerifyCollabNetRepos()
+        public void MergeSources_VerifyCollabNetRepos()
         {
             string dir = GetTempDir();
             SvnMergeSourcesCollection msc;
@@ -39,25 +40,25 @@ namespace SharpSvn.Tests.Commands
             Assert.That(msc.Count, Is.EqualTo(3));
             foreach (SvnMergeSource ms in msc)
             {
-        Collection<SvnMergesEligibleEventArgs> info;
+                Collection<SvnMergesEligibleEventArgs> info;
 
-                        Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
-                        Assert.That(info, Is.Not.Null);
+                Assert.That(Client.GetMergesEligible(me, ms.Uri, out info));
+                Assert.That(info, Is.Not.Null);
 
-                        if (ms.Uri == new Uri(CollabReposUri, "trunk"))
-                        {
-                                Assert.That(info.Count, Is.EqualTo(1));
-                        }
-                        else if (ms.Uri == new Uri(CollabReposUri, "branches/a"))
-                        {
-                                Assert.That(info.Count, Is.EqualTo(0));
-                        }
-                        else if (ms.Uri == new Uri(CollabReposUri, "branches/b"))
-                        {
-                                Assert.That(info.Count, Is.EqualTo(0));
-                        }
-                        else
-                                Assert.That(false, "Strange branch found");
+                if (ms.Uri == new Uri(CollabReposUri, "trunk"))
+                {
+                    Assert.That(info.Count, Is.EqualTo(1));
+                }
+                else if (ms.Uri == new Uri(CollabReposUri, "branches/a"))
+                {
+                    Assert.That(info.Count, Is.EqualTo(0));
+                }
+                else if (ms.Uri == new Uri(CollabReposUri, "branches/b"))
+                {
+                    Assert.That(info.Count, Is.EqualTo(0));
+                }
+                else
+                    Assert.That(false, "Strange branch found");
             }
         }
     }
