@@ -52,7 +52,7 @@ namespace SharpSvn.Tests
                     Assert.That(ee[0].Entry.Author, Is.Not.Null);
         }
 
-        [TestMethod]
+        [TestMethod,Ignore]
         public void TestSsh()
         {
             SvnClient cl = new SvnClient();
