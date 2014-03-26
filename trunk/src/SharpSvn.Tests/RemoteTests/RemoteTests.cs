@@ -24,6 +24,9 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_OpenRepos()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             using (SvnRemoteSession r = new SvnRemoteSession(CollabReposUri))
             {
                 r.Reparent(CollabReposUri);
@@ -269,6 +272,9 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_LogRanges()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             using (SvnRemoteSession rc = new SvnRemoteSession())
             using (SvnRemoteSession rc2 = new SvnRemoteSession())
             {
@@ -292,6 +298,9 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_CompareRanges()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             using (SvnRemoteSession rc = new SvnRemoteSession())
             {
                 rc.Open(CollabReposUri);
@@ -322,6 +331,9 @@ namespace SharpSvn.Tests.RemoteTests
         [TestMethod]
         public void Remote_GetProps()
         {
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
             using (SvnRemoteSession rc = new SvnRemoteSession(CollabReposUri))
             {
                 SvnPropertyCollection pc;

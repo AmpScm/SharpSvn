@@ -23,8 +23,9 @@ using SharpSvn.TestBuilder;
 
 using SharpSvn;
 using SharpSvn.Security;
+using SharpSvn.Tests.Commands;
 
-namespace SharpSvn.Tests.Commands
+namespace SharpSvn.Tests.Misc
 {
     /// <summary>
     /// Tests the Authentication class.

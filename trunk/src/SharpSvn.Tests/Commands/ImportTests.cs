@@ -33,12 +33,6 @@ namespace SharpSvn.Tests.Commands
     [TestClass]
     public class ImportTests : TestBase
     {
-        [TestInitialize]
-        public void ImportSetup()
-        {
-            notifications = new List<SvnNotifyEventArgs>();
-        }
-
         /// <summary>
         /// Tests importing an unverioned file into the repository with the new entry :
         /// testfile2.txt.

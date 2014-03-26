@@ -63,5 +63,13 @@ namespace SharpSvn.Tests.Commands
 
             Client.SetRevisionProperty(new Uri(reposUri, "trunk"), rev, SvnPropertyNames.SvnDate, SvnPropertyNames.FormatDate(DateTime.UtcNow));
         }
+
+
+        protected void InstallRevpropHook(string reposPath)
+        {
+            string bat = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, SvnHookType.PreRevPropChange), ".bat");
+
+            File.WriteAllText(bat, "exit 0");
+        }
     }
 }

@@ -23,6 +23,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
+using System.Collections.Generic;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -167,6 +168,29 @@ namespace SharpSvn.Tests.Commands
             Assert.That(this.GetSvnStatus(dir2), Is.EqualTo(SvnStatus.Added), "Subsubdirectory not added");
             Assert.That(this.GetSvnStatus(testFile1), Is.EqualTo(SvnStatus.Added), "File in subdirectory not added");
             Assert.That(this.GetSvnStatus(testFile2), Is.EqualTo(SvnStatus.Added), "File in subsubdirectory not added");
+        }
+
+        List<SvnNotifyEventArgs> _notifications = new List<SvnNotifyEventArgs>();
+
+        /// <summary>
+        /// Callback method to be used as ClientContext.NotifyCallback
+        /// </summary>
+        /// <param name="notification">An object containing information about the notification</param>
+        public virtual void NotifyCallback(object sender, SvnNotifyEventArgs e)
+        {
+            e.Detach();
+            _notifications.Add(e);
+        }
+
+        /// <summary>
+        /// The notifications generated during a call to Client::Add
+        /// </summary>
+        public SvnNotifyEventArgs[] Notifications
+        {
+            get
+            {
+                return _notifications.ToArray();
+            }
         }
 
         [TestMethod]

@@ -37,7 +37,12 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void CreateDirectory_MakeLocalDir()
         {
-            string path = Path.Combine(this.WcPath, "foo");
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri emptyUri = sbox.CreateRepository(SandBoxRepository.Empty);
+
+            Client.CheckOut(emptyUri, sbox.Wc);
+
+            string path = Path.Combine(sbox.Wc, "foo");
             Assert.That(Client.CreateDirectory(path));
 
             Assert.That(this.GetSvnStatus(path), Is.EqualTo(SvnStatus.Added), "Wrong status code");
@@ -78,7 +83,8 @@ namespace SharpSvn.Tests.Commands
 
                 client.Add(Path.Combine(trunkPath, "test.txt"));
 
-                TouchFile(Path.Combine(trunkPath, "dir/test.txt"), true);
+                Directory.CreateDirectory(Path.Combine(trunkPath, "dir"));
+                TouchFile(Path.Combine(trunkPath, "dir/test.txt"));
 
                 SvnAddArgs aa = new SvnAddArgs();
                 aa.AddParents = true;

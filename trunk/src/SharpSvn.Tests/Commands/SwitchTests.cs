@@ -47,7 +47,10 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void PegTests()
         {
-            string dir = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string dir = sbox.Wc;
 
             SvnUpdateResult result;
             Assert.That(Client.CheckOut(new SvnUriTarget(new Uri(CollabReposUri, "trunk")), dir, out result));

@@ -57,6 +57,9 @@ namespace SharpSvn.Tests.Commands
     [TestMethod]
     public void GetPropertyValues()
     {
+        SvnSandBox sbox = new SvnSandBox(this);
+        Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
         Uri trunk = new Uri(CollabReposUri, "trunk");
         string dir = GetTempDir();
         Client.CheckOut(trunk, dir);
@@ -91,7 +94,9 @@ namespace SharpSvn.Tests.Commands
         [TestMethod]
         public void TestNonExistentPropertyExistingFile()
         {
-            string wc = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+            string wc = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
 
             SvnGetPropertyArgs pa = new SvnGetPropertyArgs();
@@ -108,7 +113,10 @@ namespace SharpSvn.Tests.Commands
     [TestMethod, ExpectedException(typeof(SvnUnversionedNodeException))]
         public void TestNonExistentPropertyNonExistingFile()
         {
-            string wc = GetTempDir();
+            SvnSandBox sbox = new SvnSandBox(this);
+            Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+            string wc = sbox.Wc;
             Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
 
             string value;
@@ -125,7 +133,10 @@ namespace SharpSvn.Tests.Commands
     [TestMethod]
     public void TestGetOnCwd()
     {
-        string wc = GetTempDir();
+        SvnSandBox sbox = new SvnSandBox(this);
+        Uri CollabReposUri = sbox.CreateRepository(SandBoxRepository.MergeScenario);
+
+        string wc = sbox.Wc;
         Client.CheckOut(new Uri(CollabReposUri, "trunk"), wc);
 
         string dir = Directory.GetCurrentDirectory();

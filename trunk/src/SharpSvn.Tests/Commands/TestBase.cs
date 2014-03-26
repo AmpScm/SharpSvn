@@ -48,12 +48,11 @@ namespace SharpSvn.Tests.Commands
         Uri _reposUri;
         string _reposPath;
         string _wcPath;
+        private SvnClient client;
 
         public TestBase()
         {
             string asm = this.GetType().FullName;
-            this.REPOS_FILE = "repos.zip";
-            this.WC_FILE = "wc.zip";
             UseEmptyRepositoryForWc = true;
         }
 
@@ -112,16 +111,9 @@ namespace SharpSvn.Tests.Commands
             return GetReposUri(type).AbsolutePath;
         }
 
-        [Obsolete("Please use an SBox")]
-        protected Uri CollabReposUri
-        {
-            get { return GetReposUri(TestReposType.CollabRepos); }
-        }
-
         [TestInitialize]
         public void SetUp()
         {
-            this.notifications = new List<SvnNotifyEventArgs>();
             this.client = new SvnClient();
             client.Configuration.LogMessageRequired = false;
             client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
@@ -177,24 +169,6 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-        protected static void RecursiveDelete(string path)
-        {
-            if (Directory.Exists(path))
-            {
-                foreach (FileInfo f in new DirectoryInfo(path).GetFiles("*", SearchOption.AllDirectories))
-                {
-                    f.Attributes = FileAttributes.Normal;
-                }
-
-                foreach (DirectoryInfo f in new DirectoryInfo(path).GetDirectories("*", SearchOption.AllDirectories))
-                {
-                    f.Attributes = FileAttributes.Normal;
-                }
-
-                Directory.Delete(path, true);
-            }
-        }
-
         /// <summary>
         /// extract our test repository
         /// </summary>
@@ -217,7 +191,7 @@ namespace SharpSvn.Tests.Commands
 
             this._wcPath = GetTempDir();
 
-            UnzipToFolder(Path.Combine(ProjectBase, "Zips/" + WC_FILE), _wcPath);
+            UnzipToFolder(Path.Combine(ProjectBase, "Zips/wc.zip"), _wcPath);
             RawRelocate(_wcPath, new Uri("file:///tmp/repos/"), ReposUrl);
             this.RenameAdminDirs(_wcPath);
 
@@ -387,33 +361,12 @@ namespace SharpSvn.Tests.Commands
         }
 
         /// <summary>
-        /// The notifications generated during a call to Client::Add
-        /// </summary>
-        public SvnNotifyEventArgs[] Notifications
-        {
-            get
-            {
-                return this.notifications.ToArray();
-            }
-        }
-
-        /// <summary>
         /// The client object.
         /// </summary>
         public SvnClient Client
         {
             [System.Diagnostics.DebuggerStepThrough]
             get { return this.client; }
-        }
-
-        /// <summary>
-        /// Callback method to be used as ClientContext.NotifyCallback
-        /// </summary>
-        /// <param name="notification">An object containing information about the notification</param>
-        public virtual void NotifyCallback(object sender, SvnNotifyEventArgs e)
-        {
-            e.Detach();
-            this.notifications.Add(e);
         }
 
         /// <summary>
@@ -430,18 +383,6 @@ namespace SharpSvn.Tests.Commands
             return path;
         }
 
-        protected string Configuration
-        {
-            get
-            {
-#if DEBUG
-                return "DEBUG";
-#else
-                return "RELEASE";
-#endif
-            }
-        }
-
         protected string GetTempFile()
         {
             SvnSandBox sbox = new SvnSandBox(this);
@@ -455,10 +396,10 @@ namespace SharpSvn.Tests.Commands
         /// <param name="path"></param>
         protected void RenameAdminDirs(string path)
         {
-            if (TRAD_WC_ADMIN_DIR == SvnClient.AdministrativeDirectoryName)
+            if (SvnClient.AdministrativeDirectoryName == ".svn")
                 return;
 
-            string adminDir = Path.Combine(path, TRAD_WC_ADMIN_DIR);
+            string adminDir = Path.Combine(path, ".svn");
             string newDir = Path.Combine(path, SvnClient.AdministrativeDirectoryName);
 
             if (Directory.Exists(adminDir))
@@ -470,63 +411,17 @@ namespace SharpSvn.Tests.Commands
                 this.RenameAdminDirs(dir);
         }
 
-        /// <summary>
-        /// Starts a svnserve instance.
-        /// </summary>
-        /// <param name="root">The root directory to use for svnserve.</param>
-        /// <returns></returns>
-        protected Process StartSvnServe(string root)
-        {
-            ProcessStartInfo psi = new ProcessStartInfo(Path.GetFullPath(Path.Combine(ProjectBase, "..\\..\\imports\\release\\bin\\svnserve.exe")),
-                String.Format("--daemon --root {0} --listen-host 127.0.0.1 --listen-port {1}", root,
-                PortNumber));
-
-            psi.CreateNoWindow = true;
-            psi.UseShellExecute = false;
-
-            return Process.Start(psi);
-        }
-
-        protected void SetReposAuth()
-        {
-            string conf = Path.Combine(this.ReposPath,
-                Path.Combine("conf", "svnserve.conf"));
-            string authConf = Path.Combine(this.ReposPath,
-                Path.Combine("conf", "svnserve.auth.conf"));
-            File.Copy(authConf, conf, true);
-        }
-
-        protected static readonly int PortNumber = 7777 + new Random().Next(5000);
-
-
-
         protected static void TouchFile(string filename)
         {
-            TouchFile(filename, false);
-        }
-
-        protected static void Touch2(string filename)
-        {
-            File.WriteAllText(filename, Guid.NewGuid().ToString());
-        }
-
-        protected static void TouchFile(string filename, bool createDir)
-        {
-            string dir = Path.GetDirectoryName(filename);
-            if (createDir && !Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-
             using (FileStream fs = File.Create(filename))
             {
                 fs.Write(new byte[0], 0, 0);
             }
         }
 
-        protected void InstallRevpropHook(string reposPath)
+        protected static void Touch2(string filename)
         {
-            string bat = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, SvnHookType.PreRevPropChange), ".bat");
-
-            File.WriteAllText(bat, "exit 0");
+            File.WriteAllText(filename, Guid.NewGuid().ToString());
         }
 
         public static void ForcedDeleteDirectory(string dir)
@@ -574,15 +469,6 @@ namespace SharpSvn.Tests.Commands
 
             }
         }
-
-        protected readonly string REPOS_FILE;
-        private const string REPOS_NAME = "repos";
-        protected readonly string WC_FILE;
-        protected const string WC_NAME = "wc";
-        protected const string TRAD_WC_ADMIN_DIR = ".svn";
-        private SvnClient client;
-
-        protected List<SvnNotifyEventArgs> notifications;
 
         Microsoft.VisualStudio.TestTools.UnitTesting.TestContext _tcx;
         public Microsoft.VisualStudio.TestTools.UnitTesting.TestContext TestContext
