@@ -36,7 +36,8 @@ namespace SharpSvn.Tests.Commands
         Empty,
         EmptyNoMerge,
         AnkhRepos,
-        CollabRepos
+        CollabRepos,
+        GreekRepos
     }
     /// <summary>
     /// Serves as a base class for tests for NSvn::Core::Add
@@ -87,6 +88,9 @@ namespace SharpSvn.Tests.Commands
                 case TestReposType.AnkhRepos:
                     sbox = new SvnSandBox(this);
                     return sbox.CreateRepository(SandBoxRepository.AnkhSvnCases);
+                case TestReposType.GreekRepos:
+                    sbox = new SvnSandBox(this);
+                    return sbox.CreateRepository(SandBoxRepository.Greek);
                 default:
                     throw new ArgumentException();
             }

@@ -30,7 +30,7 @@ namespace SharpSvn.Tests
     public class SvnBdbTest : Commands.TestBase
     {
 
-        [TestMethod]
+        [TestMethod,Ignore]
         public void CreateBdbRepos()
         {
 			string path = GetTempDir();
