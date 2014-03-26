@@ -225,6 +225,29 @@ namespace SharpSvn {
             return ContainsError((SharpSvn::SvnErrorCode)APR_FROM_OS_ERROR((int)code));
         }
 
+        bool ContainsError(... array<SharpSvn::SvnErrorCode> ^codes)
+        {
+            if (!codes)
+                throw gcnew ArgumentNullException("codes");
+
+            Exception^ e = this;
+
+            while (e)
+            {
+                SvnException ^svnEx = dynamic_cast<SvnException ^>(e);
+                if (svnEx)
+                    for each (SharpSvn::SvnErrorCode c in codes)
+                    {
+                        if (svnEx->SvnErrorCode == c)
+                            return true;
+                    }
+
+                e = e->InnerException;
+            }
+
+            return false;
+        }
+
     public:
         property String^ File
         {

@@ -38,6 +38,7 @@ namespace SharpSvn {
         // On +- 90% of the SvnClientArgs instances none of these is used
         array<SvnException^>^ _warnings;
         array<SvnErrorCode>^ _expectedErrors;
+        array<SvnErrorCode>^ _expectedCauses;
         array<SvnErrorCategory>^ _expectedErrorCategories;
 
     public:
@@ -218,6 +219,12 @@ namespace SharpSvn {
         void AddExpectedError(SvnErrorCategory errorCategory);
         /// <summary>Adds error categories to the list of errors not to throw exceptions for</summary>
         void AddExpectedError(... array<SvnErrorCategory>^ errorCategories);
+
+        /// <summary>Adds an error code to the list of errors not to throw exceptions for</summary>
+        void AddExpectedCause(SvnErrorCode errorCode);
+        /// <summary>Adds error codes to the list of errors not to throw exceptions for</summary>
+        void AddExpectedCause(... array<SvnErrorCode>^ errorCodes);
+        /// <summary>Adds an error category to the list of errors not to throw exceptions for</summary>
 
     internal:
         bool HandleResult(SvnClientContext^ client, svn_error_t *error)
