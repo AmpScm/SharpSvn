@@ -36,7 +36,7 @@ namespace SharpSvn.Tests
         SvnListArgs la = new SvnListArgs();
         la.RetrieveEntries = SvnDirEntryItems.AllFieldsV15;
 
-                    cl.List(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
+                    cl.List(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk"), la, delegate(object Sender, SvnListEventArgs e)
                     {
                             Assert.That(e.Entry, Is.Not.Null);
                             Assert.That(e.Entry.Revision, Is.GreaterThan(0L));
@@ -47,7 +47,7 @@ namespace SharpSvn.Tests
                     Assert.That(found);
 
                     Collection<SvnListEventArgs> ee;
-        cl.GetList(new Uri("http://sharpsvn.open.collab.net/svn/sharpsvn/trunk"), out ee);
+        cl.GetList(new Uri("https://ctf.open.collab.net/svn/repos/sharpsvn/trunk"), out ee);
                     Assert.That(ee, Is.Not.Null);
                     Assert.That(ee[0].Entry.Author, Is.Not.Null);
         }
