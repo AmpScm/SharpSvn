@@ -124,7 +124,6 @@ namespace SharpSvn.Tests.Commands
                 bool arrived = false;
                 SvnInfoArgs ia = new SvnInfoArgs();
                 ia.AddExpectedError(SvnErrorCode.SVN_ERR_AUTHN_NO_PROVIDER);
-                ia.AddExpectedError(SvnErrorCode.SVN_ERR_RA_CANNOT_CREATE_SESSION);
                 Assert.That(client.Info(new Uri("https://svn.apache.org/repos/asf/"), ia,
                     delegate(object sender, SvnInfoEventArgs e)
                     {
