@@ -14,7 +14,7 @@ namespace SharpSvn.Tests.AdminCommands
     public class DumpTest : TestBase
     {
 
-        [TestMethod,Ignore]
+        [TestMethod]
         public void Dump_DumpDb()
         {
             string repos = GetTempDir();
