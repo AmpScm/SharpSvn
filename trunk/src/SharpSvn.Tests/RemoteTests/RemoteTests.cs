@@ -92,7 +92,7 @@ namespace SharpSvn.Tests.RemoteTests
 
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
-                rs.Open(new Uri("https://ankhsvn.open.collab.net/svn/ankhsvn"));
+                rs.Open(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn"));
 
                 int n = 0;
                 rs.ListLocks("",
@@ -106,7 +106,7 @@ namespace SharpSvn.Tests.RemoteTests
 
             using (SvnRemoteSession rs = new SvnRemoteSession())
             {
-                rs.Open(new Uri("https://ankhsvn.open.collab.net/svn/ankhsvn/testcases"));
+                rs.Open(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn/testcases"));
 
                 int n = 0;
                 rs.ListLocks("",

@@ -228,7 +228,7 @@ namespace SharpSvn.Tests.Commands
             DateTime now = DateTime.UtcNow;
 
             for(int i = 0; i < 20; i++)
-            Assert.That(Client.Log(new Uri("http://ankhsvn.open.collab.net/svn/ankhsvn"), la,
+            Assert.That(Client.Log(new Uri("https://ctf.open.collab.net/svn/repos/ankhsvn"), la,
                 delegate(object sender, SvnLogEventArgs e)
                 {
                     e.Cancel = true;
