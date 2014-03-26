@@ -589,10 +589,10 @@ namespace SharpSvn.Tests
 
             Assert.That(SvnTools.IsAbsolutePath(testPath));
 
-            Assert.That(SvnTools.GetNormalizedFullPath(testPath), Is.EqualTo(testPath));
-            Assert.That(SvnTools.GetTruePath(testPath), Is.EqualTo(testPath));
+            Assert.That(SvnTools.GetNormalizedFullPath(testPath), Is.EqualTo(testPath),"Fetch normalized");
+            Assert.That(SvnTools.GetTruePath(testPath), Is.EqualTo(testPath), "Fetch truepath");
 
-            Assert.That(new SvnPathTarget(testPath).TargetName, Is.EqualTo(testPath));
+            Assert.That(new SvnPathTarget(testPath).TargetName, Is.EqualTo(testPath), "PathTarget");
         }
 
         [TestMethod]
