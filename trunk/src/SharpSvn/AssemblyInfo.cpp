@@ -106,7 +106,9 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 
 [assembly:CLSCompliantAttribute(true)];
 
+#if __CLR_VER < 40000000
 [assembly:SecurityPermission(SecurityAction::RequestMinimum, UnmanagedCode = true)];
+#endif
 
 [assembly:RuntimeCompatibility(WrapNonExceptionThrows = true)];
 
