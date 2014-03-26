@@ -69,8 +69,7 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(e.LocalLock.Owner, Is.EqualTo(Environment.UserName));
                 Assert.That(e.LocalLock.Token, Is.Not.Null);
                 Assert.That(e.LocalLock.Comment, Is.EqualTo(comment));
-                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.LessThan(DateTime.Now));
-                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.GreaterThan(DateTime.Now - new TimeSpan(0,0,20)));
+                Assert.That(e.LocalLock.CreationTime.ToLocalTime(), Is.LessThanOrEqualTo(DateTime.Now).And.GreaterThan(DateTime.Now - new TimeSpan(0,0,20)));
                 gotIn = true;
             });
 
