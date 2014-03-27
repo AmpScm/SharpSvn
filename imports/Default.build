@@ -18,7 +18,9 @@
   <!-- r1580816                - Allocate dirent properly (old ra_svn) -->
   <!-- r1581401                - Cleanup after BDB create error -->
   <!-- r1581605                - Improve error message on file install failure -->
-  <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605" overwrite="false" /> 
+  <!-- r1582023,1582047,1582274- Serf correctness fix against <= 1.6 servers -->
+  <!-- 1582230,1582231         - Don't break on svn+ssh polling -->
+  <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605,1582023,1582047,1582274,1582230,1582231" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
