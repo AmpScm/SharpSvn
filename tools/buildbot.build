@@ -243,6 +243,23 @@
       <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
       <arg value="release" />
     </exec>
+    
+    <foreach item="File" property="file" if="${property::exists('nugetExe')}">
+      <in>
+        <items basedir="src/nuget">
+          <include name="*.nuspec" />
+        </items>
+      </in>
+      <do>
+        <exec program="${nugetExe}">
+          <arg line='-BasePath release' />
+          <arg line='-OutputDirectory release' />
+          <arg line='-Version "${artifactLabel}"' />
+          <arg line='-NonInteractive' />
+          <arg line='-Symbols' />
+        </exec>
+      </do>
+    </foreach>
 
     <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
     <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
