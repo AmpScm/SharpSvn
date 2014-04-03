@@ -545,6 +545,9 @@ namespace SharpSvn.Tests.Commands
             if (_checkedBDB)
                 return;
 
+            if (Environment.GetEnvironmentVariable("SVNTEST_TEMP") == null)
+                Environment.SetEnvironmentVariable("SVNTEST_TEMP", value.TestDir);
+
             _checkedBDB = true;
 
             string dir = Path.GetDirectoryName(new Uri(typeof(TestBase).Assembly.CodeBase).LocalPath);

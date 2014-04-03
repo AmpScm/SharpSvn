@@ -292,7 +292,7 @@ bool SvnClient::TryGetRepositoryId(Uri^ uri, [Out] Guid% id)
         CtxHandle,
         pool.Handle, pool.Handle);
 
-    if (err || !uuidStr)
+    if (err || !uuidStr || !*uuidStr)
     {
         if (err)
             svn_error_clear(err);
@@ -416,7 +416,7 @@ bool SvnClient::TryGetRepository(String^ path, [Out] Uri^% repositoryUrl, [Out] 
                                     pool.AllocAbsoluteDirent(path),
                                     CtxHandle, pool.Handle, pool.Handle);
 
-    if (err)
+    if (err || !urlStr || !uuidStr || !*urlStr || !*uuidStr)
     {
         svn_error_clear(err);
         return false;
