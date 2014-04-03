@@ -49,11 +49,6 @@ namespace SharpSvn.Tests.Commands
         public TestBase()
         {
             string asm = this.GetType().FullName;
-        }
-
-        [TestInitialize]
-        public void SetUp()
-        {
             this.client = new SvnClient();
             client.Configuration.LogMessageRequired = false;
             client.Notify += new EventHandler<SvnNotifyEventArgs>(OnClientNotify);
