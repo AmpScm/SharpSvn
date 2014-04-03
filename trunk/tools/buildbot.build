@@ -252,7 +252,7 @@
       </in>
       <do>
         <exec program="${nugetExe}">
-          <arg line='pack' />
+          <arg line='pack "${file}"' />
           <arg line='-BasePath release' />
           <arg line='-OutputDirectory release' />
           <arg line='-Version "${artifactLabel}"' />
