@@ -95,7 +95,6 @@
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
-    <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
     <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
@@ -103,7 +102,6 @@
     <ReferencePath>..\..\imports\release\lib-AnyCPU;$(ReferencePath)</ReferencePath>
     <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
-    <LinkIncremental>true</LinkIncremental>
     <LinkKeyFile>SharpSvn.snk</LinkKeyFile>
     <KeyOriginatorFile>SharpSvn.snk</KeyOriginatorFile>
   </PropertyGroup>
