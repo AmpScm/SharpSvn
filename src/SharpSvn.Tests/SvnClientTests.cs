@@ -327,5 +327,19 @@ namespace SharpSvn.Tests
 
             Assert.That(Client.GetWorkingCopyRoot(WcPath), Is.EqualTo(WcPath));
         }
+
+        [TestMethod]
+        public void GetRepositoryId()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.Default);
+
+            Guid id;
+            Assert.That(Client.TryGetRepositoryId(sbox.Wc, out id), "Can get id");
+            Assert.That(id, Is.Not.EqualTo(Guid.Empty));
+
+            Assert.That(Client.TryGetRepositoryId(Path.Combine(sbox.Wc, "AA"), out id), Is.False, "No Id");
+            Assert.That(id, Is.EqualTo(Guid.Empty));
+        }
     }
 }
