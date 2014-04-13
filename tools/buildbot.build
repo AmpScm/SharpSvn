@@ -24,6 +24,17 @@
     
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
+    
+    <foreach item="Folder" property="dir">
+      <in>
+        <items basedir=".">
+          <include name="Jenkins_*_*" />
+        </items>
+      </in>
+      <do>
+        <delete dir="${dir}" />
+      </do>
+    </foreach>
   </target>
   
   <target name="build" depends="prepare">
@@ -232,6 +243,56 @@
       <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
       <arg value="release" />
     </exec>
+    
+    <foreach item="File" property="file" if="${property::exists('nugetExe')}">
+      <in>
+        <items basedir="src/nuget">
+          <include name="*.nuspec" />
+        </items>
+      </in>
+      <do>
+        <exec program="${nugetExe}">
+          <arg line='pack "${file}"' />
+          <arg line='-BasePath release' />
+          <arg line='-OutputDirectory release' />
+          <arg line='-Version "${artifactLabel}"' />
+          <arg line='-NonInteractive' />
+          <arg line='-Symbols' />
+        </exec>
+      </do>
+    </foreach>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}.zip">
+      <fileset basedir="release/net20/x86" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/licenses">
+        <include name="*.txt" />
+      </fileset>
+    </zip>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip">
+      <fileset basedir="release/net20/x64" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
+        <include name="*.txt" />
+      </fileset>
+    </zip>
 
     <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
     <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
