@@ -334,8 +334,8 @@
           
           <arg value="--description" />
             <arg value="SharpSVN Build ${artifactLabel}" />
-          <arg value="release/SharpSvn.1.9-x86-${artifactLabel}.nupkg" />
-          <arg value="release/SharpSvn.1.9-x86-${artifactLabel}.symbols.nupkg" />
+          <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.nupkg" />
+          <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.symbols.nupkg" />
         </exec>
         
         <exec program="${collabUploadExe}">
@@ -349,8 +349,8 @@
           
           <arg value="--description" />
             <arg value="SharpSVN Build ${artifactLabel}" />
-          <arg value="release/SharpSvn.1.9-x64-${artifactLabel}.nupkg" />
-          <arg value="release/SharpSvn.1.9-x64-${artifactLabel}.symbols.nupkg" />
+          <arg value="release/SharpSvn.1.9-x64.${artifactLabel}.nupkg" />
+          <arg value="release/SharpSvn.1.9-x64.${artifactLabel}.symbols.nupkg" />
         </exec>
         
       </if>
