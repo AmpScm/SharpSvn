@@ -293,10 +293,68 @@
         <include name="*.txt" />
       </fileset>
     </zip>
+    
+    <if test="${property::exists('collabUploadCredentials') and property::exists('collabUploadExe')}">
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 716" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SSvn-${artifactLabel}.zip" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 719" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SSvn-${artifactLabel}-x64.zip" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 717" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SharpSvn.1.9-x86-${artifactLabel}.nupkg" />
+          <arg value="release/SharpSvn.1.9-x86-${artifactLabel}.symbols.nupkg" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 718" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SharpSvn.1.9-x64-${artifactLabel}.nupkg" />
+          <arg value="release/SharpSvn.1.9-x64-${artifactLabel}.symbols.nupkg" />
+        </exec>
+        
+      </if>
 
-    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
-    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
-    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
   </target>
   
   <target name="clean-imports">
