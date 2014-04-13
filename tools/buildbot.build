@@ -261,6 +261,38 @@
         </exec>
       </do>
     </foreach>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}.zip">
+      <fileset basedir="release/net20/x86" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/licenses">
+        <include name="*.txt" />
+      </fileset>
+    </zip>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip">
+      <fileset basedir="release/net20/x64" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
+        <include name="*.txt" />
+      </fileset>
+    </zip>
 
     <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
     <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
