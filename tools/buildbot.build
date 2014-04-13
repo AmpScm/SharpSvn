@@ -275,6 +275,7 @@
       </fileset>
       <fileset basedir="release/licenses" prefix="SharpSvn/licenses">
         <include name="*.txt" />
+        <include name="*.wxs" />
       </fileset>
     </zip>
     
@@ -291,6 +292,7 @@
       </fileset>
       <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
         <include name="*.txt" />
+        <include name="*.wxs" />
       </fileset>
     </zip>
     
