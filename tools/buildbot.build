@@ -15,6 +15,17 @@
   <target name="prepare">
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
+    
+    <foreach item="Folder" property="dir">
+      <in>
+        <items basedir=".">
+          <include name="Jenkins_*_*" />
+        </items>
+      </in>
+      <do>
+        <delete dir="${dir}" />
+      </do>
+    </foreach>
   </target>
   
   <target name="build" depends="prepare">
@@ -146,6 +157,7 @@
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpPlink-Win32.pdb" />
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -162,6 +174,7 @@
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpPlink-x64.pdb" />
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -178,10 +191,134 @@
       <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
       <arg value="release" />
     </exec>
+    
+    <foreach item="File" property="file" if="${property::exists('nugetExe')}">
+      <in>
+        <items basedir="src/nuget">
+          <include name="*.nuspec" />
+        </items>
+      </in>
+      <do>
+        <exec program="${nugetExe}">
+          <arg line='pack "${file}"' />
+          <arg line='-BasePath release' />
+          <arg line='-OutputDirectory release' />
+          <arg line='-Version "${artifactLabel}"' />
+          <arg line='-NonInteractive' />
+          <arg line='-Symbols' />
+        </exec>
+      </do>
+    </foreach>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}.zip">
+      <fileset basedir="release/net20/x86" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
+        <include name="*.txt" />
+        <include name="*.wxs" />
+      </fileset>
+    </zip>
+    
+    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip">
+      <fileset basedir="release/net20/x64" prefix="SharpSvn">
+        <include name="*.dll" />
+        <include name="*.pdb" />
+        <include name="*.xml" />
+        <include name="*.svnDll" />
+        <include name="*.svnExe" />
+      </fileset>
+      <fileset basedir="release" prefix="SharpSvn">
+        <include name="*.wxs" />
+      </fileset>
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
+        <include name="*.txt" />
+        <include name="*.wxs" />
+      </fileset>
+    </zip>
+    
+    <if test="${property::exists('collabUploadCredentials') and property::exists('collabUploadExe')}">
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 729" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SSvn-${artifactLabel}.zip" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 730" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SSvn-${artifactLabel}-x64.zip" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 733" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 731" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SharpSvn.1.7-x86.${artifactLabel}.nupkg" />
+          <arg value="release/SharpSvn.1.7-x86.${artifactLabel}.symbols.nupkg" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 30" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 732" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release/SharpSvn.1.7-x64.${artifactLabel}.nupkg" />
+          <arg value="release/SharpSvn.1.7-x64.${artifactLabel}.symbols.nupkg" />
+        </exec>
+        
+      </if>
 
-    <delete file="D:\artifacts\${CCNetProject}\${CCNetProject}-${artifactLabel}.7z" />
-    <move todir="D:\artifacts\${CCNetProject}" file="release\${CCNetProject}-${artifactLabel}.7z"  />
-    <echo  file="D:\artifacts\${CCNetProject}\_last.txt" message="${CCNetProject}-${artifactLabel}.7z" />
   </target>
   
   <target name="clean-imports">
