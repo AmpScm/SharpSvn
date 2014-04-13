@@ -326,6 +326,20 @@
         <exec program="${collabUploadExe}">
           <arg line="${collabUploadCredentials}" />
           <arg line="--site https://sharpsvn.open.collab.net" />
+          <arg line="--max-uploads 15" />
+          <arg line="--keep 28.0:00" />
+          <!--arg line="- -result resulting.uri" /-->
+          
+          <arg line="--folder 727" />
+          
+          <arg value="--description" />
+            <arg value="SharpSVN Build ${artifactLabel}" />
+          <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
+        </exec>
+        
+        <exec program="${collabUploadExe}">
+          <arg line="${collabUploadCredentials}" />
+          <arg line="--site https://sharpsvn.open.collab.net" />
           <arg line="--max-uploads 30" />
           <arg line="--keep 28.0:00" />
           <!--arg line="- -result resulting.uri" /-->
