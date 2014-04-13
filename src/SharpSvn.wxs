@@ -13,9 +13,6 @@
       <?endif?>
       <?ifdef SharpSvn_Pdb?>
       <ComponentRef Id="C_LOCAL_SharpSvn.pdb" />
-      <?ifndef SharpSvn_NoPlink?>
-      <ComponentRef Id="C_LOCAL_SharpPlink_Win32.pdb" />
-      <?endif?>
       <?endif?>
       <?ifndef SharpSvn_NoXml?>
       <ComponentRef Id="C_LOCAL_SharpSvn.xml" />
