@@ -179,6 +179,7 @@
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpPlink-Win32.pdb" />
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -195,6 +196,7 @@
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpPlink-x64.pdb" />
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -211,6 +213,7 @@
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpPlink-Win32.pdb" />
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -227,6 +230,7 @@
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpPlink-x64.pdb" />
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -273,7 +277,7 @@
       <fileset basedir="release" prefix="SharpSvn">
         <include name="*.wxs" />
       </fileset>
-      <fileset basedir="release/licenses" prefix="SharpSvn/licenses">
+      <fileset basedir="release/licenses" prefix="SharpSvn/Licenses">
         <include name="*.txt" />
         <include name="*.wxs" />
       </fileset>
