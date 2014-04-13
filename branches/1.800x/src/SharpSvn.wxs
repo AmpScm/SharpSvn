@@ -13,9 +13,6 @@
       <?endif?>
       <?ifdef SharpSvn_Pdb?>
       <ComponentRef Id="C_LOCAL_SharpSvn.pdb" />
-      <?ifndef SharpSvn_NoPlink?>
-      <ComponentRef Id="C_LOCAL_SharpPlink_Win32.pdb" />
-      <?endif?>
       <?endif?>
       <?ifndef SharpSvn_NoXml?>
       <ComponentRef Id="C_LOCAL_SharpSvn.xml" />
@@ -73,9 +70,6 @@
     <DirectoryRef Id="DIR_SharpSvn" FileSource="$(var.SharpSvnBinDir)">
       <Component Id="C_LOCAL_SharpSvn.pdb" Guid="F38A631A-F9DE-4A4C-B4DD-2C94FA4A7E1F">
         <File Id="CF_LOCAL_SharpSvn.pdb" Name="SharpSvn.pdb" KeyPath="yes" />
-      </Component>
-      <Component Id="C_LOCAL_SharpPlink_Win32.pdb" Guid="F3ED7757-1A3E-4F56-8CCE-811924222608">
-        <File Id="CF_LOCAL_SharpPlink_Win32.pdb" Name="SharpPlink-Win32.pdb" KeyPath="yes" />
       </Component>
     </DirectoryRef>
   </Fragment>
