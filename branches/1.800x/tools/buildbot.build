@@ -266,7 +266,7 @@
       </do>
     </foreach>
     
-    <zip zipfile="release\SSvn-${artifactLabel}.zip">
+    <zip zipfile="release\SSvn-${artifactLabel}.zip" ziplevel="9">
       <fileset basedir="release/net20/x86" prefix="SharpSvn">
         <include name="*.dll" />
         <include name="*.pdb" />
@@ -283,7 +283,7 @@
       </fileset>
     </zip>
     
-    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip">
+    <zip zipfile="release\SSvn-${artifactLabel}-x64.zip" ziplevel="9">
       <fileset basedir="release/net20/x64" prefix="SharpSvn">
         <include name="*.dll" />
         <include name="*.pdb" />
