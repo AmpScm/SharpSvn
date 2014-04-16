@@ -650,6 +650,9 @@
     <ClInclude Include="SvnSshContext.h">
       <Filter>Svn\Headers</Filter>
     </ClInclude>
+    <ClInclude Include="Args\Youngest.h">
+      <Filter>SvnClient\Args</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1107,6 +1110,9 @@
     </ClCompile>
     <ClCompile Include="SvnSshContext.cpp">
       <Filter>Svn\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\Youngest.cpp">
+      <Filter>SvnClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

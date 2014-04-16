@@ -326,5 +326,19 @@ namespace SharpSvn.Tests.Commands
                 Assert.That(info.Path, Is.EqualTo(Path.GetFileName(ReposUrl.LocalPath.TrimEnd('\\'))), "Path is end of folder name");
             }
         }
+
+        [TestMethod]
+        public void InfoYoungest()
+        {
+            SvnSandBox sbox = new SvnSandBox(this);
+            sbox.Create(SandBoxRepository.AnkhSvnCases);
+
+            long rev;
+            Assert.That(Client.Youngest(sbox.Uri, out rev));
+            Assert.That(rev, Is.EqualTo(6));
+
+            Assert.That(Client.Youngest(sbox.Wc, out rev));
+            Assert.That(rev, Is.EqualTo(6));
+        }
     }
 }
