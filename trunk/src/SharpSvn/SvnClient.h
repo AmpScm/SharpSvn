@@ -76,6 +76,7 @@ namespace SharpSvn {
     ref class SvnGetAppliedMergeInfoArgs;
     ref class SvnUpgradeArgs;
     ref class SvnPatchArgs;
+    ref class SvnYoungestArgs;
     ref class SvnRepositoryOperationArgs;
 
     ref class SvnCropWorkingCopyArgs;
@@ -1239,6 +1240,13 @@ namespace SharpSvn {
         /// <summary>Applies a patch file to a directory</summary>
         bool Patch(String^ patchFile, String^ targetDir);
         bool Patch(String^ patchFile, String^ targetDir, SvnPatchArgs^ args);
+
+    public:
+        /// <overloads>Obtains the youngest valid revision for the repository</overloads>
+        bool Youngest(String^ target, [Out] __int64 %revision);
+        bool Youngest(String^ target, SvnYoungestArgs ^args, [Out] __int64 %revision);
+        bool Youngest(Uri^ target, [Out] __int64 %revision);
+        bool Youngest(Uri^ target, SvnYoungestArgs ^args, [Out] __int64 %revision);
 
     public:
         bool RepositoryOperation(Uri ^anchor, SvnRepositoryOperationBuilder ^builder);

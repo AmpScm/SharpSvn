@@ -67,6 +67,7 @@ namespace SharpSvn {
         Patch,
         InheritedPropertyList,
         RepositoryOperations,
+        Youngest,
 
         CropWorkingCopy = 0x501,
 
