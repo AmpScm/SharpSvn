@@ -64,7 +64,10 @@ namespace CollabUpload
         {
             Args a = Parse(args);
             if (a != null)
-                Run(a);
+                if (!Run(a))
+                    Environment.ExitCode = 1;
+                else
+                    Environment.ExitCode = 1;
         }
 
         static Args Parse(string[] args)
