@@ -154,7 +154,7 @@ namespace CollabUpload
                             i++;
                             break;
                         default:
-                            return ArgError(string.Format("Unknown argument: {0}", value));
+                            return ArgError(string.Format("Unknown argument: {0}", key));
                     }
                 }
                 else
