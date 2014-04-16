@@ -68,6 +68,8 @@ bool SvnClient::Import(String^ path, Uri^ target, SvnImportArgs^ args, [Out] Svn
         throw gcnew ArgumentNullException("target");
     else if (!args)
         throw gcnew ArgumentNullException("args");
+    else if (!SvnBase::IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
     else if (!SvnBase::IsValidReposUri(target))
         throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAValidRepositoryUri, "target");
 

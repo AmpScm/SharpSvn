@@ -21,9 +21,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-using ICSharpCode.SharpZipLib.Zip;
 using SharpSvn.Tests.Commands.Utils;
 using Assert = NUnit.Framework.Assert;
 using Is = NUnit.Framework.Is;
@@ -107,17 +105,6 @@ namespace SharpSvn.Tests.Commands
 
                 return Path.GetFullPath(Path.Combine(assemblyDir, "..\\..\\.."));
             }
-        }
-
-        protected static void UnzipToFolder(string zipFile, string toFolder)
-        {
-            Assert.That(File.Exists(zipFile));
-            FastZip fz = new FastZip();
-            fz.CreateEmptyDirectories = true;
-            fz.RestoreAttributesOnExtract = true;
-            fz.RestoreDateTimeOnExtract = true;
-
-            fz.ExtractZip(zipFile, toFolder, null);
         }
 
         /// <summary>

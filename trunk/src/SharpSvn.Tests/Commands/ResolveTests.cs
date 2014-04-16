@@ -25,6 +25,7 @@ using SharpSvn.TestBuilder;
 using SharpSvn;
 using SharpSvn.Security;
 using SharpSvn.Tests.LookCommands;
+using ICSharpCode.SharpZipLib.Zip;
 
 namespace SharpSvn.Tests.Commands
 {
@@ -128,7 +129,15 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-
+        protected static void UnzipToFolder(string zipFile, string toFolder)
+        {
+            Assert.That(File.Exists(zipFile));
+            FastZip fz = new FastZip();
+            fz.CreateEmptyDirectories = true;
+            fz.RestoreAttributesOnExtract = true;
+            fz.RestoreDateTimeOnExtract = true;
+            fz.ExtractZip(zipFile, toFolder, null);
+        }
     }
 
 }
