@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-  <?if $(var.SvnSuffix) = 0 ?>
-  <?define SvnSuffixVal = "" ?>
-  <?else?>
-  <?define SvnSuffixVal="-$(var.SvnSuffix)" ?>
-  <?endif?>
-  <Product Id="*" Name="Slik Subversion $(var.SvnVersion)$(var.SvnSuffixVal) ($(var.Platform))"
-           Language="1033" Version="$(var.SvnVersion).$(var.SvnSuffix)"
+  <Product Id="*" Name="Slik Subversion $(var.SvnFullVersion) ($(var.Platform))"
+           Language="1033" Version="$(var.DistVersion)"
            Manufacturer="SlikSvn &amp; The SharpSvn Project" UpgradeCode="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
     <?if $(var.Platform) = x86 ?>
     <?include Win32.wxi ?>
@@ -19,9 +14,9 @@
     <Property Id="INSTALLLEVEL" Value="100" />
 
     <Upgrade Id="38BD67A1-0135-414F-82ED-3BF0F30C87AA">
-      <UpgradeVersion Maximum="$(var.SvnVersion).$(var.SvnSuffix)" IncludeMaximum="no" Property="PREVIOUSVERSIONINSTALLED" MigrateFeatures="yes" />
-      <UpgradeVersion Minimum="$(var.SvnVersion).$(var.SvnSuffix)" IncludeMinimum="yes" Maximum="$(var.SvnVersion).$(var.SvnSuffix)" IncludeMaximum="yes" Property="EXACTVERSIONINSTALLED" />
-      <UpgradeVersion Minimum="$(var.SvnVersion).$(var.SvnSuffix)" IncludeMinimum="no" Property="NEWERVERSIONINSTALLED" OnlyDetect="yes"/>
+      <UpgradeVersion Maximum="$(var.DistVersion)" IncludeMaximum="no" Property="PREVIOUSVERSIONINSTALLED" MigrateFeatures="yes" />
+      <UpgradeVersion Minimum="$(var.DistVersion)" IncludeMinimum="yes" Maximum="$(var.DistVersion)" IncludeMaximum="yes" Property="EXACTVERSIONINSTALLED" />
+      <UpgradeVersion Minimum="$(var.DistVersion)" IncludeMinimum="no" Property="NEWERVERSIONINSTALLED" OnlyDetect="yes"/>
     </Upgrade>
 
     <Property Id="ShortProductName" Value="Subversion" />
