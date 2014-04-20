@@ -5,6 +5,7 @@
   <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
   <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
   <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
+  <property name="signtoolExe" value="" overwrite="false" />
   <property name="buildImports" value="true" overwrite="false" />
   <property name="svnDist" value="false" overwrite="false" />
   
@@ -399,6 +400,24 @@
         <include name="*-Subversion-${svnVersion}*.msi" />
       </fileset>
     </copy>
+    
+    <foreach item="File" property="file" if="${signtoolExe != ''}">
+      <in>
+        <items basedir="release">
+          <include name="*.msi" />
+        </items>
+      </in>
+      <do>
+        <exec program="${signtoolExe}" >
+          <arg line='sign /v /n "Open Source"' />
+          <arg line='/du http://sliksvn.com/en/download/' />
+          <arg line='/d' />
+          <arg value="Slik Subversion Client ${svnVersion}" />
+          <arg line='/t http://timestamp.certum.pl/authenticode' />
+          <arg value="${file}" />
+      </exec>
+      </do>
+    </foreach>
     
     <copy todir="release">
       <fileset basedir="imports\svn-dist\dist-win32">
