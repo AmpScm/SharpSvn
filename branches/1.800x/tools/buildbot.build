@@ -5,6 +5,7 @@
   <property name="programfilesX86" value="C:\Program Files (x86)" overwrite="false" />
   <property name="nantExe" value="${assembly::get-location(nant::get-assembly())}" />
   <property name="sevenZipExe" value="${path::combine(assembly::get-location(nant::get-assembly()), '../7z.exe')}" />
+  <property name="signtoolExe" value="" overwrite="false" />
   <property name="buildImports" value="true" overwrite="false" />
   <property name="svnDist" value="false" overwrite="false" />
   
@@ -105,18 +106,6 @@
         <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))) * 1000 + version::get-build(version::parse(svn-ver))}" />
       </otherwise>
     </choose>
-    
-    <if test="${svnDist}">
-      <property name="versionBase" value="1.${version::get-minor(version::parse(svn-ver))}" />
-      <choose>
-        <when test="${svn-tag == svn-ver}">
-          <property name="checkout-rev" value="${version::get-build(version::parse(svn-ver))}" />
-        </when>
-        <otherwise>
-          <property name="checkout-rev" value="0" />      
-        </otherwise>
-      </choose>
-    </if>
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
 /P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This product and its sourcecode are licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
@@ -129,6 +118,7 @@
 
       <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
       <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
+      <echo file="release\tag.txt" message="${svn-tag}" />
     </if>    
   </target>
   
@@ -385,9 +375,19 @@
     
     <if test="${file::exists('release/ver.txt')}">
       <loadfile file="release/ver.txt" property="sliksvnVersion" />
+      <loadfile file="release/tag.txt" property="svnTag" />
 
       <property name="artifactLabel" value="${sliksvnVersion}" />
-      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion))}.${version::get-build(version::parse(sliksvnVersion))}" />
+      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
+      <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}" />
+      <choose>
+        <when test="${(version::get-minor(version::parse(sliksvnVersion)) % 1000) &gt; 900}">
+          <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${(version::get-minor(version::parse(sliksvnVersion)) / 1000) + 1}.${version::get-revision(version::parse(sliksvnVersion))}" />
+        </when>
+        <otherwise>
+          <property name="distVersion" value="${version}.${(version::get-minor(version::parse(sliksvnVersion)) % 1000) * 1000 + version::get-revision(version::parse(sliksvnVersion))}" />
+        </otherwise>
+      </choose>
     </if>
     
     <delete>
@@ -398,29 +398,47 @@
 
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel} /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel} /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <copy todir="release" flatten="true">
       <fileset basedir="imports\svn-dist\wix\bin">
-        <include name="*-Subversion-${svnVersion}*.msi" />
+        <include name="*-Subversion-${svnTag}*.msi" />
       </fileset>
     </copy>
     
+    <foreach item="File" property="file" if="${signtoolExe != ''}">
+      <in>
+        <items basedir="release">
+          <include name="*.msi" />
+        </items>
+      </in>
+      <do>
+        <exec program="${signtoolExe}" >
+          <arg line='sign /v /n "Open Source"' />
+          <arg line='/du http://sliksvn.com/en/download/' />
+          <arg line='/d' />
+          <arg value="Slik Subversion Client ${svnVersion}" />
+          <arg line='/t http://timestamp.certum.pl/authenticode' />
+          <arg value="${file}" />
+      </exec>
+      </do>
+    </foreach>
+    
     <copy todir="release">
       <fileset basedir="imports\svn-dist\dist-win32">
-        <include name="Symbols*${svnVersion}*.zip" />
+        <include name="Symbols*${svnTag}*.zip" />
       </fileset>
     </copy>
 
     <copy todir="release">
       <fileset basedir="imports\svn-dist\dist-x64">
-        <include name="Symbols*${svnVersion}*.zip" />
+        <include name="Symbols*${svnTag}*.zip" />
       </fileset>
     </copy>
 
