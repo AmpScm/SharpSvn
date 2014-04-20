@@ -118,6 +118,7 @@
 
       <echo file="release\_${versionBase}.${checkout-rev}.${CCNetNumericLabel}_.txt">${versionBase}.${checkout-rev}.${CCNetNumericLabel}</echo>
       <echo file="release\ver.txt" message="${versionBase}.${checkout-rev}.${CCNetNumericLabel}" />
+      <echo file="release\tag.txt" message="${svn-tag}" />
     </if>    
   </target>
   
@@ -374,6 +375,7 @@
     
     <if test="${file::exists('release/ver.txt')}">
       <loadfile file="release/ver.txt" property="sliksvnVersion" />
+      <loadfile file="release/tag.txt" property="svnTag" />
 
       <property name="artifactLabel" value="${sliksvnVersion}" />
       <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
@@ -387,12 +389,12 @@
 
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <copy todir="release" flatten="true">
