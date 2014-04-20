@@ -408,7 +408,7 @@
     
     <copy todir="release" flatten="true">
       <fileset basedir="imports\svn-dist\wix\bin">
-        <include name="*-Subversion-${svnVersion}*.msi" />
+        <include name="*-Subversion-${svnTag}*.msi" />
       </fileset>
     </copy>
     
@@ -432,13 +432,13 @@
     
     <copy todir="release">
       <fileset basedir="imports\svn-dist\dist-win32">
-        <include name="Symbols*${svnVersion}*.zip" />
+        <include name="Symbols*${svnTag}*.zip" />
       </fileset>
     </copy>
 
     <copy todir="release">
       <fileset basedir="imports\svn-dist\dist-x64">
-        <include name="Symbols*${svnVersion}*.zip" />
+        <include name="Symbols*${svnTag}*.zip" />
       </fileset>
     </copy>
 
