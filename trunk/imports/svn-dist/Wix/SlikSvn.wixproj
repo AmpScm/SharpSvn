@@ -9,8 +9,9 @@
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <SvnVersion Condition="'$(SvnVersion)' == '' ">1.7.4</SvnVersion>
     <SvnSuffix Condition="'$(SvnSuffix)' == '' ">0</SvnSuffix>
-    <SvnFullVersion>$(SvnVersion)</SvnFullVersion>
-    <SvnFullVersion Condition="'$(SvnSuffix)' != '0' ">$(SvnVersion)-$(SvnSuffix)</SvnFullVersion>
+    <SvnFullVersion Condition="'$(SvnFullVersion)' != ''">$(SvnVersion)</SvnFullVersion>
+    <SvnFullVersion Condition="'$(SvnFullVersion)' != '' and '$(SvnSuffix)' != '0'">$(SvnVersion)-$(SvnSuffix)</SvnFullVersion>
+    <DistVersion Condition="'$(DistVersion) == ''">$(SvnVersion)</DistVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\</OutputPath>
