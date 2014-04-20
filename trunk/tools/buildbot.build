@@ -105,18 +105,6 @@
         <property name="versionBase" value="1.${(version::get-minor(version::parse(svn-ver))) * 1000 + version::get-build(version::parse(svn-ver))}" />
       </otherwise>
     </choose>
-    
-    <if test="${svnDist}">
-      <property name="versionBase" value="1.${version::get-minor(version::parse(svn-ver))}" />
-      <choose>
-        <when test="${svn-tag == svn-ver}">
-          <property name="checkout-rev" value="${version::get-build(version::parse(svn-ver))}" />
-        </when>
-        <otherwise>
-          <property name="checkout-rev" value="0" />      
-        </otherwise>
-      </choose>
-    </if>
 
     <echo append="false" file="msbuildprops.txt">/P:AnnotatePdbFile=true
 /P:ForceAssemblyCopyright="Copyright (c) 2006-${datetime::get-year(datetime::now())} The SharpSvn Project. This product and its sourcecode are licensed under the Apache 2.0 license. Check http://sharpsvn.net/ for details."
@@ -387,7 +375,7 @@
       <loadfile file="release/ver.txt" property="sliksvnVersion" />
 
       <property name="artifactLabel" value="${sliksvnVersion}" />
-      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion))}.${version::get-build(version::parse(sliksvnVersion))}" />
+      <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
     </if>
     
     <delete>
@@ -398,12 +386,12 @@
 
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel} /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} /p:DistBuild=true"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:SvnVersion=${svnVersion} /p:SvnSuffix=${CCNetNumericLabel} /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} /p:DistBuild=true"' />
     </exec>
     
     <copy todir="release" flatten="true">
