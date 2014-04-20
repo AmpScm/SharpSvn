@@ -8,26 +8,25 @@
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <SvnVersion Condition="'$(SvnVersion)' == '' ">1.7.4</SvnVersion>
+    <SvnSuffix Condition="'$(SvnSuffix)' == '' ">0</SvnSuffix>
+    <SvnFullVersion Condition="'$(SvnFullVersion)' != ''">$(SvnVersion)</SvnFullVersion>
+    <SvnFullVersion Condition="'$(SvnFullVersion)' != '' and '$(SvnSuffix)' != '0'">$(SvnVersion)-$(SvnSuffix)</SvnFullVersion>
+    <DistVersion Condition="'$(DistVersion) == ''">$(SvnVersion)</DistVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=$(SvnVersion);platform=Win32;SvnSuffix=</DefineConstants>
-    <WixVariables>
-    </WixVariables>
-    <SuppressValidation>False</SuppressValidation>
+    <DefineConstants>Debug;distDir=../dist-win32;SvnVersion=$(SvnVersion);platform=Win32;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=</DefineConstants>
+    <DefineConstants>distDir=../dist-win32;platform=Win32;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
-    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=$(SvnVersion);platform=x64;SvnSuffix=</DefineConstants>
-    <WixVariables>
-    </WixVariables>
+    <DefineConstants>Debug;distDir=../dist-x64;SvnVersion=$(SvnVersion);platform=x64;SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
     <OutputPath>bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
@@ -35,9 +34,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
     <OutputPath>bin\</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
-    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=</DefineConstants>
-    <WixVariables>
-    </WixVariables>
+    <DefineConstants>distDir=../dist-x64;platform=x64;SvnVersion=$(SvnVersion);SvnSuffix=$(SvnSuffix);SvnFullVersion=$(SvnFullVersion);DistVersion=$(DistVersion)</DefineConstants>
     <SuppressIces>ICE61;ICE03;ICE82;ICE25;ICE43;ICE57;ICE80</SuppressIces>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
