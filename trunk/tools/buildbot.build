@@ -385,7 +385,7 @@
           <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${(version::get-minor(version::parse(sliksvnVersion)) / 1000) + 1}.${version::get-revision(version::parse(sliksvnVersion))}" />
         </when>
         <otherwise>
-          <property name="distVersion" value="${version}.${(version::get-minor(version::parse(sliksvnVersion)) % 1000) * 1000 + version::get-revision(version::parse(sliksvnVersion))}" />
+          <property name="distVersion" value="${distVersion}.${(version::get-minor(version::parse(sliksvnVersion)) % 1000) * 1000 + version::get-revision(version::parse(sliksvnVersion))}" />
         </otherwise>
       </choose>
     </if>
