@@ -398,12 +398,12 @@
 
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x86 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <exec program="cmd.exe" workingdir="imports\svn-dist">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
-      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${sliksvnVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
+      <arg line='msbuild wix\SlikSvn.sln /p:Configuration=Release /p:Platform=x64 /p:DistVersion=${distVersion} /p:SvnVersion=${svnVersion} "/p:SvnFullVersion=${svnTag}" /p:DistBuild=true"' />
     </exec>
     
     <copy todir="release" flatten="true">
