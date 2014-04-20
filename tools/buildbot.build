@@ -379,7 +379,7 @@
 
       <property name="artifactLabel" value="${sliksvnVersion}" />
       <property name="svnVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}.${version::get-minor(version::parse(sliksvnVersion)) % 1000}" />
-      <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion)))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}" />
+      <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion))}.${version::get-minor(version::parse(sliksvnVersion)) / 1000}" />
       <choose>
         <when test="${(version::get-minor(version::parse(sliksvnVersion)) % 1000) &gt; 900}">
           <property name="distVersion" value="${version::get-major(version::parse(sliksvnVersion)))}.${(version::get-minor(version::parse(sliksvnVersion)) / 1000) + 1}.${version::get-revision(version::parse(sliksvnVersion))}" />
