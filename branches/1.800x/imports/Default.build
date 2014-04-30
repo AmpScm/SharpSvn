@@ -21,7 +21,7 @@
   <property name="subversionMerges" value="1493272,1498000,1538812,1538925,1538928,1538939,1544182,${mtccMerges}" overwrite="false" /> 
   <!-- r1544597, r1544600, r1544688, r1544690, r1545111, r1545122 - status direct vs ancestor -->
   <!-- r1.8.x-r1544597 - Move updates during delete -->
-  <property name="subversionMergeBranches" value="branches/1.8.x-issue4437;branches/1.8.x-r1544597" overwrite="false" />
+  <property name="subversionMergeBranches" value="branches/1.8.x-issue4437@r1591139;branches/1.8.x-r1544597" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
