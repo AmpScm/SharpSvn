@@ -110,4 +110,7 @@
   
   <target name="build-serf" depends="serf-build">
   </target>
+  
+  <target name="copy-serf" depends="build-serf, build-svn">
+  </target>
 </project>
