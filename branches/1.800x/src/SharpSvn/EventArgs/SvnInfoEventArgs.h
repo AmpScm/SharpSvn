@@ -52,6 +52,9 @@ namespace SharpSvn {
         initonly __int64 _size;
         initonly bool _conflicted;
         ICollection<SvnConflictData^>^ _conflicts;
+        String ^_wcAbspath;
+        String ^_movedFromAbspath;
+        String ^_movedToAbspath;
 
     internal:
         SvnInfoEventArgs(String^ path, const svn_client_info2_t* info, AprPool^ pool)
@@ -221,7 +224,7 @@ namespace SharpSvn {
         {
             SvnLockInfo^ get()
             {
-                if (!_lock && _info && _info->lock)
+                if (!_lock && _info && _info->lock && _info->lock->token)
                     _lock = gcnew SvnLockInfo(_info->lock, HasLocalInfo);
 
                 return _lock;
@@ -425,6 +428,39 @@ namespace SharpSvn {
             }
         }
 
+        property String^ WorkingCopyRoot
+        {
+            String^ get()
+            {
+                if (!_wcAbspath && _info && _info->wc_info && _pool)
+                    _wcAbspath = SvnBase::Utf8_PathPtrToString(_info->wc_info->wcroot_abspath, _pool);
+
+                return _wcAbspath;
+            }
+        }
+
+        property String^ MovedFrom
+        {
+            String^ get()
+            {
+                if (!_movedFromAbspath && _info && _info->wc_info && _info->wc_info->moved_from_abspath)
+                    _movedFromAbspath = SvnBase::Utf8_PathPtrToString(_info->wc_info->moved_from_abspath, _pool);
+
+                return _movedFromAbspath;
+            }
+        }
+
+        property String^ MovedTo
+        {
+            String^ get()
+            {
+                if (!_movedToAbspath && _info && _info->wc_info && _info->wc_info->moved_from_abspath)
+                    _movedToAbspath = SvnBase::Utf8_PathPtrToString(_info->wc_info->moved_to_abspath, _pool);
+
+                return _movedToAbspath;
+            }
+        }
+
         /// <summary>Serves as a hashcode for the specified type</summary>
         virtual int GetHashCode() override
         {
@@ -453,6 +489,9 @@ namespace SharpSvn {
                     GC::KeepAlive(PropertyEditFile);
                     GC::KeepAlive(ChangeList);
                     GC::KeepAlive(Conflicts);
+                    GC::KeepAlive(WorkingCopyRoot);
+                    GC::KeepAlive(MovedFrom);
+                    GC::KeepAlive(MovedTo);
                 }
 
                 if (_conflicts)
