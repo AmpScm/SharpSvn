@@ -153,7 +153,6 @@
         <in>
           <items basedir="${svnBase}">
             <include name="build/win32/**/*.vcproj" />
-            <include name="../serf/serf.vcproj" />
           </items>
         </in>
         <do>
@@ -209,7 +208,7 @@
     </OnceBlock>
   </target>
 
-  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,build-serf,build-swig,prepare-neon,generate-svnfiles,build-httpd">
+  <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,serf-build,build-swig,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
       <MSBuild>

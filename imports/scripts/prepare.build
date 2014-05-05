@@ -9,6 +9,9 @@
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
   <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
 
+  <property name="sconsFilename" value="scons-${sconsVersion}.zip" />
+  <property name="sconsDir" value="${'build/scons-' + sconsVersion}" />
+
   <regex pattern="^(?'nunitVersionMMR'\d+\.\d+(\.\d+))" input="${nunitVersion}" />
   <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 
@@ -52,6 +55,10 @@
     <get src="http://www.cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
       dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
+
+    <get src="http://heanet.dl.sourceforge.net/sourceforge/scons/${sconsVersion}/scons-${sconsVersion}.zip"
+      dest="${downloads + sconsFilename}"
+      unless="${file::exists(downloads + sconsFilename)}" />
 
     <if test="${property::exists('withSwig')}">
       <get
