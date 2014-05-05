@@ -28,6 +28,18 @@
         </do>
       </foreach>
     </OnceBlock>
+    <copy todir="${intDir}/inc32">
+      <fileset basedir="${intDir}/include">
+        <include name="openssl*" />
+        <include name="openssl/**" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/out32dll">
+      <fileset basedir="${intDir}/lib">
+        <include name="*ssl*" />
+        <include name="*eay*" />
+      </fileset>
+    </copy>
   </target>
   <target name="serf-build" depends="serf-prepare, build-zlib, build-apr, build-openssl, scons-install">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.build">
