@@ -104,4 +104,10 @@
       <arg value="check" />
     </exec>
   </target>
+  
+  <target name="prepare-serf" depends="serf-prepare">
+  </target>
+  
+  <target name="build-serf" depends="serf-build">
+  </target>
 </project>
