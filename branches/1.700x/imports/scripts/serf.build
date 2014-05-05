@@ -44,6 +44,7 @@
         <arg value="ZLIB=${intDir}" />
         <arg value="APR=${aprDir}" />
         <arg value="APU=${aprUtilDir}" />
+        <arg value="SOURCE_LAYOUT=yes" />
         <arg value="DEBUG=yes" if="${serfDebug}" />
         <arg value="TARGET_ARCH=${platform}" />
         <arg value="MSVC_VERSION=${sconsVSVersion}" />
@@ -72,6 +73,7 @@
       <arg value="ZLIB=${intDir}" />
       <arg value="APR=${aprDir}" />
       <arg value="APU=${aprUtilDir}" />
+      <arg value="SOURCE_LAYOUT=yes" />
       <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
@@ -93,6 +95,7 @@
       <arg value="ZLIB=${intDir}" />
       <arg value="APR=${aprDir}" />
       <arg value="APU=${aprUtilDir}" />
+      <arg value="SOURCE_LAYOUT=yes" />
       <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
