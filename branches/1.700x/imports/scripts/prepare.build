@@ -111,6 +111,11 @@
       unless="${directory::exists(nunitDir)}" />
 
     <unzip
+      zipfile="${downloads + sconsFilename}"
+      todir="build"
+      unless="${directory::exists(sconsDir)}" />
+
+    <unzip
       zipfile="${downloads + sharpZipFilename}"
       todir="${sharpZipLibDir}"
       unless="${directory::exists(sharpZipLibDir)}" />
