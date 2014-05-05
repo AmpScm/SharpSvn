@@ -70,7 +70,7 @@
       <arg value="PREFIX=${intDir}" />
       <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
-      <arg value="ZLIB=${intDir}" />
+      <arg value="ZLIB=${zlibDir}" />
       <arg value="APR=${aprDir}" />
       <arg value="APU=${aprUtilDir}" />
       <arg value="SOURCE_LAYOUT=yes" />
@@ -92,7 +92,7 @@
       <arg value="PREFIX=${intDir}" />
       <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
-      <arg value="ZLIB=${intDir}" />
+      <arg value="ZLIB=${zlibDir}" />
       <arg value="APR=${aprDir}" />
       <arg value="APU=${aprUtilDir}" />
       <arg value="SOURCE_LAYOUT=yes" />
