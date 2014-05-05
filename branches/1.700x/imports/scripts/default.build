@@ -71,6 +71,8 @@
 
   <include buildfile="layout.build" />
   <include buildfile="prepare.build" />
+  
+  <include buildfile="scons.build" />
 
   <include buildfile="bdb.build" />
   <include buildfile="zlib.build" />
