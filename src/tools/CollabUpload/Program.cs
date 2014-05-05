@@ -74,6 +74,9 @@ namespace CollabUpload
             Args aa = new Args();
             int i;
 
+            if (args.Length == 0)
+                return ArgError("Missing --site and --folder argument");
+
             for (i = 0; i < args.Length; i++)
             {
                 string key = args[i];
@@ -341,6 +344,8 @@ namespace CollabUpload
 
                 if (nS > 0)
                     text = text.Substring(nS).Replace("&nbsp;", "&#160;").Replace("&copy;", "&#169;");
+
+                text = Regex.Replace(text, @"(\<input[^>]*[^/])\>", "$1/>");
 
                 int lastForm = text.LastIndexOf("<form ", StringComparison.OrdinalIgnoreCase);
 
