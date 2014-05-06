@@ -53,10 +53,10 @@
         <arg value="PREFIX=${intDir}" />
         <arg value="LIBDIR=${intDir}/lib" />
         <arg value="OPENSSL=${intDir}" />
-        <arg value="ZLIB=${zlibDir}" />
-        <arg value="APR=${aprDir}" />
-        <arg value="APU=${aprUtilDir}" />
-        <arg value="SOURCE_LAYOUT=yes" />
+        <arg value="ZLIB=${intDir}" />
+        <arg value="APR=${intDir}" />
+        <arg value="APU=${intDir}" />
+        <arg value="SOURCE_LAYOUT=no" />
         <arg value="DEBUG=yes" if="${serfDebug}" />
         <arg value="TARGET_ARCH=${platform}" />
         <arg value="MSVC_VERSION=${sconsVSVersion}" />
@@ -82,10 +82,10 @@
       <arg value="PREFIX=${intDir}" />
       <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
-      <arg value="ZLIB=${zlibDir}" />
-      <arg value="APR=${aprDir}" />
-      <arg value="APU=${aprUtilDir}" />
-      <arg value="SOURCE_LAYOUT=yes" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
       <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
@@ -104,10 +104,10 @@
       <arg value="PREFIX=${intDir}" />
       <arg value="LIBDIR=${intDir}/lib" />
       <arg value="OPENSSL=${intDir}" />
-      <arg value="ZLIB=${zlibDir}" />
-      <arg value="APR=${aprDir}" />
-      <arg value="APU=${aprUtilDir}" />
-      <arg value="SOURCE_LAYOUT=yes" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
       <arg value="DEBUG=yes" if="${serfDebug}" />
       <arg value="TARGET_ARCH=${platform}" />
       <arg value="MSVC_VERSION=${sconsVSVersion}" />
