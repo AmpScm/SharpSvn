@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project basedir="." default="help">
+<project basedir="." default="build">
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" />
   
