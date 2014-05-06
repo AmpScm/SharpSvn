@@ -288,14 +288,6 @@
       <arg value="${sqliteDir}" />
     </Svn>
 
-    <Svn
-      verbose="true"
-      unless="${directory::exists(gtestDir)}">
-
-      <arg value="co" />
-      <arg value="http://googletest.googlecode.com/svn/tags/release-${gtestVersion}/" />
-      <arg value="${gtestDir}" />
-    </Svn>
   </target>
 
   <target name="copy-licenses">
