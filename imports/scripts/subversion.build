@@ -211,11 +211,7 @@
   <target name="build-svn" depends="build-bdb,build-zlib,build-openssl,serf-build,build-swig,prepare-neon,generate-svnfiles,build-httpd">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
       <!-- Now build subversion -->
-      <MSBuild>
-        <arg value="${svnBase}/subversion_vcnet.sln" />
-        <!--arg value="/verbosity:quiet" /-->
-        <arg value="/p:Configuration=Release" />
-        <arg value="/p:Platform=${platform}" />
+      <MSBuild src="${svnBase}/subversion_vcnet.sln">
         <arg value="/t:Programs\svn" />
         <arg value="/t:Programs\svnadmin" />        
         <arg value="/t:Programs\svnversion" />
