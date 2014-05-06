@@ -22,10 +22,7 @@
     <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
       <copy tofile="${httpdDir}/apache.sln" file="${downloads}/../scripts/apache-httpd.sln" />
 
-      <MSBuild>
-        <arg value="${httpdDir}/apache.sln" />
-        <arg value="/P:configuration=Release" />
-        <arg value="/P:platform=Win32" />
+      <MSBuild src="${httpdDir}/apache.sln">
         <arg value="/t:httpd" />
         <arg value="/t:htpasswd" />
         <arg value="/t:mod_dav" />
