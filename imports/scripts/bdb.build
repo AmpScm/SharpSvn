@@ -14,19 +14,10 @@
 
   <target name="prepare-bdb" depends="extract">
     <OnceBlock file="build/db-${dbVersion}.prepared">
-      <foreach item="File" property="dsp">
-        <in>
-          <items basedir="${dbWindowsDir}">
-            <include name="*.dsp" />
-          </items>
-        </in>
-        <do>
-          <VCBuild>
-            <arg line="/upgrade" />
-            <arg value="${dsp}" />
-          </VCBuild>
-        </do>
-      </foreach>
+      <VCBuild src="${dbWindowsDir}/db_dll.dsp" unless="${vcxproj}">
+        <arg line="/upgrade" />
+      </VCBuild>
+      <VCUpgrade src="${dbWindowsDir}/db_dll.dsp" if="${vcxproj}" />
     </OnceBlock>
     <OnceBlock file="build/db-${dbVersion}.patched">
       <foreach item="File" property="vcproj">
@@ -50,12 +41,31 @@
     </OnceBlock>
   </target>
   <target name="build-bdb" depends="prepare-bdb">
-    <VCBuild platform="${platform}">
-      <arg value="${dbWindowsDir}/db_dll.vcproj" />
-      <arg value="Release|${platform}" if="${platform == 'win32' and dbVersion &lt; '4.6'}" />
-      <arg value="Release X86|${platform}" if="${platform == 'win32' and dbVersion &gt;= '4.6'}" />
-      <arg value="Release AMD64|${platform}" if="${platform == 'x64'}" />
-    </VCBuild>
+    <OnceBlock file="build/db-${dbVersion}-${platform}.build">
+      <property name="dbConfig" value="Release" />
+      <property name="dbConfig" value="Release X86" if="${dbVersion &gt;= '4.6'}"/>
+      <property name="dbConfig" value="Release AMD64" if="${platform == 'x64'}"/>
+      <property name="dbDebugConfig" value="Debug" />
+      <property name="dbDebugConfig" value="Debug X86" if="${dbVersion &gt;= '4.6'}"/>
+      <property name="dbDebugConfig" value="Debug AMD64" if="${platform == 'x64'}"/>
+    
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <arg value="${dbConfig}|${platform}" />
+      </VCBuild>
+      
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <arg value="${dbDebugConfig}|${platform}" />
+      </VCBuild>
+      
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}">
+        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" /><!-- Bug in VS2012 for x64? -->
+      </MSBuild>
+      
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj}">
+        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" /><!-- Bug in VS2012 for x64? -->
+      </MSBuild>
+    </OnceBlock>
+
     <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}" if="${platform=='win32'}"/>
     <property name="bdbResultDir" value="${dbWindowsDir}/${Configuration}_AMD64" if="${platform=='x64'}"/>
 
