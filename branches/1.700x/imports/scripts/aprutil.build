@@ -54,11 +54,6 @@
         <prop name="APR_HAS_LDAP" value="OFF" />
         <prop name="APU_HAVE_ODBC" value="OFF" />
       </CMake>
-      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${vcxproj}" generated="true">
-        <filterchain>
-          <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
-        </filterchain>
-      </FilterFile>
       
       <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
         <filterchain refid="cmake-lib" />
@@ -67,9 +62,6 @@
         <filterchain refid="cmake-lib" />
       </FilterFile>
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" generated="true">
-        <filterchain refid="cmake-link" />      
-      </FilterFile>
-      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true">
         <filterchain refid="cmake-link" />      
       </FilterFile>
       
@@ -82,7 +74,6 @@
       <MSBuild src="${aprUtilDir}/APR-Util.sln">
         <target value="aprutil-1" />
         <target value="libaprutil-1" />
-        <target value="apr_crypto_openssl-1" />
       </MSBuild>
     </OnceBlock>
 
