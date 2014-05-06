@@ -72,6 +72,7 @@
   <include buildfile="layout.build" />
   <include buildfile="prepare.build" />
   
+  <include buildfile="cmake.build" />
   <include buildfile="scons.build" />
 
   <include buildfile="bdb.build" />
@@ -81,6 +82,7 @@
   <include buildfile="neon.build" />
   <include buildfile="httpd.build" />
   <include buildfile="apr.build" />
+  <include buildfile="aprutil.build" />
   <include buildfile="sasl.build" />
   <include buildfile="gettext.build" />
   <include buildfile="sharpintl.build" />
