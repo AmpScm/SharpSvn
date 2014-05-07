@@ -224,7 +224,7 @@ namespace SharpSvn {
 		{
 			SvnLockInfo^ get()
 			{
-				if (!_lock && _info && _info->lock && info->lock->token)
+				if (!_lock && _info && _info->lock && _info->lock->token)
 					_lock = gcnew SvnLockInfo(_info->lock, HasLocalInfo);
 
 				return _lock;
