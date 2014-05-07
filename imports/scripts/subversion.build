@@ -13,7 +13,7 @@
         <include name="**/*.h" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/lib/xml/expat/lib" file="release/include/apr-1/expat.h" />
+    <copy todir="build/${platform}/lib/xml/expat/lib" file="${intDir}/include/expat.h" />
     <copy todir="build/${platform}/lib/include">
       <fileset basedir="${aprDir}/include">
         <include name="arch/win32/**.h" />
