@@ -38,7 +38,7 @@
       </FilterFile>
     </OnceBlock>
   </target>
-  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, build-openssl">
+  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.build">
       <CMake workingdir="${aprUtilDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
@@ -50,10 +50,16 @@
         <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
         <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
         
-        <prop name="APU_HAVE_CRYPTO" value="OFF" />
+        <prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto}" />
+        <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto}" />
         <prop name="APR_HAS_LDAP" value="OFF" />
         <prop name="APU_HAVE_ODBC" value="OFF" />
       </CMake>
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" generated="true" if="${vcxproj and enableAprCrypto}">
+        <filterchain>
+          <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
+        </filterchain>
+      </FilterFile>
       
       <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
         <filterchain refid="cmake-lib" />
@@ -62,6 +68,9 @@
         <filterchain refid="cmake-lib" />
       </FilterFile>
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" generated="true">
+        <filterchain refid="cmake-link" />      
+      </FilterFile>
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true" if="${enableAprCrypto}">
         <filterchain refid="cmake-link" />      
       </FilterFile>
       
@@ -74,6 +83,7 @@
       <MSBuild src="${aprUtilDir}/APR-Util.sln">
         <target value="aprutil-1" />
         <target value="libaprutil-1" />
+        <target value="apr_crypto_openssl-1" if="${enableAprCrypto}" />
       </MSBuild>
     </OnceBlock>
 
@@ -97,6 +107,11 @@
       </fileset>
     </copy>
     <copy todir="${intDir}/include">
+      <fileset basedir="${aprUtilDir}/xml/expat/lib">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/xml/expat/lib">
       <fileset basedir="${aprUtilDir}/xml/expat/lib">
         <include name="*.h" />
       </fileset>

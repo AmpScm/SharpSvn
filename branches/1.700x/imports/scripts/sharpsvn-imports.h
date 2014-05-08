@@ -47,7 +47,6 @@
 #pragma comment(lib, "libsvn_fs_util-1.lib")
 
 #pragma comment(lib, "libsvn_ra-1.lib")
-#pragma comment(lib, "libsvn_ra_neon-1.lib")
 #pragma comment(lib, "libsvn_ra_serf-1.lib")
 #pragma comment(lib, "libsasl.lib")
 #pragma comment(lib, "libsvn_ra_local-1.lib")
@@ -56,15 +55,23 @@
 #pragma comment(lib, "libsvn_subr-1.lib")
 #pragma comment(lib, "libsvn_wc-1.lib")
 #pragma comment(lib, "xml.lib")
-#pragma comment(lib, "libneon.lib")
 
 #pragma comment(lib, "zlib.lib")
 #pragma comment(lib, "ws2_32.lib")
 #pragma comment(lib, "secur32.lib")
 #pragma comment(lib, "libdb" APR_STRINGIFY(DB_VERSION_MAJOR) APR_STRINGIFY(DB_VERSION_MINOR) ".lib")
 
+#if (SVN_VER_MAJOR == 1 && SVN_VER_MINOR <= 7)
+#pragma comment(lib, "libsvn_ra_neon-1.lib")
+#pragma comment(lib, "libneon.lib")
+#endif
+
 #if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 6)
 #pragma comment(lib, "sqlite3.lib")
+#endif
+
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 9)
+#pragma comment(lib, "libsvn_fs_x-1.lib")
 #endif
 
 #if (APR_MAJOR_VERSION == 0)
@@ -81,6 +88,18 @@
 #pragma comment(lib, "serf.lib")
 #elif (SERF_MAJOR_VERSION == 1)
 #pragma comment(lib, "serf-1.lib")
+#elif (SERF_MAJOR_VERSION == 2)
+#pragma comment(lib, "serf-2.lib")
 #else
-#error Only Serf 0.x and 1.x are supported
+#error Only Serf 0.x, 1.x and 2.x are supported
 #endif
+
+#pragma comment(lib, "ole32.lib")
+#pragma comment(lib, "Gdi32.lib")
+#pragma comment(lib, "User32.lib")
+#pragma comment(lib, "Version.lib")
+
+#if (SVN_VER_MAJOR > 1 || SVN_VER_MINOR >= 8)
+#pragma comment(lib, "Psapi.lib")
+#endif
+

@@ -12,15 +12,18 @@
   <property name="javaHome" value="" overwrite="false" />
   <property name="buildSubversion" value="true" overwrite="false" />
   <property name="svn-dev" value="false" overwrite="false" />
-  <property name="enableAprCrypto" value="false" overwrite="false" />
+  <property name="enableAprCrypto" value="true" overwrite="false" />
+  <property name="buildJavaHL" value="true" overwrite="false" />
   <property name="ltcg" value="false" overwrite="false" />
+  <property name="getSvnBook" value="false" overwrite="false" />
+
 
   <if test="${platform != 'win32' and platform != 'x64'}">
     <fail message="Platform must be win32 or x64 at this time" />
   </if>
   
   <if test="${not property::exists('VSversion')}">
-    <!-- Auto detect VS 2005 and VS 2008 -->
+    <!-- Auto detect VS 2005-2012 -->
     <if test="${environment::variable-exists('VCINSTALLDIR')}">
       <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
 
@@ -28,6 +31,7 @@
       <property name="VSversion" value="2008" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 9.0')}" />
       <property name="VSversion" value="2010" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 10.0')}" />
       <property name="VSversion" value="2012" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 11.0')}" />
+      <property name="VSversion" value="2013" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 12.0')}" />
     </if>
 
     <if test="${not property::exists('VSversion')}">
@@ -40,6 +44,7 @@
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
   <property name="buildHttpd" value="false" overwrite="false" />
+  <property name="buildNeon" value="true" overwrite="true" />
 
   <foreach item="Folder" property="jhbp">
     <in>
@@ -82,6 +87,7 @@
   <include buildfile="serf.build" />
   <include buildfile="neon.build" />
   <include buildfile="httpd.build" />
+  <include buildfile="pcre.build" />
   <include buildfile="apr.build" />
   <include buildfile="aprutil.build" />
   <include buildfile="sasl.build" />
@@ -90,6 +96,9 @@
   <include buildfile="subversion.build" />
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
+  
+  
+  <include buildfile="dev.build" />
 
   <setenv>
     <variable name="PATH" value="${environment::get-variable('PATH')};${path::get-full-path(nasmDir)}"/>
@@ -136,7 +145,7 @@
     </exec>
   </target>
 
-  <target name="build" depends="download,extract,checkout, build-svn, copy-result">
+  <target name="build" depends="download,extract,checkout, svn-build, copy-result">
 
   </target>
 

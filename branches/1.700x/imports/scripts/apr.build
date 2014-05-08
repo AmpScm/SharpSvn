@@ -112,13 +112,5 @@
         <include name="arch/win32/*.h" />
       </fileset>
     </copy>
-    <copy todir="${intDir}/include">
-      <fileset basedir="${intDir}/include/apr-1">
-        <include name="*.h" />
-      </fileset>
-    </copy>
-  </target>
-  
-  <target name="build-apr" depends="apr-build, aprutil-build">
   </target>
 </project>

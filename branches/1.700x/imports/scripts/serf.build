@@ -28,20 +28,8 @@
         </do>
       </foreach>
     </OnceBlock>
-    <copy todir="${intDir}/inc32">
-      <fileset basedir="${intDir}/include">
-        <include name="openssl*" />
-        <include name="openssl/**" />
-      </fileset>
-    </copy>
-    <copy todir="${intDir}/out32dll">
-      <fileset basedir="${intDir}/lib">
-        <include name="*ssl*" />
-        <include name="*eay*" />
-      </fileset>
-    </copy>
   </target>
-  <target name="serf-build" depends="serf-prepare, build-zlib, build-apr, build-openssl, scons-install">
+  <target name="serf-build" depends="serf-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.build">
       <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
           if="${file::exists(serfDir + '/SConstruct')}">
@@ -115,14 +103,5 @@
       <arg value="DEBUG=yes"/>
       <arg value="check" />
     </exec>
-  </target>
-  
-  <target name="prepare-serf" depends="serf-prepare">
-  </target>
-  
-  <target name="build-serf" depends="serf-build">
-  </target>
-  
-  <target name="copy-serf" depends="build-serf, build-svn">
   </target>
 </project>

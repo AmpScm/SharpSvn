@@ -8,7 +8,7 @@
 
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
   <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
-
+  
   <property name="sconsFilename" value="scons-${sconsVersion}.zip" />
   <property name="sconsDir" value="${'build/scons-' + sconsVersion}" />
 
@@ -24,6 +24,10 @@
 
   <property name="nasmFilename" value="nasm-${nasmVersion}-win32.zip" />
   <property name="nasmDir" value="${buildRoot}\nasm-${nasmVersion}" />
+  
+  <property name="ltcgFlags" value="" />
+  <property name="ltcgFlags" value="-GL" if="${ltcg}" />
+  <property name="ltcgFlags" value="${ltcgFlags} -Gw" if="${int::parse(VSversion) &gt;= 2013}" />
 
   <target name="download" depends="initialize-layout">
     <mkdir dir="${downloads}" />
@@ -43,11 +47,6 @@
       dest="${downloads + sharpZipFilename}"
       unless="${file::exists(downloads + sharpZipFilename)}" />
 
-    <get
-      src="http://ftp.andrew.cmu.edu/pub/cyrus-mail/${saslFilename}"
-      dest="${downloads + saslFilename}"
-      unless="${file::exists(downloads + saslFilename)}" />
-
     <get src="http://www.nasm.us/pub/nasm/releasebuilds/${nasmVersion}/win32/${nasmFilename}"
       dest="${downloads + nasmFilename}"
       unless="${file::exists(downloads + nasmFilename)}" />
@@ -55,17 +54,23 @@
     <get src="http://www.cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
       dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
-
+      
     <get src="http://heanet.dl.sourceforge.net/sourceforge/scons/${sconsVersion}/scons-${sconsVersion}.zip"
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
+      
+     
+    <get
+       src="http://svnbook.red-bean.com/en/1.7/svn-book.pdf"
+       dest="${downloads + 'svn-book.pdf'}"
+       unless="${file::exists(downloads + 'svn-book.pdf')}"
+       if="${getSvnBook}" />
 
-    <if test="${property::exists('withSwig')}">
-      <get
-        src="http://prdownloads.sourceforge.net/swig/${swigFilename}"
-        dest="${downloads + swigFilename}"
-        unless="${file::exists(downloads + swigFilename)}" />
-    </if>
+    <get
+      src="http://prdownloads.sourceforge.net/swig/${swigFilename}"
+      dest="${downloads + swigFilename}"
+      unless="${file::exists(downloads + swigFilename)}"
+      if="${property::exists('withSwig')}" />
 
     <if test="${intl == 'gettext'}">
       <get
@@ -104,12 +109,12 @@
       src="${downloads + dbFilename}" compression="gzip"
       dest="build"
       unless="${directory::exists('build/db-' + dbVersion + '.NC')}" />
-
+      
     <unzip
       zipfile="${downloads + nunitFilename}"
       todir="build"
       unless="${directory::exists(nunitDir)}" />
-
+      
     <unzip
       zipfile="${downloads + sconsFilename}"
       todir="build"
@@ -119,11 +124,6 @@
       zipfile="${downloads + sharpZipFilename}"
       todir="${sharpZipLibDir}"
       unless="${directory::exists(sharpZipLibDir)}" />
-
-    <untar
-      src="${downloads + saslFilename}" compression="gzip"
-      dest="build/${platform}"
-      unless="${directory::exists(saslDir)}" />
 
     <unzip
       zipfile="${downloads + nasmFilename}"
@@ -139,19 +139,26 @@
       <unzip zipfile="${downloads + swigFilename}" todir="build" />
     </if>
     <if test="${intl == 'gettext'}">
-      <if test="${not directory::exists(gettextDir)}">
-        <untar src="${downloads + gettextFilename}" dest="build" compression="gzip" />
-      </if>
-      <if test="${not directory::exists(gettextToolsDir)}">
-        <unzip zipfile="${downloads + gettextToolsFilename}" todir="${gettextToolsDir}" />
-        <unzip zipfile="${downloads + gettextToolsRuntimeFilename}" todir="${gettextToolsDir}" />
-        <unzip zipfile="${downloads + gettextToolsIconvFilename}" todir="${gettextToolsDir}" />
-      </if>
+      <untar
+        src="${downloads + gettextFilename}" compression="gzip"
+        dest="build"
+        unless="${directory::exists(gettextDir)}" />
+    </if>
+    <if test="${intl == 'gettext' and not directory::exists(gettextToolsDir)}">
+      <unzip
+        zipfile="${downloads + gettextToolsFilename}"
+        todir="${gettextToolsDir}" />
+      <unzip
+        zipfile="${downloads + gettextToolsRuntimeFilename}"
+        todir="${gettextToolsDir}" />        
+      <unzip
+        zipfile="${downloads + gettextToolsIconvFilename}"
+        todir="${gettextToolsDir}" />
     </if>
     <if test="${javaHome != ''}">
-      <if test="${not directory::exists(junitDir)}">
-        <unzip zipfile="${downloads + junitFilename}" todir="build" />
-      </if>
+      <unzip
+        zipfile="${downloads + junitFilename}" todir="build"
+        unless="${directory::exists(junitDir)}" />
     </if>
   </target>
   <target name="checkout" depends="initialize-layout">
@@ -168,7 +175,7 @@
       <arg value="${svnBase}" />
     </Svn>
 
-    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.revsMerged" if="${buildSubversion}">
+    <OnceBlock file="build/subversion-${subversionVersion}_${platform}.merged" if="${buildSubversion}">
       <Svn>
         <arg value="revert" />
         <arg value="-R" />
@@ -191,13 +198,14 @@
           <arg value="${svnBase}" />
         </Svn>
       </foreach>
+      
       <foreach item="String" property="branch" in="${subversionMergeBranches}" delim=";"
            if="${string::get-length(subversionMergeBranches) &gt; 0}">
-        <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
-          <arg value="merge" />
-          <arg line="^/subversion/${branch}" />
-          <arg value="${svnBase}" />
-        </Svn>
+          <Svn verbose="true" if="${string::get-length(string::trim(branch)) &gt; 0}">
+            <arg value="merge" />
+            <arg line="^/subversion/${branch}" />
+            <arg value="${svnBase}" />
+          </Svn>
       </foreach>
     </OnceBlock>
 
@@ -206,7 +214,7 @@
       unless="${directory::exists(zlibDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
+      <arg value="https://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
       <arg value="${zlibDir}" />
     </Svn>
     
@@ -215,12 +223,13 @@
       unless="${directory::exists(opensslDir)}">
       
       <arg value="co" />
-      <arg value="${httpOrHttps}://github.com/openssl/openssl.git/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="https://github.com/openssl/openssl.git/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
       <arg value="${opensslDir}" />
     </Svn>
 
     <Svn
       verbose="true"
+      if="${buildNeon}"
       unless="${directory::exists(platformRoot + '/neon')}">
 
       <arg value="co" />
@@ -228,7 +237,7 @@
       <arg value="build/${platform}/neon" />
     </Svn>
     <!-- Write version for subversion configure script -->
-    <echo message="${neonVersion}" file="${platformRoot}/neon/.version" />
+    <echo message="${neonVersion}" file="${platformRoot}/neon/.version" if="${buildNeon}" />
 
     <Svn
       verbose="true"
@@ -236,18 +245,19 @@
       unless="${directory::exists(httpdDir)}">
 
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/tags/${httpdVersion}/" if="${httpdBuildType == 'tag'}" />
+      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/httpd/httpd/branches/${httpdVersion}/" if="${httpdBuildType == 'branch'}" />
       <arg value="${httpdDir}" />
     </Svn>
-
+    
     <Svn
       verbose="true"
       if="${buildHttpd}"
-      unless="${directory::exists(aprIconvDir)}">
-
+      unless="${directory::exists(pcreDir)}">
+      
       <arg value="co" />
-      <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-iconv/tags/${aprIconvVersion}/" />
-      <arg value="${aprIconvDir}" />
+      <arg value="svn://vcs.exim.org/pcre/code/tags/pcre-${pcreVersion}/" />
+      <arg value="${pcreDir}" />
     </Svn>
 
     <Svn
@@ -267,11 +277,26 @@
       <arg value="${httpOrHttps}://svn.apache.org/repos/asf/apr/apr-util/tags/${aprUtilVersion}/" />
       <arg value="${aprUtilDir}" />
     </Svn>
+    
+    <Svn
+      verbose="true"
+      if="${file::exists(aprUtilDir + '/xml/expat/lib/map_osd_ebcdic_df04_1.h')}">
+      
+      <arg value="up" />
+      <arg line="--set-depth exclude" />
+      <arg line="${aprUtilDir + '/xml/expat/lib'}" />
+    </Svn>
 
     <Svn
       verbose="true"
-      unless="${directory::exists(platformRoot + '/serf')}">
+      unless="${directory::exists(aprUtilDir + '/xml/expat/lib')}">
 
+      <arg value="co" />
+      <arg value="https://github.com/LuaDist/libexpat.git/tags/${expatVersion}/lib" />
+      <arg value="${aprUtilDir + '/xml/expat/lib'}" />
+    </Svn>
+
+    <Svn unless="${directory::exists(platformRoot + '/serf')}">
       <arg value="co" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
@@ -279,21 +304,24 @@
       <arg value="${platformRoot}/serf" />
     </Svn>
 
-    <Svn
-      verbose="true"
-      unless="${directory::exists(sqliteDir)}">
-
+    <Svn unless="${directory::exists(sqliteDir)}">
       <arg value="co" />
       <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
     </Svn>
 
+    <Svn unless="${directory::exists(saslDir)}">
+      <arg value="co" />
+      <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
+      <arg value="${saslDir}" />
+    </Svn>
   </target>
 
   <target name="copy-licenses">
     <copy
 			file="build/${platform}/subversion/LICENSE"
-			tofile="release/licenses/Subversion-License.txt" />
+			tofile="release/licenses/Subversion-License.txt"
+			if="${buildSubversion}" />
     <copy
 			file="${aprDir}/LICENSE"
 			tofile="release/licenses/Apr-License.txt" />
@@ -307,6 +335,7 @@
 			file="${saslDir}/COPYING"
 			tofile="release/licenses/Cyrus-Sasl-License.txt" />
     <copy
+      if="${buildNeon}"
 			file="${neonDir}/src/COPYING.LIB"
 			tofile="release/licenses/Neon-License.txt" />
     <copy
@@ -330,7 +359,7 @@
         file="${gettextDir}/gettext-runtime/COPYING"
         tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
     <copy
-			file="${sharpSvnDir}/imports/scripts/SharpSvn-Licenses.wxs"
+			file="${downloads}/../scripts/SharpSvn-Licenses.wxs"
 			tofile="release/licenses/SharpSvn-Licenses.wxs" />
   </target>
 </project>
