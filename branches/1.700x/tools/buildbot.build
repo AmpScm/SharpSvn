@@ -136,8 +136,8 @@
         
     <copy file="release/SharpSvn.xml" todir="release/net20/x86" />
     <copy file="release/SharpSvn.xml" todir="release/net20/x64" />
-    <!--copy file="release/SharpSvn.xml" todir="release/net40/x86" />
-    <copy file="release/SharpSvn.xml" todir="release/net40/x64" /-->
+    <copy file="release/SharpSvn.xml" todir="release/net40/x86" />
+    <copy file="release/SharpSvn.xml" todir="release/net40/x64" />
     <delete file="release/SharpSvn.xml" />
 
     <copy todir="release">
@@ -197,7 +197,7 @@
       </fileset>
     </copy>
 
-    <!--copy todir="release/net40/x86">
+    <copy todir="release/net40/x86">
       <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
@@ -229,7 +229,7 @@
       <fileset basedir="v40/imports/release/bin">
         <include name="SharpSvn-*-x64.*" />
       </fileset>
-    </copy-->
+    </copy>
 
     <exec program="${sevenZipExe}">
       <arg line="a -y" />
