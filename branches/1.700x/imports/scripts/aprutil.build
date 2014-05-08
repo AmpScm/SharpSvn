@@ -77,6 +77,7 @@
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
         <filterchain>
           <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' if="${vcxproj}" />
+          <LineRegexReplace re='(OutputFile=".*\\)(libapr-1.dll")' to='$1${dllPrefix}$2' unless="${vcxproj}" />
         </filterchain>
       </FilterFile>
 
