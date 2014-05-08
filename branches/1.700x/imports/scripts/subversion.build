@@ -129,8 +129,8 @@
         <arg line="--vsnet-version=${VSversion}" />
         <arg value="--release" />
         <arg value="--with-httpd=../../httpd" if="${(buildHttpd == 'true') and (platform == 'win32')}" />
-        <arg value="--with-apr=../lib" />
-        <arg value="--with-apr-util=../lib" />
+        <arg value="--with-apr=${intDir}" />
+        <arg value="--with-apr-util=${intDir}" />
         <arg value="--with-berkeley-db=../lib" />
         <arg value="--with-openssl=../openssl" />
         <arg value="--with-zlib=${zlibDir}" />
