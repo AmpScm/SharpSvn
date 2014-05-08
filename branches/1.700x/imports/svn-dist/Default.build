@@ -47,10 +47,8 @@
 			<include name="${saslDir}/lib/*.dll" />
 			<include name="${dbWindowsDir}/Release/*.dll" if="${platform == 'win32'}" />
 			<include name="${dbWindowsDir}/Release_AMD64/*.dll" if="${platform == 'x64'}" />
-			<include name="${aprDir}/Release/*.dll" if="${platform == 'win32'}" />
-			<include name="${aprUtilDir}/Release/*.dll" if="${platform == 'win32'}" />
-			<include name="${aprDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
-			<include name="${aprUtilDir}/x64/Release/*.dll" if="${platform == 'x64'}" />
+			<include name="${aprDir}/Release/*.dll" />
+			<include name="${aprUtilDir}/Release/*.dll" />
 			<include name="${gettextDir}/bin/${platform}/release/*.dll" />
 		</fileset>
 	</copy>
