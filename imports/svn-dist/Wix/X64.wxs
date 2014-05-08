@@ -98,32 +98,32 @@
       <Component Id="ssleay32.dll" Guid="360CA2FC-AE7B-4AB9-A9B9-CD051832E68A">
         <File Id="ssleay32.dll" Name="SlikSvn-ssleay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="libintl.dll" Guid="85710EB8-AC52-4BAF-81F5-E91C08F9B7B6">
-        <File Id="libintl.dll" Name="SlikSvn-libintl-x64.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="libintl.dll" Guid="FFE158A2-5145-469F-95E1-6DF9BD8F3602">
+        <File Id="libintl.dll" Name="SlikSvn-libintl.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_client_1.dll" Guid="AA3EA152-36AA-488B-B478-122F482A0BB8">
-        <File Id="svn_client_1.dll" Name="SlikSvn-svn_client-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_client_1.dll" Guid="4E57BD93-2D3C-4759-9929-677AD1342198">
+        <File Id="svn_client_1.dll" Name="SlikSvn-libsvn_client-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_delta_1.dll" Guid="B1313BD0-6891-430F-B3DD-FCF370126589">
-        <File Id="svn_delta_1.dll" Name="SlikSvn-svn_delta-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_delta_1.dll" Guid="A917B89C-ED51-47D9-AC16-D4C199E6DFA6">
+        <File Id="svn_delta_1.dll" Name="SlikSvn-libsvn_delta-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_diff_1.dll" Guid="AC2CDD49-B292-434E-85B3-282A14EC4011">
-        <File Id="svn_diff_1.dll" Name="SlikSvn-svn_diff-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_diff_1.dll" Guid="5A6BF124-2F00-428A-9DC0-9891A5F7C0CD">
+        <File Id="svn_diff_1.dll" Name="SlikSvn-libsvn_diff-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_fs_1.dll" Guid="D3162E5A-3ABC-4858-8D77-74B6FF6DF927">
-        <File Id="svn_fs_1.dll" Name="SlikSvn-svn_fs-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_fs_1.dll" Guid="FD54D8C8-2452-41FC-AA4E-6EDB5D9B0631">
+        <File Id="svn_fs_1.dll" Name="SlikSvn-libsvn_fs-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_ra_1.dll" Guid="1BDC442B-6DB3-435B-894F-80FDB08F1A6C">
-        <File Id="svn_ra_1.dll" Name="SlikSvn-svn_ra-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_ra_1.dll" Guid="67C95B4F-20B8-47DB-B771-323A9D25EBCA">
+        <File Id="svn_ra_1.dll" Name="SlikSvn-libsvn_ra-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_repos_1.dll" Guid="4F9524B6-92F3-4D13-B327-7D509E7820EC">
-        <File Id="svn_repos_1.dll" Name="SlikSvn-svn_repos-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_repos_1.dll" Guid="D79285DA-F161-48BA-8E58-2F93D2AA59C9">
+        <File Id="svn_repos_1.dll" Name="SlikSvn-libsvn_repos-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_subr_1.dll" Guid="3454D612-C8CD-4251-BEB2-0AA7A887BBCF">
-        <File Id="svn_subr_1.dll" Name="SlikSvn-svn_subr-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_subr_1.dll" Guid="37D4BC8A-7485-4297-96ED-45CEE238003B">
+        <File Id="svn_subr_1.dll" Name="SlikSvn-libsvn_subr-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="svn_wc_1.dll" Guid="153FCE56-A2BC-4FB5-8F86-C9891CF70714">
-        <File Id="svn_wc_1.dll" Name="SlikSvn-svn_wc-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="svn_wc_1.dll" Guid="3D0B49AF-B64D-457F-9151-966D866E8BF6">
+        <File Id="svn_wc_1.dll" Name="SlikSvn-libsvn_wc-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
       <Component Id="libsvnjavahl_1.dll" Guid="665BBB08-90B1-4B1C-828D-8CCBA2B324C6">
         <File Id="libsvnjavahl_1.dll" Name="libsvnjavahl-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
