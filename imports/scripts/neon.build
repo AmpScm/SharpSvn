@@ -70,5 +70,17 @@
 
   
     </OnceBlock>
+    <copy todir="${intDir}/include/neon">
+      <fileset basedir="${neonDir}\src">
+        <include name="ne_*.h" />
+        <include name="neon_*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include/neon">
+      <fileset basedir="${neonDir}\src">
+        <include name="ne_*.h" />
+        <include name="neon_*.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
