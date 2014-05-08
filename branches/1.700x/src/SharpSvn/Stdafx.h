@@ -1,5 +1,3 @@
-// $Id$
-//
 // Copyright 2007-2008 The SharpSvn Project
 //
 //  Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,12 +27,20 @@
 
 #include <svn_client.h>
 #include <svn_compat.h>
+#include <svn_config.h>
 #include <svn_dirent_uri.h>
+#include <svn_dso.h>
 #include <svn_io.h>
 #include <svn_path.h>
+#include <svn_pools.h>
 #include <svn_props.h>
 #include <svn_repos.h>
+#include <svn_sorts.h>
 #include <svn_time.h>
+#include "svn_utf.h"
+
+
+#include <serf-1/serf.h>
 
 #ifndef UNUSED_ALWAYS
 #define UNUSED_ALWAYS(x) (x)
@@ -44,6 +50,7 @@
 
 #include <vcclr.h>
 #include <crtdbg.h>
+#include <assert.h>
 
 #pragma warning(disable: 4706) // assignment within conditional expression
 //#pragma warning(error: 4996) // Deprecated warnings
@@ -104,3 +111,5 @@ using System::Diagnostics::DebuggerDisplayAttribute;
 #define DECLARE_EVENT(type, name) DECLARE_EVENT_X(type, name, public)
 
 #pragma warning(disable: 4127) // warning C4127: conditional expression is constant
+
+#include "SvnAll.h"
