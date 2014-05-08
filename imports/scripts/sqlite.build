@@ -4,11 +4,11 @@
   <property name="sqliteIntDir" value="${sqliteDir}/obj/${platform}" />
   <property name="sqliteLibDir" value="${sqliteDir}/bin/${platform}" />
 
-  <target name="build-sqlite" depends="checkout">
+  <target name="sqlite-build" depends="checkout">
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
     <OnceBlock file="build/sqlite-${sqliteVersion}.patched">
-      <loadfile file="${sqliteDir}/sqlite3.c" property="projtext">
+      <FilterFile file="${sqliteDir}/sqlite3.c">
         <filterchain>
           <!-- Add openssl includes to aprutil and aprutil/crypto -->
           <replacestring from="static int mutexIsNT(void){" to="
@@ -18,16 +18,19 @@ static int original_mutexIsNT(void){" />
 #define isNT() (1)
 static int original_isNT(void){" />
         </filterchain>
-      </loadfile>
-      <echo message="${projtext}" file="${sqliteDir}/sqlite3.c" />
+      </FilterFile>
     </OnceBlock>
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
-      <arg value="/O2" />      <!-- Maximize speed -->
+      <arg value="/Ox" />      <!-- Maximize speed -->
       <arg value="/GF" />      <!-- String Pooling -->
       <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
       <arg value="/Zi" />      <!-- Write debug information -->
-      <arg value="/Zl" />      <!-- Ommit default library name -->
-      <arg value="/Gy" />      <!-- Function level linking -->
+      <arg value="/Zl" />      <!-- No default library name -->
+      
+      <arg value="/GL" if="${ltcg}" />      <!-- Whole program optimization -->
+      <arg value="/Gy" if="${ltcg}" />      <!-- Function level linking -->
+      <arg value="/Gw" if="${ltcg}" />      <!-- Optimize global data -->
+      
       <defines>
         <define name="NDEBUG" />
         
@@ -66,7 +69,8 @@ static int original_isNT(void){" />
         <!-- These would be nice, but currently break compilation -->
         <!--define name="SQLITE_OMIT_ATTACH" /-->
         <!--define name="SQLITE_OMIT_VIRTUALTABLE" /-->
-        
+
+        <define name="SQLITE_WIN32_GETVERSIONEX" value="0" /><!-- Just assume NT -->        
       </defines>
       <sources basedir="${sqliteDir}">
         <include name="sqlite3.c" />
@@ -88,7 +92,7 @@ static int original_isNT(void){" />
         <include name="sqlite3.lib" />
       </fileset>
     </copy>
-    <copy todir="${intDir}\inc">
+    <copy todir="${intDir}\include">
       <fileset basedir="${sqliteDir}">
         <include name="*.h" />
       </fileset>

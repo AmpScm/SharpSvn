@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
   <property name="opensslDir" value="build/${platform}/openssl" />
+  <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
 
-  <target name="prepare-openssl" depends="extract, build-zlib">
+  <target name="openssl-prepare" depends="checkout">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
       <exec program="perl.exe" workingdir="${opensslDir}">
         <arg value="Configure" />
@@ -19,15 +20,12 @@
         <arg value="no-shared" />
         <arg value="no-krb5"/>
         <arg value="no-hw"/>
-        <arg value="zlib" />
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
         <arg value="-DSSL_FORBID_ENULL" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
-        <arg value="--with-zlib-lib=${releaseLib}/zlib.lib" />
-        <arg value="--with-zlib-include=${string::replace(release,'\','/')}/include" />
-        <arg value="--prefix=${path::get-full-path(intDir)}" />        
+        <arg value="--prefix=${path::get-full-path(intDir)}" />
       </exec>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
@@ -37,52 +35,47 @@
       <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
         <arg line="/c ms\do_win64a.bat" />
       </exec>
-      <if test="${static != 'true'}">
-        <loadfile file="${opensslDir}/ms/libeay32.def" property="def">
-          <filterchain>
-            <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${def}" file="${opensslDir}/ms/libeay32.def" />
-        <loadfile file="${opensslDir}/ms/ssleay32.def" property="def">
-          <filterchain>
-            <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
-          </filterchain>
-        </loadfile>
-        <echo message="${def}" file="${opensslDir}/ms/ssleay32.def" />
-        <loadfile file="${opensslDir}/ms/ntdll.mak" property="mk">
-          <filterchain>
-            <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
-            <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
-            <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
-            <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
-            <replacestring from=" /MT " to=" /MD " />
-          </filterchain>
-        </loadfile>
-        <echo message="${mk}" file="${opensslDir}/ms/ntdll.mak" />
-      </if>
-      <loadfile file="${opensslDir}/ms/nt.mak" property="mk">
+      <FilterFile file="${opensslDir}/ms/libeay32.def" unless="${static}">
         <filterchain>
-          <replacestring from=" /MT " to=" /MD " />
+          <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
         </filterchain>
-      </loadfile>
-      <echo message="${mk}" file="${opensslDir}/ms/nt.mak" />
-      <if test="${svnAddSharpSvn == 'true'}">
-        <loadfile file="${opensslDir}/engines/e_capi.c" property="mk">
-          <filterchain>
-            <replacestring from="static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" to="
-            
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/ssleay32.def" unless="${static}">
+        <filterchain>
+          <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}">
+        <filterchain>
+          <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
+          <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
+          <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
+          <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
+          <replacestring from=" /MT " to=" /MD " />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
+        <filterchain>
+          <!-- Ommit default library name -->
+          <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags}" />
+          <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/engines/e_capi.c" if="${svnAddSharpSvn}">
+        <filterchain>
+          <replacestring from='static int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' to='
+
+#pragma comment(lib, "crypt32.lib")
 typedef HWND (*sharpsvn_get_ui_parent_handler_t)();
 extern sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler;
 sharpsvn_get_ui_parent_handler_t sharpsvn_get_ui_parent_handler = NULL;
-static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
-            <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL; 
+static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
+          <replacestring from="hwnd = GetForegroundWindow();" to="hwnd = sharpsvn_get_ui_parent_handler ? sharpsvn_get_ui_parent_handler() : NULL; 
             if (hwnd == (HWND)-1) { idx = 0; goto err; }" />
-          </filterchain>
-        </loadfile>
-        <echo message="${mk}" file="${opensslDir}/engines/e_capi.c" />
-      </if>
-      <loadfile file="${opensslDir}/crypto/rand/rand_win.c" property="mk">
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/crypto/rand/rand_win.c">
         <filterchain>
           <!-- If OpenSSL already used a *good* source for entropy, such as most likely
                CryptoAPI, don't start asking for kernel objects for up to 1 second, which might
@@ -98,63 +91,32 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);" />
           <replacestring from="if (kernel)" to="if (good &amp;&amp; kernel) { FreeLibrary(kernel); } else if (kernel /* &amp;&amp; !good*/)" />
           <replacestring from="!defined(OPENSSL_SYS_WIN32_CYGWIN)" to="0 &amp;&amp; ! defined(OPENSSL_SYS_WIN32_CYGWIN)" />
         </filterchain>
-      </loadfile>
-      <echo message="${mk}" file="${opensslDir}/crypto/rand/rand_win.c" />
+      </FilterFile>
     </OnceBlock>
   </target>
-  <target name="build-openssl" depends="prepare-openssl">
+  <target name="openssl-build" depends="openssl-prepare">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">    
-      <if test="${static == 'true'}">
-        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak">
-          <arg value="install" />
-        </NMake>
-      </if>
-      <if test="${static != 'true'}">
-        <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak">
-          <arg value="install" />
-        </NMake>
-      </if>
+      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" if="${static}">
+        <arg value="install" />
+      </NMake>
+      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" unless="${static}">
+        <arg value="install" />
+      </NMake>
+      <copy todir="${intDir}/bin" unless="${static}">
+        <fileset basedir="${opensslDir}/out32dll">
+          <include name="libeay32.pdb" />
+          <include name="ssleay32.pdb" />
+        </fileset>
+      </copy>
     </OnceBlock>
     <copy todir="${release}/include">
       <fileset basedir="${intDir}/include">
         <include name="openssl/**" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/openssl/out32" if="${static != 'true'}">
-      <fileset basedir="build/${platform}/openssl/out32dll">
+    <copy todir="${opensslDir}/out32">
+      <fileset basedir="${opensslDir}/out32dll">
         <include name="*.lib" />
-        <include name="*.exp" />
-        <include name="*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib" flatten="true">
-      <fileset basedir="build/win32/openssl-${opensslVersion}">
-        <include name="out32/*.lib" />
-        <include name="out32/*.exp" />
-        <include name="out32/*.pdb" />
-        <include name="out32dll/*.lib" />
-        <include name="out32dll/*.exp" />
-        <include name="out32dll/*.pdb" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin" flatten="true">
-      <fileset basedir="build/win32/openssl/out32dll">
-        <include name="*.dll" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/bin/x64" flatten="true">
-      <fileset basedir="build/x64/openssl/out32dll">
-        <include name="*.dll" />
-      </fileset>
-    </copy>
-    <copy todir="${release}/lib-x64" flatten="true">
-      <fileset basedir="build/x64/openssl-${opensslVersion}">
-        <include name="out32/*.lib" />
-        <include name="out32/*.exp" />
-        <include name="out32/*.pdb" />
-        <include name="out32dll/*.lib" />
-        <include name="out32dll/*.exp" />
-        <include name="out32dll/*.pdb" />
       </fileset>
     </copy>
   </target>
