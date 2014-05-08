@@ -13,7 +13,7 @@
   <property name="buildSubversion" value="true" overwrite="false" />
   <property name="svn-dev" value="false" overwrite="false" />
   <property name="enableAprCrypto" value="true" overwrite="false" />
-  <property name="buildJavaHL" value="true" overwrite="false" />
+  <property name="buildJavaHL" value="false" overwrite="false" />
   <property name="ltcg" value="false" overwrite="false" />
   <property name="getSvnBook" value="false" overwrite="false" />
 
