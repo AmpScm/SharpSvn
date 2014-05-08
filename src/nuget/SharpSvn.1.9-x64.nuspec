@@ -18,22 +18,18 @@
     <!-- DotNet 2.0 compatible version -->
     <file src="net20/x64/SharpSvn.dll" target="lib/net20" />
     <file src="net20/x64/SharpSvn.xml" target="lib/net20" />
-    <file src="net20/x64/SharpSvn-*-x64.svnDll" target="lib/net20" />
-    <file src="net20/x64/Sharp*-x64.svnExe" target="lib/net20" />
+    <file src="net20/x64/SharpSvn-DB44-20-x64.svnDll" target="lib/net20" />
     <file src="net20/x64/SharpSvn.pdb" target="lib/net20" />
     <file src="net20/x64/SharpSvn.UI.dll" target="lib/net20" />
     <file src="net20/x64/SharpSvn.UI.xml" target="lib/net20" />
     <file src="net20/x64/SharpSvn.UI.pdb" target="lib/net20" />
-    <file src="net20/x64/**/*.resources.dll" target="lib/net20" />
     <!-- DotNet 4.0+ version -->
     <file src="net40/x64/SharpSvn.dll" target="lib/net40" />
     <file src="net40/x64/SharpSvn.xml" target="lib/net40" />
-    <file src="net40/x64/SharpSvn-*-x64.svnDll" target="lib/net40" />
-    <file src="net40/x64/Sharp*-x64.svnExe" target="lib/net40" />
+    <file src="net40/x64/SharpSvn-DB44-20-x64.svnDll" target="lib/net40" />
     <file src="net40/x64/SharpSvn.pdb" target="lib/net40" />
     <file src="net40/x64/SharpSvn.UI.dll" target="lib/net40" />
     <file src="net40/x64/SharpSvn.UI.xml" target="lib/net40" />
     <file src="net40/x64/SharpSvn.UI.pdb" target="lib/net40" />
-    <file src="net40/x64/**/*.resources.dll" target="lib/net40" />
   </files>
 </package>
