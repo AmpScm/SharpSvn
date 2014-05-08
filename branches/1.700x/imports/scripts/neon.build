@@ -82,5 +82,17 @@
         <include name="neon_*.h" />
       </fileset>
     </copy>
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${neonDir}">
+        <include name="*neon*.lib" />
+        <include name="*neon*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${neonDir}">
+        <include name="*neon*.lib" />
+        <include name="*neon*.pdb" />
+      </fileset>
+    </copy>
   </target>
 </project>
