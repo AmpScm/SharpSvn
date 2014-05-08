@@ -14,6 +14,15 @@
   </if>
   
   <target name="prepare">
+    <exec program="svn.exe" output=".svn-info"><arg line="info . --xml" /></exec>
+    <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
+    <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
+    <exec program="svn.exe" unless="${svnDist}">
+      <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
+      <arg line="update"                  if="${directory::exists('v40')}" />
+      <arg line="-r ${svn_rev} v40/" />      
+    </exec>
+    
     <delete dir="release" if="${directory::exists('release')}" />
     <mkdir dir="release" />
     
@@ -51,6 +60,16 @@
       <arg line='"${nantExe}" build"' />
     </exec>
     
+    <exec program="cmd.exe" workingdir="v40\imports" if="${buildImports}" unless="${svnDist}">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
+      <arg line='"${nantExe}" build"' />
+    </exec>
+    
+    <exec program="cmd.exe" workingdir="v40\imports" if="${buildImports}" unless="${svnDist}">
+      <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86_amd64 &amp;&amp;' />
+      <arg line='"${nantExe}" build"' />
+    </exec>
+
     <exec program="cmd.exe" workingdir="imports\svn-dist" if="${svnDist}">
       <arg line='/s /c ""${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86 &amp;&amp;' />
       <arg line='"${nantExe}" build-svn-dist"' />
@@ -117,6 +136,8 @@
         
     <copy file="release/SharpSvn.xml" todir="release/net20/x86" />
     <copy file="release/SharpSvn.xml" todir="release/net20/x64" />
+    <!--copy file="release/SharpSvn.xml" todir="release/net40/x86" />
+    <copy file="release/SharpSvn.xml" todir="release/net40/x64" /-->
     <delete file="release/SharpSvn.xml" />
 
     <copy todir="release">
@@ -175,6 +196,40 @@
         <include name="SharpSvn-*-x64.*" />
       </fileset>
     </copy>
+
+    <!--copy todir="release/net40/x86">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-Win32.svnExe" />
+        <include name="SharpPlink-Win32.pdb" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="SharpSvn.UI.xml" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x86">
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-win32.*" />
+      </fileset>
+    </copy>
+
+    <copy todir="release/net40/x64">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release">
+        <include name="SharpSvn.dll" />
+        <include name="SharpSvn.pdb" />
+        <include name="SharpPlink-x64.svnExe" />
+        <include name="SharpPlink-x64.pdb" />
+        <include name="SharpSvn.UI.dll" />
+        <include name="SharpSvn.UI.pdb" />
+        <include name="SharpSvn.UI.xml" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x64">
+      <fileset basedir="v40/imports/release/bin">
+        <include name="SharpSvn-*-x64.*" />
+      </fileset>
+    </copy-->
 
     <exec program="${sevenZipExe}">
       <arg line="a -y" />
