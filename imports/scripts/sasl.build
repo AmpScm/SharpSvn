@@ -97,7 +97,8 @@
         <arg value="OPENSSL_INCLUDE=${path::get-full-path(intDir + '/include')}" />
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(intDir + '/lib')}" />
         <arg value="NTLM=1" />
-        <arg value="NTLM_STATIC=1" />        
+        <arg value="NTLM_STATIC=1" />
+        <arg value="LINK32LIB=lib.exe /nologo" />
       </NMake>
       <!-- VS2005 and VS2008 binaries need a manifest -->
       <exec program="mt.exe" workingdir="${saslDir}/lib" unless="${static}" if="${not vcxproj}">
