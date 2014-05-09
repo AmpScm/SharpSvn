@@ -35,6 +35,7 @@ namespace SharpSvn {
         bool _noPreCommitHook;
         bool _noPostCommitHook;
         bool _noPropertyValidation;
+        bool _noDateVerify;
         __int64 _startRev;
         __int64 _endRev;
 
@@ -98,6 +99,18 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _noPropertyValidation = !value;
+            }
+        }
+
+        property bool VerifyDates
+        {
+            bool get()
+            {
+                return !_noDateVerify;
+            }
+            void set(bool value)
+            {
+                _noDateVerify = !value;
             }
         }
 
