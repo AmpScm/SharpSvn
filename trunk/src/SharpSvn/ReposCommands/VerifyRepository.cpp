@@ -49,10 +49,12 @@ bool SvnRepositoryClient::Verify(String^ repositoryPath, SvnVerifyRepositoryArgs
 
     SVN_HANDLE(svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle));
 
-    svn_error_t* r = svn_repos_verify_fs2(
+    svn_error_t* r = svn_repos_verify_fs3(
         repos,
         (svn_revnum_t)args->StartRevision,
         (svn_revnum_t)args->EndRevision,
+        args->ContinueOnError,
+        args->VerifyNormalization,
         repos_notify_func,
         _clientBaton->Handle,
         CtxHandle->cancel_func,

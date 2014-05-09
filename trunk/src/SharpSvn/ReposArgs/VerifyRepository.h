@@ -22,6 +22,8 @@ namespace SharpSvn {
     {
         __int64 _startRev;
         __int64 _endRev;
+        bool _continueOnError;
+        bool _verifyNormalization;
 
     public:
         SvnVerifyRepositoryArgs()
@@ -54,6 +56,29 @@ namespace SharpSvn {
             }
         }
 
+        property bool ContinueOnError
+        {
+            bool get()
+            {
+                return _continueOnError;
+            }
+            void set(bool value)
+            {
+                _continueOnError = value;
+            }
+        }
+
+        property bool VerifyNormalization
+        {
+            bool get()
+            {
+                return _verifyNormalization;
+            }
+            void set(bool value)
+            {
+                _verifyNormalization = value;
+            }
+        }
 
         virtual property SvnCommandType CommandType
         {
