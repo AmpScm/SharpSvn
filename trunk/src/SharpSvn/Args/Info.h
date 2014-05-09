@@ -57,6 +57,10 @@ namespace SharpSvn {
             {
                 return !_filterExcluded;
             }
+            void set(bool value)
+            {
+                _filterExcluded = !value;
+            }
         }
 
     /// <summary>Include actual only (tree conflict) nodes in the result (Default true)</summary>
@@ -65,6 +69,10 @@ namespace SharpSvn {
             bool get()
             {
                 return !_filterActualOnly;
+            }
+            void set(bool value)
+            {
+                _filterActualOnly = !value;
             }
         }
 
