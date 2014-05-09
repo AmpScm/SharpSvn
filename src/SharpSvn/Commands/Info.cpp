@@ -83,13 +83,14 @@ bool SvnClient::Info(SvnTarget^ target, SvnInfoArgs^ args, EventHandler<SvnInfoE
         svn_opt_revision_t pegRev = target->GetSvnRevision(SvnRevision::None, SvnRevision::Head)->ToSvnRevision();
         svn_opt_revision_t rev = args->Revision->Or(target->GetSvnRevision(SvnRevision::None, SvnRevision::Head))->ToSvnRevision();
 
-        svn_error_t* r = svn_client_info3(
+        svn_error_t* r = svn_client_info4(
             target->AllocAsString(%pool, true),
             &pegRev,
             &rev,
             (svn_depth_t)args->Depth,
             args->RetrieveExcluded,
             args->RetrieveActualOnly,
+            args->IncludeExternals,
             CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
             svn_info_receiver,
             (void*)_clientBaton->Handle,

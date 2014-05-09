@@ -25,6 +25,7 @@ namespace SharpSvn {
         SvnChangeListCollection^ _changelists;
         bool _filterExcluded;
         bool _filterActualOnly;
+        bool _includeExternals;
 
     public:
         DECLARE_EVENT(SvnInfoEventArgs^, Info);
@@ -73,6 +74,18 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _filterActualOnly = !value;
+            }
+        }
+
+        property bool IncludeExternals
+        {
+            bool get()
+            {
+                return _includeExternals;
+            }
+            void set(bool value)
+            {
+                _includeExternals = value;
             }
         }
 
