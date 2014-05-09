@@ -22,6 +22,7 @@ namespace SharpSvn {
     {
         SvnDepth _depth;
         SvnChangeListCollection^ _changelists;
+        bool _clearChangelists;
 
     public:
         SvnRevertArgs()
@@ -46,6 +47,18 @@ namespace SharpSvn {
             void set(SvnDepth value)
             {
                 _depth = EnumVerifier::Verify(value);
+            }
+        }
+
+        property bool ClearChangelists
+        {
+            bool get()
+            {
+                return _clearChangelists;
+            }
+            void set(bool value)
+            {
+                _clearChangelists = value;
             }
         }
 

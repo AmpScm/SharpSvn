@@ -72,10 +72,11 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
 
     AprArray<String^, AprCStrDirentMarshaller^>^ aprPaths = gcnew AprArray<String^, AprCStrDirentMarshaller^>(paths, %pool);
 
-    svn_error_t *r = svn_client_revert2(
+    svn_error_t *r = svn_client_revert3(
         aprPaths->Handle,
         (svn_depth_t)args->Depth,
         CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
+        args->ClearChangelists,
         CtxHandle,
         pool.Handle);
 
