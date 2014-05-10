@@ -301,7 +301,7 @@
           <arg line="--folder 716" />
           
           <arg value="--description" />
-            <arg value="SharpSVN Build ${artifactLabel}" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
           <arg value="release/SSvn-${artifactLabel}.zip" />
         </exec>
         
@@ -315,7 +315,7 @@
           <arg line="--folder 719" />
           
           <arg value="--description" />
-            <arg value="SharpSVN Build ${artifactLabel}" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
           <arg value="release/SSvn-${artifactLabel}-x64.zip" />
         </exec>
         
@@ -329,7 +329,7 @@
           <arg line="--folder 727" />
           
           <arg value="--description" />
-            <arg value="SharpSVN Build ${artifactLabel}" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
           <arg value="release\${CCNetProject}-${artifactLabel}.7z" />
         </exec>
         
@@ -343,7 +343,7 @@
           <arg line="--folder 717" />
           
           <arg value="--description" />
-            <arg value="SharpSVN Build ${artifactLabel}" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
           <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.nupkg" />
           <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.symbols.nupkg" />
         </exec>
@@ -358,7 +358,7 @@
           <arg line="--folder 718" />
           
           <arg value="--description" />
-            <arg value="SharpSVN Build ${artifactLabel}" />
+            <arg value="SharpSvn Build ${artifactLabel}" />
           <arg value="release/SharpSvn.1.9-x64.${artifactLabel}.nupkg" />
           <arg value="release/SharpSvn.1.9-x64.${artifactLabel}.symbols.nupkg" />
         </exec>
