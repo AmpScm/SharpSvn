@@ -697,7 +697,8 @@ static void output_csv(struct callback_data *p, const char *z, int bSep){
 */
 static void interrupt_handler(int NotUsed){
   UNUSED_PARAMETER(NotUsed);
-  seenInterrupt = 1;
+  seenInterrupt++;
+  if( seenInterrupt>2 ) exit(1);
   if( db ) sqlite3_interrupt(db);
 }
 #endif
@@ -1195,7 +1196,8 @@ static void explain_data_prepare(struct callback_data *p, sqlite3_stmt *pSql){
   int nAlloc = 0;                 /* Allocated size of p->aiIndent[], abYield */
   int iOp;                        /* Index of operation in p->aiIndent[] */
 
-  const char *azNext[] = { "Next", "Prev", "VPrev", "VNext", "SorterNext", 0 };
+  const char *azNext[] = { "Next", "Prev", "VPrev", "VNext", "SorterNext",
+                           "NextIfOpen", "PrevIfOpen", 0 };
   const char *azYield[] = { "Yield", "SeekLt", "SeekGt", "RowSetRead", "Rewind", 0 };
   const char *azGoto[] = { "Goto", 0 };
 
@@ -2129,10 +2131,12 @@ static void tryToClone(struct callback_data *p, const char *zNewDb){
     fprintf(stderr, "Cannot create output database: %s\n",
             sqlite3_errmsg(newDb));
   }else{
+    sqlite3_exec(p->db, "PRAGMA writable_schema=ON;", 0, 0, 0);
     sqlite3_exec(newDb, "BEGIN EXCLUSIVE;", 0, 0, 0);
     tryToCloneSchema(p, newDb, "type='table'", tryToCloneData);
     tryToCloneSchema(p, newDb, "type!='table'", 0);
     sqlite3_exec(newDb, "COMMIT;", 0, 0, 0);
+    sqlite3_exec(p->db, "PRAGMA writable_schema=OFF;", 0, 0, 0);
   }
   sqlite3_close(newDb);
 }
@@ -2427,6 +2431,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
     }
     nByte = strlen30(zSql);
     rc = sqlite3_prepare_v2(p->db, zSql, -1, &pStmt, 0);
+    csv_append_char(&sCsv, 0);    /* To ensure sCsv.z is allocated */
     if( rc && sqlite3_strglob("no such table: *", sqlite3_errmsg(db))==0 ){
       char *zCreate = sqlite3_mprintf("CREATE TABLE %s", zTable);
       char cSep = '(';
@@ -3024,6 +3029,7 @@ static int do_meta_command(char *zLine, struct callback_data *p){
       { "optimizations",         SQLITE_TESTCTRL_OPTIMIZATIONS          },
       { "iskeyword",             SQLITE_TESTCTRL_ISKEYWORD              },
       { "scratchmalloc",         SQLITE_TESTCTRL_SCRATCHMALLOC          },
+      { "byteorder",             SQLITE_TESTCTRL_BYTEORDER              },
     };
     int testctrl = -1;
     int rc = 0;
@@ -3064,9 +3070,10 @@ static int do_meta_command(char *zLine, struct callback_data *p){
           break;
 
         /* sqlite3_test_control(int) */
-        case SQLITE_TESTCTRL_PRNG_SAVE:           
-        case SQLITE_TESTCTRL_PRNG_RESTORE:        
+        case SQLITE_TESTCTRL_PRNG_SAVE:
+        case SQLITE_TESTCTRL_PRNG_RESTORE:
         case SQLITE_TESTCTRL_PRNG_RESET:
+        case SQLITE_TESTCTRL_BYTEORDER:
           if( nArg==2 ){
             rc = sqlite3_test_control(testctrl);
             fprintf(p->out, "%d (0x%08x)\n", rc, rc);
