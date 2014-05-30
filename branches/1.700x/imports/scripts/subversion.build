@@ -264,6 +264,18 @@
     </OnceBlock>
   </target>
   <target name="copy-result" depends="svn-build,misc-copy,copy-licenses,gettext-translate" if="${buildSubversion}">
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${neonDir}">
+        <include name="*neon*.lib" />
+        <include name="*neon*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${neonDir}">
+        <include name="*neon*.lib" />
+        <include name="*neon*.pdb" />
+      </fileset>
+    </copy>
     <copy todir="${release}/lib" flatten="true">
       <fileset basedir="build/win32">
         <include name="subversion/${Configuration}/**/*.lib" />
