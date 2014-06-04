@@ -17,9 +17,10 @@ namespace SharpSvn.PdbAnnotate
         static int Main(string[] args)
         {
             bool quiet = false;
+            bool nologo = false;
             SourceServerIndexer indexer = LoadIndexer(args, out quiet);
 
-            if (!quiet)
+            if (!quiet && !nologo)
             {
                 Console.Write(((AssemblyProductAttribute)typeof(Program).Assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false)[0]).Product);
 
@@ -63,6 +64,7 @@ namespace SharpSvn.PdbAnnotate
                        multiple times). Directories and files can be used.
   -f[orce]             Add annotation to previously annotated files
                        (not recommended)
+  -nologo              Hide logo
   -x, -exclude <path>  Don't include files in the specified path (can be used
                        multiple times). Directories and files can be used.
 
@@ -80,6 +82,7 @@ Please note:
             SourceServerIndexer indexer = new SourceServerIndexer();
 
             quiet = false;
+            nologo = false;
             int i;
             for (i = 0; i < args.Length; i++)
             {
@@ -99,8 +102,11 @@ Please note:
                             break;
                         case "?":
                         case "h":
-                        case "-help":
+                        case "help":
                             return null; // We show help
+                        case "nologo":
+                            nologo = true;
+                            break;
                         case "q":
                         case "quiet":
                             quiet = true;
