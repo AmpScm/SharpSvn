@@ -280,9 +280,6 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="app.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="SharpSvnStrings.h" />
     <ClInclude Include="EventArgs\SvnEventArgs.h" />
     <ClInclude Include="SvnStreamWrapper.h" />
