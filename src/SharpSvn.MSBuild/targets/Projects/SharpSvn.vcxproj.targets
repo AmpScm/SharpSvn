@@ -7,8 +7,15 @@
   <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
   <UsingTask TaskName="PdbSourceAnnotate" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
 
+  <PropertyGroup>
+    <AfterBuildLinkTargets>
+      $(AfterBuildLinkTargets);
+      SharpSvnPostLink;
+      SharpSvnAnnotateSymbols
+    </AfterBuildLinkTargets>
+  </PropertyGroup>
+
   <Target Name="SharpSvnPostLink"
-          AfterTargets="Link;LinkEmbedManifest;Manifest;_Manifest"
           Condition="'@(Link)' != '' and '$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
 
     <UpdateNativeVersionResource
@@ -69,7 +76,6 @@
   </Target>
 
   <Target Name="SharpSvnAnnotateSymbols"
-          AfterTargets="Link;LinkEmbedManifest;Manifest;_Manifest;SharpSvnPostLink"
           Condition="$(AnnotatePdbFile) == 'true'">
 
     <PdbSourceAnnotate
