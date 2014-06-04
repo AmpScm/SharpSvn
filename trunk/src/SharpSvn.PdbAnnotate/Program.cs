@@ -16,9 +16,9 @@ namespace SharpSvn.PdbAnnotate
         [STAThread]
         static int Main(string[] args)
         {
-            bool quiet = false;
-            bool nologo = false;
-            SourceServerIndexer indexer = LoadIndexer(args, out quiet);
+            bool quiet;
+            bool nologo;
+            SourceServerIndexer indexer = LoadIndexer(args, out quiet, out nologo);
 
             if (!quiet && !nologo)
             {
@@ -77,7 +77,7 @@ Please note:
 ", new AssemblyName(typeof(Program).Assembly.FullName).Name);
         }
 
-        private static SourceServerIndexer LoadIndexer(string[] args, out bool quiet)
+        private static SourceServerIndexer LoadIndexer(string[] args, out bool quiet, out bool nologo)
         {
             SourceServerIndexer indexer = new SourceServerIndexer();
 
