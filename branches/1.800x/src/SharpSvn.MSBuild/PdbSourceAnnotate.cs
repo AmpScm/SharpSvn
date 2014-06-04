@@ -30,6 +30,7 @@ namespace SharpSvn.MSBuild
             CommandLineBuilder cb = new CommandLineBuilder();
 
             //cb.AppendSwitch("-q");
+            cb.AppendSwitch("-nologo");
             cb.AppendSwitch("--");
 
             cb.AppendFileNamesIfNotNull(Sources, " ");
