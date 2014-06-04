@@ -110,11 +110,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="app.rc">
-      <Filter>Resource Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="SharpSvnStrings.h">
       <Filter>Resource Files</Filter>
     </ClInclude>
