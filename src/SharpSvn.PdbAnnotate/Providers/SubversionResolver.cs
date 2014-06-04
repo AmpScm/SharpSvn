@@ -62,17 +62,6 @@ namespace SharpSvn.PdbAnnotate.Providers
         #endregion #### ISourceProviderDetector Members
         #endregion ### Availability
 
-        void OnSvnInfo(object sender, SvnInfoEventArgs e)
-        {
-            SourceFile file;
-
-            string path = State.NormalizePath(e.Path);
-
-            if (!State.SourceFiles.TryGetValue(path, out file) || file.IsResolved)
-                return;
-
-            file.SourceReference = new SubversionSourceReference(this, file, e.RepositoryRoot, e.RepositoryRoot.MakeRelativeUri(e.Uri), e.LastChangeRevision, e.Revision);
-        }
 
         /// <summary>
         /// 
@@ -85,17 +74,28 @@ namespace SharpSvn.PdbAnnotate.Providers
 
             infoArgs.ThrowOnError = false;
             infoArgs.Depth = SvnDepth.Files;
-            infoArgs.Info += new EventHandler<SvnInfoEventArgs>(OnSvnInfo);
 
             foreach (SourceFile file in State.SourceFiles.Values)
             {
                 if (file.IsResolved)
                     continue;
 
-                if (client.Info(SvnTools.GetTruePath(file.FullName, true), infoArgs, new EventHandler<SvnInfoEventArgs>(OnSvnInfo)))
-                {
-                    // Info set in OnSvnInfo
-                }
+                string dirName = SvnTools.GetTruePath(SvnTools.GetNormalizedDirectoryName(file.FullName), true);
+
+                client.Info(dirName, infoArgs,
+                    delegate(object sender, SvnInfoEventArgs e)
+                    {
+                        SourceFile infoFile;
+
+                        string path = e.FullPath;
+
+                        if (State.SourceFiles.TryGetValue(path, out infoFile)
+                            && !infoFile.IsResolved)
+                        {
+                            infoFile.SourceReference = new SubversionSourceReference(this, infoFile, e.RepositoryRoot, 
+                                                                                      e.RepositoryRoot.MakeRelativeUri(e.Uri), e.LastChangeRevision, e.Revision);
+                        }
+                    });
             }
 
             return true;
