@@ -231,12 +231,8 @@
         #pragma once
         #undef SVN_VER_TAG
         #undef SVN_VER_NUMTAG
-        #define SVN_VER_TAG  " (${svnBuildName}${vDesc}) ${string::to-upper(platform)}"
-        #ifndef SHARPSVN_INFO
-        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}-${vVer}-${string::to-upper(platform)}"
-        #else
-        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}-${vVer}"
-        #endif
+        #define SVN_VER_TAG  " (${svnBuildName}${vDesc})"
+        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}
       </echo>
     </OnceBlock>
   </target>
