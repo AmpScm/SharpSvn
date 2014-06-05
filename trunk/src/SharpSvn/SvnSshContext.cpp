@@ -924,12 +924,12 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
             CREDENTIALW cred;
             memset(&cred, sizeof(cred), 0);
 
-            pin_ptr<const wchar_t> pRealm = PtrToStringChars(_host->RealmString);
+            pin_ptr<const wchar_t> pHostRealm = PtrToStringChars(_host->RealmString);
             pin_ptr<const wchar_t> pUserName = PtrToStringChars(_username);
             pin_ptr<const wchar_t> pPassword = PtrToStringChars(ee->Password);
 
             cred.Type = CRED_TYPE_GENERIC;
-            cred.TargetName = const_cast<wchar_t*>(pRealm);
+            cred.TargetName = const_cast<wchar_t*>(pHostRealm);
             cred.UserName = const_cast<wchar_t*>(pUserName);
 
             cred.CredentialBlob = (BYTE*)const_cast<wchar_t*>(pPassword);
