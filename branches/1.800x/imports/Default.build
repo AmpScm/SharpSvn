@@ -15,13 +15,11 @@
   <property name="subversionVersion" value="1.8.9" overwrite="false" />
   <property name="mtccMerges" value="1550758,1550765,1550783,1550799,1550806,1550807,1550816,1550831,1550840,1550848,1550938,1550940,1550967,1550972,1550981,1550974,1551032,1551085" />
   <!-- r1493272 - Fix blame performance issue -->
-  <!-- r1498000 - Use transition based iprop handling -->
-  <!-- r1538812, r1538925, r1538928, r1538939 - Move original deleted -->
   <!-- r1544182 - svn_client_cat3() -->
-  <property name="subversionMerges" value="1493272,1498000,1538812,1538925,1538928,1538939,1544182,${mtccMerges}" overwrite="false" /> 
+  <property name="subversionMerges" value="1493272,1544182,${mtccMerges}" overwrite="false" /> 
   <!-- r1544597, r1544600, r1544688, r1544690, r1545111, r1545122 - status direct vs ancestor -->
   <!-- r1.8.x-r1544597 - Move updates during delete -->
-  <property name="subversionMergeBranches" value="branches/1.8.x-issue4437@1591139;branches/1.8.x-r1544597@1591149" overwrite="false" />
+  <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
