@@ -232,7 +232,7 @@
         #undef SVN_VER_TAG
         #undef SVN_VER_NUMTAG
         #define SVN_VER_TAG  " (${svnBuildName}${vDesc})"
-        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}
+        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}"
       </echo>
     </OnceBlock>
   </target>
