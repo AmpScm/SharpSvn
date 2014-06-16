@@ -47,7 +47,7 @@ the 'Visual Studio Command Prompt' are loaded.
    prompt (See 1)
    
    * Create a base directory
-   * Type> 'svn co http://sharpsvn.open.collab.net/svn/sharpsvn/trunk/imports'
+   * Type> 'svn co https://ctf.open.collab.net/svn/repos/sharpsvn/trunk/imports'
    * Type> 'copy /y imports\dev-default.build'
    * Type> 'nant'
    After something between 5 and 30 minutes you should see build succeeded
