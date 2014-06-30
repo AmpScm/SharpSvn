@@ -1,0 +1,247 @@
+Index: include/arch/win32/apr_arch_misc.h
+===================================================================
+--- include/arch/win32/apr_arch_misc.h	(revision 1597949)
++++ include/arch/win32/apr_arch_misc.h	(working copy)
+@@ -203,6 +203,25 @@ FARPROC apr_load_dll_func(apr_dlltoken_e fnLib, ch
+             return (*(apr_winapi_pfn_##fn)) names; \
+         else { SetLastError(ERROR_INVALID_FUNCTION); return 0;} }; \
+ 
++/* The apr_load_dll_func call WILL return 0 set error to
++ * ERROR_INVALID_FUNCTION if the function cannot be loaded
++ */
++#define APR_DECLARE_LATE_DLL_FUNC_VOID(lib, calltype, fn, ord, args, names) \
++    typedef void (calltype *apr_winapi_fpt_##fn) args; \
++    static apr_winapi_fpt_##fn apr_winapi_pfn_##fn = NULL; \
++    static int apr_winapi_chk_##fn = 0; \
++    static APR_INLINE int apr_winapi_ld_##fn(void) \
++    {   if (apr_winapi_pfn_##fn) return 1; \
++        if (apr_winapi_chk_##fn ++) return 0; \
++        if (!apr_winapi_pfn_##fn) \
++            apr_winapi_pfn_##fn = (apr_winapi_fpt_##fn) \
++                                      apr_load_dll_func(lib, #fn, ord); \
++        if (apr_winapi_pfn_##fn) return 1; else return 0; }; \
++    static APR_INLINE void apr_winapi_##fn args \
++    {   if (apr_winapi_ld_##fn()) \
++            (*(apr_winapi_pfn_##fn)) names; \
++        else { SetLastError(ERROR_INVALID_FUNCTION); } }; \
++
+ #define APR_HAVE_LATE_DLL_FUNC(fn) apr_winapi_ld_##fn()
+ 
+ /* Provide late bound declarations of every API function missing from
+@@ -481,6 +500,62 @@ APR_DECLARE_LATE_DLL_FUNC(DLL_WINBASEAPI, BOOL, WI
+     (lpPathName));
+ #define SetDllDirectoryW apr_winapi_SetDllDirectoryW
+ 
++#if (_WIN32_WINNT < 0x0600)
++#ifndef RTL_SRWLOCK_INIT
++typedef struct _RTL_SRWLOCK {
++        PVOID Ptr;
++} RTL_SRWLOCK, *PRTL_SRWLOCK;
++#define RTL_SRWLOCK_INIT {0}
++#endif
++
++typedef RTL_SRWLOCK SRWLOCK, *PSRWLOCK;
++#define SRWLOCK_INIT RTL_SRWLOCK_INIT
++
++APR_DECLARE_LATE_DLL_FUNC_VOID(DLL_WINBASEAPI, WINAPI,
++                               InitializeSRWLock, 0,
++                               (OUT PSRWLOCK SRWLock),
++                               (SRWLock));
++#define InitializeSRWLock apr_winapi_InitializeSRWLock
++
++APR_DECLARE_LATE_DLL_FUNC_VOID(DLL_WINBASEAPI, WINAPI,
++                               AcquireSRWLockExclusive, 0,
++                               (IN OUT PSRWLOCK SRWLock),
++                               (SRWLock));
++#define AcquireSRWLockExclusive apr_winapi_AcquireSRWLockExclusive
++
++APR_DECLARE_LATE_DLL_FUNC_VOID(DLL_WINBASEAPI, WINAPI,
++                               AcquireSRWLockShared, 0,
++                               (IN OUT PSRWLOCK SRWLock),
++                               (SRWLock));
++#define AcquireSRWLockShared apr_winapi_AcquireSRWLockShared
++
++APR_DECLARE_LATE_DLL_FUNC_VOID(DLL_WINBASEAPI, WINAPI,
++                               ReleaseSRWLockExclusive, 0,
++                               (IN OUT PSRWLOCK SRWLock),
++                               (SRWLock));
++#define ReleaseSRWLockExclusive apr_winapi_ReleaseSRWLockExclusive
++
++APR_DECLARE_LATE_DLL_FUNC_VOID(DLL_WINBASEAPI, WINAPI,
++                               ReleaseSRWLockShared, 0,
++                               (IN OUT PSRWLOCK SRWLock),
++                               (SRWLock));
++#define ReleaseSRWLockShared apr_winapi_ReleaseSRWLockShared
++
++APR_DECLARE_LATE_DLL_FUNC(DLL_WINBASEAPI, BOOLEAN, WINAPI,
++                          TryAcquireSRWLockExclusive, 0,
++                          (IN OUT PSRWLOCK SRWLock),
++                          (SRWLock));
++#define TryAcquireSRWLockExclusive apr_winapi_TryAcquireSRWLockExclusive
++
++APR_DECLARE_LATE_DLL_FUNC(DLL_WINBASEAPI, BOOLEAN, WINAPI,
++                          TryAcquireSRWLockShared, 0,
++                          (IN OUT PSRWLOCK SRWLock),
++                          (SRWLock));
++#define TryAcquireSRWLockShared apr_winapi_TryAcquireSRWLockShared
++
++#endif /* (_WIN32_WINNT < 0x0600) */
++
++
+ #endif /* !defined(_WIN32_WCE) */
+ 
+ #endif  /* ! MISC_H */
+Index: include/arch/win32/apr_arch_thread_rwlock.h
+===================================================================
+--- include/arch/win32/apr_arch_thread_rwlock.h	(revision 1597949)
++++ include/arch/win32/apr_arch_thread_rwlock.h	(working copy)
+@@ -21,8 +21,15 @@
+ 
+ struct apr_thread_rwlock_t {
+     apr_pool_t *pool;
+-    HANDLE      write_mutex;
+-    HANDLE      read_event;
++    union {
++      struct {
++        HANDLE      write_mutex;
++        HANDLE      read_event;
++      };
++#if !defined(_WIN32_WCE)
++      SRWLOCK     srw_lock;
++#endif
++    };
+     LONG        readers;
+ };
+ 
+Index: locks/win32/thread_rwlock.c
+===================================================================
+--- locks/win32/thread_rwlock.c	(revision 1597949)
++++ locks/win32/thread_rwlock.c	(working copy)
+@@ -19,8 +19,17 @@
+ #include "apr_general.h"
+ #include "apr_strings.h"
+ #include "apr_arch_thread_rwlock.h"
++#include "apr_arch_misc.h"
+ #include "apr_portable.h"
+ 
++#if defined(_WIN32_WCE)
++/* #undef HAVE_NATIVE_SRW */
++#elif (_WIN32_WINNT < 0x0600)
++#define HAVE_NATIVE_SRW (APR_HAVE_LATE_DLL_FUNC(InitializeSRWLock))
++#else
++#define HAVE_NATIVE_SRW (TRUE)
++#endif
++
+ static apr_status_t thread_rwlock_cleanup(void *data)
+ {
+     apr_thread_rwlock_t *rwlock = data;
+@@ -42,6 +51,15 @@ APR_DECLARE(apr_status_t)apr_thread_rwlock_create(
+     (*rwlock)->pool        = pool;
+     (*rwlock)->readers     = 0;
+ 
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++    {
++        InitializeSRWLock(&(*rwlock)->srw_lock);
++
++        return APR_SUCCESS;
++    }
++#endif
++
+     if (! ((*rwlock)->read_event = CreateEvent(NULL, TRUE, FALSE, NULL))) {
+         *rwlock = NULL;
+         return apr_get_os_error();
+@@ -84,6 +102,15 @@ static apr_status_t apr_thread_rwlock_rdlock_core(
+ 
+ APR_DECLARE(apr_status_t) apr_thread_rwlock_rdlock(apr_thread_rwlock_t *rwlock)
+ {
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++    {
++        AcquireSRWLockShared(&rwlock->srw_lock);
++        InterlockedIncrement(&rwlock->readers); /* Mark reader mode */
++
++        return APR_SUCCESS;
++    }
++#endif
+     return apr_thread_rwlock_rdlock_core(rwlock, INFINITE);
+ }
+ 
+@@ -90,6 +117,16 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_rdlock
+ APR_DECLARE(apr_status_t) 
+ apr_thread_rwlock_tryrdlock(apr_thread_rwlock_t *rwlock)
+ {
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++    {
++        if (TryAcquireSRWLockShared(&rwlock->srw_lock)) {
++            InterlockedIncrement(&rwlock->readers); /* Mark reader mode */
++            return APR_SUCCESS;
++        } else
++            return APR_EBUSY;
++    }
++#endif
+     return apr_thread_rwlock_rdlock_core(rwlock, 0);
+ }
+ 
+@@ -126,11 +163,28 @@ apr_thread_rwlock_wrlock_core(apr_thread_rwlock_t
+ 
+ APR_DECLARE(apr_status_t) apr_thread_rwlock_wrlock(apr_thread_rwlock_t *rwlock)
+ {
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++    {
++        AcquireSRWLockExclusive(&rwlock->srw_lock);
++
++        return APR_SUCCESS;
++    }
++#endif
+     return apr_thread_rwlock_wrlock_core(rwlock, INFINITE);
+ }
+ 
+ APR_DECLARE(apr_status_t)apr_thread_rwlock_trywrlock(apr_thread_rwlock_t *rwlock)
+ {
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++    {
++        if (TryAcquireSRWLockExclusive(&rwlock->srw_lock)) {
++            return APR_SUCCESS;
++        } else
++            return APR_EBUSY;
++    }
++#endif
+     return apr_thread_rwlock_wrlock_core(rwlock, 0);
+ }
+ 
+@@ -138,6 +192,20 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_unlock
+ {
+     apr_status_t rv = 0;
+ 
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++    {
++        if (rwlock->readers) {
++            /* We (And perhaps others) have a read lock */
++            InterlockedDecrement(&rwlock->readers);
++            ReleaseSRWLockShared(&rwlock->srw_lock);
++        } else
++            ReleaseSRWLockExclusive(&rwlock->srw_lock);
++
++        return APR_SUCCESS;
++    }
++#endif
++
+     /* First, guess that we're unlocking a writer */
+     if (! ReleaseMutex(rwlock->write_mutex))
+         rv = apr_get_os_error();
+@@ -159,6 +227,10 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_unlock
+ 
+ APR_DECLARE(apr_status_t) apr_thread_rwlock_destroy(apr_thread_rwlock_t *rwlock)
+ {
++#ifdef HAVE_NATIVE_SRW
++    if (HAVE_NATIVE_SRW)
++        return APR_SUCCESS; /* Nothing to do */
++#endif
+     return apr_pool_cleanup_run(rwlock->pool, rwlock, thread_rwlock_cleanup);
+ }
+ 
