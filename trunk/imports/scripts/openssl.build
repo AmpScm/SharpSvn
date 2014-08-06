@@ -4,6 +4,22 @@
   <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
 
   <target name="openssl-prepare" depends="checkout">
+    <OnceBlock file="build/openssl-${opensslVersion}-${platform}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/openssl">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${opensslDir}" />
+          </Svn>
+        </do>
+      </foreach>
+    </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.prepared">
       <exec program="perl.exe" workingdir="${opensslDir}">
         <arg value="Configure" />
