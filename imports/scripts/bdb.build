@@ -19,7 +19,7 @@
       </VCBuild>
       <if test="${vcxproj}">
         <copy todir="${dbWindowsDir}">
-          <fileset include="${downloads}/../scripts">
+          <fileset basedir="${downloads}/../scripts">
             <include name="db_dll.vcxproj" />
           </fileset>
         </copy>
