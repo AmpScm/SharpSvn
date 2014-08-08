@@ -17,7 +17,13 @@
       <VCBuild src="${dbWindowsDir}/db_dll.dsp" unless="${vcxproj}">
         <arg line="/upgrade" />
       </VCBuild>
-      <VCUpgrade src="${dbWindowsDir}/db_dll.dsp" if="${vcxproj}" />
+      <if test="${vcxproj}">
+        <copy todir="${dbWindowsDir}">
+          <fileset include="${downloads}/../scripts">
+            <include name="db_dll.vcxproj" />
+          </fileset>
+        </copy>
+      </if>
     </OnceBlock>
     <OnceBlock file="build/db-${dbVersion}.patched">
       <FilterFile file="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
