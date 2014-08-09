@@ -55,7 +55,7 @@
       </FilterFile>
     </OnceBlock>
   </target>
-  <target name="apr-build" depends="checkout, apr-merge">
+  <target name="apr-build" depends="checkout, apr-merge, cmake-prepare">
     <OnceBlock file="build/apr-${aprVersion}-${platform}.build">
       <CMake workingdir="${aprDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />        

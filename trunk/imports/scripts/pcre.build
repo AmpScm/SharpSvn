@@ -2,7 +2,7 @@
 <project>
   <property name="pcreDir" value="${platformRoot}/pcre" />
   
-  <target name="pcre-build" depends="zlib-build" if="${buildHttpd}">
+  <target name="pcre-build" depends="zlib-build,cmake-prepare" if="${buildHttpd}">
     <CMake workingdir="${pcreDir}">
       <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         
