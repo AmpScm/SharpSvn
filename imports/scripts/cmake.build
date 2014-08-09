@@ -65,4 +65,25 @@
     <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />
   </filterchain>
+
+  <target name="cmake-prepare">
+    <OnceBlock file="build/cmake-${cmakeVersion}.patched">
+      <foreach item="File" property="cmakeVSFinder">
+        <in>
+          <items basedir="${cmakeDir}/share/cmake-${cmakeVersionMM}/Modules">
+            <include name="CMakeVS10FindMake.cmake" />
+            <include name="CMakeVS11FindMake.cmake" />
+            <include name="CMakeVS12FindMake.cmake" />
+          </items>
+        </in>
+        <do>
+          <FilterFile file="${cmakeVSFinder}">
+            <filterchain>
+              <replacestring from='NAMES devenv' to='noDevNoEnv' />
+            </filterchain>
+          </FilterFile>
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
 </project>
