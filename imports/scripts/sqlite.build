@@ -7,19 +7,6 @@
   <target name="sqlite-build" depends="checkout">
     <mkdir dir="${sqliteIntDir}" />
     <mkdir dir="${sqliteLibDir}" />
-    <OnceBlock file="build/sqlite-${sqliteVersion}.patched">
-      <FilterFile file="${sqliteDir}/sqlite3.c">
-        <filterchain>
-          <!-- Add openssl includes to aprutil and aprutil/crypto -->
-          <replacestring from="static int mutexIsNT(void){" to="
-#define mutexIsNT() (1)
-static int original_mutexIsNT(void){" />
-          <replacestring from="static int isNT(void){" to="
-#define isNT() (1)
-static int original_isNT(void){" />
-        </filterchain>
-      </FilterFile>
-    </OnceBlock>
     <cl outputdir="${sqliteIntDir}" pdbfile="${sqliteIntDir}/sqlite3.pdb">
       <arg value="/Ox" />      <!-- Maximize speed -->
       <arg value="/GF" />      <!-- String Pooling -->
@@ -33,6 +20,10 @@ static int original_isNT(void){" />
       
       <defines>
         <define name="NDEBUG" />
+        <define name="WIN32" />
+        <define name="WINNT" />
+        <define name="WIN64" if="${platform=='x64'}" />
+        <define name="_WIN32_WINNT" value="0x0501" />
         
         <!-- Store temporary tables in RAM, unless requested otherwise -->
         <define name="SQLITE_TEMP_STORE" value="2" />
@@ -42,7 +33,7 @@ static int original_isNT(void){" />
         <define name="SQLITE_DEFAULT_RECURSIVE_TRIGGERS" value="1" />
         <define name="SQLITE_POWERSAFE_OVERWRITE" value="1" /><!-- Assume whole sector writes -->
         <define name="SQLITE_DISABLE_DIRSYNC" /><!-- Not needed on Windows -->
-        
+
         <!-- Ommit some parts of SQLite not used by Subversion -->
         <define name="SQLITE_OMIT_AUTOINIT" /><!-- Subversion initializes properly -->
         <define name="SQLITE_OMIT_DEPRECATED" /><!-- Removes deprecated APIs -->
@@ -70,7 +61,8 @@ static int original_isNT(void){" />
         <!--define name="SQLITE_OMIT_ATTACH" /-->
         <!--define name="SQLITE_OMIT_VIRTUALTABLE" /-->
 
-        <define name="SQLITE_WIN32_GETVERSIONEX" value="0" /><!-- Just assume NT -->        
+        <define name="SQLITE_WIN32_GETVERSIONEX" value="0" /><!-- Just assume NT -->
+        <define name="SQLITE_WIN32_NO_ANSI" /><!-- Avoid more NT checks -->
       </defines>
       <sources basedir="${sqliteDir}">
         <include name="sqlite3.c" />
