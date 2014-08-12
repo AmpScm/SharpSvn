@@ -135,12 +135,21 @@ Index: locks/win32/thread_rwlock.c
  static apr_status_t thread_rwlock_cleanup(void *data)
  {
      apr_thread_rwlock_t *rwlock = data;
-@@ -42,6 +51,15 @@ APR_DECLARE(apr_status_t)apr_thread_rwlock_create(
+@@ -42,6 +51,24 @@ APR_DECLARE(apr_status_t)apr_thread_rwlock_create(
      (*rwlock)->pool        = pool;
      (*rwlock)->readers     = 0;
  
 +#ifdef HAVE_NATIVE_SRW
-+    if (HAVE_NATIVE_SRW)
++    if (HAVE_NATIVE_SRW
++#if (_WIN32_WINNT < 0x0600)
++        && APR_HAVE_LATE_DLL_FUNC(AcquireSRWLockExclusive)
++        && APR_HAVE_LATE_DLL_FUNC(AcquireSRWLockShared)
++        && APR_HAVE_LATE_DLL_FUNC(ReleaseSRWLockExclusive)
++        && APR_HAVE_LATE_DLL_FUNC(ReleaseSRWLockShared)
++        && APR_HAVE_LATE_DLL_FUNC(TryAcquireSRWLockExclusive)
++        && APR_HAVE_LATE_DLL_FUNC(TryAcquireSRWLockShared)
++#endif
++        )
 +    {
 +        InitializeSRWLock(&(*rwlock)->srw_lock);
 +
@@ -151,7 +160,7 @@ Index: locks/win32/thread_rwlock.c
      if (! ((*rwlock)->read_event = CreateEvent(NULL, TRUE, FALSE, NULL))) {
          *rwlock = NULL;
          return apr_get_os_error();
-@@ -84,6 +102,15 @@ static apr_status_t apr_thread_rwlock_rdlock_core(
+@@ -84,6 +111,15 @@ static apr_status_t apr_thread_rwlock_rdlock_core(
  
  APR_DECLARE(apr_status_t) apr_thread_rwlock_rdlock(apr_thread_rwlock_t *rwlock)
  {
@@ -167,7 +176,7 @@ Index: locks/win32/thread_rwlock.c
      return apr_thread_rwlock_rdlock_core(rwlock, INFINITE);
  }
  
-@@ -90,6 +117,16 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_rdlock
+@@ -90,6 +126,16 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_rdlock
  APR_DECLARE(apr_status_t) 
  apr_thread_rwlock_tryrdlock(apr_thread_rwlock_t *rwlock)
  {
@@ -184,7 +193,7 @@ Index: locks/win32/thread_rwlock.c
      return apr_thread_rwlock_rdlock_core(rwlock, 0);
  }
  
-@@ -126,11 +163,28 @@ apr_thread_rwlock_wrlock_core(apr_thread_rwlock_t
+@@ -126,11 +172,28 @@ apr_thread_rwlock_wrlock_core(apr_thread_rwlock_t
  
  APR_DECLARE(apr_status_t) apr_thread_rwlock_wrlock(apr_thread_rwlock_t *rwlock)
  {
@@ -213,7 +222,7 @@ Index: locks/win32/thread_rwlock.c
      return apr_thread_rwlock_wrlock_core(rwlock, 0);
  }
  
-@@ -138,6 +192,20 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_unlock
+@@ -138,6 +201,20 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_unlock
  {
      apr_status_t rv = 0;
  
@@ -234,7 +243,7 @@ Index: locks/win32/thread_rwlock.c
      /* First, guess that we're unlocking a writer */
      if (! ReleaseMutex(rwlock->write_mutex))
          rv = apr_get_os_error();
-@@ -159,6 +227,10 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_unlock
+@@ -159,6 +236,10 @@ APR_DECLARE(apr_status_t) apr_thread_rwlock_unlock
  
  APR_DECLARE(apr_status_t) apr_thread_rwlock_destroy(apr_thread_rwlock_t *rwlock)
  {
