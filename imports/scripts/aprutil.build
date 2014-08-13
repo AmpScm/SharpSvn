@@ -38,7 +38,7 @@
       </FilterFile>
     </OnceBlock>
   </target>
-  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build">
+  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build,cmake-prepare">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.build">
       <CMake workingdir="${aprUtilDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
