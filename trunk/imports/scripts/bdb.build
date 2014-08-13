@@ -40,9 +40,6 @@
         <filterchain>
           <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
           <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
-          <replacestring from='bufferoverflowU.lib' to='' />
-          <replacestring from='/Wp64' to='' />
-          <replacestring from='DB_CREATE_DLL;' to='' />
         </filterchain>
       </FilterFile>
       <FilterFile file="${dbWindowsDir}/libdb.def">
@@ -74,11 +71,13 @@
       </VCBuild>
       
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}">
-        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" /><!-- Bug in VS2012 for x64? -->
+        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" />
+        <prop name="PlatformToolset" value="v120" if="${VSversion == '2013'}" />
       </MSBuild>
       
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj}">
-        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" /><!-- Bug in VS2012 for x64? -->
+        <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" />
+        <prop name="PlatformToolset" value="v120" if="${VSversion == '2013'}" />
       </MSBuild>
     </OnceBlock>
 
