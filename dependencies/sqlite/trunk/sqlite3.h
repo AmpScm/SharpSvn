@@ -109,7 +109,7 @@ extern "C" {
 */
 #define SQLITE_VERSION        "3.8.6"
 #define SQLITE_VERSION_NUMBER 3008006
-#define SQLITE_SOURCE_ID      "2014-08-08 17:49:55 bdaa6947371a60a31b6a13267b0ba6e46df2a8ce"
+#define SQLITE_SOURCE_ID      "2014-08-15 11:46:33 9491ba7d738528f168657adb43a198238abde19e"
 
 /*
 ** CAPI3REF: Run-Time Library Version Numbers
@@ -277,7 +277,7 @@ typedef sqlite_uint64 sqlite3_uint64;
 ** statements or unfinished sqlite3_backup objects then sqlite3_close()
 ** will leave the database connection open and return [SQLITE_BUSY].
 ** ^If sqlite3_close_v2() is called with unfinalized prepared statements
-** and unfinished sqlite3_backups, then the database connection becomes
+** and/or unfinished sqlite3_backups, then the database connection becomes
 ** an unusable "zombie" which will automatically be deallocated when the
 ** last prepared statement is finalized or the last sqlite3_backup is
 ** finished.  The sqlite3_close_v2() interface is intended for use with
@@ -290,7 +290,7 @@ typedef sqlite_uint64 sqlite3_uint64;
 ** with the [sqlite3] object prior to attempting to close the object.  ^If
 ** sqlite3_close_v2() is called on a [database connection] that still has
 ** outstanding [prepared statements], [BLOB handles], and/or
-** [sqlite3_backup] objects then it returns [SQLITE_OK] but the deallocation
+** [sqlite3_backup] objects then it returns [SQLITE_OK] and the deallocation
 ** of resources is deferred until all [prepared statements], [BLOB handles],
 ** and [sqlite3_backup] objects are also destroyed.
 **
