@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project>
-  <property name="vcxproj" value="${int::parse(VSversion) &gt;= 2010}" />
+  <property name="vcxproj" value="${VSversion != '2005' and VSversion != '2008'}" />
   <property name="vcproj" value="vcxproj" if="${vcxproj}" />
   <property name="vcproj" value="vcproj" unless="${vcxproj}" />
   
