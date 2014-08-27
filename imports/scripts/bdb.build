@@ -73,11 +73,13 @@
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}">
         <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" />
         <prop name="PlatformToolset" value="v120" if="${VSversion == '2013'}" />
+        <prop name="PlatformToolset" value="v140" if="${VSversion == '14'}" />
       </MSBuild>
       
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj}">
         <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" />
         <prop name="PlatformToolset" value="v120" if="${VSversion == '2013'}" />
+        <prop name="PlatformToolset" value="v140" if="${VSversion == '14'}" />
       </MSBuild>
     </OnceBlock>
 
