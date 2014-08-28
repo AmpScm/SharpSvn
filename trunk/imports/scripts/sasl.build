@@ -16,6 +16,10 @@
           <replacestring from='#define STATIC_SRP 1' to='/* #undef STATIC_SRP */' />
           <replacestring from='#define STATIC_GSSAPIV2 1' to='/* #undef STATIC_GSSAPIV2 */' />
           <replacestring from='typedef int ssize_t;' to='typedef INT_PTR ssize_t;' />
+          <LineRegexReplace re='(#define snprintf .*)'
+                         to='#if _MSC_VER &lt; 1900
+$1
+#endif' />
         </filterchain>
       </FilterFile>
       <echo message='
