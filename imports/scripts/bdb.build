@@ -66,7 +66,7 @@
         <arg value="${dbConfig}|${platform}" />
       </VCBuild>
       
-      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}" if="${svn-dev}">
         <arg value="${dbDebugConfig}|${platform}" />
       </VCBuild>
       
@@ -76,7 +76,7 @@
         <prop name="PlatformToolset" value="v140" if="${VSversion == '14'}" />
       </MSBuild>
       
-      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj}">
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj and svn-dev}">
         <prop name="PlatformToolset" value="v110" if="${VSversion == '2012'}" />
         <prop name="PlatformToolset" value="v120" if="${VSversion == '2013'}" />
         <prop name="PlatformToolset" value="v140" if="${VSversion == '14'}" />
@@ -92,9 +92,9 @@
     <copy todir="${platformRoot}/bdb-install/lib" flatten="true">
       <fileset basedir="${dbWindowsDir}">
         <include name="Release/*.lib" if="${platform == 'win32'}" />
-        <include name="Debug/*.lib" if="${platform == 'win32'}" />
+        <include name="Debug/*.lib" if="${platform == 'win32' and svn-dev}" />
         <include name="Release_AMD64/*.lib" if="${platform == 'x64'}" />
-        <include name="Debug_AMD64/*.lib" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.lib" if="${platform == 'x64' and svn-dev}" />
       </fileset>
     </copy>
     <copy todir="${intDir}/bin" flatten="true">
@@ -107,14 +107,14 @@
     </copy>
     <copy todir="${platformRoot}/bdb-install/bin" flatten="true">
       <fileset basedir="${dbWindowsDir}">
-        <include name="Debug/*.dll" if="${platform == 'win32'}" />
-        <include name="Debug/*.${svnDll}" if="${platform == 'win32'}" />
-        <include name="Debug/*.pdb" if="${platform == 'win32'}" />
+        <include name="Debug/*.dll" if="${platform == 'win32' and svn-dev}" />
+        <include name="Debug/*.${svnDll}" if="${platform == 'win32' and svn-dev}" />
+        <include name="Debug/*.pdb" if="${platform == 'win32' and svn-dev}" />
         <include name="Release_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
         <include name="Release_AMD64/*.pdb" if="${platform == 'x64'}" />
-        <include name="Debug_AMD64/*.dll" if="${platform == 'x64'}" />
-        <include name="Debug_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
-        <include name="Debug_AMD64/*.pdb" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.dll" if="${platform == 'x64' and svn-dev}" />
+        <include name="Debug_AMD64/*.${svnDll}" if="${platform == 'x64' and svn-dev}" />
+        <include name="Debug_AMD64/*.pdb" if="${platform == 'x64' and svn-dev}" />
       </fileset>
     </copy>
     <copy todir="${intDir}/include">
