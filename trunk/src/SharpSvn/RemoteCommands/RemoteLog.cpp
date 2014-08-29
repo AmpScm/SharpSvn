@@ -120,6 +120,8 @@ bool SvnRemoteSession::Log(ICollection<String^>^ relPaths, SvnRevisionRange^ ran
         else
             retrieveProperties = svn_compat_log_revprops_in(pool.Handle);
 
+		environ
+
         svn_error_t *r = svn_ra_get_log2(_session,
                                                                          AllocRelpathArray(relPaths, %pool),
                                                                          (svn_revnum_t)start_rev,
