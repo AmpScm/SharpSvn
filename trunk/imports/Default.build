@@ -35,7 +35,7 @@
   <property name="neonVersion" value="0.30.0" overwrite="false" />
 
   <property name="aprVersion" value="1.5.1" overwrite="false" />
-  <property name="aprUtilVersion" value="1.5.3" overwrite="false" />
+  <property name="aprUtilVersion" value="1.5.4" overwrite="false" />
   <property name="aprIconvVersion" value="1.2.1" overwrite="false" />
   <property name="dbVersion" value="4.4.20" overwrite="false" />
   <property name="expatVersion" value="2.0.1" overwrite="false" />
