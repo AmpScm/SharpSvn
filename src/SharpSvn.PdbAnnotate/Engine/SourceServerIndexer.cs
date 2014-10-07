@@ -58,13 +58,6 @@ namespace SharpSvn.PdbAnnotate.Engine
         public IList<string> SourceRoots
         {
             get { return _sourceRoots; }
-            set
-            {
-                if (value != null)
-                    _sourceRoots = value;
-                else
-                    _sourceRoots = new string[0];
-            }
         }
 
         /// <summary>
@@ -73,14 +66,7 @@ namespace SharpSvn.PdbAnnotate.Engine
         /// <remarks>These directories allow to exclude specific directories which are included in the <see cref="SourceRoots"/></remarks>
         public IList<string> ExcludeSourceRoots
         {
-            get { return _sourceRoots; }
-            set
-            {
-                if (value != null)
-                    _excludeSourceRoots = value;
-                else
-                    _excludeSourceRoots = new string[0];
-            }
+            get { return _excludeSourceRoots; }
         }
 
         /// <summary>
