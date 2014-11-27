@@ -290,7 +290,7 @@
       unless="${directory::exists(aprUtilDir + '/xml/expat/lib')}">
 
       <arg value="co" />
-      <arg value="https://github.com/LuaDist/libexpat.git/tags/${expatVersion}/lib" />
+      <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/libexpat/tags/${expatVersion}/" />
       <arg value="${aprUtilDir + '/xml/expat/lib'}" />
     </Svn>
 
