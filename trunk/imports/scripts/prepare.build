@@ -292,6 +292,7 @@
       <arg value="co" />
       <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/libexpat/tags/${expatVersion}/" />
       <arg value="${aprUtilDir + '/xml/expat/lib'}" />
+      <arg line='--no-auth-cache --username guest --password=""' />
     </Svn>
 
     <Svn unless="${directory::exists(platformRoot + '/serf')}">
