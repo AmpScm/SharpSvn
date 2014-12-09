@@ -12,7 +12,7 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.8.10" overwrite="false" />
+  <property name="subversionVersion" value="1.8.11" overwrite="false" />
   <property name="mtccMerges" value="1550758,1550765,1550783,1550799,1550806,1550807,1550816,1550831,1550840,1550848,1550938,1550940,1550967,1550972,1550981,1550974,1551032,1551085" />
   <!-- r1493272 - Fix blame performance issue -->
   <!-- r1544182 - svn_client_cat3() -->
@@ -28,7 +28,7 @@
 
   <!-- -->
   <property name="opensslVersion" value="1.0.1j" overwrite="false" />
-  <property name="neonVersion" value="0.30.0" overwrite="false" />
+  <property name="neonVersion" value="0.30.1" overwrite="false" />
 
   <property name="aprVersion" value="1.5.1" overwrite="false" />
   <property name="aprUtilVersion" value="1.5.4" overwrite="false" />
@@ -47,7 +47,7 @@
   <property name="libssh2Version" value="1.4.3" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="2.8.12.1" overwrite="false" />
+  <property name="cmakeVersion" value="2.8.12.2" overwrite="false" />
   <property name="sconsVersion" value="2.3.4" overwrite="false" />
   
   <!-- For testcase -->
