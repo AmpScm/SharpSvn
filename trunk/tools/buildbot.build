@@ -404,8 +404,8 @@
     
     <delete>
       <fileset basedir="imports\svn-dist\wix">
-        <include name="bin/*" />
-        <include name="obj/*" />
+        <include name="bin/**" />
+        <include name="obj/**" />
       </fileset>
     </delete>
 
