@@ -30,7 +30,8 @@ namespace SharpSvn {
         None                    = svn_node_none,
         File                    = svn_node_file,
         Directory               = svn_node_dir,
-        Unknown                 = svn_node_unknown
+        Unknown                 = svn_node_unknown,
+        SymbolicLink            = svn_node_symlink
     };
 
     namespace Implementation {
