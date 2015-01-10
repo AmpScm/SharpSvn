@@ -38,7 +38,7 @@
         <arg value="no-hw" />
         <arg value="no-ssl2" />
         <arg value="no-ssl3" />
-        <arg value="no-gost" />
+        <arg value="no-gost" if="${static}"/>
         <arg value="no-dtls" />
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
