@@ -29,7 +29,9 @@
   <!-- r2184-r2186      - Return connection timeouts as a specific error -->
   <!-- r2254            - Possible bucket leak in cancel scenarios -->
   <!-- r2455            - Properly validate status line -->
-  <property name="serfMerges" value="2184-2186,2254,2455" overwrite="false" />
+  <!-- r2456,r2457      - Correctness fixes to help debugging -->
+  
+  <property name="serfMerges" value="2184-2186,2254,2455,2456,2457" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.0.1k" overwrite="false" />
