@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
-  <property name="opensslDir" value="build/${platform}/openssl" />
+  <property name="opensslDir" value="${platformRoot}/openssl" />
   <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
 
   <target name="openssl-prepare" depends="checkout">
@@ -40,8 +40,13 @@
         <arg value="no-ssl3" />
         <arg value="no-gost" if="${static}"/>
         <arg value="no-dtls" />
+        <arg value="no-srp" />
+        <arg value="no-unit-test" />
+        <arg value="no-zlib" />
+        <arg value="no-zlib-dynamic" />
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
+        <arg value="enable-static-engine" if="${static}" />
         <arg value="-DSSL_FORBID_ENULL" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
@@ -115,6 +120,11 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
       <FilterFile file="${opensslDir}/crypto/cversion.c">
         <filterchain>
           <replacestring from="(cflags)" to ='("(cflags)")' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/crypto/opensslconf.h">
+        <filterchain>
+          <replacestring from='#define ENGINESDIR "' to='#define ENGINESDIR  "C:\\ProgramData\\OpenSSL\\Engines" //' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
