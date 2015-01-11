@@ -179,7 +179,26 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
 
     if (State < SvnContextState::ConfigLoaded && requiredState >= SvnContextState::ConfigLoaded)
     {
+        svn_config_t *config;
+
         ApplyUserDiffConfig();
+
+        config = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_SERVERS, APR_HASH_KEY_STRING);
+        if (config)
+        {
+            svn_boolean_t trust_default_ca;
+
+            svn_error_t *err = svn_config_get_bool(config, &trust_default_ca,
+                                                   SVN_CONFIG_SECTION_GLOBAL,
+                                                   SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA,
+                                                   FALSE);
+
+            if (!err && !trust_default_ca)
+              svn_config_set_bool(config, SVN_CONFIG_SECTION_GLOBAL,
+                                  SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA, FALSE);
+            else
+              svn_error_clear(err);
+        }
 
         if (_pool && _configOverrides && _configOverrides->Count > 0)
         {
