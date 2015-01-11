@@ -164,6 +164,8 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
                     *last_bs = 0;
                     strcat(engines_path, "\\engines");
                 }
+                else
+                    engines_path[0] = 0;
             }
             else
                 engines_path[0] = 0;
