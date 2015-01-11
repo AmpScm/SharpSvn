@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="saslDir" value="build/${platform}/sasl" />
+  <property name="saslDir" value="${platformRoot}/sasl" />
 
   <regex pattern="^(?'SASL_MAJOR_VERSION'\d+)\.(?'SASL_MINOR_VERSION'\d+)\.(?'SASL_MICRO_VERSION'\d+)" input="${saslVersion}" />
 

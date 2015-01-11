@@ -23,6 +23,7 @@
   <property name="svnStatic" value="true" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
   <property name="svnDll" value="dll" />
+  <property name="singlePlatform" value="true" overwrite="false" />
   
   <property name="wc" value="dev" overwrite="false" />
   <property name="branch" value="" overwrite="false" />
