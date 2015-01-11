@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
-  <property name="opensslDir" value="build/${platform}/openssl" />
+  <property name="opensslDir" value="${platformRoot}/openssl" />
   <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
 
   <target name="openssl-prepare" depends="checkout">
@@ -32,12 +32,17 @@
         <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
         <arg value="threads" />
         <arg value="no-asm" if="${platform=='x64'}" />
-        <arg value="no-dso"/>
+        <arg value="no-dso" if="${static}" />
         <arg value="no-shared" />
         <arg value="no-krb5"/>
         <arg value="no-hw"/>
+        <arg value="no-srp" />
+        <arg value="no-unit-test" />
+        <arg value="no-zlib" />
+        <arg value="no-zlib-dynamic" />
         <arg value="enable-tlsext" />
         <arg value="enable-capieng" />
+        <arg value="enable-static-engine" if="${static}" />
         <arg value="-DSSL_FORBID_ENULL" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
@@ -113,6 +118,45 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
           <replacestring from="(cflags)" to ='("(cflags)")' />
         </filterchain>
       </FilterFile>
+      <FilterFile file="${opensslDir}/crypto/opensslconf.h">
+        <filterchain>
+          <replacestring from='#define ENGINESDIR "' to='#define ENGINESDIR  "C:\\ProgramData\\OpenSSL\\Engines" //' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${opensslDir}/crypto/engine/eng_list.c">
+        <filterchain>
+          <replacestring from='load_dir = ENGINESDIR;' to='{
+    static int engines_initialized = 0; 
+    static char engines_path[4*MAX_PATH+1] = "";
+    
+    if (!engines_initialized)
+    {
+        HMODULE hm = NULL;
+        engines_initialized = 1;
+
+        if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR) &amp;ENGINE_by_id, &amp;hm))
+        {
+            char *last_bs;
+            DWORD r = GetModuleFileNameA(hm, engines_path, sizeof(engines_path));
+
+            if (r > 0 &amp;&amp; (r < (sizeof(engines_path)-2))
+            {
+                last_bs = (char*)strrchr(engines_path, "\\"[0]);
+
+                if (last_bs)
+                    *last_bs = 0;
+            }
+            else
+                engines_path[0] = 0;
+        }
+    }
+    if (*engines_path)
+      load_dir = engines_path;
+    else
+      load_dir =  ENGINESDIR;
+}' />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
   <target name="openssl-build" depends="openssl-prepare">
@@ -123,13 +167,15 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
       <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" unless="${static}">
         <arg value="install" />
       </NMake>
-      <copy todir="${intDir}/bin" unless="${static}">
-        <fileset basedir="${opensslDir}/out32dll">
-          <include name="libeay32.pdb" />
-          <include name="ssleay32.pdb" />
-        </fileset>
-      </copy>
     </OnceBlock>
+    <copy todir="${intDir}/bin" unless="${static}">
+      <fileset basedir="${opensslDir}/out32dll">
+        <include name="libeay32.pdb" />
+        <include name="ssleay32.pdb" />
+        <include name="capi.dll" />
+        <include name="capi.pdb" />
+      </fileset>
+    </copy>
     <copy todir="${release}/include">
       <fileset basedir="${intDir}/include">
         <include name="openssl/**" />
