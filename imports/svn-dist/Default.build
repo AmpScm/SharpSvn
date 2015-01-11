@@ -50,7 +50,7 @@
     <arg value="${release}/ReleaseNotes.html" />
 	</Svn>
 	<copy todir="dist-${platform}/bin">
-		<fileset include="${intDir}/bin">
+		<fileset basedir="${intDir}/bin">
 			<include name="${dllPrefix}*.dll" />
 			<include name="engines/*.dll" />
 		</fileset>
