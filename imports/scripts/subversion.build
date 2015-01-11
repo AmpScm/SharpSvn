@@ -163,6 +163,7 @@
           <include name="*aprutil-1.dll" />
           <include name="*libeay*.dll" />
           <include name="*ssl*.dll" />
+          <include name="*capi*.dll" />
           <include name="*sasl*.dll" />
         </fileset>
       </copy>
