@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="neonDir" value="build/${platform}/neon" />
+  <property name="neonDir" value="${platformRoot}/neon" />
   <target name="neon-prepare" depends="checkout, serf-prepare" if="${buildNeon}">
     <OnceBlock file="build/neon-${neonVersion}_${platform}.merged">
       <Svn verbose="true" if="${string::get-length(neonMerges) &gt; 0}">

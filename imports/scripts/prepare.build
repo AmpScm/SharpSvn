@@ -228,14 +228,14 @@
     <Svn
       verbose="true"
       if="${buildNeon}"
-      unless="${directory::exists(platformRoot + '/neon')}">
+      unless="${directory::exists(neonDir)}">
 
       <arg value="co" />
       <arg value="http://svn.webdav.org/repos/projects/neon/tags/${neonVersion}/" />
-      <arg value="build/${platform}/neon" />
+      <arg value="${neonDir}" />
     </Svn>
     <!-- Write version for subversion configure script -->
-    <echo message="${neonVersion}" file="${platformRoot}/neon/.version" if="${buildNeon}" />
+    <echo message="${neonVersion}" file="${neonDir}/.version" if="${buildNeon}" />
 
     <Svn
       verbose="true"

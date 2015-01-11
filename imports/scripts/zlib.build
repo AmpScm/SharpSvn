@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="zlibDir" value="${buildRoot}/${platform}/zlib" />
+  <property name="zlibDir" value="${platformRoot}/zlib" />
 
   <target name="zlib-build" depends="checkout">
     <OnceBlock file="build/zlib-${zlibVersion}-${platform}.build">
