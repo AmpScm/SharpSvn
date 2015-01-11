@@ -91,7 +91,7 @@
       <Component Id="libeay32.dll" Guid="B68C343C-3DC1-4581-8B32-D8A71DE597B1">
         <File Id="libeay32.dll" Name="SlikSvn-libeay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Directory Id="INSTALLLOCATION_BIN_engines" Name="engines" FileSource="$(var.distDir)\bin\">
+      <Directory Id="INSTALLLOCATION_BIN_engines" Name="engines" FileSource="$(var.distDir)\bin\engines\">
         <Component Id="Capi.dll" Guid="937F455B-CA31-4350-A7D6-2B24A2A41F42">
           <File Id="capi.dll" Name="capi.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
         </Component>
