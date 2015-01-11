@@ -49,9 +49,14 @@
     <arg line="export --force http://svn.apache.org/repos/asf/subversion/site/publish/docs/release-notes/${releasenotesFile}" />
     <arg value="${release}/ReleaseNotes.html" />
 	</Svn>
+	<copy todir="dist-${platform}/bin">
+		<fileset include="${intDir}/bin">
+			<include name="${dllPrefix}*.dll" />
+			<include name="engines/*.dll" />
+		</fileset>
+	</copy>
 	<copy todir="dist-${platform}/bin" flatten="true">
 		<fileset>
-			<include name="${intDir}/bin/${dllPrefix}*.dll" />
 			<include name="${gettextDir}/bin/${platform}/release/*.dll" />
 		</fileset>
 	</copy>
