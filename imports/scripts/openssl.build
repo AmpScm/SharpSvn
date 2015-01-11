@@ -137,6 +137,16 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
     {
         HMODULE hm = NULL;
 
+#ifndef GET_MODULE_HANDLE_EX_FLAG_PIN
+#define GET_MODULE_HANDLE_EX_FLAG_PIN                 (0x00000001)
+#endif
+#ifndef GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT
+#define GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT  (0x00000002)
+#endif
+#ifndef GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
+#define GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS        (0x00000004)
+#endif
+
         engines_initialized = 1;
 
         if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR) &amp;ENGINE_by_id, &amp;hm))
