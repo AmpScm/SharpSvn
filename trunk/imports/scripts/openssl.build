@@ -136,6 +136,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
     if (!engines_initialized)
     {
         HMODULE hm = NULL;
+
         engines_initialized = 1;
 
         if (GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR) &amp;ENGINE_by_id, &amp;hm))
@@ -143,7 +144,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
             char *last_bs;
             DWORD r = GetModuleFileNameA(hm, engines_path, sizeof(engines_path));
 
-            if (r > 0 &amp;&amp; (r < (sizeof(engines_path)-2))
+            if (r &gt; 0 &amp;&amp; (r &lt; (sizeof(engines_path)-2))
             {
                 last_bs = (char*)strrchr(engines_path, "\\"[0]);
 
