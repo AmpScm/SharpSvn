@@ -57,7 +57,7 @@
         <Environment Id="SvnToPath" Name="PATH" Part="last" System="yes" Value="[INSTALLLOCATION]bin" Action="set" />
       </Component>
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="SlikSvn_MENU" Name="Subversion">          
+        <Directory Id="SlikSvn_MENU" Name="Subversion">
         </Directory>
       </Directory>
     </Directory>
