@@ -154,7 +154,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
             char *last_bs;
             DWORD r = GetModuleFileNameA(hm, engines_path, sizeof(engines_path));
 
-            if (r &gt; 0 &amp;&amp; (r &lt; (sizeof(engines_path)-2))
+            if ((r &gt; 0) &amp;&amp; (r &lt; (sizeof(engines_path)-2)))
             {
                 last_bs = (char*)strrchr(engines_path, "\\"[0]);
 
