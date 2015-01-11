@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <project basedir=".." default="build">
-  <property name="serfDir" value="build/${platform}/serf" />
+  <property name="serfDir" value="${platformRoot}/serf" />
   <property name="serfDebug" value="false" overwrite="false" />
   <target name="serf-prepare" depends="checkout">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.merged">
