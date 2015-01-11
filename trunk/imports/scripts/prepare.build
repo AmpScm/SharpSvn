@@ -295,12 +295,12 @@
       <arg line='--no-auth-cache --username guest --password=""' />
     </Svn>
 
-    <Svn unless="${directory::exists(platformRoot + '/serf')}">
+    <Svn unless="${directory::exists(serfDir)}">
       <arg value="co" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/trunk/" if="${serfBuildType == 'trunk'}" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
       <arg value="${httpOrHttps}://serf.googlecode.com/svn/branches/${serfVersion}/" if="${serfBuildType == 'branch'}" />
-      <arg value="${platformRoot}/serf" />
+      <arg value="${serfDir}" />
     </Svn>
 
     <Svn unless="${directory::exists(sqliteDir)}">
