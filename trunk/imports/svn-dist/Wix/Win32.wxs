@@ -91,6 +91,9 @@
       <Component Id="libeay32.dll" Guid="17719BC2-6FBC-4E26-AC0B-D25FE5A3869D">
         <File Id="libeay32.dll" Name="SlikSvn-libeay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
+      <Component Id="Capi.dll" Guid="7D63AE46-7922-4CCF-8D19-5000EEDDE446">
+        <File Id="capi.dll" Name="capi.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
       <Component Id="Sasl.dll" Guid="4A47D422-81C9-4FF5-9615-482D26ED65B6">
         <File Id="libsasl21.dll" Name="SlikSvn-libsasl21.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>

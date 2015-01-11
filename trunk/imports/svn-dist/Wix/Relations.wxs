@@ -197,11 +197,12 @@
       <ComponentGroupRef Id="libeay32.dll"/>
     </ComponentGroup>
     <ComponentGroup Id="libeay32.dll">
-      <ComponentRef Id="libeay32.dll"/>      
+      <ComponentRef Id="libeay32.dll"/>
     </ComponentGroup>
     <ComponentGroup Id="ssleay32.dll">
       <ComponentRef Id="ssleay32.dll"/>
       <ComponentGroupRef Id="libeay32.dll"/>
+      <ComponentRef Id="Capi.dll"/>
     </ComponentGroup>
     <ComponentGroup Id="libintl.dll">
       <ComponentRef Id="libintl.dll"/>
