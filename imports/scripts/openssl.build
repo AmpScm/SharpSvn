@@ -132,7 +132,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
         <filterchain>
           <replacestring from='load_dir = ENGINESDIR;' to='{
     static int engines_initialized = 0; 
-    static char engines_path[4*MAX_PATH+1] = "";
+    static char engines_path[4*MAX_PATH] = "";
     
     if (!engines_initialized)
     {
@@ -155,12 +155,15 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
             char *last_bs;
             DWORD r = GetModuleFileNameA(hm, engines_path, sizeof(engines_path));
 
-            if ((r &gt; 0) &amp;&amp; (r &lt; (sizeof(engines_path)-2)))
+            if ((r &gt; 0) &amp;&amp; (r &lt; (sizeof(engines_path)-10)))
             {
                 last_bs = (char*)strrchr(engines_path, "\\"[0]);
 
                 if (last_bs)
+                {
                     *last_bs = 0;
+                    strcat(engines_path, "\\engines");
+                }
             }
             else
                 engines_path[0] = 0;
@@ -188,8 +191,11 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
       <fileset basedir="${opensslDir}/out32dll">
         <include name="libeay32.pdb" />
         <include name="ssleay32.pdb" />
-        <include name="capi.dll" />
-        <include name="capi.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin/engines" unless="${static}">
+      <fileset basedir="${opensslDir}/out32dll">
+        <include name="capi.*" />
       </fileset>
     </copy>
     <copy todir="${release}/include">
