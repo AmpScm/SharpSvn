@@ -84,7 +84,7 @@
       <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
         <filterchain>
           <!-- Ommit default library name -->
-          <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags}" />
+          <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags} " />
           <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
         </filterchain>
       </FilterFile>
