@@ -118,11 +118,6 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
           <replacestring from="!defined(OPENSSL_SYS_WIN32_CYGWIN)" to="0 &amp;&amp; ! defined(OPENSSL_SYS_WIN32_CYGWIN)" />
         </filterchain>
       </FilterFile>
-      <FilterFile file="${opensslDir}/crypto/cversion.c">
-        <filterchain>
-          <replacestring from="(cflags)" to ='("(cflags)")' />
-        </filterchain>
-      </FilterFile>
       <FilterFile file="${opensslDir}/crypto/opensslconf.h">
         <filterchain>
           <replacestring from='#define ENGINESDIR "' to='#define ENGINESDIR  "C:\\ProgramData\\OpenSSL\\Engines" //' />
