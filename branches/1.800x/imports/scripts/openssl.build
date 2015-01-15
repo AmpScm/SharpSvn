@@ -34,8 +34,12 @@
         <arg value="no-asm" if="${platform=='x64'}" />
         <arg value="no-dso" if="${static}" />
         <arg value="no-shared" />
-        <arg value="no-krb5"/>
-        <arg value="no-hw"/>
+        <arg value="no-krb5" />
+        <arg value="no-hw" />
+        <arg value="no-ssl2" />
+        <arg value="no-ssl3" />
+        <arg value="no-gost" if="${static}"/>
+        <arg value="no-dtls" />
         <arg value="no-srp" />
         <arg value="no-unit-test" />
         <arg value="no-zlib" />
@@ -128,16 +132,6 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
     if (!engines_initialized)
     {
         HMODULE hm = NULL;
-
-#ifndef GET_MODULE_HANDLE_EX_FLAG_PIN
-#define GET_MODULE_HANDLE_EX_FLAG_PIN                 (0x00000001)
-#endif
-#ifndef GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT
-#define GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT  (0x00000002)
-#endif
-#ifndef GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
-#define GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS        (0x00000004)
-#endif
 
         engines_initialized = 1;
 
