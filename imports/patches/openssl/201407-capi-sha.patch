@@ -1,8 +1,8 @@
 Index: engines/e_capi.c
 ===================================================================
---- engines/e_capi.c	(revision 19895)
+--- engines/e_capi.c	(revision 19951)
 +++ engines/e_capi.c	(working copy)
-@@ -109,6 +109,34 @@
+@@ -109,6 +109,30 @@
  #define CERT_SYSTEM_STORE_CURRENT_USER			0x00010000
  #endif 
  
@@ -26,10 +26,6 @@ Index: engines/e_capi.c
 +#define CALG_SHA_512            (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA_512)
 +#endif
 +
-+#ifndef MS_ENH_RSA_AES_PROV_A
-+#define MS_ENH_RSA_AES_PROV_A   "Microsoft Enhanced RSA and AES Cryptographic Provider"
-+#endif
-+
 +#ifndef PROV_RSA_AES
 +#define PROV_RSA_AES 24
 +#endif
@@ -37,7 +33,7 @@ Index: engines/e_capi.c
  #include <openssl/engine.h>
  #include <openssl/pem.h>
  #include <openssl/x509v3.h>
-@@ -816,6 +844,18 @@ int capi_rsa_sign(int dtype, const unsigned char *
+@@ -816,6 +846,18 @@ int capi_rsa_sign(int dtype, const unsigned char *
  /* Convert the signature type to a CryptoAPI algorithm ID */
  	switch(dtype)
  		{
@@ -56,13 +52,16 @@ Index: engines/e_capi.c
  	case NID_sha1:
  		alg = CALG_SHA1;
  		break;
-@@ -1438,6 +1478,10 @@ static CAPI_KEY *capi_get_key(CAPI_CTX *ctx, const
+@@ -1438,6 +1480,13 @@ static CAPI_KEY *capi_get_key(CAPI_CTX *ctx, const
  						contname, provname, ptype);
      if(ctx->store_flags & CERT_SYSTEM_STORE_LOCAL_MACHINE)
          dwFlags = CRYPT_MACHINE_KEYSET;
 +    if ((ptype == PROV_RSA_FULL)
 +        && !strcmp(provname, MS_ENHANCED_PROV_A)
-+        && CryptAcquireContextA(&key->hprov, contname, MS_ENH_RSA_AES_PROV_A, PROV_RSA_AES, dwFlags))
++        && CryptAcquireContextA(&key->hprov, contname,
++                                "Microsoft Enhanced RSA and AES Cryptographic Provider"
++                                /* = MS_ENH_RSA_AES_PROV_A, except when using Windows SDK 6.0 when compiling for XP PRE SP1 this has the " (Prototype)" suffix :( */,
++                                PROV_RSA_AES, dwFlags))
 +    {} else
      if (!CryptAcquireContextA(&key->hprov, contname, provname, ptype, dwFlags)) 
  		{
