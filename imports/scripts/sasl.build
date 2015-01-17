@@ -91,7 +91,7 @@ $1
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.build">
       <NMake workingdir="${saslDir}" makeFile="${saslDir}/NTMakefile">
         <arg value="TARGET_WIN_SYSTEM=51" />
-        <!-- Win 2000+ -->
+        <!-- Win XP+ -->
         <arg value="STATIC=no" /><!-- Use shared CRTpus -->
         <!-- BDB -->
         <arg value="DB_LIB=${libDb}.lib" />
