@@ -527,7 +527,8 @@ public class FilterFile : Task
   FileInfo _file;
   Encoding _encoding;
   bool _generated;
-  
+  bool _noNormalize;
+
   [BuildElement("filterchain")]
   public FilterChain FilterChain
   {
@@ -539,21 +540,28 @@ public class FilterFile : Task
   public FileInfo File
   {
     get { return _file; }
-	  set { _file = value; }
-	}
-	
+    set { _file = value; }
+  }
+
   [TaskAttribute("encoding")]
   public Encoding Encoding
   {
     get { return _encoding ?? (_encoding = new UTF8Encoding()); }
     set { _encoding = value; }
   }
-  
+
   [TaskAttribute("generated"), BooleanValidator]
   public bool Generated
   {
       get { return _generated; }
       set { _generated = value; }
+  }
+
+  [TaskAttribute("normalize"), BooleanValidator]
+  public bool NormalizeEols
+  {
+      get { return !_noNormalize; }
+      set { _noNormalize = !value; }
   }
 
   protected override void ExecuteTask()
@@ -565,15 +573,33 @@ public class FilterFile : Task
       from = File.FullName;
     else if (!System.IO.File.Exists(from))
       System.IO.File.Copy(File.FullName, from);
-    
+
     text = FileUtils.ReadFile(from, FilterChain, Encoding);
+
+    if (NormalizeEols && text.Contains("\r\n"))
+    {
+      int n = text.IndexOf('\n');
+      bool normalize = true;
+
+      while (n > 0)
+      {
+        if (text[n-1] != '\r')
+        {
+            normalize = true;
+            break;
+        }
+        n = text.IndexOf('\n', n+1);
+      }
+      if (normalize)
+        text = text.Replace("\r\n", "\n");
+    }
 
     using (StreamWriter sw = new StreamWriter(File.FullName, false, Encoding))
     {
       sw.Write(text ?? "");
     }
   }
-	
+
 }
 
 [TaskName("CMake")]
