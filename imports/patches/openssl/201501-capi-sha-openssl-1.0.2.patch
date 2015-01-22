@@ -28,10 +28,10 @@ Index: engines/e_capi.c
 +#ifndef CALG_SHA_256
 +# define CALG_SHA_256           (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA_256)
 +#endif
-+#ifndef CALG_SHA_384 
++#ifndef CALG_SHA_384
 +# define CALG_SHA_384           (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA_384)
 +#endif
-+#ifndef CALG_SHA_512 
++#ifndef CALG_SHA_512
 +# define CALG_SHA_512           (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA_512)
 +#endif
 +
