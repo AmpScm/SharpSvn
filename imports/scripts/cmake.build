@@ -24,6 +24,10 @@
             overwrite="false" if="${VSversion == '2013' and platform=='win32'}" />
   <property name="cmakeGenerator" value="Visual Studio 12 Win64"
             overwrite="false" if="${VSversion == '2013' and platform=='x64'}" />
+  <property name="cmakeGenerator" value="Visual Studio 14 2015"
+            overwrite="false" if="${VSversion == '2015' and platform=='win32'}" />
+  <property name="cmakeGenerator" value="Visual Studio 14 2015 Win64"
+            overwrite="false" if="${VSversion == '2015' and platform=='x64'}" />
 
   <filterchain id="cmake-lib">
     <!-- DebugInformationFormat is only empty for release mode -->
