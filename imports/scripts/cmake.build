@@ -84,6 +84,11 @@
           </FilterFile>
         </do>
       </foreach>
+      <FilterFile file="${cmakeDir}/share/cmake-${cmakeVersionMM}/Modules/FindOpenSSL.cmake">
+        <filterchain>
+          <replacestring from='#define[\t ]+OPENSSL_' to='#[\t ]*define[\t ]+OPENSSL_' />
+        </filterchain>
+      </FilterFile>
     </OnceBlock>
   </target>
 </project>
