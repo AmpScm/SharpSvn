@@ -20,6 +20,7 @@
   <!-- r1581605                - Improve error message on file install failure -->
   <!-- r1582023,1582047,1582274- Serf correctness fix against <= 1.6 servers -->
   <!-- 1582230,1582231         - Don't break on svn+ssh polling -->
+  <!-- r1654027                - Fix OpenSSL version probing -->
   <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605,1582023,1582047,1582274,1582230,1582231" overwrite="false" /> 
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />  
