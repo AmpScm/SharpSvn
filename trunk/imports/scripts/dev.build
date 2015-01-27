@@ -24,9 +24,6 @@
     <property name="wc.branch.start" value="${string::last-index-of(wc.url,'/')}" />
     <property name="wc.branch" value="${string::substring(wc.url, int::parse(wc.branch.start)+1, string::get-length(wc.url)-int::parse(wc.branch.start)-1)}" />
 
-    <property name="impBase" value="../build/x64" overwrite="false" if="${platform=='x64'}"/>
-    <property name="impBase" value="../build/win32" overwrite="false" />
-
     <if test="${wc.branch &gt; '1.9.'}">
       <exec program="python.exe" workingdir="${wc}" verbose="true">
         <arg line="gen-make.py" />
@@ -61,10 +58,10 @@
         <arg value="--with-httpd=${httpdDir}" if="${buildHttpd == 'true'}" />
         <!-- apr and apr-util locations are implied via httpd -->
         <arg value="--with-berkeley-db=${platformRoot}/bdb-install" />
-        <arg value="--with-openssl=${impBase}/openssl" />
+        <arg value="--with-openssl=${platformRoot}/openssl" />
         <arg value="--with-zlib=${zlibDir}" />
-        <arg value="--with-neon=${impBase}/neon" if="${wc.branch &lt; '1.8.'}" />
-        <arg value="--with-serf=${impBase}/serf" if="${wc.branch &gt;= '1.8.'}"/>
+        <arg value="--with-neon=${platformRoot}/neon" if="${wc.branch &lt; '1.8.'}" />
+        <arg value="--with-serf=${platformRoot}/serf" if="${wc.branch &gt;= '1.8.'}"/>
         <arg value="--with-sasl=${intDir}" />
         <arg value="--with-sqlite=${intDir}" />
         <arg value="--enable-nls" if="${intl != 'none'}"/>
