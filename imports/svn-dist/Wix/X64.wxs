@@ -71,6 +71,9 @@
           <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
         </RegistryKey>
       </Component>
+      <Component Id="svnauthz.exe" Guid="E22C35B5-796C-4CF8-954B-EFB01A7D4621">
+        <File Id="svnauthz.exe" Name="svnauthz.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
       <Component Id="svnauthz_validate.exe" Guid="E4D2B7B4-A54D-42A7-8FF5-9739C3ACC534" >
         <File Id="svnauthz_validate.exe" Name="svnauthz-validate.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
