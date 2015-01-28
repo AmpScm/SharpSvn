@@ -246,6 +246,7 @@
         <target value="Programs\svnsync" />
         <target value="Programs\svnlook" />
         <target value="Programs\svnmucc"/>
+        <target value="Programs\svnauthz" />
         <target value="Programs\svnauthz-validate" />
         <target value="Programs\svndumpfilter" />
         <target value="Programs\svnrdump" />
