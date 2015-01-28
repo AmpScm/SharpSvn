@@ -86,6 +86,13 @@
       <ComponentGroupRef Id="libaprutil_1.dll"/>
       <ComponentGroupRef Id="libintl.dll" />
     </ComponentGroup>
+    <ComponentGroup Id="svnauthz.exe">
+      <ComponentRef Id="svnauthz.exe"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libsvn_repos_1.dll"/>
+      <ComponentGroupRef Id="libsvn_subr_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll" />
+    </ComponentGroup>
     <ComponentGroup Id="svnauthz_validate.exe">
       <ComponentRef Id="svnauthz_validate.exe"/>
       <ComponentGroupRef Id="libapr_1.dll"/>
