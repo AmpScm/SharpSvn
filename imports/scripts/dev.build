@@ -5,8 +5,8 @@
   <property name="aprRelSubdir" value="LibR" if="${static}" />
   <property name="aprRelSubdir" value="${platform}/${aprRelSubdir}" if="${platform != 'win32'}" />
   <property name="aprStaticSubdir" value="LibR" />
-  <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />  
-  
+  <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
+
   <target name="gen-dev" depends="extract,checkout,svn-compat">
     <if test="${not directory::exists(wc)}">
       <Svn>
@@ -15,7 +15,7 @@
         <arg line="co https://svn.apache.org/repos/asf/subversion/tags/${tag} ${wc}" if="${tag != ''}" />
       </Svn>
     </if>
-    
+
     <!-- Calculate the branch suffix via an ugly hack -->
     <exec program="svn.exe" output="build\svn.wc.info">
       <arg line="info --xml ${wc}" />
@@ -71,6 +71,6 @@
         <arg value="--disable-shared" if="${(static=='true') or (svnStatic=='true')}"/>
       </exec>
     </if>
-    <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />  
+    <echo message="@echo off" file="${wc}/build/${platform}/build_zlib.bat" />
   </target>
 </project>

@@ -1,8 +1,8 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="aprUtilDir" value="${platformRoot}\apr-util" /> 
+  <property name="aprUtilDir" value="${platformRoot}\apr-util" />
   <property name="libAprUtilSharedLib" value="${aprUtilDir}\Release\libaprutil-1.lib" />
- 
+
   <target name="aprutil-merge" depends="checkout">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.merged">
       <Svn verbose="true" if="${string::get-length(aprutilMerges) &gt; 0}">
@@ -44,12 +44,12 @@
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
         <prop name="APR_BUILD_TESTAPR" value="ON" />
-        
+
         <prop name="APR_INCLUDE_DIR" value="${intDir}/include/apr-1" />
         <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />
         <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
         <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
-        
+
         <prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto}" />
         <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto}" />
         <prop name="APR_HAS_LDAP" value="OFF" />
@@ -60,7 +60,7 @@
           <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
         </filterchain>
       </FilterFile>
-      
+
       <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
         <filterchain refid="cmake-lib" />
       </FilterFile>
@@ -68,12 +68,12 @@
         <filterchain refid="cmake-lib" />
       </FilterFile>
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" generated="true">
-        <filterchain refid="cmake-link" />      
+        <filterchain refid="cmake-link" />
       </FilterFile>
       <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true" if="${enableAprCrypto}">
-        <filterchain refid="cmake-link" />      
+        <filterchain refid="cmake-link" />
       </FilterFile>
-      
+
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
         <filterchain>
           <replacestring from='&gt;libaprutil-1&lt;/TargetName' to='&gt;${dllPrefix}libaprutil-1&lt;/TargetName' if="${vcxproj}" />
@@ -116,7 +116,7 @@
         <include name="../apu.h" /> <!-- Generated -->
         <include name="../apu_want.h" /> <!-- Generated -->
       </fileset>
-    </copy>        
+    </copy>
     <copy todir="${intDir}/include/apr-1">
       <fileset basedir="${aprUtilDir}/include">
         <include name="*.h" />

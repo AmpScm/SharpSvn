@@ -22,7 +22,7 @@
         <do>
           <ApplyPatch patchFile="${patch}" toDir="${sconsDir}" />
         </do>
-      </foreach>    
+      </foreach>
     </OnceBlock>
     <OnceBlock file="build/scons-${sconsVersion}.installed">
       <exec program="python.exe" workingdir="${sconsDir}" verbose="true">

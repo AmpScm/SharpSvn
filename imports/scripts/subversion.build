@@ -21,7 +21,7 @@
           </Svn>
         </do>
       </foreach>
-      
+
       <echo append="true" file="${svnBase}/subversion/libsvn_subr/auth.c" if="${svnAddSharpSvn and applyMerges}">
         /* Appended by sharpsvn/imports/scripts/build-subversion.build */
         apr_hash_t* sharpsvn_svn_auth_get_credentials_cache(svn_auth_baton_t *auth_baton)
@@ -39,14 +39,14 @@
                    to='SVN_ERR(check_bdb_availability()); if (loader_version->major != SVN_VER_MAJOR)' if="${applyMerges=='true'}" />
         </filterchain>
       </FilterFile>
-        
+
       <FilterFile file="${svnBase}/subversion/libsvn_subr/io.c" if="${svnAddSharpSvn and applyMerges}">
         <filterchain>
           <replacestring from='|| os_err == ERROR_DIR_NOT_EMPTY)'
                            to='|| os_err == ERROR_DIR_NOT_EMPTY) &amp;&amp; sharpsvn_retry(retries, err, os_err, #expr)' />
         </filterchain>
       </FilterFile>
-      
+
       <FilterFile file="${svnBase}\build\generator\templates\vcnet_vcproj.ezt" if="${(not static) and (dllPrefix != '')}">
         <filterchain>
           <replacestring from='$(OutDir)\[target.output_name]'
@@ -61,34 +61,34 @@
       </FilterFile>
     </OnceBlock>
   </target>
-  
+
   <target name="svn-compat">
-    
+
     <copy todir="${intDir}\inc">
       <fileset basedir="${intDir}\include">
         <include name="sqlite*.h" />
       </fileset>
     </copy>
-    
+
     <copy todir="${intDir}\include">
       <fileset basedir="${intDir}\include\apr-1">
         <include name="**.h" />
       </fileset>
     </copy>
-    
+
     <!-- Enable compiling Subversion in debug and release mode -->
     <copy todir="${httpdDir}/Debug" flatten="true" if="${buildHttpd}">
       <fileset basedir="${httpdDir}">
         <include name="Release/*.lib" />
       </fileset>
     </copy>
-    
+
     <!-- 1.8 and earlier expect this nonstandard sqlite layout -->
     <copy todir="${intDir}\inc">
       <fileset basedir="${intDir}\include">
         <include name="sqlite*.h" />
       </fileset>
-    </copy>      
+    </copy>
     <!-- Place APR below HTTPD where 1.8 and 1.7 expect it -->
     <copy todir="${httpdDir}/srclib/apr/LibR">
       <fileset basedir="${intDir}/lib">
@@ -115,7 +115,7 @@
         <include name="*.h" />
       </fileset>
     </copy>
-    
+
     <copy todir="${httpdDir}/srclib/apr-util/LibR">
       <fileset basedir="${intDir}/lib">
         <include name="*apr*.lib" />
@@ -136,13 +136,13 @@
         <include name="*apr*.lib" />
       </fileset>
     </copy>
-    
+
     <copy todir="${httpdDir}/srclib/apr-util/include">
       <fileset basedir="${intDir}/include/apr-1">
         <include name="*.h" />
       </fileset>
     </copy>
-    
+
     <!-- Allow neon to find expat and zlib where Subversion 1.7 says it is -->
     <copy todir="${httpdDir}/srclib/apr-util/xml/expat/lib">
       <fileset basedir="${intDir}/include">
@@ -153,7 +153,7 @@
     <copy tofile="${zlibDir}/zlibstatD.lib" file="${zlibDir}/zlib.lib" />
     <!-- /Neon -->
 
-    
+
     <!-- Pre 1.9 the test suite expects this dll here -->
     <copy todir="${intDir}/lib">
       <fileset basedir="${intDir}/bin">
@@ -240,7 +240,7 @@
       <MSBuild src="${svnBase}/subversion_vcnet.sln">
         <!--arg value="/verbosity:quiet" /-->
         <target value="Programs\svn" />
-        <target value="Programs\svnadmin" />        
+        <target value="Programs\svnadmin" />
         <target value="Programs\svnversion" />
         <target value="Programs\svnserve" />
         <target value="Programs\svnsync" />
@@ -290,7 +290,7 @@
         </fileset>
       </copy>
     </if>
-   <copy todir="${releaseLib}">
+    <copy todir="${releaseLib}">
       <fileset basedir="${intDir}/lib">
         <include name="*.lib" />
       </fileset>

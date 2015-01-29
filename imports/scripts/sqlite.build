@@ -13,18 +13,18 @@
       <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
       <arg value="/Zi" />      <!-- Write debug information -->
       <arg value="/Zl" />      <!-- No default library name -->
-      
+
       <arg value="/GL" if="${ltcg}" />      <!-- Whole program optimization -->
       <arg value="/Gy" if="${ltcg}" />      <!-- Function level linking -->
       <arg value="/Gw" if="${ltcg}" />      <!-- Optimize global data -->
-      
+
       <defines>
         <define name="NDEBUG" />
         <define name="WIN32" />
         <define name="WINNT" />
         <define name="WIN64" if="${platform=='x64'}" />
         <define name="_WIN32_WINNT" value="0x0501" />
-        
+
         <!-- Store temporary tables in RAM, unless requested otherwise -->
         <define name="SQLITE_TEMP_STORE" value="2" />
         <define name="SQLITE_DEFAULT_PAGE_SIZE" value="4096" />
@@ -47,16 +47,16 @@
         <define name="SQLITE_OMIT_DATETIME_FUNCS" /><!-- Date time uses APR -->
         <define name="SQLITE_OMIT_LOCALTIME" />
         <define name="SQLITE_OMIT_AUTORESET" /><!-- Make forgetting a reset an error -->
-        
+
         <define name="SQLITE_OMIT_SHARED_CACHE" /><!-- Unstable in our previous usage -->
         <define name="SQLITE_OMIT_BUILTIN_TEST" />
         <define name="SQLITE_OMIT_AUTHORIZATION" />
-        
+
         <define name="SQLITE_OMIT_GET_TABLE" />
         <define name="SQLITE_OMIT_SCHEMA_PRAGMAS" />
-        
+
         <define name="SQLITE_OMIT_INTEGRITY_CHECK" />
-        
+
         <!-- These would be nice, but currently break compilation -->
         <!--define name="SQLITE_OMIT_ATTACH" /-->
         <!--define name="SQLITE_OMIT_VIRTUALTABLE" /-->

@@ -3,7 +3,7 @@
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" overwrite="false" />
   <property name="httpdBuildType" value="tag" overwrite="false" />
-  
+
   <property name="guessedPlatform" value="win32" />
   <if test="${environment::variable-exists('LIB')}">
     <property name="guessedPlatform" value="x64" if="${string::contains(string::to-upper(environment::get-variable('LIB')),'LIB\AMD64')}" />
@@ -21,9 +21,9 @@
   <!-- r1582023,1582047,1582274- Serf correctness fix against <= 1.6 servers -->
   <!-- 1582230,1582231         - Don't break on svn+ssh polling -->
   <!-- r1654027                - Fix OpenSSL version probing -->
-  <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605,1582023,1582047,1582274,1582230,1582231,1654027" overwrite="false" /> 
+  <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605,1582023,1582047,1582274,1582230,1582231,1654027" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
-  <property name="svnAddSharpSvn" value="true" overwrite="false" />  
+  <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
@@ -56,7 +56,7 @@
   <!-- Building only -->
   <property name="cmakeVersion" value="2.8.12.2" overwrite="false" />
   <property name="sconsVersion" value="2.3.4" overwrite="false" />
-  
+
   <!-- For testcase -->
   <property name="nunitVersion" value="2.6.3" overwrite="false" />
   <property name="sharpZipVersion" value="0860" overwrite="false" />
