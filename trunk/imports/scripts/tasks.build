@@ -18,7 +18,7 @@
       <import namespace="NAnt.Core.Util"/>
     </imports>
     <code>
-      <![CDATA[			
+      <![CDATA[
 
 public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
 {
