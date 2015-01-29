@@ -82,7 +82,7 @@ $1
           <replacestring from='$(LINK32DLL_FLAGS)' to='$(LIB32_FLAGS)' if="${static}" />
           <replacestring from=' $(libsasl_res)' to='' if="${static}" />
           <replacestring from='/implib:"libsasl.lib" ' to='' if="${static}" />
-          <replacestring from='libsasl.dll' to='libsasl.lib' if="${static}" />          
+          <replacestring from='libsasl.dll' to='libsasl.lib' if="${static}" />
         </filterchain>
       </FilterFile>
     </OnceBlock>
@@ -92,7 +92,7 @@ $1
       <NMake workingdir="${saslDir}" makeFile="${saslDir}/NTMakefile">
         <arg value="TARGET_WIN_SYSTEM=51" />
         <!-- Win XP+ -->
-        <arg value="STATIC=no" /><!-- Use shared CRTpus -->
+        <arg value="STATIC=no" /><!-- Use shared CRT -->
         <!-- BDB -->
         <arg value="DB_LIB=${libDb}.lib" />
         <arg value="DB_INCLUDE=${path::get-full-path(intDir + '/include')}" />

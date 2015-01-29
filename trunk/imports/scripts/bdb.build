@@ -61,18 +61,18 @@
       <property name="dbDebugConfig" value="Debug" />
       <property name="dbDebugConfig" value="Debug X86" if="${dbVersion &gt;= '4.6'}"/>
       <property name="dbDebugConfig" value="Debug AMD64" if="${platform == 'x64'}"/>
-    
+
       <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
         <arg value="${dbConfig}|${platform}" />
       </VCBuild>
-      
+
       <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}" if="${svn-dev}">
         <arg value="${dbDebugConfig}|${platform}" />
       </VCBuild>
-      
+
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}">
       </MSBuild>
-      
+
       <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj and svn-dev}">
       </MSBuild>
     </OnceBlock>
@@ -125,13 +125,13 @@
       <fileset basedir="${intDir}/include">
         <include name="db*.h" />
       </fileset>
-    </copy>    
+    </copy>
     <copy todir="${release}/bin">
       <fileset basedir="${intDir}/bin">
         <include name="${fullDbDllName}" />
         <include name="*libdb*.dll" />
         <include name="*libdb*.${svnDll}" />
       </fileset>
-    </copy>    
+    </copy>
   </target>
 </project>

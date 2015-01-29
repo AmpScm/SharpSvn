@@ -9,11 +9,11 @@
   <target name="sharpintl-build" depends="sharpintl-prepare" if="${intl=='sharpsvn'}">
     <property name="i18proj" value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2005.vcproj" if="${VSversion == '2005'}" />
     <property name="i18proj" value="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcproj" unless="${VSversion == '2005'}" />
-    
+
     <OnceBlock file="build/sharpintl-${platform}.build" if="${buildSubversion}">
       <VCBuild src="${i18proj}" unless="${vcxproj}" />
 
-      <VCUpgrade src="${i18proj}" if="${vcxproj}" />    
+      <VCUpgrade src="${i18proj}" if="${vcxproj}" />
       <move if="${vcxproj}"
             file="SharpSvn-SvnI18n/SharpSvn-SvnI18n-VS2008.vcxproj"
             tofile="SharpSvn-SvnI18n/SharpSvn-SvnI18n.vcxproj" overwrite="true" />

@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="libssh2Dir" value="build/${platform}/libssh2" />
   <property name="buildLibssh2" value="true" overwrite="false" />
-  
+
   <target name="libssh2-prepare" depends="checkout" if="${buildLibssh2}">
     <OnceBlock file="build/libssh2_${platform}.patched">
       <foreach item="File" property="patch" if="${applyPatches}">
@@ -21,7 +21,7 @@
       </foreach>
     </OnceBlock>
   </target>
-  
+
   <target name="libssh2-build" depends="libssh2-prepare" if="${buildLibssh2}">
     <OnceBlock file="build/libssh2-${libssh2Version}_${platform}.build">
       <FilterFile file="${libssh2Dir}\win32\config.mk">
@@ -51,7 +51,7 @@
         </filterchain>
       </FilterFile>
       <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
-      
+
       </NMake>
     </OnceBlock>
     <copy todir="${intDir}/lib" flatten="true">

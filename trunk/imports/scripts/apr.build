@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="aprDir" value="${platformRoot}\apr" />
   <property name="libAprSharedLib" value="${aprDir}\Release\libapr-1.lib" />
- 
+
   <target name="apr-merge" depends="checkout">
     <OnceBlock file="build/apr-${aprVersion}-${platform}.merged">
       <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
@@ -58,22 +58,22 @@
   <target name="apr-build" depends="checkout, apr-merge, cmake-prepare">
     <OnceBlock file="build/apr-${aprVersion}-${platform}.build">
       <CMake workingdir="${aprDir}">
-        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />        
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
         <prop name="APR_BUILD_TESTAPR" value="ON" />
-        
+
         <prop name="MIN_WINDOWS_VER" value="0x0501" /><!-- Windows XP -->
-        
+
         <prop name="APR_INSTALL_PRIVATE_H" value="ON" />
       </CMake>
-      
+
       <FilterFile file="${aprDir}/libapr-1.${vcproj}" generated="true">
         <filterchain refid="cmake-link" />
       </FilterFile>
       <FilterFile file="${aprDir}/apr-1.${vcproj}" generated="true">
         <filterchain refid="cmake-lib" />
       </FilterFile>
-      
+
       <FilterFile file="${aprDir}/libapr-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
         <filterchain>
           <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' if="${vcxproj}" />
@@ -84,7 +84,7 @@
         <target value="libapr-1" />
       </MSBuild>
     </OnceBlock>
-    
+
     <copy todir="${intDir}/lib" flatten="true">
       <fileset basedir="${aprDir}/Release">
         <include name="apr*.lib" />

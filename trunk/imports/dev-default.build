@@ -24,18 +24,18 @@
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
   <property name="svnDll" value="dll" />
   <property name="singlePlatform" value="true" overwrite="false" />
-  
+
   <property name="wc" value="dev" overwrite="false" />
   <property name="branch" value="" overwrite="false" />
   <property name="tag" value="" overwrite="false" />
   <property name="botBuild" value="true" overwrite="false" />
-    
+
   <include buildfile="imports/Default.build" />
-  
+
   <target name="prep-dev" depends="svn-prepare,bdb-build,zlib-build,openssl-build,serf-build,neon-prepare,httpd-build">
   </target>
 
   <target name="prepare-dev" depends="prep-dev, gen-dev">
   </target>
-  
+
 </project>

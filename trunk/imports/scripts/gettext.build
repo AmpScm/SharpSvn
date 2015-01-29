@@ -47,7 +47,7 @@ ${intlh}
 #undef SUBLANG_SINDHI_AFGHANISTAN
 
 </echo>
-<echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
+      <echo file="${gettextDir}/gettext-runtime/intl/config.h" append="true">
 #define uintmax_t unsigned __int64
 #define intmax_t __int64
 #ifndef SIZE_MAX
@@ -58,7 +58,7 @@ ${intlh}
 #endif
 
 </echo>
-<echo file="${gettextDir}/gettext-runtime/config.h" append="true">
+      <echo file="${gettextDir}/gettext-runtime/config.h" append="true">
 #define uintmax_t unsigned __int64
 #define intmax_t __int64
 #ifndef SIZE_MAX
@@ -128,7 +128,7 @@ ${intlh}
         </sources>
       </cl>
       <property name="libintlDllName" value="intl.dll" />
-      <property name="libintlDllName" value="${dllPrefix}libintl.dll" if="${dllPrefix != ''}" />      
+      <property name="libintlDllName" value="${dllPrefix}libintl.dll" if="${dllPrefix != ''}" />
       <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
         options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
         /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib

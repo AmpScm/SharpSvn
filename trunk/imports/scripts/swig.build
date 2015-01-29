@@ -2,8 +2,8 @@
 <project basedir=".." default="build">
   <property name="swigFilename" value="swigwin-${swigVersion}.zip" />
   <property name="swigDir" value="build/swigwin-${swigVersion}" />
-  
-  
+
+
   <target name="swig-build" if="${property::exists('withSwig')}">
     <exec program="where.exe" output="build/perl.where" failonerror="false">
       <arg value="perl" />
@@ -13,7 +13,7 @@
     </exec>
     <loadfile file="build/perl.where" property="perl.location" />
     <property name="perl.location" value="${path::get-directory-name(string::trim(perl.location))}" />
-    
+
     <copy todir="${swigDir}/lib/perl">
       <fileset basedir="${swigDir}/lib/perl5">
         <include name="**" />
@@ -31,13 +31,13 @@
 #include &lt;apr.h&gt;
 /* --- /SharpSVN Patch --- */
 ${perl.h}
-</echo>   
-    <copy todir="build/${platform}/lib/lib"> 
+</echo>
+    <copy todir="build/${platform}/lib/lib">
       <fileset basedir="${path::get-full-path(perl.location + '/../lib/CORE')}">
         <include name="**/*.lib" />
       </fileset>
     </copy>
-    <copy todir="build/${platform}/lib/include"> 
+    <copy todir="build/${platform}/lib/include">
       <fileset basedir="${path::get-full-path(perl.location + '/../lib/CORE')}">
         <include name="**/*.h" />
       </fileset>

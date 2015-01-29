@@ -21,7 +21,7 @@
   <if test="${platform != 'win32' and platform != 'x64'}">
     <fail message="Platform must be win32 or x64 at this time" />
   </if>
-  
+
   <if test="${not property::exists('VSversion')}">
     <!-- Auto detect VS 2005-2012 -->
     <if test="${environment::variable-exists('VCINSTALLDIR')}">
@@ -40,7 +40,7 @@
     </if>
     <echo message="Using Visual Studio ${VSversion} ${platform} for building" />
   </if>
-  
+
   <property name="MSBuildExe" value="MSBuild.exe" />
   <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
 
@@ -49,11 +49,11 @@
 
   <foreach item="Folder" property="jhbp">
     <in>
-     <items basedir="${path::get-full-path(path::combine(environment::get-variable('ProgramFiles'), '..'))}">
-       <include name="${environment::get-variable('ProgramFiles')}" />
-       <include name="Program Files (x86)" />
-       <include name="Program Files" />
-     </items>
+      <items basedir="${path::get-full-path(path::combine(environment::get-variable('ProgramFiles'), '..'))}">
+        <include name="${environment::get-variable('ProgramFiles')}" />
+        <include name="Program Files (x86)" />
+        <include name="Program Files" />
+      </items>
     </in>
     <do>
       <property name="jhb" value="${path::combine(jhbp, 'Java')}" />
@@ -78,7 +78,7 @@
 
   <include buildfile="layout.build" />
   <include buildfile="prepare.build" />
-  
+
   <include buildfile="cmake.build" />
   <include buildfile="scons.build" />
 
@@ -98,8 +98,8 @@
   <include buildfile="sqlite.build" />
   <include buildfile="swig.build" />
   <include buildfile="libssh2.build" />
-  
-  
+
+
   <include buildfile="dev.build" />
 
   <setenv>
@@ -183,7 +183,7 @@
     <Svn nonInteractive="false">
       <arg line="revert -R build/${platform}/subversion" />
     </Svn>
-    <Svn> 
+    <Svn>
       <arg line="up build/${platform}/subversion" />
     </Svn>
   </target>

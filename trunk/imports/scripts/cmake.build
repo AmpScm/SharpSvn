@@ -3,7 +3,7 @@
   <property name="vcxproj" value="${VSversion != '2005' and VSversion != '2008'}" />
   <property name="vcproj" value="vcxproj" if="${vcxproj}" />
   <property name="vcproj" value="vcproj" unless="${vcxproj}" />
-  
+
   <property name="cmakeGenerator" value="Visual Studio 8 2005"
             overwrite="false" if="${VSversion == '2005' and platform=='win32'}" />
   <property name="cmakeGenerator" value="Visual Studio 8 2005 Win64"
@@ -31,21 +31,21 @@
 
   <filterchain id="cmake-lib">
     <!-- DebugInformationFormat is only empty for release mode -->
-    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;'
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;
                          &lt;OmitDefaultLibName&gt;true&lt;/OmitDefaultLibName&gt;
                          &lt;WholeProgramOptimization&gt;true&lt;/WholeProgramOptimization&gt;' if="${ltcg}" unless="${not vcxproj}" />
-    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;'
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;
                          &lt;OmitDefaultLibName&gt;true&lt;/OmitDefaultLibName&gt;' if="${not ltcg}" unless="${not vcxproj}" />
-    <!-- InlineFunctionExpansion is only 2 for release mode -->               
+    <!-- InlineFunctionExpansion is only 2 for release mode -->
     <replacestring from='InlineFunctionExpansion="2"'
                      to='InlineFunctionExpansion="2" DebugInformationFormat="3"
-                         EnableFunctionLevelLinking="true" OmitDefaultLibName="true" WholeProgramOptimization="true"' if="${ltcg}" unless="${vcxproj}" />       
+                         EnableFunctionLevelLinking="true" OmitDefaultLibName="true" WholeProgramOptimization="true"' if="${ltcg}" unless="${vcxproj}" />
     <replacestring from='InlineFunctionExpansion="2"'
                      to='InlineFunctionExpansion="2" DebugInformationFormat="3"
                          EnableFunctionLevelLinking="true" OmitDefaultLibName="true"' if="${not ltcg}" unless="${vcxproj}" />
-                         
+
     <replacestring from='&lt;/Midl&gt;'
                      to='&lt;/Midl&gt;
                          &lt;Lib&gt;
@@ -57,16 +57,16 @@
                            &lt;TargetMachine&gt;MachineX86&lt;/TargetMachine&gt;
                          &lt;/Lib&gt;' if="${vcxproj and platform=='x64'}" />
   </filterchain>
-  
+
   <filterchain id="cmake-link">
     <replacestring from='LinkIncremental="1"'
                      to='LinkIncremental="1" GenerateDebugInformation="true"' unless="${vcxproj}" />
     <replacestring from='InlineFunctionExpansion="2"'
                      to='InlineFunctionExpansion="2" DebugInformationFormat="3"' unless="${vcxproj}" />
-    
+
     <replacestring from='&lt;GenerateDebugInformation&gt;false&lt;/GenerateDebugInformation&gt;'
                      to='&lt;GenerateDebugInformation&gt;true&lt;/GenerateDebugInformation&gt;' />
-    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;' 
+    <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;'
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />
   </filterchain>
 
