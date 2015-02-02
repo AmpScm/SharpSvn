@@ -60,7 +60,7 @@
   <!-- For testcase -->
   <property name="nunitVersion" value="2.6.3" overwrite="false" />
   <property name="sharpZipVersion" value="0860" overwrite="false" />
-  <property name="junitVersion" value="4.8.1" overwrite="false" />
+  <property name="junitVersion" value="4.10" overwrite="false" />
 
   <!-- Prefer http or https -->
   <property name="httpOrHttps" value="http" />
