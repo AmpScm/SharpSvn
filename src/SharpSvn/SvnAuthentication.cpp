@@ -25,17 +25,6 @@ using namespace System::Text::RegularExpressions;
 [module: SuppressMessage("Microsoft.Performance", "CA1812:AvoidUninstantiatedInternalClasses", Scope="type", Target="SharpSvn.Security.SvnAuthProviderMarshaller")];
 [module: SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable", Scope="type", Target="SharpSvn.Security.SvnAuthentication")];
 
-static svn_error_t *
-    sharpsvn_auth_plaintext_prompt(svn_boolean_t *may_save_plaintext, const char *realmstring, void *baton, apr_pool_t *pool)
-{
-    UNUSED_ALWAYS(realmstring);
-    UNUSED_ALWAYS(baton);
-    UNUSED_ALWAYS(pool);
-    *may_save_plaintext = true;
-
-    return SVN_NO_ERROR;
-}
-
 SvnAuthentication::SvnAuthentication(SvnClientContext^ context, AprPool^ parentPool)
 {
     if (!context)
@@ -152,6 +141,8 @@ struct AuthPromptWrappers
     static svn_error_t* svn_auth_ssl_server_trust_prompt_func(svn_auth_cred_ssl_server_trust_t **cred, void *baton, const char *realm, apr_uint32_t failures, const svn_auth_ssl_server_cert_info_t *cert_info, svn_boolean_t may_save, apr_pool_t *pool);
     static svn_error_t* svn_auth_ssl_client_cert_prompt_func(svn_auth_cred_ssl_client_cert_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool);
     static svn_error_t* svn_auth_ssl_client_cert_pw_prompt_func(svn_auth_cred_ssl_client_cert_pw_t **cred, void *baton, const char *realm, svn_boolean_t may_save, apr_pool_t *pool);
+
+    static svn_error_t *svn_auth_plaintext_prompt(svn_boolean_t *may_save_plaintext, const char *realmstring, void *baton, apr_pool_t *pool);
 };
 
 
@@ -240,6 +231,16 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
     return nullptr;
 }
 
+svn_error_t *AuthPromptWrappers::svn_auth_plaintext_prompt(svn_boolean_t *may_save_plaintext, const char *realmstring, void *baton, apr_pool_t *pool);
+{
+    UNUSED_ALWAYS(realmstring);
+    UNUSED_ALWAYS(baton);
+    UNUSED_ALWAYS(pool);
+    *may_save_plaintext = true;
+
+    return SVN_NO_ERROR;
+}
+
 svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPtr(AprPool^ pool)
 {
     if (!pool)
@@ -249,7 +250,7 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
 
     if (_handler->Equals(SvnAuthentication::SubversionFileUserNamePasswordHandler))
     {
-        svn_auth_get_simple_provider2(&provider, sharpsvn_auth_plaintext_prompt, nullptr, pool->Handle);
+        svn_auth_get_simple_provider2(&provider, AuthPromptWrappers::svn_auth_plaintext_prompt, (void*)_baton->Handle, pool->Handle);
     }
     else if (_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
     {
@@ -443,7 +444,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
 
     if (_handler->Equals(SvnAuthentication::SubversionFileSslClientCertificatePasswordHandler))
     {
-        svn_auth_get_ssl_client_cert_pw_file_provider2(&provider, sharpsvn_auth_plaintext_prompt, nullptr, pool->Handle);
+        svn_auth_get_ssl_client_cert_pw_file_provider2(&provider, AuthPromptWrappers::svn_auth_plaintext_prompt, (void*)_baton->Handle, pool->Handle);
     }
     else if (_handler->Equals(SvnAuthentication::SubversionWindowsSslClientCertificatePasswordHandler))
     {
