@@ -231,7 +231,7 @@ svn_error_t* AuthPromptWrappers::svn_auth_simple_prompt_func(svn_auth_cred_simpl
     return nullptr;
 }
 
-svn_error_t *AuthPromptWrappers::svn_auth_plaintext_prompt(svn_boolean_t *may_save_plaintext, const char *realmstring, void *baton, apr_pool_t *pool);
+svn_error_t *AuthPromptWrappers::svn_auth_plaintext_prompt(svn_boolean_t *may_save_plaintext, const char *realmstring, void *baton, apr_pool_t *pool)
 {
     UNUSED_ALWAYS(realmstring);
     UNUSED_ALWAYS(baton);
@@ -254,7 +254,7 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
     }
     else if (_handler->Equals(SvnAuthentication::SubversionWindowsUserNamePasswordHandler))
     {
-        svn_auth_get_windows_simple_provider(&provider, pool->Handle);
+        SVN_THROW(svn_auth_get_platform_specific_provider(&provider, "windows", "simple", pool->Handle));
     }
     else
         svn_auth_get_simple_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_simple_prompt_func, (void*)_baton->Handle, RetryLimit, pool->Handle);
@@ -319,7 +319,7 @@ svn_auth_provider_object_t *SvnSslServerTrustEventArgs::Wrapper::GetProviderPtr(
     }
     else if (_handler->Equals(SvnAuthentication::SubversionWindowsSslServerTrustHandler))
     {
-        svn_auth_get_windows_ssl_server_trust_provider(&provider, pool->Handle);
+        SVN_THROW(svn_auth_get_platform_specific_provider(&provider, "windows", "ssl_server_trust", pool->Handle));
     }
     else
         svn_auth_get_ssl_server_trust_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_server_trust_prompt_func, (void*)_baton->Handle, pool->Handle);
@@ -448,7 +448,7 @@ svn_auth_provider_object_t *SvnSslClientCertificatePasswordEventArgs::Wrapper::G
     }
     else if (_handler->Equals(SvnAuthentication::SubversionWindowsSslClientCertificatePasswordHandler))
     {
-        svn_auth_get_windows_ssl_client_cert_pw_provider(&provider, pool->Handle);
+        SVN_THROW(svn_auth_get_platform_specific_provider(&provider, "windows", "ssl_client_cert_pw", pool->Handle));
     }
     else
         svn_auth_get_ssl_client_cert_pw_prompt_provider(&provider, &AuthPromptWrappers::svn_auth_ssl_client_cert_pw_prompt_func, (void*)_baton->Handle, RetryLimit, pool->Handle);
