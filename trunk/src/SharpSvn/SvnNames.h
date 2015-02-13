@@ -100,6 +100,14 @@ namespace SharpSvn {
         literal String^ SvnSpecial = SVN_PROP_SPECIAL;
         literal String^ SvnExternals = SVN_PROP_EXTERNALS;
         literal String^ SvnMergeInfo = SVN_PROP_MERGEINFO;
+        literal String^ SvnAutoProps = SVN_PROP_INHERITABLE_AUTO_PROPS;
+        literal String^ SvnGlobalIgnores = SVN_PROP_INHERITABLE_IGNORES;
+
+        // Not used by svn, but predefined
+        literal String^ SvnTextTime = SVN_PROP_TEXT_TIME;
+        literal String^ SvnOwner = SVN_PROP_OWNER;
+        literal String^ SvnGroup = SVN_PROP_GROUP;
+        literal String^ SvnUnixMode = SVN_PROP_UNIX_MODE;
 
         literal String^ SvnAuthor = SVN_PROP_REVISION_AUTHOR;
         literal String^ SvnLog = SVN_PROP_REVISION_LOG;
@@ -120,6 +128,7 @@ namespace SharpSvn {
         literal String^ SvnPropRevisionPrefix = SVN_PROP_REVISION_PREFIX;
 
         static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ AllSvnRevisionProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^> {SVN_PROP_REVISION_ALL_PROPS }));
+        static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ AllSvnNodeProperties = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(dynamic_cast<IList<String^>^>(gcnew array<String^> {SVN_PROP_NODE_ALL_PROPS }));
 
         // From TortoiseSvn src\TortoiseProc\ProjectProperties.h
         literal String^ BugTrackPrefix                          = "bugtraq:";
