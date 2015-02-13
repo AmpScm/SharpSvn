@@ -187,7 +187,7 @@ namespace SharpSvn {
                 pin_ptr<System::Byte> pData = &data[offset];
 
                 apr_size_t len = length;
-                SVN_THROW(svn_stream_read(_stream, (char*)pData, &len));
+                SVN_THROW(svn_stream_read_full(_stream, (char*)pData, &len));
 
                 return (int)len;
             }
