@@ -13,15 +13,8 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.9.x" overwrite="false" />
-  <!-- r1575018                - Properly store author when retrieving directory entries -->
-  <!-- 1575319,1575322,1576313 - Resolve segfault on early close of first serf request -->
-  <!-- r1580816                - Allocate dirent properly (old ra_svn) -->
-  <!-- r1581401                - Cleanup after BDB create error -->
-  <!-- r1581605                - Improve error message on file install failure -->
-  <!-- r1582023,1582047,1582274- Serf correctness fix against <= 1.6 servers -->
-  <!-- 1582230,1582231         - Don't break on svn+ssh polling -->
-  <!-- r1654027                - Fix OpenSSL version probing -->
-  <property name="subversionMerges" value="1575018,1575319,1575322,1576313,1580816,1581401,1581605,1582023,1582047,1582274,1582230,1582231,1654027" overwrite="false" />
+  <!-- r1661451                - Expose metadata_only on svn_client_copy7() -->
+  <property name="subversionMerges" value="1661451" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
