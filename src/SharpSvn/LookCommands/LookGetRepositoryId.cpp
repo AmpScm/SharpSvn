@@ -41,7 +41,8 @@ bool SvnLookClient::TryGetRepositoryId(String^ repositoryPath, [Out] Guid% id)
 
     svn_error_t* r;
     svn_repos_t* repos;
-    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+    if (r = svn_repos_open3(&repos, pool.AllocDirent(repositoryPath), nullptr,
+                            pool.Handle, pool.Handle))
     {
         svn_error_clear(r);
         return false;

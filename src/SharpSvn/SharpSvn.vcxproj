@@ -276,6 +276,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemGroup>
     <ClInclude Include="Args\InheritedPropertyList.h" />
     <ClInclude Include="Args\SvnRepositoryOperationArgs.h" />
+    <ClInclude Include="Args\Vacuum.h" />
     <ClInclude Include="Args\Youngest.h" />
     <ClInclude Include="EventArgs\SvnInheritedPropertyListEventArgs.h" />
     <ClInclude Include="RemoteArgs\SvnRemoteWriteArgs.h" />
@@ -534,6 +535,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
   <ItemGroup>
     <ClCompile Include="AprArray.cpp" />
     <ClCompile Include="AprPool.cpp" />
+    <ClCompile Include="Commands\CleanUp.cpp" />
     <ClCompile Include="Commands\InheritedPropertyList.cpp" />
     <ClCompile Include="Commands\MultiOpen.cpp" />
     <ClCompile Include="Commands\RepositoryCopy.cpp" />
@@ -586,7 +588,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="Commands\AddToChangeList.cpp" />
     <ClCompile Include="Commands\Blame.cpp" />
     <ClCompile Include="Commands\CheckOut.cpp" />
-    <ClCompile Include="Commands\CleanUp.cpp" />
+    <ClCompile Include="Commands\Vacuum.cpp" />
     <ClCompile Include="Commands\Commit.cpp" />
     <ClCompile Include="Commands\Copy.cpp" />
     <ClCompile Include="Commands\CreateDirectory.cpp" />

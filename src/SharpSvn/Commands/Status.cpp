@@ -93,13 +93,14 @@ bool SvnClient::Status(String^ path, SvnStatusArgs^ args, EventHandler<SvnStatus
 
         svn_opt_revision_t pegRev = args->Revision->ToSvnRevision();
 
-        svn_error_t* r = svn_client_status5(&version,
+        svn_error_t* r = svn_client_status6(&version,
             CtxHandle,
             pool.AllocDirent(path),
             &pegRev,
             (svn_depth_t)args->Depth,
             args->RetrieveAllEntries,
-            args->ContactRepository,
+            args->RetrieveRemoteStatus,
+            !args->IgnoreWorkingCopyStatus,
             args->RetrieveIgnoredEntries,
             args->IgnoreExternals,
             args->KeepDepth,
@@ -176,10 +177,13 @@ void SvnWorkingCopyInfo::Ensure()
 
     _ensured = true;
 
+#pragma warning(push)
+#pragma warning(disable: 4996)
     svn_wc_status2_t *status2;
     SVN_THROW(svn_wc__status2_from_3(&status2, (const svn_wc_status3_t*)_status->backwards_compatibility_baton,
                                                                      _client->CtxHandle->wc_ctx,
                                                                      _status->local_abspath, _pool->Handle, _pool->Handle));
+#pragma warning(pop)
 
     const svn_wc_entry_t *entry = status2->entry;
     _entry = entry;

@@ -77,6 +77,7 @@ bool SvnClient::Revert(ICollection<String^>^ paths, SvnRevertArgs^ args)
         (svn_depth_t)args->Depth,
         CreateChangeListsList(args->ChangeLists, %pool), // Intersect ChangeLists
         args->ClearChangelists,
+        args->MetaDataOnly,
         CtxHandle,
         pool.Handle);
 

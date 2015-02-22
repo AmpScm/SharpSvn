@@ -47,7 +47,8 @@ bool SvnRepositoryClient::Pack(String^ repositoryPath, SvnPackRepositoryArgs^ ar
 
     svn_repos_t* repos = nullptr;
 
-    SVN_HANDLE(svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle));
+    SVN_HANDLE(svn_repos_open3(&repos, pool.AllocDirent(repositoryPath), 
+                               nullptr, pool.Handle, pool.Handle));
 
     svn_error_t* r = svn_repos_fs_pack2(
         repos,

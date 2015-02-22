@@ -41,7 +41,18 @@
 #include <svn_version.h>
 
 #if SVN_VER_MINOR >= 9
-#include <svn_client_mtcc.h>
+#include <private/svn_client_mtcc.h>
+#define svn_client_mtcc_t               svn_client__mtcc_t
+#define svn_client_mtcc_create          svn_client__mtcc_create
+#define svn_client_mtcc_add_add_file    svn_client__mtcc_add_add_file
+#define svn_client_mtcc_add_copy        svn_client__mtcc_add_copy
+#define svn_client_mtcc_add_delete      svn_client__mtcc_add_delete
+#define svn_client_mtcc_add_mkdir       svn_client__mtcc_add_mkdir
+#define svn_client_mtcc_add_move        svn_client__mtcc_add_move
+#define svn_client_mtcc_add_propset     svn_client__mtcc_add_propset
+#define svn_client_mtcc_add_update_file svn_client__mtcc_add_update_file
+#define svn_client_mtcc_check_path      svn_client__mtcc_check_path
+#define svn_client_mtcc_commit          svn_client__mtcc_commit
 #endif
 
 /* Avoid problems when first including libssh2. and then db.h */

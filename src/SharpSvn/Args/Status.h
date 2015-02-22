@@ -25,7 +25,8 @@ namespace SharpSvn {
         bool _update;
         bool _noIgnore;
         bool _ignoreExternals;
-    bool _sticky;
+        bool _noWc;
+        bool _sticky;
         SvnRevision^ _revision;
         SvnChangeListCollection^ _changelists;
 
@@ -116,6 +117,18 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _update = value;
+            }
+        }
+
+        property bool IgnoreWorkingCopyStatus
+        {
+            bool get()
+            {
+                return _noWc;
+            }
+            void set(bool value)
+            {
+                _noWc = value;
             }
         }
 

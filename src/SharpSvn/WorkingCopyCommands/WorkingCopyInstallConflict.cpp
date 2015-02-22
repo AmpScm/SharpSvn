@@ -75,7 +75,6 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
                                                     (svn_node_kind_t)rightSource->NodeKind,
                                                     pool.Handle);
 
-#if SVN_VER_MINOR < 9
     svn_wc_conflict_description2_t *conflict;
     conflict = svn_wc_conflict_description_create_tree2(path,
                                                         kind,
@@ -83,15 +82,6 @@ bool SvnWorkingCopyClient::InstallConflict(String^ targetPath, SvnUriOrigin^ lef
                                                         left_version,
                                                         right_version,
                                                         pool.Handle);
-#else
-    svn_wc_conflict_description3_t *conflict;
-    conflict = svn_wc_conflict_description_create_tree3(path,
-                                                        kind,
-                                                        (svn_wc_operation_t)args->Operation,
-                                                        left_version,
-                                                        right_version,
-                                                        pool.Handle);
-#endif
     conflict->reason = (svn_wc_conflict_reason_t)args->Reason;
     conflict->action = (svn_wc_conflict_action_t)args->Action;
 

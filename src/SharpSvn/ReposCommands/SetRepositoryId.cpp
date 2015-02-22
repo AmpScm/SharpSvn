@@ -40,7 +40,8 @@ bool SvnRepositoryClient::SetRepositoryId(String^ repositoryPath, Guid id, SvnSe
     svn_repos_t* repos = nullptr;
     svn_error_t* r;
 
-    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+    if (r = svn_repos_open3(&repos, pool.AllocDirent(repositoryPath), nullptr,
+                            pool.Handle, pool.Handle))
         return args->HandleResult(this, r);
 
     r = svn_fs_set_uuid(svn_repos_fs(repos), pool.AllocString(id.ToString()), pool.Handle);

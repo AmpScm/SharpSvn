@@ -171,7 +171,8 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
     svn_error_t *r;
     svn_repos_t *repos;
 
-    if (r = svn_repos_open2(&repos, subpool.AllocDirent(repositoryPath), nullptr, subpool.Handle))
+    if (r = svn_repos_open3(&repos, subpool.AllocDirent(repositoryPath), nullptr,
+                            subpool.Handle, subpool.Handle))
         return args->HandleResult(this, r);
 
     svn_revnum_t rev;
@@ -190,16 +191,16 @@ bool SvnRepositoryClient::InternalSetRevisionProperty(String^ repositoryPath, Sv
     }
 
     return args->HandleResult(this,
-                                                      svn_repos_fs_change_rev_prop4(
-                                                                            repos,
-                                                                            rev,
-                                                                            args->Author ? subpool.AllocString(args->Author) : nullptr,
-                                                                            subpool.AllocString(propertyName),
-                                                                            oldValue,
-                                                                            value,
-                                                                            args->CallPreRevPropChangeHook,
-                                                                            args->CallPostRevPropChangeHook,
-                                                                            nullptr,
-                                                                            nullptr,
-                                                                            subpool.Handle));
+                              svn_repos_fs_change_rev_prop4(
+                                                    repos,
+                                                    rev,
+                                                    args->Author ? subpool.AllocString(args->Author) : nullptr,
+                                                    subpool.AllocString(propertyName),
+                                                    oldValue,
+                                                    value,
+                                                    args->CallPreRevPropChangeHook,
+                                                    args->CallPostRevPropChangeHook,
+                                                    nullptr,
+                                                    nullptr,
+                                                    subpool.Handle));
 }

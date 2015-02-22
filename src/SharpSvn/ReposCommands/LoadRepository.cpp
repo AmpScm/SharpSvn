@@ -64,7 +64,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, Stream^ from, S
     svn_repos_t* repos = nullptr;
     svn_error_t* r;
 
-    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+    if (r = svn_repos_open3(&repos, pool.AllocDirent(repositoryPath), nullptr,
+                            pool.Handle, pool.Handle))
         return args->HandleResult(this, r);
 
     // Set a simple warning handler (see svnadmin/main.c), otherwise we might abort()
@@ -128,7 +129,8 @@ bool SvnRepositoryClient::LoadRepository(String^ repositoryPath, String^ from, S
     svn_repos_t* repos = nullptr;
     svn_error_t* r;
 
-    if (r = svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle))
+    if (r = svn_repos_open3(&repos, pool.AllocDirent(repositoryPath), nullptr,
+                            pool.Handle, pool.Handle))
         return args->HandleResult(this, r);
 
     // Set a simple warning handler (see svnadmin/main.c), otherwise we might abort()

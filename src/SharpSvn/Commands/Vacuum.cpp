@@ -14,23 +14,21 @@
 
 #include "stdafx.h"
 
-#include "Args/CleanUp.h"
+#include "Args/Vacuum.h"
 
 using namespace SharpSvn::Implementation;
 using namespace SharpSvn;
 using namespace System::Collections::Generic;
 
-[module: SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters", Scope="member", Target="SharpSvn.SvnClient.CleanUp(System.String,SharpSvn.SvnCleanUpArgs):System.Boolean")];
-
-bool SvnClient::CleanUp(String ^path)
+bool SvnClient::Vacuum(String ^path)
 {
     if (String::IsNullOrEmpty(path))
         throw gcnew ArgumentNullException("path");
 
-    return CleanUp(path, gcnew SvnCleanUpArgs());
+    return Vacuum(path, gcnew SvnVacuumArgs());
 }
 
-bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
+bool SvnClient::Vacuum(String ^path, SvnVacuumArgs^ args)
 {
     if (String::IsNullOrEmpty(path))
         throw gcnew ArgumentNullException("path");
@@ -41,12 +39,12 @@ bool SvnClient::CleanUp(String ^path, SvnCleanUpArgs^ args)
     AprPool pool(%_pool);
     ArgsStore store(this, args, %pool);
 
-    svn_error_t *r = svn_client_cleanup2(
+    svn_error_t *r = svn_client_vacuum(
                       pool.AllocAbsoluteDirent(path),
-                      args->BreakLocks,
-                      args->FixTimestamps,
-                      args->ClearDavCache,
-                      args->VacuumPristines,
+                      TRUE /* remove_unversioned_items */,
+                      TRUE /* remove_ignored_items */,
+                      TRUE /* fix_recorded_timestamps*/,
+                      FALSE /* vacuum_pristines */,
                       args->IncludeExternals,
                       CtxHandle,
                       pool.Handle);

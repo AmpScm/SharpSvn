@@ -98,7 +98,8 @@ svn_error_t* SvnLookClient::open_origin(SvnLookOrigin^ lookOrigin, svn_fs_root_t
     if (repos)
         *repos = nullptr;
 
-    SVN_ERR(svn_repos_open2(&pRepos, pool->AllocDirent(lookOrigin->RepositoryPath), nullptr, pool->Handle));
+    SVN_ERR(svn_repos_open3(&pRepos, pool->AllocDirent(lookOrigin->RepositoryPath), nullptr,
+                            pool->Handle, pool->Handle));
 
     pFs = svn_repos_fs(pRepos);
 
