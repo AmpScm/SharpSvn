@@ -359,7 +359,7 @@ bool SvnClient::FileVersions(SvnTarget^ target, SvnFileVersionsArgs^ args, Event
             CtxHandle->wc_ctx,
             pTarget,
             ra_session,
-            args->Start->AllocSvnRevision(%pool),
+            args->Start->Or(0)->AllocSvnRevision(%pool),
             pool.Handle);
 
         if (r)
