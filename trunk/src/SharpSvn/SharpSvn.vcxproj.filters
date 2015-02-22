@@ -653,6 +653,9 @@
     <ClInclude Include="Args\Youngest.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
+    <ClInclude Include="Args\Vacuum.h">
+      <Filter>SvnClient\Args</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -793,9 +796,6 @@
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\CheckOut.cpp">
-      <Filter>SvnClient\Sources</Filter>
-    </ClCompile>
-    <ClCompile Include="Commands\CleanUp.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\Commit.cpp">
@@ -1112,6 +1112,12 @@
       <Filter>Svn\Sources</Filter>
     </ClCompile>
     <ClCompile Include="Commands\Youngest.cpp">
+      <Filter>SvnClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\Vacuum.cpp">
+      <Filter>SvnClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Commands\CleanUp.cpp">
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>

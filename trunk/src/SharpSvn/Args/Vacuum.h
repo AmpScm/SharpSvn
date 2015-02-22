@@ -20,64 +20,12 @@ namespace SharpSvn {
 
     /// <summary>Extended parameter container for <see cref="SvnClient" />Cleanup</summary>
     /// <threadsafety static="true" instance="false"/>
-    public ref class SvnCleanUpArgs : public SvnClientArgs
+    public ref class SvnVacuumArgs : public SvnClientArgs
     {
         bool _includeExternals;
-        bool _noBreakLocks;
-        bool _noFixTimestamps;
-        bool _noClearDavCache;
-        bool _noVacuumPristines;
     public:
-        SvnCleanUpArgs()
+        SvnVacuumArgs()
         {
-        }
-
-        property bool BreakLocks
-        {
-            bool get()
-            {
-                return !_noBreakLocks;
-            }
-            void set(bool value)
-            {
-                _noBreakLocks = !value;
-            }
-        }
-
-        property bool FixTimestamps
-        {
-            bool get()
-            {
-                return !_noFixTimestamps;
-            }
-            void set(bool value)
-            {
-                _noFixTimestamps = !value;
-            }
-        }
-
-        property bool ClearDavCache
-        {
-            bool get()
-            {
-                return !_noClearDavCache;
-            }
-            void set(bool value)
-            {
-                _noClearDavCache = !value;
-            }
-        }
-
-        property bool VacuumPristines
-        {
-            bool get()
-            {
-                return !_noVacuumPristines;
-            }
-            void set(bool value)
-            {
-                _noVacuumPristines = !value;
-            }
         }
 
         property bool IncludeExternals
@@ -92,11 +40,12 @@ namespace SharpSvn {
             }
         }
 
+
         virtual property SvnCommandType CommandType
         {
             virtual SvnCommandType get() override sealed
             {
-                return SvnCommandType::CleanUp;
+                return SvnCommandType::Vacuum;
             }
         }
     };

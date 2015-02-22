@@ -24,6 +24,8 @@ namespace SharpSvn {
         bool _makeParents;
         bool _alwaysCopyBelow;
         bool _ignoreExternals;
+        bool _metadataOnly;
+        bool _pinExternals;
         SvnRevision^ _revision;
 
     public:
@@ -76,6 +78,30 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _alwaysCopyBelow = value;
+            }
+        }
+
+        property bool MetaDataOnly
+        {
+            bool get()
+            {
+                return _metadataOnly;
+            }
+            void set(bool value)
+            {
+                _metadataOnly = value;
+            }
+        }
+
+        property bool PinExternals
+        {
+            bool get()
+            {
+                return _pinExternals;
+            }
+            void set(bool value)
+            {
+                _pinExternals = value;
             }
         }
 

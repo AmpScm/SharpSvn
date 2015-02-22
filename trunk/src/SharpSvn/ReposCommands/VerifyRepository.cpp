@@ -47,7 +47,9 @@ bool SvnRepositoryClient::Verify(String^ repositoryPath, SvnVerifyRepositoryArgs
 
     svn_repos_t* repos = nullptr;
 
-    SVN_HANDLE(svn_repos_open2(&repos, pool.AllocDirent(repositoryPath), nullptr, pool.Handle));
+    SVN_HANDLE(svn_repos_open3(&repos, pool.AllocDirent(repositoryPath),
+                               nullptr,
+                               pool.Handle, pool.Handle));
 
     svn_error_t* r = svn_repos_verify_fs3(
         repos,
@@ -55,6 +57,7 @@ bool SvnRepositoryClient::Verify(String^ repositoryPath, SvnVerifyRepositoryArgs
         (svn_revnum_t)args->EndRevision,
         args->ContinueOnError,
         args->VerifyNormalization,
+        FALSE /* metadata_only */,
         repos_notify_func,
         _clientBaton->Handle,
         CtxHandle->cancel_func,

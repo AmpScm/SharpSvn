@@ -33,6 +33,7 @@ namespace SharpSvn {
     ref class SvnClientArgsWithCommit;
     ref class SvnClientArgsWithConflict;
     ref class SvnCleanUpArgs;
+    ref class SvnVacuumArgs;
     ref class SvnCheckOutArgs;
     ref class SvnUpdateArgs;
     ref class SvnExportArgs;
@@ -688,6 +689,22 @@ namespace SharpSvn {
         /// <exception type="ArgumentException">Parameters invalid</exception>
         bool CleanUp(String^ path, SvnCleanUpArgs^ args);
 #pragma endregion
+
+    public:
+        /////////////////////////////////////////
+#pragma region // Vacuum Client Command
+        /// <overloads> Vacuums the working copy (via <c>svn cleanup</c>)</overloads>
+        /// <summary>Vacuums the specified path</summary>
+        /// <exception type="SvnException">Operation failed</exception>
+        /// <exception type="ArgumentException">Parameters invalid</exception>
+        bool Vacuum(String^ path);
+        /// <summary>Vacuums the specified path</summary>
+        /// <returns>true if the operation succeeded; false if it did not</returns>
+        /// <exception type="SvnException">Operation failed and args.ThrowOnError = true</exception>
+        /// <exception type="ArgumentException">Parameters invalid</exception>
+        bool Vacuum(String^ path, SvnVacuumArgs^ args);
+#pragma endregion
+
 
     public:
         /////////////////////////////////////////

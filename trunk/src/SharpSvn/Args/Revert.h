@@ -23,6 +23,7 @@ namespace SharpSvn {
         SvnDepth _depth;
         SvnChangeListCollection^ _changelists;
         bool _clearChangelists;
+        bool _metadataOnly;
 
     public:
         SvnRevertArgs()
@@ -59,6 +60,18 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _clearChangelists = value;
+            }
+        }
+
+        property bool MetaDataOnly
+        {
+            bool get()
+            {
+                return _metadataOnly;
+            }
+            void set(bool value)
+            {
+                _metadataOnly = value;
             }
         }
 

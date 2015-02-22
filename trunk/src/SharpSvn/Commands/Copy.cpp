@@ -114,12 +114,15 @@ bool SvnClient::Copy(ICollection<TSvnTarget>^ sources, String^ toPath, SvnCopyAr
         }
     }
 
-    svn_error_t *r = svn_client_copy6(
+    svn_error_t *r = svn_client_copy7(
         copies,
         pool.AllocDirent(toPath),
         args->AlwaysCopyAsChild || (sources->Count > 1),
         args->CreateParents,
         args->IgnoreExternals,
+        args->MetaDataOnly,
+        args->PinExternals,
+        nullptr,
         nullptr,
         nullptr, nullptr,
         CtxHandle,
@@ -266,12 +269,15 @@ bool SvnClient::RemoteCopy(ICollection<TSvnTarget>^ sources, Uri^ toUri, SvnCopy
         }
     }
 
-    svn_error_t *r = svn_client_copy6(
+    svn_error_t *r = svn_client_copy7(
         copies,
         pool.AllocUri(toUri),
         args->AlwaysCopyAsChild || (sources->Count > 1),
         args->CreateParents,
         args->IgnoreExternals,
+        args->MetaDataOnly,
+        args->PinExternals,
+        nullptr /* */,
         CreateRevPropList(args->LogProperties, %pool),
     crr.CommitCallback, crr.CommitBaton,
         CtxHandle,
