@@ -202,6 +202,10 @@ namespace SharpSvn.Tests.Commands
 
             if (rslt.Count != 1)
                 return null;
+
+            if (rslt[0].LocalNodeStatus == SvnStatus.None)
+                return null;
+
             return rslt[0];
         }
 
