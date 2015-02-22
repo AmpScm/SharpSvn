@@ -203,10 +203,18 @@ namespace SharpSvn.Tests.Commands
             if (rslt.Count != 1)
                 return null;
 
-            if (rslt[0].LocalNodeStatus == SvnStatus.None)
-                return null;
+            SvnStatusEventArgs r = rslt[0];
 
-            return rslt[0];
+            if (!r.Versioned
+                && !r.Conflicted
+                && r.LocalNodeStatus == SvnStatus.None
+                && r.LocalTextStatus == SvnStatus.None
+                && r.LocalPropertyStatus == SvnStatus.None)
+            {
+                return null;
+            }
+
+            return r;
         }
 
         [TestMethod]
