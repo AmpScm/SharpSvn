@@ -246,6 +246,9 @@ namespace SharpSvn {
 
         literal String^     HttpBulkUpdates                     = SVN_CONFIG_OPTION_HTTP_BULK_UPDATES;
         literal String^     HttpMaxConnections                  = SVN_CONFIG_OPTION_HTTP_MAX_CONNECTIONS;
+        literal String^     HttpChunkedRequests                 = SVN_CONFIG_OPTION_HTTP_CHUNKED_REQUESTS;
+        /* SVN_CONFIG_OPTION_SERF_LOG_COMPONENTS */
+        /* SVN_CONFIG_OPTION_SERF_LOG_LEVEL */
 
         literal String^     SslAuthorityFiles                   = SVN_CONFIG_OPTION_SSL_AUTHORITY_FILES;
         literal String^     SslTrustDefaultCertificateAuthority = SVN_CONFIG_OPTION_SSL_TRUST_DEFAULT_CA;
@@ -277,6 +280,8 @@ namespace SharpSvn {
         literal String^         MimeTypesFile                   = SVN_CONFIG_OPTION_MIMETYPES_FILE;
         literal String^         PreservedConflictFileExtensions = SVN_CONFIG_OPTION_PRESERVED_CF_EXTS;
         literal String^         InteractiveConflicts            = SVN_CONFIG_OPTION_INTERACTIVE_CONFLICTS;
+        literal String^         MemoryCacheSize                 = SVN_CONFIG_OPTION_MEMORY_CACHE_SIZE;
+        literal String^         DiffIgnoreContentType           = SVN_CONFIG_OPTION_DIFF_IGNORE_CONTENT_TYPE;
                             
         literal String^     TunnelsSection                      = SVN_CONFIG_SECTION_TUNNELS;
                             
@@ -285,6 +290,7 @@ namespace SharpSvn {
         literal String^     WorkingCopySection                  = SVN_CONFIG_SECTION_WORKING_COPY;
         literal String^         SqliteExclusive                 = SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE;
         literal String^         SqliteExclusiveClients          = SVN_CONFIG_OPTION_SQLITE_EXCLUSIVE_CLIENTS;
+        literal String^         SqliteBusyTimeout               = SVN_CONFIG_OPTION_SQLITE_BUSY_TIMEOUT;
 
         static initonly System::Collections::ObjectModel::ReadOnlyCollection<String^>^ SvnDefaultGlobalIgnores
             = gcnew System::Collections::ObjectModel::ReadOnlyCollection<String^>(
