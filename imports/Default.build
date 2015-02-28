@@ -13,8 +13,7 @@
 
   <!-- -->
   <property name="subversionVersion" value="1.9.x" overwrite="false" />
-  <!-- r1661451,r1661511       - Expose metadata_only on svn_client_copy7() -->
-  <property name="subversionMerges" value="1661451,r1661511" overwrite="false" />
+  <property name="subversionMerges" value="" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
