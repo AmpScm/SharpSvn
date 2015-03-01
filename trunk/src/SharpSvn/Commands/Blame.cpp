@@ -33,17 +33,17 @@ bool SvnClient::Blame(SvnTarget^ target, EventHandler<SvnBlameEventArgs^>^ blame
 }
 
 static svn_error_t *svn_client_blame_receiver_handler3(void *baton,
-                                                                                                           svn_revnum_t start_revnum,
-                                                                                                           svn_revnum_t end_revnum,
-                                                                                                           apr_int64_t line_no,
-                                                                                                           svn_revnum_t revision,
-                                                                                                           apr_hash_t *rev_props,
-                                                                                                           svn_revnum_t merged_revision,
-                                                                                                           apr_hash_t *merged_rev_props,
-                                                                                                           const char *merged_path,
-                                                                                                           const char *line,
-                                                                                                           svn_boolean_t local_change,
-                                                                                                           apr_pool_t *pool)
+                                                       svn_revnum_t start_revnum,
+                                                       svn_revnum_t end_revnum,
+                                                       apr_int64_t line_no,
+                                                       svn_revnum_t revision,
+                                                       apr_hash_t *rev_props,
+                                                       svn_revnum_t merged_revision,
+                                                       apr_hash_t *merged_rev_props,
+                                                       const char *merged_path,
+                                                       const char *line,
+                                                       svn_boolean_t local_change,
+                                                       apr_pool_t *pool)
 {
     SvnClient^ client = AprBaton<SvnClient^>::Get((IntPtr)baton);
 

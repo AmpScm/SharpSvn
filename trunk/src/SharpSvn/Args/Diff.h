@@ -32,8 +32,8 @@ namespace SharpSvn {
         SvnCommandLineArgumentCollection^ _diffArguments;
         SvnChangeListCollection^ _changelists;
         Stream^ _errorStream;
-    bool _copiesAsAdds;
-    bool _gitFormat;
+        bool _copiesAsAdds;
+        bool _gitFormat;
 
     public:
         SvnDiffArgs()

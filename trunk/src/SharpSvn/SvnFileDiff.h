@@ -50,6 +50,13 @@ namespace SharpSvn {
             SvnIgnoreSpacing _ignoreSpacing;
             bool _ignoreLineEndings;
             bool _showCFunction;
+            int _contextSize;
+
+        public:
+            SvnFileDiffArgs()
+            {
+                _contextSize = 3;
+            }
 
         public:
             property SvnIgnoreSpacing IgnoreSpacing
@@ -85,6 +92,21 @@ namespace SharpSvn {
                 void set(bool value)
                 {
                     _showCFunction = value;
+                }
+            }
+
+            property int ContextSize
+            {
+                int get()
+                {
+                    return _contextSize;
+                }
+                void set(int value)
+                {
+                    if (value < 0)
+                        _contextSize = 3;
+                    else
+                        _contextSize = value;
                 }
             }
 
