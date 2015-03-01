@@ -38,7 +38,7 @@ namespace SharpSvn.Tests
             }
         }
 
-        [TestMethod]
+        [TestMethod, Ignore]
         public void ListSsh()
         {
             using (SvnClient client = new SvnClient())
