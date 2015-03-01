@@ -440,6 +440,10 @@
 					>
 				</File>
 				<File
+					RelativePath="PuttySrc\callback.c"
+					>
+				</File>
+				<File
 					RelativePath="PuttySrc\conf.c"
 					>
 				</File>
@@ -456,6 +460,10 @@
 					>
 				</File>
 				<File
+					RelativePath="PuttySrc\errsock.c"
+					>
+				</File>
+				<File
 					RelativePath="PuttySrc\ldisc.c"
 					>
 				</File>
@@ -465,6 +473,10 @@
 				</File>
 				<File
 					RelativePath="PuttySrc\misc.c"
+					>
+				</File>
+				<File
+					RelativePath="PuttySrc\noterm.c"
 					>
 				</File>
 				<File
@@ -497,6 +509,10 @@
 				</File>
 				<File
 					RelativePath="PuttySrc\ssh.c"
+					>
+				</File>
+				<File
+					RelativePath="PuttySrc\sshshare.c"
 					>
 				</File>
 				<File
@@ -624,6 +640,10 @@
 					>
 				</File>
 				<File
+					RelativePath="PuttySrc\windows\winhsock.c"
+					>
+				</File>
+				<File
 					RelativePath="PuttySrc\windows\winjump.c"
 					>
 				</File>
@@ -633,6 +653,14 @@
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winnet.c"
+					>
+				</File>
+				<File
+					RelativePath="PuttySrc\windows\winnpc.c"
+					>
+				</File>
+				<File
+					RelativePath="PuttySrc\windows\winnps.c"
 					>
 				</File>
 				<File
@@ -656,7 +684,15 @@
 					>
 				</File>
 				<File
+					RelativePath="PuttySrc\windows\winsecur.c"
+					>
+				</File>
+				<File
 					RelativePath="PuttySrc\windows\winser.c"
+					>
+				</File>
+				<File
+					RelativePath="PuttySrc\windows\winshare.c"
 					>
 				</File>
 				<File

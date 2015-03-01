@@ -219,6 +219,33 @@
     <ClCompile Include="PuttySrc\x11fwd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PuttySrc\sshshare.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winshare.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winsecur.c">
+      <Filter>Putty</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnpc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnps.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winhsock.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\errsock.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\noterm.c">
+      <Filter>Putty</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\callback.c">
+      <Filter>Putty</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h">
