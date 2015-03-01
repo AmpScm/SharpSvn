@@ -17,7 +17,7 @@
 namespace SharpSvn {
     using namespace System::Collections::ObjectModel;
 
-    public ref class SvnConflictSource sealed : ISvnOrigin
+    public ref class SvnConflictSource sealed : SvnBase, ISvnOrigin
     {
         const svn_wc_conflict_version_t *_version;
         AprPool^ _pool;
@@ -155,7 +155,7 @@ namespace SharpSvn {
         initonly SvnOperation _operation;
 
         String^ _propertyName;
-    String^ _fullPath;
+        String^ _fullPath;
         String^ _path;
         String^ _mimeType;
 
@@ -163,8 +163,7 @@ namespace SharpSvn {
         String^ _theirFile;
         String^ _myFile;
         String^ _mergedFile;
-
-        String^ _mergeResult;
+        String^ _prejFile;
 
         SvnConflictSource^ _leftOrigin;
         SvnConflictSource^ _rightOrigin;
@@ -270,20 +269,21 @@ namespace SharpSvn {
         {
             String^ get()
             {
-                if (_mergeResult)
-                    return _mergeResult;
+                if (!_mergedFile && _description && _description->merged_file && _pool)
+                    _mergedFile  = SvnBase::Utf8_PathPtrToString(_description->merged_file, _pool);
 
-        if (!_mergedFile && _description && _description->merged_file && _pool)
-                                _mergedFile  = SvnBase::Utf8_PathPtrToString(_description->merged_file, _pool);
-
-                        return _mergedFile;
+                return _mergedFile;
             }
-            void set(String^ value)
-            {
-                if (String::IsNullOrEmpty(value) && (value != MergedFile))
-                    throw gcnew InvalidOperationException("Only settable with valid filename");
+        }
 
-                _mergeResult = value;
+        property String^ PropertyRejectFile
+        {
+            String^ get()
+            {
+                if (!_prejFile && _description && _description->prop_reject_abspath && _pool)
+                    _prejFile = SvnBase::Utf8_PathPtrToString(_description->prop_reject_abspath, _pool);
+
+                return _prejFile;
             }
         }
 
@@ -336,6 +336,12 @@ namespace SharpSvn {
             }
         }
 
+        /* ### TODO:
+        const svn_string_t *prop_value_base;
+        const svn_string_t *prop_value_working;
+        const svn_string_t *prop_value_incoming_old;
+        const svn_string_t *prop_value_incoming_new;*/
+
         property SvnConflictSource^ LeftSource
         {
             SvnConflictSource^ get()
@@ -372,22 +378,23 @@ namespace SharpSvn {
                 if (keepProperties)
                 {
                     GC::KeepAlive(Name);
-            GC::KeepAlive(FullPath);
-                                GC::KeepAlive(PropertyName);
-                                GC::KeepAlive(MimeType);
-                                GC::KeepAlive(BaseFile);
-                                GC::KeepAlive(TheirFile);
-                                GC::KeepAlive(MyFile);
-                                GC::KeepAlive(MergedFile);
+                    GC::KeepAlive(FullPath);
+                    GC::KeepAlive(PropertyName);
+                    GC::KeepAlive(MimeType);
+                    GC::KeepAlive(BaseFile);
+                    GC::KeepAlive(TheirFile);
+                    GC::KeepAlive(MyFile);
+                    GC::KeepAlive(MergedFile);
+                    GC::KeepAlive(PropertyRejectFile);
 
-                                GC::KeepAlive(LeftSource);
-                                GC::KeepAlive(RightSource);
-                        }
+                    GC::KeepAlive(LeftSource);
+                    GC::KeepAlive(RightSource);
+                }
 
-                        if (_leftOrigin)
-                                _leftOrigin->Detach(keepProperties);
-                        if (_rightOrigin)
-                                _rightOrigin->Detach(keepProperties);
+                if (_leftOrigin)
+                        _leftOrigin->Detach(keepProperties);
+                if (_rightOrigin)
+                        _rightOrigin->Detach(keepProperties);
             }
             finally
             {

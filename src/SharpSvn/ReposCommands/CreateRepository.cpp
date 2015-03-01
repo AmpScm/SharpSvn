@@ -48,33 +48,29 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
 
     apr_hash_t *fs_config = apr_hash_make(pool.Handle);
 
-    apr_hash_set(
+    svn_hash_sets(
         fs_config,
         SVN_FS_CONFIG_BDB_TXN_NOSYNC,
-        APR_HASH_KEY_STRING,
         (args->BerkeleyDBNoFSyncAtCommit ? "1" : "0"));
 
-    apr_hash_set(
+    svn_hash_sets(
         fs_config,
         SVN_FS_CONFIG_BDB_LOG_AUTOREMOVE,
-        APR_HASH_KEY_STRING,
         (args->BerkeleyDBKeepTransactionLogs ? "0" : "1"));
 
 
     switch(args->RepositoryType)
     {
     case SvnRepositoryFileSystem::FsFs:
-        apr_hash_set(
+        svn_hash_sets(
             fs_config,
             SVN_FS_CONFIG_FS_TYPE,
-            APR_HASH_KEY_STRING,
             SVN_FS_TYPE_FSFS);
         break;
     case SvnRepositoryFileSystem::BerkeleyDB:
-        apr_hash_set(
+        svn_hash_sets(
             fs_config,
             SVN_FS_CONFIG_FS_TYPE,
-            APR_HASH_KEY_STRING,
             SVN_FS_TYPE_BDB);
         break;
     default:
@@ -85,41 +81,41 @@ bool SvnRepositoryClient::CreateRepository(String^ repositoryPath, SvnCreateRepo
     {
     case SvnRepositoryCompatibility::Subversion10:
         // Use 1.0-1.3 format
-        apr_hash_set(
+        svn_hash_sets(
             fs_config,
             SVN_FS_CONFIG_PRE_1_4_COMPATIBLE,
-            APR_HASH_KEY_STRING,
             "1");
         // fall through
     case SvnRepositoryCompatibility::Subversion14:
         // Use 1.4 format
-        apr_hash_set(
+        svn_hash_sets(
             fs_config,
             SVN_FS_CONFIG_PRE_1_5_COMPATIBLE,
-            APR_HASH_KEY_STRING,
             "1");
         // fall through
     case SvnRepositoryCompatibility::Subversion15:
         // Use 1.5 format
-        apr_hash_set(
+        svn_hash_sets(
             fs_config,
             SVN_FS_CONFIG_PRE_1_6_COMPATIBLE,
-            APR_HASH_KEY_STRING,
             "1");
         // fall through
     case SvnRepositoryCompatibility::Subversion16:
         // fall through
     case SvnRepositoryCompatibility::Subversion17:
         // .....
-        apr_hash_set(
+        svn_hash_sets(
             fs_config,
             SVN_FS_CONFIG_PRE_1_8_COMPATIBLE,
-            APR_HASH_KEY_STRING,
             "1");
         break;
-        // fall through
     case SvnRepositoryCompatibility::Subversion18:
+        svn_hash_sets(fs_config,
+                      SVN_FS_CONFIG_COMPATIBLE_VERSION,
+                      "1.8");
+        break;
         // fall through
+    case SvnRepositoryCompatibility::Subversion19:
     case SvnRepositoryCompatibility::Default:
     default:
         // Use default format
