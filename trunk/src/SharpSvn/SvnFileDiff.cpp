@@ -154,7 +154,7 @@ bool SvnFileDiff::WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs
         "UTF-8",
         args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
         args->ShowCFunction,
-        -1 /* context size */,
+        args->ContextSize,
         nullptr, nullptr,
         pool.Handle);
 

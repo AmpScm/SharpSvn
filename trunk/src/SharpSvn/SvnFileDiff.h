@@ -234,6 +234,13 @@ namespace SharpSvn {
             String^ _header;
             String^ _relativeFrom;
             bool _showCFunction;
+            int _contextSize;
+
+        public:
+            SvnDiffWriteDifferencesArgs()
+            {
+                _contextSize = 3;
+            }
 
         public:
             property String^ OriginalHeader
@@ -296,6 +303,21 @@ namespace SharpSvn {
                 void set(bool value)
                 {
                     _showCFunction = value;
+                }
+            }
+
+            property int ContextSize
+            {
+                int get()
+                {
+                    return _contextSize;
+                }
+                void set(int value)
+                {
+                    if (value < 0)
+                        _contextSize = 3;
+                    else
+                        _contextSize = value;
                 }
             }
 
