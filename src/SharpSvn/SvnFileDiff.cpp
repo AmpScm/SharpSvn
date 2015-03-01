@@ -81,6 +81,7 @@ bool SvnFileDiff::TryCreate(String^ originalPath, String^ modifiedPath, String^ 
         options->ignore_eol_style = args->IgnoreLineEndings;
         options->ignore_space = (svn_diff_file_ignore_space_t)args->IgnoreSpacing;
         options->show_c_function = args->ShowCFunction;
+        options->context_size = args->ContextSize;
 
         svn_diff_t* dp = nullptr;
         svn_error_t* err;
