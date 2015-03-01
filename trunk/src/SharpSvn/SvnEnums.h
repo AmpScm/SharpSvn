@@ -183,7 +183,22 @@ namespace SharpSvn {
         LoadSkippedRevision = svn_repos_notify_load_skipped_rev,
 
         /// <summary> The structure of a revision is being verified.  @since New in 1.8. </summary>
-        VerifyStructure = svn_repos_notify_verify_rev_structure
+        VerifyStructure = svn_repos_notify_verify_rev_structure,
+
+        /** A revision is found with corruption/errors. @since New in 1.9. */
+        Failure = svn_repos_notify_failure,
+
+        /** A revprop shard got packed. @since New in 1.9. */
+        PackRevisionProperties = svn_repos_notify_pack_revprops,
+
+        /** A non-packed revprop shard got removed. @since New in 1.9. */
+        CleanupRevisionProperties = svn_repos_notify_cleanup_revprops,
+
+        /** The repository format got bumped. @since New in 1.9. */
+        FormatBumped = svn_repos_notify_format_bumped,
+
+        /** A revision range was copied. @since New in 1.9. */
+        HotcopiedRevisionRange = svn_repos_notify_hotcopy_rev_range
     };
 
     public enum class SvnRevisionType
@@ -362,6 +377,19 @@ namespace SharpSvn {
         /// copy + delete. The notified path is the move source (the deleted path).
         /// </summary>
         MoveBroken                                              = svn_wc_notify_move_broken,
+
+        /// <summary>Running cleanup on an external module.</summary>
+        CleanupExternal             = svn_wc_notify_cleanup_external,
+
+        /// <summary>The operation failed because the operation (E.g. commit) is only valid
+        /// if the operation includes this path.</summary>
+        OperationRequiresTarget     = svn_wc_notify_failed_requires_target,
+
+        /// <summary>Running info on an external module.</summary>
+        InfoExternal                = svn_wc_notify_info_external,
+
+        /// <summary>Finalizing commit.</summary>
+        CommitFinalizing            = svn_wc_notify_commit_finalizing,
     };
 
     public enum class SvnNotifyState
@@ -510,6 +538,8 @@ namespace SharpSvn {
         Subversion17,
         /// <summary>Create a repository in Subversion 1.8 compatible format</summary>
         Subversion18,
+        /// <summary>Create a repository in Subversion 1.9 compatible format</summary>
+        Subversion19,
     };
 
     public enum class SvnDiffKind

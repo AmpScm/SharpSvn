@@ -117,7 +117,7 @@ bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
     AprPool pool(Pool);
     SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
-    svn_error_t * err = svn_diff_file_output_merge2(
+    svn_error_t * err = svn_diff_file_output_merge3(
         wrapper.Handle,
         DiffHandle,
         _originalPath,
@@ -127,7 +127,9 @@ bool SvnFileDiff::WriteMerged(Stream^ toStream, SvnDiffWriteMergedArgs^ args)
         args->ConflictModified ? pool.AllocString(args->ConflictModified) : nullptr,
         args->ConflictLatest ? pool.AllocString(args->ConflictLatest) : nullptr,
         args->ConflictSeparator ? pool.AllocString(args->ConflictSeparator) : nullptr,
-        (svn_diff_conflict_display_style_t)args->Display, pool.Handle);
+        (svn_diff_conflict_display_style_t)args->Display, 
+        nullptr, nullptr, /* cancel support */
+        pool.Handle);
 
     return args->HandleResult(nullptr, err);
 }
@@ -142,7 +144,7 @@ bool SvnFileDiff::WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs
     AprPool pool(Pool);
     SvnStreamWrapper wrapper(toStream, false, true, %pool);
 
-    svn_error_t * err = svn_diff_file_output_unified3(
+    svn_error_t * err = svn_diff_file_output_unified4(
         wrapper.Handle,
         DiffHandle,
         _originalPath,
@@ -152,6 +154,8 @@ bool SvnFileDiff::WriteDifferences(Stream^ toStream, SvnDiffWriteDifferencesArgs
         "UTF-8",
         args->RelativeToPath ? pool.AllocDirent(args->RelativeToPath) : nullptr,
         args->ShowCFunction,
+        -1 /* context size */,
+        nullptr, nullptr,
         pool.Handle);
 
     return args->HandleResult(nullptr, err);
