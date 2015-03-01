@@ -38,13 +38,13 @@ namespace SharpSvn.Tests
             }
         }
 
-        [TestMethod, Ignore]
+        [TestMethod]
         public void ListSsh()
         {
             using (SvnClient client = new SvnClient())
             {
                 bool foundOne = false;
-                client.List(new Uri("svn+ssh://vip.alh.net.qqn.nl/home/bert/repos/"), delegate(object sender, SvnListEventArgs e)
+                client.List(new Uri("svn+ssh://vip.vsoft.nl/home/bert/repos/"), delegate(object sender, SvnListEventArgs e)
                 {
                     foundOne = true;
                 });
