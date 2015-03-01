@@ -39,7 +39,7 @@
   <property name="saslVersion" value="2.1.26" overwrite="false" />
   <property name="swigVersion" value="3.0.2" overwrite="false" />
   <property name="nasmVersion" value="2.11.06" overwrite="false" />
-  <property name="pcreVersion" value="8.33" overwrite="false" />
+  <property name="pcreVersion" value="8.36" overwrite="false" />
   <property name="httpdVersion" value="2.4.12" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
   <property name="sqliteVersion" value="3.8.8.2" overwrite="false" />
