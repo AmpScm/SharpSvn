@@ -23,7 +23,8 @@
   <!-- r2254            - Possible bucket leak in cancel scenarios -->
   <!-- r2455,r2463-r2464- Properly validate status line -->
   <!-- r2456-r2457      - Correctness fixes to help debugging -->
-  <property name="serfMerges" value="2184-2186,2254,2455,2456-2457,2463-2464" overwrite="false" />
+  <!-- r2374            - Allow building with VS 2015 -->
+  <property name="serfMerges" value="2184-2186,2254,2455,2456-2457,2463-2464,2374" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.0.2" overwrite="false" />
