@@ -93,7 +93,9 @@ namespace SharpSvn {
         {
             String^ get()
             {
-                if (!_path && _notify && _pool && !_notify->url && _notify->path )
+                if (!_path && _notify && _notify->path && _pool && (!_notify->url
+                                                                    || (_notify->path[0] != '\0'
+                                                                        && !(_notify->path[0] == '.' && _notify->path[1] == '\0'))))
                 {
                     _path = SvnBase::Utf8_PathPtrToString(_notify->path, _pool);
 
@@ -123,14 +125,9 @@ namespace SharpSvn {
         {
             String^ get()
             {
-                if (!_fullPath && _notify && _pool && !_notify->url && _notify->path)
+                if (!_fullPath && Path)
                 {
-                    if (!_path)
-                        _path = SvnBase::Utf8_PathPtrToString(_notify->path, _pool);
-
-                    if (svn_dirent_is_absolute(_notify->path))
-                        _fullPath = _path;
-                    else
+                    if (!_fullPath) /* Might be set by .Path */
                         _fullPath = SvnTools::GetNormalizedFullPath(_path);
                 }
 
