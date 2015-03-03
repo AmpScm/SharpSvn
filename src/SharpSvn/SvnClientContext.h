@@ -46,7 +46,6 @@ namespace Security {
             Initial,
             ConfigPrepared,
             ConfigLoaded,
-            CustomRemoteConfigApplied,
             AuthorizationInitialized,
         };
 
@@ -312,7 +311,6 @@ namespace Security {
         SvnExtendedState _xState;
         initonly SvnAuthentication^ _authentication;
         SvnClientContext ^_parent;
-        bool _customSshApplied;
 
         static initonly Object^ _plinkLock = gcnew Object();
         static String^ _plinkPath;
@@ -345,6 +343,7 @@ namespace Security {
         SvnSshOverride _sshOverride;
         bool _useBuiltinSsh;
         bool _useUserDiff;
+        bool _customSshApplied;
         SvnOverride _keepAllExtensionsOnConflict;
 
     internal:
