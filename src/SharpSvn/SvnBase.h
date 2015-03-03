@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <svn_types.h>
+
 namespace SharpSvn {
     using namespace System;
     using System::Collections::Generic::IList;

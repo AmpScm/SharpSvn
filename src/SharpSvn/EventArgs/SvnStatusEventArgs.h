@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "SvnBase.h"
 #include "SvnLockInfo.h"
 #include "SvnConflictData.h"
 // Included from SvnClientArgs.h
@@ -242,8 +243,8 @@ namespace SharpSvn {
             String^ get()
             {
                 Ensure();
-                if (!_conflictOld && _entry && _entry->conflict_old)
-                    _conflictOld = SvnBase::Utf8_PtrToString(_entry->conflict_old)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                if (!_conflictOld && _entry && _entry->conflict_old && _pool)
+                    _conflictOld = SvnBase::Utf8_PathPtrToString(_entry->conflict_old, _pool);
 
                 return _conflictOld;
             }
@@ -254,8 +255,8 @@ namespace SharpSvn {
             String^ get()
             {
                 Ensure();
-                if (!_conflictNew && _entry && _entry->conflict_new)
-                    _conflictNew = SvnBase::Utf8_PtrToString(_entry->conflict_new)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                if (!_conflictNew && _entry && _entry->conflict_new && _pool)
+                    _conflictNew = SvnBase::Utf8_PathPtrToString(_entry->conflict_new, _pool);
 
                 return _conflictNew;
             }
@@ -266,8 +267,8 @@ namespace SharpSvn {
             String^ get()
             {
                 Ensure();
-                if (!_conflictWork && _entry && _entry->conflict_wrk)
-                    _conflictWork = SvnBase::Utf8_PtrToString(_entry->conflict_wrk)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                if (!_conflictWork && _entry && _entry->conflict_wrk && _pool)
+                    _conflictWork = SvnBase::Utf8_PathPtrToString(_entry->conflict_wrk, _pool);
 
                 return _conflictWork;
             }
@@ -278,8 +279,8 @@ namespace SharpSvn {
             String^ get()
             {
                 Ensure();
-                if (!_prejfile && _entry && _entry->prejfile)
-                    _prejfile = SvnBase::Utf8_PtrToString(_entry->prejfile)->Replace('/', System::IO::Path::DirectorySeparatorChar);
+                if (!_prejfile && _entry && _entry->prejfile && _pool)
+                    _prejfile = SvnBase::Utf8_PathPtrToString(_entry->prejfile, _pool);
 
                 return _prejfile;
             }
