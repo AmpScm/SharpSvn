@@ -248,9 +248,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="SharpPlink.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -317,14 +314,9 @@
     <ClInclude Include="PuttySrc\tree234.h">
       <Filter>Putty\Headers</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="SharpPlink.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
+    <ClInclude Include="SharpPlinkVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="SharpPlink.rc">
