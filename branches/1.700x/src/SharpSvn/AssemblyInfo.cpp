@@ -53,6 +53,9 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 #define BDB_VERSION APR_STRINGIFY(DB_VERSION_MAJOR) "." APR_STRINGIFY(DB_VERSION_MINOR) "." APR_STRINGIFY(DB_VERSION_PATCH)
 
 #define SASL_VERSION APR_STRINGIFY(SASL_VERSION_MAJOR) "." APR_STRINGIFY(SASL_VERSION_MINOR) "." APR_STRINGIFY(SASL_VERSION_STEP)
+
+#define EXPAT_VERSION APR_STRINGIFY(XML_MAJOR_VERSION) "." APR_STRINGIFY(XML_MINOR_VERSION) "." APR_STRINGIFY(XML_MICRO_VERSION)
+
 //
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
