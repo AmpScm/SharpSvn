@@ -241,6 +241,7 @@
         <!--arg value="/verbosity:quiet" /-->
         <target value="Programs\svn" />
         <target value="Programs\svnadmin" />
+        <target value="Programs\svnbench" />
         <target value="Programs\svnversion" />
         <target value="Programs\svnserve" />
         <target value="Programs\svnsync" />

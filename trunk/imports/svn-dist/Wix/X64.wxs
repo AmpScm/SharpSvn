@@ -73,6 +73,17 @@
       </Component>
       <Component Id="svnauthz.exe" Guid="E22C35B5-796C-4CF8-954B-EFB01A7D4621">
         <File Id="svnauthz.exe" Name="svnauthz.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnauthz.exe">
+          <RegistryValue Value="[#svnauthz.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnbench.exe" Guid="E5CE3B61-5B64-4FA1-8362-96E5430AA3E4">
+        <File Id="svnbench.exe" Name="svnbench.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnbench.exe">
+          <RegistryValue Value="[#svnbench.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
       </Component>
       <Component Id="svnauthz_validate.exe" Guid="E4D2B7B4-A54D-42A7-8FF5-9739C3ACC534" >
         <File Id="svnauthz_validate.exe" Name="svnauthz-validate.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
