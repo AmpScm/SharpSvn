@@ -218,13 +218,6 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
         _contextState = SvnContextState::ConfigLoaded;
     }
 
-    if (requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
-    {
-        ApplyCustomRemoteConfig();
-
-        System::Diagnostics::Debug::Assert(State == SvnContextState::CustomRemoteConfigApplied);
-    }
-
     if (requiredState >= SvnContextState::AuthorizationInitialized)
     {
         if (State < SvnContextState::AuthorizationInitialized)
@@ -636,16 +629,21 @@ void SvnClientContext::ApplyCustomRemoteConfig()
     _customSshApplied = true;
     _useBuiltinSsh = false;
 
-    if (_sshOverride == SvnSshOverride::Disabled)
-        return;
+    String^ plinkPath = PlinkPath;
 
     svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
 
     if (!cfg)
-    {
-        _useBuiltinSsh = true;
         return;
+
+    if (plinkPath)
+    {
+        // Allocate in Ctx pool
+        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "plink", _pool->AllocString('"' + plinkPath +'"'));
     }
+
+    if (_sshOverride == SvnSshOverride::Disabled)
+        return;
 
     if (_sshOverride == SvnSshOverride::Automatic
         || _sshOverride == SvnSshOverride::ForceSharpPlinkAfterConfig
@@ -719,15 +717,17 @@ void SvnClientContext::ApplyCustomRemoteConfig()
 
     /* Whether we use plink or not, always set it, to allow doing smart things in the
        tunnel callback */
-    String^ plinkPath = PlinkPath;
-
     if (plinkPath)
     {
         // Allocate in Ctx pool
-        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(plinkPath));
+        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString('"' + plinkPath + '"'));
     }
 
-    _contextState = SvnContextState::CustomRemoteConfigApplied;
+    if (_sshOverride != SvnSshOverride::ForceSharpPlink
+        && _sshOverride != SvnSshOverride::ForceSharpPlinkAfterConfig)
+    {
+        _useBuiltinSsh = true;
+    }
 }
 
 String^ SvnClientContext::PlinkPath::get()
@@ -1111,14 +1111,14 @@ sharpsvn_check_tunnel_func(void *baton, const char *name)
 {
     SvnClientContext^ client = AprBaton<SvnClientContext^>::Get((IntPtr)baton);
 
-    if (! strcmp(name, "ssh"))
-    {
-        client->ApplyCustomRemoteConfig();
+    client->ApplyCustomRemoteConfig();
 
+    if (! _stricmp(name, "ssh"))
+    {
         if (client->_useBuiltinSsh)
             return true;
     }
-    else if (! strcmp(name, "builtin-ssh") || ! strcmp(name, "libssh2"))
+    else if (! _stricmp(name, "builtin-ssh") || ! _stricmp(name, "libssh2"))
         return true;
 
     return false;

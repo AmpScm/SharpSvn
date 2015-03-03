@@ -43,7 +43,11 @@ SvnSshOverride SvnClientConfiguration::SshOverride::get()
 
 void SvnClientConfiguration::SshOverride::set(SvnSshOverride value)
 {
-    _client->_sshOverride = value;
+    if (_client->_sshOverride != value)
+    {
+        _client->_sshOverride = value;
+        _client->_customSshApplied = false;
+    }
 }
 
 bool SvnClientConfiguration::UseSubversionDiff::get()
@@ -89,7 +93,7 @@ System::Collections::Generic::IEnumerable<String^>^ SvnClientConfiguration::Glob
 void SvnClientConfiguration::SetOption(String^ file, String^ section, String^ option, String^ value)
 {
     if (!file)
-                throw gcnew ArgumentNullException("file");
+        throw gcnew ArgumentNullException("file");
     else if (!section)
         throw gcnew ArgumentNullException("section");
     else if (!option)
