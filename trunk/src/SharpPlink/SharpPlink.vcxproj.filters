@@ -326,4 +326,9 @@
   <ItemGroup>
     <None Include="SharpPlink.vcproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="SharpPlink.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

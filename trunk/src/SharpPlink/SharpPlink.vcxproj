@@ -371,6 +371,9 @@
   <ItemGroup>
     <None Include="SharpPlink.vcproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="SharpPlink.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
