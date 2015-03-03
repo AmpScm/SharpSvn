@@ -36,27 +36,14 @@ void SvnClientConfiguration::LoadSvnMimeTypes::set(bool value)
     _client->_dontLoadMimeFile = !value;
 }
 
-bool SvnClientConfiguration::DisableBuiltinSsh::get()
+SvnSshOverride SvnClientConfiguration::SshOverride::get()
 {
-    return _client->_disableBuiltinSsh;
+    return _client->_sshOverride;
 }
 
-void SvnClientConfiguration::DisableBuiltinSsh::set(bool value)
+void SvnClientConfiguration::SshOverride::set(SvnSshOverride value)
 {
-    _client->_disableBuiltinSsh = value;
-}
-
-String^ SvnClientConfiguration::FallbackSshClient::get()
-{
-    return _client->_fallbackSshClient;
-}
-
-void SvnClientConfiguration::FallbackSshClient::set(String ^value)
-{
-    if (!value)
-        _client->_fallbackSshClient = nullptr;
-    else
-        _client->_fallbackSshClient = SvnTools::GetNormalizedFullPath(value);
+    _client->_sshOverride = value;
 }
 
 bool SvnClientConfiguration::UseSubversionDiff::get()

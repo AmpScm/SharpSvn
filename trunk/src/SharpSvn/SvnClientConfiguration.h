@@ -16,13 +16,13 @@
 
 namespace SharpSvn {
 
-    ref class SvnClient;
+    ref class SvnClientContext;
 
     public ref class SvnClientConfiguration sealed : public SvnBase
     {
-        initonly SvnClient^ _client;
+        initonly SvnClientContext^ _client;
     internal:
-        SvnClientConfiguration(SvnClient^ client)
+        SvnClientConfiguration(SvnClientContext^ client)
         {
             if (!client)
                 throw gcnew ArgumentNullException("client");
@@ -53,24 +53,24 @@ namespace SharpSvn {
         /// <summary>This property used to get a boolean indicating whether to enable the SharpPlink handler when no
         /// other valid handler for svn+ssh:// was registered. It is now mapped to the inverse of <see cref="DisableBuiltinSsh" /></summary>
         [System::ComponentModel::DefaultValue((System::Boolean)true)]
-        [Obsolete("Use .DisableBuiltinSsh and/or .FallbackSshClient as the direct SharpPlink support in SharpSvn for Subversion <= 1.8.x has been replaced with LibSSH2")]
         property bool EnableSharpPlink
         {
-            bool get()  { return !DisableBuiltinSsh; }
-            void set(bool value) { DisableBuiltinSsh = !value; }
+            [Obsolete("Returns .SshOverride != SvnSshOverride.Disabled")]
+            bool get()  { return (SshOverride != SvnSshOverride::Disabled); }
+            [Obsolete("Only sets .SshOverride to Automatic or Off")]
+            void set(bool value)
+            {
+                if (!value)
+                    SshOverride = SvnSshOverride::Disabled;
+                else if (SshOverride == SvnSshOverride::Disabled)
+                    SshOverride = SvnSshOverride::Automatic;
+            }
         }
 
-        /// <summary></summary>
-        property bool DisableBuiltinSsh
+        property SvnSshOverride SshOverride
         {
-            bool get();
-            void set(bool value);
-        }
-
-        property String^ FallbackSshClient
-        {
-            String ^ get();
-            void set(String ^value);
+            SvnSshOverride get();
+            void set(SvnSshOverride value);
         }
 
         /// <summary>Gets or sets a boolean indicating whether to always use the subversion integrated diff library

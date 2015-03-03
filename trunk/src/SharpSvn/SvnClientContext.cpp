@@ -218,6 +218,13 @@ void SvnClientContext::EnsureState(SvnContextState requiredState)
         _contextState = SvnContextState::ConfigLoaded;
     }
 
+    if (requiredState >= SvnContextState::CustomRemoteConfigApplied && State < SvnContextState::CustomRemoteConfigApplied)
+    {
+        ApplyCustomRemoteConfig();
+
+        System::Diagnostics::Debug::Assert(State == SvnContextState::CustomRemoteConfigApplied);
+    }
+
     if (requiredState >= SvnContextState::AuthorizationInitialized)
     {
         if (State < SvnContextState::AuthorizationInitialized)
@@ -583,6 +590,40 @@ void SvnClientContext::ApplyOverrideFlags()
     }
 }
 
+
+static String^ ReadRegKey(RegistryKey^ key, String^ path, String^ name)
+{
+    if (!key)
+        throw gcnew ArgumentNullException("key");
+    else if(String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+
+    RegistryKey^ rk = nullptr;
+    try
+    {
+        rk = key->OpenSubKey(path, false);
+
+        if (!rk)
+            return nullptr;
+
+        String^ v = dynamic_cast<String^>(rk->GetValue(name, nullptr));
+
+        if (!String::IsNullOrEmpty(v) && !String::IsNullOrEmpty(v->Trim()))
+            return v;
+    }
+    catch (System::Security::SecurityException^)
+    {}
+    catch (UnauthorizedAccessException^)
+    {}
+    finally
+    {
+        if (rk)
+            delete rk;
+    }
+
+    return nullptr;
+}
+
 void SvnClientContext::ApplyCustomRemoteConfig()
 {
     // Look for a custom SSH client; Windows most common SVN client uses their own setting, so we should to :(
@@ -595,78 +636,131 @@ void SvnClientContext::ApplyCustomRemoteConfig()
     _customSshApplied = true;
     _useBuiltinSsh = false;
 
+    if (_sshOverride == SvnSshOverride::Disabled)
+        return;
+
     svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
 
-    if (!cfg || (_disableBuiltinSsh && !_fallbackSshClient))
-        return;
-
-    AprPool pool(_pool);
-
-    // Get the setting from the subversion config, to make sure it makes any sense (The default is "", which we must always replace)
-
-    const char* cmd = nullptr;
-    const char* val = nullptr;
-
     if (!cfg)
-        return;
-
-    svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh -q");
-
-    if (val && val[0] == '$')
-    {
-        // svn/client.c: If the scheme definition begins with "$varname", it means there is an
-        //                   environment variable which can override the command.
-
-        val++;
-        int len = (int)strcspn(val, " ");
-        char* var = apr_pstrmemdup(pool.Handle, val, len);
-        cmd = getenv(var);
-
-        if (!cmd)
-        {
-            val += len;
-
-            while (*val && isspace((int)*val))
-                val++;
-        }
-        else
-            val = apr_pstrdup(pool.Handle, cmd);
-    }
-
-    if (val && *val)
-    {
-        wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
-        LPWSTR pFile = nullptr;
-
-        if (strcmp(val, "ssh") && strncmp(val, "ssh ", 4))
-            return; // Something non-standard was configured, use it!
-
-        if (SearchPathW(nullptr, L"ssh", L".exe", 1000, buffer, &pFile) && pFile)
-        {
-            return; // ssh.exe exists. Use it!
-        }
-    }
-
-
-    // Ok: registry unset, setting invalid. Let's set our handler
-    if (!_disableBuiltinSsh)
     {
         _useBuiltinSsh = true;
         return;
     }
 
-    String^ app = _fallbackSshClient;
-
-    if (app && System::IO::File::Exists(app))
+    if (_sshOverride == SvnSshOverride::Automatic
+        || _sshOverride == SvnSshOverride::ForceSharpPlinkAfterConfig
+        || _sshOverride == SvnSshOverride::ForceInternalAfterConfig)
     {
-        String ^p = app;
+        svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
 
-        p = p->Replace('\\', '/');
+        String^ customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
-        if (p->Contains(" "))
-            p = "\"" + p + "\"";
+        if (!customSshConfig)
+            customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
-        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(p));
+        if (!customSshConfig)
+            customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\TortoiseSVN", "SSH");
+
+        if (!customSshConfig)
+            customSshConfig = ReadRegKey(Registry::LocalMachine, "Software\\TortoiseSVN", "SSH");
+
+        if (customSshConfig)
+        {
+            // allocate in Ctx pool!
+            svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(customSshConfig->Replace('\\', '/')));
+            _useBuiltinSsh = false;
+            return;
+        }
+
+        AprPool pool(_pool);
+
+        // Get the setting from the subversion config, to make sure it makes any sense (The default is "", which we must always replace)
+
+        const char* cmd = nullptr;
+        const char* val = nullptr;
+
+        svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh -q");
+
+        if (val && val[0] == '$')
+        {
+            // svn/client.c: If the scheme definition begins with "$varname", it means there is an
+            //                   environment variable which can override the command.
+
+            val++;
+            int len = (int)strcspn(val, " ");
+            char* var = apr_pstrmemdup(pool.Handle, val, len);
+            cmd = getenv(var);
+
+            if (!cmd)
+            {
+                val += len;
+
+                while (*val && isspace((int)*val))
+                    val++;
+            }
+            else
+                val = apr_pstrdup(pool.Handle, cmd);
+        }
+
+        if (val && *val)
+        {
+            wchar_t* buffer = (wchar_t*)apr_pcalloc(pool.Handle, 1024 * sizeof(wchar_t));
+            LPWSTR pFile = nullptr;
+
+            if (strcmp(val, "ssh") && strncmp(val, "ssh ", 4))
+                return; // Something non-standard was configured, use it!
+
+            if (SearchPathW(nullptr, L"ssh", L".exe", 1000, buffer, &pFile) && pFile)
+            {
+                return; // ssh.exe exists. Use it!
+            }
+        }
+    }
+
+    /* Whether we use plink or not, always set it, to allow doing smart things in the
+       tunnel callback */
+    String^ plinkPath = PlinkPath;
+
+    if (plinkPath)
+    {
+        // Allocate in Ctx pool
+        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(plinkPath));
+    }
+
+    _contextState = SvnContextState::CustomRemoteConfigApplied;
+}
+
+String^ SvnClientContext::PlinkPath::get()
+{
+    Monitor::Enter(_plinkLock);
+    try
+    {
+        if (!_plinkPath)
+        {
+            _plinkPath = "";
+            Uri^ codeBase;
+
+            if (Uri::TryCreate(SvnClientContext::typeid->Assembly->CodeBase, UriKind::Absolute, codeBase) && (codeBase->IsUnc || codeBase->IsFile))
+            {
+                String^ path = SvnTools::GetNormalizedFullPath(codeBase->LocalPath);
+
+                path = SvnTools::PathCombine(Path::GetDirectoryName(path), "SharpPlink-" APR_STRINGIFY(SHARPSVN_PLATFORM_SUFFIX) ".svnExe");
+
+                if (System::IO::File::Exists(path))
+                {
+                    _plinkPath = path->Replace(System::IO::Path::DirectorySeparatorChar, '/');
+
+                    if (_plinkPath->Contains(" "))
+                        _plinkPath = "\"" + _plinkPath + "\"";
+                }
+            }
+        }
+
+        return String::IsNullOrEmpty(_plinkPath) ? nullptr : _plinkPath;
+    }
+    finally
+    {
+        Monitor::Exit(_plinkLock);
     }
 }
 

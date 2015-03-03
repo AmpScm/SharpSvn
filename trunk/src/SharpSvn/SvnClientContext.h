@@ -46,6 +46,7 @@ namespace Security {
             Initial,
             ConfigPrepared,
             ConfigLoaded,
+            CustomRemoteConfigApplied,
             AuthorizationInitialized,
         };
 
@@ -55,6 +56,22 @@ namespace Security {
             None = 0,
             MimeTypesLoaded = 0x01,
             TortoiseSvnHooksLoaded = 0x02,
+        };
+
+        public enum class SvnSshOverride
+        {
+            /// <summary>Automatic handling: Similar to ForceInternalAfterConfig</summary>
+            Automatic,
+            /// <summary>Disable all SSH support. Fall back to Subversion conflict</summary>
+            Disabled,
+            /// <summary>Use internal SSH client (currently based on LibSSH2)</summary>
+            ForceInternal,
+            /// <summary>Use SharpPlink</summary>
+            ForceSharpPlink,
+            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
+            ForceSharpPlinkAfterConfig,
+            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
+            ForceInternalAfterConfig,
         };
 
         ref class SvnLibrary;
@@ -297,6 +314,9 @@ namespace Security {
         SvnClientContext ^_parent;
         bool _customSshApplied;
 
+        static initonly Object^ _plinkLock = gcnew Object();
+        static String^ _plinkPath;
+
     internal:
         bool _noLogMessageRequired;
         SvnSshContext ^_sshContext;
@@ -322,13 +342,10 @@ namespace Security {
 
     internal:
         bool _dontLoadMimeFile;
-        bool _disableBuiltinSsh;
-        String^ _fallbackSshClient;
+        SvnSshOverride _sshOverride;
+        bool _useBuiltinSsh;
         bool _useUserDiff;
         SvnOverride _keepAllExtensionsOnConflict;
-
-    internal:
-        bool _useBuiltinSsh;
 
     internal:
         SvnClientContext(AprPool^ pool);
@@ -450,6 +467,12 @@ namespace Security {
             {
                 return _contextState;
             }
+        }
+
+        /// <summary>Gets the path to SharpSvn's plink. The path is encoded to be safe for subversion configuration settings</summary>
+        static property String^ PlinkPath
+        {
+            String^ get();
         }
 
     public:
