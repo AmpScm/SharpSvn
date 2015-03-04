@@ -94,7 +94,7 @@
       <ComponentGroupRef Id="libintl.dll" />
     </ComponentGroup>
     <ComponentGroup Id="svnbench.exe">
-      <ComponentRef Id="svnbench.exe">
+      <ComponentRef Id="svnbench.exe"/>
       <ComponentGroupRef Id="libapr_1.dll"/>
       <ComponentGroupRef Id="libsvn_client_1.dll"/>
       <ComponentGroupRef Id="libsvn_delta_1.dll"/>
