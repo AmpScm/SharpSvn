@@ -340,6 +340,7 @@ public class NMake : ExternalAppTask
 public class OnceBlock : NAnt.Core.TaskContainer
 {
     FileInfo _touchFile;
+    FileSet _fileset;
 
     [TaskAttribute("file", Required = true)]
     public FileInfo TouchFile
@@ -348,16 +349,48 @@ public class OnceBlock : NAnt.Core.TaskContainer
         set { _touchFile = value; }
     }
 
+    [BuildElement("fileset")]
+    public virtual FileSet CopyFileSet
+    {
+        get
+        {
+            return this._fileset;
+        }
+        set
+        {
+            this._fileset = value;
+        }
+    }
+
     protected override void ExecuteTask()
     {
-        if (!_touchFile.Exists)
+        if (_touchFile.Exists)
         {
-            base.ExecuteTask();
+            if (_fileset == null)
+                return;
 
-            using (_touchFile.Create())
+            DateTime stamp = File.GetLastWriteTimeUtc(_touchFile.FullName);
+            bool skip = true;
+
+            foreach(string f in _fileset.FileNames)
             {
-                // Create NOP file if execute succeeded
+               if (File.Exists(f)
+                   && File.GetLastWriteTimeUtc(f) > stamp)
+               {
+                  skip = false;
+                  break;
+               }
             }
+
+            if (skip)
+                return;
+        }
+
+        base.ExecuteTask();
+
+        using (_touchFile.Create())
+        {
+            // Create NOP file if execute succeeded
         }
     }
 }

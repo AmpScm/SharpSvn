@@ -3,15 +3,18 @@
   <property name="pcreDir" value="${platformRoot}/pcre" />
 
   <target name="pcre-build" depends="zlib-build,cmake-prepare" if="${buildHttpd}">
-    <CMake workingdir="${pcreDir}">
-      <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+    <OnceBlock file="build/pcre-${pcreVersion}.${platform}.build">
 
-      <prop name="BUILD_SHARED_LIBS" value="ON" />
-    </CMake>
+      <CMake workingdir="${pcreDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
 
-    <MSBuild src="${pcreDir}/PCRE.sln">
-      <target value="pcre" />
-    </MSBuild>
+        <prop name="BUILD_SHARED_LIBS" value="ON" />
+      </CMake>
+
+      <MSBuild src="${pcreDir}/PCRE.sln">
+        <target value="pcre" />
+      </MSBuild>
+    </OnceBlock>
 
     <copy todir="${intDir}/lib">
       <fileset basedir="${pcreDir}/Release">
