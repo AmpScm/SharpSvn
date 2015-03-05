@@ -239,6 +239,7 @@
       <fileset basedir="${svnBase}">
         <include name="subversion/**/*.c" />
         <include name="subversion/**/*.h" />
+        <include name="${intDir}/**" />
       </fileset>
 
       <!-- Now build subversion -->
