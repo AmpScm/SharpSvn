@@ -31,6 +31,11 @@
   </target>
   <target name="serf-build" depends="serf-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
     <OnceBlock file="build/serf-${serfVersion}_${platform}.build">
+      <fileset basedir="${serfDir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+
       <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
           if="${file::exists(serfDir + '/SConstruct')}">
         <environment>

@@ -40,6 +40,11 @@
   </target>
   <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build,cmake-prepare">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.build">
+      <fileset basedir="${aprUtilDir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+
       <CMake workingdir="${aprUtilDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />

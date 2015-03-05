@@ -57,6 +57,11 @@
   </target>
   <target name="apr-build" depends="checkout, apr-merge, cmake-prepare">
     <OnceBlock file="build/apr-${aprVersion}-${platform}.build">
+      <fileset basedir="${aprDir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+
       <CMake workingdir="${aprDir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
         <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />

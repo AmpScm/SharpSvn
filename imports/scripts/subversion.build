@@ -236,6 +236,11 @@
 
   <target name="svn-build" depends="bdb-build, zlib-build, apr-build, serf-build, swig-build, httpd-build, svn-generate" if="${buildSubversion}">
     <OnceBlock file="build/subversion-${subversionVersion}_${platform}.build">
+      <fileset basedir="${svnBase}">
+        <include name="subversion/**/*.c" />
+        <include name="subversion/**/*.h" />
+      </fileset>
+
       <!-- Now build subversion -->
       <MSBuild src="${svnBase}/subversion_vcnet.sln">
         <!--arg value="/verbosity:quiet" /-->
