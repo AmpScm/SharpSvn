@@ -20,6 +20,7 @@
 #include "SvnSshContext.h"
 #endif
 #include <svn_config.h>
+#include <svn-internal/libsvn_client/client.h>
 
 using namespace SharpSvn;
 using namespace System::Threading;
@@ -866,6 +867,11 @@ SvnClientContext::ArgsStore::ArgsStore(SvnClientContext^ client, SvnClientArgs^ 
     svn_client_ctx_t *ctx = _client->CtxHandle;
     svn_wc_context_t **p_wc_ctx = &ctx->wc_ctx;
     _wc_ctx = *p_wc_ctx;
+
+    {
+        svn_client__private_ctx_t *pctx = svn_client__get_private_ctx(ctx);
+        pctx->total_progress = 0;
+    }
 
     _lastContext = SvnClientContext::_activeContext;
     SvnClientContext::_activeContext = _client;
