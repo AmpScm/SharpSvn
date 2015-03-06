@@ -79,6 +79,7 @@
           <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
           <replacestring from=" /MT " to=" /MD " />
           <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
+          <LineRegexReplace re='^(MLFLAGS=.*)/subsystem:console' to='$1 /subsystem:windows /nxcompat /largeadressaware /release' />
         </filterchain>
       </FilterFile>
       <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
