@@ -35,7 +35,18 @@
         <include name="**/*.c" />
         <include name="**/*.h" />
       </fileset>
-
+      <delete>
+        <fileset basedir="${serfDir}">
+          <include name="serf-?.lib" />
+          <include name="libserf-?.lib" />
+          <include name="serf-?.dll" />
+          <include name="libserf-?.dll" />
+          <include name="serf-?.exp" />
+          <include name="libserf-?.exp" />
+          <include name="serf-?.pdb" />
+          <include name="libserf-?.pdb" />
+        </fileset>
+      </delete>
       <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
           if="${file::exists(serfDir + '/SConstruct')}">
         <environment>
@@ -57,6 +68,14 @@
         <arg value="install" />
       </exec>
     </OnceBlock>
+    <property name="bad-name" value="serf-1" if="${file::exists(serfDir+'/serf-2.lib')}" />
+    <property name="bad-name" value="serf-2" if="${file::exists(serfDir+'/serf-1.lib')}" />
+    <delete dir="${intDir}/include/${bad-name}" />
+    <delete>
+      <fileset basedir="${intDir}/lib">
+        <include name="${bad-name}.*" />
+      </fileset>
+    </delete>
   </target>
   <target name="serf-clean">
     <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
