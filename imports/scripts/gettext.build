@@ -129,12 +129,17 @@ ${intlh}
       </cl>
       <property name="libintlDllName" value="intl.dll" />
       <property name="libintlDllName" value="${dllPrefix}libintl.dll" if="${dllPrefix != ''}" />
+      <regex pattern="^(?'GETTEXT_MAJOR'\d+)\.(?'GETTEXT_MINOR'\d+)\.(?'GETTEXT_MICRO'\d+)" input="${gettextVersion}" />
+      <rc rcfile="${gettextDir}/gettext-runtime/intl/libintl.rc" output="${gettextDir}/obj/${platform}/release/libintl.res" verbose="true"
+        options="/n /dPACKAGE_VERSION_MAJOR=${GETTEXT_MAJOR} /dPACKAGE_VERSION_MINOR=${GETTEXT_MINOR} /dPACKAGE_VERSION_SUBMINOR=${GETTEXT_MICRO} /dPACKAGE_VERSION_STRING=${gettextVersion}">
+      </rc>
       <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
         options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
         /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
         /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
         <sources basedir="${gettextDir}/obj/${platform}/release">
           <include name="**/*.obj" />
+          <include name="libintl.res" />
           <include name="${gettextDir}/gettext-runtime/intl/gettext.def" />
         </sources>
       </link>
