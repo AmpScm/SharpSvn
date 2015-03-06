@@ -10,10 +10,11 @@
   </if>
 
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
-
-  <!-- -->
+  <!--
+     1664593,1664594                - Improve error on failing to open registry
+  // -->
   <property name="subversionVersion" value="1.9.0-beta1" overwrite="false" />
-  <property name="subversionMerges" value="" overwrite="false" />
+  <property name="subversionMerges" value="1664593,1664594" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
