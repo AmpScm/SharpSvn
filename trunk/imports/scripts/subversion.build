@@ -223,13 +223,17 @@
       <property name="vDesc" value=":${svnBuildType}/${subversionVersion}@${svnWcVersion}" if="${svnBuildType!='tag'}" />
       <property name="vDesc" value="/${subversionVersion}" if="${svnBuildType=='tag'}" />
       <property name="buildType" value="" />
-      <property name="buildType" value="-${svnBuildType}" if="${svnBuildType!='tag'}" />
+      <property name="buildType" value="${svnBuildType}-" if="${svnBuildType!='tag'}" />
+      <property name="buildType" value="${string::substring(subversionVersion,
+                                                            string::index-of(subversionVersion,'-')+1,
+                                                            string::get-length(subversionVersion)-string::index-of(subversionVersion,'-')-1)}-" 
+                                 if="${string::contains(subversionVersion, '-')}" />
       <echo append="true" file="${svnBase}/subversion/include/svn_version.h">
         #pragma once
         #undef SVN_VER_TAG
         #undef SVN_VER_NUMTAG
         #define SVN_VER_TAG  " (${svnBuildName}${vDesc})"
-        #define SVN_VER_NUMTAG "-${svnBuildName + buildType}"
+        #define SVN_VER_NUMTAG "-${buildType + svnBuildName}"
       </echo>
     </OnceBlock>
   </target>
