@@ -140,6 +140,11 @@ namespace SharpSvn {
             System::Version^ get();
         }
 
+        property static String^ VersionString
+        {
+            String^ get();
+        }
+
         /// <summary>Gets the version of the SharpSvn library</summary>
         property static System::Version^ SharpSvnVersion
         {
