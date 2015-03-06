@@ -136,7 +136,7 @@ ${intlh}
       <link output="${gettextDir}/bin/${platform}/release/${libintlDllName}"
         options='/MANIFEST /MANIFESTFILE:"${gettextDir}/bin/${platform}/release/${dllPrefix}libintl.dll.intermediate.manifest" /DLL /SUBSYSTEM:WINDOWS /OPT:REF /BASE:"0x6EEC0000" 
         /IMPLIB:"${gettextDir}/bin/${platform}/release/intl.lib" ws2_32.lib mswsock.lib rpcrt4.lib kernel32.lib advapi32.lib
-        /DEF:${gettextDir}/gettext-runtime/intl/gettext.def '>
+        /DEF:${gettextDir}/gettext-runtime/intl/gettext.def /NXCOMPAT /LARGEADDRESSAWARE'>
         <sources basedir="${gettextDir}/obj/${platform}/release">
           <include name="**/*.obj" />
           <include name="libintl.res" />
