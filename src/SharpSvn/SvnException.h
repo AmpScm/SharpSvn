@@ -32,7 +32,7 @@ namespace SharpSvn {
 
         static String^ GetErrorText(svn_error_t *error);
 
-        static Exception^ GetInnerException(svn_error_t *error)
+        static Exception^ GetInnerException(const svn_error_t *error)
         {
             if (error && error->child)
                 return Create(error->child, false);
@@ -347,6 +347,12 @@ namespace SharpSvn {
         {
         }
 
+    internal:
+        SvnMalfunctionException(svn_error_t *err)
+          : SvnException(err)
+        {
+        }
+
     protected:
         SvnMalfunctionException(System::Runtime::Serialization::SerializationInfo^ info, System::Runtime::Serialization::StreamingContext context)
             : SvnException(info, context)
@@ -457,6 +463,7 @@ namespace SharpSvn {
     DECLARE_SVN_EXCEPTION_TYPE(SvnObstructedUpdateException, SvnWorkingCopyException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnInvalidNodeKindException, SvnWorkingCopyException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnSerfException, SvnException);
+    DECLARE_SVN_EXCEPTION_TYPE(SvnX509Exception, SvnRepositoryIOException);
 
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnsupportedFeatureException, SvnException);
     DECLARE_SVN_EXCEPTION_TYPE(SvnUnknownCapabilityException, SvnException);

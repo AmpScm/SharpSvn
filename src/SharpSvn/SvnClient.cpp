@@ -83,6 +83,11 @@ System::Version^ SvnClient::SharpSvnVersion::get()
     return (gcnew System::Reflection::AssemblyName(SvnClient::typeid->Assembly->FullName))->Version;
 }
 
+String^ SvnClient::VersionString::get()
+{
+    return SVN_VER_NUM SVN_VER_NUMTAG;
+}
+
 void SvnClient::HandleClientCancel(SvnCancelEventArgs^ e)
 {
     __super::HandleClientCancel(e);
