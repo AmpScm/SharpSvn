@@ -88,7 +88,7 @@ using System::Diagnostics::DebuggerDisplayAttribute;
   do {                                          \
     svn_error_t *svn_err__temp = (expr);        \
     if (svn_err__temp)                          \
-      throw SvnException::Create(expr);         \
+      throw SvnException::Create(svn_err__temp);\
   } while (0)
 
 #define SVN_HANDLE(expr)                                                  \
