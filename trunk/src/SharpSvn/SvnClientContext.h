@@ -57,22 +57,6 @@ namespace Security {
             TortoiseSvnHooksLoaded = 0x02,
         };
 
-        public enum class SvnSshOverride
-        {
-            /// <summary>Automatic handling: Similar to ForceInternalAfterConfig</summary>
-            Automatic,
-            /// <summary>Disable all SSH support. Fall back to Subversion conflict</summary>
-            Disabled,
-            /// <summary>Use internal SSH client (currently based on LibSSH2)</summary>
-            ForceInternal,
-            /// <summary>Use SharpPlink</summary>
-            ForceSharpPlink,
-            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
-            ForceSharpPlinkAfterConfig,
-            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
-            ForceInternalAfterConfig,
-        };
-
         ref class SvnLibrary;
 
         ref class SvnConfigItem sealed
@@ -132,6 +116,23 @@ namespace Security {
                 }
             }
         };
+
+        public enum class SvnSshOverride
+        {
+            /// <summary>Automatic handling: Similar to ForceInternalAfterConfig</summary>
+            Automatic,
+            /// <summary>Disable all SSH support. Fall back to Subversion conflict</summary>
+            Disabled,
+            /// <summary>Use internal SSH client (currently based on LibSSH2)</summary>
+            ForceInternal,
+            /// <summary>Use SharpPlink</summary>
+            ForceSharpPlink,
+            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
+            ForceSharpPlinkAfterConfig,
+            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
+            ForceInternalAfterConfig,
+        };
+
 
         /* This order matches the ordering of SvnClientHook::_hookTypes */
         private enum class SvnClientHookType
