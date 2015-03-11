@@ -93,9 +93,6 @@ void SvnBase::EnsureLoaded()
 				InstallAbortHandler();
 				InstallSslDialogHandler();
 
-				// There seems to be a race condition in loading and unloading this DLL
-				LoadLibraryA("Crypt32.dll"); // Never unload this dll
-
 				LONG v = ::InterlockedExchange(&ensurer, 2);
 
 				System::Diagnostics::Debug::Assert(v == 1);
