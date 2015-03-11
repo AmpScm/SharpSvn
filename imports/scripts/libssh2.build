@@ -49,6 +49,7 @@
         <filterchain>
           <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' if="${libssh2BuildType != 'tag'}"/>
           <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "${libssh2Version}"' if="${libssh2BuildType == 'tag'}"/>
+          <LineRegexReplace re='(#define LIBSSH2_SSH_BANNER.*)' to='$1 "_sharpsvn"' />
           <replacestring from="__declspec(dllexport)" to="/* __declspec( dllexport ) */" />
           <replacestring from="__declspec(dllimport)" to="/* __declspec( dllimport ) */" />
         </filterchain>
