@@ -2,6 +2,7 @@
 <project basedir=".." default="build">
   <property name="libssh2Dir" value="build/${platform}/libssh2" />
   <property name="buildLibssh2" value="true" overwrite="false" />
+  <property name="libssh2BuildType" value="tag" overwrite="false" />
 
   <target name="libssh2-prepare" depends="checkout" if="${buildLibssh2}">
     <OnceBlock file="build/libssh2_${platform}.patched">
@@ -46,7 +47,8 @@
       </FilterFile>
       <FilterFile file="${libssh2Dir}\include\libssh2.h">
         <filterchain>
-          <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' />
+          <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' if="${libssh2BuildType != 'tag'"/>
+          <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "${libssh2Version}"' if="${libssh2BuildType == 'tag'"/>
           <replacestring from="__declspec(dllexport)" to="/* __declspec( dllexport ) */" />
         </filterchain>
       </FilterFile>
