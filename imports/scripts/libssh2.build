@@ -21,8 +21,7 @@
       </foreach>
     </OnceBlock>
   </target>
-
-  <target name="libssh2-build" depends="libssh2-prepare" if="${buildLibssh2}">
+  <target name="libssh2-build" depends="libssh2-prepare, openssl-build" if="${buildLibssh2}">
     <OnceBlock file="build/libssh2-${libssh2Version}_${platform}.build">
       <FilterFile file="${libssh2Dir}\win32\config.mk">
         <filterchain>
@@ -48,10 +47,11 @@
       <FilterFile file="${libssh2Dir}\include\libssh2.h">
         <filterchain>
           <LineRegexReplace re='(#define LIBSSH2_VERSION)\s+"(.*)_DEV"' to='$1 "$2"' />
+          <replacestring from="__declspec(dllexport)" to="/* __declspec( dllexport ) */" />
         </filterchain>
       </FilterFile>
       <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
-
+        <arg value="WITH_WINCNG=0" /><!-- CNG is not compatible with Windows XP-->
       </NMake>
     </OnceBlock>
     <copy todir="${intDir}/lib" flatten="true">
