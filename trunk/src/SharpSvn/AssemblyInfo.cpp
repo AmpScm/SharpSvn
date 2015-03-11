@@ -67,7 +67,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", LibSSH2 " LIBSSH2_VERSION
     ", " OPENSSL_VERSION_TEXT
     ", serf " SERF_VERSION
-    ", sqlite" SQLITE_VERSION
+    ", sqlite " SQLITE_VERSION
     ", zlib " ZLIB_VERSION
     " and " OPENSSL_VERSION_TEXT
     ". If available this library also uses the optional Berkeley DB " BDB_VERSION
