@@ -3,6 +3,7 @@
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" overwrite="false" />
   <property name="httpdBuildType" value="tag" overwrite="false" />
+  <property name="libssh2BuildType" value="tag" overwrite="false" />
 
   <property name="guessedPlatform" value="win32" />
   <if test="${environment::variable-exists('LIB')}">

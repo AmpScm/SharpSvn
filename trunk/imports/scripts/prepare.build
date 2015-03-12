@@ -212,7 +212,7 @@
       unless="${directory::exists(zlibDir)}">
 
       <arg value="co" />
-      <arg value="https://github.com/madler/zlib.git/tags/v${zlibVersion}/" />
+      <arg value="https://github.com/madler/zlib/tags/v${zlibVersion}/" />
       <arg value="${zlibDir}" />
     </Svn>
 
@@ -221,7 +221,7 @@
       unless="${directory::exists(opensslDir)}">
 
       <arg value="co" />
-      <arg value="https://github.com/openssl/openssl.git/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
       <arg value="${opensslDir}" />
     </Svn>
 
@@ -318,7 +318,8 @@
 
     <Svn unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
       <arg value="co" />
-      <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}" />
+      <arg value="https://github.com/libssh2/libssh2/trunk/"                            if="${libssh2BuildType == 'trunk'}" />
+      <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}"    if="${libssh2BuildType == 'tag'}" />
       <arg value="${libssh2Dir}" />
     </Svn>
 
