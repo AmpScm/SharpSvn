@@ -99,7 +99,8 @@ bool SvnRemoteSession::Log(ICollection<String^>^ relPaths, SvnRevisionRange^ ran
 
     __int64 start_rev, end_rev;
 
-    if (!InternalResolveRevision(range->StartRevision, args, start_rev) || !InternalResolveRevision(range->EndRevision, args, end_rev))
+    if (!InternalResolveRevision(range->StartRevision, true, args, start_rev)
+        || !InternalResolveRevision(range->EndRevision, true, args, end_rev))
         return false;
 
     ArgsStore store(this, args, %pool);

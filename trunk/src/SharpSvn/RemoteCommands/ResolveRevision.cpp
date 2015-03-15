@@ -18,10 +18,10 @@ bool SvnRemoteSession::ResolveRevision(SvnRevision^ revision, [Out] __int64% rev
 
 bool SvnRemoteSession::ResolveRevision(SvnRevision^ revision, SvnRemoteCommonArgs^ args, [Out] __int64% revno)
 {
-    return InternalResolveRevision(revision, args, revno);
+    return InternalResolveRevision(revision, false, args, revno);
 }
 
-bool SvnRemoteSession::InternalResolveRevision(SvnRevision^ revision, SvnRemoteSessionArgs^ args, [Out] __int64% revno)
+bool SvnRemoteSession::InternalResolveRevision(SvnRevision^ revision, bool useMinusOne, SvnRemoteSessionArgs^ args, [Out] __int64% revno)
 {
     if (!revision)
         throw gcnew ArgumentNullException("revision");
@@ -31,6 +31,11 @@ bool SvnRemoteSession::InternalResolveRevision(SvnRevision^ revision, SvnRemoteS
     switch (revision->RevisionType)
     {
     case SvnRevisionType::Head:
+        if (useMinusOne)
+        {
+            revno = -1;
+            return true;
+        }
         return InternalGetLatestRevision(args, revno);
 
     case SvnRevisionType::Number:

@@ -33,8 +33,8 @@ bool SvnRemoteSession::GetDeletedRevision(String^ relPath, SvnRevision^ revision
 
     revno = SVN_INVALID_REVNUM;
 
-    if (!InternalResolveRevision(revision, args, startrev)
-        || !InternalResolveRevision(args->EndRevision, args, endrev))
+    if (!InternalResolveRevision(revision, false, args, startrev)
+        || !InternalResolveRevision(args->EndRevision, false, args, endrev))
         return false;
 
     ArgsStore store(this, args, %pool);
