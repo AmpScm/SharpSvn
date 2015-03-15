@@ -114,7 +114,7 @@ namespace SharpSvn {
         bool ResolveRevision(SvnRevision^ revision, SvnRemoteCommonArgs^ args, [Out] __int64% revno);
 
     private:
-        bool InternalResolveRevision(SvnRevision^ revision, SvnRemoteSessionArgs^ args, [Out] __int64% revno);
+        bool InternalResolveRevision(SvnRevision^ revision, bool useMinusOne, SvnRemoteSessionArgs^ args, [Out] __int64% revno);
 
     public:
         bool GetRepositoryRoot([Out] Uri^% uri);
