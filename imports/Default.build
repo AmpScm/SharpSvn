@@ -72,6 +72,7 @@
 
   <property name="vcVarsPath" value="C:\Program Files\Microsoft Visual Studio 9.0\VC" />
   <property name="buildJavaHL" value="false" overwrite="false" />
+  <property name="downloadNUnit" value="true" overwrite="true" />
 
   <include buildfile="scripts/default.build" />
 
