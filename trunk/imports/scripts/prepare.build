@@ -94,12 +94,11 @@
         unless="${file::exists(downloads + gettextToolsIconvFilename)}" />
     </if>
 
-    <if test="${javaHome != ''}">
-      <get
-        src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}"
-        dest="${downloads + junitFilename}"
-        unless="${file::exists(downloads + junitFilename)}" />
-    </if>
+    <get
+      src="http://downloads.sourceforge.net/project/junit/junit/${junitVersion}/${junitFilename}"
+      dest="${downloads + junitFilename}"
+      unless="${file::exists(downloads + junitFilename)}"
+      if="${javaHome != '' and buildJavaHL}" />
   </target>
 
   <target name="extract" depends="download">
@@ -156,11 +155,10 @@
         zipfile="${downloads + gettextToolsIconvFilename}"
         todir="${gettextToolsDir}" />
     </if>
-    <if test="${javaHome != ''}">
-      <unzip
-        zipfile="${downloads + junitFilename}" todir="build"
-        unless="${directory::exists(junitDir)}" />
-    </if>
+    <unzip
+      zipfile="${downloads + junitFilename}" todir="build"
+      unless="${directory::exists(junitDir)}"
+      if="${javaHome != '' and buildJavaHL}" />
   </target>
   <target name="checkout" depends="initialize-layout">
 
