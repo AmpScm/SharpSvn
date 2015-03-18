@@ -40,7 +40,8 @@
     <get
       src="http://launchpad.net/nunitv2/trunk/${nunitVersionMMR}/+download/${nunitFilename}"
       dest="${downloads + nunitFilename}"
-      unless="${file::exists(downloads + nunitFilename)}" />
+      unless="${file::exists(downloads + nunitFilename)}"
+      if="${downloadNUnit}" />
 
     <get
       src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}"
@@ -112,7 +113,8 @@
     <unzip
       zipfile="${downloads + nunitFilename}"
       todir="build"
-      unless="${directory::exists(nunitDir)}" />
+      unless="${directory::exists(nunitDir)}"
+      if="${downloadNUnit}" />
 
     <unzip
       zipfile="${downloads + sconsFilename}"

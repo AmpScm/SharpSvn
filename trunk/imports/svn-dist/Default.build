@@ -19,6 +19,7 @@
   <property name="buildLibgit2" value="false" />
   <property name="buildLibssh2" value="false" />
   <property name="buildJavaHL" value="true" />
+  <property name="downloadNUnit" value="false" />
   <property name="ltcg" value="true" />
   <property name="getSvnBook" value="true" />
   
