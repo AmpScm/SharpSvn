@@ -30,6 +30,7 @@
   <property name="tag" value="" overwrite="false" />
   <property name="botBuild" value="true" overwrite="false" />
   <property name="downloadNUnit" value="false" overwrite="false" />
+  <property name="buildJavaHL" value="true" overwrite="false" />
 
   <include buildfile="imports/Default.build" />
 
