@@ -16,11 +16,15 @@
 
 namespace SharpSvn {
 
+    using namespace System;
+
     /// <summary>Extended Parameter container of <see cref="SvnClient::SetRevisionProperty(SvnUriTarget^,String^,SvnSetRevisionPropertyArgs^,String^)" /></summary>
     /// <threadsafety static="true" instance="false"/>
     public ref class SvnSetRevisionPropertyArgs : public SvnClientArgs
     {
         bool _force;
+        String ^_oldValue;
+        array<Byte> ^_oldValueBytes;
     public:
         SvnSetRevisionPropertyArgs()
         {
@@ -43,6 +47,34 @@ namespace SharpSvn {
             void set(bool value)
             {
                 _force = value;
+            }
+        }
+
+        property String ^OldValue
+        {
+            String ^get()
+            {
+                return _oldValue;
+            }
+            void set(String ^value)
+            {
+                _oldValue = value;
+                if (value)
+                    _oldValueBytes = nullptr;
+            }
+        }
+
+        property array<Byte> ^OldRawValue
+        {
+            array<Byte> ^get()
+            {
+                return _oldValueBytes;
+            }
+            void set(array<Byte> ^ value)
+            {
+                _oldValueBytes = (array<Byte> ^)(value ? value->Clone() : nullptr);
+                if (value)
+                    _oldValue = nullptr;
             }
         }
     };
