@@ -82,7 +82,9 @@ bool SvnClient::SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ 
         // Subversion does no normalization on the property value; so we have to do this before sending it
         // to the server
         pool.AllocPropertyValue(value, propertyName),
-        nullptr,
+        args->OldValue ? pool.AllocPropertyValue(args->OldValue, propertyName)
+                       : (args->OldRawValue ? pool.AllocSvnString(args->OldRawValue)
+                                            : nullptr),
         args,
         %pool);
 }
@@ -120,7 +122,9 @@ bool SvnClient::SetRevisionProperty(Uri^ target, SvnRevision^ revision, String^ 
         revision,
         propertyName,
         pool.AllocSvnString(byteArray),
-        nullptr,
+        args->OldValue ? pool.AllocPropertyValue(args->OldValue, propertyName)
+                       : (args->OldRawValue ? pool.AllocSvnString(args->OldRawValue)
+                                            : nullptr),
         args,
         %pool);
 }
@@ -163,7 +167,9 @@ bool SvnClient::DeleteRevisionProperty(Uri^ target, SvnRevision^ revision, Strin
         revision,
         propertyName,
         nullptr,
-        nullptr,
+        args->OldValue ? pool.AllocPropertyValue(args->OldValue, propertyName)
+                       : (args->OldRawValue ? pool.AllocSvnString(args->OldRawValue)
+                                            : nullptr),
         args,
         %pool);
 }
