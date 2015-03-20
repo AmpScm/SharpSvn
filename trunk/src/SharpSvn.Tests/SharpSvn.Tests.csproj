@@ -153,6 +153,10 @@
       <Project>{691cbc4f-cc38-4342-8738-a08e48812141}</Project>
       <Name>SharpSvn.TestBuilder</Name>
     </ProjectReference>
+    <ProjectReference Include="..\tools\HookNotifier\HookNotifier.csproj">
+      <Project>{3a1d7085-4b6a-4d47-9fa6-b2a63cdd6595}</Project>
+      <Name>HookNotifier</Name>
+    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(MSBuildToolsVersion)' == '3.5'">
