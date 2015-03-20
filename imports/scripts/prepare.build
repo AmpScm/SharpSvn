@@ -325,53 +325,85 @@
 
   </target>
 
+  <filterchain id="license-filter">
+    <LineRegexReplace re='(?&lt;!\r)\n' to='&#x0D;&#x0A;' />
+  </filterchain>
   <target name="copy-licenses">
     <copy
       file="build/${platform}/subversion/LICENSE"
       tofile="release/licenses/Subversion-License.txt"
-      if="${buildSubversion}" />
+      if="${buildSubversion}">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${aprDir}/LICENSE"
-      tofile="release/licenses/Apr-License.txt" />
+      tofile="release/licenses/Apr-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${aprUtilDir}/LICENSE"
-      tofile="release/licenses/Apr-Util-License.txt" />
+      tofile="release/licenses/Apr-Util-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${dbDir}/LICENSE"
-      tofile="release/licenses/BerkeleyDB-License.txt" />
+      tofile="release/licenses/BerkeleyDB-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${saslDir}/COPYING"
-      tofile="release/licenses/Cyrus-Sasl-License.txt" />
+      tofile="release/licenses/Cyrus-Sasl-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       if="${buildNeon}"
       file="${neonDir}/src/COPYING.LIB"
-      tofile="release/licenses/Neon-License.txt" />
+      tofile="release/licenses/Neon-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${opensslDir}/LICENSE"
-      tofile="release/licenses/OpenSsl-License.txt" />
+      tofile="release/licenses/OpenSsl-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${serfDir}/LICENSE"
-      tofile="release/licenses/Serf-License.txt" />
+      tofile="release/licenses/Serf-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${zlibDir}/README"
-      tofile="release/licenses/ZLib-License.txt" />
+      tofile="release/licenses/ZLib-License.txt">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy if="${buildLibssh2}"
       file="${libssh2Dir}/COPYING"
-      tofile="release/licenses/LibSSH2.txt" />
+      tofile="release/licenses/LibSSH2.txt">
+      <filterchain refid="license-filter" />
+    </copy>
 
     <copy
       file="${sharpSvnDir}/LICENSE.txt"
       tofile="release/licenses/SharpSvn-License.txt"
-      if="${file::exists(sharpSvnDir + '/LICENSE.txt')}"/>
+      if="${file::exists(sharpSvnDir + '/LICENSE.txt')}">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${sharpSvnDir}/src/SharpPlink/PuttySrc/LICENCE"
       tofile="release/licenses/Putty-License.txt"
-      if="${file::exists(sharpSvnDir + '/src/SharpPlink/PuttySrc/LICENCE')}" />
+      if="${file::exists(sharpSvnDir + '/src/SharpPlink/PuttySrc/LICENCE')}">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
         file="${gettextDir}/gettext-runtime/COPYING"
-        tofile="release/licenses/GetText-Runtime-License.txt" if="${intl == 'gettext'}" />
+        tofile="release/licenses/GetText-Runtime-License.txt"
+        if="${intl == 'gettext'}">
+      <filterchain refid="license-filter" />
+    </copy>
     <copy
       file="${downloads}/../scripts/SharpSvn-Licenses.wxs"
-      tofile="release/licenses/SharpSvn-Licenses.wxs" />
+      tofile="release/licenses/SharpSvn-Licenses.wxs">
+      <filterchain refid="license-filter" />
+    </copy>
   </target>
 </project>
