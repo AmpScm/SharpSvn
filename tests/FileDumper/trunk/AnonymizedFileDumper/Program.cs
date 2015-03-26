@@ -15,13 +15,6 @@ class Program
         }
 
         string reposPath = args[1];
-        if (Directory.Exists(reposPath))
-        {
-            foreach (FileInfo f in new DirectoryInfo(reposPath).GetFiles("*", SearchOption.AllDirectories))
-                f.Attributes = f.Attributes & ~FileAttributes.ReadOnly;
-
-            Directory.Delete(reposPath, true);
-        }
 
         using (SvnRepositoryClient repos = new SvnRepositoryClient())
         {
