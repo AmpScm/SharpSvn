@@ -4,16 +4,16 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-class Anonymyzer : Stream
+class Anonymizer : Stream
 {
     readonly Stream _inner;
     readonly HashAlgorithm _hash;
     readonly StreamWriter _writer;
 
-    public Anonymyzer(Stream toStream)
+    public Anonymizer(Stream toStream)
     {
         _inner = toStream;
-        _hash = new MD5Cng();
+        _hash = new Crc32();
         _writer = new StreamWriter(_inner);
     }
 

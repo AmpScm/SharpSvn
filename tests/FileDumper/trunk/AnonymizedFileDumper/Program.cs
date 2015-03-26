@@ -37,7 +37,7 @@ class Program
 
                     using (MemoryStream ms = new MemoryStream())
                     {
-                        e.WriteTo(new Anonymyzer(ms)); // Write full text to memory stream
+                        e.WriteTo(new Anonymizer(ms)); // Write full text to memory stream
                         ms.Position = 0;
 
                         // And now use 'svnmucc' to update repository
