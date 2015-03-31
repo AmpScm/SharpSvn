@@ -23,6 +23,8 @@ using System.Web;
 using QQn.TurtleUtils.IO;
 using System.Text.RegularExpressions;
 using System.Globalization;
+using System.Security.Cryptography.X509Certificates;
+using System.Net.Security;
 
 namespace CollabUpload
 {
@@ -43,6 +45,7 @@ namespace CollabUpload
             public int MaxUploads;
             public TimeSpan Keep;
             public bool List;
+            public bool IgnoreCertificateErrors;
 
             public readonly List<string> Files = new List<string>();
         }
@@ -156,6 +159,9 @@ namespace CollabUpload
                                 return ArgError("--keep requires timespan argument DD.hh:mm");
                             i++;
                             break;
+                        case "--ignore-certificate-errors":
+                            aa.IgnoreCertificateErrors = true;
+                            break;
                         default:
                             return ArgError(string.Format("Unknown argument: {0}", key));
                     }
@@ -182,6 +188,15 @@ namespace CollabUpload
         {
             CookieContainer cookBox = new CookieContainer();
 
+            if (args.IgnoreCertificateErrors)
+            {
+                ServicePointManager.ServerCertificateValidationCallback =
+                    delegate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+                    {
+                        return true;
+                    };
+            }
+ 
             string requestUri = string.Format("{0}/servlets/ProjectDocumentAdd?folderID={1}", args.Site, args.Folder);
             HttpWebRequest wr = (HttpWebRequest)WebRequest.Create(requestUri);
             wr.UserAgent = UserAgentName;
