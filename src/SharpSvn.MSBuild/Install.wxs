@@ -57,6 +57,15 @@
               </Directory>
             </Directory>
           </Directory>
+          <Directory Id="MSBuild_140" Name="14.0">
+            <Directory Id="MSBuild_140_Common" Name="Microsoft.Common.Targets" FileSource="common">
+              <Directory Id="MSBuild_140_Common_ImportAfter" Name="ImportAfter">
+                <Component Id="sharpsvn_hook_140" Guid="4E6E6269-381C-4708-92DD-9C710F92C87E">
+                  <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_140" Vital="yes" Checksum="yes" KeyPath="yes" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
         </Directory>
       </Directory>
     </Directory>
@@ -70,6 +79,7 @@
       <ComponentRef Id="SharpSvnMSBuild_dll"/>
       <ComponentRef Id="sharpsvn_hook_40"/>
       <ComponentRef Id="sharpsvn_hook_120"/>
+      <ComponentRef Id="sharpsvn_hook_140"/>
       <ComponentGroupRef Id="LOCAL_SharpSvn.PdbAnnotate"/>
     </Feature>
   </Product>
