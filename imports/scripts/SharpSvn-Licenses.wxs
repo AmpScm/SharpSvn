@@ -18,6 +18,7 @@
     <ComponentGroup Id="SharpSvn_LICENSES">
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />
       <ComponentRef Id="C_SSVNLICENSE_LibSSH2" />
+      <ComponentRef Id="C_SSVNLICENSE_Putty" />
     </ComponentGroup>
   </Fragment>
   <Fragment>
@@ -58,8 +59,8 @@
   </Fragment>
   <Fragment>
     <DirectoryRef Id="DIR_SharpSvnLicenses" FileSource="$(sys.SOURCEFILEDIR)">
-      <Component Id="C_SSVNLICENSE_LibSSH2" Guid="727FAB37-9CCD-46B6-814A-CD7F5114CDC3">
-        <File Id="CF_SSVNLICENSE_LibSSH2" Name="LibSSH2.txt" Vital="yes" KeyPath="yes"/>
+      <Component Id="C_SSVNLICENSE_LibSSH2" Guid="7059AA69-475A-49A8-BE54-E6CBCABFBF77">
+        <File Id="CF_SSVNLICENSE_LibSSH2" Name="LibSSH2-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
     </DirectoryRef>
   </Fragment>
