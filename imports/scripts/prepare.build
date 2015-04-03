@@ -357,7 +357,7 @@
     </copy>
     <copy
       file="${opensslDir}/LICENSE"
-      tofile="release/licenses/OpenSsl-License.txt">
+      tofile="release/licenses/OpenSSL-License.txt">
       <filterchain refid="license-filter" />
     </copy>
     <copy
@@ -390,8 +390,6 @@
     </copy>
     <copy
       file="${downloads}/../scripts/SharpSvn-Licenses.wxs"
-      tofile="release/licenses/SharpSvn-Licenses.wxs">
-      <filterchain refid="license-filter" />
-    </copy>
+      tofile="release/licenses/SharpSvn-Licenses.wxs" />
   </target>
 </project>
