@@ -41,7 +41,7 @@
         <File Id="CF_SSVNLICENSE_Cyrus_Sasl" Name="Cyrus-Sasl-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_OpenSsl" Guid="A0CCDA71-2C18-4617-90BA-FC5B761E8252">
-        <File Id="CF_SSVNLICENSE_OpenSsl" Name="OpenSsl-License.txt" Vital="yes" KeyPath="yes"/>
+        <File Id="CF_SSVNLICENSE_OpenSsl" Name="OpenSSL-License.txt" Vital="yes" KeyPath="yes"/>
       </Component>
       <Component Id="C_SSVNLICENSE_Serf" Guid="B47454F7-A069-4669-9254-8AC4881A5E18">
         <File Id="CF_SSVNLICENSE_Serf" Name="Serf-License.txt" Vital="yes" KeyPath="yes"/>

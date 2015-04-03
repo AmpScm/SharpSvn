@@ -363,7 +363,7 @@
     </copy>
     <copy
       file="${opensslDir}/LICENSE"
-      tofile="release/licenses/OpenSsl-License.txt">
+      tofile="release/licenses/OpenSSL-License.txt">
       <filterchain refid="license-filter" />
     </copy>
     <copy
