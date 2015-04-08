@@ -45,7 +45,6 @@
         <define name="SQLITE_OMIT_UTF16" /><!-- Subversion uses utf-8 everywhere -->
         <define name="SQLITE_OMIT_DATETIME_FUNCS" /><!-- Date time uses APR -->
         <define name="SQLITE_OMIT_LOCALTIME" />
-        <define name="SQLITE_OMIT_AUTORESET" /><!-- Make forgetting a reset an error -->
 
         <define name="SQLITE_OMIT_SHARED_CACHE" /><!-- Unstable in our previous usage -->
         <define name="SQLITE_OMIT_BUILTIN_TEST" />
