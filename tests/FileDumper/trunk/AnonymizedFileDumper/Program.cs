@@ -31,7 +31,7 @@ class Program
             fileName = args[2];
 
         bool anonymize;
-        if (args.Length <= 4 || !bool.TryParse(args[3], out anonymize))
+        if (args.Length < 4 || !bool.TryParse(args[3], out anonymize))
             anonymize = true;
 
         Uri reposUri = SvnTools.LocalPathToUri(args[1], true);
