@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="httpdDir" value="${buildRoot}/httpd" />
-  <property name="aprIconvDir" value="${httpdDir}/srclib/apr-iconv" />
 
   <target name="httpd-build" depends="apr-build, aprutil-build, zlib-build, pcre-build,cmake-prepare" if="${buildHttpd}">
     <OnceBlock file="build/httpd-${httpdVersion}.patched">
