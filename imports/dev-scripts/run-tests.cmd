@@ -10,6 +10,7 @@ set PARALLEL=-p
 set CLEANUP=-c
 set ARGS=
 set LOGLEVEL=
+set SWIG=
 set LOCAL=1
 set HTTPLOG=--httpd-no-log
 set FS=fsfs
@@ -22,7 +23,7 @@ IF "%1" == "-d" (
    SET VALS=-r
    SHIFT
 ) ELSE IF "%1" == "-k" (
-   taskkill /im tsvncache.exe /im python.exe /im svn.exe /im httpd.exe /im svnrdump.exe /im svnsync.exe /f
+   taskkill /im tsvncache.exe /im python.exe /im svn.exe /im httpd.exe /im svnrdump.exe /im svnsync.exe /im svnserve.exe /f
    SHIFT
 ) ELSE IF "%1" == "-s" (
    SET PARALLEL=
@@ -50,12 +51,44 @@ IF "%1" == "-d" (
 ) ELSE IF "%1" == "--bdb" (
    SET FS=bdb
    SHIFT
+) ELSE IF "%1" == "--fsx" (
+   SET FS=fsx
+   SHIFT
+) ELSE IF "%1" == "--perl" (
+   SET SWIG=perl
+   SHIFT
+) ELSE IF "%1" == "--python" (
+   SET SWIG=python
+   SHIFT
+) ELSE IF "%1" == "--ruby" (
+   SET SWIG=ruby
+   SHIFT
+) ELSE IF "%1" == "--java" (
+   SET JAVA=java
+   SHIFT
+) ELSE IF "%1" == "-v" (
+   SET ARGS=-v !ARGS!
+   SHIFT
+) ELSE IF "%1" == "--disable-http-v2" (
+   SET ARGS=--disable-http-v2 !ARGS!
+   SHIFT   
+) ELSE IF "%1" == "--enable-sasl" (
+   SET ARGS=--enable-sasl !ARGS!
+   SHIFT   
 ) ELSE (
    SET ARGS=!ARGS! -t %1
    SHIFT
 )
 
 IF NOT "%1" == "" GOTO next
+
+IF NOT "%SWIG%" == "" (
+  SET ARGS=--swig=%SWIG% %ARGS%
+) ELSE IF NOT "%JAVA%" == "" (
+  SET ARGS=--javahl %ARGS%
+)
+
+PATH %CD%\release\bin;%PATH%
 
 set BASE=R:\Tst
 
@@ -89,7 +122,7 @@ if NOT "%SVNSERVE%" == "" (
 if NOT "%HTTP%" == "" (
   echo del %LOCATION%dav-tests.log %LOCATION%dav-fails.log %LOCATION%subversion\tests\cmdline\httpd\log
   del %LOCATION%dav-tests.log %LOCATION%dav-fails.log %LOCATION%subversion\tests\cmdline\httpd\log
-  timethis win-tests.py %VALS% -f %FS% %HTTPINFO% %ARGS%
+  timethis win-tests.py %PARALLEL% %VALS% -f %FS% %HTTPINFO% %ARGS%
 )
 
 REM timethis win-tests.py %PARALLEL% %VALS% -f bdb %ARGS%
