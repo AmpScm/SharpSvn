@@ -323,6 +323,12 @@
       <arg value="${libssh2Dir}" />
     </Svn>
 
+    <Svn unless="${directory::exists(libeventDir)}" if="${buildLibevent}">
+      <arg value="co" />
+      <arg value="https://github.com/libevent/libevent/tags/release-${libeventVersion}"/>
+      <arg value="${libeventDir}" />
+    </Svn>
+
   </target>
 
   <filterchain id="license-filter">
