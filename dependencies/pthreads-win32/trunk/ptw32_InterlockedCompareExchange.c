@@ -75,7 +75,6 @@ ptw32_InterlockedCompareExchange (PTW32_INTERLOCKED_LPLONG location,
 
 #if defined(_MSC_VER) || defined(__WATCOMC__) || (defined(__BORLANDC__) && defined(HAVE_TASM32))
 #define HAVE_INLINABLE_INTERLOCKED_CMPXCHG
-
     {
       _asm {
 	PUSH         ecx
@@ -86,7 +85,7 @@ ptw32_InterlockedCompareExchange (PTW32_INTERLOCKED_LPLONG location,
 	LOCK CMPXCHG dword ptr [ecx],edx
 	MOV          dword ptr [result], eax
 	POP          edx
-        POP          ecx
+	POP          ecx
       }
     }
   else
@@ -100,7 +99,7 @@ ptw32_InterlockedCompareExchange (PTW32_INTERLOCKED_LPLONG location,
 	CMPXCHG      dword ptr [ecx],edx
 	MOV          dword ptr [result], eax
 	POP          edx
-        POP          ecx
+	POP          ecx
       }
     }
 
@@ -204,12 +203,13 @@ ptw32_InterlockedExchange (LPLONG location,
        * it doesn't lock the bus. If an interrupt or context switch
        * occurs between the MOV and the CMPXCHG then the value in
        * 'location' may have changed, in which case we will loop
-       * back to do the MOV again. Because both instructions
-       * reference the same location, they will not be re-ordered
-       * in the pipeline.
+       * back to do the MOV again.
+       *
+       * FIXME! Need memory barriers for the MOV+CMPXCHG combo?
+       *
        * Tests show that this routine has almost identical timing
        * to Win32's InterlockedExchange(), which is much faster than
-       * using the an inlined 'xchg' instruction, so it's probably
+       * using the inlined 'xchg' instruction above, so it's probably
        * doing something similar to this (on UP systems).
        *
        * Can we do without the PUSH/POP instructions?
@@ -245,9 +245,10 @@ L1:	MOV          eax,dword ptr [ecx]
        * it doesn't lock the bus. If an interrupt or context switch
        * occurs between the movl and the cmpxchgl then the value in
        * 'location' may have changed, in which case we will loop
-       * back to do the movl again. Because both instructions
-       * reference the same location, they will not be re-ordered
-       * in the pipeline.
+       * back to do the movl again.
+       *
+       * FIXME! Need memory barriers for the MOV+CMPXCHG combo?
+       *
        * Tests show that this routine has almost identical timing
        * to Win32's InterlockedExchange(), which is much faster than
        * using the an inlined 'xchg' instruction, so it's probably

@@ -82,7 +82,8 @@ pthread_kill (pthread_t thread, int sig)
 
   if (NULL == tp
       || thread.x != tp->ptHandle.x
-      || NULL == tp->threadH)
+      || NULL == tp->threadH
+      || THREAD_PRIORITY_ERROR_RETURN == GetThreadPriority (tp->threadH))
     {
       result = ESRCH;
     }
