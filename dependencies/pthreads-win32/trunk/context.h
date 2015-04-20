@@ -1,8 +1,8 @@
 /*
- * dll.c
+ * context.h
  *
  * Description:
- * This translation unit implements DLL initialisation.
+ * POSIX thread macros related to thread cancellation.
  *
  * --------------------------------------------------------------------------
  *
@@ -34,59 +34,41 @@
  *      59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
 
-#if !defined(PTW32_STATIC_LIB)
+#ifndef PTW32_CONTEXT_H
+#define PTW32_CONTEXT_H
 
-#include "pthread.h"
-#include "implement.h"
+#undef PTW32_PROGCTR
 
-#if defined(_MSC_VER)
-/* 
- * lpvReserved yields an unreferenced formal parameter;
- * ignore it
- */
-#pragma warning( disable : 4100 )
+#if defined(_M_IX86) || (defined(_X86_) && !defined(__amd64__))
+#define PTW32_PROGCTR(Context)  ((Context).Eip)
 #endif
 
-#if defined(__cplusplus)
-/*
- * Dear c++: Please don't mangle this name. -thanks
- */
-extern "C"
-#endif				/* __cplusplus */
-  BOOL WINAPI
-DllMain (HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved)
-{
-  BOOL result = PTW32_TRUE;
+#if defined (_M_IA64) || defined(_IA64)
+#define PTW32_PROGCTR(Context)  ((Context).StIIP)
+#endif
 
-  switch (fdwReason)
-    {
+#if defined(_MIPS_) || defined(MIPS)
+#define PTW32_PROGCTR(Context)  ((Context).Fir)
+#endif
 
-    case DLL_PROCESS_ATTACH:
-      result = pthread_win32_process_attach_np ();
-      break;
+#if defined(_ALPHA_)
+#define PTW32_PROGCTR(Context)  ((Context).Fir)
+#endif
 
-    case DLL_THREAD_ATTACH:
-      /*
-       * A thread is being created
-       */
-      result = pthread_win32_thread_attach_np ();
-      break;
+#if defined(_PPC_)
+#define PTW32_PROGCTR(Context)  ((Context).Iar)
+#endif
 
-    case DLL_THREAD_DETACH:
-      /*
-       * A thread is exiting cleanly
-       */
-      result = pthread_win32_thread_detach_np ();
-      break;
+#if defined(_AMD64_) || defined(__amd64__)
+#define PTW32_PROGCTR(Context)  ((Context).Rip)
+#endif
 
-    case DLL_PROCESS_DETACH:
-      (void) pthread_win32_thread_detach_np ();
-      result = pthread_win32_process_detach_np ();
-      break;
-    }
+#if defined(_ARM_) || defined(ARM)
+#define PTW32_PROGCTR(Context)  ((Context).Pc)
+#endif
 
-  return (result);
+#if !defined(PTW32_PROGCTR)
+#error Module contains CPU-specific code; modify and recompile.
+#endif
 
-}				/* DllMain */
-
-#endif /* PTW32_STATIC_LIB */
+#endif
