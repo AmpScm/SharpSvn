@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="libeventDir" value="${platformRoot}\libevent" />
+  <property name="libeventBuildDir" value="${libeventDir}\build" />
+
+  <target name="libevent-build" depends="checkout, cmake-prepare, openssl-build" if="${buildLibevent}">
+    <OnceBlock file="build/libevent-${libeventVersion}-${platform}.build">
+
+      <mkdir dir="${libeventBuildDir}" />
+
+      <CMake workingdir="${libeventBuildDir}">
+        <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+        <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
+        <prop name="ZLIB_LIBRARY" value="${intDir}/lib/zlib.lib" />
+        <prop name="ZLIB_INCLUDE_DIR" value="${intDir}" />
+
+        <arg value=".." />
+      </CMake>
+
+      <MSBuild src="${libeventBuildDir}/libevent.sln">
+        <!--target value="apr-1" />
+        <target value="libapr-1" /-->
+      </MSBuild>
+    </OnceBlock>
+  </target>
+</project>
