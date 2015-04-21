@@ -4,7 +4,7 @@
 
   <property name="svnBuildType" value="tag" overwrite="false" />
   <property name="serfBuildType" value="tag" overwrite="false" />
-  <property name="subversionVersion" value="1.9.0-beta1" overwrite="false" />
+  <!--property name="subversionVersion" value="1.9.0-beta1" overwrite="false" /-->
   
   <property name="static" value="false" />
   <property name="downloads" value="../downloads/" />
