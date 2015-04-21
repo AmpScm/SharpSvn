@@ -4,7 +4,8 @@
   <property name="pthreadwin32IntDir" value="${pthreadwin32Dir}/obj/${platform}" />
   <property name="pthreadwin32LibDir" value="${pthreadwin32Dir}/bin/${platform}" />
 
-  <target name="pthreadwin32-build" depends="checkout">
+  <target name="pthreadwin32-build" depends="checkout" if="${buildPthreadwin32}">
+    <OnceBlock file="build/pthreadwin32-${pthreadwin32Version}-${platform}.build">
     <mkdir dir="${pthreadwin32IntDir}" />
     <mkdir dir="${pthreadwin32LibDir}" />
     <cl outputdir="${pthreadwin32IntDir}" pdbfile="${pthreadwin32IntDir}/pthread.pdb">
@@ -39,6 +40,7 @@
         <include name="*.obj" />
       </sources>
     </lib>
+    </OnceBlock>
     <copy todir="${releaseLib}">
       <fileset basedir="${pthreadwin32LibDir}">
         <include name="pthread.lib" />

@@ -5,6 +5,7 @@
   <property name="memcachedBinDir" value="${memcachedDir}/bin/${platform}" />
 
   <target name="memcached-build" depends="checkout, libevent-build, pthreadwin32-build" if="${buildMemcached}">
+    <OnceBlock file="build/memcached-${memcachedVersion}-${platform}.build">
     <mkdir dir="${memcachedIntDir}" />
     <mkdir dir="${memcachedBinDir}" />
 
@@ -248,6 +249,7 @@ int snprintf(char* str, size_t size, const char* format, ...)
       <arg value="/DEBUG" />
       <arg value="/DLL" />
     </link>
+    </OnceBlock>
     
     <copy todir="${release}\memcached" flatten="true">
       <fileset>
