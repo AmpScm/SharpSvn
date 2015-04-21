@@ -248,5 +248,13 @@ int snprintf(char* str, size_t size, const char* format, ...)
       <arg value="/DEBUG" />
       <arg value="/DLL" />
     </link>
+    
+    <copy todir="${release}\memcached" flatten="true">
+      <fileset>
+        <include name="${memcachedBinDir}/*.exe" />
+        <include name="${memcachedBinDir}/*.so" />
+        <include name="${intDir}/bin/pthread*" />
+      </fileset>
+    </copy>
   </target>
 </project>
