@@ -7,7 +7,7 @@
   <property name="aprStaticSubdir" value="LibR" />
   <property name="aprStaticSubdir" value="${platform}/${aprStaticSubdir}" if="${platform != 'win32'}" />
 
-  <target name="gen-dev" depends="extract,checkout,svn-compat">
+  <target name="gen-dev" depends="extract,checkout,svn-compat,memcached-build">
     <if test="${not directory::exists(wc)}">
       <Svn>
         <arg line="co https://svn.apache.org/repos/asf/subversion/trunk ${wc}" if="${branch == '' and tag == ''}" />
