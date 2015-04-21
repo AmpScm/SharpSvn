@@ -782,6 +782,46 @@ public class LineRegexReplace : Filter
   }  
 }
 
+[ElementName("AppendAtEnd")]
+public class AppendAtEnd : Filter
+{
+  string _value;
+  ChainableReader _from;
+
+  [TaskAttribute("value", Required=true)]
+  public string Value
+  {
+      get { return _value; }
+      set { _value = value; }
+  }
+  
+  public override void Chain(ChainableReader chainedReader)
+  {
+      base.Chain(chainedReader);
+      _from = chainedReader;
+  }
+  
+  public override int Peek()
+  {
+      throw new NotImplementedException();
+  }
+  
+  int _iNext;
+  public override int Read()
+  {
+      if (_iNext == 0)
+      {
+          int n = _from.Read();
+
+          if (n >= 0)
+              return n;
+      }
+      if (_iNext >= _value.Length)
+          return -1;
+      return _value[_iNext++];
+  }  
+}
+
 ]]>
     </code>
   </script>
