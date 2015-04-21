@@ -1,0 +1,252 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="memcachedDir" value="${buildRoot}/memcached" overwrite="false" />
+  <property name="memcachedIntDir" value="${memcachedDir}/obj/${platform}" />
+  <property name="memcachedBinDir" value="${memcachedDir}/bin/${platform}" />
+
+  <target name="memcached-build" depends="checkout, libevent-build, pthreadwin32-build" if="${buildMemcached}">
+    <mkdir dir="${memcachedIntDir}" />
+    <mkdir dir="${memcachedBinDir}" />
+
+    <echo file="${memcachedDir}/win32/config_version.h">
+#pragma once
+
+/* Define to the full name and version of this package. */
+#define PACKAGE_STRING "memcached ${memcachedVersion}"
+
+/* Define to the version of this package. */
+#define PACKAGE_VERSION "${memcachedVersion}"
+
+/* Version number of package */
+#define VERSION "${memcachedVersion}"
+
+#include &lt;stdio.h&gt;
+#include &lt;stdarg.h&gt;
+
+#ifdef WIN64
+typedef __int64 ssize_t;
+#else
+typedef __int32 ssize_t;
+#endif
+
+#define PATH_MAX 256
+#define F_OK 0
+
+int snprintf(char* str, size_t size, const char* format, ...);
+
+struct timezone2 
+{
+  __int32  tz_minuteswest; /* minutes W of Greenwich */
+  int  tz_dsttime;     /* type of dst correction */
+};
+
+struct timeval2 {
+__int32    tv_sec;         /* seconds */
+__int32    tv_usec;        /* microseconds */
+};
+
+</echo>
+<echo file="${memcachedDir}/win32/unistd.h">
+#pragma once
+#define STDIN_FILENO  0
+#define STDOUT_FILENO 1
+#define STDERR_FILENO 2
+</echo>
+<echo file="${memcachedDir}/win32/strings.h">
+#pragma once
+#include &lt;config_version.h&gt;
+</echo>
+<echo file="${memcachedDir}/win32/config.h" append="true">
+#include &lt;config_version.h&gt;
+</echo>
+    <FilterFile file="${memcachedDir}/daemon/memcached.c">
+      <filterchain>
+        <replacestring from='[nkey+1]' to='[512/*nkey+1*/]' />
+        <replacestring from='[max_items]' to='[256/*max_items*/]' />
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${memcachedDir}/win32/win32.c">
+      <filterchain>
+        <AppendAtEnd value="
+        
+#include &lt;time.h&gt;
+#include &lt;windows.h&gt;
+#include &lt;config_version.h&gt;
+
+const __int64 iDELTA_EPOCH_IN_MICROSECS= 11644473600000000I64;
+
+/* IN UNIX the use of the timezone struct is obsolete;
+ I don't know why you use it. See http://linux.about.com/od/commands/l/blcmdl2_gettime.htm
+ But if you want to use this structure to know about GMT(UTC) diffrence from your local time
+ it will be next: tz_minuteswest is the real diffrence in minutes from GMT(UTC) and a tz_dsttime is a flag
+ indicates whether daylight is now in use
+*/
+
+int gettimeofday(struct timeval2 *tv/*in*/, struct timezone2 *tz/*in*/)
+{
+  FILETIME ft;
+  __int64 tmpres = 0;
+  TIME_ZONE_INFORMATION tz_winapi;
+  int rez=0;
+
+   ZeroMemory(&amp;ft,sizeof(ft));
+   ZeroMemory(&amp;tz_winapi,sizeof(tz_winapi));
+
+    GetSystemTimeAsFileTime(&amp;ft);
+
+    tmpres = ft.dwHighDateTime;
+    tmpres &lt;&lt;= 32;
+    tmpres |= ft.dwLowDateTime;
+
+    /*converting file time to unix epoch*/
+    tmpres /= 10;  /*convert into microseconds*/
+    tmpres -= iDELTA_EPOCH_IN_MICROSECS; 
+    if (tv)
+    {
+      tv-&gt;tv_sec = (__int32)(tmpres*0.000001);
+      tv-&gt;tv_usec =(tmpres%1000000);
+    }
+
+    if (tz)
+    {
+      //_tzset(),don't work properly, so we use GetTimeZoneInformation
+      rez=GetTimeZoneInformation(&amp;tz_winapi);
+      tz-&gt;tz_dsttime=(rez==2)?TRUE:FALSE;
+      tz-&gt;tz_minuteswest = tz_winapi.Bias + ((rez==2)?tz_winapi.DaylightBias:0);
+    }
+
+  return 0;
+}
+
+#include &lt;stdio.h&gt;
+#include &lt;stdarg.h&gt;
+#include &lt;varargs.h&gt;
+
+static __inline int vsnprintf(char* str, size_t size, const char* format, va_list ap)
+{
+    int count = -1;
+
+    if (size != 0)
+        count = _vsnprintf_s(str, size, _TRUNCATE, format, ap);
+    if (count == -1)
+        count = _vscprintf(format, ap);
+
+    return count;
+}
+
+int snprintf(char* str, size_t size, const char* format, ...)
+{
+    int count;
+    va_list argptr;
+
+    va_start(argptr, format);
+    count = vsnprintf(str, size, format, argptr);
+    va_end(argptr);
+
+    return count;
+}
+
+" />
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${memcachedDir}/daemon/thread.c">
+      <filterchain>
+        <replacestring from='[max_items]' to='[256/*max_items*/]' />
+      </filterchain>
+    </FilterFile>
+
+    <FilterFile file="${memcachedDir}/engines/default_engine/default_engine.h">
+      <filterchain>
+        <replacestring from='ENGINE_ERROR_CODE create_instance('
+                         to='ENGINE_ERROR_CODE __declspec(dllexport) create_instance(' />
+      </filterchain>
+    </FilterFile>
+
+    <cl outputdir="${memcachedIntDir}" pdbfile="${memcachedIntDir}/memcached.pdb">
+      <arg value="/Ox" />      <!-- Maximize speed -->
+      <arg value="/GF" />      <!-- String Pooling -->
+      <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
+      <arg value="/Zi" />      <!-- Write debug information -->
+
+      <arg value="/GL" if="${ltcg}" />      <!-- Whole program optimization -->
+      <arg value="/Gy" if="${ltcg}" />      <!-- Function level linking -->
+      <arg value="/Gw" if="${ltcg}" />      <!-- Optimize global data -->
+
+      <arg value="/MD" />
+
+      <arg value="-I${intDir}/include" />
+      <arg value="-I${memcachedDir}/win32" />
+      <arg value="-I${memcachedDir}" />
+      <arg value="-I${memcachedDir}/include" />
+      <arg value="-I${libeventDir}/WIN32-Code" /><!-- For getopt() -->
+
+      <defines>
+        <define name="NDEBUG" />
+        <define name="WIN32" />
+        <define name="WINNT" />
+        <define name="__WIN32__" />
+        <define name="WIN64" if="${platform=='x64'}" />
+        <define name="_WIN32_WINNT" value="0x0501" />
+
+        <define name="inline" value="__inline" />
+        <define name="strcasecmp" value="stricmp" />
+        <define name="strtoull" value="my_strtoull" />
+
+        <define name="PTW32_STATIC_LIB" />
+      </defines>
+      <sources basedir="${memcachedDir}">
+        <include name="daemon/cache.c" />
+        <include name="daemon/hash.c" />
+        <include name="daemon/isasl.c" />
+        <include name="daemon/memcached.c" />
+        <include name="daemon/sasl_defs.c" />
+        <include name="daemon/stats.c" />
+        <include name="daemon/thread.c" />
+        <include name="daemon/topkeys.c" />
+        <include name="utilities/config_parser.c" />
+        <include name="utilities/engine_loader.c" />
+        <include name="utilities/extension_loggers.c" />
+        <include name="utilities/genhash.c" />
+        <include name="utilities/util.c" />
+        <include name="win32/defs.c" />
+        <include name="win32/dlfcn.c" />
+        <include name="win32/win32.c" />
+
+        <include name="engines/default_engine/assoc.c" />
+        <include name="engines/default_engine/default_engine.c" />
+        <include name="engines/default_engine/items.c" />
+        <include name="engines/default_engine/slabs.c" />
+        <!--include name="utilities/util.c" /-->
+
+        <include name="${libeventDir}/WIN32-Code/getopt.c" />
+      </sources>
+    </cl>
+    <link output="${memcachedBinDir}/memcached.exe">
+      <sources basedir="${memcachedIntDir}">
+        <include name="*.obj" />
+      </sources>
+      <arg value="Ws2_32.lib" />
+      <arg value="Advapi32.lib" />
+      <arg value="${libeventDir}/lib/Release/event.lib" />
+      <arg value="${intDir}/lib/pthread.lib" />
+      <arg value="/DEBUG" />
+    </link>
+    
+    <link output="${memcachedBinDir}/default_engine.so">
+      <sources basedir="${memcachedIntDir}">
+        <include name="assoc.obj" />
+        <include name="default_engine.obj" />
+        <include name="items.obj" />
+        <include name="slabs.obj" />
+        <include name="util.obj" />
+        <include name="win32.obj" />
+      </sources>
+      <arg value="Ws2_32.lib" />
+      <arg value="Advapi32.lib" />
+      <arg value="${libeventDir}/lib/Release/event.lib" />
+      <arg value="${intDir}/lib/pthread.lib" />
+      <arg value="/DEBUG" />
+      <arg value="/DLL" />
+    </link>
+  </target>
+</project>
