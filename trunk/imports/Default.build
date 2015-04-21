@@ -13,16 +13,9 @@
 
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
   <!--
-     1663183,1663184                - VS2015 support
-     1663671                        - Github TC check
-     1664593,1664594,1664596,1667715- Improve error on failing to open registry
-     1664653                        - Pin externals fix
-     1665195                        - Bad serf error handling (out of date)
-     1665213, 1665259, 1665609      - Serf session reuse fixes
-     1665318                        - Lock consistency improvements
   // -->
-  <property name="subversionVersion" value="1.9.0-beta1" overwrite="false" />
-  <property name="subversionMerges" value="1663183,1663184,1663671,1664593,1664594,1664596,1667715,1664653,1665195,1665213,1665259,1665318,1665609" overwrite="false" />
+  <property name="subversionVersion" value="1.9.0-rc1" overwrite="false" />
+  <property name="subversionMerges" value="" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
