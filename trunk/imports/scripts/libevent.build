@@ -1,26 +1,29 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
   <property name="libeventDir" value="${platformRoot}\libevent" />
-  <property name="libeventBuildDir" value="${libeventDir}\build" />
 
   <target name="libevent-build" depends="checkout, cmake-prepare, openssl-build" if="${buildLibevent}">
     <OnceBlock file="build/libevent-${libeventVersion}-${platform}.build">
 
-      <mkdir dir="${libeventBuildDir}" />
-
-      <CMake workingdir="${libeventBuildDir}">
+      <CMake workingdir="${libeventDir}">
         <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
         <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
         <prop name="ZLIB_LIBRARY" value="${intDir}/lib/zlib.lib" />
         <prop name="ZLIB_INCLUDE_DIR" value="${intDir}" />
-
-        <arg value=".." />
       </CMake>
+      <FilterFile file="${libeventDir}/event.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
 
-      <MSBuild src="${libeventBuildDir}/libevent.sln">
+      <MSBuild src="${libeventDir}/libevent.sln">
         <!--target value="apr-1" />
         <target value="libapr-1" /-->
       </MSBuild>
     </OnceBlock>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${libeventDir}/include">
+        <include name="**" />
+      </fileset>
+    </copy>
   </target>
 </project>

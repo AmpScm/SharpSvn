@@ -1,0 +1,65 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="pthreadwin32Dir" value="${buildRoot}/pthread-win32" overwrite="false" />
+  <property name="pthreadwin32IntDir" value="${pthreadwin32Dir}/obj/${platform}" />
+  <property name="pthreadwin32LibDir" value="${pthreadwin32Dir}/bin/${platform}" />
+
+  <target name="pthreadwin32-build" depends="checkout">
+    <mkdir dir="${pthreadwin32IntDir}" />
+    <mkdir dir="${pthreadwin32LibDir}" />
+    <cl outputdir="${pthreadwin32IntDir}" pdbfile="${pthreadwin32IntDir}/pthread.pdb">
+      <arg value="/Ox" />      <!-- Maximize speed -->
+      <arg value="/GF" />      <!-- String Pooling -->
+      <arg value="/EHa" />     <!-- C++ and SEH Exceptions -->
+      <arg value="/Zi" />      <!-- Write debug information -->
+      <arg value="/Zl" />      <!-- No default library name -->
+
+      <arg value="/GL" if="${ltcg}" />      <!-- Whole program optimization -->
+      <arg value="/Gy" if="${ltcg}" />      <!-- Function level linking -->
+      <arg value="/Gw" if="${ltcg}" />      <!-- Optimize global data -->
+
+      <arg value="-I${pthreadwin32Dir}" />
+
+      <defines>
+        <define name="NDEBUG" />
+        <define name="WIN32" />
+        <define name="WINNT" />
+        <define name="WIN64" if="${platform=='x64'}" />
+        <define name="_WIN32_WINNT" value="0x0501" />
+        <define name="PTW32_STATIC_LIB" />
+      </defines>
+
+      <sources basedir="${pthreadwin32Dir}">
+        <include name="pthread.c" />
+      </sources>
+    </cl>
+    <lib output="${pthreadwin32LibDir}/pthread.lib">
+      <arg value="/NODEFAULTLIB" />
+      <sources basedir="${pthreadwin32IntDir}">
+        <include name="*.obj" />
+      </sources>
+    </lib>
+    <copy todir="${releaseLib}">
+      <fileset basedir="${pthreadwin32LibDir}">
+        <include name="pthread.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}\lib">
+      <fileset basedir="${pthreadwin32LibDir}">
+        <include name="pthread.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}\include">
+      <fileset basedir="${pthreadwin32Dir}">
+        <include name="pthread.h" />
+        <include name="sched.h" />
+      </fileset>
+    </copy>
+    <copy todir="${releaseInc}">
+      <fileset basedir="${pthreadwin32Dir}">
+        <include name="pthread.h" />
+        <include name="sched.h" />
+      </fileset>
+    </copy>
+  </target>
+</project>

@@ -329,6 +329,18 @@
       <arg value="${libeventDir}" />
     </Svn>
 
+    <Svn unless="${directory::exists(pthreadwin32Dir)}" if="${buildPthreadwin32}">
+      <arg value="co" />
+      <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/pthreads-win32/tags/${pthreadwin32Version}"/>
+      <arg value="${pthreadwin32Dir}" />
+      <arg line='--no-auth-cache --username guest --password=""' />
+    </Svn>
+
+    <Svn unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
+      <arg value="co" />
+      <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}"/>
+      <arg value="${memcachedDir}" />
+    </Svn>
   </target>
 
   <filterchain id="license-filter">
