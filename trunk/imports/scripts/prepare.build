@@ -338,7 +338,8 @@
 
     <Svn unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
       <arg value="co" />
-      <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}"/>
+      <arg value="https://github.com/memcached/memcached/branches/engine-pu" if="${memcachedBuildType == 'trunk'}" />/>
+      <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}" if="${memcachedBuildType == 'tag'}" />/>
       <arg value="${memcachedDir}" />
     </Svn>
   </target>
