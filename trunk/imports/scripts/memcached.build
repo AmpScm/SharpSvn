@@ -63,20 +63,11 @@ __int32    tv_usec;        /* microseconds */
 #if _MSC_VER >= 1800
 #    define HAVE_STDBOOL_H 1
 #endif' /><!-- Not available in VS2010 -->
-        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
+        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */
+#define PRIu64       "llu"' /><!-- Not available in VS2010 -->
         <AppendAtEnd value="
 #include &lt;config_version.h&gt;
 " />
-      </filterchain>
-    </FilterFile>
-    <FilterFile file="${memcachedDir}/engines/default_engine/slabs.c">
-      <filterchain>
-        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
-      </filterchain>
-    </FilterFile>
-    <FilterFile file="${memcachedDir}/engines/default_engine/default_engine.c">
-      <filterchain>
-        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
       </filterchain>
     </FilterFile>
     <FilterFile file="${memcachedDir}/daemon/memcached.c">
@@ -182,23 +173,29 @@ int snprintf(char* str, size_t size, const char* format, ...)
                          to='ENGINE_ERROR_CODE __declspec(dllexport) create_instance(' />
       </filterchain>
     </FilterFile>
-    <FilterFile file="${memcachedDir}/include/memcached/engine.h">
-      <filterchain>
-        <replacestring from='#include &lt;stdbool.h&gt;'
-        to='#if _MSC_VER >= 1800
-#  include &lt;stdbool.h&gt;
-#endif' />
-       </filterchain>
-    </FilterFile>
-    <FilterFile file="${memcachedDir}/include/memcached/types.h">
-      <filterchain>
-        <replacestring from='#include &lt;stdbool.h&gt;'
-        to='#if _MSC_VER >= 1800
-#  include &lt;stdbool.h&gt;
-#endif' />
-       </filterchain>
-    </FilterFile>
+    <foreach item="File" property="headerPatchFile">
+      <in>
+        <items basedir="${memcachedDir}">
+          <include name="include/memcached/engine.h" />
+          <include name="include/memcached/server_api.h" />
+          <include name="include/memcached/types.h" />
 
+          <include name="engines/default_engine/slabs.c" />
+          <include name="engines/default_engine/default_engine.c" />
+        </items>
+      </in>
+      <do>
+        <FilterFile file="${headerPatchFile}">
+          <filterchain>
+            <replacestring from='#include &lt;stdbool.h&gt;'
+                           to='#if _MSC_VER >= 1800
+#  include &lt;stdbool.h&gt;
+#endif' />
+            <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' />
+          </filterchain>
+        </FilterFile>
+      </do>
+    </foreach>
     <cl outputdir="${memcachedIntDir}" pdbfile="${memcachedIntDir}/memcached.pdb">
       <arg value="/Ox" />      <!-- Maximize speed -->
       <arg value="/GF" />      <!-- String Pooling -->
