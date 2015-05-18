@@ -44,7 +44,7 @@
       if="${downloadNUnit}" />
 
     <get
-      src="http://downloads.sourceforge.net/project/sharpdevelop/${sharpZipFilename}"
+      src="http://prdownloads.sourceforge.net/sharpdevelop/${sharpZipFilename}"
       dest="${downloads + sharpZipFilename}"
       unless="${file::exists(downloads + sharpZipFilename)}" />
 
@@ -56,7 +56,7 @@
       dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
 
-    <get src="http://heanet.dl.sourceforge.net/sourceforge/scons/${sconsVersion}/scons-${sconsVersion}.zip"
+    <get src="http://prdownloads.sourceforge.net/scons/${sconsVersion}/scons-${sconsVersion}.zip"
       dest="${downloads + sconsFilename}"
       unless="${file::exists(downloads + sconsFilename)}" />
 
@@ -79,17 +79,17 @@
         unless="${file::exists(downloads + gettextFilename)}" />
 
       <get
-        src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsFilename}"
+        src="http://prdownloads.sourceforge.net/gettext/${gettextToolsFilename}"
         dest="${downloads + gettextToolsFilename}"
         unless="${file::exists(downloads + gettextToolsFilename)}" />
 
       <get
-        src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsRuntimeFilename}"
+        src="http://prdownloads.sourceforge.net/gettext/${gettextToolsRuntimeFilename}"
         dest="${downloads + gettextToolsRuntimeFilename}"
         unless="${file::exists(downloads + gettextToolsRuntimeFilename)}" />
 
       <get
-        src="http://heanet.dl.sourceforge.net/sourceforge/gettext/${gettextToolsIconvFilename}"
+        src="http://prdownloads.sourceforge.net/gettext/${gettextToolsIconvFilename}"
         dest="${downloads + gettextToolsIconvFilename}"
         unless="${file::exists(downloads + gettextToolsIconvFilename)}" />
     </if>
