@@ -57,9 +57,14 @@ __int32    tv_usec;        /* microseconds */
 #pragma once
 #include &lt;config_version.h&gt;
 </echo>
-<echo file="${memcachedDir}/win32/config.h" append="true">
+    <FilterFile file="${memcachedDir}/win32/config.h">
+      <filterchain>
+        <replacestring from='#define HAVE_STDBOOL_H' to='/* #define  HAVE_STDBOOL_H */' />
+        <AppendAtEnd value="
 #include &lt;config_version.h&gt;
-</echo>
+" />
+      </filterchain>
+    </FilterFile>
     <FilterFile file="${memcachedDir}/daemon/memcached.c">
       <filterchain>
         <replacestring from='[nkey+1]' to='[512/*nkey+1*/]' />
