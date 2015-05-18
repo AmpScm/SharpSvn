@@ -17,7 +17,7 @@
   <property name="enableIpv6" value="true" overwrite="false" />
   <property name="buildHttpd" value="true" overwrite="false" />
   <property name="buildNeon" value="true" overwrite="false" />
-  <property name="buildMemcached" value="true" overwrite="false" />
+  <property name="buildMemcached" value="false" overwrite="false" />
   <property name="buildSubversion" value="false" />
   <property name="buildLibgit2" value="false" />
   <property name="buildLibssh2" value="false" />
