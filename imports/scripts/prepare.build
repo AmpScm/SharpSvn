@@ -44,7 +44,7 @@
       if="${downloadNUnit}" />
 
     <get
-      src="http://switch.dl.sourceforge.net/sourceforge/sharpdevelop/${sharpZipFilename}"
+      src="http://downloads.sourceforge.net/project/sharpdevelop/${sharpZipFilename}"
       dest="${downloads + sharpZipFilename}"
       unless="${file::exists(downloads + sharpZipFilename)}" />
 
