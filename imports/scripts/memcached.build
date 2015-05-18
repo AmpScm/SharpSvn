@@ -59,7 +59,10 @@ __int32    tv_usec;        /* microseconds */
 </echo>
     <FilterFile file="${memcachedDir}/win32/config.h">
       <filterchain>
-        <replacestring from='#define HAVE_STDBOOL_H' to='/* #define HAVE_STDBOOL_H */' /><!-- Not available in VS2010 -->
+        <replacestring from='#define HAVE_STDBOOL_H' to='
+#if _MSC_VER >= 1800
+#    define HAVE_STDBOOL_H 1
+#endif' /><!-- Not available in VS2010 -->
         <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
         <AppendAtEnd value="
 #include &lt;config_version.h&gt;
@@ -67,6 +70,11 @@ __int32    tv_usec;        /* microseconds */
       </filterchain>
     </FilterFile>
     <FilterFile file="${memcachedDir}/engines/default_engine/slabs.c">
+      <filterchain>
+        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${memcachedDir}/engines/default_engine/default_engine.c">
       <filterchain>
         <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
       </filterchain>
@@ -169,6 +177,7 @@ int snprintf(char* str, size_t size, const char* format, ...)
 
     <FilterFile file="${memcachedDir}/engines/default_engine/default_engine.h">
       <filterchain>
+        <replacestring from='#include &lt;stdbool.h&gt;' to='/* #include &lt;stdbool.h&gt; */' /><!-- Not available in VS2010 -->
         <replacestring from='ENGINE_ERROR_CODE create_instance('
                          to='ENGINE_ERROR_CODE __declspec(dllexport) create_instance(' />
       </filterchain>
