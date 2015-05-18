@@ -59,7 +59,8 @@ __int32    tv_usec;        /* microseconds */
 </echo>
     <FilterFile file="${memcachedDir}/win32/config.h">
       <filterchain>
-        <replacestring from='#define HAVE_STDBOOL_H' to='/* #define  HAVE_STDBOOL_H */' />
+        <replacestring from='#define HAVE_STDBOOL_H' to='/* #define HAVE_STDBOOL_H */' />
+        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' />
         <AppendAtEnd value="
 #include &lt;config_version.h&gt;
 " />
