@@ -191,6 +191,14 @@ int snprintf(char* str, size_t size, const char* format, ...)
             <replacestring from='#include &lt;stdbool.h&gt;'
                            to='#if _MSC_VER >= 1800
 #  include &lt;stdbool.h&gt;
+#else
+#ifndef bool
+#define bool int
+#endif
+#ifndef true
+#define true 1
+#define false 0
+#endif
 #endif' />
             <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' />
           </filterchain>
