@@ -59,11 +59,16 @@ __int32    tv_usec;        /* microseconds */
 </echo>
     <FilterFile file="${memcachedDir}/win32/config.h">
       <filterchain>
-        <replacestring from='#define HAVE_STDBOOL_H' to='/* #define HAVE_STDBOOL_H */' />
-        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' />
+        <replacestring from='#define HAVE_STDBOOL_H' to='/* #define HAVE_STDBOOL_H */' /><!-- Not available in VS2010 -->
+        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
         <AppendAtEnd value="
 #include &lt;config_version.h&gt;
 " />
+      </filterchain>
+    </FilterFile>
+    <FilterFile file="${memcachedDir}/engines/default_engine/slabs.c">
+      <filterchain>
+        <replacestring from='#include &lt;inttypes.h&gt;' to='/* #include &lt;inttypes.h&gt; */' /><!-- Not available in VS2010 -->
       </filterchain>
     </FilterFile>
     <FilterFile file="${memcachedDir}/daemon/memcached.c">
