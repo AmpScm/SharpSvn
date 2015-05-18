@@ -182,6 +182,14 @@ int snprintf(char* str, size_t size, const char* format, ...)
                          to='ENGINE_ERROR_CODE __declspec(dllexport) create_instance(' />
       </filterchain>
     </FilterFile>
+    <FilterFile file="${memcachedDir}/include\memcached/engine.h">
+      <filterchain>
+        <replacestring from='#include &lt;stdbool.h&gt;'
+        to='#if _MSC_VER >= 1800
+#  include &lt;stdbool.h&gt;
+#endif' />
+       </filterchain>
+    </FilterFile>
 
     <cl outputdir="${memcachedIntDir}" pdbfile="${memcachedIntDir}/memcached.pdb">
       <arg value="/Ox" />      <!-- Maximize speed -->
