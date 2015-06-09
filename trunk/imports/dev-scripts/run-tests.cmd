@@ -75,6 +75,9 @@ IF "%1" == "-d" (
 ) ELSE IF "%1" == "--enable-sasl" (
    SET ARGS=--enable-sasl !ARGS!
    SHIFT   
+) ELSE IF "%1" == "--enable-memcached" (
+   SET ARGS=--memcached-server=127.0.0.1:11211 --memcached-dir=%cd%\release\memcached !ARGS!
+   SHIFT   
 ) ELSE (
    SET ARGS=!ARGS! -t %1
    SHIFT
