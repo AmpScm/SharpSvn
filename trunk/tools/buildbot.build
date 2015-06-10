@@ -187,7 +187,7 @@
     </copy>
 
     <copy todir="release/net20/x64">
-      <fileset basedir="src/SharpSvn.UI/bin/x64/release">
+      <fileset basedir="src/SharpSvn/bin/x64/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
