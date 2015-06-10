@@ -166,11 +166,15 @@
     </copy>
 
     <copy todir="release/net20/x86">
-      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
+      <fileset basedir="src/SharpSvn/bin/Win32/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
         <include name="SharpPlink-Win32.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net20/x86">
+      <fileset basedir="src/SharpSvn.UI/bin/x86/release">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -181,13 +185,17 @@
         <include name="SharpSvn-*-win32.*" />
       </fileset>
     </copy>
-      
+
     <copy todir="release/net20/x64">
       <fileset basedir="src/SharpSvn.UI/bin/x64/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
         <include name="SharpPlink-x64.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net20/x64">
+      <fileset basedir="src/SharpSvn.UI/bin/x64/release">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -200,11 +208,15 @@
     </copy>
 
     <copy todir="release/net40/x86">
-      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release">
+      <fileset basedir="v40/src/SharpSvn/bin/Win32/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-Win32.svnExe" />
         <include name="SharpPlink-Win32.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x86">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x86/release">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
@@ -217,11 +229,15 @@
     </copy>
 
     <copy todir="release/net40/x64">
-      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release">
+      <fileset basedir="v40/src/SharpSvn/bin/x64/release">
         <include name="SharpSvn.dll" />
         <include name="SharpSvn.pdb" />
         <include name="SharpPlink-x64.svnExe" />
         <include name="SharpPlink-x64.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="release/net40/x64">
+      <fileset basedir="v40/src/SharpSvn.UI/bin/x64/release">
         <include name="SharpSvn.UI.dll" />
         <include name="SharpSvn.UI.pdb" />
         <include name="SharpSvn.UI.xml" />
