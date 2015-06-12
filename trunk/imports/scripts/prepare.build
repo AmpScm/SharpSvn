@@ -221,7 +221,7 @@
       unless="${directory::exists(opensslDir)}">
 
       <arg value="co" />
-      <arg value="https://github.com/openssl/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="https://github.com/rhuijben/openssl/tags/OpenSSL_${string::replace(opensslVersion,'.','_')}/" />
       <arg value="${opensslDir}" />
     </Svn>
 
