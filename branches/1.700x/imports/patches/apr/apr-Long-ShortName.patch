@@ -1,0 +1,68 @@
+Index: file_io/win32/filepath.c
+===================================================================
+--- file_io/win32/filepath.c	(revision 1652867)
++++ file_io/win32/filepath.c	(working copy)
+@@ -890,9 +890,9 @@ APR_DECLARE(apr_status_t) apr_filepath_merge(char
+                             memmove(path + keptlen + namelen + 1,
+                                    path + keptlen + seglen + 1,
+                                    pathlen - keptlen - seglen);
+-                            pathlen += namelen - seglen;
+-                            seglen = namelen;
+                         }
++                        pathlen += namelen - seglen;
++                        seglen = namelen;
+                     }
+                     else { /* namelen > seglen */
+                         if (pathlen + namelen - seglen >= sizeof(path))
+Index: test/testnames.c
+===================================================================
+--- test/testnames.c	(revision 1652867)
++++ test/testnames.c	(working copy)
+@@ -214,6 +214,39 @@ static void merge_lowercasedrive(abts_case *tc, vo
+ 
+   ABTS_INT_EQUAL(tc, APR_SUCCESS, rv);
+ }
++
++static void merge_shortname(abts_case *tc, void *data)
++{
++  apr_status_t rv;
++  char *long_path;
++  char short_path[MAX_PATH+1];
++  DWORD short_len;
++  char *result_path;
++
++  /* 'A b.c' is not a valid short path, so will have multiple representations
++     when short path name generation is enabled... but its 'short' path will
++     most likely be longer than the long path */
++  rv = apr_dir_make_recursive("C:/data/short/A b.c",
++                              APR_UREAD | APR_UWRITE | APR_UEXECUTE, p);
++  ABTS_INT_EQUAL(tc, APR_SUCCESS, rv);
++
++  rv = apr_filepath_merge(&long_path, NULL, "C:/data/short/A b.c",
++                          APR_FILEPATH_NOTRELATIVE, p);
++  ABTS_INT_EQUAL(tc, APR_SUCCESS, rv);
++
++  short_len = GetShortPathName(long_path, short_path, sizeof(short_path));
++  if (short_len > MAX_PATH)
++    return; /* Unable to test. Impossible shortname */
++
++  if (! strcmp(long_path, short_path))
++    return; /* Unable to test. 8dot3name option is probably not enabled */
++
++  rv = apr_filepath_merge(&result_path, "", short_path, APR_FILEPATH_TRUENAME,
++                          p);
++  ABTS_INT_EQUAL(tc, APR_SUCCESS, rv);
++
++  ABTS_STR_EQUAL(tc, long_path, result_path);
++}
+ #endif
+ 
+ static void root_absolute(abts_case *tc, void *data)
+@@ -341,6 +374,7 @@ abts_suite *testnames(abts_suite *suite)
+     abts_run_test(suite, merge_dotdot_dotdot_dotdot, NULL);
+ #if defined(WIN32)
+     abts_run_test(suite, merge_lowercasedrive, NULL);
++    abts_run_test(suite, merge_shortname, NULL);
+ #endif
+ 
+     abts_run_test(suite, root_absolute, NULL);
