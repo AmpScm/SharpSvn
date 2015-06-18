@@ -152,7 +152,8 @@ svn_error_t* SvnLookClient::ProcessTree(svn_repos_node_t *node, String^ basePath
     String^ name = SvnBase::Utf8_PtrToString(node->name);
     String^ path = basePath ? (basePath + "/" + name) : name;
 
-    if (node->action)
+    if (node->action == 'A' || node->action == 'D'
+        || (node->action == 'R' && (node->text_mod || node->prop_mod)))
     {
         String^ fp = (((SvnNodeKind)node->kind) == SvnNodeKind::Directory) ? (path + "/") : path;
 

@@ -43,13 +43,29 @@ namespace SharpSvn.Tests.LookCommands
                     da.LogMessage = "Created!";
                     cl.RemoteCreateDirectories(
                     new Uri[]
+                        {
+                        new Uri(uri, "a/b/c/d/e/f"),
+                        new Uri(uri, "a/b/c/d/g/h"),
+                        new Uri(uri, "i/j/k"),
+                        new Uri(uri, "l/m/n"),
+                        new Uri(uri, "l/m/n/o/p")
+                        }, da);
+                }
+            }
+
+            using (InstallHook(uri, SvnHookType.PreCommit, OnCopyDir))
             {
-            new Uri(uri, "a/b/c/d/e/f"),
-            new Uri(uri, "a/b/c/d/g/h"),
-            new Uri(uri, "i/j/k"),
-            new Uri(uri, "l/m/n"),
-            new Uri(uri, "l/m/n/o/p")
-            }, da);
+                using (SvnClient cl = new SvnClient())
+                {
+                    SvnCopyArgs ca = new SvnCopyArgs();
+                    ca.CreateParents = true;
+                    ca.LogMessage = "Created!";
+                    cl.RemoteCopy(
+                    new SvnUriTarget[]
+                        {
+                        new Uri(uri, "a/b/c/d"),
+                        new Uri(uri, "i/j")
+                        }, uri, ca);
                 }
             }
         }
@@ -64,15 +80,35 @@ namespace SharpSvn.Tests.LookCommands
                 Collection<SvnChangedEventArgs> list;
                 Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
 
-                Assert.That(list.Count, Is.EqualTo(17)); // 16 + root directory
-                Assert.That(list[0].Name, Is.EqualTo(""));
-                Assert.That(list[0].Path, Is.EqualTo("/"));
-                Assert.That(list[1].Name, Is.EqualTo("a"));
-                Assert.That(list[1].Path, Is.EqualTo("/a/"));
-                Assert.That(list[2].Name, Is.EqualTo("b"));
-                Assert.That(list[2].Path, Is.EqualTo("/a/b/"));
-                Assert.That(list[3].Name, Is.EqualTo("c"));
-                Assert.That(list[3].Path, Is.EqualTo("/a/b/c/"));
+                Assert.That(list.Count, Is.EqualTo(16));
+                Assert.That(list[0].Name, Is.EqualTo("a"));
+                Assert.That(list[0].Path, Is.EqualTo("/a/"));
+                Assert.That(list[1].Name, Is.EqualTo("b"));
+                Assert.That(list[1].Path, Is.EqualTo("/a/b/"));
+                Assert.That(list[2].Name, Is.EqualTo("c"));
+                Assert.That(list[2].Path, Is.EqualTo("/a/b/c/"));
+            }
+        }
+
+        private void OnCopyDir(object sender, ReposHookEventArgs e)
+        {
+            using (SvnLookClient lc = new SvnLookClient())
+            {
+                SvnChangedArgs ca = new SvnChangedArgs();
+                ca.Transaction = e.HookArgs.TransactionName;
+
+                Collection<SvnChangedEventArgs> list;
+                Assert.That(lc.GetChanged(e.HookArgs.LookOrigin, ca, out list));
+                Assert.That(list.Count, Is.EqualTo(2));
+
+                Assert.That(list[0].Name, Is.EqualTo("d"));
+                Assert.That(list[0].Path, Is.EqualTo("/d/"));
+                Assert.That(list[0].CopyFromPath, Is.EqualTo("/a/b/c/d"));
+                Assert.That(list[0].CopyFromRevision, Is.EqualTo(1L));
+                Assert.That(list[1].Name, Is.EqualTo("j"));
+                Assert.That(list[1].Path, Is.EqualTo("/j/"));
+                Assert.That(list[1].CopyFromPath, Is.EqualTo("/i/j"));
+                Assert.That(list[1].CopyFromRevision, Is.EqualTo(1L));
             }
         }
 
