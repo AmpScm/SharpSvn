@@ -147,6 +147,8 @@ namespace SharpSvn.Tests.LookCommands
             Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDOUT", outTxt);
             Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDERR", errTxt);
 
+            string file = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, type), ".exe");
+
             stopper.Start(
             delegate
             {
@@ -208,9 +210,8 @@ namespace SharpSvn.Tests.LookCommands
                 }
 
                 GC.KeepAlive(tfc);
+                File.Delete(file);
             });
-
-            string file = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, type), ".exe");
 
             File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
 
