@@ -29,6 +29,7 @@ namespace SharpSvn {
     ref class SvnLookRevisionPropertyArgs;
     ref class SvnLookGetPropertyArgs;
     ref class SvnLookPropertyListArgs;
+    ref class SvnLookInheritedPropertyListArgs;
     ref class SvnLookWriteArgs;
     ref class SvnLookListArgs;
 
@@ -149,6 +150,13 @@ namespace SharpSvn {
         bool GetPropertyList(SvnLookOrigin^ lookOrigin, String^ path, [Out] SvnPropertyCollection^% properties);
         /// <summary>Gets all properties on files or dirs (<c>svn proplist</c>)</summary>
         bool GetPropertyList(SvnLookOrigin^ lookOrigin, String^ path, SvnLookPropertyListArgs^ args, [Out] SvnPropertyCollection^% properties);
+
+    public:
+        bool InheritedPropertyList(SvnLookOrigin^ lookOrigin, String^ path, EventHandler<SvnLookInheritedPropertyListEventArgs^> ^propertyHandler);
+        bool InheritedPropertyList(SvnLookOrigin^ lookOrigin, String^ path, SvnLookInheritedPropertyListArgs ^args, EventHandler<SvnLookInheritedPropertyListEventArgs^> ^propertyHandler);
+
+        bool GetInheritedPropertyList(SvnLookOrigin^ lookOrigin, String^ path, [Out] Collection<SvnLookInheritedPropertyListEventArgs^> ^items);
+        bool GetInheritedPropertyList(SvnLookOrigin^ lookOrigin, String^ path, SvnLookInheritedPropertyListArgs ^args, [Out] Collection<SvnLookInheritedPropertyListEventArgs^> ^items);
 
     public:
         /// <overloads>Writes the content of the specified path to a stream directly from a repository</overloads>

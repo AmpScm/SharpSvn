@@ -656,6 +656,12 @@
     <ClInclude Include="Args\Vacuum.h">
       <Filter>SvnClient\Args</Filter>
     </ClInclude>
+    <ClInclude Include="LookArgs\SvnLookInheritedPropertyListArgs.h">
+      <Filter>SvnLookClient\Args</Filter>
+    </ClInclude>
+    <ClInclude Include="LookEventArgs\SvnLookInheritedPropertyListEventArgs.h">
+      <Filter>SvnLookClient\EventArgs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1119,6 +1125,9 @@
     </ClCompile>
     <ClCompile Include="Commands\CleanUp.cpp">
       <Filter>SvnClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LookCommands\LookInheritedPropertyList.cpp">
+      <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
