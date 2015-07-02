@@ -21,6 +21,11 @@ namespace SharpSvn {
         SvnRevision ^_revision;
 
     public:
+        SvnInheritedPropertyListArgs()
+        {
+s            _revision = SvnRevision::None;
+        }
+
         DECLARE_EVENT(SvnInheritedPropertyListEventArgs^, List)
 
 
