@@ -1007,6 +1007,15 @@ namespace SharpSvn {
 #pragma endregion
 
     public:
+        bool InheritedPropertyList(SvnTarget^ target, EventHandler<SvnInheritedPropertyListEventArgs^>^ handler);
+        bool InheritedPropertyList(SvnTarget^ target, SvnInheritedPropertyListArgs^ args, EventHandler<SvnInheritedPropertyListEventArgs^>^ handler);
+
+        bool GetInheritedPropertyList(SvnTarget^ target, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% listHandler);
+        bool GetInheritedPropertyList(SvnTarget^ target, SvnInheritedPropertyListArgs^ args, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% listHandler);
+
+        bool TryGetInheritedProperty(SvnTarget^ target, String^ propertyName, [Out] String^% value);
+        bool TryGetAllInheritedProperties(SvnTarget^ target, [Out] SvnPropertyCollection^% properties);
+
         bool InheritedPropertyList(String^ path, EventHandler<SvnInheritedPropertyListEventArgs^>^ handler);
         bool InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, EventHandler<SvnInheritedPropertyListEventArgs^>^ handler);
 

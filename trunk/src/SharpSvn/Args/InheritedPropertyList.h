@@ -18,10 +18,28 @@ namespace SharpSvn {
     /// <threadsafety static="true" instance="false"/>
     public ref class SvnInheritedPropertyListArgs : public SvnClientArgs
     {
-
+        SvnRevision ^_revision;
 
     public:
         DECLARE_EVENT(SvnInheritedPropertyListEventArgs^, List)
+
+
+    public:
+        property SvnRevision^ Revision
+        {
+            SvnRevision^ get()
+            {
+                return _revision;
+            }
+            void set(SvnRevision^ value)
+            {
+                if (value)
+                    _revision = value;
+                else
+                    _revision = SvnRevision::None;
+            }
+        }
+
 
     protected public:
         virtual void OnList(SvnInheritedPropertyListEventArgs^ e)
