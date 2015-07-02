@@ -42,21 +42,53 @@ bool SvnLookClient::InheritedPropertyList(SvnLookOrigin^ lookOrigin, String^ pat
         svn_error_t* r;
         apr_hash_t *props;
         apr_array_header_t *inherited_props;
-        const char *c_path = pool.AllocRelpath(path);
+        const char *c_path = apr_pstrcat(pool.Handle, "/", pool.AllocRelpath(path), (void*)nullptr);
 
         if (r = open_origin(lookOrigin, &root, nullptr, nullptr, %pool))
             return args->HandleResult(this, r);
 
+        /* This function accepts both relpaths and fspaths */
         if (r = svn_fs_node_proplist(&props, root, c_path, pool.Handle))
             return args->HandleResult(this, r);
 
+        /* This function only accept fspaths */
         if (r = svn_repos_fs_get_inherited_props(&inherited_props, root, c_path,
                                                  NULL /* propname */,
                                                  NULL, NULL /* authz */,
                                                  pool.Handle, pool.Handle))
             return args->HandleResult(this, r);
 
+        AprPool iterpool(%pool);
+        SvnLookInheritedPropertyListEventArgs ^ea;
+
         /* TODO: Walk entries */
+        for (int i = 0; i < inherited_props->nelts; i++)
+        {
+            const svn_prop_inherited_item_t *item = APR_ARRAY_IDX(inherited_props, i, svn_prop_inherited_item_t *);
+            SvnLookInheritedPropertyListEventArgs ^ea;
+
+            iterpool.Clear();
+            ea = gcnew SvnLookInheritedPropertyListEventArgs(item->path_or_url, item->prop_hash, %iterpool);
+            try
+            {
+                args->OnInheritedPropertyList(ea);
+            }
+            finally
+            {
+                ea->Detach(false);
+            }
+
+        }
+
+        ea = gcnew SvnLookInheritedPropertyListEventArgs(c_path+1, props, %iterpool);
+        try
+        {
+            args->OnInheritedPropertyList(ea);
+        }
+        finally
+        {
+            ea->Detach(false);
+        }
 
         return args->HandleResult(this, r);
     }
