@@ -71,6 +71,7 @@
   <ItemGroup>
     <Compile Include="AdminCommands\DumpTest.cs" />
     <Compile Include="Commands\AddTests.cs" />
+    <Compile Include="LookCommands\InheritedPropertyTests.cs" />
     <Compile Include="Misc\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
     <Compile Include="Commands\DiffSummaryTests.cs" />

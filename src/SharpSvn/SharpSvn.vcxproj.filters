@@ -659,7 +659,7 @@
     <ClInclude Include="LookArgs\SvnLookInheritedPropertyListArgs.h">
       <Filter>SvnLookClient\Args</Filter>
     </ClInclude>
-    <ClInclude Include="LookEventArgs\SvnLookInheritedPropertyListEventArgs.h">
+    <ClInclude Include="EventArgs\SvnLookInheritedPropertyListEventArgs.h">
       <Filter>SvnLookClient\EventArgs</Filter>
     </ClInclude>
   </ItemGroup>
