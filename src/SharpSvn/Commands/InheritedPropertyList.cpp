@@ -4,14 +4,12 @@
 
 using namespace SharpSvn;
 
-bool SvnClient::InheritedPropertyList(String^ path, EventHandler<SvnInheritedPropertyListEventArgs^>^ listHandler)
+bool SvnClient::InheritedPropertyList(SvnTarget ^target,EventHandler<SvnInheritedPropertyListEventArgs^>^ listHandler)
 {
-    if (String::IsNullOrEmpty(path))
-        throw gcnew ArgumentNullException("path");
-    else if (!IsNotUri(path))
-        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
 
-    return InheritedPropertyList(path, gcnew SvnInheritedPropertyListArgs(), listHandler);
+    return InheritedPropertyList(target, gcnew SvnInheritedPropertyListArgs(), listHandler);
 }
 
 static svn_error_t *iprop_list(void *baton, const char *path, apr_hash_t *prop_hash, apr_array_header_t *inherited_props, apr_pool_t *scratch_pool)
@@ -70,12 +68,10 @@ static svn_error_t *iprop_list(void *baton, const char *path, apr_hash_t *prop_h
     }
 }
 
-bool SvnClient::InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, EventHandler<SvnInheritedPropertyListEventArgs^>^ listHandler)
+bool SvnClient::InheritedPropertyList(SvnTarget ^target,SvnInheritedPropertyListArgs^ args, EventHandler<SvnInheritedPropertyListEventArgs^>^ listHandler)
 {
-    if (String::IsNullOrEmpty(path))
-        throw gcnew ArgumentNullException("path");
-    else if (!IsNotUri(path))
-        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+    if (!target)
+        throw gcnew ArgumentNullException("target");
     else if (!args)
         throw gcnew ArgumentNullException("args");
 
@@ -87,10 +83,12 @@ bool SvnClient::InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs
         args->List += listHandler;
     try
     {
-        svn_opt_revision_t rev  = {svn_opt_revision_unspecified};
+        svn_opt_revision_t pegrev = target->Revision->ToSvnRevision();
+        svn_opt_revision_t rev = args->Revision->Or(target->Revision)->ToSvnRevision();
 
-        svn_error_t* r = svn_client_proplist4(pool.AllocAbsoluteDirent(path),
-            &rev,
+        svn_error_t* r = svn_client_proplist4(
+            target->AllocAsString(%pool, true),
+            &pegrev,
             &rev,
             svn_depth_empty,
             nullptr /* changelist */,
@@ -100,7 +98,7 @@ bool SvnClient::InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs
             CtxHandle,
             pool.Handle);
 
-        return args->HandleResult(this, r, path);
+        return args->HandleResult(this, r, target);
     }
     finally
     {
@@ -109,17 +107,17 @@ bool SvnClient::InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs
     }
 }
 
-bool SvnClient::GetInheritedPropertyList(String^ path, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% list)
+bool SvnClient::GetInheritedPropertyList(SvnTarget ^target,[Out] Collection<SvnInheritedPropertyListEventArgs^>^% list)
 {
-    if (!path)
+    if (!target)
         throw gcnew ArgumentNullException("target");
 
-    return GetInheritedPropertyList(path, gcnew SvnInheritedPropertyListArgs(), list);
+    return GetInheritedPropertyList(target, gcnew SvnInheritedPropertyListArgs(), list);
 }
 
-bool SvnClient::GetInheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% list)
+bool SvnClient::GetInheritedPropertyList(SvnTarget ^target,SvnInheritedPropertyListArgs^ args, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% list)
 {
-    if (!path)
+    if (!target)
         throw gcnew ArgumentNullException("target");
     else if (!args)
         throw gcnew ArgumentNullException("args");
@@ -128,7 +126,7 @@ bool SvnClient::GetInheritedPropertyList(String^ path, SvnInheritedPropertyListA
 
     try
     {
-        return InheritedPropertyList(path, args, results->Handler);
+        return InheritedPropertyList(target, args, results->Handler);
     }
     finally
     {
@@ -169,7 +167,7 @@ public:
 };
 
 // This can be optimized by using more unmanaged code, but we can always do that later
-bool SvnClient::TryGetAllInheritedProperties(String^ path, [Out] SvnPropertyCollection^% properties)
+bool SvnClient::TryGetAllInheritedProperties(SvnTarget ^target,[Out] SvnPropertyCollection^% properties)
 {
     TheIPropCollector ^pc = gcnew TheIPropCollector();
 
@@ -177,7 +175,7 @@ bool SvnClient::TryGetAllInheritedProperties(String^ path, [Out] SvnPropertyColl
     la->ThrowOnError = false;
     properties = nullptr;
 
-    if (InheritedPropertyList(path, la, gcnew EventHandler<SvnInheritedPropertyListEventArgs^>(pc, &TheIPropCollector::Collect)))
+    if (InheritedPropertyList(target, la, gcnew EventHandler<SvnInheritedPropertyListEventArgs^>(pc, &TheIPropCollector::Collect)))
     {
         properties = pc->GetCollection();
         return true;
@@ -187,12 +185,12 @@ bool SvnClient::TryGetAllInheritedProperties(String^ path, [Out] SvnPropertyColl
 }
 
 // This can be optimized by using more unmanaged code, but we can always do that later
-bool SvnClient::TryGetInheritedProperty(String^ path, String^ propertyName, [Out] String^% value)
+bool SvnClient::TryGetInheritedProperty(SvnTarget ^target, String^ propertyName, [Out] String^% value)
 {
     SvnPropertyCollection^ props;
     value = nullptr;
 
-    if (TryGetAllInheritedProperties(path, props))
+    if (TryGetAllInheritedProperties(target, props))
     {
         if (props->Contains(propertyName))
         {
@@ -206,4 +204,64 @@ bool SvnClient::TryGetInheritedProperty(String^ path, String^ propertyName, [Out
     }
 
     return false;
+}
+
+bool SvnClient::InheritedPropertyList(String^ path, EventHandler<SvnInheritedPropertyListEventArgs^>^ listHandler)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    return InheritedPropertyList(gcnew SvnPathTarget(path), listHandler);
+}
+
+bool SvnClient::InheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, EventHandler<SvnInheritedPropertyListEventArgs^>^ listHandler)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    return InheritedPropertyList(gcnew SvnPathTarget(path), args, listHandler);
+}
+
+bool SvnClient::GetInheritedPropertyList(String^ path, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% list)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    return GetInheritedPropertyList(gcnew SvnPathTarget(path), list);
+}
+
+bool SvnClient::GetInheritedPropertyList(String^ path, SvnInheritedPropertyListArgs^ args, [Out] Collection<SvnInheritedPropertyListEventArgs^>^% list)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    return GetInheritedPropertyList(gcnew SvnPathTarget(path), args, list);
+}
+
+bool SvnClient::TryGetAllInheritedProperties(String^ path, [Out] SvnPropertyCollection^% properties)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    return TryGetAllInheritedProperties(gcnew SvnPathTarget(path), properties);
+}
+
+bool SvnClient::TryGetInheritedProperty(String^ path, String^ propertyName, [Out] String^% value)
+{
+    if (String::IsNullOrEmpty(path))
+        throw gcnew ArgumentNullException("path");
+    else if (!IsNotUri(path))
+        throw gcnew ArgumentException(SharpSvnStrings::ArgumentMustBeAPathNotAUri, "path");
+
+    return TryGetInheritedProperty(gcnew SvnPathTarget(path), propertyName, value);
 }

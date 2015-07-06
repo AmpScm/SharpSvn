@@ -283,6 +283,8 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClInclude Include="Args\InheritedPropertyList.h" />
     <ClInclude Include="Args\SvnRepositoryOperationArgs.h" />
     <ClInclude Include="EventArgs\SvnInheritedPropertyListEventArgs.h" />
+    <ClInclude Include="EventArgs\SvnLookInheritedPropertyListEventArgs.h" />
+    <ClInclude Include="LookArgs\SvnLookInheritedPropertyListArgs.h" />
     <ClInclude Include="RemoteArgs\SvnRemoteWriteArgs.h" />
     <ClInclude Include="ReposArgs\PackRepository.h" />
     <ClInclude Include="ReposArgs\VerifyRepository.h" />
@@ -548,6 +550,7 @@ $(SolutionDir)tools\Errors2Enum\bin\$(Configuration)\Errors2Enum.exe "$(VCInstal
     <ClCompile Include="Commands\RepositoryMove.cpp" />
     <ClCompile Include="Commands\RepositorySetProperty.cpp" />
     <ClCompile Include="Commands\RepositoryUpdateFile.cpp" />
+    <ClCompile Include="LookCommands\LookInheritedPropertyList.cpp" />
     <ClCompile Include="RemoteCommands\RemoteWrite.cpp" />
     <ClCompile Include="ReposCommands\PackRepository.cpp" />
     <ClCompile Include="ReposCommands\VerifyRepository.cpp" />
