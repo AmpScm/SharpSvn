@@ -38,6 +38,7 @@
 #include "EventArgs/SvnChangedEventArgs.h"
 #include "EventArgs/SvnChangeInfoEventArgs.h"
 #include "EventArgs/SvnLookListEventArgs.h"
+#include "EventArgs/SvnLookInheritedPropertyListEventArgs.h"
 #include "EventArgs/SvnFileVersionEventArgs.h"
 #include "EventArgs/SvnPatchFilterEventArgs.h"
 #include "EventArgs/SvnInheritedPropertyListEventArgs.h"

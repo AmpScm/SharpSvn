@@ -647,6 +647,12 @@
     <ClInclude Include="RemoteArgs\SvnRemoteWriteArgs.h">
       <Filter>SvnRemoteSession\Args</Filter>
     </ClInclude>
+    <ClInclude Include="LookArgs\SvnLookInheritedPropertyListArgs.h">
+      <Filter>SvnLookClient\Args</Filter>
+    </ClInclude>
+    <ClInclude Include="EventArgs\SvnLookInheritedPropertyListEventArgs.h">
+      <Filter>SvnLookClient\EventArgs</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1101,6 +1107,9 @@
     </ClCompile>
     <ClCompile Include="RemoteCommands\RemoteWrite.cpp">
       <Filter>SvnRemoteSession\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LookCommands\LookInheritedPropertyList.cpp">
+      <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

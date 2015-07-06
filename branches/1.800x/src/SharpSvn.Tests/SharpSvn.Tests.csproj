@@ -73,6 +73,7 @@
     <Compile Include="AdminCommands\DumpTest.cs" />
     <Compile Include="Commands\AddTests.cs" />
     <Compile Include="Commands\AuthenticationTests.cs" />
+    <Compile Include="LookCommands\InheritedPropertyTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
     <Compile Include="Commands\DiffSummaryTests.cs" />
     <Compile Include="Commands\CapabilitiesTests.cs" />
