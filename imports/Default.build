@@ -13,11 +13,10 @@
 
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
   <!--
-    r1674455, r1674456,
-    r1674626, r1674785
+    r1674626, r1674785 - Enable memcached support
   // -->
   <property name="subversionVersion" value="1.9.0-rc3" overwrite="false" />
-  <property name="subversionMerges" value="r1674455,r1674456,r1674626,r1674785" overwrite="false" />
+  <property name="subversionMerges" value="r1674626,r1674785" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
