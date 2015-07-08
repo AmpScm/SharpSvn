@@ -185,9 +185,6 @@ namespace SharpSvn {
         /// <summary> The structure of a revision is being verified.  @since New in 1.8. </summary>
         VerifyStructure = svn_repos_notify_verify_rev_structure,
 
-        /** A revision is found with corruption/errors. @since New in 1.9. */
-        Failure = svn_repos_notify_failure,
-
         /** A revprop shard got packed. @since New in 1.9. */
         PackRevisionProperties = svn_repos_notify_pack_revprops,
 
