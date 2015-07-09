@@ -65,7 +65,6 @@ bool SvnLookClient::InheritedPropertyList(SvnLookOrigin^ lookOrigin, String^ pat
         for (int i = 0; i < inherited_props->nelts; i++)
         {
             const svn_prop_inherited_item_t *item = APR_ARRAY_IDX(inherited_props, i, svn_prop_inherited_item_t *);
-            SvnLookInheritedPropertyListEventArgs ^ea;
 
             iterpool.Clear();
             ea = gcnew SvnLookInheritedPropertyListEventArgs(item->path_or_url, item->prop_hash, %iterpool);
