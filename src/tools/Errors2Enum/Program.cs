@@ -10,9 +10,9 @@ namespace Errors2Enum
     {
         static void Main(string[] args)
         {
-            if (args.Length != 6)
+            if (args.Length != 7)
             {
-                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <apr_errno.h> <serf.h> <libssh2.h> <outputfile>");
+                Console.Error.WriteLine("Usage: Errors2Enum <VCPath> <SDKPath> <UniversalSDKDir> <apr_errno.h> <serf.h> <libssh2.h> <outputfile>");
                 foreach (string s in args)
                 {
                     Console.Error.WriteLine("'" + s + "'");
@@ -23,12 +23,16 @@ namespace Errors2Enum
 
             string vcPath = Path.GetFullPath(args[0]);
             string sdkPath = Path.GetFullPath(args[1]);
+            string usdkPath = Path.GetFullPath(args[2].Split(new char[] { ';' }, 2)[0]);
             string winerror = Path.Combine(sdkPath, "include\\winerror.h");
             string errno = Path.Combine(vcPath, "include\\errno.h");
-            string aprerrno = Path.GetFullPath(args[2]);
-            string serfh = Path.GetFullPath(args[3]);
-            string libssh2h = Path.GetFullPath(args[4]);
-            string to = Path.GetFullPath(args[5]);
+            string altErrNo = Path.Combine(usdkPath, "errno.h");
+            if (!File.Exists(errno) && File.Exists(altErrNo))
+                errno = altErrNo;
+            string aprerrno = Path.GetFullPath(args[3]);
+            string serfh = Path.GetFullPath(args[4]);
+            string libssh2h = Path.GetFullPath(args[5]);
+            string to = Path.GetFullPath(args[6]);
 
             if (!File.Exists(winerror))
                 winerror = Path.Combine(Path.Combine(Path.GetDirectoryName(winerror), "shared"), "winerror.h");
