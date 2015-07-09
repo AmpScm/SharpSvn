@@ -23,7 +23,7 @@ namespace Errors2Enum
 
             string vcPath = Path.GetFullPath(args[0]);
             string sdkPath = Path.GetFullPath(args[1]);
-            string usdkPath = Path.GetFullPath(args[2].Split(new char[] { ';' }, 2)[0]);
+            string usdkPath = string.IsNullOrEmpty(args[2].Trim()) ? "C:\\" : Path.GetFullPath(args[2].Split(new char[] { ';' }, 2)[0]);
             string winerror = Path.Combine(sdkPath, "include\\winerror.h");
             string errno = Path.Combine(vcPath, "include\\errno.h");
             string altErrNo = Path.Combine(usdkPath, "errno.h");
