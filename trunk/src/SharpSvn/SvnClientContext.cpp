@@ -650,8 +650,6 @@ void SvnClientContext::ApplyCustomRemoteConfig()
         || _sshOverride == SvnSshOverride::ForceSharpPlinkAfterConfig
         || _sshOverride == SvnSshOverride::ForceInternalAfterConfig)
     {
-        svn_config_t *cfg = (svn_config_t*)apr_hash_get(CtxHandle->config, SVN_CONFIG_CATEGORY_CONFIG, APR_HASH_KEY_STRING);
-
         String^ customSshConfig = ReadRegKey(Registry::CurrentUser, "Software\\QQn\\SharpSvn\\CurrentVersion\\Handlers", "SSH");
 
         if (!customSshConfig)
