@@ -55,11 +55,11 @@ bool SvnRepositoryClient::Verify(String^ repositoryPath, SvnVerifyRepositoryArgs
         repos,
         (svn_revnum_t)args->StartRevision,
         (svn_revnum_t)args->EndRevision,
-        args->ContinueOnError,
         args->VerifyNormalization,
         FALSE /* metadata_only */,
         repos_notify_func,
         _clientBaton->Handle,
+        nullptr, nullptr,
         CtxHandle->cancel_func,
         CtxHandle->cancel_baton,
         pool.Handle);

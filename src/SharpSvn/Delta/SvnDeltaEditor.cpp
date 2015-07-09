@@ -121,8 +121,8 @@ public:
 
         if(nextRef && *nextRef == this)
             *nextRef = _nextFile;
-        else
-            throw gcnew InvalidOperationException();
+        /*else
+            throw gcnew InvalidOperationException();*/
 
         _nextFile = nullptr;
     }
@@ -154,8 +154,8 @@ directory_baton::~directory_baton()
 
     if(nextRef && *nextRef == this)
         *nextRef = _nextDir;
-    else
-        throw gcnew InvalidOperationException();
+    /*else
+        throw gcnew InvalidOperationException();*/
 
     _nextDir = nullptr;
 }

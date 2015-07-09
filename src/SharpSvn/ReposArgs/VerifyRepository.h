@@ -56,18 +56,6 @@ namespace SharpSvn {
             }
         }
 
-        property bool ContinueOnError
-        {
-            bool get()
-            {
-                return _continueOnError;
-            }
-            void set(bool value)
-            {
-                _continueOnError = value;
-            }
-        }
-
         property bool VerifyNormalization
         {
             bool get()
