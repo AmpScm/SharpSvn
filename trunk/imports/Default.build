@@ -54,7 +54,7 @@
   <property name="sconsVersion" value="2.3.4" overwrite="false" />
 
   <!-- For testcase -->
-  <property name="nunitVersion" value="2.6.3" overwrite="false" />
+  <property name="nunitVersion" value="2.6.4" overwrite="false" />
   <property name="sharpZipVersion" value="0860" overwrite="false" />
   <property name="junitVersion" value="4.10" overwrite="false" />
   <property name="libeventVersion" value="2.1.5-beta" overwrite="false" />
