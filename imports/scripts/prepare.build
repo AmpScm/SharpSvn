@@ -8,12 +8,12 @@
 
   <property name="nunitFilename" value="NUnit-${nunitVersion}.zip" />
   <property name="nunitDir" value="${'build/NUnit-' + nunitVersion}" />
+  
+  <regex pattern="^(?'nunitVersionMMR'\d+\.\d+(\.\d+))" input="${nunitVersion}" />
+  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 
   <property name="sconsFilename" value="scons-${sconsVersion}.zip" />
   <property name="sconsDir" value="${'build/scons-' + sconsVersion}" />
-
-  <regex pattern="^(?'nunitVersionMMR'\d+\.\d+(\.\d+))" input="${nunitVersion}" />
-  <property name="nunitDir" value="${'build/nunit-' + nunitVersion}" />
 
   <regex pattern="^(?'cmakeVersionMM'\d+\.\d+)" input="${cmakeVersion}" />
   <property name="cmakeFilename" value="cmake-${cmakeVersion}-win32-x86.zip" />
@@ -38,10 +38,9 @@
       unless="${file::exists(downloads + dbFilename)}" />
 
     <get
-      src="http://launchpad.net/nunitv2/trunk/${nunitVersionMMR}/+download/${nunitFilename}"
+      src="http://github.com/nunit/nunitv2/releases/download/${nunitVersionMMR}/${nunitFilename}"
       dest="${downloads + nunitFilename}"
-      unless="${file::exists(downloads + nunitFilename)}"
-      if="${downloadNUnit}" />
+      unless="${file::exists(downloads + nunitFilename)}" />
 
     <get
       src="http://prdownloads.sourceforge.net/sharpdevelop/${sharpZipFilename}"
