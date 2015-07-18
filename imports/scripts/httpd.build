@@ -52,6 +52,8 @@
         <target value="mod_dav" />
         <target value="mod_access_compat" />
         <target value="mod_authz_core" />
+        <target value="mod_authz_groupfile" />
+        <target value="mod_authz_host" />
         <target value="mod_authz_user" />
         <target value="mod_auth_basic" />
         <target value="mod_authn_core" />
