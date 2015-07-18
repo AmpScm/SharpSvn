@@ -58,6 +58,7 @@
         <target value="mod_auth_basic" />
         <target value="mod_authn_core" />
         <target value="mod_authn_file" />
+        <target value="mod_access_compat" /><!-- Used for version detection -->
         <target value="mod_mime" />
         <target value="mod_alias" />
         <target value="mod_log_config" />
