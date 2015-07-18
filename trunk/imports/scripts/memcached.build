@@ -128,6 +128,8 @@ int gettimeofday(struct timeval2 *tv/*in*/, struct timezone2 *tz/*in*/)
 
   return 0;
 }
+" />
+        <AppendAtEnd if="${VSversion &lt; '2015'}" value="
 
 #include &lt;stdio.h&gt;
 #include &lt;stdarg.h&gt;
@@ -267,6 +269,8 @@ typedef unsigned long long uint_fast64_t;
         <define name="inline" value="__inline" />
         <define name="strcasecmp" value="stricmp" />
         <define name="strtoull" value="my_strtoull" />
+
+        <define name="_TIMESPEC_DEFINED" if="${VSversion &gt;= '2015'}"/>
 
         <define name="PTW32_STATIC_LIB" />
       </defines>

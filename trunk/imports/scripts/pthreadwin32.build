@@ -27,6 +27,7 @@
         <define name="WINNT" />
         <define name="WIN64" if="${platform=='x64'}" />
         <define name="_WIN32_WINNT" value="0x0501" />
+        <define name="_TIMESPEC_DEFINED" if="${VSversion &gt;= '2015'}"/>
         <define name="PTW32_STATIC_LIB" />
       </defines>
 
