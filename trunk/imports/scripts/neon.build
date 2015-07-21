@@ -45,6 +45,10 @@
             <token key="MINOR" value="${NEON_MINOR_VERSION}" />
           </replacetokens>
           <replacestring from="#define socklen_t" to="// # define socklen_t" />
+          <LineRegexReplace re='#define snprintf[ \t]*_snprintf' to='
+#if (_MSC_VER &lt; 1900)
+# define snprintf _snprintf
+#endif' />
         </filterchain>
       </loadfile>
       <echo file="${neonDir}/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
