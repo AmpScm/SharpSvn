@@ -12,13 +12,12 @@
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
 
   <!-- -->
-  <property name="subversionVersion" value="1.7.20" overwrite="false" />
+  <property name="subversionVersion" value="1.7.22" overwrite="false" />
   <!-- r1156080 - Blame notification change (1.8) -->
   <!-- r1302450 - Upgrade svn_client_import to support filtering -->
   <property name="subversionMerges" value="1156080,1302450" overwrite="false" />
   <!-- r1340318 - Avoid ancestor check in the status walker -->
-  <!-- r1542765 - Add Sqlite indexes -->
-  <property name="subversionMergeBranches" value="branches/1.7.x-r1542765@1687152;branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
+  <property name="subversionMergeBranches" value="branches/1.7.x -c -1355701 --accept=theirs-conflict;trunk -c 1340318,1348822,1348855,1349215" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="960671" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
