@@ -15,7 +15,7 @@
   <!--
     r1674626, r1674785 - Enable memcached support
   // -->
-  <property name="subversionVersion" value="1.9.0-rc3" overwrite="false" />
+  <property name="subversionVersion" value="1.9.0" overwrite="false" />
   <property name="subversionMerges" value="r1674626,r1674785" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
