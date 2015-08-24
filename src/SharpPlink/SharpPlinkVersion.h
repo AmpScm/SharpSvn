@@ -4,7 +4,7 @@
 #define PLINK_FILE_DESCRIPTION SharpPlink - Putty Plink variant
 
 #define PLINK_VER_MAJOR 0
-#define PLINK_VER_MINOR 64
+#define PLINK_VER_MINOR 65
 #define PLINK_VER_PATCH 0
 
 #define PLINK_VER_REVISION 0
