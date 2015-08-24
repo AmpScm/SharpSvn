@@ -91,6 +91,9 @@
       <Component Id="svn_populate_node_origins_index.exe" Guid="44032186-CE94-4149-8594-8C48AA8781FA">
         <File Id="svn_populate_node_origins_index.exe" Name="svn-populate-node-origins-index.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
+      <Component Id="svnfsfs.exe" Guid="8120856F-AA05-40DE-B293-BCBC2E588CEC">
+        <File Id="svnfsfs.exe" Name="svnfsfs.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
     </DirectoryRef>
     <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin\" DiskId="1">
       <Component Id="DB.dll" Guid="DD2F46E2-2B09-45DB-B389-C1B80ABC0F42">
