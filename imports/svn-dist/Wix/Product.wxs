@@ -133,6 +133,7 @@
       <ComponentRef Id="AddToPath"/>      
       <ComponentGroupRef Id="svnauthz_validate.exe"/>
       <ComponentGroupRef Id="svnbench.exe"/>
+      <ComponentGroupRef Id="svnfsfs.exe"/>
       <ComponentGroupRef Id="svn_populate_node_origins_index.exe"/>
       <MergeRef Id="VC_CRT"/>
       <ComponentGroupRef Id="SharpSvnImport_LICENSES" />

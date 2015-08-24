@@ -260,6 +260,7 @@
         <target value="Programs\svnauthz" />
         <target value="Programs\svnauthz-validate" />
         <target value="Programs\svndumpfilter" />
+        <target value="Programs\svnfsfs" />
         <target value="Programs\svnrdump" />
         <target value="Programs\svn-populate-node-origins-index" />
         <target value="__SWIG_PERL__" if="${property::exists('withSwig')}" />

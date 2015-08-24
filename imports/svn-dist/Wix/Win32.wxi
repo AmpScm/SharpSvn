@@ -5,7 +5,7 @@
 
   <DirectoryRef Id="TARGETDIR">
     <Directory Id="ProgramFilesFolder">
-      <Directory Id="INSTALLBASE">      
+      <Directory Id="INSTALLBASE">
       </Directory>
     </Directory>
   </DirectoryRef>
