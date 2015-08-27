@@ -153,7 +153,7 @@
     </exec>
   </target>
 
-  <target name="build" depends="download,extract,checkout, svn-build, copy-result">
+  <target name="build" depends="download,extract,checkout, svn-build, libssh2-build, copy-result">
 
   </target>
 

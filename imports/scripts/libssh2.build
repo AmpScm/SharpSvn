@@ -54,6 +54,14 @@
           <replacestring from="__declspec(dllimport)" to="/* __declspec( dllimport ) */" />
         </filterchain>
       </FilterFile>
+      <FilterFile file="${libssh2Dir}\win32\libssh2_config.h">
+        <filterchain>
+          <replacestring from='#define snprintf _snprintf' to='
+#if _MSC_VER &lt; 1900
+#define snprintf  _snprintf
+#endif'   />
+        </filterchain>
+      </FilterFile>
       <NMake workingdir="${libssh2Dir}" makeFile="${libssh2Dir}\NMakefile">
         <arg value="WITH_WINCNG=0" /><!-- CNG is not compatible with Windows XP-->
       </NMake>
