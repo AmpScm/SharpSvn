@@ -2,6 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TargetFrameworkVersion Condition="'$(MSBuildToolsVersion)' == '3.5' or '$(MSBuildToolsVersion)' == '2.0' or '$(PlatformToolset)' == 'v90'">v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion Condition="'$(MSBuildToolsVersion)' != '3.5' and '$(MSBuildToolsVersion)' != '2.0' and '$(PlatformToolset)' != 'v90'">v4.0</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
