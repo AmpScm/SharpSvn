@@ -85,7 +85,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("Cyrus Sasl", SASL_VERSION)];
 [assembly:SvnLibrary("eXpat", EXPAT_VERSION)];
 [assembly:SvnLibrary("LibSSH2", LIBSSH2_VERSION)]
-[assembly:SvnLibrary("serf", SERF_VERSION)];
+[assembly:SvnLibrary("Serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix = true)];
