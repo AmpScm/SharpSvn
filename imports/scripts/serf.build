@@ -8,7 +8,7 @@
         <arg value="merge" />
         <arg value="-c" />
         <arg value="${serfMerges}" />
-        <arg value="^/trunk" />
+        <arg value="^/serf/trunk" />
         <arg value="${serfDir}" />
       </Svn>
     </OnceBlock>
