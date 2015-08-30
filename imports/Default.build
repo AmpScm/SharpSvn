@@ -22,12 +22,12 @@
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
-  <!-- r2184-r2186      - Return connection timeouts as a specific error -->
-  <!-- r2254            - Possible bucket leak in cancel scenarios -->
-  <!-- r2455,r2463-r2464- Properly validate status line -->
-  <!-- r2456-r2457      - Correctness fixes to help debugging -->
-  <!-- r2374            - Allow building with VS 2015 -->
-  <property name="serfMerges" value="2184-2186,2254,2455,2456-2457,2463-2464,2374" overwrite="false" />
+  <!-- r1699721-r1699723          - Return connection timeouts as a specific error -->
+  <!-- r1699791                   - Possible bucket leak in cancel scenarios -->
+  <!-- r1699985,r1699993-r1699994 - Properly validate status line -->
+  <!-- r1699986-r1699987          - Correctness fixes to help debugging -->
+  <!-- r1699906                   - Allow building with VS 2015 -->
+  <property name="serfMerges" value="r1699721-1699723,r1699791,r1699985,r1699986-r1699987,r1699993-r1699994,r1699906" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.0.2d" overwrite="false" />
