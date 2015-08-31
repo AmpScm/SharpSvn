@@ -61,7 +61,7 @@
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />
   </filterchain>
 
-  <target name="cmake-prepare">
+  <target name="cmake-prepare" depends="extract">
     <OnceBlock file="build/cmake-${cmakeVersion}.patched">
       <foreach item="File" property="cmakeVSFinder">
         <in>
