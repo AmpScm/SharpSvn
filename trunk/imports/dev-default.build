@@ -41,7 +41,7 @@
   <target name="prepare-dev" depends="prep-dev, gen-dev">
   </target>
 
-  <target name="prep-serf-dev" depends="svn-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
+  <target name="prep-serf-dev" depends="zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
   </target>
 
 </project>
