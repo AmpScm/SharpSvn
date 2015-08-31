@@ -70,6 +70,6 @@
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;' if="${vcxproj}" />
   </filterchain>
 
-  <target name="cmake-prepare">
+  <target name="cmake-prepare" depends="extract">
   </target>
 </project>
