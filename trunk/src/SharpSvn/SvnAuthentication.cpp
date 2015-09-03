@@ -762,9 +762,13 @@ bool SvnAuthentication::Run(T args, Predicate<T> ^doneFilter)
         if (!ww)
             continue;
 
+        args->Break = false;
+
         int repeat = ww->RetryLimit;
         while (!args->Break && repeat-- > 0)
         {
+            args->Clear();
+
             ww->Raise(args);
 
             if (args->Cancel)
@@ -772,11 +776,7 @@ bool SvnAuthentication::Run(T args, Predicate<T> ^doneFilter)
 
             if (!args->Break && doneFilter(args))
                 return true;
-
-            args->Clear();
         }
-
-        args->Break = false;
     }
 
     return false;
