@@ -317,6 +317,7 @@
       <fileset basedir="${svnBase}/subversion">
         <include name="libsvn_client/client.h" />
         <include name="libsvn_subr/config_impl.h" />
+        <include name="libsvn_subr/utf8proc/utf8proc.h" />
       </fileset>
     </copy>
     <copy todir="${release}/include">
