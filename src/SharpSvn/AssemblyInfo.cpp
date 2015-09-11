@@ -36,6 +36,8 @@
 #include <zlib.h>
 #undef Byte
 
+#include <svn-internal/libsvn_subr/utf8proc/utf8proc.h>
+
 using namespace System;
 using namespace System::Reflection;
 using namespace System::Resources;
@@ -53,6 +55,8 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 #define SASL_VERSION APR_STRINGIFY(SASL_VERSION_MAJOR) "." APR_STRINGIFY(SASL_VERSION_MINOR) "." APR_STRINGIFY(SASL_VERSION_STEP)
 
 #define EXPAT_VERSION APR_STRINGIFY(XML_MAJOR_VERSION) "." APR_STRINGIFY(XML_MINOR_VERSION) "." APR_STRINGIFY(XML_MICRO_VERSION)
+
+#define UTF8PROC_VERSION APR_STRINGIFY(UTF8PROC_VERSION_MAJOR) "." APR_STRINGIFY(UTF8PROC_VERSION_MINOR) "." APR_STRINGIFY(UTF8PROC_VERSION_PATCH)
 //
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -68,6 +72,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
     ", " OPENSSL_VERSION_TEXT
     ", serf " SERF_VERSION
     ", sqlite " SQLITE_VERSION
+    ", utf8proc " UTF8PROC_VERSION
     ", zlib " ZLIB_VERSION
     " and " OPENSSL_VERSION_TEXT
     ". If available this library also uses the optional Berkeley DB " BDB_VERSION
@@ -87,6 +92,7 @@ using SharpSvn::Implementation::SvnLibraryAttribute;
 [assembly:SvnLibrary("LibSSH2", LIBSSH2_VERSION)]
 [assembly:SvnLibrary("Serf", SERF_VERSION)];
 [assembly:SvnLibrary("SQLite", SQLITE_VERSION)];
+[assembly:SvnLibrary("Utf8proc", UTF8PROC_VERSION)];
 [assembly:SvnLibrary("ZLib", ZLIB_VERSION)];
 [assembly:SvnLibrary("OpenSSL", OPENSSL_VERSION_TEXT, SkipPrefix = true)];
 [assembly:SvnLibrary("Berkeley DB", BDB_VERSION, DynamicallyLinked = true, Optional = true)];
