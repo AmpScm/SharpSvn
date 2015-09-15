@@ -34,7 +34,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -123,7 +123,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -213,7 +213,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -305,7 +305,7 @@
 			>
 			<Tool
 				Name="VCPreBuildEventTool"
-				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
+				CommandLine="$(SolutionDir)tools\Po2Resx\bin\$(ConfigurationName)\Po2Resx.exe SvnText -to $(ProjectDir)SvnText $(SolutionDir)..\imports\release\po\*.po&#x0D;&#x0A;$(SolutionDir)tools\Errors2Enum\bin\$(ConfigurationName)\Errors2Enum.exe &quot;$(VCInstallDir).&quot; &quot;$(WindowsSdkDir).&quot; &quot;&quot; &quot;$(SolutionDir)..\imports\release\include\apr-1\apr_errno.h&quot; &quot;$(SolutionDir)..\imports\release\include\serf-1\serf.h&quot; &quot;$(SolutionDir)..\imports\release\include\libssh2\libssh2.h&quot; &quot;$(ProjectDir)\SvnWindowsError.h&quot;&#x0D;&#x0A;"
 			/>
 			<Tool
 				Name="VCCustomBuildTool"
@@ -1797,7 +1797,8 @@
 				<File
 					RelativePath="RemoteArgs\SvnRemoteWriteArgs.h"
 					>
-				</File>			</Filter>
+				</File>
+			</Filter>
 			<Filter
 				Name="EventArgs"
 				>

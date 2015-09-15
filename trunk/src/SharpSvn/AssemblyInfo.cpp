@@ -36,7 +36,14 @@
 #include <zlib.h>
 #undef Byte
 
+#define bool Q_bool
+#define false Q_false
+#define true Q_true
+#undef ssize_t
 #include <svn-internal/libsvn_subr/utf8proc/utf8proc.h>
+#undef true
+#undef false
+#undef bool
 
 using namespace System;
 using namespace System::Reflection;
