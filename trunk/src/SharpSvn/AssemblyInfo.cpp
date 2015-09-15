@@ -36,14 +36,20 @@
 #include <zlib.h>
 #undef Byte
 
+extern "C" {
+#if _MSC_VER < 1900
 #define bool Q_bool
 #define false Q_false
 #define true Q_true
+#endif
 #undef ssize_t
 #include <svn-internal/libsvn_subr/utf8proc/utf8proc.h>
+#if _MSC_VER < 1900
 #undef true
 #undef false
 #undef bool
+#endif
+};
 
 using namespace System;
 using namespace System::Reflection;
