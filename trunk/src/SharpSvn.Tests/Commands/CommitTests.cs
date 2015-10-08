@@ -225,7 +225,7 @@ namespace SharpSvn.Tests.Commands
         /// Tests that you can cancel a commit.
         /// </summary>
         [TestMethod]
-        public void Commit_CancelledCommit()
+        public void Commit_CanceledCommit()
         {
             SvnSandBox sbox = new SvnSandBox(this);
             sbox.Create(SandBoxRepository.AnkhSvnCases);
@@ -250,12 +250,12 @@ namespace SharpSvn.Tests.Commands
 
             Assert.That(this.Client.Commit(new string[] { path, path2 }, a, out info), Is.False);
 
-            Assert.That(info, Is.Null, "info should be Invalid for a cancelled commit");
+            Assert.That(info, Is.Null, "info should be Invalid for a canceled commit");
 
             Collection<SvnStatusEventArgs> statee;
             Client.GetStatus(path, out statee);
             Assert.That(statee.Count, Is.EqualTo(1));
-            Assert.That(statee[0].LocalNodeStatus, Is.EqualTo(SvnStatus.Modified), "File committed even for a cancelled log message");
+            Assert.That(statee[0].LocalNodeStatus, Is.EqualTo(SvnStatus.Modified), "File committed even for a canceled log message");
         }
 
         void VerifyNotify(object sender, SvnNotifyEventArgs e)

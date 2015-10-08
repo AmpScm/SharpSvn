@@ -103,7 +103,7 @@ svn_error_t* SvnException::CreateExceptionSvnError(String^ origin, Exception^ ex
         status = se->SubversionErrorCode;
 
     // Use svn_error_createf to make sure the value is copied
-    return svn_error_createf(status, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation cancelled. Exception occured in {0}", origin)));
+    return svn_error_createf(status, innerError, "%s", tmpPool.AllocString(String::Format(System::Globalization::CultureInfo::InvariantCulture, "Operation canceled. Exception occured in {0}", origin)));
 }
 
 svn_error_t* SvnException::CreateSvnError(Exception^ exception)

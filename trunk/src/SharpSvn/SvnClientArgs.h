@@ -156,7 +156,7 @@ namespace SharpSvn {
         }
 
         /// <summary>
-        /// Gets or sets a boolean indicating whether the call must throw an error if the operation is cancelled
+        /// Gets or sets a boolean indicating whether the call must throw an error if the operation is canceled
         /// <see cref="IsLastInvocationCanceled" /> is true and the returnvalue <c>false</c> if the operation was canceled.
         /// (The <see cref="LastException" /> property is set to the cancel exception). Defaults to true
         /// </summary>
