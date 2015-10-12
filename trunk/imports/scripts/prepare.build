@@ -259,6 +259,27 @@
 
     <Svn
       verbose="true"
+      if="${buildHttpd}"
+      unless="${directory::exists(nghttp2Dir)}">
+
+      <arg value="co" />
+      <arg value="https://github.com/tatsuhiro-t/nghttp2/tags/v${nghttp2Version}/" />
+      <arg value="${nghttp2Dir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
+      if="${buildHttpd}"
+      unless="${file::exists(nghttp2Dir + '/CMakeLists.txt')}">
+
+      <arg value="export" />
+      <arg value="--force" />
+      <arg value="https://github.com/trawick/nghttp2-minimal-cmake/trunk" />
+      <arg value="${nghttp2Dir}" />
+    </Svn>
+
+    <Svn
+      verbose="true"
       unless="${directory::exists(aprDir)}">
 
       <arg value="co" />
@@ -294,7 +315,10 @@
       <arg line='--no-auth-cache --username guest --password=""' />
     </Svn>
 
-    <Svn unless="${directory::exists(serfDir)}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(serfDir)}">
+
       <arg value="co" />
       <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/trunk/" if="${serfBuildType == 'trunk'}" />
       <arg value="${httpOrHttps}://svn.apache.org/repos/asf/serf/tags/${serfVersion}/" if="${serfBuildType == 'tag'}" />
@@ -302,40 +326,58 @@
       <arg value="${serfDir}" />
     </Svn>
 
-    <Svn unless="${directory::exists(sqliteDir)}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(sqliteDir)}">
+
       <arg value="co" />
       <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/sqlite/tags/${sqliteVersion}/" />
       <arg value="${sqliteDir}" />
       <arg line='--no-auth-cache --username guest --password=""' />
     </Svn>
 
-    <Svn unless="${directory::exists(saslDir)}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(saslDir)}">
+
       <arg value="co" />
       <arg value="https://github.com/rhuijben/cyrus-sasl/tags/cyrus-sasl-${saslVersion}/" />
       <arg value="${saslDir}" />
     </Svn>
 
-    <Svn unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(libssh2Dir)}" if="${buildLibssh2}">
+
       <arg value="co" />
-      <arg value="https://github.com/libssh2/libssh2/trunk/"                            if="${libssh2BuildType == 'trunk'}" />
-      <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}"    if="${libssh2BuildType == 'tag'}" />
+      <arg value="https://github.com/libssh2/libssh2/trunk/"                         if="${libssh2BuildType == 'trunk'}" />
+      <arg value="https://github.com/libssh2/libssh2/tags/libssh2-${libssh2Version}" if="${libssh2BuildType == 'tag'}" />
       <arg value="${libssh2Dir}" />
     </Svn>
 
-    <Svn unless="${directory::exists(libeventDir)}" if="${buildLibevent}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(libeventDir)}" if="${buildLibevent}">
+
       <arg value="co" />
       <arg value="https://github.com/libevent/libevent/tags/release-${libeventVersion}"/>
       <arg value="${libeventDir}" />
     </Svn>
 
-    <Svn unless="${directory::exists(pthreadwin32Dir)}" if="${buildPthreadwin32}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(pthreadwin32Dir)}" if="${buildPthreadwin32}">
+
       <arg value="co" />
       <arg value="https://ctf.open.collab.net/svn/repos/sharpsvn/dependencies/pthreads-win32/tags/${pthreadwin32Version}"/>
       <arg value="${pthreadwin32Dir}" />
       <arg line='--no-auth-cache --username guest --password=""' />
     </Svn>
 
-    <Svn unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
+    <Svn
+      verbose="true"
+      unless="${directory::exists(memcachedDir)}" if="${buildMemcached}">
+
       <arg value="co" />
       <arg value="https://github.com/memcached/memcached/branches/engine-pu" if="${memcachedBuildType == 'trunk'}" />/>
       <arg value="https://github.com/memcached/memcached/tags/${memcachedVersion}" if="${memcachedBuildType == 'tag'}" />/>

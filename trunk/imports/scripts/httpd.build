@@ -2,7 +2,7 @@
 <project basedir=".." default="build">
   <property name="httpdDir" value="${buildRoot}/httpd" />
 
-  <target name="httpd-build" depends="apr-build, aprutil-build, zlib-build, pcre-build,cmake-prepare" if="${buildHttpd}">
+  <target name="httpd-build" depends="apr-build, aprutil-build, zlib-build, pcre-build, nghttp2-build, cmake-prepare" if="${buildHttpd}">
     <OnceBlock file="build/httpd-${httpdVersion}.patched">
       <foreach item="File" property="patch">
         <in>
@@ -61,6 +61,7 @@
         <target value="mod_access_compat" /><!-- Used for version detection -->
         <target value="mod_mime" />
         <target value="mod_alias" />
+        <target value="mod_http2" />
         <target value="mod_log_config" />
       </MSBuild>
     </OnceBlock>
