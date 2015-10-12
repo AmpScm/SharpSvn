@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="nghttp2Dir" value="${platformRoot}/nghttp2" />
+
+  <target name="nghttp2-build" depends="checkout, cmake-prepare" if="${buildHttpd}">
+    <OnceBlock file="build/nghttp2-${nghttp2Version}-${platform}.build">
+      <fileset basedir="${nghttp2Dir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+
+      <copy todir="${nghttp2Dir}/lib" file="${nghttp2Dir}/nghttp2.rc" />
+      
+      <CMake workingdir="${nghttp2Dir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+      </CMake>
+
+      <FilterFile file="${nghttp2Dir}/nghttp2.${vcproj}" generated="true">
+        <filterchain refid="cmake-link" />
+      </FilterFile>
+      <FilterFile file="${nghttp2Dir}/nghttp2-static.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
+
+      <FilterFile file="${nghttp2Dir}/libnghttp2-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
+        <filterchain>
+          <replacestring from='&gt;libnghttp2-1&lt;/TargetName' to='&gt;${dllPrefix}libnghttp2-1&lt;/TargetName' if="${vcxproj}" />
+        </filterchain>
+      </FilterFile>
+      <MSBuild src="${nghttp2Dir}/NGHTTP2.sln">
+        <target value="nghttp2" />
+        <target value="nghttp2-static" />
+      </MSBuild>
+    </OnceBlock>
+
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${nghttp2Dir}/Release">
+        <include name="*.lib" />
+        <include name="*.pdb" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${nghttp2Dir}/lib/includes">
+        <include name="**.h" />
+      </fileset>
+    </copy>
+  </target>
+</project>

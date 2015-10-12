@@ -93,6 +93,7 @@
   <include buildfile="neon.build" />
   <include buildfile="httpd.build" />
   <include buildfile="pcre.build" />
+  <include buildfile="nghttp2.build" />
   <include buildfile="apr.build" />
   <include buildfile="aprutil.build" />
   <include buildfile="sasl.build" />
