@@ -62,6 +62,7 @@
         <target value="mod_mime" />
         <target value="mod_alias" />
         <target value="mod_http2" />
+        <target value="mod_ssl" />
         <target value="mod_log_config" />
       </MSBuild>
     </OnceBlock>
@@ -87,6 +88,7 @@
     <copy todir="${release}/httpd/modules" flatten="true">
       <fileset basedir="${httpdDir}">
         <include name="release/*.so" />
+        <include name="${nghttp2Dir}/Release/*.dll" />
       </fileset>
     </copy>
     <mkdir dir="${release}/httpd/conf" />
