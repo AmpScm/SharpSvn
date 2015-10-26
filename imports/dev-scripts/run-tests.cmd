@@ -38,6 +38,17 @@ IF "%1" == "-d" (
    SHIFT
 ) ELSE IF "%1" == "--http" (
    SET HTTP=1
+   SET HTTP_SCHEME=http
+   SET HTTP_HOSTNAME=127.0.0.1
+   SHIFT
+) ELSE IF "%1" == "--https" (
+   SET HTTP=1
+   SET HTTP_SCHEME=https
+   SET HTTP_HOSTNAME=localhost
+   SET ARGS=--https %ARGS%
+   SHIFT
+) ELSE IF "%1" == "--http2" (
+   SET ARGS=--http2 %ARGS%
    SHIFT
 ) ELSE IF "%1" == "--http-log" (
    SET HTTPLOG=
@@ -97,7 +108,7 @@ set BASE=R:\Tst
 
 set TEMP=%BASE%\Z-temp
 set TMP=%TEMP%
-set HTTPINFO=--httpd-dir %cd%\release\httpd --httpd-port 7829 -u http://127.0.0.1:7829 %HTTPLOG%
+set HTTPINFO=--httpd-dir %cd%\release\httpd --httpd-port 7829 -u %HTTP_SCHEME%://%HTTP_HOSTNAME%:7829 %HTTPLOG%
 set SVN_DBG_REAL_QUIET=1
 set LOCATION=R:\
 
