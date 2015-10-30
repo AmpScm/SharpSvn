@@ -184,7 +184,42 @@ void SshConnection::ResolveAddress(AprPool^ scratchPool)
 
     /* Resolve the hostname. */
     status = apr_sockaddr_info_get(&sa, hostname, family,
-        (apr_port_t)_host->Port, 0, _pool.Handle);
+                                   (apr_port_t)_host->Port, 0, _pool.Handle);
+
+    if (status)
+    {
+        HKEY hkey1 = NULL, hkey2 = NULL;
+        if (!RegOpenKeyExW(HKEY_CURRENT_USER, L"SOFTWARE\\SimonTatham\\PuTTY\\Sessions", 0,
+                           KEY_QUERY_VALUE, &hkey1))
+        try
+        {
+            pin_ptr<const wchar_t> pName = PtrToStringChars(_host->Host);
+            if (!RegOpenKeyExW(hkey1, pName, 0, KEY_QUERY_VALUE, &hkey2))
+            {
+                char hostname_buffer[256+1];
+                DWORD dwType;
+                DWORD dwLen = sizeof(hostname_buffer) - 1;
+
+                if (!RegQueryValueExA(hkey2, "HostName", NULL, &dwType, (BYTE*)&hostname_buffer, &dwLen)
+                    && dwType == REG_SZ)
+                {
+                    status = apr_sockaddr_info_get(&sa, hostname_buffer, family,
+                                                   (apr_port_t)_host->Port, 0, _pool.Handle);
+                }
+            }
+            else
+            {
+                hkey2 = NULL;
+            }
+        }
+        finally
+        {
+            if (hkey2)
+                RegCloseKey(hkey2);
+            RegCloseKey(hkey1);
+        }
+    }
+
     if (status)
         SVN_THROW(svn_error_wrap_apr(status, NULL));
 
