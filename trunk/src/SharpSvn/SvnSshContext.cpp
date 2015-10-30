@@ -274,27 +274,20 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
     }
     if (String::IsNullOrEmpty(_username))
     {
-        wchar_t *win_name = nullptr;
-        ULONG namelen;
-        if (GetUserNameExW(NameUserPrincipal, NULL, &namelen))
+        wchar_t attempt[32];
+        ULONG namelen = sizeof(attempt);
+
+        if (GetUserNameExW(NameUserPrincipal, attempt, &namelen))
+            _username = gcnew String(attempt, 0, namelen);
+        else if (GetLastError() == ERROR_MORE_DATA)
         {
             namelen++;
-            win_name = (wchar_t *)scratchPool->Alloc(namelen * sizeof(wchar_t));
+
+            wchar_t *win_name = (wchar_t *)scratchPool->Alloc(namelen * sizeof(wchar_t));
 
             if (GetUserNameExW(NameUserPrincipal, win_name, &namelen))
-            {
-                win_name[namelen] = 0;
-
-                wchar_t *w_at = wcschr(win_name, L'@');
-                if (w_at)
-                    *w_at = L'\0';
-            }
-            else
-                win_name = nullptr;
+                _username = gcnew String(win_name, 0, namelen);
         }
-
-        if (win_name)
-            _username = gcnew String(win_name);
 
         bool maySave = Environment::UserInteractive;
         SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(L'<' + _host->RealmString + L'>', maySave);
