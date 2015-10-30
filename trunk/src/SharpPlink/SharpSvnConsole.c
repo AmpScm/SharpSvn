@@ -226,6 +226,7 @@ int console_get_userpass_input(prompts_t *p, unsigned char *in, int inlen)
                 dwResult = CredUIConfirmCredentials(sTarget, FALSE);
             }
 
+            fprintf(stderr, "Credential prompt aborted\n");
             return 0; // Failure
         }
         else
