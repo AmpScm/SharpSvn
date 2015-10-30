@@ -640,7 +640,7 @@ void SvnClientContext::ApplyCustomRemoteConfig()
     if (plinkPath)
     {
         // Allocate in Ctx pool
-        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "plink", _pool->AllocString('"' + plinkPath +'"'));
+        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "plink", _pool->AllocString(L'"' + plinkPath +L'"'));
     }
 
     if (_sshOverride == SvnSshOverride::Disabled)
@@ -719,7 +719,7 @@ void SvnClientContext::ApplyCustomRemoteConfig()
     if (plinkPath)
     {
         // Allocate in Ctx pool
-        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString('"' + plinkPath + '"'));
+        svn_config_set(cfg, SVN_CONFIG_SECTION_TUNNELS, "ssh", _pool->AllocString(L'"' + plinkPath + L'"'));
     }
 
     if (_sshOverride != SvnSshOverride::ForceSharpPlink
