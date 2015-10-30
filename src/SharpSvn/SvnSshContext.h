@@ -117,6 +117,7 @@ namespace SharpSvn {
             bool _closeOnIdle;
             svn_cancel_func_t _cancel_func;
             void *_cancel_baton;
+            String^ _defaultUsername;
 
         internal:
             ssh_keybint_t *_kbi;

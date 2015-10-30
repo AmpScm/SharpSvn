@@ -186,38 +186,62 @@ void SshConnection::ResolveAddress(AprPool^ scratchPool)
     status = apr_sockaddr_info_get(&sa, hostname, family,
                                    (apr_port_t)_host->Port, 0, _pool.Handle);
 
-    if (status)
-    {
-        HKEY hkey1 = NULL, hkey2 = NULL;
-        if (!RegOpenKeyExW(HKEY_CURRENT_USER, L"SOFTWARE\\SimonTatham\\PuTTY\\Sessions", 0,
-                           KEY_QUERY_VALUE, &hkey1))
-        try
-        {
-            pin_ptr<const wchar_t> pName = PtrToStringChars(_host->Host);
-            if (!RegOpenKeyExW(hkey1, pName, 0, KEY_QUERY_VALUE, &hkey2))
-            {
-                char hostname_buffer[256+1];
-                DWORD dwType;
-                DWORD dwLen = sizeof(hostname_buffer) - 1;
 
-                if (!RegQueryValueExA(hkey2, "HostName", NULL, &dwType, (BYTE*)&hostname_buffer, &dwLen)
-                    && dwType == REG_SZ)
-                {
-                    status = apr_sockaddr_info_get(&sa, hostname_buffer, family,
-                                                   (apr_port_t)_host->Port, 0, _pool.Handle);
-                }
+    HKEY hkey1 = NULL, hkey2 = NULL;
+    if (!RegOpenKeyExW(HKEY_CURRENT_USER, L"SOFTWARE\\SimonTatham\\PuTTY\\Sessions", 0,
+                       KEY_QUERY_VALUE, &hkey1))
+    try
+    {
+        pin_ptr<const wchar_t> pName = PtrToStringChars(_host->Host);
+        if (!RegOpenKeyExW(hkey1, pName, 0, KEY_QUERY_VALUE, &hkey2))
+        {
+            char username_buffer[256+1];
+            char hostname_buffer[256 + 1];
+            DWORD dwType;
+            DWORD dwLen;
+            DWORD dwPort;
+
+            dwLen = sizeof(dwPort);
+            if (!RegQueryValueExA(hkey2, "PortNumber", NULL, &dwType, (BYTE*)&dwPort, &dwLen)
+                && dwType == REG_DWORD)
+            {
             }
             else
+                dwPort = _host->Port;
+
+            dwLen = sizeof(username_buffer) - 1;
+            if (!RegQueryValueExA(hkey2, "UserName", NULL, &dwType, (BYTE*)&username_buffer, &dwLen)
+                && dwType == REG_SZ)
             {
-                hkey2 = NULL;
+                username_buffer[dwLen] = '\0';
+            }
+            else
+                username_buffer[0] = '\0';
+
+            dwLen = sizeof(hostname_buffer) - 1;
+            if (!RegQueryValueExA(hkey2, "HostName", NULL, &dwType, (BYTE*)&hostname_buffer, &dwLen)
+                && dwType == REG_SZ)
+            {
+                hostname_buffer[dwLen] = '\0';
+
+                if (status)
+                    status = apr_sockaddr_info_get(&sa, hostname_buffer, family,
+                                                   (apr_port_t)dwPort, 0, _pool.Handle);
+
+                if (!status && username_buffer[0])
+                    _defaultUsername = gcnew String(username_buffer);
             }
         }
-        finally
+        else
         {
-            if (hkey2)
-                RegCloseKey(hkey2);
-            RegCloseKey(hkey1);
+            hkey2 = NULL;
         }
+    }
+    finally
+    {
+        if (hkey2)
+            RegCloseKey(hkey2);
+        RegCloseKey(hkey1);
     }
 
     if (status)
@@ -307,7 +331,10 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
 
         CredFree(pCred);
     }
-    if (String::IsNullOrEmpty(_username))
+
+    if (String::IsNullOrEmpty(_username) && !String::IsNullOrEmpty(_defaultUsername))
+        _username = _defaultUsername; // From plink
+    else if (String::IsNullOrEmpty(_username))
     {
         wchar_t attempt[32];
         ULONG namelen = sizeof(attempt);
@@ -340,10 +367,6 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
         }
     }
 
-
-    if (String::IsNullOrEmpty(_username))
-    {
-    }
 
     const char *username = scratchPool->AllocString(_username);
     {
