@@ -151,6 +151,23 @@ namespace SharpSvn {
         }
 
     private:
+          SvnClientConfiguration^ _config;
+
+    public:
+      /// <summary>Gets the <see cref="SvnClientConfiguration" /> instance of this <see cref="SvnClient"/></summary>
+      property SvnClientConfiguration^ Configuration
+      {
+        SvnClientConfiguration^ get()
+        {
+          if (!_config)
+            _config = gcnew SvnClientConfiguration(this);
+
+          return _config;
+        }
+      }
+
+
+    private:
         SvnClientArgs^ _currentArgs;
 
         property SvnClientArgs^ CurrentCommandArgs
