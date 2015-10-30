@@ -5,6 +5,8 @@
 #include "SvnClientArgs.h"
 #include "LookArgs/SvnLookClientArgs.h"
 
+#include "SvnClientConfiguration.h"
+
 #include "AprBaton.h"
 
 namespace SharpSvn {
@@ -188,6 +190,22 @@ namespace SharpSvn {
     public:
         String^ MakeRelativePath(Uri^ uri);
         String^ MakeRepositoryRootRelativePath(Uri^ uri);
+
+    private:
+        SvnClientConfiguration^ _config;
+
+    public:
+        /// <summary>Gets the <see cref="SvnClientConfiguration" /> instance of this <see cref="SvnClient"/></summary>
+        property SvnClientConfiguration^ Configuration
+        {
+          SvnClientConfiguration^ get()
+          {
+            if (!_config)
+              _config = gcnew SvnClientConfiguration(this);
+
+            return _config;
+          }
+        }
 
     public:
         /// <summary>
