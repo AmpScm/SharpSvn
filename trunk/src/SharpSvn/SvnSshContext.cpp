@@ -572,6 +572,29 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
         puttyRealm = puttyValue = nullptr;
     }
 
+    if (puttyRealm && puttyValue)
+    {
+        System::Threading::Monitor::Enter(_processKeyCache);
+        try
+        {
+            String ^key = puttyRealm;
+            String ^value;
+
+            if (_ctx->ConfigPath)
+                key = _ctx->ConfigPath + ";:" + puttyRealm;
+
+            if (_processKeyCache->TryGetValue(key, value))
+            {
+                if (value == puttyValue)
+                  return; // Victory
+            }
+        }
+        finally
+        {
+            System::Threading::Monitor::Exit(_processKeyCache);
+        }
+    }
+
     if (!_ctx->ConfigPath && puttyRealm && puttyValue)
     {
         HKEY hk;
@@ -691,6 +714,24 @@ void SshConnection::VerifySshHost(AprPool ^scratchPool)
                                                                           maySave);
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnSshServerTrustEventArgs^>(&FingerPrintAccepted)))
         {
+            if (puttyRealm && puttyValue)
+            {
+                System::Threading::Monitor::Enter(_processKeyCache);
+                try
+                {
+                    String ^key = puttyRealm;
+
+                    if (_ctx->ConfigPath)
+                        key = _ctx->ConfigPath + ";:" + puttyRealm;
+
+                    _processKeyCache[key] = puttyValue;
+                }
+                finally
+                {
+                    System::Threading::Monitor::Exit(_processKeyCache);
+                }
+            }
+
             // Victory... The user accepted the fingerprint
             if (maySave && ee->Save)
             {
