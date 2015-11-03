@@ -1310,6 +1310,15 @@ static svn_error_t * ssh_close(void *baton)
     return SVN_NO_ERROR;
 }
 
+static svn_error_t * ssh_data_available(void *baton,
+                                        svn_boolean_t *data_available)
+{
+  *data_available = FALSE; /* ### Do something smarter
+                              ### This is what 1.8 always did on Windows */
+
+  return SVN_NO_ERROR;
+}
+
 void SshConnection::OpenTunnel(svn_stream_t *&channel,
                                svn_cancel_func_t cancel_func, void * cancel_baton,
                                AprPool ^resultPool)
@@ -1336,6 +1345,7 @@ void SshConnection::OpenTunnel(svn_stream_t *&channel,
 
     svn_stream_set_write(channel, ssh_write);
     svn_stream_set_read2(channel, ssh_read, NULL);
+    svn_stream_set_data_available(channel, ssh_data_available);
     svn_stream_set_close(channel, ssh_close);
 
     resultPool->KeepAlive(this);
