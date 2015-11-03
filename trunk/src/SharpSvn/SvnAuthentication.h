@@ -38,6 +38,7 @@ namespace SharpSvn {
             SslClientCertificate,
             SslClientCertificatePassword,
             WindowsSshCredentials,
+            WindowsSshHostKeys
         };
 
         public ref class SvnAuthenticationCacheItem sealed : public SvnBase
@@ -1322,6 +1323,7 @@ namespace SharpSvn {
 
         private:
             Collection<SvnAuthenticationCacheItem^>^ GetSshCredentials();
+            Collection<SvnAuthenticationCacheItem^>^ GetSshHostKeys();
 
         public:
             /// <summary>Simple credential handler to provide a static credential via <see cref="UserNameHandlers" /> and <see cref="UserNamePasswordHandlers" />.

@@ -256,8 +256,18 @@ void SvnAuthenticationCacheItem::Delete()
 {
     if (!String::IsNullOrEmpty(_filename))
     {
-        if (System::IO::File::Exists(_filename))
-            System::IO::File::Delete(_filename);
+      String ^filename = _filename;
+        switch (CacheType)
+        {
+            case SvnAuthenticationCacheType::WindowsSshHostKeys:
+                // TODO: Implement per item delete
+                filename = _filename->Substring(0, _filename->IndexOf(";#", StringComparison::OrdinalIgnoreCase));
+                // Temporary fall through
+            default:
+                if (System::IO::File::Exists(filename))
+                    System::IO::File::Delete(filename);
+                break;
+        }
     }
     else
     {
@@ -290,7 +300,7 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
         SVN_CONFIG__AUTH_SUBDIR,
         pool.Handle));
 
-    const char* append = nullptr;;
+    const char* append = nullptr;
     switch (type)
     {
     case SvnAuthenticationCacheType::UserName:
@@ -310,6 +320,8 @@ SvnAuthentication::GetCachedItems(SvnAuthenticationCacheType type)
         break;
     case SvnAuthenticationCacheType::WindowsSshCredentials:
         return GetSshCredentials();
+    case SvnAuthenticationCacheType::WindowsSshHostKeys:
+        return GetSshHostKeys();
     }
 
     if (!cfg || !append)
@@ -402,7 +414,8 @@ Collection<SvnAuthenticationCacheItem^>^ SvnAuthentication::GetSshCredentials()
             String^ target = gcnew String(pCredentials[i]->TargetName);
             Uri^ targetUri;
 
-            if (!System::Uri::TryCreate(target, UriKind::Absolute, targetUri) || targetUri->Scheme != "ssh")
+            if (!System::Uri::TryCreate(target, UriKind::Absolute, targetUri)
+                || (targetUri->Scheme != "ssh" && !targetUri->Scheme->StartsWith("svn+")))
                 continue;
 
             result->Add(gcnew SvnAuthenticationCacheItem(SvnAuthenticationCacheType::WindowsSshCredentials, targetUri, target));
@@ -413,4 +426,65 @@ Collection<SvnAuthenticationCacheItem^>^ SvnAuthentication::GetSshCredentials()
     {
         CredFree(pCredentials);
     }
+}
+
+Collection<SvnAuthenticationCacheItem^>^ SvnAuthentication::GetSshHostKeys()
+{
+    _clientContext->EnsureState(SharpSvn::Implementation::SvnContextState::AuthorizationInitialized);
+
+    AprPool pool(SvnBase::SmallThreadPool);
+
+    const char* cfg = nullptr;
+    SVN_THROW(svn_config_get_user_config_path(
+        &cfg,
+        _clientContext->_configPath ? pool.AllocDirent(_clientContext->_configPath) : nullptr,
+        SVN_CONFIG__AUTH_SUBDIR,
+        pool.Handle));
+
+    Collection<SvnAuthenticationCacheItem^>^ result = gcnew Collection<SvnAuthenticationCacheItem^>();
+
+    const char *path = svn_dirent_join(cfg, "ssh-known_hosts", pool.Handle);
+
+    svn_node_kind_t kind;
+    svn_error_t *err = svn_io_check_path(path, &kind, pool.Handle);
+
+    if (err || (kind != svn_node_file))
+    {
+        svn_error_clear(err);
+        return result;
+    }
+
+    String ^filename = SvnBase::Utf8_PathPtrToString(path, %pool);
+
+    svn_stream_t *hosts;
+    svn_boolean_t eof = false;
+    SVN_THROW(svn_stream_open_readonly(&hosts, path, pool.Handle, pool.Handle));
+    while (!eof)
+    {
+        svn_stringbuf_t *sb;
+
+        SVN_THROW(svn_stream_readline(hosts, &sb, "\n", &eof, pool.Handle));
+
+        if (eof)
+          break;
+
+        svn_stringbuf_strip_whitespace(sb); // Chops "\r" if needed
+
+        if (sb->len == 0 || sb->data[0] == ';' || sb->data[0] == '#')
+          continue;
+
+        char *space = strchr(sb->data, ' ');
+        if (space)
+        {
+            UriBuilder ^ub = gcnew UriBuilder();
+            String ^host = SvnBase::Utf8_PtrToString(sb->data, space - sb->data);
+            ub->Scheme = "ssh";
+            ub->Host = host;
+
+            result->Add(gcnew SvnAuthenticationCacheItem(SvnAuthenticationCacheType::WindowsSshHostKeys,
+                                                         ub->Uri, filename + ";#" + host));
+        }
+    }
+
+    return result;
 }
