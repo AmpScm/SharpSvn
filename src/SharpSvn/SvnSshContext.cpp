@@ -254,11 +254,11 @@ void SshConnection::OpenSocket(AprPool^ scratchPool)
 {
     const char *hostname = scratchPool->AllocString(_host->Host);
     apr_socket_t *sock;
-    apr_status_t status;
+    apr_status_t status = APR_EINCOMPLETE;
 
     /* Iterate through the returned list of addresses attempting to
     * connect to each in turn. */
-    do
+    while (status != APR_SUCCESS && _sockAddr)
     {
         /* Create the socket. */
         status = apr_socket_create(&sock, _sockAddr->family, SOCK_STREAM, APR_PROTO_TCP,
@@ -270,11 +270,13 @@ void SshConnection::OpenSocket(AprPool^ scratchPool)
         if (status == APR_SUCCESS)
         {
             status = apr_socket_connect(sock, _sockAddr);
-            if (status != APR_SUCCESS)
-                apr_socket_close(sock);
+            if (status == APR_SUCCESS)
+                break;
+
+            apr_socket_close(sock);
         }
         _sockAddr = _sockAddr->next;
-    } while (status != APR_SUCCESS && _sockAddr);
+    }
 
     if (status)
         SVN_THROW(

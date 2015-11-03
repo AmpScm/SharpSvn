@@ -1167,6 +1167,11 @@ sharpsvn_open_tunnel_func(svn_stream_t **request, svn_stream_t **response,
     }
     catch (Exception ^e)
     {
+#ifdef _DEBUG
+        if (IsDebuggerPresent())
+            throw;
+#endif
+
         return SvnException::CreateSvnError(e);
     }
 }
