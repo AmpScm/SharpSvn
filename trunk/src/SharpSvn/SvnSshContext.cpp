@@ -358,8 +358,7 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
             _username = _username->Substring(0, n);
 
         bool maySave = Environment::UserInteractive;
-        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(L'<' + _host->RealmString + L'>', maySave);
-        ee->UserName = _username;
+        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(_userName, L'<' + _host->RealmString + L'>', maySave);
 
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNameEventArgs^>(&TryUserName)))
         {
