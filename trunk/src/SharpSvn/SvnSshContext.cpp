@@ -367,6 +367,9 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
             keepUserWhenNoPassword = true;
             saveUserWhenNoPassword = ee->Save;
         }
+        else if (ee->Cancel)
+            throw gcnew SvnRepositoryIOException(
+                  svn_error_create(SVN_ERR_RA_CANNOT_CREATE_TUNNEL, NULL, "Authentication failed"));
     }
 
 
@@ -1042,6 +1045,8 @@ bool SshConnection::DoKeyboardInteractiveAuth(AprPool^ scratchPool)
 
             return true;
         }
+        else if (ee->Cancel)
+            return false;
 
         return false;
     }
