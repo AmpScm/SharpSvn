@@ -282,6 +282,29 @@ svn_auth_provider_object_t *SvnUserNamePasswordEventArgs::Wrapper::GetProviderPt
 
     return provider;
 }
+
+void SvnUserNamePasswordEventArgs::AuthSetup(svn_auth_baton_t *auth_baton, AprPool^ pool)
+{
+
+}
+
+void SvnUserNamePasswordEventArgs::Done(svn_auth_baton_t *auth_baton, AprPool^ pool)
+{
+
+}
+bool SvnUserNamePasswordEventArgs::Apply(void *credentials)
+{
+    svn_auth_cred_simple_t *cred = (svn_auth_cred_simple_t *)credentials;
+
+    if (!cred)
+      return false;
+
+    this->UserName = cred->username ? SvnBase::Utf8_PtrToString(cred->username) : nullptr;
+    this->Password = cred->password ? SvnBase::Utf8_PtrToString(cred->password) : nullptr;
+    this->Save = (cred->may_save != FALSE);
+    return TRUE;
+}
+
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////

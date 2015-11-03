@@ -315,7 +315,7 @@ namespace SharpSvn {
             }
         };
 
-        public ref class SvnUserNamePasswordEventArgs : public SvnAuthenticationEventArgs
+        public ref class SvnUserNamePasswordEventArgs : public SvnAuthenticationEventArgs, ISvnAuthenticationEventArgs
         {
             initonly String ^_initialUserName;
             String ^_username;
@@ -363,6 +363,20 @@ namespace SharpSvn {
                     _password = value ? value : "";
                 }
             }
+
+        private:
+            property const char *CredentialKind
+            {
+                virtual const char *get() sealed = ISvnAuthenticationEventArgs::CredentialKind::get
+                {
+                    return SVN_AUTH_CRED_SIMPLE;
+                }
+            }
+
+            virtual void AuthSetup(svn_auth_baton_t *auth_baton, AprPool^ pool) sealed = ISvnAuthenticationEventArgs::Setup;
+            virtual void Done(svn_auth_baton_t *auth_baton, AprPool^ pool) sealed = ISvnAuthenticationEventArgs::Done;
+            virtual bool Apply(void *credentials) sealed = ISvnAuthenticationEventArgs::Apply;
+
 
         internal:
             ref class Wrapper sealed : public SvnAuthWrapper<SvnUserNamePasswordEventArgs^>
@@ -441,7 +455,7 @@ namespace SharpSvn {
         private:
             property const char *CredentialKind
             {
-                virtual const char *get() = ISvnAuthenticationEventArgs::CredentialKind::get
+                virtual const char *get() sealed = ISvnAuthenticationEventArgs::CredentialKind::get
                 {
                     return SVN_AUTH_CRED_USERNAME;
                 }
