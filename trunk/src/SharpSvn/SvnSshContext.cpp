@@ -338,28 +338,9 @@ void SshConnection::OpenConnection(svn_cancel_func_t cancel_func, void * cancel_
         _username = _defaultUsername; // From plink
     else if (String::IsNullOrEmpty(_username))
     {
-        wchar_t attempt[32];
-        ULONG namelen = sizeof(attempt);
-
-        if (GetUserNameExW(NameUserPrincipal, attempt, &namelen))
-            _username = gcnew String(attempt, 0, namelen);
-        else if (GetLastError() == ERROR_MORE_DATA)
-        {
-            namelen++;
-
-            wchar_t *win_name = (wchar_t *)scratchPool->Alloc(namelen * sizeof(wchar_t));
-
-            if (GetUserNameExW(NameUserPrincipal, win_name, &namelen))
-                _username = gcnew String(win_name, 0, namelen);
-        }
-
-        int n = _username->IndexOf('@');
-        if (n >= 0)
-            _username = _username->Substring(0, n);
-
         bool maySave = Environment::UserInteractive;
-        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(_userName, L'<' + _host->RealmString + L'>', maySave);
 
+        SvnUserNameEventArgs ^ee = gcnew SvnUserNameEventArgs(L'<' + _host->RealmString + L'>', maySave);
         if (_ctx->Authentication->Run(ee, gcnew Predicate<SvnUserNameEventArgs^>(&TryUserName)))
         {
             _username = ee->UserName;
@@ -1362,7 +1343,7 @@ static svn_error_t * ssh_data_available(void *baton,
 {
     ssh_baton *ssh = (ssh_baton*)baton;
 
-    FD_SET read_set, error_set;
+    FD_SET read_set;
     TIMEVAL tv = {0, 0 }; // Return directly
 
     FD_ZERO(&read_set);
