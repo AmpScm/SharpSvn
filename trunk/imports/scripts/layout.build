@@ -27,6 +27,8 @@
   <property name="releaseBin" value="${release}\bin-${platform}" if="${(not singlePlatform) and platform!='win32'}" />
   <property name="releaseInc" value="${release}\include" />
 
+  <property name="sharpSvnDir" value="${downloads}/../.." overwrite="false" />
+
   <target name="initialize-layout">
     <mkdir dir="${downloads}" />
     <mkdir dir="${platformRoot}" />
