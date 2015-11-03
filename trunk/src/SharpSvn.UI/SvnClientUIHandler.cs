@@ -128,6 +128,8 @@ namespace SharpSvn.UI
                 dlg.Text = Strings.ConnectToSubversion;
                 dlg.descriptionBox.Text = SharpSvnGui.MakeDescription(e.Realm, Strings.TheServerXatYRequiresAUsername, Strings.TheServerXRequiresAUsername);
                 dlg.descriptionBox.Visible = true;
+
+                dlg.usernameBox.Text = e.InitialUserName ?? e.UserName ?? "";
                 dlg.rememberCheck.Enabled = e.MaySave;
 
                 if (Image != null)
