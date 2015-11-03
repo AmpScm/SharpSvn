@@ -29,6 +29,18 @@ namespace SharpSvn {
 
         ref class SvnAuthentication;
 
+        private interface class ISvnAuthenticationEventArgs
+        {
+              property const char *CredentialKind
+              {
+                  const char *get();
+              }
+
+              void Setup(svn_auth_baton_t *auth_baton, AprPool^ pool);
+              void Done(svn_auth_baton_t *auth_baton, AprPool^ pool);
+              bool Apply(void *credentials);
+        };
+
         public enum class SvnAuthenticationCacheType
         {
             None,
@@ -373,7 +385,7 @@ namespace SharpSvn {
             }
         };
 
-        public ref class SvnUserNameEventArgs : public SvnAuthenticationEventArgs
+        public ref class SvnUserNameEventArgs : public SvnAuthenticationEventArgs, ISvnAuthenticationEventArgs
         {
             String ^_username;
             String ^_initialUserName;
@@ -425,6 +437,20 @@ namespace SharpSvn {
 
                 virtual svn_auth_provider_object_t *GetProviderPtr(AprPool^ pool) override;
             };
+
+        private:
+            property const char *CredentialKind
+            {
+                virtual const char *get() = ISvnAuthenticationEventArgs::CredentialKind::get
+                {
+                    return SVN_AUTH_CRED_USERNAME;
+                }
+            }
+
+            virtual void AuthSetup(svn_auth_baton_t *auth_baton, AprPool^ pool) sealed = ISvnAuthenticationEventArgs::Setup;
+            virtual void Done(svn_auth_baton_t *auth_baton, AprPool^ pool) sealed = ISvnAuthenticationEventArgs::Done;
+            virtual bool Apply(void *credentials) sealed = ISvnAuthenticationEventArgs::Apply;
+
 
         protected public:
             virtual void Clear() override

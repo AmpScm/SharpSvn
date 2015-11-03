@@ -196,6 +196,27 @@ svn_auth_provider_object_t *SvnUserNameEventArgs::Wrapper::GetProviderPtr(AprPoo
 
     return provider;
 }
+
+void SvnUserNameEventArgs::AuthSetup(svn_auth_baton_t *auth_baton, AprPool^ pool)
+{
+
+}
+
+void SvnUserNameEventArgs::Done(svn_auth_baton_t *auth_baton, AprPool^ pool)
+{
+
+}
+bool SvnUserNameEventArgs::Apply(void *credentials)
+{
+    svn_auth_cred_username_t *cred = (svn_auth_cred_username_t *)credentials;
+
+    if (!cred)
+        return false;
+
+    this->UserName = cred->username ? SvnBase::Utf8_PtrToString(cred->username) : nullptr;
+    this->Save = (cred->may_save != FALSE);
+    return TRUE;
+}
 #pragma endregion
 
 ////////////////////////////////////////////////////////////////
@@ -755,29 +776,68 @@ Uri^ SvnAuthenticationEventArgs::RealmUri::get()
 generic<typename T> where T : SvnAuthenticationEventArgs
 bool SvnAuthentication::Run(T args, Predicate<T> ^doneFilter)
 {
-    for each (ISvnAuthWrapper^ w in _handlers)
+    ISvnAuthenticationEventArgs ^svnAuthArgs;
+
+    svnAuthArgs = dynamic_cast<ISvnAuthenticationEventArgs^>((Object^)args);
+    if (svnAuthArgs)
     {
-        SvnAuthWrapper<T>^ ww = dynamic_cast<SvnAuthWrapper<T>^>(w);
+        AprPool pool(SmallThreadPool);
+        svn_auth_iterstate_t *iterstate;
+        void *credentials;
 
-        if (!ww)
-            continue;
 
-        args->Break = false;
-
-        int repeat = ww->RetryLimit;
-        while (!args->Break && repeat-- > 0)
+        svnAuthArgs->Setup(_clientContext->CtxHandle->auth_baton, %pool);
+        try
         {
-            args->Clear();
+            SVN_THROW(svn_auth_first_credentials(&credentials, &iterstate,
+                                                 svnAuthArgs->CredentialKind,
+                                                 pool.AllocString(args->Realm),
+                                                 _clientContext->CtxHandle->auth_baton,
+                                                 pool.Handle));
 
-            ww->Raise(args);
+            while (credentials)
+            {
+                svnAuthArgs->Apply(credentials);
 
-            if (args->Cancel)
-                return false;
+                if (doneFilter(args))
+                    return true;
 
-            if (!args->Break && doneFilter(args))
-                return true;
+                SVN_THROW(svn_auth_next_credentials(&credentials, iterstate, pool.Handle));
+            }
+
+            return false;
+        }
+        finally
+        {
+            svnAuthArgs->Done(_clientContext->CtxHandle->auth_baton, %pool);
         }
     }
+    else
+    {
+        for each (ISvnAuthWrapper^ w in _handlers)
+        {
+            SvnAuthWrapper<T>^ ww = dynamic_cast<SvnAuthWrapper<T>^>(w);
 
-    return false;
+            if (!ww)
+                continue;
+
+            args->Break = false;
+
+            int repeat = ww->RetryLimit;
+            while (!args->Break && repeat-- > 0)
+            {
+                args->Clear();
+
+                ww->Raise(args);
+
+                if (args->Cancel)
+                    return false;
+
+                if (!args->Break && doneFilter(args))
+                    return true;
+            }
+        }
+
+        return false;
+    }
 }
