@@ -38,6 +38,18 @@ namespace SharpSvn.Tests
             }
         }
 
+        [TestMethod]
+        public void ListSshHostCredentials()
+        {
+            using (SvnClient client = new SvnClient())
+            {
+                foreach (SvnAuthenticationCacheItem i in client.Authentication.GetCachedItems(SvnAuthenticationCacheType.WindowsSshHostKeys))
+                {
+                    GC.KeepAlive(i);
+                }
+            }
+        }
+
         [TestMethod, Ignore]
         public void ListSsh()
         {
