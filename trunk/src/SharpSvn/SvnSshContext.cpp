@@ -1313,10 +1313,24 @@ static svn_error_t * ssh_close(void *baton)
 static svn_error_t * ssh_data_available(void *baton,
                                         svn_boolean_t *data_available)
 {
-  *data_available = FALSE; /* ### Do something smarter
-                              ### This is what 1.8 always did on Windows */
+    ssh_baton *ssh = (ssh_baton*)baton;
 
-  return SVN_NO_ERROR;
+    FD_SET read_set, error_set;
+    TIMEVAL tv = {0, 0 }; // Return directly
+
+    FD_ZERO(&read_set);
+    FD_SET(ssh->socket, &read_set);
+
+    if (0 < select(1, &read_set, NULL, NULL, &tv))
+    {
+        // Yes this function is deprecated, but there is no alternative
+        // And we do call select() first
+        *data_available = (0 != libssh2_poll_channel_read(ssh->channel, 0));
+    }
+    else
+        *data_available = FALSE;
+
+    return SVN_NO_ERROR;
 }
 
 void SshConnection::OpenTunnel(svn_stream_t *&channel,
