@@ -118,6 +118,7 @@ namespace SharpSvn {
             svn_cancel_func_t _cancel_func;
             void *_cancel_baton;
             String^ _defaultUsername;
+            static initonly Dictionary<String^, String^> ^_processKeyCache = gcnew Dictionary<String^, String^>();
 
         internal:
             ssh_keybint_t *_kbi;
