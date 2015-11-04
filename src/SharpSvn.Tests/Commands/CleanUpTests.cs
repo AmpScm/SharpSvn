@@ -27,12 +27,12 @@ using SharpSvn;
 
 namespace SharpSvn.Tests.Commands
 {
-	/// <summary>
-	/// Tests the Client::Cleanup method
-	/// </summary>
-	[TestClass]
-	public class CleanupTests : TestBase
-	{
+    /// <summary>
+    /// Tests the Client::Cleanup method
+    /// </summary>
+    [TestClass]
+    public class CleanupTests : TestBase
+    {
         [TestMethod]
         public void Cleanup_Basic()
         {
@@ -45,5 +45,5 @@ namespace SharpSvn.Tests.Commands
             }
         }
 
-	}
+    }
 }
