@@ -44,5 +44,10 @@
         <include name="**.h" />
       </fileset>
     </copy>
+    <copy todir="${intDir}/include/nghttp2" flatten="true">
+      <fileset>
+        <include name="${nghttp2Dir}/nghttp2/nghttp2ver.h" />
+      </fileset>
+    </copy>
   </target>
 </project>
