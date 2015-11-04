@@ -49,7 +49,7 @@
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
   <property name="sqliteVersion" value="3.8.11.1" overwrite="false" />
   <property name="libssh2Version" value="1.6.0" overwrite="false" />
-  <property name="nghttp2Version" value="1.3.4" overwrite="false" />
+  <property name="nghttp2Version" value="1.4.0" overwrite="false" />
 
   <!-- Building only -->
   <property name="cmakeVersion" value="3.3.1" overwrite="false" />
