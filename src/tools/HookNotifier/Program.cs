@@ -25,7 +25,9 @@ namespace HookNotifier
     {
         static void Main(string[] args)
         {
-            string file = Environment.GetEnvironmentVariable("SHARPSVNHOOK_FILE");
+            string envPrefix = Path.GetFileNameWithoutExtension(Environment.GetCommandLineArgs()[0]) + ".";
+
+            string file = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_FILE");
 
             if (!string.IsNullOrEmpty(file))
             {
@@ -38,7 +40,7 @@ namespace HookNotifier
                 }
             }
 
-            file = Environment.GetEnvironmentVariable("SHARPSVNHOOK_STDIN");
+            file = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_STDIN");
 
             if (!string.IsNullOrEmpty(file))
             {
@@ -59,7 +61,14 @@ namespace HookNotifier
                 }
             }
 
-            file = Environment.GetEnvironmentVariable("SHARPSVNHOOK_WAIT");
+            file = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_DONE");
+
+            if (!string.IsNullOrEmpty(file))
+            {
+                File.WriteAllText(file, "");
+            }
+
+            file = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_WAIT");
 
             if (!string.IsNullOrEmpty(file))
             {
@@ -78,14 +87,14 @@ namespace HookNotifier
                 Thread.Sleep(100); // 1/10th of a second
                 int result = int.Parse(File.ReadAllText(file).Trim());
 
-                string outText = Environment.GetEnvironmentVariable("SHARPSVNHOOK_OUT_STDOUT");
+                string outText = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDOUT");
                 if (!string.IsNullOrEmpty(outText) && File.Exists(outText))
                 {
                     Console.Out.Write(File.ReadAllText(outText));
                     File.Delete(outText);
                 }
 
-                string errText = Environment.GetEnvironmentVariable("SHARPSVNHOOK_OUT_STDERR");
+                string errText = Environment.GetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDERR");
                 if (!string.IsNullOrEmpty(errText) && File.Exists(errText))
                 {
                     Console.Error.Write(File.ReadAllText(errText));
