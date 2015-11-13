@@ -21,6 +21,7 @@ using System.Threading;
 using System.IO;
 using System.CodeDom.Compiler;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace SharpSvn.Tests.LookCommands
 {
@@ -43,9 +44,10 @@ namespace SharpSvn.Tests.LookCommands
                 _stdinText = stdinText;
 
                 SvnHookArguments ha;
-                if (SvnHookArguments.ParseHookArguments(args, ht, false, out ha))
+                if (SvnHookArguments.ParseHookArguments(args, ht, new StringReader(stdinText), out ha))
+                {
                     _ha = ha;
-
+                }
             }
 
             public string[] Args
@@ -127,6 +129,7 @@ namespace SharpSvn.Tests.LookCommands
             string suffix = Guid.NewGuid().ToString("N");
             string args = Path.Combine(dir, suffix + "-args.txt");
             string stdin = Path.Combine(dir, suffix + "-stdin.txt");
+            string done = Path.Combine(dir, suffix + "-done.txt");
             string wait = Path.Combine(dir, suffix + "-wait.txt");
 
             string errTxt = Path.Combine(dir, suffix + "-errTxt.txt");
@@ -140,11 +143,13 @@ namespace SharpSvn.Tests.LookCommands
 
             ThreadStopper stopper = new ThreadStopper();
 
-            Environment.SetEnvironmentVariable("SHARPSVNHOOK_FILE", args);
-            Environment.SetEnvironmentVariable("SHARPSVNHOOK_STDIN", stdin);
-            Environment.SetEnvironmentVariable("SHARPSVNHOOK_WAIT", wait);
-            Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDOUT", outTxt);
-            Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDERR", errTxt);
+            string envPrefix = Path.GetFileNameWithoutExtension(SvnHookArguments.GetHookFileName(reposPath, type)) + ".";
+            Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_FILE", args);
+            Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_STDIN", stdin);
+            Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_DONE", done);
+            Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_WAIT", wait);
+            Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDOUT", outTxt);
+            Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDERR", errTxt);
 
             string file = Path.ChangeExtension(SvnHookArguments.GetHookFileName(reposPath, type), ".exe");
 
@@ -155,7 +160,7 @@ namespace SharpSvn.Tests.LookCommands
                 {
                     while (!stopper.Cancel)
                     {
-                        if (File.Exists(args) && File.Exists(stdin))
+                        if (File.Exists(done))
                         {
                             List<string> argCollection = new List<string>();
                             using (StreamReader fs = File.OpenText(args))
@@ -164,19 +169,21 @@ namespace SharpSvn.Tests.LookCommands
                                 while (null != (line = fs.ReadLine()))
                                     argCollection.Add(line);
                             }
-                            string stdinText = RetriedReadAllText(stdin);
+                            string stdinText = File.ReadAllText(stdin);
 
                             File.Delete(args);
                             File.Delete(stdin);
 
-                            ReposHookEventArgs ra = new ReposHookEventArgs(type, argCollection.ToArray(), stdin);
+                            ReposHookEventArgs ra = new ReposHookEventArgs(type, argCollection.ToArray(), stdinText);
 
                             try
                             {
                                 hook(this, ra);
                             }
-                            catch
+                            catch (Exception e)
                             {
+                                if (string.IsNullOrEmpty(ra.ErrorText))
+                                    ra.ErrorText = e.ToString();
                                 ra.ExitCode = 129;
                             }
                             finally
@@ -192,6 +199,8 @@ namespace SharpSvn.Tests.LookCommands
                                 File.WriteAllText(wait, ra.ExitCode.ToString());
                             }
 
+                            File.Delete(done);
+
                             if (ra.Cancel)
                                 break;
                         }
@@ -201,11 +210,12 @@ namespace SharpSvn.Tests.LookCommands
                 }
                 finally
                 {
-                    Environment.SetEnvironmentVariable("SHARPSVNHOOK_FILE", null);
-                    Environment.SetEnvironmentVariable("SHARPSVNHOOK_STDIN", null);
-                    Environment.SetEnvironmentVariable("SHARPSVNHOOK_WAIT", null);
-                    Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDOUT", null);
-                    Environment.SetEnvironmentVariable("SHARPSVNHOOK_OUT_STDERR", null);
+                    Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_FILE", null);
+                    Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_STDIN", null);
+                    Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_DONE", null);
+                    Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_WAIT", null);
+                    Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDOUT", null);
+                    Environment.SetEnvironmentVariable(envPrefix + "SHARPSVNHOOK_OUT_STDERR", null);
                 }
 
                 GC.KeepAlive(tfc);
@@ -215,21 +225,6 @@ namespace SharpSvn.Tests.LookCommands
             File.Copy(Path.Combine(ProjectBase, "..\\tools\\hooknotifier\\bin\\" + Configuration + "\\HookNotifier.exe"), file);
 
             return stopper;
-        }
-
-        private string RetriedReadAllText(string path)
-        {
-            for(int i = 0; i < 10; i++)
-                try
-                {
-                    return File.ReadAllText(path);
-                }
-                catch(IOException)
-                {
-                    Thread.Sleep(500 * i);
-                }
-
-            return null;
         }
 
         protected string Configuration
