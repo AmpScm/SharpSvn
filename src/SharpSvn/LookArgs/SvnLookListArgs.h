@@ -1,5 +1,7 @@
 #pragma once
 
+#include "LookArgs/SvnLookClientArgs.h"
+
 namespace SharpSvn {
 
     /// <summary>Base Extended Parameter container of <see cref="SvnLookClient" /> commands</summary>

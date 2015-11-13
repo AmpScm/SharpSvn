@@ -66,11 +66,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AdminCommands\DumpTest.cs" />
     <Compile Include="Commands\AddTests.cs" />
+    <Compile Include="LookCommands\GetLockTests.cs" />
     <Compile Include="LookCommands\InheritedPropertyTests.cs" />
     <Compile Include="Misc\AuthenticationTests.cs" />
     <Compile Include="Commands\BlameTests.cs" />
@@ -153,6 +155,10 @@
     <ProjectReference Include="..\SharpSvn.TestBuilder\SharpSvn.TestBuilder.csproj">
       <Project>{691cbc4f-cc38-4342-8738-a08e48812141}</Project>
       <Name>SharpSvn.TestBuilder</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SharpSvn.UI\SharpSvn.UI.csproj">
+      <Project>{e929a4d4-6c65-4d00-9432-e082169bddc3}</Project>
+      <Name>SharpSvn.UI</Name>
     </ProjectReference>
     <ProjectReference Include="..\tools\HookNotifier\HookNotifier.csproj">
       <Project>{3a1d7085-4b6a-4d47-9fa6-b2a63cdd6595}</Project>

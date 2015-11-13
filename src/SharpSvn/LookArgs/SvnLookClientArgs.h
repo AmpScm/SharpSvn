@@ -14,17 +14,19 @@
 
 #pragma once
 
+#include "SvnClientArgs.h"
+
 namespace SharpSvn {
 
-	ref class SvnLookClient;
+    ref class SvnLookClient;
 
-	/// <summary>Base Extended Parameter container of <see cref="SvnLookClient" /> commands</summary>
-	/// <threadsafety static="true" instance="false"/>
-	public ref class SvnLookClientArgs abstract : public SvnClientArgs
-	{
-	protected:
-		SvnLookClientArgs()
-		{
-		}
-	};
+    /// <summary>Base Extended Parameter container of <see cref="SvnLookClient" /> commands</summary>
+    /// <threadsafety static="true" instance="false"/>
+    public ref class SvnLookClientArgs abstract : public SvnClientArgs
+    {
+    protected:
+        SvnLookClientArgs()
+        {
+        }
+    };
 }
