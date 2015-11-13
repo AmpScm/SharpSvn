@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include "SvnEnums.h"
 #include "SvnChangeList.h"
 #include "SvnCommandLineArgumentCollection.h"
 

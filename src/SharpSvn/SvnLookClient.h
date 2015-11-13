@@ -32,6 +32,7 @@ namespace SharpSvn {
     ref class SvnLookInheritedPropertyListArgs;
     ref class SvnLookWriteArgs;
     ref class SvnLookListArgs;
+    ref class SvnLookLockArgs;
 
     /// <summary>Container for the location to use with the <see cref="SvnLookClient" /> commands</summary>
     public ref class SvnLookOrigin sealed : public SvnBase
@@ -168,19 +169,23 @@ namespace SharpSvn {
     public:
         /// <overloads>Lists the content of a path directly from a repository</overloads>
         /// <summary>Lists the content of a path directly from a repository</summary>
-        bool List(SvnLookOrigin^ origin, String^ path, EventHandler<SvnLookListEventArgs^>^ listHandler);
+        bool List(SvnLookOrigin^ lookOrigin, String^ path, EventHandler<SvnLookListEventArgs^>^ listHandler);
 
         /// <summary>Lists the content of a path directly from a repository</summary>
-        bool List(SvnLookOrigin^ origin, String^ path, SvnLookListArgs^ args, EventHandler<SvnLookListEventArgs^>^ listHandler);
+        bool List(SvnLookOrigin^ lookOrigin, String^ path, SvnLookListArgs^ args, EventHandler<SvnLookListEventArgs^>^ listHandler);
 
         /// <overloads>Gets the content of a path directly from a repository</overloads>
         /// <summary>Gets the content of a path directly from a repository</summary>
-        bool GetList(SvnLookOrigin^ origin, String^ path, [Out] Collection<SvnLookListEventArgs^>^% list);
+        bool GetList(SvnLookOrigin^ lookOrigin, String^ path, [Out] Collection<SvnLookListEventArgs^>^% list);
         /// <summary>Gets the content of a path directly from a repository</summary>
-        bool GetList(SvnLookOrigin^ origin, String^ path, SvnLookListArgs^ args, [Out] Collection<SvnLookListEventArgs^>^% list);
+        bool GetList(SvnLookOrigin^ lookOrigin, String^ path, SvnLookListArgs^ args, [Out] Collection<SvnLookListEventArgs^>^% list);
 
     public:
-        bool TryGetRepositoryId(SvnLookOrigin^ origin, [Out] Guid% id);
+        bool GetLock(SvnLookOrigin^ lookOrigin, String^ path, [Out] SvnLockInfo^% lockInfo);
+        bool GetLock(SvnLookOrigin^ lookOrigin, String^ path, SvnLookLockArgs^ args, [Out] SvnLockInfo^% lockInfo);
+
+    public:
+        bool TryGetRepositoryId(SvnLookOrigin^ lookOrigin, [Out] Guid% id);
         bool TryGetRepositoryId(String^ repositoryPath, [Out] Guid% id);
 
     public:
