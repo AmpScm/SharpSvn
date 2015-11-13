@@ -662,6 +662,9 @@
     <ClInclude Include="EventArgs\SvnLookInheritedPropertyListEventArgs.h">
       <Filter>SvnLookClient\EventArgs</Filter>
     </ClInclude>
+    <ClInclude Include="LookArgs\SvnLookLockArgs.h">
+      <Filter>SvnLookClient\Args</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="SharpSvnStrings.resx">
@@ -1127,6 +1130,9 @@
       <Filter>SvnClient\Sources</Filter>
     </ClCompile>
     <ClCompile Include="LookCommands\LookInheritedPropertyList.cpp">
+      <Filter>SvnLookClient\Sources</Filter>
+    </ClCompile>
+    <ClCompile Include="LookCommands\LookLock.cpp">
       <Filter>SvnLookClient\Sources</Filter>
     </ClCompile>
   </ItemGroup>
