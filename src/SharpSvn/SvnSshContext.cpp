@@ -253,7 +253,7 @@ void SshConnection::ResolveAddress(AprPool^ scratchPool)
 void SshConnection::OpenSocket(AprPool^ scratchPool)
 {
     const char *hostname = scratchPool->AllocString(_host->Host);
-    apr_socket_t *sock;
+    apr_socket_t *sock = nullptr;
     apr_status_t status = APR_EINCOMPLETE;
 
     /* Iterate through the returned list of addresses attempting to
@@ -278,7 +278,7 @@ void SshConnection::OpenSocket(AprPool^ scratchPool)
         _sockAddr = _sockAddr->next;
     }
 
-    if (status)
+    if (status || !_sockAddr)
         SVN_THROW(
         svn_error_wrap_apr(status, "Can't connect to host '%s'", hostname));
 
