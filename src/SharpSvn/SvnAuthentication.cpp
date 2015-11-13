@@ -15,6 +15,7 @@
 #include "stdafx.h"
 
 #include "SvnAuthentication.h"
+#include "UnmanagedStructs.h"
 
 using namespace SharpSvn;
 using namespace SharpSvn::Implementation;
