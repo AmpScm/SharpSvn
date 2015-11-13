@@ -256,7 +256,7 @@ void SvnAuthenticationCacheItem::Delete()
 {
     if (!String::IsNullOrEmpty(_filename))
     {
-      String ^filename = _filename;
+        String ^filename = _filename;
         switch (CacheType)
         {
             case SvnAuthenticationCacheType::WindowsSshHostKeys:
