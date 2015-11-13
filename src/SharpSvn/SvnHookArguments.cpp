@@ -36,26 +36,34 @@ bool SvnHookArguments::ParseHookArguments(array<String^>^ args, SvnHookType hook
     if (!args)
         throw gcnew ArgumentNullException("args");
 
+    return ParseHookArguments(args, hookType, useConsole ? System::Console::In : nullptr, data);
+}
+
+bool SvnHookArguments::ParseHookArguments(array<String^>^ args, SvnHookType hookType, TextReader ^consoleData, [Out] SvnHookArguments^% data)
+{
+    if (!args)
+        throw gcnew ArgumentNullException("args");
+
     switch(hookType)
     {
     case SvnHookType::PostCommit:
-        return ParsePostCommit(args, useConsole, data);
+        return ParsePostCommit(args, consoleData, data);
     case SvnHookType::PostLock:
-        return ParsePostLock(args, useConsole, data);
+        return ParsePostLock(args, consoleData, data);
     case SvnHookType::PostRevPropChange:
-        return ParsePostRevPropChange(args, useConsole, data);
+        return ParsePostRevPropChange(args, consoleData, data);
     case SvnHookType::PostUnlock:
-        return ParsePostUnlock(args, useConsole, data);
+        return ParsePostUnlock(args, consoleData, data);
     case SvnHookType::PreCommit:
-        return ParsePreCommit(args, useConsole, data);
+        return ParsePreCommit(args, consoleData, data);
     case SvnHookType::PreLock:
-        return ParsePreLock(args, useConsole, data);
+        return ParsePreLock(args, consoleData, data);
     case SvnHookType::PreRevPropChange:
-        return ParsePreRevPropChange(args, useConsole, data);
+        return ParsePreRevPropChange(args, consoleData, data);
     case SvnHookType::PreUnlock:
-        return ParsePreUnlock(args, useConsole, data);
+        return ParsePreUnlock(args, consoleData, data);
     case SvnHookType::StartCommit:
-        return ParseStartCommit(args, useConsole, data);
+        return ParseStartCommit(args, consoleData, data);
     default:
         throw gcnew ArgumentOutOfRangeException("hookType", hookType, "Invalid hooktype passed");
     }
@@ -104,175 +112,192 @@ String^ SvnHookArguments::GetHookFileName(String^ path, SvnHookType hookType)
     return SvnTools::PathCombine(path, "hooks\\" + name);
 }
 
-bool SvnHookArguments::ParsePostCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostCommit(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 2)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PostCommit);
     data->RepositoryPath = args[0];
     data->Revision = __int64::Parse(args[1], CultureInfo::InvariantCulture);
     return true;
 }
 
-bool SvnHookArguments::ParsePostLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostLock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
-
-    UNUSED_ALWAYS(useConsole);
 
     data = nullptr;
     if (args->Length < 2)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PostLock);
     data->RepositoryPath = args[0];
     data->User = args[1];
+
+    if (consoleData)
+        data->ReadPathsFromStdIn(consoleData);
+
     return true;
 }
 
-bool SvnHookArguments::ParsePostRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostRevPropChange(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 5)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PostCommit);
     data->RepositoryPath = args[0];
     data->Revision = __int64::Parse(args[1], CultureInfo::InvariantCulture);
     data->User = args[2];
     data->PropertyName = args[3];
     data->Action = args[4];
 
-    if (useConsole)
-        data->PreviousValue = ReadStdInText();
+    if (consoleData)
+        data->PreviousValue = ReadStdInText(consoleData);
     return true;
 }
 
-bool SvnHookArguments::ParsePostUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePostUnlock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
-
-    UNUSED_ALWAYS(useConsole);
 
     data = nullptr;
     if (args->Length < 2)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PostUnlock);
     data->RepositoryPath = args[0];
     data->User = args[1];
+
+    if (consoleData)
+        data->ReadPathsFromStdIn(consoleData);
+
     return true;
 }
 
-bool SvnHookArguments::ParsePreCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreCommit(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 2)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PreCommit);
     data->RepositoryPath = args[0];
     data->TransactionName = args[1];
     return true;
 }
 
-bool SvnHookArguments::ParsePreLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreLock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 3)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PreLock);
     data->RepositoryPath = args[0];
     data->Path = args[1];
     data->User = args[2];
     return true;
 }
 
-bool SvnHookArguments::ParsePreRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreRevPropChange(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 5)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PreRevPropChange);
     data->RepositoryPath = args[0];
     data->Revision = __int64::Parse(args[1], CultureInfo::InvariantCulture);
     data->User = args[2];
     data->PropertyName = args[3];
     data->Action = args[4];
 
-    if (useConsole)
-        data->NewValue = ReadStdInText();
+    if (consoleData)
+        data->NewValue = ReadStdInText(consoleData);
     return true;
 }
 
-bool SvnHookArguments::ParsePreUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParsePreUnlock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 3)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::PreUnlock);
     data->RepositoryPath = args[0];
     data->Path = args[1];
     data->User = args[2];
     return true;
 }
 
-bool SvnHookArguments::ParseStartCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data)
+bool SvnHookArguments::ParseStartCommit(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data)
 {
     if (!args)
         throw gcnew ArgumentNullException("args");
 
-    UNUSED_ALWAYS(useConsole);
+    UNUSED_ALWAYS(consoleData);
 
     data = nullptr;
     if (args->Length < 3)
         return false;
 
-    data = gcnew SvnHookArguments();
+    data = gcnew SvnHookArguments(SvnHookType::StartCommit);
     data->RepositoryPath = args[0];
     data->User = args[1];
     data->Capabilities = gcnew Collection<String^>(array<String^>::AsReadOnly(args[2]->Split(',')));
     return true;
 }
 
-String^ SvnHookArguments::ReadStdInText()
+String^ SvnHookArguments::ReadStdInText(TextReader^ consoleData)
 {
-    return System::Console::In->ReadToEnd();
+    return consoleData->ReadToEnd();
+}
+
+void SvnHookArguments::ReadPathsFromStdIn(TextReader^ consoleData)
+{
+    Collection<String^> ^paths = gcnew Collection<String^>();
+    String ^line;
+
+    while ((line = consoleData->ReadLine()))
+    {
+        paths->Add(line);
+    }
+
+    Paths = paths;
 }

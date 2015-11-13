@@ -16,6 +16,7 @@
 
 namespace SharpSvn {
     using namespace SharpSvn::Implementation;
+    using System::IO::TextReader;
 
     public enum class SvnHookType
     {
@@ -35,29 +36,33 @@ namespace SharpSvn {
     {
     public:
         static bool ParseHookArguments(array<String^>^ args, SvnHookType hookType, bool useConsole, [Out] SvnHookArguments^% data);
+        static bool ParseHookArguments(array<String^>^ args, SvnHookType hookType, TextReader^ consoleData, [Out] SvnHookArguments^% data);
     internal:
-        static bool ParsePostCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePostLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePostRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePostUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePreCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePreLock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePreRevPropChange(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParsePreUnlock(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
-        static bool ParseStartCommit(array<String^>^ args, bool useConsole, [Out] SvnHookArguments^% data);
+        static bool ParsePostCommit(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePostLock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePostRevPropChange(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePostUnlock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePreCommit(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePreLock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePreRevPropChange(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParsePreUnlock(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
+        static bool ParseStartCommit(array<String^>^ args, TextReader ^consoleData, [Out] SvnHookArguments^% data);
 
     public:
         static String^ GetHookFileName(String^ path, SvnHookType hookType);
 
     protected:
-        static String^ ReadStdInText();
+        static String^ ReadStdInText(TextReader^ consoleData);
+        void ReadPathsFromStdIn(TextReader^ consoleData);
 
     private:
+        initonly SvnHookType _hookType;
         String^ _repositoryPath;
         String^ _txnName;
         __int64 _revision;
         String^ _user;
         String^ _path;
+        Collection<String^> ^_paths;
         String^ _propertyName;
         String^ _action;
         Collection<String^>^ _capabilities;
@@ -66,12 +71,21 @@ namespace SharpSvn {
         SvnLookOrigin^ _lookOrigin;
 
     protected:
-        SvnHookArguments()
+        SvnHookArguments(SvnHookType hookType)
         {
+            _hookType = hookType;
             _revision = -1L;
         }
 
     public:
+        property SvnHookType HookType
+        {
+            SvnHookType get()
+            {
+                return _hookType;
+            }
+        }
+
         property String^ RepositoryPath
         {
             String^ get()
@@ -122,8 +136,17 @@ namespace SharpSvn {
                         _lookOrigin = gcnew SvnLookOrigin(RepositoryPath, TransactionName);
                     else if(Revision >= 0)
                         _lookOrigin = gcnew SvnLookOrigin(RepositoryPath, Revision);
-                    else
+                    else switch (HookType)
+                    {
+                    case SvnHookType::PostLock:
+                    case SvnHookType::PostUnlock:
+                    case SvnHookType::PreLock:
+                    case SvnHookType::PreUnlock:
+                        _lookOrigin = gcnew SvnLookOrigin(RepositoryPath);
+                        break;
+                    default:
                         throw gcnew InvalidOperationException();
+                    }
                 }
                 return _lookOrigin;
             }
@@ -146,12 +169,25 @@ namespace SharpSvn {
         {
             String^ get()
             {
-                return _path;
+                return _path ? _path : ((_paths && _paths->Count) ? _paths[0] : nullptr);
             }
         protected:
             void set(String^ value)
             {
                 _path = value;
+            }
+        }
+
+        property Collection<String^>^ Paths
+        {
+            Collection<String^>^ get()
+            {
+                return _paths;
+            }
+        protected:
+            void set(Collection<String^>^ value)
+            {
+                _paths = value;
             }
         }
 
@@ -187,7 +223,7 @@ namespace SharpSvn {
             {
                 return _capabilities;
             }
-        internal:
+        protected:
             void set(Collection<String^>^ value)
             {
                 _capabilities = value;
