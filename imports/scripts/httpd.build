@@ -66,6 +66,13 @@
         <target value="mod_log_config" />
       </MSBuild>
     </OnceBlock>
+    
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${httpdDir}/release">
+        <include name="libhttpd.lib" />
+        <include name="mod_dav.lib" />
+      </fileset>
+    </copy>
 
     <copy todir="${httpdDir}/include" flatten="true">
       <fileset basedir="${httpdDir}">

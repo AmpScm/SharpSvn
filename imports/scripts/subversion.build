@@ -76,13 +76,6 @@
       </fileset>
     </copy>
 
-    <!-- Enable compiling Subversion in debug and release mode -->
-    <copy todir="${httpdDir}/Debug" flatten="true" if="${buildHttpd}">
-      <fileset basedir="${httpdDir}">
-        <include name="Release/*.lib" />
-      </fileset>
-    </copy>
-
     <!-- 1.8 and earlier expect this nonstandard sqlite layout -->
     <copy todir="${intDir}\inc">
       <fileset basedir="${intDir}\include">
