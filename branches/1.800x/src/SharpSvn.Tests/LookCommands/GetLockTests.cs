@@ -108,7 +108,7 @@ namespace SharpSvn.Tests.LookCommands
                 Client.Unlock(twopaths);
             }
 
-            Assert.That(n, Is.EqualTo(16));
+            Assert.That(n, Is.EqualTo(18)); // 16 in 1.9+
         }
     }
 }
