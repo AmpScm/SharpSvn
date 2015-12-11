@@ -51,6 +51,10 @@
 #define WINNT
 #endif
 #if !defined(WIN32)' />
+          <LineRegexReplace re='#define APR_HAVE_STRICMP\s+1'
+                            to='$0
+#define stricmp(s1, s2) _stricmp(s1, s2)
+#define strnicmp(s1, s2, n) _strnicmp(s1, s2, n)' />
         </filterchain>
       </FilterFile>
     </OnceBlock>
