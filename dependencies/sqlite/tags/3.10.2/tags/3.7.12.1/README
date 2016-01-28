@@ -1,0 +1,10 @@
+  Updating Sqlite for SharpSvn
+  ============================
+  
+ Please update Sqlite by
+  * Importing a newer version over trunk.
+  * Commit as new version
+  * Create a tag for the new version
+  
+ And then update the version number in SharpSvn's import code
+ 
