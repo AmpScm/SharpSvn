@@ -31,7 +31,7 @@
   <property name="serfMerges" value="r1699721-1699723,r1699791,r1699985,r1699986-r1699987,r1699993-r1699994,r1699906" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.0.2e" overwrite="false" />
+  <property name="opensslVersion" value="1.0.2f" overwrite="false" />
   <property name="neonVersion" value="0.30.1" overwrite="false" />
 
   <property name="aprVersion" value="1.5.1" overwrite="false" />
