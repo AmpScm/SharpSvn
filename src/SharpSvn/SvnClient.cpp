@@ -236,9 +236,9 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 
         (*result)->choice = (svn_wc_conflict_choice_t)ea->Choice;
 
-        if (ea->Choice != SvnAccept::Postpone && ea->MergedFile)
+        if (ea->Choice == SvnAccept::Merged)
         {
-            if (ea->Choice == SvnAccept::Merged)
+            if (ea->MergedFile)
                 (*result)->merged_file = resultPool.AllocAbsoluteDirent(ea->MergedFile);
         }
 
