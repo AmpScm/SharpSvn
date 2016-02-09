@@ -199,16 +199,16 @@ namespace SharpSvn {
             }
         }
 
-    property String^ FullPath
-    {
-        String^ get()
+        property String^ FullPath
         {
-        if (!_fullPath && _description && _description->local_abspath && _pool)
-                                _fullPath = SvnBase::Utf8_PathPtrToString(_description->local_abspath, _pool);
+            String^ get()
+            {
+                if (!_fullPath && _description && _description->local_abspath && _pool)
+                    _fullPath = SvnBase::Utf8_PathPtrToString(_description->local_abspath, _pool);
 
-                        return _fullPath;
+                return _fullPath;
+            }
         }
-    }
 
         property String^ PropertyName
         {
