@@ -26,7 +26,8 @@ namespace SharpSvn {
         SvnAccept _result;
 
         SvnConflictData^ _data;
-        String^ _mergeResult;
+        String^ _mergeFile;
+        String^ _mergedValue;
 
     internal:
         // BH: Note svn_wc_conflict_description_t is also mapped by SvnConflictData
@@ -123,8 +124,8 @@ namespace SharpSvn {
         {
             String^ get()
             {
-                if (_mergeResult)
-                    return _mergeResult;
+                if (_mergeFile)
+                    return _mergeFile;
 
                 return Conflict ? Conflict->MergedFile : nullptr;
             }
@@ -133,7 +134,19 @@ namespace SharpSvn {
                 if (String::IsNullOrEmpty(value) && (value != MergedFile))
                     throw gcnew InvalidOperationException("Only settable with valid filename");
 
-                _mergeResult = value;
+                _mergeFile = value;
+            }
+        }
+
+        property String^ MergedValue
+        {
+            String^ get()
+            {
+                return _mergedValue;
+            }
+            void set(String^ value)
+            {
+                _mergedValue= value;
             }
         }
 

@@ -238,6 +238,8 @@ svn_error_t* SvnClientCallBacks::svn_wc_conflict_resolver_func(svn_wc_conflict_r
 
         if (ea->Choice == SvnAccept::Merged)
         {
+            if (ea->MergedValue)
+                (*result)->merged_value = resultPool.AllocSvnString(ea->MergedValue);
             if (ea->MergedFile)
                 (*result)->merged_file = resultPool.AllocAbsoluteDirent(ea->MergedFile);
         }
