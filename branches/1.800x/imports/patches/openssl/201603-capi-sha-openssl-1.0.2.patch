@@ -1,0 +1,38 @@
+Index: engines/e_capi.c
+===================================================================
+--- engines/e_capi.c	(revision 24340)
++++ engines/e_capi.c	(working copy)
+@@ -66,7 +66,7 @@
+ #  include <openssl/rsa.h>
+ 
+ #  ifndef _WIN32_WINNT
+-#   define _WIN32_WINNT 0x0400
++#   define _WIN32_WINNT 0x0501
+ #  endif
+ 
+ #  include <windows.h>
+@@ -134,6 +134,10 @@
+ #  define CALG_SHA_512            (ALG_CLASS_HASH | ALG_TYPE_ANY | ALG_SID_SHA_512)
+ # endif
+ 
++#ifndef PROV_RSA_AES
++# define PROV_RSA_AES 24
++#endif
++
+ # include <openssl/engine.h>
+ # include <openssl/pem.h>
+ # include <openssl/x509v3.h>
+@@ -1453,6 +1457,13 @@
+     }
+     if (ctx->store_flags & CERT_SYSTEM_STORE_LOCAL_MACHINE)
+         dwFlags = CRYPT_MACHINE_KEYSET;
++    if ((ptype == PROV_RSA_FULL)
++        && !strcmp(provname, MS_ENHANCED_PROV_A)
++        && CryptAcquireContextA(&key->hprov, contname,
++                                "Microsoft Enhanced RSA and AES Cryptographic Provider"
++                                /* = MS_ENH_RSA_AES_PROV_A, except when using Windows SDK 6.0 when compiling for XP PRE SP1 this has the " (Prototype)" suffix :( */,
++                                PROV_RSA_AES, dwFlags))
++    {} else
+     if (!CryptAcquireContext(&key->hprov, contname, provname, ptype, dwFlags)) {
+         CAPIerr(CAPI_F_CAPI_GET_KEY, CAPI_R_CRYPTACQUIRECONTEXT_ERROR);
+         capi_addlasterror();
