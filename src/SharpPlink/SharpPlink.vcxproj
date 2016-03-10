@@ -327,6 +327,8 @@
     </ClCompile>
     <ClCompile Include="PuttySrc\dialog.c">
     </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wincapi.c">
+    </ClCompile>
     <ClCompile Include="PuttySrc\windows\winctrls.c">
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winhelp.c">
