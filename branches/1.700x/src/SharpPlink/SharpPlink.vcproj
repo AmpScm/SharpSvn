@@ -620,6 +620,10 @@
 					>
 				</File>
 				<File
+					RelativePath="PuttySrc\windows\wincapi.c"
+					>
+				</File>
+				<File
 					RelativePath="PuttySrc\windows\winctrls.c"
 					>
 				</File>
