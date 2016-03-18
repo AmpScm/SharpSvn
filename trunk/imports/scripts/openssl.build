@@ -34,9 +34,9 @@
         <arg value="no-asm" if="${platform=='x64'}" />
         <arg value="no-dso" if="${static}" />
         <arg value="no-shared" />
-        <arg value="no-krb5" />
+        <arg value="no-krb5" if="${opensslVersion &lt; '1.1.'}" />
         <arg value="no-hw" />
-        <arg value="no-ssl2" />
+        <arg value="no-ssl2" if="${opensslVersion &lt; '1.1.'}" />
         <arg value="no-ssl3" />
         <arg value="no-gost" if="${static}"/>
         <arg value="no-dtls" />
@@ -44,7 +44,7 @@
         <arg value="no-unit-test" />
         <arg value="no-zlib" />
         <arg value="no-zlib-dynamic" />
-        <arg value="enable-tlsext" />
+        <arg value="enable-tlsext" if="${opensslVersion &lt; '1.1.'}" />
         <arg value="enable-capieng" />
         <arg value="enable-static-engine" if="${static}" />
         <arg value="-DSSL_FORBID_ENULL" />
@@ -61,17 +61,21 @@
       <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
         <arg line="/c ms\do_win64a.bat" />
       </exec>
-      <FilterFile file="${opensslDir}/ms/libeay32.def" unless="${static}">
-        <filterchain>
-          <replacestring from="LIBEAY32" to="${dllPrefix}LIBEAY32" if="${dllPrefix != ''}" />
-        </filterchain>
-      </FilterFile>
-      <FilterFile file="${opensslDir}/ms/ssleay32.def" unless="${static}">
-        <filterchain>
-          <replacestring from="SSLEAY32" to="${dllPrefix}SSLEAY32" if="${dllPrefix != ''}" />
-        </filterchain>
-      </FilterFile>
-      <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}">
+      <foreach item="File" property="deffile">
+        <in>
+          <items basedir="${opensslDir}/ms">
+            <include name="*.def" />
+          </items>
+        </in>
+        <do>
+          <FilterFile file="${deffile}" unless="${static}">
+            <filterchain>
+              <LineRegexReplace re="LIBRARY[\t ]+" to="LIBRARY ${dllPrefix}" />
+            </filterchain>
+          </FilterFile>
+        </do>
+      </foreach>
+      <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}" if="${opensslVersion &lt; '1.1.'}" >
         <filterchain>
           <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
           <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
@@ -119,7 +123,9 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
           <replacestring from="!defined(OPENSSL_SYS_WIN32_CYGWIN)" to="0 &amp;&amp; ! defined(OPENSSL_SYS_WIN32_CYGWIN)" />
         </filterchain>
       </FilterFile>
-      <FilterFile file="${opensslDir}/crypto/opensslconf.h">
+      <property name="opensslconf" value="${opensslDir}/crypto/opensslconf.h" if="${opensslVersion &lt; '1.1.'}" />
+      <property name="opensslconf" value="${opensslDir}/include/openssl/opensslconf.h" unless="${opensslVersion &lt; '1.1.'}" />
+      <FilterFile file="${opensslconf}">
         <filterchain>
           <replacestring from='#define ENGINESDIR "' to='#define ENGINESDIR  "C:\\ProgramData\\OpenSSL\\Engines" //' />
         </filterchain>

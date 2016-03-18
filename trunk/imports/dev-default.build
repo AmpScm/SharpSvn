@@ -21,6 +21,7 @@
   <property name="buildSubversion" value="false" />
   <property name="buildLibgit2" value="false" />
   <property name="buildLibssh2" value="false" />
+  <property name="buildNeon" value="false" />
   <property name="svnStatic" value="true" overwrite="false" />
   <property name="svnAddSharpSvn" value="false" overwrite="false" />
   <property name="svnDll" value="dll" />
@@ -32,6 +33,7 @@
   <property name="botBuild" value="true" overwrite="false" />
   <property name="downloadNUnit" value="false" overwrite="false" />
   <property name="buildJavaHL" value="true" overwrite="false" />
+  <property name="ltcg" value="false" overwrite="false" />
 
   <include buildfile="imports/Default.build" />
 
