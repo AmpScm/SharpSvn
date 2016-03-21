@@ -1,0 +1,31 @@
+Index: plugins/ntlm.c
+===================================================================
+--- plugins/ntlm.c	(revision 2353)
++++ plugins/ntlm.c	(working copy)
+@@ -424,7 +424,7 @@
+ 			 const sasl_utils_t *utils,
+ 			 char **buf, unsigned *buflen, int *result)
+ {
+-    HMAC_CTX ctx;
++    HMAC_CTX *ctx;
+     unsigned char hash[EVP_MAX_MD_SIZE];
+     char *upper;
+     unsigned int len;
+@@ -449,11 +449,12 @@
+ 	HMAC(EVP_md5(), hash, MD4_DIGEST_LENGTH, *buf, 2 * len, hash, &len);
+ 
+ 	/* V2 = HMAC-MD5(NTLMv2hash, challenge + blob) + blob */
+-	HMAC_Init(&ctx, hash, len, EVP_md5());
+-	HMAC_Update(&ctx, challenge, NTLM_NONCE_LENGTH);
+-	HMAC_Update(&ctx, blob, bloblen);
+-	HMAC_Final(&ctx, V2, &len);
+-	HMAC_cleanup(&ctx);
++	ctx = HMAC_CTX_new();
++	HMAC_Init(ctx, hash, len, EVP_md5());
++	HMAC_Update(ctx, challenge, NTLM_NONCE_LENGTH);
++	HMAC_Update(ctx, blob, bloblen);
++	HMAC_Final(ctx, V2, &len);
++	HMAC_CTX_free(ctx);
+ 
+ 	/* the blob is concatenated outside of this function */
+ 
