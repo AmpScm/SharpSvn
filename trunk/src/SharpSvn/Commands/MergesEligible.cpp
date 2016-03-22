@@ -80,7 +80,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
     ArgsStore store(this, args, %pool);
 
     if (handler)
-        args->List += handler;
+        args->MergesEligible += handler;
     try
     {
         apr_array_header_t* retrieveProperties;
@@ -113,7 +113,7 @@ bool SvnClient::ListMergesEligible(SvnTarget ^target, SvnTarget^ source, SvnMerg
     finally
     {
         if (handler)
-            args->List -= handler;
+            args->MergesEligible -= handler;
         args->_sourceTarget = nullptr;
     }
 }
