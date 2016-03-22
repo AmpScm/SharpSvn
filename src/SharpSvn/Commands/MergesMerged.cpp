@@ -81,7 +81,7 @@ bool SvnClient::ListMergesMerged(SvnTarget ^target, SvnTarget^ source, SvnMerges
     ArgsStore store(this, args, %pool);
 
     if (handler)
-        args->List += handler;
+        args->MergesMerged += handler;
     try
     {
         apr_array_header_t* retrieveProperties;
@@ -114,7 +114,7 @@ bool SvnClient::ListMergesMerged(SvnTarget ^target, SvnTarget^ source, SvnMerges
     finally
     {
         if (handler)
-            args->List -= handler;
+            args->MergesMerged -= handler;
 
         args->_sourceTarget = nullptr;
     }
