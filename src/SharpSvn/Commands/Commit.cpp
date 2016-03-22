@@ -183,6 +183,18 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
         {
             return args->HandleResult(this, gcnew SvnClientHookException("TortoiseSVN Client hook 'pre-commit' rejected commit"));
         }
+
+        // Read the log message back from the hook script
+        AprPool subpool(%pool);
+        svn_stream_t *f;
+        svn_string_t *msg;
+
+        SVN_HANDLE(svn_stream_open_readonly(&f, subpool.AllocDirent(msgFile), subpool.Handle, subpool.Handle));
+        SVN_HANDLE(svn_string_from_stream(&msg, f, subpool.Handle, subpool.Handle));
+        SVN_HANDLE(svn_stream_close(f));
+
+        // Overwrite the previous log message with the (possibly) adjusted one from the hook script
+        args->LogMessage = SvnBase::Utf8_PtrToString(msg->data, msg->len);
     }
 
     svn_error_t *r = svn_client_commit6(
@@ -210,14 +222,14 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
 
         /* Delete the tempfile on disposing the SvnClient */
         SVN_HANDLE(svn_stream_open_unique(&f, &path, nullptr, svn_io_file_del_on_pool_cleanup,
-                                                                          _pool.Handle, subpool.Handle));
+                                          _pool.Handle, subpool.Handle));
 
         svn_error_t *rr = r;
 
         while(rr)
         {
             SVN_HANDLE(svn_stream_printf(f, subpool.Handle, "%s\n",
-                                                                     svn_err_best_message(rr, tmpBuf, 1024)));
+                                         svn_err_best_message(rr, tmpBuf, 1024)));
 
             rr = rr->child;
         }
@@ -226,12 +238,12 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
         String^ errFile = Utf8_PathPtrToString(path, %subpool);
 
         if (!postCommitHook->Run(this, args,
-                                                         pathsFile,
-                                                         ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
-                                                         msgFile,
-                                                         (result ? result->Revision : -1).ToString(CultureInfo::InvariantCulture),
-                                                         errFile,
-                                                         commonPath))
+                                 pathsFile,
+                                 ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
+                                 msgFile,
+                                 (result ? result->Revision : -1).ToString(CultureInfo::InvariantCulture),
+                                 errFile,
+                                 commonPath))
           {
             return args->HandleResult(this, gcnew SvnClientHookException("TortoiseSVN Client hook 'post-commit' failed"));
           }
