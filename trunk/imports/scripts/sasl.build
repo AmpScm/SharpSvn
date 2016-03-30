@@ -57,6 +57,7 @@ $1
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
           <replacestring from='$(LINK32DLL_FLAGS)' to='$(LIB32_FLAGS)' />
           <replacestring from='$(LINK32DLL)' to='$(LIB32)' />
+          <replacestring from='OPENSSL_LIBS=' to='OPENSSL_QQ_LIBS=' />
           <LineRegexReplace re='/implib:"sasl[A-Za-z0-9_]+\.lib" ' to='' />
           <LineRegexReplace re=' ([a-zA-Z0-9_]+)_init.(c|obj)' to='' />
           <LineRegexReplace re='(sasl[A-Z0-9a-z]+)_out\s*=\s*(\1).dll\s+(\1).exp\s*(\1).exp' to='$1_out = ' />
@@ -75,7 +76,7 @@ $1
           <replacestring from='/D "WIN32"' to='/D "WIN32" /D "WIN64"' if="${platform=='x64'}" />
           <!-- Shared Library -->
           <replacestring from='$(LINK32DLL_FLAGS) /out' to='$(LINK32DLL_FLAGS) /MACHINE:x64 /out' if="${platform=='x64'}" unless="${static}" />
-          <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" /libpath:$(OPENSSL_LIBPATH) libeay32.lib ssleay32.lib /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} /delayload:${libeayFullName} ' unless="${static}" />
+          <replacestring from='/implib:"libsasl.lib" /pdb:"libsasl.pdb" ' to='/implib:"libsasl.lib" /pdb:"libsasl.pdb" $(OPENSSL_LIBS) /libpath:$(DB_LIBPATH) $(DB_LIB) delayimp.lib /delayload:${fullDbDllName} /delayload:${libeayFullName} ' unless="${static}" />
           <replacestring from='libsasl.dll' to='${saslDllName}' if="${dllPrefix != ''}" unless="${static}" />
           <!-- Static library -->
           <replacestring from='$(LINK32DLL)' to='$(LIB32)' if="${static}" />
@@ -100,6 +101,7 @@ $1
         <!-- OpenSSL -->
         <arg value="OPENSSL_INCLUDE=${path::get-full-path(intDir + '/include')}" />
         <arg value="OPENSSL_LIBPATH=${path::get-full-path(intDir + '/lib')}" />
+        <arg value="OPENSSL_LIBS=/libpath:${path::get-full-path(intDir + '/lib')} ${libcryptoName} ${libsslName}" />
         <arg value="NTLM=1" />
         <arg value="NTLM_STATIC=1" />
         <arg value="LIB32=lib.exe /nologo" />
