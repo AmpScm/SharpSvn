@@ -2,6 +2,10 @@
 <project basedir=".." default="build">
   <property name="opensslDir" value="${platformRoot}/openssl" />
   <property name="libeayFullName" value="${dllPrefix}libeay32.dll" />
+  <property name="libcryptoName" value="libeay32.lib" if="${opensslVersion &lt; '1.1.'}" />
+  <property name="libcryptoName" value="libcrypto.lib" if="${opensslVersion &gt;= '1.1.'}" />
+  <property name="libsslName" value="ssleay32.lib" if="${opensslVersion &lt; '1.1.'}" />
+  <property name="libsslName" value="libssl.lib" if="${opensslVersion &gt;= '1.1.'}" />
 
   <target name="openssl-prepare" depends="checkout">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.patched">
@@ -31,9 +35,11 @@
         <arg value="-D_CRT_NONSTDC_NO_DEPRECATE" />
         <arg value="-D_CRT_SECURE_NO_DEPRECATE" />
         <arg value="threads" />
-        <arg value="no-asm" if="${platform=='x64'}" />
+        <arg value="no-asm" if="${opensslVersion &lt; '1.1.' and platform=='x64'}" />
         <arg value="no-dso" if="${static}" />
-        <arg value="no-shared" />
+        <arg value="no-shared" if="${opensslVersion &lt; '1.1.'}" />
+        <arg value="no-shared" if="${static and opensslVersion &gt; '1.1.'}" />
+        <arg value="shared" if="${not static and opensslVersion &gt; '1.1.'}" />
         <arg value="no-krb5" if="${opensslVersion &lt; '1.1.'}" />
         <arg value="no-hw" />
         <arg value="no-ssl2" if="${opensslVersion &lt; '1.1.'}" />
@@ -51,14 +57,15 @@
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
         <arg value="-D_WIN32_WINNT=0x0501" />
+        <arg value="-D_WINSOCK_DEPRECATED_NO_WARNINGS" />
         <arg value="--prefix=${path::get-full-path(intDir)}" />
       </exec>
     </OnceBlock>
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.initialized">
-      <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='win32'}">
+      <exec program="cmd.exe" workingdir="${opensslDir}" if="${opensslVersion &lt; '1.1.' and platform=='win32'}">
         <arg line="/c ms\do_nasm.bat" />
       </exec>
-      <exec program="cmd.exe" workingdir="${opensslDir}" if="${platform=='x64'}">
+      <exec program="cmd.exe" workingdir="${opensslDir}" if="${opensslVersion &lt; '1.1.' and platform=='x64'}">
         <arg line="/c ms\do_win64a.bat" />
       </exec>
       <foreach item="File" property="deffile">
@@ -174,22 +181,39 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
   </target>
   <target name="openssl-build" depends="openssl-prepare">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
-      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\nt.mak" if="${static}">
-        <arg value="install" />
-      </NMake>
-      <NMake workingdir="${opensslDir}" makeFile="${opensslDir}\ms\ntdll.mak" unless="${static}">
+      <property name="makefile" value="${opensslDir}\ms\nt.mak" if="${static and opensslVersion &lt; '1.1.'}" />
+      <property name="makefile" value="${opensslDir}\ms\ntdll.mak" if="${not static and opensslVersion &lt; '1.1.'}" />
+      <property name="makefile" value="${opensslDir}\makefile" if="${opensslVersion &gt;= '1.1.'}" />
+      <NMake workingdir="${opensslDir}" makeFile="${makefile}" />
+      <NMake workingdir="${opensslDir}" makeFile="${makefile}">
         <arg value="install" />
       </NMake>
     </OnceBlock>
+    <property name="binDir" value="${opensslDir}/out32dll" if="${opensslVersion &lt; '1.1.'}" />
+    <property name="binDir" value="${opensslDir}" if="${opensslVersion &gt;= '1.1.'}" />
     <copy todir="${intDir}/bin" unless="${static}">
-      <fileset basedir="${opensslDir}/out32dll">
-        <include name="libeay32.pdb" />
-        <include name="ssleay32.pdb" />
+      <fileset basedir="${binDir}">
+        <include name="*.pdb" />
+        <include name="*.dll" if="${opensslVersion &gt;= '1.1.'}" />
+        <exclude name="lib.*" />
       </fileset>
     </copy>
+    <copy todir="${intDir}/lib" if="${opensslVersion &gt;= '1.1.'}" >
+      <fileset basedir="${opensslDir}">
+        <include name="*.lib" />
+        <exclude name="lib.*" />
+      </fileset>
+    </copy>
+    <property name="enginesDir" value="${opensslDir}/out32dll" if="${opensslVersion &lt; '1.1.'}" />
+    <property name="enginesDir" value="${opensslDir}/engines" if="${opensslVersion &gt;= '1.1.'}" />
     <copy todir="${intDir}/bin/engines" unless="${static}">
-      <fileset basedir="${opensslDir}/out32dll">
+      <fileset basedir="${enginesDir}">
         <include name="capi.*" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include" if="${opensslVersion &gt;= '1.1.'}" >
+      <fileset basedir="${opensslDir}/include">
+        <include name="openssl/**" />
       </fileset>
     </copy>
     <copy todir="${release}/include">
