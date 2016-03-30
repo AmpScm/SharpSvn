@@ -38,6 +38,8 @@
     <replacestring from='&lt;DebugInformationFormat&gt;&lt;/DebugInformationFormat&gt;'
                      to='&lt;DebugInformationFormat&gt;ProgramDatabase&lt;/DebugInformationFormat&gt;
                          &lt;OmitDefaultLibName&gt;true&lt;/OmitDefaultLibName&gt;' if="${not ltcg}" unless="${not vcxproj}" />
+    <replacestring from='&lt;WholeProgramOptimization&gt;true&lt;/WholeProgramOptimization&gt;'
+                     to='&lt;!--WholeProgramOptimization&gt;true&lt;/WholeProgramOptimization--&gt;' if="${(not ltcg) and vcxproj}" />
     <!-- InlineFunctionExpansion is only 2 for release mode -->
     <replacestring from='InlineFunctionExpansion="2"'
                      to='InlineFunctionExpansion="2" DebugInformationFormat="3"
