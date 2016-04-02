@@ -9,17 +9,14 @@
         <include name="**/*.h" />
       </fileset>
 
-      <copy todir="${nghttp2Dir}/lib" file="${nghttp2Dir}/nghttp2.rc" />
+      <!--copy todir="${nghttp2Dir}/lib" file="${nghttp2Dir}/nghttp2.rc" /-->
       
       <CMake workingdir="${nghttp2Dir}">
         <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
       </CMake>
 
-      <FilterFile file="${nghttp2Dir}/nghttp2.${vcproj}" generated="true">
+      <FilterFile file="${nghttp2Dir}/lib/nghttp2.${vcproj}" generated="true">
         <filterchain refid="cmake-link" />
-      </FilterFile>
-      <FilterFile file="${nghttp2Dir}/nghttp2-static.${vcproj}" generated="true">
-        <filterchain refid="cmake-lib" />
       </FilterFile>
 
       <FilterFile file="${nghttp2Dir}/libnghttp2-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
@@ -29,12 +26,11 @@
       </FilterFile>
       <MSBuild src="${nghttp2Dir}/NGHTTP2.sln">
         <target value="nghttp2" />
-        <target value="nghttp2-static" />
       </MSBuild>
     </OnceBlock>
 
     <copy todir="${intDir}/lib" flatten="true">
-      <fileset basedir="${nghttp2Dir}/Release">
+      <fileset basedir="${nghttp2Dir}/lib/Release">
         <include name="*.lib" />
         <include name="*.pdb" />
       </fileset>
