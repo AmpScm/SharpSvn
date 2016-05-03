@@ -121,7 +121,7 @@ namespace Security {
         {
             /// <summary>Automatic handling: Similar to ForceInternalAfterConfig</summary>
             Automatic,
-            /// <summary>Disable all SSH support. Fall back to Subversion conflict</summary>
+            /// <summary>Disable all SSH support. Fall back to Subversion config</summary>
             Disabled,
             /// <summary>Use internal SSH client (currently based on LibSSH2)</summary>
             ForceInternal,
@@ -129,7 +129,7 @@ namespace Security {
             ForceSharpPlink,
             /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
             ForceSharpPlinkAfterConfig,
-            /// <summary>Like ForceSharpPlink, but checks TortoiseSVN config first</summary>
+            /// <summary>Like ForceInternal, but checks TortoiseSVN config first</summary>
             ForceInternalAfterConfig,
         };
 
