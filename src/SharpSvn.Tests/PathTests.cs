@@ -312,6 +312,10 @@ namespace SharpSvn.Tests
             Assert.That(SvnTools.GetNormalizedDirectoryName(share + @"\sub\dir\\"), Is.EqualTo(share + @"\sub"));
             Assert.That(SvnTools.GetNormalizedDirectoryName(shaUC + @"\sub\dir\\"), Is.EqualTo(share + @"\sub"));
 
+            Assert.That(SvnTools.GetNormalizedFullPath("c:\\"), Is.EqualTo("C:\\"));
+            Assert.That(SvnTools.GetNormalizedFullPath("C:\\"), Is.EqualTo("C:\\"));
+            Assert.That(SvnTools.GetNormalizedFullPath("C:"), Is.StringStarting("C:\\"));
+            Assert.That(SvnTools.GetNormalizedFullPath("c:"), Is.StringStarting("C:\\"));
 
         }
 
