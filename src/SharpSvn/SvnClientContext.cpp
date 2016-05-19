@@ -453,7 +453,9 @@ bool SvnClientContext::FindHook(String^ path, SvnClientHookType hookType, [Out] 
         else if (!path->Substring(0, h->Path->Length)->Equals(h->Path, StringComparison::OrdinalIgnoreCase))
             continue;
 
-        if (path->Length == h->Path->Length || path[h->Path->Length] == '\\')
+        if (path->Length == h->Path->Length
+            || path[h->Path->Length] == '\\'         // 'C:\A\B' below 'C:\A'
+            || h->Path[h->Path->Length - 1] == '\\') // 'C:\A' below 'C:\' special case.
         {
             hook = h;
             return true;
