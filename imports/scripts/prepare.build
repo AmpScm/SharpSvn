@@ -150,7 +150,7 @@
       unless="${directory::exists(aprUtilDir + '/xml/expat/lib')}">
 
       <arg value="co" />
-      <arg value="https://github.com/rhuijben/libexpat/tags/R_${string::replace(opensslVersion,'.','_')}/" />
+      <arg value="https://github.com/rhuijben/libexpat/tags/R_${string::replace(expatVersion,'.','_')}/" />
       <arg value="${aprUtilDir + '/xml/expat/lib'}" />
     </Svn>
 
