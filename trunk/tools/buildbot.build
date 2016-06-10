@@ -279,7 +279,6 @@
           <arg line='-OutputDirectory release' />
           <arg line='-Version "${artifactLabel}"' />
           <arg line='-NonInteractive' />
-          <arg line='-Symbols' />
         </exec>
       </do>
     </foreach>
@@ -373,7 +372,7 @@
           <arg value="--description" />
             <arg value="SharpSvn Build ${artifactLabel}" />
           <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.nupkg" />
-          <arg value="release/SharpSvn.1.9-x86.${artifactLabel}.symbols.nupkg" />
+          <!--arg value="release/SharpSvn.1.9-x86.${artifactLabel}.symbols.nupkg" /-->
         </exec>
         
         <exec program="${collabUploadExe}">
