@@ -454,7 +454,7 @@ namespace SharpSvn {
         {
             String^ get()
             {
-                if (!_movedToAbspath && _info && _info->wc_info && _info->wc_info->moved_from_abspath)
+                if (!_movedToAbspath && _info && _info->wc_info && _info->wc_info->moved_to_abspath)
                     _movedToAbspath = SvnBase::Utf8_PathPtrToString(_info->wc_info->moved_to_abspath, _pool);
 
                 return _movedToAbspath;
