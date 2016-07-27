@@ -52,7 +52,7 @@
   <property name="nghttp2Version" value="1.9.1" overwrite="false" />
 
   <!-- Building only -->
-  <property name="cmakeVersion" value="3.5.1" overwrite="false" />
+  <property name="cmakeVersion" value="3.6.1" overwrite="false" />
   <property name="sconsVersion" value="2.5.0" overwrite="false" />
 
   <!-- For testcase -->
