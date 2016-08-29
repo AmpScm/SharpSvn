@@ -24,11 +24,7 @@
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- r1699721-r1699723          - Return connection timeouts as a specific error -->
-  <!-- r1699791                   - Possible bucket leak in cancel scenarios -->
-  <!-- r1699985,r1699993-r1699994 - Properly validate status line -->
-  <!-- r1699986-r1699987          - Correctness fixes to help debugging -->
-  <!-- r1699906                   - Allow building with VS 2015 -->
-  <property name="serfMerges" value="r1699721-1699723,r1699791,r1699985,r1699986-r1699987,r1699993-r1699994,r1699906" overwrite="false" />
+  <property name="serfMerges" value="r1699721-1699723" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.0.2h" overwrite="false" />
@@ -40,7 +36,7 @@
   <property name="dbVersion" value="4.4.20" overwrite="false" />
   <property name="expatVersion" value="2.2.0" overwrite="false" />
   <property name="zlibVersion" value="1.2.8" overwrite="false" />
-  <property name="serfVersion" value="1.3.8" overwrite="false" />
+  <property name="serfVersion" value="1.3.9" overwrite="false" />
   <property name="saslVersion" value="2.1.26" overwrite="false" />
   <property name="swigVersion" value="3.0.2" overwrite="false" />
   <property name="nasmVersion" value="2.12" overwrite="false" />
