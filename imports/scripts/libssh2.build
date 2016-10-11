@@ -77,5 +77,11 @@
         <include name="*.h" />
       </fileset>
     </copy>
+    <mkdir dir="${libssh2Dir}/embed" />
+    <copy todir="${libssh2Dir}/embed">
+      <fileset basedir="${libssh2Dir}">
+        <include name="include/**" />
+      </fileset>
+    </copy>
   </target>
 </project>
