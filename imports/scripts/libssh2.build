@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
-  <property name="libssh2Dir" value="build/${platform}/libssh2" />
+  <property name="libssh2Dir" value="${platformRoot}/libssh2" />
   <property name="buildLibssh2" value="true" overwrite="false" />
   <property name="libssh2BuildType" value="tag" overwrite="false" />
 
