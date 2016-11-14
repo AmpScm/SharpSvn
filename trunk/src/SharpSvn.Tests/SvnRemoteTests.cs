@@ -22,6 +22,8 @@ using Is = NUnit.Framework.Is;
 using SharpSvn.TestBuilder;
 
 using System.Collections.ObjectModel;
+using SharpSvn.Remote;
+using SharpSvn.UI;
 
 namespace SharpSvn.Tests
 {
@@ -120,6 +122,74 @@ namespace SharpSvn.Tests
 
             Assert.That(sshEx, Is.Not.Null);
             Assert.That(sshEx.SshErrorCode, Is.EqualTo(SvnSshErrorCode.LIBSSH2_ERROR_SOCKET_DISCONNECT));
+        }
+
+        [TestMethod]
+        public void AAAAAA()
+        {
+            string id = Guid.NewGuid().ToString();
+            Uri uri_bad = new Uri(string.Format("svn+ssh://Z-{0}.vipp.alh.net.qqn.nl/hoqme/sqvt", id));
+            Uri uri = new Uri(string.Format("svn+ssh://Z-{0}.vipp.alh.net.qqn.nl/home/svt", id));
+
+            SvnClient svn = new SvnClient();
+            svn.Configuration.LogMessageRequired = false;
+            svn.Configuration.SshOverride = Implementation.SvnSshOverride.ForceInternalAfterConfig;
+
+            svn.Authentication.SshServerTrustHandlers += delegate (object sender, Security.SvnSshServerTrustEventArgs e)
+            {
+                e.AcceptedFailures = e.Failures;
+                Assert.That(e.Save, Is.False);
+            };
+
+            if (true)
+            {
+                svn.Authentication.UserNameHandlers += delegate (object sender, Security.SvnUserNameEventArgs e)
+                {
+                    e.UserName = "svq";
+                    Assert.That(e.MaySave, Is.True);
+                    Assert.That(e.Save, Is.False);
+                };
+
+                svn.Authentication.UserNamePasswordHandlers += delegate (object sender, Security.SvnUserNamePasswordEventArgs e)
+                {
+                    e.UserName = "svt";
+                    e.Password = "svnsvn";
+                    Assert.That(e.MaySave, Is.True);
+                    //e.Save = true;
+                    Assert.That(e.Save, Is.False);
+                };
+            }
+            else
+            {
+                SvnUI.Bind(svn, new SvnUIBindArgs());
+            }
+
+            svn.RepositoryOperation(uri,
+                delegate (SvnMultiCommandClient mucc)
+                {
+                    mucc.SetProperty("", "A", Guid.NewGuid().ToString());
+                });
+
+            svn = new SvnClient();
+            svn.Configuration.LogMessageRequired = false;
+            svn.Configuration.SshOverride = Implementation.SvnSshOverride.ForceInternalAfterConfig;
+
+            svn.RepositoryOperation(uri,
+                delegate (SvnMultiCommandClient mucc)
+                {
+                    mucc.SetProperty("", "A", Guid.NewGuid().ToString());
+                });
+
+            svn = new SvnClient();
+            svn.Configuration.LogMessageRequired = false;
+            svn.Configuration.SshOverride = Implementation.SvnSshOverride.ForceInternalAfterConfig;
+            SvnUI.Bind(svn, new SvnUIBindArgs());
+
+            svn.RepositoryOperation(uri,
+                delegate (SvnMultiCommandClient mucc)
+                {
+                    mucc.SetProperty("", "A", Guid.NewGuid().ToString());
+                });
         }
     }
 }

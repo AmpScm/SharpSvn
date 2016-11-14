@@ -176,10 +176,10 @@ bool SvnClient::Commit(ICollection<String^>^ paths, SvnCommitArgs^ args, [Out] S
     if (preCommitHook != nullptr)
     {
         if (!preCommitHook->Run(this, args,
-                                                        pathsFile,
-                                                        ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
-                                                        msgFile,
-                                                        commonPath))
+                                pathsFile,
+                                ((int)args->Depth).ToString(CultureInfo::InvariantCulture),
+                                msgFile,
+                                commonPath))
         {
             return args->HandleResult(this, gcnew SvnClientHookException("TortoiseSVN Client hook 'pre-commit' rejected commit"));
         }
