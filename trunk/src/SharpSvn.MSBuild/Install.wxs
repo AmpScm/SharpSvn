@@ -66,6 +66,15 @@
               </Directory>
             </Directory>
           </Directory>
+          <Directory Id="MSBuild_150" Name="15.0">
+            <Directory Id="MSBuild_150_Common" Name="Microsoft.Common.Targets" FileSource="common">
+              <Directory Id="MSBuild_150_Common_ImportAfter" Name="ImportAfter">
+                <Component Id="sharpsvn_hook_150" Guid="3ABE0D45-1DAA-45AD-8A5A-93635FB02087">
+                  <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_150" Vital="yes" Checksum="yes" KeyPath="yes" />
+                </Component>
+              </Directory>
+            </Directory>
+          </Directory>
         </Directory>
       </Directory>
     </Directory>
@@ -80,6 +89,7 @@
       <ComponentRef Id="sharpsvn_hook_40"/>
       <ComponentRef Id="sharpsvn_hook_120"/>
       <ComponentRef Id="sharpsvn_hook_140"/>
+      <ComponentRef Id="sharpsvn_hook_150"/>
       <ComponentGroupRef Id="LOCAL_SharpSvn.PdbAnnotate"/>
     </Feature>
   </Product>
