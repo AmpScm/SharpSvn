@@ -424,7 +424,7 @@
       </fileset>
     </copy>
     
-    <foreach item="File" property="file" if="${signtoolExe != ''}">
+    <!--foreach item="File" property="file" if="${signtoolExe != ''}">
       <in>
         <items basedir="release">
           <include name="*.msi" />
@@ -440,7 +440,7 @@
           <arg value="${file}" />
       </exec>
       </do>
-    </foreach>
+    </foreach-->
     
     <copy todir="release">
       <fileset basedir="imports\svn-dist\dist-win32">
