@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <project basedir=".." default="build">
 
-  <property name="junitFilename" value="junit${junitVersion}.zip" />
+  <property name="junitFilename" value="junit-${junitVersion}.zip" />
   <property name="junitDir" value="${buildRoot}\junit${junitVersion}" />
   <property name="junitJar" value="${junitDir}\junit-${junitVersion}.jar" />
 
