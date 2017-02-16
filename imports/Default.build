@@ -43,7 +43,7 @@
   <property name="pcreVersion" value="8.39" overwrite="false" />
   <property name="httpdVersion" value="2.4.25" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
-  <property name="sqliteVersion" value="3.16.1" overwrite="false" />
+  <property name="sqliteVersion" value="3.17.0" overwrite="false" />
   <property name="libssh2Version" value="1.8.0" overwrite="false" />
   <property name="nghttp2Version" value="1.18.1" overwrite="false" />
 
