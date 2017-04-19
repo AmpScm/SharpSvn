@@ -77,13 +77,28 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="common\ImportAfter\SharpSvn.ImportAfter.targets" />
+    <None Include="Microsoft.Common.Targets\ImportAfter\SharpSvn.ImportAfter.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="SharpSvn.MSBuild.Inc.csproj">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="SharpSvn.MSBuild.snk" />
-    <None Include="targets\Projects\SharpSvn.fsproj.targets" />
-    <None Include="targets\Projects\SharpSvn.vbproj.targets" />
-    <None Include="targets\Projects\SharpSvn.csproj.targets" />
-    <None Include="targets\Projects\SharpSvn.vcxproj.targets" />
-    <None Include="targets\SharpSvn.targets" />
+    <None Include="SharpSvn\Projects\SharpSvn.fsproj.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SharpSvn\Projects\SharpSvn.vbproj.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SharpSvn\Projects\SharpSvn.csproj.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SharpSvn\Projects\SharpSvn.vcxproj.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="SharpSvn\SharpSvn.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Install.wxs">
