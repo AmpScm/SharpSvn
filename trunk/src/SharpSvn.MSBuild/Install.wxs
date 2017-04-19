@@ -15,7 +15,7 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <Directory Id="ProgramFilesFolder" Name="ProgramFiles">
         <Directory Id="MSBuild" Name="MSBuild">
-          <Directory Id="MSBuild_SharpSvn" Name="SharpSvn" FileSource="targets">
+          <Directory Id="MSBuild_SharpSvn" Name="SharpSvn" FileSource="SharpSvn">
             <Component Id="sharpsvn_targets" Guid="8846C887-6353-4D5A-BA53-F4781A785BC4">
               <File Name="SharpSvn.targets" Vital="yes" Checksum="yes" />
             </Component>
@@ -40,7 +40,7 @@
             </Directory>
           </Directory>
           <Directory Id="MSBuild_40" Name="4.0">
-            <Directory Id="MSBuild_40_Common" Name="Microsoft.Common.Targets" FileSource="common">
+            <Directory Id="MSBuild_40_Common" Name="Microsoft.Common.Targets" FileSource="Microsoft.Common.Targets">
               <Directory Id="MSBuild_40_Common_ImportAfter" Name="ImportAfter">
                 <Component Id="sharpsvn_hook_40" Guid="7B98F726-12A7-47D9-A587-6C743E698EC3">
                   <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_40" Vital="yes" Checksum="yes" KeyPath="yes" />
@@ -49,7 +49,7 @@
             </Directory>
           </Directory>
           <Directory Id="MSBuild_120" Name="12.0">
-            <Directory Id="MSBuild_120_Common" Name="Microsoft.Common.Targets" FileSource="common">
+            <Directory Id="MSBuild_120_Common" Name="Microsoft.Common.Targets" FileSource="Microsoft.Common.Targets">
               <Directory Id="MSBuild_120_Common_ImportAfter" Name="ImportAfter">
                 <Component Id="sharpsvn_hook_120" Guid="54E02173-76A8-4BE7-A9FF-2629AAC52192">
                   <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_120" Vital="yes" Checksum="yes" KeyPath="yes" />
@@ -58,7 +58,7 @@
             </Directory>
           </Directory>
           <Directory Id="MSBuild_140" Name="14.0">
-            <Directory Id="MSBuild_140_Common" Name="Microsoft.Common.Targets" FileSource="common">
+            <Directory Id="MSBuild_140_Common" Name="Microsoft.Common.Targets" FileSource="Microsoft.Common.Targets">
               <Directory Id="MSBuild_140_Common_ImportAfter" Name="ImportAfter">
                 <Component Id="sharpsvn_hook_140" Guid="4E6E6269-381C-4708-92DD-9C710F92C87E">
                   <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_140" Vital="yes" Checksum="yes" KeyPath="yes" />
@@ -67,7 +67,7 @@
             </Directory>
           </Directory>
           <Directory Id="MSBuild_150" Name="15.0">
-            <Directory Id="MSBuild_150_Common" Name="Microsoft.Common.Targets" FileSource="common">
+            <Directory Id="MSBuild_150_Common" Name="Microsoft.Common.Targets" FileSource="Microsoft.Common.Targets">
               <Directory Id="MSBuild_150_Common_ImportAfter" Name="ImportAfter">
                 <Component Id="sharpsvn_hook_150" Guid="3ABE0D45-1DAA-45AD-8A5A-93635FB02087">
                   <File Name="SharpSvn.ImportAfter.targets" Id="ImportAfter_150" Vital="yes" Checksum="yes" KeyPath="yes" />

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24627.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B7ADE12F-386A-4809-AB93-023E49AF3C7B}"
 	ProjectSection(SolutionItems) = preProject
@@ -56,6 +56,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.TestBuilder", "SharpSvn.TestBuilder\SharpSvn.TestBuilder.csproj", "{691CBC4F-CC38-4342-8738-A08E48812141}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.PdbAnnotate", "SharpSvn.PdbAnnotate\SharpSvn.PdbAnnotate.csproj", "{3645E16F-6B5A-43D7-A81D-77E681E9A636}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.MSBuild.VSIX", "SharpSvn.MSBuild.VSIX\SharpSvn.MSBuild.VSIX.csproj", "{41C94DFB-3004-4524-9869-69C30931BE4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpSvn.MSBuild.Inc", "SharpSvn.MSBuild\SharpSvn.MSBuild.Inc.csproj", "{FEEDF00D-BC63-4FDF-84D4-6194228C9101}"
 EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
@@ -165,6 +169,18 @@ Global
 		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x64.Build.0 = Release|x64
 		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x86.ActiveCfg = Release|x86
 		{3645E16F-6B5A-43D7-A81D-77E681E9A636}.Release|x86.Build.0 = Release|x86
+		{41C94DFB-3004-4524-9869-69C30931BE4E}.Debug|x64.ActiveCfg = Debug|x64
+		{41C94DFB-3004-4524-9869-69C30931BE4E}.Debug|x86.ActiveCfg = Debug|x86
+		{41C94DFB-3004-4524-9869-69C30931BE4E}.Release|x64.ActiveCfg = Release|x64
+		{41C94DFB-3004-4524-9869-69C30931BE4E}.Release|x86.ActiveCfg = Release|x86
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Debug|x64.ActiveCfg = Debug|x64
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Debug|x64.Build.0 = Debug|x64
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Debug|x86.ActiveCfg = Debug|x86
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Debug|x86.Build.0 = Debug|x86
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Release|x64.ActiveCfg = Release|x64
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Release|x64.Build.0 = Release|x64
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Release|x86.ActiveCfg = Release|x86
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -177,6 +193,8 @@ Global
 		{F1ED9F1C-BC63-4FDF-84D4-6194228C9101} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 		{C1B994B4-4F00-4F99-AE3D-EFEDBD8CD33D} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 		{3645E16F-6B5A-43D7-A81D-77E681E9A636} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
+		{41C94DFB-3004-4524-9869-69C30931BE4E} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
+		{FEEDF00D-BC63-4FDF-84D4-6194228C9101} = {27C2F39C-9D4A-41CC-8CE7-5B649A8D7036}
 	EndGlobalSection
 	GlobalSection(TextTemplating) = postSolution
 		TextTemplating = 1

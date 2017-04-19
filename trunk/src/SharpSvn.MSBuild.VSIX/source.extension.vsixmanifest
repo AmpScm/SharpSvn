@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="SharpSvn.MSBuild.VSIX.Bert Huijben.ef7b5e08-a023-4588-aadf-fd158f2ce4af" Version="1.9000.2" Language="en-US" Publisher="SharpSvn Project" />
+    <DisplayName>SharpSvn MSBuild Annotate support</DisplayName>
+    <Description>Empty VSIX Project.</Description>
+  </Metadata>
+  <Installation AllUsers="true">
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0]" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.0,)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="SharpSvn.MSBuild" Path="|SharpSvn.MSBuild|" AssemblyName="|SharpSvn.MSBuild;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="SharpSvn.MSBuild.Inc" Path="|SharpSvn.MSBuild.Inc|" AssemblyName="|SharpSvn.MSBuild.Inc;AssemblyName|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="SharpSvn.PdbAnnotate" Path="|SharpSvn.PdbAnnotate|" AssemblyName="|SharpSvn.PdbAnnotate;AssemblyName|" />
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.Component.MSBuild" Version="[15.0.26208.0,)" DisplayName="MSBuild" />
+  </Prerequisites>
+</PackageManifest>
