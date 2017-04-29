@@ -246,6 +246,9 @@
     <ClCompile Include="PuttySrc\x11fwd.c">
       <Filter>Putty</Filter>
     </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wincapi.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharpPlink.h">
