@@ -246,6 +246,7 @@
     <ClCompile Include="PuttySrc\settings.c">
     </ClCompile>
     <ClCompile Include="PuttySrc\ssh.c">
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</WholeProgramOptimization>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshaes.c">
     </ClCompile>
