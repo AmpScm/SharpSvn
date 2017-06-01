@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="SharpSvn.MSBuild.VSIX.Bert Huijben.ef7b5e08-a023-4588-aadf-fd158f2ce4af" Version="1.9000.3" Language="en-US" Publisher="SharpSvn Project" />
+    <Identity Id="SharpSvn.MSBuild.ef7b5e08-a023-4588-aadf-fd158f2ce4af" Version="1.9000.4" Language="en-US" Publisher="SharpSvn Project" />
     <DisplayName>SharpSvn MSBuild Annotate support</DisplayName>
     <Description xml:space="preserve">Support for annotating release assemblies based on build specific arguments and version control information</Description>
   </Metadata>
