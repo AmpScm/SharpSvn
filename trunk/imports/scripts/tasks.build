@@ -680,10 +680,10 @@ public class CMake : ExternalAppTask
         get
         {
             StringBuilder sb = new StringBuilder();
-            
+
             if (Targets.Count == 0)
                 sb.AppendFormat(" -G \"{0}\"", Properties["cmakeGenerator"]);
-                
+
             foreach(Option o in AppProperties)
             {
                 if (o.IfDefined && !o.UnlessDefined)
@@ -701,13 +701,18 @@ public class CMake : ExternalAppTask
                     haveTargets = true;
                 }
             }
-            
+
             if (haveTargets)
             {
                 sb.AppendFormat(" --config \"{0}\"", Configuration);
                 sb.AppendFormat(" --use-stderr"); // Use direct output of MSBuild, etc.
             }
-                
+
+            if (!Verbose)
+            {
+                sb.Append(" -Wno-dev");
+            }
+
             return sb.ToString().Trim();
         }
     }
