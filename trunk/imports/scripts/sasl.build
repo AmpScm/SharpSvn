@@ -9,6 +9,16 @@
 
   <target name="sasl-prepare" depends="checkout, bdb-build, openssl-build">
     <OnceBlock file="build/sasl-${saslVersion}_${platform}.prepared">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/sasl">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${saslDir}" />
+        </do>
+      </foreach>
       <FilterFile file="${saslDir}/win32/include/config.h">
         <filterchain>
           <replacestring from='/* which mechs can we link staticly? */' to='#define STATIC_NTLM 1 /* Which mechs can we link staticly?  */ ' />
