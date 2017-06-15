@@ -10,9 +10,9 @@ Origin:                  https://github.com/cyrusimap/cyrus-sasl/commit/f607d99b
 Description:             Allow to build with OpenSSL-1.1.0.
 
 
-diff -Naurp cyrus-sasl-2.1.26-orig/plugins/ntlm.c cyrus-sasl-2.1.26/plugins/ntlm.c
---- cyrus-sasl-2.1.26-orig/plugins/ntlm.c	2012-01-27 17:31:36.000000000 -0600
-+++ cyrus-sasl-2.1.26/plugins/ntlm.c	2017-05-26 23:42:19.293372476 -0500
+diff -Naurp plugins/ntlm.c plugins/ntlm.c
+--- plugins/ntlm.c	2012-01-27 17:31:36.000000000 -0600
++++ plugins/ntlm.c	2017-05-26 23:42:19.293372476 -0500
 @@ -417,6 +417,29 @@ static unsigned char *P24(unsigned char
      return P24;
  }
@@ -87,9 +87,9 @@ diff -Naurp cyrus-sasl-2.1.26-orig/plugins/ntlm.c cyrus-sasl-2.1.26/plugins/ntlm
      return V2;
  }
  
-diff -Naurp cyrus-sasl-2.1.26-orig/plugins/otp.c cyrus-sasl-2.1.26/plugins/otp.c
---- cyrus-sasl-2.1.26-orig/plugins/otp.c	2012-10-12 09:05:48.000000000 -0500
-+++ cyrus-sasl-2.1.26/plugins/otp.c	2017-05-26 23:42:19.293372476 -0500
+diff -Naurp plugins/otp.c plugins/otp.c
+--- plugins/otp.c	2012-10-12 09:05:48.000000000 -0500
++++ plugins/otp.c	2017-05-26 23:42:19.293372476 -0500
 @@ -96,6 +96,28 @@ static algorithm_option_t algorithm_opti
      {NULL,	0,	NULL}
  };
@@ -333,9 +333,9 @@ diff -Naurp cyrus-sasl-2.1.26-orig/plugins/otp.c cyrus-sasl-2.1.26/plugins/otp.c
      return r;
  }
  
-diff -Naurp cyrus-sasl-2.1.26-orig/saslauthd/lak.c cyrus-sasl-2.1.26/saslauthd/lak.c
---- cyrus-sasl-2.1.26-orig/saslauthd/lak.c	2012-10-12 09:05:48.000000000 -0500
-+++ cyrus-sasl-2.1.26/saslauthd/lak.c	2017-05-26 23:42:19.293372476 -0500
+diff -Naurp saslauthd/lak.c saslauthd/lak.c
+--- saslauthd/lak.c	2012-10-12 09:05:48.000000000 -0500
++++ saslauthd/lak.c	2017-05-26 23:42:19.293372476 -0500
 @@ -61,6 +61,35 @@
  #include <sasl.h>
  #include "lak.h"
