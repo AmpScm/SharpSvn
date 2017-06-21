@@ -79,6 +79,11 @@
       <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true" if="${enableAprCrypto}">
         <filterchain refid="cmake-link" />
       </FilterFile>
+      <FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.${vcproj}" generated="true" if="${enableAprCrypto}">
+        <filterchain>
+          <replacestring from='&lt;/AdditionalDependencies&gt;' to=';ws2_32.lib&lt;/AdditionalDependencies&gt;' />
+        </filterchain>
+      </FilterFile>
 
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
         <filterchain>

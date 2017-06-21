@@ -7,6 +7,10 @@
   <property name="libsslName" value="ssleay32.lib" if="${opensslVersion &lt; '1.1.'}" />
   <property name="libsslName" value="libssl.lib" if="${opensslVersion &gt;= '1.1.'}" />
 
+  <property name="opensslMakefile" value="${opensslDir}\ms\nt.mak" if="${static and opensslVersion &lt; '1.1.'}" />
+  <property name="opensslMakefile" value="${opensslDir}\ms\ntdll.mak" if="${not static and opensslVersion &lt; '1.1.'}" />
+  <property name="opensslMakefile" value="${opensslDir}\makefile" if="${opensslVersion &gt;= '1.1.'}" />
+
   <target name="openssl-prepare" depends="checkout">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.patched">
       <foreach item="File" property="patch">
@@ -82,7 +86,7 @@
           </FilterFile>
         </do>
       </foreach>
-      <FilterFile file="${opensslDir}/ms/ntdll.mak" unless="${static}" if="${opensslVersion &lt; '1.1.'}" >
+      <FilterFile file="${opensslMakefile}" unless="${static}">
         <filterchain>
           <replacestring from="$(LIB_D)\$(SSL).dll" to="$(LIB_D)\${dllPrefix}$(SSL).dll" if="${dllPrefix != ''}" />
           <replacestring from="$(LIB_D)\$(CRYPTO).dll" to="$(LIB_D)\${dllPrefix}$(CRYPTO).dll" if="${dllPrefix != ''}" />
@@ -93,7 +97,7 @@
           <LineRegexReplace re='^(MLFLAGS=.*)/subsystem:console' to='$1 /subsystem:windows /nxcompat /largeaddressaware /release' />
         </filterchain>
       </FilterFile>
-      <FilterFile file="${opensslDir}/ms/nt.mak" if="${static}">
+      <FilterFile file="${opensslMakefile}" if="${static}">
         <filterchain>
           <!-- Ommit default library name -->
           <replacestring from=" /MT /Ox /O2 /Ob2 " to=" -MD -Ox -Gy ${ltcgFlags} " />
@@ -131,7 +135,7 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
         </filterchain>
       </FilterFile>
       <property name="opensslconf" value="${opensslDir}/crypto/opensslconf.h" if="${opensslVersion &lt; '1.1.'}" />
-      <property name="opensslconf" value="${opensslDir}/include/openssl/opensslconf.h" unless="${opensslVersion &lt; '1.1.'}" />
+      <property name="opensslconf" value="${opensslDir}/include/openssl/opensslconf.h.in" unless="${opensslVersion &lt; '1.1.'}" />
       <FilterFile file="${opensslconf}">
         <filterchain>
           <replacestring from='#define ENGINESDIR "' to='#define ENGINESDIR  "C:\\ProgramData\\OpenSSL\\Engines" //' />
@@ -181,11 +185,8 @@ static  int cert_select_dialog(ENGINE *e, SSL *ssl, STACK_OF(X509) *certs);' />
   </target>
   <target name="openssl-build" depends="openssl-prepare">
     <OnceBlock file="build/openssl-${opensslVersion}-${platform}.build">
-      <property name="makefile" value="${opensslDir}\ms\nt.mak" if="${static and opensslVersion &lt; '1.1.'}" />
-      <property name="makefile" value="${opensslDir}\ms\ntdll.mak" if="${not static and opensslVersion &lt; '1.1.'}" />
-      <property name="makefile" value="${opensslDir}\makefile" if="${opensslVersion &gt;= '1.1.'}" />
-      <NMake workingdir="${opensslDir}" makeFile="${makefile}" />
-      <NMake workingdir="${opensslDir}" makeFile="${makefile}">
+      <NMake workingdir="${opensslDir}" makeFile="${opensslMakefile}" />
+      <NMake workingdir="${opensslDir}" makeFile="${opensslMakefile}">
         <arg value="install" />
       </NMake>
     </OnceBlock>
