@@ -1,0 +1,1 @@
+﻿This project contains a minimalistic po to resx compiler to allow embedding the subversion resources in a .Net assembly

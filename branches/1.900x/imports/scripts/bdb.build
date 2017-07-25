@@ -1,0 +1,137 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="dbFilename" value="db-${dbVersion}.NC.tar.gz" />
+  <property name="dbDir" value="build/db-${dbVersion}.NC" />
+  <regex pattern="^(?'BDB_MAJOR_VERSION'\d+)\.(?'BDB_MINOR_VERSION'\d+)\.(?'BDB_MICRO_VERSION'\d+)" input="${dbVersion}" />
+
+  <property name="dbWindowsDir" value="${dbDir}/build_win32" if="${dbVersion &lt; '4.5'}" />
+  <property name="dbWindowsDir" value="${dbDir}/build_windows" if="${dbVersion &gt;= '4.5'}" />
+
+  <property name="dbDllName" value="${dllPrefix}DB${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}-${BDB_MICRO_VERSION}" />
+  <property name="libDb" value="libdb${BDB_MAJOR_VERSION}${BDB_MINOR_VERSION}" />
+  <property name="fullDbDllName" value="${dbDllName}-${platform}.${svnDll}" if="${dllPrefix != ''}"/>
+  <property name="fullDbDllName" value="${libDb}.${svnDll}" if="${dllPrefix == ''}"/>
+
+  <target name="bdb-prepare" depends="extract">
+    <OnceBlock file="build/db-${dbVersion}.prepared">
+      <VCBuild src="${dbWindowsDir}/db_dll.dsp" unless="${vcxproj}">
+        <arg line="/upgrade" />
+      </VCBuild>
+      <if test="${vcxproj}">
+        <copy todir="${dbWindowsDir}">
+          <fileset basedir="${downloads}/../scripts">
+            <include name="db_dll.vcxproj" />
+          </fileset>
+        </copy>
+      </if>
+    </OnceBlock>
+    <OnceBlock file="build/db-${dbVersion}.patched">
+      <FilterFile file="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <filterchain>
+          <replacestring from='PreprocessorDefinitions="' to='PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_SECURE_NO_DEPRECATE;' />
+          <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='bufferoverflowU.lib' to='' if="${VSversion != '2005'}" />
+          <replacestring from='/Wp64' to='' />
+          <replacestring from='DB_CREATE_DLL;' to='' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${dbWindowsDir}/db_dll.vcxproj" if="${vcxproj}">
+        <filterchain>
+          <replacestring from='AMD64/${libDb}.dll' to='AMD64/${dbDllName}-x64.${svnDll}' if="${dllPrefix != ''}"/>
+          <replacestring from='/${libDb}.dll' to='/${dbDllName}-win32.${svnDll}' if="${dllPrefix != ''}"/>
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${dbWindowsDir}/libdb.def">
+        <filterchain>
+          <replacestring from='	log_compare' to=';	log_compare' />
+          <replacestring from='	db_env_set_' to=';	db_env_set_' />
+          <replacestring from='	db_xa_'      to=';	db_xa_' />
+          <replacestring from='	__' to=';	__' />
+          <LineRegexReplace re="@[0-9]+" to=";$0" />
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+  </target>
+  <target name="bdb-build" depends="bdb-prepare">
+    <OnceBlock file="build/db-${dbVersion}-${platform}.build">
+      <property name="dbConfig" value="Release" />
+      <property name="dbConfig" value="Release X86" if="${dbVersion &gt;= '4.6'}"/>
+      <property name="dbConfig" value="Release AMD64" if="${platform == 'x64'}"/>
+      <property name="dbDebugConfig" value="Debug" />
+      <property name="dbDebugConfig" value="Debug X86" if="${dbVersion &gt;= '4.6'}"/>
+      <property name="dbDebugConfig" value="Debug AMD64" if="${platform == 'x64'}"/>
+
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}">
+        <arg value="${dbConfig}|${platform}" />
+      </VCBuild>
+
+      <VCBuild src="${dbWindowsDir}/db_dll.vcproj" unless="${vcxproj}" if="${svn-dev}">
+        <arg value="${dbDebugConfig}|${platform}" />
+      </VCBuild>
+
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbConfig}" if="${vcxproj}">
+      </MSBuild>
+
+      <MSBuild src="${dbWindowsDir}/db_dll.vcxproj" configuration="${dbDebugConfig}" if="${vcxproj and svn-dev}">
+      </MSBuild>
+    </OnceBlock>
+
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Release/*.lib" if="${platform == 'win32'}" />
+        <include name="Release_AMD64/*.lib" if="${platform == 'x64'}" />
+      </fileset>
+    </copy>
+    <copy todir="${platformRoot}/bdb-install/lib" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Release/*.lib" if="${platform == 'win32'}" />
+        <include name="Debug/*.lib" if="${platform == 'win32' and svn-dev}" />
+        <include name="Release_AMD64/*.lib" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.lib" if="${platform == 'x64' and svn-dev}" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Release/*.${svnDll}" if="${platform == 'win32'}" />
+        <include name="Release/*.pdb" if="${platform == 'win32'}" />
+        <include name="Release_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
+        <include name="Release_AMD64/*.pdb" if="${platform == 'x64'}" />
+      </fileset>
+    </copy>
+    <copy todir="${platformRoot}/bdb-install/bin" flatten="true">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="Debug/*.dll" if="${platform == 'win32' and svn-dev}" />
+        <include name="Debug/*.${svnDll}" if="${platform == 'win32' and svn-dev}" />
+        <include name="Debug/*.pdb" if="${platform == 'win32' and svn-dev}" />
+        <include name="Release_AMD64/*.${svnDll}" if="${platform == 'x64'}" />
+        <include name="Release_AMD64/*.pdb" if="${platform == 'x64'}" />
+        <include name="Debug_AMD64/*.dll" if="${platform == 'x64' and svn-dev}" />
+        <include name="Debug_AMD64/*.${svnDll}" if="${platform == 'x64' and svn-dev}" />
+        <include name="Debug_AMD64/*.pdb" if="${platform == 'x64' and svn-dev}" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${platformRoot}/bdb-install/include">
+      <fileset basedir="${dbWindowsDir}">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/include">
+      <fileset basedir="${intDir}/include">
+        <include name="db*.h" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/bin">
+      <fileset basedir="${intDir}/bin">
+        <include name="${fullDbDllName}" />
+        <include name="*libdb*.dll" />
+        <include name="*libdb*.${svnDll}" />
+      </fileset>
+    </copy>
+  </target>
+</project>

@@ -1,0 +1,137 @@
+Index: src/agent.c
+===================================================================
+--- src/agent.c	(revision 1622)
++++ src/agent.c	(working copy)
+@@ -274,10 +274,14 @@
+     return LIBSSH2_ERROR_NONE;
+ }
+ 
++static SECURITY_ATTRIBUTES *SharpSvn_CreateSecurityAttributes(HWND forWindow);
++static void SharpSvn_DestroySecurityAttributes(SECURITY_ATTRIBUTES *sa);
++
+ static int
+ agent_transact_pageant(LIBSSH2_AGENT *agent, agent_transaction_ctx_t transctx)
+ {
+     HWND hwnd;
++    SECURITY_ATTRIBUTES *psa;
+     char mapname[23];
+     HANDLE filemap;
+     unsigned char *p;
+@@ -294,10 +298,14 @@
+         return _libssh2_error(agent->session, LIBSSH2_ERROR_AGENT_PROTOCOL,
+                               "found no pageant");
+ 
++    psa = SharpSvn_CreateSecurityAttributes(hwnd);
++
+     sprintf(mapname, "PageantRequest%08x", (unsigned)GetCurrentThreadId());
+-    filemap = CreateFileMapping(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE,
++    filemap = CreateFileMapping(INVALID_HANDLE_VALUE, psa, PAGE_READWRITE,
+                                 0, PAGEANT_MAX_MSGLEN, mapname);
+ 
++    SharpSvn_DestroySecurityAttributes(psa);
++
+     if (filemap == NULL || filemap == INVALID_HANDLE_VALUE)
+         return _libssh2_error(agent->session, LIBSSH2_ERROR_AGENT_PROTOCOL,
+                               "failed setting up pageant filemap");
+@@ -791,3 +799,101 @@
+     agent_free_identities(agent);
+     LIBSSH2_FREE(agent->session, agent);
+ }
++
++/* SharpSvn patch */
++PSID get_user_sid(void)
++{
++    HANDLE proc = NULL, tok = NULL;
++    TOKEN_USER *user = NULL;
++    DWORD toklen, sidlen;
++    PSID sid = NULL, ret = NULL;
++
++    if ((proc = OpenProcess(MAXIMUM_ALLOWED, FALSE,
++                            GetCurrentProcessId())) == NULL)
++        goto cleanup;
++
++    if (!OpenProcessToken(proc, TOKEN_QUERY, &tok))
++        goto cleanup;
++
++    if (!GetTokenInformation(tok, TokenUser, NULL, 0, &toklen) &&
++        GetLastError() != ERROR_INSUFFICIENT_BUFFER)
++        goto cleanup;
++
++    if ((user = (TOKEN_USER *)LocalAlloc(LPTR, toklen)) == NULL)
++        goto cleanup;
++
++    if (!GetTokenInformation(tok, TokenUser, user, toklen, &toklen))
++        goto cleanup;
++
++    sidlen = GetLengthSid(user->User.Sid);
++
++    sid = (PSID)LocalAlloc(LPTR, sidlen);
++
++    if (!CopySid(sidlen, sid, user->User.Sid))
++        goto cleanup;
++
++    /* Success. Move sid into the return value slot, and null it out
++     * to stop the cleanup code freeing it. */
++    ret = sid;
++    sid = NULL;
++
++  cleanup:
++    if (proc != NULL)
++        CloseHandle(proc);
++    if (tok != NULL)
++        CloseHandle(tok);
++    if (user != NULL)
++        LocalFree(user);
++    if (sid != NULL)
++        free(sid);
++
++    return ret;
++}
++
++static SECURITY_ATTRIBUTES *SharpSvn_CreateSecurityAttributes(HWND forWindow)
++{
++    SECURITY_ATTRIBUTES *psa;
++    SECURITY_DESCRIPTOR *psd;
++    PSID usersid;
++    if (!forWindow)
++        return NULL;
++
++    /*
++     * Make the file mapping we create for communication with
++     * Pageant owned by the user SID rather than the default. This
++     * should make communication between processes with slightly
++     * different contexts more reliable: in particular, command
++     * prompts launched as administrator should still be able to
++     * run PSFTPs which refer back to the owning user's
++     * unprivileged Pageant.
++     */
++    usersid = get_user_sid();
++
++    if (usersid) {
++        psd = (SECURITY_DESCRIPTOR*)LocalAlloc(LPTR, sizeof(*psd));
++        psa = (SECURITY_ATTRIBUTES*)LocalAlloc(LPTR, sizeof(*psa));
++        if (psa && psd) {
++            if (InitializeSecurityDescriptor(psd, SECURITY_DESCRIPTOR_REVISION) &&
++                SetSecurityDescriptorOwner(psd, usersid, FALSE)) {
++                psa->nLength = sizeof(*psa);
++                psa->bInheritHandle = FALSE;
++                psa->lpSecurityDescriptor = psd;
++                return psa;
++            } else {
++                LocalFree(psd);
++                LocalFree(psa);
++            }
++        }
++        LocalFree(usersid);
++    }
++
++    return NULL;
++}
++
++static void SharpSvn_DestroySecurityAttributes(SECURITY_ATTRIBUTES *sa)
++{
++  if (sa) {
++      LocalFree(sa->lpSecurityDescriptor);
++      LocalFree(sa);
++  }
++}

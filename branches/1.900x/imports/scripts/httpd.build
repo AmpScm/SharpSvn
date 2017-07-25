@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="httpdDir" value="${buildRoot}/httpd" />
+
+  <target name="httpd-build" depends="apr-build, aprutil-build, zlib-build, pcre-build, nghttp2-build, cmake-prepare" if="${buildHttpd}">
+    <OnceBlock file="build/httpd-${httpdVersion}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/httpd">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${httpdDir}" />
+        </do>
+      </foreach>
+    </OnceBlock>
+    <OnceBlock file="build/httpd-${httpdVersion}_${platform}.build">
+
+      <CMake workingdir="${httpdDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${string::replace(intDir, '\', '/')}" />
+        <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+
+        <prop name="APR_INCLUDE_DIR" value="${string::replace(intDir + '\include\apr-1', '\', '/')}" />
+        <prop name="APR_LIBRARIES" value="${libAprSharedLib};${libAprUtilSharedLib}" />
+
+        <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
+        <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include/openssl" />
+
+        <prop name="PCRE_INCLUDE_DIR" value="${intDir}/include" />
+        <prop name="PCRE_LIBRARIES" value="${intDir}/lib/pcre.lib" />
+      </CMake>
+
+      <!-- Remove some defines that somehow break the build -->
+      <foreach item="File" property="project">
+        <in>
+          <items basedir="${httpdDir}">
+            <include name="*.${vcproj}" />
+          </items>
+        </in>
+        <do>
+          <FilterFile file="${project}" generated="true">
+            <filterchain refid="cmake-link" />
+          </FilterFile>
+        </do>
+      </foreach>
+
+      <!-- And now build the binaries for the intended target -->
+      <MSBuild src="${httpdDir}/HTTPD.sln">
+        <target value="httpd" />
+        <target value="htpasswd" />
+        <target value="mod_dav" />
+        <target value="mod_access_compat" />
+        <target value="mod_authz_core" />
+        <target value="mod_authz_groupfile" />
+        <target value="mod_authz_host" />
+        <target value="mod_authz_user" />
+        <target value="mod_auth_basic" />
+        <target value="mod_authn_core" />
+        <target value="mod_authn_file" />
+        <target value="mod_access_compat" /><!-- Used for version detection -->
+        <target value="mod_mime" />
+        <target value="mod_alias" />
+        <target value="mod_http2" />
+        <target value="mod_ssl" />
+        <target value="mod_log_config" />
+      </MSBuild>
+    </OnceBlock>
+    
+    <copy todir="${intDir}/lib">
+      <fileset basedir="${httpdDir}/release">
+        <include name="libhttpd.lib" />
+        <include name="mod_dav.lib" />
+      </fileset>
+    </copy>
+
+    <copy todir="${httpdDir}/include" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="ap_config_layout.h" />
+        <include name="os/win32/os.h" />
+        <include name="modules/*/mod_*.h" />
+        <include name="modules/dav/*/mod_*.h" />
+      </fileset>
+    </copy>
+
+    <copy todir="${release}/httpd/bin" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="release/*.exe" />
+        <include name="release/*.dll" />
+        <include name="${intDir}/bin/libapr*.dll" />
+        <include name="${intDir}/bin/pcre.dll" />
+        <exclude name="gen_*.exe" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/httpd/modules" flatten="true">
+      <fileset basedir="${httpdDir}">
+        <include name="release/*.so" />
+        <include name="${nghttp2Dir}/Release/*.dll" />
+      </fileset>
+    </copy>
+    <mkdir dir="${release}/httpd/conf" />
+    <mkdir dir="${release}/httpd/logs" />
+    <echo message="Listen 1234" file="${release}/httpd/conf/httpd.conf" />
+  </target>
+</project>

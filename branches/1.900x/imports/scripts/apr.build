@@ -1,0 +1,125 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="aprDir" value="${platformRoot}\apr" />
+  <property name="libAprSharedLib" value="${aprDir}\Release\libapr-1.lib" />
+
+  <target name="apr-merge" depends="checkout">
+    <OnceBlock file="build/apr-${aprVersion}-${platform}.merged">
+      <Svn verbose="true" if="${string::get-length(aprMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${aprMerges}" />
+        <arg value="http://svn.apache.org/repos/asf/apr/apr/trunk/" />
+        <arg value="${aprDir}" />
+      </Svn>
+    </OnceBlock>
+    <OnceBlock file="build/apr-${aprVersion}-${platform}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/apr">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${aprDir}" />
+          </Svn>
+        </do>
+      </foreach>
+      <FilterFile file="${aprDir}\atomic\win32\apr_atomic.c">
+        <filterchain>
+          <LineRegexReplace re='\(\(apr_atomic_win32_ptr[a-z_]*\)([^\)]*)\)' to='$1' />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${aprDir}\file_io\win32\open.c">
+        <filterchain>
+          <replacestring from='attributes |= FILE_FLAG_DELETE_ON_CLOSE;'
+                           to='attributes |= FILE_FLAG_DELETE_ON_CLOSE | FILE_ATTRIBUTE_TEMPORARY;' />
+          <replacestring from='DWORD sharemode = FILE_SHARE_READ | FILE_SHARE_WRITE;'
+                           to='DWORD sharemode = FILE_SHARE_READ;' if="${applyMerges}" />
+          <replacestring from='FILE_SHARE_DELETE;' to= '0; // FILE_SHARE_DELETE' unless="${buildSubversion == 'false'}" />
+        </filterchain>
+      </FilterFile>
+      <FilterFile file="${aprDir}\include\apr.hwc">
+        <filterchain>
+          <replacestring from='#pragma warning(disable: 4996)' to='//# WAS: #pragma warning(disable: 4996)' />
+          <replacestring from='#if defined(_WIN32) &amp;&amp; !defined(WIN32)'
+                           to='
+#if !defined(WINNT)
+#define WINNT
+#endif
+#if !defined(WIN32)' />
+          <LineRegexReplace re='#define APR_HAVE_STRICMP\s+1'
+                            to='$0
+#define stricmp(s1, s2) _stricmp(s1, s2)
+#define strnicmp(s1, s2, n) _strnicmp(s1, s2, n)' />
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+  </target>
+  <target name="apr-build" depends="checkout, apr-merge, cmake-prepare">
+    <OnceBlock file="build/apr-${aprVersion}-${platform}.build">
+      <fileset basedir="${aprDir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+
+      <CMake workingdir="${aprDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+        <prop name="TEST_STATIC_LIBS" value="ON" if="${static}" />
+        <prop name="APR_BUILD_TESTAPR" value="ON" />
+
+        <prop name="MIN_WINDOWS_VER" value="0x0501" /><!-- Windows XP -->
+
+        <prop name="APR_INSTALL_PRIVATE_H" value="ON" />
+      </CMake>
+
+      <FilterFile file="${aprDir}/libapr-1.${vcproj}" generated="true">
+        <filterchain refid="cmake-link" />
+      </FilterFile>
+      <FilterFile file="${aprDir}/apr-1.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
+
+      <FilterFile file="${aprDir}/libapr-1.${vcproj}" if="${dllPrefix!=''}" generated="true">
+        <filterchain>
+          <replacestring from='&gt;libapr-1&lt;/TargetName' to='&gt;${dllPrefix}libapr-1&lt;/TargetName' if="${vcxproj}" />
+        </filterchain>
+      </FilterFile>
+      <MSBuild src="${aprDir}/APR.sln">
+        <target value="apr-1" />
+        <target value="libapr-1" />
+      </MSBuild>
+    </OnceBlock>
+
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${aprDir}/Release">
+        <include name="apr*.lib" />
+        <include name="apr*.pdb" />
+        <include name="lib*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/bin" flatten="true">
+      <fileset basedir="${aprDir}/Release">
+        <include name="lib*.dll" />
+        <include name="lib*.pdb" />
+        <include name="${dllPrefix}*.dll" if="${dllPrefix != ''}" />
+        <include name="${dllPrefix}*.pdb" if="${dllPrefix != ''}" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include/apr-1" flatten="true">
+      <fileset basedir="${aprDir}/include">
+        <include name="../apr.h" /> <!-- Generated -->
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include/apr-1">
+      <fileset basedir="${aprDir}/include">
+        <include name="*.h" />
+        <include name="arch/*.h" />
+        <include name="arch/win32/*.h" />
+      </fileset>
+    </copy>
+  </target>
+</project>

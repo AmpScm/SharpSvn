@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?if $(var.Platform) = x64 ?>
+  <Fragment>
+    <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
+      <Merge SourceFile="..\..\msm\Microsoft_VC100_CRT_x64.msm" Id="VC_CRT" Language="1033"/>
+      <!-- Primary Client Applications -->
+      <Component Id="svn.exe" Guid="18AA5EE7-8E33-4958-8D75-5F82C87EFAAE" >
+        <File Name="svn.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svn.exe">
+          <RegistryValue Value="[#svn.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnversion.exe" Guid="52811A53-C279-4150-9FC1-E637C5CDA386" >
+        <File Name="svnversion.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnversion.exe">
+          <RegistryValue Value="[#svnversion.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <!-- Local Repository Tools -->
+      <Component Id="svnadmin.exe" Guid="728815CB-3AFC-4AFA-9164-47EB36099F0F" >
+        <File Name="svnadmin.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnadmin.exe">
+          <RegistryValue Value="[#svnadmin.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnsync.exe" Guid="AFB79BCC-A0C4-48DB-9A41-0198BE23899B" >
+        <File Name="svnsync.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnsync.exe">
+          <RegistryValue Value="[#svnsync.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnlook.exe" Guid="576151C4-9EDE-42B2-B35F-66FE53EE86F1" >
+        <File Name="svnlook.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnlook.exe">
+          <RegistryValue Value="[#svnlook.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svndumpfilter.exe" Guid="3B70B170-8D22-47D1-ACA9-0085E35C57B4" >
+        <File Name="svndumpfilter.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svndumpfilter.exe">
+          <RegistryValue Value="[#svndumpfilter.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnrdump.exe" Guid="73D0A44D-BEA9-4A62-81D0-5F22E1C980CF" >
+        <File Name="svnrdump.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnrdump.exe">
+          <RegistryValue Value="[#svnrdump.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <!-- SvnServe -->
+      <Component Id="svnserve.exe" Guid="2AAD3EF2-A846-426D-8EC0-E831DF53799F" >
+        <File Name="svnserve.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnserve.exe">
+          <RegistryValue Value="[#svnserve.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <!-- Extra Tools -->
+      <Component Id="svnmucc.exe" Guid="A6CCA081-45A2-4844-8422-1AD2D4B0C7C7" >
+        <File Name="svnmucc.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnmucc.exe">
+          <RegistryValue Value="[#svnmucc.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnauthz.exe" Guid="E22C35B5-796C-4CF8-954B-EFB01A7D4621">
+        <File Id="svnauthz.exe" Name="svnauthz.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnauthz.exe">
+          <RegistryValue Value="[#svnauthz.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnbench.exe" Guid="E5CE3B61-5B64-4FA1-8362-96E5430AA3E4">
+        <File Id="svnbench.exe" Name="svnbench.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+        <RegistryKey Root="HKLM" Key="SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\svnbench.exe">
+          <RegistryValue Value="[#svnbench.exe]" Type="string" />
+          <RegistryValue Name="Path" Value="[INSTALLLOCATION_BIN]" Type="string" />
+        </RegistryKey>
+      </Component>
+      <Component Id="svnauthz_validate.exe" Guid="E4D2B7B4-A54D-42A7-8FF5-9739C3ACC534" >
+        <File Id="svnauthz_validate.exe" Name="svnauthz-validate.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svn_populate_node_origins_index.exe" Guid="ED6BEE8C-2EF5-42F4-BC90-EA93376A2CFD" >
+        <File Id="svn_populate_node_origins_index.exe" Name="svn-populate-node-origins-index.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="svnfsfs.exe" Guid="BA61C3A3-8BA7-4384-8D76-30D0ACD2BB0D">
+        <File Id="svnfsfs.exe" Name="svnfsfs.exe" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+    </DirectoryRef>
+    <DirectoryRef Id="INSTALLLOCATION_BIN" FileSource="$(var.distDir)\bin" DiskId="1">
+      <Component Id="DB.dll" Guid="A35469EC-019F-4FB5-95AC-D05F00C2CEFC">
+        <File Id="DB44_20.dll" Name="SlikSvn-DB44-20-x64.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libapr_1.dll" Guid="5E994BC7-065B-4AD3-B478-A1321CBD54A0">
+        <File Id="libapr_1.dll" Name="SlikSvn-libapr-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libaprutil_1.dll" Guid="DD9F5726-1141-4428-8336-EA95BF466989">
+        <File Id="libaprutil_1.dll" Name="SlikSvn-libaprutil-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libeay32.dll" Guid="B68C343C-3DC1-4581-8B32-D8A71DE597B1">
+        <File Id="libeay32.dll" Name="SlikSvn-libeay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Directory Id="INSTALLLOCATION_BIN_engines" Name="engines" FileSource="$(var.distDir)\bin\engines\">
+        <Component Id="Capi.dll" Guid="937F455B-CA31-4350-A7D6-2B24A2A41F42">
+          <File Id="capi.dll" Name="capi.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+        </Component>
+      </Directory>
+      <Component Id="Sasl.dll" Guid="C5B24AFE-3DA3-4D34-BDCB-A3A053866F8E">
+        <File Id="libsasl21.dll" Name="SlikSvn-libsasl21.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="ssleay32.dll" Guid="360CA2FC-AE7B-4AB9-A9B9-CD051832E68A">
+        <File Id="ssleay32.dll" Name="SlikSvn-ssleay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libintl.dll" Guid="81D9F23F-760A-4E65-A327-A8EF2B6EBE55">
+        <File Id="libintl.dll" Name="SlikSvn-libintl.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_client_1.dll" Guid="20654C11-8F95-4925-8AD6-72169CA63DE3">
+        <File Id="libsvn_client_1.dll" Name="SlikSvn-libsvn_client-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_delta_1.dll" Guid="4381F74F-0154-45EC-9BB0-FB2615688D98">
+        <File Id="libsvn_delta_1.dll" Name="SlikSvn-libsvn_delta-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_diff_1.dll" Guid="063BEE82-6BFF-47EC-9AE0-4B9E5EEC5EEC">
+        <File Id="libsvn_diff_1.dll" Name="SlikSvn-libsvn_diff-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_fs_1.dll" Guid="C8BF8E90-16DF-4B3D-A3DB-7151D4270D56">
+        <File Id="libsvn_fs_1.dll" Name="SlikSvn-libsvn_fs-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_ra_1.dll" Guid="1D939199-AC3B-426D-8089-3868D44BB1F4">
+        <File Id="libsvn_ra_1.dll" Name="SlikSvn-libsvn_ra-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_repos_1.dll" Guid="80D43EBD-057F-4CC2-97A5-682D3A76B829">
+        <File Id="libsvn_repos_1.dll" Name="SlikSvn-libsvn_repos-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_subr_1.dll" Guid="FA4C8985-2660-4B3C-A0FF-3E16CB2E9599">
+        <File Id="libsvn_subr_1.dll" Name="SlikSvn-libsvn_subr-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvn_wc_1.dll" Guid="22C11225-0D53-4776-B5F4-02A3A4579F25">
+        <File Id="libsvn_wc_1.dll" Name="SlikSvn-libsvn_wc-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+      <Component Id="libsvnjavahl_1.dll" Guid="665BBB08-90B1-4B1C-828D-8CCBA2B324C6">
+        <File Id="libsvnjavahl_1.dll" Name="libsvnjavahl-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      </Component>
+    </DirectoryRef>
+  </Fragment>
+  <?endif?>
+</Wix>

@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+
+  <property name="sconsApp" value="${path::get-full-path('build/scons/scripts/scons.bat')}" />
+  <property name="sconsPythonPath" value="${path::get-full-path('build/scons/Lib/site-packages/scons')}" />
+
+  <property name="sconsVSVersion" value="8.0"  if="${VSversion == '2005'}" />
+  <property name="sconsVSVersion" value="9.0"  if="${VSversion == '2008'}" />
+  <property name="sconsVSVersion" value="10.0" if="${VSversion == '2010'}" />
+  <property name="sconsVSVersion" value="11.0" if="${VSversion == '2012'}" />
+  <property name="sconsVSVersion" value="12.0" if="${VSversion == '2013'}" />
+  <property name="sconsVSVersion" value="14.0" if="${VSversion == '2015'}" />
+
+  <target name="scons-install" depends="download,extract">
+    <OnceBlock file="build/scons-${sconsVersion}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/scons">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${sconsDir}" />
+        </do>
+      </foreach>
+    </OnceBlock>
+    <OnceBlock file="build/scons-${sconsVersion}.installed">
+      <exec program="python.exe" workingdir="${sconsDir}" verbose="true">
+        <arg value="setup.py" />
+        <arg value="install" />
+        <arg value="--standalone-lib" />
+        <arg value="--prefix=${path::get-full-path('build/scons')}" />
+      </exec>
+    </OnceBlock>
+  </target>
+
+</project>

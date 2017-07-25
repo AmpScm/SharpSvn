@@ -1,0 +1,58 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="neonDir" value="${platformRoot}/neon" />
+  <target name="neon-prepare" depends="checkout, serf-prepare" if="${buildNeon}">
+    <OnceBlock file="build/neon-${neonVersion}_${platform}.merged">
+      <Svn verbose="true" if="${string::get-length(neonMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${neonMerges}" />
+        <arg value="http://svn.webdav.org/repos/projects/neon/trunk/" />
+        <arg value="${neonDir}" />
+      </Svn>
+    </OnceBlock>
+    <OnceBlock file="build/neon-${neonVersion}_${platform}.patched">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/neon">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <ApplyPatch patchFile="${patch}" toDir="${neonDir}" />
+        </do>
+      </foreach>
+      <property name="mak" value="" overwrite="false" />
+      <FilterFile file="${platformRoot}/neon/neon.mak">
+        <filterchain>
+          <replacestring from="$(LIB32_FLAGS) $(STATIC_LIB)" to="$(LIB32_FLAGS) $(APR_LIBS) $(APRUTIL_LIBS) $(STATIC_LIB) advapi32.lib ws2_32.lib mswsock.lib user32.lib gdi32.lib" />
+          <LineRegexReplace re="(?&lt;=CFLAGS\s*=)(.*)" to="$1 /D XML_STATIC /D _CRT_SECURE_NO_WARNINGS /D WIN32" />
+          <replacestring from=" /O2 " to=" /O2 /W3 /GS /Zi " />
+          <replacestring from=" /MDd " to=" /MDd /Zl " />
+          <replacestring from=" /MD " to=" /MD /Zl " />
+          <replacestring from='/Fd"$(INTDIR)\\"' to='/Fd"$(INTDIR)\neon.pdb"' />
+          <replacestring from='!IF "$(ENABLE_IPV6)" == "yes"' to='!IF "yes" == "yes"' if="${enableIpv6=='true'}"/>
+        </filterchain>
+      </FilterFile>
+    </OnceBlock>
+    <OnceBlock file="build/neon-${neonVersion}_${platform}.prepared">
+      <regex pattern="^(?'NEON_MAJOR_VERSION'\d+)\.(?'NEON_MINOR_VERSION'\d+)\.(?'NEON_MICRO_VERSION'\d+)$" input="${neonVersion}" />
+      <loadfile file="${neonDir}/config.hw.in" property="configfile">
+        <filterchain>
+          <replacetokens begintoken="@" endtoken="@">
+            <token key="VERSION" value="${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}" />
+            <token key="MAJOR" value="${NEON_MAJOR_VERSION}" />
+            <token key="MINOR" value="${NEON_MINOR_VERSION}" />
+          </replacetokens>
+          <replacestring from="#define socklen_t" to="// # define socklen_t" />
+          <LineRegexReplace re='#define snprintf[ \t]*_snprintf' to='
+#if (_MSC_VER &lt; 1900)
+# define snprintf _snprintf
+#endif' />
+        </filterchain>
+      </loadfile>
+      <echo file="${neonDir}/config.hw" message="${configfile}" unless="${file::exists(svnBase + '/neon/config.hw')}" />
+      <echo file="${neonDir}/src/neon_version.h" message='#define NEON_VERSION "${NEON_MAJOR_VERSION}.${NEON_MINOR_VERSION}.${NEON_MICRO_VERSION}"' />
+    </OnceBlock>
+  </target>
+</project>

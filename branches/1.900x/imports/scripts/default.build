@@ -1,0 +1,205 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="Configuration" value="Release" overwrite="false" />
+  <property name="dllPrefix" value="SharpSvn-" overwrite="false" />
+  <property name="dbDllName" value="${dllPrefix}-DB${string::replace(dbVersion, '.','-')}" overwrite="false" />
+  <property name="static" value="true" overwrite="false" />
+  <property name="applyMerges" value="true" overwrite="false" />
+  <property name="applyPatches" value="true" overwrite="false" />
+  <property name="enableIpv6" value="true" overwrite="false" />
+  <property name="svnStatic" value="false" overwrite="false" />
+  <property name="svnAddSharpSvn" value="false" overwrite="false" />
+  <property name="javaHome" value="" overwrite="false" />
+  <property name="buildSubversion" value="true" overwrite="false" />
+  <property name="svn-dev" value="false" overwrite="false" />
+  <property name="enableAprCrypto" value="true" overwrite="false" />
+  <property name="buildJavaHL" value="true" overwrite="false" />
+  <property name="ltcg" value="false" overwrite="false" />
+  <property name="getSvnBook" value="false" overwrite="false" />
+  <property name="buildMemcached" value="false" overwrite="false" />
+  <property name="buildLibevent" value="true" overwrite="false" if="${buildMemcached}" />
+  <property name="buildLibevent" value="false" overwrite="false" />
+  <property name="buildPthreadwin32" value="true" overwrite="false" if="${buildMemcached}" />
+  <property name="buildPthreadwin32" value="false" overwrite="false" />
+
+  <if test="${platform != 'win32' and platform != 'x64'}">
+    <fail message="Platform must be win32 or x64 at this time" />
+  </if>
+
+  <if test="${not property::exists('VSversion')}">
+    <!-- Auto detect VS 2005-2012 -->
+    <if test="${environment::variable-exists('VCINSTALLDIR')}">
+      <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
+
+      <property name="VSversion" value="2005" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 8')}" />
+      <property name="VSversion" value="2008" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 9.0')}" />
+      <property name="VSversion" value="2010" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 10.0')}" />
+      <property name="VSversion" value="2012" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 11.0')}" />
+      <property name="VSversion" value="2013" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 12.0')}" />
+      <property name="VSversion" value="2015" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 14.0')}" />
+    </if>
+
+    <if test="${not property::exists('VSversion')}">
+      <fail message="VSversion variable not defined and autodetect failed" />
+    </if>
+    <echo message="Using Visual Studio ${VSversion} ${platform} for building" />
+  </if>
+
+  <property name="MSBuildExe" value="MSBuild.exe" />
+  <property name="MSBuildExe" value="${environment::get-variable('WINDIR')}\Microsoft.NET\Framework\v3.5\MSBuild.exe" if="${VSversion=='2008'}" />
+
+  <property name="buildHttpd" value="false" overwrite="false" />
+  <property name="buildNeon" value="false" overwrite="false" />
+
+  <foreach item="Folder" property="jhbp">
+    <in>
+      <items basedir="${path::get-full-path(path::combine(environment::get-variable('ProgramFiles'), '..'))}">
+        <include name="${environment::get-variable('ProgramFiles')}" />
+        <include name="Program Files (x86)" />
+        <include name="Program Files" />
+      </items>
+    </in>
+    <do>
+      <property name="jhb" value="${path::combine(jhbp, 'Java')}" />
+      <foreach item="Folder" property="jh" in="${jhb}" if="${directory::exists(jhb)}">
+        <do>
+          <property name="javaHome" value="${jh}" if="${javaHome=='' and file::exists(path::combine(jh,'bin/javah.exe'))}" />
+        </do>
+      </foreach>
+    </do>
+  </foreach>
+  <echo message="Found Java support in: ${javaHome}" if="${javaHome!=''}" />
+  <setenv>
+    <variable name="OPENSSL_STATIC" value="1" />
+    <variable name="ENABLE_IPV6" value="1" if="${enableIpv6=='true'}" />
+    <variable name="PATH" value="${environment::get-variable('PATH')};${javaHome}\bin" if="${javaHome!=''}" />
+  </setenv>
+  
+  <property name="ltcgFlags" value="" />
+  <property name="ltcgFlags" value="-GL" if="${ltcg}" />
+  <property name="ltcgFlags" value="${ltcgFlags} -Gw" if="${int::parse(VSversion) &gt;= 2013}" />
+
+  <property name="Configuration" value="release" />
+  <property name="release" value="release" />
+
+  <include buildfile="tasks.build" />
+
+  <include buildfile="layout.build" />
+  <include buildfile="prepare.build" />
+  <include buildfile="download.build" />
+
+  <include buildfile="cmake.build" />
+  <include buildfile="scons.build" />
+
+  <include buildfile="bdb.build" />
+  <include buildfile="zlib.build" />
+  <include buildfile="openssl.build" />
+  <include buildfile="serf.build" />
+  <include buildfile="neon.build" />
+  <include buildfile="httpd.build" />
+  <include buildfile="pcre.build" />
+  <include buildfile="nghttp2.build" />
+  <include buildfile="apr.build" />
+  <include buildfile="aprutil.build" />
+  <include buildfile="sasl.build" />
+  <include buildfile="gettext.build" />
+  <include buildfile="sharpintl.build" />
+  <include buildfile="subversion.build" />
+  <include buildfile="sqlite.build" />
+  <include buildfile="swig.build" />
+  <include buildfile="libssh2.build" />
+  <include buildfile="libevent.build" />
+  <include buildfile="pthreadwin32.build" />
+  <include buildfile="memcached.build" />
+
+  <include buildfile="dev.build" />
+
+  <setenv>
+    <variable name="PATH" value="${environment::get-variable('PATH')};${path::get-full-path(nasmDir)}"/>
+  </setenv>
+
+  <target name="clean">
+    <delete>
+      <fileset basedir="build" defaultexcludes="false">
+        <include name="**" />
+      </fileset>
+    </delete>
+    <delete>
+      <fileset basedir="release">
+        <include name="**" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="distclean" depends="clean">
+    <delete>
+      <fileset basedir="downloads">
+        <include name="**" />
+      </fileset>
+    </delete>
+    <delete>
+      <fileset basedir="release">
+        <include name="**" />
+      </fileset>
+    </delete>
+  </target>
+
+  <target name="win32" depends="x86">
+  </target>
+
+  <target name="x86">
+    <exec program="${environment::get-variable('comspec')}">
+      <arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=win32 build"' />
+    </exec>
+  </target>
+
+  <target name="x64">
+    <exec program="${environment::get-variable('comspec')}">
+      <arg line='/s /c ""${vcVarsPath}\vcvarsall.bat" x86_amd64 &amp;&amp; nant "-buildfile:${project::get-buildfile-path()}" /D:platform=x64 build"' />
+    </exec>
+  </target>
+
+  <target name="build" depends="download,extract,checkout, svn-build, libssh2-build, copy-result">
+
+  </target>
+
+  <target name="misc-copy" depends="extract">
+    <copy todir="${release}/lib-AnyCPU">
+      <fileset basedir="${nunitDir}/bin">
+        <include name="nunit.framework.dll" />
+        <include name="nunit.framework.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${release}/lib-AnyCPU">
+      <fileset basedir="${sharpZipLibDir}/net-20">
+        <include name="ICSharpCode.SharpZipLib.dll" />
+      </fileset>
+    </copy>
+  </target>
+
+  <target name="clean-svn" depends="update-svn">
+    <delete>
+      <fileset basedir="${release}">
+        <include name="${releaseLib}/**" />
+        <include name="bin/*-${platform}.exe" />
+        <include name="bin/*-${platform}.dll" />
+      </fileset>
+    </delete>
+  </target>
+  <target name="update-svn">
+    <delete>
+      <fileset basedir="build">
+        <include name="subversion*_${platform}.*" />
+      </fileset>
+    </delete>
+    <Svn nonInteractive="false">
+      <arg line="revert -R build/${platform}/subversion" />
+    </Svn>
+    <Svn>
+      <arg line="up build/${platform}/subversion" />
+    </Svn>
+  </target>
+  <target name="svn-update" depends="update-svn">
+  </target>
+</project>
+

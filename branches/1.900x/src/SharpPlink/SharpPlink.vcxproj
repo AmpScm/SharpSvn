@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{F47E6F0F-0639-45AE-B029-7EDD8CD5910A}</ProjectGuid>
+    <RootNamespace>SharpSvnPlink</RootNamespace>
+    <SccProjectName>Svn</SccProjectName>
+    <SccAuxPath>Svn</SccAuxPath>
+    <SccLocalPath>Svn</SccLocalPath>
+    <SccProvider>SubversionScc</SccProvider>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset Condition="'$(VCTargetsPath11)' == ''">v100</PlatformToolset>
+    <PlatformToolset Condition="'$(VCTargetsPath11)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset Condition="$(DefaultPlatformToolset) != '' and $(VisualStudioVersion) != ''">$(DefaultPlatformToolset)</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath12)' != ''">v120</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == '' and '$(VCTargetsPath11)' != ''">v110</PlatformToolset>
+    <PlatformToolset Condition="$(PlatformToolset) == ''">v100</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.50417.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Platform)</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Platform)</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Platform)</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>bin\$(Platform)\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Platform)\$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)-$(Platform)</TargetName>
+    <TargetExt>.exe</TargetExt>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>PuttySrc\windows;PuttySrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>PuttySrc\windows;PuttySrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>PuttySrc\windows;PuttySrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <Optimization>MinSpace</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>PuttySrc\windows;PuttySrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader />
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <BrowseInformation>true</BrowseInformation>
+      <DisableSpecificWarnings>4996</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\imports\release\lib-x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="SharpPlink.cpp" />
+    <ClCompile Include="SharpSvnCmdLine.c" />
+    <ClCompile Include="SharpSvnConsole.c" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\be_all_s.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\cproxy.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\ldisc.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\logging.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\misc.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\callback.c" />
+    <ClCompile Include="PuttySrc\errsock.c" />
+    <ClCompile Include="PuttySrc\noterm.c" />
+    <ClCompile Include="PuttySrc\sshshare.c" />
+    <ClCompile Include="PuttySrc\windows\winhsock.c" />
+    <ClCompile Include="PuttySrc\windows\winnpc.c" />
+    <ClCompile Include="PuttySrc\windows\winnps.c" />
+    <ClCompile Include="PuttySrc\windows\winsecur.c" />
+    <ClCompile Include="PuttySrc\windows\winshare.c" />
+    <ClCompile Include="PuttySrc\pgssapi.c" />
+    <ClCompile Include="PuttySrc\pinger.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\portfwd.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\proxy.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\raw.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\rlogin.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\settings.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\ssh.c">
+      <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</WholeProgramOptimization>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshaes.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\ssharcf.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshblowf.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshbn.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshcrc.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshcrcda.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdes.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdh.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdss.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdssg.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshgssc.c" />
+    <ClCompile Include="PuttySrc\sshmd5.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshprime.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshpubk.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshrand.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshrsa.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshrsag.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsh256.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsh512.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsha.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshzlib.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\telnet.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\timing.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\tree234.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\version.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\wildcard.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\windefs.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wingss.c" />
+    <ClCompile Include="PuttySrc\windows\winhandl.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winjump.c" />
+    <ClCompile Include="PuttySrc\windows\winmisc.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnet.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnoise.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winpgntc.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winplink.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winproxy.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winser.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winstore.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wintime.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winx11.c" />
+    <ClCompile Include="PuttySrc\x11fwd.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\conf.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\config.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\dialog.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wincapi.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winctrls.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winhelp.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winprint.c">
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winucs.c">
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="PuttySrc\dialog.h" />
+    <ClInclude Include="PuttySrc\int64.h" />
+    <ClInclude Include="PuttySrc\ldisc.h" />
+    <ClInclude Include="PuttySrc\misc.h" />
+    <ClInclude Include="PuttySrc\network.h" />
+    <ClInclude Include="PuttySrc\pgssapi.h" />
+    <ClInclude Include="PuttySrc\proxy.h" />
+    <ClInclude Include="PuttySrc\psftp.h" />
+    <ClInclude Include="PuttySrc\putty.h" />
+    <ClInclude Include="PuttySrc\puttymem.h" />
+    <ClInclude Include="PuttySrc\puttyps.h" />
+    <ClInclude Include="PuttySrc\resource.h" />
+    <ClInclude Include="PuttySrc\sftp.h" />
+    <ClInclude Include="PuttySrc\ssh.h" />
+    <ClInclude Include="PuttySrc\sshgss.h" />
+    <ClInclude Include="PuttySrc\sshgssc.h" />
+    <ClInclude Include="PuttySrc\storage.h" />
+    <ClInclude Include="PuttySrc\terminal.h" />
+    <ClInclude Include="PuttySrc\tree234.h" />
+    <ClInclude Include="SharpPlink.h" />
+    <ClInclude Include="SharpPlinkVersion.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="SharpPlink.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SharpPlink.vcproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="SharpPlink.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

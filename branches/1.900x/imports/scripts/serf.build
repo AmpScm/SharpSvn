@@ -1,0 +1,125 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<project basedir=".." default="build">
+  <property name="serfDir" value="${platformRoot}/serf" />
+  <property name="serfDebug" value="false" overwrite="false" />
+  <target name="serf-prepare" depends="checkout">
+    <OnceBlock file="build/serf-${serfVersion}_${platform}.merged" unless="${serfBuildType == 'trunk'}">
+      <Svn verbose="true" if="${string::get-length(serfMerges) &gt; 0}">
+        <arg value="merge" />
+        <arg value="-c" />
+        <arg value="${serfMerges}" />
+        <arg value="^/serf/trunk" />
+        <arg value="${serfDir}" />
+      </Svn>
+    </OnceBlock>
+    <OnceBlock file="build/serf-${serfVersion}_${platform}.prepared">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/serf">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn>
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${serfDir}" />
+          </Svn>
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="serf-build" depends="serf-prepare, zlib-build, apr-build, aprutil-build, openssl-build, scons-install">
+    <OnceBlock file="build/serf-${serfVersion}_${platform}.build">
+      <fileset basedir="${serfDir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+      <delete>
+        <fileset basedir="${serfDir}">
+          <include name="serf-?.lib" />
+          <include name="libserf-?.lib" />
+          <include name="serf-?.dll" />
+          <include name="libserf-?.dll" />
+          <include name="serf-?.exp" />
+          <include name="libserf-?.exp" />
+          <include name="serf-?.pdb" />
+          <include name="libserf-?.pdb" />
+        </fileset>
+      </delete>
+      <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+          if="${file::exists(serfDir + '/SConstruct')}">
+        <environment>
+          <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+          <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                         + environment::get-variable('PATH') }" />
+        </environment>
+        <arg value="PREFIX=${intDir}" />
+        <arg value="LIBDIR=${intDir}/lib" />
+        <arg value="OPENSSL=${intDir}" />
+        <arg value="ZLIB=${intDir}" />
+        <arg value="APR=${intDir}" />
+        <arg value="APU=${intDir}" />
+        <arg value="SOURCE_LAYOUT=no" />
+        <arg value="DEBUG=yes" if="${serfDebug}" />
+        <arg value="TARGET_ARCH=${platform}" />
+        <arg value="MSVC_VERSION=${sconsVSVersion}" />
+        <arg value="APR_STATIC=yes" if="${static}" />
+        <arg value="install" />
+      </exec>
+    </OnceBlock>
+    <property name="bad-name" value="serf-1" if="${file::exists(serfDir+'/serf-2.lib')}" />
+    <property name="bad-name" value="serf-2" if="${file::exists(serfDir+'/serf-1.lib')}" />
+    <delete dir="${intDir}/include/${bad-name}" />
+    <delete>
+      <fileset basedir="${intDir}/lib">
+        <include name="${bad-name}.*" />
+      </fileset>
+    </delete>
+  </target>
+  <target name="serf-clean">
+    <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+        if="${file::exists(serfDir + '/SConstruct')}">
+      <environment>
+        <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+        <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                       + environment::get-variable('PATH') }" />
+      </environment>
+      <arg value="PREFIX=${intDir}" />
+      <arg value="LIBDIR=${intDir}/lib" />
+      <arg value="OPENSSL=${intDir}" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
+      <arg value="DEBUG=yes" if="${serfDebug}" />
+      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="MSVC_VERSION=${sconsVSVersion}" />
+      <arg value="APR_STATIC=yes" if="${static}" />
+      <arg value="--clean" />
+    </exec>
+  </target>
+  <target name="serf-check" depends="serf-prepare">
+    <exec program="${sconsApp}" workingdir="${serfDir}" verbose="true"
+        if="${file::exists(serfDir + '/SConstruct')}">
+      <environment>
+        <variable name="PYTHONPATH" dir="${sconsPythonPath}" />
+        <variable name="PATH" value="${intDir + '\bin;' + intDir + '\lib;'
+                                       + environment::get-variable('PATH') }" />
+      </environment>
+      <arg value="PREFIX=${intDir}" />
+      <arg value="LIBDIR=${intDir}/lib" />
+      <arg value="OPENSSL=${intDir}" />
+      <arg value="ZLIB=${intDir}" />
+      <arg value="APR=${intDir}" />
+      <arg value="APU=${intDir}" />
+      <arg value="SOURCE_LAYOUT=no" />
+      <arg value="DEBUG=yes" if="${serfDebug}" />
+      <arg value="TARGET_ARCH=${platform}" />
+      <arg value="MSVC_VERSION=${sconsVSVersion}" />
+      <arg value="APR_STATIC=yes" if="${static}" />
+      <arg value="DEBUG=yes"/>
+      <arg value="check" />
+    </exec>
+  </target>
+</project>
