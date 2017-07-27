@@ -75,9 +75,6 @@
     <ClCompile Include="PuttySrc\errsock.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\windows\wincapi.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PuttySrc\x11fwd.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
@@ -259,6 +256,9 @@
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\miscucs.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wincapi.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
