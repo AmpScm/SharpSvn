@@ -204,6 +204,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="PuttySrc\be_misc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\miscucs.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshccp.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshecc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="SharpPlink.cpp" />
     <ClCompile Include="SharpSvnCmdLine.c" />
     <ClCompile Include="SharpSvnConsole.c" />

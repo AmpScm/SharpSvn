@@ -249,6 +249,18 @@
     <ClCompile Include="PuttySrc\windows\winx11.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="PuttySrc\be_misc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshecc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshccp.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\miscucs.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SharpPlink.h">
