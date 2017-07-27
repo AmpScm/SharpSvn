@@ -214,133 +214,217 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PuttySrc\be_all_s.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\cproxy.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\ldisc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\logging.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\misc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\callback.c" />
-    <ClCompile Include="PuttySrc\errsock.c" />
-    <ClCompile Include="PuttySrc\noterm.c" />
-    <ClCompile Include="PuttySrc\sshshare.c" />
-    <ClCompile Include="PuttySrc\windows\winhsock.c" />
-    <ClCompile Include="PuttySrc\windows\winnpc.c" />
-    <ClCompile Include="PuttySrc\windows\winnps.c" />
-    <ClCompile Include="PuttySrc\windows\winsecur.c" />
-    <ClCompile Include="PuttySrc\windows\winshare.c" />
-    <ClCompile Include="PuttySrc\pgssapi.c" />
+    <ClCompile Include="PuttySrc\callback.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\errsock.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\noterm.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshshare.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winhsock.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnpc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnps.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winsecur.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winshare.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\pgssapi.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="PuttySrc\pinger.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\portfwd.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\proxy.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\raw.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\rlogin.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\settings.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\ssh.c">
       <WholeProgramOptimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</WholeProgramOptimization>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshaes.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\ssharcf.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshblowf.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshbn.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshcrc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshcrcda.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshdes.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshdh.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshdss.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshdssg.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\sshgssc.c" />
+    <ClCompile Include="PuttySrc\sshgssc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="PuttySrc\sshmd5.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshprime.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshpubk.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshrand.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshrsa.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshrsag.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshsh256.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshsh512.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshsha.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\sshzlib.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\telnet.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\timing.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\tree234.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\version.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\wildcard.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\windefs.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\windows\wingss.c" />
+    <ClCompile Include="PuttySrc\windows\wingss.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="PuttySrc\windows\winhandl.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winjump.c" />
+    <ClCompile Include="PuttySrc\windows\winjump.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="PuttySrc\windows\winmisc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winnet.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winnoise.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winpgntc.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winplink.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winproxy.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winser.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winstore.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\wintime.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winx11.c" />
+    <ClCompile Include="PuttySrc\windows\winx11.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
+    </ClCompile>
     <ClCompile Include="PuttySrc\x11fwd.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\conf.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\config.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\dialog.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\wincapi.c">
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winctrls.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winhelp.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winprint.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winucs.c">
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">../sharpplink-ex.h</ForcedIncludeFiles>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,6 +447,7 @@
     <ClInclude Include="PuttySrc\storage.h" />
     <ClInclude Include="PuttySrc\terminal.h" />
     <ClInclude Include="PuttySrc\tree234.h" />
+    <ClInclude Include="sharpplink-ex.h" />
     <ClInclude Include="SharpPlink.h" />
     <ClInclude Include="SharpPlinkVersion.h" />
     <ClInclude Include="stdafx.h" />
