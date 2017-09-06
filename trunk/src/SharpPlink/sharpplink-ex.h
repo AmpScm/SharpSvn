@@ -5,7 +5,7 @@ typedef void *   DLL_DIRECTORY_COOKIE;
 typedef void ** PDLL_DIRECTORY_COOKIE;
 #endif
 
-#if defined _MSC_VER && defined _M_AMD64 && _MSC_VER < 1600
+#if defined _MSC_VER && defined _M_AMD64 && _MSC_VER < 1700 /* 1700 = VS 2012 */
 static __forceinline 
 unsigned char _addcarry_u64(unsigned char c_in, unsigned __int64 src1, unsigned __int64 src2, unsigned __int64 *sum_out)
 {
