@@ -678,7 +678,7 @@ void SvnClientContext::ApplyCustomRemoteConfig()
         const char* cmd = nullptr;
         const char* val = nullptr;
 
-        svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh -q");
+        svn_config_get(cfg, &val, SVN_CONFIG_SECTION_TUNNELS, "ssh", "$SVN_SSH ssh -q --");
 
         if (val && val[0] == '$')
         {
