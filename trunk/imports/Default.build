@@ -24,7 +24,7 @@
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- r1699721-r1699723          - Return connection timeouts as a specific error -->
-  <property name="serfMerges" value="r1699721-1699723" overwrite="false" />
+  <property name="serfMerges" value="r1699721-1699723,1712131,1807594" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.0.2l" overwrite="false" />
