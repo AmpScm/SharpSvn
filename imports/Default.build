@@ -16,7 +16,7 @@
   <!--
     r1704292 - Write binary diffs in the right order
   // -->
-  <property name="subversionVersion" value="1.9.6" overwrite="false" />
+  <property name="subversionVersion" value="1.9.7" overwrite="false" />
   <property name="subversionMerges" value="1704292" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
@@ -24,7 +24,7 @@
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- r1699721-r1699723          - Return connection timeouts as a specific error -->
-  <property name="serfMerges" value="r1699721-1699723" overwrite="false" />
+  <property name="serfMerges" value="r1699721-1699723,1712131,1807594" overwrite="false" />
 
   <!-- -->
   <property name="opensslVersion" value="1.0.2l" overwrite="false" />
@@ -43,7 +43,7 @@
   <property name="pcreVersion" value="8.39" overwrite="false" />
   <property name="httpdVersion" value="2.4.25" overwrite="false" />
   <property name="gettextVersion" value="0.18.3" overwrite="false" />
-  <property name="sqliteVersion" value="3.19.3" overwrite="false" />
+  <property name="sqliteVersion" value="3.20.1" overwrite="false" />
   <property name="libssh2Version" value="1.8.0" overwrite="false" />
   <property name="nghttp2Version" value="1.23.1" overwrite="false" />
 
