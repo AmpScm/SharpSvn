@@ -438,286 +438,2742 @@
 				<File
 					RelativePath="PuttySrc\be_all_s.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\be_misc.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\callback.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\conf.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\config.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\cproxy.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\dialog.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\errsock.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\ldisc.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\logging.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\misc.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\miscucs.c"
 					>
 				</File>
 				<File
 					RelativePath="PuttySrc\noterm.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\pgssapi.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\pinger.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\portfwd.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\proxy.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\raw.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\rlogin.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\settings.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\ssh.c"
 					>
-				</File>
-				<File
-					RelativePath="PuttySrc\sshshare.c"
-					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshaes.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\ssharcf.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\sshbcrypt.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshblowf.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshbn.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\sshccp.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshcrc.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshcrcda.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshdes.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshdh.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshdss.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshdssg.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\sshecc.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath=".\PuttySrc\sshecdsag.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshgssc.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshmd5.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshprime.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshpubk.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshrand.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshrsa.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshrsag.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshsh256.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshsh512.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshsha.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="PuttySrc\sshshare.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\sshzlib.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\telnet.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\timing.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\tree234.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\version.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\wildcard.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\wincapi.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winctrls.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\windefs.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\wingss.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winhandl.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winhelp.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winhsock.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winjump.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winmisc.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winnet.c"
 					>
-				</File>
-				<File
-					RelativePath="PuttySrc\windows\winnpc.c"
-					>
-				</File>
-				<File
-					RelativePath="PuttySrc\windows\winnps.c"
-					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winnoise.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="PuttySrc\windows\winnpc.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="PuttySrc\windows\winnps.c"
+					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winpgntc.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winplink.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winprint.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winproxy.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winsecur.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winser.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winshare.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winstore.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\wintime.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winucs.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\windows\winx11.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="PuttySrc\x11fwd.c"
 					>
+					<FileConfiguration
+						Name="Debug|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Debug|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|x64"
+						>
+						<Tool
+							Name="VCCLCompilerTool"
+							ForcedIncludeFiles="..\sharpplink-ex.h"
+						/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
