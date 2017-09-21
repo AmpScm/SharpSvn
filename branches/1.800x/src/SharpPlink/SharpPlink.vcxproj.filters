@@ -57,176 +57,11 @@
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\be_all_s.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\cproxy.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ldisc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\logging.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\misc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\pgssapi.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\pinger.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\portfwd.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\proxy.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\raw.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\rlogin.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\settings.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssh.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshaes.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\ssharcf.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshblowf.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshbn.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshcrc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshcrcda.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshdes.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshdh.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshdss.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshdssg.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshgssc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshmd5.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshprime.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshpubk.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshrand.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshrsa.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshrsag.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshsh256.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshsh512.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshsha.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\sshzlib.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\telnet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\timing.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\tree234.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\version.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\wildcard.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\windefs.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\wingss.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winhandl.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winjump.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winmisc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winnet.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winnoise.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winpgntc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winplink.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winproxy.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winser.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winstore.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\wintime.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winx11.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\x11fwd.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="PuttySrc\sshshare.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winshare.c">
       <Filter>Putty\Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="PuttySrc\windows\winsecur.c">
-      <Filter>Putty</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\windows\winnpc.c">
       <Filter>Putty\Source Files</Filter>
@@ -240,11 +75,191 @@
     <ClCompile Include="PuttySrc\errsock.c">
       <Filter>Putty\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PuttySrc\noterm.c">
-      <Filter>Putty</Filter>
+    <ClCompile Include="PuttySrc\x11fwd.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\be_all_s.c">
+      <Filter>Putty\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PuttySrc\callback.c">
-      <Filter>Putty</Filter>
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\cproxy.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\ldisc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\logging.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\misc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\noterm.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\pgssapi.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\pinger.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\portfwd.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\proxy.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\raw.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\rlogin.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\settings.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\ssh.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshaes.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\ssharcf.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshblowf.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshbn.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshcrc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshcrcda.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdes.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdh.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdss.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshdssg.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshgssc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshmd5.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshprime.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshpubk.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshrand.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshrsa.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshrsag.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsh256.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsh512.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshsha.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshzlib.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\telnet.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\timing.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\tree234.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\version.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\wildcard.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\windefs.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wingss.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winhandl.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winjump.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winmisc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnet.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winnoise.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winpgntc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winplink.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winproxy.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winsecur.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winser.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winstore.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wintime.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\winx11.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\be_misc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshecc.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\sshccp.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\miscucs.c">
+      <Filter>Putty\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PuttySrc\windows\wincapi.c">
+      <Filter>Putty\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -257,7 +272,67 @@
     <ClInclude Include="targetver.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="PuttySrc\dialog.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\int64.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\ldisc.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\misc.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\network.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\pgssapi.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\proxy.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\psftp.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\putty.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\puttymem.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\puttyps.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\resource.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\sftp.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\ssh.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\sshgss.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\sshgssc.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\storage.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\terminal.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="PuttySrc\tree234.h">
+      <Filter>Putty\Headers</Filter>
+    </ClInclude>
     <ClInclude Include="SharpPlinkVersion.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sharpplink-ex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -268,5 +343,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="SharpPlink.vcproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="SharpPlink.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
