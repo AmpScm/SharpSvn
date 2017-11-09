@@ -35,8 +35,13 @@
 
 #pragma comment(lib, "intl3_svn.lib")
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
 #pragma comment(lib, "libeay32.lib")
 #pragma comment(lib, "ssleay32.lib")
+#else
+#pragma comment(lib, "libcrypto.lib")
+#pragma comment(lib, "libssl.lib")
+#endif
 
 #pragma comment(lib, "libsvn_client-1.lib")
 #pragma comment(lib, "libsvn_delta-1.lib")
