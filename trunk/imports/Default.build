@@ -17,17 +17,18 @@
     r1704292 - Write binary diffs in the right order
   // -->
   <property name="subversionVersion" value="1.9.7" overwrite="false" />
-  <property name="subversionMerges" value="1704292" overwrite="false" />
+  <property name="subversionMerges" value="1704292," overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
   <property name="aprutilMerges" value="" overwrite="false" />
   <property name="neonMerges" value="" overwrite="false" />
   <!-- r1699721-r1699723          - Return connection timeouts as a specific error -->
-  <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088" overwrite="false" />
+  <!-- r1814724-r1814726          - Detect OpenSSL 1.1.0 -->
+  <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088,r1814724-r1814726" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.0.2m" overwrite="false" />
+  <property name="opensslVersion" value="1.1.0g" overwrite="false" />
   <property name="neonVersion" value="0.30.2" overwrite="false" />
 
   <property name="aprVersion" value="1.6.2" overwrite="false" />
