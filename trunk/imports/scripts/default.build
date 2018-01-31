@@ -27,8 +27,12 @@
   </if>
 
   <if test="${not property::exists('VSversion')}">
-    <!-- Auto detect VS 2005-2012 -->
-    <if test="${environment::variable-exists('VCINSTALLDIR')}">
+ 
+    <if test="${environment::variable-exists('VisualStudioVersion')}">
+      <property name="VSversion" value="2017" overwrite="false" if="${'15.0' == environment::get-variable('VisualStudioVersion')}" />
+    </if>
+    <!-- Auto detect VS 2005-2015 -->
+    <if test="${environment::variable-exists('VCINSTALLDIR') and not property::exists('VSversion')}">
       <property name="VCINSTALLDIR" value="${environment::get-variable('VCINSTALLDIR')}" />
 
       <property name="VSversion" value="2005" overwrite="false" if="${string::contains(VCINSTALLDIR, 'Visual Studio 8')}" />
