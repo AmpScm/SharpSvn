@@ -57,6 +57,7 @@
         <arg value="enable-tlsext" if="${opensslVersion &lt; '1.1.'}" />
         <arg value="enable-capieng" />
         <arg value="enable-static-engine" if="${static}" />
+        <!--arg value="enable-weak-ssl-ciphers" if="${opensslVersion &gt; '1.1.'}" /-->
         <arg value="-DSSL_FORBID_ENULL" />
         <arg value="-DOPENSSL_SSL_CLIENT_ENGINE_AUTO=capi" />
         <arg value="-DOPENSSL_CAPIENG_DIALOG" />
