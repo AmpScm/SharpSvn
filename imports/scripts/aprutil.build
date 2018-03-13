@@ -38,7 +38,7 @@
       </FilterFile>
     </OnceBlock>
   </target>
-  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build,cmake-prepare">
+  <target name="aprutil-build" depends="checkout, aprutil-merge, apr-build, openssl-build, libexpat-build, cmake-prepare">
     <OnceBlock file="build/aprutil-${aprVersion}-${platform}.build">
       <fileset basedir="${aprUtilDir}">
         <include name="**/*.c" />
@@ -54,7 +54,8 @@
         <prop name="APR_LIBRARIES" value="${intDir}/lib/libapr-1.lib" />
         <prop name="OPENSSL_ROOT_DIR" value="${intDir}" />
         <prop name="OPENSSL_INCLUDE_DIR" value="${intDir}/include" />
-        <prop name="XMLLIB_INCLUDE_DIR" value="${aprUtilDir}/xml/expat/lib" />
+        <prop name="EXPAT_INCLUDE_DIR" value="${intDir}/include" />
+        <prop name="XMLLIB_LIBRARIES" value="libexpat.lib" />
 
         <!--prop name="APU_HAVE_CRYPTO" value="ON" if="${enableAprCrypto}" />
         <prop name="APU_HAVE_CRYPTO" value="OFF" unless="${enableAprCrypto}" /-->
@@ -68,9 +69,6 @@
       </FilterFile-->
 
       <FilterFile file="${aprUtilDir}/aprutil-1.${vcproj}" generated="true">
-        <filterchain refid="cmake-lib" />
-      </FilterFile>
-      <FilterFile file="${aprUtilDir}/libexpat.${vcproj}" generated="true">
         <filterchain refid="cmake-lib" />
       </FilterFile>
       <FilterFile file="${aprUtilDir}/libaprutil-1.${vcproj}" generated="true">
@@ -102,11 +100,9 @@
       <fileset basedir="${aprUtilDir}/Release">
         <include name="*.lib" />
         <include name="apr*.pdb" />
-        <include name="libexpat*.pdb" />
         <exclude name="apr_*.pdb" />
       </fileset>
     </copy>
-    <copy file="${intDir}/lib/libexpat.lib" tofile="${intDir}/lib/xml.lib" />
     <copy todir="${intDir}/bin" flatten="true">
       <fileset basedir="${aprUtilDir}/Release">
         <include name="libapr*.dll" />
@@ -115,11 +111,6 @@
         <include name="apr_*.pdb" />
         <include name="${dllPrefix}*.dll" if="${dllPrefix != ''}" />
         <include name="${dllPrefix}*.pdb" if="${dllPrefix != ''}" />
-      </fileset>
-    </copy>
-    <copy todir="${intDir}/include">
-      <fileset basedir="${aprUtilDir}/xml/expat/lib">
-        <include name="*.h" />
       </fileset>
     </copy>
     <copy todir="${intDir}/include/apr-1" flatten="true">
