@@ -9,6 +9,7 @@
       <include name="System.Xml.dll" />
     </references>
     <imports>
+      <import namespace="System.Net"/>
       <import namespace="System.Xml"/>
       <import namespace="System.Xml.XPath"/>
       <import namespace="System.Text.RegularExpressions" />
@@ -19,6 +20,17 @@
     </imports>
     <code>
       <![CDATA[
+
+[TaskName("TweakSslOptions")]
+public class TweakSslOptions : Task
+{
+    protected override void ExecuteTask()
+    {
+      System.Net.ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 |
+          (SecurityProtocolType)768 | (SecurityProtocolType)3072;
+    }
+}
+
 
 public abstract class ExternalAppTask : NAnt.Core.Tasks.ExternalProgramBase
 {
@@ -840,5 +852,6 @@ public class AppendAtEnd : Filter
 ]]>
     </code>
   </script>
+  <TweakSslOptions />
 </project>
 
