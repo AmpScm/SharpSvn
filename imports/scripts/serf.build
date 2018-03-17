@@ -51,7 +51,7 @@
         <arg value="APR_STATIC=yes" if="${static}" />
         <arg value="install-lib" />
         <arg value="install-inc" />
-        <!-- But not install-pc! />
+        <!-- But not install-pc! -->
       </exec>
     </OnceBlock>
     <mkdir dir="${releaseInc}/serf-1" />
