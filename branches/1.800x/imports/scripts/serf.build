@@ -49,7 +49,9 @@
         <arg value="TARGET_ARCH=${platform}" />
         <arg value="MSVC_VERSION=${sconsVSVersion}" />
         <arg value="APR_STATIC=yes" if="${static}" />
-        <arg value="install" />
+        <arg value="install-lib" />
+        <arg value="install-inc" />
+        <!-- But not install-pc! />
       </exec>
     </OnceBlock>
     <mkdir dir="${releaseInc}/serf-1" />
