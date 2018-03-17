@@ -5,7 +5,9 @@ pipeline {
     stage('Build') {
       steps {
         bat """
+          set
           nant -f imports/svn-dist/Default.build"
+          @set
         """
       }
     }
