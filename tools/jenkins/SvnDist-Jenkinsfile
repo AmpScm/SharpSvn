@@ -5,9 +5,9 @@ pipeline {
     stage('Build') {
       steps {
         bat """
-          set
-          nant -f imports/svn-dist/Default.build"
-          @set
+@IF EXIST "%BUILD_CMDSETUP%" @CALL "%BUILD_CMDSETUP%"
+@SET
+nant -f tools/buildbot.build "-D:CCNetNumericLabel=%BUILD_NUMBER%" "-D:CCNetProject=%JOB_NAME%" "-D:build.include=C:\tools\prefix.build" -D:svnDist=true buildbot-build package-svndist
         """
       }
     }
