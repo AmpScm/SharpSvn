@@ -102,6 +102,7 @@
   <include buildfile="nghttp2.build" />
   <include buildfile="apr.build" />
   <include buildfile="aprutil.build" />
+  <include buildfile="libexpat.build" />
   <include buildfile="sasl.build" />
   <include buildfile="gettext.build" />
   <include buildfile="sharpintl.build" />
