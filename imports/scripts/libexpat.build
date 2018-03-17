@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<project basedir=".." default="build">
+  <property name="libexpatDir" value="${platformRoot}\libexpat" />
+
+  <target name="libexpat-prepare" depends="checkout">
+    <OnceBlock file="build/libexpat-${expatVersion}-${platform}.merged">
+      <foreach item="File" property="patch">
+        <in>
+          <items basedir="${downloads}/../patches/libexpat">
+            <include name="*.patch" />
+          </items>
+        </in>
+        <do>
+          <Svn verbose="true">
+            <arg value="patch" />
+            <arg value="${patch}" />
+            <arg value="${libexpatDir}" />
+          </Svn>
+        </do>
+      </foreach>
+    </OnceBlock>
+  </target>
+  <target name="libexpat-build" depends="libexpat-prepare,cmake-prepare">
+    <OnceBlock file="build/libexpat-${expatVersion}-${platform}.build">
+      <fileset basedir="${libexpatDir}">
+        <include name="**/*.c" />
+        <include name="**/*.h" />
+      </fileset>
+
+      <CMake workingdir="${libexpatDir}">
+        <prop name="CMAKE_INSTALL_PREFIX" value="${intDir}" />
+        <prop name="BUILD_shared" value="OFF" />
+      </CMake>
+      <!--FilterFile file="${aprUtilDir}/apr_crypto_openssl-1.vcxproj" if="${enableAprCrypto and vcxproj}" generated="true">
+        <filterchain>
+          <LineRegexReplace re='([A-Za-z_0-9]+)=\\"([^"]*)\\";' to='$1="$2";' />
+        </filterchain>
+      </FilterFile-->
+
+      <FilterFile file="${libexpatDir}/expat.${vcproj}" generated="true">
+        <filterchain refid="cmake-lib" />
+      </FilterFile>
+
+      <MSBuild src="${libexpatDir}/expat.sln">
+        <target value="expat" />
+      </MSBuild>
+    </OnceBlock>
+    
+    <copy todir="${intDir}/lib" flatten="true">
+      <fileset basedir="${libexpatDir}/Release">
+        <include name="*.lib" />
+      </fileset>
+    </copy>
+    <copy todir="${intDir}/include">
+      <fileset basedir="${libexpatDir}/lib">
+        <include name="*.h" />
+      </fileset>
+    </copy>
+    <copy file="${intDir}/lib/expat.lib" tofile="${intDir}/lib/xml.lib" />
+  </target>
+</project>
