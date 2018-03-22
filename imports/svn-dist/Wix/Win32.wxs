@@ -105,8 +105,8 @@
       <Component Id="libaprutil_1.dll" Guid="80AF758B-4529-4BF7-A736-3C5F3119A1F3">
         <File Id="libaprutil_1.dll" Name="SlikSvn-libaprutil-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="libeay32.dll" Guid="17719BC2-6FBC-4E26-AC0B-D25FE5A3869D">
-        <File Id="libeay32.dll" Name="SlikSvn-libeay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="libcrypto.dll" Guid="E4FCB2C7-37EB-4D26-81D1-EBBDFC3BC254">
+        <File Id="libcrypto-1_1.dll" Name="SlikSvn-libcrypto-1_1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
       <Directory Id="INSTALLLOCATION_BIN_engines" Name="engines" FileSource="$(var.distDir)\bin\engines">
         <Component Id="Capi.dll" Guid="7D63AE46-7922-4CCF-8D19-5000EEDDE446">
@@ -116,8 +116,8 @@
       <Component Id="Sasl.dll" Guid="4A47D422-81C9-4FF5-9615-482D26ED65B6">
         <File Id="libsasl21.dll" Name="SlikSvn-libsasl21.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="ssleay32.dll" Guid="638286E1-57C6-4DA8-98BD-5637A3AB021C">
-        <File Id="ssleay32.dll" Name="SlikSvn-ssleay32.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
+      <Component Id="libssl.dll" Guid="4FEF731C-79EA-4D51-BEB6-6CCBDC29616C">
+        <File Id="libssl-1_1.dll" Name="SlikSvn-libssl-1_1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
       <Component Id="libintl.dll" Guid="F4CDB29C-7A57-4DBD-9679-A998EFD33D78">
         <File Id="libintl.dll" Name="SlikSvn-libintl.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
