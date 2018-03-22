@@ -187,8 +187,7 @@
       <ComponentGroupRef Id="Sasl.dll"/>
       <ComponentGroupRef Id="libsvn_delta_1.dll"/>
       <ComponentGroupRef Id="libsvn_fs_1.dll"/>
-      <ComponentGroupRef Id="libeay32.dll"/>
-      <ComponentGroupRef Id="ssleay32.dll"/>
+      <ComponentGroupRef Id="libssl.dll"/>
       <ComponentGroupRef Id="libintl.dll" />
     </ComponentGroup>
     <ComponentGroup Id="libsvn_wc_1.dll">
@@ -222,14 +221,14 @@
     <ComponentGroup Id="Sasl.dll">
       <ComponentRef Id="Sasl.dll"/>
       <ComponentGroupRef Id="DB.dll"/>
-      <ComponentGroupRef Id="libeay32.dll"/>
+      <ComponentGroupRef Id="libcrypto.dll"/>
     </ComponentGroup>
-    <ComponentGroup Id="libeay32.dll">
-      <ComponentRef Id="libeay32.dll"/>
+    <ComponentGroup Id="libcrypto.dll">
+      <ComponentRef Id="libcrypto.dll"/>
     </ComponentGroup>
-    <ComponentGroup Id="ssleay32.dll">
-      <ComponentRef Id="ssleay32.dll"/>
-      <ComponentGroupRef Id="libeay32.dll"/>
+    <ComponentGroup Id="libssl.dll">
+      <ComponentRef Id="libssl.dll"/>
+      <ComponentGroupRef Id="libcrypto.dll"/>
       <ComponentRef Id="Capi.dll"/>
     </ComponentGroup>
     <ComponentGroup Id="libintl.dll">
