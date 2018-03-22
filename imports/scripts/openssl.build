@@ -73,10 +73,10 @@
       <exec program="cmd.exe" workingdir="${opensslDir}" if="${opensslVersion &lt; '1.1.' and platform=='x64'}">
         <arg line="/c ms\do_win64a.bat" />
       </exec>
-      <foreach item="File" property="deffile">
+      <foreach item="File" property="deffile" if="${opensslVersion &lt; '1.1.'}" >
         <in>
-          <items basedir="${opensslDir}/ms">
-            <include name="*.def" />
+          <items basedir="${opensslDir}">
+            <include name="ms/*.def" />
           </items>
         </in>
         <do>
@@ -94,6 +94,7 @@
           <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
           <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
           <replacestring from=" /MT " to=" /MD " />
+          <LineRegexReplace re='lib(crypto|ssl)-[1-9_]+\.(dll|pdb)' to='${dllPrefix}$0' if="${dllPrefix != '' and opensslVersion &gt;= '1.1.'}" />
           <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
           <LineRegexReplace re='^(MLFLAGS=.*)/subsystem:console' to='$1 /subsystem:windows /nxcompat /largeaddressaware /release' />
         </filterchain>
