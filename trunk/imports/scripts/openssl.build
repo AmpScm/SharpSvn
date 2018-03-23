@@ -94,7 +94,7 @@
           <replacestring from="/out:$(O_SSL)" to="/out:$(O_SSL) /IMPLIB:$(L_SSL)" />
           <replacestring from="/out:$(O_CRYPTO)" to="/out:$(O_CRYPTO) /IMPLIB:$(L_CRYPTO)" />
           <replacestring from=" /MT " to=" /MD " />
-          <LineRegexReplace re='lib(crypto|ssl)-[1-9_]+\.(dll|pdb)' to='${dllPrefix}$0' if="${dllPrefix != '' and opensslVersion &gt;= '1.1.'}" />
+          <LineRegexReplace re='lib(crypto|ssl)-[1-9_]+(-x64)?\.(dll|pdb)' to='${dllPrefix}$0' if="${dllPrefix != '' and opensslVersion &gt;= '1.1.'}" />
           <LineRegexReplace re='\s+\$\(CP\).*\$\(OPENSSLDIR\).*' to='# $0' />
           <LineRegexReplace re='^(MLFLAGS=.*)/subsystem:console' to='$1 /subsystem:windows /nxcompat /largeaddressaware /release' />
         </filterchain>
