@@ -18,6 +18,7 @@
     <xmlpeek file=".svn-info" xpath="/info/entry/url" property="svn_url" />
     <xmlpeek file=".svn-info" xpath="/info/entry/@revision" property="svn_rev" />
     <exec program="svn.exe" unless="${svnDist}">
+      <arg line='--no-auth-cache --username guest --password ""' />
       <arg line="checkout ${svn_url}" unless="${directory::exists('v40')}" />
       <arg line="update"                  if="${directory::exists('v40')}" />
       <arg line="-r ${svn_rev} v40/" />      
@@ -256,7 +257,9 @@
         </items>
       </in>
       <do>
-        <fail if="${version::get-major(fileversioninfo::get-file-version(fileversioninfo::get-version-info(file))) == 0}" />
+        <fail
+          if="${version::get-major(fileversioninfo::get-file-version(fileversioninfo::get-version-info(file))) == 0}"
+          message="File '${file}' doesn't have a fileversion recorded in its version resource" />
       </do>
     </foreach>
 
