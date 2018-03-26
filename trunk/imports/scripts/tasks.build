@@ -199,6 +199,8 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
 public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 {
     bool _interactive;
+    FileInfo _output;
+    
     public override string ProgramArguments
     {
         get { return _interactive ? "" : "--non-interactive"; }
@@ -210,6 +212,13 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
     {
         get { return !_interactive; }
         set { _interactive = !value; }
+    }
+    
+    [TaskAttribute("output")]
+    public override FileInfo Output
+    {
+      get { return _output; }
+      set { _output = value; }
     }
 }
 
