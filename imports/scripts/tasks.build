@@ -863,7 +863,7 @@ public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
       get { return _envScript; }
    }
    
-   [TaskAttribute("workdir")]
+   [TaskAttribute("workingdir")]
    public DirectoryInfo WorkDir
    {
      set { _workDir = value; }
