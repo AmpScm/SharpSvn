@@ -905,6 +905,12 @@ public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
           {
             if (line.StartsWith("!.!.!"))
               inSet = true;
+              
+            line = line.Trim('*').Trim();
+            
+            if (line.Length > 0 && !line.StartsWith("Visual Studio") && !line.StartsWith("Copyright"))
+              Log(Level.Info, line);
+              
             continue;
           }
           
