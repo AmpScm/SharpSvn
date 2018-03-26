@@ -199,6 +199,8 @@ public class VCUpgrade : NAnt.Core.Tasks.ExternalProgramBase
 public class Svn : NAnt.Core.Tasks.ExternalProgramBase
 {
     bool _interactive;
+    FileInfo _output;
+    
     public override string ProgramArguments
     {
         get { return _interactive ? "" : "--non-interactive"; }
@@ -210,6 +212,13 @@ public class Svn : NAnt.Core.Tasks.ExternalProgramBase
     {
         get { return !_interactive; }
         set { _interactive = !value; }
+    }
+    
+    [TaskAttribute("output")]
+    public override FileInfo Output
+    {
+      get { return _output; }
+      set { _output = value; }
     }
 }
 
@@ -759,6 +768,110 @@ public class LineRegexReplace : Filter
       else
          return Read(); // Recurse
   }  
+}
+
+[TaskName("NAntWithEnv")]
+public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
+{
+   FileInfo _envScript;
+   string _envArgs;
+   DirectoryInfo _workDir;
+   
+   [TaskAttribute("env-script", Required=true)]
+   public FileInfo EnvScript
+   {
+      set { _envScript = value; }
+      get { return _envScript; }
+   }
+   
+   [TaskAttribute("workingdir")]
+   public DirectoryInfo WorkDir
+   {
+     set { _workDir = value; }
+     get { return _workDir; }
+   } 
+   
+   [TaskAttribute("env-args")]
+   public string EnvArgs
+   {
+      set { _envArgs = value; }
+      get { return _envArgs; }
+   }
+   
+   SortedList LoadEnv()
+   {
+     ProcessStartInfo psi = new ProcessStartInfo(Environment.GetEnvironmentVariable("COMSPEC"),
+                                        "/C \"" + EnvScript.FullName + "\" " + EnvArgs +" && echo.!.!.! && set");
+     psi.UseShellExecute = false;
+     psi.RedirectStandardOutput = true;
+     
+     using(Process p = Process.Start(psi))
+     {
+        bool inSet = false;
+        string line;
+        SortedList sl = new SortedList();
+        
+        while (null != (line = p.StandardOutput.ReadLine()))
+        {
+          if (!inSet)
+          {
+            if (line.StartsWith("!.!.!"))
+            {
+              inSet = true;
+              continue;
+            }
+              
+            line = line.Trim('*').Trim();
+            
+            if (line.Length > 0 && !line.StartsWith("Visual Studio") && !line.StartsWith("Copyright"))
+              Log(Level.Info, line);
+              
+            continue;
+          }
+          
+          int nIs = line.IndexOf('=');
+          if (nIs <= 0)
+            continue;
+          
+          string k = line.Substring(0, nIs);
+          string v = line.Substring(nIs+1);
+
+          sl[k] = v;
+        }
+        
+        return sl;
+     }
+   }
+   
+   protected override void ExecuteTask()
+   {
+      SortedList envItems = LoadEnv();
+      SortedList oldEnv = new SortedList();
+      string oldDir = Environment.CurrentDirectory;
+      
+      try
+      {
+         foreach(DictionaryEntry e in envItems)
+         {
+           string key = (string)e.Key;
+           string old = Environment.GetEnvironmentVariable(key);
+           oldEnv.Add(key, old);
+           Environment.SetEnvironmentVariable(key, (string)e.Value);
+         }
+         if (WorkDir != null)
+           Environment.CurrentDirectory = WorkDir.FullName;
+
+         base.ExecuteTask();
+       }
+       finally
+       {
+          Environment.CurrentDirectory = oldDir;  
+          foreach(DictionaryEntry e in oldEnv)
+          {
+            Environment.SetEnvironmentVariable((string)e.Key, (string)e.Value);
+          }
+       }
+   }
 }
 
 ]]>
