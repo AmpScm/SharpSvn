@@ -904,7 +904,10 @@ public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
           if (!inSet)
           {
             if (line.StartsWith("!.!.!"))
+            {
               inSet = true;
+              continue;
+            }
               
             line = line.Trim('*').Trim();
             
