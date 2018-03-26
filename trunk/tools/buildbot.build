@@ -257,7 +257,9 @@
         </items>
       </in>
       <do>
-        <fail if="${version::get-major(fileversioninfo::get-file-version(fileversioninfo::get-version-info(file))) == 0}" />
+        <fail
+          if="${version::get-major(fileversioninfo::get-file-version(fileversioninfo::get-version-info(file))) == 0}"
+          message="File '${file}' doesn't have a fileversion recorded in its version resource" />
       </do>
     </foreach>
 
