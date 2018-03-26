@@ -54,8 +54,7 @@
   
     <NAntWithEnv
        env-script="${programfilesX86}\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" env-args="x86"
-       workingdir="imports"
-       buildfile="Default.build"
+       workingdir="imports" buildfile="imports\Default.build"
        target="build" />
   
     <exec program="cmd.exe" workingdir="imports" if="${buildImports}" unless="${svnDist}">
