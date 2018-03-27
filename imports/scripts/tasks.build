@@ -927,6 +927,10 @@ public class NAntWithEnv : NAnt.Core.Tasks.NAntTask
           sl[k] = v;
         }
         
+        p.WaitForExit();
+        if (p.ExitCode != 0)
+          throw new InvalidOperationException("Environment script failed");
+        
         return sl;
      }
    }
