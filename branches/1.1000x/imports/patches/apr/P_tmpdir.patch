@@ -1,0 +1,13 @@
+Index: file_io/unix/tempdir.c
+===================================================================
+--- file_io/unix/tempdir.c	(revision 1663176)
++++ file_io/unix/tempdir.c	(working copy)
+@@ -101,7 +101,7 @@ APR_DECLARE(apr_status_t) apr_temp_dir_get(const c
+         }
+     }
+ 
+-#ifdef P_tmpdir
++#if defined(P_tmpdir) && !defined(WIN32)
+     /* 
+      * If we have it, use the POSIX definition of where 
+      * the tmpdir should be 

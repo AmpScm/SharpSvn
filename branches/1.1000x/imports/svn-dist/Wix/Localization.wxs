@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Fragment>
+    <ComponentGroup Id="Localization">
+      <ComponentRef Id="sl_de"/>
+      <ComponentRef Id="sl_es"/>
+      <ComponentRef Id="sl_fr"/>
+      <ComponentRef Id="sl_it"/>
+      <ComponentRef Id="sl_ja"/>
+      <ComponentRef Id="sl_ko"/>
+      <ComponentRef Id="sl_nb"/>
+      <ComponentRef Id="sl_pl"/>      
+      <ComponentRef Id="sl_pt_BR"/>
+      <ComponentRef Id="sl_sv"/>
+      <ComponentRef Id="sl_zh_CN"/>
+      <ComponentRef Id="sl_zh_TW"/>
+    </ComponentGroup>
+    <DirectoryRef Id="DIR_Share_Locale" FileSource="$(var.distDir)\share\locale">
+      <Directory Id="LOCALE_de" Name="de">
+        <Directory Id="MESSAGES_de" Name="LC_MESSAGES">
+          <Component Id="sl_de" Guid="175CBAE4-5451-4F0D-BE09-ED67F0FF3A3A">
+            <File Id="sl_de" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_es" Name="es">
+        <Directory Id="MESSAGES_es" Name="LC_MESSAGES">
+          <Component Id="sl_es" Guid="5E39DB78-0C46-4F5C-9C76-A55E11739EB8">
+            <File Id="sl_es" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_fr" Name="fr">
+        <Directory Id="MESSAGES_fr" Name="LC_MESSAGES">
+          <Component Id="sl_fr" Guid="669DA4E8-0D73-4EC6-9979-DEA357ADAF96">
+            <File Id="sl_fr" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory  Id="LOCALE_it" Name="it">
+        <Directory Id="MESSAGES_it" Name="LC_MESSAGES">
+          <Component Id="sl_it" Guid="6C592D75-2850-4B17-91DB-78075DD4557D">
+            <File Id="sl_it" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_ja" Name="ja">
+        <Directory Id="MESSAGES_ja" Name="LC_MESSAGES">
+          <Component Id="sl_ja" Guid="76EDA79E-2BF9-4461-A9F0-661DABBB912B">
+            <File Id="sl_ja" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_ko" Name="ko">
+        <Directory Id="MESSAGES_ko" Name="LC_MESSAGES">
+          <Component Id="sl_ko" Guid="33DFE883-01F8-422B-9041-59E19783398F">
+            <File Id="sl_ko" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_nb" Name="nb">
+        <Directory Id="MESSAGES_nb" Name="LC_MESSAGES">
+          <Component Id="sl_nb" Guid="E9C6CA94-B784-4CE0-ACC3-64139EB163D0">
+            <File Id="sl_nb" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_pl" Name="pl">
+        <Directory Id="MESSAGES_pl" Name="LC_MESSAGES">
+          <Component Id="sl_pl" Guid="B1325600-5BCD-45E8-9E7E-C766E8842910">
+            <File Id="sl_pl" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_pt_BR" Name="pt_BR">
+        <Directory Id="MESSAGES_pt_BR" Name="LC_MESSAGES">
+          <Component Id="sl_pt_BR" Guid="7DBF64E7-E3F9-4B96-9AEC-F34D14C87DA7">
+            <File Id="sl_pt_BR" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_sv" Name="sv">
+        <Directory Id="MESSAGES_sv" Name="LC_MESSAGES">
+          <Component Id="sl_sv" Guid="2414C993-8743-46AA-ACA1-4F7AB6A6E660">
+            <File Id="sl_sv" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_zh_CN" Name="zh_CN">
+        <Directory Id="MESSAGES_zh_CN" Name="LC_MESSAGES">
+          <Component Id="sl_zh_CN" Guid="026F6F9E-663D-456C-9B43-80120BF3271C">
+            <File Id="sl_zh_CN" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+      <Directory Id="LOCALE_zh_TW" Name="zh_TW">
+        <Directory Id="MESSAGES_zh_TW" Name="LC_MESSAGES">
+          <Component Id="sl_zh_TW" Guid="879AB40A-FB76-4472-B049-6E078B17EF93">
+            <File Id="sl_zh_TW" Name="subversion.mo" KeyPath="yes" Vital="yes"/>
+          </Component>
+        </Directory>
+      </Directory>
+    </DirectoryRef>
+  </Fragment>
+</Wix>

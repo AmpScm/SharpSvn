@@ -1,0 +1,13 @@
+Index: build.conf
+===================================================================
+--- build.conf	(revision 1482261)
++++ build.conf	(working copy)
+@@ -1411,6 +1411,7 @@
+ [sasl]
+ type = lib
+ external-lib = $(SVN_SASL_LIBS)
++libs = openssl
+ 
+ [openssl]
+ type = lib
+

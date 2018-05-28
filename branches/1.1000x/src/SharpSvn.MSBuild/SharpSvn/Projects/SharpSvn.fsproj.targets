@@ -1,0 +1,72 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+  <UsingTask TaskName="PdbSourceAnnotate" AssemblyFile="$(SharpSvnTargetsDir)\SharpSvn.MSBuild.dll" />
+
+  <Target Name="SharpSvnPatchAssemblyInfoFile"
+          AfterTargets="BuildGenerateSources"
+          BeforeTargets="Compile;XamlPreCompile;CoreCompile"
+          Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true'">
+
+    <ItemGroup>
+      <AssemblyInfoFile
+            Include="@(Compile->'$(IntermediateOutputPath)_SharpSvn\%(Filename)%(Extension)')"
+            Condition="'%(filename)' == 'AssemblyInfo'">
+        <InfoIdentity>%(Identity)</InfoIdentity>
+        <InfoSource>%(FullPath)</InfoSource>
+      </AssemblyInfoFile>
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="%(AssemblyInfoFile.InfoIdentity)" />
+      <Compile Include="@(AssemblyInfoFile)" />
+    </ItemGroup>
+
+    <TransformAssemblyInfo
+      Language                   ="fsharp"
+
+      Sources                    ="@(AssemblyInfoFile)"
+
+      SetVersion                 ="$(ForceAssemblyVersion)"
+
+      SetOnlyAssemblyVersion     ="$(ForceOnlyAssemblyVersion)"
+      SetFileVersion             ="$(ForceAssemblyFileVersion)"
+      SetInformationalVersion    ="$(ForceAssemblyInformationalVersion)"
+      SetSatelliteContractVersion="$(ForceSatelliteContractVersion)"
+      SetComCompatibleVersion    ="$(ForceComCompatibleVersion)"
+
+      SetCopyright               ="$(ForceAssemblyCopyright)"
+      SetCompany                 ="$(ForceAssemblyCompany)"
+      SetTrademark               ="$(ForceAssemblyTrademark)"
+      SetConfiguration           ="$(ForceAssemblyConfiguration)"
+      SetDescription             ="$(ForceAssemblyDescription)"
+
+      SetProduct                 ="$(ForceAssemblyProduct)"
+      SetTitle                   ="$(ForceAssemblyTitle)"
+
+      SetCLSCompliant            ="$(ForceCLSCompliant)"
+      SetComVisible              ="$(ForceComVisible)"
+      SetNeutralResourceLanguage ="$(ForceNeutralResourceLanguage)"
+      >
+
+      <Output TaskParameter="FilesWritten" ItemName="FileWrites"/>
+    </TransformAssemblyInfo>
+  </Target>
+
+  <Target Name="SharpSvnAnnotateSymbols"
+          AfterTargets="Compile;XamlPreCompile;CoreCompile"
+          BeforeTargets="CopyFilesToOutputDirectory"
+          Condition="$(AnnotatePdbFile) == 'true' and $(_DebugSymbolsProduced) == 'true'"
+          Inputs="@(_DebugSymbolsIntermediatePath)"
+          Outputs="@(_DebugSymbolsIntermediatePath->'$(IntermediateOutputPath)_SharpSvn\%(filename).pdb')">
+
+    <PdbSourceAnnotate
+          Sources="@(_DebugSymbolsIntermediatePath)"
+          ToolPath="$(SharpSvnTargetsDir)\bin" />
+
+    <Copy SourceFiles="@(_DebugSymbolsIntermediatePath)"
+          DestinationFolder="$(IntermediateOutputPath)_SharpSvn">
+      <Output TaskParameter="CopiedFiles" ItemName="FileWrites"/>
+    </Copy>
+  </Target>
+
+</Project>

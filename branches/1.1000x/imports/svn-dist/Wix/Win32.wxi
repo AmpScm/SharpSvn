@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Include>
+  <Package InstallerVersion="300" Compressed="yes" Platform="x86" 
+           InstallPrivileges="elevated" InstallScope="perMachine"/>
+
+  <DirectoryRef Id="TARGETDIR">
+    <Directory Id="ProgramFilesFolder">
+      <Directory Id="INSTALLBASE">
+      </Directory>
+    </Directory>
+  </DirectoryRef>
+</Include>
