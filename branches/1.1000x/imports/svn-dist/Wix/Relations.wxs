@@ -212,8 +212,44 @@
       <ComponentGroupRef Id="libaprutil_1.dll"/>
       <ComponentGroupRef Id="libsvn_subr_1.dll"/>
       <ComponentGroupRef Id="libsvn_delta_1.dll"/>
-      <ComponentGroupRef Id="DB.dll"/>
       <ComponentGroupRef Id="libintl.dll" />
+      <ComponentGroupRef Id="libsvn_fs_base_1.dll" />
+      <ComponentGroupRef Id="libsvn_fs_fs_1.dll" />
+      <ComponentGroupRef Id="libsvn_fs_x_1.dll" />
+      <ComponentGroupRef Id="libsvn_fs_util_1.dll" />
+    </ComponentGroup>
+    <ComponentGroup Id="libsvn_fs_base_1.dll">
+      <ComponentRef Id="libsvn_fs_base_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll" />
+      <ComponentGroupRef Id="DB.dll"/>
+      <ComponentGroupRef Id="libsvn_delta_1.dll"/>
+      <ComponentGroupRef Id="libsvn_fs_util_1.dll" />
+      <ComponentGroupRef Id="libsvn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="libsvn_fs_fs_1.dll">
+      <ComponentRef Id="libsvn_fs_fs_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll" />
+      <ComponentGroupRef Id="libsvn_delta_1.dll"/>
+      <ComponentGroupRef Id="libsvn_fs_util_1.dll" />
+      <ComponentGroupRef Id="libsvn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="libsvn_fs_x_1.dll">
+      <ComponentRef Id="libsvn_fs_x_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libaprutil_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll" />
+      <ComponentGroupRef Id="libsvn_delta_1.dll"/>
+      <ComponentGroupRef Id="libsvn_fs_util_1.dll" />
+      <ComponentGroupRef Id="libsvn_subr_1.dll"/>
+    </ComponentGroup>
+    <ComponentGroup Id="libsvn_fs_util_1.dll">
+      <ComponentRef Id="libsvn_fs_util_1.dll"/>
+      <ComponentGroupRef Id="libapr_1.dll"/>
+      <ComponentGroupRef Id="libintl.dll" />
+      <ComponentGroupRef Id="libsvn_subr_1.dll"/>
     </ComponentGroup>
     <ComponentGroup Id="DB.dll">
       <ComponentRef Id="DB.dll"/>
