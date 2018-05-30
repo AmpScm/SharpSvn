@@ -137,13 +137,13 @@
       <Component Id="libsvn_fs_base_1.dll" Guid="47ED577A-DFF2-4C9D-905F-C51F2C6ABD1A">
         <File Id="libsvn_fs_base_1.dll" Name="SlikSvn-libsvn_base-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="libsvn_fs_fs.dll" Guid="9ACA181A-2FE6-412D-9E78-F01D8D2B752A">
+      <Component Id="libsvn_fs_fs_1.dll" Guid="9ACA181A-2FE6-412D-9E78-F01D8D2B752A">
         <File Id="libsvn_fs_fs_1.dll" Name="SlikSvn-libsvn_fs_fs-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="libsvn_fs_x.dll" Guid="7C04129E-9B5F-475D-8AC8-D2E10043F983">
+      <Component Id="libsvn_fs_x_1.dll" Guid="7C04129E-9B5F-475D-8AC8-D2E10043F983">
         <File Id="libsvn_fs_x_1.dll" Name="SlikSvn-libsvn_fs_x-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
-      <Component Id="libsvn_fs_util.dll" Guid="8FAA59FB-0C64-405C-95B9-FDB24AA27364">
+      <Component Id="libsvn_fs_util_1.dll" Guid="8FAA59FB-0C64-405C-95B9-FDB24AA27364">
         <File Id="libsvn_fs_util_1.dll" Name="SlikSvn-libsvn_fs_util-1.dll" KeyPath="yes" Checksum="yes" Vital="yes" />
       </Component>
       <Component Id="libsvn_ra_1.dll" Guid="1D939199-AC3B-426D-8089-3868D44BB1F4">
