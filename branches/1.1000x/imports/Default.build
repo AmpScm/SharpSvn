@@ -15,8 +15,6 @@
 
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
   <!--
-    r1786653 - Recognize Visual Studio 2017
-    r1811752,r182278 - More 2017 VStweaks
   // -->
   <property name="subversionVersion" value="1.10.0" overwrite="false" />
   <property name="subversionMerges" value="" overwrite="false" />
@@ -30,7 +28,7 @@
   <property name="serfMerges" value="r1699721-1699723,1712131,1807594,1811083,1811088" overwrite="false" />
 
   <!-- -->
-  <property name="opensslVersion" value="1.1.0g" overwrite="false" />
+  <property name="opensslVersion" value="1.1.0h" overwrite="false" />
   <property name="neonVersion" value="0.30.2" overwrite="false" />
 
   <property name="aprVersion" value="1.6.3" overwrite="false" />
