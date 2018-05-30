@@ -15,11 +15,9 @@
 
   <property name="platform" value="${guessedPlatform}" if="${not property::exists('platform')}" />
   <!--
-    r1786653 - Recognize Visual Studio 2017
-    r1811752,r182278 - More 2017 VStweaks
   // -->
-  <property name="subversionVersion" value="1.9.7" overwrite="false" />
-  <property name="subversionMerges" value="Tr1811752;r1814724-r1814726,r182278" overwrite="false" />
+  <property name="subversionVersion" value="1.10.0" overwrite="false" />
+  <property name="subversionMerges" value="" overwrite="false" />
   <property name="subversionMergeBranches" value="" overwrite="false" />
   <property name="svnAddSharpSvn" value="true" overwrite="false" />
   <property name="aprMerges" value="" overwrite="false" />
