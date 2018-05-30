@@ -46,7 +46,7 @@
       dest="${downloads + nasmFilename}"
       unless="${file::exists(downloads + nasmFilename)}" />
 
-    <get src="http://www.cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
+    <get src="https://cmake.org/files/v${cmakeVersionMM}/${cmakeFilename}"
       dest="${downloads + cmakeFilename}"
       unless="${file::exists(downloads + cmakeFilename)}" />
 
