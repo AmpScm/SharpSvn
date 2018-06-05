@@ -1,0 +1,75 @@
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <SharpSvnAnnotateIncluded>true</SharpSvnAnnotateIncluded>
+  </PropertyGroup>
+
+  <UsingTask TaskName="TransformAssemblyInfo" AssemblyFile="$(MSBuildThisFileDirectory)..\SharpSvn.MSBuild.dll" Condition="$(SharpSvnIncluded) != 'true'" />
+  <UsingTask TaskName="UpdateNativeVersionResource" AssemblyFile="$(MSBuildThisFileDirectory)..\SharpSvn.MSBuild.dll" Condition="$(SharpSvnIncluded) != 'true'" />
+
+  <PropertyGroup Condition="$(SharpSvnIncluded) != 'true'" >
+    <AfterBuildLinkTargets>
+      $(AfterBuildLinkTargets);
+      SharpSvnPostLinkViaNuGet;
+    </AfterBuildLinkTargets>
+  </PropertyGroup>
+
+  <Target Name="SharpSvnPostLinkViaNuGet"
+          Condition="'@(Link)' != '' and  Condition="$(SharpSvnIncluded) != 'true'" and '$(SharpSvnUpdateVersionResource)' == 'true' and '$(CLRSupport)' != '' and '$(CLRSupport)'!='false' and '$(LinkSkippedExecution)' != 'true'">
+
+    <UpdateNativeVersionResource
+      Source          ="%(Link.OutputFile)"
+      TempDir         ="$(IntermediateOutputPath)_SharpSvn\Res"
+      SourceUpdated   ="$(SharpSvnUpdatedResource)"
+      KeyContainer    ="%(Link.KeyContainer)"
+      KeyFile         ="$(LinkKeyFile)"
+
+      Condition="%(Link.OutputFile) != ''"/>
+  </Target>
+
+  <Target Name="SharpSvnPatchAssemblyInfoFileViaNuGet"
+          AfterTargets="BuildGenerateSources"
+          BeforeTargets="BuildCompile;Compile"
+          Condition="'$(SharpSvnPatchAssemblyInfo)' == 'true' and $(SharpSvnIncluded) != 'true'">
+
+    <ItemGroup>
+      <AssemblyInfoFile Include="@(ClCompile->'$(IntermediateOutputPath)_SharpSvn\%(Filename)%(Extension)')" Condition="'%(filename)' == 'AssemblyInfo'">
+        <InfoIdentity>%(Identity)</InfoIdentity>
+        <InfoSource>%(FullPath)</InfoSource>
+      </AssemblyInfoFile>
+    </ItemGroup>
+    <ItemGroup>
+      <ClCompile Remove="%(AssemblyInfoFile.InfoIdentity)" />
+      <ClCompile Include="@(AssemblyInfoFile)" />
+    </ItemGroup>
+
+    <TransformAssemblyInfo
+      Language                   ="cpp"
+
+      Sources                    ="@(AssemblyInfoFile)"
+
+      SetVersion                 ="$(ForceAssemblyVersion)"
+
+      SetOnlyAssemblyVersion     ="$(ForceOnlyAssemblyVersion)"
+      SetFileVersion             ="$(ForceAssemblyFileVersion)"
+      SetInformationalVersion    ="$(ForceAssemblyInformationalVersion)"
+      SetSatelliteContractVersion="$(ForceSatelliteContractVersion)"
+      SetComCompatibleVersion    ="$(ForceComCompatibleVersion)"
+
+      SetCopyright               ="$(ForceAssemblyCopyright)"
+      SetCompany                 ="$(ForceAssemblyCompany)"
+      SetTrademark               ="$(ForceAssemblyTrademark)"
+      SetConfiguration           ="$(ForceAssemblyConfiguration)"
+      SetDescription             ="$(ForceAssemblyDescription)"
+
+      SetProduct                 ="$(ForceAssemblyProduct)"
+      SetTitle                   ="$(ForceAssemblyTitle)"
+
+      SetCLSCompliant            ="$(ForceCLSCompliant)"
+      SetComVisible              ="$(ForceComVisible)"
+      SetNeutralResourceLanguage ="$(ForceNeutralResourceLanguage)"
+      >
+
+      <Output TaskParameter="FilesWritten" ItemName="FileWrites"/>
+    </TransformAssemblyInfo>
+  </Target>
+</Project>

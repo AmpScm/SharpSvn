@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata minClientVersion="2.5">
+    <id>SharpSvn.AnnotateAssembly</id>
+    <version>$version$</version>
+    <title>SharpSvn.AnnotateAssembly</title>
+    <authors>SharpSvn Project</authors>
+    <owners>SharpSvn Project</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0</licenseUrl>
+    <projectUrl>http://sharpsvn.net/</projectUrl>
+    <iconUrl>http://sharpsvn.open.collab.net/favicon.ico</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+      This package provides support for explicitly setting assembly level properties
+      via MSBuild properties for C#, VB.Net, C++/CLI and F#.
+    
+      When this package is added to your project and one or more of the properties
+      ForceAssemblyVersion, ForceAssemblyFileVersion, ForceAssemblyInformationalVersion,
+      ForceSatelliteContractVersion, ForceComCompatibleVersion, ForceAssemblyCopyright, 
+      ForceAssemblyCompany, ForceAssemblyTrademark, ForceAssemblyConfiguration,
+      ForceAssemblyDescription, ForceAssemblyProduct, ForceAssemblyTitle,
+      ForceCLSCompliant, ForceComVisible, ForceNeutralResourceLanguage is set then the
+      assemblyinfo.(cs|vb|cpp|fs) is filtered to set the attribute to the specified value.
+      
+      Note that the same feature is also available as .msi/.vsix package globally without
+      including this package. When this feature is installed globally, individual includes
+      with this package are automatically skipped.
+    </description>
+    <releaseNotes></releaseNotes>
+    <copyright>Copyright (c) 2006-2018</copyright>
+    <tags>msbuild assemblyinfo versioninfo</tags>
+  </metadata>
+  <files>
+    <file target="build" src="SharpSvn.AnnotateAssembly.props" />
+    <file target="build" src="SharpSvn.AnnotateAssembly.targets" />
+    <file target="build" src="..\SharpSvn.MSBuild\bin\x86\Release\SharpSvn.MSBuild.dll" />
+    <file target="build\projects" src="projects\AnnotateAssembly.*.targets" />
+  </files>
+</package>
